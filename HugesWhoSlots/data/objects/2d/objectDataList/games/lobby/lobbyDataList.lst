@@ -1,0 +1,60 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default>
+        <visual defaultUniformScale="1.5">
+            <texture file="data/textures/games/lobby/lobby_spriteSheet.png"/>
+            <mesh genType="sprite_sheet">
+                <spriteSheet file="data/objects/2d/mesh/games/lobby/lobby.xml"/>
+            </mesh>
+            <shader id="shader_2d_spriteSheet"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="background">
+            <visual>
+                <texture file="data/textures/games/lobby/background.png"/>
+                <mesh genType="quad">
+                    <file name=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+            </visual>
+        </object>
+        
+        <object name="Payback Pig">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Payback Pig Normal"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="Galactic Girl">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Galactic Girl Normal1"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="meter_font">
+            <visual>
+                <texture file="" compressed="false"/>
+                <mesh genType="font">
+                    <file name=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+            </visual>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

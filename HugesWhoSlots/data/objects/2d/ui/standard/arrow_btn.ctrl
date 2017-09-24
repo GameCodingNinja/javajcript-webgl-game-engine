@@ -1,0 +1,24 @@
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="arrow_btn"/>
+    
+        <sprite objectName="arrow_btn_active_overlay">
+            <scriptLst>
+                <script disabled="MenuBtnActOver_Disabled"/>
+                <script inactive="MenuBtnActOver_Inactive"/>
+                <script selected="MenuBtnActOver_FastSelected"/>
+            </scriptLst>
+        </sprite>
+
+        <sprite objectName="arrow_btn_disabled_overlay">
+            <scriptLst>
+                <script disabled="MenuBtnDisOver_DisabledAnim"/>
+                <script inactive="MenuBtnDisOver_InactiveAnim"/>
+            </scriptLst>
+        </sprite>
+
+    </spriteList>
+
+</UIControl>

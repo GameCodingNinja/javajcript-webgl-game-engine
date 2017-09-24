@@ -1,0 +1,53 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <texture count="0" file="" compressed="false"/>
+            <mesh genType="quad">
+                <spriteSheet defIndex="" glyphCount="" columns=""/>
+                <scaledFrame thicknessWidth="" thicknessHeight="" centerQuad="" frameBottom=""/>
+                <file name=""/>
+            </mesh>
+            <color r="1" g="1" b="1" a="1"/>
+            <shader id="shader_2d"/>
+        </visual>
+        <physics world="(game)">
+            <body type="" linearDamping="0" angularDamping="0" fixedRotation="false"/>
+            <fixtureLst>
+                <fixture shape="" radius="0" chainLoop="false" friction="0.2" density="0.2" restitution="0.2">
+                    <!-- vert list for polygon shapes - max of 8
+                    Box2D polygons are defined using Counter Clockwise Winding (CCW)
+                    <vert x="" y=""/> -->
+                    <sizeMod top="0" bottom="0" left="0" right="0"/>
+                </fixture>
+            </fixtureLst>
+        </physics>
+        <size width="0" height="0"/>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+    
+        <object name="sector0">
+            <visual>
+                <texture file="data/textures/stage1/abstract-vector-background-art.jpg"/>
+            </visual>
+        </object>
+        
+        <object name="sector1">
+            <visual>
+                <texture file="data/textures/stage1/ftb6zkujumtpuwsm94w5.jpg"/>
+            </visual>
+        </object>
+        
+        <object name="sector2">
+            <visual>
+                <texture file="data/textures/stage1/Abstract-Colorful-Vector-Background-Art.jpg"/>
+            </visual>
+        </object>
+    
+    </objectList>
+
+</objectDataList2D>
+

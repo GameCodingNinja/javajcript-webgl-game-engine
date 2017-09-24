@@ -1,0 +1,26 @@
+<UIControl>
+
+    <spriteList>
+      
+        <sprite objectName="Level Meter"/>
+        
+        <sprite objectName="Level Meter Color">
+            <position x="0" y="25" z="0"/>
+        </sprite>
+        
+        <sprite objectName="Level Meter Star">
+            <position x="-270" y="25" z="0"/>
+        </sprite>
+
+        <sprite objectName="meter_font">
+            <font fontName="dejavu_sans_reg_45"/>
+        </sprite>
+    
+    </spriteList>
+    
+    <!-- stencil mask -->
+    <stencilMask objectName="level_meter_stencil" spriteIndex="1">
+        <position x="0" y="25" z="0"/>
+    </stencilMask>
+
+</UIControl>

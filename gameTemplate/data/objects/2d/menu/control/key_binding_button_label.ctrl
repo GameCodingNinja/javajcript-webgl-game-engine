@@ -1,0 +1,17 @@
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="label_font">
+            <font fontName="dejavu_sans_cond_32">
+                <alignment horzAlign="center" vertAlign="center"/>
+            </font>
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+            </scriptLst>
+        </sprite>
+    
+    </spriteList>
+
+</UIControl>

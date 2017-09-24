@@ -1,0 +1,17 @@
+<actor>
+
+    <spriteList>
+
+        <sprite objectName="ship_gun" group="(actor)">
+            <centerPos x="12" y="0" z="0"/>
+        </sprite>
+
+        <sprite objectName="player_ship" group="(actor)"/>
+
+        <sprite objectName="player_fire_tail" group="(actor)">
+            <position x="-115" y="4" z="0"/>
+        </sprite>
+
+    </spriteList>
+
+</actor>

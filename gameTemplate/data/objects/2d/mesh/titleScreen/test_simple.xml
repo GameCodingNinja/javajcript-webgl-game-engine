@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<spriteSheet>
+
+    <rect x1="   0" y1="   0" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00000"/>
+    <rect x1=" 177" y1="   0" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00002"/>
+    <rect x1=" 354" y1="   0" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00004"/>
+    <rect x1=" 531" y1="   0" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00006"/>
+    <rect x1=" 708" y1="   0" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00008"/>
+    <rect x1="   0" y1=" 176" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00010"/>
+    <rect x1=" 177" y1=" 176" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00012"/>
+    <rect x1=" 354" y1=" 176" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00014"/>
+    <rect x1=" 531" y1=" 176" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00016"/>
+    <rect x1=" 708" y1=" 176" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00018"/>
+    <rect x1="   0" y1=" 352" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00020"/>
+    <rect x1=" 177" y1=" 352" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00022"/>
+    <rect x1=" 354" y1=" 352" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00024"/>
+    <rect x1=" 531" y1=" 352" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00026"/>
+    <rect x1=" 708" y1=" 352" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00028"/>
+    <rect x1="   0" y1=" 528" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00030"/>
+    <rect x1=" 177" y1=" 528" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00032"/>
+    <rect x1=" 354" y1=" 528" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00034"/>
+    <rect x1=" 531" y1=" 528" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00036"/>
+    <rect x1=" 708" y1=" 528" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00038"/>
+    <rect x1="   0" y1=" 704" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00040"/>
+    <rect x1=" 177" y1=" 704" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00042"/>
+    <rect x1=" 354" y1=" 704" x2=" 177" y2=" 176" cx="   0" cy="   0" name="coin_00044"/>
+
+</spriteSheet>

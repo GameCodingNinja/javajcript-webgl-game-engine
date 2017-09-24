@@ -1,0 +1,16 @@
+<UIControl>
+
+    <spriteList>
+    
+        <sprite objectName="button_slider">
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_slider_btn_Selected"/>
+            </scriptLst>
+        </sprite>
+
+    </spriteList>
+
+</UIControl>

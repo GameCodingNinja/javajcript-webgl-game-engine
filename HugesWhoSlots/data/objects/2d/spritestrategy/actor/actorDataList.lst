@@ -1,0 +1,15 @@
+<actorList>
+
+    <!-- Example actor
+    <actor name="actor_name" playerActor="true" aiName="ai_name" file="data/objects/2d/actor/player_ship.act">
+        <collision group="1" mask="2" radiusScaler="0.75"/>
+        <position x="0" y="0" z="0"/>
+        <rotation x="0" y="0" z="0"/>
+        <scale x="1" y="1" z="1"/>
+    </actor> -->
+    
+    <actor name="player_ship" playerActor="true" aiName="player_ship" file="data/objects/2d/actor/player_ship.act"/>
+    <actor name="player_projectile" aiName="player_projectile" file="data/objects/2d/actor/player_projectile.act"/>
+ 
+</actorList>
+

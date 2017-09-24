@@ -1,0 +1,42 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default>
+        <visual>
+            <mesh genType="quad"/>
+            <shader id="shader_2d"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="logo">
+          <visual defaultUniformScale="1.5">
+            <texture file="data/textures/startup/HugesWhoLogo.png"/>
+          </visual>
+        </object>
+        
+        <object name="progress_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_3_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="400" height="40"/>
+        </object>
+        
+        <object name="progress_solid">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="25" g="54" b="84" a="0.8"/>
+            </visual>
+            <size width="394" height="34"/>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

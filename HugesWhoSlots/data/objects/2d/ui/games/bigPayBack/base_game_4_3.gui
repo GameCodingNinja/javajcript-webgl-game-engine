@@ -1,0 +1,108 @@
+<menu>
+    
+    <staticMenuControls>
+        
+        <!-- Win Meter Label -->
+        <control name="win_meter" controlType="meter" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/bigPayBack/controls/win_meter.ctrl"/>
+            <position x="-5" y="-400" z="0"/>
+            <!-- Max size of font string in meter -->
+            <size width="530" height="210"/>
+            <meterScript onInit="Meter_OnInit" onStart="Meter_OnStart" onStop="Meter_OnStop" onClear="Meter_OnClear"/>
+            <bangRange fastBangTime="500" scaleType="axis">
+                <range target="500" bangUpType="rampUp" velocity="15.0"  estimatedTime="200" slowStartTime="100"/>
+                <range target="1000" bangUpType="rampUp" velocity="15.0"  estimatedTime="500" slowStartTime="200"/>
+                <range target="10000" bangUpType="rampUp" velocity="15.0"  estimatedTime="2000" slowStartTime="500"/>
+                <range target="100000" bangUpType="rampUp" velocity="15.0"  estimatedTime="3000" slowStartTime="500"/>
+                <range target="1000000" bangUpType="rampUp" velocity="15.0"  estimatedTime="4000" slowStartTime="500"/>
+            </bangRange>
+        </control>
+        
+        <!-- Credit Meter Label -->
+        <control name="credit_meter" controlType="meter" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/bigPayBack/controls/credit_meter.ctrl"/>
+            <position x="450" y="-470" z="0"/>
+            <!-- Max size of font string in meter -->
+            <size width="300" height="65"/>
+            <bangRange fastBangTime="500" scaleType="axis">
+                <range target="500" bangUpType="rampUp" velocity="15.0"  estimatedTime="200" slowStartTime="100"/>
+                <range target="1000" bangUpType="rampUp" velocity="15.0"  estimatedTime="500" slowStartTime="200"/>
+                <range target="10000" bangUpType="rampUp" velocity="15.0"  estimatedTime="2000" slowStartTime="500"/>
+                <range target="100000" bangUpType="rampUp" velocity="15.0"  estimatedTime="3000" slowStartTime="500"/>
+                <range target="1000000" bangUpType="rampUp" velocity="15.0"  estimatedTime="4000" slowStartTime="500"/>
+            </bangRange>
+        </control>
+        
+        <!-- Progress bar -->
+        <control name="progress_bar" controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/bigPayBack/controls/progress_bar.ctrl"/>
+            <position x="-480" y="-420" z="0"/>
+        </control>
+
+    </staticMenuControls>
+
+    <menuControls>
+
+        <!-- Play Button -->
+        <control name="play_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/bigPayBack/controls/play_btn.ctrl"/>
+            <position x="780" y="-390" z="0"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <action actionType="action"/>
+            <navigate left="total_bet_meter" right="buy_btn"/>
+        </control>
+        
+        <!-- Total Bet button list -->
+        <control name="total_bet_meter" controlType="button_list" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/standard/total_bet_meter.ctrl"/>
+            <position x="450" y="-360" z="0"/>
+            <fontStringLst>
+                <string text="15"/>
+                <string text="30"/>
+                <string text="45"/>
+                <string text="60"/>
+                <string text="75"/>
+                <string text="90"/>
+                <string text="120"/>
+                <string text="135"/>
+                <string text="150"/>
+                <string text="165"/>
+            </fontStringLst>
+            <navigate left="buy_btn" right="play_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scroll startDelay="770" scrollDelay="350" left="true" right="true"/>
+            <actionResponse up="true" down="true"/>
+            <action actionType="action"/>
+        </control>
+        
+        <!-- Buy Button -->
+        <control name="buy_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/standard/buy_btn.ctrl"/>
+            <position x="-810" y="-375" z="0"/>
+            <navigate down="menu_btn" left="play_btn" right="total_bet_meter"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <action actionType="to_tree" executionAction="buy_tree"/>
+        </control>
+        
+        <!-- Menu Button -->
+        <control name="menu_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/standard/menu_btn.ctrl"/>
+            <position x="-750" y="-480" z="0"/>
+            <navigate up="buy_btn" left="home_btn" right="total_bet_meter"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <action actionType="to_tree" executionAction="menu_tree"/>
+        </control>
+        
+        <!-- Home Button -->
+        <control name="home_btn" faction="decision_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/standard/home_btn.ctrl"/>
+            <position x="-865" y="-480" z="0"/>
+            <navigate up="buy_btn" left="play_btn" right="menu_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <action actionType="to_tree" executionAction="confirmation_tree"/>
+        </control>
+
+    </menuControls>
+
+</menu>
+

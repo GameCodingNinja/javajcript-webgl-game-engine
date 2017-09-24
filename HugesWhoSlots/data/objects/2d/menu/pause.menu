@@ -1,0 +1,101 @@
+<menu>
+
+    <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
+    
+    <scriptLst>
+        <script transIn="Menu_TransIn"/>
+        <script transOut="Menu_TransOut"/>
+    </scriptLst>
+
+    <staticMenuControls>
+
+        <!-- Pause Label -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
+            <position x="0" y="150" z="0"/>
+            <fontStringLst>
+                <string text="Pause"/>
+            </fontStringLst>
+        </control>
+
+    </staticMenuControls>
+
+    <mouseOnlyControls>
+
+        <!-- mouse-only close Button -->
+        <control name="close_btn" controlType="button" defaultState="inactive" mouseOnlyCtrl="true">
+            <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
+            <position x="140" y="160" z="0"/>
+            <fontStringLst>
+                <string text="x"/>
+            </fontStringLst>
+            <action actionType="close"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+    
+    </mouseOnlyControls>
+  
+    <menuControls>
+
+        <!-- Resume Button -->
+        <control name="resume_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="0" y="60" z="0"/>
+            <fontStringLst>
+                <string text="Resume"/>
+            </fontStringLst>
+            <action actionType="back"/>
+            <navigate up="lobby_menu_btn" down="settings_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Settings Button -->
+        <control name="settings_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="0" y="0" z="0"/>
+            <fontStringLst>
+                <string text="Settings"/>
+            </fontStringLst>
+            <action actionType="to_menu" executionAction="settings_menu"/>
+            <navigate up="resume_btn" down="lobby_menu_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Key Bindings Button -->
+        <!--<control name="key_binding_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="0" y="-50" z="0"/>
+            <fontStringLst>
+                <string text="Key Bindings"/>
+            </fontStringLst>
+            <action actionType="to_menu" executionAction="key_bindings_menu"/>
+            <navigate up="settings_btn" down="main_menu_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>-->
+
+        <!-- Lobby Menu Button -->
+        <control name="lobby_menu_btn" faction="decision_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="0" y="-60" z="0"/>
+            <fontStringLst>
+                <string text="to Lobby"/>
+            </fontStringLst>
+            <action actionType="to_menu" executionAction="confirmation_menu"/>
+            <navigate up="settings_btn" down="resume_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control> 
+
+    </menuControls>
+
+    <spriteList>
+
+        <sprite objectName="pause_menu_bg">
+            <script>
+                <transition in="Menu_TransIn" out="Menu_TransOut"/>
+            </script>
+        </sprite>
+    
+    </spriteList>
+  
+</menu>
+

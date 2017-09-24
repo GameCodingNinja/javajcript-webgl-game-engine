@@ -1,0 +1,14 @@
+<UIControl>
+
+    <spriteList>
+      
+        <!--<sprite objectName="credit_meter"/>-->
+
+        <sprite objectName="meter_font">
+            <position x="0" y="13" z="0"/>
+            <font fontName="arial_reg_55"/>
+        </sprite>
+    
+    </spriteList>
+
+</UIControl>

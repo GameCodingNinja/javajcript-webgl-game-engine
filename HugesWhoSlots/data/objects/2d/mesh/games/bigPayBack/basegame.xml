@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<spriteSheet width="1024" height="798">
+
+    <rect x1=" 805" y1=" 149" x2="  22" y2="  22" cx="   0" cy="   0" name="arrow_btn"/>
+    <rect x1=" 781" y1=" 149" x2="  22" y2="  22" cx="   0" cy="   0" name="arrow_btn_active_overlay"/>
+    <rect x1=" 757" y1=" 149" x2="  22" y2="  22" cx="   0" cy="   0" name="arrow_btn_disabled_overlay"/>
+    <rect x1=" 895" y1="  87" x2=" 126" y2="  84" cx="   0" cy="   0" name="buy_btn"/>
+    <rect x1=" 895" y1="   1" x2=" 126" y2="  84" cx="   0" cy="   0" name="buy_btn_active_overlay"/>
+    <rect x1=" 405" y1=" 353" x2=" 126" y2="  84" cx="   0" cy="   0" name="buy_btn_disabled_overlay"/>
+    <rect x1=" 563" y1=" 603" x2=" 212" y2="  70" cx="   0" cy="   0" name="credit_meter"/>
+    <rect x1="  79" y1=" 745" x2="  76" y2="  52" cx="   0" cy="   0" name="home_btn"/>
+    <rect x1="   1" y1=" 745" x2="  76" y2="  52" cx="   0" cy="   0" name="home_btn_active_overlay"/>
+    <rect x1=" 905" y1=" 385" x2="  76" y2="  52" cx="   0" cy="   0" name="home_btn_disabled_overlay"/>
+    <rect x1=" 325" y1=" 603" x2=" 236" y2=" 102" cx="   0" cy="   0" name="level_meter"/>
+    <rect x1=" 905" y1=" 331" x2="  76" y2="  52" cx="   0" cy="   0" name="menu_btn"/>
+    <rect x1=" 947" y1=" 231" x2="  76" y2="  52" cx="   0" cy="   0" name="menu_btn_active_overlay"/>
+    <rect x1=" 947" y1=" 177" x2="  76" y2="  52" cx="   0" cy="   0" name="menu_btn_disabled_overlay"/>
+    <rect x1=" 179" y1="   1" x2=" 224" y2=" 302" cx="   0" cy="  -1" name="Payback Pig"/>
+    <rect x1=" 307" y1=" 745" x2=" 142" y2="  46" cx="   0" cy="  -1" name="play_btn_text"/>
+    <rect x1=" 581" y1="   1" x2=" 174" y2=" 174" cx="   0" cy="  -1" name="record_btn"/>
+    <rect x1=" 405" y1=" 177" x2=" 174" y2=" 174" cx="   0" cy="  -1" name="record_btn_active_overlay"/>
+    <rect x1=" 405" y1="   1" x2=" 174" y2=" 174" cx="   0" cy="  -1" name="record_btn_disabled_overlay"/>
+    <rect x1="   1" y1="   1" x2=" 176" y2=" 452" cx="   0" cy="   0" name="reel_frame"/>
+    <rect x1=" 341" y1=" 305" x2="  56" y2="  50" cx="   1" cy="   3" name="spin_btn_burst_00"/>
+    <rect x1=" 947" y1=" 285" x2="  50" y2="  42" cx="   3" cy="   4" name="spin_btn_burst_01"/>
+    <rect x1=" 983" y1=" 331" x2="  38" y2="  32" cx="   3" cy="   5" name="spin_btn_burst_02"/>
+    <rect x1=" 533" y1=" 397" x2="  36" y2="  42" cx="   3" cy="  -6" name="spin_btn_burst_03"/>
+    <rect x1=" 341" y1=" 357" x2="  40" y2="  46" cx="   6" cy="   0" name="spin_btn_burst_04"/>
+    <rect x1=" 983" y1=" 385" x2="  36" y2="  30" cx="  -1" cy="   2" name="spin_btn_burst_05"/>
+    <rect x1=" 533" y1=" 353" x2="  34" y2="  42" cx="  -1" cy="  -4" name="spin_btn_burst_06"/>
+    <rect x1=" 341" y1=" 405" x2="  34" y2="  42" cx="   3" cy="   0" name="spin_btn_burst_07"/>
+    <rect x1=" 377" y1=" 405" x2="  24" y2="  34" cx="   2" cy="   3" name="spin_btn_burst_08"/>
+    <rect x1=" 383" y1=" 357" x2="   6" y2="   4" cx="   1" cy="   3" name="spin_btn_burst_09"/>
+    <rect x1=" 157" y1=" 745" x2=" 148" y2="  46" cx="   0" cy="   0" name="stop_btn_text"/>
+    <rect x1=" 483" y1=" 455" x2=" 158" y2=" 144" cx="   1" cy="   0" name="symb_b"/>
+    <rect x1=" 321" y1=" 455" x2=" 160" y2=" 146" cx="   0" cy="  -1" name="symb_coin"/>
+    <rect x1=" 163" y1=" 455" x2=" 156" y2=" 146" cx="   1" cy="  -1" name="symb_diamond_ring"/>
+    <rect x1=" 581" y1=" 331" x2=" 160" y2=" 120" cx="   0" cy="   0" name="symb_gems"/>
+    <rect x1="   1" y1=" 455" x2=" 160" y2=" 146" cx="   0" cy="  -1" name="symb_gold_record"/>
+    <rect x1=" 743" y1=" 331" x2=" 160" y2=" 118" cx="   0" cy="  -1" name="symb_logo"/>
+    <rect x1="   1" y1=" 603" x2=" 160" y2=" 140" cx="   0" cy="   2" name="symb_microphone"/>
+    <rect x1=" 757" y1="   1" x2=" 136" y2=" 146" cx="   0" cy="  -1" name="symb_music_note"/>
+    <rect x1=" 801" y1=" 455" x2=" 156" y2=" 142" cx="   0" cy="  -1" name="symb_p"/>
+    <rect x1=" 179" y1=" 305" x2=" 160" y2=" 146" cx="   0" cy="  -1" name="symb_piano_keys"/>
+    <rect x1=" 163" y1=" 603" x2=" 160" y2=" 132" cx="   0" cy="  -1" name="symb_stack_of_money"/>
+    <rect x1=" 643" y1=" 455" x2=" 156" y2=" 142" cx="   0" cy="  -1" name="symb_t"/>
+    <rect x1=" 777" y1=" 667" x2=" 206" y2="  62" cx="   0" cy="   0" name="total_bet_meter"/>
+    <rect x1=" 777" y1=" 603" x2=" 206" y2="  62" cx="   0" cy="   0" name="total_bet_meter_active_overlay"/>
+    <rect x1=" 563" y1=" 675" x2=" 206" y2="  62" cx="   0" cy="   0" name="total_bet_meter_disabled_overlay"/>
+    <rect x1=" 581" y1=" 177" x2=" 364" y2=" 152" cx="   0" cy="   0" name="win_meter"/>
+
+</spriteSheet>

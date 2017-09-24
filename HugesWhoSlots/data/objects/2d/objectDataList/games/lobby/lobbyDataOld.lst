@@ -1,0 +1,179 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <graphicResSwap>
+                <res heightOrLess="800" defaultUniformScale="1.5" ext="_720"/>
+            </graphicResSwap>
+            <texture file="data/textures/games/lobby/lobby_spriteSheet.png" compressed="false"/>
+            <mesh genType="sprite_sheet">
+                <spriteSheet file="data/objects/2d/mesh/games/lobby/lobby.xml"/>
+                <scaledFrame thicknessWidth="" thicknessHeight="" centerQuad="" frameBottom=""/>
+            </mesh>
+            <shader id="shader_2d_spriteSheet"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="background">
+            <visual>
+                <texture file="data/textures/games/lobby/background.png"/>
+                <mesh genType="quad">
+                    <file name=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+            </visual>
+        </object>
+       
+        <object name="Payback Pig Normal">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Payback Pig Normal"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="Payback Pig Roll Over">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Payback Pig Roll Over"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="Galactic Girl Normal1">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Galactic Girl Normal1"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="Galactic Girl Overlay1">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Galactic Girl Overlay1"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="menu_btn">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="menu_btn"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="menu_btn_active_overlay">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="menu_btn_active_overlay"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="buy_btn">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buy_btn"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="buy_btn_active_overlay">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buy_btn_active_overlay"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="credit_meter">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="credit_meter"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="Level Meter">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Level Meter"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+      
+        <object name="Level Meter Color">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Level Meter Color"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="Level Meter Star">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="Level Meter Star"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        
+        
+        <object name="level_meter_stencil">
+            <visual>
+                <texture file=""/>
+                <mesh genType="quad">
+                    <file name=""/>
+                </mesh>
+                <shader id="shader_solid_2d"/>
+            </visual>
+            <size width="494" height="66"/>
+        </object>
+        
+        
+        
+        <object name="meter_font">
+            <visual>
+                <texture file="" compressed="false"/>
+                <mesh genType="font">
+                    <file name=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+            </visual>
+        </object>
+        
+    </objectList>
+
+</objectDataList2D>
+

@@ -1,0 +1,115 @@
+
+// 
+//  FILE NAME: controlbase.js
+//  DESC:      Control base class
+//
+
+"use strict";
+
+import { Object2D } from '../2d/object2d';
+import { settings } from '../utilities/settings';
+import { DynamicOffset } from '../common/dynamicoffset';
+import { assetHolder } from '../utilities/assetholder';
+import * as parseHelper from '../utilities/xmlparsehelper';
+
+export class ControlBase extends Object2D
+{
+    constructor( group )
+    {
+        super();
+        
+        // Object data group name
+        this.group = group;
+
+        // Unique string id
+        this.name = null;
+
+        // The type of control
+        this.type = null;
+
+        // Control string list
+        this.stringAry = [];
+
+        // A name that is applied to similar controls.
+        // Provides a way to check for many controls without having to use unique names
+        this.faction = null;
+
+        // Dynamic offset
+        this.dynamicOffset = null;
+    }
+    
+    // 
+    //  DESC: Load the control info from XML node
+    //
+    loadFromNode( node )
+    {
+        // Set the controls name
+        let attr = node.getAttribute( 'name' );
+        if( attr )
+            this.name = attr;
+
+        // Set the faction name
+        attr = node.getAttribute( 'faction' );
+        if( attr )
+            this.faction = attr;
+
+        // Load the transform data
+        this.loadTransFromNode( node );
+
+        // Load the dynamic offset from node
+        this.loadDynamicOffsetFromNode( node );
+
+        // See if we have a list of strings
+        let stringLstNode = node.getElementsByTagName( 'fontStringLst' );
+        if( stringLstNode.length )
+        {
+            let stringNode = stringLstNode[0].getElementsByTagName( 'string' );
+            
+            for( let i = 0; i < stringNode.length; ++i )
+                this.stringAry.push( stringNode[i].getAttribute( 'text' ) );
+        }
+
+        // Load the control specific xml file
+        // Get the file path node to the control specific xml code
+        let filePathNode = node.getElementsByTagName( 'filePath' );
+        if( filePathNode.length )
+        {
+            // Get the control's file path
+            let controlFilePath = filePathNode[0].getAttribute( 'file' );
+
+            // Load xml specific control code
+            // Use the preloaded since many controls reuse xml files
+            this.loadControlFromNode( assetHolder.get( this.group, controlFilePath ) );
+        }
+    }
+    
+    // 
+    //  DESC: Load the control specific info from XML node
+    //
+    loadControlFromNode( node )
+    {
+        // Empty function to be overwritten
+    }
+
+    // 
+    //  DESC: Load the dynamic offset data from node
+    //
+    loadDynamicOffsetFromNode( node )
+    {
+        // Load the dynamic offset
+        this.dynamicOffset = parseHelper.loadDynamicOffset( node );
+
+        // Set the dynamic position
+        this.setDynamicPos();
+    }
+
+    // 
+    //  DESC: Set the dynamic position
+    //
+    setDynamicPos()
+    {
+        // Position the menu based on the dynamic offset
+        if( this.dynamicOffset )
+            this.setPos( this.dynamicOffset.getPos( settings.defaultSize_half ) );
+    }
+}

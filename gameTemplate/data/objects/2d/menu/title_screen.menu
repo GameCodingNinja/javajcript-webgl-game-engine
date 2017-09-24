@@ -1,0 +1,101 @@
+<menu>
+  
+    <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
+    
+    <scriptLst>
+        <script transIn="Menu_TransIn"/>
+        <script transOut="Menu_TransOut"/>
+    </scriptLst>
+    
+    <staticMenuControls>
+        
+        <!-- Credit Meter control -->
+        <!--<control name="meter" controlType="meter" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/meter.ctrl"/>
+            <position x="-1450" y="700" z="0"/>-->
+            <!-- Max size of font string in meter -->
+            <!--<size width="170" height="80"/>
+            <bangRange fastBangTime="500" scaleType="axis">
+                <range target="500" bangUpType="rampUp" velocity="15.0"  estimatedTime="200" slowStartTime="100"/>
+                <range target="1000" bangUpType="rampUp" velocity="15.0"  estimatedTime="500" slowStartTime="200"/>
+                <range target="10000" bangUpType="rampUp" velocity="15.0"  estimatedTime="2000" slowStartTime="500"/>
+                <range target="100000" bangUpType="rampUp" velocity="15.0"  estimatedTime="3000" slowStartTime="500"/>
+                <range target="1000000" bangUpType="rampUp" velocity="15.0"  estimatedTime="4000" slowStartTime="500"/>
+            </bangRange>
+        </control>-->
+       
+        <!--<control name="progress_bar" controlType="progress_bar" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/progress_bar.ctrl"/>
+            <position x="-700" y="100" z="0"/>
+            <range cur="50" min="0" max="100"/>-->
+            <!--<orentation type="vert" alignment="bottom"/>-->
+        <!--</control>-->
+
+    </staticMenuControls>
+
+    <menuControls>
+        <!-- Continue Button -->
+        <control name="continue_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="0" y="116" z="0"/>
+            <fontStringLst>
+                <string text="Continue"/>
+            </fontStringLst>
+            <action actionType="game_state_change" executionAction="run_state"/>
+            <navigate up="key_binding_btn" down="new_game_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- New Game Button -->
+        <control name="new_game_btn" controlType="button" defaultState="disabled">
+            <filePath file="data/objects/2d/menu/control/button_spin_275x55.ctrl"/>
+            <position x="0" y="58" z="0"/>
+            <fontStringLst>
+                <string text="New Game"/>
+            </fontStringLst>
+            <!-- <action actionType="to_menu" executionAction="settings_menu"/> -->
+            <action actionType="action"/>
+            <navigate up="continue_btn" down="load_game_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Load Game Button -->
+        <control name="load_game_btn" controlType="button" defaultState="disabled">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="0" y="0" z="0"/>
+            <fontStringLst>
+                <string text="Load Game"/>
+            </fontStringLst>
+            <action actionType="to_menu" executionAction="settings_menu"/>
+            <navigate up="new_game_btn" down="settings_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+      
+        <!-- Settings Button -->
+        <control name="settings_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="0" y="-58" z="0"/>
+            <fontStringLst>
+                <string text="Settings"/>
+            </fontStringLst>
+            <action actionType="to_menu" executionAction="settings_menu"/>
+            <navigate up="load_game_btn" down="key_binding_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Key Bindings Button -->
+        <control name="key_binding_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="0" y="-116" z="0"/>
+            <fontStringLst>
+                <string text="Key Bindings"/>
+            </fontStringLst>
+            <action actionType="to_menu" executionAction="key_bindings_menu"/>
+            <navigate up="settings_btn" down="continue_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+    </menuControls>
+
+</menu>
+

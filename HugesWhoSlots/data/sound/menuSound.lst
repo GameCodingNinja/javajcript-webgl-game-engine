@@ -1,0 +1,34 @@
+<soundList>
+
+  <soundFiles>
+    <load id="highlight_0" file="data/sound/menu/highlight0.ogg"/>
+    <load id="highlight_1" file="data/sound/menu/highlight1.ogg"/>
+    <load id="highlight_2" file="data/sound/menu/highlight2.ogg"/>
+    <load id="highlight_3" file="data/sound/menu/highlight3.ogg"/>
+    <load id="highlight_4" file="data/sound/menu/highlight4.ogg"/>
+    <load id="highlight_5" file="data/sound/menu/highlight5.ogg"/>
+    <load id="select_0" file="data/sound/menu/select0.ogg"/>
+    <load id="select_1" file="data/sound/menu/select1.ogg"/>
+    <load id="select_2" file="data/sound/menu/select2.ogg"/>
+    <load id="select_3" file="data/sound/menu/select3.ogg"/>
+  </soundFiles>
+
+  <playlistSet>
+    <playList id="active" playtype="random">
+      <sound id="highlight_0"/>
+      <sound id="highlight_1"/>
+      <sound id="highlight_2"/>
+      <sound id="highlight_3"/>
+      <sound id="highlight_4"/>
+      <sound id="highlight_5"/>
+    </playList>
+    
+    <playList id="select" playtype="random">
+      <sound id="select_0"/>
+      <sound id="select_1"/>
+      <sound id="select_2"/>
+      <sound id="select_3"/>
+    </playList>
+  </playlistSet>
+
+</soundList>

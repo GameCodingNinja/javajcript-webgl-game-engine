@@ -1,0 +1,42 @@
+<listTable>
+
+    <groupList groupName="(debug)">
+        <file path="data/objects/2d/objectDataList/debug.lst"/>
+    </groupList>
+    
+    <groupList groupName="(startup)">
+        <file path="data/objects/2d/objectDataList/startupDataList.lst"/>
+    </groupList>
+
+    <groupList groupName="(loadingScreen)">
+        <file path="data/objects/2d/objectDataList/loadingScreenDataList.lst"/>
+    </groupList>
+
+    <groupList groupName="(menu)">
+        <file path="data/objects/2d/objectDataList/menuBackgrounds.lst"/>
+        <file path="data/objects/2d/objectDataList/keybindingMenu.lst"/>
+        <file path="data/objects/2d/objectDataList/menuOther.lst"/>
+        <file path="data/objects/2d/objectDataList/menuGeneric.lst"/>
+    </groupList>
+
+    <groupList groupName="(title_screen)">
+        <file path="data/objects/2d/objectDataList/titleScreenDataList.lst"/>
+    </groupList>
+    
+    <groupList groupName="(slot)">
+        <file path="data/objects/2d/objectDataList/symbolDataList.lst"/>
+    </groupList>
+    
+    <groupList groupName="(run)">
+        <file path="data/objects/2d/objectDataList/runDataList.lst"/>
+    </groupList>
+    
+    <groupList groupName="(actor)">
+        <file path="data/objects/2d/objectDataList/actorDataList.lst"/>
+    </groupList>
+    
+    <groupList groupName="(stage1)">
+        <file path="data/objects/2d/objectDataList/stage1DataList.lst"/>
+    </groupList>
+  
+</listTable>

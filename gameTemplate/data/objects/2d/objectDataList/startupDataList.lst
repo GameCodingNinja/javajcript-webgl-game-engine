@@ -1,0 +1,106 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <texture count="0" file="" compressed="false"/>
+            <mesh genType="quad">
+                <spriteSheet defIndex="" glyphCount="" columns=""/>
+                <scaledFrame thicknessWidth="" thicknessHeight="" centerQuad="" frameBottom=""/>
+                <file name=""/>
+            </mesh>
+            <color r="1" g="1" b="1" a="1"/>
+            <shader id="shader_2d"/>
+        </visual>
+        <size width="0" height="0"/>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="logo">
+          <visual>
+            <!--<texture file="data/textures/startup/HugesWhoLogo_720.png"/>-->
+            <texture file="data/textures/startup/waffles.png"/>
+          </visual>
+        </object>
+        
+        <object name="progress_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_3_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="400" height="40"/>
+        </object>
+        
+        <object name="progress_solid">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="25" g="54" b="84" a="0.8"/>
+            </visual>
+            <size width="394" height="34"/>
+        </object>
+<!--
+        <object name="pause_menu_bg">
+            <visual>
+                <texture file="data/textures/menu/menu_bg.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="30" thicknessHeight="30"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="217"/>
+            </visual>
+            <size width="355" height="395"/>
+        </object>
+        
+        <object name="pause_menu_bg_sprite_sheet">
+            <visual>
+                <texture file="data/textures/menu/menu_spriteSheet.png"/>
+                <mesh genType="scaled_frame">
+                    <spriteSheet file="data/objects/2d/mesh/menu.xml">
+                        <glyph id="16x16_2_pixel_frame"/>
+                    </spriteSheet>
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="217"/>
+            </visual>
+            <size width="455" height="295"/>
+        </object>
+
+        <object name="spriteSheet_mesh_file">
+            <visual>
+                <texture file="data/textures/startup/spritesheet.png"/>
+                <mesh genType="sprite_sheet">
+                    <spriteSheet>
+                        <glyph id="record_btn"/>
+                    </spriteSheet>
+                    <file name="data/objects/2d/mesh/spritesheet.xml"/>
+                </mesh>
+                <shader id="shader_2d_spriteSheet"/>
+            </visual>
+        </object>
+        
+        <object name="spriteSheet_build">
+            <visual>
+                <texture file="data/textures/startup/loading_spriteSheet.png"/>
+                <mesh genType="sprite_sheet">
+                    <spriteSheet defIndex="9" glyphCount="18" columns="6"/>
+                </mesh>
+                <shader id="shader_2d_spriteSheet"/>
+            </visual>
+        </object>
+
+        <object name="waffles">
+            <visual>
+                <texture file=""/>
+                <shader id="shader_solid_2d"/>
+            </visual>
+            <size width="200" height="300"/>
+        </object>
+-->
+    </objectList>
+
+</objectDataList2D>
+

@@ -1,0 +1,63 @@
+<menu>
+    
+    <staticMenuControls>
+        
+        <!-- Credit Meter control -->
+        <control name="credit_meter" controlType="meter" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/lobby/controls/credit_meter.ctrl"/>
+            <position x="400" y="-450" z="0"/>
+            <!-- Max size of font string in meter -->
+            <size width="300" height="65"/>
+        </control>
+        
+        <!-- Progress bar -->
+        <!--<control name="progress_bar" controlType="progress_bar" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/lobby/controls/progress_bar.ctrl"/>
+            <position x="-280" y="-420" z="0"/>
+            <range cur="50" min="0" max="100"/>
+        </control>-->
+
+    </staticMenuControls>
+
+    <menuControls>
+        
+        <!-- Big Cash Back Button -->
+        <control name="big_pay_back_btn" faction="decision_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/lobby/controls/big_payback_btn.ctrl"/>
+            <position x="-350" y="25" z="0"/>
+            <action actionType="to_tree" executionAction="confirmation_tree"/>
+            <!--<navigate down="buy_btn" right="galatic_junk_btn"/>-->
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+        
+        <!-- Galatic Junk In The Trunk Button -->
+        <control name="galatic_junk_btn" faction="decision_btn" controlType="button" defaultState="disabled">
+            <filePath file="data/objects/2d/ui/games/lobby/controls/galatic_junk_btn.ctrl"/>
+            <position x="350" y="30" z="0"/>
+            <action actionType="to_tree" executionAction="confirmation_tree"/>
+            <!--<navigate down="buy_btn" left="big_cash_back_btn"/>-->
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+        
+        <!-- Buy Button -->
+        <!--<control name="buy_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/lobby/controls/buy_btn.ctrl"/>
+            <position x="-810" y="-375" z="0"/>
+            <navigate down="menu_btn" up="big_cash_back_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <action actionType="to_tree" executionAction="buy_tree"/>
+        </control>-->
+        
+        <!-- Menu Button -->
+        <!--<control name="menu_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/lobby/controls/menu_btn.ctrl"/>
+            <position x="-810" y="-480" z="0"/>
+            <navigate up="buy_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <action actionType="to_tree" executionAction="menu_tree"/>
+        </control>-->
+
+    </menuControls>
+
+</menu>
+

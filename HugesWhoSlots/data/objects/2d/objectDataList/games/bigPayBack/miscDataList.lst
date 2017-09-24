@@ -1,0 +1,29 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default>
+        <visual>
+            <mesh genType="font"/>
+            <shader id="shader_2d"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+        
+        <object name="meter_font"/>
+        
+        <object name="cycle_results_font"/>
+        
+        <object name="reel_strip_mask_vert_3">
+            <visual>
+                <mesh genType="quad"/>
+                <shader id="shader_solid_2d"/>
+            </visual>
+            <size width="238" height="654"/>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

@@ -1,0 +1,57 @@
+<UIControl>
+
+    <spriteList>
+        
+        <sprite objectName="play_btn">
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Solid_Active"/>
+                <script selected="Control_Selected_Dispatch_Exe_Act"/>
+            </scriptLst>
+        </sprite>
+        
+        <sprite objectName="play_btn_txt">
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Solid_Active"/>
+                <script selected="Control_Selected_Visible"/>
+            </scriptLst>
+        </sprite>
+      
+        <!--<sprite objectName="play_btn_active_overlay">
+            <scriptLst>
+                <script init="MenuBtn_Init"/>
+                <script disabled="MenuBtnActOver_Disabled"/>
+                <script inactive="MenuBtnActOver_Inactive"/>
+                <script active="PlayBtnActOver_Active"/>
+                <script selected="PlayBtnActOver_Selected"/>
+            </scriptLst>
+        </sprite>
+    
+        <sprite objectName="play_btn_disabled_overlay">
+            <scriptLst>
+                <script init="MenuBtn_Init"/>
+                <script disabled="MenuBtnDisOver_Disabled"/>
+            </scriptLst>
+        </sprite>
+        
+        <sprite objectName="play_btn_sparkle">
+            <position x="-80" y="80" z="0"/>
+            <scriptLst>
+                <script init="PlayBtnSparkle_Init"/>
+                <script selected="PlayBtnSparkle_Selected"/>
+            </scriptLst>
+        </sprite>
+        
+        <sprite objectName="play_btn_txt">
+            <scriptLst>
+                <script selected="PlayBtnTxt_Selected"/>
+                <script playReady="PlayBtnTxt_PlayReady"/>
+            </scriptLst>
+        </sprite>-->
+
+    </spriteList>
+
+</UIControl>

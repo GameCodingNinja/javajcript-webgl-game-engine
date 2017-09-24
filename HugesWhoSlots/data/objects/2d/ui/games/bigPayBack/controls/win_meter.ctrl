@@ -1,0 +1,16 @@
+<UIControl>
+
+    <spriteList>
+      
+        <!--<sprite objectName="win_meter"/>-->
+
+        <sprite objectName="meter_font">
+            <position x="0" y="-10" z="0"/>
+            <font fontName="arial_black_170">
+                <attributes kerning="-3"/>
+            </font>
+        </sprite>
+    
+    </spriteList>
+
+</UIControl>

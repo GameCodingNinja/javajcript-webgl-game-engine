@@ -1,0 +1,54 @@
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="total_bet_meter"/>
+        
+        <sprite objectName="total_bet_meter_active_overlay">
+            <scriptLst>
+                <script disabled="MenuBtnActOver_Disabled"/>
+                <script inactive="MenuBtnActOver_Inactive"/>
+                <script active="TotalBetActOver_Active"/>
+            </scriptLst>
+        </sprite>
+    
+        <sprite objectName="total_bet_meter_disabled_overlay">
+            <scriptLst>
+                <script disabled="MenuBtnDisOver_DisabledAnim"/>
+                <script inactive="MenuBtnDisOver_InactiveAnim"/>
+            </scriptLst>
+        </sprite>
+    
+        <sprite objectName="meter_font">
+            <position x="0" y="-13" z="0"/>
+            <font fontName="arial_reg_45"/>
+        </sprite>
+
+    </spriteList>
+
+    <subControlList>
+
+        <!-- These controls must always be listed in this order -->
+
+        <!-- Decrement Button -->
+        <control name="total_bet_dec_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/standard/arrow_btn.ctrl"/>
+            <position x="-115" y="-10" z="0"/>
+            <rotation z="180"/>
+            <!-- Click area modifier -->
+            <rect x1="90" y1="40" x2="40" y2="40"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Increment Button -->
+        <control name="total_bet_inc_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/standard/arrow_btn.ctrl"/>
+            <position x="115" y="-10" z="0"/>
+            <!-- Click area modifier -->
+            <rect x1="90" y1="40" x2="40" y2="40"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+    </subControlList>
+
+</UIControl>

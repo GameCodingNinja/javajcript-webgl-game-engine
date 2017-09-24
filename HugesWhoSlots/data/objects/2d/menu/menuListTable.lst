@@ -1,0 +1,15 @@
+<listTable>
+
+    <groupList groupName="(menu)">
+        <file path="data/objects/2d/menu/main_menu.cfg"/>
+    </groupList>
+    
+    <groupList groupName="(lobby)">
+        <file path="data/objects/2d/ui/games/lobby/lobby.cfg"/>
+    </groupList>
+    
+    <groupList groupName="(big_pay_back)">
+        <file path="data/objects/2d/ui/games/bigPayBack/base_game.cfg"/>
+    </groupList>
+  
+</listTable>

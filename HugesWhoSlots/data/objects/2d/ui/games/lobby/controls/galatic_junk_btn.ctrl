@@ -1,0 +1,25 @@
+<UIControl>
+
+    <spriteList>
+        
+        <sprite objectName="Galactic Girl">
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Solid_Active"/>
+                <script selected="Control_Selected_Dispatch_Exe_Act"/>
+            </scriptLst>
+        </sprite>
+        
+        <!--<sprite objectName="Galactic Girl Normal1"/>
+        
+        <sprite objectName="Galactic Girl Overlay1">
+            <scriptLst>
+                <script disabled="MenuBtnDisOver_Disabled"/>
+                <script inactive="MenuBtnDisOver_Inactive"/>
+            </scriptLst>
+        </sprite>-->
+
+    </spriteList>
+
+</UIControl>

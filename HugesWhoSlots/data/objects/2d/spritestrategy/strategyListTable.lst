@@ -1,0 +1,11 @@
+<listTable>
+
+    <groupList groupName="(stage1)">
+        <file path="data/objects/2d/spritestrategy/stage/stage1/stage.cfg"/>
+    </groupList>
+    
+    <groupList groupName="(actor)">
+        <file path="data/objects/2d/spritestrategy/actor/actorDataList.lst"/>
+    </groupList>
+  
+</listTable>

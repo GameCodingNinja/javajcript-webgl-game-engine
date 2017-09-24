@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<spriteSheet width="462" height="750">
+
+    <rect x1="   1" y1="   1" x2=" 378" y2=" 380" cx="  -1" cy="  -1" name="Galactic Girl Normal1"/>
+    <rect x1="   1" y1=" 383" x2=" 460" y2=" 366" cx="   0" cy="   9" name="Payback Pig Normal"/>
+
+</spriteSheet>

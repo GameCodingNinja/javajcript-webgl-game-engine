@@ -1,0 +1,10 @@
+<actor>
+
+    <spriteList>
+
+        <sprite objectName="player_projectile" group="(actor)"/>
+
+    </spriteList>
+  
+</actor>
+

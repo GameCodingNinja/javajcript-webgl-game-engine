@@ -1,0 +1,25 @@
+<UIControl>
+
+    <spriteList>
+    
+        <sprite objectName="buy_btn"/>
+    
+        <sprite objectName="buy_btn_active_overlay">
+            <scriptLst>
+                <script disabled="MenuBtnActOver_Disabled"/>
+                <script inactive="MenuBtnActOver_Inactive"/>
+                <script active="MenuBtnActOver_Active"/>
+                <script selected="MenuBtnActOver_Selected"/>
+            </scriptLst>
+        </sprite>
+    
+        <sprite objectName="buy_btn_disabled_overlay">
+            <scriptLst>
+                <script disabled="MenuBtnDisOver_DisabledAnim"/>
+                <script inactive="MenuBtnDisOver_InactiveAnim"/>
+            </scriptLst>
+        </sprite>
+
+    </spriteList>
+
+</UIControl>

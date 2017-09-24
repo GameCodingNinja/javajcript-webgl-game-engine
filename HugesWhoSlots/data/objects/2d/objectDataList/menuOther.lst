@@ -1,0 +1,106 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <texture count="0" file="" compressed="false"/>
+            <mesh genType="quad">
+                <spriteSheet defIndex="" glyphCount="" columns=""/>
+                <scaledFrame thicknessWidth="" thicknessHeight="" centerQuad="" frameBottom=""/>
+                <file name=""/>
+            </mesh>
+            <color r="1" g="1" b="1" a="1"/>
+            <shader id="shader_2d"/>
+        </visual>
+        <size width="0" height="0"/>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="250x90_slider_selection_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_3_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="250" height="90"/>
+        </object>
+
+        <object name="230x10_slider_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_2_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="230" height="10"/>
+        </object>
+
+        <object name="button_slider">
+            <visual>
+                <texture file="data/textures/menu/slider_button.png"/>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+        </object>
+    
+        <object name="arrow_button_face">
+            <visual>
+                <texture file="data/textures/menu/arrow.png"/>
+                <color r="64" g="125" b="192" a="1"/>
+            </visual>
+        </object>
+
+        <object name="arrow_button_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_2_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="217"/>
+            </visual>
+            <size width="33" height="41"/>
+        </object>
+
+        <object name="arrow_button_solid">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="25" g="54" b="84" a="0.8"/>
+            </visual>
+            <size width="31" height="39"/>
+        </object>
+        
+        
+        <!--<object name="Level Meter">
+            <visual>
+                <texture file="data/textures/menu/Level Meter.png"/>
+            </visual>
+        </object>
+      
+        <object name="Level Meter Color">
+            <visual>
+                <texture file="data/textures/menu/Level Meter Color.png"/>
+            </visual>
+        </object>
+        
+        <object name="Level Meter Star">
+            <visual>
+                <texture file="data/textures/menu/Level Meter Star.png"/>
+            </visual>
+        </object>
+        
+        <object name="level_meter_stencil">
+            <visual>
+                <texture file=""/>
+                <shader id="shader_solid_2d"/>
+            </visual>
+            <size width="494" height="66"/>
+        </object>-->
+
+    </objectList>
+
+</objectDataList2D>
+

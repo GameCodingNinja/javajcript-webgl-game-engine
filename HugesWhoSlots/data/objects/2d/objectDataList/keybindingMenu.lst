@@ -1,0 +1,85 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <texture count="0" file="" compressed="false"/>
+            <mesh genType="quad">
+                <spriteSheet defIndex="" glyphCount="" columns=""/>
+                <scaledFrame thicknessWidth="" thicknessHeight="" centerQuad="" frameBottom=""/>
+                <file name=""/>
+            </mesh>
+            <color r="1" g="1" b="1" a="1"/>
+            <shader id="shader_2d"/>
+        </visual>
+        <size width="0" height="0"/>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="key_binding_scroll_box_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_2_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="36" g="82" b="115" a="1"/>
+            </visual>
+            <size width="930" height="562"/>
+        </object>
+
+        <object name="key_binding_slider_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_2_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="10" height="560"/>
+        </object>
+        
+        <object name="key_binding_button_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_3_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                    <file name="data/objects/2d/mesh/menu/key_binding_button_frame.2dm"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="217"/>
+            </visual>
+            <size width="908" height="40"/>
+        </object>
+
+        <object name="key_binding_button_solid">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="25" g="54" b="84" a="0.8"/>
+            </visual>
+            <size width="904" height="36"/>
+        </object>
+
+        <object name="key_binding_scroll_box_mask">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="1" g="1" b="1" a="1"/>
+            </visual>
+            <size width="916" height="548"/>
+        </object>
+        
+        <object name="key_binding_reset_button_frame">
+            <visual>
+                <texture file="data/textures/menu/16x16_3_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="217"/>
+            </visual>
+            <size width="908" height="40"/>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

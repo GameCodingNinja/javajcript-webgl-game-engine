@@ -1,0 +1,12 @@
+<sector>
+  
+    <spriteList>
+
+        <sprite objectName="sector0" group="(stage1)">
+            <position x="0" y="0" z="0"/>
+        </sprite>
+
+    </spriteList>
+  
+</sector>
+
