@@ -9,8 +9,10 @@
 import { Object2D } from './object2d';
 import { settings } from '../utilities/settings';
 import { Sprite2D } from '../2d/sprite2d';
+import { ActorSprite2D } from '../2d/actorsprite2d';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { signalManager } from '../managers/signalmanager';
+import { ActorData } from '../common/actordata';
 
 export class Sector2D extends Object2D
 {
@@ -31,30 +33,30 @@ export class Sector2D extends Object2D
     //
     //  DESC: Load the data from xml node
     //
-    loadFromNode( strategyId, xmlNode, filePath, finishCallback )
+    loadFromNode( strategyId, node, filePath, finishCallback )
     {
-        let defaultObjName = '';
         let defaultGroup = '';
-        let defaultId = -1;
+        let defaultObjName = '';
         let defaultAIName = '';
+        let defaultId = -1;
         
-        let attr = xmlNode.getAttribute( 'defaultObjectName' );
-        if( attr )
-            defaultObjName = attr;
-        
-        attr = xmlNode.getAttribute( 'defaultGroup' );
+        let attr = node.getAttribute( 'defaultGroup' );
         if( attr )
             defaultGroup = attr;
         
-        attr = xmlNode.getAttribute( 'defaultId' );
+        attr = node.getAttribute( 'defaultObjectName' );
         if( attr )
-            defaultId = Number(attr);
+            defaultObjName = attr;
         
-        attr = xmlNode.getAttribute( 'defaultAIName' );
+        attr = node.getAttribute( 'defaultAIName' );
         if( attr )
             defaultAIName = attr;
         
-        let spriteNode = xmlNode.getElementsByTagName( 'sprite' );
+        attr = node.getAttribute( 'defaultId' );
+        if( attr )
+            defaultId = Number(attr);
+        
+        let spriteNode = node.children;
 
         for( let i = 0; i < spriteNode.length; ++i )
         {
@@ -70,17 +72,24 @@ export class Sector2D extends Object2D
             attr = spriteNode[i].getAttribute( 'objectName' );
             if( attr )
                 objName = attr;
-
-            attr = spriteNode[i].getAttribute( 'id' );
-            if( attr )
-                id = Number(attr);
             
             attr = spriteNode[i].getAttribute( 'aiName' );
             if( attr )
                 aiName = attr;
             
+            attr = spriteNode[i].getAttribute( 'id' );
+            if( attr )
+                id = Number(attr);
+            
+            let sprite = null;
+            
             // Allocate the sprite and add it to the array
-            let sprite = new Sprite2D( objectDataManager.getData( group, objName ), id );
+            if( spriteNode[i].tagName === 'sprite' )
+                sprite = new Sprite2D( objectDataManager.getData( group, objName ), id );
+
+            else
+                sprite = new ActorSprite2D( new ActorData( spriteNode[i], group, objName, aiName, id ) );
+            
             this.spriteAry.push( sprite );
             
             // Load the transform data from node
@@ -129,18 +138,21 @@ export class Sector2D extends Object2D
     update()
     {
         for( let i = 0; i < this.spriteAry.length; ++i )
+        {
             this.spriteAry[i].update();
+            this.spriteAry[i].physicsUpdate();
+        }
     }
 
     //
     //  DESC: Transform the sprite
     //
-    doTransform( object )
+    transform( object )
     {
         if( object )
-            this.transform( object.matrix, object.wasWorldPosTranformed() );
+            super.transform( object.matrix, object.wasWorldPosTranformed() );
         else
-            this.transform();
+            super.transform();
         
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].transform( this.matrix, this.wasWorldPosTranformed() );

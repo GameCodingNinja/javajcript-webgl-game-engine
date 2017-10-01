@@ -16,6 +16,9 @@ export class SpriteData extends Object
     {
         super();
         
+        // Set the sprite type
+        this.parameters.add( defs.SPRITE2D );
+        
         this.fontData = null;
         this.name = null;
         this.group = defGroup;

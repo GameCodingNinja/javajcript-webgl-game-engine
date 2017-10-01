@@ -16,17 +16,23 @@ export class ActorData extends Object
     {
         super();
         
+        // Set the sprite type
+        this.parameters.add( defs.ACTOR2D );
+        
         // Name of the ai
         this.aiName = defAIName;
+        
+        // Flag to indicate this is the player actor
+        this.playerActor = false;
         
         // Unique Id number
         this.id = defId;
 
         // sprite data vector
         this.spriteDataAry = [];
-
+        
         // Get the sprite's AI name
-        /*let attr = node.getAttribute( "aiName" );
+        let attr = node.getAttribute( "aiName" );
         if( attr )
             this.aiName = attr;
         
@@ -34,6 +40,11 @@ export class ActorData extends Object
         attr = node.getAttribute( "id" );
         if( attr )
             this.id = Number(attr);
+        
+        // visible property
+        attr = node.getAttribute( 'visible' );
+        if( attr )
+            this.setVisible( attr === 'true' );
 
         // See if we have a sprite list which we should since it's an actor sprite
         let spriteNode = node.getElementsByTagName( 'sprite' );
@@ -44,7 +55,7 @@ export class ActorData extends Object
             this.spriteDataAry.push( new SpriteData( spriteNode[i], defGroup, defObjName, defAIName, defId ) );
 
         // Load the transform data from node
-        this.loadTransFromNode( node );*/
+        this.loadTransFromNode( node );
     }
 }
 

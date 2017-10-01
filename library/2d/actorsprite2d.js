@@ -9,6 +9,7 @@
 import { Object2D } from './object2d';
 import { Sprite2D } from './sprite2d';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
+import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import * as defs from '../common/defs';
 
 export class ActorSprite2D extends Object2D
@@ -16,6 +17,9 @@ export class ActorSprite2D extends Object2D
     constructor( actorData, id = defs.SPRITE_DEFAULT_ID )
     {
         super();
+        
+        // The physics part of the actor sprite
+        this.physicsComponent = null;
         
         // Base AI scoped pointer
         this.ai = null;
@@ -28,6 +32,9 @@ export class ActorSprite2D extends Object2D
 
         // Unique Id number
         this.id = id;
+        
+        if( id === defs.SPRITE_DEFAULT_ID )
+            id = actorData.id;
     
         // Set the sprite type
         this.parameters.add( defs.ACTOR2D );
@@ -59,7 +66,7 @@ export class ActorSprite2D extends Object2D
         }
         
         // Copy over the transform
-        copyTransform( actorData );
+        this.copyTransform( actorData );
     }
     
     // 
@@ -85,7 +92,24 @@ export class ActorSprite2D extends Object2D
     //
     initPhysics()
     {
+        for( let i = 0; i < this.spriteAry.length; ++i )
+        {
+            if( this.spriteAry[i].objData.physicsData.isActive() )
+            {
+                // Init the physics component with the fist active sprite and create the body
+                if( !this.physicsComponent )
+                {
+                    this.physicsComponent = new PhysicsComponent2D( this.spriteAry[i].objData.physicsData );
+                    this.physicsComponent.createBody( this.spriteAry[i] );
+                }
+
+                // Add in each sprite's fixture
+                this.physicsComponent.createFixture( this.spriteAry[i] );
+            }
+        }
         
+        // Reposition based on the actor
+        this.physicsComponent.setTransform( this.pos.x, this.pos.y, this.rot.z );
     }
 
     // 
@@ -114,7 +138,8 @@ export class ActorSprite2D extends Object2D
     //
     physicsUpdate()
     {
-
+        if( this.physicsComponent )
+            this.physicsComponent.update( this );
     }
     
     //

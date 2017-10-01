@@ -26,7 +26,8 @@ export class Sprite2D extends Object2D
         // The visual part of the 2d sprite
         this.visualComponent = new VisualComponent2D( objData.visualData );
         
-        // The visual part of the 2d sprite
+        // The physics part of the 2d sprite
+        this.physicsComponent = null;
         if( objData.physicsData.isActive() )
             this.physicsComponent = new PhysicsComponent2D( objData.physicsData );
         
@@ -115,7 +116,8 @@ export class Sprite2D extends Object2D
     //
     initPhysics()
     {
-        this.physicsComponent.init( this );
+        if( this.physicsComponent )
+            this.physicsComponent.init( this );
     }
     
     // 
@@ -143,7 +145,8 @@ export class Sprite2D extends Object2D
     //
     physicsUpdate()
     {
-        this.physicsComponent.update( this );
+        if( this.physicsComponent )
+            this.physicsComponent.update( this );
     }
     
     // 

@@ -25,8 +25,10 @@ export class PhysicsComponent2D
         this.metersToPixels = 0;
 
         // Pointer to the world
-        // NOTE: Do not free. We don't own this pointer.
         this.world = null;
+        
+        // Flag to indicate static body
+        this.staticBody = false;
         
         if( physicsData.isActive() )
         {
@@ -57,30 +59,36 @@ export class PhysicsComponent2D
     //
     createBody( sprite )
     {
-        let physicsData = sprite.objData.physicsData;
-        let worldDef = {
-            type : physicsData.bodyType,
-            position : planck.Vec2( sprite.pos.x * this.pixelsToMeters, -(sprite.pos.y * this.pixelsToMeters) ),
-            angle : -sprite.rot.z,
+        if( !this.body )
+        {
+            let physicsData = sprite.objData.physicsData;
+            let worldDef = {
+                type : physicsData.bodyType,
+                position : planck.Vec2( sprite.pos.x * this.pixelsToMeters, -(sprite.pos.y * this.pixelsToMeters) ),
+                angle : -sprite.rot.z,
 
-            linearVelocity : planck.Vec2.zero(),
-            angularVelocity : 0.0,
+                linearVelocity : planck.Vec2.zero(),
+                angularVelocity : 0.0,
 
-            linearDamping : physicsData.linearDamping,
-            angularDamping : physicsData.angularDamping,
+                linearDamping : physicsData.linearDamping,
+                angularDamping : physicsData.angularDamping,
 
-            fixedRotation : physicsData.fixedRotation,
-            bullet : false,
-            gravityScale : 1.0,
+                fixedRotation : physicsData.fixedRotation,
+                bullet : false,
+                gravityScale : 1.0,
 
-            allowSleep : true,
-            awake : true,
-            active : true,
+                allowSleep : true,
+                awake : true,
+                active : true,
 
-            userData : sprite };
+                userData : sprite };
 
-        // Create the body
-        this.body = this.world.createBody( worldDef );
+            // Create the body
+            this.body = this.world.createBody( worldDef );
+            
+            if( physicsData.bodyType === 'static' )
+                this.staticBody = true;
+        }
     }
 
     // 
@@ -265,8 +273,7 @@ export class PhysicsComponent2D
         {
             //CStatCounter::Instance().IncPhysicsObjectsCounter();
 
-            //if( (BODY_TYPE > b2_staticBody) && m_pBody->IsAwake() )
-            if( this.body.isAwake() )
+            if( !this.staticBody && this.body.isAwake() )
             {
                 let pos = this.body.getPosition();
                 let angle = this.body.getAngle();

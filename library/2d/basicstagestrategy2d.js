@@ -103,7 +103,7 @@ export class BasicStageStrategy2D extends iSpriteStrategy
     transform( object )
     {
         for( let i = 0; i < this.sectorAry.length; ++i )
-            this.sectorAry[i].doTransform( object );
+            this.sectorAry[i].transform( object );
     }
 
     //

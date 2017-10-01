@@ -86,10 +86,10 @@ class SignalManager
     // 
     //  DESC: Broadcast AI Actor create signal
     //
-    broadcast_aiCreate( aiName, actorSprite )
+    broadcast_aiCreate( aiName, sprite )
     {
         for( let i = 0; i < this.aiCreateSignal.length; ++i )
-            this.aiCreateSignal[i](aiName, actorSprite);
+            this.aiCreateSignal[i](aiName, sprite);
     }
     
     // 

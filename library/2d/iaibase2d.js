@@ -6,11 +6,10 @@
 
 "use strict";
 
-export class aiBase
+export class iaiBase2d
 {
-    constructor( ai )
+    constructor()
     {
-        this.ai = ai;
     }
     
     // 

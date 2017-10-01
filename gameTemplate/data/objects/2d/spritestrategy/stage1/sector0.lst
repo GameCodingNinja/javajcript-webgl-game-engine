@@ -1,223 +1,223 @@
 <spriteList defaultGroup="(run)" defaultObjectName="peg" defaultId="-2">
 
     <sprite>
-        <position x="-800" y="320" z="0"/>
+        <position x="-800" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="-640" y="320" z="0"/>
+        <position x="-640" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="-480" y="320" z="0"/>
+        <position x="-480" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="-320" y="320" z="0"/>
+        <position x="-320" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="-160" y="320" z="0"/>
+        <position x="-160" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="0" y="320" z="0"/>
+        <position x="0" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="160" y="320" z="0"/>
+        <position x="160" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="320" y="320" z="0"/>
+        <position x="320" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="480" y="320" z="0"/>
+        <position x="480" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="640" y="320" z="0"/>
+        <position x="640" y="320"/>
     </sprite>
 
     <sprite>
-        <position x="800" y="320" z="0"/>
-    </sprite>
-
-
-
-    <sprite>
-        <position x="-720" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="-560" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="-400" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="-240" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="-80" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="80" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="240" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="400" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="560" y="160" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="720" y="160" z="0"/>
+        <position x="800" y="320"/>
     </sprite>
 
 
 
     <sprite>
-        <position x="-800" y="0" z="0"/>
+        <position x="-720" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="-640" y="0" z="0"/>
+        <position x="-560" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="-480" y="0" z="0"/>
+        <position x="-400" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="-320" y="0" z="0"/>
+        <position x="-240" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="-160" y="0" z="0"/>
+        <position x="-80" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="0" y="0" z="0"/>
+        <position x="80" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="160" y="0" z="0"/>
+        <position x="240" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="320" y="0" z="0"/>
+        <position x="400" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="480" y="0" z="0"/>
+        <position x="560" y="160"/>
     </sprite>
 
     <sprite>
-        <position x="640" y="0" z="0"/>
-    </sprite>
-
-    <sprite>
-        <position x="800" y="0" z="0"/>
+        <position x="720" y="160"/>
     </sprite>
 
 
 
     <sprite>
-        <position x="-720" y="-160" z="0"/>
+        <position x="-800" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="-560" y="-160" z="0"/>
+        <position x="-640" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="-400" y="-160" z="0"/>
+        <position x="-480" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="-240" y="-160" z="0"/>
+        <position x="-320" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="-80" y="-160" z="0"/>
+        <position x="-160" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="80" y="-160" z="0"/>
+        <position x="0" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="240" y="-160" z="0"/>
+        <position x="160" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="400" y="-160" z="0"/>
+        <position x="320" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="560" y="-160" z="0"/>
+        <position x="480" y="0"/>
     </sprite>
 
     <sprite>
-        <position x="720" y="-160" z="0"/>
+        <position x="640" y="0"/>
+    </sprite>
+
+    <sprite>
+        <position x="800" y="0"/>
     </sprite>
 
 
 
     <sprite>
-        <position x="-800" y="-320" z="0"/>
+        <position x="-720" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="-640" y="-320" z="0"/>
+        <position x="-560" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="-480" y="-320" z="0"/>
+        <position x="-400" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="-320" y="-320" z="0"/>
+        <position x="-240" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="-160" y="-320" z="0"/>
+        <position x="-80" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="0" y="-320" z="0"/>
+        <position x="80" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="160" y="-320" z="0"/>
+        <position x="240" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="320" y="-320" z="0"/>
+        <position x="400" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="480" y="-320" z="0"/>
+        <position x="560" y="-160"/>
     </sprite>
 
     <sprite>
-        <position x="640" y="-320" z="0"/>
+        <position x="720" y="-160"/>
+    </sprite>
+
+
+
+    <sprite>
+        <position x="-800" y="-320"/>
     </sprite>
 
     <sprite>
-        <position x="800" y="-320" z="0"/>
+        <position x="-640" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="-480" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="-320" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="-160" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="0" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="160" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="320" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="480" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="640" y="-320"/>
+    </sprite>
+
+    <sprite>
+        <position x="800" y="-320"/>
     </sprite>
 
 </spriteList>

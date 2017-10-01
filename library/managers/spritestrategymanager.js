@@ -56,68 +56,39 @@ class SpriteStrategyManager extends ManagerBase
         // Make sure the strategy we are looking for is available
         let strategy = this.strategyMap.get( strategyId );
         if( !strategy )
-            throw new Error( `Sprite Manager strategy Id can't be found (${strategyId}).` );
+            throw new Error( `Sprite Manager strategy Id can't be found (${strategyId})!` );
         
         return strategy;
     }
     
-    
-    
-    /************************************************************************
-    *    desc:  create the sprite and provide a unique id number for each one
-    ************************************************************************/
-    /*const std::vector<int> & CSpriteStrategyMgr::Create(
-        const std::string & strategyId,
-        const std::string & name,
-        const int count,
-        const CPoint<CWorldValue> & pos,
-        const CPoint<float> & rot,
-        const CPoint<float> & scale )
+    //
+    //  DESC: create the sprite and provide a unique id number for each one
+    //
+    createGroup( strategyId, name, count, pos, rot, scale )
     {
-        // Make sure the group we are looking has been defined in the list table file
-        auto mapIter = m_pStrategyMap.find( strategyId );
-        if( mapIter == m_pStrategyMap.end() )
-            throw NExcept::CCriticalException("Sprite Manager Strategy Group Find Error!",
-                boost::str( boost::format("Sprite Manager strategy id can't be found (%s).\n\n%s\nLine: %s") 
-                    % strategyId % __FUNCTION__ % __LINE__ ));
+        // Make sure the strategy we are looking for is available
+        let strategy = this.strategyMap.get( strategyId );
+        if( !strategy )
+            throw new Error( `Sprite Manager strategy Id can't be found (${strategyId})!` );
 
-        m_incReturn.clear();
-        m_incReturn.reserve(count);
+        let incReturn = [];
 
         // Create the requested number of sprites
-        for( int i = 0; i < count; ++i )
-        {
-            m_incReturn.push_back(++m_SpriteInc);
-            mapIter->second->Create( name, m_SpriteInc, pos, rot, scale );
-        }
+        for( let i = 0; i < count; ++i )
+            incReturn.push( strategy.create( name, ++this.spriteInc, pos, rot, scale ) );
 
-        return m_incReturn;
+        return incReturn;
+    }
 
-    }   // Create
-
-    int CSpriteStrategyMgr::Create(
-        const std::string & strategyId,
-        const std::string & name,
-        const CPoint<CWorldValue> & pos,
-        const CPoint<float> & rot,
-        const CPoint<float> & scale )
+    create( strategyId, name, pos, rot, scale )
     {
-        // Make sure the group we are looking has been defined in the list table file
-        auto mapIter = m_pStrategyMap.find( strategyId );
-        if( mapIter == m_pStrategyMap.end() )
-            throw NExcept::CCriticalException("Sprite Manager Strategy Group Find Error!",
-                boost::str( boost::format("Sprite Manager strategy id can't be found (%s).\n\n%s\nLine: %s") 
-                    % strategyId % __FUNCTION__ % __LINE__ ));
+        // Make sure the strategy we are looking for is available
+        let strategy = this.strategyMap.get( strategyId );
+        if( !strategy )
+            throw new Error( `Sprite Manager strategy Id can't be found (${strategyId})!` );
 
-        mapIter->second->Create( name, ++m_SpriteInc, pos, rot, scale );
-
-        return m_SpriteInc;
-
-    }   // Create */
-    
-    
-    
-    
+        return strategy.create( name, ++this.spriteInc, pos, rot, scale );
+    }
     
     //
     //  DESC: Delete all the strategy

@@ -162,4 +162,20 @@ export class Point
     {
         return (0 === this.z);
     }
+    
+    isEquilXYZ( x, y, z )
+    {
+        if( this.data[0] === x )
+        {
+            if( this.data[1] === y )
+            {
+                if( this.data[2] === z )
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
 }

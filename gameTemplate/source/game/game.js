@@ -17,6 +17,7 @@ import { LoadState } from '../state/loadstate';
 import { RunState } from '../state/runstate';
 import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
 import { betManager } from '../../../library/slot/betmanager';
+import { aiBall } from '../ai/aiball';
 import * as state from '../state/gamestate';
 
 class Game extends Basegame
@@ -30,6 +31,9 @@ class Game extends Basegame
         
         // Set the smart gui call back
         signalManager.connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
+        
+        // Set the ai call back
+        signalManager.connect_aiCreate( this.aiCreateCallBack.bind(this) );
 
         // Load the settings
         downloadFile( 'xml', 'data/settings/settings.cfg',
@@ -59,8 +63,17 @@ class Game extends Basegame
     //
     smartGuiControlCreateCallBack( control )
     {
-        if( control.faction === "decision_btn" )
+        if( control.faction === 'decision_btn' )
             control.smartGui = new SmartConfirmBtn( control );
+    }
+    
+    // 
+    //  DESC: Callback for when an ai is created
+    //
+    aiCreateCallBack( aiName, sprite )
+    {
+        if( aiName === 'aiBall' )
+            sprite.setAI( new aiBall(sprite) );
     }
     
     // 

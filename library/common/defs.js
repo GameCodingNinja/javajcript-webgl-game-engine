@@ -13,6 +13,8 @@ export const DEG_TO_RAD = 0.0174532925199432957,
      
 export const SPRITE_DEFAULT_ID = -1;
 
+export const RESET_VELOCITY = true;
+
 // EGenerationType
 export const EGT_NULL         = 0,
              EGT_QUAD         = 1,
@@ -73,6 +75,10 @@ export const VISIBLE            = 0x100;
 // Type bits
 export const SPRITE2D           = 0x200,
              ACTOR2D            = 0x400;
+
+// Sprite strategy command
+export const ESSC_KILL_SPRITE   = 0,
+             ESSC_CREATE_SPRITE = 1;
 
 // EGameEvent
 // Menu events
