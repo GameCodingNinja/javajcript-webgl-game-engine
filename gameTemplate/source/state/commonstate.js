@@ -1,7 +1,7 @@
 
 // 
 //  FILE NAME: commonstate.js
-//  DESC:      CommonState Class State to be common
+//  DESC:      CommonState Class State
 //
 
 "use strict";
