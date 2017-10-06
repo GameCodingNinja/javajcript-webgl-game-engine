@@ -1,0 +1,67 @@
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="key_binding_button_solid">
+            <scriptLst>
+                <script disabled="Control_Hidden"/>
+                <script inactive="Control_Hidden"/>
+                <script active="Control_Solid_Active"/>
+                <script selected="Control_Solid_Selected"/>
+            </scriptLst>
+        </sprite>
+    
+        <sprite objectName="key_binding_button_frame">
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Selected"/>
+            </scriptLst>
+        </sprite>
+
+        <sprite objectName="control_font">
+            <font fontName="dejavu_sans_cond_32">
+                <alignment horzAlign="left" vertAlign="center"/>
+            </font>
+            <position x="-435" y="0" z="0"/>
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Selected_Dispatch_Exe_Act"/>
+            </scriptLst>
+        </sprite>
+
+    </spriteList>
+  
+    <subControlSettings respondsToSelectMsg="true"/>
+  
+    <subControlList>
+
+        <!-- These controls must always be listed in this order to match the device enum list in defs.h -->
+
+        <!-- Keyboard binding -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/key_binding_button_label.ctrl"/>
+            <position x="-85" y="0" z="0"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Mouse binding -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/key_binding_button_label.ctrl"/>
+            <position x="157" y="0" z="0"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Gamepad binding -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/key_binding_button_label.ctrl"/>
+            <position x="370" y="0" z="0"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+    </subControlList>
+
+</UIControl>

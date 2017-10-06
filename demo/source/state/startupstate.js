@@ -30,7 +30,7 @@ import * as menuScripts from '../scripts/menuscripts';
 import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-const STARTUP_ASSET_COUNT = 86,
+const STARTUP_ASSET_COUNT = 77,
       LOGO_DISPLAY_DELAY = 2000;
 
 export class StartUpState extends state.GameState
@@ -252,19 +252,6 @@ export class StartUpState extends state.GameState
                     });
             });
 
-        // Load the object data list table and (startup) group
-        loadManager.add(
-            ( callback ) =>
-            {
-                genFunc.downloadFile( 'xml', 'data/objects/3d/objectDataList/dataListTable.lst',
-                    ( xmlNode ) =>
-                    {
-                        // Load the object data list table
-                        objectDataManager.loadListTable( xmlNode );
-                        callback();
-                    });
-            });
-            
         // Load the fonts
         loadManager.add(
             ( callback ) =>

@@ -1,0 +1,16 @@
+<menuActionList>
+
+    <backAction>Menu Back</backAction>
+    <toggleAction>Menu Toggle</toggleAction>
+    <escapeAction>Menu Escape</escapeAction>
+    <selectAction>Menu Select</selectAction>
+    <upAction>Menu Up</upAction>
+    <downAction>Menu Down</downAction>
+    <leftAction>Menu Left</leftAction>
+    <rightAction>Menu Right</rightAction>
+    <tabLeft>Menu Tab Left</tabLeft>
+    <tabRight>Menu Tab Right</tabRight>
+    <defaultTree>pause_tree</defaultTree>
+
+</menuActionList>
+

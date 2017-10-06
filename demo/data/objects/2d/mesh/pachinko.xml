@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<spriteSheet width="500" height="200">
+
+    <rect x1=" 300" y1=" 100" x2=" 100" y2=" 100" cx="   0" cy="   0" name="circle_blue"/>
+    <rect x1=" 200" y1=" 100" x2=" 100" y2=" 100" cx="   0" cy="   0" name="circle_green"/>
+    <rect x1=" 100" y1=" 100" x2=" 100" y2=" 100" cx="   0" cy="   0" name="circle_red"/>
+    <rect x1=" 400" y1=" 142" x2="  40" y2="  42" cx="   0" cy="   0" name="peg"/>
+    <rect x1="   0" y1=" 100" x2=" 100" y2=" 100" cx="   0" cy="   0" name="square_blue"/>
+    <rect x1=" 400" y1="   0" x2=" 100" y2=" 100" cx="   0" cy="   0" name="square_green"/>
+    <rect x1=" 300" y1="   0" x2=" 100" y2=" 100" cx="   0" cy="   0" name="square_red"/>
+    <rect x1=" 200" y1="   0" x2=" 100" y2=" 100" cx="   0" cy="   0" name="triangle_blue"/>
+    <rect x1=" 100" y1="   0" x2=" 100" y2=" 100" cx="   0" cy="   0" name="triangle_green"/>
+    <rect x1="   0" y1="   0" x2=" 100" y2=" 100" cx="   0" cy="   0" name="triangle_red"/>
+    <rect x1=" 400" y1=" 100" x2="  40" y2="  42" cx="   0" cy="   0" name="peg_light"/>
+
+</spriteSheet>

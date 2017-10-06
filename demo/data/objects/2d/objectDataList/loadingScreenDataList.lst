@@ -1,0 +1,27 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <mesh genType="quad"/>
+            <color r="1" g="1" b="1" a="1"/>
+            <shader id="shader_2d_spriteSheet"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+        
+        <object name="loadAnim">
+            <visual>
+                <texture file="data/textures/loadingScreen/loading_spriteSheet.png"/>
+                <mesh genType="sprite_sheet">
+                    <spriteSheet defIndex="0" glyphCount="18" columns="6"/>
+                </mesh>
+            </visual>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

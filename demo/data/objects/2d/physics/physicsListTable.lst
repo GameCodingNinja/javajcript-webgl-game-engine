@@ -1,0 +1,7 @@
+<listTable>
+
+  <groupList groupName="(game)">
+    <file path="data/objects/2d/physics/gamePhysics.cfg"/>
+  </groupList>
+  
+</listTable>

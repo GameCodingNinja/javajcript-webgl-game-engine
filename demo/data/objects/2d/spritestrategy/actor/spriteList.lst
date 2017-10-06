@@ -1,0 +1,14 @@
+<spriteList defaultGroup="(pachinko)" defaultAIName="aiBall">
+    
+    <sprite name="square_red" objectName="square_red">
+        <scale x=".9" y=".9" z="1"/>
+    </sprite>
+    
+    <sprite name="triangle_green" objectName="triangle_green"/>
+    <sprite name="triangle_blue" objectName="triangle_blue"/>
+    
+    <sprite name="circle_green" objectName="circle_green"/>
+    <sprite name="circle_blue" objectName="circle_blue"/> 
+    <sprite name="circle_red" objectName="circle_red"/>
+ 
+</spriteList>

@@ -1,0 +1,11 @@
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="label_font">
+            <font fontName="dejavu_sans_bold_45"/>
+        </sprite>
+    
+    </spriteList>
+
+</UIControl>
