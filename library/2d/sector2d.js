@@ -22,6 +22,9 @@ export class Sector2D extends Object2D
         
         // sprite allocation array
         this.spriteAry = [];
+        
+        // Map of sprites that have names
+        this.spriteMap = new Map;
 
         // The projection type
         this.projectionType = settings.projectionType;
@@ -64,10 +67,15 @@ export class Sector2D extends Object2D
             let group = defaultGroup;
             let id = defaultId;
             let aiName = defaultAIName;
+            let name = null;
             
             attr = spriteNode[i].getAttribute( 'group' );
             if( attr )
                 group = attr;
+            
+            attr = spriteNode[i].getAttribute( 'name' );
+            if( attr )
+                name = attr;
             
             attr = spriteNode[i].getAttribute( 'objectName' );
             if( attr )
@@ -85,12 +93,19 @@ export class Sector2D extends Object2D
             
             // Allocate the sprite and add it to the array
             if( spriteNode[i].tagName === 'sprite' )
+            {
                 sprite = new Sprite2D( objectDataManager.getData( group, objName ), id );
-
+                
+                if( sprite.visualComponent.isFontSprite() )
+                    sprite.visualComponent.loadFontPropFromNode( spriteNode[i] );
+            }
             else
                 sprite = new ActorSprite2D( new ActorData( spriteNode[i], group, objName, aiName, id ) );
             
             this.spriteAry.push( sprite );
+            
+            if( name )
+                this.spriteMap.set( name, sprite );
             
             // Load the transform data from node
             sprite.loadTransFromNode( spriteNode[i] );
@@ -122,6 +137,18 @@ export class Sector2D extends Object2D
     {
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].cleanUp();
+    }
+    
+    //
+    //  DESC: Get sprite by sector index and name
+    //
+    get( name )
+    {
+        let sprite = this.spriteMap.get( name );
+        if( !sprite )
+            throw new Error( `Sprite name can't be found (${name})!` );
+        
+        return sprite;
     }
     
     //

@@ -109,6 +109,9 @@ export class Sprite2D extends Object2D
     {
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.deleteFontVBO();
+        
+        if( this.physicsComponent )
+            this.physicsComponent.destroyBody();
     }
     
     // 

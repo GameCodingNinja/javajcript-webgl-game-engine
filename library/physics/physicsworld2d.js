@@ -120,7 +120,7 @@ export class PhysicsWorld2D
     //
     destroyBody( body )
     {
-        let index = this.bodySet.indexOf( body );
+        let index = this.bodyAry.indexOf( body );
 
         if( index !== -1 )
         {

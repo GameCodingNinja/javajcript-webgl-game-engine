@@ -9,6 +9,9 @@
 import { iSpriteStrategy } from '../common/ispritestrategy';
 import * as defs from '../common/defs';
 
+const CMD = 0,
+      SPRITE_ID = 1;
+
 export class BaseStrategy extends iSpriteStrategy
 {
     constructor( idOffset, idDir )
@@ -21,11 +24,8 @@ export class BaseStrategy extends iSpriteStrategy
         // ID Direction
         this.idDir = idDir;
 
-        // Array of indexes to delete
-        this.deleteAry = [];
-
-        // Array of sprites to create
-        this.createAry = [];
+        // Array of commands
+        this.commandAry = [];
     }
     
     //
@@ -33,13 +33,7 @@ export class BaseStrategy extends iSpriteStrategy
     //
     postCommand( cmd, code )
     {
-        // Add to the delete index
-        if( cmd === defs.ESSC_KILL_SPRITE )
-            this.deleteAry.push( code );
-        
-        // Add the create name
-        else if( cmd === defs.ESSC_CREATE_SPRITE )
-            this.createAry.push( code );
+        this.commandAry.push( [cmd, code] );
     }
     
     //
@@ -47,25 +41,24 @@ export class BaseStrategy extends iSpriteStrategy
     //
     miscProcess()
     {
-        handleDelete();
-
-        handleCreate();
-    }
-
-    //
-    //  DESC: Handle the deleting of any object by Id
-    //
-    handleDelete()
-    {
-        if( this.deleteAry.length )
+        if( this.commandAry.length )
         {
-            for( let i = 0; i < this.deleteAry.length; ++i )
-                this.deleteObj( this.deleteAry[i] );
-
-            this.deleteAry = [];
+            for( let i = 0; i < this.commandAry.length; ++i )
+            {
+                if( this.commandAry[i][CMD] === defs.ESSC_DELETE_SPRITE )
+                    this.deleteObj( this.commandAry[i][SPRITE_ID] );
+                
+                else if( this.commandAry[i][CMD] === defs.ESSC_CREATE_SPRITE )
+                    this.createObj( this.commandAry[i][SPRITE_ID] );
+                
+                else if( this.commandAry[i][CMD] === defs.ESSC_DELETE_PHYSICS )
+                    this.deletePhysics( this.commandAry[i][SPRITE_ID] );
+            }
+            
+            this.commandAry = [];
         }
     }
-    
+
     //
     //  DESC: Handle the deleting of any object by Id
     //
@@ -73,25 +66,19 @@ export class BaseStrategy extends iSpriteStrategy
     {
         // Virtual function meant to be over written by inherited class
     }
-    
-    //
-    //  DESC: Handle the creating of new sprite objects by name
-    //
-    handleCreate()
-    {
-        if( this.createAry.length )
-        {
-            for( let i = 0; i < this.createAry.length; ++i )
-                this.createObj( this.createAry[i] );
-
-            this.createAry = [];
-        }
-    }
 
     //
     //  DESC: Handle the creating of any object by name
     //
     createObj( name )
+    {
+        // Virtual function meant to be over written by inherited class
+    }
+    
+    //
+    //  DESC: Handle the deleting of any object physics by Id
+    //
+    deletePhysics( id )
     {
         // Virtual function meant to be over written by inherited class
     }

@@ -87,6 +87,18 @@ export class BasicStageStrategy2D extends iSpriteStrategy
         for( let i = 0; i < this.sectorAry.length; ++i )
             this.sectorAry[i].cleanUp();
     }
+    
+    //
+    //  DESC: Get sprite by sector index and name
+    //
+    get( name, index = 0 )
+    {
+        let sector = this.sectorAry[index];
+        if( !sector )
+            throw new Error( `Sector index can't be found (${name}, ${index})!` );
+        
+        return sector.get( name );
+    }
 
     //
     //  DESC: Update the sector

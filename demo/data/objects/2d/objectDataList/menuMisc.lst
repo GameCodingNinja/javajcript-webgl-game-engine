@@ -34,11 +34,11 @@
                 <mesh genType="font"/>
             </visual>
         </object>
-        
+
         <object name="meter_font">
             <visual>
                 <mesh genType="font"/>
-                <color r="64" g="125" b="192" a="0"/>
+                <color r="64" g="125" b="192" a="1"/>
             </visual>
         </object>
 

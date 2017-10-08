@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { spriteStrategyManager } from '../../../library/managers/spritestrategymanager';
 import { iaiBase2d } from '../../../library/2d/iaibase2d';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
@@ -17,6 +18,10 @@ export class aiBall extends iaiBase2d
         super();
         
         this.sprite = sprite;
+        
+        this.killMsgSent = false;
+        
+        this.strategy = spriteStrategyManager.get( '(sprite)' );
     }
     
     // 
@@ -24,7 +29,6 @@ export class aiBall extends iaiBase2d
     //
     init()
     {
-        this.initPhysics();
     }
     
     // 
@@ -32,22 +36,10 @@ export class aiBall extends iaiBase2d
     //
     update()
     {
-        if( this.sprite.pos.y < -600 )
-            this.initPhysics();
-    }
-    
-    // 
-    //  DESC: Init the physics
-    //
-    initPhysics()
-    {
-        this.sprite.physicsComponent.setTransform(
-            genFunc.randomInt(-700,700),
-            genFunc.randomInt(600,1000),
-            genFunc.randomInt(0,360) * defs.DEG_TO_RAD,
-            defs.RESET_VELOCITY );
-        
-        // Reposition the sprite based on the new physics position and rotation
-        this.sprite.physicsUpdate();
+        if( (this.sprite.pos.y < -600) && !this.killMsgSent )
+        {
+            this.strategy.postCommand( defs.ESSC_DELETE_SPRITE, this.sprite.id );
+            this.killMsgSent = true;
+        }
     }
 }

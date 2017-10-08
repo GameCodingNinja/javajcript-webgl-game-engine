@@ -1,0 +1,24 @@
+<menu>
+    
+    <staticMenuControls>
+        
+        <!-- Win Meter Label -->
+        <control name="win_meter" controlType="meter" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/pachinko/controls/win_meter.ctrl"/>
+            <position x="-845" y="-435" z="0"/>
+            <!-- Max size of font string in meter -->
+            <size width="175" height="55"/>
+            <!-- <meterScript onInit="Meter_OnInit" onStart="Meter_OnStart" onStop="Meter_OnStop" onClear="Meter_OnClear"/> -->
+            <bangRange fastBangTime="500" scaleType="axis">
+                <range target="500" bangUpType="rampUp" velocity="15.0"  estimatedTime="200" slowStartTime="100"/>
+                <range target="1000" bangUpType="rampUp" velocity="15.0"  estimatedTime="500" slowStartTime="200"/>
+                <range target="10000" bangUpType="rampUp" velocity="15.0"  estimatedTime="2000" slowStartTime="500"/>
+                <range target="100000" bangUpType="rampUp" velocity="15.0"  estimatedTime="3000" slowStartTime="500"/>
+                <range target="1000000" bangUpType="rampUp" velocity="15.0"  estimatedTime="4000" slowStartTime="500"/>
+            </bangRange>
+        </control>
+
+    </staticMenuControls>
+
+</menu>
+

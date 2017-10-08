@@ -97,7 +97,7 @@ export class SlotGame
     }
     
     //
-    //  DESC: Init the sprite. This only matters if it's a sprite font.
+    //  DESC: Init the sprite. This only matters if it's a font or physics.
     //
     init()
     {

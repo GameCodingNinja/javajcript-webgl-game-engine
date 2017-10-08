@@ -158,7 +158,7 @@ export class BasicSpriteStrategy2D extends BaseStrategy
         if( data.aiName !== '' )
             signalManager.broadcast_aiCreate( data.aiName, sprite );
         
-        return spriteId;
+        return sprite;
     }
     
     //
@@ -168,7 +168,7 @@ export class BasicSpriteStrategy2D extends BaseStrategy
     {
         let sprite = this.spriteMap.get( id );
         if( !sprite )
-            throw new Error( `Error finding sprite (${id})!` );
+            throw new Error( `Sprite index can't be found (${id})!` );
 
         return sprite;
     }
@@ -179,8 +179,7 @@ export class BasicSpriteStrategy2D extends BaseStrategy
     createObj( name )
     {
         this.create( name, 0 );
-
-    }   // CreateObj
+    }
     
     //
     //  DESC: Handle the deleting of any sprites
@@ -188,18 +187,27 @@ export class BasicSpriteStrategy2D extends BaseStrategy
     deleteObj( id )
     {
         // Find the sprite, delete it and remove entry from map
-        let sprite = this.spriteMap.get( id );
+        let sprite = this.get( id );
         if( sprite )
         {
-            // Specificly delete the physics body before deleting the sprite
-            sprite.physicsComponent.destroyBody();
-            
-            // Clean up if font sprite
+            // Clean up if font or physics sprite
             sprite.cleanUp();
 
             // Delete from map
             this.spriteMap.delete( id );
         }
+    }
+    
+    //
+    //  DESC: Handle the deleting of any object physics by Id
+    //
+    deletePhysics( id )
+    {
+        // Find the sprite and delete the physics body
+        let sprite = this.spriteMap.get( id );
+        if( sprite )
+            sprite.physicsComponent.destroyBody();
+
         else
             throw new Error( `Sprite index can't be found (${id})!` );
     }

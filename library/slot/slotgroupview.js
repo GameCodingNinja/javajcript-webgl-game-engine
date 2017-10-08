@@ -73,7 +73,7 @@ export class SlotGroupView extends Object2D
     }
     
     //
-    //  DESC: Do some cleanup. This only matters if it's a sprite font.
+    //  DESC: Do some cleanup. This only matters if it's a font or physics.
     //
     cleanUp()
     {

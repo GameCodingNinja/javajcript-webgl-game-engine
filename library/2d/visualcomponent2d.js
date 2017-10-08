@@ -603,7 +603,7 @@ export class VisualComponent2D
     allowRender()
     {
         return ((this.visualData.genType > defs.EGT_NULL) && (this.visualData.genType < defs.EGT_FONT)) ||
-               ((this.visualData.genType === defs.EGT_FONT) && this.fontData.fontString);
+               ((this.visualData.genType === defs.EGT_FONT) && this.fontData.fontString && this.vbo);
     }
     
     //

@@ -33,7 +33,7 @@ export class SmartConfirmBtn extends SmartGuiControl
         
         if( this.uiControl.name === 'pachinko_btn' )
         {
-            conformationMsg = 'Are you sure you|want to run the|pachinko demo?';
+            conformationMsg = 'Are you sure you|want to run the|Pachinko Demo?';
             actionType = defs.ECAT_GAME_STATE_CHANGE;
             executionAction = 'run_state';
         }

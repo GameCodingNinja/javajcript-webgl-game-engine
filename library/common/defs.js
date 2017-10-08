@@ -77,8 +77,9 @@ export const SPRITE2D           = 0x200,
              ACTOR2D            = 0x400;
 
 // Sprite strategy command
-export const ESSC_KILL_SPRITE   = 0,
-             ESSC_CREATE_SPRITE = 1;
+export const ESSC_DELETE_SPRITE   = 0,
+             ESSC_CREATE_SPRITE   = 1,
+             ESSC_DELETE_PHYSICS  = 2;
 
 // EGameEvent
 // Menu events

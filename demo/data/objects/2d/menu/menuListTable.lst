@@ -2,6 +2,7 @@
 
     <groupList groupName="(menu)">
         <file path="data/objects/2d/menu/main_menu.cfg"/>
+        <file path="data/objects/2d/ui/games/pachinko/base_game.cfg"/>
     </groupList>
   
 </listTable>

@@ -71,7 +71,7 @@ export class SlotGroup
     }
     
     //
-    //  DESC: Do some cleanup. This only matters if it's a sprite font.
+    //  DESC: Do some cleanup. This only matters if it's a font or physics.
     //
     cleanUp()
     {

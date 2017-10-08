@@ -3,7 +3,7 @@
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
     <default  name="">
         <visual>
-            <texture count="0" file="data/textures/pachinko/pachinko_spriteSheet.png" compressed="false"/>
+            <texture file="data/textures/pachinko/pachinko_spriteSheet.png"/>
             <mesh genType="sprite_sheet">
                 <spriteSheet file="data/objects/2d/mesh/pachinko.xml"/>
             </mesh>
@@ -206,6 +206,53 @@
                     </fixture>
                 </fixtureLst>
             </physics>
+        </object>
+        
+        <object name="bar">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="bar"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <physics>
+                <body type="static"/>
+                <fixtureLst>
+                    <fixture shape="polygon">
+                        <sizeMod top="-4" bottom="-4" left="-4" right="-4"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+        
+        <object name="strawberry">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="strawberry"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <physics>
+                <body type="static"/>
+                <fixtureLst>
+                    <fixture shape="circle" radius="2" sensor="true">
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+        
+        <object name="sprite_font">
+            <visual>
+                <texture file=""/>
+                <mesh genType="font">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+                <color r="64" g="125" b="192" a="1"/>
+            </visual>
+            <physics world=""/>
         </object>
 
     </objectList>

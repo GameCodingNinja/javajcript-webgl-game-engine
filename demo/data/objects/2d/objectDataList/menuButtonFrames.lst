@@ -15,6 +15,17 @@
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
   
     <objectList>
+        
+        <object name="175x55_button_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="175" height="55"/>
+        </object>
 
         <object name="275x55_button_frame">
             <visual>

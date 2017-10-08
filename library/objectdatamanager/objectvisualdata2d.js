@@ -337,7 +337,7 @@ export class ObjectVisualData2D
     // 
     //  DESC: Generate a scaled frame
     //
-    generateScaledFrame( group, textureSize, glyphSize, frameSize, spriteSheetOffset )
+    generateScaledFrame( group, textureSize, glyphSize, frameSize, textureOffset )
     {
         let frame = this.scaledFrame.frame;
         let tSize = textureSize;
@@ -345,7 +345,7 @@ export class ObjectVisualData2D
         let vboName = 'scaled_frame_' + frameSize.w + '_' + frameSize.h + '_' + frame.w + '_' + frame.h + '_' + tSize.w + '_' + tSize.h + '_' + gSize.w + '_' + gSize.h;
 
         this.vbo = vertexBufferManager.createScaledFrame(
-            group, vboName, this.scaledFrame, textureSize, glyphSize, frameSize, spriteSheetOffset );
+            group, vboName, this.scaledFrame, textureSize, glyphSize, frameSize, textureOffset );
 
         let iboAry = [
             0,1,2,     0,3,1,
@@ -377,7 +377,7 @@ export class ObjectVisualData2D
     // 
     //  DESC: Generate a scaled frame with a mesh file
     //
-    generateScaledFrameMeshFile( group, textureSize, glyphSize, frameSize, spriteSheetOffset )
+    generateScaledFrameMeshFile( group, textureSize, glyphSize, frameSize, textureOffset )
     {
         // Construct the name used for vbo and ibo
         let name = 'scaled_frame_mesh_' + this.meshFilePath;
@@ -401,11 +401,11 @@ export class ObjectVisualData2D
         {
             // Load a mesh from XML file
             let meshFileVertAry = [];
-            this.loadMeshFromXML( group, textureSize, frameSize, spriteSheetOffset, 16, meshFileVertAry, iboAry );
+            this.loadMeshFromXML( group, textureSize, frameSize, textureOffset, 16, meshFileVertAry, iboAry );
 
             // create the vbo
             this.vbo = vertexBufferManager.createScaledFrame(
-                group, name, this.scaledFrame, textureSize, glyphSize, frameSize, new Rect, meshFileVertAry );
+                group, name, this.scaledFrame, textureSize, glyphSize, frameSize, textureOffset, meshFileVertAry );
         }
         
         // Create the reusable IBO buffer
@@ -416,7 +416,7 @@ export class ObjectVisualData2D
     // 
     //  DESC: Load a mesh from XML file
     //
-    loadMeshFromXML( group, textureSize, frameSize, spriteSheetOffset, iboOffset, vertAry, iboAry )
+    loadMeshFromXML( group, textureSize, frameSize, textureOffset, iboOffset, vertAry, iboAry )
     {
         // Check if the width or height is odd. If so, we offset 
         // by 0.5 for proper orthographic rendering
@@ -448,8 +448,8 @@ export class ObjectVisualData2D
                 vertAry.push( centerAlignSize.w + vert.x + additionalOffsetX );
                 vertAry.push( centerAlignSize.h - vert.y + additionalOffsetY );
                 vertAry.push( vert.z );
-                vertAry.push( spriteSheetOffset.x1 + (vert.u / textureSize.w) );
-                vertAry.push( spriteSheetOffset.y1 + (vert.v / textureSize.h) );
+                vertAry.push( textureOffset.x1 + (vert.u / textureSize.w) );
+                vertAry.push( textureOffset.y1 + (vert.v / textureSize.h) );
             }
         }
 
