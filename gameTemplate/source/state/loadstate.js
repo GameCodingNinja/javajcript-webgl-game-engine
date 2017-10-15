@@ -54,7 +54,7 @@ export class LoadState extends state.GameState
         let loadAnim = this.loadAnimUpdate.bind(this);
         this.loadAnimInterval = setInterval( () => loadAnim(), 83 );
         
-        shaderManager.setShaderValue4fv( 'shader_2d_spriteSheet', 'additive', [1, 1, 1, 1] );
+        shaderManager.setAllShaderValue4fv( 'additive', [1, 1, 1, 1] );
         
         // Set the load manager's callback when everything is loaded
         loadManager.loadCompleteCallback = this.loadFinished.bind(this);
@@ -104,7 +104,7 @@ export class LoadState extends state.GameState
     //
     cleanUp()
     {
-        shaderManager.setShaderValue4fv( 'shader_2d_spriteSheet', 'additive', [0, 0, 0, 1] );
+        shaderManager.setAllShaderValue4fv( 'additive', [0, 0, 0, 1] );
     }
     
     // 

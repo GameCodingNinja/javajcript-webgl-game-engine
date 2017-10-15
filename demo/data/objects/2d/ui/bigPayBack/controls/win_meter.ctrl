@@ -1,0 +1,18 @@
+<UIControl>
+
+    <spriteList>
+      
+        <sprite objectName="win_meter_frame"/>
+        
+        <sprite objectName="meter_label">
+            <position x="0" y="55" z="0"/>
+            <font fontName="dejavu_sans_reg_bold_14"/>
+        </sprite>
+
+        <sprite objectName="meter_font">
+            <font fontName="arial_black_170"/>
+        </sprite>
+    
+    </spriteList>
+
+</UIControl>

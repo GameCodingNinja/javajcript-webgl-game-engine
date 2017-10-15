@@ -86,7 +86,7 @@ export class UIMeter extends UIControl
         this.maxFontStrSize = null;
 
         // The amount to scale the font by to fit within the meter
-        this.bangScaleAdjustment = new Size;
+        this.bangScaleAdjustment = new Size(1, 1);
 
         // Scale on axis or accurate
         this.scaleType = EST_AXIS;
@@ -206,16 +206,14 @@ export class UIMeter extends UIControl
     
     //
     //  DESC: Find the sprite that renders the font
+    //        NOTE: Should always be the last font sprite in the sprite list
     //
     findFontSprite()
     {
         for( let i = 0; i < this.spriteAry.length; ++i )
         {
             if( this.spriteAry[i].visualComponent.isFontSprite() )
-            {
                 this.fontSprite = this.spriteAry[i];
-                break;
-            }
         }
 
         if( this.fontSprite == null )

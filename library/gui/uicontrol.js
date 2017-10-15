@@ -189,13 +189,14 @@ export class UIControl extends ControlBase
             sprite.visualComponent.loadFontPropFromNode( node );
 
             // Set the font string to be created later
-            if( this.stringAry.length && (fontSpriteCount[0] < this.stringAry.length) )
+            if( this.stringAry.length && (fontSpriteCount[0] < this.stringAry.length) && (sprite.visualComponent.fontData.fontString === '' ) )
+            {
                 sprite.visualComponent.setFontString( this.stringAry[ fontSpriteCount[0] ] );
+                ++fontSpriteCount[0];
+            }
 
             // set the color if it is different
             sprite.visualComponent.color = parseHelper.loadColor( node, sprite.visualComponent.color );
-
-            ++fontSpriteCount[0];
         }
         else
         {
@@ -415,7 +416,7 @@ export class UIControl extends ControlBase
             // Smart gui execution
             this.smartExecuteAction();
 
-            // Boost signal execute action
+            // signal execute action
             if( this.executionActionCallback !== null )
                 for( let i = 0; i < this.executionActionCallback.length; ++i )
                     this.executionActionCallback[i](this);

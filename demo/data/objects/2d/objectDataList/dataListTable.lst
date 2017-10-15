@@ -21,5 +21,9 @@
     <groupList groupName="(pachinko)">
         <file path="data/objects/2d/objectDataList/pachinkoDataList.lst"/>
     </groupList>
+    
+    <groupList groupName="(big_pay_back)">
+        <file path="data/objects/2d/objectDataList/bigpayback.lst"/>
+    </groupList>
   
 </listTable>

@@ -47,7 +47,8 @@ export class ObjectVisualData3D
         if( visualNode.length )
         {
             let attr = visualNode[0].getAttribute('file');
-            if( attr )
+            // Check for null because might want to replace with an empty string
+            if( attr !== null )
                 this.meshFilePath = attr;
                 
             // The shader node determines which shader to use

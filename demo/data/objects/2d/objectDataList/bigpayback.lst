@@ -1,0 +1,262 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default>
+        <visual defaultUniformScale="1.5">
+            <texture file="data/textures/bigPayBack/spriteSheet.png" compressed="false"/>
+            <mesh genType="sprite_sheet">
+                <spriteSheet file="data/objects/2d/mesh/bigpayback.xml"/>
+            </mesh>
+            <shader id="shader_2d_spriteSheet"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="background">
+            <visual>
+                <texture file="data/textures/bigPayBack/background-720.jpg"/>
+                <mesh genType="quad">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+            </visual>
+        </object>
+        
+        <object name="pig">
+            <visual>
+                <texture file="data/textures/bigPayBack/TBP_Pig.png"/>
+                <mesh genType="quad">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+            </visual>
+        </object>
+        
+        <object name="meter_label">
+            <visual defaultUniformScale="1">
+                <texture file=""/>
+                <mesh genType="font">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+                <color r="84" g="139" b="199" a="1"/>
+            </visual>
+        </object>
+        
+        <object name="meter_font">
+            <visual defaultUniformScale="1">
+                <texture file=""/>
+                <mesh genType="font">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+                <color r="143" g="179" b="218" a="1"/>
+            </visual>
+        </object>
+        
+        <object name="cycle_results_font">
+            <visual defaultUniformScale="1">
+                <texture file=""/>
+                <mesh genType="font">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+            </visual>
+        </object>
+        
+        <object name="reel_strip_mask_vert_4">
+            <visual defaultUniformScale="1">
+                <texture file=""/>
+                <mesh genType="quad">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_solid_2d"/>
+            </visual>
+            <size width="281" height="790"/>
+        </object>
+        
+        <object name="win_meter_frame">
+            <visual defaultUniformScale="1">
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="20" thicknessHeight="20" centerQuad="true"/>
+                    <spriteSheet>
+                        <glyph id="meter frame"/>
+                    </spriteSheet>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+                <shader id="shader_2d"/>
+            </visual>
+            <size width="450" height="142"/>
+        </object>
+        
+        <object name="credit_bet_meter_frame">
+            <visual defaultUniformScale="1">
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="20" thicknessHeight="20" centerQuad="true"/>
+                    <spriteSheet>
+                        <glyph id="meter frame"/>
+                    </spriteSheet>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+                <shader id="shader_2d"/>
+            </visual>
+            <size width="300" height="67"/>
+        </object>
+        
+        <object name="play_btn">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="record_btn"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="play_btn_txt">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="play_btn_text"/>
+                        <glyph id="stop_btn_text"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="arrow_btn">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="arrow_btn"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="symb_logo">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_logo"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="symb_gold_record">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_gold_record"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="symb_stack_of_money">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_stack_of_money"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="symb_diamond_ring">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_diamond_ring"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="sym_limo">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="sym_limo"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="symb_piano_keys">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_piano_keys"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="symb_microphone">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_microphone"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="symb_music_note">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_music_note"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="symb_t">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_t"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="symb_b">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_b"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+        <object name="symb_p">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_p"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="symb_coin">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="symb_coin"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+        
+    </objectList>
+
+</objectDataList2D>
+

@@ -23,6 +23,9 @@ export class UIButtonList extends UISubControl
 
         // Index of the image list
         this.imageLstIndex = -1;
+        
+        // Last font index used for the font list
+        this.lastFontSpriteIndex = 0;
 
         // Indicates if the control responds to up, down, left or right
         this.actionMask = new BitMask;
@@ -78,6 +81,17 @@ export class UIButtonList extends UISubControl
             {
                 this.imageLstIndex = i;
                 break;
+            }
+        }
+        
+        // Find the last font sprite in the list
+        let fontSpriteCounter = 0;
+        for( let i = 0; i < this.spriteAry.length; ++i )
+        {
+            if( this.spriteAry[i].visualComponent.isFontSprite() )
+            {
+                this.lastFontSpriteIndex = fontSpriteCounter;
+                ++fontSpriteCounter;
             }
         }
     }
@@ -174,9 +188,6 @@ export class UIButtonList extends UISubControl
 
                 // Update the display
                 this.updateDisplay( this.activeIndex );
-
-                // Execute smart gui
-                this.smartExecuteAction();
             }
             else if( this.subControlAry[defs.BTN_INC] == event.detail.arg[1] )
             {
@@ -185,9 +196,6 @@ export class UIButtonList extends UISubControl
 
                 // Update the display
                 this.updateDisplay( this.activeIndex );
-
-                // Execute smart gui
-                this.smartExecuteAction();
             }
         }
     }
@@ -219,7 +227,7 @@ export class UIButtonList extends UISubControl
     {
         this.activeIndex = index;
 
-        this.createFontString( this.activeIndex );
+        this.createFontString( this.activeIndex, this.lastFontSpriteIndex );
 
         if( this.imageLstIndex > -1 )
             this.spriteAry[this.imageLstIndex].visualComponent.setFrame( this.activeIndex );

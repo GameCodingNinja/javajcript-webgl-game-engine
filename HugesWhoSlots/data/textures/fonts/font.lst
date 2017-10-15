@@ -5,6 +5,7 @@
   <fonts>
 
     <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->
+    <font name="dejavu_sans_cond_24" file="data/textures/fonts/dejavu_sans_cond_24"/>
     <!--<font name="dejavu_sans_cond_26" file="data/textures/fonts/dejavu_sans_cond_26"/>-->
     <font name="dejavu_sans_reg_32" file="data/textures/fonts/dejavu_sans_reg_32"/>
     <!--<font name="dejavu_sans_reg_bold_32" file="data/textures/fonts/dejavu_sans_reg_bold_32"/>

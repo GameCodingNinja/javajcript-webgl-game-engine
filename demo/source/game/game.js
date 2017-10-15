@@ -14,7 +14,8 @@ import { shaderManager } from '../../../library/managers/shadermanager';
 import { StartUpState } from '../state/startupstate';
 import { TitleScreenState } from '../state/titlescreenstate';
 import { LoadState } from '../state/loadstate';
-import { PachinkoState } from '../state/pachinkostate';
+import { PachinkoChallengeState } from '../state/pachinkochallengestate';
+import { BigPayBackState } from '../state/bigpaybackstate';
 import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
 import { betManager } from '../../../library/slot/betmanager';
 import { aiBall } from '../ai/aiball';
@@ -99,8 +100,11 @@ class Game extends Basegame
             else if( this.gameState.nextState === state.GAME_STATE_LOAD )
                 this.gameState = new LoadState( this.gameState.stateMessage, this.doStateChange.bind(this) );
             
-            else if( this.gameState.nextState === state.GAME_STATE_PACHINKO )
-                this.gameState = new PachinkoState( this.gameLoop.bind(this) );
+            else if( this.gameState.nextState === state.GAME_STATE_PACHINKO_CHALLENGE )
+                this.gameState = new PachinkoChallengeState( this.gameLoop.bind(this) );
+            
+            else if( this.gameState.nextState === state.GAME_STATE_BIG_PAY_BACK )
+                this.gameState = new BigPayBackState( this.gameLoop.bind(this) );
             
             // Do any pre-game loop init's
             this.gameState.init();

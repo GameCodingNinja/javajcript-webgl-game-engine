@@ -114,7 +114,7 @@ export class ObjectVisualData2D
         if( visualNode.length )
         {
             let attr = visualNode[0].getAttribute( 'defaultUniformScale' );
-            if( attr )
+            if( attr !== null )
                 this.defaultUniformScale = Number(attr);
             
             // See if we have a texture to load
@@ -122,7 +122,8 @@ export class ObjectVisualData2D
             if( textureNode.length )
             {
                 let file = textureNode[0].getAttribute( 'file' );
-                if( file )
+                // Check for null because might want to replace with an empty string
+                if( file !== null )
                     this.textureFilePath = file;
             }
 
@@ -157,23 +158,24 @@ export class ObjectVisualData2D
                     let columns = 0;
                     
                     let attr = spriteSheetNode[0].getAttribute( 'defIndex' );
-                    if( attr )
+                    if( attr !== null )
                         defaultIndex = Number(attr);
 
                     // Make sure all elements are defined for manually building the sprite sheet data
                     attr = spriteSheetNode[0].getAttribute( 'glyphCount' );
-                    if( attr )
+                    if( attr !== null )
                     {
                         glyphCount = Number(attr);
 
                         attr = spriteSheetNode[0].getAttribute( 'columns' );
-                        if( attr )
+                        if( attr !== null )
                             columns = Number(attr);
                     }
                     
                     // Get the sprite sheet glyph file
                     attr = spriteSheetNode[0].getAttribute( 'file' );
-                    if( attr )
+                    // Check for null because might want to replace with an empty string
+                    if( attr !== null )
                         this.spriteSheetFilePath = attr;
 
                     // See if any glyph Id's have been defined

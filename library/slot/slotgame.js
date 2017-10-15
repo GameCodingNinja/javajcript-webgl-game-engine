@@ -195,10 +195,10 @@ export class SlotGame
     statePlaceWager()
     {
         betManager.deductBet();
-
+        
         if( this.frontPanel )
-            this.frontPanel.initGame( betManager.getCredits() );
-
+            this.frontPanel.statePlaceWager( betManager.getCredits() );
+        
         this.slotResults.clear();
 
         /*if( this.allowSpinMusic && this.spinMusicStartFunc.length )
@@ -242,6 +242,9 @@ export class SlotGame
     //
     statePreSpin()
     {
+        if( this.frontPanel )
+            this.frontPanel.statePreSpin();
+        
         for( let i = 0; i < this.slotGroupAry.length; ++i )
             this.slotGroupAry[i].slotGroupView.startSpin();
 
@@ -362,7 +365,7 @@ export class SlotGame
     stateEnd()
     {
         if( this.frontPanel )
-            this.frontPanel.enableButtons( betManager.allowPlay() );
+            this.frontPanel.stateEnd( betManager.allowPlay() );
 
         // Set the timer that waits to see if the music should time out
         this.stopSpinMusicTimer.set( this.spinMusicTimeOut );
@@ -420,6 +423,9 @@ export class SlotGame
     //
     playGame( control )
     {
+        if( this.frontPanel )
+            this.frontPanel.playGame( control, this.slotState );
+            
         if( this.slotState === slotDefs.ESLOT_IDLE )
         {
             if( betManager.allowPlay() )
@@ -440,11 +446,6 @@ export class SlotGame
         {
             for( let i = 0; i < this.slotGroupAry.length; ++i )
                 this.slotGroupAry[i].slotGroupView.stopSpin();
-        }
-        else if( this.slotState === slotDefs.ESLOT_WAIT_FOR_AWARD )
-        {
-            if( this.frontPanel )
-                this.frontPanel.fastBang();
         }
     }
 

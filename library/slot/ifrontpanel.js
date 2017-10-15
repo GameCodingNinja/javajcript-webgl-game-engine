@@ -6,15 +6,36 @@
 
 "use strict";
 
+import * as slotDefs from './slotdefs';
+
 export class iFrontPanel
 {
     constructor()
     {
     }
     
-    initGame( credits )
+    statePlaceWager( credits )
     {
         // Empty function to be overwritten
+    }
+    
+    stateEnd( allowPlay )
+    {
+        // Empty function to be overwritten
+    }
+    
+    statePreSpin()
+    {
+        // Empty function to be overwritten
+    }
+    
+    //
+    //  DESC: Called when player clicks play button
+    //
+    playGame( control, slotState )
+    {
+        if( slotState === slotDefs.ESLOT_WAIT_FOR_AWARD )
+            this.fastBang();
     }
     
     startBangUp( credits, win )
@@ -28,11 +49,6 @@ export class iFrontPanel
     }
     
     fastBang()
-    {
-        // Empty function to be overwritten
-    }
-    
-    enableButtons( allowPlay )
     {
         // Empty function to be overwritten
     }

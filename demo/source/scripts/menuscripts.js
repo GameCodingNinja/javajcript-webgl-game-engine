@@ -620,6 +620,37 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
     get isFinished() { return this.finished; }
 }
 
+class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
+{
+    constructor( sprite )
+    {
+        super( sprite, 1.7 );
+        
+        this.time = 80;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.time -= highResTimer.elapsedTime;
+
+        if( this.time < 0 )
+        {
+            this.sprite.setDefaultColor();
+            eventManager.dispatchEvent( defs.EGE_MENU_SELECT_EXECUTE );
+            eventManager.dispatchEvent( defs.EGE_MENU_REACTIVATE );
+            this.finished = true;
+        }
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    get isFinished() { return this.finished; }
+}
+
 class Control_Fast_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
@@ -757,6 +788,9 @@ export function loadScripts()
             
     scriptManager.set( 'Control_Fast_Face_Selected_Act',
             ( sprite ) => { return new Control_Fast_Face_Selected_Act( sprite ); } );
+    
+    scriptManager.set( 'Control_Fast_Face_Selected_Exe_Act',
+            ( sprite ) => { return new Control_Fast_Face_Selected_Exe_Act( sprite ); } );
             
     scriptManager.set( 'Control_Fast_Selected',
             ( sprite ) => { return new Control_Fast_Selected( sprite ); } );

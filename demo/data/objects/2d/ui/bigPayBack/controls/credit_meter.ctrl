@@ -1,0 +1,19 @@
+<UIControl>
+
+    <spriteList>
+      
+        <sprite objectName="credit_bet_meter_frame"/>
+        
+        <sprite objectName="meter_label">
+            <position x="0" y="20" z="0"/>
+            <font fontName="dejavu_sans_reg_bold_14"/>
+        </sprite>
+
+        <sprite objectName="meter_font">
+            <position x="0" y="-6" z="0"/>
+            <font fontName="arial_reg_45"/>
+        </sprite>
+    
+    </spriteList>
+
+</UIControl>

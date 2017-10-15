@@ -1,0 +1,92 @@
+<menu>
+    
+    <staticMenuControls>
+        
+        <!-- Win Meter Label -->
+        <control name="win_meter" controlType="meter" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/bigPayBack/controls/win_meter.ctrl"/>
+            <position x="-5" y="-458" z="0"/>
+            <!-- Max size of font string in meter -->
+            <size width="430" height="150"/>
+            <!--<meterScript onInit="Meter_OnInit" onStart="Meter_OnStart" onStop="Meter_OnStop" onClear="Meter_OnClear"/>-->
+            <bangRange fastBangTime="500" scaleType="axis">
+                <range target="500" bangUpType="rampUp" velocity="15.0"  estimatedTime="200" slowStartTime="100"/>
+                <range target="1000" bangUpType="rampUp" velocity="15.0"  estimatedTime="500" slowStartTime="200"/>
+                <range target="10000" bangUpType="rampUp" velocity="15.0"  estimatedTime="2000" slowStartTime="500"/>
+                <range target="100000" bangUpType="rampUp" velocity="15.0"  estimatedTime="3000" slowStartTime="500"/>
+                <range target="1000000" bangUpType="rampUp" velocity="15.0"  estimatedTime="4000" slowStartTime="500"/>
+            </bangRange>
+            <fontStringLst>
+                <string text="WIN"/>
+            </fontStringLst>
+        </control>
+        
+        <!-- Credit Meter Label -->
+        <control name="credit_meter" controlType="meter" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/bigPayBack/controls/credit_meter.ctrl"/>
+            <position x="380" y="-421" z="0"/>
+            <!-- Max size of font string in meter -->
+            <size width="300" height="65"/>
+            <bangRange fastBangTime="500" scaleType="axis">
+                <range target="500" bangUpType="rampUp" velocity="15.0"  estimatedTime="200" slowStartTime="100"/>
+                <range target="1000" bangUpType="rampUp" velocity="15.0"  estimatedTime="500" slowStartTime="200"/>
+                <range target="10000" bangUpType="rampUp" velocity="15.0"  estimatedTime="2000" slowStartTime="500"/>
+                <range target="100000" bangUpType="rampUp" velocity="15.0"  estimatedTime="3000" slowStartTime="500"/>
+                <range target="1000000" bangUpType="rampUp" velocity="15.0"  estimatedTime="4000" slowStartTime="500"/>
+            </bangRange>
+            <fontStringLst>
+                <string text="CREDITS"/>
+            </fontStringLst>
+        </control>
+        
+        <!-- Progress bar -->
+        <!--<control name="progress_bar" controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/games/bigPayBack/controls/progress_bar.ctrl"/>
+            <position x="-480" y="-420" z="0"/>
+        </control>-->
+
+    </staticMenuControls>
+
+    <menuControls>
+
+        <!-- Play Button -->
+        <control name="play_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/bigPayBack/controls/play_btn.ctrl"/>
+            <position x="800" y="-470" z="0"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <action actionType="action"/>
+            <navigate left="total_bet_meter" right="total_bet_meter"/>
+        </control>
+        
+        <!-- Total Bet button list -->
+        <control name="total_bet_meter" controlType="button_list" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/bigPayBack/controls/total_bet_meter.ctrl"/>
+            <position x="380" y="-495" z="0"/>
+            <fontStringLst>
+                <string text="40"/>
+                <string text="80"/>
+                <string text="120"/>
+                <string text="160"/>
+                <string text="200"/>
+                <string text="240"/>
+                <string text="280"/>
+                <string text="320"/>
+                <string text="360"/>
+                <string text="400"/>
+                <string text="440"/>
+                <string text="480"/>
+                <string text="520"/>
+                <string text="560"/>
+                <string text="600"/>
+            </fontStringLst>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scroll startDelay="770" scrollDelay="350" left="true" right="true"/>
+            <actionResponse up="true" down="true"/>
+            <action actionType="action"/>
+            <navigate left="play_btn" right="play_btn"/>
+        </control>
+
+    </menuControls>
+
+</menu>
+

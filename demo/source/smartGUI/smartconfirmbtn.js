@@ -31,17 +31,23 @@ export class SmartConfirmBtn extends SmartGuiControl
         let executionAction = '';
         let actionType = defs.ECAT_BACK;
         
-        if( this.uiControl.name === 'pachinko_btn' )
-        {
-            conformationMsg = 'Are you sure you|want to run the|Pachinko Demo?';
-            actionType = defs.ECAT_GAME_STATE_CHANGE;
-            executionAction = 'run_state';
-        }
-        else if( this.uiControl.name === 'main_menu_btn' )
+        if( this.uiControl.name === 'main_menu_btn' )
         {
             conformationMsg = 'Are you sure you|want to go back to|the main menu?';
             actionType = defs.ECAT_GAME_STATE_CHANGE;
             executionAction = 'title_screen_state';
+        }
+        else if( this.uiControl.name === 'pachinko_challenge_btn' )
+        {
+            conformationMsg = 'Are you sure you|want to play the|Pachinko Fun?';
+            actionType = defs.ECAT_GAME_STATE_CHANGE;
+            executionAction = 'pachinko_challenge_state';
+        }
+        else if( this.uiControl.name === 'big_pay_back_btn' )
+        {
+            conformationMsg = 'Are you sure you|want to play the|Big Pay Back?';
+            actionType = defs.ECAT_GAME_STATE_CHANGE;
+            executionAction = 'big_pay_back_state';
         }
         
         // Set the conformation menu

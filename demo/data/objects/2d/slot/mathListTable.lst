@@ -1,7 +1,7 @@
 <listTable>
 
-    <groupList groupName="(title_screen)">
-        <file path="data/objects/2d/slot/math.cfg"/>
+    <groupList groupName="(big_pay_back)">
+        <file path="data/objects/2d/slot/bigPayBack/math.cfg"/>
     </groupList>
   
 </listTable>

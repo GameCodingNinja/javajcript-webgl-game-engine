@@ -34,6 +34,12 @@ export class LoadState extends state.GameState
         this.loadAnim.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
         this.loadAnim.transform();
         
+        this.loadFont = new Sprite2D( objectDataManager.getData( '(loadingScreen)', 'load_font' ) );
+        this.loadFont.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        this.loadFont.visualComponent.setFontProperties('dejavu_sans_cond_24');
+        this.loadFont.visualComponent.createFontString('0%');
+        this.loadFont.transform();
+        
         this.frameCount = this.loadAnim.getFrameCount();
         
         this.loadFrameCounter = 0;
@@ -54,7 +60,7 @@ export class LoadState extends state.GameState
         let loadAnim = this.loadAnimUpdate.bind(this);
         this.loadAnimInterval = setInterval( () => loadAnim(), 83 );
         
-        shaderManager.setShaderValue4fv( 'shader_2d_spriteSheet', 'additive', [1, 1, 1, 1] );
+        shaderManager.setAllShaderValue4fv( 'additive', [1, 1, 1, 1] );
         
         // Set the load manager's callback when everything is loaded
         loadManager.loadCompleteCallback = this.loadFinished.bind(this);
@@ -104,7 +110,8 @@ export class LoadState extends state.GameState
     //
     cleanUp()
     {
-        shaderManager.setShaderValue4fv( 'shader_2d_spriteSheet', 'additive', [0, 0, 0, 1] );
+        this.loadFont.cleanUp();
+        shaderManager.setAllShaderValue4fv( 'additive', [0, 0, 0, 1] );
     }
     
     // 
@@ -115,6 +122,7 @@ export class LoadState extends state.GameState
         gl.clear(gl.COLOR_BUFFER_BIT);
         
         this.loadAnim.render( device.orthographicMatrix );
+        this.loadFont.render( device.orthographicMatrix );
         
         ++this.loadFrameCounter;
         

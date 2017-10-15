@@ -30,7 +30,7 @@ import * as menuScripts from '../scripts/menuscripts';
 import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-const STARTUP_ASSET_COUNT = 80,
+const STARTUP_ASSET_COUNT = 83,
       LOGO_DISPLAY_DELAY = 2000;
 
 export class StartUpState extends state.GameState
@@ -373,6 +373,6 @@ export class StartUpState extends state.GameState
     cleanUp()
     {
         objectDataManager.freeGroup( ['(startup)'] );
-        assetHolder.deleteGroup( ['(startup)','(menu)'] );
+        assetHolder.deleteGroup( ['(startup)','(menu)','(loadingScreen)'] );
     }
 }

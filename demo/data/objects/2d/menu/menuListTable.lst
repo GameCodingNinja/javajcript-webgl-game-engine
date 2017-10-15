@@ -2,7 +2,14 @@
 
     <groupList groupName="(menu)">
         <file path="data/objects/2d/menu/main_menu.cfg"/>
-        <file path="data/objects/2d/ui/games/pachinko/base_game.cfg"/>
+    </groupList>
+    
+    <groupList groupName="(pachinko)">
+        <file path="data/objects/2d/ui/pachinko/base_game.cfg"/>
+    </groupList>
+    
+    <groupList groupName="(big_pay_back)">
+        <file path="data/objects/2d/ui/bigPayBack/base_game.cfg"/>
     </groupList>
   
 </listTable>

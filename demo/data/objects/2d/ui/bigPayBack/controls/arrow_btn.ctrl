@@ -1,0 +1,16 @@
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="arrow_btn">
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Fast_Face_Selected_Exe_Act"/>
+            </scriptLst>
+        </sprite>
+
+    </spriteList>
+
+</UIControl>

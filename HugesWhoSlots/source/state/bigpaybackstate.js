@@ -105,7 +105,7 @@ export class BigPayBackState extends CommonState
     //
     cleanUp()
     {
-        // Currently used for cleaning up after the font sprites
+        // Currently used for cleaning up after the font sprites and sprites with physics
         this.slotGame.cleanUp();
         unload();
     }
@@ -224,11 +224,11 @@ export function load()
     loadManager.add(
         ( callback ) => symbolSetViewManager.loadGroup( [group], callback ) );
 
-    // Preload the menu group
+    // Preload the ui group
     loadManager.add(
         ( callback ) => menuManager.preloadGroup( [group], callback ) );
     
-    // Create the lobby menu group
+    // Create the ui group
     loadManager.add(
         ( callback ) => { menuManager.createGroup( [group] ); callback(); });
 

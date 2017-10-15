@@ -84,18 +84,4 @@ export class CommonState extends state.GameState
     {
         menuManager.render( device.orthographicMatrix );
     }
-    
-    // 
-    //  DESC: Get the load state
-    //
-    getLoadState( loadStateStr )
-    {
-        if( loadStateStr === 'title_screen_state' )
-            return state.GAME_STATE_TITLESCREEN;
-        
-        else if( loadStateStr === 'run_state' )
-            return state.GAME_STATE_PACHINKO;
-        
-        throw new Error( `State does not exist!. (${loadStateStr})` );
-    }
 }

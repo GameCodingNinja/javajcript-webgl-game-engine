@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<spriteSheet width="684" height="576">
+
+    <rect x1=" 341" y1=" 137" x2="  22" y2="  22" cx="   0" cy="   0" name="arrow_btn"/>
+    <rect x1=" 299" y1=" 313" x2=" 194" y2=" 134" cx="   0" cy="   0" name="symb_recording_studio"/>
+    <rect x1=" 173" y1=" 449" x2=" 186" y2=" 112" cx="   0" cy="   1" name="sym_limo"/>
+    <rect x1=" 361" y1=" 449" x2="  86" y2="  86" cx="   0" cy="  -1" name="meter frame"/>
+    <rect x1=" 449" y1=" 497" x2=" 142" y2="  46" cx="   0" cy="  -1" name="play_btn_text"/>
+    <rect x1="   1" y1="   1" x2=" 174" y2=" 174" cx="   0" cy="  -1" name="record_btn"/>
+    <rect x1=" 449" y1=" 449" x2=" 148" y2="  46" cx="   0" cy="   0" name="stop_btn_text"/>
+    <rect x1=" 147" y1=" 313" x2=" 150" y2=" 134" cx="   0" cy="   0" name="symb_b"/>
+    <rect x1=" 177" y1="   1" x2=" 162" y2=" 160" cx="  -2" cy="   1" name="symb_coin"/>
+    <rect x1="   1" y1=" 313" x2=" 144" y2=" 134" cx="   0" cy="   0" name="symb_diamond_ring"/>
+    <rect x1=" 495" y1=" 313" x2=" 142" y2=" 132" cx="  -1" cy="   0" name="symb_gold_record"/>
+    <rect x1=" 459" y1=" 177" x2=" 190" y2=" 134" cx="   0" cy="   0" name="symb_logo"/>
+    <rect x1=" 283" y1=" 177" x2=" 174" y2=" 134" cx="   0" cy="   0" name="symb_microphone"/>
+    <rect x1=" 147" y1=" 177" x2=" 134" y2=" 134" cx="   0" cy="   0" name="symb_music_note"/>
+    <rect x1="   1" y1=" 177" x2=" 144" y2=" 134" cx="  -1" cy="   0" name="symb_p"/>
+    <rect x1=" 489" y1="   1" x2=" 194" y2=" 134" cx="   0" cy="   0" name="symb_piano_keys"/>
+    <rect x1="   1" y1=" 449" x2=" 170" y2=" 126" cx="   0" cy="   0" name="symb_stack_of_money"/>
+    <rect x1=" 341" y1="   1" x2=" 146" y2=" 134" cx="   0" cy="   0" name="symb_t"/>
+
+</spriteSheet>

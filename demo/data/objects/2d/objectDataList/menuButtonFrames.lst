@@ -16,7 +16,7 @@
   
     <objectList>
         
-        <object name="175x55_button_frame">
+        <object name="300x55_button_frame">
             <visual>
                 <mesh>
                     <spriteSheet>
@@ -24,9 +24,9 @@
                     </spriteSheet>
                 </mesh>
             </visual>
-            <size width="175" height="55"/>
+            <size width="300" height="55"/>
         </object>
-
+        
         <object name="275x55_button_frame">
             <visual>
                 <mesh>

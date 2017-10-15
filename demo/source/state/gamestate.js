@@ -8,11 +8,12 @@
 
 import { StateMessage } from './statemessage';
 
-export const GAME_STATE_NULL        = 0;
-export const GAME_STATE_STARTUP     = 1;
-export const GAME_STATE_TITLESCREEN = 2;
-export const GAME_STATE_LOAD        = 3;
-export const GAME_STATE_PACHINKO    = 4;
+export const GAME_STATE_NULL               = 0,
+             GAME_STATE_STARTUP            = 1,
+             GAME_STATE_TITLESCREEN        = 2,
+             GAME_STATE_LOAD               = 3,
+             GAME_STATE_PACHINKO_CHALLENGE = 4,
+             GAME_STATE_BIG_PAY_BACK       = 5;
 
 export class GameState
 {
@@ -25,6 +26,23 @@ export class GameState
         
         // Message to send to next state
         this.stateMessage = new StateMessage;
+    }
+    
+    // 
+    //  DESC: Get the state based on string name
+    //
+    getLoadState( loadStateStr )
+    {
+        if( loadStateStr === 'title_screen_state' )
+            return GAME_STATE_TITLESCREEN;
+        
+        else if( loadStateStr === 'pachinko_challenge_state' )
+            return GAME_STATE_PACHINKO_CHALLENGE;
+        
+        else if( loadStateStr === 'big_pay_back_state' )
+            return GAME_STATE_BIG_PAY_BACK;
+        
+        throw new Error( `State does not exist!. (${loadStateStr})` );
     }
     
     init()

@@ -13,7 +13,7 @@
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
   
     <objectList>
-        
+
         <object name="background">
             <visual>
                 <texture file="data/textures/games/bigPayBack/background.png"/>

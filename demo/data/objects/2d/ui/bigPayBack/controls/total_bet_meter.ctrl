@@ -1,0 +1,63 @@
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="credit_bet_meter_frame">
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Selected"/>
+            </scriptLst>
+        </sprite>
+        
+        <sprite objectName="meter_label">
+            <position x="0" y="20" z="0"/>
+            <font fontString="TOTAL BET" fontName="dejavu_sans_reg_bold_14"/>
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Selected"/>
+            </scriptLst>
+        </sprite>
+        
+        <sprite objectName="meter_font">
+            <position x="0" y="-6" z="0"/>
+            <font fontName="arial_reg_45"/>
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Selected"/>
+            </scriptLst>
+        </sprite>
+        
+    </spriteList>
+
+    <subControlList>
+
+        <!-- These controls must always be listed in this order -->
+
+        <!-- Decrement Button -->
+        <control name="total_bet_dec_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/bigPayBack/controls/arrow_btn.ctrl"/>
+            <position x="-115" y="0" z="0"/>
+            <rotation z="180"/>
+            <!-- Click area modifier -->
+            <rect x1="90" y1="40" x2="40" y2="40"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Increment Button -->
+        <control name="total_bet_inc_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/bigPayBack/controls/arrow_btn.ctrl"/>
+            <position x="115" y="0" z="0"/>
+            <!-- Click area modifier -->
+            <rect x1="90" y1="40" x2="40" y2="40"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+    </subControlList>
+
+</UIControl>
