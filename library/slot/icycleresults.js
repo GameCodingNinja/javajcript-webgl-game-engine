@@ -27,9 +27,9 @@ export class iCycleResults
     }
     
     //
-    //  DESC: Start the cycle results
+    //  DESC: Activate the cycle results
     //
-    start()
+    activate()
     {
         this.cycleResultsActive = true;
         this.firstCycleComplete = false;
@@ -37,10 +37,26 @@ export class iCycleResults
     }
     
     //
-    //  DESC: Stop the cycle results
+    //  DESC: Deactivate the cycle results
     //
-    stop()
+    deactivate()
     {
         this.cycleResultsActive = false;
+    }
+    
+    //
+    //  DESC: Are we active
+    //
+    isActive()
+    {
+        return this.cycleResultsActive;
+    }
+    
+    //
+    //  DESC: Are we still animating
+    //
+    isAnimating()
+    {
+        return false;
     }
 }

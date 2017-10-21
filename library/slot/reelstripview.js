@@ -14,6 +14,7 @@ import { Sprite2D } from '../2d/sprite2d';
 import { Point } from '../common/point';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { highResTimer } from '../utilities/highresolutiontimer';
+import { soundManager } from '../managers/soundmanager';
 import { gl } from '../system/device';
 import * as slotDefs from './slotdefs';
 
@@ -93,7 +94,7 @@ export class ReelStripView extends Object2D
         this.disableSpinTimer = false;
 
         // Pointer to spin stop sound
-        //CSound * pSpinStopSnd;
+        this.spinStopSnd = null;
 
         // Do we allow stop sounds
         this.allowStopSounds = true;
@@ -167,7 +168,7 @@ export class ReelStripView extends Object2D
             let group = stopSoundNode[0].getAttribute( 'group' );
             let soundId = stopSoundNode[0].getAttribute( 'soundId' );
 
-            //pSpinStopSnd = &CSoundMgr::Instance().GetSound( group, soundId );
+            this.spinStopSnd = soundManager.getSound( group, soundId );
         }
         
         // Init the reel strip with symbols
@@ -400,11 +401,8 @@ export class ReelStripView extends Object2D
                             for( let i = 0; i < this.spinStateSignal.length; ++i )
                                 this.spinStateSignal[i](this.reelId, slotDefs.ESS_STOPPED);
 
-                        /*if( this.allowStopSounds && (pSpinStopSnd != nullptr) )
-                        {
-                            const int channel = CSoundMgr::Instance().GetNextChannel();
-                            pSpinStopSnd->Play( channel );
-                        }*/
+                        if( this.allowStopSounds && this.spinStopSnd )
+                            this.spinStopSnd.play();
 
                         break;
                     }

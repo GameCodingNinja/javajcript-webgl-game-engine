@@ -1,0 +1,9 @@
+<soundList>
+
+  <soundFiles>
+    <load id="reel_stop_1-4" file="data/sound/common/ReelStop_1.ogg" volume="0.20"/>
+    <load id="reel_stop_5" file="data/sound/common/ReelStop_5.ogg" volume="0.20"/>
+    <load id="reelSpinMusic" file="data/sound/bigPayBack/BCB_minigametune_fullmix1.ogg" volume="0.6"/>
+  </soundFiles>
+
+</soundList>

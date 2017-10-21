@@ -37,13 +37,13 @@ export class SimpleCycleResults extends iCycleResults
     }
     
     //
-    //  DESC: Start the cycle results
+    //  DESC: Activate the cycle results
     //
-    start()
+    activate()
     {
         if( this.playResult.getPayCount() > 0 )
         {
-            super.start();
+            super.activate();
 
             this.slotGroupView.generateCycleResultSymbs();
         }

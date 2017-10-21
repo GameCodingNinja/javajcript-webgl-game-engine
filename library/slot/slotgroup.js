@@ -81,19 +81,19 @@ export class SlotGroup
     //
     //  DESC: Start the cycle results
     //
-    startCycleResults()
+    activateCycleResults()
     {
         if( this.cycleResults )
-            this.cycleResults.start();
+            this.cycleResults.activate();
     }
 
     //
     //  DESC: Stop the cycle results
     //
-    stopCycleResults()
+    deactivateCycleResults()
     {
         if( this.cycleResults )
-            this.cycleResults.stop();
+            this.cycleResults.deactivate();
     }
 
     //
@@ -112,6 +112,17 @@ export class SlotGroup
     {
         if( this.cycleResults )
             this.cycleResults.stopAnimation();
+    }
+    
+    //
+    //  DESC: Is the cycle results active
+    //
+    isCycleResultsActive()
+    {
+        if( this.cycleResults )
+            return this.cycleResults.isActive();
+
+        return false;
     }
 
     //

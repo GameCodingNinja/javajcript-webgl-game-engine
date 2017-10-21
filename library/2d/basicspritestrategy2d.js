@@ -11,7 +11,6 @@ import { SpriteData } from '../common/spritedata';
 import { ActorData } from '../common/actordata';
 import { Sprite2D } from '../2d/sprite2d';
 import { ActorSprite2D } from '../2d/actorsprite2d';
-import { ActorData } from '../common/actordata';
 import { signalManager } from '../managers/signalmanager';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import * as defs from '../common/defs';

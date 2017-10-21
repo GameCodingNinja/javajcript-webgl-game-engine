@@ -157,6 +157,11 @@ class SoundManager extends ManagerBase
             // Make sure the group we are looking for exists
             if( this.listTableMap.get( group ) === undefined )
                 throw new Error( `Sound group name can't be found (${group})!` );
+            
+            // Stop any currently playing files
+            let groupMap = this.soundMapMap.get( group );
+            for( let [ key, sound ] of groupMap.entries() )
+                sound.stop();
 
             // Erase the group
             if( this.soundMapMap.has( group ) )

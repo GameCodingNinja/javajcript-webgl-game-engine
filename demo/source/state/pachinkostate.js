@@ -1,6 +1,6 @@
 
 // 
-//  FILE NAME: pachinkochallengestate.js
+//  FILE NAME: pachinkostate.js
 //  DESC:      Pachinko Class State
 //
 
@@ -27,11 +27,14 @@ import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
+var assetsLoaded  = false;
+export const ASSET_COUNT = 11;
+
 const stateGroup    = '(pachinko)',
       SPRITE_PEG    = -2,
       STRAWBERRY    = 0;
 
-export class PachinkoChallengeState extends CommonState
+export class PachinkoState extends CommonState
 {
     constructor( gameLoopCallback = null )
     {
@@ -295,6 +298,19 @@ export class PachinkoChallengeState extends CommonState
             this.winMeter.startBangUp( this.totalWin );
         }
     }
+}
+
+// 
+//  DESC: Access function for assets load check
+//
+export function isAssetsLoaded()
+{
+    return assetsLoaded;
+}
+
+export function SetAssetsLoaded()
+{
+    assetsLoaded = true;
 }
 
 // 

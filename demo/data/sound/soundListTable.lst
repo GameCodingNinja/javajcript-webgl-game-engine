@@ -4,4 +4,8 @@
     <file path="data/sound/menuSound.lst"/>
   </groupList>
   
+  <groupList groupName="(big_pay_back)">
+    <file path="data/sound/bigPayBackSound.lst"/>
+  </groupList>
+  
 </listTable>

@@ -23,12 +23,16 @@ import { settings } from '../../../library/utilities/settings';
 import { device } from '../../../library/system/device';
 import { betManager } from '../../../library/slot/betmanager';
 import { SlotGame } from '../../../library/slot/slotgame';
+import { BaseGameMusic } from '../../../library/slot/basegamemusic';
 import { FrontPanel } from '../game/frontpanel';
 import { CommonState } from './commonstate';
 import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as slotDefs from '../../../library/slot/slotdefs';
+
+var assetsLoaded  = false;
+export const ASSET_COUNT = 21;
 
 const stateGroup = '(big_pay_back)';
 
@@ -50,28 +54,13 @@ export class BigPayBackState extends CommonState
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
         
         // Allocate the slot game
-        this.slotGame = new SlotGame( stateGroup );
+        this.slotGame = new SlotGame;
         
         // Allocate the front panel
         this.frontPanel = new FrontPanel;
-    }
-    
-    // 
-    //  DESC: handle events
-    //
-    handleEvent( event )
-    {
-        super.handleEvent( event );
         
-        if( event instanceof CustomEvent )
-        {
-            // Check for the "game change state" message
-            if( event.detail.type === defs.EGE_MENU_GAME_STATE_CHANGE )
-            {
-                if( event.detail.arg[0] === defs.ETC_BEGIN )
-                    this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
-            }
-        }
+        // Allocate the base game music component
+        this.baseGameMusic = new BaseGameMusic(stateGroup, 'reelSpinMusic', 3000.0, 5000.0);
     }
     
     // 
@@ -82,9 +71,6 @@ export class BigPayBackState extends CommonState
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
         menuManager.activateTree( ['pause_tree', 'base_game_tree'] );
-        
-        // Load the slot config
-        this.slotGame.loadSlotConfig( assetHolder.get( stateGroup, 'slotCfg' ) );
         
         // Create the slot group
         this.slotGame.createSlotGroup(
@@ -111,7 +97,9 @@ export class BigPayBackState extends CommonState
             menuManager.getMenuControl( 'base_game_ui', 'win_meter' ),
             menuManager.getMenuControl( 'base_game_ui', 'credit_meter' ) );
             
+        // Add slot game components
         this.slotGame.setFrontPanel( this.frontPanel );
+        this.slotGame.setGameMusic( this.baseGameMusic );
         
         // Set the line bet and the total numvber of lines bet
         betManager.setLineBet(1);
@@ -135,6 +123,27 @@ export class BigPayBackState extends CommonState
     }
     
     // 
+    //  DESC: handle events
+    //
+    handleEvent( event )
+    {
+        super.handleEvent( event );
+        
+        if( event instanceof CustomEvent )
+        {
+            // Check for the "game change state" message
+            if( event.detail.type === defs.EGE_MENU_GAME_STATE_CHANGE )
+            {
+                if( event.detail.arg[0] === defs.ETC_BEGIN )
+                {
+                    this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
+                    this.baseGameMusic.forceFadeDown( 500 );
+                }
+            }
+        }
+    }
+    
+    // 
     //  DESC: Handle the misc processes
     //
     miscProcess()
@@ -150,6 +159,8 @@ export class BigPayBackState extends CommonState
         super.update();
         
         this.scriptComponent.update();
+        
+        this.baseGameMusic.update();
         
         if( !menuManager.isMenuActive() )
         {
@@ -193,6 +204,19 @@ export class BigPayBackState extends CommonState
 }
 
 // 
+//  DESC: Access function for assets load check
+//
+export function isAssetsLoaded()
+{
+    return assetsLoaded;
+}
+
+export function SetAssetsLoaded()
+{
+    assetsLoaded = true;
+}
+
+// 
 //  DESC: Unload files
 //
 function unload()
@@ -200,6 +224,7 @@ function unload()
     menuManager.freeGroup( [stateGroup] );
     objectDataManager.freeGroup( [stateGroup] );
     symbolSetViewManager.clear();
+    soundManager.freeGroup( [stateGroup] );
     slotMathManager.clear();
 }
 
@@ -240,6 +265,10 @@ export function load()
     loadManager.add(
         ( callback ) => symbolSetViewManager.loadGroup( [stateGroup], callback ) );
 
+    // Load the sounds
+    loadManager.add(
+        ( callback ) => soundManager.loadGroup( [stateGroup], callback ) );
+
     // Load the payline config
     loadManager.add(
         ( callback ) =>
@@ -274,19 +303,6 @@ export function load()
                 ( xmlNode ) =>
                 {
                     assetHolder.set( stateGroup, 'spinProfile', xmlNode );
-
-                    callback();
-                });
-        });
-        
-    // Load the slot config
-    loadManager.add(
-        ( callback ) =>
-        {
-            genFunc.downloadFile( 'xml', 'data/objects/2d/slot/bigPayBack/slot.cfg',
-                ( xmlNode ) =>
-                {
-                    assetHolder.set( stateGroup, 'slotCfg', xmlNode );
 
                     callback();
                 });

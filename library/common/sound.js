@@ -1,18 +1,15 @@
 
 // 
 //  FILE NAME: sound.js
-//  DESC:      Class to hold the sound reference and type
+//  DESC:      Class to hold the sound resource
 //
 
 "use strict";
 
 export class Sound
 {
-    constructor( type = 0 )
+    constructor()
     {
-        // Sound type - loaded or stream
-        this.type = type;
-        
         // Audio context
         this.context = null;
         
@@ -30,13 +27,10 @@ export class Sound
         this.gainNode = null;
         
         // The time the sound started
-        this.startTime = null;
+        this.startTime = 0;
         
         // Pause flag
         this.paused = false;
-        
-        // The play time
-        this.playDuration = 0;
     }
     
     //
@@ -69,7 +63,6 @@ export class Sound
     {
         this.stop();
         
-        this.playDuration = offset;
         this.source = this.context.createBufferSource();
         this.source.buffer = this.buffer;
 
@@ -78,8 +71,8 @@ export class Sound
         this.source.connect(this.gainNode);
         this.gainNode.connect(this.context.destination);
         
-        this.startTime = this.context.currentTime;
-        this.source.start(0, offset);
+        this.source.start(0, offset % this.buffer.duration);
+        this.startTime = this.context.currentTime - offset;
     }
     
     //
@@ -89,9 +82,10 @@ export class Sound
     {
         if( this.startTime )
         {
-            this.startTime = null;
+            if( !this.source.loop )
+                this.startTime = 0;
+            
             this.paused = false;
-            this.playDuration = 0;
             this.source.stop();
         }
     }
@@ -104,8 +98,8 @@ export class Sound
         if( !this.paused && this.startTime )
         {
             this.paused = true;
-            this.playDuration += (this.context.currentTime - this.startTime);
             this.source.stop();
+            this.startTime = (this.context.currentTime - this.startTime);
         }
     }
     
@@ -117,7 +111,7 @@ export class Sound
         if( this.paused )
         {
             this.paused = false;
-            this.play(false, this.playDuration);
+            this.play(this.source.loop, this.startTime);
         }
     }
     
@@ -126,11 +120,21 @@ export class Sound
     //
     setVolume( volume )
     {
+        let cappedVolume = volume;
+        
         if( this.gainNode )
-            this.gainNode.gain.value = volume;
+        {
+            if( cappedVolume < 0 )
+                cappedVolume = 0;
+            
+            else if( cappedVolume > 1 )
+                cappedVolume = 1;
+                
+            this.gainNode.gain.value = cappedVolume;
+        }
     }
     
-    setVolume( volume )
+    getVolume()
     {
         if( this.gainNode )
             return this.gainNode.gain.value;
@@ -143,7 +147,10 @@ export class Sound
     //
     isPlaying()
     {
-        return (this.startTime !== null);
+        if( this.startTime && this.source.loop )
+            return true;
+        
+        return (this.startTime && ((this.context.currentTime - this.startTime) < this.source.buffer.duration) );
     }
 
     //

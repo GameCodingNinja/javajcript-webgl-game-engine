@@ -17,17 +17,11 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { gl, device } from '../../../library/system/device';
 import * as titleScreenState from '../state/titlescreenstate';
-import * as pachinkoChallengeState from '../state/pachinkochallengestate';
+import * as pachinkoState from '../state/pachinkostate';
 import * as bigPayBackState from '../state/bigpaybackstate';
 import * as state from './gamestate';
 
 const MIN_LOAD_TIME = 500;
-
-var bigPayBackLoadCount = 18;
-var pachinkoCount = 11;
-
-var bigPayBackLoaded = false;
-var pachinkoLoaded = false;
 
 export class LoadState extends state.GameState
 {
@@ -45,17 +39,17 @@ export class LoadState extends state.GameState
         this.maxLoadCount = 0;
         this.loadFont = null;
         this.displayProgress = false;
-        if( (stateMessage.loadState === state.GAME_STATE_BIG_PAY_BACK) && !bigPayBackLoaded )
+        if( (stateMessage.loadState === state.GAME_STATE_BIG_PAY_BACK) && !bigPayBackState.isAssetsLoaded() )
         {
-            bigPayBackLoaded = true;
+            bigPayBackState.SetAssetsLoaded();
             this.displayProgress = true;
-            this.maxLoadCount = bigPayBackLoadCount;
+            this.maxLoadCount = bigPayBackState.ASSET_COUNT;
         }
-        else if( (stateMessage.loadState === state.GAME_STATE_PACHINKO_CHALLENGE) && !pachinkoLoaded )
+        else if( (stateMessage.loadState === state.GAME_STATE_PACHINKO_CHALLENGE) && !pachinkoState.isAssetsLoaded() )
         {
-            pachinkoLoaded = true;
+            pachinkoState.SetAssetsLoaded();
             this.displayProgress = true;
-            this.maxLoadCount = pachinkoCount;
+            this.maxLoadCount = pachinkoState.ASSET_COUNT;
         }
             
         if( this.displayProgress )
@@ -121,7 +115,7 @@ export class LoadState extends state.GameState
             titleScreenState.load();
         
         else if( this.stateMessage.loadState === state.GAME_STATE_PACHINKO_CHALLENGE )
-            pachinkoChallengeState.load();
+            pachinkoState.load();
         
         else if( this.stateMessage.loadState === state.GAME_STATE_BIG_PAY_BACK )
             bigPayBackState.load();
@@ -141,7 +135,10 @@ export class LoadState extends state.GameState
         if( loadTime > MIN_LOAD_TIME )
         {
             if( this.displayProgress )
+            {
+                let displayCompleteCallback = this.displayComplete.bind(this);
                 setTimeout( () => displayCompleteCallback(), 200 );
+            }
             else
                 this.displayComplete();
         }

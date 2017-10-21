@@ -9,13 +9,11 @@
 import { SlotResults } from './slotresults';
 import { SlotGroup } from './slotgroup';
 import { betManager } from './betmanager';
-import { Timer } from '../utilities/timer';
-import { ScriptComponent } from '../script/scriptcomponent';
 import * as slotDefs from './slotdefs';
 
 export class SlotGame
 {
-    constructor( group )
+    constructor()
     {
         // Slot results class
         this.slotResults = new SlotResults;
@@ -26,35 +24,11 @@ export class SlotGame
         // slot state
         this.slotState = slotDefs.ESLOT_IDLE;
 
-        // stop spin music timer
-        this.stopSpinMusicTimer = new Timer;
-
-        // For scripting needs
-        this.scriptComponent = new ScriptComponent;
-
-        // Slot group
-        this.group = group;
-
         // Class for holding interface items
-        // Does not own pointer. Do Not Free
         this.frontPanel = null;
-
-        // bool to control the spotting of the spin music
-        this.waitForSpinMusicTimer = false;
-
-        // Spin start and stop music function calls
-        this.spinMusicStartFunc = '';
-        this.spinMusicStopFunc = '';
-        this.spinMusicTimeOut = 0;
-
-        // Flag to indicate spin music can be played
-        this.allowSpinMusic = true;
-
-        // Flag to indicate stop sounds can be played
-        this.allowStopSounds = true;
         
-        // Cycle results flag
-        this.cycleResultsActive = false;
+        // Game music component
+        this.gameMusic = null;
     }
     
     //
@@ -81,20 +55,6 @@ export class SlotGame
             symbolSetView,
             cycleResults );
     }
-
-    //
-    //  DESC: Load the slot config file
-    //
-    loadSlotConfig( node )
-    {
-        let spinMusicScriptFunNode = node.getElementsByTagName( 'spinMusicScriptFun' );
-        if( spinMusicScriptFunNode.length )
-        {
-            this.spinMusicStartFunc = spinMusicScriptFunNode[0].getAttribute( "startMusic" );
-            this.spinMusicStopFunc = spinMusicScriptFunNode[0].getAttribute( "stopMusic" );
-            this.spinMusicTimeOut = Number(spinMusicScriptFunNode[0].getAttribute( "timeOut" ));
-        }
-    }
     
     //
     //  DESC: Init the sprite. This only matters if it's a font or physics.
@@ -106,7 +66,7 @@ export class SlotGame
     }
     
     //
-    //  DESC: Do some cleanup. This only matters if it's a sprite font.
+    //  DESC: Do some cleanup. This only matters if it's a font or physics.
     //
     cleanUp()
     {
@@ -162,15 +122,6 @@ export class SlotGame
     //
     stateIdle()
     {
-        // Fade down the music if the player is not spinning
-        if( this.allowSpinMusic && this.waitForSpinMusicTimer && this.spinMusicStopFunc.length )
-        {
-            if( this.stopSpinMusicTimer.expired() )
-            {
-                //m_scriptComponent.Prepare( m_group, m_spinMusicStopFunc );
-                this.waitForSpinMusicTimer = false;
-            }
-        }
     }
     
     //
@@ -180,10 +131,8 @@ export class SlotGame
     {
         if( !this.isCycleResultsAnimating() )
         {
-            this.cycleResultsActive = false;
-
             for( let i = 0; i < this.slotGroupAry.length; ++i )
-                this.slotGroupAry[i].stopCycleResults();
+                this.slotGroupAry[i].deactivateCycleResults();
 
             this.slotState = slotDefs.ESLOT_PLACE_WAGER;
         }
@@ -199,13 +148,10 @@ export class SlotGame
         if( this.frontPanel )
             this.frontPanel.statePlaceWager( betManager.getCredits() );
         
+        if( this.gameMusic )
+            this.gameMusic.startMusic();
+        
         this.slotResults.clear();
-
-        /*if( this.allowSpinMusic && this.spinMusicStartFunc.length )
-        {
-            this.scriptComponent.StopAndRecycle( m_spinMusicStopFunc );
-            this.scriptComponent.Prepare( m_group, m_spinMusicStartFunc );
-        }*/
 
         this.slotState = slotDefs.ESLOT_GENERATE_STOPS;
     }
@@ -334,10 +280,7 @@ export class SlotGame
 
             // Start the cycle results
             for( let i = 0; i < this.slotGroupAry.length; ++i )
-                this.slotGroupAry[i].startCycleResults();
-
-            // Start the cycle results
-            this.cycleResultsActive = true;
+                this.slotGroupAry[i].activateCycleResults();
         }
 
         this.slotState = slotDefs.ESLOT_WAIT_FOR_AWARD;
@@ -366,10 +309,9 @@ export class SlotGame
     {
         if( this.frontPanel )
             this.frontPanel.stateEnd( betManager.allowPlay() );
-
-        // Set the timer that waits to see if the music should time out
-        this.stopSpinMusicTimer.set( this.spinMusicTimeOut );
-        this.waitForSpinMusicTimer = true;
+        
+        if( this.gameMusic )
+            this.gameMusic.setTimeOut();
 
         this.slotState = slotDefs.ESLOT_IDLE;
     }
@@ -390,14 +332,12 @@ export class SlotGame
             this.slotGroupAry[i].slotGroupView.update();
         
         // Start the cycle results animation if not currently animating
-        if( this.cycleResultsActive )
+        if( this.isCycleResultsActive() )
         {
             if( !this.isCycleResultsAnimating() )
                 for( let i = 0; i < this.slotGroupAry.length; ++i )
                     this.slotGroupAry[i].startCycleResultsAnimation();
         }
-
-        this.scriptComponent.update();
     }
 
     //
@@ -430,7 +370,7 @@ export class SlotGame
         {
             if( betManager.allowPlay() )
             {
-                if( this.cycleResultsActive )
+                if( this.isCycleResultsActive() )
                 {
                     // Stop the cycle results
                     for( let i = 0; i < this.slotGroupAry.length; ++i )
@@ -455,6 +395,27 @@ export class SlotGame
     setFrontPanel( frontPanel )
     {
         this.frontPanel = frontPanel;
+    }
+    
+    //
+    //  DESC: Set the front panel
+    //
+    setGameMusic( gameMusic )
+    {
+        this.gameMusic = gameMusic;
+    }
+    
+    //
+    //  DESC: Is the cycle results animating
+    //
+    isCycleResultsActive()
+    {
+        let active = false;
+        
+        for( let i = 0; i < this.slotGroupAry.length; ++i )
+            active |= this.slotGroupAry[i].isCycleResultsActive();
+
+        return active;
     }
     
     //
