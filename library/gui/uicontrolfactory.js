@@ -16,7 +16,7 @@ import { UIMeter } from './uimeter';
 import { UIProgressBar } from './uiprogressbar';
 
 // 
-//  DESC: Load the control info from XML node
+//  DESC: Create the control info from XML node
 //
 export function create( node, group )
 {

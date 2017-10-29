@@ -13,30 +13,7 @@ module.exports = {
 	      test: /\.js$/,
 	      loader: '/lib/node_modules/babel-loader',
 	      query: {
-		presets: [['/lib/node_modules/babel-preset-babili', {
-                    "booleans"            : false,
-                    "builtIns"            : false,
-                    "consecutiveAdds"     : false,
-                    "deadcode"            : false,
-                    "evaluate"            : false,
-                    "flipComparisons"     : false,
-                    "guards"              : false,
-                    "infinity"            : false,
-                    "mangle"              : false,
-                    "memberExpressions"   : false,
-                    "mergeVars"           : false,
-                    "numericLiterals"     : false,
-                    "propertyLiterals"    : false,
-                    "regexpConstructors"  : false,
-                    "removeConsole"       : false,
-                    "removeDebugger"      : false,
-                    "removeUndefined"     : false,
-                    "replace"             : false,
-                    "simplify"            : false,
-                    "simplifyComparisons" : false,
-                    "typeConstructors"    : false,
-                    "undefinedToVoid"     : false,
-                }]]
+		presets: ['/lib/node_modules/babel-preset-es2015']
 	      }
 	    }
 	]

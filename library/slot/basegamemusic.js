@@ -59,9 +59,9 @@ export class BaseGameMusic extends iGameMusic
     }
     
     //
-    //  DESC: Force a fade down. Could be exiting the game
+    //  DESC: Fast a fade down. Could be exiting the game
     //
-    forceFadeDown( fadeDurationOverride = 0 )
+    fastFadeDown( fadeDurationOverride = 0 )
     {
         this.stopSpinMusicTimer.setExpired();
         
@@ -84,7 +84,7 @@ export class BaseGameMusic extends iGameMusic
     }
     
     //
-    //  DESC: Stop
+    //  DESC: Start the music timeout
     //
     setTimeOut()
     {

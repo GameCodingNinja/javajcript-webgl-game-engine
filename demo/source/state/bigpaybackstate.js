@@ -30,6 +30,7 @@ import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as slotDefs from '../../../library/slot/slotdefs';
+import * as slotgroupFactory from '../../../library/slot/slotgroupfactory';
 
 var assetsLoaded  = false;
 export const ASSET_COUNT = 21;
@@ -54,7 +55,22 @@ export class BigPayBackState extends CommonState
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
         
         // Allocate the slot game
-        this.slotGame = new SlotGame;
+        this.slotGame = new SlotGame();
+        
+        // Create the slot group
+        let slotGroup = slotgroupFactory.create(
+            slotDefs.ED_REEL,
+            'main_reel_strip',
+            'main_paytable',
+            slotMathManager.getSlotMath( stateGroup, "slot" ),
+            assetHolder.get( stateGroup, 'reelgroup' ),
+            assetHolder.get( stateGroup, 'spinProfile' ),
+            symbolSetViewManager.getViewData( stateGroup, "base_game" ),
+            this.slotGame.slotResults.create(),
+            new SimpleCycleResults )
+        
+        // Add the slot group to the game
+        this.slotGame.addSlotGroup( slotGroup );
         
         // Allocate the front panel
         this.frontPanel = new FrontPanel;
@@ -71,17 +87,6 @@ export class BigPayBackState extends CommonState
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
         menuManager.activateTree( ['pause_tree', 'base_game_tree'] );
-        
-        // Create the slot group
-        this.slotGame.createSlotGroup(
-            slotDefs.ED_REEL,
-            'main_reel_strip',
-            'main_paytable',
-            slotMathManager.getSlotMath( stateGroup, "slot" ),
-            assetHolder.get( stateGroup, 'reelgroup' ),
-            assetHolder.get( stateGroup, 'spinProfile' ),
-            symbolSetViewManager.getViewData( stateGroup, "base_game" ),
-            new SimpleCycleResults );
             
         // Init after all slot groups have been created. Currently used for setting up the font sprites
         this.slotGame.init();
@@ -137,7 +142,7 @@ export class BigPayBackState extends CommonState
                 if( event.detail.arg[0] === defs.ETC_BEGIN )
                 {
                     this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
-                    this.baseGameMusic.forceFadeDown( 500 );
+                    this.baseGameMusic.fastFadeDown( 500 );
                 }
             }
         }

@@ -9,6 +9,7 @@
 import { physicsWorldManager } from './physicsworldmanager';
 import { Size } from '../common/size';
 import * as planck from '../../Box2D/planck.min';
+//import * as planck from '../../Box2D/planck';
 
 export class PhysicsComponent2D
 {

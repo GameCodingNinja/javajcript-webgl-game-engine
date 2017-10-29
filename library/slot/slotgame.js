@@ -6,9 +6,8 @@
 
 "use strict";
 
-import { SlotResults } from './slotresults';
-import { SlotGroup } from './slotgroup';
 import { betManager } from './betmanager';
+import { SlotResults } from './slotresults';
 import * as slotDefs from './slotdefs';
 
 export class SlotGame
@@ -16,6 +15,7 @@ export class SlotGame
     constructor()
     {
         // Slot results class
+        // Allocate the slot result for all the reel groups
         this.slotResults = new SlotResults;
 
         // Slot group array
@@ -32,28 +32,11 @@ export class SlotGame
     }
     
     //
-    //  DESC: Create the reel group. Math and video reel strips
+    //  DESC: Add the slot group
     //
-    createSlotGroup(
-        slotDevice,
-        slotStripSetId,
-        paytableSetId,
-        slotMath,
-        viewReelCfgNode,
-        viewSpinProfileCfgNode,
-        symbolSetView,
-        cycleResults )
+    addSlotGroup( slotGroup )
     {
-        let slotGroup = new SlotGroup( slotDevice, slotMath, this.slotResults.create() );
         this.slotGroupAry.push( slotGroup );
-
-        slotGroup.create(
-            slotStripSetId,
-            paytableSetId,
-            viewReelCfgNode,
-            viewSpinProfileCfgNode,
-            symbolSetView,
-            cycleResults );
     }
     
     //

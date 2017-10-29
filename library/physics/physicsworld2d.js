@@ -9,6 +9,7 @@
 import { highResTimer } from '../utilities/highresolutiontimer';
 import * as genFunc from '../utilities/genfunc';
 import * as planck from '../../Box2D/planck.min';
+//import * as planck from '../../Box2D/planck';
 
 export class PhysicsWorld2D
 {
