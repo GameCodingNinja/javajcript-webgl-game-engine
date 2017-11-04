@@ -788,7 +788,7 @@ class MenuManager extends ManagerBase
             if( activeTreeAry[i].isActive() )
             {
                 menuActive = true;
-                activeTreeAry[i].doTransform();
+                activeTreeAry[i].transform();
             }
         }
 

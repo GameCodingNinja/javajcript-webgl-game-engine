@@ -64,6 +64,25 @@ export class SlotGroupModel
                 evalSymbAry.push(0);
         }
     }
+    
+    //
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        let gaffEnabled = false;
+        
+        for( let i = 0; i < this.slotStripModelAry.length; ++i )
+            gaffEnabled |= this.slotStripModelAry[i].isGaffEnabled();
+        
+        // This ensures that if one reel has been gaffed, then they all retain
+        // their current stop even if they were not clicked on.
+        if( gaffEnabled )
+        {
+            for( let i = 0; i < this.slotStripModelAry.length; ++i )
+                this.slotStripModelAry[i].enableGaff();
+        }
+    }
 
     //
     //  DESC: Generate the stops

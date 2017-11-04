@@ -66,12 +66,18 @@ export class SimpleCycleResults extends iCycleResults
 
             // Set them all to a low alphs
             for( let i = 0; i < cycleResultSymbAry.length; ++i )
+            {
                 for( let j = 0; j < cycleResultSymbAry[i].length; ++j )
-                        cycleResultSymbAry[i][j].spriteAry[0].setAlpha( 0.2 );
+                {
+                    cycleResultSymbAry[i][j].spriteAry[0].setAlpha( 0.2 );
+                }
+            }
 
             // Set only the winners to default color
             for( let i = 0; i < symbPosAry.length; ++i )
+            {
                 cycleResultSymbAry[symbPosAry[i].reel][symbPosAry[i].pos].spriteAry[0].setDefaultColor();
+            }
 
             this.slotGroupView.setCycleResultText( true, pay );
         }

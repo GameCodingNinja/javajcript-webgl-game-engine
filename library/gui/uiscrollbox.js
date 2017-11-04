@@ -332,14 +332,14 @@ export class UIScrollBox extends UISubControl
     // 
     //  DESC: Transform the control
     //
-    doTransform( object )
+    transform( object )
     {
         // Call the parent
-        super.doTransform( object );
+        super.transform( object );
 
         // Transform all controls
         for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].doTransform( this );
+            this.scrollControlAry[i].transform( this );
 
         // Transform the mask
         this.stencilMaskSprite.transform( this.matrix, this.wasWorldPosTranformed() );

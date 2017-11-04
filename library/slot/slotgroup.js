@@ -35,6 +35,26 @@ export class SlotGroup
     {
         this.slotGroupView.cleanUp();
     }
+    
+    //
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        this.slotGroupView.handleEvent( event );
+        this.slotGroupModel.handleEvent( event );
+    }
+    
+    //
+    //  DESC: Update objects that require them
+    //
+    update()
+    {
+        this.slotGroupView.update();
+        
+        if( this.cycleResults && this.cycleResults.isActive() )
+            this.cycleResults.update();
+    }
 
     //
     //  DESC: Start the cycle results
@@ -108,5 +128,8 @@ export class SlotGroup
     render( matrix )
     {
         this.slotGroupView.render( matrix );
+        
+        if( this.cycleResults )
+            this.cycleResults.render( matrix );
     }
 }

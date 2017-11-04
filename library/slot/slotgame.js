@@ -8,6 +8,7 @@
 
 import { betManager } from './betmanager';
 import { SlotResults } from './slotresults';
+import * as buildDefs from '../common/build_defs';
 import * as slotDefs from './slotdefs';
 
 export class SlotGame
@@ -81,22 +82,22 @@ export class SlotGame
     {
         switch( this.slotState )
         {
-            case slotDefs.ESLOT_IDLE:                    this.stateIdle();                 break;
-            case slotDefs.ESLOT_WAIT_CYCLE_RESULTS_STOP: this.stateWaitCycleResultsStop(); break;
-            case slotDefs.ESLOT_PLACE_WAGER:             this.statePlaceWager();           break;
-            case slotDefs.ESLOT_GENERATE_STOPS:          this.stateGenerateStops();        break;
-            case slotDefs.ESLOT_EVALUATE:                this.stateEvaluate();             break;
-            case slotDefs.ESLOT_PRE_SPIN:                this.statePreSpin();              break;
-            case slotDefs.ESLOT_SPIN:                    this.stateSpin();                 break;
-            case slotDefs.ESLOT_POST_SPIN:               this.statePostSpin();             break;
-            case slotDefs.ESLOT_PRE_AWARD_WIN:           this.statePreAwardWin();          break;
-            case slotDefs.ESLOT_BONUS_DECISION:          this.stateBonusDecision();        break;
-            case slotDefs.ESLOT_PRE_BONUS:               this.statePreBonus();             break;
-            case slotDefs.ESLOT_BONUS:                   this.stateBonus();                break;
-            case slotDefs.ESLOT_POST_BONUS:              this.statePostBonus();            break;
-            case slotDefs.ESLOT_POST_AWARD_WIN:          this.statePostAwardWin();         break;
-            case slotDefs.ESLOT_WAIT_FOR_AWARD:          this.stateWaitForAward();         break;
-            case slotDefs.ESLOT_END:                     this.stateEnd();                  break;
+            case slotDefs.ESLOT_IDLE:                this.stateIdle();             break;
+            case slotDefs.ESLOT_KILL_CYCLE_RESULTS:  this.stateKillCycleResults(); break;
+            case slotDefs.ESLOT_PLACE_WAGER:         this.statePlaceWager();       break;
+            case slotDefs.ESLOT_GENERATE_STOPS:      this.stateGenerateStops();    break;
+            case slotDefs.ESLOT_EVALUATE:            this.stateEvaluate();         break;
+            case slotDefs.ESLOT_PRE_SPIN:            this.statePreSpin();          break;
+            case slotDefs.ESLOT_SPIN:                this.stateSpin();             break;
+            case slotDefs.ESLOT_POST_SPIN:           this.statePostSpin();         break;
+            case slotDefs.ESLOT_PRE_AWARD_WIN:       this.statePreAwardWin();      break;
+            case slotDefs.ESLOT_BONUS_DECISION:      this.stateBonusDecision();    break;
+            case slotDefs.ESLOT_PRE_BONUS:           this.statePreBonus();         break;
+            case slotDefs.ESLOT_BONUS:               this.stateBonus();            break;
+            case slotDefs.ESLOT_POST_BONUS:          this.statePostBonus();        break;
+            case slotDefs.ESLOT_POST_AWARD_WIN:      this.statePostAwardWin();     break;
+            case slotDefs.ESLOT_WAIT_FOR_AWARD:      this.stateWaitForAward();     break;
+            case slotDefs.ESLOT_END:                 this.stateEnd();              break;
         };
     }
 
@@ -108,17 +109,13 @@ export class SlotGame
     }
     
     //
-    //  DESC: State Wait for the cycle results to stop
+    //  DESC: State for killing the cycle results
     //
-    stateWaitCycleResultsStop()
+    stateKillCycleResults()
     {
-        if( !this.isCycleResultsAnimating() )
-        {
-            for( let i = 0; i < this.slotGroupAry.length; ++i )
-                this.slotGroupAry[i].deactivateCycleResults();
+        this.killCycleResults();
 
-            this.slotState = slotDefs.ESLOT_PLACE_WAGER;
-        }
+        this.slotState = slotDefs.ESLOT_PLACE_WAGER;
     }
 
     //
@@ -304,6 +301,18 @@ export class SlotGame
     //
     handleEvent( event )
     {
+        // Event handling for the slot group is currently only for debug purposes
+        if( buildDefs.DEBUG )
+        {
+            if( (this.slotState === slotDefs.ESLOT_IDLE) && (event.type === 'mouseup') )
+            {
+                if( this.isCycleResultsActive() )
+                    this.killCycleResults();
+
+                for( let i = 0; i < this.slotGroupAry.length; ++i )
+                    this.slotGroupAry[i].handleEvent( event );
+            }
+        }
     }
 
     //
@@ -312,14 +321,16 @@ export class SlotGame
     update()
     {
         for( let i = 0; i < this.slotGroupAry.length; ++i )
-            this.slotGroupAry[i].slotGroupView.update();
+            this.slotGroupAry[i].update();
         
         // Start the cycle results animation if not currently animating
         if( this.isCycleResultsActive() )
         {
             if( !this.isCycleResultsAnimating() )
+            {
                 for( let i = 0; i < this.slotGroupAry.length; ++i )
                     this.slotGroupAry[i].startCycleResultsAnimation();
+            }
         }
     }
 
@@ -354,13 +365,7 @@ export class SlotGame
             if( betManager.allowPlay() )
             {
                 if( this.isCycleResultsActive() )
-                {
-                    // Stop the cycle results
-                    for( let i = 0; i < this.slotGroupAry.length; ++i )
-                        this.slotGroupAry[i].stopCycleResultsAnimation();
-
-                    this.slotState = slotDefs.ESLOT_WAIT_CYCLE_RESULTS_STOP;
-                }
+                    this.slotState = slotDefs.ESLOT_KILL_CYCLE_RESULTS;
                 else
                     this.slotState = slotDefs.ESLOT_PLACE_WAGER;
             }
@@ -412,5 +417,17 @@ export class SlotGame
             animating |= this.slotGroupAry[i].isCycleResultsAnimating();
 
         return animating;
+    }
+    
+    //
+    //  DESC: Kill the cycle results
+    //
+    killCycleResults()
+    {
+        for( let i = 0; i < this.slotGroupAry.length; ++i )
+        {
+            this.slotGroupAry[i].stopCycleResultsAnimation();
+            this.slotGroupAry[i].deactivateCycleResults();
+        }
     }
 }

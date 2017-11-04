@@ -15,7 +15,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { slotMathManager } from '../../../library/slot/slotmathmanager';
 import { symbolSetViewManager } from '../../../library/slot/symbolsetviewmanager';
-import { SimpleCycleResults } from '../../../library/slot/simplecycleresults';
+import { AnimatedCycleResults } from '../../../library/slot/animatedcycleresults';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { Sprite2D } from '../../../library/2d/sprite2d';
@@ -33,7 +33,7 @@ import * as slotDefs from '../../../library/slot/slotdefs';
 import * as slotgroupFactory from '../../../library/slot/slotgroupfactory';
 
 var assetsLoaded  = false;
-export const ASSET_COUNT = 21;
+export const ASSET_COUNT = 27;
 
 const stateGroup = '(big_pay_back)';
 
@@ -67,7 +67,7 @@ export class BigPayBackState extends CommonState
             assetHolder.get( stateGroup, 'spinProfile' ),
             symbolSetViewManager.getViewData( stateGroup, "base_game" ),
             this.slotGame.slotResults.create(),
-            new SimpleCycleResults )
+            new AnimatedCycleResults )
         
         // Add the slot group to the game
         this.slotGame.addSlotGroup( slotGroup );
@@ -145,6 +145,10 @@ export class BigPayBackState extends CommonState
                     this.baseGameMusic.fastFadeDown( 500 );
                 }
             }
+        }
+        else if( event instanceof MouseEvent )
+        {
+            this.slotGame.handleEvent( event );
         }
     }
     

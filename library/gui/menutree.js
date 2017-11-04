@@ -64,10 +64,10 @@ export class MenuTree
     // 
     //  DESC: Transform the menu tree
     //
-    doTransform()
+    transform()
     {
         if( this.menuPathAry.length )
-            this.menuPathAry[this.menuPathAry.length-1].doTransform();
+            this.menuPathAry[this.menuPathAry.length-1].transform();
     }
     
     // 

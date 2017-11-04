@@ -25,6 +25,12 @@ export class SlotStripModel
         // reel stop
         this.stop = 0;
         
+        // Gaff reel stop
+        this.gaffStop = 0;
+        
+        // Gaffing flag
+        this.gaffEnabled = false;
+        
         // Get the total weight of the slot strip
         this.totalWeight = 0;
         for( let i = 0; i < this.mathStripAry.length; ++i )
@@ -40,16 +46,25 @@ export class SlotStripModel
         this.stop = 0;
         let weightCount = 0;
         
-        let awardedWeight = this.rng.genrand_int32() % (this.totalWeight + 1);
-        
-        for( let i = 0; i < this.mathStripAry.length; ++i )
+        if( !this.gaffEnabled )
         {
-            weightCount += this.mathStripAry[i].weight;
+            let awardedWeight = this.rng.genrand_int32() % (this.totalWeight + 1);
 
-            if( awardedWeight <= weightCount )
-                break;
+            for( let i = 0; i < this.mathStripAry.length; ++i )
+            {
+                weightCount += this.mathStripAry[i].weight;
 
-            ++this.stop;
+                if( awardedWeight <= weightCount )
+                    break;
+
+                ++this.stop;
+            }
+        }
+        else
+        {
+            this.stop = this.getSymbolIndex( this.gaffStop );
+            this.gaffStop = 0;
+            this.gaffEnabled = false;
         }
     }
     
@@ -74,5 +89,33 @@ export class SlotStripModel
             index = this.mathStripAry.length - index;
 
         return index;
+    }
+    
+    //
+    //  DESC: Set the gaf stop
+    //
+    setGaffStop( stopOffset )
+    {
+        this.gaffStop = this.getSymbolIndex( this.stop + stopOffset );
+        this.gaffEnabled = true;
+    }
+    
+    //
+    //  DESC: Enable gaffing
+    //
+    enableGaff()
+    {
+        this.gaffEnabled = true;
+        
+        if( this.gaffStop === 0 )
+            this.gaffStop = this.stop;
+    }
+    
+    //
+    //  DESC: Is gaffing enabled
+    //
+    isGaffEnabled()
+    {
+        return this.gaffEnabled;
     }
 }

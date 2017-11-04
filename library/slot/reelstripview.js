@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { Object2D } from '../2d/object2d';
+import { SlotStripView } from './slotstripview';
 import { Timer } from '../utilities/timer';
 import { SpinProfile } from './spinprofile';
 import { Symbol2d } from './symbol2d';
@@ -15,14 +15,15 @@ import { Point } from '../common/point';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { highResTimer } from '../utilities/highresolutiontimer';
 import { soundManager } from '../managers/soundmanager';
+import { eventManager } from '../managers/eventmanager';
 import { gl } from '../system/device';
 import * as slotDefs from './slotdefs';
 
-export class ReelStripView extends Object2D
+export class ReelStripView extends SlotStripView
 {
-    constructor( slotStripModel, symbolSetView, reelId )
+    constructor( slotStripModel, symbolSetView, id )
     {
-        super();
+        super( id );
         
         // Spin state callback
         this.spinStateCallback = null;
@@ -32,9 +33,6 @@ export class ReelStripView extends Object2D
         
         // Symbol set view
         this.symbolSetView = symbolSetView;
-
-        // The reel id
-        this.reelId = reelId;
 
         // Number of visible symbols that are evaluated on this reel
         this.visibleSymbCount = slotStripModel.evalSymbIndexAry.length;
@@ -103,6 +101,9 @@ export class ReelStripView extends Object2D
         this.spinTimer = new Timer;
         // Set the value returned by Expired when the timer is disabled
         this.spinTimer.setDisableValue( true );
+        
+        // Gaff offset to current stop
+        this.gaffOffset = 0;
     }
     
     //
@@ -116,6 +117,12 @@ export class ReelStripView extends Object2D
         // Get the size of the symbol
         let symbolSizeW = Number(node.getAttribute( 'symbolWidth' ));
         let symbolSizeH = Number(node.getAttribute( 'symbolHeight' ));
+        
+        // Calculate the size of this reel strip
+        if( this.spinDir < slotDefs.ESD_LEFT )
+            this.size.set( symbolSizeW, symbolSizeH * this.visibleSymbCount );
+        else
+            this.size.set( symbolSizeW * this.visibleSymbCount, symbolSizeH );
 
         // Get the spin direction and set the spin direction vector
         this.spinDir = Number(node.getAttribute( 'spinDirection' ));
@@ -220,7 +227,45 @@ export class ReelStripView extends Object2D
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].cleanUp();
     }
-
+    
+    //
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        if( this.isPointInStrip( eventManager.mouseX, eventManager.mouseY ) )
+        {
+            if( this.spinDir < slotDefs.ESD_LEFT )
+            {
+                if( eventManager.mouseY < this.collisionCenter.y )
+                    this.gaffOffset++;
+                else
+                    this.gaffOffset--;
+            }
+            else
+            {
+                if( eventManager.mouseX < this.collisionCenter.x )
+                    this.gaffOffset--;
+                else
+                    this.gaffOffset++;
+            }
+            
+            this.gaffSymbolPos();
+        }
+    }
+    
+    //
+    //  DESC: Get the symbol from the reel strip offset
+    //
+    gaffSymbolPos()
+    {
+        this.slotStripModel.setGaffStop( this.gaffOffset );
+        
+        // Reset the position and the symbols of the strip
+        for( let i = 0; i < this.symPosAry.length; ++i )
+            this.symbolAry[i] = this.getSymbol( this.slotStripModel.gaffStop - this.bufferSymbols + i );
+    }
+        
     //
     //  DESC: Get the symbol from the reel strip offset
     //
@@ -296,6 +341,7 @@ export class ReelStripView extends Object2D
                     this.acceleration = this.spinProfile.accelation;
                     this.spinTimer.set( this.spinProfile.startDelay );
                     this.spinState = slotDefs.ESS_SPIN_STARTING;
+                    this.gaffOffset = 0;
                 }
 
                 case slotDefs.ESS_SPIN_STARTING:
@@ -531,6 +577,9 @@ export class ReelStripView extends Object2D
 
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
+        
+        // Transform the collision
+        this.transformCollision();
     }
 
     //
@@ -538,51 +587,71 @@ export class ReelStripView extends Object2D
     //
     render( matrix )
     {
-        if( this.isVisible() )
+        for( let i = 0; i < this.spriteAry.length; ++i )
+            this.spriteAry[i].render( matrix );
+
+        // Disable rendering to the color buffer
+        // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
+        gl.colorMask( false, false, false, false );
+
+        // Disable rendering to the depth mask
+        gl.depthMask( false );
+
+        // Start using the stencil
+        gl.enable( gl.STENCIL_TEST );
+
+        gl.stencilFunc( gl.ALWAYS, 0x1, 0x1 );
+        gl.stencilOp( gl.REPLACE, gl.REPLACE, gl.REPLACE );
+
+
+        this.stencilMaskSprite.render( matrix );
+
+
+        // Re-enable color
+        // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
+        gl.colorMask( true, true, true, true );
+
+        // Where a 1 was not rendered
+        gl.stencilFunc( gl.EQUAL, 0x1, 0x1 );
+
+        // Keep the pixel
+        gl.stencilOp( gl.KEEP, gl.KEEP, gl.KEEP );
+
+        // Enable rendering to the depth mask
+        gl.depthMask( true );
+
+        
+        for( let i = 0; i < this.symbolAry.length; ++i )
         {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].render( matrix );
-
-            // Disable rendering to the color buffer
-            // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-            gl.colorMask( false, false, false, false );
-
-            // Disable rendering to the depth mask
-            gl.depthMask( false );
-
-            // Start using the stencil
-            gl.enable( gl.STENCIL_TEST );
-
-            gl.stencilFunc( gl.ALWAYS, 0x1, 0x1 );
-            gl.stencilOp( gl.REPLACE, gl.REPLACE, gl.REPLACE );
-
-
-            this.stencilMaskSprite.render( matrix );
-
-
-            // Re-enable color
-            // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-            gl.colorMask( true, true, true, true );
-
-            // Where a 1 was not rendered
-            gl.stencilFunc( gl.EQUAL, 0x1, 0x1 );
-
-            // Keep the pixel
-            gl.stencilOp( gl.KEEP, gl.KEEP, gl.KEEP );
-
-            // Enable rendering to the depth mask
-            gl.depthMask( true );
-
-
-            for( let i = 0; i < this.symbolAry.length; ++i )
+            if( !this.symbolAry[i].deferedRender )
             {
                 this.symbolAry[i].setPos( this.symPosAry[i] );
                 this.symbolAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
                 this.symbolAry[i].render( matrix );
             }
+        }
+        
 
-            // Finished using stencil
-            gl.disable( gl.STENCIL_TEST );
+        // Finished using stencil
+        gl.disable( gl.STENCIL_TEST );
+    }
+    
+    //
+    //  DESC: do the defered render. Used for the winning cycle result symbols
+    //
+    deferedRender( matrix )
+    {
+        if( this.spinState === slotDefs.ESS_STOPPED )
+        {
+            for( let i = 0; i < this.symbolAry.length; ++i )
+            {
+                if( this.symbolAry[i].deferedRender )
+                {
+                    this.symbolAry[i].setPos( this.symPosAry[i] );
+                    this.symbolAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
+                    this.symbolAry[i].render( matrix );
+                }
+            }
         }
     }
 

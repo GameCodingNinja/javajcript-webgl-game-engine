@@ -33,7 +33,7 @@ export class PlayResult
     //
     sortPays()
     {
-        this.payAry.sort( ( a, b ) => { return (b.award - a.award); } );
+        this.payAry.sort( ( a, b ) => { return (b.getFinalAward() - a.getFinalAward()); } );
     }
 
     //

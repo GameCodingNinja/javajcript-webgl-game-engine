@@ -89,6 +89,15 @@ export class SlotGroupView extends Object2D
     }
     
     //
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        for( let i = 0; i < this.slotStripViewAry.length; ++i )
+            this.slotStripViewAry[i].handleEvent( event );
+    }
+    
+    //
     //  DESC: Do clean up and free the memory allocated for the cycle result symbols
     //
     freeCycleResultSymbs()
@@ -209,6 +218,18 @@ export class SlotGroupView extends Object2D
                 this.slotStripViewAry[i].render( matrix );
 
             this.cycleResultsTxtSprite.render( matrix );
+        }
+    }
+    
+    //
+    //  DESC: do the defered render. Used for the winning cycle result symbols
+    //
+    deferedRender( matrix )
+    {
+        if( this.isVisible() )
+        {
+            for( let i = 0; i < this.slotStripViewAry.length; ++i )
+                this.slotStripViewAry[i].deferedRender( matrix );
         }
     }
     

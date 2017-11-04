@@ -41,6 +41,9 @@ export class Symbol2d extends Object2D
             
             this.spriteAry.push( sprite );
         }
+        
+        // Flag to indicate symbol is to be rendered after all reel strips have been rendered
+        this.deferedRender = false;
     }
     
     // 

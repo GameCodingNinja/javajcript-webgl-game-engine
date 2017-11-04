@@ -8,7 +8,7 @@
 
 "use strict";
 
-import { Object2D } from '../2d/object2d';
+import { SlotStripView } from './slotstripview';
 import { Sprite2D } from '../2d/sprite2d';
 import { Symbol2d } from '../slot/symbol2d';
 import { SpinProfile } from './spinprofile';
@@ -18,11 +18,11 @@ import { highResTimer } from '../utilities/highresolutiontimer';
 import * as slotDefs from './slotdefs';
 import * as defs from '../common/defs';
 
-export class WheelView extends Object2D
+export class WheelView extends SlotStripView
 {
-    constructor( slotStripModel, symbolSetView, wheelId )
+    constructor( slotStripModel, symbolSetView, id )
     {
-        super();
+        super( id );
         
         // Spin state callback
         this.spinStateCallback = null;
@@ -36,9 +36,6 @@ export class WheelView extends Object2D
         // The degrees per math wedge
         this.degreePerWedge = (Math.PI * 2) / slotStripModel.mathStripAry.length;
         this.saftyCheckDegree = 0;
-
-        // The wheel id
-        this.wheelId = wheelId;
 
         // sprite array
         this.spriteAry = [];
@@ -231,6 +228,14 @@ export class WheelView extends Object2D
         
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].cleanUp();
+    }
+    
+    //
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+
     }
     
     //
@@ -436,6 +441,9 @@ export class WheelView extends Object2D
         
         for( let i = 0; i < this.symbolAry.length; ++i )
             this.symbolAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
+        
+        // Transform the collision
+        this.transformCollision();
     }
     
     // 

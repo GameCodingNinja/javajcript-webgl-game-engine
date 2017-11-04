@@ -67,7 +67,7 @@ export class StartUpState extends state.GameState
         this.spriteLogo.render( device.orthographicMatrix );
         
         this.progressBar.incCurrentValue( ++this.progressCounter );
-        this.progressBar.doTransform();
+        this.progressBar.transform();
         this.progressBar.render( device.orthographicMatrix );
         
         // Unbind everything after a round of rendering
@@ -139,7 +139,7 @@ export class StartUpState extends state.GameState
         this.progressBar.setPosXYZ( 0, -350, 0 );
         this.progressBar.loadSpriteFromArray( ['progress_frame', 'progress_solid'], 1 );
         this.progressBar.initProgressBar( STARTUP_ASSET_COUNT );
-        this.progressBar.doTransform();
+        this.progressBar.transform();
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();

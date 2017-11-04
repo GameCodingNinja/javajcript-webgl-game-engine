@@ -378,23 +378,23 @@ export class Menu extends Object2D
     // 
     //  DESC: Transform the menu
     //
-    doTransform()
+    transform()
     {
         if( this.isVisible() )
         {
-            this.transform();
+            super.transform();
             
             for( let i = 0; i < this.spriteAry.length; ++i )
                 this.spriteAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
             
             for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].doTransform( this );
+                this.staticControlAry[i].transform( this );
             
             for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].doTransform( this );
+                this.mouseOnlyControlAry[i].transform( this );
             
             for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].doTransform( this );
+                this.controlAry[i].transform( this );
         }
     }
 

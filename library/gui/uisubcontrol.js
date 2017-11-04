@@ -160,14 +160,14 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Transform the control
     //
-    doTransform( object )
+    transform( object )
     {
         // Call the parent
-        super.doTransform( object );
+        super.transform( object );
 
         // Update all controls
         for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].doTransform( this );
+            this.subControlAry[i].transform( this );
     }
 
     // 

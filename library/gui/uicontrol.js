@@ -239,16 +239,17 @@ export class UIControl extends ControlBase
     // 
     //  DESC: Transform the control
     //
-    doTransform( object = null )
+    transform( object = null )
     {
         if( object )
-            this.transform( object.matrix, object.wasWorldPosTranformed() );
+            super.transform( object.matrix, object.wasWorldPosTranformed() );
         else
-            this.transform();
+            super.transform();
 
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
 
+        // Transform the collision
         this.transformCollision();
     }
 
