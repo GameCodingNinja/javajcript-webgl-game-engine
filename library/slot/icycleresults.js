@@ -27,6 +27,14 @@ export class iCycleResults
     }
     
     //
+    //  DESC: Update the cycle results
+    //
+    update()
+    {
+        
+    }
+    
+    //
     //  DESC: Activate the cycle results
     //
     activate()
@@ -58,5 +66,13 @@ export class iCycleResults
     isAnimating()
     {
         return false;
+    }
+    
+    //
+    //  DESC: Do the render
+    //
+    render( matrix )
+    {
+        
     }
 }

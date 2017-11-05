@@ -47,7 +47,7 @@ export class BigPayBackState extends CommonState
         this.background.transform();
         
         this.pig = new Sprite2D( objectDataManager.getData( stateGroup, 'pig' ) );
-        this.pig.setPosXYZ( -799, -308 );
+        this.pig.setPosXYZ( -860, -308 );
         this.pig.transform();
 
         // Create the script component and add a script

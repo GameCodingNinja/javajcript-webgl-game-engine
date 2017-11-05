@@ -181,7 +181,7 @@ export class AnimatedCycleResults extends iCycleResults
     }
     
     //
-    //  DESC: do the render
+    //  DESC: Do the render
     //
     render( matrix )
     {

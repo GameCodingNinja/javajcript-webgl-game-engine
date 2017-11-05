@@ -19,6 +19,10 @@ and open the template in the editor.
         </canvas>
         <br />
         <i>Hughes Who Demo. Firefox, Chrome and Chromium are the only supported browsers.</i>
-        <script src="bundle.js"></script>
+        <script>
+            var jsbundle = document.createElement('script');
+            jsbundle.setAttribute( 'src','bundle.js?please-dont-cache=' + Math.random() );
+            document.head.appendChild( jsbundle );
+        </script>
     </body>
 </html>

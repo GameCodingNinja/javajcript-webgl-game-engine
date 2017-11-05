@@ -26,7 +26,7 @@
         
         <object name="pig">
             <visual>
-                <texture file="data/textures/bigPayBack/TBP_Pig.png"/>
+                <texture file="data/textures/bigPayBack/JB.png"/>
                 <mesh genType="quad">
                     <spriteSheet file=""/>
                 </mesh>
