@@ -17,21 +17,6 @@ export class AnimatedCycleResults extends iCycleResults
     constructor()
     {
         super();
-        
-        // cycle results timer
-        this.cycleResultsTimer = new Timer;
-        
-        // Flag for symbol animations
-        this.symbolAnimation = false;
-        
-        // animation time
-        this.animTime = 0;
-        
-        // Animation Frame
-        this.animFrame = 0;
-        
-        // symbol position array for symbol animation
-        this.symbPosAry = null;
     }
     
     //
@@ -48,29 +33,14 @@ export class AnimatedCycleResults extends iCycleResults
     //
     update()
     {
-        if( this.symbolAnimation )
+        if( this.cycleResultsActive )
         {
-            this.animTime -= highResTimer.elapsedTime;
-
-            if( this.animTime < 0 )
-            {
-                this.animTime = 1000.0 / FPS;
-                this.animFrame++;
-                this.symbolAnimation = false;
-                
-                let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
-                
-                for( let i = 0; i < this.symbPosAry.length; ++i )
-                {
-                    let sprite = cycleResultSymbAry[this.symbPosAry[i].reel][this.symbPosAry[i].pos].spriteAry[0];
-
-                    if( this.animFrame < sprite.getFrameCount() )
-                    {
-                        sprite.setFrame( this.animFrame );
-                        this.symbolAnimation = true;
-                    }
-                }
-            }
+            let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
+            let pay = this.playResult.getPay( this.curPayIndex );
+            let symbPosAry = pay.symbPosAry;
+            
+            for( let i = 0; i < symbPosAry.length; ++i )
+                cycleResultSymbAry[symbPosAry[i].reel][symbPosAry[i].pos].getSprite().scriptComponent.update();
         }
     }
     
@@ -107,41 +77,35 @@ export class AnimatedCycleResults extends iCycleResults
     {
         if( this.cycleResultsActive )
         {
-            this.cycleResultsTimer.set( 1000 );
-            this.animTime = 1000.0 / FPS;
-            this.animFrame = 0;
-
             let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
-
-            let pay = this.playResult.getPay( this.cyclePayCounter );
-            this.symbPosAry = pay.symbPosAry;
+            
+            this.curPayIndex = this.cyclePayCounter;
             this.cyclePayCounter = (this.cyclePayCounter + 1) % this.playResult.getPayCount();
-
+            
+            let pay = this.playResult.getPay( this.curPayIndex );
+            let symbPosAry = pay.symbPosAry;
+            
             // Set them all to a low alphs
             for( let i = 0; i < cycleResultSymbAry.length; ++i )
             {
                 for( let j = 0; j < cycleResultSymbAry[i].length; ++j )
                 {
-                    cycleResultSymbAry[i][j].spriteAry[0].setAlpha( 0.2 );
-                    cycleResultSymbAry[i][j].deferedRender = false;
+                    let symbol = cycleResultSymbAry[i][j];
+                    symbol.getSprite().setAlpha( 0.2 );
+                    symbol.getSprite().scriptComponent.reset();
+                    symbol.deferredRender = false;
                 }
             }
 
-            this.symbolAnimation = false;
-            
             // Set only the winners to default color
-            for( let i = 0; i < this.symbPosAry.length; ++i )
+            for( let i = 0; i < symbPosAry.length; ++i )
             {
-                let symbol = cycleResultSymbAry[this.symbPosAry[i].reel][this.symbPosAry[i].pos];
+                let symbol = cycleResultSymbAry[symbPosAry[i].reel][symbPosAry[i].pos];
                 
-                symbol.spriteAry[0].setDefaultColor();
-                symbol.deferedRender = true;
-                
-                this.symbolAnimation |= (symbol.spriteAry[0].getFrameCount() > 1);
+                symbol.getSprite().setDefaultColor();
+                symbol.getSprite().prepareScript( 'animate' );
+                symbol.deferredRender = true;
             }
-            
-            if( this.symbolAnimation )
-                this.cycleResultsTimer.setExpired();
 
             this.slotGroupView.setCycleResultText( true, pay );
         }
@@ -154,18 +118,21 @@ export class AnimatedCycleResults extends iCycleResults
     {
         if( this.cycleResultsActive )
         {
-            this.cycleResultsTimer.setExpired();
-
             let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
             
             // Set it all back to normal
             for( let i = 0; i < cycleResultSymbAry.length; ++i )
+            {
                 for( let j = 0; j < cycleResultSymbAry[i].length; ++j )
-                    cycleResultSymbAry[i][j].spriteAry[0].setDefaultColor();
+                {
+                    let symbol = cycleResultSymbAry[i][j];
+                    symbol.getSprite().scriptComponent.reset();
+                    symbol.getSprite().setDefaultColor();
+                    symbol.deferredRender = false;
+                }
+            }
 
             this.slotGroupView.setCycleResultText( false );
-            
-            this.symbolAnimation = false;
         }
     }
 
@@ -174,10 +141,15 @@ export class AnimatedCycleResults extends iCycleResults
     //
     isAnimating()
     {
-        if( this.symbolAnimation )
-            return true;
+        let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
+        let pay = this.playResult.getPay( this.curPayIndex );
+        let symbPosAry = pay.symbPosAry;
         
-        return !this.cycleResultsTimer.expired();
+        for( let i = 0; i < symbPosAry.length; ++i )
+            if( cycleResultSymbAry[symbPosAry[i].reel][symbPosAry[i].pos].getSprite().scriptComponent.isActive() )
+                return true;
+        
+        return false;
     }
     
     //
@@ -185,7 +157,7 @@ export class AnimatedCycleResults extends iCycleResults
     //
     render( matrix )
     {
-        if( this.isActive() )
-            this.slotGroupView.deferedRender( matrix );
+        if( this.cycleResultsActive )
+            this.slotGroupView.deferredRender( matrix );
     }
 }

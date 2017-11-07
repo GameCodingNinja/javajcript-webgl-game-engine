@@ -623,7 +623,7 @@ export class ReelStripView extends SlotStripView
         
         for( let i = 0; i < this.symbolAry.length; ++i )
         {
-            if( !this.symbolAry[i].deferedRender )
+            if( !this.symbolAry[i].deferredRender )
             {
                 this.symbolAry[i].setPos( this.symPosAry[i] );
                 this.symbolAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
@@ -637,15 +637,15 @@ export class ReelStripView extends SlotStripView
     }
     
     //
-    //  DESC: do the defered render. Used for the winning cycle result symbols
+    //  DESC: do the deferred render. Used for the winning cycle result symbols
     //
-    deferedRender( matrix )
+    deferredRender( matrix )
     {
         if( this.spinState === slotDefs.ESS_STOPPED )
         {
             for( let i = 0; i < this.symbolAry.length; ++i )
             {
-                if( this.symbolAry[i].deferedRender )
+                if( this.symbolAry[i].deferredRender )
                 {
                     this.symbolAry[i].setPos( this.symPosAry[i] );
                     this.symbolAry[i].transform( this.matrix, this.wasWorldPosTranformed() );

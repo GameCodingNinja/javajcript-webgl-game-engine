@@ -113,21 +113,22 @@ export class UIControl extends ControlBase
         let stateScriptNode = node.getElementsByTagName( 'stateScript' );
         if( stateScriptNode.length )
         {
+            // This allocates the script to the map
             let attr = stateScriptNode[0].getAttribute( "onDisabled" );
             if( attr )
-                this.scriptFactoryMap.set( defs.ECS_DISABLED, scriptManager.get(attr) );
+                this.scriptFactoryMap.set( defs.ECS_DISABLED, scriptManager.get(attr)(this) );
 
             attr = stateScriptNode[0].getAttribute( "onInactive" );
             if( attr )
-                this.scriptFactoryMap.set( defs.ECS_INACTIVE, scriptManager.get(attr) );
+                this.scriptFactoryMap.set( defs.ECS_INACTIVE, scriptManager.get(attr)(this) );
 
             attr = stateScriptNode[0].getAttribute( "onActive" );
             if( attr )
-                this.scriptFactoryMap.set( defs.ECS_ACTIVE, scriptManager.get(attr) );
+                this.scriptFactoryMap.set( defs.ECS_ACTIVE, scriptManager.get(attr)(this) );
 
             attr = stateScriptNode[0].getAttribute( "onSelect" );
             if( attr )
-                this.scriptFactoryMap.set( defs.ECS_SELECTED, scriptManager.get(attr) );
+                this.scriptFactoryMap.set( defs.ECS_SELECTED, scriptManager.get(attr)(this) );
         }
 
         // Load the scroll data from node
@@ -651,7 +652,7 @@ export class UIControl extends ControlBase
     prepareSpriteScriptFactory( scriptFactoryMapKey, forceUpdate )
     {    
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].prepareScriptFactoryFunction( scriptFactoryMapKey, forceUpdate );
+            this.spriteAry[i].prepareScript( scriptFactoryMapKey, forceUpdate );
     }
 
     // 
@@ -659,9 +660,12 @@ export class UIControl extends ControlBase
     //
     prepareControlScriptFactory( controlState )
     {
-        let scriptFactory = this.scriptFactoryMap.get( controlState );
-        if( scriptFactory )
-            this.scriptComponent.set( scriptFactory(this) );
+        let script = this.scriptFactoryMap.get( controlState );
+        if( script )
+        {
+            script.init();
+            this.scriptComponent.set( script );
+        }
     }
 
     // 

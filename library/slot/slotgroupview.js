@@ -184,11 +184,8 @@ export class SlotGroupView extends Object2D
     //
     update()
     {
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.slotStripViewAry.length; ++i )
-                this.slotStripViewAry[i].update();
-        }
+        for( let i = 0; i < this.slotStripViewAry.length; ++i )
+            this.slotStripViewAry[i].update();
     }
 
     //
@@ -196,15 +193,12 @@ export class SlotGroupView extends Object2D
     //
     transform()
     {
-        if( this.isVisible() )
-        {
-            super.transform();
+        super.transform();
 
-            for( let i = 0; i < this.slotStripViewAry.length; ++i )
-                this.slotStripViewAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
+        for( let i = 0; i < this.slotStripViewAry.length; ++i )
+            this.slotStripViewAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
 
-            this.cycleResultsTxtSprite.transform( this.matrix, this.wasWorldPosTranformed() );
-        }
+        this.cycleResultsTxtSprite.transform( this.matrix, this.wasWorldPosTranformed() );
     }
 
     //
@@ -212,25 +206,19 @@ export class SlotGroupView extends Object2D
     //
     render( matrix )
     {
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.slotStripViewAry.length; ++i )
-                this.slotStripViewAry[i].render( matrix );
+        for( let i = 0; i < this.slotStripViewAry.length; ++i )
+            this.slotStripViewAry[i].render( matrix );
 
-            this.cycleResultsTxtSprite.render( matrix );
-        }
+        this.cycleResultsTxtSprite.render( matrix );
     }
     
     //
-    //  DESC: do the defered render. Used for the winning cycle result symbols
+    //  DESC: Do the deferred render. Used for the winning cycle result symbols
     //
-    deferedRender( matrix )
+    deferredRender( matrix )
     {
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.slotStripViewAry.length; ++i )
-                this.slotStripViewAry[i].deferedRender( matrix );
-        }
+        for( let i = 0; i < this.slotStripViewAry.length; ++i )
+            this.slotStripViewAry[i].deferredRender( matrix );
     }
     
     //

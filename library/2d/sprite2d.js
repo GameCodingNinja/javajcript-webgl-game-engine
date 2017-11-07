@@ -66,19 +66,30 @@ export class Sprite2D extends Object2D
         {
             let attr = scriptNode[i].attributes[0];
             if( attr )
-                this.scriptFactoryMap.set( attr.name, scriptManager.get(attr.value) );
+                // This allocates the script to the map
+                this.scriptFactoryMap.set( attr.name, scriptManager.get(attr.value)(this) );
         }
     }
     
     // 
-    //  DESC: Prepare the script factory function to run
+    //  DESC: Create the script functions from a map
     //
-    prepareScriptFactoryFunction( scriptFactoryId, forceUpdate = false )
+    createScriptFunctions( spriteData )
     {
-        let scriptFactory = this.scriptFactoryMap.get( scriptFactoryId );
-        if( scriptFactory )
+        for( let [ key, scriptFactory ] of spriteData.scriptFunctionMap.entries() )
+            this.scriptFactoryMap.set( key, scriptFactory(this) );
+    }
+    
+    // 
+    //  DESC: Prepare the script class to run from factory id
+    //
+    prepareScript( scriptFactoryId, forceUpdate = false )
+    {
+        let script = this.scriptFactoryMap.get( scriptFactoryId );
+        if( script )
         {
-            this.scriptComponent.set( scriptFactory(this) );
+            script.init();
+            this.scriptComponent.set( script );
             
             if( forceUpdate )
                 this.scriptComponent.update();

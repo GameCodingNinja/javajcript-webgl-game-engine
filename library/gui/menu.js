@@ -157,9 +157,8 @@ export class Menu extends Object2D
                 let attr = scriptNode[i].attributes[0];
                 
                 if( attr )
-                {
-                    this.scriptFactoryMap.set( attr.name, scriptManager.get(attr.value) );
-                }
+                    // This allocates the script to the map
+                    this.scriptFactoryMap.set( attr.name, scriptManager.get(attr.value)(this) );
             }
         }
     }
@@ -709,9 +708,12 @@ export class Menu extends Object2D
     //
     prepare( scriptFactoryId )
     {
-        let scriptFactory = this.scriptFactoryMap.get( scriptFactoryId );
-        if( scriptFactory )
-            this.scriptComponent.set( scriptFactory(this) );
+        let script = this.scriptFactoryMap.get( scriptFactoryId );
+        if( script )
+        {
+            script.init();
+            this.scriptComponent.set( script );
+        }
     }
 
     // 

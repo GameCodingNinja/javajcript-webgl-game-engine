@@ -39,11 +39,13 @@ export class Symbol2d extends Object2D
             
             sprite.copyTransform( spriteDataAry[i] );
             
+            sprite.createScriptFunctions( spriteDataAry[i] );
+            
             this.spriteAry.push( sprite );
         }
         
         // Flag to indicate symbol is to be rendered after all reel strips have been rendered
-        this.deferedRender = false;
+        this.deferredRender = false;
     }
     
     // 
@@ -111,5 +113,13 @@ export class Symbol2d extends Object2D
     {
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].render( matrix );
+    }
+    
+    // 
+    //  DESC: Get the sprite
+    //
+    getSprite( index = 0 )
+    {
+        return this.spriteAry[index];
     }
 }

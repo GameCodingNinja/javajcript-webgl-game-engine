@@ -48,6 +48,19 @@ export class SimpleCycleResults extends iCycleResults
             this.slotGroupView.generateCycleResultSymbs();
         }
     }
+    
+    //
+    //  DESC: Deactivate the cycle results
+    //
+    deactivate()
+    {
+        if( this.cycleResultsActive )
+        {
+            super.deactivate();
+            
+            this.slotGroupView.clearCycleResultSymbs();
+        }
+    }
 
     //
     //  DESC: Start the cycle results animation
@@ -100,8 +113,6 @@ export class SimpleCycleResults extends iCycleResults
                     cycleResultSymbAry[i][j].spriteAry[0].setDefaultColor();
 
             this.slotGroupView.setCycleResultText( false );
-
-            this.slotGroupView.clearCycleResultSymbs();
         }
     }
 

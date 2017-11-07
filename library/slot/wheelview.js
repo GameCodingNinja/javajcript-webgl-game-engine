@@ -462,6 +462,14 @@ export class WheelView extends SlotStripView
     }
     
     //
+    //  DESC: Do the deferred render. Used for the winning cycle result symbols
+    //
+    deferredRender( matrix )
+    {
+        
+    }
+    
+    //
     //  DESC: Start the spin
     //
     startSpin()

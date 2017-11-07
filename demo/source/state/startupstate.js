@@ -27,6 +27,7 @@ import { slotMathManager } from '../../../library/slot/slotmathmanager';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
 import * as menuScripts from '../scripts/menuscripts';
+import * as slotScripts from '../scripts/slotscripts';
 import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 
@@ -201,6 +202,11 @@ export class StartUpState extends state.GameState
         // Use the simple timer to see how long the download is
         highResTimer.timerStart();
         
+        // Load the scripts
+        menuScripts.loadScripts();
+        utilScripts.loadScripts();
+        slotScripts.loadScripts();
+        
         let groupAry = ['(menu)','(loadingScreen)'];
         
         // Set the load manager's callback when everything is loaded
@@ -297,10 +303,6 @@ export class StartUpState extends state.GameState
         loadManager.add(
             ( callback ) =>
             {
-                // Load the menu scripts before creating the menus
-                menuScripts.loadScripts();
-                utilScripts.loadScripts();
-        
                 // Create the menu group
                 menuManager.createGroup( ['(menu)'] );
                 

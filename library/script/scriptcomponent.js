@@ -32,7 +32,7 @@ export class ScriptComponent
             this.scriptAry[i].execute();
             
             // If the script is finished, remove it
-            if( this.scriptAry[i].isFinished )
+            if( this.scriptAry[i].isFinished() )
                 this.scriptAry.splice( i, 1 );
         }
     }

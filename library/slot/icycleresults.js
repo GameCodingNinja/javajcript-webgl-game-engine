@@ -18,6 +18,9 @@ export class iCycleResults
 
         // index into pay
         this.cyclePayCounter = 0;
+        
+        // Current cycle pay
+        this.curPayIndex = 0;
 
         // Did we complete one animation cycle of all the pays
         this.firstCycleComplete = false;
@@ -42,6 +45,8 @@ export class iCycleResults
         this.cycleResultsActive = true;
         this.firstCycleComplete = false;
         this.cyclePayCounter = 0;
+        this.curPayIndex = 0;
+        this.firstCycleComplete = false;
     }
     
     //

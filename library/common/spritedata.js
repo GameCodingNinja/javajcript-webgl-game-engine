@@ -8,6 +8,7 @@
 
 import { Object } from '../common/object';
 import { FontData } from '../common/fontdata';
+import { scriptManager } from '../script/scriptmanager';
 import * as defs from '../common/defs';
 
 export class SpriteData extends Object
@@ -25,6 +26,7 @@ export class SpriteData extends Object
         this.objectName = defObjName;
         this.aiName = defAIName;
         this.id = defId;
+        this.scriptFunctionMap = new Map;
         
         // Get the name of this specific sprite instance
         let attr = node.getAttribute( "name" );
@@ -69,8 +71,14 @@ export class SpriteData extends Object
 
         // Load the transform data from node
         this.loadTransFromNode( node );
+        
+        // Load any script functions
+        this.loadScriptFunctions( node );
     }
     
+    // 
+    //  DESC: Copy the sprite data
+    //
     copy( obj )
     {
         this.group = obj.group;
@@ -82,5 +90,24 @@ export class SpriteData extends Object
         
         if( this.fontData )
             this.fontData.copy( obj.fontData );
+        
+        for( let [ key, scriptFactory ] of obj.scriptFunctionMap.entries() )
+            this.scriptFunctionMap.set( key, scriptFactory );
+    }
+    
+    // 
+    //  DESC: Load the script functions and add them to the map
+    //
+    loadScriptFunctions( node )
+    {
+        // Check for scripting
+        let scriptNode = node.getElementsByTagName( 'script' );
+
+        for( let i = 0; i < scriptNode.length; ++i )
+        {
+            let attr = scriptNode[i].attributes[0];
+            if( attr )
+                this.scriptFunctionMap.set( attr.name, scriptManager.get(attr.value) );
+        }
     }
 }
