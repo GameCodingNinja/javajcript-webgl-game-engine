@@ -14,11 +14,116 @@ import { Color } from '../../../library/common/color';
 import * as defs from '../../../library/common/defs';
 
 //
+//  DESC: Script for holding for time duration
+//
+export class Hold
+{
+    constructor( sprite )
+    {
+        this.time = 0;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( time )
+    {
+        this.time = time;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.time -= highResTimer.elapsedTime;
+
+        if( this.time < 0 )
+        {
+            this.finished = true;
+        }
+    }
+}
+
+
+//
+//  DESC: Script for playing the frames of an animation
+//
+export class Play
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+        
+        this.time = 0;
+        this.fps = 0;
+        this.counter = 0;
+        this.loop = false;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( fps, loop = false )
+    {
+        this.fps = fps;
+        this.time = 1000.0 / this.fps;
+        this.loop = loop;
+        this.counter = 0;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.time -= highResTimer.elapsedTime;
+
+        if( this.time < 0 )
+        {
+            this.time = 1000.0 / this.fps;
+            this.counter++;
+            
+            if( this.counter < this.sprite.getFrameCount() )
+            {
+                this.sprite.setFrame( this.counter );
+            }
+            else
+            {
+                if( this.loop )
+                {
+                    this.counter = 0;
+                    this.sprite.setFrame( this.counter );
+                }
+                else
+                    this.finished = true;
+            }
+        }
+    }
+}
+
+//
 //  DESC: Script for fading in the menu
 //
 export class FadeTo
 {
-    constructor( current, final, time )
+    constructor()
+    {
+        this.current = 0;
+        this.final = 0;
+        this.time = 0;
+        this.inc = 0;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( current, final, time )
     {
         this.current = current;
         this.final = final;
@@ -58,6 +163,9 @@ export class ColorTo
         this.time;
     }
     
+    // 
+    //  DESC: Init the script for use
+    //
     init( current, final, time )
     {
         this.time = time;
@@ -92,11 +200,6 @@ export class ColorTo
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
-    
-    // 
-    //  DESC: Finished access function
-    //
     get color()
     {
         if( this.finished )
@@ -104,6 +207,11 @@ export class ColorTo
         else
             return this.current;
     }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
 }
 
 //
@@ -113,7 +221,9 @@ class ScreenFade extends FadeTo
 {
     constructor( current, final, time, gameStateChangeMsg )
     {
-        super( current, final, time );
+        super();
+        
+        this.init( current, final, time );
         
         this.gameStateChangeMsg = gameStateChangeMsg;
     }
@@ -141,7 +251,7 @@ class ScreenFade extends FadeTo
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 // 
@@ -150,5 +260,5 @@ class ScreenFade extends FadeTo
 export function loadScripts()
 {
     scriptManager.set( 'ScreenFade',
-            ( current, final, time, gameStateChangeMsg = false ) => { return new ScreenFade( current, final, time, gameStateChangeMsg ); } );
+        ( current, final, time, gameStateChangeMsg = false ) => { return new ScreenFade( current, final, time, gameStateChangeMsg ); } );
 }

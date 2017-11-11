@@ -58,9 +58,6 @@ export class BigPayBackState extends CommonState
         menuManager.allowEventHandling = true;
         menuManager.activateTree( ['confirmation_tree', 'base_game_tree'] );
         
-        // Load the slot config
-        this.slotGame.loadSlotConfig( assetHolder.get( group, 'slotCfg' ) );
-        
         // Create the slot group
         this.slotGame.createSlotGroup(
             slotDefs.ED_REEL,
@@ -266,19 +263,6 @@ export function load()
                 ( xmlNode ) =>
                 {
                     assetHolder.set( group, 'spinProfile', xmlNode );
-
-                    callback();
-                });
-        });
-        
-    // Load the slot config
-    loadManager.add(
-        ( callback ) =>
-        {
-            genFunc.downloadFile( 'xml', 'data/objects/2d/slot/games/bigPayBack/slot.cfg',
-                ( xmlNode ) =>
-                {
-                    assetHolder.set( group, 'slotCfg', xmlNode );
 
                     callback();
                 });

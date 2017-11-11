@@ -25,6 +25,14 @@ class Control_OnActive
     }
     
     // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        // No init required
+    }
+    
+    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -35,7 +43,7 @@ class Control_OnActive
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return true; }
+    isFinished() { return true; }
 }
 
 //
@@ -49,6 +57,14 @@ class Control_OnSelect
     }
     
     // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        // No init required
+    }
+    
+    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -59,7 +75,7 @@ class Control_OnSelect
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return true; }
+    isFinished() { return true; }
 }
 
 //
@@ -69,9 +85,18 @@ class Menu_TransIn extends utilScripts.FadeTo
 {
     constructor( menu )
     {
-        super( 0, 1, 250 );
+        super();
         
         this.menu = menu;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 0, 1, 250 );
+        
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
     }
@@ -98,7 +123,7 @@ class Menu_TransIn extends utilScripts.FadeTo
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 //
@@ -108,9 +133,20 @@ class Menu_TransOut extends utilScripts.FadeTo
 {
     constructor( menu )
     {
-        super( 1, 0, 250 );
+        super();
         
         this.menu = menu;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1, 0, 250 );
+        
+        this.menu.setAlpha( this.current );
+        this.menu.setVisible( true );
     }
     
     // 
@@ -136,7 +172,7 @@ class Menu_TransOut extends utilScripts.FadeTo
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 
@@ -148,6 +184,14 @@ class Control_Disabled
     constructor( sprite )
     {
         this.sprite = sprite;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        // No init required
     }
     
     // 
@@ -167,7 +211,7 @@ class Control_Disabled
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 //
@@ -178,6 +222,14 @@ class Control_Inactive
     constructor( sprite )
     {
         this.sprite = sprite;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        // No init required
     }
     
     // 
@@ -193,7 +245,7 @@ class Control_Inactive
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 //
@@ -204,6 +256,14 @@ class Control_Hidden
     constructor( sprite )
     {
         this.sprite = sprite;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        // No init required
     }
     
     // 
@@ -219,7 +279,7 @@ class Control_Hidden
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 
@@ -228,22 +288,31 @@ class Control_Hidden
 //
 class Base_Control_Active
 {
-    constructor( sprite, hiHSV, lowHSV )
+    constructor( sprite )
     {
         this.sprite = sprite;
-        
-        sprite.setVisible( true );
 
         this.hiColor = new Color;
-        this.hiColor.copy( sprite.getDefaultColor() );
+        this.lowColor = new Color;
+        this.colorTo = new utilScripts.ColorTo;
+
+        this.toggle = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( hiHSV, lowHSV )
+    {
+        this.sprite.setVisible( true );
+        
+        this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
         
-        this.lowColor = new Color;
-        this.lowColor.copy( sprite.getDefaultColor() );
+        this.lowColor.copy( this.sprite.getDefaultColor() );
         this.lowColor.transformHSV( 0, 1, lowHSV );
         
-        this.colorTo = new utilScripts.ColorTo;
-        this.colorTo.init( sprite.getColor(), this.hiColor, 500 );
+        this.colorTo.init( this.sprite.getColor(), this.hiColor, 500 );
         
         this.toggle = false;
     }
@@ -257,7 +326,7 @@ class Base_Control_Active
         
         this.sprite.setColor( this.colorTo.color );
         
-        if( this.colorTo.isFinished )
+        if( this.colorTo.isFinished() )
         {
             if( this.toggle )
                 this.colorTo.init( this.sprite.getColor(), this.hiColor, 500 );
@@ -273,7 +342,15 @@ class Control_Active extends Base_Control_Active
 {
     constructor( sprite )
     {
-        super( sprite, 1.3, .5 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.3, 0.5 );
     }
     
     // 
@@ -287,14 +364,22 @@ class Control_Active extends Base_Control_Active
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return false; }
+    isFinished() { return false; }
 }
 
 class Control_Solid_Active extends Base_Control_Active
 {
     constructor( sprite )
     {
-        super( sprite, 1.1, .5 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.1, 0.5 );
     }
     
     // 
@@ -308,7 +393,7 @@ class Control_Solid_Active extends Base_Control_Active
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return false; }
+    isFinished() { return false; }
 }
 
 
@@ -319,21 +404,32 @@ class Control_Solid_Active extends Base_Control_Active
 //
 class Base_Control_Selected
 {
-    constructor( sprite, hiHSV, lowHSV )
+    constructor( sprite )
     {
         this.sprite = sprite;
-        
-        sprite.setVisible( true );
 
         this.hiColor = new Color;
-        this.hiColor.copy( sprite.getDefaultColor() );
+        this.lowColor = new Color;
+
+        this.colorTo = new utilScripts.ColorTo;
+
+        this.toggle = false;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( hiHSV, lowHSV )
+    {
+        this.sprite.setVisible( true );
+        
+        this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
         
-        this.lowColor = new Color;
-        this.lowColor.copy( sprite.getDefaultColor() );
+        this.lowColor.copy( this.sprite.getDefaultColor() );
         this.lowColor.transformHSV( 0, 1, lowHSV );
         
-        this.colorTo = new utilScripts.ColorTo;
         this.colorTo.init( this.hiColor, this.lowColor, 120 );
         
         this.toggle = false;
@@ -349,7 +445,7 @@ class Base_Control_Selected
         
         this.sprite.setColor( this.colorTo.color );
         
-        if( this.colorTo.isFinished )
+        if( this.colorTo.isFinished() )
         {
             if( this.toggle )
             {
@@ -373,7 +469,15 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7, 0.6 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.7, 0.6 );
     }
     
     // 
@@ -392,14 +496,22 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7, 0.6 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.7, 0.6 );
     }
     
     // 
@@ -419,14 +531,22 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 class Control_Selected_Visible extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7, 0.6 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.7, 0.6 );
     }
     
     // 
@@ -440,7 +560,7 @@ class Control_Selected_Visible extends Base_Control_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 
@@ -451,7 +571,15 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.5, 0.6 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.5, 0.6 );
     }
     
     // 
@@ -465,14 +593,22 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 class Control_Selected extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7, 0.6 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.7, 0.6 );
     }
     
     // 
@@ -489,14 +625,22 @@ class Control_Selected extends Base_Control_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 class Control_Solid_Selected extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.5, 0.6 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.5, 0.6 );
     }
     
     // 
@@ -513,14 +657,22 @@ class Control_Solid_Selected extends Base_Control_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 class Control_Selected_frame_highlight extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7, 0.6 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.7, 0.6 );
     }
     
     // 
@@ -537,7 +689,7 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 
@@ -546,14 +698,22 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
 //
 class Base_Control_Fast_Selected
 {
-    constructor( sprite, hiHSV )
+    constructor( sprite )
     {
         this.sprite = sprite;
-        
-        sprite.setVisible( true );
 
         this.hiColor = new Color;
-        this.hiColor.copy( sprite.getDefaultColor() );
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( hiHSV )
+    {
+        this.sprite.setVisible( true );
+        
+        this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
         this.finished = false;
         
@@ -565,9 +725,18 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7 );
+        super( sprite );
         
+        this.time = 0;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
         this.time = 80;
+        super.init( 1.7 );
     }
     
     // 
@@ -587,16 +756,25 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7 );
+        super( sprite );
         
+        this.time = 0;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
         this.time = 80;
+        super.init( 1.7 );
     }
     
     // 
@@ -617,16 +795,65 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
+}
+
+class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
+{
+    constructor( sprite )
+    {
+        super( sprite );
+        
+        this.time = 0;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        this.time = 80;
+        super.init( 1.7 );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.time -= highResTimer.elapsedTime;
+
+        if( this.time < 0 )
+        {
+            this.sprite.setDefaultColor();
+            eventManager.dispatchEvent( defs.EGE_MENU_SELECT_EXECUTE );
+            eventManager.dispatchEvent( defs.EGE_MENU_REACTIVATE );
+            this.finished = true;
+        }
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7 );
+        super( sprite );
         
         this.time = 80;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        this.time = 80;
+        super.init( 1.7 );
     }
     
     // 
@@ -646,16 +873,25 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7 );
+        super( sprite );
         
         this.time = 80;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        this.time = 80;
+        super.init( 1.7 );
     }
     
     // 
@@ -675,14 +911,22 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return this.finished; }
+    isFinished() { return this.finished; }
 }
 
 class Control_slider_btn_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite, 1.7 );
+        super( sprite );
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1.7 );
     }
     
     // 
@@ -695,7 +939,7 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     // 
     //  DESC: Finished access function
     //
-    get isFinished() { return true; }
+    isFinished() { return true; }
 }
 
 
@@ -705,65 +949,68 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
 export function loadScripts()
 {
     scriptManager.set( 'Control_OnActive',
-            ( control ) => { return new Control_OnActive( control ); } );
+        ( control ) => { return new Control_OnActive( control ); } );
             
     scriptManager.set( 'Control_OnSelect',
-            ( control ) => { return new Control_OnSelect( control ); } );
+        ( control ) => { return new Control_OnSelect( control ); } );  
             
     scriptManager.set( 'Menu_TransIn',
-            ( menu ) => { return new Menu_TransIn( menu ); } );
+        ( menu ) => { return new Menu_TransIn( menu ); } );
             
     scriptManager.set( 'Menu_TransOut',
-            ( menu ) => { return new Menu_TransOut( menu ); } );
+        ( menu ) => { return new Menu_TransOut( menu ); } );
             
     scriptManager.set( 'Control_Disabled',
-            ( sprite ) => { return new Control_Disabled( sprite ); } );
+        ( sprite ) => { return new Control_Disabled( sprite ); } );
             
     scriptManager.set( 'Control_Inactive',
-            ( sprite ) => { return new Control_Inactive( sprite ); } );
+        ( sprite ) => { return new Control_Inactive( sprite ); } );
             
     scriptManager.set( 'Control_Hidden',
-            ( sprite ) => { return new Control_Hidden( sprite ); } );
+        ( sprite ) => { return new Control_Hidden( sprite ); } );
             
     scriptManager.set( 'Control_Active',
-            ( sprite ) => { return new Control_Active( sprite ); } );
+        ( sprite ) => { return new Control_Active( sprite ); } );
             
     scriptManager.set( 'Control_Solid_Active',
-            ( sprite ) => { return new Control_Solid_Active( sprite ); } );
+        ( sprite ) => { return new Control_Solid_Active( sprite ); } );
             
     scriptManager.set( 'Control_Selected_Dispatch_Exe',
-            ( sprite ) => { return new Control_Selected_Dispatch_Exe( sprite ); } );
+        ( sprite ) => { return new Control_Selected_Dispatch_Exe( sprite ); } );
             
     scriptManager.set( 'Control_Selected_Dispatch_Exe_Act',
-            ( sprite ) => { return new Control_Selected_Dispatch_Exe_Act( sprite ); } );
+        ( sprite ) => { return new Control_Selected_Dispatch_Exe_Act( sprite ); } );
             
     scriptManager.set( 'Control_Selected_Visible',
-            ( sprite ) => { return new Control_Selected_Visible( sprite ); } );
+        ( sprite ) => { return new Control_Selected_Visible( sprite ); } );
             
     scriptManager.set( 'Control_Solid_Selected_visible',
-            ( sprite ) => { return new Control_Solid_Selected_visible( sprite ); } );
+        ( sprite ) => { return new Control_Solid_Selected_visible( sprite ); } );
             
     scriptManager.set( 'Control_Selected',
-            ( sprite ) => { return new Control_Selected( sprite ); } );
+        ( sprite ) => { return new Control_Selected( sprite ); } );
             
     scriptManager.set( 'Control_Solid_Selected',
-            ( sprite ) => { return new Control_Solid_Selected( sprite ); } );
+        ( sprite ) => { return new Control_Solid_Selected( sprite ); } );
             
     scriptManager.set( 'Control_Selected_frame_highlight',
-            ( sprite ) => { return new Control_Selected_frame_highlight( sprite ); } );
+        ( sprite ) => { return new Control_Selected_frame_highlight( sprite ); } );
             
     scriptManager.set( 'Control_Fast_Face_Selected',
-            ( sprite ) => { return new Control_Fast_Face_Selected( sprite ); } );
+        ( sprite ) => { return new Control_Fast_Face_Selected( sprite ); } );
             
     scriptManager.set( 'Control_Fast_Face_Selected_Act',
-            ( sprite ) => { return new Control_Fast_Face_Selected_Act( sprite ); } );
+        ( sprite ) => { return new Control_Fast_Face_Selected_Act( sprite ); } );
+    
+    scriptManager.set( 'Control_Fast_Face_Selected_Exe_Act',
+        ( sprite ) => { return new Control_Fast_Face_Selected_Exe_Act( sprite ); } );
             
     scriptManager.set( 'Control_Fast_Selected',
-            ( sprite ) => { return new Control_Fast_Selected( sprite ); } );
+        ( sprite ) => { return new Control_Fast_Selected( sprite ); } );
             
     scriptManager.set( 'Control_Fast_Solid_Selected',
-            ( sprite ) => { return new Control_Fast_Solid_Selected( sprite ); } );
+        ( sprite ) => { return new Control_Fast_Solid_Selected( sprite ); } );
             
     scriptManager.set( 'Control_slider_btn_Selected',
-            ( sprite ) => { return new Control_slider_btn_Selected( sprite ); } );
+        ( sprite ) => { return new Control_slider_btn_Selected( sprite ); } );
 }
