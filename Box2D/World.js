@@ -906,6 +906,13 @@ World.prototype._listeners = null;
 
 /**
  * Register an event listener.
+ * 
+ *   'begin-contact'
+ *   'end-contact'
+ *   'pre-solve'
+ *   'post-solve'
+ *   'remove-joint'
+ *   'remove-fixture'
  *
  * @param {string} name
  * @param {function} listener
