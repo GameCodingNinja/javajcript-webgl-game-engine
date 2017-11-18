@@ -8,7 +8,6 @@
             <position x="-5" y="-458" z="0"/>
             <!-- Max size of font string in meter -->
             <size width="430" height="150"/>
-            <!--<meterScript onInit="Meter_OnInit" onStart="Meter_OnStart" onStop="Meter_OnStop" onClear="Meter_OnClear"/>-->
             <bangRange fastBangTime="500" scaleType="axis">
                 <range target="500" bangUpType="rampUp" velocity="15.0"  estimatedTime="200" slowStartTime="100"/>
                 <range target="1000" bangUpType="rampUp" velocity="15.0"  estimatedTime="500" slowStartTime="200"/>

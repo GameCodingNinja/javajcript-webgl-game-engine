@@ -93,7 +93,11 @@ export class Sprite2D extends Object2D
             
             if( forceUpdate )
                 this.scriptComponent.update();
+            
+            return true;
         }
+        
+        return false;
     }
 
     prepareScriptFactory( scriptFactory, forceUpdate = false )

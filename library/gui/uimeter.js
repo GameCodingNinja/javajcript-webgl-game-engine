@@ -90,9 +90,6 @@ export class UIMeter extends UIControl
 
         // Scale on axis or accurate
         this.scaleType = EST_AXIS;
-
-        // On meter script function names
-        this.meterScriptFunction = new Map;
     }
     
     //
@@ -131,27 +128,6 @@ export class UIMeter extends UIControl
                     Number(rangeNode[i].getAttribute( 'estimatedTime' )),
                     Number(rangeNode[i].getAttribute( 'slowStartTime' )) ) );
             }
-        }
-
-        // Get the meter script functions
-        let meterScriptNode = node.getElementsByTagName( 'meterScript' );
-        if( meterScriptNode.length )
-        {
-            let attr = meterScriptNode[0].getAttribute( "onInit" )
-            if( attr )
-                this.meterScriptFunction.set( defs.EMSF_ON_INIT, scriptManager.get(attr) );
-
-            attr = meterScriptNode[0].getAttribute( "onStart" )
-            if( attr )
-                this.meterScriptFunction.set( defs.EMSF_ON_START, scriptManager.get(attr) );
-            
-            attr = meterScriptNode[0].getAttribute( "onStop" )
-            if( attr )
-                this.meterScriptFunction.set( defs.EMSF_ON_STOP, scriptManager.get(attr) );
-            
-            attr = meterScriptNode[0].getAttribute( "onClear" )
-            if( attr )
-                this.meterScriptFunction.set( defs.EMSF_ON_CLEAR, scriptManager.get(attr) );
         }
 
         // Get the max size of the font string to fit within this meter.
@@ -309,9 +285,8 @@ export class UIMeter extends UIControl
         // Set the timer to allow the bang-up to start off slowly
         this.startUpTimer.set( bangRange.slowStartTime );
 
-        let scriptFunc = this.meterScriptFunction.get( defs.EMSF_ON_START );
-        if( scriptFunc )
-            this.fontSprite.prepareScriptFactory( scriptFunc );
+        // Prepare the start script function if one exists
+        this.fontSprite.prepareScript( 'start' );
     }
 
     //
@@ -397,10 +372,8 @@ export class UIMeter extends UIControl
                     this.currentValue = this.targetValue;
                     this.bangUp = false;
 
-                    // Call the script function if one is defined
-                    let scriptFunc = this.meterScriptFunction.get( defs.EMSF_ON_START );
-                    if( scriptFunc )
-                        this.fontSprite.prepareScriptFactory( scriptFunc );
+                    // Prepare the stop script function if one exists
+                    this.fontSprite.prepareScript( 'stop' );
                 }
 
                 // Display the value in the meter
@@ -461,10 +434,7 @@ export class UIMeter extends UIControl
         this.lastValue = this.currentValue = this.targetValue = 0;
         this.bangUp = false;
         
-        let scriptFunc = this.meterScriptFunction.get( defs.EMSF_ON_CLEAR );
-        if( scriptFunc )
-            this.fontSprite.prepareScriptFactory( scriptFunc );
-        else
+        if( !this.fontSprite.prepareScript( 'clear' ) )
             this.fontSprite.visualComponent.createFontString( this.currentValue.toString() );
     }
     

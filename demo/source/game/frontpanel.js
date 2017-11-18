@@ -52,9 +52,6 @@ export class FrontPanel extends iFrontPanel
     {
         this.winMeter = winMeter;
         this.creditMeter = creditMeter;
-        
-        if( this.winMeter )
-            this.winMeter.clear();
 
         if( this.creditMeter )
             this.creditMeter.set( betManager.getCredits() );

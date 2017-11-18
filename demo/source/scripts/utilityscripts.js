@@ -140,13 +140,13 @@ export class FadeTo
         this.time -= highResTimer.elapsedTime;
 
         if( this.time < 0 )
-        {
             this.finished = true;
-        }
+
         else
-        {
             this.current += (this.inc * highResTimer.elapsedTime);
-        }
+        
+        if( this.current > 1 )
+            this.current = 1;
     }
 }
 

@@ -204,14 +204,12 @@ class Control_Disabled
         color.transformHSV( 0, 0, 1 );
 
         this.sprite.setColor( color );
-        
-        this.finished = true;
     }
     
     // 
     //  DESC: Finished access function
     //
-    isFinished() { return this.finished; }
+    isFinished() { return true; }
 }
 
 //
@@ -238,14 +236,12 @@ class Control_Inactive
     execute()
     {
         this.sprite.setColor( this.sprite.getDefaultColor() );
-        
-        this.finished = true;
     }
     
     // 
     //  DESC: Finished access function
     //
-    isFinished() { return this.finished; }
+    isFinished() { return true; }
 }
 
 //
@@ -272,14 +268,12 @@ class Control_Hidden
     execute()
     {
         this.sprite.setVisible( false );
-        
-        this.finished = true;
     }
     
     // 
     //  DESC: Finished access function
     //
-    isFinished() { return this.finished; }
+    isFinished() { return true; }
 }
 
 

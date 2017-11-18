@@ -11,6 +11,12 @@
 
         <sprite objectName="meter_font">
             <font fontName="arial_black_170"/>
+            <scriptLst>
+                <script init="Meter_Init"/>
+                <script start="Meter_Start"/>
+                <!-- <script stop="Meter_Stop"/> -->
+                <script clear="Meter_Clear"/>
+            </scriptLst>
         </sprite>
     
     </spriteList>

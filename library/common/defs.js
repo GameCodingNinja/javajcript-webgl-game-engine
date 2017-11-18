@@ -211,12 +211,6 @@ export const ECAT_NULL              = 0,
 // EControlScriptFunctions
 export const ECSF_ON_ACTIVE   = 0,
              ECSF_ON_SELECTED = 1;
-    
-// EMeterScriptFunctions
-export const EMSF_ON_INIT  = 0,
-             EMSF_ON_START = 1,
-             EMSF_ON_STOP  = 2,
-             EMSF_ON_CLEAR = 3;
 
 // EOrientation
 export const EO_HORIZONTAL = 0,
