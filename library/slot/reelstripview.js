@@ -295,19 +295,6 @@ export class ReelStripView extends SlotStripView
 
         return symbol;
     }
-    
-    //
-    //  DESC: This replaces the temporary cycle symbols with the ones used for spinning
-    //
-    clearCycleResultSymbs()
-    {
-        for( let i = 0; i < this.visibleSymbCount; ++i )
-        {
-            let symbId = this.symbolAry[this.bufferSymbols + i].id;
-
-            this.symbolAry[this.bufferSymbols + i] = this.symbolSetView.getSymbol( symbId );
-        }
-    }
 
     //
     //  DESC: Set the spin profile
@@ -322,6 +309,9 @@ export class ReelStripView extends SlotStripView
     //
     update()
     {
+        for( let i = 0; i < this.symbolAry.length; ++i )
+            this.symbolAry[i].update();
+        
         if( this.spin )
         {
             switch( this.spinState )

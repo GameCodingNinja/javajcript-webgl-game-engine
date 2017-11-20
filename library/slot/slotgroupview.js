@@ -81,7 +81,17 @@ export class SlotGroupView extends Object2D
             this.slotStripViewAry[i].cleanUp();
         
         // Do clean up and free the memory allocated for the cycle result symbols
-        this.freeCycleResultSymbs();
+        for( let reel = 0; reel < this.cycleResultSymbAry.length; ++reel )
+        {
+            for( let symb = 0; symb < this.cycleResultSymbAry[reel].length; ++symb )
+            {
+                if( this.cycleResultSymbAry[reel][symb] )
+                {
+                    this.cycleResultSymbAry[reel][symb].cleanUp();
+                    this.cycleResultSymbAry[reel][symb] = null;
+                }
+            }
+        }
         
         // Free the OpenGL font data
         if( this.cycleResultsTxtSprite )
@@ -95,24 +105,6 @@ export class SlotGroupView extends Object2D
     {
         for( let i = 0; i < this.slotStripViewAry.length; ++i )
             this.slotStripViewAry[i].handleEvent( event );
-    }
-    
-    //
-    //  DESC: Do clean up and free the memory allocated for the cycle result symbols
-    //
-    freeCycleResultSymbs()
-    {
-        for( let reel = 0; reel < this.cycleResultSymbAry.length; ++reel )
-        {
-            for( let symb = 0; symb < this.cycleResultSymbAry[reel].length; ++symb )
-            {
-                if( this.cycleResultSymbAry[reel][symb] )
-                {
-                    this.cycleResultSymbAry[reel][symb].cleanUp();
-                    this.cycleResultSymbAry[reel][symb] = null;
-                }
-            }
-        }
     }
     
     //
@@ -277,13 +269,5 @@ export class SlotGroupView extends Object2D
     {
         for( let i = 0; i < this.slotStripViewAry.length; ++i )
             this.slotStripViewAry.allowStopSounds( allow );
-    }
-    
-    //
-    //  DESC: Clear the cycle results symbols?
-    //
-    clearCycleResultSymbs()
-    {
-        // Empty by design. Clearing may not be required
     }
 }

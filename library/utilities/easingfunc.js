@@ -1,13 +1,22 @@
 
 // 
-//  FILE NAME: easing scripts.js
+//  FILE NAME: easingfunc.js
 //  DESC:      Class for holding easing scripts
 //
 
 "use strict";
+import { highResTimer } from './highresolutiontimer';
 
 // 
-//  DESC: Pow functions
+//  DESC: linear
+//
+export function getLinear()
+{
+    return (time) => { return time; };
+}
+
+// 
+//  DESC: Pow functions - default parameter, 2, 3, 4, 5
 //
 export function getPowIn( pow )
 {
@@ -49,7 +58,7 @@ export function getSineInOut()
 }
 
 // 
-//  DESC: Back functions
+//  DESC: Back functions - default parameter, 1.7
 //
 export function getBackIn( amount )
 {
@@ -143,7 +152,7 @@ export function getBounceInOut()
 }
 
 // 
-//  DESC: Elastic functions
+//  DESC: Elastic functions - default parameter, 1, 0.3
 //
 export function getElasticIn( amplitude, period )
 {
@@ -186,4 +195,67 @@ export function getElasticInOut( amplitude, period )
             
             return amplitude * Math.pow( 2, -10 * (time -= 1)) * Math.sin((time - s) * pi2 / period) * 0.5 + 1;
         }
+}
+
+//
+//  DESC: Easing class for singular value
+//
+export class valueTo
+{
+    constructor()
+    {
+        this.start = 0;
+        this.end = 0;
+        this.current = 0;
+        this.time = 0;
+        this.totalTime = 0;
+        this.dif = 0;
+        this.finished = false;
+        this.easingFunc = null;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( start, end, totalTime, easingFunc )
+    {
+        this.start = start;
+        this.end = end;
+        this.current = 0.0;
+        this.time = 0.0;
+        this.totalTime = totalTime;
+        this.dif = end - start;
+        this.finished = false;
+        this.easingFunc = easingFunc;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.time += highResTimer.elapsedTime;
+
+        if( this.time < this.totalTime )
+            this.current = (this.dif * this.easingFunc( this.time / this.totalTime )) + this.start;
+        
+        else
+            this.finished = true;
+    }
+    
+    // 
+    //  DESC: Get the current value
+    //
+    getValue()
+    {
+        if( this.finished )
+            return this.end;
+        else
+            return this.current;
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
 }

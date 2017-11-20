@@ -318,7 +318,7 @@ class Base_Control_Active
     {
         this.colorTo.execute();
         
-        this.sprite.setColor( this.colorTo.color );
+        this.sprite.setColor( this.colorTo.getColor() );
         
         if( this.colorTo.isFinished() )
         {
@@ -437,7 +437,7 @@ class Base_Control_Selected
     {
         this.colorTo.execute();
         
-        this.sprite.setColor( this.colorTo.color );
+        this.sprite.setColor( this.colorTo.getColor() );
         
         if( this.colorTo.isFinished() )
         {

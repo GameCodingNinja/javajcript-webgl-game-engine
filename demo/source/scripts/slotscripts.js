@@ -12,16 +12,110 @@ import { eventManager } from '../../../library/managers/eventmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { Color } from '../../../library/common/color';
 import * as utilScripts from './utilityscripts';
+import * as easingFunc from '../../../library/utilities/easingfunc.js';
 import * as defs from '../../../library/common/defs';
+
+//
+//  DESC: Script for animating a winning symbol
+//
+class Symbol_Reset extends utilScripts.FadeTo
+{
+    constructor( sprite )
+    {
+        super();
+        
+        this.sprite = sprite;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        this.finished = false;
+        
+        if( this.sprite.getAlpha() < 1 )
+            super.init( 0.2, 1, 200 );
+
+        else
+            this.finished = true;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( !this.finished )
+        {
+            super.execute();
+            this.sprite.setAlpha( super.getAlpha() );
+        }
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
+}
+
+//
+//  DESC: Script for animating a winning symbol
+//
+class Symbol_NoWin extends utilScripts.FadeTo
+{
+    constructor( sprite )
+    {
+        super();
+        
+        this.sprite = sprite;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        this.finished = false;
+        
+        if( this.sprite.getAlpha() < 1 )
+            this.finished = true;
+        
+        else
+            super.init( 1, 0.2, 70 );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( !this.finished )
+        {
+            super.execute();
+            this.sprite.setAlpha( super.getAlpha() );
+        }
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
+}
 
 //
 //  DESC: Script for timing out a winning symbol
 //
-class Symbol_Hold extends utilScripts.Hold
+class Symbol_LowWin extends utilScripts.Hold
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
+        
+        this.sprite = sprite;
+        this.fadeTo = new utilScripts.FadeTo;
     }
     
     // 
@@ -30,6 +124,9 @@ class Symbol_Hold extends utilScripts.Hold
     init()
     {
         super.init( 1000 );
+        
+        if( this.sprite.getAlpha() < 1 )
+            this.fadeTo.init( 0.2, 1, 70 );
     }
     
     // 
@@ -38,6 +135,194 @@ class Symbol_Hold extends utilScripts.Hold
     execute()
     {
         super.execute();
+        
+        if( this.sprite.getAlpha() < 1 )
+        {
+            this.fadeTo.execute();
+            this.sprite.setAlpha( this.fadeTo.getAlpha() );
+        }
+    }
+}
+
+//
+//  DESC: Script for animating a winning symbol
+//
+class Symbol_MedWin
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+        
+        this.state = 0;
+        
+        this.easingFunc = new easingFunc.valueTo;
+        this.hold = new utilScripts.Hold;
+        this.fadeTo = new utilScripts.FadeTo;
+        
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        this.state = 0;
+        this.hold.init( 200 );
+        this.finished = false;
+        
+        if( this.sprite.getAlpha() < 1 )
+            this.fadeTo.init( 0.2, 1, 70 );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( (this.state == 0) || (this.state == 2) || (this.state == 4) )
+        {
+            this.hold.execute();
+        }
+        else if( this.state == 1 || this.state == 3 )
+        {
+            this.easingFunc.execute();
+            
+            let value = this.easingFunc.getValue();
+            this.sprite.setScaleXYZ( value, value );
+        }
+        
+        if( (this.state == 0) && this.hold.isFinished() )
+        {
+            this.state = 1;
+            this.easingFunc.init( 1, 1.5, 100, easingFunc.getPowIn(4) );
+        }
+        else if( (this.state == 1) && this.easingFunc.isFinished() )
+        {
+            this.state = 2;
+            this.hold.init( 50 );
+        }
+        else if( (this.state == 2) && this.hold.isFinished() )
+        {
+            this.state = 3;
+            this.easingFunc.init( 1.5, 1, 200, easingFunc.getPowOut(2) );
+        }
+        else if( (this.state == 3) && this.easingFunc.isFinished() )
+        {
+            this.state = 4;
+            this.hold.init( 700 );
+        }
+        else if( (this.state == 4) && this.hold.isFinished() )
+        {
+            return this.finished = true;
+        }
+        
+        if( this.sprite.getAlpha() < 1 )
+        {
+            this.fadeTo.execute();
+            this.sprite.setAlpha( this.fadeTo.getAlpha() );
+        }
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
+}
+
+//
+//  DESC: Script for animating a winning symbol
+//
+class Symbol_HiWin
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+        
+        this.state = 0;
+        this.rotateState = 0;
+        
+        this.scaleEasingFunc = new easingFunc.valueTo;
+        this.rotateEasingFunc = new easingFunc.valueTo;
+        this.hold = new utilScripts.Hold;
+        this.fadeTo = new utilScripts.FadeTo;
+        
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        this.state = 0;
+        this.rotateState = false;
+        this.hold.init( 200 );
+        this.finished = false;
+        
+        if( this.sprite.getAlpha() < 1 )
+            this.fadeTo.init( 0.2, 1, 70 );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( (this.state == 0) || (this.state == 2) || (this.state == 4) )
+        {
+            this.hold.execute();
+        }
+        else if( this.state == 1 || this.state == 3 )
+        {
+            this.scaleEasingFunc.execute();
+            
+            let value = this.scaleEasingFunc.getValue();
+            this.sprite.setScaleXYZ( value, value );
+        }
+        
+        if( this.rotateState )
+        {
+            this.rotateEasingFunc.execute();
+            
+            let value = this.rotateEasingFunc.getValue();
+            this.sprite.setRotXYZ( 0, 0, value, false );
+        }
+        
+        if( (this.state == 0) && this.hold.isFinished() )
+        {
+            this.state = 1;
+            this.rotateState = true;
+            
+            this.scaleEasingFunc.init( 1, 1.3, 1500, easingFunc.getElasticOut(3, 0.3) );
+            this.rotateEasingFunc.init(-0.5, 0, 1500, easingFunc.getElasticOut(2, 0.3) );
+        }
+        else if( (this.state == 1) && this.scaleEasingFunc.isFinished() )
+        {
+            this.state = 2;
+            this.rotateState = false;
+            this.hold.init( 50 );
+        }
+        else if( (this.state == 2) && this.hold.isFinished() )
+        {
+            this.state = 3;
+            this.scaleEasingFunc.init( 1.3, 1, 200, easingFunc.getPowOut(3) );
+        }
+        else if( (this.state == 3) && this.scaleEasingFunc.isFinished() )
+        {
+            this.state = 4;
+            this.hold.init( 200 );
+        }
+        else if( (this.state == 4) && this.hold.isFinished() )
+        {
+            return this.finished = true;
+        }
+        
+        if( this.sprite.getAlpha() < 1 )
+        {
+            this.fadeTo.execute();
+            this.sprite.setAlpha( this.fadeTo.getAlpha() );
+        }
     }
     
     // 
@@ -54,6 +339,8 @@ class Symbol_Animate extends utilScripts.Play
     constructor( sprite )
     {
         super( sprite );
+        
+        this.fadeTo = new utilScripts.FadeTo;
     }
     
     // 
@@ -62,6 +349,9 @@ class Symbol_Animate extends utilScripts.Play
     init()
     {
         super.init( 18 );
+        
+        if( this.sprite.getAlpha() < 1 )
+            this.fadeTo.init( 0.2, 1, 70 );
     }
     
     // 
@@ -70,12 +360,13 @@ class Symbol_Animate extends utilScripts.Play
     execute()
     {
         super.execute();
+        
+        if( this.sprite.getAlpha() < 1 )
+        {
+            this.fadeTo.execute();
+            this.sprite.setAlpha( this.fadeTo.getAlpha() );
+        }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
@@ -207,8 +498,20 @@ class Meter_Clear extends utilScripts.FadeTo
 //
 export function loadScripts()
 {
-    scriptManager.set( 'Symbol_Hold',
-        ( sprite ) => { return new Symbol_Hold( sprite ); } );
+    scriptManager.set( 'Symbol_NoWin',
+        ( sprite ) => { return new Symbol_NoWin( sprite ); } );
+        
+    scriptManager.set( 'Symbol_Reset',
+        ( sprite ) => { return new Symbol_Reset( sprite ); } );
+        
+    scriptManager.set( 'Symbol_LowWin',
+        ( sprite ) => { return new Symbol_LowWin( sprite ); } );
+        
+    scriptManager.set( 'Symbol_MedWin',
+        ( sprite ) => { return new Symbol_MedWin( sprite ); } );
+        
+    scriptManager.set( 'Symbol_HiWin',
+        ( sprite ) => { return new Symbol_HiWin( sprite ); } );
         
     scriptManager.set( 'Symbol_Animate',
         ( sprite ) => { return new Symbol_Animate( sprite ); } );

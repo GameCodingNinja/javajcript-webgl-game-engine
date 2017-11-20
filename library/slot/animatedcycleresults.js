@@ -9,6 +9,7 @@
 import { Timer } from '../utilities/timer';
 import { iCycleResults } from './icycleresults';
 import { highResTimer } from '../utilities/highresolutiontimer';
+import { betManager } from './betmanager';
 
 const FPS = 18.0;
 
@@ -35,12 +36,11 @@ export class AnimatedCycleResults extends iCycleResults
     {
         if( this.cycleResultsActive )
         {
-            let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
-            let pay = this.playResult.getPay( this.curPayIndex );
-            let symbPosAry = pay.symbPosAry;
+            /*let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
             
-            for( let i = 0; i < symbPosAry.length; ++i )
-                cycleResultSymbAry[symbPosAry[i].reel][symbPosAry[i].pos].getSprite().scriptComponent.update();
+            for( let i = 0; i < cycleResultSymbAry.length; ++i )
+                for( let j = 0; j < cycleResultSymbAry[i].length; ++j )
+                    cycleResultSymbAry[i][j].getSprite().scriptComponent.update();*/
         }
     }
     
@@ -65,8 +65,6 @@ export class AnimatedCycleResults extends iCycleResults
         if( this.cycleResultsActive )
         {
             super.deactivate();
-            
-            this.slotGroupView.clearCycleResultSymbs();
         }
     }
 
@@ -85,14 +83,19 @@ export class AnimatedCycleResults extends iCycleResults
             let pay = this.playResult.getPay( this.curPayIndex );
             let symbPosAry = pay.symbPosAry;
             
+            let totalBet = betManager.getTotalBet();
+            
             // Set them all to a low alphs
             for( let i = 0; i < cycleResultSymbAry.length; ++i )
             {
                 for( let j = 0; j < cycleResultSymbAry[i].length; ++j )
                 {
                     let symbol = cycleResultSymbAry[i][j];
-                    symbol.getSprite().setAlpha( 0.2 );
                     symbol.getSprite().scriptComponent.reset();
+                    symbol.getSprite().setScaleXYZ();
+                    symbol.getSprite().setRotXYZ();
+                    symbol.getSprite().setFrame(0);
+                    symbol.getSprite().prepareScript( 'no_win' );
                     symbol.deferredRender = false;
                 }
             }
@@ -102,9 +105,18 @@ export class AnimatedCycleResults extends iCycleResults
             {
                 let symbol = cycleResultSymbAry[symbPosAry[i].reel][symbPosAry[i].pos];
                 
-                symbol.getSprite().setDefaultColor();
-                symbol.getSprite().prepareScript( 'animate' );
+                //symbol.getSprite().setDefaultColor();
+                symbol.getSprite().scriptComponent.reset();
                 symbol.deferredRender = true;
+                
+                if( pay.getFinalAward() >= totalBet * 5 )
+                    symbol.getSprite().prepareScript( 'hi_win' );
+                
+                else if( pay.getFinalAward() >= totalBet * 3 )
+                    symbol.getSprite().prepareScript( 'med_win' );
+                
+                else
+                    symbol.getSprite().prepareScript( 'low_win' );
             }
 
             this.slotGroupView.setCycleResultText( true, pay );
@@ -127,7 +139,10 @@ export class AnimatedCycleResults extends iCycleResults
                 {
                     let symbol = cycleResultSymbAry[i][j];
                     symbol.getSprite().scriptComponent.reset();
-                    symbol.getSprite().setDefaultColor();
+                    symbol.getSprite().setScaleXYZ();
+                    symbol.getSprite().setRotXYZ();
+                    symbol.getSprite().setFrame(0);
+                    symbol.getSprite().prepareScript( 'reset' );
                     symbol.deferredRender = false;
                 }
             }

@@ -18,7 +18,7 @@ import * as defs from '../../../library/common/defs';
 //
 export class Hold
 {
-    constructor( sprite )
+    constructor()
     {
         this.time = 0;
         this.finished = false;
@@ -45,6 +45,11 @@ export class Hold
             this.finished = true;
         }
     }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
 }
 
 
@@ -104,6 +109,11 @@ export class Play
             }
         }
     }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
 }
 
 //
@@ -144,10 +154,23 @@ export class FadeTo
 
         else
             this.current += (this.inc * highResTimer.elapsedTime);
-        
-        if( this.current > 1 )
-            this.current = 1;
     }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    getAlpha()
+    {
+        if( this.finished )
+            return this.final;
+        else
+            return this.current;
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
 }
 
 //
@@ -200,7 +223,7 @@ export class ColorTo
     // 
     //  DESC: Finished access function
     //
-    get color()
+    getColor()
     {
         if( this.finished )
             return this.final;

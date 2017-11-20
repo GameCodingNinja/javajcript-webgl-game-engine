@@ -57,8 +57,6 @@ export class SimpleCycleResults extends iCycleResults
         if( this.cycleResultsActive )
         {
             super.deactivate();
-            
-            this.slotGroupView.clearCycleResultSymbs();
         }
     }
 

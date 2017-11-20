@@ -68,20 +68,13 @@ export class ReelGroupView extends SlotGroupView
             let evalSymbIndexAry = this.slotGroupModel.slotStripModelAry[reel].evalSymbIndexAry;
 
             for( let symb = 0; symb < evalSymbIndexAry.length; ++symb )
+            {
+                // Clean up after the pervious symbol
+                if( this.cycleResultSymbAry[reel][symb] )
+                    this.cycleResultSymbAry[reel][symb].cleanUp();
+                
                 this.cycleResultSymbAry[reel][symb] = this.slotStripViewAry[reel].getCycleResultSymbol( evalSymbIndexAry[symb] );
+            }
         }
-    }
-    
-    //
-    //  DESC: Clear the cycle results symbols
-    //
-    clearCycleResultSymbs()
-    {
-        // This replaces the temporary cycle symbols with the ones used for spinning
-        for( let reel = 0; reel < this.slotStripViewAry.length; ++reel )
-            this.slotStripViewAry[reel].clearCycleResultSymbs();
-
-        // Do clean up and free the memory allocated for the cycle result symbols
-        this.freeCycleResultSymbs();
     }
 }
