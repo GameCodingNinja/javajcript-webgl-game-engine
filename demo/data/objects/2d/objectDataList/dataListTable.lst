@@ -24,6 +24,7 @@
     
     <groupList groupName="(big_pay_back)">
         <file path="data/objects/2d/objectDataList/bigpayback.lst"/>
+        <file path="data/objects/2d/objectDataList/paylineDataList.lst"/>
     </groupList>
   
 </listTable>

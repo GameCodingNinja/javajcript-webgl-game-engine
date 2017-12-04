@@ -68,6 +68,9 @@ export class ObjectVisualData2D
 
         // Default scale
         this.defaultUniformScale = 1;
+        
+        // Mirror value
+        this.mirror = defs.EM_NULL;
     }
     
     // 
@@ -81,6 +84,7 @@ export class ObjectVisualData2D
         this.meshFilePath = obj.meshFilePath;
         this.spriteSheetFilePath = obj.spriteSheetFilePath;
         this.defaultUniformScale = obj.defaultUniformScale;
+        this.mirror = obj.mirror;
         this.color.copy( obj.color );
         
         if( obj.glyphIDs )
@@ -149,7 +153,20 @@ export class ObjectVisualData2D
                     else if( genTypeStr === 'font' )
                         this.genType = defs.EGT_FONT;
                 }
+                
+                let mirrorStr = meshNode[0].getAttribute('mirror');
+                if( mirrorStr )
+                {
+                    if( mirrorStr === 'horizontal' )
+                        this.mirror = defs.EM_HORIZONTAL;
 
+                    else if( mirrorStr === 'vertical' )
+                        this.mirror = defs.EM_VERTICAL;
+
+                    else if( mirrorStr === 'horizontal_vertical' )
+                        this.mirror = defs.EM_HORIZONTAL_VERTICAL;
+                }
+                
                 let spriteSheetNode = meshNode[0].getElementsByTagName( 'spriteSheet' );
                 if( spriteSheetNode.length )
                 {
@@ -330,7 +347,30 @@ export class ObjectVisualData2D
              0.5, -0.5, 0.0,   1.0, 1.0
         ];
         
-        this.vbo = vertexBufferManager.createVBO( group, 'guad_0011', vertAry );
+        let horzStr = '';
+        let vertStr = '';
+        
+        if( (this.mirror === defs.EM_HORIZONTAL) || (this.mirror === defs.EM_HORIZONTAL_VERTICAL) )
+        {
+            horzStr = '_horz';
+            
+            vertAry[5 * 0 + 3] = 0.0;
+            vertAry[5 * 1 + 3] = 1.0;
+            vertAry[5 * 2 + 3] = 1.0;
+            vertAry[5 * 3 + 3] = 0.0;
+        }
+        
+        if( (this.mirror === defs.EM_VERTICAL) || (this.mirror === defs.EM_HORIZONTAL_VERTICAL) )
+        {
+            vertStr = '_vert';
+            
+            vertAry[5 * 0 + 4] = 1.0;
+            vertAry[5 * 1 + 4] = 1.0;
+            vertAry[5 * 2 + 4] = 0.0;
+            vertAry[5 * 3 + 4] = 0.0;
+        }
+        
+        this.vbo = vertexBufferManager.createVBO( group, 'guad_0011' + horzStr + vertStr, vertAry );
         this.ibo = vertexBufferManager.createIBO( group, 'quad_0123', [0, 1, 2, 3], true );
         
         this.iboCount = 4;

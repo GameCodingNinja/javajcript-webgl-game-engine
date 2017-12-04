@@ -120,6 +120,9 @@ export class SlotGroup
     transform()
     {
         this.slotGroupView.transform();
+        
+        if( this.cycleResults && this.cycleResults.isActive() )
+            return this.cycleResults.transform( this.slotGroupView.matrix, this.slotGroupView.wasWorldPosTranformed() );
     }
     
     //
@@ -129,7 +132,7 @@ export class SlotGroup
     {
         this.slotGroupView.render( matrix );
         
-        if( this.cycleResults )
+        if( this.cycleResults && this.cycleResults.isActive() )
             this.cycleResults.render( matrix );
     }
 }

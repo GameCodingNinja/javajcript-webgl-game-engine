@@ -28,15 +28,7 @@ export class iCycleResults
         // Cycle results flag
         this.cycleResultsActive = false;
     }
-    
-    //
-    //  DESC: Update the cycle results
-    //
-    update()
-    {
-        
-    }
-    
+
     //
     //  DESC: Activate the cycle results
     //
@@ -71,6 +63,22 @@ export class iCycleResults
     isAnimating()
     {
         return false;
+    }
+    
+    //
+    //  DESC: Update the cycle results
+    //
+    update()
+    {
+        
+    }
+    
+    //
+    //  DESC: Transform the reel strip
+    //
+    transform( matrix, tranformWorldPos )
+    {
+        
     }
     
     //

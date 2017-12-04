@@ -14,7 +14,9 @@ import { assetHolder } from '../../../library/utilities/assetholder';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { slotMathManager } from '../../../library/slot/slotmathmanager';
-import { symbolSetViewManager } from '../../../library/slot/symbolsetviewmanager';
+import { spriteStrategyManager } from '../../../library/managers/spritestrategymanager';
+import { SymbolSetViewStrategy2D } from '../../../library/slot/symbolsetviewstrategy2d';
+import { SpriteSetStrategy2D } from '../../../library/2d/spritesetstrategy2d';
 import { AnimatedCycleResults } from '../../../library/slot/animatedcycleresults';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
@@ -33,7 +35,7 @@ import * as slotDefs from '../../../library/slot/slotdefs';
 import * as slotgroupFactory from '../../../library/slot/slotgroupfactory';
 
 var assetsLoaded  = false;
-export const ASSET_COUNT = 27;
+export const ASSET_COUNT = 31;
 
 const stateGroup = '(big_pay_back)';
 
@@ -65,9 +67,9 @@ export class BigPayBackState extends CommonState
             slotMathManager.getSlotMath( stateGroup, "slot" ),
             assetHolder.get( stateGroup, 'reelgroup' ),
             assetHolder.get( stateGroup, 'spinProfile' ),
-            symbolSetViewManager.getViewData( stateGroup, "base_game" ),
+            spriteStrategyManager.get( '(big_pay_back_symbol_set_view)' ).get( "base_game" ),
             this.slotGame.slotResults.create(),
-            new AnimatedCycleResults )
+            new AnimatedCycleResults( spriteStrategyManager.get( '(big_pay_back_payline_set_view)' ).get( "40_4x5" ) ) )
         
         // Add the slot group to the game
         this.slotGame.addSlotGroup( slotGroup );
@@ -232,7 +234,7 @@ function unload()
 {
     menuManager.freeGroup( [stateGroup] );
     objectDataManager.freeGroup( [stateGroup] );
-    symbolSetViewManager.clear();
+    spriteStrategyManager.clear();
     soundManager.freeGroup( [stateGroup] );
     slotMathManager.clear();
 }
@@ -270,9 +272,23 @@ export function load()
     loadManager.add(
         ( callback ) => slotMathManager.loadGroup( [stateGroup], callback ) );
 
-    // Load the symbol set view data manager list table
+    // Create the symbol set view strategy
     loadManager.add(
-        ( callback ) => symbolSetViewManager.loadGroup( [stateGroup], callback ) );
+        ( callback ) => spriteStrategyManager.load( '(big_pay_back_symbol_set_view)', new SymbolSetViewStrategy2D, callback ) );
+
+    // Create the payline set view strategy
+    loadManager.add(
+        ( callback ) => spriteStrategyManager.load( '(big_pay_back_payline_set_view)', new SpriteSetStrategy2D, callback ) );
+
+    // Build the symbol set
+    loadManager.add(
+        ( callback ) =>
+        {
+            spriteStrategyManager.get( '(big_pay_back_symbol_set_view)' ).get( "base_game" ).build();
+            spriteStrategyManager.get( '(big_pay_back_payline_set_view)' ).get( "40_4x5" ).build();
+            
+            callback();
+        });
 
     // Load the sounds
     loadManager.add(

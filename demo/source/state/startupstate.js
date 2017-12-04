@@ -11,7 +11,6 @@ import { textureManager } from '../../../library/managers/texturemanager';
 import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { fontManager } from '../../../library/managers/fontmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
-import { symbolSetViewManager } from '../../../library/slot/symbolsetviewmanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { loadManager } from '../../../library/managers/loadmanager';
@@ -31,7 +30,7 @@ import * as slotScripts from '../scripts/slotscripts';
 import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-const STARTUP_ASSET_COUNT = 83,
+const STARTUP_ASSET_COUNT = 82,
       LOGO_DISPLAY_DELAY = 2000;
 
 export class StartUpState extends state.GameState
@@ -317,20 +316,6 @@ export class StartUpState extends state.GameState
                     {
                         // Load the symbol set view data list table
                         slotMathManager.loadListTable( xmlNode );
-                        
-                        callback();
-                    });
-            });
-            
-        // Load the symbol set view data list table
-        loadManager.add(
-            ( callback ) =>
-            {
-                genFunc.downloadFile( 'xml', 'data/objects/2d/slot/symbolSetListTable.lst',
-                    ( xmlNode ) =>
-                    {
-                        // Load the symbol set view data list table
-                        symbolSetViewManager.loadListTable( xmlNode );
                         
                         callback();
                     });

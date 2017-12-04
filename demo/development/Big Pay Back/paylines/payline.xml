@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<spriteSheet width="902" height="170">
+
+    <rect x1="   1" y1=" 153" x2=" 900" y2="  16" cx="   0" cy="   0" name="payline_0_1_2_3"/>
+    <rect x1="   1" y1="   1" x2=" 894" y2=" 150" cx="   0" cy="   0" name="payline_8_9_10_11_12_13"/>
+
+</spriteSheet>

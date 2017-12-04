@@ -215,3 +215,10 @@ export const ECSF_ON_ACTIVE   = 0,
 // EOrientation
 export const EO_HORIZONTAL = 0,
              EO_VERTICAL   = 1;
+     
+// EMirror
+export const EM_NULL                = 0,
+             EM_HORIZONTAL          = 1,
+             EM_VERTICAL            = 2,
+             EM_HORIZONTAL_VERTICAL = 3;
+     

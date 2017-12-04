@@ -34,9 +34,6 @@ export class ReelGroupView extends SlotGroupView
         if( this.slotGroupModel.slotStripModelAry.length !== reelNode.length )
             throw new Error( 'Reelstrip model count does not match view count!' );
         
-        // Build the visible symbol set
-        symbolSetView.buildSymbolSetView();
-        
         // Create the view reel strips
         for( let reel = 0; reel < reelNode.length; ++reel )
         {

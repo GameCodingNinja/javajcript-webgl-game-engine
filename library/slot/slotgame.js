@@ -320,9 +320,6 @@ export class SlotGame
     //
     update()
     {
-        for( let i = 0; i < this.slotGroupAry.length; ++i )
-            this.slotGroupAry[i].update();
-        
         // Start the cycle results animation if not currently animating
         if( this.isCycleResultsActive() )
         {
@@ -332,6 +329,9 @@ export class SlotGame
                     this.slotGroupAry[i].startCycleResultsAnimation();
             }
         }
+        
+        for( let i = 0; i < this.slotGroupAry.length; ++i )
+            this.slotGroupAry[i].update();
     }
 
     //

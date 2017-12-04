@@ -10,14 +10,21 @@ import { Timer } from '../utilities/timer';
 import { iCycleResults } from './icycleresults';
 import { highResTimer } from '../utilities/highresolutiontimer';
 import { betManager } from './betmanager';
+import * as slotDefs from './slotdefs';
 
 const FPS = 18.0;
 
 export class AnimatedCycleResults extends iCycleResults
 {
-    constructor()
+    constructor( paylineSpriteSet )
     {
         super();
+        
+        // Payline sprite set
+        this.paylineSpriteSet = paylineSpriteSet;
+        
+        // Payline sprite
+        this.paylineSprite = null;
     }
     
     //
@@ -27,21 +34,6 @@ export class AnimatedCycleResults extends iCycleResults
     {
         this.slotGroupView = slotGroupView;
         this.playResult = playResult;
-    }
-    
-    //
-    //  DESC: Update the cycle results
-    //
-    update()
-    {
-        if( this.cycleResultsActive )
-        {
-            /*let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
-            
-            for( let i = 0; i < cycleResultSymbAry.length; ++i )
-                for( let j = 0; j < cycleResultSymbAry[i].length; ++j )
-                    cycleResultSymbAry[i][j].getSprite().scriptComponent.update();*/
-        }
     }
     
     //
@@ -82,6 +74,9 @@ export class AnimatedCycleResults extends iCycleResults
             
             let pay = this.playResult.getPay( this.curPayIndex );
             let symbPosAry = pay.symbPosAry;
+            
+            if( pay.payType === slotDefs.EP_PAYLINE )
+                this.paylineSprite = this.paylineSpriteSet.getSprite( pay.payLine );
             
             let totalBet = betManager.getTotalBet();
             
@@ -148,6 +143,7 @@ export class AnimatedCycleResults extends iCycleResults
             }
 
             this.slotGroupView.setCycleResultText( false );
+            this.paylineSprite = null;
         }
     }
 
@@ -168,11 +164,38 @@ export class AnimatedCycleResults extends iCycleResults
     }
     
     //
+    //  DESC: Update the cycle results
+    //
+    update()
+    {
+        if( this.cycleResultsActive && this.paylineSprite )
+        {
+            this.paylineSprite.update();
+        }
+    }
+    
+    //
+    //  DESC: Transform the reel strip
+    //
+    transform( matrix, tranformWorldPos )
+    {
+        if( this.cycleResultsActive && this.paylineSprite )
+        {
+            this.paylineSprite.transform( matrix, tranformWorldPos );
+        }
+    }
+    
+    //
     //  DESC: Do the render
     //
     render( matrix )
     {
         if( this.cycleResultsActive )
+        {
+            if( this.paylineSprite )
+                this.paylineSprite.render( matrix );
+            
             this.slotGroupView.deferredRender( matrix );
+        }
     }
 }
