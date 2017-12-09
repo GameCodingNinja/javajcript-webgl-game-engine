@@ -46,7 +46,7 @@ export class SlotGame
     init()
     {
         for( let i = 0; i < this.slotGroupAry.length; ++i )
-            this.slotGroupAry[i].init();
+            this.slotGroupAry[i].slotGroupView.init();
     }
     
     //
@@ -55,7 +55,7 @@ export class SlotGame
     cleanUp()
     {
         for( let i = 0; i < this.slotGroupAry.length; ++i )
-            this.slotGroupAry[i].cleanUp();
+            this.slotGroupAry[i].slotGroupView.cleanUp();
     }
 
     //
@@ -260,7 +260,7 @@ export class SlotGame
 
             // Start the cycle results
             for( let i = 0; i < this.slotGroupAry.length; ++i )
-                this.slotGroupAry[i].activateCycleResults();
+                this.slotGroupAry[i].slotGroupView.activateCycleResults();
         }
 
         this.slotState = slotDefs.ESLOT_WAIT_FOR_AWARD;
@@ -326,12 +326,12 @@ export class SlotGame
             if( !this.isCycleResultsAnimating() )
             {
                 for( let i = 0; i < this.slotGroupAry.length; ++i )
-                    this.slotGroupAry[i].startCycleResultsAnimation();
+                    this.slotGroupAry[i].slotGroupView.startCycleResultsAnimation();
             }
         }
         
         for( let i = 0; i < this.slotGroupAry.length; ++i )
-            this.slotGroupAry[i].update();
+            this.slotGroupAry[i].slotGroupView.update();
     }
 
     //
@@ -340,7 +340,7 @@ export class SlotGame
     transform()
     {
         for( let i = 0; i < this.slotGroupAry.length; ++i )
-            this.slotGroupAry[i].transform();
+            this.slotGroupAry[i].slotGroupView.transform();
     }
 
     //
@@ -349,7 +349,7 @@ export class SlotGame
     render( matrix )
     {
         for( let i = 0; i < this.slotGroupAry.length; ++i )
-            this.slotGroupAry[i].render( matrix );
+            this.slotGroupAry[i].slotGroupView.render( matrix );
     }
 
     //
@@ -400,8 +400,8 @@ export class SlotGame
     {
         let active = false;
         
-        for( let i = 0; i < this.slotGroupAry.length; ++i )
-            active |= this.slotGroupAry[i].isCycleResultsActive();
+        for( let i = 0; i < this.slotGroupAry.length && !active; ++i )
+            active = this.slotGroupAry[i].slotGroupView.isCycleResultsActive();
 
         return active;
     }
@@ -413,8 +413,8 @@ export class SlotGame
     {
         let animating = false;
         
-        for( let i = 0; i < this.slotGroupAry.length; ++i )
-            animating |= this.slotGroupAry[i].isCycleResultsAnimating();
+        for( let i = 0; i < this.slotGroupAry.length && !animating; ++i )
+            animating = this.slotGroupAry[i].slotGroupView.isCycleResultsAnimating();
 
         return animating;
     }
@@ -426,8 +426,8 @@ export class SlotGame
     {
         for( let i = 0; i < this.slotGroupAry.length; ++i )
         {
-            this.slotGroupAry[i].stopCycleResultsAnimation();
-            this.slotGroupAry[i].deactivateCycleResults();
+            this.slotGroupAry[i].slotGroupView.stopCycleResultsAnimation();
+            this.slotGroupAry[i].slotGroupView.deactivateCycleResults();
         }
     }
 }

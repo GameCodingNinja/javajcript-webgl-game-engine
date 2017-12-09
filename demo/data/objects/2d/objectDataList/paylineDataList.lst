@@ -104,7 +104,7 @@
         
         <object name="payline_8">
             <visual>
-                <mesh>
+                <mesh mirror="vertical">
                     <spriteSheet>
                         <glyph id="payline_8_9_10_11_12_13"/>
                     </spriteSheet>
@@ -137,7 +137,7 @@
         
         <object name="payline_11">
             <visual>
-                <mesh>
+                <mesh mirror="vertical">
                     <spriteSheet>
                         <glyph id="payline_8_9_10_11_12_13"/>
                     </spriteSheet>
@@ -148,7 +148,7 @@
         
         <object name="payline_12">
             <visual>
-                <mesh>
+                <mesh mirror="vertical">
                     <spriteSheet>
                         <glyph id="payline_8_9_10_11_12_13"/>
                     </spriteSheet>

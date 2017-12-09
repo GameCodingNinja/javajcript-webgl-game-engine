@@ -35,13 +35,19 @@ export class SlotGroupView extends Object2D
 
         // cycle results text sprite
         this.cycleResultsTxtSprite = null;
+        
+        // Cycle results interface
+        this.cycleResults = null;
     }
     
     //
     //  DESC: Create the group view
     //
-    create( node, symbolSetView )
+    create( node, symbolSetView, cycleResults )
     {
+        // Set the cycle results
+        this.cycleResults = cycleResults;
+        
         // Get the group name
         let group = node.getAttribute( 'group' );
         
@@ -178,6 +184,9 @@ export class SlotGroupView extends Object2D
     {
         for( let i = 0; i < this.slotStripViewAry.length; ++i )
             this.slotStripViewAry[i].update();
+        
+        if( this.cycleResults && this.cycleResults.isActive() )
+            this.cycleResults.update();
     }
 
     //
@@ -191,6 +200,9 @@ export class SlotGroupView extends Object2D
             this.slotStripViewAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
 
         this.cycleResultsTxtSprite.transform( this.matrix, this.wasWorldPosTranformed() );
+        
+        if( this.cycleResults && this.cycleResults.isActive() )
+            return this.cycleResults.transform( this.matrix, this.wasWorldPosTranformed() );
     }
 
     //
@@ -202,6 +214,9 @@ export class SlotGroupView extends Object2D
             this.slotStripViewAry[i].render( matrix );
 
         this.cycleResultsTxtSprite.render( matrix );
+        
+        if( this.cycleResults && this.cycleResults.isActive() )
+            this.cycleResults.render( matrix );
     }
     
     //
@@ -262,6 +277,64 @@ export class SlotGroupView extends Object2D
         return result;
     }
 
+    //
+    //  DESC: Start the cycle results
+    //
+    activateCycleResults()
+    {
+        if( this.cycleResults )
+            this.cycleResults.activate();
+    }
+
+    //
+    //  DESC: Stop the cycle results
+    //
+    deactivateCycleResults()
+    {
+        if( this.cycleResults )
+            this.cycleResults.deactivate();
+    }
+
+    //
+    //  DESC: Stop the cycle results animation
+    //
+    startCycleResultsAnimation()
+    {
+        if( this.cycleResults )
+            this.cycleResults.startAnimation();
+    }
+
+    //
+    //  DESC: Stop the cycle results animation
+    //
+    stopCycleResultsAnimation()
+    {
+        if( this.cycleResults )
+            this.cycleResults.stopAnimation();
+    }
+    
+    //
+    //  DESC: Is the cycle results active
+    //
+    isCycleResultsActive()
+    {
+        if( this.cycleResults )
+            return this.cycleResults.isActive();
+
+        return false;
+    }
+
+    //
+    //  DESC: Is the cycle results animating
+    //
+    isCycleResultsAnimating()
+    {
+        if( this.cycleResults )
+            return this.cycleResults.isAnimating();
+
+        return false;
+    }
+    
     //
     //  DESC: Do we allow the stop sounds?
     //

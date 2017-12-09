@@ -40,15 +40,15 @@ export function create(
         throw new Error( `Undefined slot device!` );
     
     // Create group view based on xml node and symbol set view
-    slotGroupView.create( viewCfgNode, symbolSetView );
+    slotGroupView.create( viewCfgNode, symbolSetView, cycleResults );
 
     // Load the spin profile from XML node
     slotGroupView.loadSpinProfileFromNode( viewSpinProfileCfgNode );
     
     // Init the cycle results if we have one
     if( cycleResults )
-        cycleResults.init( slotGroupView, playResult );
+        cycleResults.init( slotGroupView );
 
     // Create the slot group
-    return new SlotGroup( slotGroupModel, slotGroupView, cycleResults );
+    return new SlotGroup( slotGroupModel, slotGroupView );
 }

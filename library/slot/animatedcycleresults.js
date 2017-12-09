@@ -16,9 +16,12 @@ const FPS = 18.0;
 
 export class AnimatedCycleResults extends iCycleResults
 {
-    constructor( paylineSpriteSet )
+    constructor( playResult, paylineSpriteSet )
     {
         super();
+        
+        // Set the play result
+        this.playResult = playResult;
         
         // Payline sprite set
         this.paylineSpriteSet = paylineSpriteSet;
@@ -33,7 +36,6 @@ export class AnimatedCycleResults extends iCycleResults
     init( slotGroupView, playResult )
     {
         this.slotGroupView = slotGroupView;
-        this.playResult = playResult;
     }
     
     //

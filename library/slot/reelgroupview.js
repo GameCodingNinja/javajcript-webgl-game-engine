@@ -19,9 +19,9 @@ export class ReelGroupView extends SlotGroupView
     //
     //  DESC: Create the group views
     //
-    create( node, symbolSetView )
+    create( node, symbolSetView, cycleResults )
     {
-        super.create( node, symbolSetView );
+        super.create( node, symbolSetView, cycleResults );
         
         // Get the group name
         let group = node.getAttribute( 'group' );

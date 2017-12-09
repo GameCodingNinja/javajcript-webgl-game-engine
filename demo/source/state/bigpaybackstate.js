@@ -59,6 +59,9 @@ export class BigPayBackState extends CommonState
         // Allocate the slot game
         this.slotGame = new SlotGame();
         
+        // Create the play result
+        let playResult = this.slotGame.slotResults.create();
+        
         // Create the slot group
         let slotGroup = slotgroupFactory.create(
             slotDefs.ED_REEL,
@@ -68,8 +71,8 @@ export class BigPayBackState extends CommonState
             assetHolder.get( stateGroup, 'reelgroup' ),
             assetHolder.get( stateGroup, 'spinProfile' ),
             spriteStrategyManager.get( '(big_pay_back_symbol_set_view)' ).get( "base_game" ),
-            this.slotGame.slotResults.create(),
-            new AnimatedCycleResults( spriteStrategyManager.get( '(big_pay_back_payline_set_view)' ).get( "40_4x5" ) ) )
+            playResult,
+            new AnimatedCycleResults( playResult, spriteStrategyManager.get( '(big_pay_back_payline_set_view)' ).get( "40_4x5" ) ) )
         
         // Add the slot group to the game
         this.slotGame.addSlotGroup( slotGroup );
