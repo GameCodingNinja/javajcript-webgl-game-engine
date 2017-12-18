@@ -257,7 +257,7 @@ export class Sprite2D extends Object2D
     // 
     //  DESC: Set the texture ID from index
     //
-    setFrame( index )
+    setFrame( index = 0 )
     {
         if( this.visualComponent.frameIndex != index )
         {

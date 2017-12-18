@@ -16,8 +16,11 @@ export class iCycleResults
         // Pointer to slot group view. NOTE: We don't own this pointer
         this.slotGroupView = null;
 
-        // index into pay
-        this.cyclePayCounter = 0;
+        // pay counter
+        this.payCounter = 0;
+        
+        // cycle counter
+        this.cycleCounter = 0;
         
         // Current cycle pay
         this.curPayIndex = 0;
@@ -36,7 +39,8 @@ export class iCycleResults
     {
         this.cycleResultsActive = true;
         this.firstCycleComplete = false;
-        this.cyclePayCounter = 0;
+        this.payCounter = 0;
+        this.cycleCounter = 0;
         this.curPayIndex = 0;
         this.firstCycleComplete = false;
     }

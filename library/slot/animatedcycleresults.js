@@ -28,6 +28,13 @@ export class AnimatedCycleResults extends iCycleResults
         
         // Payline sprite
         this.paylineSprite = null;
+        
+        this.testPaylines = [];
+        
+        this.testPaylines.push( paylineSpriteSet.getSprite( 0 ) );
+        this.testPaylines.push( paylineSpriteSet.getSprite( 1 ) );
+        this.testPaylines.push( paylineSpriteSet.getSprite( 2 ) );
+        this.testPaylines.push( paylineSpriteSet.getSprite( 3 ) );
     }
     
     //
@@ -56,10 +63,7 @@ export class AnimatedCycleResults extends iCycleResults
     //
     deactivate()
     {
-        if( this.cycleResultsActive )
-        {
-            super.deactivate();
-        }
+        super.deactivate();
     }
 
     //
@@ -69,30 +73,48 @@ export class AnimatedCycleResults extends iCycleResults
     {
         if( this.cycleResultsActive )
         {
+            if( this.cycleCounter > 0 )
+                this.firstCycleComplete = true;
+            
             let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
             
-            this.curPayIndex = this.cyclePayCounter;
-            this.cyclePayCounter = (this.cyclePayCounter + 1) % this.playResult.getPayCount();
+            this.curPayIndex = this.payCounter;
+            this.payCounter = (this.payCounter + 1) % this.playResult.getPayCount();
             
             let pay = this.playResult.getPay( this.curPayIndex );
             let symbPosAry = pay.symbPosAry;
             
-            if( pay.payType === slotDefs.EP_PAYLINE )
-                this.paylineSprite = this.paylineSpriteSet.getSprite( pay.payLine );
+            this.paylineSprite = null;
             
             let totalBet = betManager.getTotalBet();
             
-            // Set them all to a low alphs
+            if( pay.payType === slotDefs.EP_PAYLINE )
+            {
+                this.paylineSprite = this.paylineSpriteSet.getSprite( pay.payLine );
+                
+                if( pay.getFinalAward() >= totalBet * 5 )
+                    this.paylineSprite.prepareScript( 'hi_win' );
+                
+                else if( pay.getFinalAward() >= totalBet * 3 )
+                    this.paylineSprite.prepareScript( 'med_win' );
+                
+                else
+                    this.paylineSprite.prepareScript( 'low_win' );
+            }
+            
+            let startAnim = 'no_win';
+            
+            if( !this.firstCycleComplete )
+                startAnim = 'init';
+            
+            // Set them all to a low alph
             for( let i = 0; i < cycleResultSymbAry.length; ++i )
             {
                 for( let j = 0; j < cycleResultSymbAry[i].length; ++j )
                 {
                     let symbol = cycleResultSymbAry[i][j];
                     symbol.getSprite().scriptComponent.reset();
-                    symbol.getSprite().setScaleXYZ();
-                    symbol.getSprite().setRotXYZ();
-                    symbol.getSprite().setFrame(0);
-                    symbol.getSprite().prepareScript( 'no_win' );
+                    symbol.getSprite().prepareScript( startAnim );
                     symbol.deferredRender = false;
                 }
             }
@@ -117,6 +139,8 @@ export class AnimatedCycleResults extends iCycleResults
             }
 
             this.slotGroupView.setCycleResultText( true, pay );
+            
+            ++this.cycleCounter;
         }
     }
 
@@ -136,16 +160,18 @@ export class AnimatedCycleResults extends iCycleResults
                 {
                     let symbol = cycleResultSymbAry[i][j];
                     symbol.getSprite().scriptComponent.reset();
-                    symbol.getSprite().setScaleXYZ();
-                    symbol.getSprite().setRotXYZ();
-                    symbol.getSprite().setFrame(0);
                     symbol.getSprite().prepareScript( 'reset' );
                     symbol.deferredRender = false;
                 }
             }
 
             this.slotGroupView.setCycleResultText( false );
-            this.paylineSprite = null;
+            
+            if( this.paylineSprite )
+            {
+                this.paylineSprite.scriptComponent.reset();
+                this.paylineSprite = null;
+            }
         }
     }
 
@@ -162,6 +188,9 @@ export class AnimatedCycleResults extends iCycleResults
             if( cycleResultSymbAry[symbPosAry[i].reel][symbPosAry[i].pos].getSprite().scriptComponent.isActive() )
                 return true;
         
+        if( this.paylineSprite && this.paylineSprite.scriptComponent.isActive() )
+            return true;
+        
         return false;
     }
     
@@ -170,9 +199,10 @@ export class AnimatedCycleResults extends iCycleResults
     //
     update()
     {
-        if( this.cycleResultsActive && this.paylineSprite )
+        if( this.cycleResultsActive )
         {
-            this.paylineSprite.update();
+            if( this.paylineSprite )
+                this.paylineSprite.update();
         }
     }
     
@@ -181,9 +211,13 @@ export class AnimatedCycleResults extends iCycleResults
     //
     transform( matrix, tranformWorldPos )
     {
-        if( this.cycleResultsActive && this.paylineSprite )
+        if( this.cycleResultsActive )
         {
-            this.paylineSprite.transform( matrix, tranformWorldPos );
+            if( this.paylineSprite )
+                this.paylineSprite.transform( matrix, tranformWorldPos );
+            
+            for( let i = 0; i < this.testPaylines.length; ++i )
+                this.testPaylines[i].transform( matrix, tranformWorldPos );
         }
     }
     
@@ -194,10 +228,16 @@ export class AnimatedCycleResults extends iCycleResults
     {
         if( this.cycleResultsActive )
         {
-            if( this.paylineSprite )
-                this.paylineSprite.render( matrix );
+            //if( this.paylineSprite )
+            //    this.paylineSprite.render( matrix );
             
             this.slotGroupView.deferredRender( matrix );
+            
+            for( let i = 0; i < this.testPaylines.length; ++i )
+            this.testPaylines[i].render( matrix );
+        
+            if( this.paylineSprite )
+                this.paylineSprite.render( matrix );
         }
     }
 }

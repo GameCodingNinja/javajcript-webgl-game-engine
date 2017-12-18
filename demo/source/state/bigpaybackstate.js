@@ -153,7 +153,8 @@ export class BigPayBackState extends CommonState
         }
         else if( event instanceof MouseEvent )
         {
-            this.slotGame.handleEvent( event );
+            if( !menuManager.isMenuActive() )
+                this.slotGame.handleEvent( event );
         }
     }
     

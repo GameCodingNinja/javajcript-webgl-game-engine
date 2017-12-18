@@ -27,19 +27,16 @@ class Device
     //
     create()
     {
+        let parm = {premultipliedAlpha: false, alpha: false, stencil:true, preserveDrawingBuffer: true};
+        
         this.canvas = document.getElementById('game-surface');
-	this.glContext = this.canvas.getContext('webgl',{premultipliedAlpha: false, alpha: false, stencil:true, preserveDrawingBuffer: true});
-
-	if( !this.glContext )
-        {
-            console.log('WebGL not supported, falling back on experimental-webgl');
-            this.glContext = this.canvas.getContext('experimental-webgl',{premultipliedAlpha: false, alpha: false, stencil:true, preserveDrawingBuffer: true});
-	}
-
-	if( !this.glContext )
-        {
+	this.glContext =
+            this.canvas.getContext('webgl2', parm) ||
+            this.canvas.getContext('webgl', parm) ||
+            this.canvas.getContext('experimental-webgl', parm);
+        
+        if( !this.glContext )
             alert('Your browser does not support WebGL');
-        }
     }
     
     // 

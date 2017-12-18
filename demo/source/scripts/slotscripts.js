@@ -18,14 +18,13 @@ import * as defs from '../../../library/common/defs';
 //
 //  DESC: Script for animating a winning symbol
 //
-class Symbol_Reset extends utilScripts.FadeTo
+class Symbol_Init extends utilScripts.FadeTo
 {
     constructor( sprite )
     {
         super();
         
         this.sprite = sprite;
-        this.finished = false;
     }
     
     // 
@@ -34,6 +33,53 @@ class Symbol_Reset extends utilScripts.FadeTo
     init()
     {
         this.finished = false;
+        
+        this.sprite.setScaleXYZ();
+        this.sprite.setRotXYZ();
+        this.sprite.setFrame();
+        
+        if( this.sprite.getAlpha() > 0.2 )
+            super.init( 1, 0.2, 200 );
+
+        else
+            this.finished = true;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( !this.finished )
+        {
+            super.execute();
+            this.sprite.setAlpha( super.getAlpha() );
+        }
+    }
+}
+
+//
+//  DESC: Script for animating a winning symbol
+//
+class Symbol_Reset extends utilScripts.FadeTo
+{
+    constructor( sprite )
+    {
+        super();
+        
+        this.sprite = sprite;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        this.finished = false;
+        
+        this.sprite.setScaleXYZ();
+        this.sprite.setRotXYZ();
+        this.sprite.setFrame();
         
         if( this.sprite.getAlpha() < 1 )
             super.init( 0.2, 1, 200 );
@@ -53,22 +99,15 @@ class Symbol_Reset extends utilScripts.FadeTo
             this.sprite.setAlpha( super.getAlpha() );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for animating a winning symbol
 //
-class Symbol_NoWin extends utilScripts.FadeTo
+class Symbol_NoWin
 {
     constructor( sprite )
     {
-        super();
-        
         this.sprite = sprite;
         this.finished = false;
     }
@@ -78,13 +117,11 @@ class Symbol_NoWin extends utilScripts.FadeTo
     //
     init()
     {
+        this.sprite.setScaleXYZ();
+        this.sprite.setRotXYZ();
+        this.sprite.setFrame();
+        
         this.finished = false;
-        
-        if( this.sprite.getAlpha() < 1 )
-            this.finished = true;
-        
-        else
-            super.init( 1, 0.2, 70 );
     }
     
     // 
@@ -92,11 +129,8 @@ class Symbol_NoWin extends utilScripts.FadeTo
     //
     execute()
     {
-        if( !this.finished )
-        {
-            super.execute();
-            this.sprite.setAlpha( super.getAlpha() );
-        }
+        this.finished = true;
+        this.sprite.setAlpha( 0.2 );
     }
     
     // 
@@ -115,7 +149,6 @@ class Symbol_LowWin extends utilScripts.Hold
         super();
         
         this.sprite = sprite;
-        this.fadeTo = new utilScripts.FadeTo;
     }
     
     // 
@@ -123,10 +156,11 @@ class Symbol_LowWin extends utilScripts.Hold
     //
     init()
     {
-        super.init( 1000 );
+        this.sprite.setScaleXYZ();
+        this.sprite.setRotXYZ();
+        this.sprite.setFrame();
         
-        if( this.sprite.getAlpha() < 1 )
-            this.fadeTo.init( 0.2, 1, 70 );
+        super.init( 1000 );
     }
     
     // 
@@ -137,10 +171,7 @@ class Symbol_LowWin extends utilScripts.Hold
         super.execute();
         
         if( this.sprite.getAlpha() < 1 )
-        {
-            this.fadeTo.execute();
-            this.sprite.setAlpha( this.fadeTo.getAlpha() );
-        }
+            this.sprite.setAlpha( 1 );
     }
 }
 
@@ -157,7 +188,6 @@ class Symbol_MedWin
         
         this.easingFunc = new easingFunc.valueTo;
         this.hold = new utilScripts.Hold;
-        this.fadeTo = new utilScripts.FadeTo;
         
         this.finished = false;
     }
@@ -167,12 +197,13 @@ class Symbol_MedWin
     //
     init()
     {
+        this.sprite.setScaleXYZ();
+        this.sprite.setRotXYZ();
+        this.sprite.setFrame();
+        
         this.state = 0;
         this.hold.init( 200 );
         this.finished = false;
-        
-        if( this.sprite.getAlpha() < 1 )
-            this.fadeTo.init( 0.2, 1, 70 );
     }
     
     // 
@@ -218,10 +249,7 @@ class Symbol_MedWin
         }
         
         if( this.sprite.getAlpha() < 1 )
-        {
-            this.fadeTo.execute();
-            this.sprite.setAlpha( this.fadeTo.getAlpha() );
-        }
+            this.sprite.setAlpha( 1 );
     }
     
     // 
@@ -245,7 +273,6 @@ class Symbol_HiWin
         this.scaleEasingFunc = new easingFunc.valueTo;
         this.rotateEasingFunc = new easingFunc.valueTo;
         this.hold = new utilScripts.Hold;
-        this.fadeTo = new utilScripts.FadeTo;
         
         this.finished = false;
     }
@@ -255,13 +282,14 @@ class Symbol_HiWin
     //
     init()
     {
+        this.sprite.setScaleXYZ();
+        this.sprite.setRotXYZ();
+        this.sprite.setFrame();
+        
         this.state = 0;
         this.rotateState = false;
         this.hold.init( 200 );
         this.finished = false;
-        
-        if( this.sprite.getAlpha() < 1 )
-            this.fadeTo.init( 0.2, 1, 70 );
     }
     
     // 
@@ -319,10 +347,7 @@ class Symbol_HiWin
         }
         
         if( this.sprite.getAlpha() < 1 )
-        {
-            this.fadeTo.execute();
-            this.sprite.setAlpha( this.fadeTo.getAlpha() );
-        }
+            this.sprite.setAlpha( 1 );
     }
     
     // 
@@ -339,8 +364,6 @@ class Symbol_Animate extends utilScripts.Play
     constructor( sprite )
     {
         super( sprite );
-        
-        this.fadeTo = new utilScripts.FadeTo;
     }
     
     // 
@@ -348,10 +371,11 @@ class Symbol_Animate extends utilScripts.Play
     //
     init()
     {
-        super.init( 18 );
+        this.sprite.setScaleXYZ();
+        this.sprite.setRotXYZ();
+        this.sprite.setFrame();
         
-        if( this.sprite.getAlpha() < 1 )
-            this.fadeTo.init( 0.2, 1, 70 );
+        super.init( 18 );
     }
     
     // 
@@ -362,10 +386,28 @@ class Symbol_Animate extends utilScripts.Play
         super.execute();
         
         if( this.sprite.getAlpha() < 1 )
-        {
-            this.fadeTo.execute();
-            this.sprite.setAlpha( this.fadeTo.getAlpha() );
-        }
+            this.sprite.setAlpha( 1 );
+    }
+}
+
+//
+//  DESC: Script for timing out a payline win
+//
+class Payline_LowWin extends utilScripts.Hold
+{
+    constructor( sprite )
+    {
+        super();
+        
+        this.sprite = sprite;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
+        super.init( 1000 );
     }
 }
 
@@ -498,11 +540,14 @@ class Meter_Clear extends utilScripts.FadeTo
 //
 export function loadScripts()
 {
-    scriptManager.set( 'Symbol_NoWin',
-        ( sprite ) => { return new Symbol_NoWin( sprite ); } );
-        
     scriptManager.set( 'Symbol_Reset',
         ( sprite ) => { return new Symbol_Reset( sprite ); } );
+    
+    scriptManager.set( 'Symbol_Init',
+        ( sprite ) => { return new Symbol_Init( sprite ); } );
+        
+    scriptManager.set( 'Symbol_NoWin',
+        ( sprite ) => { return new Symbol_NoWin( sprite ); } );
         
     scriptManager.set( 'Symbol_LowWin',
         ( sprite ) => { return new Symbol_LowWin( sprite ); } );
@@ -515,6 +560,15 @@ export function loadScripts()
         
     scriptManager.set( 'Symbol_Animate',
         ( sprite ) => { return new Symbol_Animate( sprite ); } );
+        
+    scriptManager.set( 'Payline_LowWin',
+        ( sprite ) => { return new Payline_LowWin( sprite ); } );
+        
+    scriptManager.set( 'Payline_MedWin',
+        ( sprite ) => { return new Payline_LowWin( sprite ); } );
+        
+    scriptManager.set( 'Payline_HiWin',
+        ( sprite ) => { return new Payline_LowWin( sprite ); } );
         
     scriptManager.set( 'Meter_Init',
         ( sprite ) => { return new Meter_Init( sprite ); } );

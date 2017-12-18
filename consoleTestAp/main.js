@@ -4,6 +4,14 @@
  * and open the template in the editor.
  */
 
+"use strict";
+
+const foo = require("./stuff");
+
+foo.callMe(20);
+
+//let foo = new CFoo( 10 );
+
 console.log("Test started...");
 console.time();
 
@@ -25,6 +33,6 @@ do
     }
     while (test > 1);
 }
-while ((test > 0) && (value < 100000000));
+while ((test > 0) && (value < 10000000));
 
 console.timeEnd();

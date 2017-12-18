@@ -21,7 +21,7 @@ import { betManager } from '../../../library/slot/betmanager';
 import { aiBall } from '../ai/aiball';
 import * as state from '../state/gamestate';
 
-class Game extends Basegame
+export class Game extends Basegame
 {
     constructor()
     {
@@ -171,5 +171,3 @@ class Game extends Basegame
         this.gameState.postRender();
     }
 }
-
-export { Game }

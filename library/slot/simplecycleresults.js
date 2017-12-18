@@ -67,13 +67,18 @@ export class SimpleCycleResults extends iCycleResults
     {
         if( this.cycleResultsActive )
         {
+            if( this.cycleCounter > 0 )
+                this.firstCycleComplete = true;
+            
             this.cycleResultsTimer.set( 1000 );
 
             let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
+            
+            this.curPayIndex = this.payCounter;
+            this.payCounter = (this.payCounter + 1) % this.playResult.getPayCount();
 
-            let pay = this.playResult.getPay( this.cyclePayCounter );
+            let pay = this.playResult.getPay( this.curPayIndex );
             let symbPosAry = pay.symbPosAry;
-            this.cyclePayCounter = (this.cyclePayCounter + 1) % this.playResult.getPayCount();
 
             // Set them all to a low alphs
             for( let i = 0; i < cycleResultSymbAry.length; ++i )
@@ -91,6 +96,8 @@ export class SimpleCycleResults extends iCycleResults
             }
 
             this.slotGroupView.setCycleResultText( true, pay );
+            
+            ++this.cycleCounter;
         }
     }
 

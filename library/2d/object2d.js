@@ -53,6 +53,10 @@ export class Object2D extends Object
     
     //
     //  DESC: Transform
+    //  
+    //  NOTE: Child objects that are intermittenly transformed
+    //        will need a transform even if it's just 0, 0, 0
+    //        to force a transfor with it's parent
     //
     transform( matrix = null, tranformWorldPos = null )
     {
