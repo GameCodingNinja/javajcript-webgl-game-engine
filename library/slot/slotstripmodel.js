@@ -26,7 +26,7 @@ export class SlotStripModel
         this.stop = 0;
         
         // Gaff reel stop
-        this.gaffStop = 0;
+        this.gaffStop = null;
         
         // Gaffing flag
         this.gaffEnabled = false;
@@ -63,7 +63,7 @@ export class SlotStripModel
         else
         {
             this.stop = this.getSymbolIndex( this.gaffStop );
-            this.gaffStop = 0;
+            this.gaffStop = null;
             this.gaffEnabled = false;
         }
     }
@@ -107,7 +107,8 @@ export class SlotStripModel
     {
         this.gaffEnabled = true;
         
-        if( this.gaffStop === 0 )
+        // If this reel hasn't been gaffed, use the current stop
+        if( this.gaffStop === null )
             this.gaffStop = this.stop;
     }
     
