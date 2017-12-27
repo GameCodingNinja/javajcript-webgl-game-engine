@@ -42,7 +42,6 @@ export class iCycleResults
         this.payCounter = 0;
         this.cycleCounter = 0;
         this.curPayIndex = 0;
-        this.firstCycleComplete = false;
     }
     
     //

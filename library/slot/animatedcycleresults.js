@@ -9,6 +9,7 @@
 import { Timer } from '../utilities/timer';
 import { iCycleResults } from './icycleresults';
 import { highResTimer } from '../utilities/highresolutiontimer';
+import { Color } from '../common/color';
 import { betManager } from './betmanager';
 import * as slotDefs from './slotdefs';
 
@@ -29,12 +30,8 @@ export class AnimatedCycleResults extends iCycleResults
         // Payline sprite
         this.paylineSprite = null;
         
-        this.testPaylines = [];
-        
-        this.testPaylines.push( paylineSpriteSet.getSprite( 0 ) );
-        this.testPaylines.push( paylineSpriteSet.getSprite( 1 ) );
-        this.testPaylines.push( paylineSpriteSet.getSprite( 2 ) );
-        this.testPaylines.push( paylineSpriteSet.getSprite( 3 ) );
+        // payline color
+        this.paylineColor = new Color();
     }
     
     //
@@ -73,9 +70,6 @@ export class AnimatedCycleResults extends iCycleResults
     {
         if( this.cycleResultsActive )
         {
-            if( this.cycleCounter > 0 )
-                this.firstCycleComplete = true;
-            
             let cycleResultSymbAry = this.slotGroupView.cycleResultSymbAry;
             
             this.curPayIndex = this.payCounter;
@@ -91,20 +85,20 @@ export class AnimatedCycleResults extends iCycleResults
             if( pay.payType === slotDefs.EP_PAYLINE )
             {
                 this.paylineSprite = this.paylineSpriteSet.getSprite( pay.payLine );
-                
+
                 if( pay.getFinalAward() >= totalBet * 5 )
                     this.paylineSprite.prepareScript( 'hi_win' );
-                
+
                 else if( pay.getFinalAward() >= totalBet * 3 )
                     this.paylineSprite.prepareScript( 'med_win' );
-                
+
                 else
                     this.paylineSprite.prepareScript( 'low_win' );
             }
             
             let startAnim = 'no_win';
             
-            if( !this.firstCycleComplete )
+            if( this.cycleCounter === 0 )
                 startAnim = 'init';
             
             // Set them all to a low alph
@@ -124,7 +118,6 @@ export class AnimatedCycleResults extends iCycleResults
             {
                 let symbol = cycleResultSymbAry[symbPosAry[i].reel][symbPosAry[i].pos];
                 
-                //symbol.getSprite().setDefaultColor();
                 symbol.getSprite().scriptComponent.reset();
                 symbol.deferredRender = true;
                 
@@ -141,6 +134,9 @@ export class AnimatedCycleResults extends iCycleResults
             this.slotGroupView.setCycleResultText( true, pay );
             
             ++this.cycleCounter;
+            
+            if( this.cycleCounter === this.playResult.getPayCount() )
+                this.firstCycleComplete = true;
         }
     }
 
@@ -215,9 +211,6 @@ export class AnimatedCycleResults extends iCycleResults
         {
             if( this.paylineSprite )
                 this.paylineSprite.transform( matrix, tranformWorldPos );
-            
-            for( let i = 0; i < this.testPaylines.length; ++i )
-                this.testPaylines[i].transform( matrix, tranformWorldPos );
         }
     }
     
@@ -228,16 +221,10 @@ export class AnimatedCycleResults extends iCycleResults
     {
         if( this.cycleResultsActive )
         {
-            //if( this.paylineSprite )
-            //    this.paylineSprite.render( matrix );
-            
-            this.slotGroupView.deferredRender( matrix );
-            
-            for( let i = 0; i < this.testPaylines.length; ++i )
-            this.testPaylines[i].render( matrix );
-        
             if( this.paylineSprite )
                 this.paylineSprite.render( matrix );
+            
+            this.slotGroupView.deferredRender( matrix );
         }
     }
 }

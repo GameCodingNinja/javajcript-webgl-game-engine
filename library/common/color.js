@@ -16,10 +16,25 @@ export class Color
     
     set( r = 1, g = 1, b = 1, a = 1 )
     {
-        this.data[0] = r;
-        this.data[1] = g;
-        this.data[2] = b;
-        this.data[3] = a;
+        if( r > 1.5 )
+            this.data[0] = r * defs.RGB_TO_DEC;
+        else
+            this.data[0] = r;
+        
+        if( g > 1.5 )
+            this.data[1] = g * defs.RGB_TO_DEC;
+        else
+            this.data[1] = g;
+        
+        if( b > 1.5 )
+            this.data[2] = b * defs.RGB_TO_DEC;
+        else
+            this.data[2] = b;
+        
+        if( a > 1.5 )
+            this.data[3] = a * defs.RGB_TO_DEC;
+        else
+            this.data[3] = a;
     }
     
     copy( obj )

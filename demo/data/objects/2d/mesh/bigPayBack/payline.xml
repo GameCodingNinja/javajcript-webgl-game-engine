@@ -1,19 +1,21 @@
-<?xml version="1.0"?>
-<spriteSheet width="1856" height="2070">
+<spriteSheet width="1672" height="2372">
 
-    <rect x1=" 833" y1=" 781" x2=" 926" y2="  12" cx="   0" cy="   0" name="payline_00000"/>
-    <rect x1=" 929" y1="1161" x2=" 926" y2=" 306" cx="   0" cy="   0" name="payline_00012"/>
-    <rect x1="   1" y1="1925" x2=" 926" y2=" 144" cx="   0" cy="   0" name="payline_00100"/>
-    <rect x1=" 929" y1="1469" x2=" 926" y2=" 276" cx="   0" cy="   0" name="payline_00122"/>
-    <rect x1="   1" y1="   1" x2=" 926" y2=" 438" cx="   0" cy="   0" name="payline_00123"/>
-    <rect x1="   1" y1="1747" x2=" 924" y2=" 176" cx="   0" cy="   0" name="payline_01110"/>
-    <rect x1=" 833" y1=" 441" x2=" 926" y2=" 338" cx="   0" cy="   0" name="payline_01112"/>
-    <rect x1="   1" y1=" 851" x2=" 926" y2=" 308" cx="   0" cy="   0" name="payline_01210"/>
-    <rect x1="   1" y1="1161" x2=" 926" y2=" 306" cx="   0" cy="   0" name="payline_10012"/>
-    <rect x1=" 927" y1="1747" x2=" 924" y2=" 174" cx="   0" cy="   0" name="payline_10101"/>
-    <rect x1="   1" y1="1469" x2=" 926" y2=" 276" cx="   0" cy="   0" name="payline_10121"/>
-    <rect x1=" 929" y1="   1" x2=" 926" y2=" 438" cx="   0" cy="   0" name="payline_10123"/>
-    <rect x1=" 929" y1=" 851" x2=" 926" y2=" 306" cx="   0" cy="   0" name="payline_11012"/>
-    <rect x1="   1" y1=" 441" x2=" 830" y2=" 408" cx="   0" cy="   0" name="payline_03030"/>
+    <rect x1=" 837" y1=" 693" x2=" 834" y2="  14" cx="   0" cy="   0" name="payline_00000"/>
+    <rect x1="   1" y1="1945" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_00012"/>
+    <rect x1=" 837" y1="2225" x2=" 834" y2=" 146" cx="   0" cy="   0" name="payline_00100"/>
+    <rect x1=" 837" y1="1665" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_00122"/>
+    <rect x1="   1" y1=" 413" x2=" 834" y2=" 410" cx="   0" cy="   0" name="payline_00123"/>
+    <rect x1="   1" y1="2225" x2=" 834" y2=" 146" cx="   0" cy="   0" name="payline_01110"/>
+    <rect x1="   1" y1="1665" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_01112"/>
+    <rect x1=" 837" y1="1385" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_01210"/>
+    <rect x1="   1" y1="1385" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_02120"/>
+    <rect x1=" 837" y1="1105" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_02220"/>
+    <rect x1=" 837" y1="   1" x2=" 834" y2=" 410" cx="   0" cy="   0" name="payline_03030"/>
+    <rect x1="   1" y1="1105" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_10012"/>
+    <rect x1=" 837" y1="1945" x2=" 834" y2=" 146" cx="   0" cy="   0" name="payline_10101"/>
+    <rect x1=" 837" y1=" 825" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_10121"/>
+    <rect x1="   1" y1="   1" x2=" 834" y2=" 410" cx="   0" cy="   0" name="payline_10123"/>
+    <rect x1="   1" y1=" 825" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_10201"/>
+    <rect x1=" 837" y1=" 413" x2=" 834" y2=" 278" cx="   0" cy="   0" name="payline_11012"/>
 
 </spriteSheet>

@@ -62,21 +62,17 @@
             <filePath file="data/objects/2d/ui/bigPayBack/controls/total_bet_meter.ctrl"/>
             <position x="380" y="-495" z="0"/>
             <fontStringLst>
-                <string text="40"/>
                 <string text="80"/>
                 <string text="120"/>
                 <string text="160"/>
-                <string text="200"/>
                 <string text="240"/>
-                <string text="280"/>
                 <string text="320"/>
-                <string text="360"/>
                 <string text="400"/>
-                <string text="440"/>
                 <string text="480"/>
-                <string text="520"/>
                 <string text="560"/>
-                <string text="600"/>
+                <string text="640"/>
+                <string text="720"/>
+                <string text="800"/>
             </fontStringLst>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
             <scroll startDelay="770" scrollDelay="350" left="true" right="true"/>
