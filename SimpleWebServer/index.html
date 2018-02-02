@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Demo</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <br />
+        <i>Hughes Who Demo. Firefox, Chrome and Chromium are the only supported browsers.</i>
+        <p><button onclick="poke()">Poke the server</button></p>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io('http://localhost:9000');
+            socket.on('message', (message) => {
+                console.log('The server has a message for you: ' + message);
+            })
+            
+            function poke() {
+                socket.emit('message', 'Hi server, how are you?');
+                console.log('message sent')
+            }
+        </script>
+    </body>
+</html>

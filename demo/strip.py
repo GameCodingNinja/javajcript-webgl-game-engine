@@ -64,7 +64,7 @@ with open("bundle_strip.js", "r") as ins:
                 lineCheck += char
                 spaceFound = False
 
-	    newLine = lineCheck
+            newLine = lineCheck
 
         # Remove starting tabs
         lineCheck = ''

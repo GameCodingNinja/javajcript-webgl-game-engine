@@ -126,6 +126,11 @@ export class Basegame
         
         this.preRender();
         this.postRender();
+        
+        // Apparently it's a good practice to do this at the end of a render cycle
+        shaderManager.unbind();
+        textureManager.unbind();
+        vertexBufferManager.unbind();
     }
     
     preRender()
@@ -170,10 +175,5 @@ export class Basegame
 
         // Continues the loop
         requestAnimationFrame( this.gameLoop.bind(this) );
-
-        // Apparently it's a good practice to do this at the end of a render cycle
-        shaderManager.unbind();
-        textureManager.unbind();
-        vertexBufferManager.unbind();
     }
 }

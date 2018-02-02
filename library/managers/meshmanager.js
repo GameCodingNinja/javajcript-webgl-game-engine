@@ -21,12 +21,6 @@ class MeshManager
 
         // Map for collision mesh
         //this.collisionMeshBufMapMap = new Map;
-
-        // Current vbo
-        this.currentVBO = null;
-
-        // Current IBO ID
-        this.currentIBO = null;
         
         // counter for indexing into binary data when loading
         this.counter = 0;
