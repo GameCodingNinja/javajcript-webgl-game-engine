@@ -177,18 +177,12 @@ export class UIControl extends ControlBase
         let sprite = new Sprite2D( objectDataManager.getData( this.group, objectName ) );
         this.spriteAry.push( sprite );
 
-        // Load the transform data
-        sprite.loadTransFromNode( node );
-
-        // Init the script factory functions
-        sprite.initScriptFactoryFunctions( node );
+        // Load the sprite data
+        sprite.load( node );
 
         // See if this sprite is used for rendering a font string
         if( sprite.visualComponent.isFontSprite() )
         {
-            // Load the font properties from XML node
-            sprite.visualComponent.loadFontPropFromNode( node );
-
             // Set the font string to be created later
             if( this.stringAry.length && (fontSpriteCount[0] < this.stringAry.length) && (sprite.visualComponent.fontData.fontString === '' ) )
             {

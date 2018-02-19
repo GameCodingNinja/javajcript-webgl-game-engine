@@ -204,6 +204,14 @@ export class StartUpState extends state.GameState
         // Set the load manager's callback when everything is loaded
         loadManager.loadCompleteCallback = this.loadComplete.bind(this);
         
+        // Load the fonts
+        loadManager.add(
+            ( callback ) =>
+            {
+                genFunc.downloadFile( 'xml', 'data/textures/fonts/font.lst',
+                    ( xmlNode ) => fontManager.load( xmlNode, callback ) );
+            });
+        
         // Load the menu assets
         // Load the xml group
         loadManager.add(
@@ -234,14 +242,6 @@ export class StartUpState extends state.GameState
                         // Preload the menu group
                         soundManager.loadGroup( ['(menu)'], callback );
                     });
-            });
-            
-        // Load the fonts
-        loadManager.add(
-            ( callback ) =>
-            {
-                genFunc.downloadFile( 'xml', 'data/textures/fonts/font.lst',
-                    ( xmlNode ) => fontManager.load( xmlNode, callback ) );
             });
             
         // Load the action manager

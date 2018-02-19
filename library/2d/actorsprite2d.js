@@ -70,6 +70,21 @@ export class ActorSprite2D extends Object2D
     }
     
     // 
+    //  DESC: Load from SpriteData or node
+    //
+    load( data )
+    {
+        if( data instanceof SpriteData )
+        {
+            copyTransform( data );
+        }
+        else if( data instanceof Element )
+        {
+            
+        }
+    }
+    
+    // 
     //  DESC: Init the sprite
     //
     init()

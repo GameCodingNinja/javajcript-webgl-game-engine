@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { fontManager } from '../managers/fontmanager';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as defs from './defs';
 
@@ -33,6 +34,10 @@ export class FontProperties
 
         // add spacing to the lines
         this.lineWrapHeight = 0;
+        
+        // Throws an error if font is not loaded
+        if( this.fontName )
+            fontManager.isFont( this.fontName );
     }
     
     // 
@@ -47,6 +52,9 @@ export class FontProperties
         this.spaceCharKerning = obj.spaceCharKerning;
         this.lineWrapWidth = obj.lineWrapWidth;
         this.lineWrapHeight = obj.lineWrapHeight;
+        
+        // Throws an error if font is not loaded
+        fontManager.isFont( this.fontName );
     }
     
     //
@@ -58,6 +66,9 @@ export class FontProperties
         let attr = node.getAttribute( 'fontName' );
         if( attr )
             this.fontName = attr;
+        
+        // Throws an error if font is not loaded
+        fontManager.isFont( this.fontName );
 
         // Get the attributes node
         let attrNode = node.getElementsByTagName( 'attributes' );

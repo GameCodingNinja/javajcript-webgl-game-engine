@@ -11,7 +11,6 @@ import { textureManager } from '../../../library/managers/texturemanager';
 import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { fontManager } from '../../../library/managers/fontmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
-import { symbolSetViewManager } from '../../../library/slot/symbolsetviewmanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { loadManager } from '../../../library/managers/loadmanager';
@@ -30,7 +29,7 @@ import * as menuScripts from '../scripts/menuscripts';
 import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-const STARTUP_ASSET_COUNT = 86,
+const STARTUP_ASSET_COUNT = 85,
       LOGO_DISPLAY_DELAY = 2000;
 
 export class StartUpState extends state.GameState
@@ -206,6 +205,14 @@ export class StartUpState extends state.GameState
         // Set the load manager's callback when everything is loaded
         loadManager.loadCompleteCallback = this.loadComplete.bind(this);
         
+        // Load the fonts
+        loadManager.add(
+            ( callback ) =>
+            {
+                genFunc.downloadFile( 'xml', 'data/textures/fonts/font.lst',
+                    ( xmlNode ) => fontManager.load( xmlNode, callback ) );
+            });
+        
         // Load the menu assets
         // Load the xml group
         loadManager.add(
@@ -265,14 +272,6 @@ export class StartUpState extends state.GameState
                     });
             });
             
-        // Load the fonts
-        loadManager.add(
-            ( callback ) =>
-            {
-                genFunc.downloadFile( 'xml', 'data/textures/fonts/font.lst',
-                    ( xmlNode ) => fontManager.load( xmlNode, callback ) );
-            });
-            
         // Load the action manager
         loadManager.add(
             ( callback ) =>
@@ -328,20 +327,6 @@ export class StartUpState extends state.GameState
                     {
                         // Load the symbol set view data list table
                         slotMathManager.loadListTable( xmlNode );
-                        
-                        callback();
-                    });
-            });
-            
-        // Load the symbol set view data list table
-        loadManager.add(
-            ( callback ) =>
-            {
-                genFunc.downloadFile( 'xml', 'data/objects/2d/slot/symbolSetListTable.lst',
-                    ( xmlNode ) =>
-                    {
-                        // Load the symbol set view data list table
-                        symbolSetViewManager.loadListTable( xmlNode );
                         
                         callback();
                     });

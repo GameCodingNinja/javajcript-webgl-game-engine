@@ -126,13 +126,16 @@ export class BasicSpriteStrategy2D extends BaseStrategy
 
         // Create the sprite
         if( data.parameters.isSet( defs.SPRITE2D ) )
+        {
             sprite = new Sprite2D( objectDataManager.getData( data.group, data.objectName ), spriteId );
-
+        }
         else if( data.parameters.isSet( defs.ACTOR2D ) )
+        {
             sprite = new ActorSprite2D( data, spriteId );
+        }
 
-        // Copy transform data specified in the xml
-        sprite.copyTransform( data );
+        // Load from sprite/actor data
+        sprite.load( data );
         
         // Add sprite to map
         this.spriteMap.set( spriteId, sprite );

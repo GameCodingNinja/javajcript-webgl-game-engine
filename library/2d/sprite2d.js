@@ -10,6 +10,7 @@ import { VisualComponent2D } from './visualcomponent2d';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
 import { scriptManager } from '../script/scriptmanager';
+import { SpriteData } from '../common/spritedata';
 import { Object2D } from './object2d';
 import { Matrix } from '../utilities/matrix';
 import * as defs from '../common/defs';
@@ -51,6 +52,29 @@ export class Sprite2D extends Object2D
         
         // Set the sprite type
         this.parameters.add( defs.SPRITE2D );
+    }
+    
+    // 
+    //  DESC: Load from SpriteData or node
+    //
+    load( data )
+    {
+        if( data instanceof SpriteData )
+        {
+            this.copyTransform( data );
+            this.createScriptFunctions( data );
+            
+            if( this.visualComponent.isFontSprite() && data.fontData )
+                this.visualComponent.fontData.copy( data.fontData );
+        }
+        else if( data instanceof Element )
+        {
+            this.loadTransFromNode( data );
+            this.initScriptFactoryFunctions( data );
+            
+            if( this.visualComponent.isFontSprite() )
+                this.visualComponent.loadFontPropFromNode( data );
+        }
     }
     
     // 

@@ -93,23 +93,21 @@ export class Sector2D extends Object2D
             
             // Allocate the sprite and add it to the array
             if( spriteNode[i].tagName === 'sprite' )
-            {
                 sprite = new Sprite2D( objectDataManager.getData( group, objName ), id );
-                
-                if( sprite.visualComponent.isFontSprite() )
-                    sprite.visualComponent.loadFontPropFromNode( spriteNode[i] );
-            }
+
             else
                 sprite = new ActorSprite2D( new ActorData( spriteNode[i], group, objName, aiName, id ) );
             
+            // Load the transform data from node
+            sprite.load( spriteNode[i] );
+            
+            // Add to the sprite array
             this.spriteAry.push( sprite );
             
+            // If it has a name, add it to the map for easy retrieval
             if( name )
                 this.spriteMap.set( name, sprite );
-            
-            // Load the transform data from node
-            sprite.loadTransFromNode( spriteNode[i] );
-            
+
             // Init the physics
             sprite.initPhysics();
             

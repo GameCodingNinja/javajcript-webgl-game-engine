@@ -119,6 +119,16 @@ class FontManager
         return font;
     }
     
+    //
+    //  DESC: Get the font
+    //
+    isFont( name )
+    {
+        let font = this.fontMap.get( name );
+        if( font === undefined )
+            throw new Error( `Font name can't be found (${name}).` );
+    }
+    
     // 
     //  DESC: allow event handling access function
     //
