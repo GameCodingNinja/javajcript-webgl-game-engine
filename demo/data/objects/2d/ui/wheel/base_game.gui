@@ -1,0 +1,20 @@
+<menu>
+    
+    <menuControls>
+
+        <!-- Play Button -->
+        <control name="play_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/ui/wheel/controls/button_spin.ctrl"/>
+            <fontStringLst>
+                <string text="Spin"/>
+            </fontStringLst>
+            <position x="800" y="-470" z="0"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <action actionType="action"/>
+            <!--<navigate left="total_bet_meter" right="total_bet_meter"/>-->
+        </control>
+
+    </menuControls>
+    
+</menu>
+

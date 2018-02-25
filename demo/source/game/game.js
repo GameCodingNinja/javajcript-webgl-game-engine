@@ -16,6 +16,7 @@ import { TitleScreenState } from '../state/titlescreenstate';
 import { LoadState } from '../state/loadstate';
 import { PachinkoState } from '../state/pachinkostate';
 import { BigPayBackState } from '../state/bigpaybackstate';
+import { WheelDemoState } from '../state/wheeldemostate';
 import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
 import { betManager } from '../../../library/slot/betmanager';
 import { aiBall } from '../ai/aiball';
@@ -105,6 +106,9 @@ export class Game extends Basegame
             
             else if( this.gameState.nextState === state.GAME_STATE_BIG_PAY_BACK )
                 this.gameState = new BigPayBackState( this.gameLoop.bind(this) );
+            
+            else if( this.gameState.nextState === state.GAME_STATE_WHEEL_DEMO )
+                this.gameState = new WheelDemoState( this.gameLoop.bind(this) );
             
             // Do any pre-game loop init's
             this.gameState.init();

@@ -19,6 +19,7 @@ import { gl, device } from '../../../library/system/device';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as pachinkoState from '../state/pachinkostate';
 import * as bigPayBackState from '../state/bigpaybackstate';
+import * as wheelDemoState from '../state/wheeldemostate';
 import * as state from './gamestate';
 
 const MIN_LOAD_TIME = 500;
@@ -39,17 +40,24 @@ export class LoadState extends state.GameState
         this.maxLoadCount = 0;
         this.loadFont = null;
         this.displayProgress = false;
-        if( (stateMessage.loadState === state.GAME_STATE_BIG_PAY_BACK) && !bigPayBackState.isAssetsLoaded() )
+        
+        if( (stateMessage.loadState === state.GAME_STATE_PACHINKO_CHALLENGE) && !pachinkoState.isAssetsLoaded() )
+        {
+            pachinkoState.SetAssetsLoaded();
+            this.displayProgress = true;
+            this.maxLoadCount = pachinkoState.ASSET_COUNT;
+        }
+        else if( (stateMessage.loadState === state.GAME_STATE_BIG_PAY_BACK) && !bigPayBackState.isAssetsLoaded() )
         {
             bigPayBackState.SetAssetsLoaded();
             this.displayProgress = true;
             this.maxLoadCount = bigPayBackState.ASSET_COUNT;
         }
-        else if( (stateMessage.loadState === state.GAME_STATE_PACHINKO_CHALLENGE) && !pachinkoState.isAssetsLoaded() )
+        if( (stateMessage.loadState === state.GAME_STATE_WHEEL_DEMO) && !wheelDemoState.isAssetsLoaded() )
         {
-            pachinkoState.SetAssetsLoaded();
+            wheelDemoState.SetAssetsLoaded();
             this.displayProgress = true;
-            this.maxLoadCount = pachinkoState.ASSET_COUNT;
+            this.maxLoadCount = wheelDemoState.ASSET_COUNT;
         }
             
         if( this.displayProgress )
@@ -119,6 +127,9 @@ export class LoadState extends state.GameState
         
         else if( this.stateMessage.loadState === state.GAME_STATE_BIG_PAY_BACK )
             bigPayBackState.load();
+        
+        else if( this.stateMessage.loadState === state.GAME_STATE_WHEEL_DEMO )
+            wheelDemoState.load();
         
         // Start the load
         loadManager.load();

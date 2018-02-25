@@ -3,5 +3,9 @@
     <groupList groupName="(big_pay_back)">
         <file path="data/objects/2d/slot/bigPayBack/math.cfg"/>
     </groupList>
+    
+    <groupList groupName="(wheel)">
+        <file path="data/objects/2d/slot/wheel/math.cfg"/>
+    </groupList>
   
 </listTable>

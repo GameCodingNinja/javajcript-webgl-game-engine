@@ -37,7 +37,7 @@ export class AnimatedCycleResults extends iCycleResults
     //
     //  DESC: Do some inits
     //
-    init( slotGroupView, playResult )
+    init( slotGroupView )
     {
         this.slotGroupView = slotGroupView;
     }

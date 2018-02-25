@@ -49,6 +49,12 @@ export class SmartConfirmBtn extends SmartGuiControl
             actionType = defs.ECAT_GAME_STATE_CHANGE;
             executionAction = 'big_pay_back_state';
         }
+        else if( this.uiControl.name === 'wheel_demo_btn' )
+        {
+            conformationMsg = 'Are you sure you want|to play the Wheel Demo?';
+            actionType = defs.ECAT_GAME_STATE_CHANGE;
+            executionAction = 'wheel_demo_state';
+        }
         
         // Set the conformation menu
         yesBtn.smartGui = smartGuiCtrl;

@@ -11,9 +11,12 @@ import { iCycleResults } from './icycleresults';
 
 export class SimpleCycleResults extends iCycleResults
 {
-    constructor()
+    constructor( playResult )
     {
         super();
+        
+        // Set the play result
+        this.playResult = playResult;
         
         // cycle results timer
         this.cycleResultsTimer = new Timer;
@@ -22,10 +25,9 @@ export class SimpleCycleResults extends iCycleResults
     //
     //  DESC: Do some inits
     //
-    init( slotGroupView, playResult )
+    init( slotGroupView )
     {
         this.slotGroupView = slotGroupView;
-        this.playResult = playResult;
     }
     
     //

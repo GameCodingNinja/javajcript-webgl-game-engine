@@ -15,8 +15,10 @@ import { SpinProfile } from './spinprofile';
 import { Timer } from '../utilities/timer';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { highResTimer } from '../utilities/highresolutiontimer';
+import { eventManager } from '../managers/eventmanager';
 import * as slotDefs from './slotdefs';
 import * as defs from '../common/defs';
+import * as parseHelper from '../utilities/xmlparsehelper';
 
 export class WheelView extends SlotStripView
 {
@@ -82,11 +84,31 @@ export class WheelView extends SlotStripView
         // The rotation amount that includes correction
         this.rotation = 0;
         
-        // The rotation amount that does not include correction
-        this.currentRotation = 0;
+        // The extended rotation to hold a value greater then PI_2
+        // This is needed for zero stop win rotation checks
+        this.extRotation = 0;
+        
+        // Rotational distance to stop
+        this.distToStop = 0;
+        
+        // last velocity to insure a negative velocity is never used
+        this.lastVelocity = 0;
+        
+        // Max/Min range to stop rotation
+        this.maxRangeToStop = 0;
+        this.minRangeToStop = 0;
+        
+        // Flag to indicate inrange to stop
+        this.inRangeToStop = false;
         
         // 360 degrees in radians
         this.PI_2 = Math.PI * 2;
+        
+        // Gaff offset to current stop
+        this.gaffOffset = 0;
+        
+        // Gaff spin direction vector
+        this.gaffSpinDirVector = -1;
     }
     
     //
@@ -97,7 +119,12 @@ export class WheelView extends SlotStripView
         // Load the transform data from node
         let attr = node.getElementsByTagName( 'translation' );
         if( attr )
+        {
             this.loadTransFromNode( attr[0] );
+            
+            // Try to load a size used for wheel gaffing
+            this.size = parseHelper.loadSize( attr[0] );
+        }
         
         // Set the spin direction
         attr = node.getAttribute( 'spinDirection' );
@@ -235,7 +262,36 @@ export class WheelView extends SlotStripView
     //
     handleEvent( event )
     {
+        if( this.isPointInStrip( eventManager.mouseX, eventManager.mouseY ) )
+        {
+            if( eventManager.mouseY < this.collisionCenter.y )
+                this.gaffOffset++;
+            else
+                this.gaffOffset--;
 
+            this.gaffWheelPos();
+        }
+    }
+    
+    //
+    //  DESC: Get the symbol from the reel strip offset
+    //
+    gaffWheelPos()
+    {
+        this.slotStripModel.setGaffStop( this.gaffOffset );
+        
+        this.rotation = this.degreePerWedge * this.slotStripModel.gaffStop;
+        
+        if( this.spinDir === slotDefs.EDS_CLOCKWISE )
+            this.rotation = this.PI_2 - this.rotation;
+        
+        // This is needed for zero stop win rotation checks
+        this.extRotation = this.rotation;
+        
+        if( this.rotation >= this.PI_2 )
+            this.rotation -= this.PI_2;
+        
+        this.setRotXYZ( 0, 0, this.rotation * this.spinDirVector, false );
     }
     
     //
@@ -278,7 +334,7 @@ export class WheelView extends SlotStripView
                 case slotDefs.ESS_STOPPED:
                 {
                     if( this.spinDir === slotDefs.EDS_CLOCKWISE )
-                        this.winPointDegree = this.PI_2 - (this.degreePerWedge * (this.slotStripModel.stop));
+                        this.winPointDegree = this.PI_2 - (this.degreePerWedge * this.slotStripModel.stop);
                     else
                     {
                         // Special condition for stop zero checks
@@ -293,6 +349,8 @@ export class WheelView extends SlotStripView
                     this.saftyCheckDegree = this.degreePerWedge / this.spinProfile.safetyCheckDivisor;
                     this.spinTimer.set( this.spinProfile.startDelay );
                     this.spinState = slotDefs.ESS_SPIN_STARTING;
+                    this.gaffOffset = 0;
+                    this.inRangeToStop = false;
                 }
 
                 case slotDefs.ESS_SPIN_STARTING:
@@ -337,12 +395,19 @@ export class WheelView extends SlotStripView
                     this.incSpin( this.velocity );
                     
                     // Wait for the unadjusted rotation to exceed the win point to start slowing down
-                    if( (this.currentRotation > this.winPointDegree) )
+                    // extRotation is needed for zero stop win rotation checks
+                    if( this.extRotation > this.winPointDegree )
                     {
                         // A velocity(4) / PI is the exact deceleration to slow down within 1 rotation
                         let vel = this.spinProfile.maxVelocity * 1000.0;
                         this.acceleration = 
                             (this.velocity / ((Math.PI * (4.0 / vel)) * this.spinProfile.decelerationRotationCount)) / 1000.0;
+
+                        // Calculate the rotation distance to stop
+                        this.distToStop = (this.PI_2 * this.spinProfile.decelerationRotationCount) - (this.extRotation - this.winPointDegree);
+                        
+                        this.maxRangeToStop = this.winPointDegree + this.saftyCheckDegree;
+                        this.minRangeToStop = this.winPointDegree - this.saftyCheckDegree;
 
                         this.spinState = slotDefs.ESS_SPIN_STOPPING;
                     }
@@ -353,42 +418,70 @@ export class WheelView extends SlotStripView
                 case slotDefs.ESS_SPIN_STOPPING:
                 {
                     // Decrement the velocity and accelation
-                    let elapsedTime = highResTimer.elapsedTime;
-                    this.velocity -= this.acceleration * elapsedTime;
-
-                    if( this.velocity < 0.0 )
+                    this.velocity -= this.acceleration * highResTimer.elapsedTime;
+                    
+                    // Only use the last known positive velocity.
+                    // This insures we don't start spinning in the opposite direction
+                    if( this.velocity > 0.0 )
+                        this.lastVelocity = this.velocity
+                    
+                    // Decrement the distance checker
+                    this.distToStop -= this.lastVelocity * highResTimer.elapsedTime;
+                    
+                    let timeToStop = false;
+                    
+                    // Check if it is time to stop
+                    if( (this.distToStop < 0.0) || (this.velocity < 0.0) )
+                    {
+                        // Calculate the future position of the wheel
+                        let futureRotation = this.rotation + (this.lastVelocity * highResTimer.elapsedTime);
+                        
+                        // There's a special case for zero stop
+                        // The min and max range need to be a moving target because the future
+                        // rotation can be greater then PI_2 or 0
+                        if( this.slotStripModel.stop === 0 )
+                        {
+                            if( futureRotation > Math.PI )
+                            {
+                                this.maxRangeToStop = this.PI_2 + this.saftyCheckDegree;
+                                this.minRangeToStop = this.PI_2 - this.saftyCheckDegree;
+                            }
+                            else
+                            {
+                                this.maxRangeToStop = this.saftyCheckDegree;
+                                this.minRangeToStop = 0;
+                            }
+                        }
+                        
+                        // Set the flag once we are in range
+                        if( !this.inRangeToStop && (futureRotation > this.minRangeToStop) && (futureRotation < this.maxRangeToStop) )
+                            this.inRangeToStop = true;
+                        
+                        // When in range, check to see if we need to stop
+                        if( this.inRangeToStop )
+                        {
+                            if( (this.velocity < 0.0) ||
+                                (futureRotation < this.minRangeToStop) ||
+                                (futureRotation > this.maxRangeToStop) )
+                            {
+                                timeToStop = true;
+                                
+                                /*if( (futureRotation < this.minRangeToStop) || (futureRotation > this.maxRangeToStop) )
+                                    console.log(this.id, 'exceeding range', futureRotation, this.minRangeToStop, this.maxRangeToStop);
+                                else
+                                    console.log(this.id, 'velocity < 0.0', futureRotation, this.minRangeToStop, this.maxRangeToStop);*/
+                            }
+                        }
+                    }
+                    
+                    if( timeToStop )
                     {
                         // Stop the spin
                         this.velocity = 0.0;
+                        this.lastVelocity = 0.0
+                        this.distToStop = 0.0
                         this.spinWheel = false;
                         this.disableSpinTimer = false;
-                        
-                        // Sanity check the bounds in which we stopped and reset if needed
-                        let maxRot = this.winPointDegree + this.saftyCheckDegree;
-                        let minRot = this.winPointDegree - this.saftyCheckDegree;
-                        
-                        // There's a special case for the first stop
-                        if( (this.slotStripModel.stop === 0) && (this.rotation < 6.0) )
-                        {
-                            if( this.rotation > this.saftyCheckDegree )
-                            {
-                                this.rotation = maxRot;
-                                this.incSpin( this.velocity );
-                            }
-                        }
-                        else
-                        {
-                            if( this.rotation > maxRot )
-                            {
-                                this.rotation = maxRot;
-                                this.incSpin( this.velocity );
-                            }
-                            else if( this.rotation < minRot )
-                            {
-                                this.rotation = minRot;
-                                this.incSpin( this.velocity );
-                            }
-                        }
 
                         this.spinState = slotDefs.ESS_STOPPED;
 
@@ -397,16 +490,10 @@ export class WheelView extends SlotStripView
                             for( let i = 0; i < this.spinStateSignal.length; ++i )
                                 this.spinStateSignal[i](this.reelId, slotDefs.ESS_STOPPED);
 
-                        /*if( this.allowStopSounds && (pSpinStopSnd != nullptr) )
-                        {
-                            const int channel = CSoundMgr::Instance().GetNextChannel();
-                            pSpinStopSnd->Play( channel );
-                        }*/
-
                         break;
                     }
 
-                    this.incSpin( this.velocity );
+                    this.incSpin( this.lastVelocity );
 
                     break;
                 }
@@ -421,7 +508,9 @@ export class WheelView extends SlotStripView
     {
         // Get the rotation traveled
         this.rotation += velocity * highResTimer.elapsedTime;
-        this.currentRotation = this.rotation;
+        
+        // This is needed for zero stop win rotation checks
+        this.extRotation = this.rotation;
         
         if( this.rotation >= this.PI_2 )
             this.rotation -= this.PI_2;
@@ -482,7 +571,7 @@ export class WheelView extends SlotStripView
     //
     stopSpin()
     {
-        if( this.spin && this.spinState < slotDefs.ESS_PREPARE_TO_STOP )
+        if( this.spinWheel && this.spinState < slotDefs.ESS_PREPARE_TO_STOP )
             this.disableSpinTimer = true;
     }
 

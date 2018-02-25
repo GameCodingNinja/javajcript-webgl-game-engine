@@ -13,7 +13,8 @@ export const GAME_STATE_NULL               = 0,
              GAME_STATE_TITLESCREEN        = 2,
              GAME_STATE_LOAD               = 3,
              GAME_STATE_PACHINKO_CHALLENGE = 4,
-             GAME_STATE_BIG_PAY_BACK       = 5;
+             GAME_STATE_BIG_PAY_BACK       = 5,
+             GAME_STATE_WHEEL_DEMO         = 6;
 
 export class GameState
 {
@@ -41,6 +42,9 @@ export class GameState
         
         else if( loadStateStr === 'big_pay_back_state' )
             return GAME_STATE_BIG_PAY_BACK;
+        
+        else if( loadStateStr === 'wheel_demo_state' )
+            return GAME_STATE_WHEEL_DEMO;
         
         throw new Error( `State does not exist!. (${loadStateStr})` );
     }

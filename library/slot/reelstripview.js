@@ -56,7 +56,7 @@ export class ReelStripView extends SlotStripView
         this.spriteAry = [];
 
         // spin the reel
-        this.spin = false;
+        this.spinReel = false;
 
         // spin distance
         this.spinDistance = 0;
@@ -312,7 +312,7 @@ export class ReelStripView extends SlotStripView
         for( let i = 0; i < this.symbolAry.length; ++i )
             this.symbolAry[i].update();
         
-        if( this.spin )
+        if( this.spinReel )
         {
             switch( this.spinState )
             {
@@ -424,7 +424,7 @@ export class ReelStripView extends SlotStripView
                     {
                         // Stop the spin
                         this.velocity = 0.0;
-                        this.spin = false;
+                        this.spinReel = false;
                         this.disableSpinTimer = false;
 
                         // Hard set the final position of the symbols
@@ -650,7 +650,7 @@ export class ReelStripView extends SlotStripView
     //
     startSpin()
     {
-        this.spin = true;
+        this.spinReel = true;
     }
 
     //
@@ -658,7 +658,7 @@ export class ReelStripView extends SlotStripView
     //
     stopSpin()
     {
-        if( this.spin && this.spinState < slotDefs.ESS_PREPARE_TO_STOP )
+        if( this.spinReel && this.spinState < slotDefs.ESS_PREPARE_TO_STOP )
             this.disableSpinTimer = true;
     }
 

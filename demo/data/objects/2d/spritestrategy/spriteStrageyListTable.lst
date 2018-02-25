@@ -12,6 +12,10 @@
         <file path="data/objects/2d/slot/bigPayBack/symbolset.cfg"/>
     </groupList>
     
+    <groupList groupName="(wheel_symbol_set_view)">
+        <file path="data/objects/2d/slot/wheel/symbolset.cfg"/>
+    </groupList>
+    
     <groupList groupName="(big_pay_back_payline_set_view)">
         <file path="data/objects/2d/slot/payline_view.cfg"/>
     </groupList>

@@ -11,5 +11,9 @@
     <groupList groupName="(big_pay_back)">
         <file path="data/objects/2d/ui/bigPayBack/base_game.cfg"/>
     </groupList>
+    
+    <groupList groupName="(wheel)">
+        <file path="data/objects/2d/ui/wheel/base_game.cfg"/>
+    </groupList>
   
 </listTable>

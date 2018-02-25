@@ -11,7 +11,7 @@
         <!-- Pachinko Button -->
         <control name="pachinko_challenge_btn" faction="decision_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_300x55.ctrl"/>
-            <position x="0" y="0" z="0"/>
+            <position x="0" y="58" z="0"/>
             <fontStringLst>
                 <string text="Pachinko Fun"/>
             </fontStringLst>
@@ -23,12 +23,24 @@
         <!-- Big Pay Back Button -->
         <control name="big_pay_back_btn" faction="decision_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_300x55.ctrl"/>
-            <position x="0" y="-58" z="0"/>
+            <position x="0" y="0" z="0"/>
             <fontStringLst>
                 <string text="Big Pay Back"/>
             </fontStringLst>
             <action actionType="to_menu" executionAction="confirmation_menu"/>
-            <navigate up="pachinko_challenge_btn" down="settings_btn"/>
+            <navigate up="pachinko_challenge_btn" down="wheel_demo_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+        
+        <!-- Wheel Demo Button -->
+        <control name="wheel_demo_btn" faction="decision_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_300x55.ctrl"/>
+            <position x="0" y="-58" z="0"/>
+            <fontStringLst>
+                <string text="Wheel Demo"/>
+            </fontStringLst>
+            <action actionType="to_menu" executionAction="confirmation_menu"/>
+            <navigate up="big_pay_back_btn" down="settings_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
       
@@ -40,7 +52,7 @@
                 <string text="Settings"/>
             </fontStringLst>
             <action actionType="to_menu" executionAction="settings_menu"/>
-            <navigate up="big_pay_back_btn" down="pachinko_challenge_btn"/>
+            <navigate up="wheel_demo_btn" down="pachinko_challenge_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 

@@ -26,5 +26,9 @@
         <file path="data/objects/2d/objectDataList/bigpayback.lst"/>
         <file path="data/objects/2d/objectDataList/paylineDataList.lst"/>
     </groupList>
+    
+    <groupList groupName="(wheel)">
+        <file path="data/objects/2d/objectDataList/wheelDataList.lst"/>
+    </groupList>
   
 </listTable>

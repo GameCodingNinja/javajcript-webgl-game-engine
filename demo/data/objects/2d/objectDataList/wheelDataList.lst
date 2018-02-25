@@ -1,0 +1,75 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <mesh genType="quad"/>
+            <shader id="shader_2d"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="background">
+            <visual defaultUniformScale="1.5">
+                <texture file="data/textures/wheel/background-720.jpg"/>
+            </visual>
+        </object>
+        
+        <object name="wheel">
+            <visual defaultUniformScale="1.5">
+                <texture file="data/textures/wheel/wheel-720.png"/>
+            </visual>
+        </object>
+        
+        <object name="triangle">
+            <visual>
+                <texture file="data/textures/wheel/triangle_green.png"/>
+            </visual>
+        </object>
+        
+        <object name="275x55_button_frame">
+            <visual>
+                <texture file="data/textures/wheel/16x16_3_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="275" height="55"/>
+        </object>
+        
+        <object name="275x55_button_solid">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="25" g="54" b="84" a="0.8"/>
+            </visual>
+            <size width="271" height="51"/>
+        </object>
+        
+        <object name="control_font">
+            <visual>
+                <mesh genType="font"/>
+                <color r="64" g="125" b="192" a="1"/>
+            </visual>
+        </object>
+
+        <object name="black_font">
+            <visual>
+                <mesh genType="font"/>
+                <color r="0" g="0" b="0" a="1"/>
+            </visual>
+        </object>
+        
+        <object name="white_font">
+            <visual>
+                <mesh genType="font"/>
+                <color r="1" g="1" b="1" a="1"/>
+            </visual>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+
