@@ -7,6 +7,7 @@
 "use strict";
 
 import { VisualComponentQuad } from '../2d/visualcomponentquad';
+import { VisualComponentSpriteSheet } from '../2d/visualcomponentspritesheet';
 import { VisualComponent3D } from '../3d/visualcomponent3d';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
@@ -52,6 +53,9 @@ export class Sprite
             
             if( objData.visualData.genType === defs.EGT_QUAD )
                 this.visualComponent = new VisualComponentQuad( objData.visualData );
+            
+            else if( objData.visualData.genType === defs.EGT_SPRITE_SHEET )
+                this.visualComponent = new VisualComponentSpriteSheet( objData.visualData );
             
             if( objData.physicsData.isActive() )
                 this.physicsComponent = new PhysicsComponent2D( objData.physicsData );
@@ -209,7 +213,7 @@ export class Sprite
     render( camera )
     {
         if( this.object.isVisible() )
-            this.visualComponent.render( this.object.matrix, camera );
+            this.visualComponent.render( this.object, camera );
     }
     
     // 
@@ -298,7 +302,7 @@ export class Sprite
             this.visualComponent.setFrame( index );
 
             if( this.objData.visualData.genType === defs.EGT_SPRITE_SHEET )
-                this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
+                this.object.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
     }
     

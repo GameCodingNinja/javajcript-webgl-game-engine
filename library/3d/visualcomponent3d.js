@@ -62,7 +62,7 @@ export class VisualComponent3D
     //
     //  DESC: do the render
     //
-    render( objMatrix, projMatrix, rotMatrix, camera )
+    render( object, camera )
     {
         for( let i = 0; i < this.meshAry.length; ++i )
         {
@@ -99,13 +99,12 @@ export class VisualComponent3D
             gl.uniform4fv( this.colorLocation, this.color.data );
 
             gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( objMatrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.matrix.matrix );
-            gFinalMatrix.mergeMatrix( projMatrix.matrix );
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
             gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
             
             gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( rotMatrix.matrix );
+            gFinalMatrix.mergeMatrix( object.rotMatrix.matrix );
             gFinalMatrix.mergeMatrix( camera.rotMatrix.matrix );
             gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
 

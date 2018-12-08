@@ -1,11 +1,12 @@
 
 // 
-//  FILE NAME:  visualcomponentquad.js
+//  FILE NAME:  visualcomponentspritesheet.js
 //  DESC:       Class for handling the visual part of the sprite
 //
 
 "use strict";
 
+import { VisualComponentQuad } from '../2d/visualcomponentquad';
 import { shaderManager } from '../managers/shadermanager';
 import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
@@ -25,50 +26,27 @@ import * as genFunc from '../utilities/genfunc';
 // allocated and heald within each class
 var gFinalMatrix = new Matrix;
 
-export class VisualComponentQuad
+export class VisualComponentSpriteSheet extends VisualComponentQuad
 {
     constructor( visualData )
     {
-        this.visualData = visualData;
-        this.shaderData = null;
-        this.vertexLocation = null;
-        this.text0Location = null;
-        this.uvLocation = null;
-        this.matrixLocation = null;
-        this.colorLocation = null;
-        this.VERTEX_BUF_SIZE = 20;
-        this.frameIndex = 0;
-        this.vbo = visualData.vbo;
-        this.ibo = visualData.ibo;
-        this.iboCount = visualData.iboCount;
-        this.texture = visualData.texture;
-        this.color = new Color;
+        super( visualData );
         
         if( visualData.isActive() )
         {
-            this.shaderData = shaderManager.getShaderData( visualData.shaderID );
-
-            // Common shader members
-            this.vertexLocation = this.shaderData.getLocation( 'in_position' );
-            this.matrixLocation = this.shaderData.getLocation( 'cameraViewProjMatrix' );
-            this.colorLocation = this.shaderData.getLocation( 'color' );
-            
-            // Do we have a texture? This could be a solid rect
-            if( this.texture !== null )
+            // Is this a sprite sheet? Get the glyph rect position
+            if( visualData.genType === defs.EGT_SPRITE_SHEET )
             {
-                this.uvLocation = this.shaderData.getLocation( 'in_uv' );
-                this.text0Location = this.shaderData.getLocation( 'text0' );
+                this.glyphLocation = this.shaderData.getLocation( 'glyphRect' );
+
+                this.glyphUV = visualData.spriteSheet.getGlyph().uv;
+                this.frameIndex = visualData.spriteSheet.defaultIndex;
+                
+                // Local vertex scale for sprite sheets that might have glyphs of different sizes
+                this.vertexScale = new Size;
+                this.vertexScale.copy( this.visualData.vertexScale );
             }
-            
-            this.color.copy( this.visualData.color );
         }
-    }
-    
-    //
-    //  DESC: Delete the custom VBO for this font
-    //
-    deleteFontVBO()
-    {
     }
 
     //
@@ -102,12 +80,15 @@ export class VisualComponentQuad
             
             // Calculate the final matrix
             gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.setScaleFromSize( this.visualData.vertexScale );
+            gFinalMatrix.setScaleFromSize( this.vertexScale );
             gFinalMatrix.mergeMatrix( object.matrix.matrix );
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
 
             // Send the final matrix to the shader
             gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+
+            // Send the glyph rect
+            gl.uniform4fv( this.glyphLocation, this.glyphUV.data );
             
             // Do the render
             gl.drawElements(gl.TRIANGLE_FAN, this.iboCount, gl.UNSIGNED_BYTE, 0);
@@ -115,34 +96,17 @@ export class VisualComponentQuad
     }
     
     //
-    //  DESC: Is rendering allowed?
-    //
-    allowRender()
-    {
-        return (this.visualData.genType != defs.EGT_NULL);
-    }
-    
-    //
-    //  DESC: Is this a font sprite
-    //
-    isFontSprite()
-    {
-        return false;
-    }
-    
-    //
     //  DESC: Set the frame ID from index
     //
     setFrame( index )
     {
-        this.frameIndex = index;
-    }
-    
-    //
-    //  DESC: Get the font size
-    //
-    getFontSize()
-    {
-        return 0;
+        super.setFrame( index );
+        
+        let glyph = this.visualData.spriteSheet.getGlyph( index );
+
+        this.vertexScale.w = glyph.size.w * this.visualData.defaultUniformScale;
+        this.vertexScale.h = glyph.size.h * this.visualData.defaultUniformScale;
+
+        this.glyphUV = glyph.uv;
     }
 }

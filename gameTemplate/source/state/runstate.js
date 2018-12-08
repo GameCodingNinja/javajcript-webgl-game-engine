@@ -17,7 +17,6 @@ import { soundManager } from '../../../library/managers/soundmanager';
 import { spriteStrategyManager } from '../../../library/managers/spritestrategymanager';
 import { BasicStageStrategy2D } from '../../../library/2d/basicstagestrategy2d';
 import { BasicSpriteStrategy2D } from '../../../library/2d/basicspritestrategy2d';
-import { Sprite2D } from '../../../library/2d/sprite2d';
 import { device } from '../../../library/system/device';
 import { CommonState } from './commonstate';
 import * as state from './gamestate';

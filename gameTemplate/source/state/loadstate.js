@@ -12,7 +12,8 @@ import { vertexBufferManager } from '../../../library/managers/vertexbuffermanag
 import { loadManager } from '../../../library/managers/loadmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { settings } from '../../../library/utilities/settings';
-import { Sprite2D } from '../../../library/2d/sprite2d';
+import { Sprite } from '../../../library/sprite/sprite';
+import { Camera } from '../../../library/utilities/camera';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { gl, device } from '../../../library/system/device';
 import * as titleScreenState from '../state/titlescreenstate';
@@ -30,9 +31,11 @@ export class LoadState extends state.GameState
         this.stateMessage.loadState = stateMessage.loadState;
         this.stateMessage.unloadState = stateMessage.unloadState;
         
-        this.loadAnim = new Sprite2D( objectDataManager.getData( '(loadingScreen)', 'loadAnim' ) );
-        this.loadAnim.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
-        this.loadAnim.transform();
+        this.camera = new Camera( 5, 1000 );
+        
+        this.loadAnim = new Sprite( objectDataManager.getData( '(loadingScreen)', 'loadAnim' ) );
+        this.loadAnim.object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        this.loadAnim.object.transform();
         
         this.frameCount = this.loadAnim.getFrameCount();
         
@@ -114,7 +117,7 @@ export class LoadState extends state.GameState
     {
         gl.clear(gl.COLOR_BUFFER_BIT);
         
-        this.loadAnim.render( device.orthographicMatrix );
+        this.loadAnim.render( this.camera );
         
         ++this.loadFrameCounter;
         

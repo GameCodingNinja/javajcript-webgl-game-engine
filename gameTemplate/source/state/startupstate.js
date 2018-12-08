@@ -17,7 +17,6 @@ import { loadManager } from '../../../library/managers/loadmanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { spriteStrategyManager } from '../../../library/managers/spritestrategymanager';
-import { Sprite2D } from '../../../library/2d/sprite2d';
 import { Sprite } from '../../../library/sprite/sprite';
 import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';

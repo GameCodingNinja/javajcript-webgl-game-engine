@@ -7,8 +7,7 @@
 "use strict";
 
 import { CommonState } from './commonstate';
-import { Sprite2D } from '../../../library/2d/sprite2d';
-import { Sprite3D } from '../../../library/3d/sprite3d';
+import { Sprite } from '../../../library/sprite/sprite';
 import { Camera } from '../../../library/utilities/camera';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { shaderManager } from '../../../library/managers/shadermanager';
@@ -30,15 +29,18 @@ export class TitleScreenState extends CommonState
     {
         super( state.GAME_STATE_TITLESCREEN, state.GAME_STATE_LOAD, gameLoopCallback );
         
-        this.background = new Sprite2D( objectDataManager.getData( '(title_screen)', 'background' ) );
-        this.background.transform();
+        this.background = new Sprite( objectDataManager.getData( '(title_screen)', 'background' ) );
+        this.background.object.transform();
         
-        this.camera = new Camera;
-        this.camera.setPosXYZ( 0, 0, 20 );
-        this.camera.setRotXYZ( 10, 0, 0 );
+        this.camera = new Camera( 5, 1000 );
         
-        this.cube = new Sprite3D( objectDataManager.getData( '(cube)', 'cube' ) );
-        this.cube.setScaleXYZ( 3, 3, 3 );
+        this.cameraCube = new Camera( 5, 1000, 45 );
+        this.cameraCube.setPosXYZ( 0, 0, 20 );
+        this.cameraCube.setRotXYZ( 10, 0, 0 );
+        this.cameraCube.transform();
+        
+        this.cube = new Sprite( objectDataManager.getData( '(cube)', 'cube' ) );
+        this.cube.object.setScaleXYZ( 3, 3, 3 );
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -98,7 +100,7 @@ export class TitleScreenState extends CommonState
         this.scriptComponent.update();
         
         let rot = highResTimer.elapsedTime * 0.04;
-        this.cube.incRotXYZ( 0, rot, 0 );
+        this.cube.object.incRotXYZ( rot, rot, 0 );
     }
     
     // 
@@ -108,8 +110,7 @@ export class TitleScreenState extends CommonState
     {
         super.transform();
         
-        this.camera.transform();
-        this.cube.transform();
+        this.cube.object.transform();
     }
     
     // 
@@ -119,10 +120,8 @@ export class TitleScreenState extends CommonState
     {
         super.render();
         
-        let matrix = device.orthographicMatrix;
-        
-        this.background.render( matrix );
-        this.cube.render( device.perspectiveMatrix, this.camera );
+        this.background.render( this.camera );
+        this.cube.render( this.cameraCube );
         
         menuManager.render( device.orthographicMatrix );
     }
