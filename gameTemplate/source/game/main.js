@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { Game } from './game';
+import { Game } from './game.js';
 
 // Create the game
 var game = new Game;

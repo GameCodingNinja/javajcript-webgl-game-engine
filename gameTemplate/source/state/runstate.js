@@ -117,21 +117,15 @@ export class RunState extends CommonState
     // 
     //  DESC: 2D/3D Render of game content
     //
-    preRender()
+    render()
     {
-        super.preRender();
+        super.render();
         
         let matrix = device.orthographicMatrix;
         
         spriteStrategyManager.render( matrix );
-    }
-    
-    // 
-    //  DESC: 2D/3D Render of game content
-    //
-    postRender()
-    {
-        super.postRender();
+        
+        menuManager.render( device.orthographicMatrix );
     }
 }
 

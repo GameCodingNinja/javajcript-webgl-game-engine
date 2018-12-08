@@ -107,6 +107,19 @@ export const EGE_MENU_TRANS_IN             = 100,
              EGE_MENU_TAB_LEFT             = 121,
              EGE_MENU_TAB_RIGHT            = 122;
 
+// ESpriteType
+export const EST_NULL     = 0,
+             EST_OBJECT2D = 1,
+             EST_OBJECT3D = 2,
+             EST_SPRITE2D = 3,
+             EST_SPRITE3D = 4;
+     
+// ENodeType
+export const ENT_NULL              = 0,
+             ENT_SPRITE            = 1,
+             ENT_OBJECT_MULTI_LIST = 2,
+             ENT_SPRITE_MULTI_LIST = 3;
+
 // ESelection Message Arguments
 export const ESMA_PRESS_TYPE  = 0,
              ESMA_DEVICE_TYPE = 1,
@@ -221,4 +234,3 @@ export const EM_NULL                = 0,
              EM_HORIZONTAL          = 1,
              EM_VERTICAL            = 2,
              EM_HORIZONTAL_VERTICAL = 3;
-     

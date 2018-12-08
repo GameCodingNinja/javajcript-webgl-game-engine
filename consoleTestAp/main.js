@@ -15,12 +15,15 @@ foo.callMe(20);
 console.log("Test started...");
 console.time();
 
+let maxValue = 10000000;
 let value = 0;
 let test;
+let counter = 0;
 
 do
 {
     test = ++value;
+    ++counter;
 
     do
     {
@@ -30,9 +33,12 @@ do
         //    test /= 2;
         else
             test = (test * 3) + 1;
+        
+        ++counter;
     }
     while (test > 1);
 }
-while ((test > 0) && (value < 10000000));
+while ((test > 0) && (value < maxValue));
 
 console.timeEnd();
+console.log("Count:", counter);

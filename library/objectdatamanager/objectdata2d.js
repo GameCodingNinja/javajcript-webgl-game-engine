@@ -9,6 +9,7 @@
 import { ObjectPhysicsData2D } from './objectphysicsdata2d';
 import { ObjectVisualData2D } from './objectvisualdata2d';
 import { Size } from '../common/size';
+import * as defs from '../common/defs';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
 export class ObjectData2D

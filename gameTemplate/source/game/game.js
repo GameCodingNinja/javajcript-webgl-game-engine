@@ -7,8 +7,10 @@
 "use strict";
 
 import { signalManager } from '../../../library/managers/signalmanager';
-import { Basegame } from '../../../library/system/basegame';
 import { settings } from '../../../library/utilities/settings';
+import { textureManager } from '../../../library/managers/texturemanager';
+import { meshManager } from '../../../library/managers/meshmanager';
+import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { downloadFile } from '../../../library/utilities/genfunc';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { StartUpState } from '../state/startupstate';
@@ -16,16 +18,16 @@ import { TitleScreenState } from '../state/titlescreenstate';
 import { LoadState } from '../state/loadstate';
 import { RunState } from '../state/runstate';
 import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
-import { betManager } from '../../../library/slot/betmanager';
 import { aiBall } from '../ai/aiball';
+import { gl, device } from '../../../library/system/device';
+import { eventManager } from '../../../library/managers/eventmanager';
+import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as state from '../state/gamestate';
 
-class Game extends Basegame
+export class Game
 {
     constructor()
     {
-        super();
-        
         // Set the shader init callback
         shaderManager.initShaderCallback = this.shaderInitCallBack.bind(this);
         
@@ -49,9 +51,56 @@ class Game extends Basegame
     //
     init()
     {
-        super.init();
+        // Create the projection matrixes
+        device.createProjMatrix();
         
-        betManager.setCredits(50000);
+        // Do we add stencil buffer
+        if( settings.createStencilBuffer )
+            gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+        
+        // Depth testing is off by default. Enable it?
+        if( settings.enableDepthBuffer )
+            gl.enable(gl.DEPTH_TEST);
+    
+        // Init the clear color
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        
+        // Init the stencil clear mask based on the bit size of the mask
+        // Stencil buffer can only be 1 or 8 bits per pixel
+        if( settings.stencilBufferBitSize === 1 )
+        {
+            gl.stencilFunc(gl.ALWAYS, 1, 0x1);
+            gl.stencilMask(0x1);
+        }
+        else if( settings.stencilBufferBitSize === 8 )
+        {
+            gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+            gl.stencilMask(0xff);
+        }
+        
+        // Cull the back face
+        gl.frontFace(gl.CCW);
+        gl.cullFace(gl.BACK);
+        gl.enable(gl.CULL_FACE);
+        
+        // Enable alpha blending
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+        // Make the zero texture the active texture
+        gl.activeTexture(gl.TEXTURE0);
+        
+        // Init the clear buffer mask
+        if( settings.clearTargetBuffer )
+            this.clearBufferMask |= gl.COLOR_BUFFER_BIT;
+
+        if( settings.enableDepthBuffer )
+            this.clearBufferMask |= gl.DEPTH_BUFFER_BIT;
+
+        if( settings.clearStencilBuffer )
+            this.clearBufferMask |= gl.STENCIL_BUFFER_BIT;
+        
+        gl.clear( this.clearBufferMask );
         
         // Create the startup state
         this.gameState = new StartUpState( this.gameLoop.bind(this) );
@@ -111,6 +160,18 @@ class Game extends Basegame
         return false;
     }
     
+    //
+    //  DESC: Poll for game events
+    //
+    pollEvents()
+    {
+        let event = null;
+        
+        // Handle events on the queue
+        while( (event = eventManager.pollEvent()) )
+            this.handleEvent( event );
+    }
+    
     // 
     //  DESC: Handle events
     //
@@ -120,52 +181,41 @@ class Game extends Basegame
     }
     
     // 
-    //  DESC: Handle any misc processing before the real work is started
+    //  DESC: Main game loop
     //
-    miscProcess()
+    gameLoop()
     {
-        this.gameState.miscProcess();
-    }
-    
-    // 
-    //  DESC: Handle the physics
-    //
-    physics()
-    {
+        // Break out of the game loop and handle the state change
+        if( this.doStateChange() )
+            return;
+        
+        // Poll the events
+        this.pollEvents();
+        
+        // Get our elapsed time
+        highResTimer.calcElapsedTime();
+        
+        // Handle the physics
         this.gameState.physics();
-    }
-    
-    // 
-    //  DESC: Update animations
-    //
-    update()
-    {
+        
+        // Update animations, Move sprites, Check for collision
         this.gameState.update();
-    }
-    
-    // 
-    //  DESC: Transform game objects
-    //
-    transform()
-    {
+
+        // Transform game objects
         this.gameState.transform();
-    }
-    
-    // 
-    //  DESC: Render of game content
-    //
-    preRender()
-    {
-        this.gameState.preRender();
-    }
-    
-    // 
-    //  DESC: Render of content after post process effects
-    //
-    postRender()
-    {
-        this.gameState.postRender();
+
+        // Clear the back buffer
+        gl.clear( this.clearBufferMask );
+        
+        // Do the rendering
+        this.gameState.render();
+        
+        // Apparently it's a good practice to do this at the end of a render cycle
+        shaderManager.unbind();
+        textureManager.unbind();
+        vertexBufferManager.unbind();
+
+        // Continues the loop
+        requestAnimationFrame( this.gameLoop.bind(this) );
     }
 }
-
-export { Game }

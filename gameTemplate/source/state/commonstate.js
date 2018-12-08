@@ -68,22 +68,6 @@ export class CommonState extends state.GameState
         // Transform the menus
         menuManager.transform();
     }
-
-    // 
-    //  DESC: 2D/3D Render of game content
-    //
-    preRender()
-    {
-        menuManager.renderInterface( device.orthographicMatrix );
-    }
-
-    // 
-    //  DESC: 2D/3D Render of game content
-    //
-    postRender()
-    {
-        menuManager.render( device.orthographicMatrix );
-    }
     
     // 
     //  DESC: Get the load state

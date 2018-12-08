@@ -18,18 +18,19 @@ import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { spriteStrategyManager } from '../../../library/managers/spritestrategymanager';
 import { Sprite2D } from '../../../library/2d/sprite2d';
+import { Sprite } from '../../../library/sprite/sprite';
 import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { UIProgressBar } from '../../../library/gui/uiprogressbar';
-import { slotMathManager } from '../../../library/slot/slotmathmanager';
+import { Camera } from '../../../library/utilities/camera';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-const STARTUP_ASSET_COUNT = 85,
+const STARTUP_ASSET_COUNT = 84,
       LOGO_DISPLAY_DELAY = 2000;
 
 export class StartUpState extends state.GameState
@@ -55,26 +56,7 @@ export class StartUpState extends state.GameState
         
         this.progressCounter = 0;
     }
-    
-    // 
-    //  DESC: progress bar update
-    //
-    progressbarUpdate()
-    {
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        
-        this.spriteLogo.render( device.orthographicMatrix );
-        
-        this.progressBar.incCurrentValue( ++this.progressCounter );
-        this.progressBar.transform();
-        this.progressBar.render( device.orthographicMatrix );
-        
-        // Unbind everything after a round of rendering
-        shaderManager.unbind();
-        textureManager.unbind();
-        vertexBufferManager.unbind();
-    }
-    
+
     // 
     //  DESC: Do start up init
     //
@@ -130,9 +112,10 @@ export class StartUpState extends state.GameState
     startFade()
     {
         // Create the logo to fade in and out
-        this.spriteLogo = new Sprite2D( objectDataManager.getData( '(startup)', 'logo' ) );
-        this.spriteLogo.setScaleXYZ( 1.5, 1.5, 1 );
-        this.spriteLogo.transform();
+        this.spriteLogo = new Sprite( objectDataManager.getData( '(startup)', 'logo' ) );
+        this.spriteLogo.object.setScaleXYZ( 1.5, 1.5, 1 );
+        this.spriteLogo.object.transform();
+        this.camera = new Camera( 5, 1000 );
         
         this.progressBar = new UIProgressBar( '(startup)' );
         this.progressBar.setPosXYZ( 0, -350, 0 );
@@ -180,7 +163,26 @@ export class StartUpState extends state.GameState
         
         gl.clear(gl.COLOR_BUFFER_BIT);
         
-        this.spriteLogo.render( device.orthographicMatrix );
+        this.spriteLogo.render( this.camera );
+        this.progressBar.render( device.orthographicMatrix );
+        
+        // Unbind everything after a round of rendering
+        shaderManager.unbind();
+        textureManager.unbind();
+        vertexBufferManager.unbind();
+    }
+    
+    // 
+    //  DESC: progress bar update
+    //
+    progressbarUpdate()
+    {
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        
+        this.spriteLogo.render( this.camera );
+        
+        this.progressBar.incCurrentValue( ++this.progressCounter );
+        this.progressBar.transform();
         this.progressBar.render( device.orthographicMatrix );
         
         // Unbind everything after a round of rendering
@@ -317,19 +319,6 @@ export class StartUpState extends state.GameState
                 menuManager.createGroup( ['(menu)'] );
                 
                 callback();
-            });
-            
-        loadManager.add(
-            ( callback ) =>
-            {
-                genFunc.downloadFile( 'xml', 'data/objects/2d/slot/mathListTable.lst',
-                    ( xmlNode ) =>
-                    {
-                        // Load the symbol set view data list table
-                        slotMathManager.loadListTable( xmlNode );
-                        
-                        callback();
-                    });
             });
             
         // Load the state specific assets

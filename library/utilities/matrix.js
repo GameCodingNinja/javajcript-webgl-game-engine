@@ -12,6 +12,12 @@ const ROT_Y  = 2;
 const ROT_X  = 4;
 const ROT_ALL = ROT_Z | ROT_Y | ROT_X;
 
+// Global temp matrix to be reused so that an object
+// specific one doesn't have to be created each time
+var gTempMatrix = new Float32Array(16);
+var gTempMergeMatrix = new Float32Array(16);
+var gSwap = null;
+
 export class Matrix
 {
     constructor( matrix = null )
@@ -54,21 +60,21 @@ export class Matrix
     //  
     mergeMatrix( matrix )
     {
-        let temp = new Float32Array(16);
-
         for( let i = 0; i < 4; ++i )
         {
             for( let j = 0; j < 4; ++j )
             { 
-                temp[(i*4)+j] = (this.matrix[i*4] * matrix[j])
+                gTempMergeMatrix[(i*4)+j] = (this.matrix[i*4] * matrix[j])
                 + (this.matrix[(i*4)+1] * matrix[4+j])
                 + (this.matrix[(i*4)+2] * matrix[8+j])
                 + (this.matrix[(i*4)+3] * matrix[12+j]);
             }
         }
 
-        // Let the temp be the new master matrix
-        this.matrix = temp;
+        // Swap matricies so that there's no garbage collection
+        gSwap = this.matrix;
+        this.matrix = gTempMergeMatrix;
+        gTempMergeMatrix = gSwap;
     }
     
     //
@@ -77,34 +83,33 @@ export class Matrix
     rotate( point )
     {
         let flags = NO_ROT;
-        let rMatrix = new Float32Array(16);
         
         // init the rotation matrix
-        this.initIdentityMatrix( rMatrix );
+        this.initIdentityMatrix( gTempMatrix );
 
         // Apply Z rotation
         if( !point.isZEmpty() )
         {
-            this.rotateZRad( rMatrix, point.z, flags );
+            this.rotateZRad( gTempMatrix, point.z, flags );
             flags |= ROT_Z;
         }
 
         // Apply Y rotation
         if( !point.isYEmpty() )
         {
-            this.rotateYRad( rMatrix, point.y, flags );
+            this.rotateYRad( gTempMatrix, point.y, flags );
             flags |= ROT_Y;
         }
 
         // Apply X rotation
         if( !point.isXEmpty() )
         {
-            this.rotateXRad( rMatrix, point.x, flags );
+            this.rotateXRad( gTempMatrix, point.x, flags );
             flags |= ROT_X;
         }
 
         // Merg the rotation into the master matrix
-        this.mergeMatrix( rMatrix );
+        this.mergeMatrix( gTempMatrix );
     }
      
     //
@@ -341,18 +346,16 @@ export class Matrix
     //
     mergeScale( x, y, z )
     {
-        let temp = new Float32Array(16);
-        
         // init the matrix
-        this.initIdentityMatrix( temp );
+        this.initIdentityMatrix( gTempMatrix );
 
         // Initialize scaling matrix:
-        temp[0]  = x;
-        temp[5]  = y;
-        temp[10] = z;
+        gTempMatrix[0]  = x;
+        gTempMatrix[5]  = y;
+        gTempMatrix[10] = z;
 
         // Merge the scale into the master matrix
-        this.mergeMatrix( temp );
+        this.mergeMatrix( gTempMatrix );
     }
     
     //

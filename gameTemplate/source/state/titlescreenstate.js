@@ -19,11 +19,6 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
-//import { slotMathManager } from '../../../library/slot/slotmathmanager';
-//import { SlotGame } from '../../../library/slot/slotgame';
-//import { SimpleCycleResults } from '../../../library/slot/simplecycleresults';
-//import { symbolSetViewManager } from '../../../library/slot/symbolsetviewmanager';
-import { betManager } from '../../../library/slot/betmanager';
 import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
@@ -48,9 +43,6 @@ export class TitleScreenState extends CommonState
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
-        
-        // Allocate the slot game
-        //this.slotGame = new SlotGame( '(title_screen)' );
     }
     
     // 
@@ -61,28 +53,6 @@ export class TitleScreenState extends CommonState
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
         menuManager.activateTree( ['title_screen_tree'] );
-        
-        // Create the slot group
-        /*this.slotGame.createSlotGroup(
-            slotDefs.ED_WHEEL,
-            'wheel_strip',
-            'wheel_paytable',
-            slotMathManager.getSlotMath( '(title_screen)', "slot_wheel" ),
-            assetHolder.get( '(title_screen)', 'wheelgroup' ),
-            assetHolder.get( '(title_screen)', 'spinProfile' ),
-            symbolSetViewManager.getViewData( '(title_screen)', "wheel_wedges" ),
-            new SimpleCycleResults );
-            
-        // Init after all slot groups have been created. Currently used for setting up the font sprites
-        this.slotGame.init();
-        
-        // Hook the Play button to the reel group
-        let spinBtn = menuManager.getMenuControl( 'title_screen_menu', 'new_game_btn' );
-        spinBtn.connect_ExecutionAction( this.slotGame.playGame.bind(this.slotGame) );
-        
-        // Set the line bet and the total numvber of lines bet
-        betManager.setLineBet(1);
-        betManager.setTotalLines(1);*/
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -97,7 +67,6 @@ export class TitleScreenState extends CommonState
     cleanUp()
     {
         // Currently used for cleaning up after the font sprites
-        //this.slotGame.cleanUp();
         unload();
     }
     
@@ -120,14 +89,6 @@ export class TitleScreenState extends CommonState
     }
     
     // 
-    //  DESC: Handle any misc processing before the real work is started
-    //
-    miscProcess()
-    {
-        //this.slotGame.processGameState();
-    }
-    
-    // 
     //  DESC: Update objects that require them
     //
     update()
@@ -135,8 +96,6 @@ export class TitleScreenState extends CommonState
         super.update();
         
         this.scriptComponent.update();
-        
-        //this.slotGame.update();
         
         let rot = highResTimer.elapsedTime * 0.04;
         this.cube.incRotXYZ( 0, rot, 0 );
@@ -149,8 +108,6 @@ export class TitleScreenState extends CommonState
     {
         super.transform();
         
-        //this.slotGame.transform();
-        
         this.camera.transform();
         this.cube.transform();
     }
@@ -158,24 +115,16 @@ export class TitleScreenState extends CommonState
     // 
     //  DESC: 2D/3D Render of game content
     //
-    preRender()
+    render()
     {
-        super.preRender();
+        super.render();
         
         let matrix = device.orthographicMatrix;
         
         this.background.render( matrix );
         this.cube.render( device.perspectiveMatrix, this.camera );
         
-        //this.slotGame.render( matrix );
-    }
-    
-    // 
-    //  DESC: 2D/3D Render of game content
-    //
-    postRender()
-    {
-        super.postRender();
+        menuManager.render( device.orthographicMatrix );
     }
 }
 
@@ -186,8 +135,6 @@ export class TitleScreenState extends CommonState
 function unload()
 {
     objectDataManager.freeGroup( ['(title_screen)','(cube)'] );
-    //symbolSetViewManager.clear();
-    //slotMathManager.clear();
 }
 
 // 
@@ -210,52 +157,6 @@ export function load()
     // Create OpenGL objects from the loaded data
     loadManager.add(
         ( callback ) => objectDataManager.createFromData( ['(title_screen)'], callback ) );
-
-    // Load the slot math manager list table
-    /*loadManager.add(
-        ( callback ) => slotMathManager.loadGroup( ['(title_screen)'], callback ) );
-
-    // Load the symbol set view data manager list table
-    loadManager.add(
-        ( callback ) => symbolSetViewManager.loadGroup( ['(title_screen)'], callback ) );
-
-    // Preload wheel group
-    loadManager.add(
-        ( callback ) =>
-        {
-            genFunc.downloadFile( 'xml', 'data/objects/2d/slot/wheelgroup.cfg',
-                ( xmlData ) =>
-                {
-                    assetHolder.set( '(title_screen)', 'wheelgroup', xmlData );
-                    callback();
-                });
-        });
-        
-    // Preload spin profile
-    loadManager.add(
-        ( callback ) =>
-        {
-            genFunc.downloadFile( 'xml', 'data/objects/2d/slot/spinProfile.cfg',
-                ( xmlData ) =>
-                {
-                    assetHolder.set( '(title_screen)', 'spinProfile', xmlData );
-                    callback();
-                });
-        });
-        
-     // Load the payline config
-    loadManager.add(
-        ( callback ) =>
-        {
-            genFunc.downloadFile( 'xml', 'data/objects/2d/slot/payline_wheel.cfg',
-                ( xmlNode ) =>
-                {
-                    slotMathManager.loadPaylineSetFromNode( xmlNode );
-
-                    callback();
-                });
-        });*/
-
 
     // Load the object data list table and (startup) group
     loadManager.add(

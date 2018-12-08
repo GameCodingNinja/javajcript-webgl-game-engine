@@ -48,11 +48,6 @@ export class GameState
         return this.stateChange;
     }
     
-    miscProcess()
-    {
-        // Empty function to be overwritten
-    }
-    
     physics()
     {
         // Empty function to be overwritten
@@ -68,12 +63,7 @@ export class GameState
         // Empty function to be overwritten
     }
     
-    preRender()
-    {
-        // Empty function to be overwritten
-    }
-    
-    postRender()
+    render()
     {
         // Empty function to be overwritten
     }
