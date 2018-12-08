@@ -1,6 +1,6 @@
 
 // 
-//  FILE NAME: basicspritestrategy2d.js
+//  FILE NAME: actorstrategy.js
 //  DESC:      Basic sprite strategy 2d class
 //
 
@@ -9,13 +9,12 @@
 import { BaseStrategy } from '../common/basestrategy';
 import { SpriteData } from '../common/spritedata';
 import { ActorData } from '../common/actordata';
-import { Sprite2D } from '../2d/sprite2d';
-import { ActorSprite2D } from '../2d/actorsprite2d';
+import { Sprite } from '../sprite/sprite';
 import { signalManager } from '../managers/signalmanager';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import * as defs from '../common/defs';
 
-export class BasicSpriteStrategy2D extends BaseStrategy
+export class ActorStrategy extends BaseStrategy
 {
     constructor( idOffset = 0, idDir = 1 )
     {
@@ -127,11 +126,7 @@ export class BasicSpriteStrategy2D extends BaseStrategy
         // Create the sprite
         if( data.parameters.isSet( defs.SPRITE2D ) )
         {
-            sprite = new Sprite2D( objectDataManager.getData( data.group, data.objectName ), spriteId );
-        }
-        else if( data.parameters.isSet( defs.ACTOR2D ) )
-        {
-            sprite = new ActorSprite2D( data, spriteId );
+            sprite = new Sprite( objectDataManager.getData( data.group, data.objectName ), spriteId );
         }
 
         // Load from sprite/actor data
@@ -142,13 +137,13 @@ export class BasicSpriteStrategy2D extends BaseStrategy
 
         // Use passed in transforms if specified
         if( pos && !pos.isEmpty() )
-            sprite.setPos(pos);
+            sprite.object.setPos(pos);
 
         if( rot && !rot.isEmpty() )
-            sprite.setRot(rot, false);
+            sprite.object.setRot(rot, false);
 
         if( scale && !scale.isEquilXYZ( 1, 1, 1 ) )
-            sprite.setScale(scale);
+            sprite.object.setScale(scale);
         
         // Mainly for font sprites
         sprite.init();
@@ -229,26 +224,18 @@ export class BasicSpriteStrategy2D extends BaseStrategy
     //
     //  DESC: Transform the sprite
     //
-    transform( object )
+    transform()
     {
-        if( object )
-        {
-            for( let [ key, sprite ] of this.spriteMap.entries() )
-                sprite.transform( object.matrix, object.wasWorldPosTranformed() );
-        }
-        else
-        {
-            for( let [ key, sprite ] of this.spriteMap.entries() )
-                sprite.transform();
-        }
+        for( let [ key, sprite ] of this.spriteMap.entries() )
+            sprite.object.transform();
     }
 
     //
     //  DESC: Render the sprites
     //
-    render( matrix )
+    render( camera )
     {
         for( let [ key, sprite ] of this.spriteMap.entries() )
-            sprite.render( matrix );
+            sprite.render( camera );
     }
 }

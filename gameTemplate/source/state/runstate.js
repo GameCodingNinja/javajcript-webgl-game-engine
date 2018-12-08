@@ -14,9 +14,9 @@ import { physicsWorldManager } from '../../../library/physics/physicsworldmanage
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
-import { spriteStrategyManager } from '../../../library/managers/spritestrategymanager';
-import { BasicStageStrategy2D } from '../../../library/2d/basicstagestrategy2d';
-import { BasicSpriteStrategy2D } from '../../../library/2d/basicspritestrategy2d';
+import { strategyManager } from '../../../library/strategy/strategymanager';
+import { StageStrategy } from '../../../library/strategy/stagestrategy';
+import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import { device } from '../../../library/system/device';
 import { CommonState } from './commonstate';
 import * as state from './gamestate';
@@ -63,6 +63,8 @@ export class RunState extends CommonState
         menuManager.allowEventHandling = true;
         menuManager.activateTree( ['pause_tree'] );
         
+        strategyManager.init();
+        
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
         
@@ -74,7 +76,7 @@ export class RunState extends CommonState
     //
     cleanUp()
     {
-        spriteStrategyManager.clear();
+        strategyManager.clear();
         
         objectDataManager.freeGroup( ['(run)'] );
         
@@ -100,7 +102,7 @@ export class RunState extends CommonState
         this.scriptComponent.update();
         
         if( !menuManager.active )
-            spriteStrategyManager.update();
+            strategyManager.update();
     }
     
     // 
@@ -110,7 +112,7 @@ export class RunState extends CommonState
     {
         super.transform();
         
-        spriteStrategyManager.transform();
+        strategyManager.transform();
     }
     
     // 
@@ -120,9 +122,7 @@ export class RunState extends CommonState
     {
         super.render();
         
-        let matrix = device.orthographicMatrix;
-        
-        spriteStrategyManager.render( matrix );
+        strategyManager.render();
         
         menuManager.render();
     }
@@ -166,11 +166,11 @@ export function load()
         
     // Create the basic stage strategy
     loadManager.add(
-        ( callback ) => spriteStrategyManager.load( '(stage1)', new BasicStageStrategy2D, callback ) );
+        ( callback ) => strategyManager.load( '(stage1)', new StageStrategy, callback ) );
 
     // Create the basic sprite strategy
     loadManager.add(
-        ( callback ) => spriteStrategyManager.load( '(sprite)', new BasicSpriteStrategy2D, callback ) );
+        ( callback ) => strategyManager.load( '(sprite)', new ActorStrategy, callback ) );
 
     // Create the ball sprites
     loadManager.add(
@@ -179,7 +179,7 @@ export function load()
             let sprites = ['triangle_blue', 'triangle_green', 'circle_blue', 'circle_green', 'circle_red', 'square_red'];
         
             for( let i = 0; i < 24; ++i )
-                spriteStrategyManager.create('(sprite)', sprites[i % 6] );
+                strategyManager.create('(sprite)', sprites[i % 6] );
             
             callback()
         } );

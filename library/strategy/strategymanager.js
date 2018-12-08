@@ -1,6 +1,6 @@
 
 // 
-//  FILE NAME: spritestrategymanager.js
+//  FILE NAME: strategymanager.js
 //  DESC:      Sprite strategy manager singleton
 //
 
@@ -8,8 +8,9 @@
 
 import { ManagerBase } from '../managers/managerbase';
 import { assetHolder } from '../utilities/assetholder';
+import { Camera } from '../utilities/camera';
 
-class SpriteStrategyManager extends ManagerBase
+class StrategyManager extends ManagerBase
 {
     constructor()
     {
@@ -20,6 +21,16 @@ class SpriteStrategyManager extends ManagerBase
 
         // Sprite Id incrementor
         this.spriteInc = 0;
+    }
+    
+    //
+    //  DESC: Init function for objects that need to be
+    //        created after loading the settings
+    //
+    init()
+    {
+        // Default camera
+        this.camera = new Camera();
     }
     
     //
@@ -102,30 +113,12 @@ class SpriteStrategyManager extends ManagerBase
     }
 
     //
-    //  DESC: Do any pre-game loop init's
-    //
-    init()
-    {
-        for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.init();
-    }
-
-    //
     //  DESC: Do some cleanup
     //
     cleanUp()
     {
         for( let [ key, strategy ] of this.strategyMap.entries() )
             strategy.cleanUp();
-    }
-
-    //
-    //  DESC: Handle any misc processing before the real work is started
-    //
-    miscProcess()
-    {
-        for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.miscProcess();
     }
 
     //
@@ -140,20 +133,20 @@ class SpriteStrategyManager extends ManagerBase
     //
     //  DESC: Transform the strategy
     //
-    transform( object = null )
+    transform()
     {
         for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.transform( object );
+            strategy.transform();
     }
 
     //
     //  DESC: Render the strategy
     //
-    render( matrix )
+    render()
     {
         for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.render( matrix );
+            strategy.render( this.camera );
     }
 }
 
-export var spriteStrategyManager = new SpriteStrategyManager;
+export var strategyManager = new StrategyManager;

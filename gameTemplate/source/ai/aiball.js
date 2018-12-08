@@ -32,7 +32,7 @@ export class aiBall extends iaiBase2d
     //
     update()
     {
-        if( this.sprite.pos.y < -600 )
+        if( this.sprite.object.pos.y < -600 )
             this.initPhysics();
     }
     

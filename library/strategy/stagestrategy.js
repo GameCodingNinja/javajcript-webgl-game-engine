@@ -1,17 +1,16 @@
 
 // 
-//  FILE NAME: basicstagestrategy2d.js
-//  DESC:      Basic 2D stage strategy
+//  FILE NAME: stagestrategy.js
+//  DESC:      Stage strategy
 //
 
 "use strict";
 
 import { iSpriteStrategy } from '../common/ispritestrategy';
-import { Sector2D } from '../2d/sector2d';
 import { assetHolder } from '../utilities/assetholder';
-import { Object } from '../common/object';
+import { Sector } from './sector';
 
-export class BasicStageStrategy2D extends iSpriteStrategy
+export class StageStrategy extends iSpriteStrategy
 {
     constructor()
     {
@@ -19,9 +18,6 @@ export class BasicStageStrategy2D extends iSpriteStrategy
         
         // Deque of the sector 2d sprites
         this.sectorAry = [];
-
-        // default camera position
-        this.defaultCameraPos = new Object;
     }
     
     //
@@ -29,16 +25,11 @@ export class BasicStageStrategy2D extends iSpriteStrategy
     //
     loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
     {
-        // Get the node to the sound files
-        let cameraNode = node.getElementsByTagName( 'cameraPosition' );
-        if( cameraNode.length )
-            this.defaultCameraPos.loadTransFromNode( cameraNode[0] );
-        
         let sectorNode = node.getElementsByTagName( 'sector' );
 
         for( let i = 0; i < sectorNode.length; ++i )
         {
-            let sector = new Sector2D;
+            let sector = new Sector;
             this.sectorAry.push( sector );
             
             sector.loadTransFromNode( sectorNode[i] );
@@ -127,4 +118,3 @@ export class BasicStageStrategy2D extends iSpriteStrategy
             this.sectorAry[i].render( matrix );
     }
 }
-

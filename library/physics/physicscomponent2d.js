@@ -65,8 +65,8 @@ export class PhysicsComponent2D
             let physicsData = sprite.objData.physicsData;
             let worldDef = {
                 type : physicsData.bodyType,
-                position : planck.Vec2( sprite.pos.x * this.pixelsToMeters, -(sprite.pos.y * this.pixelsToMeters) ),
-                angle : -sprite.rot.z,
+                position : planck.Vec2( sprite.object.pos.x * this.pixelsToMeters, -(sprite.object.pos.y * this.pixelsToMeters) ),
+                angle : -sprite.object.rot.z,
 
                 linearVelocity : planck.Vec2.zero(),
                 angularVelocity : 0.0,
@@ -141,7 +141,7 @@ export class PhysicsComponent2D
     createCircularShapeFixture( sprite, fixture )
     {
         this.body.createFixture(
-            planck.Circle( (fixture.radius * sprite.scale.x) * this.pixelsToMeters ),
+            planck.Circle( (fixture.radius * sprite.object.scale.x) * this.pixelsToMeters ),
             this.getFixtureDef( sprite, fixture ) );
     }
 
@@ -158,12 +158,12 @@ export class PhysicsComponent2D
 
         // Apply scale to the size and divide by 2
         let size = new Size(
-            sprite.objData.size.w * sprite.scale.x * 0.5,
-            sprite.objData.size.h * sprite.scale.y * 0.5 );
+            sprite.objData.size.w * sprite.object.scale.x * 0.5,
+            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
 
         // Convert the points to world location in meters
         let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, sprite.scale );
+        this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
 
         this.body.createFixture(
             planck.Edge( Vec2Ary[0], Vec2Ary[1] ),
@@ -179,14 +179,14 @@ export class PhysicsComponent2D
 
         // Apply scale to the size and divide by 2
         let size = new Size(
-            sprite.objData.size.w * sprite.scale.x * 0.5,
-            sprite.objData.size.h * sprite.scale.y * 0.5 );
+            sprite.objData.size.w * sprite.object.scale.x * 0.5,
+            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
 
         // Is this polygon shape defined by a vector of points?
         if( fixture.vertAry.length )
         {
             // Convert the points to world location in meters
-            this.convertPoints( Vec2Ary, fixture, size, sprite.scale );
+            this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
         }
         
         // If vector points are not supplied, build a square based on the object size
@@ -194,10 +194,10 @@ export class PhysicsComponent2D
         {
             // Bottom and left mod have their signs flipped so that a positive mod always means
             // expansion of the side, and a negative mod always means a contraction of the side
-            let topMod = fixture.topMod * sprite.scale.y;
-            let bottomMod = -fixture.bottomMod * sprite.scale.y;
-            let leftMod = -fixture.leftMod * sprite.scale.x;
-            let rightMod = fixture.rightMod * sprite.scale.x;
+            let topMod = fixture.topMod * sprite.object.scale.y;
+            let bottomMod = -fixture.bottomMod * sprite.object.scale.y;
+            let leftMod = -fixture.leftMod * sprite.object.scale.x;
+            let rightMod = fixture.rightMod * sprite.object.scale.x;
 
             // Convert to meters
             // Box2D polygons are defined using Counter Clockwise Winding (CCW)
@@ -238,12 +238,12 @@ export class PhysicsComponent2D
         
         // Apply scale to the size and divide by 2
         let size = new Size(
-            sprite.objData.size.w * sprite.scale.x * 0.5,
-            sprite.objData.size.h * sprite.scale.y * 0.5 );
+            sprite.objData.size.w * sprite.object.scale.x * 0.5,
+            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
 
         // Convert the points to world location in meters
         let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, sprite.scale );
+        this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
 
         this.body.createFixture(
             planck.Chain( Vec2Ary, fixture.chainLoop ),
@@ -278,8 +278,8 @@ export class PhysicsComponent2D
             {
                 let pos = this.body.getPosition();
                 let angle = this.body.getAngle();
-                sprite.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
-                sprite.setRotXYZ( 0, 0, -angle, false );
+                sprite.object.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
+                sprite.object.setRotXYZ( 0, 0, -angle, false );
             }
         }
     }

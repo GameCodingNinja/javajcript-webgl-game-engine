@@ -1,20 +1,18 @@
 
 // 
-//  FILE NAME: sector2d.js
+//  FILE NAME: sector.js
 //  DESC:      Class the creates & renders all the sector sprites
 //
 
 "use strict";
 
-import { Object2D } from './object2d';
+import { Object3D } from '../3d/object3d';
 import { settings } from '../utilities/settings';
-import { Sprite2D } from '../2d/sprite2d';
-import { ActorSprite2D } from '../2d/actorsprite2d';
+import { Sprite } from '../sprite/sprite';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { signalManager } from '../managers/signalmanager';
-import { ActorData } from '../common/actordata';
 
-export class Sector2D extends Object2D
+export class Sector extends Object3D
 {
     constructor()
     {
@@ -93,10 +91,7 @@ export class Sector2D extends Object2D
             
             // Allocate the sprite and add it to the array
             if( spriteNode[i].tagName === 'sprite' )
-                sprite = new Sprite2D( objectDataManager.getData( group, objName ), id );
-
-            else
-                sprite = new ActorSprite2D( new ActorData( spriteNode[i], group, objName, aiName, id ) );
+                sprite = new Sprite( objectDataManager.getData( group, objName ), id );
             
             // Load the transform data from node
             sprite.load( spriteNode[i] );
@@ -180,15 +175,15 @@ export class Sector2D extends Object2D
             super.transform();
         
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
+            this.spriteAry[i].object.transform( this.matrix, this.wasWorldPosTranformed() );
     }
 
     //
     //  DESC: Render the sprites
     //
-    render( matrix )
+    render( camera )
     {
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].render( matrix );
+            this.spriteAry[i].render( camera );
     }
 }

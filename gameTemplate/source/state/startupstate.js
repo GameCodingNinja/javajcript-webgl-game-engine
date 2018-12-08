@@ -16,7 +16,7 @@ import { menuManager } from '../../../library/gui/menumanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
-import { spriteStrategyManager } from '../../../library/managers/spritestrategymanager';
+import { strategyManager } from '../../../library/strategy/strategymanager';
 import { Sprite } from '../../../library/sprite/sprite';
 import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
@@ -239,7 +239,7 @@ export class StartUpState extends state.GameState
                     ( xmlNode ) =>
                     {
                         // Load the object data list table
-                        spriteStrategyManager.loadListTable( xmlNode );
+                        strategyManager.loadListTable( xmlNode );
                         
                         callback();
                     });
