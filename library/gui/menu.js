@@ -8,7 +8,7 @@ import { Object2D } from '../2d/object2d';
 import { DynamicOffset } from '../common/dynamicoffset';
 import { ScrollParam } from './scrollparam';
 import { settings } from '../utilities/settings';
-import { Sprite2D } from '../2d/sprite2d';
+import { Sprite } from '../sprite/sprite';
 import { eventManager } from '../managers/eventmanager';
 import { UIControlNavNode } from '../gui/uicontrolnavnode';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
@@ -172,11 +172,11 @@ export class Menu extends Object2D
         let objectName = node.getAttribute( 'objectName' );
 
         // Allocate the static sprite and add it to the array
-        let sprite = new Sprite2D( objectDataManager.getData( this.group, objectName ) );
+        let sprite = new Sprite( objectDataManager.getData( this.group, objectName ) );
         this.spriteAry.push( sprite );
 
         // Load the transform data
-        sprite.loadTransFromNode( node );
+        sprite.object.loadTransFromNode( node );
 
         // Init the script factory functions
         sprite.initScriptFactoryFunctions( node );
@@ -384,7 +384,7 @@ export class Menu extends Object2D
             super.transform();
             
             for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
+                this.spriteAry[i].object.transform( this.matrix, this.wasWorldPosTranformed() );
             
             for( let i = 0; i < this.staticControlAry.length; ++i )
                 this.staticControlAry[i].transform( this );
@@ -400,21 +400,21 @@ export class Menu extends Object2D
     // 
     //  DESC: do the render
     //
-    render( matrix )
+    render( camera )
     {
         if( this.isVisible() )
         {
             for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].render( matrix );
+                this.spriteAry[i].render( camera );
             
             for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].render( matrix );
+                this.staticControlAry[i].render( camera );
             
             for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].render( matrix );
+                this.mouseOnlyControlAry[i].render( camera );
             
             for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].render( matrix );
+                this.controlAry[i].render( camera );
         }
     }
 

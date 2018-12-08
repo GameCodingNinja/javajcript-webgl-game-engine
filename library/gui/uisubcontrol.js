@@ -173,13 +173,13 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Render the sub control
     //
-    render( matrix )
+    render( camera )
     {
         // Call the parent
-        super.render( matrix );
+        super.render( camera );
 
         for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].render( matrix );
+            this.subControlAry[i].render( camera );
     }
 
     // 

@@ -1,6 +1,6 @@
 
 // 
-//  FILE NAME:  visualcomponentspritesheet.js
+//  FILE NAME:  visualcomponentscaledframe.js
 //  DESC:       Class for handling the visual part of the sprite
 //
 
@@ -26,23 +26,11 @@ import * as genFunc from '../utilities/genfunc';
 // allocated and heald within each class
 var gFinalMatrix = new Matrix;
 
-export class VisualComponentSpriteSheet extends VisualComponentQuad
+export class VisualComponentScaledFrame extends VisualComponentQuad
 {
     constructor( visualData )
     {
         super( visualData );
-        
-        if( visualData.isActive() )
-        {
-            this.glyphLocation = this.shaderData.getLocation( 'glyphRect' );
-
-            this.glyphUV = visualData.spriteSheet.getGlyph().uv;
-            this.frameIndex = visualData.spriteSheet.defaultIndex;
-
-            // Local vertex scale for sprite sheets that might have glyphs of different sizes
-            this.vertexScale = new Size;
-            this.vertexScale.copy( this.visualData.vertexScale );
-        }
     }
 
     //
@@ -76,33 +64,14 @@ export class VisualComponentSpriteSheet extends VisualComponentQuad
             
             // Calculate the final matrix
             gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.setScaleFromSize( this.vertexScale );
             gFinalMatrix.mergeMatrix( object.matrix.matrix );
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
 
             // Send the final matrix to the shader
             gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-
-            // Send the glyph rect
-            gl.uniform4fv( this.glyphLocation, this.glyphUV.data );
             
             // Do the render
-            gl.drawElements(gl.TRIANGLE_FAN, this.iboCount, gl.UNSIGNED_BYTE, 0);
+            gl.drawElements(gl.TRIANGLES, this.iboCount, gl.UNSIGNED_BYTE, 0);
         }
-    }
-    
-    //
-    //  DESC: Set the frame ID from index
-    //
-    setFrame( index )
-    {
-        super.setFrame( index );
-        
-        let glyph = this.visualData.spriteSheet.getGlyph( index );
-
-        this.vertexScale.w = glyph.size.w * this.visualData.defaultUniformScale;
-        this.vertexScale.h = glyph.size.h * this.visualData.defaultUniformScale;
-
-        this.glyphUV = glyph.uv;
     }
 }

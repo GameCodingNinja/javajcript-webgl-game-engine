@@ -73,10 +73,10 @@ export class MenuTree
     // 
     //  DESC: do the render
     //
-    render( matrix )
+    render( camera )
     {
         if( this.menuPathAry.length )
-            this.menuPathAry[this.menuPathAry.length-1].render( matrix );
+            this.menuPathAry[this.menuPathAry.length-1].render( camera );
     }
     
     // 

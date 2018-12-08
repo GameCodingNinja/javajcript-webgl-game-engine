@@ -11,6 +11,7 @@ import { actionManager } from '../managers/actionmanager';
 import { eventManager } from '../managers/eventmanager';
 import { signalManager } from '../managers/signalmanager';
 import { assetHolder } from '../utilities/assetholder';
+import { Camera } from '../utilities/camera';
 import { Menu } from '../gui/menu';
 import { MenuTree } from '../gui/menutree';
 import * as genFunc from '../utilities/genfunc';
@@ -21,6 +22,9 @@ class MenuManager extends ManagerBase
     constructor()
     {
         super();
+        
+        // NOTE: Only simple allocation that don't 
+        //       require Settings to be loaded
         
         // Map map of menu trees
         this.menuTreeMapMap = new Map;
@@ -55,6 +59,16 @@ class MenuManager extends ManagerBase
 
         // Allow message processing
         this.allow = false;
+    }
+    
+    //
+    //  DESC: Init function for objects that need to be
+    //        created after loading the settings
+    //
+    init()
+    {
+        // Default camera
+        this.camera = new Camera();
     }
     
     // 
@@ -798,13 +812,13 @@ class MenuManager extends ManagerBase
     // 
     //  DESC: Render menus
     //
-    render( matrix )
+    render()
     {
         if( this.active )
         {
             for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
                 if( this.activeMenuTreeAry[i].isActive() )
-                    this.activeMenuTreeAry[i].render( matrix );
+                    this.activeMenuTreeAry[i].render( this.camera );
         }
     }
 

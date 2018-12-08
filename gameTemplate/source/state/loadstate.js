@@ -31,7 +31,7 @@ export class LoadState extends state.GameState
         this.stateMessage.loadState = stateMessage.loadState;
         this.stateMessage.unloadState = stateMessage.unloadState;
         
-        this.camera = new Camera( 5, 1000 );
+        this.camera = new Camera();
         
         this.loadAnim = new Sprite( objectDataManager.getData( '(loadingScreen)', 'loadAnim' ) );
         this.loadAnim.object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );

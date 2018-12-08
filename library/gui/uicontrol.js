@@ -8,7 +8,7 @@
 
 import { ControlBase } from './controlbase';
 import { ScrollParam } from './scrollparam';
-import { Sprite2D } from '../2d/sprite2d';
+import { Sprite } from '../sprite/sprite';
 import { Size } from '../common/size';
 import { Point } from '../common/point';
 import { Quad } from '../common/quad';
@@ -174,7 +174,7 @@ export class UIControl extends ControlBase
         let objectName = node.getAttribute( 'objectName' );
 
         // allocate the sprite in the array
-        let sprite = new Sprite2D( objectDataManager.getData( this.group, objectName ) );
+        let sprite = new Sprite( objectDataManager.getData( this.group, objectName ) );
         this.spriteAry.push( sprite );
 
         // Load the sprite data
@@ -196,8 +196,8 @@ export class UIControl extends ControlBase
         else
         {
             // Find the largest size width and height of the different sprites for the controls size
-            let width = sprite.objData.size.w + Math.abs( sprite.pos.x );
-            let height = sprite.objData.size.h + Math.abs( sprite.pos.y );
+            let width = sprite.objData.size.w + Math.abs( sprite.object.pos.x );
+            let height = sprite.objData.size.h + Math.abs( sprite.object.pos.y );
 
             if( width > this.size.w )
                 this.size.w = width;
@@ -216,7 +216,7 @@ export class UIControl extends ControlBase
         for( let i = 0; i < objectNameAry.length; ++i )
         {
             // allocate the sprite in the array
-            this.spriteAry.push( new Sprite2D( objectDataManager.getData( this.group, objectNameAry[i] ) ) );
+            this.spriteAry.push( new Sprite( objectDataManager.getData( this.group, objectNameAry[i] ) ) );
         }
     }
     
@@ -242,7 +242,7 @@ export class UIControl extends ControlBase
             super.transform();
 
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].transform( this.matrix, this.wasWorldPosTranformed() );
+            this.spriteAry[i].object.transform( this.matrix, this.wasWorldPosTranformed() );
 
         // Transform the collision
         this.transformCollision();
@@ -299,10 +299,10 @@ export class UIControl extends ControlBase
     // 
     //  DESC: do the render
     //
-    render( matrix )
+    render( camera )
     {
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].render( matrix );
+            this.spriteAry[i].render( camera );
     }
 
     // 

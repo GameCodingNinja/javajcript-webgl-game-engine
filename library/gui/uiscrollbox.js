@@ -7,7 +7,7 @@
 "use strict";
 import { UISubControl } from './uisubcontrol';
 import { Point } from '../common/point';
-import { Sprite2D } from '../2d/sprite2d';
+import { Sprite } from '../sprite/sprite';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { gl, device } from '../system/device';
 import { eventManager } from '../managers/eventmanager';
@@ -153,13 +153,13 @@ export class UIScrollBox extends UISubControl
         {
             let objectName = stencilMaskNode[0].getAttribute( "objectName" );
 
-            this.stencilMaskSprite = new Sprite2D( objectDataManager.getData( this.group, objectName ) );
+            this.stencilMaskSprite = new Sprite( objectDataManager.getData( this.group, objectName ) );
 
             // Get the cull height
             this.cullHeight = (this.stencilMaskSprite.objData.size.w + this.controlHeight) / 2;
 
             // Load the transform data
-            this.stencilMaskSprite.loadTransFromNode( stencilMaskNode[0] );
+            this.stencilMaskSprite.object.loadTransFromNode( stencilMaskNode[0] );
         }
     }
 
@@ -342,16 +342,16 @@ export class UIScrollBox extends UISubControl
             this.scrollControlAry[i].transform( this );
 
         // Transform the mask
-        this.stencilMaskSprite.transform( this.matrix, this.wasWorldPosTranformed() );
+        this.stencilMaskSprite.object.transform( this.matrix, this.wasWorldPosTranformed() );
     }
 
     // 
     //  DESC: Render the sub control
     //
-    render( matrix )
+    render( camera )
     {
         // Call the parent
-        super.render( matrix );
+        super.render( camera );
         
 
         // Disable rendering to the color buffer
@@ -368,7 +368,7 @@ export class UIScrollBox extends UISubControl
         gl.stencilOp( gl.REPLACE, gl.REPLACE, gl.REPLACE );
 
 
-        this.stencilMaskSprite.render( matrix );
+        this.stencilMaskSprite.render( camera );
 
 
         // Re-enable color
@@ -386,7 +386,7 @@ export class UIScrollBox extends UISubControl
 
 
         for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].render( matrix );
+            this.scrollControlAry[i].render( camera );
 
 
         // Finished using stencil

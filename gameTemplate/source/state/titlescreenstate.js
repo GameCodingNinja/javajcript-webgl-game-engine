@@ -32,9 +32,9 @@ export class TitleScreenState extends CommonState
         this.background = new Sprite( objectDataManager.getData( '(title_screen)', 'background' ) );
         this.background.object.transform();
         
-        this.camera = new Camera( 5, 1000 );
+        this.camera = new Camera();
         
-        this.cameraCube = new Camera( 5, 1000, 45 );
+        this.cameraCube = new Camera( defs.EPT_PERSPECTIVE, 5, 1000, 45 );
         this.cameraCube.setPosXYZ( 0, 0, 20 );
         this.cameraCube.setRotXYZ( 10, 0, 0 );
         this.cameraCube.transform();
@@ -123,7 +123,7 @@ export class TitleScreenState extends CommonState
         this.background.render( this.camera );
         this.cube.render( this.cameraCube );
         
-        menuManager.render( device.orthographicMatrix );
+        menuManager.render();
     }
 }
 

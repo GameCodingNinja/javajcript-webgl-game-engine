@@ -114,7 +114,7 @@ export class RunState extends CommonState
     }
     
     // 
-    //  DESC: 2D/3D Render of game content
+    //  DESC: Render of game content
     //
     render()
     {
@@ -124,7 +124,7 @@ export class RunState extends CommonState
         
         spriteStrategyManager.render( matrix );
         
-        menuManager.render( device.orthographicMatrix );
+        menuManager.render();
     }
 }
 

@@ -6,7 +6,7 @@
 
 "use strict";
 import { UIControl } from './uicontrol';
-import { Sprite2D } from '../2d/sprite2d';
+import { Sprite } from '../sprite/sprite';
 import { Size } from '../common/size';
 import { Point } from '../common/point';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
@@ -126,7 +126,7 @@ export class UIProgressBar extends UIControl
 
             if( objectName && objectName.length )
             {
-                this.stencilMaskSprite = new Sprite2D( objectDataManager.getData( this.group, objectName ) );
+                this.stencilMaskSprite = new Sprite( objectDataManager.getData( this.group, objectName ) );
 
                 // Load the transform data
                 this.stencilMaskSprite.loadTransFromNode( stencilMaskNode[0] );
@@ -135,10 +135,10 @@ export class UIProgressBar extends UIControl
                 this.progressBarSize.copy( this.stencilMaskSprite.objData.size );
 
                 // Get the initial position
-                this.progressBarPos.copy( this.stencilMaskSprite.pos );
+                this.progressBarPos.copy( this.stencilMaskSprite.object.pos );
                 
                 // Get the initial scale
-                this.progressBarScale.copy( this.stencilMaskSprite.scale );
+                this.progressBarScale.copy( this.stencilMaskSprite.object.scale );
             }
             else
             {
@@ -146,10 +146,10 @@ export class UIProgressBar extends UIControl
                 this.progressBarSize.copy( this.spriteAry[this.spriteApplyIndex].objData.size );
 
                 // Get the initial position
-                this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].pos );
+                this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].object.pos );
                 
                 // Get the initial scale
-                this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].scale );
+                this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].object.scale );
             }
         }
     }
@@ -181,16 +181,16 @@ export class UIProgressBar extends UIControl
         
         if( stencilMaskSprite )
         {
-            this.stencilMaskSprite = new Sprite2D( objectDataManager.getData( this.group, stencilMaskSprite ) );
+            this.stencilMaskSprite = new Sprite( objectDataManager.getData( this.group, stencilMaskSprite ) );
             
             // Get the size
-            this.progressBarSize.copy( this.stencilMaskSprite.objData.size );
+            this.progressBarSize.copy( this.stencilMaskSprite.object.objData.size );
 
             // Get the initial position
-            this.progressBarPos.copy( this.stencilMaskSprite.pos );
+            this.progressBarPos.copy( this.stencilMaskSprite.object.pos );
 
             // Get the initial scale
-            this.progressBarScale.copy( this.stencilMaskSprite.scale );
+            this.progressBarScale.copy( this.stencilMaskSprite.object.scale );
         }
         else
         {
@@ -198,10 +198,10 @@ export class UIProgressBar extends UIControl
             this.progressBarSize.copy( this.spriteAry[this.spriteApplyIndex].objData.size );
 
             // Get the initial position
-            this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].pos );
+            this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].object.pos );
 
             // Get the initial scale
-            this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].scale );
+            this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].object.scale );
         }
     }
     
@@ -223,7 +223,7 @@ export class UIProgressBar extends UIControl
         super.transform( object );
 
         if( this.stencilMaskSprite )
-            this.stencilMaskSprite.transform( this.matrix, this.wasWorldPosTranformed() );
+            this.stencilMaskSprite.object.transform( this.matrix, this.wasWorldPosTranformed() );
     }
     
     // 
@@ -237,7 +237,7 @@ export class UIProgressBar extends UIControl
     //
     //  DESC: do the render
     //
-    render( matrix )
+    render( camera )
     { 
         if( this.stencilMaskSprite )
         {
@@ -259,7 +259,7 @@ export class UIProgressBar extends UIControl
                     gl.stencilOp( gl.REPLACE, gl.REPLACE, gl.REPLACE );
         
 
-                    this.stencilMaskSprite.render( matrix );
+                    this.stencilMaskSprite.render( camera );
                     
                     
                     // Re-enable color
@@ -283,12 +283,12 @@ export class UIProgressBar extends UIControl
                     gl.disable( gl.STENCIL_TEST );
                 }
                 else
-                    this.spriteAry[i].render( matrix );
+                    this.spriteAry[i].render( camera );
             }
         }
         else
         {
-            super.render( matrix );
+            super.render( camera );
         }
     }
 
@@ -332,13 +332,13 @@ export class UIProgressBar extends UIControl
 
         if( this.stencilMaskSprite )
         {
-            this.stencilMaskSprite.setScaleXYZ( scaleX, scaleY, 1 );
-            this.stencilMaskSprite.setPosXYZ( posX, posY );
+            this.stencilMaskSprite.object.setScaleXYZ( scaleX, scaleY, 1 );
+            this.stencilMaskSprite.object.setPosXYZ( posX, posY );
         }
         else
         {
-            this.spriteAry[this.spriteApplyIndex].setScaleXYZ( scaleX, scaleY, 1 );
-            this.spriteAry[this.spriteApplyIndex].setPosXYZ( posX, posY, 0 );
+            this.spriteAry[this.spriteApplyIndex].object.setScaleXYZ( scaleX, scaleY, 1 );
+            this.spriteAry[this.spriteApplyIndex].object.setPosXYZ( posX, posY, 0 );
         }
     }
 }

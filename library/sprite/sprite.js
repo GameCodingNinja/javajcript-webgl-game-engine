@@ -8,6 +8,8 @@
 
 import { VisualComponentQuad } from '../2d/visualcomponentquad';
 import { VisualComponentSpriteSheet } from '../2d/visualcomponentspritesheet';
+import { VisualComponentScaledFrame } from '../2d/visualcomponentscaledframe';
+import { VisualComponentFont } from '../2d/visualcomponentfont';
 import { VisualComponent3D } from '../3d/visualcomponent3d';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
@@ -56,6 +58,12 @@ export class Sprite
             
             else if( objData.visualData.genType === defs.EGT_SPRITE_SHEET )
                 this.visualComponent = new VisualComponentSpriteSheet( objData.visualData );
+            
+            else if( objData.visualData.genType === defs.EGT_SCALED_FRAME )
+                this.visualComponent = new VisualComponentScaledFrame( objData.visualData );
+            
+            else if( objData.visualData.genType === defs.EGT_FONT )
+                this.visualComponent = new VisualComponentFont( objData.visualData );
             
             if( objData.physicsData.isActive() )
                 this.physicsComponent = new PhysicsComponent2D( objData.physicsData );

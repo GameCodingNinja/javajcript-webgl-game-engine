@@ -13,28 +13,66 @@ import * as defs from '../common/defs';
 
 export class Camera extends Object3D
 {
-    constructor( minZDist, maxZDist, angle = null )
+    constructor( projType, minZDist, maxZDist, angle )
     {
         super();
         
         this.projectionMatrix = new Matrix;
         this.finalMatrix = new Matrix;
         
-        if( angle === null )
+        if( projType !== undefined )
+        {
+            this.projType = projType;
+            this.minZDist = minZDist;
+            this.maxZDist = maxZDist;
+            this.angle = angle;
+        }
+        else
+        {
+            this.projType = settings.projectionType;
+            this.minZDist = settings.minZdist;
+            this.maxZDist = settings.maxZdist;
+            this.angle = settings.viewAngle;
+        }
+
+        // Create the projection matrix
+        this.createProjectionMatrix();
+    }
+    
+    //
+    //  DESC: Create the projection matrix
+    //
+    init( projType, minZDist, maxZDist, angle )
+    {
+        this.projType = projType;
+        this.minZDist = minZDist;
+        this.maxZDist = maxZDist;
+        this.angle = angle;
+        
+        // Create the projection matrix
+        this.createProjectionMatrix();
+    }
+    
+    //
+    //  DESC: Create the projection matrix
+    //
+    createProjectionMatrix()
+    {
+        if( this.projType == defs.EPT_PERSPECTIVE )
+        {
+            this.projectionMatrix.perspectiveFovRH(
+                this.angle,
+                settings.screenAspectRatio.w,
+                this.minZDist,
+                this.maxZDist );
+        }
+        else
         {
             this.projectionMatrix.orthographicRH(
                 settings.defaultSize.w,
                 settings.defaultSize.h,
-                minZDist,
-                maxZDist );
-        }
-        else
-        {
-            this.projectionMatrix.perspectiveFovRH(
-                settings.viewAngle,
-                settings.screenAspectRatio.w,
-                minZDist,
-                maxZDist );
+                this.minZDist,
+                this.maxZDist );
         }
         
         this.calcFinalMatrix();

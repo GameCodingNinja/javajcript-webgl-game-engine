@@ -271,7 +271,7 @@ class Control_Hidden
     //
     execute()
     {
-        this.sprite.setVisible( false );
+        this.sprite.object.setVisible( false );
         
         this.finished = true;
     }
@@ -304,7 +304,7 @@ class Base_Control_Active
     //
     init( hiHSV, lowHSV )
     {
-        this.sprite.setVisible( true );
+        this.sprite.object.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
@@ -422,7 +422,7 @@ class Base_Control_Selected
     //
     init( hiHSV, lowHSV )
     {
-        this.sprite.setVisible( true );
+        this.sprite.object.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
@@ -619,7 +619,7 @@ class Control_Selected extends Base_Control_Selected
         super.execute();
         
         if( this.finished )
-            this.sprite.setVisible( false );
+            this.sprite.object.setVisible( false );
     }
     
     // 
@@ -651,7 +651,7 @@ class Control_Solid_Selected extends Base_Control_Selected
         super.execute();
         
         if( this.finished )
-            this.sprite.setVisible( false );
+            this.sprite.object.setVisible( false );
     }
     
     // 
@@ -711,7 +711,7 @@ class Base_Control_Fast_Selected
     //
     init( hiHSV )
     {
-        this.sprite.setVisible( true );
+        this.sprite.object.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
@@ -865,7 +865,7 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
 
         if( this.time < 0 )
         {
-            this.sprite.setVisible( false );
+            this.sprite.object.setVisible( false );
             this.finished = true;
         }
     }
@@ -903,7 +903,7 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
 
         if( this.time < 0 )
         {
-            this.sprite.setVisible( false );
+            this.sprite.object.setVisible( false );
             this.finished = true;
         }
     }

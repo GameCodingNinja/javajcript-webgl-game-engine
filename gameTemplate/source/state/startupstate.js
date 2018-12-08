@@ -114,7 +114,7 @@ export class StartUpState extends state.GameState
         this.spriteLogo = new Sprite( objectDataManager.getData( '(startup)', 'logo' ) );
         this.spriteLogo.object.setScaleXYZ( 1.5, 1.5, 1 );
         this.spriteLogo.object.transform();
-        this.camera = new Camera( 5, 1000 );
+        this.camera = new Camera();
         
         this.progressBar = new UIProgressBar( '(startup)' );
         this.progressBar.setPosXYZ( 0, -350, 0 );
@@ -163,7 +163,7 @@ export class StartUpState extends state.GameState
         gl.clear(gl.COLOR_BUFFER_BIT);
         
         this.spriteLogo.render( this.camera );
-        this.progressBar.render( device.orthographicMatrix );
+        this.progressBar.render( this.camera );
         
         // Unbind everything after a round of rendering
         shaderManager.unbind();
@@ -182,7 +182,7 @@ export class StartUpState extends state.GameState
         
         this.progressBar.incCurrentValue( ++this.progressCounter );
         this.progressBar.transform();
-        this.progressBar.render( device.orthographicMatrix );
+        this.progressBar.render( this.camera );
         
         // Unbind everything after a round of rendering
         shaderManager.unbind();
@@ -289,6 +289,8 @@ export class StartUpState extends state.GameState
         loadManager.add(
             ( callback ) =>
             {
+                menuManager.init();
+                
                 genFunc.downloadFile( 'xml', 'data/objects/2d/menu/menuListTable.lst',
                     ( xmlNode ) =>
                     {
