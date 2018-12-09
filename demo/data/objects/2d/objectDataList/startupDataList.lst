@@ -20,7 +20,7 @@
 
         <object name="logo">
           <visual>
-            <texture file="data/textures/startup/HugesWhoLogo_720.jpg"/>
+            <texture file="data/textures/startup/HugesWhoLogo_tech_720.jpg"/>
             <!--<texture file="data/textures/startup/waffles.png"/>-->
           </visual>
         </object>

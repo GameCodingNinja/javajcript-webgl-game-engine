@@ -30,7 +30,7 @@ import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 
 const STARTUP_ASSET_COUNT = 84,
-      LOGO_DISPLAY_DELAY = 2000;
+      LOGO_DISPLAY_DELAY = 1000;
 
 export class StartUpState extends state.GameState
 {

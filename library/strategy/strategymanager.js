@@ -18,9 +18,9 @@ class StrategyManager extends ManagerBase
         
         // Map of unique strategy references
         this.strategyMap = new Map;
-
-        // Sprite Id incrementor
-        this.spriteInc = 0;
+        
+        // An array of strategy references
+        this.strategyAry = [];
     }
     
     //
@@ -30,7 +30,7 @@ class StrategyManager extends ManagerBase
     init()
     {
         // Default camera
-        this.camera = new Camera();
+        this.defaultCamera = new Camera();
     }
     
     //
@@ -73,35 +73,6 @@ class StrategyManager extends ManagerBase
     }
     
     //
-    //  DESC: create the sprite and provide a unique id number for each one
-    //
-    createGroup( strategyId, name, count, pos, rot, scale )
-    {
-        // Make sure the strategy we are looking for is available
-        let strategy = this.strategyMap.get( strategyId );
-        if( !strategy )
-            throw new Error( `Sprite Manager strategy Id can't be found (${strategyId})!` );
-
-        let incReturn = [];
-
-        // Create the requested number of sprites
-        for( let i = 0; i < count; ++i )
-            incReturn.push( strategy.create( name, ++this.spriteInc, pos, rot, scale ) );
-
-        return incReturn;
-    }
-
-    create( strategyId, name, pos, rot, scale )
-    {
-        // Make sure the strategy we are looking for is available
-        let strategy = this.strategyMap.get( strategyId );
-        if( !strategy )
-            throw new Error( `Sprite Manager strategy Id can't be found (${strategyId})!` );
-
-        return strategy.create( name, ++this.spriteInc, pos, rot, scale );
-    }
-    
-    //
     //  DESC: Delete all the strategy
     //
     clear()
@@ -109,7 +80,6 @@ class StrategyManager extends ManagerBase
         this.cleanUp();
         
         this.strategyMap.clear();
-        this.spriteInc = 0;
     }
 
     //
@@ -145,7 +115,7 @@ class StrategyManager extends ManagerBase
     render()
     {
         for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.render( this.camera );
+            strategy.render( this.defaultCamera );
     }
 }
 

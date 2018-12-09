@@ -33,7 +33,7 @@
                 </mesh>
                 <color r="48" g="97" b="153" a="1"/>
             </visual>
-            <size width="400" height="40"/>
+            <size width="700" height="20"/>
         </object>
         
         <object name="progress_solid">
@@ -41,7 +41,7 @@
                 <shader id="shader_solid_2d"/>
                 <color r="25" g="54" b="84" a="0.8"/>
             </visual>
-            <size width="394" height="34"/>
+            <size width="694" height="14"/>
         </object>
 
     </objectList>

@@ -6,11 +6,11 @@
 
 "use strict";
 
-import { iSpriteStrategy } from '../common/ispritestrategy';
+import { iStrategy } from './istrategy';
 import { assetHolder } from '../utilities/assetholder';
 import { Sector } from './sector';
 
-export class StageStrategy extends iSpriteStrategy
+export class StageStrategy extends iStrategy
 {
     constructor()
     {
@@ -59,15 +59,6 @@ export class StageStrategy extends iSpriteStrategy
                 sector.loadFromNode( strategyId, assetHolder.get( strategyId, sectorFile), sectorFile, null );
             }
         }
-    }
-
-    //
-    //  DESC: Do any pre-game loop init's
-    //
-    init()
-    {
-        for( let i = 0; i < this.sectorAry.length; ++i )
-            this.sectorAry[i].init();
     }
 
     //

@@ -72,6 +72,7 @@ export function downloadFile( fileType, filepath, callback )
         request.open('GET', filepath + '?please-dont-cache=' + Math.random(), true);
         request.send();
     }
+    // Images are handled differently
     else
     {
         let image = new Image();

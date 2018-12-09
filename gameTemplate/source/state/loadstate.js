@@ -111,7 +111,7 @@ export class LoadState extends state.GameState
     }
     
     // 
-    //  DESC: progress bar update
+    //  DESC: load animation update
     //
     loadAnimUpdate()
     {

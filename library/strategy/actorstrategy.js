@@ -6,25 +6,39 @@
 
 "use strict";
 
-import { BaseStrategy } from '../common/basestrategy';
-import { SpriteData } from '../common/spritedata';
-import { ActorData } from '../common/actordata';
+import { iStrategy } from './istrategy';
+import { SpriteData } from '../sprite/spritedata';
 import { Sprite } from '../sprite/sprite';
 import { signalManager } from '../managers/signalmanager';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import * as defs from '../common/defs';
 
-export class ActorStrategy extends BaseStrategy
+export class ActorStrategy extends iStrategy
 {
-    constructor( idOffset = 0, idDir = 1 )
+    constructor()
     {
-        super( idOffset, idDir );
+        super();
+        
+        // ID Offset for this strategy 
+        this.idOffset = 0;
+
+        // ID Direction
+        this.idDir = 1;
+
+        // Id increment member
+        this.idInc = 0;
+
+        // Camera pointer
+        this.camera = null;
         
         // Map of the sprite data
         this.dataMap = new Map;
         
-        // Map of all the sprites
+        // Map of nodes with instance names
         this.spriteMap = new Map;
+        
+        // Active Array of nodes
+        this.nodeAry = [];
     }
     
     //
@@ -66,20 +80,6 @@ export class ActorStrategy extends BaseStrategy
             // Allocate the sprite data and add it to the array
             this.dataMap.set( name, new SpriteData( spriteNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
         }
-        
-        // Get all the actors
-        let actorNode = node.getElementsByTagName( 'actor' );
-        
-        for( let i = 0; i < actorNode.length; ++i )
-        {
-            // There must be a name associated with this sprite data
-            let name = actorNode[i].getAttribute( 'name' );
-            if( !name )
-                throw new Error( `Sprite strategy missing actor name!` );
-            
-            // Allocate the sprite data and add it to the array
-            this.dataMap.set( name, new ActorData( actorNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
-        }
     }
     
     //
@@ -107,43 +107,22 @@ export class ActorStrategy extends BaseStrategy
     //  DESC: create the sprite sprite
     //        NOTE: Function assumes radians
     //
-    create( name, id, pos, rot, scale )
+    create( dataName, instanceName = null )
     {
         let sprite;
-        let data = this.getData( name );
-
-        // Generate the id
-        let spriteId = (id + this.idOffset) * this.idDir;
+        let data = this.getData( dataName );
         
-        // If the sprite data defined a unique id, use that
-        if( data.id !== defs.SPRITE_DEFAULT_ID )
-            spriteId = data.id;
-        
-        // Check for duplicate id's
-        if( this.spriteMap.has( spriteId ) )
-            throw new Error( `Duplicate sprite id (${spriteId})!` );
+        // Create a unique node id
+        let nodeId =  ((this.idInc++) + this.idOffset) * this.idDir;
 
         // Create the sprite
-        if( data.parameters.isSet( defs.SPRITE2D ) )
-        {
-            sprite = new Sprite( objectDataManager.getData( data.group, data.objectName ), spriteId );
-        }
+        sprite = new Sprite( objectDataManager.getData( data.group, data.objectName ), nodeId );
 
-        // Load from sprite/actor data
+        // Load from sprite data
         sprite.load( data );
         
         // Add sprite to map
-        this.spriteMap.set( spriteId, sprite );
-
-        // Use passed in transforms if specified
-        if( pos && !pos.isEmpty() )
-            sprite.object.setPos(pos);
-
-        if( rot && !rot.isEmpty() )
-            sprite.object.setRot(rot, false);
-
-        if( scale && !scale.isEquilXYZ( 1, 1, 1 ) )
-            sprite.object.setScale(scale);
+        this.spriteMap.set( nodeId, sprite );
         
         // Mainly for font sprites
         sprite.init();

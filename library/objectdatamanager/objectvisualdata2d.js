@@ -11,7 +11,7 @@ import { Color } from '../common/color';
 import { Size } from '../common/size';
 import { Vertex2d } from '../common/vertex2d';
 import { ScaledFrame } from '../common/scaledframe';
-import { SpriteSheet } from '../common/spritesheet';
+import { SpriteSheet } from '../sprite/spritesheet';
 import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { spriteSheetManager } from '../managers/spritesheetmanager';

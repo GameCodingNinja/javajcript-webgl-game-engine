@@ -177,9 +177,12 @@ export function load()
         ( callback ) => 
         {
             let sprites = ['triangle_blue', 'triangle_green', 'circle_blue', 'circle_green', 'circle_red', 'square_red'];
+            
+            // Get the sprite strategy
+            let strategy = strategyManager.get( '(sprite)' );
         
             for( let i = 0; i < 24; ++i )
-                strategyManager.create('(sprite)', sprites[i % 6] );
+                strategy.create(sprites[i % 6] );
             
             callback()
         } );

@@ -90,8 +90,7 @@ export class Sector extends Object3D
             let sprite = null;
             
             // Allocate the sprite and add it to the array
-            if( spriteNode[i].tagName === 'sprite' )
-                sprite = new Sprite( objectDataManager.getData( group, objName ), id );
+            sprite = new Sprite( objectDataManager.getData( group, objName ), id );
             
             // Load the transform data from node
             sprite.load( spriteNode[i] );

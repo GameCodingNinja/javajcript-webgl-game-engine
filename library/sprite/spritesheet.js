@@ -5,7 +5,7 @@
 //
 
 "use strict";
-import { SpriteSheetGlyph } from '../common/spritesheetglyph';
+import { SpriteSheetGlyph } from './spritesheetglyph';
 import { Size } from '../common/size';
 import { Rect } from '../common/rect';
 import * as parseHelper from '../utilities/xmlparsehelper';

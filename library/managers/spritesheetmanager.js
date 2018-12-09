@@ -6,7 +6,7 @@
 //
 
 "use strict";
-import { SpriteSheet } from '../common/spritesheet';
+import { SpriteSheet } from '../sprite/spritesheet';
 
 class SpriteSheetManager
 {
