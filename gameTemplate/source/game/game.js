@@ -146,13 +146,10 @@ export class Game
                 this.gameState = new TitleScreenState( this.gameLoop.bind(this) );
             
             else if( this.gameState.nextState === state.GAME_STATE_LOAD )
-                this.gameState = new LoadState( this.gameState.stateMessage, this.doStateChange.bind(this) );
+                this.gameState = new LoadState( this.gameState.stateMessage, this.gameLoop.bind(this) );
             
             else if( this.gameState.nextState === state.GAME_STATE_RUN )
                 this.gameState = new RunState( this.gameLoop.bind(this) );
-            
-            // Do any pre-game loop init's
-            //this.gameState.init();
             
             return true;
         }
@@ -185,8 +182,10 @@ export class Game
     //
     gameLoop()
     {
-        // Handle the state change
-        this.doStateChange();
+        // Break out of the game loop if the 
+        // state needs to do some loading
+        if( this.doStateChange() )
+            return;
         
         // Poll the events
         this.pollEvents();

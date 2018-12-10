@@ -34,6 +34,17 @@ export class RunState extends CommonState
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+        
+        // Unblock the menu messaging and activate needed trees
+        menuManager.allowEventHandling = true;
+        menuManager.activateTree( ['pause_tree'] );
+        
+        strategyManager.init();
+        
+        // Reset the elapsed time before entering the render loop
+        highResTimer.calcElapsedTime();
+        
+        requestAnimationFrame( this.callback );
     }
     
     // 
@@ -52,23 +63,6 @@ export class RunState extends CommonState
                     this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
         }
-    }
-    
-    // 
-    //  DESC: Do any pre-game loop init's
-    //
-    init()
-    {
-        // Unblock the menu messaging and activate needed trees
-        menuManager.allowEventHandling = true;
-        menuManager.activateTree( ['pause_tree'] );
-        
-        strategyManager.init();
-        
-        // Reset the elapsed time before entering the render loop
-        highResTimer.calcElapsedTime();
-        
-        requestAnimationFrame( this.callback );
     }
     
     // 

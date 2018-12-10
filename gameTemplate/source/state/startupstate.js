@@ -28,22 +28,24 @@ import { Camera } from '../../../library/utilities/camera';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
+import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as stateDefs from './statedefs';
 
 const STARTUP_ASSET_COUNT = 83,
-      LOGO_DISPLAY_DELAY = 1500;
+      MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends state.GameState
 {
-    constructor( gameLoopCallback = null )
+    constructor( gameLoopCallback )
     {
         super( state.GAME_STATE_STARTUP, state.GAME_STATE_TITLESCREEN, gameLoopCallback );
         
-        // Load the utility scripts
+        // Load the scripts
         utilScripts.loadScripts();
+        stateScripts.loadScripts();
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -149,15 +151,15 @@ export class StartUpState extends state.GameState
             }
             else if( event.detail.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
             {
-                let downloadTime = highResTimer.timerStop();
+                let loadTime = highResTimer.timerStop();
                 
                 // If the load was too fast, do a timeout of the difference before fading out
-                if( downloadTime > LOGO_DISPLAY_DELAY )
+                if( loadTime > MIN_LOAD_TIME )
                     this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
                 else
-                    setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), LOGO_DISPLAY_DELAY - downloadTime );
+                    setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
         
-                console.log('Asset load complete!: ' + this.progressCounter);
+                console.log('StartUp State load complete!: ' + this.progressCounter);
             }
         }
     }

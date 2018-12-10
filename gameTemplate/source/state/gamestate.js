@@ -44,7 +44,6 @@ export class GameState
     
     doStateChange()
     {
-        // Empty function to be overwritten
         return this.stateChange;
     }
     

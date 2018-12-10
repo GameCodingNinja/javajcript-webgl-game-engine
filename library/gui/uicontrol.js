@@ -406,9 +406,6 @@ export class UIControl extends ControlBase
             else if( this.actionType === defs.ECAT_GAME_STATE_CHANGE )
                 eventManager.dispatchEvent( defs.EGE_MENU_GAME_STATE_CHANGE, defs.ETC_BEGIN, this.executionAction );
 
-            //else if( this.actionType === defs.ECAT_QUIT_GAME )
-                //eventManager.dispatchEvent( SDL_QUIT );
-
             // Smart gui execution
             this.smartExecuteAction();
 

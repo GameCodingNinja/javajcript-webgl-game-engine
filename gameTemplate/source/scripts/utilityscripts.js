@@ -51,12 +51,13 @@ export class Hold
 //
 //  DESC: Script for playing the frames of an animation
 //
-export class Play
+export class PlayAnim
 {
     constructor( sprite )
     {
         this.sprite = sprite;
         
+        this.frameCount = this.sprite.getFrameCount();
         this.time = 0;
         this.fps = 0;
         this.counter = 0;
@@ -88,7 +89,7 @@ export class Play
             this.time = 1000.0 / this.fps;
             this.counter++;
             
-            if( this.counter < this.sprite.getFrameCount() )
+            if( this.counter < this.frameCount )
             {
                 this.sprite.setFrame( this.counter );
             }
@@ -104,6 +105,11 @@ export class Play
             }
         }
     }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
 }
 
 //

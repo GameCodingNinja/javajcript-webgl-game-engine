@@ -20,12 +20,10 @@ import { loadManager } from '../../../library/managers/loadmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
-import * as genFunc from '../../../library/utilities/genfunc';
-import * as slotDefs from '../../../library/slot/slotdefs';
 
 export class TitleScreenState extends CommonState
 {
-    constructor( gameLoopCallback = null )
+    constructor( gameLoopCallback )
     {
         super( state.GAME_STATE_TITLESCREEN, state.GAME_STATE_LOAD, gameLoopCallback );
         
@@ -52,17 +50,9 @@ export class TitleScreenState extends CommonState
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
-    }
-    
-    // 
-    //  DESC: Do any pre-game loop init's
-    //
-    init()
-    {
-        
         
         // Start the game loop
-        //requestAnimationFrame( this.callback );
+        requestAnimationFrame( this.callback );
     }
     
     // 

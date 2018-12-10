@@ -10,6 +10,7 @@ import * as state from './gamestate';
 import { menuManager } from '../../../library/gui/menumanager';
 import { device } from '../../../library/system/device';
 import * as defs from '../../../library/common/defs';
+import * as stateDefs from './statedefs';
 
 export class CommonState extends state.GameState
 {
@@ -39,14 +40,14 @@ export class CommonState extends state.GameState
                     // Set the message to load and unload the states
                     this.stateMessage.setMsg( this.getLoadState(event.detail.arg[1]), this.gameState );
                 }
-                else if( event.detail.arg[0] === defs.ETC_END )
-                {
-                    // Clear out all the trees
-                    menuManager.clearActiveTrees();
+            }
+            else if( event.detail.type === stateDefs.ESE_FADE_OUT_COMPLETE )
+            {
+                // Clear out all the trees
+                menuManager.clearActiveTrees();
 
-                    // Set the flag to change the state
-                    this.stateChange = true;
-                }
+                // Set the flag to change the state
+                this.stateChange = true;
             }
         }
     }
