@@ -127,6 +127,14 @@ class EventManager
         
         //console.log( `Custom Event was sent. ${event.detail.type}, ${event.detail.arg[0]}, ${event.detail.arg[1]}` );
     }
+    
+    // 
+    //  DESC: Clear the event queue
+    //
+    clear()
+    {
+        this.queue = [];
+    }
 }
 
 export var eventManager = new EventManager;

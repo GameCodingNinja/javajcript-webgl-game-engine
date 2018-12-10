@@ -41,6 +41,9 @@ export class LoadState extends state.GameState
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 250 ) );
         
+        // Clear the event queue
+        eventManager.clear();
+        
         // Preload assets for the loading screen
         this.preload();
     }

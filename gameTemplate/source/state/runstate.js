@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { eventManager } from '../../../library/managers/eventmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
@@ -38,6 +39,9 @@ export class RunState extends CommonState
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
         menuManager.activateTree( ['pause_tree'] );
+        
+        // Clear the event queue
+        eventManager.clear();
         
         strategyManager.init();
         

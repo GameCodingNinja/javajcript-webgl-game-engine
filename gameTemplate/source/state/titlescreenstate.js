@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { eventManager } from '../../../library/managers/eventmanager';
 import { CommonState } from './commonstate';
 import { Sprite } from '../../../library/sprite/sprite';
 import { Camera } from '../../../library/utilities/camera';
@@ -47,6 +48,9 @@ export class TitleScreenState extends CommonState
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
         menuManager.activateTree( ['title_screen_tree'] );
+        
+        // Clear the event queue
+        eventManager.clear();
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
