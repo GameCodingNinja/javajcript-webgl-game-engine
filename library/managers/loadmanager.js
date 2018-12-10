@@ -23,10 +23,11 @@ class LoadManager
     {
         if( this.objects.length === 0 )
         {
-            if( this.loadCompleteCallback === null )
-                throw new Error( 'LoadManager: Load complete callback has not been set!' );
-            else
-                this.loadCompleteCallback();
+            let callback = this.loadCompleteCallback;
+            this.loadCompleteCallback = null;
+            
+            if( callback !== null )
+                callback();
         }
         else
         {

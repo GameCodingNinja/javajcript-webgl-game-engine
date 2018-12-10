@@ -104,7 +104,7 @@ export class Game
         
         // Create the startup state
         this.gameState = new StartUpState( this.gameLoop.bind(this) );
-        this.gameState.init();
+        //this.gameState.init();
     }
     
     // 
@@ -152,7 +152,7 @@ export class Game
                 this.gameState = new RunState( this.gameLoop.bind(this) );
             
             // Do any pre-game loop init's
-            this.gameState.init();
+            //this.gameState.init();
             
             return true;
         }
@@ -185,9 +185,8 @@ export class Game
     //
     gameLoop()
     {
-        // Break out of the game loop and handle the state change
-        if( this.doStateChange() )
-            return;
+        // Handle the state change
+        this.doStateChange();
         
         // Poll the events
         this.pollEvents();

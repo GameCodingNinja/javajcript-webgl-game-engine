@@ -7,8 +7,10 @@
 "use strict";
 
 import { shaderManager } from '../../../library/managers/shadermanager';
+import { scriptManager } from '../../../library/script/scriptmanager';
 import { textureManager } from '../../../library/managers/texturemanager';
 import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
+import { eventManager } from '../../../library/managers/eventmanager';
 import { fontManager } from '../../../library/managers/fontmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { actionManager } from '../../../library/managers/actionmanager';
@@ -23,14 +25,16 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { UIProgressBar } from '../../../library/gui/uiprogressbar';
 import { Camera } from '../../../library/utilities/camera';
+import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
+import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 84,
-      LOGO_DISPLAY_DELAY = 1000;
+const STARTUP_ASSET_COUNT = 83,
+      LOGO_DISPLAY_DELAY = 1500;
 
 export class StartUpState extends state.GameState
 {
@@ -38,33 +42,32 @@ export class StartUpState extends state.GameState
     {
         super( state.GAME_STATE_STARTUP, state.GAME_STATE_TITLESCREEN, gameLoopCallback );
         
-        this.stateChange = true;
+        // Load the utility scripts
+        utilScripts.loadScripts();
         
-        // Logo to fade in and out during the load
-        this.spriteLogo;
+        // Create the script component and add a script
+        this.scriptComponent = new ScriptComponent;
+        this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
         
-        // progress bar to show loading
-        this.progressBar;
-        
-        // Init fade members
-        this.current = 0.0;
-        this.final = 1.0;
-        this.time = 500.0;
-        this.inc = (this.final - this.current) / this.time;
-        this.fadeCompleteCallback = this.assetLoad.bind(this);
-        
+        // Init the progress bar counter
         this.progressCounter = 0;
+        
+        // Create the camera
+        this.camera = new Camera();
+        
+        // Preload assets for the startup screen
+        this.preload();
     }
 
     // 
-    //  DESC: Do start up init
+    //  DESC: Do the preload
     //
-    init()
+    preload()
     {
         let groupAry = ['(startup)'];
         
         // Set the load manager's callback when everything is loaded
-        loadManager.loadCompleteCallback = this.startFade.bind(this);
+        loadManager.loadCompleteCallback = this.preloadComplete.bind(this);
         
         // Load the shaders
         loadManager.add(
@@ -106,88 +109,74 @@ export class StartUpState extends state.GameState
     }
     
     // 
-    //  DESC: Start the fade
+    //  DESC: Preload is complete. Start the game loop which will fade in the screen
     //
-    startFade()
+    preloadComplete()
     {
-        // Create the logo to fade in and out
+        // Create the logo
         this.spriteLogo = new Sprite( objectDataManager.getData( '(startup)', 'logo' ) );
         this.spriteLogo.object.setScaleXYZ( 1.5, 1.5, 1 );
         this.spriteLogo.object.transform();
-        this.camera = new Camera();
-        
+
+        // create the progress bar
         this.progressBar = new UIProgressBar( '(startup)' );
         this.progressBar.setPosXYZ( 0, -350, 0 );
         this.progressBar.loadSpriteFromArray( ['progress_frame', 'progress_solid'], 1 );
         this.progressBar.initProgressBar( STARTUP_ASSET_COUNT );
         this.progressBar.transform();
-        
+
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
-        
-        // Start the fade
-        requestAnimationFrame( this.fade.bind(this) );
+
+        // Start the game loop
+        requestAnimationFrame( this.callback );
     }
     
     // 
-    //  DESC: handle the logo fade in
+    //  DESC: handle events
     //
-    fade()
+    handleEvent( event )
     {
-        highResTimer.calcElapsedTime();
-        this.time -= highResTimer.elapsedTime;
+        if( event instanceof CustomEvent )
+        {
+            if( event.detail.type === stateDefs.ESE_FADE_IN_COMPLETE )
+            {
+                this.assetLoad();
+            }
+            else if( event.detail.type === stateDefs.ESE_FADE_OUT_COMPLETE )
+            {
+                this.stateChange = true;
+            }
+            else if( event.detail.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
+            {
+                let downloadTime = highResTimer.timerStop();
+                
+                // If the load was too fast, do a timeout of the difference before fading out
+                if( downloadTime > LOGO_DISPLAY_DELAY )
+                    this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
+                else
+                    setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), LOGO_DISPLAY_DELAY - downloadTime );
         
-        if( this.time < 0 )
-        {
-            this.renderFade( this.final );
-            this.fadeCompleteCallback();
+                console.log('Asset load complete!: ' + this.progressCounter);
+            }
         }
-        else
-        {
-            this.current += this.inc * highResTimer.elapsedTime;
-            this.renderFade( this.current );
-            
-            // Continues the loop
-            requestAnimationFrame( this.fade.bind(this) );
-        }
+    }
+
+    // 
+    //  DESC: Update objects that require them
+    //
+    update()
+    {
+        this.scriptComponent.update();
     }
     
     // 
-    //  DESC: Render the fade
+    //  DESC: Render of game content
     //
-    renderFade( value )
+    render()
     {
-        for( let [ key, shaderData ] of shaderManager.shaderMap.entries() )
-            shaderManager.setShaderValue4fv( key, 'additive', [value, value, value, 1] );
-        
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        
         this.spriteLogo.render( this.camera );
         this.progressBar.render( this.camera );
-        
-        // Unbind everything after a round of rendering
-        shaderManager.unbind();
-        textureManager.unbind();
-        vertexBufferManager.unbind();
-    }
-    
-    // 
-    //  DESC: progress bar update
-    //
-    progressbarUpdate()
-    {
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        
-        this.spriteLogo.render( this.camera );
-        
-        this.progressBar.incCurrentValue( ++this.progressCounter );
-        this.progressBar.transform();
-        this.progressBar.render( this.camera );
-        
-        // Unbind everything after a round of rendering
-        shaderManager.unbind();
-        textureManager.unbind();
-        vertexBufferManager.unbind();
     }
     
     // 
@@ -195,16 +184,13 @@ export class StartUpState extends state.GameState
     //
     assetLoad()
     {
+        // Set the timer to see how long the load takes
+        highResTimer.timerStart();
+        
         // Set the function to be called to update the progress bar during the download
         signalManager.connect_loadComplete( this.progressbarUpdate.bind(this) );
         
-        // Use the simple timer to see how long the download is
-        highResTimer.timerStart();
-        
-        let groupAry = ['(menu)','(loadingScreen)'];
-        
-        // Set the load manager's callback when everything is loaded
-        loadManager.loadCompleteCallback = this.loadComplete.bind(this);
+        let groupAry = ['(menu)'];
         
         // Load the fonts
         loadManager.add(
@@ -314,7 +300,6 @@ export class StartUpState extends state.GameState
             {
                 // Load the menu scripts before creating the menus
                 menuScripts.loadScripts();
-                utilScripts.loadScripts();
         
                 // Create the menu group
                 menuManager.createGroup( ['(menu)'] );
@@ -325,34 +310,21 @@ export class StartUpState extends state.GameState
         // Load the state specific assets
         titleScreenState.load();
         
+        // Last thing to do is send a message that the asset load is complete
+        loadManager.add(
+            ( callback ) => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) );
+        
         // Start the load
         loadManager.load();
     }
     
     // 
-    //  DESC: Load is completed so fade the logo out
+    //  DESC: progress bar update callback function
     //
-    loadComplete()
+    progressbarUpdate()
     {
-        signalManager.clear_loadComplete();
-        console.log(`StartUp State Download Count: ${this.progressCounter}`);
-        
-        // Init fade members
-        this.current = 1.0;
-        this.final = 0.0;
-        this.time = 500.0;
-        this.inc = (this.final - this.current) / this.time;
-        this.fadeCompleteCallback = this.callback;
-        
-        // Reset the elapsed time before entering the render loop
-        highResTimer.calcElapsedTime();
-        
-        let downloadTime = highResTimer.timerStop();
-        
-        if( downloadTime > LOGO_DISPLAY_DELAY )
-            requestAnimationFrame( this.fade.bind(this) );
-        else
-            setTimeout( () => requestAnimationFrame( this.fade.bind(this) ), LOGO_DISPLAY_DELAY - downloadTime );
+        this.progressBar.incCurrentValue( ++this.progressCounter );
+        this.progressBar.transform();
     }
     
     // 
@@ -361,6 +333,9 @@ export class StartUpState extends state.GameState
     cleanUp()
     {
         objectDataManager.freeGroup( ['(startup)'] );
-        assetHolder.deleteGroup( ['(startup)','(menu)','(loadingScreen)'] );
+        assetHolder.deleteGroup( ['(startup)','(menu)'] );
+        
+        this.spriteLogo.cleanUp();
+        this.progressBar.cleanUp();
     }
 }

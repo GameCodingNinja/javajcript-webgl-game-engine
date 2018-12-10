@@ -11,7 +11,7 @@ import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { Color } from '../../../library/common/color';
-import * as defs from '../../../library/common/defs';
+import * as stateDefs from '../state/statedefs';
 
 //
 //  DESC: Script for holding for time duration
@@ -140,13 +140,10 @@ export class FadeTo
         this.time -= highResTimer.elapsedTime;
 
         if( this.time < 0 )
-        {
             this.finished = true;
-        }
+
         else
-        {
             this.current += (this.inc * highResTimer.elapsedTime);
-        }
     }
 }
 
@@ -183,8 +180,7 @@ export class ColorTo
     //
     execute()
     {
-        let elapsedTime = highResTimer.elapsedTime;
-        this.time -= elapsedTime;
+        this.time -= highResTimer.elapsedTime;
 
         if( this.time < 0 )
         {
@@ -193,7 +189,7 @@ export class ColorTo
         else
         {
             for( let i = 0; i < 4; ++i )
-                this.current.data[i] += this.inc.data[i] * elapsedTime;
+                this.current.data[i] += this.inc.data[i] * highResTimer.elapsedTime;
         }
     }
     
@@ -219,13 +215,11 @@ export class ColorTo
 //
 class ScreenFade extends FadeTo
 {
-    constructor( current, final, time, gameStateChangeMsg )
+    constructor( current, final, time )
     {
         super();
         
         this.init( current, final, time );
-        
-        this.gameStateChangeMsg = gameStateChangeMsg;
     }
     
     // 
@@ -239,8 +233,10 @@ class ScreenFade extends FadeTo
         {
             shaderManager.setAllShaderValue4fv( 'additive', [this.final, this.final, this.final, 1] );
             
-            if( this.gameStateChangeMsg )
-                eventManager.dispatchEvent( defs.EGE_MENU_GAME_STATE_CHANGE, defs.ETC_END );
+            if( this.final > this.current )
+                eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_COMPLETE );
+            else
+                eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_COMPLETE );
         }
         else
         {
@@ -260,5 +256,5 @@ class ScreenFade extends FadeTo
 export function loadScripts()
 {
     scriptManager.set( 'ScreenFade',
-        ( current, final, time, gameStateChangeMsg = false ) => { return new ScreenFade( current, final, time, gameStateChangeMsg ); } );
+        ( current, final, time ) => { return new ScreenFade( current, final, time ); } );
 }

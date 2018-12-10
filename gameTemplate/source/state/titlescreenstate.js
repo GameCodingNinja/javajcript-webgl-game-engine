@@ -45,6 +45,13 @@ export class TitleScreenState extends CommonState
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+        
+        // Unblock the menu messaging and activate needed trees
+        menuManager.allowEventHandling = true;
+        menuManager.activateTree( ['title_screen_tree'] );
+        
+        // Reset the elapsed time before entering the render loop
+        highResTimer.calcElapsedTime();
     }
     
     // 
@@ -52,15 +59,10 @@ export class TitleScreenState extends CommonState
     //
     init()
     {
-        // Unblock the menu messaging and activate needed trees
-        menuManager.allowEventHandling = true;
-        menuManager.activateTree( ['title_screen_tree'] );
         
-        // Reset the elapsed time before entering the render loop
-        highResTimer.calcElapsedTime();
         
         // Start the game loop
-        requestAnimationFrame( this.callback );
+        //requestAnimationFrame( this.callback );
     }
     
     // 
