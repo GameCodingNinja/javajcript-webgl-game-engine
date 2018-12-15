@@ -149,18 +149,7 @@ export function load()
 
     // Load the physics list table and group
     loadManager.add(
-        ( callback ) =>
-        {
-            genFunc.downloadFile( 'xml', 'data/objects/2d/physics/physicsListTable.lst',
-                ( xmlNode ) =>
-                {
-                    // Load the object data list table
-                    physicsWorldManager.loadListTable( xmlNode );
-
-                    // Load the object data XML's
-                    physicsWorldManager.loadWorldGroup2D( '(game)', callback );
-                });
-        });
+        ( callback ) => physicsWorldManager.loadWorldGroup2D( '(game)', callback ));
         
     // Create the basic stage strategy
     loadManager.add(

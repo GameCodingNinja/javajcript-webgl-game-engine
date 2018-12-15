@@ -23,9 +23,18 @@ class ShaderManager
     }
     
     // 
+    //  DESC: Load the shader from file path
+    //
+    load( filePath, callback )
+    {
+        genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode, callback ) );
+    }
+    
+    // 
     //  DESC: Load the shader from xml node
     //
-    load( xmlNode, callback )
+    loadFromNode( xmlNode, callback )
     {
         if( xmlNode )
         {
@@ -45,6 +54,8 @@ class ShaderManager
                 }
             }
         }
+        else
+            callback();
     }
     
     // 

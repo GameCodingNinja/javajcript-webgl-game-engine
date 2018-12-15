@@ -238,8 +238,8 @@ class ScreenFade extends FadeTo
         if( this.finished )
         {
             shaderManager.setAllShaderValue4fv( 'additive', [this.final, this.final, this.final, 1] );
-            
-            if( this.final > this.current )
+
+            if( this.inc > 0 )
                 eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_COMPLETE );
             else
                 eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_COMPLETE );

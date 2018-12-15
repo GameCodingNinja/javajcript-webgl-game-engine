@@ -20,9 +20,23 @@ export class ManagerBase
     }
     
     // 
-    //  DESC: Load the data list tables
+    //  DESC: Load the data list tables from file path
     //
-    loadListTable( xmlNode )
+    loadListTable( filePath, callback )
+    {
+        genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) =>
+            {
+                this.loadListTableFromNode( xmlNode );
+                
+                callback();
+            });
+    }
+    
+    // 
+    //  DESC: Load the data list tables from node
+    //
+    loadListTableFromNode( xmlNode )
     {
         if( xmlNode )
         {

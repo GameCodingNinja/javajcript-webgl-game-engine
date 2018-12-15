@@ -6,6 +6,7 @@
 "use strict";
 import { KeyCodeAction } from '../common/keycodeaction';
 import { Point } from '../common/point';
+import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
 
 class ActionManager
@@ -144,15 +145,29 @@ class ActionManager
     }
     
     // 
+    //  DESC: Load data from file path
+    //
+    load( filePath, callback )
+    {
+        genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) =>
+            {
+                this.loadFromNode( xmlNode );
+                
+                callback();
+            });
+    }
+    
+    // 
     //  DESC: Load data from XML node
     //
-    load( node )
+    loadFromNode( xmlNode )
     {
-        if( node )
+        if( xmlNode )
         {
             // Load the keyboard/mouse/gamepad mapping
-            this.loadKeyboardMappingFromNode( node.getElementsByTagName('keyboardMapping') );
-            this.loadMouseMappingFromNode( node.getElementsByTagName( 'mouseMapping' ) );
+            this.loadKeyboardMappingFromNode( xmlNode.getElementsByTagName('keyboardMapping') );
+            this.loadMouseMappingFromNode( xmlNode.getElementsByTagName( 'mouseMapping' ) );
             //this.loadGamepadMappingFromNode( node.getElementsByTagName( 'gamepadMapping' ) );
         }
     }

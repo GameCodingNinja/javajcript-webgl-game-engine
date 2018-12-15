@@ -62,10 +62,9 @@ class MenuManager extends ManagerBase
     }
     
     //
-    //  DESC: Init function for objects that need to be
-    //        created after loading the settings
+    //  DESC: Create the default camera based on what is defined in the settings.cfg config
     //
-    init()
+    createDefaultCamera()
     {
         // Default camera
         this.camera = new Camera();
@@ -379,11 +378,25 @@ class MenuManager extends ManagerBase
             throw new Error( `Menu group name can't be found to clean up (${group})!` );
         }
     }
+    
+    // 
+    //  DESC: Load the menu action list from XML
+    //
+    loadMenuAction( filePath, callback )
+    {
+        genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) =>
+            {
+                this.loadMenuActionFromNode( xmlNode );
+                
+                callback();
+            });
+    }
 
     // 
     //  DESC: Load the menu action list from XML
     //
-    loadMenuAction( node )
+    loadMenuActionFromNode( node )
     {
         this.backAction = node.getElementsByTagName( 'backAction' )[0].childNodes[0].nodeValue;
         this.toggleAction = node.getElementsByTagName( 'toggleAction' )[0].childNodes[0].nodeValue;

@@ -55,9 +55,6 @@ export class LoadState extends state.GameState
     {
         let groupAry = ['(loadingScreen)'];
         
-        // Set the load manager's callback when everything is loaded
-        loadManager.loadCompleteCallback = this.preloadComplete.bind(this);
-        
         // Load the menu assets
         // Load the xml group
         loadManager.add(
@@ -73,7 +70,7 @@ export class LoadState extends state.GameState
 
         // Create OpenGL objects from the loaded data
         loadManager.add(
-            ( callback ) => objectDataManager.createFromData( groupAry, callback ) );
+            ( callback ) => objectDataManager.createFromData( groupAry, this.preloadComplete.bind(this) ));
     
         // Start the load
         loadManager.load();
@@ -84,8 +81,6 @@ export class LoadState extends state.GameState
     //
     preloadComplete()
     {
-        console.log('Preload complete!');
-        
         this.loadAnim = new Sprite( objectDataManager.getData( '(loadingScreen)', 'loadAnim' ) );
         this.loadAnim.object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
         this.loadAnim.prepareScriptFactory( scriptManager.get('State_PlayLoadAnim') );

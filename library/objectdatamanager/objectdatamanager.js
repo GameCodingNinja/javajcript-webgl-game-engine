@@ -348,7 +348,7 @@ class ObjectDataManager extends ManagerBase
                     objData.createFromData( group );
             }
         }
-
+        
         callback();
     }
     

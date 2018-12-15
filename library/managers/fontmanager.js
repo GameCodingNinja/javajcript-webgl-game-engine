@@ -27,7 +27,16 @@ class FontManager
     //
     //  DESC: Load the fonts from xml node
     //
-    load( node, callback )
+    load( filePath, callback )
+    {
+        genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode, callback ) );
+    }
+    
+    //
+    //  DESC: Load the fonts from xml node
+    //
+    loadFromNode( node, callback )
     {
         if( node )
         {
@@ -64,6 +73,8 @@ class FontManager
                 this.downloadFontFiles( name, fontNode[i].getAttribute( 'file' ) );
             }
         }
+        else
+            callback();
     }
     
     //

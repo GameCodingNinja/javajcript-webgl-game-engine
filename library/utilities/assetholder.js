@@ -31,6 +31,8 @@ class AssetHolder
     //
     set( group, name, data = null )
     {
+        console.log(`AssetHolder Set: ${group}, ${name}`);
+        
         let groupMap = this.loadMapMap.get( group );
         if( groupMap === undefined )
         {
