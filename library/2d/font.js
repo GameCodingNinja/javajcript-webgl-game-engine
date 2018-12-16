@@ -95,7 +95,7 @@ export class Font
             // Get the character ID which is the ascii value of the character.
             let id = Number(charNode[i].getAttribute( 'id' ));
 
-            // Add the character to our list
+            // Add the character to the map
             this.charDataMap.set( id, charData );
         }
     }

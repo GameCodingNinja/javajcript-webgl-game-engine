@@ -116,9 +116,10 @@ export const EST_NULL     = 0,
      
 // ENodeType
 export const ENT_NULL              = 0,
-             ENT_SPRITE            = 1,
-             ENT_OBJECT_MULTI_LIST = 2,
-             ENT_SPRITE_MULTI_LIST = 3;
+             ENT_OBJECT            = 1,
+             ENT_SPRITE            = 2,
+             ENT_OBJECT_MULTI_LIST = 3,
+             ENT_SPRITE_MULTI_LIST = 4;
 
 // ESelection Message Arguments
 export const ESMA_PRESS_TYPE  = 0,
@@ -234,3 +235,4 @@ export const EM_NULL                = 0,
              EM_HORIZONTAL          = 1,
              EM_VERTICAL            = 2,
              EM_HORIZONTAL_VERTICAL = 3;
+     
