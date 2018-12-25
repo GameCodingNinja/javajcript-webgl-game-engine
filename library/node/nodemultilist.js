@@ -66,17 +66,7 @@ export class NodeMultiLst extends Node
     //
     transform()
     {
-        this.updateRecursive( this );
-        
-        this.resetIndexes();
-    }
-    
-    // 
-    //  DESC: Transform child nodes
-    //
-    transformChild( matrix, tranformWorldPos )
-    {
-        this.updateRecursive( this );
+        this.transformRecursive( this );
         
         this.resetIndexes();
     }
@@ -95,7 +85,7 @@ export class NodeMultiLst extends Node
                 // get the next node
                 nextNode = node.next();
 
-                if( nextNode != nullptr )
+                if( nextNode != null )
                 {
                     let nextObj = null;
                     let obj = null;
@@ -110,15 +100,50 @@ export class NodeMultiLst extends Node
                         obj = node.getSprite().object;
 
                     else if( node.getObject() !== null )
-                        obj = node.getObject;
+                        obj = node.getObject();
 
                     // Transform the child node
-                    nextObj.transformChild(
-                        obj.matrix,
-                        obj.wasWorldPosTranformed() );
+                    nextObj.transform( obj.matrix, obj.wasWorldPosTranformed() );
 
                     // Call a recursive function again
                     this.transformRecursive( nextNode );
+                }
+            }
+            while( nextNode !== null );
+        }
+    }
+    
+    //
+    //  DESC: Render the sprite
+    //
+    render( camera )
+    {
+        this.renderRecursive( this, camera );
+        
+        this.resetIndexes();
+    }
+    
+    //
+    //  DESC: Render the sprite
+    //
+    renderRecursive( node, camera )
+    {
+        if( node !== null )
+        {
+            let nextNode;
+
+            do
+            {
+                // get the next node
+                nextNode = node.next();
+
+                if( nextNode != null )
+                {
+                    if( nextNode.getSprite() !== null )
+                        nextNode.getSprite().render( camera );
+
+                    // Call a recursive function again
+                    this.renderRecursive( nextNode, camera );
                 }
             }
             while( nextNode !== null );

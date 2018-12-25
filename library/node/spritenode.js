@@ -6,16 +6,16 @@
 
 "use strict";
 
-import { Node } from './node';
+import { iNode } from './inode';
 import { Sprite } from '../sprite/sprite';
 import * as defs from '../common/defs';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 
-export class SpriteNode extends Node
+export class SpriteNode extends iNode
 {
     constructor( objectData, spriteId = defs.SPRITE_DEFAULT_ID )
     {
-        super( spriteId, 0 );
+        super();
         
         this.sprite = new Sprite( objectData, spriteId );
         
@@ -35,7 +35,7 @@ export class SpriteNode extends Node
     //
     //  DESC: Transform the sprite
     //
-    transform( object )
+    transform( object = null )
     {
         if( object )
             this.sprite.object.transform( object.matrix, object.wasWorldPosTranformed() );

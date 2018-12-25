@@ -6,12 +6,14 @@
 
 "use strict";
 
-import * as defs from '../common/defs';
+import { iNode } from './inode';
 
-export class Node
+export class Node extends iNode
 {
     constructor( id, parentId )
     {
+        super();
+        
         // Child node array
         this.nodeAry = [];
         
@@ -23,9 +25,6 @@ export class Node
 
         // parent node id
         this.parentId = parentId;
-        
-        // Node type
-        this.type = defs.ENT_NULL;
     }
     
     // 
@@ -78,7 +77,7 @@ export class Node
 
         if( searchNode != null )
         {
-            if( this.id == searchNode.parentId )
+            if( this.id == searchNode.getParentId() )
             {
                 result = this;
             }
@@ -103,6 +102,22 @@ export class Node
 
         return result;
     }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.id;
+    }
+    
+    // 
+    //  DESC: Get the parent id
+    //
+    getParentId()
+    {
+        return this.parentId;
+    }
 
     // 
     //  DESC: Reset the index
@@ -110,37 +125,5 @@ export class Node
     reset()
     {
         this.index = 0;
-    }
-    
-    // 
-    //  DESC: Reset the indexes
-    //
-    resetIndexes()
-    {
-        // Empty function by design
-    }
-    
-    // 
-    //  DESC: Get the child node
-    //
-    getChildNode( nodeName )
-    {
-        return null;
-    }
-    
-    // 
-    //  DESC: Get the sprite
-    //
-    getSprite()
-    {
-        return null;
-    }
-    
-    // 
-    //  DESC: Get the object
-    //
-    getObject()
-    {
-        return null;
     }
 }

@@ -6,16 +6,16 @@
 
 "use strict";
 
-import { Node } from './nodemultilist';
+import { NodeMultiLst } from './nodemultilist';
 import { Sprite } from '../sprite/sprite';
 import * as defs from '../common/defs';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 
 export class SpriteNodeMultiLst extends NodeMultiLst
 {
-    constructor( objectData, spriteId = defs.SPRITE_DEFAULT_ID )
+    constructor( objectData, spriteId = defs.SPRITE_DEFAULT_ID, nodeId = -1, parentId = -1 )
     {
-        super( spriteId, 0 );
+        super( nodeId, parentId );
         
         this.sprite = new Sprite( objectData, spriteId );
         
@@ -30,17 +30,20 @@ export class SpriteNodeMultiLst extends NodeMultiLst
     {
         this.sprite.update();
         this.sprite.physicsUpdate();
+        
+        // Call the parent but it has to be last
+        super.update();
     }
     
     //
     //  DESC: Transform the sprite
     //
-    transform( object )
+    transform()
     {
-        if( object )
-            this.sprite.object.transform( object.matrix, object.wasWorldPosTranformed() );
-        else
-            this.sprite.object.transform();
+        this.sprite.object.transform();
+        
+        // Call the parent but it has to be last
+        super.transform();
     }
     
     //
@@ -49,6 +52,9 @@ export class SpriteNodeMultiLst extends NodeMultiLst
     render( camera )
     {
         this.sprite.render( camera );
+        
+        // Call the parent but it has to be last
+        super.render( camera );
     }
     
     // 
