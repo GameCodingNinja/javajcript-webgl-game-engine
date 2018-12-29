@@ -8,10 +8,14 @@
 
 import { Object2D } from '../2d/object2d';
 import { NodeMultiLst } from './nodemultilist';
+import * as defs from '../common/defs';
 
 export class ObjectNodeMultiLst extends NodeMultiLst
 {
-    constructor( objectId = -1, nodeId = -1, parentId = -1 )
+    constructor(
+        objectId = defs.OBJECT_DEFAULT_ID,
+        nodeId = defs.NODE_DEFAULT_ID,
+        parentId = defs.PARENT_NODE_DEFAULT_ID )
     {
         super( nodeId, parentId );
         
@@ -23,9 +27,12 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     //
     //  DESC: Transform the object
     //
-    transform()
+    transform( object )
     {
-        this.object.transform();
+        if( object )
+            this.object.transform( object );
+        else
+            this.object.transform();
         
         // Call the parent but it has to be last
         super.transform();
@@ -37,5 +44,13 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     getObject()
     {
         return this.object;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.objectId;
     }
 }

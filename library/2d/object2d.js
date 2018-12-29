@@ -58,17 +58,16 @@ export class Object2D extends Object
     //        will need a transform even if it's just 0, 0, 0
     //        to force a transfor with it's parent
     //
-    transform( matrix = null, tranformWorldPos = null )
+    transform( object = null )
     {
         this.parameters.remove( defs.WAS_TRANSFORMED );
         
-        if( matrix )
+        if( object )
         {
-            if( this.parameters.isSet( defs.TRANSFORM ) || tranformWorldPos )
+            if( this.parameters.isSet( defs.TRANSFORM ) || object.wasWorldPosTranformed() )
             {
                 this.transformLocal( this.matrix );
-
-                this.matrix.mergeMatrix( matrix.matrix );
+                this.matrix.mergeMatrix( object.matrix.matrix );
             }
         }
         else

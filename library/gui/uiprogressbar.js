@@ -223,7 +223,7 @@ export class UIProgressBar extends UIControl
         super.transform( object );
 
         if( this.stencilMaskSprite )
-            this.stencilMaskSprite.object.transform( this.matrix, this.wasWorldPosTranformed() );
+            this.stencilMaskSprite.object.transform( this );
     }
     
     // 

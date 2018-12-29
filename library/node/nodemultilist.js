@@ -7,10 +7,11 @@
 "use strict";
 
 import { Node } from './node';
+import * as defs from '../common/defs';
 
 export class NodeMultiLst extends Node
 {
-    constructor( id, parentId )
+    constructor( id = defs.NODE_DEFAULT_ID, parentId = defs.PARENT_NODE_DEFAULT_ID )
     {
         super( id, parentId )
         
@@ -103,7 +104,7 @@ export class NodeMultiLst extends Node
                         obj = node.getObject();
 
                     // Transform the child node
-                    nextObj.transform( obj.matrix, obj.wasWorldPosTranformed() );
+                    nextObj.transform( obj );
 
                     // Call a recursive function again
                     this.transformRecursive( nextNode );

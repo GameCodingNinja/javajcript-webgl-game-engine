@@ -7,6 +7,7 @@
 "use strict";
 
 import { iNode } from './inode';
+import * as defs from '../common/defs';
 
 export class Node extends iNode
 {
@@ -101,14 +102,6 @@ export class Node extends iNode
         }
 
         return result;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.id;
     }
     
     // 

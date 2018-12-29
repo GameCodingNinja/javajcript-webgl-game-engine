@@ -38,7 +38,7 @@ export class SpriteNode extends iNode
     transform( object = null )
     {
         if( object )
-            this.sprite.object.transform( object.matrix, object.wasWorldPosTranformed() );
+            this.sprite.object.transform( object );
         else
             this.sprite.object.transform();
     }
@@ -57,5 +57,13 @@ export class SpriteNode extends iNode
     getSprite()
     {
         return this.sprite;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.sprite.id;
     }
 }

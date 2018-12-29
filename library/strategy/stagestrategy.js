@@ -94,10 +94,10 @@ export class StageStrategy extends iStrategy
     //
     //  DESC: Transform the sector
     //
-    transform( object )
+    transform()
     {
         for( let i = 0; i < this.sectorAry.length; ++i )
-            this.sectorAry[i].transform( object );
+            this.sectorAry[i].transform();
     }
 
     //

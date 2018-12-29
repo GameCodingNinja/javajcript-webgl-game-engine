@@ -13,7 +13,11 @@ import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 
 export class SpriteNodeMultiLst extends NodeMultiLst
 {
-    constructor( objectData, spriteId = defs.SPRITE_DEFAULT_ID, nodeId = -1, parentId = -1 )
+    constructor(
+        objectData,
+        spriteId = defs.SPRITE_DEFAULT_ID,
+        nodeId = defs.NODE_DEFAULT_ID,
+        parentId = defs.PARENT_NODE_DEFAULT_ID )
     {
         super( nodeId, parentId );
         
@@ -38,9 +42,12 @@ export class SpriteNodeMultiLst extends NodeMultiLst
     //
     //  DESC: Transform the sprite
     //
-    transform()
+    transform( object )
     {
-        this.sprite.object.transform();
+        if( object )
+            this.sprite.object.transform( object );
+        else
+            this.sprite.object.transform();
         
         // Call the parent but it has to be last
         super.transform();
@@ -63,5 +70,13 @@ export class SpriteNodeMultiLst extends NodeMultiLst
     getSprite()
     {
         return this.sprite;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.sprite.id;
     }
 }

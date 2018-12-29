@@ -166,15 +166,12 @@ export class Sector extends Object3D
     //
     //  DESC: Transform the sprite
     //
-    transform( object )
+    transform()
     {
-        if( object )
-            super.transform( object.matrix, object.wasWorldPosTranformed() );
-        else
-            super.transform();
+        super.transform();
         
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].object.transform( this.matrix, this.wasWorldPosTranformed() );
+            this.spriteAry[i].object.transform( this );
     }
 
     //

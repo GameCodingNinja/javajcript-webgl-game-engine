@@ -384,7 +384,7 @@ export class Menu extends Object2D
             super.transform();
             
             for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].object.transform( this.matrix, this.wasWorldPosTranformed() );
+                this.spriteAry[i].object.transform( this );
             
             for( let i = 0; i < this.staticControlAry.length; ++i )
                 this.staticControlAry[i].transform( this );

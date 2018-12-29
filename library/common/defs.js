@@ -11,7 +11,10 @@ export const DEG_TO_RAD = 0.0174532925199432957,
              EPSILON    = 8.854187817e-12,
              RGB_TO_DEC = 0.00390625;
      
-export const SPRITE_DEFAULT_ID = -1;
+export const SPRITE_DEFAULT_ID      = -1;
+export const OBJECT_DEFAULT_ID      = -1;
+export const NODE_DEFAULT_ID        = -1;
+export const PARENT_NODE_DEFAULT_ID = -1;
 
 export const RESET_VELOCITY = true;
 

@@ -342,7 +342,7 @@ export class UIScrollBox extends UISubControl
             this.scrollControlAry[i].transform( this );
 
         // Transform the mask
-        this.stencilMaskSprite.object.transform( this.matrix, this.wasWorldPosTranformed() );
+        this.stencilMaskSprite.object.transform( this );
     }
 
     // 
