@@ -7,5 +7,9 @@
     <groupList groupName="(sprite)">
         <file path="data/objects/2d/spritestrategy/actor/spriteList.lst"/>
     </groupList>
+    
+    <groupList groupName="(main)">
+        <file path="data/objects/2d/spritestrategy/mainNode.lst"/>
+    </groupList>
   
 </listTable>

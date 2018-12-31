@@ -16,36 +16,49 @@ export class SpriteData extends Object
     constructor( node, defGroup, defObjName, defAIName, defId = defs.SPRITE_DEFAULT_ID )
     {
         super();
-        
-        // Set the sprite type
-        this.parameters.add( defs.SPRITE2D );
-        
-        this.fontData = null;
+
+        // Sprite name
         this.name = null;
+        
+        // Group Name
         this.group = defGroup;
+        
+        // Object name
         this.objectName = defObjName;
+        
+        // AI name
         this.aiName = defAIName;
+        
+        // Sprite Id
         this.id = defId;
+        
+        // Font data
+        this.fontData = null;
+        
+        // Script function map
         this.scriptFunctionMap = new Map;
         
+        // Sprite type
+        this.spriteType = defs.EST_NULL;
+        
         // Get the name of this specific sprite instance
-        let attr = node.getAttribute( "name" );
+        let attr = node.getAttribute( 'name' );
         if( attr )
             this.name = attr;
         
         // Get the group this sprite belongs to
-        attr = node.getAttribute( "group" );
+        attr = node.getAttribute( 'group' );
         if( attr )
             this.group = attr;
         
         // Get the object data name
-        attr = node.getAttribute( "objectName" );
-        if( attr )
+        attr = node.getAttribute( 'objectName' );
+        if( attr)
             this.objectName = attr;
 
         // Get the sprite's AI name
-        attr = node.getAttribute( "aiName" );
-        if( attr )
+        attr = node.getAttribute( 'aiName' );
+        if( attr !== null )
             this.aiName = attr;
 
         // Get the sprite's unique id number
@@ -58,6 +71,19 @@ export class SpriteData extends Object
         if( attr )
             this.setVisible( attr === 'true' );
         
+        // Get the node type
+        if( node.nodeName == 'object2d' )
+            this.spriteType = defs.EST_OBJECT2D;
+
+        else if( node.nodeName == 'object3d' )
+            this.spriteType = defs.EST_OBJECT3D;
+
+        else if( node.nodeName == 'sprite2d' )
+            this.spriteType = defs.EST_SPRITE2D;
+
+        else if( node.nodeName == 'sprite3d' )
+            this.spriteType = defs.EST_SPRITE3D;
+
         // Need to check if the font node is present
         let fontNode = node.getElementsByTagName( 'font' );
         if( fontNode.length )

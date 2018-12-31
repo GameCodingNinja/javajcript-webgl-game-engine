@@ -7,7 +7,7 @@
 "use strict";
 
 import { iStrategy } from './istrategy';
-import { SpriteData } from '../sprite/spritedata';
+import { NodeDataList } from '../node/nodedatalist';
 import { Sprite } from '../sprite/sprite';
 import { signalManager } from '../managers/signalmanager';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
@@ -42,7 +42,7 @@ export class ActorStrategy extends iStrategy
     }
     
     //
-    //  DESC: Load the data from xml node
+    //  DESC: Load the node data from xml
     //
     loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
     {
@@ -52,33 +52,30 @@ export class ActorStrategy extends iStrategy
         let defaultId = -1;
         
         let attr = node.getAttribute( 'defaultGroup' );
-        if( attr )
+        if( attr !== null )
             defaultGroup = attr;
         
         attr = node.getAttribute( 'defaultObjectName' );
-        if( attr )
+        if( attr !== null )
             defaultObjName = attr;
         
         attr = node.getAttribute( 'defaultAIName' );
-        if( attr )
+        if( attr !== null )
             defaultAIName = attr;
         
         attr = node.getAttribute( 'defaultId' );
-        if( attr )
+        if( attr !== null )
             defaultId = Number(attr);
         
-        // Get all the sprites
-        let spriteNode = node.getElementsByTagName( 'sprite' );
-        
-        for( let i = 0; i < spriteNode.length; ++i )
+        for( let i = 0; i < node.children.length; ++i )
         {
             // There must be a name associated with this sprite data
-            let name = spriteNode[i].getAttribute( 'name' );
-            if( !name )
+            let nodeName = node.children[i].getAttribute( 'name' );
+            if( !nodeName )
                 throw new Error( `Sprite strategy missing sprite name!` );
             
             // Allocate the sprite data and add it to the array
-            this.dataMap.set( name, new SpriteData( spriteNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
+            this.dataMap.set( nodeName, new NodeDataList( node.children[i], defaultGroup, defaultObjName, defaultAIName ) );
         }
     }
     

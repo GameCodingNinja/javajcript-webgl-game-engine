@@ -1,4 +1,136 @@
-<spriteList defaultGroup="(run)" defaultAIName="aiBall">
+<node defaultGroup="(run)" defaultAIName="aiBall">
+    
+    <node name="multiListTestNode" type="objectNodeMultiList" defaultAIName="">
+
+        <object2d>
+            <position x="400" y="-200" z="0"/>
+            <!--<scale x=".5" y=".5" z="1"/>-->
+        </object2d>
+
+        <node type="spriteNodeMultiList">
+
+            <sprite2d objectName="logo">
+                <position x="0" y="0" z="0"/>
+            </sprite2d>
+
+            <node type="spriteNodeMultiList">
+
+                <sprite2d objectName="square_red">
+                    <position x="-150" y="150" z="0"/>password
+                    
+                </sprite2d>
+
+                <node type="spriteNodeMultiList">
+
+                    <sprite2d objectName="circle_red">
+                        <position x="0" y="80" z="0"/>
+                    </sprite2d>
+
+                    <node type="spriteNodeMultiList">
+
+                        <sprite2d objectName="triangle_red">
+                            <position x="0" y="70" z="0"/>
+                        </sprite2d>
+
+                    </node>
+
+                </node>
+
+            </node>
+
+            <node type="spriteNodeMultiList">
+
+                <sprite2d objectName="square_green">
+                    <position x="0" y="150" z="0"/>
+                </sprite2d>
+
+                <node type="spriteNodeMultiList">
+
+                    <sprite2d objectName="circle_green">
+                        <position x="0" y="80" z="0"/>
+                    </sprite2d>
+
+                    <node type="spriteNodeMultiList">
+
+                        <sprite2d objectName="triangle_green">
+                            <position x="0" y="70" z="0"/>
+                        </sprite2d>
+
+                    </node>
+
+                </node>
+
+            </node>
+
+            <node type="spriteNodeMultiList">
+
+                <sprite2d objectName="square_blue">
+                    <position x="150" y="150" z="0"/>
+                </sprite2d>
+
+                <node type="spriteNodeMultiList">
+
+                    <sprite2d objectName="circle_blue">
+                        <position x="0" y="80" z="0"/>
+                    </sprite2d>
+
+                    <node type="spriteNodeMultiList">
+
+                        <sprite2d objectName="triangle_blue">
+                            <position x="0" y="70" z="0"/>
+                        </sprite2d>
+
+                    </node>
+
+                </node>
+
+            </node>
+
+        </node>
+
+    </node>
+    
+    <node name="square_red" type="spriteNode">
+        
+        <sprite2d objectName="square_red">
+            <scale x=".9" y=".9" z="1"/>
+        </sprite2d>
+
+    </node>
+    
+    <node name="triangle_green" type="spriteNode">
+        
+        <sprite2d objectName="triangle_green"/>
+
+    </node>
+    
+    <node name="triangle_blue" type="spriteNode">
+        
+        <sprite2d objectName="triangle_blue"/>
+
+    </node>
+    
+    <node name="circle_green" type="spriteNode">
+        
+        <sprite2d objectName="circle_green"/>
+
+    </node>
+    
+    <node name="circle_blue" type="spriteNode">
+        
+        <sprite2d objectName="circle_blue"/>
+
+    </node>
+    
+    <node name="circle_red" type="spriteNode">
+        
+        <sprite2d objectName="circle_red"/>
+
+    </node>
+
+</node>
+
+<!--<spriteList defaultGroup="(run)" defaultAIName="aiBall">
     
     <sprite name="square_red" objectName="square_red">
         <scale x=".9" y=".9" z="1"/>
@@ -11,4 +143,4 @@
     <sprite name="circle_blue" objectName="circle_blue"/> 
     <sprite name="circle_red" objectName="circle_red"/>
  
-</spriteList>
+</spriteList>-->
