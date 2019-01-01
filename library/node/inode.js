@@ -87,4 +87,12 @@ export class iNode
     {
         return null;
     }
+    
+    // 
+    //  DESC: Clean up any sprites
+    //
+    cleanUp()
+    {
+        // Empty by design
+    }
 }

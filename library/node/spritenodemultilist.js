@@ -79,4 +79,12 @@ export class SpriteNodeMultiLst extends NodeMultiLst
     {
         return this.sprite.id;
     }
+    
+    // 
+    //  DESC: Clean up any sprites
+    //
+    cleanUp()
+    {
+        this.sprite.cleanUp();
+    }
 }

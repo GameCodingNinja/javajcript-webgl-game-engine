@@ -66,4 +66,12 @@ export class SpriteNode extends iNode
     {
         return this.sprite.id;
     }
+    
+    // 
+    //  DESC: Clean up any sprites
+    //
+    cleanUp()
+    {
+        this.sprite.cleanUp();
+    }
 }
