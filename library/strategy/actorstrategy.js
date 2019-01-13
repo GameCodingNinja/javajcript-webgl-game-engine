@@ -226,7 +226,7 @@ export class ActorStrategy extends iStrategy
     }
 
     //
-    //  DESC: Remove deleted nodes from the active list
+    //  DESC: Remove deleted nodes from the active list and map
     //
     removeFromActiveList()
     {
