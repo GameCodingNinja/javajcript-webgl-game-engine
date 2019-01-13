@@ -17,7 +17,7 @@ import * as defs from '../common/defs';
 // 
 //  DESC: Load files
 //
-export function Create( nodeData, nodeId )
+export function create( nodeData, nodeId )
 {
     let node = null;
     

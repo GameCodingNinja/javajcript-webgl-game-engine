@@ -22,6 +22,44 @@ export class NodeMultiLst extends Node
     }
     
     // 
+    //  DESC: Do some cleanup
+    //
+    cleanUp()
+    {
+        this.cleanUpRecursive( this );
+        
+        this.resetIndexes();
+    }
+    
+    // 
+    //  DESC: Recursive function to update nodes
+    //
+    cleanUpRecursive( node )
+    {
+        if( node !== null )
+        {
+            let nextNode;
+
+            do
+            {
+                // get the next node
+                nextNode = node.next();
+
+                if( nextNode !== null )
+                {
+                    // Update the children
+                    if( nextNode.getSprite() !== null )
+                        nextNode.getSprite().cleanUp();
+
+                    // Call a recursive function again
+                    this.updateRecursive( nextNode );
+                }
+            }
+            while( nextNode !== null );
+        }
+    }
+    
+    // 
     //  DESC: Update the nodes
     //
     update()

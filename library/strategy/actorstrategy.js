@@ -77,7 +77,7 @@ export class ActorStrategy extends iStrategy
             // There must be a name associated with this sprite data
             let nodeName = node.children[i].getAttribute( 'name' );
             if( !nodeName )
-                throw new Error( `Sprite strategy missing sprite name!` );
+                throw new Error( `Actor strategy missing node name!` );
 
             // Allocate the sprite data and add it to the array
             this.dataMap.set( nodeName, new NodeDataList( node.children[i], defaultGroup, defaultObjName, defaultAIName ) );
@@ -183,11 +183,8 @@ export class ActorStrategy extends iStrategy
     //
     update()
     {
-        for( let [ key, sprite ] of this.nodeMap.entries() )
-        {
-            sprite.update();
-            sprite.physicsUpdate();
-        }
+        for( let i = 0; i < this.nodeAry.length; i++ )
+            this.nodeAry[i].update();
 
         // Add created nodes to the active list
         this.addToActiveList();
@@ -201,8 +198,8 @@ export class ActorStrategy extends iStrategy
     //
     transform()
     {
-        for( let [ key, sprite ] of this.nodeMap.entries() )
-            sprite.object.transform();
+        for( let i = 0; i < this.nodeAry.length; i++ )
+            this.nodeAry[i].transform();
     }
 
     //
@@ -210,8 +207,8 @@ export class ActorStrategy extends iStrategy
     //
     render( camera )
     {
-        for( let [ key, sprite ] of this.nodeMap.entries() )
-            sprite.render( camera );
+        for( let i = 0; i < this.nodeAry.length; i++ )
+            this.nodeAry[i].render( camera );
     }
 
     //
@@ -248,6 +245,16 @@ export class ActorStrategy extends iStrategy
                 }
                 else
                     throw new Error( `Node id can't be found (${id})!` );
+                
+                // If this same node is in the map, delete it here too.
+                for( let [ key, node ] of this.nodeMap.entries() )
+                {
+                    if( node.getId() === id )
+                    {
+                        this.nodeMap.delete(key);
+                        break;
+                    }
+                }
             }
 
             this.deleteAry = [];
