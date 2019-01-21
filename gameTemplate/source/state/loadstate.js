@@ -15,7 +15,7 @@ import { loadManager } from '../../../library/managers/loadmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { settings } from '../../../library/utilities/settings';
 import { Sprite } from '../../../library/sprite/sprite';
-import { Camera } from '../../../library/utilities/camera';
+import { Camera } from '../../../library/common/camera';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { gl, device } from '../../../library/system/device';

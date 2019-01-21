@@ -43,7 +43,10 @@ export class RunState extends CommonState
         // Clear the event queue
         eventManager.clear();
         
+        // Prepare the strategies to run
         strategyManager.init();
+        strategyManager.activateStrategy('(stage1)');
+        strategyManager.activateStrategy('(sprite)');
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -151,13 +154,13 @@ export function load()
     loadManager.add(
         ( callback ) => physicsWorldManager.loadWorldGroup2D( '(game)', callback ));
         
-    // Create the basic stage strategy
+    // Create the stage strategy
     loadManager.add(
-        ( callback ) => strategyManager.load( '(stage1)', new StageStrategy, callback ) );
+        ( callback ) => strategyManager.addStrategy( '(stage1)', new StageStrategy, callback ) );
 
-    // Create the basic sprite strategy
+    // Create the actor strategy
     loadManager.add(
-        ( callback ) => strategyManager.load( '(sprite)', new ActorStrategy, callback ) );
+        ( callback ) => strategyManager.addStrategy( '(sprite)', new ActorStrategy, callback ) );
 
     // Create the ball sprites
     loadManager.add(

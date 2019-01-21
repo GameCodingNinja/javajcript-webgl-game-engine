@@ -9,7 +9,7 @@
 import { Matrix } from '../utilities/matrix';
 import { Object3D } from '../3d/object3d';
 import { settings } from '../utilities/settings';
-import * as defs from '../common/defs';
+import * as defs from './defs';
 
 export class Camera extends Object3D
 {

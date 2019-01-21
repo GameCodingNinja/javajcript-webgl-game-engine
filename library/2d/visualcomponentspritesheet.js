@@ -16,7 +16,7 @@ import { Matrix } from '../utilities/matrix';
 import { Color } from '../common/color';
 import { Size } from '../common/size';
 import { Vertex2d } from '../common/vertex2d';
-import { Camera } from '../utilities/camera';
+import { Camera } from '../common/camera';
 import { gl } from '../system/device';
 import * as defs from '../common/defs';
 import * as genFunc from '../utilities/genfunc';

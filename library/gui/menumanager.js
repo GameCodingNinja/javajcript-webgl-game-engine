@@ -11,7 +11,7 @@ import { actionManager } from '../managers/actionmanager';
 import { eventManager } from '../managers/eventmanager';
 import { signalManager } from '../managers/signalmanager';
 import { assetHolder } from '../utilities/assetholder';
-import { Camera } from '../utilities/camera';
+import { Camera } from '../common/camera';
 import { Menu } from '../gui/menu';
 import { MenuTree } from '../gui/menutree';
 import * as genFunc from '../utilities/genfunc';

@@ -8,7 +8,7 @@
 
 import { ManagerBase } from '../managers/managerbase';
 import { assetHolder } from '../utilities/assetholder';
-import { Camera } from '../utilities/camera';
+import { Camera } from '../common/camera';
 
 class StrategyManager extends ManagerBase
 {
@@ -34,16 +34,16 @@ class StrategyManager extends ManagerBase
     }
     
     //
-    //  DESC: Load strategy data from an xml node
+    //  DESC: Add strategy which will load it's data from XML node
     //
-    load( strategyId, spriteStrategy, finishCallback )
+    addStrategy( strategyId, strategy, finishCallback )
     {
         // Check for duplicate Id's
         if( this.strategyMap.has( strategyId ) )
             throw new Error( `Duplicate strategy id (${strategyId})!` );
         
         // Add the strategy to the map
-        this.strategyMap.set( strategyId, spriteStrategy );
+        this.strategyMap.set( strategyId, strategy );
         
         // Load all the xml's
         super.load( strategyId, finishCallback );
@@ -57,6 +57,44 @@ class StrategyManager extends ManagerBase
         let strategy = this.strategyMap.get( strategyId );
         
         strategy.loadFromNode( strategyId, node, filePath, this.downloadFile.bind(this), finishCallback );
+    }
+    
+    //
+    //  DESC: activate strategy
+    //
+    activateStrategy( strategyId )
+    {
+        let strategy = this.strategyMap.get( strategyId );
+        if( strategy )
+        {
+            let index = this.strategyAry.findIndex( (obj) => obj === strategy );
+            if( index !== -1 )
+                console.log( `Strategy is already active (${strategyId})!` );
+            else
+                this.strategyAry.push( strategy );
+        }
+        else
+            throw new Error( `Strategy id can't be found (%s) (${strategyId})!` );
+        
+        return strategy;
+    }
+    
+    //
+    //  DESC: deactivate strategy
+    //
+    deactivateStrategy( strategyId )
+    {
+        let strategy = this.strategyMap.get( strategyId );
+        if( strategy )
+        {
+            let index = this.strategyAry.findIndex( (obj) => obj === strategy );
+            if( index !== -1 )
+                console.log( `Strategy is not active (${strategyId})!` );
+            else
+                this.strategyAry.splice( index, 1 );
+        }
+        else
+            console.log( `Strategy id can't be found (%s) (${strategyId})!` );
     }
     
     //
@@ -80,6 +118,7 @@ class StrategyManager extends ManagerBase
         this.cleanUp();
         
         this.strategyMap.clear();
+        this.strategyAry = [];
     }
 
     //
@@ -87,8 +126,8 @@ class StrategyManager extends ManagerBase
     //
     cleanUp()
     {
-        for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.cleanUp();
+        for( let i = 0; i < this.strategyAry.length; i++ )
+            this.strategyAry[i].cleanUp();
     }
 
     //
@@ -96,8 +135,8 @@ class StrategyManager extends ManagerBase
     //
     update()
     {
-        for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.update();
+        for( let i = 0; i < this.strategyAry.length; i++ )
+            this.strategyAry[i].update();
     }
 
     //
@@ -105,8 +144,8 @@ class StrategyManager extends ManagerBase
     //
     transform()
     {
-        for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.transform();
+        for( let i = 0; i < this.strategyAry.length; i++ )
+            this.strategyAry[i].transform();
     }
 
     //
@@ -114,8 +153,8 @@ class StrategyManager extends ManagerBase
     //
     render()
     {
-        for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.render( this.defaultCamera );
+        for( let i = 0; i < this.strategyAry.length; i++ )
+            this.strategyAry[i].render( this.defaultCamera );
     }
 }
 

@@ -6,6 +6,9 @@
     
     <groupList groupName="(sprite)">
         <file path="data/objects/2d/spritestrategy/actor/spriteList.lst"/>
+        <camera id="cube" projectType="perspective" minZDist="5" maxZDist="1000" view_angle="45.0">
+            <position x="0" y="0" z="-20"/>
+        </camera>
     </groupList>
     
     <groupList groupName="(main)">

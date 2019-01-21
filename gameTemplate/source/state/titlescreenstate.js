@@ -9,7 +9,7 @@
 import { eventManager } from '../../../library/managers/eventmanager';
 import { CommonState } from './commonstate';
 import { Sprite } from '../../../library/sprite/sprite';
-import { Camera } from '../../../library/utilities/camera';
+import { Camera } from '../../../library/common/camera';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { menuManager } from '../../../library/gui/menumanager';

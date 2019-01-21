@@ -39,11 +39,14 @@ export class ActorStrategy extends iStrategy
         // Active Array of nodes
         this.nodeAry = [];
 
+        // Array of nodess to be added to the active vector
+        this.activateAry = [];
+        
+        // Array of nodess to be removed to the active vector
+        this.deactivateAry = [];
+        
         // Set of indexes to delete
         this.deleteAry = [];
-
-        // Array of node pointers to be added to the active vector
-        this.createAry = [];
     }
 
     //
@@ -130,7 +133,7 @@ export class ActorStrategy extends iStrategy
         }
 
         // Add the node to the array for adding to the active list
-        this.createAry.push( headNode );
+        this.activateAry.push( headNode );
 
         // If there is an instance name with this node, add it to the map
         if( instanceName )
@@ -146,11 +149,49 @@ export class ActorStrategy extends iStrategy
     }
     
     //
+    //  DESC: activate node
+    //
+    activateNode( instanceName )
+    {
+        let node = this.nodeMap.get( instanceName );
+        if( node )
+        {
+            let index = this.nodeAry.findIndex( (obj) => obj === node );
+            if( index !== -1 )
+                console.log( `Node is already active (${instanceName})!` );
+            else
+                this.activateAry.push( node );
+        }
+        else
+            throw new Error( `Node can't be found (%s) (${instanceName})!` );
+        
+        return node;
+    }
+    
+    //
+    //  DESC: deactivate node
+    //
+    deactivateNode( instanceName )
+    {
+        let node = this.nodeMap.get( instanceName );
+        if( node )
+        {
+            let index = this.nodeAry.findIndex( (obj) => obj === instanceName );
+            if( index !== -1 )
+                console.log( `Node is not active (${instanceName})!` );
+            else
+                this.deactivateAry.push( this.nodeAry[index] );
+        }
+        else
+            console.log( `Node can't be found (%s) (${instanceName})!` );
+    }
+    
+    //
     //  DESC: destroy the node
     //
-    destroy( nodeId )
+    destroy( node )
     {
-        this.deleteAry.push( nodeId );
+        this.deleteAry.push( node );
     }
 
     //
@@ -168,8 +209,8 @@ export class ActorStrategy extends iStrategy
         }
         else
         {
-            let index = this.nodeAry.find( (node) => node.getId() === id );
-            if( index !== undefined )
+            let index = this.nodeAry.findIndex( (node) => node.getId() === id );
+            if( index !== -1 )
                 node = this.nodeAry[index];
             else
                 throw new Error( `Node id can't be found (${id})!` );
@@ -189,8 +230,11 @@ export class ActorStrategy extends iStrategy
         // Add created nodes to the active list
         this.addToActiveList();
 
-        // Remove deleted nodes from the active list
+        // Remove nodes from the active list
         this.removeFromActiveList();
+        
+        // Remove deleted nodes from the active list and map
+        this.deleteFromActiveList();
     }
 
     //
@@ -216,12 +260,12 @@ export class ActorStrategy extends iStrategy
     //
     addToActiveList()
     {
-        if( this.createAry.length > 0 )
+        if( this.activateAry.length > 0 )
         {
-            for( let i = 0; i < this.createAry.length; i++ )
-                this.nodeAry.push( this.createAry[i] );
+            for( let i = 0; i < this.activateAry.length; i++ )
+                this.nodeAry.push( this.activateAry[i] );
 
-            this.createAry = [];
+            this.activateAry = [];
         }
     }
 
@@ -230,14 +274,37 @@ export class ActorStrategy extends iStrategy
     //
     removeFromActiveList()
     {
+        if( this.deactivateAry.length > 0 )
+        {
+            for( let i = 0; i < this.deactivateAry.length; i++ )
+            {
+                let node = this.deactivateAry[i];
+
+                let index = this.nodeAry.findIndex( (obj) => obj === node );
+                if( index !== -1 )
+                    this.nodeAry.splice( index, 1 );
+                else
+                    throw new Error( `Node id can't be found (${id})!` );
+            }
+
+            this.deleteAry = [];
+        }
+    }
+    
+    
+    //
+    //  DESC: Remove deleted nodes from the active list and map
+    //
+    deleteFromActiveList()
+    {
         if( this.deleteAry.length > 0 )
         {
             for( let i = 0; i < this.deleteAry.length; i++ )
             {
                 let id = this.deleteAry[i];
 
-                let index = this.nodeAry.find( (node) => node.getId() === id );
-                if( index !== undefined )
+                let index = this.nodeAry.findIndex( (obj) => obj.getId() === id );
+                if( index !== -1 )
                 {
                     // Clean up if font or physics sprite
                     this.nodeAry[index].cleanUp();

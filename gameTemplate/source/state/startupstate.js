@@ -25,7 +25,7 @@ import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { UIProgressBar } from '../../../library/gui/uiprogressbar';
-import { Camera } from '../../../library/utilities/camera';
+import { Camera } from '../../../library/common/camera';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
