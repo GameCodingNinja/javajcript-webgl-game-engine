@@ -103,9 +103,17 @@ export class StageStrategy extends iStrategy
     //
     //  DESC: Render the sector
     //
-    render( matrix )
+    render( camera )
     {
-        for( let i = 0; i < this.sectorAry.length; ++i ) 
-            this.sectorAry[i].render( matrix );
+        if( this.camera )
+        {
+            for( let i = 0; i < this.sectorAry.length; ++i ) 
+                this.sectorAry[i].render( this.camera );
+        }
+        else
+        {
+            for( let i = 0; i < this.sectorAry.length; ++i ) 
+                this.sectorAry[i].render( camera );
+        }
     }
 }

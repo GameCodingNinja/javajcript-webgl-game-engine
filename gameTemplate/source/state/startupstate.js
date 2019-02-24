@@ -35,7 +35,7 @@ import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 84,
+const STARTUP_ASSET_COUNT = 85,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends state.GameState
@@ -208,6 +208,9 @@ export class StartUpState extends state.GameState
 
         // Preload the menu group
         loadManager.add( ( callback ) => menuManager.preloadGroup( ['(menu)'], callback ));
+        
+        // Load the cameras
+        loadManager.add( ( callback ) => strategyManager.loadCameraList( 'data/objects/2d/spritestrategy/camera.lst', callback ));
 
         loadManager.add(
             ( callback ) =>

@@ -57,9 +57,6 @@ export class ManagerBase
 
                     this.listTableMap.set( groupName, pathAry );
                 }
-                
-                // Load custom data added to the list table group
-                this.loadCustom( groupLst[i], groupName );
             }
         }
     }
@@ -155,13 +152,5 @@ export class ManagerBase
             if( this.loadCounter === 0 )
                 finishCallback();
         }
-    }
-    
-    //
-    //  DESC: Load custom data added to the list table group
-    //
-    loadCustom( xmlNode, group )
-    {
-        // Empty for purposes of overriding
     }
 }

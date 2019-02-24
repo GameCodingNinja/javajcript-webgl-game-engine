@@ -9,6 +9,7 @@
 import { ManagerBase } from '../managers/managerbase';
 import { assetHolder } from '../utilities/assetholder';
 import { Camera } from '../common/camera';
+import * as genFunc from '../utilities/genfunc';
 
 class StrategyManager extends ManagerBase
 {
@@ -18,6 +19,9 @@ class StrategyManager extends ManagerBase
         
         // Map of unique strategy references
         this.strategyMap = new Map;
+        
+        // Camera map
+        this.cameraMap = new Map;
         
         // An array of strategy references
         this.strategyAry = [];
@@ -31,6 +35,68 @@ class StrategyManager extends ManagerBase
     {
         // Default camera
         this.defaultCamera = new Camera();
+    }
+    
+    // 
+    //  DESC: Load the camera list
+    //
+    loadCameraList( filePath, callback )
+    {
+        genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) =>
+            {
+                this.loadCameraListFromNode( xmlNode );
+                
+                callback();
+            });
+    }
+    
+    // 
+    //  DESC: Load the data list tables from node
+    //
+    loadCameraListFromNode( xmlNode )
+    {
+        if( xmlNode )
+        {
+            let cameraLst = xmlNode.getElementsByTagName('camera');
+            
+            for( let i = 0; i < cameraLst.length; ++i )
+            {
+                let id = cameraLst[i].getAttribute('id');
+                
+                if( id == null )
+                    throw new Error( `Camera does not have a id!` );
+                
+                // Check for duplicate Id's
+                if( this.cameraMap.has( id ) )
+                    throw new Error( `Duplicate camera id (${id})!` );
+                
+                // Create camera and init
+                let camera = new Camera();
+                camera.initFromXml( cameraLst[i] );
+                
+                this.cameraMap.set( id, camera );
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Set/Get the camera
+    //
+    setCamera( strategyId, cameraId )
+    {
+        if( this.cameraMap.has( cameraId ) )
+            this.get( strategyId ).setCamera( this.cameraMap.get( cameraId ) );
+        else
+            throw new Error( `Camera id is not defined (${cameraId})!` );
+    }
+    
+    getCamera( cameraId )
+    {
+        if( !this.cameraMap.has( cameraId ) )
+            throw new Error( `Camera id is not defined (${cameraId})!` );
+        
+        return this.cameraMap.get( cameraId );
     }
     
     //
@@ -144,6 +210,9 @@ class StrategyManager extends ManagerBase
     //
     transform()
     {
+        for( let [ key, camera ] of this.cameraMap.entries() )
+            camera.transform();
+            
         for( let i = 0; i < this.strategyAry.length; i++ )
             this.strategyAry[i].transform();
     }

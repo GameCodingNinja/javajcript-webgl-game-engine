@@ -1,0 +1,7 @@
+<cameraLst>
+
+    <camera id="testCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0">
+        <position x="400" y="400" z="-20"/>
+    </camera>
+  
+</cameraLst>

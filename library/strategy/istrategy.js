@@ -10,6 +10,21 @@ export class iStrategy
 {
     constructor()
     {
+        // Camera
+        this.camera = null;
+    }
+    
+    // 
+    //  DESC: Set/Get the camera
+    //
+    setCamera( camera )
+    {
+        this.camera = camera;
+    }
+    
+    getCamera()
+    {
+        return this.camera;
     }
     
     //

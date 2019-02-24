@@ -27,9 +27,6 @@ export class ActorStrategy extends iStrategy
         // Id increment member
         this.idInc = 0;
 
-        // Camera pointer
-        this.camera = null;
-
         // Map of the node data
         this.dataMap = new Map;
 
@@ -251,8 +248,16 @@ export class ActorStrategy extends iStrategy
     //
     render( camera )
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].render( camera );
+        if( this.camera )
+        {
+            for( let i = 0; i < this.nodeAry.length; i++ )
+                this.nodeAry[i].render( this.camera );
+        }
+        else
+        {
+            for( let i = 0; i < this.nodeAry.length; i++ )
+                this.nodeAry[i].render( camera );
+        }
     }
 
     //

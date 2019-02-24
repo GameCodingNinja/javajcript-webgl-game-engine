@@ -13,30 +13,50 @@ import * as defs from './defs';
 
 export class Camera extends Object3D
 {
-    constructor( projType, minZDist, maxZDist, angle )
+    constructor()
     {
         super();
         
         this.projectionMatrix = new Matrix;
         this.finalMatrix = new Matrix;
         
-        if( projType !== undefined )
-        {
-            this.projType = projType;
-            this.minZDist = minZDist;
-            this.maxZDist = maxZDist;
-            this.angle = angle;
-        }
-        else
-        {
-            this.projType = settings.projectionType;
-            this.minZDist = settings.minZdist;
-            this.maxZDist = settings.maxZdist;
-            this.angle = settings.viewAngle;
-        }
+        this.projType = settings.projectionType;
+        this.minZDist = settings.minZdist;
+        this.maxZDist = settings.maxZdist;
+        this.angle = settings.viewAngle;
 
         // Create the projection matrix
         this.createProjectionMatrix();
+    }
+    
+    //
+    //  DESC: Init the camera from XML
+    //
+    initFromXml( xmlNode )
+    {
+        let attr = xmlNode.getAttribute('projectType');
+        if( attr )
+        {
+            if( attr === 'orthographic' )
+                this.projectionType = defs.EPT_ORTHOGRAPHIC;
+            else
+                this.projectionType = defs.EPT_PERSPECTIVE;
+        }
+        
+        attr = xmlNode.getAttribute('minZDist');
+        if( attr )
+            this.minZdist = Number(attr);
+
+        attr = xmlNode.getAttribute('maxZDist');
+        if( attr )
+            this.maxZdist = Number(attr);
+
+        attr = xmlNode.getAttribute('view_angle');
+        if( attr )
+            this.viewAngle = Number(attr) * defs.DEG_TO_RAD;
+        
+        // Load the transforms
+        this.loadTransFromNode( xmlNode );
     }
     
     //
