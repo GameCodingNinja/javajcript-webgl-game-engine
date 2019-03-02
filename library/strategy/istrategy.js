@@ -6,25 +6,22 @@
 
 "use strict";
 
+import { cameraManager } from '../managers/cameramanager';
+
 export class iStrategy
 {
     constructor()
     {
         // Camera
-        this.camera = null;
+        this.camera = cameraManager.getDefault();
     }
     
     // 
-    //  DESC: Set/Get the camera
+    //  DESC: Set the camera
     //
-    setCamera( camera )
+    setCamera( cameraId )
     {
-        this.camera = camera;
-    }
-    
-    getCamera()
-    {
-        return this.camera;
+        this.camera = cameraManager.get( cameraId );
     }
     
     //

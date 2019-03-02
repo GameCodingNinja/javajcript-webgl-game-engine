@@ -44,7 +44,6 @@ export class RunState extends CommonState
         eventManager.clear();
         
         // Prepare the strategies to run
-        strategyManager.init();
         strategyManager.activateStrategy('(stage1)');
         strategyManager.activateStrategy('(sprite)');
         

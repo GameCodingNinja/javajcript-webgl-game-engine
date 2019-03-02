@@ -22,11 +22,8 @@ class LoadManager
     {
         if( this.objects.length > 0 )
         {
-            requestIdleCallback( () =>
-            {
-                let obj = this.objects.shift();
-                obj( this.load.bind(this) );
-            });
+            let obj = this.objects.shift();
+            obj( this.load.bind(this) );
         }
     }
 }

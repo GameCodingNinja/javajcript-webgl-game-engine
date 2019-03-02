@@ -1,11 +1,11 @@
 <listTable>
 
     <groupList groupName="(stage1)">
-        <file path="data/objects/2d/spritestrategy/stage1/stage.cfg"/>
+        <file path="data/objects/spritestrategy/stage1/stage.cfg"/>
     </groupList>
     
     <groupList groupName="(sprite)">
-        <file path="data/objects/2d/spritestrategy/actor/spriteList.lst"/>
+        <file path="data/objects/spritestrategy/actor/spriteList.lst"/>
         <camera id="cube" projectType="perspective" minZDist="5" maxZDist="1000" view_angle="45.0">
             <position x="0" y="0" z="-20"/>
         </camera>
@@ -15,7 +15,7 @@
     </groupList>
     
     <groupList groupName="(main)">
-        <file path="data/objects/2d/spritestrategy/mainNode.lst"/>
+        <file path="data/objects/spritestrategy/mainNode.lst"/>
     </groupList>
   
 </listTable>

@@ -246,18 +246,10 @@ export class ActorStrategy extends iStrategy
     //
     //  DESC: Render the sprites
     //
-    render( camera )
+    render()
     {
-        if( this.camera )
-        {
-            for( let i = 0; i < this.nodeAry.length; i++ )
-                this.nodeAry[i].render( this.camera );
-        }
-        else
-        {
-            for( let i = 0; i < this.nodeAry.length; i++ )
-                this.nodeAry[i].render( camera );
-        }
+        for( let i = 0; i < this.nodeAry.length; i++ )
+            this.nodeAry[i].render( this.camera );
     }
 
     //

@@ -16,7 +16,7 @@
             <node type="spriteNodeMultiList">
 
                 <sprite2d objectName="square_red">
-                    <position x="-150" y="150" z="0"/>password
+                    <position x="-150" y="150" z="0"/>
                     
                 </sprite2d>
 

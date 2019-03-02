@@ -16,7 +16,7 @@ export class StageStrategy extends iStrategy
     {
         super();
         
-        // Deque of the sector 2d sprites
+        // Sector array
         this.sectorAry = [];
     }
     
@@ -103,17 +103,9 @@ export class StageStrategy extends iStrategy
     //
     //  DESC: Render the sector
     //
-    render( camera )
+    render()
     {
-        if( this.camera )
-        {
-            for( let i = 0; i < this.sectorAry.length; ++i ) 
-                this.sectorAry[i].render( this.camera );
-        }
-        else
-        {
-            for( let i = 0; i < this.sectorAry.length; ++i ) 
-                this.sectorAry[i].render( camera );
-        }
+        for( let i = 0; i < this.sectorAry.length; ++i ) 
+            this.sectorAry[i].render( this.camera );
     }
 }

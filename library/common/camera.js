@@ -27,6 +27,12 @@ export class Camera extends Object3D
 
         // Create the projection matrix
         this.createProjectionMatrix();
+        
+        // Do the initial transform
+        super.transform();
+        
+        // Calculate the final matrix
+        this.calcFinalMatrix();
     }
     
     //
@@ -38,25 +44,34 @@ export class Camera extends Object3D
         if( attr )
         {
             if( attr === 'orthographic' )
-                this.projectionType = defs.EPT_ORTHOGRAPHIC;
+                this.projType = defs.EPT_ORTHOGRAPHIC;
             else
-                this.projectionType = defs.EPT_PERSPECTIVE;
+                this.projType = defs.EPT_PERSPECTIVE;
         }
         
         attr = xmlNode.getAttribute('minZDist');
         if( attr )
-            this.minZdist = Number(attr);
+            this.minZDist = Number(attr);
 
         attr = xmlNode.getAttribute('maxZDist');
         if( attr )
-            this.maxZdist = Number(attr);
+            this.maxZDist = Number(attr);
 
         attr = xmlNode.getAttribute('view_angle');
         if( attr )
-            this.viewAngle = Number(attr) * defs.DEG_TO_RAD;
+            this.angle = Number(attr) * defs.DEG_TO_RAD;
         
         // Load the transforms
         this.loadTransFromNode( xmlNode );
+        
+        // Create the projection matrix
+        this.createProjectionMatrix();
+        
+        // Do the initial transform
+        super.transform();
+        
+        // Calculate the final matrix
+        this.calcFinalMatrix();
     }
     
     //
@@ -71,6 +86,12 @@ export class Camera extends Object3D
         
         // Create the projection matrix
         this.createProjectionMatrix();
+        
+        // Do the initial transform
+        super.transform();
+        
+        // Calculate the final matrix
+        this.calcFinalMatrix();
     }
     
     //
@@ -94,8 +115,6 @@ export class Camera extends Object3D
                 this.minZDist,
                 this.maxZDist );
         }
-        
-        this.calcFinalMatrix();
     }
     
     //

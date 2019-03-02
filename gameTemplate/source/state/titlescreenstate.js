@@ -19,6 +19,7 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
+import { cameraManager } from '../../../library/managers/cameramanager';
 import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
 
@@ -31,12 +32,9 @@ export class TitleScreenState extends CommonState
         this.background = new Sprite( objectDataManager.getData( '(title_screen)', 'background' ) );
         this.background.object.transform();
         
-        this.camera = new Camera();
+        this.camera = cameraManager.getDefault();
         
-        this.cameraCube = new Camera( defs.EPT_PERSPECTIVE, 5, 1000, 45 );
-        this.cameraCube.setPosXYZ( 0, 0, 20 );
-        this.cameraCube.setRotXYZ( 10, 0, 0 );
-        this.cameraCube.transform();
+        this.cameraCube = cameraManager.get( 'cubeCamera' );
         
         this.cube = new Sprite( objectDataManager.getData( '(cube)', 'cube' ) );
         this.cube.object.setScaleXYZ( 3, 3, 3 );

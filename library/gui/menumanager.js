@@ -11,9 +11,9 @@ import { actionManager } from '../managers/actionmanager';
 import { eventManager } from '../managers/eventmanager';
 import { signalManager } from '../managers/signalmanager';
 import { assetHolder } from '../utilities/assetholder';
-import { Camera } from '../common/camera';
 import { Menu } from '../gui/menu';
 import { MenuTree } from '../gui/menutree';
+import { cameraManager } from '../managers/cameramanager';
 import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
 
@@ -62,12 +62,20 @@ class MenuManager extends ManagerBase
     }
     
     //
-    //  DESC: Create the default camera based on what is defined in the settings.cfg config
+    //  DESC: Set the default camera
     //
-    createDefaultCamera()
+    setDefaultCamera()
     {
         // Default camera
-        this.camera = new Camera();
+        this.camera = cameraManager.getDefault();
+    }
+    
+    // 
+    //  DESC: Set the camera
+    //
+    setCamera( cameraId )
+    {
+        this.camera = cameraManager.get( cameraId );
     }
     
     // 

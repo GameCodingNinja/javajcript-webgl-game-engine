@@ -16,6 +16,7 @@ import { objectDataManager } from '../../../library/objectdatamanager/objectdata
 import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { loadManager } from '../../../library/managers/loadmanager';
+import { cameraManager } from '../../../library/managers/cameramanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
@@ -25,7 +26,6 @@ import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { UIProgressBar } from '../../../library/gui/uiprogressbar';
-import { Camera } from '../../../library/common/camera';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
@@ -35,7 +35,7 @@ import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 85,
+const STARTUP_ASSET_COUNT = 84,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends state.GameState
@@ -54,9 +54,6 @@ export class StartUpState extends state.GameState
 
         // Init the progress bar counter
         this.progressCounter = 0;
-
-        // Create the camera
-        this.camera = new Camera();
 
         // Preload assets for the startup screen
         this.preload();
@@ -85,7 +82,10 @@ export class StartUpState extends state.GameState
         loadManager.add( ( callback ) => objectDataManager.loadMeshGroup2D( groupAry, callback ) );
 
         // Create OpenGL objects from the loaded data
-        loadManager.add( ( callback ) => objectDataManager.createFromData( groupAry, this.preloadComplete.bind(this) ));
+        loadManager.add( ( callback ) => objectDataManager.createFromData( groupAry, callback ));
+        
+        // Load the camera manager
+        loadManager.add( ( callback ) => cameraManager.load( 'data/objects/camera.lst', this.preloadComplete.bind(this) ));
 
         // Start the load
         loadManager.load();
@@ -96,6 +96,9 @@ export class StartUpState extends state.GameState
     //
     preloadComplete()
     {
+        // Set the camera
+        this.camera = cameraManager.getDefault();
+        
         // Create the logo
         this.spriteLogo = new Sprite( objectDataManager.getData( '(startup)', 'logo' ) );
         this.spriteLogo.object.setScaleXYZ( 1.5, 1.5, 1 );
@@ -176,7 +179,7 @@ export class StartUpState extends state.GameState
         let groupAry = ['(menu)'];
 
         // Load the list tables
-        loadManager.add( ( callback ) => strategyManager.loadListTable( 'data/objects/2d/spritestrategy/spriteStrageyListTable.lst', callback ));
+        loadManager.add( ( callback ) => strategyManager.loadListTable( 'data/objects/spritestrategy/spriteStrageyListTable.lst', callback ));
         loadManager.add( ( callback ) => soundManager.loadListTable( 'data/sound/soundListTable.lst', callback ));
         loadManager.add( ( callback ) => objectDataManager.loadListTable( 'data/objects/3d/objectDataList/dataListTable.lst', callback ));
         loadManager.add( ( callback ) => physicsWorldManager.loadListTable( 'data/objects/2d/physics/physicsListTable.lst', callback ));
@@ -208,21 +211,18 @@ export class StartUpState extends state.GameState
 
         // Preload the menu group
         loadManager.add( ( callback ) => menuManager.preloadGroup( ['(menu)'], callback ));
-        
-        // Load the cameras
-        loadManager.add( ( callback ) => strategyManager.loadCameraList( 'data/objects/2d/spritestrategy/camera.lst', callback ));
 
         loadManager.add(
             ( callback ) =>
             {
                 // Load the menu scripts before creating the menus
                 menuScripts.loadScripts();
+                
+                // Set the default camera
+                menuManager.setDefaultCamera();
 
                 // Create the menu group
                 menuManager.createGroup( ['(menu)'] );
-
-                // Create the default camera based on what is defined in the settings.cfg config
-                menuManager.createDefaultCamera();
 
                 callback();
             });
