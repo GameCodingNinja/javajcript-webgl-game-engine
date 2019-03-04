@@ -13,7 +13,7 @@ import * as defs from '../common/defs';
 
 export class SpriteData extends Object
 {
-    constructor( node, defGroup, defObjName, defAIName, defId = defs.SPRITE_DEFAULT_ID )
+    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = defs.SPRITE_DEFAULT_ID )
     {
         super();
 
@@ -42,64 +42,64 @@ export class SpriteData extends Object
         this.spriteType = defs.EST_NULL;
         
         // Get the name of this specific sprite instance
-        let attr = node.getAttribute( 'name' );
+        let attr = xmlNode.getAttribute( 'name' );
         if( attr )
             this.name = attr;
         
         // Get the group this sprite belongs to
-        attr = node.getAttribute( 'group' );
+        attr = xmlNode.getAttribute( 'group' );
         if( attr )
             this.group = attr;
         
         // Get the object data name
-        attr = node.getAttribute( 'objectName' );
+        attr = xmlNode.getAttribute( 'objectName' );
         if( attr)
             this.objectName = attr;
 
         // Get the sprite's AI name
-        attr = node.getAttribute( 'aiName' );
+        attr = xmlNode.getAttribute( 'aiName' );
         if( attr !== null )
             this.aiName = attr;
 
         // Get the sprite's unique id number
-        attr = node.getAttribute( "id" );
+        attr = xmlNode.getAttribute( "id" );
         if( attr )
             this.id = Number(attr);
         
         // visible property
-        attr = node.getAttribute( 'visible' );
+        attr = xmlNode.getAttribute( 'visible' );
         if( attr )
             this.setVisible( attr === 'true' );
         
         // Get the node type
-        if( node.nodeName == 'object2d' )
+        if( xmlNode.nodeName == 'object2d' )
             this.spriteType = defs.EST_OBJECT2D;
 
-        else if( node.nodeName == 'object3d' )
+        else if( xmlNode.nodeName == 'object3d' )
             this.spriteType = defs.EST_OBJECT3D;
 
-        else if( node.nodeName == 'sprite2d' )
+        else if( xmlNode.nodeName == 'sprite2d' )
             this.spriteType = defs.EST_SPRITE2D;
 
-        else if( node.nodeName == 'sprite3d' )
+        else if( xmlNode.nodeName == 'sprite3d' )
             this.spriteType = defs.EST_SPRITE3D;
 
         // Need to check if the font node is present
-        let fontNode = node.getElementsByTagName( 'font' );
+        let fontNode = xmlNode.getElementsByTagName( 'font' );
         if( fontNode.length )
         {
             this.fontData = new FontData;
             
             // FontData class loads via getElementsByTagName( 'font' )
             // so just pass in the node and NOT the font node
-            this.fontData.loadFromNode( node );
+            this.fontData.loadFromNode( xmlNode );
         }
 
         // Load the transform data from node
-        this.loadTransFromNode( node );
+        this.loadTransFromNode( xmlNode );
         
         // Load any script functions
-        this.loadScriptFunctions( node );
+        this.loadScriptFunctions( xmlNode );
     }
     
     // 
@@ -112,7 +112,7 @@ export class SpriteData extends Object
         this.aiName = obj.aiName;
         this.id = obj.id;
         
-        copyTransform( obj );
+        this.copyTransform( obj );
         
         if( this.fontData )
             this.fontData.copy( obj.fontData );

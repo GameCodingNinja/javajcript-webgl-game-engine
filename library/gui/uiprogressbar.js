@@ -120,38 +120,37 @@ export class UIProgressBar extends UIControl
         let stencilMaskNode = controlNode.getElementsByTagName( "stencilMask" );
         if( stencilMaskNode.length )
         {
-            let objectName = stencilMaskNode[0].getAttribute( "objectName" );
+            let stencilMaskSprite = stencilMaskNode[0].getAttribute( "objectName" );
 
             this.spriteApplyIndex = Number(stencilMaskNode[0].getAttribute( "spriteIndex" ));
-
-            if( objectName && objectName.length )
-            {
-                this.stencilMaskSprite = new Sprite( objectDataManager.getData( this.group, objectName ) );
-
-                // Load the transform data
-                this.stencilMaskSprite.loadTransFromNode( stencilMaskNode[0] );
-
-                // Get the size
-                this.progressBarSize.copy( this.stencilMaskSprite.objData.size );
-
-                // Get the initial position
-                this.progressBarPos.copy( this.stencilMaskSprite.object.pos );
-                
-                // Get the initial scale
-                this.progressBarScale.copy( this.stencilMaskSprite.object.scale );
-            }
-            else
-            {
-                // Get the size
-                this.progressBarSize.copy( this.spriteAry[this.spriteApplyIndex].objData.size );
-
-                // Get the initial position
-                this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].object.pos );
-                
-                // Get the initial scale
-                this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].object.scale );
-            }
+            
+            this.initSizePosScale( spriteApplyIndex, stencilMaskSprite );
         }
+    }
+    
+    //
+    //  DESC: Load the control info from node data
+    //
+    loadFromData( nodeData )
+    {
+        for( let i = 0; i < nodeData.uiData.spriteDataAry.length; ++i )
+        {
+            let sprite = new Sprite( objectDataManager.getData( nodeData.group, nodeData.objectName ) );
+            sprite.load( nodeData );
+            sprite.init();
+            this.spriteAry.push( sprite );
+        }
+        
+        this.initSizePosScale( nodeData.uiData.spriteApplyIndex, nodeData.uiData.stencilMaskSprite );
+        
+        this.initProgressBar(
+            nodeData.uiData.maxValue,
+            nodeData.uiData.curValue,
+            nodeData.uiData.minValue,
+            nodeData.uiData.orentation,
+            nodeData.uiData.alignment );
+            
+        this.copyTransform( nodeData );
     }
     
     // 
@@ -168,7 +167,16 @@ export class UIProgressBar extends UIControl
         
         this.setSizePos();
     }
-    
+
+    // 
+    //  DESC: Set progress bar max
+    //
+    setProgressBarMax( max )
+    {
+        this.maxValue = max;
+        this.setSizePos();
+    }
+
     // 
     //  DESC: Load a sprite from an array
     //  NOTE: Used to init this control manually
@@ -177,6 +185,14 @@ export class UIProgressBar extends UIControl
     {
         super.loadSpriteFromArray( objectNameAry );
         
+        this.initSizePosScale( spriteApplyIndex, stencilMaskSprite );
+    }
+
+    // 
+    //  DESC: Init the progress bar size, pos and scale
+    //
+    initSizePosScale( spriteApplyIndex, stencilMaskSprite = null )
+    {
         this.spriteApplyIndex = spriteApplyIndex;
         
         if( stencilMaskSprite )
@@ -204,7 +220,7 @@ export class UIProgressBar extends UIControl
             this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].object.scale );
         }
     }
-    
+
     // 
     //  DESC: Inc the current value
     //

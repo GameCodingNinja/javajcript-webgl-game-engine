@@ -75,6 +75,14 @@ export class iNode
     // 
     //  DESC: Get the sprite
     //
+    getControl()
+    {
+        return null;
+    }
+    
+    // 
+    //  DESC: Get the sprite
+    //
     getSprite()
     {
         return null;

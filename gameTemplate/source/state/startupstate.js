@@ -27,6 +27,7 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { UIProgressBar } from '../../../library/gui/uiprogressbar';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
+import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
 import * as stateScripts from '../scripts/statescripts';
@@ -35,7 +36,7 @@ import * as state from './gamestate';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 84,
+const STARTUP_ASSET_COUNT = 83,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends state.GameState
@@ -85,8 +86,14 @@ export class StartUpState extends state.GameState
         loadManager.add( ( callback ) => objectDataManager.createFromData( groupAry, callback ));
         
         // Load the camera manager
-        loadManager.add( ( callback ) => cameraManager.load( 'data/objects/camera.lst', this.preloadComplete.bind(this) ));
-
+        loadManager.add( ( callback ) => cameraManager.load( 'data/objects/camera.lst', callback ));
+        
+        // Load the list table for the strategy manager
+        loadManager.add( ( callback ) => strategyManager.loadListTable( 'data/objects/spritestrategy/spriteStrageyListTable.lst', callback ));
+        
+        // Create the actor strategy
+        loadManager.add( ( callback ) => strategyManager.addStrategy( '(startup)', new ActorStrategy, this.preloadComplete.bind(this) ) );
+        
         // Start the load
         loadManager.load();
     }
@@ -99,10 +106,10 @@ export class StartUpState extends state.GameState
         // Set the camera
         this.camera = cameraManager.getDefault();
         
-        // Create the logo
-        this.spriteLogo = new Sprite( objectDataManager.getData( '(startup)', 'logo' ) );
-        this.spriteLogo.object.setScaleXYZ( 1.5, 1.5, 1 );
-        this.spriteLogo.object.transform();
+        // Prepare the strategies to run
+        strategyManager.activateStrategy('(startup)');
+        strategyManager.get( '(startup)' ).create( 'logo' );
+
 
         // create the progress bar
         this.progressBar = new UIProgressBar( '(startup)' );
@@ -154,6 +161,15 @@ export class StartUpState extends state.GameState
     update()
     {
         this.scriptComponent.update();
+        strategyManager.update();
+    }
+    
+    // 
+    //  DESC: Transform the game objects
+    //
+    transform()
+    {
+        strategyManager.transform();
     }
 
     //
@@ -161,7 +177,8 @@ export class StartUpState extends state.GameState
     //
     render()
     {
-        this.spriteLogo.render( this.camera );
+        strategyManager.render();
+        //this.spriteLogo.render( this.camera );
         this.progressBar.render( this.camera );
     }
 
@@ -179,7 +196,6 @@ export class StartUpState extends state.GameState
         let groupAry = ['(menu)'];
 
         // Load the list tables
-        loadManager.add( ( callback ) => strategyManager.loadListTable( 'data/objects/spritestrategy/spriteStrageyListTable.lst', callback ));
         loadManager.add( ( callback ) => soundManager.loadListTable( 'data/sound/soundListTable.lst', callback ));
         loadManager.add( ( callback ) => objectDataManager.loadListTable( 'data/objects/3d/objectDataList/dataListTable.lst', callback ));
         loadManager.add( ( callback ) => physicsWorldManager.loadListTable( 'data/objects/2d/physics/physicsListTable.lst', callback ));
@@ -251,13 +267,15 @@ export class StartUpState extends state.GameState
     //
     cleanUp()
     {
+        strategyManager.clear();
+        
         // Local data no longer needed and can be deleted
         assetHolder.deleteGroup( ['(startup)', '(menu)'] );
 
         // Free the state assets from the video memory
         objectDataManager.freeGroup( ['(startup)'] );
 
-        this.spriteLogo.cleanUp();
+        //this.spriteLogo.cleanUp();
         this.progressBar.cleanUp();
     }
 }

@@ -152,5 +152,12 @@ export class ManagerBase
             if( this.loadCounter === 0 )
                 finishCallback();
         }
+        else
+        {
+            if( this.listTableMap.size == 0 )
+                throw new Error( `Need to load the list table (${group})!` );
+            else
+                throw new Error( `Group description in list table does not exist (${group})!` );
+        }
     }
 }

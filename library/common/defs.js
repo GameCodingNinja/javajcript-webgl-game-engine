@@ -122,7 +122,8 @@ export const ENT_NULL              = 0,
              ENT_OBJECT            = 1,
              ENT_SPRITE            = 2,
              ENT_OBJECT_MULTI_LIST = 3,
-             ENT_SPRITE_MULTI_LIST = 4;
+             ENT_SPRITE_MULTI_LIST = 4,
+             ENT_UI_CONTROL        = 5;
 
 // ESelection Message Arguments
 export const ESMA_PRESS_TYPE  = 0,

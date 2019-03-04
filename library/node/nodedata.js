@@ -7,12 +7,13 @@
 "use strict";
 
 import { SpriteData } from '../sprite/spritedata';
+import { UIData } from '../gui/uidata';
 import * as defs from '../common/defs';
 
 export class NodeData extends SpriteData
 {
     constructor(
-        node,
+        xmlNode,
         nodeName,
         nodeId = defs.NODE_DEFAULT_ID,
         parenNodetId = defs.PARENT_NODE_DEFAULT_ID,
@@ -21,7 +22,7 @@ export class NodeData extends SpriteData
         defAIName = '',
         defId = defs.SPRITE_DEFAULT_ID )
     {
-        super( node.firstElementChild, defGroup, defObjName, defAIName, defId );
+        super( xmlNode.firstElementChild, defGroup, defObjName, defAIName, defId );
 
         // node name
         this.nodeName = nodeName;
@@ -34,9 +35,13 @@ export class NodeData extends SpriteData
 
         // Node type
         this.nodeType = defs.ENT_NULL;
+        
+        // UI Control members
+        this.uiControlType = defs.ECT_NULL;
+        this.uiData = null;
 
         // Get the node type
-        let attr = node.getAttribute( 'type' );
+        let attr = xmlNode.getAttribute( 'type' );
         if( attr == "spriteNode" )
             this.nodeType = defs.ENT_SPRITE;
 
@@ -45,5 +50,12 @@ export class NodeData extends SpriteData
 
         else if( attr == "spriteNodeMultiList" )
             this.nodeType = defs.ENT_SPRITE_MULTI_LIST;
+        
+        else if( attr == "uiControlNode" )
+        {
+            this.uiControlType = defs.ENT_UI_CONTROL;
+            
+            this.uiData = new UIData( xmlNode.firstElementChild, defGroup, defObjName );
+        }
     }
 }

@@ -1,4 +1,8 @@
 <listTable>
+    
+    <groupList groupName="(startup)">
+        <file path="data/objects/spritestrategy/actor/startup.lst"/>
+    </groupList>
 
     <groupList groupName="(stage1)">
         <file path="data/objects/spritestrategy/stage1/stage.cfg"/>
@@ -6,12 +10,6 @@
     
     <groupList groupName="(sprite)">
         <file path="data/objects/spritestrategy/actor/spriteList.lst"/>
-        <camera id="cube" projectType="perspective" minZDist="5" maxZDist="1000" view_angle="45.0">
-            <position x="0" y="0" z="-20"/>
-        </camera>
-        <camera id="fakecube" projectType="perspective" minZDist="5" maxZDist="1000" view_angle="45.0">
-            <position x="0" y="0" z="-30"/>
-        </camera>
     </groupList>
     
     <groupList groupName="(main)">
