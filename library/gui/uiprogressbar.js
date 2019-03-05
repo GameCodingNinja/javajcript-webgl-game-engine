@@ -133,13 +133,7 @@ export class UIProgressBar extends UIControl
     //
     loadFromData( nodeData )
     {
-        for( let i = 0; i < nodeData.uiData.spriteDataAry.length; ++i )
-        {
-            let sprite = new Sprite( objectDataManager.getData( nodeData.group, nodeData.objectName ) );
-            sprite.load( nodeData );
-            sprite.init();
-            this.spriteAry.push( sprite );
-        }
+        super.loadFromData( nodeData )
         
         this.initSizePosScale( nodeData.uiData.spriteApplyIndex, nodeData.uiData.stencilMaskSprite );
         
@@ -149,8 +143,6 @@ export class UIProgressBar extends UIControl
             nodeData.uiData.minValue,
             nodeData.uiData.orentation,
             nodeData.uiData.alignment );
-            
-        this.copyTransform( nodeData );
     }
     
     // 

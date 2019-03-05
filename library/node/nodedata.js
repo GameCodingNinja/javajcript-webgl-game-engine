@@ -37,7 +37,6 @@ export class NodeData extends SpriteData
         this.nodeType = defs.ENT_NULL;
         
         // UI Control members
-        this.uiControlType = defs.ECT_NULL;
         this.uiData = null;
 
         // Get the node type
@@ -53,7 +52,7 @@ export class NodeData extends SpriteData
         
         else if( attr == "uiControlNode" )
         {
-            this.uiControlType = defs.ENT_UI_CONTROL;
+            this.nodeType = defs.ENT_UI_CONTROL;
             
             this.uiData = new UIData( xmlNode.firstElementChild, defGroup, defObjName );
         }

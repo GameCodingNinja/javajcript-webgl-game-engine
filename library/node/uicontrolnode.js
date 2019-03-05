@@ -1,7 +1,7 @@
 
 // 
 //  FILE NAME: uicontrolnode.js
-//  DESC:      UI Control node class for rendering just one control
+//  DESC:      UI Control node class for rendering a ui control
 //
 
 "use strict";
@@ -22,7 +22,7 @@ export class UIControlNode extends iNode
     }
     
     // 
-    //  DESC: Update the sprite
+    //  DESC: Update the control
     //
     update()
     {
@@ -30,18 +30,18 @@ export class UIControlNode extends iNode
     }
     
     //
-    //  DESC: Transform the sprite
+    //  DESC: Transform the control
     //
     transform( object = null )
     {
         if( object )
-            this.uiControl.object.transform( object );
+            this.uiControl.transform( object );
         else
-            this.uiControl.object.transform();
+            this.uiControl.transform();
     }
     
     //
-    //  DESC: Render the sprite
+    //  DESC: Render the control
     //
     render( camera )
     {
@@ -65,7 +65,7 @@ export class UIControlNode extends iNode
     }
     
     // 
-    //  DESC: Clean up any sprites
+    //  DESC: Clean up any control
     //
     cleanUp()
     {

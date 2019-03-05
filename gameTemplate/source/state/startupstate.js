@@ -107,16 +107,12 @@ export class StartUpState extends state.GameState
         this.camera = cameraManager.getDefault();
         
         // Prepare the strategies to run
+        let strategy = strategyManager.get( '(startup)' );
+        strategy.create( 'logo' );
+        this.progressBar = strategy.create( 'UIProgressBar' ).getControl();
+        this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
+        
         strategyManager.activateStrategy('(startup)');
-        strategyManager.get( '(startup)' ).create( 'logo' );
-
-
-        // create the progress bar
-        this.progressBar = new UIProgressBar( '(startup)' );
-        this.progressBar.setPosXYZ( 0, -350, 0 );
-        this.progressBar.loadSpriteFromArray( ['progress_frame', 'progress_solid'], 1 );
-        this.progressBar.initProgressBar( STARTUP_ASSET_COUNT );
-        this.progressBar.transform();
 
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -178,8 +174,6 @@ export class StartUpState extends state.GameState
     render()
     {
         strategyManager.render();
-        //this.spriteLogo.render( this.camera );
-        this.progressBar.render( this.camera );
     }
 
     //
@@ -259,7 +253,6 @@ export class StartUpState extends state.GameState
     progressbarUpdate()
     {
         this.progressBar.incCurrentValue( ++this.progressCounter );
-        this.progressBar.transform();
     }
 
     //
@@ -274,8 +267,5 @@ export class StartUpState extends state.GameState
 
         // Free the state assets from the video memory
         objectDataManager.freeGroup( ['(startup)'] );
-
-        //this.spriteLogo.cleanUp();
-        this.progressBar.cleanUp();
     }
 }

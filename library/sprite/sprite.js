@@ -79,10 +79,11 @@ export class Sprite
     }
     
     // 
-    //  DESC: Load from SpriteData or node
+    //  DESC: Load from SpriteData or XML node
     //
     load( data )
     {
+        // Load from sprite data
         if( data instanceof SpriteData )
         {
             this.object.copyTransform( data );
@@ -91,6 +92,7 @@ export class Sprite
             if( this.visualComponent.isFontSprite() && data.fontData )
                 this.visualComponent.fontData.copy( data.fontData );
         }
+        // Load from XML node
         else if( data instanceof Element )
         {
             this.object.loadTransFromNode( data );

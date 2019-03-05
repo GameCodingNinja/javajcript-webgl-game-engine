@@ -159,7 +159,7 @@ export class UIScrollBox extends UISubControl
             this.cullHeight = (this.stencilMaskSprite.objData.size.w + this.controlHeight) / 2;
 
             // Load the transform data
-            this.stencilMaskSprite.object.loadTransFromNode( stencilMaskNode[0] );
+            this.stencilMaskSprite.load( stencilMaskNode[0] );
         }
     }
 

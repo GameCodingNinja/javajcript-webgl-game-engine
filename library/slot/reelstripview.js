@@ -147,7 +147,7 @@ export class ReelStripView extends SlotStripView
             this.stencilMaskSprite = new Sprite2D( objectDataManager.getData( group, objectName ) );
 
             // Load the transform data
-            this.stencilMaskSprite.loadTransFromNode( stencilMaskNode[0] );
+            this.stencilMaskSprite.load( stencilMaskNode[0] );
         }
 
         // Get the sprite list if any
@@ -164,7 +164,7 @@ export class ReelStripView extends SlotStripView
                 this.spriteAry.push( sprite );
 
                 // Load the transform data
-                sprite.loadTransFromNode( spriteNode[i] );
+                sprite.load( spriteNode[i] );
             }
         }
 

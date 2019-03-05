@@ -176,7 +176,7 @@ export class Menu extends Object2D
         this.spriteAry.push( sprite );
 
         // Load the transform data
-        sprite.object.loadTransFromNode( node );
+        sprite.load( node );
 
         // Init the script factory functions
         sprite.initScriptFactoryFunctions( node );

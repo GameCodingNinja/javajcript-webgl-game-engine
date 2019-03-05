@@ -220,6 +220,23 @@ export class UIControl extends ControlBase
         }
     }
     
+    //
+    //  DESC: Load the control info from node data
+    //
+    loadFromData( nodeData )
+    {
+        for( let i = 0; i < nodeData.uiData.spriteDataAry.length; ++i )
+        {
+            let spriteData = nodeData.uiData.spriteDataAry[i];
+            let sprite = new Sprite( objectDataManager.getData( spriteData.group, spriteData.objectName ) );
+            sprite.load( spriteData );
+            this.spriteAry.push( sprite );
+        }
+            
+        this.copyTransform( nodeData );
+    }
+    
+    
     // 
     //  DESC: Update the control
     //

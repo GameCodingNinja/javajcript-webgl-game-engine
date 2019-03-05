@@ -166,7 +166,7 @@ export class WheelView extends SlotStripView
                 this.wheelSpriteAry.push( sprite );
                 
                 // Load the transform data from node
-                sprite.loadTransFromNode( spriteNode[i] );
+                sprite.load( spriteNode[i] );
             }
         }
     }
@@ -213,7 +213,7 @@ export class WheelView extends SlotStripView
                 this.spriteAry.push( sprite );
                 
                 // Load the transform data from node
-                sprite.loadTransFromNode( spriteNode[i] );
+                sprite.load( spriteNode[i] );
             }
         }
     }

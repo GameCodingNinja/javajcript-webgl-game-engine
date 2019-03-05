@@ -30,13 +30,13 @@ export function create( nodeData, nodeId )
         
         LoadSprite( node.sprite, nodeData );
     }
-    else if( nodeData.getNodeType() === defs.ENT_OBJECT_MULTI_LIST )
+    else if( nodeData.nodeType === defs.ENT_OBJECT_MULTI_LIST )
     {
         node = new ObjectNodeMultiLst( nodeId, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadObject( node.object, nodeData );
     }
-    else if( nodeData.getNodeType() === defs.ENT_SPRITE_MULTI_LIST )
+    else if( nodeData.nodeType === defs.ENT_SPRITE_MULTI_LIST )
     {
         node = new SpriteNodeMultiLst( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeId, nodeData.nodeId, nodeData.parenNodetId );
         
@@ -90,5 +90,9 @@ function CreateUIControlNode( nodeData, nodeId )
     if( nodeData.uiData.uiControlType == defs.ECT_PROGRESS_BAR )
     {
         let progressBar = new UIProgressBar( nodeData.group );
+        progressBar.loadFromData( nodeData );
+        progressBar.init();
+        
+        return new UIControlNode( progressBar );
     }
 }

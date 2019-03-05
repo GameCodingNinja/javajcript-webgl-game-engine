@@ -63,7 +63,7 @@ export class SlotGroupView extends Object2D
         // Allocate the cycle results text
         this.cycleResultsTxtSprite = new Sprite2D( objectDataManager.getData( group, objectName ) );
         this.cycleResultsTxtSprite.setVisible( false );
-        this.cycleResultsTxtSprite.loadTransFromNode( cycleResultsTxtNode[0] );
+        this.cycleResultsTxtSprite.load( cycleResultsTxtNode[0] );
         
         // Load the font properties from XML node
         this.cycleResultsTxtSprite.visualComponent.loadFontPropFromNode( cycleResultsTxtNode[0] );

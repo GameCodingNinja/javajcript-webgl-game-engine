@@ -17,7 +17,7 @@ class StrategyManager extends ManagerBase
         // Map of unique strategy references
         this.strategyMap = new Map;
         
-        // An array of strategy references
+        // An array of active strategy references
         this.strategyAry = [];
     }
     
@@ -114,8 +114,8 @@ class StrategyManager extends ManagerBase
     //
     cleanUp()
     {
-        for( let i = 0; i < this.strategyAry.length; i++ )
-            this.strategyAry[i].cleanUp();
+        for( let [ key, strategy ] of this.strategyMap.entries() )
+            strategy.cleanUp();
     }
 
     //
