@@ -10,6 +10,10 @@ and open the template in the editor.
         <link rel="shortcut icon" type="image/png" href="favicon.ico"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--http://cristian.sulea.net/blog/disable-browser-caching-with-meta-html-tags/-->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
         <style>
             canvas:focus{outline:none;}
         </style>
@@ -20,11 +24,6 @@ and open the template in the editor.
         </canvas>
         <br />
         <i>Game Template Demo. Firefox, Chrome and Chromium are the only supported browsers.</i>
-        <script>
-            var jsbundle = document.createElement('script');
-            //jsbundle.setAttribute( 'src','bundle.js?please-dont-cache=' + Math.random() );
-            jsbundle.setAttribute( 'src','bundle.js');
-            document.head.appendChild( jsbundle );
-        </script>
+        <script src="bundle.js?version=1.0.0"></script>
     </body>
 </html>

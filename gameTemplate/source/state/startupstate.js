@@ -21,6 +21,7 @@ import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
+import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { Sprite } from '../../../library/sprite/sprite';
 import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
@@ -33,10 +34,9 @@ import * as utilScripts from '../scripts/utilityscripts';
 import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as state from './gamestate';
-import * as genFunc from '../../../library/utilities/genfunc';
 import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 83,
+const STARTUP_ASSET_COUNT = 86,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends state.GameState
@@ -92,7 +92,10 @@ export class StartUpState extends state.GameState
         loadManager.add( ( callback ) => strategyManager.loadListTable( 'data/objects/spritestrategy/spriteStrageyListTable.lst', callback ));
         
         // Create the actor strategy
-        loadManager.add( ( callback ) => strategyManager.addStrategy( '(startup)', new ActorStrategy, this.preloadComplete.bind(this) ) );
+        loadManager.add( ( callback ) => strategyManager.addStrategy( '(startup)', new ActorStrategy, callback ) );
+        
+        // Load the strategies
+        loadManager.add( ( callback ) => strategyLoader.load( '(startup)', 'data/objects/spritestrategy/startupLoad.cfg', this.preloadComplete.bind(this) ));
         
         // Start the load
         loadManager.load();
@@ -107,9 +110,7 @@ export class StartUpState extends state.GameState
         this.camera = cameraManager.getDefault();
         
         // Prepare the strategies to run
-        let strategy = strategyManager.get( '(startup)' );
-        strategy.create( 'logo' );
-        this.progressBar = strategy.create( 'UIProgressBar' ).getControl();
+        this.progressBar = strategyManager.get( '(startup)' ).get( 'UIProgressBar' ).getControl();
         this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
         
         strategyManager.activateStrategy('(startup)');
@@ -260,7 +261,8 @@ export class StartUpState extends state.GameState
     //
     cleanUp()
     {
-        strategyManager.clear();
+        // Only delete the strategy(s) used in this state. Don't use clear().
+        strategyManager.deleteStrategy( ['(startup)'] );
         
         // Local data no longer needed and can be deleted
         assetHolder.deleteGroup( ['(startup)', '(menu)'] );

@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { ivisualComponent } from '../common/ivisualcomponent';
 import { shaderManager } from '../managers/shadermanager';
 import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
@@ -25,10 +26,12 @@ import * as genFunc from '../utilities/genfunc';
 // allocated and heald within each class
 var gFinalMatrix = new Matrix;
 
-export class VisualComponentQuad
+export class VisualComponentQuad extends ivisualComponent
 {
     constructor( visualData )
     {
+        super();
+        
         this.visualData = visualData;
         this.shaderData = null;
         this.vertexLocation = null;
@@ -62,13 +65,6 @@ export class VisualComponentQuad
             
             this.color.copy( this.visualData.color );
         }
-    }
-    
-    //
-    //  DESC: Delete the custom VBO for this font
-    //
-    deleteFontVBO()
-    {
     }
 
     //
@@ -123,26 +119,10 @@ export class VisualComponentQuad
     }
     
     //
-    //  DESC: Is this a font sprite
-    //
-    isFontSprite()
-    {
-        return false;
-    }
-    
-    //
     //  DESC: Set the frame ID from index
     //
     setFrame( index )
     {
         this.frameIndex = index;
-    }
-    
-    //
-    //  DESC: Get the font size
-    //
-    getFontSize()
-    {
-        return 0;
     }
 }

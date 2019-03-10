@@ -1,0 +1,14 @@
+<node defaultGroup="(cube)">
+    
+    <node name="cube" type="spriteNode">
+        
+        <sprite3d objectName="cube">
+            <scale x="3" y="3" z="3"/>
+            <scriptLst>
+                <script rotate="State_RotateCube" group="(state)"/>
+            </scriptLst>
+        </sprite3d>
+
+    </node>
+
+</node>

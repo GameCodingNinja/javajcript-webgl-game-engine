@@ -14,12 +14,15 @@ import { objectDataManager } from '../../../library/objectdatamanager/objectdata
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { device } from '../../../library/system/device';
+import { strategyManager } from '../../../library/strategy/strategymanager';
+import { ActorStrategy } from '../../../library/strategy/actorstrategy';
+import { StageStrategy } from '../../../library/strategy/stagestrategy';
+import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
-import { cameraManager } from '../../../library/managers/cameramanager';
 import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
 
@@ -29,15 +32,8 @@ export class TitleScreenState extends CommonState
     {
         super( state.GAME_STATE_TITLESCREEN, state.GAME_STATE_LOAD, gameLoopCallback );
         
-        this.background = new Sprite( objectDataManager.getData( '(title_screen)', 'background' ) );
-        this.background.object.transform();
-        
-        this.camera = cameraManager.getDefault();
-        
-        this.cameraCube = cameraManager.get( 'cubeCamera' );
-        
-        this.cube = new Sprite( objectDataManager.getData( '(cube)', 'cube' ) );
-        this.cube.object.setScaleXYZ( 3, 3, 3 );
+        strategyManager.activateStrategy('(background)');
+        strategyManager.activateStrategy('(cube)');
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -92,9 +88,7 @@ export class TitleScreenState extends CommonState
         super.update();
         
         this.scriptComponent.update();
-        
-        let rot = highResTimer.elapsedTime * 0.04;
-        this.cube.object.incRotXYZ( rot, rot, 0 );
+        strategyManager.update();
     }
     
     // 
@@ -103,19 +97,17 @@ export class TitleScreenState extends CommonState
     transform()
     {
         super.transform();
-        
-        this.cube.object.transform();
+        strategyManager.transform();
     }
     
     // 
-    //  DESC: 2D/3D Render of game content
+    //  DESC: Render of game content
     //
     render()
     {
         super.render();
         
-        this.background.render( this.camera );
-        this.cube.render( this.cameraCube );
+        strategyManager.render();
         
         menuManager.render();
     }
@@ -127,6 +119,10 @@ export class TitleScreenState extends CommonState
 //
 function unload()
 {
+    // Only delete the strategy(s) used in this state. Don't use clear().
+    strategyManager.deleteStrategy( ['(background)','(cube)'] );
+    
+    // Free the object data
     objectDataManager.freeGroup( ['(title_screen)','(cube)'] );
 }
 
@@ -166,4 +162,16 @@ export function load()
     // Combine the meshes with their textures
     loadManager.add(
         ( callback ) => objectDataManager.createFromData( ['(cube)'], callback ) );
+
+    // Create the background strategy
+    loadManager.add(
+        ( callback ) => strategyManager.addStrategy( '(background)', new ActorStrategy, callback ) );
+
+    // Create the background strategy
+    loadManager.add(
+        ( callback ) => strategyManager.addStrategy( '(cube)', new ActorStrategy, callback ) );
+
+    // Load the strategies
+    loadManager.add(
+        ( callback ) => strategyLoader.load( '(title_screen)', 'data/objects/spritestrategy/titlescreenLoad.cfg', callback ));
 }

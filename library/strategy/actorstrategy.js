@@ -202,7 +202,7 @@ export class ActorStrategy extends iStrategy
         {
             node = this.nodeMap.get( id );
             if( !node )
-                throw new Error( `Node index can't be found (${id})!` );
+                throw new Error( `Node instance name can't be found (${id})!` );
         }
         else
         {
@@ -210,7 +210,7 @@ export class ActorStrategy extends iStrategy
             if( index !== -1 )
                 node = this.nodeAry[index];
             else
-                throw new Error( `Node id can't be found (${id})!` );
+                throw new Error( `Node index can't be found (${id})!` );
         }
 
         return node;

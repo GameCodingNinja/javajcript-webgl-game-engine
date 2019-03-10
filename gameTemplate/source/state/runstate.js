@@ -76,7 +76,8 @@ export class RunState extends CommonState
     //
     cleanUp()
     {
-        strategyManager.clear();
+        // Only delete the strategy(s) used in this state. Don't use clear().
+        strategyManager.deleteStrategy( ['(stage1)','(sprite)'] );
         
         objectDataManager.freeGroup( ['(run)'] );
         

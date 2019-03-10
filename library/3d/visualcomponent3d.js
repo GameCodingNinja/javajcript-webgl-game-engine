@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { ivisualComponent } from '../common/ivisualcomponent';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { shaderManager } from '../managers/shadermanager';
 import { textureManager } from '../managers/texturemanager';
@@ -19,10 +20,12 @@ import * as defs from '../common/defs'
 // allocated and heald within each class
 var gFinalMatrix = new Matrix;
 
-export class VisualComponent3D
+export class VisualComponent3D extends ivisualComponent
 {
     constructor( visualData )
     {
+        super();
+        
         this.visualData = visualData;
         this.shaderData = null;
         this.vertexLocation = null;

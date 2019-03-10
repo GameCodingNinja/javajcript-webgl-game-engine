@@ -144,7 +144,7 @@ export class ManagerBase
                 }
                 else
                 {
-                    this.loadFromNode( group, assetHolder.get( group, pathAry[i]), pathAry[i], null );
+                    this.loadFromNode( group, assetHolder.get( group, pathAry[i] ), pathAry[i], null );
                 }
             }
 

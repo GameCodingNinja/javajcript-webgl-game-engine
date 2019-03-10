@@ -1,0 +1,9 @@
+<node defaultGroup="(title_screen)">
+    
+    <node name="background" type="spriteNode">
+        
+        <sprite2d objectName="background"/>
+
+    </node>
+
+</node>

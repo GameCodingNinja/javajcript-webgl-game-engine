@@ -56,13 +56,13 @@ class StrategyManager extends ManagerBase
         if( strategy )
         {
             let index = this.strategyAry.findIndex( (obj) => obj === strategy );
-            if( index !== -1 )
-                console.log( `Strategy is already active (${strategyId})!` );
-            else
+            if( index === -1 )
                 this.strategyAry.push( strategy );
+            else
+                console.log( `Strategy is already active (${strategyId})!` );
         }
         else
-            throw new Error( `Strategy id can't be found (%s) (${strategyId})!` );
+            throw new Error( `Strategy id can't be found (${strategyId})!` );
         
         return strategy;
     }
@@ -77,12 +77,36 @@ class StrategyManager extends ManagerBase
         {
             let index = this.strategyAry.findIndex( (obj) => obj === strategy );
             if( index !== -1 )
-                console.log( `Strategy is not active (${strategyId})!` );
-            else
                 this.strategyAry.splice( index, 1 );
+            else
+                console.log( `Strategy is not active (${strategyId})!` );
         }
         else
-            console.log( `Strategy id can't be found (%s) (${strategyId})!` );
+            console.log( `Strategy id can't be found to deactivate (${strategyId})!` );
+        
+        return strategy;
+    }
+    
+    //
+    //  DESC: delete strategy
+    //
+    deleteStrategy( strategyGrp )
+    {
+        for( let i = 0; i < strategyGrp.length; ++i )
+        {
+            // First deactivate the strategy
+            this.deactivateStrategy( strategyGrp[i] );
+
+            // Cleanup and delete the strategy
+            let strategy = this.strategyMap.get( strategyGrp[i] );
+            if( strategy )
+            {
+                strategy.cleanUp();
+                this.strategyMap.delete( strategyGrp[i] );
+            }
+            else
+                console.log( `Strategy id can't be found to clean up (${strategyGrp[i]})!` );
+        }
     }
     
     //
