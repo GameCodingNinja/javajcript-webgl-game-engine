@@ -1,0 +1,110 @@
+<objectDataList2D>
+    
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default name="">
+        <visual>
+            <texture file="data/textures/menu/menu_spriteSheet.png"/>
+            <mesh genType="scaled_frame">
+                <spriteSheet file="data/objects/2d/mesh/menu/menu.xml"/>
+                <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+            </mesh>
+            <color r="48" g="97" b="153" a="1"/>
+            <shader id="shader_2d"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="275x55_button_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="275" height="55"/>
+        </object>
+
+        <object name="145x55_button_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="145" height="55"/>
+        </object>
+        
+        <object name="125x55_button_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="125" height="55"/>
+        </object>
+        
+        <object name="245x55_button_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="245" height="55"/>
+        </object>
+        
+        <object name="28x28_button_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_2_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="28" height="28"/>
+        </object>
+        
+        <object name="250x90_slider_selection_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="250" height="90"/>
+        </object>
+        
+        <object name="230x10_slider_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_2_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="230" height="10"/>
+        </object>
+        
+        <object name="arrow_button_frame">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="16x16_2_pixel_frame"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <size width="33" height="41"/>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

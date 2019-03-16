@@ -133,6 +133,10 @@ export class UIMeter extends UIControl
         // Get the max size of the font string to fit within this meter.
         // As the string get's bigger, it will be scaled to fit.
         this.maxFontStrSize = parseHelper.loadSize( node );
+        
+        // If no meter scripts are defined, display the current value
+        if( node.getElementsByTagName( 'meterScript' ).length == 0 )
+            this.displayValue();
     }
 
     //
@@ -143,39 +147,6 @@ export class UIMeter extends UIControl
         // Call the parent
         super.loadControlFromNode( controlNode );
 
-        // Find the sprite that renders the font
-        this.findFontSprite();
-    }
-    
-    // 
-    //  DESC: Init the meter
-    //  NOTE: Used to init this control manually
-    //
-    initMeter( fastBangTime, scaleType, sizeW, sizeH )
-    {
-        this.fastBangTime = fastBangTime;
-        this.scaleType = scaleType;
-        this.maxFontStrSize = new Size(sizeW, sizeH);
-    }
-    
-    // 
-    //  DESC: Set the bang range
-    //  NOTE: Used to init this control manually
-    //
-    setBangeRange( target, bangUpType, velocity, estimatedTime, slowStartTime )
-    {
-        this.bangRangeAry.push( 
-            new BangRange( target, bangUpType, velocity, estimatedTime, slowStartTime ) );
-    }
-    
-    // 
-    //  DESC: Load a sprite from an array
-    //  NOTE: Used to init this control manually
-    //
-    loadSpriteFromArray( objectNameAry, spriteApplyIndex, stencilMaskSprite = null )
-    {
-        super.loadSpriteFromArray( objectNameAry );
-        
         // Find the sprite that renders the font
         this.findFontSprite();
     }
@@ -201,7 +172,7 @@ export class UIMeter extends UIControl
     //
     set( amount )
     {
-        if( (amount > 0) && (amount !== this.currentValue) )
+        if( amount !== this.currentValue )
         {
             this.lastValue = this.currentValue;
             this.currentValue = this.targetValue = amount;
@@ -257,7 +228,7 @@ export class UIMeter extends UIControl
         this.impulse = 0.0;
         this.bangScaleAdjustment.set(1,1);
 
-        this.fontSprite.setScaleXYZ( 1, 1, 1 );
+        this.fontSprite.object.setScaleXYZ( 1, 1, 1 );
 
         this.velocity = bangRange.velocity / 1000.0;
 

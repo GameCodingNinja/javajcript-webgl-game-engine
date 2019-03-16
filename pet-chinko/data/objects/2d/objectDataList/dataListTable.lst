@@ -1,0 +1,25 @@
+<listTable>
+    
+    <groupList groupName="(startup)">
+        <file path="data/objects/2d/objectDataList/startupDataList.lst"/>
+    </groupList>
+
+    <groupList groupName="(loadingScreen)">
+        <file path="data/objects/2d/objectDataList/loadingScreenDataList.lst"/>
+    </groupList>
+
+    <groupList groupName="(menu)">
+        <file path="data/objects/2d/objectDataList/menuBackgrounds.lst"/>
+        <file path="data/objects/2d/objectDataList/menuButtonFrames.lst"/>
+        <file path="data/objects/2d/objectDataList/menuMisc.lst"/>
+    </groupList>
+
+    <groupList groupName="(title_screen)">
+        <file path="data/objects/2d/objectDataList/titleScreenDataList.lst"/>
+    </groupList>
+    
+    <groupList groupName="(run)">
+        <file path="data/objects/2d/objectDataList/runDataList.lst"/>
+    </groupList>
+  
+</listTable>

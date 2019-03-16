@@ -10,6 +10,7 @@ import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { signalManager } from '../managers/signalmanager';
 import { Sprite } from '../sprite/sprite';
 import { UIProgressBar } from '../gui/uiprogressbar';
+import { UIMeter } from '../gui/uimeter';
 import { SpriteNode } from '../node/spritenode';
 import { UIControlNode } from '../node/uicontrolnode';
 import { ObjectNodeMultiLst } from '../node/objectnodemultilist';
@@ -58,7 +59,7 @@ export function create( nodeData, nodeId )
 function LoadSprite( sprite, nodeData )
 {
     // Load from sprite data
-    sprite.load( nodeData );
+    sprite.load( nodeData.xmlNode );
 
     // Mainly for font sprites
     sprite.init();
@@ -76,7 +77,7 @@ function LoadSprite( sprite, nodeData )
 //
 function LoadObject( object, nodeData )
 {
-    object.copyTransform( nodeData );
+    object.loadTransFromNode( nodeData.xmlNode );
 }
 
 // 
@@ -84,15 +85,19 @@ function LoadObject( object, nodeData )
 //
 function CreateUIControlNode( nodeData, nodeId )
 {
-    if( nodeData.uiData == null )
-        throw new Error( `UI Control data not allocated (${nodeId}).` );
+    let control = null;
     
-    if( nodeData.uiData.uiControlType == defs.ECT_PROGRESS_BAR )
-    {
-        let progressBar = new UIProgressBar( nodeData.group );
-        progressBar.loadFromData( nodeData );
-        progressBar.init();
-        
-        return new UIControlNode( progressBar );
-    }
+    if( nodeData.uiControlType == defs.ECT_PROGRESS_BAR )
+        control = new UIProgressBar( nodeData.group );
+    
+    else if( nodeData.uiControlType == defs.ECT_METER )
+        control = new UIMeter( nodeData.group );
+    
+    else
+        throw new Error( `Node control type not defined (${nodeData.nodeName}).` );
+    
+    control.loadFromNode( nodeData.xmlNode );
+    control.init();
+    
+    return new UIControlNode( control );
 }

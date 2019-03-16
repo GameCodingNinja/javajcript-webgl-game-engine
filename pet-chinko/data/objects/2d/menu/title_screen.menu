@@ -1,0 +1,62 @@
+<menu>
+  
+    <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
+    
+    <scriptLst>
+        <script transIn="Menu_TransIn"/>
+        <script transOut="Menu_TransOut"/>
+    </scriptLst>
+    
+    <staticMenuControls>
+
+    </staticMenuControls>
+
+    <menuControls>
+        <!-- Texture button list -->
+        <control name="texture_btn_lst" controlType="button_list" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
+            <position x="-400" y="120" z="0"/>
+            <fontStringLst>
+                <string text="Cats"/>
+                <string text="Dogs"/>
+                <string text="Cats &#38; Dogs"/>
+            </fontStringLst>
+            <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
+            <actionResponse left="true" right="true"/>
+        </control>
+        
+        <!-- Level button list -->
+        <control name="level_btn_lst" controlType="button_list" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
+            <position x="400" y="120" z="0"/>
+            <fontStringLst>
+                <string text="Level 1"/>
+                <string text="Level 2"/>
+                <string text="Level 3"/>
+                <string text="Level 4"/>
+                <string text="Level 5"/>
+            </fontStringLst>
+            <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
+            <actionResponse left="true" right="true"/>
+        </control>
+
+        <!-- Start Game Button -->
+        <control name="continue_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/start_game.ctrl"/>
+            <position x="0" y="-120" z="0"/>
+            <fontStringLst>
+                <string text="Start Game"/>
+            </fontStringLst>
+            <action actionType="game_state_change" executionAction="run_state"/>
+            <!--<navigate up="key_binding_btn" down="new_game_btn"/>-->
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+    </menuControls>
+
+</menu>
+

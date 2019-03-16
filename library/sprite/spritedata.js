@@ -6,16 +6,16 @@
 
 "use strict";
 
-import { Object } from '../common/object';
 import { FontData } from '../common/fontdata';
 import { scriptManager } from '../script/scriptmanager';
 import * as defs from '../common/defs';
 
-export class SpriteData extends Object
+export class SpriteData
 {
     constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = defs.SPRITE_DEFAULT_ID )
     {
-        super();
+        // XML node
+        this.xmlNode = xmlNode;
 
         // Sprite name
         this.name = null;
@@ -31,12 +31,6 @@ export class SpriteData extends Object
         
         // Sprite Id
         this.id = defId;
-        
-        // Font data
-        this.fontData = null;
-        
-        // Script function map
-        this.scriptFunctionMap = new Map;
         
         // Sprite type
         this.spriteType = defs.EST_NULL;
@@ -66,11 +60,6 @@ export class SpriteData extends Object
         if( attr )
             this.id = Number(attr);
         
-        // visible property
-        attr = xmlNode.getAttribute( 'visible' );
-        if( attr )
-            this.setVisible( attr === 'true' );
-        
         // Get the node type
         if( xmlNode.nodeName == 'object2d' )
             this.spriteType = defs.EST_OBJECT2D;
@@ -83,57 +72,5 @@ export class SpriteData extends Object
 
         else if( xmlNode.nodeName == 'sprite3d' )
             this.spriteType = defs.EST_SPRITE3D;
-
-        // Need to check if the font node is present
-        let fontNode = xmlNode.getElementsByTagName( 'font' );
-        if( fontNode.length )
-        {
-            this.fontData = new FontData;
-            
-            // FontData class loads via getElementsByTagName( 'font' )
-            // so just pass in the node and NOT the font node
-            this.fontData.loadFromNode( xmlNode );
-        }
-
-        // Load the transform data from node
-        this.loadTransFromNode( xmlNode );
-        
-        // Load any script functions
-        this.loadScriptFunctions( xmlNode );
-    }
-    
-    // 
-    //  DESC: Copy the sprite data
-    //
-    copy( obj )
-    {
-        this.group = obj.group;
-        this.objectName = obj.objectName;
-        this.aiName = obj.aiName;
-        this.id = obj.id;
-        
-        this.copyTransform( obj );
-        
-        if( this.fontData )
-            this.fontData.copy( obj.fontData );
-        
-        for( let [ key, scriptFactory ] of obj.scriptFunctionMap.entries() )
-            this.scriptFunctionMap.set( key, scriptFactory );
-    }
-    
-    // 
-    //  DESC: Load the script functions and add them to the map
-    //
-    loadScriptFunctions( node )
-    {
-        // Check for scripting
-        let scriptNode = node.getElementsByTagName( 'script' );
-
-        for( let i = 0; i < scriptNode.length; ++i )
-        {
-            let attr = scriptNode[i].attributes[0];
-            if( attr )
-                this.scriptFunctionMap.set( attr.name, scriptManager.get(attr.value) );
-        }
     }
 }

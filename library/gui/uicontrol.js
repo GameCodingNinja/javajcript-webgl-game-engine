@@ -80,22 +80,22 @@ export class UIControl extends ControlBase
     // 
     //  DESC: Load the control info from XML node
     //
-    loadFromNode( node )
+    loadFromNode( xmlNode )
     {
-        super.loadFromNode( node );
+        super.loadFromNode( xmlNode );
 
         // Set the default state of the control
-        let attr = node.getAttribute( 'defaultState' );
+        let attr = xmlNode.getAttribute( 'defaultState' );
         if( attr )
             this.setDefaultState( attr );
 
         // Set if mouse selection is the down message
-        attr = node.getAttribute( 'mouseSelectDown' );
+        attr = xmlNode.getAttribute( 'mouseSelectDown' );
         if( attr && (attr === 'true') )
             this.mouseSelectType = defs.EAP_DOWN;
 
         // Setup the action
-        let actionNode = node.getElementsByTagName( 'action' );
+        let actionNode = xmlNode.getElementsByTagName( 'action' );
         if( actionNode.length )
         {
             // Set the action type
@@ -110,7 +110,7 @@ export class UIControl extends ControlBase
         }
 
         // Setup the action
-        let stateScriptNode = node.getElementsByTagName( 'stateScript' );
+        let stateScriptNode = xmlNode.getElementsByTagName( 'stateScript' );
         if( stateScriptNode.length )
         {
             // This allocates the script to the map
@@ -132,7 +132,7 @@ export class UIControl extends ControlBase
         }
 
         // Load the scroll data from node
-        let scrollParamNode = node.getElementsByTagName( 'scroll' );
+        let scrollParamNode = xmlNode.getElementsByTagName( 'scroll' );
         if( scrollParamNode.length )
         {
             this.scrollParam = new ScrollParam;
@@ -140,7 +140,7 @@ export class UIControl extends ControlBase
         }
 
         // Get the size modifier info
-        this.sizeModifier = parseHelper.loadRect( node );
+        this.sizeModifier = parseHelper.loadRect( xmlNode );
 
         // Init to the default state
         this.revertToDefaultState();
@@ -149,10 +149,10 @@ export class UIControl extends ControlBase
     // 
     //  DESC: Load the control specific info from XML node
     //
-    loadControlFromNode( node )
+    loadControlFromNode( xmlNode )
     {
         // Get the list of object data associated with this button
-        let spriteNode = node.getElementsByTagName( 'sprite' );
+        let spriteNode = xmlNode.getElementsByTagName( 'sprite' );
         if( spriteNode.length )
         {
             // This is to get around the fact that objects are passed by "copy of reference".
@@ -168,17 +168,17 @@ export class UIControl extends ControlBase
     // 
     //  DESC: Load a sprite from an XML node
     //
-    loadSpriteFromNode( node, fontSpriteCount )
+    loadSpriteFromNode( xmlNode, fontSpriteCount )
     {
         // Get the type of object
-        let objectName = node.getAttribute( 'objectName' );
+        let objectName = xmlNode.getAttribute( 'objectName' );
 
         // allocate the sprite in the array
         let sprite = new Sprite( objectDataManager.getData( this.group, objectName ) );
         this.spriteAry.push( sprite );
 
         // Load the sprite data
-        sprite.load( node );
+        sprite.load( xmlNode );
 
         // See if this sprite is used for rendering a font string
         if( sprite.visualComponent.isFontSprite() )
@@ -191,7 +191,7 @@ export class UIControl extends ControlBase
             }
 
             // set the color if it is different
-            sprite.visualComponent.color = parseHelper.loadColor( node, sprite.visualComponent.color );
+            sprite.visualComponent.color = parseHelper.loadColor( xmlNode, sprite.visualComponent.color );
         }
         else
         {
@@ -206,37 +206,7 @@ export class UIControl extends ControlBase
                 this.size.h = height;
         }
     }
-    
-    // 
-    //  DESC: Load a sprite from an array
-    //  NOTE: Used to init the progress bar manually
-    //
-    loadSpriteFromArray( objectNameAry )
-    {
-        for( let i = 0; i < objectNameAry.length; ++i )
-        {
-            // allocate the sprite in the array
-            this.spriteAry.push( new Sprite( objectDataManager.getData( this.group, objectNameAry[i] ) ) );
-        }
-    }
-    
-    //
-    //  DESC: Load the control info from node data
-    //
-    loadFromData( nodeData )
-    {
-        for( let i = 0; i < nodeData.uiData.spriteDataAry.length; ++i )
-        {
-            let spriteData = nodeData.uiData.spriteDataAry[i];
-            let sprite = new Sprite( objectDataManager.getData( spriteData.group, spriteData.objectName ) );
-            sprite.load( spriteData );
-            this.spriteAry.push( sprite );
-        }
-            
-        this.copyTransform( nodeData );
-    }
-    
-    
+
     // 
     //  DESC: Update the control
     //

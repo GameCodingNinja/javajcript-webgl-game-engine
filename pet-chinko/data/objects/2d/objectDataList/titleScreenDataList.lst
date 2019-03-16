@@ -1,0 +1,41 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default>
+        <visual>
+            <shader id="shader_2d"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="background">
+            <visual defaultUniformScale="1.5">
+                <texture file="data/textures/titleScreen/title_background-720.jpg"/>
+                <mesh genType="quad"/>
+            </visual>
+        </object>
+        
+        <object name="meter_font">
+            <visual defaultUniformScale="1">
+                <mesh genType="font"/>
+                <color r="64" g="125" b="192" a="1"/>
+            </visual>
+        </object>
+        
+        <object name="meter_frame">
+            <visual defaultUniformScale="1">
+                <texture file="data/textures/titleScreen/16x16_3_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="175" height="55"/>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

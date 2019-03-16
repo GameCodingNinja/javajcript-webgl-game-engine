@@ -1,0 +1,58 @@
+<menu>
+    
+    <scriptLst>
+        <script transIn="Menu_TransIn"/>
+        <script transOut="Menu_TransOut"/>
+    </scriptLst>
+
+    <staticMenuControls>
+
+        <!-- Message Label -->
+        <control name="message_lbl" controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/confirmation_label.ctrl"/>
+            <position x="0" y="40" z="0"/>
+            <fontStringLst>
+                <string text="Test Message"/>
+            </fontStringLst>
+        </control>
+
+    </staticMenuControls>
+  
+    <menuControls>
+      
+        <control name="no_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
+            <position x="70" y="-70" z="0"/>
+            <fontStringLst>
+                <string text="No"/>
+            </fontStringLst>
+            <action actionType="back"/>
+            <navigate left="yes_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <control name="yes_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
+            <position x="-70" y="-70" z="0"/>
+            <fontStringLst>
+                <string text="Yes"/>
+            </fontStringLst>
+            <action actionType="back"/>
+            <navigate right="no_btn"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+    </menuControls>
+
+    <spriteList>
+
+        <sprite objectName="confirmation_menu_bg">
+            <script>
+                <transition in="Menu_TransIn" out="Menu_TransOut"/>
+            </script>
+        </sprite>
+    
+    </spriteList>
+  
+</menu>
+

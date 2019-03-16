@@ -50,14 +50,17 @@ export function downloadFile( fileType, filepath, callback )
                 {
                     if( (this.status >= 200 && this.status < 300) || this.status === 304 ) 
                     {
-                        if( fileType === 'xml' )
-                            callback(this.responseXML.childNodes[0]);
+                        if( fileType === 'xml' && this.responseXML )
+                                callback(this.responseXML.childNodes[0]);
 
-                        else if( fileType === 'txt' )
-                            callback(this.responseText);
+                        else if( fileType === 'txt' && this.responseText )
+                                callback(this.responseText);
 
-                        else if( fileType === 'binary' )
-                            callback(this.response);
+                        else if( fileType === 'binary' && this.response )
+                                callback(this.response);
+                            
+                        else
+                            console.log(`Error Loading: ${filepath}`);
                         
                         signalManager.broadcast_loadComplete();
                     }

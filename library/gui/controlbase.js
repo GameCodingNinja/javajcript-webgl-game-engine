@@ -41,26 +41,26 @@ export class ControlBase extends Object2D
     // 
     //  DESC: Load the control info from XML node
     //
-    loadFromNode( node )
+    loadFromNode( xmlNode )
     {
         // Set the controls name
-        let attr = node.getAttribute( 'name' );
+        let attr = xmlNode.getAttribute( 'name' );
         if( attr )
             this.name = attr;
 
         // Set the faction name
-        attr = node.getAttribute( 'faction' );
+        attr = xmlNode.getAttribute( 'faction' );
         if( attr )
             this.faction = attr;
 
         // Load the transform data
-        this.loadTransFromNode( node );
+        this.loadTransFromNode( xmlNode );
 
         // Load the dynamic offset from node
-        this.loadDynamicOffsetFromNode( node );
+        this.loadDynamicOffsetFromNode( xmlNode );
 
         // See if we have a list of strings
-        let stringLstNode = node.getElementsByTagName( 'fontStringLst' );
+        let stringLstNode = xmlNode.getElementsByTagName( 'fontStringLst' );
         if( stringLstNode.length )
         {
             let stringNode = stringLstNode[0].getElementsByTagName( 'string' );
@@ -71,7 +71,7 @@ export class ControlBase extends Object2D
 
         // Load the control specific xml file
         // Get the file path node to the control specific xml code
-        let filePathNode = node.getElementsByTagName( 'filePath' );
+        let filePathNode = xmlNode.getElementsByTagName( 'filePath' );
         if( filePathNode.length )
         {
             // Get the control's file path
@@ -81,12 +81,17 @@ export class ControlBase extends Object2D
             // Use the preloaded since many controls reuse xml files
             this.loadControlFromNode( assetHolder.get( this.group, controlFilePath ) );
         }
+        // Load from the node if we have a sprite list
+        else if( xmlNode.getElementsByTagName( 'spriteLst' ).length )
+        {
+            this.loadControlFromNode( xmlNode );
+        }
     }
     
     // 
     //  DESC: Load the control specific info from XML node
     //
-    loadControlFromNode( node )
+    loadControlFromNode( xmlNode )
     {
         // Empty function to be overwritten
     }
@@ -94,10 +99,10 @@ export class ControlBase extends Object2D
     // 
     //  DESC: Load the dynamic offset data from node
     //
-    loadDynamicOffsetFromNode( node )
+    loadDynamicOffsetFromNode( xmlNode )
     {
         // Load the dynamic offset
-        this.dynamicOffset = parseHelper.loadDynamicOffset( node );
+        this.dynamicOffset = parseHelper.loadDynamicOffset( xmlNode );
 
         // Set the dynamic position
         this.setDynamicPos();

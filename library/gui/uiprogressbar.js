@@ -31,7 +31,7 @@ export class UIProgressBar extends UIControl
         this.minValue = 0;
 
         // Max value of progress bar
-        this.maxValue = 0;
+        this.maxValue = 1;
 
         // Sprite index to apply stencil mask to
         this.spriteApplyIndex = -1;
@@ -55,12 +55,12 @@ export class UIProgressBar extends UIControl
     //
     //  DESC: Load the control info from XML node
     //
-    loadFromNode( node )
+    loadFromNode( xmlNode )
     {
-        super.loadFromNode( node );
+        super.loadFromNode( xmlNode );
 
         // See if a range of values was specified
-        let rangeNode = node.getElementsByTagName( 'range' );
+        let rangeNode = xmlNode.getElementsByTagName( 'range' );
         if( rangeNode.length )
         {
             let attr = rangeNode[0].getAttribute( 'cur' );
@@ -76,7 +76,7 @@ export class UIProgressBar extends UIControl
                 this.maxValue = Number( attr );
         }
 
-        let orentNode = node.getElementsByTagName( "orentation" );
+        let orentNode = xmlNode.getElementsByTagName( "orentation" );
         if( orentNode.length )
         {
             let attr = orentNode[0].getAttribute("type");
@@ -124,40 +124,8 @@ export class UIProgressBar extends UIControl
 
             this.spriteApplyIndex = Number(stencilMaskNode[0].getAttribute( "spriteIndex" ));
             
-            this.initSizePosScale( spriteApplyIndex, stencilMaskSprite );
+            this.initSizePosScale( this.spriteApplyIndex, stencilMaskSprite );
         }
-    }
-    
-    //
-    //  DESC: Load the control info from node data
-    //
-    loadFromData( nodeData )
-    {
-        super.loadFromData( nodeData )
-        
-        this.initSizePosScale( nodeData.uiData.spriteApplyIndex, nodeData.uiData.stencilMaskSprite );
-        
-        this.initProgressBar(
-            nodeData.uiData.maxValue,
-            nodeData.uiData.curValue,
-            nodeData.uiData.minValue,
-            nodeData.uiData.orentation,
-            nodeData.uiData.alignment );
-    }
-    
-    // 
-    //  DESC: Init the progress bar
-    //  NOTE: Used to init this control manually
-    //
-    initProgressBar( max = 0, cur = 0, min = 0, orentation = defs.EO_HORIZONTAL, alignment = defs.EHA_HORZ_LEFT )
-    {
-        this.maxValue = max;
-        this.curValue = cur;
-        this.minValue = min;
-        this.orentation = orentation;
-        this.alignment = alignment;
-        
-        this.setSizePos();
     }
 
     // 
@@ -167,17 +135,6 @@ export class UIProgressBar extends UIControl
     {
         this.maxValue = max;
         this.setSizePos();
-    }
-
-    // 
-    //  DESC: Load a sprite from an array
-    //  NOTE: Used to init this control manually
-    //
-    loadSpriteFromArray( objectNameAry, spriteApplyIndex, stencilMaskSprite = null )
-    {
-        super.loadSpriteFromArray( objectNameAry );
-        
-        this.initSizePosScale( spriteApplyIndex, stencilMaskSprite );
     }
 
     // 

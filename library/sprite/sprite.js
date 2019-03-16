@@ -79,38 +79,25 @@ export class Sprite
     }
     
     // 
-    //  DESC: Load from SpriteData or XML node
+    //  DESC: Load from XML node
     //
-    load( data )
+    load( xmlNode )
     {
-        // Load from sprite data
-        if( data instanceof SpriteData )
-        {
-            this.object.copyTransform( data );
-            this.createScriptFunctions( data );
-            
-            if( this.visualComponent.isFontSprite() && data.fontData )
-                this.visualComponent.fontData.copy( data.fontData );
-        }
-        // Load from XML node
-        else if( data instanceof Element )
-        {
-            this.object.loadTransFromNode( data );
-            this.initScriptFactoryFunctions( data );
-            
-            if( this.visualComponent.isFontSprite() )
-                this.visualComponent.loadFontPropFromNode( data );
-        }
+        this.object.loadTransFromNode( xmlNode );
+        this.initScriptFactoryFunctions( xmlNode );
+
+        if( this.visualComponent.isFontSprite() )
+            this.visualComponent.loadFontPropFromNode( xmlNode );
     }
     
     // 
     //  DESC: Init the script factory functions and add them to the map
     //        This function loads the attribute info reguardless of what it is
     //
-    initScriptFactoryFunctions( node )
+    initScriptFactoryFunctions( xmlNode )
     {
         // Check for scripting
-        let scriptNode = node.getElementsByTagName( 'script' );
+        let scriptNode = xmlNode.getElementsByTagName( 'script' );
 
         for( let i = 0; i < scriptNode.length; ++i )
         {

@@ -1,0 +1,49 @@
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <texture count="0" file="" compressed="false"/>
+            <mesh genType="quad">
+                <spriteSheet defIndex="" glyphCount="" columns=""/>
+                <scaledFrame thicknessWidth="" thicknessHeight="" centerQuad="" frameBottom=""/>
+                <file name=""/>
+            </mesh>
+            <color r="1" g="1" b="1" a="1"/>
+            <shader id="shader_2d"/>
+        </visual>
+        <size width="0" height="0"/>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="logo">
+          <visual>
+            <texture file="data/textures/startup/logo.jpg"/>
+          </visual>
+        </object>
+        
+        <object name="progress_frame">
+            <visual>
+                <texture file="data/textures/startup/16x16_3_pixel_frame.png"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="700" height="20"/>
+        </object>
+        
+        <object name="progress_solid">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="25" g="54" b="84" a="0.8"/>
+            </visual>
+            <size width="694" height="14"/>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

@@ -71,14 +71,28 @@ class Strategyloader
             let instance = nodeLst[i].getAttribute( 'instance' );
             let node = strategy.create( name, instance );
             
-            // See if there are any scripts that need to be prepared to run
-            let scriptLst = nodeLst[i].getElementsByTagName( 'script' );
-            for( let j = 0; j < scriptLst.length; ++j )
-            {
-                let attr = scriptLst[i].getAttribute( 'prepare' );
-                if( attr )
-                    node.getSprite().prepareScript( attr );
-            }
+            // See if there is a sprite that needs to be init. There should only be one
+            let spriteNode = nodeLst[i].getElementsByTagName( 'sprite' );
+            if( spriteNode.length )
+                this.initSprite( spriteNode[0], node.getSprite(), filePath );
+        }
+    }
+    
+    // 
+    //  DESC: Populate the strategies with their objects
+    //
+    initSprite( xmlNode, sprite, filePath )
+    {
+        // Set any transforms
+        sprite.object.loadTransFromNode( xmlNode );
+        
+        // See if there are any scripts that need to be prepared to run
+        let scriptLst = xmlNode.getElementsByTagName( 'script' );
+        for( let i = 0; i < scriptLst.length; ++i )
+        {
+            let attr = scriptLst[i].getAttribute( 'prepare' );
+            if( attr )
+                sprite.prepareScript( attr );
         }
     }
 }

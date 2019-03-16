@@ -1,0 +1,25 @@
+<node defaultGroup="(startup)">
+    
+    <node name="logo" type="spriteNode">
+        
+        <sprite2d objectName="logo">
+            <scale x="1.5" y="1.5" z="1"/>
+        </sprite2d>
+
+    </node>
+    
+    <node name="UIProgressBar" type="uiControlNode">
+        
+        <uiProgressBar defaultState="inactive">
+            <position x="0" y="-350" z="0"/>
+            <spriteLst>
+                <sprite objectName="progress_frame"/>
+                <sprite objectName="progress_solid"/>
+            </spriteLst>
+            
+            <!-- stencil mask -->
+            <stencilMask objectName="" spriteIndex="1" />
+        </uiProgressBar>
+    </node>
+
+</node>
