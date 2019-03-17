@@ -18,19 +18,6 @@ class State_PlayLoadAnim extends utilScripts.PlayAnim
     constructor( sprite )
     {
         super( sprite );
-        
-        super.init( 12, true );
-    }
-}
-
-//
-//  DESC: Script for fading in the menu
-//
-class State_RotateCube
-{
-    constructor( sprite )
-    {
-        this.sprite = sprite;
     }
     
     // 
@@ -38,21 +25,8 @@ class State_RotateCube
     //
     init()
     {
+        super.init( 12, true );
     }
-    
-    // 
-    //  DESC: Execute this script object
-    //
-    execute()
-    {
-        let rot = highResTimer.elapsedTime * 0.04;
-        this.sprite.object.incRotXYZ( rot, rot, 0 );
-    }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return false; }
 }
 
 // 
@@ -62,7 +36,4 @@ export function loadScripts()
 {
     scriptManager.set( 'State_PlayLoadAnim',
         ( sprite ) => { return new State_PlayLoadAnim( sprite ); } );
-        
-    scriptManager.set( 'State_RotateCube',
-        ( sprite ) => { return new State_RotateCube( sprite ); } );
 }

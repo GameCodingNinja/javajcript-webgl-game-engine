@@ -173,5 +173,5 @@ export function load()
 
     // Load the strategies
     loadManager.add(
-        ( callback ) => strategyLoader.load( '(title_screen)', 'data/objects/spritestrategy/titlescreenLoad.cfg', callback ));
+        ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/titlescreenLoad.cfg', callback ));
 }

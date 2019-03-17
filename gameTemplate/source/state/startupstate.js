@@ -95,7 +95,7 @@ export class StartUpState extends GameState
         loadManager.add( ( callback ) => strategyManager.addStrategy( '(startup)', new ActorStrategy, callback ) );
         
         // Load the strategies
-        loadManager.add( ( callback ) => strategyLoader.load( '(startup)', 'data/objects/spritestrategy/startupLoad.cfg', this.preloadComplete.bind(this) ));
+        loadManager.add( ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/startupLoad.cfg', this.preloadComplete.bind(this) ));
         
         // Start the load
         loadManager.load();

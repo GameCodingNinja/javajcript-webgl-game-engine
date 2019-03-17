@@ -21,6 +21,8 @@ import { assetHolder } from '../../../library/utilities/assetholder';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 
+export const ASSET_COUNT = 5;
+
 export class TitleScreenState extends CommonState
 {
     constructor( gameLoopCallback )
@@ -146,5 +148,5 @@ export function load()
 
     // Load the strategies
     loadManager.add(
-        ( callback ) => strategyLoader.load( '(title_screen)', 'data/objects/spritestrategy/titlescreenLoad.cfg', callback ));
+        ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/loaders/titlescreenLoad.cfg', callback ));
 }

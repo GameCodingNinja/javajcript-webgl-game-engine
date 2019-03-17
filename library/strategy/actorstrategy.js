@@ -108,7 +108,7 @@ export class ActorStrategy extends iStrategy
     //
     //  DESC: create the sprite sprite
     //
-    create( dataName, instanceName = null )
+    create( dataName, instanceName = null, makeActive = true )
     {
         // Create a unique node id
         let nodeId =  ((this.idInc++) + this.idOffset) * this.idDir;
@@ -130,7 +130,8 @@ export class ActorStrategy extends iStrategy
         }
 
         // Add the node to the array for adding to the active list
-        this.activateAry.push( headNode );
+        if( !instanceName || makeActive )
+            this.activateAry.push( headNode );
 
         // If there is an instance name with this node, add it to the map
         if( instanceName )

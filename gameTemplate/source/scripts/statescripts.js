@@ -19,6 +19,14 @@ class State_PlayLoadAnim extends utilScripts.PlayAnim
     {
         super( sprite );
         
+        this.init();
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init()
+    {
         super.init( 12, true );
     }
 }

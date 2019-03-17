@@ -18,7 +18,7 @@ class Strategyloader
     // 
     //  DESC: Load the file defining what the strategy holds
     //
-    load( group, filePath, callback )
+    load( filePath, callback )
     {
         genFunc.downloadFile( 'xml', filePath,
             ( xmlNode ) => this.loadStartegy( xmlNode, filePath, callback ));
@@ -65,7 +65,8 @@ class Strategyloader
         {
             let name = nodeLst[i].getAttribute( 'name' );
             let instance = nodeLst[i].getAttribute( 'instance' );
-            let node = strategy.create( name, instance );
+            let active = nodeLst[i].getAttribute( 'active' );
+            let node = strategy.create( name, instance, (!active || active === 'true') );
             
             // See if there is a sprite that needs to be init. There should only be one
             let spriteNode = nodeLst[i].getElementsByTagName( 'sprite' );

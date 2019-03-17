@@ -35,7 +35,7 @@ import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 61,
+const STARTUP_ASSET_COUNT = 51,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState
@@ -91,7 +91,7 @@ export class StartUpState extends GameState
         loadManager.add( ( callback ) => strategyManager.addStrategy( '(startup)', new ActorStrategy, callback ) );
         
         // Load the strategies
-        loadManager.add( ( callback ) => strategyLoader.load( '(startup)', 'data/objects/spritestrategy/startupLoad.cfg', this.preloadComplete.bind(this) ));
+        loadManager.add( ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/loaders/startupLoad.cfg', this.preloadComplete.bind(this) ));
         
         // Start the load
         loadManager.load();
@@ -247,7 +247,7 @@ export class StartUpState extends GameState
     }
 
     //
-    //  DESC: progress bar update callback function
+    //  DESC: Load callback function
     //
     loadCallback()
     {
