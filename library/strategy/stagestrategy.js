@@ -7,7 +7,6 @@
 "use strict";
 
 import { iStrategy } from './istrategy';
-import { assetHolder } from '../utilities/assetholder';
 import { Sector } from './sector';
 
 export class StageStrategy extends iStrategy
@@ -36,28 +35,17 @@ export class StageStrategy extends iStrategy
             
             let sectorFile = sectorNode[i].getAttribute('file');
             
-            // Check if this file has already been loaded
-            if( !assetHolder.has( strategyId, sectorFile ) )
-            {
-                // load the sector file
-                downloadFileCallback(
-                    'xml',
-                    strategyId,
-                    sectorFile,
-                    finishCallback,
-                    ( group, xmlNode, filePath, finishCallback ) => 
-                    {
-                        // Store the preloaded XML file
-                        assetHolder.set( group, filePath, xmlNode );
-
-                        // Call the sector function to load the data
-                        sector.loadFromNode( group, xmlNode, filePath, finishCallback );
-                    });
-            }
-            else
-            {
-                sector.loadFromNode( strategyId, assetHolder.get( strategyId, sectorFile), sectorFile, null );
-            }
+            // load the sector file
+            downloadFileCallback(
+                'xml',
+                strategyId,
+                sectorFile,
+                finishCallback,
+                ( group, xmlNode, filePath, finishCallback ) => 
+                {
+                    // Call the sector function to load the data
+                    sector.loadFromNode( group, xmlNode, filePath, finishCallback );
+                });
         }
     }
 

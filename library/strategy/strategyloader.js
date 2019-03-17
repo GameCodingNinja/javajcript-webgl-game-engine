@@ -7,7 +7,6 @@
 "use strict";
 
 import { strategyManager } from '../strategy/strategymanager';
-import { assetHolder } from '../utilities/assetholder';
 import * as genFunc from '../utilities/genfunc';
 
 class Strategyloader
@@ -21,11 +20,8 @@ class Strategyloader
     //
     load( group, filePath, callback )
     {
-        // Check if this file has already been loaded
-        if( !assetHolder.has( group, filePath ) )
-            genFunc.downloadFile( 'xml', filePath, ( xmlNode ) => this.loadStartegy( xmlNode, filePath, callback ));
-        else
-            this.loadStartegy( assetHolder.get( group, filePath ), filePath, callback );
+        genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) => this.loadStartegy( xmlNode, filePath, callback ));
     }
     
     // 

@@ -9,7 +9,6 @@
 import { ManagerBase } from '../managers/managerbase';
 import { Sound } from '../common/sound';
 import { PlayList } from '../common/playlist';
-import { assetHolder } from '../utilities/assetholder';
 
 class SoundManager extends ManagerBase
 {
@@ -71,23 +70,12 @@ class SoundManager extends ManagerBase
             // Load from node
             snd.loadFromNode( loadFilesNode[i] );
             
-            // Check if this file has already been loaded
-            if( !assetHolder.has( group, filePath ) )
-            {
-                this.downloadFile( 'binary', group, filePath, finishCallback,
-                    ( group, audioData, filePath, finishCallback ) => 
-                    {
-                        // Store the preloaded XML file
-                        assetHolder.set( group, filePath, audioData );
-
-                        // Call the class function to load the data
-                        this.loadFromBinaryData( group, id, audioData, filePath, finishCallback );
-                    });
-            }
-            else
-            {
-                this.loadFromBinaryData( group, id, assetHolder.get( group, filePath), filePath );
-            }
+            this.downloadFile( 'binary', group, filePath, finishCallback,
+                ( group, audioData, filePath, finishCallback ) => 
+                {
+                    // Call the class function to load the data
+                    this.loadFromBinaryData( group, id, audioData, filePath, finishCallback );
+                });
         }
         
         // Get the node to the sound files

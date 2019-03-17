@@ -126,22 +126,12 @@ class ObjectDataManager extends ManagerBase
                         // Add to the array to check for duplication
                         dupPathCheck.push( filePath );
 
-                        // Check if this file has already been loaded
-                        if( !assetHolder.has( group, filePath ) )
-                        {
-                            // Load the texture file
-                            this.downloadFile( 'img', group, filePath, finishCallback,
-                                ( group, image, filePath, finishCallback ) =>
-                                {
-                                    assetHolder.set( group, filePath, image );
-
-                                    textureManager.load( group, filePath, image );
-                                });
-                        }
-                        else
-                        {
-                            textureManager.load( group, filePath, assetHolder.get( group, filePath) );
-                        }
+                        // Load the texture file
+                        this.downloadFile( 'img', group, filePath, finishCallback,
+                            ( group, image, filePath, finishCallback ) =>
+                            {
+                                textureManager.load( group, filePath, image );
+                            });
                     }
                 }
 
@@ -182,24 +172,17 @@ class ObjectDataManager extends ManagerBase
                             // Add to the array to check for duplication
                             dupPathCheck.push( filePathAry[i] );
 
-                            // Check if this file has already been loaded
-                            if( !assetHolder.has( group, filePathAry[i] ) )
-                            {
-                                // Load the mesh file
-                                this.downloadFile( 'xml', group, filePathAry[i], finishCallback,
-                                    ( group, xmlNode, filePath, finishCallback ) =>
-                                    {
+                            // Load the mesh file
+                            this.downloadFile( 'xml', group, filePathAry[i], finishCallback,
+                                ( group, xmlNode, filePath, finishCallback ) =>
+                                {
+                                    if( filePath === objData.visualData.spriteSheetFilePath )
+                                        spriteSheetManager.loadFromNode( filePath, xmlNode );
+                                    
+                                    // Save the mesh file xml node for later
+                                    else
                                         assetHolder.set( group, filePath, xmlNode );
-
-                                        if( filePath === objData.visualData.spriteSheetFilePath )
-                                            spriteSheetManager.loadFromNode( filePath, xmlNode );
-                                    });
-                            }
-                            else
-                            {
-                                if( filePathAry[i] === objData.visualData.spriteSheetFilePath )
-                                    spriteSheetManager.loadFromNode( filePathAry[i], assetHolder.get( group, filePathAry[i] ) );
-                            }
+                                });
                         }
                     }
                 }
@@ -239,24 +222,13 @@ class ObjectDataManager extends ManagerBase
                         // Add to the array to check for duplication
                         dupPathCheck.push( filePath );
 
-                        // Check if this file has already been loaded
-                        if( !assetHolder.has( group, filePath ) )
-                        {
-                            // Load the mesh file
-                            this.downloadFile( 'binary', group, filePath, finishCallback,
-                                ( group, binaryFile, filePath, finishCallback ) =>
-                                {
-                                    assetHolder.set( group, filePath, binaryFile );
-
-                                    objData.visualData.meshGrp =
-                                        meshManager.load( group, filePath, binaryFile );
-                                });
-                        }
-                        else
-                        {
-                            objData.visualData.meshGrp =
-                                meshManager.load( group, filePath, assetHolder.get( group, filePath ) );
-                        }
+                        // Load the mesh file
+                        this.downloadFile( 'binary', group, filePath, finishCallback,
+                            ( group, binaryFile, filePath, finishCallback ) =>
+                            {
+                                objData.visualData.meshGrp =
+                                    meshManager.load( group, filePath, binaryFile );
+                            });
                     }
                 }
 
@@ -299,22 +271,12 @@ class ObjectDataManager extends ManagerBase
                         {
                             filePath = objData.visualData.meshGrp.uniqueTexturePathAry[i].path;
 
-                            // Check if this file has already been loaded
-                            if( !assetHolder.has( group, filePath ) )
-                            {
-                                // Load the texture file
-                                this.downloadFile( 'img', group, filePath, finishCallback,
-                                    ( group, image, filePath, finishCallback ) =>
-                                    {
-                                        assetHolder.set( group, filePath, image );
-
-                                        textureManager.load( group, filePath, image );
-                                    });
-                            }
-                            else
-                            {
-                                textureManager.load( group, filePath, assetHolder.get( group, filePath) );
-                            }
+                            // Load the texture file
+                            this.downloadFile( 'img', group, filePath, finishCallback,
+                                ( group, image, filePath, finishCallback ) =>
+                                {
+                                    textureManager.load( group, filePath, image );
+                                });
                         }
                     }
                 }

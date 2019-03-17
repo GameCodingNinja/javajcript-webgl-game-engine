@@ -6,7 +6,6 @@
 
 "use strict";
 
-import { assetHolder } from '../utilities/assetholder';
 import * as genFunc from '../utilities/genfunc';
 
 export class ManagerBase
@@ -129,23 +128,12 @@ export class ManagerBase
         {
             for( let i = 0; i < pathAry.length; ++i )
             {
-                // Check if this file has already been loaded
-                if( !assetHolder.has( group, pathAry[i] ) )
-                {
-                    this.downloadFile( 'xml', group, pathAry[i], finishCallback,
-                        ( group, xmlNode, filePath, finishCallback ) => 
-                        {
-                            // Store the preloaded XML file
-                            assetHolder.set( group, filePath, xmlNode );
-
-                            // Call the class function to load the data
-                            this.loadFromNode( group, xmlNode, filePath, finishCallback );
-                        });
-                }
-                else
-                {
-                    this.loadFromNode( group, assetHolder.get( group, pathAry[i] ), pathAry[i], null );
-                }
+                this.downloadFile( 'xml', group, pathAry[i], finishCallback,
+                    ( group, xmlNode, filePath, finishCallback ) => 
+                    {
+                        // Call the class function to load the data
+                        this.loadFromNode( group, xmlNode, filePath, finishCallback );
+                    });
             }
 
             // If there's nothing to load, call the complete callback

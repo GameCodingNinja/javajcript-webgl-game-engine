@@ -7,7 +7,6 @@
 "use strict";
 
 import { iSpriteStrategy } from '../common/ispritestrategy';
-import { assetHolder } from '../utilities/assetholder';
 
 export class SetStrategy extends iSpriteStrategy
 {

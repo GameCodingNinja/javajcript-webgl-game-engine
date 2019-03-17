@@ -8,6 +8,8 @@
 
 import { signalManager } from '../managers/signalmanager';
 
+var sessionCacheBustNo = Math.random();
+
 // 
 //  DESC: Load files
 //
@@ -72,7 +74,7 @@ export function downloadFile( fileType, filepath, callback )
             }
 
         // Define which file to open and send the request. True = asynchronous
-        request.open('GET', filepath + '?please-dont-cache=' + Math.random(), true);
+        request.open('GET', filepath + '?please-dont-cache=' + sessionCacheBustNo, true);
         request.send();
     }
     // Images are handled differently

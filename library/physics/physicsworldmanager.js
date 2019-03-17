@@ -7,7 +7,6 @@
 "use strict";
 
 import { ManagerBase } from '../managers/managerbase';
-import { assetHolder } from '../utilities/assetholder';
 import { PhysicsWorld2D } from './physicsworld2d';
 import { PhysicsWorld3D } from './physicsworld3d';
 
@@ -54,23 +53,12 @@ class PhysicsWorldManager extends ManagerBase
                 // There will only be one xml per physics world
                 let filePath = pathAry[0];
                 
-                // Check if this file has already been loaded
-                if( !assetHolder.has( group, filePath ) )
-                {
-                    this.downloadFile( 'xml', group, filePath, finishCallback,
-                        ( group, xmlNode, filePath, finishCallback ) => 
-                        {
-                            // Store the preloaded XML file
-                            assetHolder.set( group, filePath, xmlNode );
-
-                            // Load from an xml node
-                            this.loadFromNode( group, xmlNode, filePath );
-                        });
-                }
-                else
-                {
-                    this.loadFromNode( group, assetHolder.get( group, filePath), filePath );
-                }
+                this.downloadFile( 'xml', group, filePath, finishCallback,
+                    ( group, xmlNode, filePath, finishCallback ) => 
+                    {
+                        // Load from an xml node
+                        this.loadFromNode( group, xmlNode, filePath );
+                    });
                 
                 // If there's nothing to load, call the complete callback
                 if( this.loadCounter === 0 )
