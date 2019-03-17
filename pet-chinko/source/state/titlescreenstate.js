@@ -18,14 +18,14 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
-import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
+import * as stateDefs from './statedefs';
 
 export class TitleScreenState extends CommonState
 {
     constructor( gameLoopCallback )
     {
-        super( state.GAME_STATE_TITLESCREEN, state.GAME_STATE_LOAD, gameLoopCallback );
+        super( stateDefs.EGS_TITLE_SCREEN, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
         strategyManager.activateStrategy('(title_screen)');
         

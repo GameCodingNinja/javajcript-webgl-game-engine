@@ -20,15 +20,14 @@ import { StageStrategy } from '../../../library/strategy/stagestrategy';
 import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import { device } from '../../../library/system/device';
 import { CommonState } from './commonstate';
-import * as state from './gamestate';
 import * as defs from '../../../library/common/defs';
-import * as genFunc from '../../../library/utilities/genfunc';
+import * as stateDefs from './statedefs';
 
 export class RunState extends CommonState
 {
     constructor( gameLoopCallback = null )
     {
-        super( state.GAME_STATE_RUN, state.GAME_STATE_LOAD, gameLoopCallback );
+        super( stateDefs.EGS_RUN, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
         this.physicsWorld = physicsWorldManager.getWorld( "(game)" );
 

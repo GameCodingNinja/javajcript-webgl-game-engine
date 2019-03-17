@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { GameState } from './gamestate';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { textureManager } from '../../../library/managers/texturemanager';
@@ -33,17 +34,16 @@ import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
 import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
-import * as state from './gamestate';
 import * as stateDefs from './statedefs';
 
 const STARTUP_ASSET_COUNT = 86,
       MIN_LOAD_TIME = 1500;
 
-export class StartUpState extends state.GameState
+export class StartUpState extends GameState
 {
     constructor( gameLoopCallback )
     {
-        super( state.GAME_STATE_STARTUP, state.GAME_STATE_TITLESCREEN, gameLoopCallback );
+        super( stateDefs.EGS_STARTUP, stateDefs.EGS_TITLE_SCREEN, gameLoopCallback );
 
         // Load the scripts
         utilScripts.loadScripts();
@@ -146,6 +146,9 @@ export class StartUpState extends state.GameState
                     this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
                 else
                     setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
+                
+                // Disconnect to the load signal
+                signalManager.clear_loadComplete();
 
                 console.log('StartUp State load complete!: ' + this.progressCounter);
             }

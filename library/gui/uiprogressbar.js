@@ -171,11 +171,21 @@ export class UIProgressBar extends UIControl
     }
 
     // 
-    //  DESC: Inc the current value
+    //  DESC: Set the current value
     //
-    incCurrentValue( cur )
+    setCurrentValue( cur )
     {
         this.curValue = cur;
+        
+        this.setSizePos();
+    }
+    
+    // 
+    //  DESC: Inc the current value
+    //
+    incCurrentValue()
+    {
+        ++this.curValue;
         
         this.setSizePos();
     }

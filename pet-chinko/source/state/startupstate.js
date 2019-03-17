@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { GameState } from './gamestate';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { textureManager } from '../../../library/managers/texturemanager';
@@ -32,17 +33,16 @@ import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
 import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
-import * as state from './gamestate';
 import * as stateDefs from './statedefs';
 
 const STARTUP_ASSET_COUNT = 61,
       MIN_LOAD_TIME = 1500;
 
-export class StartUpState extends state.GameState
+export class StartUpState extends GameState
 {
     constructor( gameLoopCallback )
     {
-        super( state.GAME_STATE_STARTUP, state.GAME_STATE_TITLESCREEN, gameLoopCallback );
+        super( stateDefs.EGS_STARTUP, stateDefs.EGS_TITLE_SCREEN, gameLoopCallback );
 
         // Load the scripts
         utilScripts.loadScripts();
@@ -51,9 +51,6 @@ export class StartUpState extends state.GameState
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
-
-        // Init the progress bar counter
-        this.progressCounter = 0;
 
         // Preload assets for the startup screen
         this.preload();
@@ -145,8 +142,11 @@ export class StartUpState extends state.GameState
                     this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
                 else
                     setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
+                
+                // Disconnect to the load signal
+                signalManager.clear_loadComplete();
 
-                console.log('StartUp State load complete!: ' + this.progressCounter);
+                console.log('StartUp State load complete!: ' + this.progressBar.curValue );
             }
         }
     }
@@ -185,7 +185,7 @@ export class StartUpState extends state.GameState
         highResTimer.timerStart();
 
         // Set the function to be called to update the progress bar during the download
-        signalManager.connect_loadComplete( this.progressbarUpdate.bind(this) );
+        signalManager.connect_loadComplete( this.loadCallback.bind(this) );
 
         let groupAry = ['(menu)'];
 
@@ -249,9 +249,9 @@ export class StartUpState extends state.GameState
     //
     //  DESC: progress bar update callback function
     //
-    progressbarUpdate()
+    loadCallback()
     {
-        this.progressBar.incCurrentValue( ++this.progressCounter );
+        this.progressBar.incCurrentValue();
     }
 
     //

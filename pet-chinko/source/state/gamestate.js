@@ -8,12 +8,6 @@
 
 import { StateMessage } from './statemessage';
 
-export const GAME_STATE_NULL        = 0;
-export const GAME_STATE_STARTUP     = 1;
-export const GAME_STATE_TITLESCREEN = 2;
-export const GAME_STATE_LOAD        = 3;
-export const GAME_STATE_RUN         = 4;
-
 export class GameState
 {
     constructor( gameState, nextState, callback )
@@ -25,11 +19,6 @@ export class GameState
         
         // Message to send to next state
         this.stateMessage = new StateMessage;
-    }
-    
-    init()
-    {
-        // Empty function to be overwritten
     }
     
     cleanUp()

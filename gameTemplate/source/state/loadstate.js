@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { GameState } from './gamestate';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { textureManager } from '../../../library/managers/texturemanager';
@@ -21,16 +22,15 @@ import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { gl, device } from '../../../library/system/device';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as runState from '../state/runstate';
-import * as state from './gamestate';
 import * as stateDefs from './statedefs';
 
 const MIN_LOAD_TIME = 1000;
 
-export class LoadState extends state.GameState
+export class LoadState extends GameState
 {
     constructor( stateMessage, gameLoopCallback )
     {
-        super( state.GAME_STATE_LOAD, stateMessage.loadState, gameLoopCallback );
+        super( stateDefs.EGS_GAME_LOAD, stateMessage.loadState, gameLoopCallback );
         
         this.stateMessage.loadState = stateMessage.loadState;
         this.stateMessage.unloadState = stateMessage.unloadState;
@@ -148,10 +148,10 @@ export class LoadState extends state.GameState
         // Set the timer to see how long the load takes
         highResTimer.timerStart();
         
-        if( this.stateMessage.loadState === state.GAME_STATE_TITLESCREEN )
+        if( this.stateMessage.loadState === stateDefs.EGS_TITLE_SCREEN )
             titleScreenState.load();
         
-        else if( this.stateMessage.loadState === state.GAME_STATE_RUN )
+        else if( this.stateMessage.loadState === stateDefs.EGS_RUN )
             runState.load();
         
         // Last thing to do is send a message that the asset load is complete

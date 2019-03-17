@@ -58,9 +58,9 @@ class SignalManager
     }
     
     // 
-    //  DESC: disconnect to the load signal
+    //  DESC: Disconnect to the load signal
     //
-    clear_loadComplete( slot )
+    clear_loadComplete()
     {
         this.loadCompleteSignal = [];
     }

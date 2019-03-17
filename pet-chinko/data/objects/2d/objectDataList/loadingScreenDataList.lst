@@ -20,6 +20,15 @@
                 </mesh>
             </visual>
         </object>
+        
+        <object name="load_font">
+            <visual>
+                <mesh genType="font">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_2d"/>
+            </visual>
+        </object>
 
     </objectList>
 

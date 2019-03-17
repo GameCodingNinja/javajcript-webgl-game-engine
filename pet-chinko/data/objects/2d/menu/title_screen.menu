@@ -51,7 +51,7 @@
             <fontStringLst>
                 <string text="Start Game"/>
             </fontStringLst>
-            <action actionType="game_state_change" executionAction="run_state"/>
+            <action actionType="game_state_change" executionAction="level_1_state"/>
             <!--<navigate up="key_binding_btn" down="new_game_btn"/>-->
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>

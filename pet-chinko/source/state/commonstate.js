@@ -6,13 +6,13 @@
 
 "use strict";
 
-import * as state from './gamestate';
+import { GameState } from './gamestate';
 import { menuManager } from '../../../library/gui/menumanager';
 import { device } from '../../../library/system/device';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 
-export class CommonState extends state.GameState
+export class CommonState extends GameState
 {
     constructor( gameState, nextState, callBack )
     {
@@ -76,10 +76,10 @@ export class CommonState extends state.GameState
     getLoadState( loadStateStr )
     {
         if( loadStateStr === 'title_screen_state' )
-            return state.GAME_STATE_TITLESCREEN;
+            return stateDefs.EGS_TITLE_SCREEN;
         
-        else if( loadStateStr === 'run_state' )
-            return state.GAME_STATE_RUN;
+        else if( loadStateStr === 'level_1_state' )
+            return stateDefs.EGS_LEVEL_1;
         
         throw new Error( `State does not exist!. (${loadStateStr})` );
     }

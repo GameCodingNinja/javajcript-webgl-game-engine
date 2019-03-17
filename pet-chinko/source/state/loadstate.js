@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { GameState } from './gamestate';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { textureManager } from '../../../library/managers/texturemanager';
@@ -13,6 +14,7 @@ import { vertexBufferManager } from '../../../library/managers/vertexbuffermanag
 import { eventManager } from '../../../library/managers/eventmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
+import { signalManager } from '../../../library/managers/signalmanager';
 import { settings } from '../../../library/utilities/settings';
 import { Sprite } from '../../../library/sprite/sprite';
 import { Camera } from '../../../library/common/camera';
@@ -20,20 +22,21 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { gl, device } from '../../../library/system/device';
 import * as titleScreenState from '../state/titlescreenstate';
-import * as runState from '../state/runstate';
-import * as state from './gamestate';
+import * as level1State from '../state/level1state';
 import * as stateDefs from './statedefs';
 
 const MIN_LOAD_TIME = 1000;
 
-export class LoadState extends state.GameState
+export class LoadState extends GameState
 {
     constructor( stateMessage, gameLoopCallback )
     {
-        super( state.GAME_STATE_LOAD, stateMessage.loadState, gameLoopCallback );
+        super( stateDefs.EGS_GAME_LOAD, stateMessage.loadState, gameLoopCallback );
         
         this.stateMessage.loadState = stateMessage.loadState;
         this.stateMessage.unloadState = stateMessage.unloadState;
+        
+        this.loadCounter = 0;
         
         this.camera = new Camera();
         
@@ -94,6 +97,14 @@ export class LoadState extends state.GameState
     }
     
     // 
+    //  DESC: Load call back
+    //
+    loadCallback()
+    {
+        ++this.loadCounter;
+    }
+    
+    // 
     //  DESC: handle events
     //
     handleEvent( event )
@@ -117,8 +128,11 @@ export class LoadState extends state.GameState
                     this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
                 else
                     setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
+                
+                // Disconnect to the load signal
+                signalManager.clear_loadComplete();
         
-                console.log('Load State Complete!: ');
+                console.log(`Load State Download Count: ${this.loadCounter}`);
             }
         }
     }
@@ -145,14 +159,17 @@ export class LoadState extends state.GameState
     //
     assetLoad()
     {
+        // Set the function to be called to update the progress bar during the download
+        signalManager.connect_loadComplete( this.loadCallback.bind(this) );
+        
         // Set the timer to see how long the load takes
         highResTimer.timerStart();
         
-        if( this.stateMessage.loadState === state.GAME_STATE_TITLESCREEN )
+        if( this.stateMessage.loadState === stateDefs.EGS_TITLE_SCREEN )
             titleScreenState.load();
         
-        else if( this.stateMessage.loadState === state.GAME_STATE_RUN )
-            runState.load();
+        else if( this.stateMessage.loadState === stateDefs.EGS_LEVEL_1 )
+            level1State.load();
         
         // Last thing to do is send a message that the asset load is complete
         loadManager.add(
