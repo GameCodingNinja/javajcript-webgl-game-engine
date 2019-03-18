@@ -44,7 +44,7 @@ export class VisualComponentQuad extends ivisualComponent
         this.vbo = visualData.vbo;
         this.ibo = visualData.ibo;
         this.iboCount = visualData.iboCount;
-        this.texture = visualData.texture;
+        this.texture = visualData.getTexture();
         this.color = new Color;
         
         if( visualData.isActive() )
@@ -124,5 +124,14 @@ export class VisualComponentQuad extends ivisualComponent
     setFrame( index )
     {
         this.frameIndex = index;
+        this.texture = this.visualData.getTexture( index );
+    }
+    
+    //
+    //  DESC: Get the frame count
+    //
+    getFrameCount()
+    {
+        return this.visualData.getFrameCount();
     }
 }

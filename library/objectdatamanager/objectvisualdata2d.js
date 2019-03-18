@@ -25,7 +25,7 @@ export class ObjectVisualData2D
     constructor()
     {
         // texture id
-        this.texture = null;
+        this.textureAry = [];
 
         // VBO
         this.vbo = null;
@@ -44,6 +44,9 @@ export class ObjectVisualData2D
 
         // texture file path
         this.textureFilePath = '';
+        
+        // Texture Sequence count
+        this.textureSequenceCount = 0;
 
         // mesh file path
         this.meshFilePath = null;
@@ -81,6 +84,7 @@ export class ObjectVisualData2D
         this.genType = obj.genType;
         this.shaderID = obj.shaderID;
         this.textureFilePath = obj.textureFilePath;
+        this.textureSequenceCount = obj.textureSequenceCount;
         this.meshFilePath = obj.meshFilePath;
         this.spriteSheetFilePath = obj.spriteSheetFilePath;
         this.defaultUniformScale = obj.defaultUniformScale;
@@ -125,10 +129,15 @@ export class ObjectVisualData2D
             let textureNode = visualNode[0].getElementsByTagName( 'texture' );
             if( textureNode.length )
             {
-                let file = textureNode[0].getAttribute( 'file' );
+                let attr = textureNode[0].getAttribute( 'file' );
                 // Check for null because might want to replace with an empty string
-                if( file !== null )
-                    this.textureFilePath = file;
+                if( attr !== null )
+                    this.textureFilePath = attr;
+                
+                attr = textureNode[0].getAttribute( 'count' );
+                // Check for null because might want to replace with an empty string
+                if( attr !== null )
+                    this.textureSequenceCount = Number(attr);
             }
 
             // Get the mesh node
@@ -256,12 +265,22 @@ export class ObjectVisualData2D
         // Set the texture ID if one exists
         if( this.textureFilePath.length )
         {
-            // Get the texture for this object
-            this.texture = textureManager.getTexture( group, this.textureFilePath );
+            // Get the texture(s) for this object
+            if( this.textureSequenceCount )
+            {
+                for( let i = 0; i < this.textureSequenceCount; ++i )
+                {
+                    let NUM = i;
+                    let filePath = eval('`' + this.textureFilePath + '`');
+                    this.textureAry.push( textureManager.getTexture( group, filePath ) );
+                }
+            }
+            else
+                this.textureAry.push( textureManager.getTexture( group, this.textureFilePath ) );
             
             // If the passed in size is empty, set it to the texture size
             if( size.isEmpty() )
-                size.copy( this.texture.size );
+                size.copy( this.textureAry[0].size );
         }
         
         if( this.genType === defs.EGT_QUAD )
@@ -314,16 +333,16 @@ export class ObjectVisualData2D
                 
                 // Create the scaled frame using glyph info
                 if( this.meshFilePath )
-                    this.generateScaledFrameMeshFile( group, this.texture.size, glyph.size, size, glyph.uv );
+                    this.generateScaledFrameMeshFile( group, this.textureAry[0].size, glyph.size, size, glyph.uv );
                 else
-                    this.generateScaledFrame( group, this.texture.size, glyph.size, size, glyph.uv );
+                    this.generateScaledFrame( group, this.textureAry[0].size, glyph.size, size, glyph.uv );
             }
             else if( this.meshFilePath )
-                this.generateScaledFrameMeshFile( group, this.texture.size, this.texture.size, size, new Rect );
+                this.generateScaledFrameMeshFile( group, this.textureAry[0].size, this.textureAry[0].size, size, new Rect );
 
             else
                 // Generate a scaled frame
-                this.generateScaledFrame( group, this.texture.size, this.texture.size, size, new Rect );
+                this.generateScaledFrame( group, this.textureAry[0].size, this.textureAry[0].size, size, new Rect );
         }
     }
     
@@ -520,10 +539,42 @@ export class ObjectVisualData2D
     {
         if( this.genType === defs.EGT_SPRITE_SHEET )
             return this.spriteSheet.getCount();
-        
-        else if( this.texture !== null )
-            return 1;
+        else
+            return this.textureAry.length;
 
         return 0;
+    }
+    
+    // 
+    //  DESC: Get the texture
+    //
+    getTexture( index = 0 )
+    {
+        if( this.textureAry.length > index )
+            return this.textureAry[index];
+
+        return null;
+    }
+    
+    // 
+    //  DESC: Get the texture file paths
+    //
+    getTextureFilePathAry()
+    {
+        let filePathAry = [];
+        
+        // Get the texture(s) for this object
+        if( this.textureSequenceCount )
+        {
+            for( let i = 0; i < this.textureSequenceCount; ++i )
+            {
+                let NUM = i;
+                filePathAry.push( eval('`' + this.textureFilePath + '`') );
+            }
+        }
+        else if( this.textureFilePath.length )
+            filePathAry.push( this.textureFilePath );
+        
+        return filePathAry;
     }
 }

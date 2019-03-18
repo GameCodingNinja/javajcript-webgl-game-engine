@@ -96,7 +96,7 @@ export class VisualComponentSpriteSheet extends VisualComponentQuad
     //
     setFrame( index )
     {
-        super.setFrame( index );
+        this.frameIndex = index;
         
         let glyph = this.visualData.spriteSheet.getGlyph( index );
 

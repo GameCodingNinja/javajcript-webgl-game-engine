@@ -119,19 +119,24 @@ class ObjectDataManager extends ManagerBase
 
                 for( let [ key, objData ] of groupMap.entries() )
                 {
-                    let filePath = objData.visualData.textureFilePath;
+                    let filePathAry = objData.visualData.getTextureFilePathAry();
 
-                    if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
+                    for( let i = 0; i < filePathAry.length; ++i )
                     {
-                        // Add to the array to check for duplication
-                        dupPathCheck.push( filePath );
+                        let filePath = filePathAry[i];
+                        
+                        if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
+                        {
+                            // Add to the array to check for duplication
+                            dupPathCheck.push( filePath );
 
-                        // Load the texture file
-                        this.downloadFile( 'img', group, filePath, finishCallback,
-                            ( group, image, filePath, finishCallback ) =>
-                            {
-                                textureManager.load( group, filePath, image );
-                            });
+                            // Load the texture file
+                            this.downloadFile( 'img', group, filePath, finishCallback,
+                                ( group, image, filePath, finishCallback ) =>
+                                {
+                                    textureManager.load( group, filePath, image );
+                                });
+                        }
                     }
                 }
 

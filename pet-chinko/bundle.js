@@ -4591,19 +4591,24 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
 
                 for( let [ key, objData ] of groupMap.entries() )
                 {
-                    let filePath = objData.visualData.textureFilePath;
+                    let filePathAry = objData.visualData.getTextureFilePathAry();
 
-                    if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
+                    for( let i = 0; i < filePathAry.length; ++i )
                     {
-                        // Add to the array to check for duplication
-                        dupPathCheck.push( filePath );
+                        let filePath = filePathAry[i];
+                        
+                        if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
+                        {
+                            // Add to the array to check for duplication
+                            dupPathCheck.push( filePath );
 
-                        // Load the texture file
-                        this.downloadFile( 'img', group, filePath, finishCallback,
-                            ( group, image, filePath, finishCallback ) =>
-                            {
-                                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( group, filePath, image );
-                            });
+                            // Load the texture file
+                            this.downloadFile( 'img', group, filePath, finishCallback,
+                                ( group, image, filePath, finishCallback ) =>
+                                {
+                                    _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( group, filePath, image );
+                                });
+                        }
                     }
                 }
 
@@ -6638,7 +6643,7 @@ class ObjectVisualData2D
     constructor()
     {
         // texture id
-        this.texture = null;
+        this.textureAry = [];
 
         // VBO
         this.vbo = null;
@@ -6657,6 +6662,9 @@ class ObjectVisualData2D
 
         // texture file path
         this.textureFilePath = '';
+        
+        // Texture Sequence count
+        this.textureSequenceCount = 0;
 
         // mesh file path
         this.meshFilePath = null;
@@ -6694,6 +6702,7 @@ class ObjectVisualData2D
         this.genType = obj.genType;
         this.shaderID = obj.shaderID;
         this.textureFilePath = obj.textureFilePath;
+        this.textureSequenceCount = obj.textureSequenceCount;
         this.meshFilePath = obj.meshFilePath;
         this.spriteSheetFilePath = obj.spriteSheetFilePath;
         this.defaultUniformScale = obj.defaultUniformScale;
@@ -6738,10 +6747,15 @@ class ObjectVisualData2D
             let textureNode = visualNode[0].getElementsByTagName( 'texture' );
             if( textureNode.length )
             {
-                let file = textureNode[0].getAttribute( 'file' );
+                let attr = textureNode[0].getAttribute( 'file' );
                 // Check for null because might want to replace with an empty string
-                if( file !== null )
-                    this.textureFilePath = file;
+                if( attr !== null )
+                    this.textureFilePath = attr;
+                
+                attr = textureNode[0].getAttribute( 'count' );
+                // Check for null because might want to replace with an empty string
+                if( attr !== null )
+                    this.textureSequenceCount = Number(attr);
             }
 
             // Get the mesh node
@@ -6869,12 +6883,22 @@ class ObjectVisualData2D
         // Set the texture ID if one exists
         if( this.textureFilePath.length )
         {
-            // Get the texture for this object
-            this.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__["textureManager"].getTexture( group, this.textureFilePath );
+            // Get the texture(s) for this object
+            if( this.textureSequenceCount )
+            {
+                for( let i = 0; i < this.textureSequenceCount; ++i )
+                {
+                    let NUM = i;
+                    let filePath = eval('`' + this.textureFilePath + '`');
+                    this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__["textureManager"].getTexture( group, filePath ) );
+                }
+            }
+            else
+                this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__["textureManager"].getTexture( group, this.textureFilePath ) );
             
             // If the passed in size is empty, set it to the texture size
             if( size.isEmpty() )
-                size.copy( this.texture.size );
+                size.copy( this.textureAry[0].size );
         }
         
         if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_QUAD"] )
@@ -6927,16 +6951,16 @@ class ObjectVisualData2D
                 
                 // Create the scaled frame using glyph info
                 if( this.meshFilePath )
-                    this.generateScaledFrameMeshFile( group, this.texture.size, glyph.size, size, glyph.uv );
+                    this.generateScaledFrameMeshFile( group, this.textureAry[0].size, glyph.size, size, glyph.uv );
                 else
-                    this.generateScaledFrame( group, this.texture.size, glyph.size, size, glyph.uv );
+                    this.generateScaledFrame( group, this.textureAry[0].size, glyph.size, size, glyph.uv );
             }
             else if( this.meshFilePath )
-                this.generateScaledFrameMeshFile( group, this.texture.size, this.texture.size, size, new _common_rect__WEBPACK_IMPORTED_MODULE_0__["Rect"] );
+                this.generateScaledFrameMeshFile( group, this.textureAry[0].size, this.textureAry[0].size, size, new _common_rect__WEBPACK_IMPORTED_MODULE_0__["Rect"] );
 
             else
                 // Generate a scaled frame
-                this.generateScaledFrame( group, this.texture.size, this.texture.size, size, new _common_rect__WEBPACK_IMPORTED_MODULE_0__["Rect"] );
+                this.generateScaledFrame( group, this.textureAry[0].size, this.textureAry[0].size, size, new _common_rect__WEBPACK_IMPORTED_MODULE_0__["Rect"] );
         }
     }
     
@@ -7133,11 +7157,43 @@ class ObjectVisualData2D
     {
         if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
             return this.spriteSheet.getCount();
-        
-        else if( this.texture !== null )
-            return 1;
+        else
+            return this.textureAry.length;
 
         return 0;
+    }
+    
+    // 
+    //  DESC: Get the texture
+    //
+    getTexture( index = 0 )
+    {
+        if( this.textureAry.length > index )
+            return this.textureAry[index];
+
+        return null;
+    }
+    
+    // 
+    //  DESC: Get the texture file paths
+    //
+    getTextureFilePathAry()
+    {
+        let filePathAry = [];
+        
+        // Get the texture(s) for this object
+        if( this.textureSequenceCount )
+        {
+            for( let i = 0; i < this.textureSequenceCount; ++i )
+            {
+                let NUM = i;
+                filePathAry.push( eval('`' + this.textureFilePath + '`') );
+            }
+        }
+        else if( this.textureFilePath.length )
+            filePathAry.push( this.textureFilePath );
+        
+        return filePathAry;
     }
 }
 
@@ -10608,7 +10664,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
         this.vbo = visualData.vbo;
         this.ibo = visualData.ibo;
         this.iboCount = visualData.iboCount;
-        this.texture = visualData.texture;
+        this.texture = visualData.getTexture();
         this.color = new _common_color__WEBPACK_IMPORTED_MODULE_7__["Color"];
         
         if( visualData.isActive() )
@@ -10688,6 +10744,15 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
     setFrame( index )
     {
         this.frameIndex = index;
+        this.texture = this.visualData.getTexture( index );
+    }
+    
+    //
+    //  DESC: Get the frame count
+    //
+    getFrameCount()
+    {
+        return this.visualData.getFrameCount();
     }
 }
 
@@ -10733,6 +10798,14 @@ class ivisualComponent
     //
     setFrame( index )
     {
+    }
+    
+    //
+    //  DESC: Get the frame count
+    //
+    getFrameCount()
+    {
+        return 1;
     }
     
     //
@@ -11286,7 +11359,7 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
     //
     setFrame( index )
     {
-        super.setFrame( index );
+        this.frameIndex = index;
         
         let glyph = this.visualData.spriteSheet.getGlyph( index );
 
@@ -22371,6 +22444,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     preloadComplete()
     {
+        // Position at the bottom of the screen.
         let strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].activateStrategy( '(loadingScreen)' );
         strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].defaultSize_half.h - 150), 0 );
         this.loadFont = strategy.get( 'load_font' ).getSprite();

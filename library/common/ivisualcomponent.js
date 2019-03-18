@@ -35,6 +35,14 @@ export class ivisualComponent
     }
     
     //
+    //  DESC: Get the frame count
+    //
+    getFrameCount()
+    {
+        return 1;
+    }
+    
+    //
     //  DESC: Get the font size
     //
     getFontSize()
