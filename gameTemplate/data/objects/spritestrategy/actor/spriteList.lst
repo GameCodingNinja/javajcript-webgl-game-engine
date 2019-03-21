@@ -1,4 +1,4 @@
-<node defaultGroup="(run)" defaultAIName="aiBall">
+<node defaultGroup="(level_1)" defaultAIName="aiBall">
     
     <node name="multiListTestNode" type="objectNodeMultiList" defaultAIName="">
 

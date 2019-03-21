@@ -16,7 +16,7 @@ import { shaderManager } from '../../../library/managers/shadermanager';
 import { StartUpState } from '../state/startupstate';
 import { TitleScreenState } from '../state/titlescreenstate';
 import { LoadState } from '../state/loadstate';
-import { RunState } from '../state/runstate';
+import { Level1State } from '../state/level1state';
 import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
 import { aiBall } from '../ai/aiball';
 import { gl, device } from '../../../library/system/device';
@@ -147,8 +147,8 @@ export class Game
             else if( this.gameState.nextState === stateDefs.EGS_GAME_LOAD )
                 this.gameState = new LoadState( this.gameState.stateMessage, this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === stateDefs.EGS_RUN )
-                this.gameState = new RunState( this.gameLoop.bind(this) );
+            else if( this.gameState.nextState === stateDefs.EGS_LEVEL_1 )
+                this.gameState = new Level1State( this.gameLoop.bind(this) );
             
             return true;
         }

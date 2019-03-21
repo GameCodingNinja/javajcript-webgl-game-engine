@@ -78,8 +78,8 @@ export class CommonState extends GameState
         if( loadStateStr === 'title_screen_state' )
             return stateDefs.EGS_TITLE_SCREEN;
         
-        else if( loadStateStr === 'run_state' )
-            return stateDefs.EGS_RUN;
+        else if( loadStateStr === 'level_1_state' )
+            return stateDefs.EGS_LEVEL_1;
         
         throw new Error( `State does not exist!. (${loadStateStr})` );
     }

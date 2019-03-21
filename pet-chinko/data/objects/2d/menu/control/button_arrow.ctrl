@@ -4,7 +4,8 @@
 
         <sprite objectName="arrow_button_solid">
             <scriptLst>
-                <script selected="Control_Fast_Solid_Selected"/>
+                <script init="Control_Hidden"/>
+                <script disabled="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Hidden"/>
                 <script selected="Control_Fast_Solid_Selected"/>
@@ -13,6 +14,7 @@
     
         <sprite objectName="arrow_button_frame">
             <scriptLst>
+                <script init="Control_Hidden"/>
                 <script disabled="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Active"/>

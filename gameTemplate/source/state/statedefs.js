@@ -12,7 +12,7 @@ export const EGS_NULL         = 0,
              EGS_STARTUP      = 1,
              EGS_TITLE_SCREEN = 2,
              EGS_GAME_LOAD    = 3,
-             EGS_RUN          = 4;
+             EGS_LEVEL_1      = 4;
     
 // EStateEvent
 export const ESE_STATE_EVENTS         = 1000,

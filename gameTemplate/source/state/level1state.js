@@ -1,7 +1,7 @@
 
 // 
-//  FILE NAME: runstate.js
-//  DESC:      RunState Class State
+//  FILE NAME: level1state.js
+//  DESC:      Level1State Class State
 //
 
 "use strict";
@@ -23,11 +23,11 @@ import { CommonState } from './commonstate';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 
-export class RunState extends CommonState
+export class Level1State extends CommonState
 {
     constructor( gameLoopCallback = null )
     {
-        super( stateDefs.EGS_RUN, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
+        super( stateDefs.EGS_LEVEL_1, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
         this.physicsWorld = physicsWorldManager.getWorld( "(game)" );
 
@@ -78,7 +78,7 @@ export class RunState extends CommonState
         // Only delete the strategy(s) used in this state. Don't use clear().
         strategyManager.deleteStrategy( ['(stage1)','(sprite)'] );
         
-        objectDataManager.freeGroup( ['(run)'] );
+        objectDataManager.freeGroup( ['(level_1)'] );
         
         physicsWorldManager.destroyWorld( "(game)" );
     }
@@ -135,19 +135,19 @@ export function load()
 {
     // Load the xml group
     loadManager.add(
-        ( callback ) => objectDataManager.loadXMLGroup2D( ['(run)'], callback ) );
+        ( callback ) => objectDataManager.loadXMLGroup2D( ['(level_1)'], callback ) );
 
     // Load all the textures associated with this group
     loadManager.add(
-        ( callback ) => objectDataManager.loadTextureGroup2D( ['(run)'], callback ) );
+        ( callback ) => objectDataManager.loadTextureGroup2D( ['(level_1)'], callback ) );
 
     // Load all the meshes associated with this group
     loadManager.add(
-        ( callback ) => objectDataManager.loadMeshGroup2D( ['(run)'], callback ) );
+        ( callback ) => objectDataManager.loadMeshGroup2D( ['(level_1)'], callback ) );
 
     // Create OpenGL objects from the loaded data
     loadManager.add(
-        ( callback ) => objectDataManager.createFromData( ['(run)'], callback ) );
+        ( callback ) => objectDataManager.createFromData( ['(level_1)'], callback ) );
 
     // Load the physics list table and group
     loadManager.add(

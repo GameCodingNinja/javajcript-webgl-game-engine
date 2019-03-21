@@ -1,4 +1,4 @@
-<spriteList defaultGroup="(run)" defaultObjectName="peg" defaultId="-2">
+<spriteList defaultGroup="(level_1)" defaultObjectName="peg" defaultId="-2">
 
     <sprite>
         <position x="-800" y="320"/>

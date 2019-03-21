@@ -20,8 +20,8 @@ import { Camera } from '../../../library/common/camera';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { gl, device } from '../../../library/system/device';
-import * as titleScreenState from '../state/titlescreenstate';
-import * as runState from '../state/runstate';
+import * as titleScreenState from './titlescreenstate';
+import * as level1State from './level1state';
 import * as stateDefs from './statedefs';
 
 const MIN_LOAD_TIME = 1000;
@@ -151,8 +151,8 @@ export class LoadState extends GameState
         if( this.stateMessage.loadState === stateDefs.EGS_TITLE_SCREEN )
             titleScreenState.load();
         
-        else if( this.stateMessage.loadState === stateDefs.EGS_RUN )
-            runState.load();
+        else if( this.stateMessage.loadState === stateDefs.EGS_LEVEL_1 )
+            level1State.load();
         
         // Last thing to do is send a message that the asset load is complete
         loadManager.add(

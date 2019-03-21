@@ -22674,7 +22674,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_13__["CommonStat
         // Only delete the strategy(s) used in this state. Don't use clear().
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].deleteStrategy( ['(stage1)','(sprite)'] );
         
-        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].freeGroup( ['(run)'] );
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].freeGroup( ['(level_1)'] );
         
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_5__["physicsWorldManager"].destroyWorld( "(game)" );
     }
@@ -22731,19 +22731,19 @@ function load()
 {
     // Load the xml group
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_7__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].loadXMLGroup2D( ['(run)'], callback ) );
+        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].loadXMLGroup2D( ['(level_1)'], callback ) );
 
     // Load all the textures associated with this group
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_7__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].loadTextureGroup2D( ['(run)'], callback ) );
+        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].loadTextureGroup2D( ['(level_1)'], callback ) );
 
     // Load all the meshes associated with this group
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_7__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].loadMeshGroup2D( ['(run)'], callback ) );
+        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].loadMeshGroup2D( ['(level_1)'], callback ) );
 
     // Create OpenGL objects from the loaded data
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_7__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].createFromData( ['(run)'], callback ) );
+        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].createFromData( ['(level_1)'], callback ) );
 
     // Load the physics list table and group
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_7__["loadManager"].add(

@@ -18,12 +18,8 @@
         <file path="data/objects/2d/objectDataList/titleScreenDataList.lst"/>
     </groupList>
     
-    <groupList groupName="(slot)">
-        <file path="data/objects/2d/objectDataList/symbolDataList.lst"/>
-    </groupList>
-    
-    <groupList groupName="(run)">
-        <file path="data/objects/2d/objectDataList/runDataList.lst"/>
+    <groupList groupName="(level_1)">
+        <file path="data/objects/2d/objectDataList/level1DataList.lst"/>
     </groupList>
   
 </listTable>
