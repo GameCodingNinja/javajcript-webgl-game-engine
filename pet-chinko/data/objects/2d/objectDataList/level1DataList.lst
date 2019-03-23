@@ -34,7 +34,7 @@
         
         <object name="circle_green">
             <visual>
-                <texture file="data/textures/run/circle_green.png"/>
+                <texture file="data/textures/levelArt/circle_green.png"/>
             </visual>
             <physics>
                 <body type="dynamic"/>
@@ -46,7 +46,7 @@
     
         <object name="circle_blue">
             <visual>
-                <texture file="data/textures/run/circle_blue.png"/>
+                <texture file="data/textures/levelArt/circle_blue.png"/>
             </visual>
             <physics>
                 <body type="dynamic"/>
@@ -58,7 +58,7 @@
         
         <object name="circle_red">
             <visual>
-                <texture file="data/textures/run/circle_red.png"/>
+                <texture file="data/textures/levelArt/circle_red.png"/>
             </visual>
             <physics>
                 <body type="dynamic"/>
@@ -70,7 +70,7 @@
     
         <object name="square_red">
             <visual>
-                <texture file="data/textures/run/square_red.png"/>
+                <texture file="data/textures/levelArt/square_red.png"/>
             </visual>
             <physics>
                 <body type="dynamic"/>
@@ -84,7 +84,7 @@
         
         <object name="triangle_green">
             <visual>
-                <texture file="data/textures/run/triangle_green.png"/>
+                <texture file="data/textures/levelArt/triangle_green.png"/>
             </visual>
             <physics>
                 <body type="dynamic"/>
@@ -102,7 +102,7 @@
     
         <object name="triangle_blue">
             <visual>
-                <texture file="data/textures/run/triangle_blue.png"/>
+                <texture file="data/textures/levelArt/triangle_blue.png"/>
             </visual>
             <physics>
                 <body type="dynamic"/>
@@ -120,12 +120,26 @@
 
         <object name="peg">
             <visual>
-                <texture file="data/textures/run/peg.png"/>
+                <texture file="data/textures/levelArt/peg.png"/>
             </visual>
             <physics>
                 <body type="static"/>
                 <fixtureLst>
                     <fixture shape="circle" radius="17"/>
+                </fixtureLst>
+            </physics>
+        </object>
+        
+        <object name="bar">
+            <visual>
+                <texture file="data/textures/levelArt/bar.png"/>
+            </visual>
+            <physics>
+                <body type="static"/>
+                <fixtureLst>
+                    <fixture shape="polygon">
+                        <sizeMod top="-4" bottom="-4" left="-4" right="-4"/>
+                    </fixture>
                 </fixtureLst>
             </physics>
         </object>

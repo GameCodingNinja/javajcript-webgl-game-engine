@@ -140,7 +140,7 @@ export class LoadState extends GameState
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();
         
-                console.log(`Load State Download Count: ${this.loadCounter}`);
+                console.log(`${this.getStateStr(this.stateMessage.loadState)} Count: ${this.loadCounter}`);
             }
         }
     }

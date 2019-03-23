@@ -1,16 +1,14 @@
 
 // 
 //  FILE NAME: sector.js
-//  DESC:      Class the creates & renders all the sector sprites
+//  DESC:      Class the creates & renders all the sector nodess
 //
 
 "use strict";
 
 import { Object3D } from '../3d/object3d';
-import { settings } from '../utilities/settings';
-import { Sprite } from '../sprite/sprite';
-import { objectDataManager } from '../objectdatamanager/objectdatamanager';
-import { signalManager } from '../managers/signalmanager';
+import { NodeDataList } from '../node/nodedatalist';
+import * as nodeFactory from '../node/nodefactory';
 
 export class Sector extends Object3D
 {
@@ -18,17 +16,11 @@ export class Sector extends Object3D
     {
         super();
         
-        // sprite allocation array
-        this.spriteAry = [];
+        // node allocation array
+        this.nodeAry = [];
         
-        // Map of sprites that have names
-        this.spriteMap = new Map;
-
-        // The projection type
-        this.projectionType = settings.projectionType;
-
-        // Half of the sector size
-        this.sectorSizeHalf = settings.sectorSizeHalf;
+        // Map of nodes that have names
+        this.nodeMap = new Map;
     }
     
     //
@@ -57,57 +49,32 @@ export class Sector extends Object3D
         if( attr )
             defaultId = Number(attr);
         
-        let spriteNode = node.children;
+        let sectorNode = node.children;
 
-        for( let i = 0; i < spriteNode.length; ++i )
+        for( let i = 0; i < sectorNode.length; ++i )
         {
-            let objName = defaultObjName;
-            let group = defaultGroup;
-            let id = defaultId;
-            let aiName = defaultAIName;
-            let name = null;
+            // Allocate the node data list to load this node
+            let nodeAry = new NodeDataList( sectorNode[i], defaultGroup, defaultObjName, defaultAIName ).dataAry;
             
-            attr = spriteNode[i].getAttribute( 'group' );
-            if( attr )
-                group = attr;
+            // Build the node list
+            let headNode = null;
+            for( let j = 0; j < nodeAry.length; j++ )
+            {
+                let node = nodeFactory.create( nodeAry[j], nodeAry[j].id );
+
+                if( headNode === null )
+                    headNode = node;
+
+                else if( !headNode.addNode( node, nodeAry[j].nodeName ) )
+                    throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
+            }
             
-            attr = spriteNode[i].getAttribute( 'name' );
-            if( attr )
-                name = attr;
-            
-            attr = spriteNode[i].getAttribute( 'objectName' );
-            if( attr )
-                objName = attr;
-            
-            attr = spriteNode[i].getAttribute( 'aiName' );
-            if( attr )
-                aiName = attr;
-            
-            attr = spriteNode[i].getAttribute( 'id' );
-            if( attr )
-                id = Number(attr);
-            
-            let sprite = null;
-            
-            // Allocate the sprite and add it to the array
-            sprite = new Sprite( objectDataManager.getData( group, objName ), id );
-            
-            // Load the transform data from node
-            sprite.load( spriteNode[i] );
-            
-            // Add to the sprite array
-            this.spriteAry.push( sprite );
+            // Add to the node array
+            this.nodeAry.push( headNode );
             
             // If it has a name, add it to the map for easy retrieval
-            if( name )
-                this.spriteMap.set( name, sprite );
-
-            // Init the physics
-            sprite.initPhysics();
-            
-            // Broadcast the signal to create the sprite AI
-            if( aiName !== '' )
-                signalManager.broadcast_aiCreate( aiName, sprite );
+            if( headNode.nodeName )
+                this.nodeMap.set( headNode.nodeName, headNode );
         }
     }
     
@@ -118,8 +85,8 @@ export class Sector extends Object3D
     {
         // Create any font strings
         // This allows for delayed VBO create so that the fonts can be allocated during a load screen
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].init();
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].init();
     }
 
     //
@@ -127,20 +94,20 @@ export class Sector extends Object3D
     //
     cleanUp()
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].cleanUp();
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].cleanUp();
     }
     
     //
-    //  DESC: Get sprite by sector index and name
+    //  DESC: Get node by name
     //
     get( name )
     {
-        let sprite = this.spriteMap.get( name );
-        if( !sprite )
+        let node = this.nodeMap.get( name );
+        if( !node )
             throw new Error( `Sprite name can't be found (${name})!` );
         
-        return sprite;
+        return node;
     }
     
     //
@@ -148,38 +115,36 @@ export class Sector extends Object3D
     //
     destroy()
     {
-        this.spriteAry = [];
+        this.cleanUp();
+        this.nodeAry = [];
     }
 
     //
-    //  DESC: Update the sprites
+    //  DESC: Update the nodess
     //
     update()
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-        {
-            this.spriteAry[i].update();
-            this.spriteAry[i].physicsUpdate();
-        }
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].update();
     }
 
     //
-    //  DESC: Transform the sprite
+    //  DESC: Transform the nodes
     //
     transform()
     {
         super.transform();
         
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].object.transform( this );
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].transform( this );
     }
 
     //
-    //  DESC: Render the sprites
+    //  DESC: Render the nodess
     //
     render( camera )
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].render( camera );
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].render( camera );
     }
 }

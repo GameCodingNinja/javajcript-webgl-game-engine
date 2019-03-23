@@ -35,7 +35,7 @@ import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 51,
+const STARTUP_ASSET_COUNT = 50,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState

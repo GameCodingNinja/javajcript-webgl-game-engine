@@ -21,7 +21,7 @@ import { assetHolder } from '../../../library/utilities/assetholder';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 
-export const ASSET_COUNT = 5;
+export const ASSET_COUNT = 4;
 
 export class TitleScreenState extends CommonState
 {

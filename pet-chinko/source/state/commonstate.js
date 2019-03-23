@@ -38,7 +38,7 @@ export class CommonState extends GameState
                     menuManager.allowEventHandling = false;
 
                     // Set the message to load and unload the states
-                    this.stateMessage.setMsg( this.getLoadState(event.detail.arg[1]), this.gameState );
+                    this.stateMessage.setMsg( this.getGameState(event.detail.arg[1]), this.gameState );
                 }
             }
             else if( event.detail.type === stateDefs.ESE_FADE_OUT_COMPLETE )
@@ -68,19 +68,5 @@ export class CommonState extends GameState
     {
         // Transform the menus
         menuManager.transform();
-    }
-    
-    // 
-    //  DESC: Get the load state
-    //
-    getLoadState( loadStateStr )
-    {
-        if( loadStateStr === 'title_screen_state' )
-            return stateDefs.EGS_TITLE_SCREEN;
-        
-        else if( loadStateStr === 'level_1_state' )
-            return stateDefs.EGS_LEVEL_1;
-        
-        throw new Error( `State does not exist!. (${loadStateStr})` );
     }
 }

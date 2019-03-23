@@ -11,9 +11,9 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as utilScripts from './utilityscripts';
 
 //
-//  DESC: Script for fading in the menu
+//  DESC: Script for rotating the loading animation
 //
-class State_PlayLoadAnim extends utilScripts.PlayAnim
+class State_PlayLoadAnim extends utilScripts.FrameExecute
 {
     constructor( sprite )
     {
@@ -25,7 +25,15 @@ class State_PlayLoadAnim extends utilScripts.PlayAnim
     //
     init()
     {
-        super.init( 12, true );
+        super.init( 10 );
+    }
+    
+    // 
+    //  DESC: Execute this frame
+    //
+    frame()
+    {
+        this.sprite.object.incRotXYZ( 0.0, 0.0, -30.0 );
     }
 }
 

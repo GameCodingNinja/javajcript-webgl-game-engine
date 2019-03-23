@@ -113,6 +113,60 @@ export class PlayAnim
 }
 
 //
+//  DESC: Execute an action at a specific frame rate
+//
+export class FrameExecute
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+        
+        this.time = 0;
+        this.fps = 0;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( fps )
+    {
+        this.fps = fps;
+        this.time = 1000.0 / this.fps;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.time -= highResTimer.elapsedTime;
+
+        if( this.time < 0 )
+        {
+            this.time = 1000.0 / this.fps;
+            
+            this.frame();
+        }
+    }
+    
+    // 
+    //  DESC: Execute this frame
+    //
+    frame()
+    {
+        // To be overridden
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
+}
+
+
+//
 //  DESC: Script for fading in the menu
 //
 export class FadeTo

@@ -23,7 +23,7 @@ import { CommonState } from './commonstate';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 
-export const ASSET_COUNT = 12;
+export const ASSET_COUNT = 13;
 
 export class Level1State extends CommonState
 {

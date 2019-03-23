@@ -19,9 +19,9 @@
     <objectList>
 
         <object name="logo">
-          <visual>
-            <texture file="data/textures/startup/logo.jpg"/>
-          </visual>
+            <visual defaultUniformScale="1.5">
+                <texture file="data/textures/startup/logo.jpg"/>
+            </visual>
         </object>
         
         <object name="progress_frame">

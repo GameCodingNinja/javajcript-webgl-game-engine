@@ -8,9 +8,8 @@
 
 import { iStrategy } from './istrategy';
 import { NodeDataList } from '../node/nodedatalist';
-import * as nodeFactory from '../node/nodefactory';
 import { Sprite } from '../sprite/sprite';
-import * as defs from '../common/defs';
+import * as nodeFactory from '../node/nodefactory';
 
 export class ActorStrategy extends iStrategy
 {
@@ -74,12 +73,12 @@ export class ActorStrategy extends iStrategy
 
         for( let i = 0; i < node.children.length; ++i )
         {
-            // There must be a name associated with this sprite data
+            // There must be a name associated with this node data
             let nodeName = node.children[i].getAttribute( 'name' );
             if( !nodeName )
                 throw new Error( `Actor strategy missing node name!` );
 
-            // Allocate the sprite data and add it to the array
+            // Allocate the node data list and add it to the map
             this.dataMap.set( nodeName, new NodeDataList( node.children[i], defaultGroup, defaultObjName, defaultAIName ) );
         }
     }
@@ -284,8 +283,6 @@ export class ActorStrategy extends iStrategy
                 else
                     throw new Error( `Node id can't be found (${id})!` );
             }
-
-            this.deleteAry = [];
         }
     }
     

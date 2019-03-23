@@ -1,5 +1,11 @@
 <node defaultGroup="(loadingScreen)">
     
+    <node name="logo" type="spriteNode">
+        
+        <sprite2d objectName="logo"/>
+
+    </node>
+    
     <node name="loadAnim" type="spriteNode">
         
         <sprite2d objectName="loadAnim">
