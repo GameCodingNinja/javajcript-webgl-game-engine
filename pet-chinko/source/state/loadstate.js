@@ -75,11 +75,11 @@ export class LoadState extends GameState
     
         // Create the background strategy
         loadManager.add(
-            ( callback ) => strategyManager.addStrategy( '(loadingScreen)', new ActorStrategy, callback ) );
+            ( callback ) => strategyManager.addStrategy( '_loading-screen_', new ActorStrategy, callback ) );
     
             // Load the strategies
         loadManager.add(
-            ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/loaders/loadscreenLoad.cfg', this.preloadComplete.bind(this) ));
+            ( callback ) => strategyLoader.load( 'data/objects/strategy/state/loadscreen.loader', this.preloadComplete.bind(this) ));
     
         // Start the load
         loadManager.load();
@@ -91,7 +91,7 @@ export class LoadState extends GameState
     preloadComplete()
     {
         // Position at the bottom of the screen.
-        let strategy = strategyManager.activateStrategy( '(loadingScreen)' );
+        let strategy = strategyManager.activateStrategy( '_loading-screen_' );
         strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
         this.loadFont = strategy.get( 'load_font' ).getSprite();
         this.loadFont.object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
@@ -208,6 +208,6 @@ export class LoadState extends GameState
         objectDataManager.freeGroup( ['(loadingScreen)'] );
         
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['(loadingScreen)'] );
+        strategyManager.deleteStrategy( ['_loading-screen_'] );
     }
 }

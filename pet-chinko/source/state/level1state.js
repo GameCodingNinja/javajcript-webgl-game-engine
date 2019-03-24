@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { CommonState } from './commonstate';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
@@ -18,12 +19,11 @@ import { soundManager } from '../../../library/managers/soundmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { StageStrategy } from '../../../library/strategy/stagestrategy';
 import { ActorStrategy } from '../../../library/strategy/actorstrategy';
-import { device } from '../../../library/system/device';
-import { CommonState } from './commonstate';
+import { strategyLoader } from '../../../library/strategy/strategyloader';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 
-export const ASSET_COUNT = 13;
+export const ASSET_COUNT = 16;
 
 export class Level1State extends CommonState
 {
@@ -44,9 +44,10 @@ export class Level1State extends CommonState
         // Clear the event queue
         eventManager.clear();
         
-        // Prepare the strategies to run
-        strategyManager.activateStrategy('(stage1)');
-        strategyManager.activateStrategy('(sprite)');
+        // Activate the strategies to run
+        strategyManager.activateStrategy('_level-1-stage_');
+        strategyManager.activateStrategy('_level-1-game_');
+        strategyManager.activateStrategy('_level-ui_');
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -78,7 +79,7 @@ export class Level1State extends CommonState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['(stage1)','(sprite)'] );
+        strategyManager.deleteStrategy( ['_level-1-stage_','_level-1-game_','_level-ui_'] );
         
         objectDataManager.freeGroup( ['(level_1)'] );
         
@@ -157,24 +158,17 @@ export function load()
         
     // Create the stage strategy
     loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '(stage1)', new StageStrategy, callback ) );
+        ( callback ) => strategyManager.addStrategy( '_level-1-stage_', new StageStrategy, callback ) );
 
     // Create the actor strategy
     loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '(sprite)', new ActorStrategy, callback ) );
+        ( callback ) => strategyManager.addStrategy( '_level-1-game_', new ActorStrategy, callback ) );
 
-    // Create the ball sprites
+    // Create the actor strategy
     loadManager.add(
-        ( callback ) => 
-        {
-            let sprites = ['triangle_blue', 'triangle_green', 'circle_blue', 'circle_green', 'circle_red', 'square_red'];
-            
-            // Get the sprite strategy
-            let strategy = strategyManager.get( '(sprite)' );
+        ( callback ) => strategyManager.addStrategy( '_level-ui_', new ActorStrategy, callback ) );
         
-            for( let i = 0; i < 24; ++i )
-                strategy.create(sprites[i % 6] );
-            
-            callback()
-        } );
+    // Load the strategies
+    loadManager.add(
+        ( callback ) => strategyLoader.load( 'data/objects/strategy/level1/strategy.loader', callback ));
 }

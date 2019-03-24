@@ -81,6 +81,14 @@ export class SpriteNodeMultiLst extends NodeMultiLst
     }
     
     // 
+    //  DESC: Set the AI.
+    //
+    setAI( ai )
+    {
+        this.sprite.setAI( ai );
+    }
+    
+    // 
     //  DESC: Clean up any sprites
     //
     cleanUp()

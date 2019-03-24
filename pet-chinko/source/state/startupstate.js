@@ -35,7 +35,7 @@ import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 50,
+const STARTUP_ASSET_COUNT = 52,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState
@@ -85,13 +85,13 @@ export class StartUpState extends GameState
         loadManager.add( ( callback ) => cameraManager.load( 'data/objects/camera.lst', callback ));
         
         // Load the list table for the strategy manager
-        loadManager.add( ( callback ) => strategyManager.loadListTable( 'data/objects/spritestrategy/spriteStrageyListTable.lst', callback ));
+        loadManager.add( ( callback ) => strategyManager.loadListTable( 'data/objects/strategy/strageyListTable.lst', callback ));
         
         // Create the actor strategy
-        loadManager.add( ( callback ) => strategyManager.addStrategy( '(startup)', new ActorStrategy, callback ) );
+        loadManager.add( ( callback ) => strategyManager.addStrategy( '_startup_', new ActorStrategy, callback ) );
         
         // Load the strategies
-        loadManager.add( ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/loaders/startupLoad.cfg', this.preloadComplete.bind(this) ));
+        loadManager.add( ( callback ) => strategyLoader.load( 'data/objects/strategy/state/startup.loader', this.preloadComplete.bind(this) ));
         
         // Start the load
         loadManager.load();
@@ -106,10 +106,10 @@ export class StartUpState extends GameState
         this.camera = cameraManager.getDefault();
         
         // Prepare the strategies to run
-        this.progressBar = strategyManager.get( '(startup)' ).get( 'UIProgressBar' ).getControl();
+        this.progressBar = strategyManager.get( '_startup_' ).get( 'UIProgressBar' ).getControl();
         this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
         
-        strategyManager.activateStrategy('(startup)');
+        strategyManager.activateStrategy('_startup_');
 
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -260,7 +260,7 @@ export class StartUpState extends GameState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['(startup)'] );
+        strategyManager.deleteStrategy( ['_startup_'] );
         
         // Local data no longer needed and can be deleted
         assetHolder.deleteGroup( ['(startup)', '(menu)'] );

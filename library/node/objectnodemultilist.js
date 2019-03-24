@@ -22,6 +22,17 @@ export class ObjectNodeMultiLst extends NodeMultiLst
         this.object = new Object2D;
         
         this.objectId = objectId;
+        
+        this.ai = null;
+    }
+    
+    // 
+    //  DESC: Update the object
+    //
+    update()
+    {
+        if( this.ai )
+            this.ai.update();
     }
     
     //
@@ -52,5 +63,13 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     getId()
     {
         return this.objectId;
+    }
+    
+    // 
+    //  DESC: Set the AI.
+    //
+    setAI( ai )
+    {
+        this.ai = ai;
     }
 }

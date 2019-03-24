@@ -313,4 +313,12 @@ export class Sprite
         
         return 1;
     }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.id;
+    }
 }

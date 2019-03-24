@@ -1,12 +1,12 @@
 
 // 
-//  FILE NAME:  iaibase2d.js
+//  FILE NAME:  iaibase.js
 //  DESC:       aiBase interface Class
 //
 
 "use strict";
 
-export class iaiBase2d
+export class iaiBase
 {
     constructor()
     {

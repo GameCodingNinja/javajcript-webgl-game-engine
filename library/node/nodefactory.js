@@ -29,19 +29,19 @@ export function create( nodeData, nodeId )
     {
         node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeId );
         
-        LoadSprite( node.sprite, nodeData );
+        LoadSprite( node, nodeData );
     }
     else if( nodeData.nodeType === defs.ENT_OBJECT_MULTI_LIST )
     {
         node = new ObjectNodeMultiLst( nodeId, nodeData.nodeId, nodeData.parenNodetId );
         
-        LoadObject( node.object, nodeData );
+        LoadObject( node, nodeData );
     }
     else if( nodeData.nodeType === defs.ENT_SPRITE_MULTI_LIST )
     {
         node = new SpriteNodeMultiLst( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeId, nodeData.nodeId, nodeData.parenNodetId );
         
-        LoadSprite( node.sprite, nodeData );
+        LoadSprite( node, nodeData );
     }
     else if( nodeData.nodeType === defs.ENT_UI_CONTROL )
     {
@@ -56,20 +56,20 @@ export function create( nodeData, nodeId )
 // 
 //  DESC: Load the sprite data
 //
-function LoadSprite( sprite, nodeData )
+function LoadSprite( node, nodeData )
 {
     // Load from sprite data
-    sprite.load( nodeData.xmlNode );
+    node.sprite.load( nodeData.xmlNode );
 
     // Mainly for font sprites
-    sprite.init();
+    node.sprite.init();
 
     // Init the physics
-    sprite.initPhysics();
+    node.sprite.initPhysics();
 
     // Broadcast the signal to create the sprite AI
     if( nodeData.aiName !== '' )
-        signalManager.broadcast_aiCreate( nodeData.aiName, sprite );
+        signalManager.broadcast_aiCreate( nodeData.aiName, node );
 }
 
 // 

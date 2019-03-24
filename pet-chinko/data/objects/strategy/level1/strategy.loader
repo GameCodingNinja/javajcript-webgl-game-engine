@@ -1,0 +1,8 @@
+<strategyLst>
+    
+    <strategy name="_level-ui_">
+        <node name="UIMeter" instance="UIMeter"/>
+        <node name="multiplier" instance="multiplier"/>
+    </strategy>
+  
+</strategyLst>

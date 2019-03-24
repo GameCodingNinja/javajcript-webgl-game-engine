@@ -6,17 +6,17 @@
 
 "use strict";
 
-import { iaiBase2d } from '../../../library/2d/iaibase2d';
+import { iaiBase } from '../../../library/common/iaibase';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-export class aiBall extends iaiBase2d
+export class aiBall extends iaiBase
 {
-    constructor( sprite )
+    constructor( obj )
     {
         super();
         
-        this.sprite = sprite;
+        this.sprite = obj.sprite;
     }
     
     // 

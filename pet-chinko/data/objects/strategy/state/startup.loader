@@ -1,6 +1,6 @@
 <strategyLst>
     
-    <strategy name="(startup)">
+    <strategy name="_startup_">
         <node name="logo"/>
         <node name="UIProgressBar" instance="UIProgressBar"/>
     </strategy>

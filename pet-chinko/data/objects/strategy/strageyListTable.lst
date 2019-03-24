@@ -1,0 +1,27 @@
+<listTable>
+    
+    <groupList groupName="_startup_">
+        <file path="data/objects/strategy/state/startup.strategy"/>
+    </groupList>
+    
+    <groupList groupName="_title-screen_">
+        <file path="data/objects/strategy/state/titlescreen.strategy"/>
+    </groupList>
+    
+    <groupList groupName="_loading-screen_">
+        <file path="data/objects/strategy/state/loadscreen.strategy"/>
+    </groupList>
+
+    <groupList groupName="_level-1-stage_">
+        <file path="data/objects/strategy/level1/stage.strategy"/>
+    </groupList>
+    
+    <groupList groupName="_level-ui_">
+        <file path="data/objects/strategy/level1/ui.strategy"/>
+    </groupList>
+    
+    <groupList groupName="_level-1-game_">
+        <file path="data/objects/strategy/level1/level.strategy"/>
+    </groupList>
+  
+</listTable>

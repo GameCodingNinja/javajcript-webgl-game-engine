@@ -186,9 +186,9 @@ export class ActorStrategy extends iStrategy
     //
     //  DESC: destroy the node
     //
-    destroy( node )
+    destroy( id )
     {
-        this.deleteAry.push( node );
+        this.deleteAry.push( id );
     }
 
     //
@@ -257,7 +257,7 @@ export class ActorStrategy extends iStrategy
     //
     addToActiveList()
     {
-        if( this.activateAry.length > 0 )
+        if( this.activateAry.length )
         {
             for( let i = 0; i < this.activateAry.length; i++ )
                 this.nodeAry.push( this.activateAry[i] );
@@ -271,7 +271,7 @@ export class ActorStrategy extends iStrategy
     //
     removeFromActiveList()
     {
-        if( this.deactivateAry.length > 0 )
+        if( this.deactivateAry.length )
         {
             for( let i = 0; i < this.deactivateAry.length; i++ )
             {
@@ -286,13 +286,12 @@ export class ActorStrategy extends iStrategy
         }
     }
     
-    
     //
     //  DESC: Remove deleted nodes from the active list and map
     //
     deleteFromActiveList()
     {
-        if( this.deleteAry.length > 0 )
+        if( this.deleteAry.length )
         {
             for( let i = 0; i < this.deleteAry.length; i++ )
             {

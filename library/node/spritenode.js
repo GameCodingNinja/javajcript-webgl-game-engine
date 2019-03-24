@@ -68,6 +68,14 @@ export class SpriteNode extends iNode
     }
     
     // 
+    //  DESC: Set the AI.
+    //
+    setAI( ai )
+    {
+        this.sprite.setAI( ai );
+    }
+    
+    // 
     //  DESC: Clean up any sprites
     //
     cleanUp()

@@ -1,6 +1,6 @@
 <strategyLst>
 
-    <strategy name="(loadingScreen)" type="actor">
+    <strategy name="_loading-screen_" type="actor">
         <node name="logo"/>
         <node name="loadAnim" instance="loadAnim">
             <sprite>

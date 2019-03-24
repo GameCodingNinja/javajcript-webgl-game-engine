@@ -1,0 +1,7 @@
+<strategyLst>
+
+    <strategy name="_title-screen_" type="actor">
+        <node name="background"/>
+    </strategy>
+  
+</strategyLst>

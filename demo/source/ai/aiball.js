@@ -32,7 +32,7 @@ export class aiBall extends iaiBase2d
     }
     
     // 
-    //  DESC: Do the physics
+    //  DESC: Do the update
     //
     update()
     {

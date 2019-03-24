@@ -74,7 +74,7 @@ export function downloadFile( fileType, filepath, callback )
             }
 
         // Define which file to open and send the request. True = asynchronous
-        request.open('GET', filepath + '?please-dont-cache=' + sessionCacheBustNo, true);
+        request.open('GET', filepath + '?cache_buster=' + sessionCacheBustNo, true);
         request.send();
     }
     // Images are handled differently

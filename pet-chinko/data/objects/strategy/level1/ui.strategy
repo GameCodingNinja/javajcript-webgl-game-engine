@@ -1,0 +1,44 @@
+<node defaultGroup="(level_1)">
+
+    <node name="UIMeter" type="uiControlNode">
+        
+        <uiMeter spriteApplyIndex="1" stencilMaskSprite="">
+            <position x="-840" y="-430" z="0"/>
+            <!-- Max size of font string in meter -->
+            <size width="175" height="55"/>
+            <!-- <meterScript onInit="Meter_OnInit" onStart="Meter_OnStart" onStop="Meter_OnStop" onClear="Meter_OnClear"/> -->
+            <bangRange fastBangTime="500" scaleType="axis">
+                <range target="500" bangUpType="rampUp" velocity="15.0"  estimatedTime="200" slowStartTime="100"/>
+                <range target="1000" bangUpType="rampUp" velocity="15.0"  estimatedTime="500" slowStartTime="200"/>
+                <range target="10000" bangUpType="rampUp" velocity="15.0"  estimatedTime="2000" slowStartTime="500"/>
+                <range target="100000" bangUpType="rampUp" velocity="15.0"  estimatedTime="3000" slowStartTime="500"/>
+                <range target="1000000" bangUpType="rampUp" velocity="15.0"  estimatedTime="4000" slowStartTime="500"/>
+            </bangRange>
+            
+            <spriteLst>
+      
+                <sprite objectName="meter_frame"/>
+
+                <sprite objectName="level_font">
+                    <position x="0" y="-1" z="0"/>
+                    <font fontName="dejavu_sans_cond_45">
+                        <attributes kerning="-2"/>
+                    </font>
+                </sprite>
+
+            </spriteLst>
+        </uiMeter>
+    </node>
+    
+    <node name="multiplier" type="spriteNode">
+        
+        <sprite2d objectName="level_font">
+            <position x="-840" y="-495" z="0"/>
+            <font fontName="dejavu_sans_bold_70" fontString="1x">
+                <attributes kerning="-2"/>
+            </font>
+        </sprite2d>
+
+    </node>
+
+</node>

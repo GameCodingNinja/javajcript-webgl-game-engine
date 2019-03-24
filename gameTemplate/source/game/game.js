@@ -118,10 +118,10 @@ export class Game
     // 
     //  DESC: Callback for when an ai is created
     //
-    aiCreateCallBack( aiName, sprite )
+    aiCreateCallBack( aiName, obj )
     {
         if( aiName === 'aiBall' )
-            sprite.setAI( new aiBall(sprite) );
+            obj.setAI( new aiBall( obj ) );
     }
     
     // 

@@ -97,6 +97,14 @@ export class iNode
     }
     
     // 
+    //  DESC: Set the AI.
+    //
+    setAI( ai )
+    {
+        // Empty by design
+    }
+    
+    // 
     //  DESC: Clean up any sprites
     //
     cleanUp()

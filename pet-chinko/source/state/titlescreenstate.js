@@ -29,7 +29,7 @@ export class TitleScreenState extends CommonState
     {
         super( stateDefs.EGS_TITLE_SCREEN, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
-        strategyManager.activateStrategy('(title_screen)');
+        strategyManager.activateStrategy('_title-screen_');
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -115,7 +115,7 @@ export class TitleScreenState extends CommonState
 function unload()
 {
     // Only delete the strategy(s) used in this state. Don't use clear().
-    strategyManager.deleteStrategy( ['(title_screen)'] );
+    strategyManager.deleteStrategy( ['_title-screen_'] );
     
     // Free the object data
     objectDataManager.freeGroup( ['(title_screen)'] );
@@ -144,9 +144,9 @@ export function load()
 
     // Create the background strategy
     loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '(title_screen)', new ActorStrategy, callback ) );
+        ( callback ) => strategyManager.addStrategy( '_title-screen_', new ActorStrategy, callback ) );
 
     // Load the strategies
     loadManager.add(
-        ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/loaders/titlescreenLoad.cfg', callback ));
+        ( callback ) => strategyLoader.load( 'data/objects/strategy/state/titlescreen.loader', callback ));
 }
