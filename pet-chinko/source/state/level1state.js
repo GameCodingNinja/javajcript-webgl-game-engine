@@ -20,8 +20,11 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { StageStrategy } from '../../../library/strategy/stagestrategy';
 import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
+import { settings } from '../../../library/utilities/settings';
+import { Point } from '../../../library/common/point';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
+import * as genFunc from '../../../library/utilities/genfunc';
 
 export const ASSET_COUNT = 16;
 
@@ -46,8 +49,12 @@ export class Level1State extends CommonState
         
         // Activate the strategies to run
         strategyManager.activateStrategy('_level-1-stage_');
-        strategyManager.activateStrategy('_level-1-game_');
-        strategyManager.activateStrategy('_level-ui_');
+        this.gameStrategy = strategyManager.activateStrategy('_level-1-game_');
+        let uiStrategy = strategyManager.activateStrategy('_level-ui_');
+        
+        // get the ui elements
+        this.uiMeter = uiStrategy.get( 'UIMeter' );
+        this.multiplier = uiStrategy.get( 'multiplier' );
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -62,7 +69,25 @@ export class Level1State extends CommonState
     {
         super.handleEvent( event );
         
-        if( event instanceof CustomEvent )
+        if( event.type === 'mouseup' && !menuManager.isMenuActive() )
+        {
+            // Get the spot on the screen they clicked
+            let ratio = 1.0 / settings.orthoAspectRatio.h;
+            let y = 600;
+            let x = (ratio * (event.clientX + eventManager.mouseOffsetX)) - settings.defaultSize_half.w;
+            
+            // Set a random rotation
+            let angle = genFunc.randomInt(0, 350) * defs.DEG_TO_RAD;
+            
+            // Get the random rotation
+            let rot = genFunc.randomArbitrary( -3, 3 );
+            
+            // Create the ball
+            let node = this.gameStrategy.create( 'circle_green' );
+            node.getSprite().physicsComponent.setTransform( x, y, angle, true );
+            node.getSprite().physicsComponent.applyAngularImpulse( rot );
+        }
+        else if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
             if( event.detail.type === defs.EGE_MENU_GAME_STATE_CHANGE )

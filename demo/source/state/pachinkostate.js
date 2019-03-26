@@ -19,7 +19,6 @@ import { spriteStrategyManager } from '../../../library/managers/spritestrategym
 import { BasicStageStrategy2D } from '../../../library/2d/basicstagestrategy2d';
 import { BasicSpriteStrategy2D } from '../../../library/2d/basicspritestrategy2d';
 import { Sprite2D } from '../../../library/2d/sprite2d';
-import { Point } from '../../../library/common/point';
 import { settings } from '../../../library/utilities/settings';
 import { device } from '../../../library/system/device';
 import { CommonState } from './commonstate';

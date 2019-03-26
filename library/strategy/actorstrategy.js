@@ -105,7 +105,7 @@ export class ActorStrategy extends iStrategy
     }
 
     //
-    //  DESC: create the sprite sprite
+    //  DESC: create the sprite node
     //
     create( dataName, instanceName = null, makeActive = true )
     {
@@ -173,7 +173,7 @@ export class ActorStrategy extends iStrategy
         let node = this.nodeMap.get( instanceName );
         if( node )
         {
-            let index = this.nodeAry.findIndex( (obj) => obj === instanceName );
+            let index = this.nodeAry.findIndex( (obj) => obj === node );
             if( index !== -1 )
                 console.log( `Node is not active (${instanceName})!` );
             else
@@ -186,9 +186,9 @@ export class ActorStrategy extends iStrategy
     //
     //  DESC: destroy the node
     //
-    destroy( id )
+    destroy( node )
     {
-        this.deleteAry.push( id );
+        this.deleteAry.push( node );
     }
 
     //
@@ -260,7 +260,10 @@ export class ActorStrategy extends iStrategy
         if( this.activateAry.length )
         {
             for( let i = 0; i < this.activateAry.length; i++ )
+            {
+                this.activateAry[i].update();
                 this.nodeAry.push( this.activateAry[i] );
+            }
 
             this.activateAry = [];
         }
@@ -295,9 +298,9 @@ export class ActorStrategy extends iStrategy
         {
             for( let i = 0; i < this.deleteAry.length; i++ )
             {
-                let id = this.deleteAry[i];
+                let node = this.deleteAry[i];
 
-                let index = this.nodeAry.findIndex( (obj) => obj.getId() === id );
+                let index = this.nodeAry.findIndex( (obj) => obj === node );
                 if( index !== -1 )
                 {
                     // Clean up if font or physics sprite
@@ -308,9 +311,9 @@ export class ActorStrategy extends iStrategy
                     throw new Error( `Node id can't be found (${id})!` );
                 
                 // If this same node is in the map, delete it here too.
-                for( let [ key, node ] of this.nodeMap.entries() )
+                for( let [ key, obj ] of this.nodeMap.entries() )
                 {
-                    if( node.getId() === id )
+                    if( obj === node )
                     {
                         this.nodeMap.delete(key);
                         break;

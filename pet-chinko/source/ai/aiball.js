@@ -11,13 +11,14 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 
 export class aiBall extends iaiBase
 {
-    constructor( obj )
+    constructor( node )
     {
         super();
         
-        this.sprite = obj.sprite;
+        this.node = node;
+        this.sprite = node.sprite;
         
-        this.strategy = strategyManager.get( '_level-1_' );
+        this.strategy = strategyManager.get( '_level-1-game_' );
     }
     
     // 
@@ -26,6 +27,6 @@ export class aiBall extends iaiBase
     update()
     {
         if( this.sprite.object.pos.y < -600 )
-            this.strategy.destroy( this.sprite.id );
+            this.strategy.destroy( this.node );
     }
 }

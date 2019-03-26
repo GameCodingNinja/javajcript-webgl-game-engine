@@ -329,4 +329,22 @@ export class PhysicsComponent2D
         if( this.body !== null )
             this.body.setLinearVelocity( planck.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
     }
+    
+    // 
+    //  DESC: Set the angular velocity
+    //
+    setAngularVelocity( value )
+    {
+        if( this.body !== null )
+            this.body.setAngularVelocity( value );
+    }
+    
+    // 
+    //  DESC: Set the angular velocity
+    //
+    applyAngularImpulse( value, wake = false )
+    {
+        if( this.body !== null )
+            this.body.applyAngularImpulse( value, wake );
+    }
 }
