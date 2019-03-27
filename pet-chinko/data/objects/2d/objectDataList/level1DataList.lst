@@ -32,6 +32,30 @@
   
     <objectList>
         
+        <object name="tennis_ball_green">
+            <visual>
+                <texture file="data/textures/levelArt/tennisball100x100.png"/>
+            </visual>
+            <physics>
+                <body type="dynamic"/>
+                <fixtureLst>
+                    <fixture shape="circle" radius="50" density="0.3" restitution="0.6"/>
+                </fixtureLst>
+            </physics>
+        </object>
+        
+        <object name="tennis_ball_pink">
+            <visual>
+                <texture file="data/textures/levelArt/tennisballpink100x100.png"/>
+            </visual>
+            <physics>
+                <body type="dynamic"/>
+                <fixtureLst>
+                    <fixture shape="circle" radius="50" density="0.3" restitution="0.6"/>
+                </fixtureLst>
+            </physics>
+        </object>
+        
         <object name="circle_green">
             <visual>
                 <texture file="data/textures/levelArt/circle_green.png"/>
@@ -120,12 +144,12 @@
 
         <object name="peg">
             <visual>
-                <texture file="data/textures/levelArt/peg.png"/>
+                <texture count="2" file="data/textures/levelArt/pin_${NUM}.png"/>
             </visual>
             <physics>
                 <body type="static"/>
                 <fixtureLst>
-                    <fixture shape="circle" radius="17"/>
+                    <fixture shape="circle" radius="18"/>
                 </fixtureLst>
             </physics>
         </object>

@@ -28,6 +28,9 @@ import * as genFunc from '../../../library/utilities/genfunc';
 
 export const ASSET_COUNT = 16;
 
+const SPRITE_PEG = -2,
+      STRAWBERRY = 0;
+
 export class Level1State extends CommonState
 {
     constructor( gameLoopCallback = null )
@@ -35,6 +38,11 @@ export class Level1State extends CommonState
         super( stateDefs.EGS_LEVEL_1, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
         this.physicsWorld = physicsWorldManager.getWorld( "(game)" );
+        
+        // Add the contact listeners
+        this.physicsWorld.world.on( 'begin-contact', this.beginContact.bind(this) );
+        this.physicsWorld.world.on( 'end-contact', this.endContact.bind(this) );
+        //this.physicsWorld.world.on( 'remove-fixture', this.removeFixture.bind(this) );
 
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -82,8 +90,12 @@ export class Level1State extends CommonState
             // Get the random rotation
             let rot = genFunc.randomArbitrary( -3, 3 );
             
+            let ball = 'tennis_ball_green';
+            if( genFunc.randomInt(0, 1) )
+                ball = 'tennis_ball_pink';
+            
             // Create the ball
-            let node = this.gameStrategy.create( 'circle_green' );
+            let node = this.gameStrategy.create( ball );
             node.getSprite().physicsComponent.setTransform( x, y, angle, true );
             node.getSprite().physicsComponent.applyAngularImpulse( rot );
         }
@@ -153,6 +165,69 @@ export class Level1State extends CommonState
         strategyManager.render();
         
         menuManager.render();
+    }
+    
+    // 
+    //  DESC: Called when two fixtures begin to touch
+    //
+    beginContact( contact )
+    {
+        let spriteA = contact.m_fixtureA.m_userData;
+        let spriteB = contact.m_fixtureB.m_userData;
+        
+        if( spriteA && spriteB )
+        {
+            if( spriteA.id === SPRITE_PEG )
+                spriteA.setFrame(1);
+
+            else if( spriteB.id === SPRITE_PEG )
+                spriteB.setFrame(1);
+            
+            /*else if( (spriteA.id == STRAWBERRY) || (spriteB.id == STRAWBERRY) )
+            {
+                // Delete the old strawberry
+                this.spriteStrategy.postCommand( defs.ESSC_DELETE_SPRITE, STRAWBERRY );
+                this.multiplier++;
+                
+                // Create a new one
+                let posAry = this.multiXPosAry[this.multiIndexPos];
+                let index = genFunc.randomInt(0, posAry.length-1);
+                let offsetX = posAry[index];
+                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
+                this.strawberryData.pos.x = offsetX;
+                this.spriteStrategy.postCommand( defs.ESSC_CREATE_SPRITE, 'strawberry' );
+                
+                // Update the multiplier meter
+                this.multiSprite.visualComponent.createFontString( `${this.multiplier}x` );
+            }*/
+        }
+    }
+    
+    // 
+    //  DESC: Called when two fixtures cease to touch
+    //
+    endContact( contact )
+    {
+        let spriteA = contact.m_fixtureA.m_userData;
+        let spriteB = contact.m_fixtureB.m_userData;
+        
+        if( spriteA && spriteB )
+        {
+            if( spriteA.id === SPRITE_PEG )
+                spriteA.setFrame(0);
+
+            else if( spriteB.id === SPRITE_PEG )
+                spriteB.setFrame(0);
+        }
+    }
+    
+    removeFixture( object )
+    {
+        /*if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.id > 0) )
+        {
+            this.totalWin += this.multiplier;
+            this.winMeter.startBangUp( this.totalWin );
+        }*/
     }
 }
 

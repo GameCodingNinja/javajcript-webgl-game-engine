@@ -54,7 +54,7 @@ export class Sector extends Object3D
         for( let i = 0; i < sectorNode.length; ++i )
         {
             // Allocate the node data list to load this node
-            let nodeAry = new NodeDataList( sectorNode[i], defaultGroup, defaultObjName, defaultAIName ).dataAry;
+            let nodeAry = new NodeDataList( sectorNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ).dataAry;
             
             // Build the node list
             let headNode = null;
