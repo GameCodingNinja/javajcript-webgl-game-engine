@@ -72,11 +72,8 @@ export class StartUpState extends GameState
         // Load the object data XML's
         loadManager.add( ( callback ) => objectDataManager.loadXMLGroup2D( groupAry, callback ) );
 
-        // Load all the textures associated with this group
-        loadManager.add( ( callback ) => objectDataManager.loadTextureGroup2D( groupAry, callback ) );
-
-        // Load all the mesh files associated with this group
-        loadManager.add( ( callback ) => objectDataManager.loadMeshGroup2D( groupAry, callback ) );
+        // Load all the assets associated with this group
+        loadManager.add( ( callback ) => objectDataManager.loadAssets2D( groupAry, callback ) );
 
         // Create OpenGL objects from the loaded data
         loadManager.add( ( callback ) => objectDataManager.createFromData( groupAry, callback ));
@@ -200,11 +197,8 @@ export class StartUpState extends GameState
         // Load the xml group
         loadManager.add( ( callback ) => objectDataManager.loadXMLGroup2D( groupAry, callback ));
 
-        // Load all the textures associated with this group
-        loadManager.add( ( callback ) => objectDataManager.loadTextureGroup2D( groupAry, callback ));
-
-        // Load all the meshes associated with this group
-        loadManager.add( ( callback ) => objectDataManager.loadMeshGroup2D( groupAry, callback ));
+        // Load all the assets associated with this group
+        loadManager.add( ( callback ) => objectDataManager.loadAssets2D( groupAry, callback ));
 
         // Create OpenGL objects from the loaded data
         loadManager.add( ( callback ) => objectDataManager.createFromData( groupAry, callback ));

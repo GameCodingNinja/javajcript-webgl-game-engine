@@ -61,13 +61,9 @@ export class LoadState extends GameState
         loadManager.add(
             ( callback ) => objectDataManager.loadXMLGroup2D( groupAry, callback ) );
 
-        // Load all the textures associated with this group
+        // Load all the assets associated with this group
         loadManager.add(
-            ( callback ) => objectDataManager.loadTextureGroup2D( groupAry, callback ) );
-
-        // Load all the meshes associated with this group
-        loadManager.add(
-            ( callback ) => objectDataManager.loadMeshGroup2D( groupAry, callback ) );
+            ( callback ) => objectDataManager.loadAssets2D( groupAry, callback ) );
 
         // Create OpenGL objects from the loaded data
         loadManager.add(

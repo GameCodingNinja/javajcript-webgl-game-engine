@@ -240,13 +240,9 @@ export function load()
     loadManager.add(
         ( callback ) => objectDataManager.loadXMLGroup2D( ['(level_1)'], callback ) );
 
-    // Load all the textures associated with this group
+    // Load all the assets associated with this group
     loadManager.add(
-        ( callback ) => objectDataManager.loadTextureGroup2D( ['(level_1)'], callback ) );
-
-    // Load all the meshes associated with this group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadMeshGroup2D( ['(level_1)'], callback ) );
+        ( callback ) => objectDataManager.loadAssets2D( ['(level_1)'], callback ) );
 
     // Create OpenGL objects from the loaded data
     loadManager.add(

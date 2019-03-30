@@ -60,13 +60,9 @@ export class LoadState extends GameState
         loadManager.add(
             ( callback ) => objectDataManager.loadXMLGroup2D( groupAry, callback ) );
 
-        // Load all the textures associated with this group
+        // Load all the assets associated with this group
         loadManager.add(
-            ( callback ) => objectDataManager.loadTextureGroup2D( groupAry, callback ) );
-
-        // Load all the meshes associated with this group
-        loadManager.add(
-            ( callback ) => objectDataManager.loadMeshGroup2D( groupAry, callback ) );
+            ( callback ) => objectDataManager.loadAssets2D( groupAry, callback ) );
 
         // Create OpenGL objects from the loaded data
         loadManager.add(
@@ -118,7 +114,7 @@ export class LoadState extends GameState
                 else
                     setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
         
-                console.log('Load State Complete!: ');
+                //console.log('Load State Complete!');
             }
         }
     }

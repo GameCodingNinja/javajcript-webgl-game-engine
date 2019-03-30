@@ -130,13 +130,9 @@ export function load()
     loadManager.add(
         ( callback ) => objectDataManager.loadXMLGroup2D( ['(title_screen)'], callback ) );
 
-    // Load all the textures associated with this group
+    // Load all the assets associated with this group
     loadManager.add(
-        ( callback ) => objectDataManager.loadTextureGroup2D( ['(title_screen)'], callback ) );
-
-    // Load all the meshes associated with this group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadMeshGroup2D( ['(title_screen)'], callback ) );
+        ( callback ) => objectDataManager.loadAssets2D( ['(title_screen)'], callback ) );
 
     // Create OpenGL objects from the loaded data
     loadManager.add(

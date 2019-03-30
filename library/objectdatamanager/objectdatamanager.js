@@ -56,7 +56,6 @@ class ObjectDataManager extends ManagerBase
         let defaultData;
         if( this.loadType === LOAD_2D )
             defaultData = new ObjectData2D;
-
         else
             defaultData = new ObjectData3D;
 
@@ -103,9 +102,9 @@ class ObjectDataManager extends ManagerBase
     }
     
     //
-    //  DESC: Load all the textures associated with this group
+    //  DESC: Load all the assets associated with these groups
     //
-    loadTextureGroup2D( groupAry, finishCallback )
+    loadAssets2D( groupAry, finishCallback )
     {
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
@@ -119,6 +118,7 @@ class ObjectDataManager extends ManagerBase
 
                 for( let [ key, objData ] of groupMap.entries() )
                 {
+                    // Load the textures
                     let filePathAry = objData.visualData.getTextureFilePathAry();
 
                     for( let i = 0; i < filePathAry.length; ++i )
@@ -138,37 +138,9 @@ class ObjectDataManager extends ManagerBase
                                 });
                         }
                     }
-                }
-
-                // If there's nothing to load or it was loaded via assetHolder, call the complete callback
-                if( this.loadCounter === 0 )
-                    finishCallback();
-            }
-            else
-            {
-                throw new Error( `Can't create from data because object group does not exist (${group})!` );
-            }
-        }
-    }
-
-    //
-    //  DESC: Load all the meshes associated with this group
-    //
-    loadMeshGroup2D( groupAry, finishCallback )
-    {
-        for( let grp = 0; grp < groupAry.length; ++grp )
-        {
-            let group = groupAry[grp];
-            
-            // Get the group map
-            let groupMap = this.objectDataMapMap.get( group );
-            if( groupMap !== undefined )
-            {
-                let dupPathCheck = [];
-
-                for( let [ key, objData ] of groupMap.entries() )
-                {
-                    let filePathAry = [objData.visualData.meshFilePath, objData.visualData.spriteSheetFilePath];
+                    
+                    // Load the meshes
+                    filePathAry = [objData.visualData.meshFilePath, objData.visualData.spriteSheetFilePath];
 
                     for( let i = 0; i < filePathAry.length; ++i )
                     {
@@ -198,15 +170,15 @@ class ObjectDataManager extends ManagerBase
             }
             else
             {
-                throw new Error( `Can't create load mesh data because object group does not exist (${group})!` );
+                throw new Error( `Can't download asset because object group does not exist (${group})!` );
             }
         }
     }
     
     //
-    //  DESC: Load all the meshes associated with this group
+    //  DESC: Load all the assets associated with this group
     //
-    loadMeshGroup3D( groupAry, finishCallback )
+    loadAssets3D( groupAry, finishCallback )
     {
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
@@ -233,6 +205,24 @@ class ObjectDataManager extends ManagerBase
                             {
                                 objData.visualData.meshGrp =
                                     meshManager.load( group, filePath, binaryFile );
+                            
+                                // Load the mesh textures
+                                for( let i = 0; i < objData.visualData.meshGrp.uniqueTexturePathAry.length; ++i )
+                                {
+                                    filePath = objData.visualData.meshGrp.uniqueTexturePathAry[i].path;
+                                    
+                                    if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
+                                    {
+                                        dupPathCheck.push( filePath );
+
+                                        // Load the texture file
+                                        this.downloadFile( 'img', group, filePath, finishCallback,
+                                            ( group, image, filePath, finishCallback ) =>
+                                            {
+                                                textureManager.load( group, filePath, image );
+                                            });
+                                    }
+                                }
                             });
                     }
                 }
@@ -247,56 +237,7 @@ class ObjectDataManager extends ManagerBase
             }
         }
     }
-    
-    //
-    //  DESC: Load all the textures associated with this group
-    //
-    loadTextureGroup3D( groupAry, finishCallback )
-    {
-        for( let grp = 0; grp < groupAry.length; ++grp )
-        {
-            let group = groupAry[grp];
-            
-            // Get the group map
-            let groupMap = this.objectDataMapMap.get( group );
-            if( groupMap !== undefined )
-            {
-                let dupPathCheck = [];
 
-                for( let [ key, objData ] of groupMap.entries() )
-                {
-                    let filePath = objData.visualData.meshFilePath;
-
-                    if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
-                    {
-                        // Add to the array to check for duplication
-                        dupPathCheck.push( filePath );
-
-                        for( let i = 0; i < objData.visualData.meshGrp.uniqueTexturePathAry.length; ++i )
-                        {
-                            filePath = objData.visualData.meshGrp.uniqueTexturePathAry[i].path;
-
-                            // Load the texture file
-                            this.downloadFile( 'img', group, filePath, finishCallback,
-                                ( group, image, filePath, finishCallback ) =>
-                                {
-                                    textureManager.load( group, filePath, image );
-                                });
-                        }
-                    }
-                }
-
-                // If there's nothing to load or it was loaded via assetHolder, call the complete callback
-                if( this.loadCounter === 0 )
-                    finishCallback();
-            }
-            else
-            {
-                throw new Error( `Can't create from data because object group does not exist (${group})!` );
-            }
-        }
-    }
-    
     //
     //  DESC: Create OpenGL objects from data
     //
