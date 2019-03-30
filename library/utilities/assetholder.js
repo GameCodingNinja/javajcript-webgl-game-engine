@@ -73,7 +73,8 @@ class AssetHolder
     //
     clear()
     {
-        this.loadMapMap = new Map;
+        if( this.loadMapMap.size )
+            this.loadMapMap.clear();
     }
 }
 

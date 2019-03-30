@@ -50,7 +50,7 @@
         </control>
 
         <!-- Settings Button -->
-        <control name="settings_btn" controlType="button" defaultState="inactive">
+        <control name="settings_btn" controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="10" z="0"/>
             <fontStringLst>
@@ -62,7 +62,7 @@
         </control>
 
         <!-- Key Bindings Button -->
-        <control name="key_binding_btn" controlType="button" defaultState="inactive">
+        <control name="key_binding_btn" controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="-50" z="0"/>
             <fontStringLst>

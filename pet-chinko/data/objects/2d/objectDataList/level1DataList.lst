@@ -39,7 +39,7 @@
             <physics>
                 <body type="dynamic"/>
                 <fixtureLst>
-                    <fixture shape="circle" radius="50" density="0.3" restitution="0.6"/>
+                    <fixture shape="circle" radius="50" density="0.3" restitution="0.8"/>
                 </fixtureLst>
             </physics>
         </object>
@@ -51,7 +51,7 @@
             <physics>
                 <body type="dynamic"/>
                 <fixtureLst>
-                    <fixture shape="circle" radius="50" density="0.3" restitution="0.6"/>
+                    <fixture shape="circle" radius="50" density="0.3" restitution="0.8"/>
                 </fixtureLst>
             </physics>
         </object>

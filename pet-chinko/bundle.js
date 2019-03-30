@@ -3526,25 +3526,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(88);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(2);
 /* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(90);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(66);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(93);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(94);
-/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(8);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(68);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(39);
-/* harmony import */ var _library_gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(86);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(70);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(95);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(107);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(109);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(110);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(111);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(24);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(32);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(66);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(93);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(94);
+/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(8);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(68);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(39);
+/* harmony import */ var _library_gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(86);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(70);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(95);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(107);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(109);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(110);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(111);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(24);
 
 //
 //  FILE NAME: startupstate.js
 //  DESC:      startup state class
 //
+
 
 
 
@@ -3584,14 +3586,14 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 {
     constructor( gameLoopCallback )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_27__["EGS_STARTUP"], _statedefs__WEBPACK_IMPORTED_MODULE_27__["EGS_TITLE_SCREEN"], gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_28__["EGS_STARTUP"], _statedefs__WEBPACK_IMPORTED_MODULE_28__["EGS_TITLE_SCREEN"], gameLoopCallback );
 
         // Load the scripts
-        _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_24__["loadScripts"]();
-        _scripts_statescripts__WEBPACK_IMPORTED_MODULE_25__["loadScripts"]();
+        _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_25__["loadScripts"]();
+        _scripts_statescripts__WEBPACK_IMPORTED_MODULE_26__["loadScripts"]();
 
         // Create the script component and add a script
-        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_21__["ScriptComponent"];
+        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_22__["ScriptComponent"];
         this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__["scriptManager"].get('ScreenFade')( 0, 1, 500 ) );
 
         // Preload assets for the startup screen
@@ -3624,13 +3626,13 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_11__["cameraManager"].load( 'data/objects/camera.lst', callback ));
         
         // Load the list table for the strategy manager
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__["strategyManager"].loadListTable( 'data/objects/strategy/strageyListTable.lst', callback ));
+        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__["strategyManager"].loadListTable( 'data/objects/strategy/strageyListTable.lst', callback ));
         
         // Create the actor strategy
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__["strategyManager"].addStrategy( '_startup_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_22__["ActorStrategy"], callback ) );
+        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__["strategyManager"].addStrategy( '_startup_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_23__["ActorStrategy"], callback ) );
         
         // Load the strategies
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_16__["strategyLoader"].load( 'data/objects/strategy/state/startup.loader', this.preloadComplete.bind(this) ));
+        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_17__["strategyLoader"].load( 'data/objects/strategy/state/startup.loader', this.preloadComplete.bind(this) ));
         
         // Start the load
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].load();
@@ -3645,13 +3647,13 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         this.camera = _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_11__["cameraManager"].getDefault();
         
         // Prepare the strategies to run
-        this.progressBar = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__["strategyManager"].get( '_startup_' ).get( 'UIProgressBar' ).getControl();
+        this.progressBar = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__["strategyManager"].get( '_startup_' ).get( 'UIProgressBar' ).getControl();
         this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
         
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__["strategyManager"].activateStrategy('_startup_');
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__["strategyManager"].activateStrategy('_startup_');
 
         // Reset the elapsed time before entering the render loop
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_18__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_19__["highResTimer"].calcElapsedTime();
 
         // Start the game loop
         requestAnimationFrame( this.callback );
@@ -3664,17 +3666,17 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     {
         if( event instanceof CustomEvent )
         {
-            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_27__["ESE_FADE_IN_COMPLETE"] )
+            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_28__["ESE_FADE_IN_COMPLETE"] )
             {
                 this.assetLoad();
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_27__["ESE_FADE_OUT_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_28__["ESE_FADE_OUT_COMPLETE"] )
             {
                 this.stateChange = true;
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_27__["ESE_ASSET_LOAD_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_28__["ESE_ASSET_LOAD_COMPLETE"] )
             {
-                let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_18__["highResTimer"].timerStop();
+                let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_19__["highResTimer"].timerStop();
 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
@@ -3696,7 +3698,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     update()
     {
         this.scriptComponent.update();
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__["strategyManager"].update();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__["strategyManager"].update();
     }
     
     // 
@@ -3704,7 +3706,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     transform()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__["strategyManager"].transform();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__["strategyManager"].transform();
     }
 
     //
@@ -3712,7 +3714,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     render()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__["strategyManager"].render();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__["strategyManager"].render();
     }
 
     //
@@ -3721,7 +3723,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     assetLoad()
     {
         // Set the timer to see how long the load takes
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_18__["highResTimer"].timerStart();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_19__["highResTimer"].timerStart();
 
         // Set the function to be called to update the progress bar during the download
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_12__["signalManager"].connect_loadComplete( this.loadCallback.bind(this) );
@@ -3730,7 +3732,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
         // Load the list tables
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_13__["soundManager"].loadListTable( 'data/sound/soundListTable.lst', callback ));
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_14__["physicsWorldManager"].loadListTable( 'data/objects/2d/physics/physicsListTable.lst', callback ));
+        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_15__["physicsWorldManager"].loadListTable( 'data/objects/2d/physics/physicsListTable.lst', callback ));
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_9__["menuManager"].loadListTable( 'data/objects/2d/menu/menuListTable.lst', callback ));
 
         // Load the fonts
@@ -3761,7 +3763,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
             ( callback ) =>
             {
                 // Load the menu scripts before creating the menus
-                _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_26__["loadScripts"]();
+                _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_27__["loadScripts"]();
                 
                 // Set the default camera
                 _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_9__["menuManager"].setDefaultCamera();
@@ -3773,10 +3775,10 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
             });
 
         // Load the state specific assets
-        _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_23__["load"]();
+        _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_24__["load"]();
 
         // Last thing to do is send a message that the asset load is complete
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_27__["ESE_ASSET_LOAD_COMPLETE"] ) );
+        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add( ( callback ) => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_28__["ESE_ASSET_LOAD_COMPLETE"] ) );
 
         // Start the load
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].load();
@@ -3796,13 +3798,16 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__["strategyManager"].deleteStrategy( ['_startup_'] );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_16__["strategyManager"].deleteStrategy( ['_startup_'] );
         
-        // Local data no longer needed and can be deleted
-        _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_19__["assetHolder"].deleteGroup( ['(startup)', '(menu)'] );
+        // Free all asset holder data
+        _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_20__["assetHolder"].clear();
 
         // Free the state assets from the video memory
         _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].freeGroup( ['(startup)'] );
+        
+        // Free any sprite sheet manager data
+        _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_14__["spriteSheetManager"].clear();
     }
 }
 
@@ -5065,7 +5070,8 @@ class SpriteSheetManager
     //
     clear()
     {
-        this.spriteSheetMap.clear();
+        if( this.spriteSheetMap.size )
+            this.spriteSheetMap.clear();
     }
 }
 
@@ -6196,7 +6202,8 @@ class AssetHolder
     //
     clear()
     {
-        this.loadMapMap = new Map;
+        if( this.loadMapMap.size )
+            this.loadMapMap.clear();
     }
 }
 
@@ -22418,22 +22425,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
 /* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(89);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
-/* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(95);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(93);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(94);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(68);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(70);
-/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(3);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(107);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(113);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(24);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(32);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(39);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(30);
+/* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(2);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(95);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(93);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(94);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(68);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(70);
+/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(3);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(107);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(113);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(24);
 
 // 
 //  FILE NAME: loadstate.js
 //  DESC:      All this state does is unload/load and does a state change.
 //
+
+
 
 
 
@@ -22461,7 +22472,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 {
     constructor( stateMessage, gameLoopCallback )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_16__["EGS_GAME_LOAD"], stateMessage.loadState, gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_18__["EGS_GAME_LOAD"], stateMessage.loadState, gameLoopCallback );
         
         this.stateMessage.loadState = stateMessage.loadState;
         this.stateMessage.unloadState = stateMessage.unloadState;
@@ -22470,7 +22481,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         this.maxLoadCount = 0;
         
         // Create the script component and add a script
-        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__["ScriptComponent"];
+        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_14__["ScriptComponent"];
         this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].get('ScreenFade')( 0, 1, 250 ) );
         
         // Clear the event queue
@@ -22490,23 +22501,23 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         // Load the menu assets
         // Load the xml group
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__["loadManager"].add(
-            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].loadXMLGroup2D( groupAry, callback ) );
+            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_8__["objectDataManager"].loadXMLGroup2D( groupAry, callback ) );
 
         // Load all the assets associated with this group
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__["loadManager"].add(
-            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].loadAssets2D( groupAry, callback ) );
+            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_8__["objectDataManager"].loadAssets2D( groupAry, callback ) );
 
         // Create OpenGL objects from the loaded data
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__["loadManager"].add(
-            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].createFromData( groupAry, callback ));
+            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_8__["objectDataManager"].createFromData( groupAry, callback ));
     
         // Create the background strategy
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__["loadManager"].add(
-            ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].addStrategy( '_loading-screen_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_8__["ActorStrategy"], callback ) );
+            ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_11__["strategyManager"].addStrategy( '_loading-screen_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_10__["ActorStrategy"], callback ) );
     
             // Load the strategies
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__["loadManager"].add(
-            ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_10__["strategyLoader"].load( 'data/objects/strategy/state/loadscreen.loader', this.preloadComplete.bind(this) ));
+            ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_12__["strategyLoader"].load( 'data/objects/strategy/state/loadscreen.loader', this.preloadComplete.bind(this) ));
     
         // Start the load
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__["loadManager"].load();
@@ -22518,13 +22529,13 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     preloadComplete()
     {
         // Position at the bottom of the screen.
-        let strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].activateStrategy( '_loading-screen_' );
-        strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].defaultSize_half.h - 150), 0 );
+        let strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_11__["strategyManager"].activateStrategy( '_loading-screen_' );
+        strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].defaultSize_half.h - 150), 0 );
         this.loadFont = strategy.get( 'load_font' ).getSprite();
-        this.loadFont.object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].defaultSize_half.h - 150), 0 );
+        this.loadFont.object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].defaultSize_half.h - 150), 0 );
         
         // Reset the elapsed time before entering the render loop
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__["highResTimer"].calcElapsedTime();
 
         // Start the game loop
         requestAnimationFrame( this.callback );
@@ -22546,17 +22557,17 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     {
         if( event instanceof CustomEvent )
         {
-            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_16__["ESE_FADE_IN_COMPLETE"] )
+            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_18__["ESE_FADE_IN_COMPLETE"] )
             {
                 this.assetLoad();
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_16__["ESE_FADE_OUT_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_18__["ESE_FADE_OUT_COMPLETE"] )
             {
                 this.stateChange = true;
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_16__["ESE_ASSET_LOAD_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_18__["ESE_ASSET_LOAD_COMPLETE"] )
             {
-                let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__["highResTimer"].timerStop();
+                let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__["highResTimer"].timerStop();
                 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
@@ -22565,7 +22576,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
                     setTimeout( () => this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
                 
                 // Disconnect to the load signal
-                _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_7__["signalManager"].clear_loadComplete();
+                _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__["signalManager"].clear_loadComplete();
         
                 console.log(`${this.getStateStr(this.stateMessage.loadState)} Count: ${this.loadCounter}`);
             }
@@ -22578,7 +22589,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     update()
     {
         this.scriptComponent.update();
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].update();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_11__["strategyManager"].update();
     }
     
     // 
@@ -22586,7 +22597,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     transform()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].transform();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_11__["strategyManager"].transform();
     }
     
     // 
@@ -22594,7 +22605,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     render()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].render();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_11__["strategyManager"].render();
     }
     
     // 
@@ -22603,25 +22614,25 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     assetLoad()
     {
         // Set the function to be called to update the progress bar during the download
-        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_7__["signalManager"].connect_loadComplete( this.loadCallback.bind(this) );
+        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__["signalManager"].connect_loadComplete( this.loadCallback.bind(this) );
         
         // Set the timer to see how long the load takes
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__["highResTimer"].timerStart();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__["highResTimer"].timerStart();
         
-        if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_16__["EGS_TITLE_SCREEN"] )
+        if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_18__["EGS_TITLE_SCREEN"] )
         {
-            this.maxLoadCount = _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__["ASSET_COUNT"];
-            _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__["load"]();
+            this.maxLoadCount = _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_16__["ASSET_COUNT"];
+            _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_16__["load"]();
         }
-        else if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_16__["EGS_LEVEL_1"] )
+        else if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_18__["EGS_LEVEL_1"] )
         {
-            this.maxLoadCount = _state_level1state__WEBPACK_IMPORTED_MODULE_15__["ASSET_COUNT"];
-            _state_level1state__WEBPACK_IMPORTED_MODULE_15__["load"]();
+            this.maxLoadCount = _state_level1state__WEBPACK_IMPORTED_MODULE_17__["ASSET_COUNT"];
+            _state_level1state__WEBPACK_IMPORTED_MODULE_17__["load"]();
         }
         
         // Last thing to do is send a message that the asset load is complete
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__["loadManager"].add(
-            ( callback ) => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_16__["ESE_ASSET_LOAD_COMPLETE"] ) );
+            ( callback ) => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_18__["ESE_ASSET_LOAD_COMPLETE"] ) );
         
         // Start the load
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__["loadManager"].load();
@@ -22632,10 +22643,16 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     cleanUp()
     {
-        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__["objectDataManager"].freeGroup( ['(loadingScreen)'] );
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_8__["objectDataManager"].freeGroup( ['(loadingScreen)'] );
         
         // Only delete the strategy(s) used in this state. Don't use clear().
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].deleteStrategy( ['_loading-screen_'] );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_11__["strategyManager"].deleteStrategy( ['_loading-screen_'] );
+        
+        // Free any sprite sheet manager data
+        _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_6__["spriteSheetManager"].clear();
+        
+        // Free all asset holder data
+        _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_7__["assetHolder"].clear();
     }
 }
 

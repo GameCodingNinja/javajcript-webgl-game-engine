@@ -13,6 +13,8 @@ import { textureManager } from '../../../library/managers/texturemanager';
 import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
+import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
+import { assetHolder } from '../../../library/utilities/assetholder';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { settings } from '../../../library/utilities/settings';
 import { Sprite } from '../../../library/sprite/sprite';
@@ -163,7 +165,14 @@ export class LoadState extends GameState
     //
     cleanUp()
     {
+        // Free the state assets from the video memory
         objectDataManager.freeGroup( ['(loadingScreen)'] );
+        
+        // Free any sprite sheet manager data
+        spriteSheetManager.clear();
+        
+        // Free all asset holder data
+        assetHolder.clear();
         
         this.loadAnim.cleanUp();
     }

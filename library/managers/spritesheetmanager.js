@@ -50,7 +50,8 @@ class SpriteSheetManager
     //
     clear()
     {
-        this.spriteSheetMap.clear();
+        if( this.spriteSheetMap.size )
+            this.spriteSheetMap.clear();
     }
 }
 

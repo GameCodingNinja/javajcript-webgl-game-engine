@@ -20,6 +20,7 @@ import { loadManager } from '../../../library/managers/loadmanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
+import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
@@ -256,10 +257,13 @@ export class StartUpState extends GameState
         // Only delete the strategy(s) used in this state. Don't use clear().
         strategyManager.deleteStrategy( ['_startup_'] );
         
-        // Local data no longer needed and can be deleted
-        assetHolder.deleteGroup( ['(startup)', '(menu)'] );
+        // Free all asset holder data
+        assetHolder.clear();
 
         // Free the state assets from the video memory
         objectDataManager.freeGroup( ['(startup)'] );
+        
+        // Free any sprite sheet manager data
+        spriteSheetManager.clear();
     }
 }
