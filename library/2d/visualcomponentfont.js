@@ -362,7 +362,7 @@ export class VisualComponentFont extends VisualComponentQuad
                         // Get the length of the next word to see if if should wrap
                         for( let j = i+1; j < this.fontData.fontString.length; ++j )
                         {
-                            id = this.fontData.fontString[j];
+                            id = this.fontData.fontString.charCodeAt(j);
 
                             if( id != defs.CHAR_CODE_PIPE )
                             {
@@ -471,7 +471,7 @@ export class VisualComponentFont extends VisualComponentQuad
                 // Get the length of the next word to see if if should wrap
                 for( let j = i+1; j < str.length; ++j )
                 {
-                    id = str[j];
+                    id = str.charCodeAt(j);
 
                     if( id != defs.CHAR_CODE_PIPE )
                     {

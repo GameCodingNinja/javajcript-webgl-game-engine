@@ -12,8 +12,6 @@ import { textureManager } from '../../../library/managers/texturemanager';
 import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
-import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
-import { assetHolder } from '../../../library/utilities/assetholder';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { signalManager } from '../../../library/managers/signalmanager';
 import { ActorStrategy } from '../../../library/strategy/actorstrategy';
@@ -207,11 +205,5 @@ export class LoadState extends GameState
         
         // Only delete the strategy(s) used in this state. Don't use clear().
         strategyManager.deleteStrategy( ['_loading-screen_'] );
-        
-        // Free any sprite sheet manager data
-        spriteSheetManager.clear();
-        
-        // Free all asset holder data
-        assetHolder.clear();
     }
 }

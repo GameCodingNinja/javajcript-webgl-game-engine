@@ -11,7 +11,7 @@
                 <scaledFrame thicknessWidth="30" thicknessHeight="30"/>
                 <file name=""/>
             </mesh>
-            <color r="48" g="97" b="153" a="217"/>
+            <color r="206" g="70" b="33" a="217"/>
             <shader id="shader_2d"/>
         </visual>
     </default>
@@ -25,6 +25,10 @@
         
         <object name="confirmation_menu_bg">
             <size width="545" height="295"/>
+        </object>
+        
+        <object name="help_menu_bg">
+            <size width="1100" height="500"/>
         </object>
 
     </objectList>

@@ -8,7 +8,7 @@
                 <spriteSheet file="data/objects/2d/mesh/menu/menu.xml"/>
                 <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
             </mesh>
-            <color r="48" g="97" b="153" a="1"/>
+            <color r="206" g="70" b="33" a="217"/>
             <shader id="shader_2d"/>
         </visual>
     </default>

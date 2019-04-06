@@ -1,0 +1,36 @@
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="control_font">
+            <position x="-430" y="-25" z="0"/>
+            <font fontName="dejavu_sans_reg_32">
+                <attributes lineWrapWidth="850"/>
+                <alignment horzAlign="left"/>
+            </font>
+        </sprite>
+
+    </spriteList>
+
+    <subControlList>
+
+        <!-- These controls must always be listed in this order -->
+
+        <!-- Decrement Button -->
+        <control controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
+            <position x="-500" y="0" z="0"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- Increment Button -->
+        <control controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
+            <position x="500" y="0" z="0"/>
+            <rotation z="180"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+    </subControlList>
+
+</UIControl>

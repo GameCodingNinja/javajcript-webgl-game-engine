@@ -12,15 +12,22 @@ class SpriteSheetManager
 {
     constructor()
     {
-        this.spriteSheetMap = new Map;
+        this.spriteSheetMapMap = new Map;
     }
     
     //
     //  DESC: Load the glyph data from XML node
     //
-    loadFromNode( filePath, node )
+    load( group, filePath, node )
     {
-        let spriteSheet = this.spriteSheetMap.get( filePath );
+        let groupMap = this.spriteSheetMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.spriteSheetMapMap.set( group, groupMap );
+        }
+        
+        let spriteSheet = groupMap.get( filePath );
         if( spriteSheet === undefined )
         {
             spriteSheet = new SpriteSheet;
@@ -29,20 +36,33 @@ class SpriteSheetManager
             spriteSheet.loadFromNode( node );
             
             // Add a new entry to the map
-            this.spriteSheetMap.set( filePath, spriteSheet );
+            groupMap.set( filePath, spriteSheet );
         }
     }
     
     //
     //  DESC: Load the glyph data from XML node
     //
-    getSpriteSheet( filePath )
+    get( group, filePath )
     {
-        let spriteSheet = this.spriteSheetMap.get( filePath );
-        if( spriteSheet === undefined )
-            throw new Error( 'Sprite sheet mesh file missing (' + filePath + ')!' );
-
-        return spriteSheet;
+        let groupMap = this.spriteSheetMapMap.get( group );
+        if( groupMap === undefined )
+            throw new Error( `Sprite sheet group does not exist! (${group}).` );
+            
+        let data = groupMap.get( filePath );
+        if( data === undefined )
+            throw new Error( `Sprite sheet mesh file missing! (${filePath}).` );
+        
+        return data;
+    }
+    
+    // 
+    //  DESC: Delete the group
+    //
+    deleteGroup( groupAry )
+    {
+        for( let i = 0; i < groupAry.length; ++i )
+            this.spriteSheetMapMap.delete( groupAry[i] );
     }
     
     //
@@ -50,8 +70,8 @@ class SpriteSheetManager
     //
     clear()
     {
-        if( this.spriteSheetMap.size )
-            this.spriteSheetMap.clear();
+        if( this.spriteSheetMapMap.size )
+            this.spriteSheetMapMap.clear();
     }
 }
 

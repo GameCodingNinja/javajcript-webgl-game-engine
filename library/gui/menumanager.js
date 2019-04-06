@@ -306,6 +306,9 @@ class MenuManager extends ManagerBase
             if( doInit )
                 this.initGroup( group );
         }
+        
+        // Temporary assets can now be freed
+        assetHolder.deleteGroup( groupAry );
     }
 
     //

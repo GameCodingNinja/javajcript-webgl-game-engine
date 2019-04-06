@@ -46,12 +46,24 @@
 
         <!-- Start Game Button -->
         <control name="continue_btn" controlType="button" defaultState="inactive">
-            <filePath file="data/objects/2d/menu/control/start_game.ctrl"/>
+            <filePath file="data/objects/2d/menu/control/button_275x55_frame.ctrl"/>
             <position x="0" y="-120" z="0"/>
             <fontStringLst>
                 <string text="Start Game"/>
             </fontStringLst>
             <action actionType="game_state_change" executionAction="level_1_state"/>
+            <!--<navigate up="key_binding_btn" down="new_game_btn"/>-->
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+        
+        <!-- Help Button -->
+        <control name="help_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_145x55_frame.ctrl"/>
+            <position x="-800" y="-120" z="0"/>
+            <fontStringLst>
+                <string text="Help"/>
+            </fontStringLst>
+            <action actionType="to_menu" executionAction="help_menu"/>
             <!--<navigate up="key_binding_btn" down="new_game_btn"/>-->
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>

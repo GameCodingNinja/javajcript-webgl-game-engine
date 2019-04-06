@@ -304,7 +304,7 @@ export class ObjectVisualData2D
             else
             {
                 // This will return the sprite sheet if it's been loaded
-                let spriteSheet = spriteSheetManager.getSpriteSheet( this.spriteSheetFilePath );
+                let spriteSheet = spriteSheetManager.get( group, this.spriteSheetFilePath );
 
                 // Copy the needed glyph data from the manager
                 spriteSheet.copyTo( this.spriteSheet, this.glyphIDs );
@@ -326,7 +326,7 @@ export class ObjectVisualData2D
             if( this.glyphIDs !== null )
             {
                 // This will return the sprite sheet
-                let spriteSheet = spriteSheetManager.getSpriteSheet( this.spriteSheetFilePath );
+                let spriteSheet = spriteSheetManager.get( group, this.spriteSheetFilePath );
 
                 // Get the glyph to make the frame with
                 let glyph = spriteSheet.findGlyph( this.glyphIDs[0] );

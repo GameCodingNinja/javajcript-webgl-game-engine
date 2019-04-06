@@ -154,7 +154,7 @@ class ObjectDataManager extends ManagerBase
                                 ( group, xmlNode, filePath, finishCallback ) =>
                                 {
                                     if( filePath === objData.visualData.spriteSheetFilePath )
-                                        spriteSheetManager.loadFromNode( filePath, xmlNode );
+                                        spriteSheetManager.load( group, filePath, xmlNode );
                                     
                                     // Save the mesh file xml node for later
                                     else
@@ -256,6 +256,10 @@ class ObjectDataManager extends ManagerBase
                     objData.createFromData( group );
             }
         }
+        
+        // Temporary assets can now be freed
+        assetHolder.deleteGroup( groupAry );
+        spriteSheetManager.deleteGroup( groupAry );
         
         callback();
     }

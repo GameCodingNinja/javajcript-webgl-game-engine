@@ -20,14 +20,12 @@ import { loadManager } from '../../../library/managers/loadmanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
-import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { Sprite } from '../../../library/sprite/sprite';
 import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { assetHolder } from '../../../library/utilities/assetholder';
 import { UIProgressBar } from '../../../library/gui/uiprogressbar';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { ActorStrategy } from '../../../library/strategy/actorstrategy';
@@ -261,14 +259,8 @@ export class StartUpState extends GameState
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
         strategyManager.deleteStrategy( ['(startup)'] );
-        
-        // Free all asset holder data
-        assetHolder.clear();
 
         // Free the state assets from the video memory
         objectDataManager.freeGroup( ['(startup)'] );
-        
-        // Free any sprite sheet manager data
-        spriteSheetManager.clear();
     }
 }
