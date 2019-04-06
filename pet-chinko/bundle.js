@@ -3575,7 +3575,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const STARTUP_ASSET_COUNT = 52,
+const STARTUP_ASSET_COUNT = 57,
       MIN_LOAD_TIME = 1500;
 
 class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]

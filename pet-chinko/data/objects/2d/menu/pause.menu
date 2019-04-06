@@ -45,18 +45,18 @@
                 <string text="Resume"/>
             </fontStringLst>
             <action actionType="back"/>
-            <navigate up="main_menu_btn" down="settings_btn"/>
+            <navigate up="main_menu_btn" down="help_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 
-        <!-- Settings Button -->
-        <control name="settings_btn" controlType="button" defaultState="disabled">
+        <!-- Help Button -->
+        <control name="help_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="10" z="0"/>
             <fontStringLst>
-                <string text="Settings"/>
+                <string text="Help"/>
             </fontStringLst>
-            <action actionType="to_menu" executionAction="settings_menu"/>
+            <action actionType="to_menu" executionAction="help_menu"/>
             <navigate up="resume_btn" down="key_binding_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
@@ -69,7 +69,7 @@
                 <string text="Key Bindings"/>
             </fontStringLst>
             <action actionType="to_menu" executionAction="key_bindings_menu"/>
-            <navigate up="settings_btn" down="main_menu_btn"/>
+            <navigate up="help_btn" down="main_menu_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 
