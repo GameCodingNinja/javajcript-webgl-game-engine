@@ -232,4 +232,12 @@ export class UIButtonList extends UISubControl
         if( this.imageLstIndex > -1 )
             this.spriteAry[this.imageLstIndex].visualComponent.setFrame( this.activeIndex );
     }
+    
+    // 
+    //  DESC: Get the active index
+    //
+    getIndex()
+    {
+        return this.activeIndex;
+    }
 }

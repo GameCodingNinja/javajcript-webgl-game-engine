@@ -26,7 +26,7 @@ import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-export const ASSET_COUNT = 13;
+export const ASSET_COUNT = 15;
 
 const SPRITE_PEG = -2,
       STRAWBERRY = 0;
@@ -68,6 +68,9 @@ export class Level1State extends CommonState
         highResTimer.calcElapsedTime();
         
         requestAnimationFrame( this.callback );
+        
+        this.index = menuManager.getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
+        soundManager.play( `(level_${this.index})`, 'music_0', true );
     }
     
     // 
@@ -121,6 +124,8 @@ export class Level1State extends CommonState
         objectDataManager.freeGroup( ['(level_1)'] );
         
         physicsWorldManager.destroyWorld( "(game)" );
+
+        soundManager.freeGroup( [`(level_${this.index})`]);
     }
     
     // 
@@ -251,6 +256,11 @@ export function load()
     // Load the physics list table and group
     loadManager.add(
         ( callback ) => physicsWorldManager.loadWorldGroup2D( '(game)', callback ));
+
+    let index = menuManager.getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
+
+    // Load the Sound Manager group
+    loadManager.add( ( callback ) => soundManager.loadGroup( [`(level_${index})`], callback ));
         
     // Create the stage strategy
     loadManager.add(

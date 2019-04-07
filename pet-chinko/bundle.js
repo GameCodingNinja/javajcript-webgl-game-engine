@@ -15426,6 +15426,14 @@ class UIButtonList extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubCont
         if( this.imageLstIndex > -1 )
             this.spriteAry[this.imageLstIndex].visualComponent.setFrame( this.activeIndex );
     }
+    
+    // 
+    //  DESC: Get the active index
+    //
+    getIndex()
+    {
+        return this.activeIndex;
+    }
 }
 
 
@@ -22720,7 +22728,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const ASSET_COUNT = 13;
+const ASSET_COUNT = 15;
 
 const SPRITE_PEG = -2,
       STRAWBERRY = 0;
@@ -22762,6 +22770,10 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__["highResTimer"].calcElapsedTime();
         
         requestAnimationFrame( this.callback );
+        
+        this.index = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
+        
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].play( `(level_${this.index})`, 'music_0', true );
     }
     
     // 
@@ -22815,6 +22827,8 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].freeGroup( ['(level_1)'] );
         
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].destroyWorld( "(game)" );
+
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].freeGroup( [`(level_${this.index})`]);
     }
     
     // 
@@ -22945,6 +22959,11 @@ function load()
     // Load the physics list table and group
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
         ( callback ) => _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].loadWorldGroup2D( '(game)', callback ));
+
+    let index = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
+
+    // Load the Sound Manager group
+    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].loadGroup( [`(level_${index})`], callback ));
         
     // Create the stage strategy
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(

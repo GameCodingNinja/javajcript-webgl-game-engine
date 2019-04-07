@@ -36,7 +36,6 @@
                 <string text="Level 2"/>
                 <string text="Level 3"/>
                 <string text="Level 4"/>
-                <string text="Level 5"/>
             </fontStringLst>
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>

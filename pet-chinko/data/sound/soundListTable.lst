@@ -4,4 +4,20 @@
     <file path="data/sound/menuSound.lst"/>
   </groupList>
   
+  <groupList groupName="(level_1)">
+    <file path="data/sound/level1Sound.lst"/>
+  </groupList>
+  
+  <groupList groupName="(level_2)">
+    <file path="data/sound/level2Sound.lst"/>
+  </groupList>
+  
+  <groupList groupName="(level_3)">
+    <file path="data/sound/level3Sound.lst"/>
+  </groupList>
+  
+  <groupList groupName="(level_4)">
+    <file path="data/sound/level4Sound.lst"/>
+  </groupList>
+  
 </listTable>
