@@ -22744,11 +22744,17 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         // Add the contact listeners
         this.physicsWorld.world.on( 'begin-contact', this.beginContact.bind(this) );
         this.physicsWorld.world.on( 'end-contact', this.endContact.bind(this) );
-        //this.physicsWorld.world.on( 'remove-fixture', this.removeFixture.bind(this) );
+        this.physicsWorld.world.on( 'remove-fixture', this.removeFixture.bind(this) );
 
         // Create the script component and add a script
         this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__["ScriptComponent"];
         this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__["scriptManager"].get('ScreenFade')( 0, 1, 500 ) );
+        
+        // Multiplier value
+        this.multiplier = 1;
+        
+        // Total win
+        this.totalWin = 0;
         
         // Unblock the menu messaging and activate needed trees
         _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].allowEventHandling = true;
@@ -22763,8 +22769,8 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         let uiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-ui_');
         
         // get the ui elements
-        this.uiMeter = uiStrategy.get( 'UIMeter' );
-        this.multiplier = uiStrategy.get( 'multiplier' );
+        this.uiWinMeter = uiStrategy.get( 'UIMeter' ).getControl();
+        this.uiMultiplier = uiStrategy.get( 'multiplier' ).getSprite();
         
         // Reset the elapsed time before entering the render loop
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__["highResTimer"].calcElapsedTime();
@@ -22772,7 +22778,6 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         requestAnimationFrame( this.callback );
         
         this.index = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
-        
         _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].play( `(level_${this.index})`, 'music_0', true );
     }
     
@@ -22796,9 +22801,25 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             // Get the random rotation
             let rot = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomArbitrary"]( -3, 3 );
             
-            let ball = 'tennis_ball_green';
-            if( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 1) )
-                ball = 'tennis_ball_pink';
+            let ball = '';
+            switch(_library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 4))
+            {
+                case 0:
+                    ball = 'tennis_ball_green';
+                break;
+                case 1:
+                    ball = 'tennis_ball_pink';
+                break;
+                case 2:
+                    ball = 'dog_head';
+                break;
+                case 3:
+                    ball = 'frisbee';
+                break;
+                case 4:
+                    ball = 'bone_biscuit';
+                break;
+            } 
             
             // Create the ball
             let node = this.gameStrategy.create( ball );
@@ -22931,11 +22952,11 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     
     removeFixture( object )
     {
-        /*if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.id > 0) )
+        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["SPRITE_DEFAULT_ID"]) )
         {
             this.totalWin += this.multiplier;
-            this.winMeter.startBangUp( this.totalWin );
-        }*/
+            this.uiWinMeter.startBangUp( this.totalWin );
+        }
     }
 }
 

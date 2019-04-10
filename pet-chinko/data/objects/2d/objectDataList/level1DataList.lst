@@ -55,6 +55,44 @@
                 </fixtureLst>
             </physics>
         </object>
+        
+        <object name="dog_head">
+            <visual>
+                <texture file="data/textures/levelArt/Dog_head100x100.png"/>
+            </visual>
+            <physics>
+                <body type="dynamic"/>
+                <fixtureLst>
+                    <fixture shape="circle" radius="50" density="0.3" restitution="0.6"/>
+                </fixtureLst>
+            </physics>
+        </object>
+        
+        <object name="frisbee">
+            <visual>
+                <texture file="data/textures/levelArt/frisbee100x100.png"/>
+            </visual>
+            <physics>
+                <body type="dynamic"/>
+                <fixtureLst>
+                    <fixture shape="circle" radius="50" density="0.3" restitution="0.5"/>
+                </fixtureLst>
+            </physics>
+        </object>
+        
+        <object name="bone_biscuit">
+            <visual>
+                <texture file="data/textures/levelArt/bone_biscuit.png"/>
+            </visual>
+            <physics>
+                <body type="dynamic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" density="0.1" restitution="0.3">
+                        <sizeMod top="-3" bottom="-3" left="-3" right="-3"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
 
         <object name="peg">
             <visual>

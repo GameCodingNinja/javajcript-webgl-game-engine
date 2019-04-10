@@ -42,11 +42,17 @@ export class Level1State extends CommonState
         // Add the contact listeners
         this.physicsWorld.world.on( 'begin-contact', this.beginContact.bind(this) );
         this.physicsWorld.world.on( 'end-contact', this.endContact.bind(this) );
-        //this.physicsWorld.world.on( 'remove-fixture', this.removeFixture.bind(this) );
+        this.physicsWorld.world.on( 'remove-fixture', this.removeFixture.bind(this) );
 
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+        
+        // Multiplier value
+        this.multiplier = 1;
+        
+        // Total win
+        this.totalWin = 0;
         
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
@@ -61,8 +67,8 @@ export class Level1State extends CommonState
         let uiStrategy = strategyManager.activateStrategy('_level-ui_');
         
         // get the ui elements
-        this.uiMeter = uiStrategy.get( 'UIMeter' );
-        this.multiplier = uiStrategy.get( 'multiplier' );
+        this.uiWinMeter = uiStrategy.get( 'UIMeter' ).getControl();
+        this.uiMultiplier = uiStrategy.get( 'multiplier' ).getSprite();
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -93,9 +99,25 @@ export class Level1State extends CommonState
             // Get the random rotation
             let rot = genFunc.randomArbitrary( -3, 3 );
             
-            let ball = 'tennis_ball_green';
-            if( genFunc.randomInt(0, 1) )
-                ball = 'tennis_ball_pink';
+            let ball = '';
+            switch(genFunc.randomInt(0, 4))
+            {
+                case 0:
+                    ball = 'tennis_ball_green';
+                break;
+                case 1:
+                    ball = 'tennis_ball_pink';
+                break;
+                case 2:
+                    ball = 'dog_head';
+                break;
+                case 3:
+                    ball = 'frisbee';
+                break;
+                case 4:
+                    ball = 'bone_biscuit';
+                break;
+            } 
             
             // Create the ball
             let node = this.gameStrategy.create( ball );
@@ -228,11 +250,11 @@ export class Level1State extends CommonState
     
     removeFixture( object )
     {
-        /*if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.id > 0) )
+        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > defs.SPRITE_DEFAULT_ID) )
         {
             this.totalWin += this.multiplier;
-            this.winMeter.startBangUp( this.totalWin );
-        }*/
+            this.uiWinMeter.startBangUp( this.totalWin );
+        }
     }
 }
 

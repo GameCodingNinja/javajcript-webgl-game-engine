@@ -1,15 +1,23 @@
 <node defaultGroup="(level_1)" defaultAIName="aiBall">
     
     <node name="tennis_ball_green" type="spriteNode">
-        
-        <sprite2d objectName="tennis_ball_green"/>
-
+        <sprite2d objectName="tennis_ball_green" id="1"/>
     </node>
     
     <node name="tennis_ball_pink" type="spriteNode">
-        
-        <sprite2d objectName="tennis_ball_pink"/>
-
+        <sprite2d objectName="tennis_ball_pink" id="2"/>
+    </node>
+    
+    <node name="dog_head" type="spriteNode">
+        <sprite2d objectName="dog_head" id="3"/>
+    </node>
+    
+    <node name="frisbee" type="spriteNode">
+        <sprite2d objectName="frisbee" id="4"/>
+    </node>
+    
+    <node name="bone_biscuit" type="spriteNode">
+        <sprite2d objectName="bone_biscuit" id="5"/>
     </node>
 
 </node>
