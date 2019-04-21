@@ -30,6 +30,10 @@
         <object name="help_menu_bg">
             <size width="1100" height="500"/>
         </object>
+        
+        <object name="start_game_menu_bg">
+            <size width="1100" height="500"/>
+        </object>
 
     </objectList>
 

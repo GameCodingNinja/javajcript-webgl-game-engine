@@ -56,18 +56,6 @@
             </physics>
         </object>
         
-        <object name="dog_head">
-            <visual>
-                <texture file="data/textures/levelArt/Dog_head100x100.png"/>
-            </visual>
-            <physics>
-                <body type="dynamic"/>
-                <fixtureLst>
-                    <fixture shape="circle" radius="50" density="0.3" restitution="0.6"/>
-                </fixtureLst>
-            </physics>
-        </object>
-        
         <object name="frisbee">
             <visual>
                 <texture file="data/textures/levelArt/frisbee100x100.png"/>
@@ -116,6 +104,18 @@
                     <fixture shape="polygon">
                         <sizeMod top="-4" bottom="-4" left="-4" right="-4"/>
                     </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+        
+        <object name="dog_head">
+            <visual>
+                <texture file="data/textures/levelArt/Dog_head100x100.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="circle" radius="10" sensor="true"/>
                 </fixtureLst>
             </physics>
         </object>

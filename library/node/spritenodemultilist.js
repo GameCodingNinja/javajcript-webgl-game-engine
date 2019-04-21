@@ -15,9 +15,9 @@ export class SpriteNodeMultiLst extends NodeMultiLst
 {
     constructor(
         objectData,
-        spriteId = defs.SPRITE_DEFAULT_ID,
-        nodeId = defs.NODE_DEFAULT_ID,
-        parentId = defs.PARENT_NODE_DEFAULT_ID )
+        spriteId = defs.DEFAULT_ID,
+        nodeId = defs.DEFAULT_ID,
+        parentId = defs.DEFAULT_ID )
     {
         super( nodeId, parentId );
         

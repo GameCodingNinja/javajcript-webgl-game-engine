@@ -6,8 +6,7 @@
 
 "use strict";
 
-import * as planck from '../../Box2D/planck.min';
-//import * as planck from '../../Box2D/planck';
+import * as planck from 'planck-js';
 
 export class Fixture
 {

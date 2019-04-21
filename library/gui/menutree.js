@@ -51,6 +51,52 @@ export class MenuTree
             this.rootMenu.activateMenu();
         }
     }
+    
+    // 
+    //  DESC: Set the default menu
+    //
+    setDefaultMenu( menuStr )
+    {
+        let menu = this.menuMap.get( menuStr );
+        if( menu !== undefined )
+            this.defaultMenu = menu;
+        else
+            throw new Error( `Menu being set is missing (${menuStr})!` );
+    }
+    
+    // 
+    //  DESC: Set the root menu
+    //
+    setRootMenu( menuStr )
+    {
+        let menu = this.menuMap.get( menuStr );
+        if( menu !== undefined )
+            this.rootMenu = menu;
+        else
+            throw new Error( `Menu being set is missing (${menuStr})!` );
+    }
+    
+    // 
+    //  DESC: Is the default menu
+    //
+    isDefaultMenu( menuStr )
+    {
+        if( this.defaultMenu && this.defaultMenu.name === menuStr )
+            return true
+        
+        return false;
+    }
+    
+    // 
+    //  DESC: Is the root menu
+    //
+    isRootMenu( menuStr )
+    {
+        if( this.rootMenu && this.rootMenu.name === menuStr )
+            return true
+        
+        return false;
+    }
 
     // 
     //  DESC: Update the menu tree

@@ -22,7 +22,7 @@ import * as defs from '../common/defs';
 
 export class Sprite
 {
-    constructor( objData, id = defs.SPRITE_DEFAULT_ID )
+    constructor( objData, id = defs.DEFAULT_ID )
     {
         // The object data
         this.objData = objData
@@ -201,7 +201,7 @@ export class Sprite
     physicsUpdate()
     {
         if( this.physicsComponent )
-            this.physicsComponent.update( this );
+            this.physicsComponent.update();
     }
     
     // 

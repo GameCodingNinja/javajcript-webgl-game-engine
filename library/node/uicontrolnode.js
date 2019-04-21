@@ -61,7 +61,7 @@ export class UIControlNode extends iNode
     //
     getId()
     {
-        return defs.SPRITE_DEFAULT_ID;
+        return defs.DEFAULT_ID;
     }
     
     // 

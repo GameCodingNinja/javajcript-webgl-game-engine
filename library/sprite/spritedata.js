@@ -12,7 +12,7 @@ import * as defs from '../common/defs';
 
 export class SpriteData
 {
-    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = defs.SPRITE_DEFAULT_ID )
+    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = defs.DEFAULT_ID )
     {
         // XML node
         this.xmlNode = xmlNode;

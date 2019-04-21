@@ -21,7 +21,7 @@ export class iNode
     //
     getId()
     {
-        return defs.NODE_DEFAULT_ID;
+        return defs.DEFAULT_ID;
     }
     
     // 
@@ -29,7 +29,7 @@ export class iNode
     //
     getParentId()
     {
-        return defs.PARENT_NODE_DEFAULT_ID;
+        return defs.DEFAULT_ID;
     }
     
     // 

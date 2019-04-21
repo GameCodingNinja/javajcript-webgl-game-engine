@@ -10,21 +10,13 @@ import { iStrategy } from './istrategy';
 import { NodeDataList } from '../node/nodedatalist';
 import { Sprite } from '../sprite/sprite';
 import * as nodeFactory from '../node/nodefactory';
+import * as defs from '../common/defs';
 
 export class ActorStrategy extends iStrategy
 {
     constructor()
     {
         super();
-
-        // ID Offset for this strategy
-        this.idOffset = 0;
-
-        // ID Direction
-        this.idDir = 1;
-
-        // Id increment member
-        this.idInc = 0;
 
         // Map of the node data
         this.dataMap = new Map;
@@ -109,23 +101,20 @@ export class ActorStrategy extends iStrategy
     //
     create( dataName, instanceName = null, makeActive = true )
     {
-        // Create a unique node id
-        let nodeId =  ((this.idInc++) + this.idOffset) * this.idDir;
-
         // Get the data for this data name
-        let nodeLst = this.getData( dataName ).dataAry;
+        let nodeAry = this.getData( dataName ).dataAry;
 
         // Build the node list
         let headNode = null;
-        for( let i = 0; i < nodeLst.length; i++ )
+        for( let i = 0; i < nodeAry.length; i++ )
         {
-            let node = nodeFactory.create( nodeLst[i], nodeId );
+            let node = nodeFactory.create( nodeAry[i] );
 
             if( headNode === null )
                 headNode = node;
 
-            else if( !headNode.addNode( node, nodeLst[i].nodeName ) )
-                throw new Error( `Parent node not found or node does not support adding children (${nodeLst[i].nodeName}, ${node.parentId})!` );
+            else if( !headNode.addNode( node, nodeAry[i].nodeName ) )
+                throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
         }
 
         // Add the node to the array for adding to the active list
@@ -284,7 +273,7 @@ export class ActorStrategy extends iStrategy
                 if( index !== -1 )
                     this.nodeAry.splice( index, 1 );
                 else
-                    throw new Error( `Node id can't be found (${id})!` );
+                    throw new Error( `Node id can't be found to remove from active list!` );
             }
         }
     }
@@ -308,7 +297,7 @@ export class ActorStrategy extends iStrategy
                     this.nodeAry.splice( index, 1 );
                 }
                 else
-                    throw new Error( `Node id can't be found (${id})!` );
+                    throw new Error( `Node can't be found to delete!` );
                 
                 // If this same node is in the map, delete it here too.
                 for( let [ key, obj ] of this.nodeMap.entries() )

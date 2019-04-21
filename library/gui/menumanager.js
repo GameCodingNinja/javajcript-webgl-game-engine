@@ -456,7 +456,7 @@ class MenuManager extends ManagerBase
     }
     
     // 
-    //  DESC: Activate a tree to be used
+    //  DESC: Activate a tree to be used based on group
     //
     activateTreeGroup( group, treeStr )
     {
@@ -511,7 +511,7 @@ class MenuManager extends ManagerBase
             {
                 if( key === treeStr )
                 {
-                    ActivateTree( groupIter.first, treeIter.first );
+                    this.deactivateTreeGroup( groupKey, key );
                     return;
                 }
             }
@@ -952,19 +952,14 @@ class MenuManager extends ManagerBase
     //
     getMenu( name )
     {
-        let menu = undefined;
-
         for( let [ groupKey, groupMap ] of this.menuMapMap.entries() )
         {
-            menu = groupMap.get( name );
+            let menu = groupMap.get( name );
             if( menu !== undefined )
-                break;
+                return menu;
         }
 
-        if( menu === undefined )
-            throw new Error( `Menu being asked for is missing (${name})!` );
-
-        return menu;
+        throw new Error( `Menu being asked for is missing (${name})!` );
     }
     
     // 
@@ -1012,9 +1007,46 @@ class MenuManager extends ManagerBase
 
         return menu;
     }
+    
+    // 
+    //  Get a reference to the tree
+    //
+    getTree( treeStr )
+    {
+        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        {
+            for( let [ key, tree ] of groupMap.entries() )
+            {
+                if( key === treeStr )
+                    return tree;
+            }
+        }
+
+        // If you got this far, it's a problem
+        throw new Error( `Menu tree doesn't exist (${treeStr})!` );
+    }
+    
+    // 
+    //  Get a reference to the tree based on group
+    //
+    getTreeGroup( group, treeStr )
+    {
+        let groupMap = this.menuTreeMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            // Find the tree in the map
+            let tree = groupMap.get( treeStr );
+            if( tree !== undefined )
+                return tree;
+            
+            throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
+        }
+        
+        throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
+    }
 
     // 
-    //  Get a pointer to the active tree
+    //  Get a reference to the active tree
     //
     getActiveTree()
     {
@@ -1030,6 +1062,36 @@ class MenuManager extends ManagerBase
         }
 
         return tree;
+    }
+    
+    // 
+    //  DESC: See if the tree is in the active list
+    //
+    isTreeInActivelist( treeStr )
+    {
+        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        {
+            for( let [ key, tree ] of groupMap.entries() )
+            {
+                if( key === treeStr )
+                {
+                    if( tree.interfaceMenu )
+                    {
+                        let index = this.activeInterTreeAry.indexOf( tree );
+                        if( index > -1 )
+                            return true;
+                    }
+                    else
+                    {
+                        let index = this.activeMenuTreeAry.indexOf( tree );
+                        if( index > -1 )
+                            return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
 
     // 
@@ -1057,6 +1119,7 @@ class MenuManager extends ManagerBase
     //
     get allowEventHandling() { return this.allow; }
     set allowEventHandling( value ) { this.allow = value; }
+
 }
 
 export var menuManager = new MenuManager;

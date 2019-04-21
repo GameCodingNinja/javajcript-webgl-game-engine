@@ -17,7 +17,7 @@ export class NodeDataList
         defGroup = '',
         defObjName = '',
         defAIName = '',
-        defId = defs.SPRITE_DEFAULT_ID )
+        defId = defs.DEFAULT_ID )
     {
         // Array of the node data
         this.dataAry = [];
@@ -47,9 +47,9 @@ export class NodeDataList
         if( attr )
             nodeName = attr;
         
-        this.idCounter = defs.NODE_DEFAULT_ID;
+        this.idCounter = defs.DEFAULT_ID;
         
-        let nodeData = new NodeData( node, nodeName, this.idCounter++, defs.PARENT_NODE_DEFAULT_ID, defaultGroup, defaultObjName, defaultAIName, defId );
+        let nodeData = new NodeData( node, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, defaultAIName, defId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children

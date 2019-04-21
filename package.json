@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/GameCodingNinja/javajcript-webgl-game-engine#readme",
   "devDependencies": {
+    "planck-js": "^0.3.5",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.2.0"
   }

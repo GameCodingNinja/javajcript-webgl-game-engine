@@ -13,9 +13,9 @@ import * as defs from '../common/defs';
 export class ObjectNodeMultiLst extends NodeMultiLst
 {
     constructor(
-        objectId = defs.OBJECT_DEFAULT_ID,
-        nodeId = defs.NODE_DEFAULT_ID,
-        parentId = defs.PARENT_NODE_DEFAULT_ID )
+        objectId = defs.DEFAULT_ID,
+        nodeId = defs.DEFAULT_ID,
+        parentId = defs.DEFAULT_ID )
     {
         super( nodeId, parentId );
         

@@ -23,5 +23,9 @@
     <groupList groupName="_level-1-game_">
         <file path="data/objects/strategy/level1/level.strategy"/>
     </groupList>
+    
+    <groupList groupName="_level-1-multiplier_">
+        <file path="data/objects/strategy/level1/multiplier.strategy"/>
+    </groupList>
   
 </listTable>

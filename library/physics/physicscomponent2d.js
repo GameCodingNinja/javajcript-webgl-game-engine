@@ -8,13 +8,15 @@
 
 import { physicsWorldManager } from './physicsworldmanager';
 import { Size } from '../common/size';
-import * as planck from '../../Box2D/planck.min';
-//import * as planck from '../../Box2D/planck';
+import * as planck from 'planck-js';
 
 export class PhysicsComponent2D
 {
-    constructor( physicsData )
+    constructor( physicsData, sprite )
     {
+        // Parent sprite
+        this.sprite = null;
+                
         // Body type
         this.bodyType = null;
 
@@ -27,9 +29,6 @@ export class PhysicsComponent2D
 
         // Pointer to the world
         this.world = null;
-        
-        // Flag to indicate static body
-        this.staticBody = false;
         
         if( physicsData.isActive() )
         {
@@ -50,23 +49,24 @@ export class PhysicsComponent2D
     {
         if( this.world !== null )
         {
-            this.createBody( sprite );
-            this.createFixture( sprite );
+            this.sprite = sprite;
+            this.createBody();
+            this.createFixture();
         }
     }
     
     // 
     //  DESC: Create the body
     //
-    createBody( sprite )
+    createBody()
     {
         if( !this.body )
         {
-            let physicsData = sprite.objData.physicsData;
+            let physicsData = this.sprite.objData.physicsData;
             let worldDef = {
                 type : physicsData.bodyType,
-                position : planck.Vec2( sprite.object.pos.x * this.pixelsToMeters, -(sprite.object.pos.y * this.pixelsToMeters) ),
-                angle : -sprite.object.rot.z,
+                position : planck.Vec2( this.sprite.object.pos.x * this.pixelsToMeters, -(this.sprite.object.pos.y * this.pixelsToMeters) ),
+                angle : -this.sprite.object.rot.z,
 
                 linearVelocity : planck.Vec2.zero(),
                 angularVelocity : 0.0,
@@ -82,47 +82,44 @@ export class PhysicsComponent2D
                 awake : true,
                 active : true,
 
-                userData : sprite };
+                userData : this.sprite };
 
             // Create the body
             this.body = this.world.createBody( worldDef );
-            
-            if( physicsData.bodyType === 'static' )
-                this.staticBody = true;
         }
     }
 
     // 
     //  DESC: Create the fixture
     //
-    createFixture( sprite )
+    createFixture()
     {
-        let fixtureAry = sprite.objData.physicsData.fixtureAry;
+        let fixtureAry = this.sprite.objData.physicsData.fixtureAry;
 
         for( let i = 0; i < fixtureAry.length; ++i )
         {
             // Create the fixture
             if( fixtureAry[i].shape === planck.Circle.TYPE )
-                this.createCircularShapeFixture( sprite, fixtureAry[i] );
+                this.createCircularShapeFixture( fixtureAry[i] );
 
             else if( fixtureAry[i].shape === planck.Edge.TYPE )
-                this.createEdgeShapeFixture( sprite, fixtureAry[i] );
+                this.createEdgeShapeFixture( fixtureAry[i] );
 
             else if( fixtureAry[i].shape === planck.Polygon.TYPE )
-                this.createPolygonShapeFixture( sprite, fixtureAry[i] );
+                this.createPolygonShapeFixture( fixtureAry[i] );
 
             else if( fixtureAry[i].shape === planck.Chain.TYPE )
-                this.createChainShapeFixture( sprite, fixtureAry[i] );
+                this.createChainShapeFixture( fixtureAry[i] );
         }
     }
     
     // 
     //  DESC: Create the circular shape fixture
     //
-    getFixtureDef( sprite, fixture )
+    getFixtureDef( fixture )
     {
         let fixtureDef = {
-            userData : sprite,
+            userData : this.sprite,
             friction : fixture.friction,
             restitution : fixture.restitution,
             density : fixture.density,
@@ -138,11 +135,11 @@ export class PhysicsComponent2D
     // 
     //  DESC: Create the circular shape fixture
     //
-    createCircularShapeFixture( sprite, fixture )
+    createCircularShapeFixture( fixture )
     {
         this.body.createFixture(
-            planck.Circle( (fixture.radius * sprite.object.scale.x) * this.pixelsToMeters ),
-            this.getFixtureDef( sprite, fixture ) );
+            planck.Circle( (fixture.radius * this.sprite.object.scale.x) * this.pixelsToMeters ),
+            this.getFixtureDef( fixture ) );
     }
 
     // 
@@ -150,7 +147,7 @@ export class PhysicsComponent2D
     //  NOTE: An edge is a line segment of two points
     //        This is no different then making a polygon from points
     //
-    createEdgeShapeFixture( sprite, fixture )
+    createEdgeShapeFixture( fixture )
     {
         // Do a sanity check because we need two points to define an edge
         if( fixture.vertAry.length !== 2 )
@@ -158,35 +155,35 @@ export class PhysicsComponent2D
 
         // Apply scale to the size and divide by 2
         let size = new Size(
-            sprite.objData.size.w * sprite.object.scale.x * 0.5,
-            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
 
         // Convert the points to world location in meters
         let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
+        this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
 
         this.body.createFixture(
             planck.Edge( Vec2Ary[0], Vec2Ary[1] ),
-            this.getFixtureDef( sprite, fixture ) );
+            this.getFixtureDef( fixture ) );
     }
 
     // 
     //  DESC: Create the polygon shape fixture
     //
-    createPolygonShapeFixture( sprite, fixture )
+    createPolygonShapeFixture( fixture )
     {
         let Vec2Ary = [];
 
         // Apply scale to the size and divide by 2
         let size = new Size(
-            sprite.objData.size.w * sprite.object.scale.x * 0.5,
-            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
 
         // Is this polygon shape defined by a vector of points?
         if( fixture.vertAry.length )
         {
             // Convert the points to world location in meters
-            this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
+            this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
         }
         
         // If vector points are not supplied, build a square based on the object size
@@ -194,10 +191,10 @@ export class PhysicsComponent2D
         {
             // Bottom and left mod have their signs flipped so that a positive mod always means
             // expansion of the side, and a negative mod always means a contraction of the side
-            let topMod = fixture.topMod * sprite.object.scale.y;
-            let bottomMod = -fixture.bottomMod * sprite.object.scale.y;
-            let leftMod = -fixture.leftMod * sprite.object.scale.x;
-            let rightMod = fixture.rightMod * sprite.object.scale.x;
+            let topMod = fixture.topMod * this.sprite.object.scale.y;
+            let bottomMod = -fixture.bottomMod * this.sprite.object.scale.y;
+            let leftMod = -fixture.leftMod * this.sprite.object.scale.x;
+            let rightMod = fixture.rightMod * this.sprite.object.scale.x;
 
             // Convert to meters
             // Box2D polygons are defined using Counter Clockwise Winding (CCW)
@@ -224,13 +221,13 @@ export class PhysicsComponent2D
 
         this.body.createFixture(
             planck.Polygon( Vec2Ary ),
-            this.getFixtureDef( sprite, fixture ) );
+            this.getFixtureDef( fixture ) );
     }
 
     // 
     //  DESC: Create the chain shape fixture
     //
-    createChainShapeFixture( sprite, fixture )
+    createChainShapeFixture( fixture )
     {
         // Do a sanity check because we need more then 1 point to define a chain
         if( fixture.vertAry.length > 1 )
@@ -238,16 +235,16 @@ export class PhysicsComponent2D
         
         // Apply scale to the size and divide by 2
         let size = new Size(
-            sprite.objData.size.w * sprite.object.scale.x * 0.5,
-            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
 
         // Convert the points to world location in meters
         let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
+        this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
 
         this.body.createFixture(
             planck.Chain( Vec2Ary, fixture.chainLoop ),
-            this.getFixtureDef( sprite, fixture ) );
+            this.getFixtureDef( fixture ) );
     }
 
     // 
@@ -268,20 +265,37 @@ export class PhysicsComponent2D
     // 
     //  DESC: Update the physics
     //
-    update( sprite )
+    update()
     {
         if( this.isActive() )
         {
-            //CStatCounter::Instance().IncPhysicsObjectsCounter();
-
-            if( !this.staticBody && this.body.isAwake() )
+            if( !this.body.isStatic() && this.body.isAwake() )
             {
-                let pos = this.body.getPosition();
-                let angle = this.body.getAngle();
-                sprite.object.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
-                sprite.object.setRotXYZ( 0, 0, -angle, false );
+                //CStatCounter::Instance().IncPhysicsObjectsCounter();
+                
+                this.applyTransforms();
             }
         }
+    }
+    
+    // 
+    //  DESC: Update the physics
+    //
+    applyTransforms()
+    {
+        let pos = this.body.getPosition();
+        let angle = this.body.getAngle();
+        this.sprite.object.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
+        this.sprite.object.setRotXYZ( 0, 0, -angle, false );
+    }
+    
+    // 
+    //  DESC: Set the physics to be active
+    //
+    setActive( active )
+    {
+        if( this.body )
+            this.body.setActive( active );
     }
     
     // 
@@ -289,7 +303,7 @@ export class PhysicsComponent2D
     //
     isActive()
     {
-        return (this.body !== null);
+        return (this.body && this.body.isActive());
     }
 
     // 
@@ -307,7 +321,7 @@ export class PhysicsComponent2D
     // 
     //  DESC: Set the physics position and rotation
     //
-    setTransform( x, y, angle, resetVelocity )
+    setTransform( x, y, angle, resetVelocity = false )
     {
         if( this.body !== null )
         {
@@ -318,16 +332,32 @@ export class PhysicsComponent2D
                 this.body.setLinearVelocity( planck.Vec2.zero() );
                 this.body.setAngularVelocity( 0 );
             }
+            
+            // If this body is staic, need to apply the transforms the the sprite position
+            if( this.body.isStatic() )
+                this.applyTransforms();
         }
     }
 
     // 
-    //  DESC: Set the linear velocity
+    //  DESC: Set the physics position and rotation
     //
-    setLinearVelocity( x, y )
+    setPosition( x, y, resetVelocity = false )
     {
         if( this.body !== null )
-            this.body.setLinearVelocity( planck.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
+        {
+            this.body.setPosition( planck.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
+
+            if( resetVelocity )
+            {
+                this.body.setLinearVelocity( planck.Vec2.zero() );
+                this.body.setAngularVelocity( 0 );
+            }
+            
+            // If this body is staic, need to apply the transforms the the sprite position
+            if( this.body.isStatic() )
+                this.applyTransforms();
+        }
     }
     
     // 

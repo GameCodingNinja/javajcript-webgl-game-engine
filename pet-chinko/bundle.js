@@ -91,7 +91,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _library_node_nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(104);
+/* harmony import */ var _library_node_nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(156);
 
 // 
 //  FILE NAME: main.js
@@ -122,14 +122,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(18);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(19);
 /* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(21);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(107);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(112);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(113);
-/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(116);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(118);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(159);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(164);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(165);
+/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(168);
+/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(170);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(8);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(26);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(68);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(120);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(24);
 
 // 
@@ -715,10 +715,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RAD_TO_DEG", function() { return RAD_TO_DEG; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EPSILON", function() { return EPSILON; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGB_TO_DEC", function() { return RGB_TO_DEC; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SPRITE_DEFAULT_ID", function() { return SPRITE_DEFAULT_ID; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OBJECT_DEFAULT_ID", function() { return OBJECT_DEFAULT_ID; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NODE_DEFAULT_ID", function() { return NODE_DEFAULT_ID; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PARENT_NODE_DEFAULT_ID", function() { return PARENT_NODE_DEFAULT_ID; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_ID", function() { return DEFAULT_ID; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESET_VELOCITY", function() { return RESET_VELOCITY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGT_NULL", function() { return EGT_NULL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGT_QUAD", function() { return EGT_QUAD; });
@@ -883,10 +880,7 @@ const DEG_TO_RAD = 0.0174532925199432957,
              EPSILON    = 8.854187817e-12,
              RGB_TO_DEC = 0.00390625;
      
-const SPRITE_DEFAULT_ID      = -1;
-const OBJECT_DEFAULT_ID      = -1;
-const NODE_DEFAULT_ID        = -1;
-const PARENT_NODE_DEFAULT_ID = -1;
+const DEFAULT_ID     = -1;
 
 const RESET_VELOCITY = true;
 
@@ -3520,24 +3514,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(26);
 /* harmony import */ var _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(27);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(47);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(49);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(89);
-/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(88);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(99);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(101);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(141);
+/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(140);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(2);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(90);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(66);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(93);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(94);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(142);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(118);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(145);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(146);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(8);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(68);
-/* harmony import */ var _library_gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(86);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(70);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(95);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(107);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(109);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(110);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(111);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(120);
+/* harmony import */ var _library_gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(138);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(122);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(147);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(159);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(161);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(162);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(163);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(24);
 
 //
@@ -3575,7 +3569,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const STARTUP_ASSET_COUNT = 57,
+const STARTUP_ASSET_COUNT = 58,
       MIN_LOAD_TIME = 1500;
 
 class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
@@ -4524,7 +4518,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(32);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(39);
 /* harmony import */ var _objectdata2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(40);
-/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(45);
+/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(97);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(18);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
@@ -6232,7 +6226,7 @@ var assetHolder = new AssetHolder;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectData2D", function() { return ObjectData2D; });
 /* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
-/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(43);
+/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(95);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
@@ -6317,8 +6311,8 @@ class ObjectData2D
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fixture", function() { return Fixture; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectPhysicsData2D", function() { return ObjectPhysicsData2D; });
-/* harmony import */ var _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
-/* harmony import */ var _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Box2D_planck_min__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_0__);
 
 // 
 //  FILE NAME:  objectphysicsdata2d.js
@@ -6328,7 +6322,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-//import * as planck from '../../Box2D/planck';
 
 class Fixture
 {
@@ -6393,7 +6386,7 @@ class Fixture
         for( let i = 0; i < obj.vertAry.length; ++i )
         {
             let vert = obj.vertAry[i];
-            this.vertAry.push( new _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_0__["Vec2"]( vert.x, vert.y ) );
+            this.vertAry.push( new planck_js__WEBPACK_IMPORTED_MODULE_0__["Vec2"]( vert.x, vert.y ) );
         }
     }
 }
@@ -6531,7 +6524,7 @@ class ObjectPhysicsData2D
                 for( let j = 0; j < vertNode.length; ++j )
                 {
                     fixture.vertAry.push( 
-                        new _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_0__["Vec2"](
+                        new planck_js__WEBPACK_IMPORTED_MODULE_0__["Vec2"](
                             Number( vertNode[j].getAttribute('x') ),
                             Number( vertNode[j].getAttribute('y') ) ) );
                 }
@@ -6591,20 +6584,98 @@ class ObjectPhysicsData2D
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var require;var require;/*
- * Planck.js v0.1.34
- * 
- * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
- * 
+exports.internal = {};
+
+exports.Serializer = __webpack_require__(43);
+
+exports.Math = __webpack_require__(48);
+exports.Vec2 = __webpack_require__(47);
+exports.Vec3 = __webpack_require__(69);
+exports.Mat22 = __webpack_require__(65);
+exports.Mat33 = __webpack_require__(70);
+exports.Transform = __webpack_require__(59);
+exports.Rot = __webpack_require__(57);
+
+exports.AABB = __webpack_require__(52);
+
+exports.Shape = __webpack_require__(63);
+exports.Fixture = __webpack_require__(62);
+exports.Body = __webpack_require__(56);
+exports.Contact = __webpack_require__(64);
+exports.Joint = __webpack_require__(71);
+exports.World = __webpack_require__(44);
+
+exports.Circle = __webpack_require__(74);
+exports.Edge = __webpack_require__(75);
+exports.Polygon = __webpack_require__(76);
+exports.Chain = __webpack_require__(77);
+exports.Box = __webpack_require__(78);
+
+__webpack_require__(79);
+__webpack_require__(80);
+exports.internal.CollidePolygons = __webpack_require__(81);
+__webpack_require__(82);
+__webpack_require__(83);
+
+exports.DistanceJoint = __webpack_require__(84);
+exports.FrictionJoint = __webpack_require__(85);
+exports.GearJoint = __webpack_require__(86);
+exports.MotorJoint = __webpack_require__(89);
+exports.MouseJoint = __webpack_require__(90);
+exports.PrismaticJoint = __webpack_require__(88);
+exports.PulleyJoint = __webpack_require__(91);
+exports.RevoluteJoint = __webpack_require__(87);
+exports.RopeJoint = __webpack_require__(92);
+exports.WeldJoint = __webpack_require__(93);
+exports.WheelJoint = __webpack_require__(94);
+
+exports.internal.Sweep= __webpack_require__(58);
+exports.internal.stats = __webpack_require__(68);
+exports.internal.Manifold = __webpack_require__(66);
+exports.internal.Distance = __webpack_require__(67);
+exports.internal.TimeOfImpact = __webpack_require__(72);
+exports.internal.DynamicTree = __webpack_require__(53);
+exports.internal.Settings = __webpack_require__(51);
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var World = __webpack_require__(44);
+
+exports.toJson = function(world) {
+  return JSON.stringify(world._serialize(), function(key, value) {
+    if (typeof value === 'object') {
+      if (value !== null) {
+        if (typeof value._serialize === 'function') {
+          value = value._serialize();
+        }
+      }
+    }
+    return value;
+  }, '  ');
+};
+
+exports.fromJson = function(string) {
+  return World._deserialize(JSON.parse(string));
+};
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
  * arising from the use of this software.
- * 
  * Permission is granted to anyone to use this software for any purpose,
  * including commercial applications, and to alter it and redistribute it
  * freely, subject to the following restrictions:
- * 
  * 1. The origin of this software must not be misrepresented; you must not
  * claim that you wrote the original software. If you use this software
  * in a product, an acknowledgment in the product documentation would be
@@ -6613,15 +6684,17713 @@ var require;var require;/*
  * misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
-!function(t){if(true)module.exports=t();else { var i; }}(function(){return function t(i,o,e){function s(r,m){if(!o[r]){if(!i[r]){var a="function"==typeof require&&require;if(!m&&a)return require(r,!0);if(n)return n(r,!0);var h=new Error("Cannot find module '"+r+"'");throw h.code="MODULE_NOT_FOUND",h}var c=o[r]={exports:{}};i[r][0].call(c.exports,function(t){var o=i[r][1][t];return s(o?o:t)},c,c.exports,t,i,o,e)}return o[r].exports}for(var n="function"==typeof require&&require,r=0;r<e.length;r++)s(e[r]);return s}({1:[function(t,i,o){o.internal={},o.Math=t("./common/Math"),o.Vec2=t("./common/Vec2"),o.Transform=t("./common/Transform"),o.Rot=t("./common/Rot"),o.AABB=t("./collision/AABB"),o.Shape=t("./Shape"),o.Fixture=t("./Fixture"),o.Body=t("./Body"),o.Contact=t("./Contact"),o.Joint=t("./Joint"),o.World=t("./World"),o.Circle=t("./shape/CircleShape"),o.Edge=t("./shape/EdgeShape"),o.Polygon=t("./shape/PolygonShape"),o.Chain=t("./shape/ChainShape"),o.Box=t("./shape/BoxShape"),t("./shape/CollideCircle"),t("./shape/CollideEdgeCircle"),o.internal.CollidePolygons=t("./shape/CollidePolygon"),t("./shape/CollideCirclePolygone"),t("./shape/CollideEdgePolygon"),o.DistanceJoint=t("./joint/DistanceJoint"),o.FrictionJoint=t("./joint/FrictionJoint"),o.GearJoint=t("./joint/GearJoint"),o.MotorJoint=t("./joint/MotorJoint"),o.MouseJoint=t("./joint/MouseJoint"),o.PrismaticJoint=t("./joint/PrismaticJoint"),o.PulleyJoint=t("./joint/PulleyJoint"),o.RevoluteJoint=t("./joint/RevoluteJoint"),o.RopeJoint=t("./joint/RopeJoint"),o.WeldJoint=t("./joint/WeldJoint"),o.WheelJoint=t("./joint/WheelJoint"),o.internal.Sweep=t("./common/Sweep"),o.internal.stats=t("./common/stats"),o.internal.Manifold=t("./Manifold"),o.internal.Distance=t("./collision/Distance"),o.internal.TimeOfImpact=t("./collision/TimeOfImpact"),o.internal.DynamicTree=t("./collision/DynamicTree"),o.internal.Settings=t("./Settings")},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Settings":7,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./collision/DynamicTree":14,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(t,i,o){function e(t,i){i=n(i,d),this.m_world=t,this.m_awakeFlag=i.awake,this.m_autoSleepFlag=i.allowSleep,this.m_bulletFlag=i.bullet,this.m_fixedRotationFlag=i.fixedRotation,this.m_activeFlag=i.active,this.m_islandFlag=!1,this.m_toiFlag=!1,this.m_userData=i.userData,this.m_type=i.type,this.m_type==y?(this.m_mass=1,this.m_invMass=1):(this.m_mass=0,this.m_invMass=0),this.m_I=0,this.m_invI=0,this.m_xf=h.identity(),this.m_xf.p=r.clone(i.position),this.m_xf.q.setAngle(i.angle),this.m_sweep=new a,this.m_sweep.setTransform(this.m_xf),this.c_velocity=new c,this.c_position=new _,this.m_force=r.zero(),this.m_torque=0,this.m_linearVelocity=r.clone(i.linearVelocity),this.m_angularVelocity=i.angularVelocity,this.m_linearDamping=i.linearDamping,this.m_angularDamping=i.angularDamping,this.m_gravityScale=i.gravityScale,this.m_sleepTime=0,this.m_jointList=null,this.m_contactList=null,this.m_fixtureList=null,this.m_prev=null,this.m_next=null}function s(){this.mass=0,this.center=r.zero(),this.I=0}DEBUG=!1,ASSERT=!1,i.exports=e;var n=(t("./util/common"),t("./util/options")),r=t("./common/Vec2"),m=t("./common/Rot"),a=(t("./common/Math"),t("./common/Sweep")),h=t("./common/Transform"),c=t("./common/Velocity"),_=t("./common/Position"),l=t("./Fixture"),u=(t("./Shape"),t("./World"),e.STATIC="static"),p=e.KINEMATIC="kinematic",y=e.DYNAMIC="dynamic",d={type:u,position:r.zero(),angle:0,linearVelocity:r.zero(),angularVelocity:0,linearDamping:0,angularDamping:0,fixedRotation:!1,bullet:!1,gravityScale:1,allowSleep:!0,awake:!0,active:!0,userData:null};e.prototype.isWorldLocked=function(){return!(!this.m_world||!this.m_world.isLocked())},e.prototype.getWorld=function(){return this.m_world},e.prototype.getNext=function(){return this.m_next},e.prototype.setUserData=function(t){this.m_userData=t},e.prototype.getUserData=function(){return this.m_userData},e.prototype.getFixtureList=function(){return this.m_fixtureList},e.prototype.getJointList=function(){return this.m_jointList},e.prototype.getContactList=function(){return this.m_contactList},e.prototype.isStatic=function(){return this.m_type==u},e.prototype.isDynamic=function(){return this.m_type==y},e.prototype.isKinematic=function(){return this.m_type==p},e.prototype.setStatic=function(){return this.setType(u),this},e.prototype.setDynamic=function(){return this.setType(y),this},e.prototype.setKinematic=function(){return this.setType(p),this},e.prototype.getType=function(){return this.m_type},e.prototype.setType=function(t){if(1!=this.isWorldLocked()&&this.m_type!=t){this.m_type=t,this.resetMassData(),this.m_type==u&&(this.m_linearVelocity.setZero(),this.m_angularVelocity=0,this.m_sweep.forward(),this.synchronizeFixtures()),this.setAwake(!0),this.m_force.setZero(),this.m_torque=0;for(var i=this.m_contactList;i;){var o=i;i=i.next,this.m_world.destroyContact(o.contact)}this.m_contactList=null;for(var e=this.m_world.m_broadPhase,s=this.m_fixtureList;s;s=s.m_next)for(var n=s.m_proxyCount,r=0;r<n;++r)e.touchProxy(s.m_proxies[r].proxyId)}},e.prototype.isBullet=function(){return this.m_bulletFlag},e.prototype.setBullet=function(t){this.m_bulletFlag=!!t},e.prototype.isSleepingAllowed=function(){return this.m_autoSleepFlag},e.prototype.setSleepingAllowed=function(t){this.m_autoSleepFlag=!!t,0==this.m_autoSleepFlag&&this.setAwake(!0)},e.prototype.isAwake=function(){return this.m_awakeFlag},e.prototype.setAwake=function(t){t?0==this.m_awakeFlag&&(this.m_awakeFlag=!0,this.m_sleepTime=0):(this.m_awakeFlag=!1,this.m_sleepTime=0,this.m_linearVelocity.setZero(),this.m_angularVelocity=0,this.m_force.setZero(),this.m_torque=0)},e.prototype.isActive=function(){return this.m_activeFlag},e.prototype.setActive=function(t){if(t!=this.m_activeFlag)if(this.m_activeFlag=!!t,this.m_activeFlag)for(var i=this.m_world.m_broadPhase,o=this.m_fixtureList;o;o=o.m_next)o.createProxies(i,this.m_xf);else{for(var i=this.m_world.m_broadPhase,o=this.m_fixtureList;o;o=o.m_next)o.destroyProxies(i);for(var e=this.m_contactList;e;){var s=e;e=e.next,this.m_world.destroyContact(s.contact)}this.m_contactList=null}},e.prototype.isFixedRotation=function(){return this.m_fixedRotationFlag},e.prototype.setFixedRotation=function(t){this.m_fixedRotationFlag!=t&&(this.m_fixedRotationFlag=!!t,this.m_angularVelocity=0,this.resetMassData())},e.prototype.getTransform=function(){return this.m_xf},e.prototype.setTransform=function(t,i){if(1!=this.isWorldLocked()){this.m_xf.set(t,i),this.m_sweep.setTransform(this.m_xf);for(var o=this.m_world.m_broadPhase,e=this.m_fixtureList;e;e=e.m_next)e.synchronize(o,this.m_xf,this.m_xf)}},e.prototype.synchronizeTransform=function(){this.m_sweep.getTransform(this.m_xf,1)},e.prototype.synchronizeFixtures=function(){var t=h.identity();this.m_sweep.getTransform(t,0);for(var i=this.m_world.m_broadPhase,o=this.m_fixtureList;o;o=o.m_next)o.synchronize(i,t,this.m_xf)},e.prototype.advance=function(t){this.m_sweep.advance(t),this.m_sweep.c.set(this.m_sweep.c0),this.m_sweep.a=this.m_sweep.a0,this.m_sweep.getTransform(this.m_xf,1)},e.prototype.getPosition=function(){return this.m_xf.p},e.prototype.setPosition=function(t){this.setTransform(t,this.m_sweep.a)},e.prototype.getAngle=function(){return this.m_sweep.a},e.prototype.setAngle=function(t){this.setTransform(this.m_xf.p,t)},e.prototype.getWorldCenter=function(){return this.m_sweep.c},e.prototype.getLocalCenter=function(){return this.m_sweep.localCenter},e.prototype.getLinearVelocity=function(){return this.m_linearVelocity},e.prototype.getLinearVelocityFromWorldPoint=function(t){var i=r.sub(t,this.m_sweep.c);return r.add(this.m_linearVelocity,r.cross(this.m_angularVelocity,i))},e.prototype.getLinearVelocityFromLocalPoint=function(t){return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(t))},e.prototype.setLinearVelocity=function(t){this.m_type!=u&&(r.dot(t,t)>0&&this.setAwake(!0),this.m_linearVelocity.set(t))},e.prototype.getAngularVelocity=function(){return this.m_angularVelocity},e.prototype.setAngularVelocity=function(t){this.m_type!=u&&(t*t>0&&this.setAwake(!0),this.m_angularVelocity=t)},e.prototype.getLinearDamping=function(){return this.m_linearDamping},e.prototype.setLinearDamping=function(t){this.m_linearDamping=t},e.prototype.getAngularDamping=function(){return this.m_angularDamping},e.prototype.setAngularDamping=function(t){this.m_angularDamping=t},e.prototype.getGravityScale=function(){return this.m_gravityScale},e.prototype.setGravityScale=function(t){this.m_gravityScale=t},e.prototype.getMass=function(){return this.m_mass},e.prototype.getInertia=function(){return this.m_I+this.m_mass*r.dot(this.m_sweep.localCenter,this.m_sweep.localCenter)},e.prototype.getMassData=function(t){t.mass=this.m_mass,t.I=this.getInertia(),t.center.set(this.m_sweep.localCenter)},e.prototype.resetMassData=function(){if(this.m_mass=0,this.m_invMass=0,this.m_I=0,this.m_invI=0,this.m_sweep.localCenter.setZero(),this.isStatic()||this.isKinematic())return this.m_sweep.c0.set(this.m_xf.p),this.m_sweep.c.set(this.m_xf.p),void(this.m_sweep.a0=this.m_sweep.a);for(var t=r.zero(),i=this.m_fixtureList;i;i=i.m_next)if(0!=i.m_density){var o=new s;i.getMassData(o),this.m_mass+=o.mass,t.wAdd(o.mass,o.center),this.m_I+=o.I}this.m_mass>0?(this.m_invMass=1/this.m_mass,t.mul(this.m_invMass)):(this.m_mass=1,this.m_invMass=1),this.m_I>0&&0==this.m_fixedRotationFlag?(this.m_I-=this.m_mass*r.dot(t,t),this.m_invI=1/this.m_I):(this.m_I=0,this.m_invI=0);var e=r.clone(this.m_sweep.c);this.m_sweep.setLocalCenter(t,this.m_xf),this.m_linearVelocity.add(r.cross(this.m_angularVelocity,r.sub(this.m_sweep.c,e)))},e.prototype.setMassData=function(t){if(1!=this.isWorldLocked()&&this.m_type==y){this.m_invMass=0,this.m_I=0,this.m_invI=0,this.m_mass=t.mass,this.m_mass<=0&&(this.m_mass=1),this.m_invMass=1/this.m_mass,t.I>0&&0==this.m_fixedRotationFlag&&(this.m_I=t.I-this.m_mass*r.dot(t.center,t.center),this.m_invI=1/this.m_I);var i=r.clone(this.m_sweep.c);this.m_sweep.setLocalCenter(t.center,this.m_xf),this.m_linearVelocity.add(r.cross(this.m_angularVelocity,r.sub(this.m_sweep.c,i)))}},e.prototype.applyForce=function(t,i,o){this.m_type==y&&(o&&0==this.m_awakeFlag&&this.setAwake(!0),this.m_awakeFlag&&(this.m_force.add(t),this.m_torque+=r.cross(r.sub(i,this.m_sweep.c),t)))},e.prototype.applyForceToCenter=function(t,i){this.m_type==y&&(i&&0==this.m_awakeFlag&&this.setAwake(!0),this.m_awakeFlag&&this.m_force.add(t))},e.prototype.applyTorque=function(t,i){this.m_type==y&&(i&&0==this.m_awakeFlag&&this.setAwake(!0),this.m_awakeFlag&&(this.m_torque+=t))},e.prototype.applyLinearImpulse=function(t,i,o){this.m_type==y&&(o&&0==this.m_awakeFlag&&this.setAwake(!0),this.m_awakeFlag&&(this.m_linearVelocity.wAdd(this.m_invMass,t),this.m_angularVelocity+=this.m_invI*r.cross(r.sub(i,this.m_sweep.c),t)))},e.prototype.applyAngularImpulse=function(t,i){this.m_type==y&&(i&&0==this.m_awakeFlag&&this.setAwake(!0),this.m_awakeFlag&&(this.m_angularVelocity+=this.m_invI*t))},e.prototype.shouldCollide=function(t){if(this.m_type!=y&&t.m_type!=y)return!1;for(var i=this.m_jointList;i;i=i.next)if(i.other==t&&0==i.joint.m_collideConnected)return!1;return!0},e.prototype.createFixture=function(t,i){if(1==this.isWorldLocked())return null;var o=new l(this,t,i);if(this.m_activeFlag){var e=this.m_world.m_broadPhase;o.createProxies(e,this.m_xf)}return o.m_next=this.m_fixtureList,this.m_fixtureList=o,o.m_density>0&&this.resetMassData(),this.m_world.m_newFixture=!0,o},e.prototype.destroyFixture=function(t){if(1!=this.isWorldLocked()){for(var i=this.m_fixtureList,o=!1;null!=i;){if(i==t){i=t.m_next,o=!0;break}i=i.m_next}for(var e=this.m_contactList;e;){var s=e.contact;e=e.next;var n=s.getFixtureA(),r=s.getFixtureB();t!=n&&t!=r||this.m_world.destroyContact(s)}if(this.m_activeFlag){var m=this.m_world.m_broadPhase;t.destroyProxies(m)}t.m_body=null,t.m_next=null,this.m_world.publish("remove-fixture",t),this.resetMassData()}},e.prototype.getWorldPoint=function(t){return h.mul(this.m_xf,t)},e.prototype.getWorldVector=function(t){return m.mul(this.m_xf.q,t)},e.prototype.getLocalPoint=function(t){return h.mulT(this.m_xf,t)},e.prototype.getLocalVector=function(t){return m.mulT(this.m_xf.q,t)}},{"./Fixture":4,"./Shape":8,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":50,"./util/options":52}],3:[function(t,i,o){function e(t){this.contact=t,this.prev,this.next,this.other}function s(t,i,o,s,n){this.m_nodeA=new e(this),this.m_nodeB=new e(this),this.m_fixtureA=t,this.m_fixtureB=o,this.m_indexA=i,this.m_indexB=s,this.m_evaluateFcn=n,this.m_manifold=new y,this.m_prev=null,this.m_next=null,this.m_toi=1,this.m_toiCount=0,this.m_toiFlag=!1,this.m_friction=r(this.m_fixtureA.m_friction,this.m_fixtureB.m_friction),this.m_restitution=m(this.m_fixtureA.m_restitution,this.m_fixtureB.m_restitution),this.m_tangentSpeed=0,this.m_enabledFlag=!0,this.m_islandFlag=!1,this.m_touchingFlag=!1,this.m_filterFlag=!1,this.m_bulletHitFlag=!1,this.v_points=[],this.v_normal=c.zero(),this.v_normalMass=new l,this.v_K=new l,this.v_pointCount,this.v_tangentSpeed,this.v_friction,this.v_restitution,this.v_invMassA,this.v_invMassB,this.v_invIA,this.v_invIB,this.p_localPoints=[],this.p_localNormal=c.zero(),this.p_localPoint=c.zero(),this.p_localCenterA=c.zero(),this.p_localCenterB=c.zero(),this.p_type,this.p_radiusA,this.p_radiusB,this.p_pointCount,this.p_invMassA,this.p_invMassB,this.p_invIA,this.p_invIB}function n(){this.rA=c.zero(),this.rB=c.zero(),this.normalImpulse=0,this.tangentImpulse=0,this.normalMass=0,this.tangentMass=0,this.velocityBias=0}function r(t,i){return h.sqrt(t*i)}function m(t,i){return t>i?t:i}DEBUG=!1,ASSERT=!1;var a=!1,h=(t("./util/common"),t("./common/Math")),c=t("./common/Vec2"),_=t("./common/Transform"),l=t("./common/Mat22"),u=t("./common/Rot"),p=t("./Settings"),y=t("./Manifold"),d=t("./collision/Distance");i.exports=s,s.prototype.initConstraint=function(t){var i=this.m_fixtureA,o=this.m_fixtureB,e=i.getShape(),s=o.getShape(),r=i.getBody(),m=o.getBody(),a=this.getManifold(),h=a.pointCount;this.v_invMassA=r.m_invMass,this.v_invMassB=m.m_invMass,this.v_invIA=r.m_invI,this.v_invIB=m.m_invI,this.v_friction=this.m_friction,this.v_restitution=this.m_restitution,this.v_tangentSpeed=this.m_tangentSpeed,this.v_pointCount=h,this.v_K.setZero(),this.v_normalMass.setZero(),this.p_invMassA=r.m_invMass,this.p_invMassB=m.m_invMass,this.p_invIA=r.m_invI,this.p_invIB=m.m_invI,this.p_localCenterA=c.clone(r.m_sweep.localCenter),this.p_localCenterB=c.clone(m.m_sweep.localCenter),this.p_radiusA=e.m_radius,this.p_radiusB=s.m_radius,this.p_type=a.type,this.p_localNormal=c.clone(a.localNormal),this.p_localPoint=c.clone(a.localPoint),this.p_pointCount=h;for(var _=0;_<h;++_){var l=a.points[_],u=this.v_points[_]=new n;t.warmStarting?(u.normalImpulse=t.dtRatio*l.normalImpulse,u.tangentImpulse=t.dtRatio*l.tangentImpulse):(u.normalImpulse=0,u.tangentImpulse=0),u.rA.setZero(),u.rB.setZero(),u.normalMass=0,u.tangentMass=0,u.velocityBias=0,this.p_localPoints[_]=c.clone(l.localPoint)}},s.prototype.getManifold=function(){return this.m_manifold},s.prototype.getWorldManifold=function(t){var i=this.m_fixtureA.getBody(),o=this.m_fixtureB.getBody(),e=this.m_fixtureA.getShape(),s=this.m_fixtureB.getShape();return this.m_manifold.getWorldManifold(t,i.getTransform(),e.m_radius,o.getTransform(),s.m_radius)},s.prototype.setEnabled=function(t){this.m_enabledFlag=!!t},s.prototype.isEnabled=function(){return this.m_enabledFlag},s.prototype.isTouching=function(){return this.m_touchingFlag},s.prototype.getNext=function(){return this.m_next},s.prototype.getFixtureA=function(){return this.m_fixtureA},s.prototype.getFixtureB=function(){return this.m_fixtureB},s.prototype.getChildIndexA=function(){return this.m_indexA},s.prototype.getChildIndexB=function(){return this.m_indexB},s.prototype.flagForFiltering=function(){this.m_filterFlag=!0},s.prototype.setFriction=function(t){this.m_friction=t},s.prototype.getFriction=function(){return this.m_friction},s.prototype.resetFriction=function(){this.m_friction=r(this.m_fixtureA.m_friction,this.m_fixtureB.m_friction)},s.prototype.setRestitution=function(t){this.m_restitution=t},s.prototype.getRestitution=function(){return this.m_restitution},s.prototype.resetRestitution=function(){this.m_restitution=m(this.m_fixtureA.m_restitution,this.m_fixtureB.m_restitution)},s.prototype.setTangentSpeed=function(t){this.m_tangentSpeed=t},s.prototype.getTangentSpeed=function(){return this.m_tangentSpeed},s.prototype.evaluate=function(t,i,o){this.m_evaluateFcn(t,i,this.m_fixtureA,this.m_indexA,o,this.m_fixtureB,this.m_indexB)},s.prototype.update=function(t){this.m_enabledFlag=!0;var i=!1,o=this.m_touchingFlag,e=this.m_fixtureA.isSensor(),s=this.m_fixtureB.isSensor(),n=e||s,r=this.m_fixtureA.getBody(),m=this.m_fixtureB.getBody(),a=r.getTransform(),h=m.getTransform();if(n){var c=this.m_fixtureA.getShape(),_=this.m_fixtureB.getShape();i=d.testOverlap(c,this.m_indexA,_,this.m_indexB,a,h),this.m_manifold.pointCount=0}else{var l=this.m_manifold;this.m_manifold=new y,this.evaluate(this.m_manifold,a,h),i=this.m_manifold.pointCount>0;for(var u=0;u<this.m_manifold.pointCount;++u){var p=this.m_manifold.points[u];p.normalImpulse=0,p.tangentImpulse=0;for(var v=0;v<l.pointCount;++v){var f=l.points[v];if(f.id.key==p.id.key){p.normalImpulse=f.normalImpulse,p.tangentImpulse=f.tangentImpulse;break}}}i!=o&&(r.setAwake(!0),m.setAwake(!0))}this.m_touchingFlag=i,0==o&&1==i&&t&&t.beginContact(this),1==o&&0==i&&t&&t.endContact(this),0==n&&i&&t&&t.preSolve(this,l)},s.prototype.solvePositionConstraint=function(t){return this._solvePositionConstraint(t,!1)},s.prototype.solvePositionConstraintTOI=function(t,i,o){return this._solvePositionConstraint(t,!0,i,o)},s.prototype._solvePositionConstraint=function(t,i,o,e){var s=this.m_fixtureA,n=this.m_fixtureB,r=s.getBody(),m=n.getBody(),a=(r.c_velocity,m.c_velocity,r.c_position),l=m.c_position,d=c.clone(this.p_localCenterA),v=c.clone(this.p_localCenterB),f=0,A=0;i&&r!=o&&r!=e||(f=this.p_invMassA,A=this.p_invIA);var x=0,g=0;i&&m!=o&&m!=e||(x=this.p_invMassB,g=this.p_invIB);for(var b=c.clone(a.c),B=a.a,w=c.clone(l.c),S=l.a,C=0,M=0;M<this.p_pointCount;++M){var I=_.identity(),T=_.identity();I.q.set(B),T.q.set(S),I.p=c.sub(b,u.mul(I.q,d)),T.p=c.sub(w,u.mul(T.q,v));var P,V,z;switch(this.p_type){case y.e_circles:var L=_.mul(I,this.p_localPoint),R=_.mul(T,this.p_localPoints[0]);P=c.sub(R,L),P.normalize(),V=c.wAdd(.5,L,.5,R),z=c.dot(c.sub(R,L),P)-this.p_radiusA-this.p_radiusB;break;case y.e_faceA:P=u.mul(I.q,this.p_localNormal);var F=_.mul(I,this.p_localPoint),D=_.mul(T,this.p_localPoints[M]);z=c.dot(c.sub(D,F),P)-this.p_radiusA-this.p_radiusB,V=D;break;case y.e_faceB:P=u.mul(T.q,this.p_localNormal);var F=_.mul(T,this.p_localPoint),D=_.mul(I,this.p_localPoints[M]);z=c.dot(c.sub(D,F),P)-this.p_radiusA-this.p_radiusB,V=D,P.mul(-1)}var q=c.sub(V,b),E=c.sub(V,w);C=h.min(C,z);var k=i?p.toiBaugarte:p.baumgarte,j=p.linearSlop,J=p.maxLinearCorrection,O=h.clamp(k*(z+j),-J,0),N=c.cross(q,P),G=c.cross(E,P),U=f+x+A*N*N+g*G*G,W=U>0?-O/U:0,Y=c.mul(W,P);b.wSub(f,Y),B-=A*c.cross(q,Y),w.wAdd(x,Y),S+=g*c.cross(E,Y)}return a.c.set(b),a.a=B,l.c.set(w),l.a=S,C},s.prototype.initVelocityConstraint=function(t){var i=this.m_fixtureA,o=this.m_fixtureB,e=i.getBody(),s=o.getBody(),n=e.c_velocity,r=s.c_velocity,m=e.c_position,a=s.c_position,h=this.p_radiusA,l=this.p_radiusB,y=this.getManifold(),d=this.v_invMassA,v=this.v_invMassB,f=this.v_invIA,A=this.v_invIB,x=c.clone(this.p_localCenterA),g=c.clone(this.p_localCenterB),b=c.clone(m.c),B=m.a,w=c.clone(n.v),S=n.w,C=c.clone(a.c),M=a.a,I=c.clone(r.v),T=r.w,P=_.identity(),V=_.identity();P.q.set(B),V.q.set(M),P.p.wSet(1,b,-1,u.mul(P.q,x)),V.p.wSet(1,C,-1,u.mul(V.q,g));var z=y.getWorldManifold(null,P,h,V,l);this.v_normal.set(z.normal);for(var L=0;L<this.v_pointCount;++L){var R=this.v_points[L];R.rA.set(c.sub(z.points[L],b)),R.rB.set(c.sub(z.points[L],C));var F=c.cross(R.rA,this.v_normal),D=c.cross(R.rB,this.v_normal),q=d+v+f*F*F+A*D*D;R.normalMass=q>0?1/q:0;var E=c.cross(this.v_normal,1),k=c.cross(R.rA,E),j=c.cross(R.rB,E),J=d+v+f*k*k+A*j*j;R.tangentMass=J>0?1/J:0,R.velocityBias=0;var O=c.dot(this.v_normal,I)+c.dot(this.v_normal,c.cross(T,R.rB))-c.dot(this.v_normal,w)-c.dot(this.v_normal,c.cross(S,R.rA));O<-p.velocityThreshold&&(R.velocityBias=-this.v_restitution*O)}if(2==this.v_pointCount&&t.blockSolve){var N=this.v_points[0],G=this.v_points[1],U=c.cross(N.rA,this.v_normal),W=c.cross(N.rB,this.v_normal),Y=c.cross(G.rA,this.v_normal),H=c.cross(G.rB,this.v_normal),Z=d+v+f*U*U+A*W*W,K=d+v+f*Y*Y+A*H*H,X=d+v+f*U*Y+A*W*H,Q=1e3;Z*Z<Q*(Z*K-X*X)?(this.v_K.ex.set(Z,X),this.v_K.ey.set(X,K),this.v_normalMass.set(this.v_K.getInverse())):this.v_pointCount=1}m.c.set(b),m.a=B,n.v.set(w),n.w=S,a.c.set(C),a.a=M,r.v.set(I),r.w=T},s.prototype.warmStartConstraint=function(t){for(var i=this.m_fixtureA,o=this.m_fixtureB,e=i.getBody(),s=o.getBody(),n=e.c_velocity,r=s.c_velocity,m=(e.c_position,s.c_position,this.v_invMassA),a=this.v_invIA,h=this.v_invMassB,_=this.v_invIB,l=c.clone(n.v),u=n.w,p=c.clone(r.v),y=r.w,d=this.v_normal,v=c.cross(d,1),f=0;f<this.v_pointCount;++f){var A=this.v_points[f],x=c.wAdd(A.normalImpulse,d,A.tangentImpulse,v);u-=a*c.cross(A.rA,x),l.wSub(m,x),y+=_*c.cross(A.rB,x),p.wAdd(h,x)}n.v.set(l),n.w=u,r.v.set(p),r.w=y},s.prototype.storeConstraintImpulses=function(t){for(var i=this.m_manifold,o=0;o<this.v_pointCount;++o)i.points[o].normalImpulse=this.v_points[o].normalImpulse,i.points[o].tangentImpulse=this.v_points[o].tangentImpulse},s.prototype.solveVelocityConstraint=function(t){for(var i=this.m_fixtureA.m_body,o=this.m_fixtureB.m_body,e=i.c_velocity,s=(i.c_position,o.c_velocity),n=(o.c_position,this.v_invMassA),r=this.v_invIA,m=this.v_invMassB,_=this.v_invIB,u=c.clone(e.v),p=e.w,y=c.clone(s.v),d=s.w,v=this.v_normal,f=c.cross(v,1),A=this.v_friction,x=0;x<this.v_pointCount;++x){var g=this.v_points[x],b=c.zero();b.wAdd(1,y,1,c.cross(d,g.rB)),b.wSub(1,u,1,c.cross(p,g.rA));var B=c.dot(b,f)-this.v_tangentSpeed,w=g.tangentMass*-B,S=A*g.normalImpulse,C=h.clamp(g.tangentImpulse+w,-S,S);w=C-g.tangentImpulse,g.tangentImpulse=C;var M=c.mul(w,f);u.wSub(n,M),p-=r*c.cross(g.rA,M),y.wAdd(m,M),d+=_*c.cross(g.rB,M)}if(1==this.v_pointCount||0==t.blockSolve)for(var I=0;I<this.v_pointCount;++I){var g=this.v_points[I],b=c.zero();b.wAdd(1,y,1,c.cross(d,g.rB)),b.wSub(1,u,1,c.cross(p,g.rA));var T=c.dot(b,v),w=-g.normalMass*(T-g.velocityBias),C=h.max(g.normalImpulse+w,0);w=C-g.normalImpulse,g.normalImpulse=C;var M=c.mul(w,v);u.wSub(n,M),p-=r*c.cross(g.rA,M),y.wAdd(m,M),d+=_*c.cross(g.rB,M)}else{var P=this.v_points[0],V=this.v_points[1],z=c.neo(P.normalImpulse,V.normalImpulse),L=c.zero().add(y).add(c.cross(d,P.rB)).sub(u).sub(c.cross(p,P.rA)),R=c.zero().add(y).add(c.cross(d,V.rB)).sub(u).sub(c.cross(p,V.rA)),F=c.dot(L,v),D=c.dot(R,v),q=c.neo(F-P.velocityBias,D-V.velocityBias);q.sub(l.mul(this.v_K,z));for(;;){var E=c.neg(l.mul(this.v_normalMass,q));if(E.x>=0&&E.y>=0){var k=c.sub(E,z),j=c.mul(k.x,v),J=c.mul(k.y,v);u.wSub(n,j,n,J),p-=r*(c.cross(P.rA,j)+c.cross(V.rA,J)),y.wAdd(m,j,m,J),d+=_*(c.cross(P.rB,j)+c.cross(V.rB,J)),P.normalImpulse=E.x,V.normalImpulse=E.y,a&&(L=y+c.cross(d,P.rB)-u-c.cross(p,P.rA),R=y+c.cross(d,V.rB)-u-c.cross(p,V.rA),F=Dot(L,v),D=Dot(R,v));break}if(E.x=-P.normalMass*q.x,E.y=0,F=0,D=this.v_K.ex.y*E.x+q.y,E.x>=0&&D>=0){var k=c.sub(E,z),j=c.mul(k.x,v),J=c.mul(k.y,v);if(u.wSub(n,j,n,J),p-=r*(c.cross(P.rA,j)+c.cross(V.rA,J)),y.wAdd(m,j,m,J),d+=_*(c.cross(P.rB,j)+c.cross(V.rB,J)),P.normalImpulse=E.x,V.normalImpulse=E.y,a){var O=c.add(y,c.cross(d,P.rB)),N=c.add(u,c.cross(p,P.rA)),L=c.sub(O,N);F=c.dot(L,v)}break}if(E.x=0,E.y=-V.normalMass*q.y,F=this.v_K.ey.x*E.y+q.x,D=0,E.y>=0&&F>=0){var k=c.sub(E,z),j=c.mul(k.x,v),J=c.mul(k.y,v);if(u.wSub(n,j,n,J),p-=r*(c.cross(P.rA,j)+c.cross(V.rA,J)),y.wAdd(m,j,m,J),d+=_*(c.cross(P.rB,j)+c.cross(V.rB,J)),P.normalImpulse=E.x,V.normalImpulse=E.y,a){var G=c.add(y,c.cross(d,V.rB)),U=c.add(u,c.cross(p,V.rA)),L=c.sub(G,U);D=c.dot(R,v)}break}if(E.x=0,E.y=0,F=q.x,D=q.y,F>=0&&D>=0){var k=c.sub(E,z),j=c.mul(k.x,v),J=c.mul(k.y,v);u.wSub(n,j,n,J),p-=r*(c.cross(P.rA,j)+c.cross(V.rA,J)),y.wAdd(m,j,m,J),d+=_*(c.cross(P.rB,j)+c.cross(V.rB,J)),P.normalImpulse=E.x,V.normalImpulse=E.y;break}break}}e.v.set(u),e.w=p,s.v.set(y),s.w=d};var v=[];s.addType=function(t,i,o){v[t]=v[t]||{},v[t][i]=o},s.create=function(t,i,o,e){var n,r,m=t.getType(),a=o.getType();if(r=v[m]&&v[m][a])n=new s(t,i,o,e,r);else{if(!(r=v[a]&&v[a][m]))return null;n=new s(o,e,t,i,r)}t=n.getFixtureA(),o=n.getFixtureB(),i=n.getChildIndexA(),e=n.getChildIndexB();var h=t.getBody(),c=o.getBody();return n.m_nodeA.contact=n,n.m_nodeA.other=c,n.m_nodeA.prev=null,n.m_nodeA.next=h.m_contactList,null!=h.m_contactList&&(h.m_contactList.prev=n.m_nodeA),h.m_contactList=n.m_nodeA,n.m_nodeB.contact=n,n.m_nodeB.other=h,n.m_nodeB.prev=null,n.m_nodeB.next=c.m_contactList,null!=c.m_contactList&&(c.m_contactList.prev=n.m_nodeB),c.m_contactList=n.m_nodeB,0==t.isSensor()&&0==o.isSensor()&&(h.setAwake(!0),c.setAwake(!0)),n},s.destroy=function(t,i){var o=t.m_fixtureA,e=t.m_fixtureB,s=o.getBody(),n=e.getBody();t.isTouching()&&i.endContact(t),t.m_nodeA.prev&&(t.m_nodeA.prev.next=t.m_nodeA.next),t.m_nodeA.next&&(t.m_nodeA.next.prev=t.m_nodeA.prev),t.m_nodeA==s.m_contactList&&(s.m_contactList=t.m_nodeA.next),t.m_nodeB.prev&&(t.m_nodeB.prev.next=t.m_nodeB.next),t.m_nodeB.next&&(t.m_nodeB.next.prev=t.m_nodeB.prev),t.m_nodeB==n.m_contactList&&(n.m_contactList=t.m_nodeB.next),t.m_manifold.pointCount>0&&0==o.isSensor()&&0==e.isSensor()&&(s.setAwake(!0),n.setAwake(!0));var r=o.getType(),m=e.getType(),a=v[r][m].destroyFcn;"function"==typeof a&&a(t)}},{"./Manifold":6,"./Settings":7,"./collision/Distance":13,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],4:[function(t,i,o){function e(t,i){this.aabb=new m,this.fixture=t,this.childIndex=i,this.proxyId}function s(t,i,o){i.shape?(o=i,i=i.shape):"number"==typeof o&&(o={density:o}),o=n(o,a),this.m_body=t,this.m_friction=o.friction,this.m_restitution=o.restitution,this.m_density=o.density,this.m_isSensor=o.isSensor,this.m_filterGroupIndex=o.filterGroupIndex,this.m_filterCategoryBits=o.filterCategoryBits,this.m_filterMaskBits=o.filterMaskBits,this.m_shape=i,this.m_next=null,this.m_proxies=[],this.m_proxyCount=0;for(var s=this.m_shape.getChildCount(),r=0;r<s;++r)this.m_proxies[r]=new e(this,r);this.m_userData=o.userData}DEBUG=!1,ASSERT=!1,i.exports=s;var n=(t("./util/common"),t("./util/options")),r=t("./common/Vec2"),m=t("./collision/AABB"),a={userData:null,friction:.2,restitution:0,density:0,isSensor:!1,filterGroupIndex:0,filterCategoryBits:1,filterMaskBits:65535};s.prototype.getType=function(){return this.m_shape.getType()},s.prototype.getShape=function(){return this.m_shape},s.prototype.isSensor=function(){return this.m_isSensor},s.prototype.setSensor=function(t){t!=this.m_isSensor&&(this.m_body.setAwake(!0),this.m_isSensor=t)},s.prototype.getUserData=function(){return this.m_userData},s.prototype.setUserData=function(t){this.m_userData=t},s.prototype.getBody=function(){return this.m_body},s.prototype.getNext=function(){return this.m_next},s.prototype.getDensity=function(){return this.m_density},s.prototype.setDensity=function(t){this.m_density=t},s.prototype.getFriction=function(){return this.m_friction},s.prototype.setFriction=function(t){this.m_friction=t},s.prototype.getRestitution=function(){return this.m_restitution},s.prototype.setRestitution=function(t){this.m_restitution=t},s.prototype.testPoint=function(t){return this.m_shape.testPoint(this.m_body.getTransform(),t)},s.prototype.rayCast=function(t,i,o){return this.m_shape.rayCast(t,i,this.m_body.getTransform(),o)},s.prototype.getMassData=function(t){this.m_shape.computeMass(t,this.m_density)},s.prototype.getAABB=function(t){return this.m_proxies[t].aabb},s.prototype.createProxies=function(t,i){this.m_proxyCount=this.m_shape.getChildCount();for(var o=0;o<this.m_proxyCount;++o){var e=this.m_proxies[o];this.m_shape.computeAABB(e.aabb,i,o),e.proxyId=t.createProxy(e.aabb,e)}},s.prototype.destroyProxies=function(t){for(var i=0;i<this.m_proxyCount;++i){var o=this.m_proxies[i];t.destroyProxy(o.proxyId),o.proxyId=null}this.m_proxyCount=0},s.prototype.synchronize=function(t,i,o){for(var e=0;e<this.m_proxyCount;++e){var s=this.m_proxies[e],n=new m,a=new m;this.m_shape.computeAABB(n,i,s.childIndex),this.m_shape.computeAABB(a,o,s.childIndex),s.aabb.combine(n,a);var h=r.sub(o.p,i.p);t.moveProxy(s.proxyId,s.aabb,h)}},s.prototype.setFilterData=function(t){this.m_filterGroupIndex=t.groupIndex,this.m_filterCategoryBits=t.categoryBits,this.m_filterMaskBits=t.maskBits,this.refilter()},s.prototype.getFilterGroupIndex=function(){return this.m_filterGroupIndex},s.prototype.getFilterCategoryBits=function(){return this.m_filterCategoryBits},s.prototype.getFilterMaskBits=function(){return this.m_filterMaskBits},s.prototype.refilter=function(){if(null!=this.m_body){for(var t=this.m_body.getContactList();t;){var i=t.contact,o=i.getFixtureA(),e=i.getFixtureB();o!=this&&e!=this||i.flagForFiltering(),t=t.next}var s=this.m_body.getWorld();if(null!=s)for(var n=s.m_broadPhase,r=0;r<this.m_proxyCount;++r)n.touchProxy(this.m_proxies[r].proxyId)}},s.prototype.shouldCollide=function(t){if(t.m_filterGroupIndex==this.m_filterGroupIndex&&0!=t.m_filterGroupIndex)return t.m_filterGroupIndex>0;var i=0!=(t.m_filterMaskBits&this.m_filterCategoryBits)&&0!=(t.m_filterCategoryBits&this.m_filterMaskBits);return i}},{"./collision/AABB":11,"./common/Vec2":23,"./util/common":50,"./util/options":52}],5:[function(t,i,o){function e(){this.other=null,this.joint=null,this.prev=null,this.next=null}function s(t,i,o){i=t.bodyA||i,o=t.bodyB||o,this.m_type="unknown-joint",this.m_bodyA=i,this.m_bodyB=o,this.m_index=0,this.m_collideConnected=!!t.collideConnected,this.m_prev=null,this.m_next=null,this.m_edgeA=new e,this.m_edgeB=new e,this.m_islandFlag=!1,this.m_userData=t.userData}DEBUG=!1,ASSERT=!1,i.exports=s;t("./util/common");s.prototype.isActive=function(){return this.m_bodyA.isActive()&&this.m_bodyB.isActive()},s.prototype.getType=function(){return this.m_type},s.prototype.getBodyA=function(){return this.m_bodyA},s.prototype.getBodyB=function(){return this.m_bodyB},s.prototype.getNext=function(){return this.m_next},s.prototype.getUserData=function(){return this.m_userData},s.prototype.setUserData=function(t){this.m_userData=t},s.prototype.getCollideConnected=function(){return this.m_collideConnected},s.prototype.getAnchorA=function(){},s.prototype.getAnchorB=function(){},s.prototype.getReactionForce=function(t){},s.prototype.getReactionTorque=function(t){},s.prototype.shiftOrigin=function(t){},s.prototype.initVelocityConstraints=function(t){},s.prototype.solveVelocityConstraints=function(t){},s.prototype.solvePositionConstraints=function(t){}},{"./util/common":50}],6:[function(t,i,o){function e(){this.type,this.localNormal=_.zero(),this.localPoint=_.zero(),
-this.points=[new s,new s],this.pointCount=0}function s(){this.localPoint=_.zero(),this.normalImpulse=0,this.tangentImpulse=0,this.id=new n}function n(){this.cf=new r,this.key}function r(){this.indexA,this.indexB,this.typeA,this.typeB}function m(){this.normal,this.points=[],this.separations=[]}function a(t,i,o,e){for(var s=0;s<o.pointCount;++s){var n=o.points[s].id;t[s]=y.removeState;for(var r=0;r<e.pointCount;++r)if(e.points[r].id.key==n.key){t[s]=y.persistState;break}}for(var s=0;s<e.pointCount;++s){var n=e.points[s].id;i[s]=y.addState;for(var r=0;r<o.pointCount;++r)if(o.points[r].id.key==n.key){i[s]=y.persistState;break}}}function h(){this.v=_.zero(),this.id=new n}function c(t,i,o,e,s){var n=0,m=_.dot(o,i[0].v)-e,a=_.dot(o,i[1].v)-e;if(m<=0&&t[n++].set(i[0]),a<=0&&t[n++].set(i[1]),m*a<0){var h=m/(m-a);t[n].v.wSet(1-h,i[0].v,h,i[1].v),t[n].id.cf.indexA=s,t[n].id.cf.indexB=i[0].id.cf.indexB,t[n].id.cf.typeA=r.e_vertex,t[n].id.cf.typeB=r.e_face,++n}return n}DEBUG=!1,ASSERT=!1;var _=(t("./util/common"),t("./common/Vec2")),l=t("./common/Transform"),u=t("./common/Math"),p=t("./common/Rot");i.exports=e,i.exports.clipSegmentToLine=c,i.exports.clipVertex=h,i.exports.getPointStates=a,i.exports.PointState=y,e.e_circles=0,e.e_faceA=1,e.e_faceB=2,e.e_vertex=0,e.e_face=1,n.prototype.set=function(t){this.key=t.key,this.cf.set(t.cf)},r.prototype.set=function(t){this.indexA=t.indexA,this.indexB=t.indexB,this.typeA=t.typeA,this.typeB=t.typeB},e.prototype.getWorldManifold=function(t,i,o,s,n){if(0!=this.pointCount){t=t||new m;var r=t.normal,a=t.points,h=t.separations;switch(this.type){case e.e_circles:r=_.neo(1,0);var c=l.mul(i,this.localPoint),y=l.mul(s,this.points[0].localPoint),d=_.sub(y,c);_.lengthSquared(d)>u.EPSILON*u.EPSILON&&(r.set(d),r.normalize()),a[0]=_.mid(c,y),h[0]=-n-o,a.length=1,h.length=1;break;case e.e_faceA:r=p.mul(i.q,this.localNormal);for(var v=l.mul(i,this.localPoint),f=0;f<this.pointCount;++f){var A=l.mul(s,this.points[f].localPoint),x=_.clone(A).wAdd(o-_.dot(_.sub(A,v),r),r),g=_.clone(A).wSub(n,r);a[f]=_.mid(x,g),h[f]=_.dot(_.sub(g,x),r)}a.length=this.pointCount,h.length=this.pointCount;break;case e.e_faceB:r=p.mul(s.q,this.localNormal);for(var v=l.mul(s,this.localPoint),f=0;f<this.pointCount;++f){var A=l.mul(i,this.points[f].localPoint),g=_.zero().wSet(1,A,n-_.dot(_.sub(A,v),r),r),x=_.zero().wSet(1,A,-o,r);a[f]=_.mid(x,g),h[f]=_.dot(_.sub(x,g),r)}a.length=this.pointCount,h.length=this.pointCount,r.mul(-1)}return t.normal=r,t.points=a,t.separations=h,t}};var y={nullState:0,addState:1,persistState:2,removeState:3};h.prototype.set=function(t){this.v.set(t.v),this.id.set(t.id)}},{"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],7:[function(t,i,o){DEBUG=!1,ASSERT=!1;var e=o;e.maxManifoldPoints=2,e.maxPolygonVertices=12,e.aabbExtension=.1,e.aabbMultiplier=2,e.linearSlop=.005,e.linearSlopSquared=e.linearSlop*e.linearSlop,e.angularSlop=2/180*Math.PI,e.polygonRadius=2*e.linearSlop,e.maxSubSteps=8,e.maxTOIContacts=32,e.maxTOIIterations=20,e.maxDistnceIterations=20,e.velocityThreshold=1,e.maxLinearCorrection=.2,e.maxAngularCorrection=8/180*Math.PI,e.maxTranslation=2,e.maxTranslationSquared=e.maxTranslation*e.maxTranslation,e.maxRotation=.5*Math.PI,e.maxRotationSquared=e.maxRotation*e.maxRotation,e.baumgarte=.2,e.toiBaugarte=.75,e.timeToSleep=.5,e.linearSleepTolerance=.01,e.linearSleepToleranceSqr=Math.pow(e.linearSleepTolerance,2),e.angularSleepTolerance=2/180*Math.PI,e.angularSleepToleranceSqr=Math.pow(e.angularSleepTolerance,2)},{}],8:[function(t,i,o){function e(){this.m_type,this.m_radius}DEBUG=!1,ASSERT=!1,i.exports=e;t("./common/Math");e.isValid=function(t){return!!t},e.prototype.getRadius=function(){return this.m_radius},e.prototype.getType=function(){return this.m_type},e.prototype._clone=function(){},e.prototype.getChildCount=function(){},e.prototype.testPoint=function(t,i){},e.prototype.rayCast=function(t,i,o,e){},e.prototype.computeAABB=function(t,i,o){},e.prototype.computeMass=function(t,i){},e.prototype.computeDistanceProxy=function(t){}},{"./common/Math":18}],9:[function(t,i,o){function e(){this.solveInit,this.solveVelocity,this.solvePosition}function s(t){this.dt=0,this.inv_dt=0,this.velocityIterations=0,this.positionIterations=0,this.warmStarting=!1,this.blockSolve=!0,this.inv_dt0=0,this.dtRatio=1}function n(t){this.m_world=t,this.m_profile=new e,this.m_stack=[],this.m_bodies=[],this.m_contacts=[],this.m_joints=[]}function r(){this.normalImpulses=[],this.tangentImpulses=[]}DEBUG=!1,ASSERT=!1,i.exports=n,i.exports.TimeStep=s;var m=t("./Settings"),a=t("./util/common"),h=t("./util/Timer"),c=t("./common/Vec2"),_=t("./common/Math"),l=(t("./Body"),t("./Contact"),t("./Joint"),t("./collision/TimeOfImpact")),u=l.Input,p=l.Output,y=t("./collision/Distance");y.Input,y.Output,y.Proxy,y.Cache;s.prototype.reset=function(t){this.dt>0&&(this.inv_dt0=this.inv_dt),this.dt=t,this.inv_dt=0==t?0:1/t,this.dtRatio=t*this.inv_dt0},n.prototype.clear=function(){this.m_stack.length=0,this.m_bodies.length=0,this.m_contacts.length=0,this.m_joints.length=0},n.prototype.addBody=function(t){this.m_bodies.push(t)},n.prototype.addContact=function(t){this.m_contacts.push(t)},n.prototype.addJoint=function(t){this.m_joints.push(t)},n.prototype.solveWorld=function(t){var i=this.m_world,o=this.m_profile;o.solveInit=0,o.solveVelocity=0,o.solvePosition=0;for(var e=i.m_bodyList;e;e=e.m_next)e.m_islandFlag=!1;for(var s=i.m_contactList;s;s=s.m_next)s.m_islandFlag=!1;for(var n=i.m_jointList;n;n=n.m_next)n.m_islandFlag=!1;for(var r=this.m_stack,m=-1,a=i.m_bodyList;a;a=a.m_next)if(m++,!a.m_islandFlag&&0!=a.isAwake()&&0!=a.isActive()&&!a.isStatic()){for(this.clear(),r.push(a),a.m_islandFlag=!0;r.length>0;){var e=r.pop();if(this.addBody(e),e.setAwake(!0),!e.isStatic()){for(var h=e.m_contactList;h;h=h.next){var c=h.contact;if(!c.m_islandFlag&&0!=c.isEnabled()&&0!=c.isTouching()){var _=c.m_fixtureA.m_isSensor,l=c.m_fixtureB.m_isSensor;if(!_&&!l){this.addContact(c),c.m_islandFlag=!0;var u=h.other;u.m_islandFlag||(r.push(u),u.m_islandFlag=!0)}}}for(var p=e.m_jointList;p;p=p.next)if(1!=p.joint.m_islandFlag){var u=p.other;0!=u.isActive()&&(this.addJoint(p.joint),p.joint.m_islandFlag=!0,u.m_islandFlag||(r.push(u),u.m_islandFlag=!0))}}}this.solveIsland(t);for(var y=0;y<this.m_bodies.length;++y){var e=this.m_bodies[y];e.isStatic()&&(e.m_islandFlag=!1)}}},n.prototype.solveIsland=function(t){for(var i=this.m_world,o=this.m_profile,e=i.m_gravity,s=i.m_allowSleep,n=h.now(),r=t.dt,l=0;l<this.m_bodies.length;++l){var u=this.m_bodies[l],p=c.clone(u.m_sweep.c),y=u.m_sweep.a,d=c.clone(u.m_linearVelocity),v=u.m_angularVelocity;u.m_sweep.c0.set(u.m_sweep.c),u.m_sweep.a0=u.m_sweep.a,u.isDynamic()&&(d.wAdd(r*u.m_gravityScale,e),d.wAdd(r*u.m_invMass,u.m_force),v+=r*u.m_invI*u.m_torque,d.mul(1/(1+r*u.m_linearDamping)),v*=1/(1+r*u.m_angularDamping)),a.debug("A: ",y,p.x,p.y,v,d.x,d.y),u.c_position.c=p,u.c_position.a=y,u.c_velocity.v=d,u.c_velocity.w=v}n=h.now();for(var l=0;l<this.m_contacts.length;++l){var f=this.m_contacts[l];f.initConstraint(t)}for(var l=0;l<this.m_contacts.length;++l){var f=this.m_contacts[l];f.initVelocityConstraint(t)}if(t.warmStarting)for(var l=0;l<this.m_contacts.length;++l){var f=this.m_contacts[l];f.warmStartConstraint(t)}for(var l=0;l<this.m_joints.length;++l){var A=this.m_joints[l];A.initVelocityConstraints(t)}o.solveInit=h.diff(n),n=h.now();for(var l=0;l<t.velocityIterations;++l){for(var x=0;x<this.m_joints.length;++x){var A=this.m_joints[x];A.solveVelocityConstraints(t)}for(var x=0;x<this.m_contacts.length;++x){var f=this.m_contacts[x];f.solveVelocityConstraint(t)}}for(var l=0;l<this.m_contacts.length;++l){var f=this.m_contacts[l];f.storeConstraintImpulses(t)}o.solveVelocity=h.diff(n);for(var l=0;l<this.m_bodies.length;++l){var u=this.m_bodies[l],p=c.clone(u.c_position.c),y=u.c_position.a,d=c.clone(u.c_velocity.v),v=u.c_velocity.w,g=c.mul(r,d);if(c.lengthSquared(g)>m.maxTranslationSquared){var b=m.maxTranslation/g.length();d.mul(b)}var B=r*v;if(B*B>m.maxRotationSquared){var b=m.maxRotation/_.abs(B);v*=b}p.wAdd(r,d),y+=r*v,u.c_position.c.set(p),u.c_position.a=y,u.c_velocity.v.set(d),u.c_velocity.w=v}n=h.now();for(var w=!1,l=0;l<t.positionIterations;++l){for(var S=0,x=0;x<this.m_contacts.length;++x){var f=this.m_contacts[x],C=f.solvePositionConstraint(t);S=_.min(S,C)}for(var M=S>=-3*m.linearSlop,I=!0,x=0;x<this.m_joints.length;++x){var A=this.m_joints[x],T=A.solvePositionConstraints(t);I=I&&T}if(M&&I){w=!0;break}}for(var l=0;l<this.m_bodies.length;++l){var u=this.m_bodies[l];u.m_sweep.c.set(u.c_position.c),u.m_sweep.a=u.c_position.a,u.m_linearVelocity.set(u.c_velocity.v),u.m_angularVelocity=u.c_velocity.w,u.synchronizeTransform()}if(o.solvePosition=h.diff(n),this.postSolveIsland(),s){for(var P=1/0,V=m.linearSleepToleranceSqr,z=m.angularSleepToleranceSqr,l=0;l<this.m_bodies.length;++l){var u=this.m_bodies[l];u.isStatic()||(0==u.m_autoSleepFlag||u.m_angularVelocity*u.m_angularVelocity>z||c.lengthSquared(u.m_linearVelocity)>V?(u.m_sleepTime=0,P=0):(u.m_sleepTime+=r,P=_.min(P,u.m_sleepTime)))}if(P>=m.timeToSleep&&w)for(var l=0;l<this.m_bodies.length;++l){var u=this.m_bodies[l];u.setAwake(!1)}}},n.prototype.printBodies=function(t){for(var i=0;i<this.m_bodies.length;++i){var o=this.m_bodies[i];a.debug(t,o.c_position.a,o.c_position.c.x,o.c_position.c.y,o.c_velocity.w,o.c_velocity.v.x,o.c_velocity.v.y)}};var d=new s;n.prototype.solveWorldTOI=function(t){var i=this.m_world;this.m_profile;if(i.m_stepComplete){for(var o=i.m_bodyList;o;o=o.m_next)o.m_islandFlag=!1,o.m_sweep.alpha0=0;for(var e=i.m_contactList;e;e=e.m_next)e.m_toiFlag=!1,e.m_islandFlag=!1,e.m_toiCount=0,e.m_toi=1}for(var e;;){for(var s=null,n=1,e=i.m_contactList;e;e=e.m_next)if(0!=e.isEnabled()&&!(e.m_toiCount>m.maxSubSteps)){var r=1;if(e.m_toiFlag)r=e.m_toi;else{var a=e.getFixtureA(),h=e.getFixtureB();if(a.isSensor()||h.isSensor())continue;var c=a.getBody(),y=h.getBody(),v=c.isAwake()&&!c.isStatic(),f=y.isAwake()&&!y.isStatic();if(0==v&&0==f)continue;var A=c.isBullet()||!c.isDynamic(),x=y.isBullet()||!y.isDynamic();if(0==A&&0==x)continue;var g=c.m_sweep.alpha0;c.m_sweep.alpha0<y.m_sweep.alpha0?(g=y.m_sweep.alpha0,c.m_sweep.advance(g)):y.m_sweep.alpha0<c.m_sweep.alpha0&&(g=c.m_sweep.alpha0,y.m_sweep.advance(g));var b=e.getChildIndexA(),B=e.getChildIndexB(),w=(c.m_sweep,y.m_sweep,new u);w.proxyA.set(a.getShape(),b),w.proxyB.set(h.getShape(),B),w.sweepA.set(c.m_sweep),w.sweepB.set(y.m_sweep),w.tMax=1;var S=new p;l(S,w);var C=S.t;r=S.state==p.e_touching?_.min(g+(1-g)*C,1):1,e.m_toi=r,e.m_toiFlag=!0}r<n&&(s=e,n=r)}if(null==s||1-10*_.EPSILON<n){i.m_stepComplete=!0;break}var a=s.getFixtureA(),h=s.getFixtureB(),c=a.getBody(),y=h.getBody(),M=c.m_sweep.clone(),I=y.m_sweep.clone();if(c.advance(n),y.advance(n),s.update(i),s.m_toiFlag=!1,++s.m_toiCount,0!=s.isEnabled()&&0!=s.isTouching()){c.setAwake(!0),y.setAwake(!0),this.clear(),this.addBody(c),this.addBody(y),this.addContact(s),c.m_islandFlag=!0,y.m_islandFlag=!0,s.m_islandFlag=!0;for(var T=[c,y],P=0;P<T.length;++P){var V=T[P];if(V.isDynamic())for(var z=V.m_contactList;z;z=z.next){var L=z.contact;if(!L.m_islandFlag){var R=z.other;if(!R.isDynamic()||V.isBullet()||R.isBullet()){var F=L.m_fixtureA.m_isSensor,D=L.m_fixtureB.m_isSensor;if(!F&&!D){var q=R.m_sweep.clone();0==R.m_islandFlag&&R.advance(n),L.update(i),0!=L.isEnabled()&&0!=L.isTouching()?(L.m_islandFlag=!0,this.addContact(L),R.m_islandFlag||(R.m_islandFlag=!0,R.isStatic()||R.setAwake(!0),this.addBody(R))):(R.m_sweep.set(q),R.synchronizeTransform())}}}}}d.reset((1-n)*t.dt),d.dtRatio=1,d.positionIterations=20,d.velocityIterations=t.velocityIterations,d.warmStarting=!1,this.solveIslandTOI(d,c,y);for(var P=0;P<this.m_bodies.length;++P){var V=this.m_bodies[P];if(V.m_islandFlag=!1,V.isDynamic()){V.synchronizeFixtures();for(var z=V.m_contactList;z;z=z.next)z.contact.m_toiFlag=!1,z.contact.m_islandFlag=!1}}if(i.findNewContacts(),i.m_subStepping){i.m_stepComplete=!1;break}}else s.setEnabled(!1),c.m_sweep.set(M),y.m_sweep.set(I),c.synchronizeTransform(),y.synchronizeTransform()}var o,e},n.prototype.solveIslandTOI=function(t,i,o){for(var e=(this.m_world,this.m_profile,0);e<this.m_bodies.length;++e){var s=this.m_bodies[e];s.c_position.c.set(s.m_sweep.c),s.c_position.a=s.m_sweep.a,s.c_velocity.v.set(s.m_linearVelocity),s.c_velocity.w=s.m_angularVelocity}for(var e=0;e<this.m_contacts.length;++e){var n=this.m_contacts[e];n.initConstraint(t)}for(var e=0;e<t.positionIterations;++e){for(var r=0,a=0;a<this.m_contacts.length;++a){var n=this.m_contacts[a],h=n.solvePositionConstraintTOI(t,i,o);r=_.min(r,h)}var l=r>=-1.5*m.linearSlop;if(l)break}var e,u;i.m_sweep.c0.set(i.c_position.c),i.m_sweep.a0=i.c_position.a,o.m_sweep.c0.set(o.c_position.c),o.m_sweep.a0=o.c_position.a;for(var e=0;e<this.m_contacts.length;++e){var n=this.m_contacts[e];n.initVelocityConstraint(t)}for(var e=0;e<t.velocityIterations;++e)for(var a=0;a<this.m_contacts.length;++a){var n=this.m_contacts[a];n.solveVelocityConstraint(t)}for(var p=t.dt,e=0;e<this.m_bodies.length;++e){var s=this.m_bodies[e],u=c.clone(s.c_position.c),y=s.c_position.a,d=c.clone(s.c_velocity.v),v=s.c_velocity.w,f=c.mul(p,d);if(c.dot(f,f)>m.maxTranslationSquared){var A=m.maxTranslation/f.length();d.mul(A)}var x=p*v;if(x*x>m.maxRotationSquared){var A=m.maxRotation/_.abs(x);v*=A}u.wAdd(p,d),y+=p*v,s.c_position.c=u,s.c_position.a=y,s.c_velocity.v=d,s.c_velocity.w=v,s.m_sweep.c=u,s.m_sweep.a=y,s.m_linearVelocity=d,s.m_angularVelocity=v,s.synchronizeTransform()}this.postSolveIsland()},n.prototype.postSolveIsland=function(){for(var t=new r,i=0;i<this.m_contacts.length;++i){for(var o=this.m_contacts[i],e=0;e<o.v_points.length;++e)t.normalImpulses.push(o.v_points[e].normalImpulse),t.tangentImpulses.push(o.v_points[e].tangentImpulse);this.m_world.postSolve(o,t)}}},{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/Timer":49,"./util/common":50}],10:[function(t,i,o){function e(t){return this instanceof e?(t&&n.isValid(t)&&(t={gravity:t}),t=s(t,c),this.m_solver=new m(this),this.m_broadPhase=new r,this.m_contactList=null,this.m_contactCount=0,this.m_bodyList=null,this.m_bodyCount=0,this.m_jointList=null,this.m_jointCount=0,this.m_stepComplete=!0,this.m_allowSleep=t.allowSleep,this.m_gravity=n.clone(t.gravity),this.m_clearForces=!0,this.m_newFixture=!1,this.m_locked=!1,this.m_warmStarting=t.warmStarting,this.m_continuousPhysics=t.continuousPhysics,this.m_subStepping=t.subStepping,this.m_blockSolve=t.blockSolve,this.m_velocityIterations=t.velocityIterations,this.m_positionIterations=t.positionIterations,this.m_t=0,this.m_stepCount=0,void(this.addPair=this.createContact.bind(this))):new e(t)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=t("./util/options"),n=(t("./util/common"),t("./util/Timer"),t("./common/Vec2")),r=t("./collision/BroadPhase"),m=t("./Solver"),a=t("./Body"),h=t("./Contact"),c={gravity:n.zero(),allowSleep:!0,warmStarting:!0,continuousPhysics:!0,subStepping:!1,blockSolve:!0,velocityIterations:8,positionIterations:3};e.prototype.getBodyList=function(){return this.m_bodyList},e.prototype.getJointList=function(){return this.m_jointList},e.prototype.getContactList=function(){return this.m_contactList},e.prototype.getBodyCount=function(){return this.m_bodyCount},e.prototype.getJointCount=function(){return this.m_jointCount},e.prototype.getContactCount=function(){return this.m_contactCount},e.prototype.setGravity=function(t){this.m_gravity=t},e.prototype.getGravity=function(){return this.m_gravity},e.prototype.isLocked=function(){return this.m_locked},e.prototype.setAllowSleeping=function(t){if(t!=this.m_allowSleep&&(this.m_allowSleep=t,0==this.m_allowSleep))for(var i=this.m_bodyList;i;i=i.m_next)i.setAwake(!0)},e.prototype.getAllowSleeping=function(){return this.m_allowSleep},e.prototype.setWarmStarting=function(t){this.m_warmStarting=t},e.prototype.getWarmStarting=function(){return this.m_warmStarting},e.prototype.setContinuousPhysics=function(t){this.m_continuousPhysics=t},e.prototype.getContinuousPhysics=function(){return this.m_continuousPhysics},e.prototype.setSubStepping=function(t){this.m_subStepping=t},e.prototype.getSubStepping=function(){return this.m_subStepping},e.prototype.setAutoClearForces=function(t){this.m_clearForces=t},e.prototype.getAutoClearForces=function(){return this.m_clearForces},e.prototype.clearForces=function(){for(var t=this.m_bodyList;t;t=t.getNext())t.m_force.setZero(),t.m_torque=0},e.prototype.queryAABB=function(t,i){var o=this.m_broadPhase;this.m_broadPhase.query(t,function(t){var e=o.getUserData(t);return i(e.fixture)})},e.prototype.rayCast=function(t,i,o){var e=this.m_broadPhase;this.m_broadPhase.rayCast({maxFraction:1,p1:t,p2:i},function(t,i){var s=e.getUserData(i),r=s.fixture,m=s.childIndex,a={},h=r.rayCast(a,t,m);if(h){var c=a.fraction,_=n.add(n.mul(1-c,t.p1),n.mul(c,t.p2));return o(r,_,a.normal,c)}return t.maxFraction})},e.prototype.getProxyCount=function(){return this.m_broadPhase.getProxyCount()},e.prototype.getTreeHeight=function(){return this.m_broadPhase.getTreeHeight()},e.prototype.getTreeBalance=function(){return this.m_broadPhase.getTreeBalance()},e.prototype.getTreeQuality=function(){return this.m_broadPhase.getTreeQuality()},e.prototype.shiftOrigin=function(t){if(!this.m_locked){for(var i=this.m_bodyList;i;i=i.m_next)i.m_xf.p.sub(t),i.m_sweep.c0.sub(t),i.m_sweep.c.sub(t);for(var o=this.m_jointList;o;o=o.m_next)o.shiftOrigin(t);this.m_broadPhase.shiftOrigin(t)}},e.prototype.createBody=function(t,i){if(this.isLocked())return null;t&&n.isValid(t)&&(t={position:t,angle:i});var o=new a(this,t);return o.m_prev=null,o.m_next=this.m_bodyList,this.m_bodyList&&(this.m_bodyList.m_prev=o),this.m_bodyList=o,++this.m_bodyCount,o},e.prototype.createDynamicBody=function(t,i){return t?n.isValid(t)&&(t={position:t,angle:i}):t={},t.type="dynamic",this.createBody(t)},e.prototype.createKinematicBody=function(t,i){return t?n.isValid(t)&&(t={position:t,angle:i}):t={},t.type="kinematic",this.createBody(t)},e.prototype.destroyBody=function(t){if(!this.isLocked()){if(t.m_destroyed)return!1;for(var i=t.m_jointList;i;){var o=i;i=i.next,this.publish("remove-joint",o.joint),this.destroyJoint(o.joint),t.m_jointList=i}t.m_jointList=null;for(var e=t.m_contactList;e;){var s=e;e=e.next,this.destroyContact(s.contact),t.m_contactList=e}t.m_contactList=null;for(var n=t.m_fixtureList;n;){var r=n;n=n.m_next,this.publish("remove-fixture",r),r.destroyProxies(this.m_broadPhase),t.m_fixtureList=n}return t.m_fixtureList=null,t.m_prev&&(t.m_prev.m_next=t.m_next),t.m_next&&(t.m_next.m_prev=t.m_prev),t==this.m_bodyList&&(this.m_bodyList=t.m_next),t.m_destroyed=!0,--this.m_bodyCount,!0}},e.prototype.createJoint=function(t){if(this.isLocked())return null;if(t.m_prev=null,t.m_next=this.m_jointList,this.m_jointList&&(this.m_jointList.m_prev=t),this.m_jointList=t,++this.m_jointCount,t.m_edgeA.joint=t,t.m_edgeA.other=t.m_bodyB,t.m_edgeA.prev=null,t.m_edgeA.next=t.m_bodyA.m_jointList,t.m_bodyA.m_jointList&&(t.m_bodyA.m_jointList.prev=t.m_edgeA),t.m_bodyA.m_jointList=t.m_edgeA,t.m_edgeB.joint=t,t.m_edgeB.other=t.m_bodyA,t.m_edgeB.prev=null,t.m_edgeB.next=t.m_bodyB.m_jointList,t.m_bodyB.m_jointList&&(t.m_bodyB.m_jointList.prev=t.m_edgeB),t.m_bodyB.m_jointList=t.m_edgeB,0==t.m_collideConnected)for(var i=t.m_bodyB.getContactList();i;i=i.next)i.other==t.m_bodyA&&i.contact.flagForFiltering();return t},e.prototype.destroyJoint=function(t){if(!this.isLocked()){t.m_prev&&(t.m_prev.m_next=t.m_next),t.m_next&&(t.m_next.m_prev=t.m_prev),t==this.m_jointList&&(this.m_jointList=t.m_next);var i=t.m_bodyA,o=t.m_bodyB;if(i.setAwake(!0),o.setAwake(!0),t.m_edgeA.prev&&(t.m_edgeA.prev.next=t.m_edgeA.next),t.m_edgeA.next&&(t.m_edgeA.next.prev=t.m_edgeA.prev),t.m_edgeA==i.m_jointList&&(i.m_jointList=t.m_edgeA.next),t.m_edgeA.prev=null,t.m_edgeA.next=null,t.m_edgeB.prev&&(t.m_edgeB.prev.next=t.m_edgeB.next),t.m_edgeB.next&&(t.m_edgeB.next.prev=t.m_edgeB.prev),t.m_edgeB==o.m_jointList&&(o.m_jointList=t.m_edgeB.next),t.m_edgeB.prev=null,t.m_edgeB.next=null,--this.m_jointCount,0==t.m_collideConnected)for(var e=o.getContactList();e;)e.other==i&&e.contact.flagForFiltering(),e=e.next;this.publish("remove-joint",t)}};var _=new m.TimeStep;e.prototype.step=function(t,i,o){if((0|i)!==i&&(i=0),i=i||this.m_velocityIterations,o=o||this.m_positionIterations,this.m_stepCount++,this.m_newFixture&&(this.findNewContacts(),this.m_newFixture=!1),this.m_locked=!0,_.reset(t),_.velocityIterations=i,_.positionIterations=o,_.warmStarting=this.m_warmStarting,_.blockSolve=this.m_blockSolve,this.updateContacts(),this.m_stepComplete&&t>0){this.m_solver.solveWorld(_);for(var e=this.m_bodyList;e;e=e.getNext())0!=e.m_islandFlag&&(e.isStatic()||e.synchronizeFixtures());this.findNewContacts()}this.m_continuousPhysics&&t>0&&this.m_solver.solveWorldTOI(_),this.m_clearForces&&this.clearForces(),this.m_locked=!1},e.prototype.findNewContacts=function(){this.m_broadPhase.updatePairs(this.addPair)},e.prototype.createContact=function(t,i){var o=t.fixture,e=i.fixture,s=t.childIndex,n=i.childIndex,r=o.getBody(),m=e.getBody();if(r!=m){for(var a=m.getContactList();a;){if(a.other==r){var c=a.contact.getFixtureA(),_=a.contact.getFixtureB(),l=a.contact.getChildIndexA(),u=a.contact.getChildIndexB();if(c==o&&_==e&&l==s&&u==n)return;if(c==e&&_==o&&l==n&&u==s)return}a=a.next}if(0!=m.shouldCollide(r)&&0!=e.shouldCollide(o)){var p=h.create(o,s,e,n);null!=p&&(p.m_prev=null,null!=this.m_contactList&&(p.m_next=this.m_contactList,this.m_contactList.m_prev=p),this.m_contactList=p,++this.m_contactCount)}}},e.prototype.updateContacts=function(){for(var t,i=this.m_contactList;t=i;){i=t.getNext();var o=t.getFixtureA(),e=t.getFixtureB(),s=t.getChildIndexA(),n=t.getChildIndexB(),r=o.getBody(),m=e.getBody();if(t.m_filterFlag){if(0==m.shouldCollide(r)){this.destroyContact(t);continue}if(0==e.shouldCollide(o)){this.destroyContact(t);continue}t.m_filterFlag=!1}var a=r.isAwake()&&!r.isStatic(),h=m.isAwake()&&!m.isStatic();if(0!=a||0!=h){var c=o.m_proxies[s].proxyId,_=e.m_proxies[n].proxyId,l=this.m_broadPhase.testOverlap(c,_);0!=l?t.update(this):this.destroyContact(t)}}},e.prototype.destroyContact=function(t){h.destroy(t,this),t.m_prev&&(t.m_prev.m_next=t.m_next),t.m_next&&(t.m_next.m_prev=t.m_prev),t==this.m_contactList&&(this.m_contactList=t.m_next),--this.m_contactCount},e.prototype._listeners=null,e.prototype.on=function(t,i){return"string"!=typeof t||"function"!=typeof i?this:(this._listeners||(this._listeners={}),this._listeners[t]||(this._listeners[t]=[]),this._listeners[t].push(i),this)},e.prototype.off=function(t,i){if("string"!=typeof t||"function"!=typeof i)return this;var o=this._listeners&&this._listeners[t];if(!o||!o.length)return this;var e=o.indexOf(i);return e>=0&&o.splice(e,1),this},e.prototype.publish=function(t,i,o,e){var s=this._listeners&&this._listeners[t];if(!s||!s.length)return 0;for(var n=0;n<s.length;n++)s[n].call(this,i,o,e);return s.length},e.prototype.beginContact=function(t){this.publish("begin-contact",t)},e.prototype.endContact=function(t){this.publish("end-contact",t)},e.prototype.preSolve=function(t,i){this.publish("pre-solve",t,i)},e.prototype.postSolve=function(t,i){this.publish("post-solve",t,i)}},{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":49,"./util/common":50,"./util/options":52}],11:[function(t,i,o){function e(t,i){return this instanceof e?(this.lowerBound=n.zero(),this.upperBound=n.zero(),"object"==typeof t&&this.lowerBound.set(t),void("object"==typeof i&&this.upperBound.set(i))):new e(t,i)}DEBUG=!1,ASSERT=!1;var s=(t("../Settings"),t("../common/Math")),n=t("../common/Vec2");i.exports=e,e.prototype.isValid=function(){return e.isValid(this)},e.isValid=function(t){var i=n.sub(t.upperBound,t.lowerBound),o=i.x>=0&&i.y>=0&&n.isValid(t.lowerBound)&&n.isValid(t.upperBound);return o},e.prototype.getCenter=function(){return n.neo(.5*(this.lowerBound.x+this.upperBound.x),.5*(this.lowerBound.y+this.upperBound.y))},e.prototype.getExtents=function(){return n.neo(.5*(this.upperBound.x-this.lowerBound.x),.5*(this.upperBound.y-this.lowerBound.y))},e.prototype.getPerimeter=function(){return 2*(this.upperBound.x-this.lowerBound.x+this.upperBound.y-this.lowerBound.y)},e.prototype.combine=function(t,i){i=i||this,this.lowerBound.set(s.min(t.lowerBound.x,i.lowerBound.x),s.min(t.lowerBound.y,i.lowerBound.y)),this.upperBound.set(s.max(t.upperBound.x,i.upperBound.x),s.max(t.upperBound.y,i.upperBound.y))},e.prototype.combinePoints=function(t,i){this.lowerBound.set(s.min(t.x,i.x),s.min(t.y,i.y)),this.upperBound.set(s.max(t.x,i.x),s.max(t.y,i.y))},e.prototype.set=function(t){this.lowerBound.set(t.lowerBound.x,t.lowerBound.y),this.upperBound.set(t.upperBound.x,t.upperBound.y)},e.prototype.contains=function(t){var i=!0;return i=i&&this.lowerBound.x<=t.lowerBound.x,i=i&&this.lowerBound.y<=t.lowerBound.y,i=i&&t.upperBound.x<=this.upperBound.x,i=i&&t.upperBound.y<=this.upperBound.y},e.prototype.extend=function(t){e.extend(this,t)},e.extend=function(t,i){t.lowerBound.x-=i,t.lowerBound.y-=i,t.upperBound.x+=i,t.upperBound.y+=i},e.testOverlap=function(t,i){var o=i.lowerBound.x-t.upperBound.x,e=t.lowerBound.x-i.upperBound.x,s=i.lowerBound.y-t.upperBound.y,n=t.lowerBound.y-i.upperBound.y;return!(o>0||s>0||e>0||n>0)},e.areEqual=function(t,i){return n.areEqual(t.lowerBound,i.lowerBound)&&n.areEqual(t.upperBound,i.upperBound)},e.diff=function(t,i){var o=s.max(0,s.min(t.upperBound.x,i.upperBound.x)-s.max(i.lowerBound.x,t.lowerBound.x)),e=s.max(0,s.min(t.upperBound.y,i.upperBound.y)-s.max(i.lowerBound.y,t.lowerBound.y)),n=t.upperBound.x-t.lowerBound.x,r=t.upperBound.y-t.lowerBound.y,m=i.upperBound.y-i.lowerBound.y,m=i.upperBound.y-i.lowerBound.y;return n*r+wB*m-o*e},e.prototype.rayCast=function(t,i){for(var o=-(1/0),e=1/0,r=i.p1,m=n.sub(i.p2,i.p1),a=n.abs(m),h=n.zero(),c="x";null!==c;c="x"===c?"y":null)if(a.x<s.EPSILON){if(r[c]<this.lowerBound[c]||this.upperBound[c]<r[c])return!1}else{var _=1/m[c],l=(this.lowerBound[c]-r[c])*_,u=(this.upperBound[c]-r[c])*_,p=-1;if(l>u){var y=l;l=u,u=y,p=1}if(l>o&&(h.setZero(),h[c]=p,o=l),e=s.min(e,u),o>e)return!1}return!(o<0||i.maxFraction<o)&&(t.fraction=o,t.normal=h,!0)},e.prototype.toString=function(){return JSON.stringify(this)}},{"../Settings":7,"../common/Math":18,"../common/Vec2":23}],12:[function(t,i,o){function e(){this.m_tree=new r,this.m_proxyCount=0,this.m_moveBuffer=[],this.queryCallback=this.queryCallback.bind(this)}DEBUG=!1,ASSERT=!1;var s=(t("../Settings"),t("../util/common"),t("../common/Math")),n=t("./AABB"),r=t("./DynamicTree");i.exports=e,e.prototype.getUserData=function(t){return this.m_tree.getUserData(t)},e.prototype.testOverlap=function(t,i){var o=this.m_tree.getFatAABB(t),e=this.m_tree.getFatAABB(i);return n.testOverlap(o,e)},e.prototype.getFatAABB=function(t){return this.m_tree.getFatAABB(t)},e.prototype.getProxyCount=function(){return this.m_proxyCount},e.prototype.getTreeHeight=function(){return this.m_tree.getHeight()},e.prototype.getTreeBalance=function(){return this.m_tree.getMaxBalance()},e.prototype.getTreeQuality=function(){return this.m_tree.getAreaRatio()},e.prototype.query=function(t,i){this.m_tree.query(t,i)},e.prototype.rayCast=function(t,i){this.m_tree.rayCast(t,i)},e.prototype.shiftOrigin=function(t){this.m_tree.shiftOrigin(t)},e.prototype.createProxy=function(t,i){var o=this.m_tree.createProxy(t,i);return this.m_proxyCount++,this.bufferMove(o),o},e.prototype.destroyProxy=function(t){this.unbufferMove(t),this.m_proxyCount--,this.m_tree.destroyProxy(t)},e.prototype.moveProxy=function(t,i,o){var e=this.m_tree.moveProxy(t,i,o);e&&this.bufferMove(t)},e.prototype.touchProxy=function(t){this.bufferMove(t)},e.prototype.bufferMove=function(t){this.m_moveBuffer.push(t)},e.prototype.unbufferMove=function(t){for(var i=0;i<this.m_moveBuffer.length;++i)this.m_moveBuffer[i]==t&&(this.m_moveBuffer[i]=null)},e.prototype.updatePairs=function(t){for(this.m_callback=t;this.m_moveBuffer.length>0;)if(this.m_queryProxyId=this.m_moveBuffer.pop(),null!==this.m_queryProxyId){var i=this.m_tree.getFatAABB(this.m_queryProxyId);this.m_tree.query(i,this.queryCallback)}},e.prototype.queryCallback=function(t){if(t==this.m_queryProxyId)return!0;var i=s.min(t,this.m_queryProxyId),o=s.max(t,this.m_queryProxyId),e=this.m_tree.getUserData(i),n=this.m_tree.getUserData(o);return this.m_callback(e,n),!0}},{"../Settings":7,"../common/Math":18,"../util/common":50,"./AABB":11,"./DynamicTree":14}],13:[function(t,i,o){function e(){this.proxyA=new m,this.proxyB=new m,this.transformA=null,this.transformB=null,this.useRadii=!1}function s(){this.pointA=u.zero(),this.pointB=u.zero(),this.distance,this.iterations}function n(){this.metric=0,this.indexA=[],this.indexB=[],this.count=0}function r(t,i,o){++_.gjkCalls;var e=o.proxyA,s=o.proxyB,n=o.transformA,r=o.transformB,m=new h;m.readCache(i,e,n,s,r);for(var a=m.m_v,d=c.maxDistnceIterations,v=[],f=[],A=0,x=1/0,g=1/0,b=0;b<d;){A=m.m_count;for(var B=0;B<A;++B)v[B]=a[B].indexA,f[B]=a[B].indexB;if(m.solve(),3==m.m_count)break;var w=m.getClosestPoint();g=w.lengthSquared(),x=g;var S=m.getSearchDirection();if(S.lengthSquared()<l.EPSILON*l.EPSILON)break;var C=a[m.m_count];C.indexA=e.getSupport(p.mulT(n.q,u.neg(S))),C.wA=y.mul(n,e.getVertex(C.indexA)),C.indexB=s.getSupport(p.mulT(r.q,S)),C.wB=y.mul(r,s.getVertex(C.indexB)),C.w=u.sub(C.wB,C.wA),++b,++_.gjkIters;for(var M=!1,B=0;B<A;++B)if(C.indexA==v[B]&&C.indexB==f[B]){M=!0;break}if(M)break;++m.m_count}if(_.gjkMaxIters=l.max(_.gjkMaxIters,b),m.getWitnessPoints(t.pointA,t.pointB),t.distance=u.distance(t.pointA,t.pointB),t.iterations=b,m.writeCache(i),o.useRadii){var I=e.m_radius,T=s.m_radius;if(t.distance>I+T&&t.distance>l.EPSILON){t.distance-=I+T;var P=u.sub(t.pointB,t.pointA);P.normalize(),t.pointA.wAdd(I,P),t.pointB.wSub(T,P)}else{var w=u.mid(t.pointA,t.pointB);t.pointA.set(w),t.pointB.set(w),t.distance=0}}}function m(){this.m_buffer=[],this.m_vertices=[],this.m_count=0,this.m_radius=0}function a(){this.indexA,this.indexB,this.wA=u.zero(),this.wB=u.zero(),this.w=u.zero(),this.a}function h(){this.m_v1=new a,this.m_v2=new a,this.m_v3=new a,this.m_v=[this.m_v1,this.m_v2,this.m_v3],this.m_count}DEBUG=!1,ASSERT=!1,i.exports=r,i.exports.Input=e,i.exports.Output=s,i.exports.Proxy=m,i.exports.Cache=n;var c=t("../Settings"),_=(t("../util/common"),t("../util/Timer"),t("../common/stats")),l=t("../common/Math"),u=t("../common/Vec2"),p=(t("../common/Vec3"),t("../common/Mat22"),t("../common/Mat33"),t("../common/Rot")),y=(t("../common/Sweep"),t("../common/Transform"));t("../common/Velocity"),t("../common/Position");_.gjkCalls=0,_.gjkIters=0,_.gjkMaxIters=0,m.prototype.getVertexCount=function(){return this.m_count},m.prototype.getVertex=function(t){return this.m_vertices[t]},m.prototype.getSupport=function(t){for(var i=0,o=u.dot(this.m_vertices[0],t),e=0;e<this.m_count;++e){var s=u.dot(this.m_vertices[e],t);s>o&&(i=e,o=s)}return i},m.prototype.getSupportVertex=function(t){return this.m_vertices[this.getSupport(t)]},m.prototype.set=function(t,i){t.computeDistanceProxy(this,i)},a.prototype.set=function(t){this.indexA=t.indexA,this.indexB=t.indexB,this.wA=u.clone(t.wA),this.wB=u.clone(t.wB),this.w=u.clone(t.w),this.a=t.a},h.prototype.print=function(){return 3==this.m_count?["+"+this.m_count,this.m_v1.a,this.m_v1.wA.x,this.m_v1.wA.y,this.m_v1.wB.x,this.m_v1.wB.y,this.m_v2.a,this.m_v2.wA.x,this.m_v2.wA.y,this.m_v2.wB.x,this.m_v2.wB.y,this.m_v3.a,this.m_v3.wA.x,this.m_v3.wA.y,this.m_v3.wB.x,this.m_v3.wB.y].toString():2==this.m_count?["+"+this.m_count,this.m_v1.a,this.m_v1.wA.x,this.m_v1.wA.y,this.m_v1.wB.x,this.m_v1.wB.y,this.m_v2.a,this.m_v2.wA.x,this.m_v2.wA.y,this.m_v2.wB.x,this.m_v2.wB.y].toString():1==this.m_count?["+"+this.m_count,this.m_v1.a,this.m_v1.wA.x,this.m_v1.wA.y,this.m_v1.wB.x,this.m_v1.wB.y].toString():"+"+this.m_count},h.prototype.readCache=function(t,i,o,e,s){this.m_count=t.count;for(var n=0;n<this.m_count;++n){var r=this.m_v[n];r.indexA=t.indexA[n],
-r.indexB=t.indexB[n];var m=i.getVertex(r.indexA),a=e.getVertex(r.indexB);r.wA=y.mul(o,m),r.wB=y.mul(s,a),r.w=u.sub(r.wB,r.wA),r.a=0}if(this.m_count>1){var h=t.metric,c=this.getMetric();(c<.5*h||2*h<c||c<l.EPSILON)&&(this.m_count=0)}if(0==this.m_count){var r=this.m_v[0];r.indexA=0,r.indexB=0;var m=i.getVertex(0),a=e.getVertex(0);r.wA=y.mul(o,m),r.wB=y.mul(s,a),r.w=u.sub(r.wB,r.wA),r.a=1,this.m_count=1}},h.prototype.writeCache=function(t){t.metric=this.getMetric(),t.count=this.m_count;for(var i=0;i<this.m_count;++i)t.indexA[i]=this.m_v[i].indexA,t.indexB[i]=this.m_v[i].indexB},h.prototype.getSearchDirection=function(){switch(this.m_count){case 1:return u.neg(this.m_v1.w);case 2:var t=u.sub(this.m_v2.w,this.m_v1.w),i=u.cross(t,u.neg(this.m_v1.w));return i>0?u.cross(1,t):u.cross(t,1);default:return u.zero()}},h.prototype.getClosestPoint=function(){switch(this.m_count){case 0:return u.zero();case 1:return u.clone(this.m_v1.w);case 2:return u.wAdd(this.m_v1.a,this.m_v1.w,this.m_v2.a,this.m_v2.w);case 3:return u.zero();default:return u.zero()}},h.prototype.getWitnessPoints=function(t,i){switch(this.m_count){case 0:break;case 1:t.set(this.m_v1.wA),i.set(this.m_v1.wB);break;case 2:t.wSet(this.m_v1.a,this.m_v1.wA,this.m_v2.a,this.m_v2.wA),i.wSet(this.m_v1.a,this.m_v1.wB,this.m_v2.a,this.m_v2.wB);break;case 3:t.wSet(this.m_v1.a,this.m_v1.wA,this.m_v2.a,this.m_v2.wA),t.wAdd(this.m_v3.a,this.m_v3.wA),i.set(t)}},h.prototype.getMetric=function(){switch(this.m_count){case 0:return 0;case 1:return 0;case 2:return u.distance(this.m_v1.w,this.m_v2.w);case 3:return u.cross(u.sub(this.m_v2.w,this.m_v1.w),u.sub(this.m_v3.w,this.m_v1.w));default:return 0}},h.prototype.solve=function(){switch(this.m_count){case 1:break;case 2:this.solve2();break;case 3:this.solve3()}},h.prototype.solve2=function(){var t=this.m_v1.w,i=this.m_v2.w,o=u.sub(i,t),e=-u.dot(t,o);if(e<=0)return this.m_v1.a=1,void(this.m_count=1);var s=u.dot(i,o);if(s<=0)return this.m_v2.a=1,this.m_count=1,void this.m_v1.set(this.m_v2);var n=1/(s+e);this.m_v1.a=s*n,this.m_v2.a=e*n,this.m_count=2},h.prototype.solve3=function(){var t=this.m_v1.w,i=this.m_v2.w,o=this.m_v3.w,e=u.sub(i,t),s=u.dot(t,e),n=u.dot(i,e),r=n,m=-s,a=u.sub(o,t),h=u.dot(t,a),c=u.dot(o,a),_=c,l=-h,p=u.sub(o,i),y=u.dot(i,p),d=u.dot(o,p),v=d,f=-y,A=u.cross(e,a),x=A*u.cross(i,o),g=A*u.cross(o,t),b=A*u.cross(t,i);if(m<=0&&l<=0)return this.m_v1.a=1,void(this.m_count=1);if(r>0&&m>0&&b<=0){var B=1/(r+m);return this.m_v1.a=r*B,this.m_v2.a=m*B,void(this.m_count=2)}if(_>0&&l>0&&g<=0){var w=1/(_+l);return this.m_v1.a=_*w,this.m_v3.a=l*w,this.m_count=2,void this.m_v2.set(this.m_v3)}if(r<=0&&f<=0)return this.m_v2.a=1,this.m_count=1,void this.m_v1.set(this.m_v2);if(_<=0&&v<=0)return this.m_v3.a=1,this.m_count=1,void this.m_v1.set(this.m_v3);if(v>0&&f>0&&x<=0){var S=1/(v+f);return this.m_v2.a=v*S,this.m_v3.a=f*S,this.m_count=2,void this.m_v1.set(this.m_v3)}var C=1/(x+g+b);this.m_v1.a=x*C,this.m_v2.a=g*C,this.m_v3.a=b*C,this.m_count=3},r.testOverlap=function(t,i,o,m,a,h){var c=new e;c.proxyA.set(t,i),c.proxyB.set(o,m),c.transformA=a,c.transformB=h,c.useRadii=!0;var _=new n,u=new s;return r(u,_,c),u.distance<10*l.EPSILON}},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":49,"../util/common":50}],14:[function(t,i,o){function e(t){this.id=t,this.aabb=new c,this.userData=null,this.parent=null,this.child1=null,this.child2=null,this.height=-1,this.toString=function(){return this.id+": "+this.userData}}function s(){this.m_root=null,this.m_nodes={},this.m_lastProxyId=0,this.m_pool=new m({create:function(){return new e}})}function n(){var t=[],i=[];return{preorder:function(o){return t.length=0,t.push(o),i.length=0,i.push(0),this},next:function(){for(;t.length>0;){var o=t.length-1,e=t[o];if(0===i[o])return i[o]=1,e;if(1===i[o]&&(i[o]=2,e.child1))return t.push(e.child1),i.push(1),e.child1;if(2===i[o]&&(i[o]=3,e.child2))return t.push(e.child2),i.push(1),e.child2;t.pop(),i.pop()}},close:function(){t.length=0}}}DEBUG=!1,ASSERT=!1;var r=t("../Settings"),m=(t("../util/common"),t("../util/Pool")),a=t("../common/Vec2"),h=t("../common/Math"),c=t("./AABB");i.exports=s,e.prototype.isLeaf=function(){return null==this.child1},s.prototype.getUserData=function(t){var i=this.m_nodes[t];return i.userData},s.prototype.getFatAABB=function(t){var i=this.m_nodes[t];return i.aabb},s.prototype.allocateNode=function(){var t=this.m_pool.allocate();return t.id=++this.m_lastProxyId,t.userData=null,t.parent=null,t.child1=null,t.child2=null,t.height=-1,this.m_nodes[t.id]=t,t},s.prototype.freeNode=function(t){this.m_pool.release(t),t.height=-1,delete this.m_nodes[t.id]},s.prototype.createProxy=function(t,i){var o=this.allocateNode();return o.aabb.set(t),c.extend(o.aabb,r.aabbExtension),o.userData=i,o.height=0,this.insertLeaf(o),o.id},s.prototype.destroyProxy=function(t){var i=this.m_nodes[t];this.removeLeaf(i),this.freeNode(i)},s.prototype.moveProxy=function(t,i,o){var e=this.m_nodes[t];return!e.aabb.contains(i)&&(this.removeLeaf(e),e.aabb.set(i),i=e.aabb,c.extend(i,r.aabbExtension),o.x<0?i.lowerBound.x+=o.x*r.aabbMultiplier:i.upperBound.x+=o.x*r.aabbMultiplier,o.y<0?i.lowerBound.y+=o.y*r.aabbMultiplier:i.upperBound.y+=o.y*r.aabbMultiplier,this.insertLeaf(e),!0)},s.prototype.insertLeaf=function(t){if(null==this.m_root)return this.m_root=t,void(this.m_root.parent=null);for(var i=t.aabb,o=this.m_root;0==o.isLeaf();){var e=o.child1,s=o.child2,n=o.aabb.getPerimeter(),r=new c;r.combine(o.aabb,i);var m,a=r.getPerimeter(),_=2*a,l=2*(a-n);if(e.isLeaf()){var u=new c;u.combine(i,e.aabb),m=u.getPerimeter()+l}else{var u=new c;u.combine(i,e.aabb);var p=e.aabb.getPerimeter(),y=u.getPerimeter();m=y-p+l}var d;if(s.isLeaf()){var u=new c;u.combine(i,s.aabb),d=u.getPerimeter()+l}else{var u=new c;u.combine(i,s.aabb);var p=s.aabb.getPerimeter(),y=u.getPerimeter();d=y-p+l}if(_<m&&_<d)break;o=m<d?e:s}var v=o,f=v.parent,A=this.allocateNode();for(A.parent=f,A.userData=null,A.aabb.combine(i,v.aabb),A.height=v.height+1,null!=f?(f.child1==v?f.child1=A:f.child2=A,A.child1=v,A.child2=t,v.parent=A,t.parent=A):(A.child1=v,A.child2=t,v.parent=A,t.parent=A,this.m_root=A),o=t.parent;null!=o;){o=this.balance(o);var e=o.child1,s=o.child2;o.height=1+h.max(e.height,s.height),o.aabb.combine(e.aabb,s.aabb),o=o.parent}},s.prototype.removeLeaf=function(t){if(t==this.m_root)return void(this.m_root=null);var i,o=t.parent,e=o.parent;if(i=o.child1==t?o.child2:o.child1,null!=e){e.child1==o?e.child1=i:e.child2=i,i.parent=e,this.freeNode(o);for(var s=e;null!=s;){s=this.balance(s);var n=s.child1,r=s.child2;s.aabb.combine(n.aabb,r.aabb),s.height=1+h.max(n.height,r.height),s=s.parent}}else this.m_root=i,i.parent=null,this.freeNode(o)},s.prototype.balance=function(t){var i=t;if(i.isLeaf()||i.height<2)return t;var o=i.child1,e=i.child2,s=e.height-o.height;if(s>1){var n=e.child1,r=e.child2;return e.child1=i,e.parent=i.parent,i.parent=e,null!=e.parent?e.parent.child1==t?e.parent.child1=e:e.parent.child2=e:this.m_root=e,n.height>r.height?(e.child2=n,i.child2=r,r.parent=i,i.aabb.combine(o.aabb,r.aabb),e.aabb.combine(i.aabb,n.aabb),i.height=1+h.max(o.height,r.height),e.height=1+h.max(i.height,n.height)):(e.child2=r,i.child2=n,n.parent=i,i.aabb.combine(o.aabb,n.aabb),e.aabb.combine(i.aabb,r.aabb),i.height=1+h.max(o.height,n.height),e.height=1+h.max(i.height,r.height)),e}if(s<-1){var m=o.child1,a=o.child2;return o.child1=i,o.parent=i.parent,i.parent=o,null!=o.parent?o.parent.child1==i?o.parent.child1=o:o.parent.child2=o:this.m_root=o,m.height>a.height?(o.child2=m,i.child1=a,a.parent=i,i.aabb.combine(e.aabb,a.aabb),o.aabb.combine(i.aabb,m.aabb),i.height=1+h.max(e.height,a.height),o.height=1+h.max(i.height,m.height)):(o.child2=a,i.child1=m,m.parent=i,i.aabb.combine(e.aabb,m.aabb),o.aabb.combine(i.aabb,a.aabb),i.height=1+h.max(e.height,m.height),o.height=1+h.max(i.height,a.height)),o}return i},s.prototype.getHeight=function(){return null==this.m_root?0:this.m_root.height},s.prototype.getAreaRatio=function(){if(null==this.m_root)return 0;for(var t,i=this.m_root,o=i.aabb.getPerimeter(),e=0,s=u.allocate().preorder();t=s.next();)t.height<0||(e+=t.aabb.getPerimeter());return u.release(s),e/o},s.prototype.computeHeight=function(t){var i;if(i="undefined"!=typeof t?this.m_nodes[t]:this.m_root,i.isLeaf())return 0;var o=ComputeHeight(i.child1),e=ComputeHeight(i.child2);return 1+h.max(o,e)},s.prototype.validateStructure=function(t){if(null!=t){t==this.m_root;var i=t.child1,o=t.child2;t.isLeaf()||(this.validateStructure(i),this.validateStructure(o))}},s.prototype.validateMetrics=function(t){if(null!=t){var i=t.child1,o=t.child2;if(!t.isLeaf()){var e=this.m_nodes[i].height,s=this.m_nodes[o].height,n=(1+h.max(e,s),new c);n.combine(i.aabb,o.aabb),this.validateMetrics(i),this.validateMetrics(o)}}},s.prototype.validate=function(){ValidateStructure(this.m_root),ValidateMetrics(this.m_root)},s.prototype.getMaxBalance=function(){for(var t,i=0,o=u.allocate().preorder();t=o.next();)if(!(t.height<=1)){var e=h.abs(t.child2.height-t.child1.height);i=h.max(i,e)}return u.release(o),i},s.prototype.rebuildBottomUp=function(){for(var t,i=[],o=0,e=u.allocate().preorder();t=e.next();)t.height<0||(t.isLeaf()?(t.parent=null,i[o]=t,++o):this.freeNode(t));for(u.release(e);o>1;){for(var s=1/0,n=-1,r=-1,m=0;m<o;++m)for(var a=i[m].aabb,_=m+1;_<o;++_){var l=i[_].aabb,p=new c;p.combine(a,l);var y=p.getPerimeter();y<s&&(n=m,r=_,s=y)}var d=i[n],v=i[r],f=this.allocateNode();f.child1=d,f.child2=v,f.height=1+h.max(d.height,v.height),f.aabb.combine(d.aabb,v.aabb),f.parent=null,d.parent=f,v.parent=f,i[r]=i[o-1],i[n]=f,--o}this.m_root=i[0],this.validate()},s.prototype.shiftOrigin=function(t){for(var i,o=u.allocate().preorder();i=o.next();){var e=i.aabb;e.lowerBound.x-=t.x,e.lowerBound.y-=t.y,e.lowerBound.x-=t.x,e.lowerBound.y-=t.y}u.release(o)},s.prototype.query=function(t,i){var o=l.allocate();for(o.push(this.m_root);o.length>0;){var e=o.pop();if(null!=e&&c.testOverlap(e.aabb,t))if(e.isLeaf()){var s=i(e.id);if(0==s)return}else o.push(e.child1),o.push(e.child2)}l.release(o)},s.prototype.rayCast=function(t,i){var o=t.p1,e=t.p2,s=a.sub(e,o);s.normalize();var n=a.cross(1,s),r=a.abs(n),m=t.maxFraction,u=new c,p=a.wAdd(1-m,o,m,e);u.combinePoints(o,p);var y=l.allocate(),d=_.allocate();for(y.push(this.m_root);y.length>0;){var v=y.pop();if(null!=v&&0!=c.testOverlap(v.aabb,u)){var f=v.aabb.getCenter(),A=v.aabb.getExtents(),x=h.abs(a.dot(n,a.sub(o,f)))-a.dot(r,A);if(!(x>0))if(v.isLeaf()){d.p1=a.clone(t.p1),d.p2=a.clone(t.p2),d.maxFraction=m;var g=i(d,v.id);if(0==g)return;g>0&&(m=g,p=a.wAdd(1-m,o,m,e),u.combinePoints(o,p))}else y.push(v.child1),y.push(v.child2)}}l.release(y),_.release(d)};var _=new m({create:function(){return{}},release:function(t){}}),l=new m({create:function(){return[]},release:function(t){t.length=0}}),u=new m({create:function(){return new n},release:function(t){t.close()}})},{"../Settings":7,"../common/Math":18,"../common/Vec2":23,"../util/Pool":48,"../util/common":50,"./AABB":11}],15:[function(t,i,o){function e(){this.proxyA=new f,this.proxyB=new f,this.sweepA=new u,this.sweepB=new u,this.tMax}function s(){this.state,this.t}function n(t,i){var o=a.now();++h.toiCalls,t.state=s.e_unknown,t.t=i.tMax;var e=i.proxyA,n=i.proxyB,_=i.sweepA,l=i.sweepB;_.normalize(),l.normalize();var u=i.tMax,f=e.m_radius+n.m_radius,x=c.max(m.linearSlop,f-3*m.linearSlop),g=.25*m.linearSlop,b=0,B=m.maxTOIIterations,w=0,S=new A,C=new d;for(C.proxyA=i.proxyA,C.proxyB=i.proxyB,C.useRadii=!1;;){var M=p.identity(),I=p.identity();_.getTransform(M,b),l.getTransform(I,b),C.transformA=M,C.transformB=I;var T=new v;if(y(T,S,C),T.distance<=0){t.state=s.e_overlapped,t.t=0;break}if(T.distance<x+g){t.state=s.e_touching,t.t=b;break}var P=new r;P.initialize(S,e,_,n,l,b);for(var V=!1,z=u,L=0;;){var R=P.findMinSeparation(z);P.indexA,P.indexB;if(R>x+g){t.state=s.e_separated,t.t=u,V=!0;break}if(R>x-g){b=z;break}var F=P.evaluate(b);P.indexA,P.indexB;if(F<x-g){t.state=s.e_failed,t.t=b,V=!0;break}if(F<=x+g){t.state=s.e_touching,t.t=b,V=!0;break}for(var D=0,q=b,E=z;;){var k;k=1&D?q+(x-F)*(E-q)/(R-F):.5*(q+E),++D,++h.toiRootIters;var j=P.evaluate(k);P.indexA,P.indexB;if(c.abs(j-x)<g){z=k;break}if(j>x?(q=k,F=j):(E=k,R=j),50==D)break}if(h.toiMaxRootIters=c.max(h.toiMaxRootIters,D),++L,L==m.maxPolygonVertices)break}if(++w,++h.toiIters,V)break;if(w==B){t.state=s.e_failed,t.t=b;break}}h.toiMaxIters=c.max(h.toiMaxIters,w);var J=a.diff(o);h.toiMaxTime=c.max(h.toiMaxTime,J),h.toiTime+=J}function r(){this.m_proxyA=new f,this.m_proxyB=new f,this.m_sweepA,this.m_sweepB,this.m_type,this.m_localPoint=_.zero(),this.m_axis=_.zero()}DEBUG=!1,ASSERT=!1,i.exports=n,i.exports.Input=e,i.exports.Output=s;var m=t("../Settings"),a=(t("../util/common"),t("../util/Timer")),h=t("../common/stats"),c=t("../common/Math"),_=t("../common/Vec2"),l=(t("../common/Vec3"),t("../common/Mat22"),t("../common/Mat33"),t("../common/Rot")),u=t("../common/Sweep"),p=t("../common/Transform"),y=(t("../common/Velocity"),t("../common/Position"),t("./Distance")),d=y.Input,v=y.Output,f=y.Proxy,A=y.Cache;s.e_unknown=0,s.e_failed=1,s.e_overlapped=2,s.e_touching=3,s.e_separated=4,h.toiTime=0,h.toiMaxTime=0,h.toiCalls=0,h.toiIters=0,h.toiMaxIters=0,h.toiRootIters=0,h.toiMaxRootIters=0;var x=1,g=2,b=3;r.prototype.initialize=function(t,i,o,e,s,n){this.m_proxyA=i,this.m_proxyB=e;var r=t.count;this.m_sweepA=o,this.m_sweepB=s;var m=p.identity(),a=p.identity();if(this.m_sweepA.getTransform(m,n),this.m_sweepB.getTransform(a,n),1==r){this.m_type=x;var h=this.m_proxyA.getVertex(t.indexA[0]),c=this.m_proxyB.getVertex(t.indexB[0]),u=p.mul(m,h),y=p.mul(a,c);this.m_axis.wSet(1,y,-1,u);var d=this.m_axis.normalize();return d}if(t.indexA[0]==t.indexA[1]){this.m_type=b;var v=e.getVertex(t.indexB[0]),f=e.getVertex(t.indexB[1]);this.m_axis=_.cross(_.sub(f,v),1),this.m_axis.normalize();var A=l.mul(a.q,this.m_axis);this.m_localPoint=_.mid(v,f);var y=p.mul(a,this.m_localPoint),h=i.getVertex(t.indexA[0]),u=p.mul(m,h),d=_.dot(u,A)-_.dot(y,A);return d<0&&(this.m_axis=_.neg(this.m_axis),d=-d),d}this.m_type=g;var B=this.m_proxyA.getVertex(t.indexA[0]),w=this.m_proxyA.getVertex(t.indexA[1]);this.m_axis=_.cross(_.sub(w,B),1),this.m_axis.normalize();var A=l.mul(m.q,this.m_axis);this.m_localPoint=_.mid(B,w);var u=p.mul(m,this.m_localPoint),c=this.m_proxyB.getVertex(t.indexB[0]),y=p.mul(a,c),d=_.dot(y,A)-_.dot(u,A);return d<0&&(this.m_axis=_.neg(this.m_axis),d=-d),d},r.prototype.compute=function(t,i){var o=p.identity(),e=p.identity();switch(this.m_sweepA.getTransform(o,i),this.m_sweepB.getTransform(e,i),this.m_type){case x:if(t){var s=l.mulT(o.q,this.m_axis),n=l.mulT(e.q,_.neg(this.m_axis));this.indexA=this.m_proxyA.getSupport(s),this.indexB=this.m_proxyB.getSupport(n)}var r=this.m_proxyA.getVertex(this.indexA),m=this.m_proxyB.getVertex(this.indexB),a=p.mul(o,r),h=p.mul(e,m),c=_.dot(h,this.m_axis)-_.dot(a,this.m_axis);return c;case g:var u=l.mul(o.q,this.m_axis),a=p.mul(o,this.m_localPoint);if(t){var n=l.mulT(e.q,_.neg(u));this.indexA=-1,this.indexB=this.m_proxyB.getSupport(n)}var m=this.m_proxyB.getVertex(this.indexB),h=p.mul(e,m),c=_.dot(h,u)-_.dot(a,u);return c;case b:var u=l.mul(e.q,this.m_axis),h=p.mul(e,this.m_localPoint);if(t){var s=l.mulT(o.q,_.neg(u));this.indexB=-1,this.indexA=this.m_proxyA.getSupport(s)}var r=this.m_proxyA.getVertex(this.indexA),a=p.mul(o,r),c=_.dot(a,u)-_.dot(h,u);return c;default:return t&&(this.indexA=-1,this.indexB=-1),0}},r.prototype.findMinSeparation=function(t){return this.compute(!0,t)},r.prototype.evaluate=function(t){return this.compute(!1,t)}},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":49,"../util/common":50,"./Distance":13}],16:[function(t,i,o){function e(t,i,o,e){"object"==typeof t&&null!==t?(this.ex=s.clone(t),this.ey=s.clone(i)):"number"==typeof t?(this.ex=s.neo(t,o),this.ey=s.neo(i,e)):(this.ex=s.zero(),this.ey=s.zero())}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("./Math"),t("./Vec2"));e.prototype.toString=function(){return JSON.stringify(this)},e.isValid=function(t){return t&&s.isValid(t.ex)&&s.isValid(t.ey)},e.assert=function(t){},e.prototype.set=function(t,i,o,e){"number"==typeof t&&"number"==typeof i&&"number"==typeof o&&"number"==typeof e?(this.ex.set(t,o),this.ey.set(i,e)):"object"==typeof t&&"object"==typeof i?(this.ex.set(t),this.ey.set(i)):"object"==typeof t&&(this.ex.set(t.ex),this.ey.set(t.ey))},e.prototype.setIdentity=function(){this.ex.x=1,this.ey.x=0,this.ex.y=0,this.ey.y=1},e.prototype.setZero=function(){this.ex.x=0,this.ey.x=0,this.ex.y=0,this.ey.y=0},e.prototype.getInverse=function(){var t=this.ex.x,i=this.ey.x,o=this.ex.y,s=this.ey.y,n=t*s-i*o;0!=n&&(n=1/n);var r=new e;return r.ex.x=n*s,r.ey.x=-n*i,r.ex.y=-n*o,r.ey.y=n*t,r},e.prototype.solve=function(t){var i=this.ex.x,o=this.ey.x,e=this.ex.y,n=this.ey.y,r=i*n-o*e;0!=r&&(r=1/r);var m=s.zero();return m.x=r*(n*t.x-o*t.y),m.y=r*(i*t.y-e*t.x),m},e.mul=function(t,i){if(i&&"x"in i&&"y"in i){var o=t.ex.x*i.x+t.ey.x*i.y,n=t.ex.y*i.x+t.ey.y*i.y;return s.neo(o,n)}if(i&&"ex"in i&&"ey"in i)return new e(s.mul(t,i.ex),s.mul(t,i.ey))},e.mulT=function(t,i){if(i&&"x"in i&&"y"in i)return s.neo(s.dot(i,t.ex),s.dot(i,t.ey));if(i&&"ex"in i&&"ey"in i){var o=s.neo(s.dot(t.ex,i.ex),s.dot(t.ey,i.ex)),n=s.neo(s.dot(t.ex,i.ey),s.dot(t.ey,i.ey));return new e(o,n)}},e.abs=function(t){return new e(s.abs(t.ex),s.abs(t.ey))},e.add=function(t,i){return new e(s.add(t.ex+i.ex),s.add(t.ey+i.ey))}},{"../util/common":50,"./Math":18,"./Vec2":23}],17:[function(t,i,o){function e(t,i,o){"object"==typeof t&&null!==t?(this.ex=n.clone(t),this.ey=n.clone(i),this.ez=n.clone(o)):(this.ex=n(),this.ey=n(),this.ez=n())}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("./Math"),t("./Vec2")),n=t("./Vec3");e.prototype.toString=function(){return JSON.stringify(this)},e.isValid=function(t){return t&&n.isValid(t.ex)&&n.isValid(t.ey)&&n.isValid(t.ez)},e.assert=function(t){},e.prototype.setZero=function(){return this.ex.setZero(),this.ey.setZero(),this.ez.setZero(),this},e.prototype.solve33=function(t){var i=n.dot(this.ex,n.cross(this.ey,this.ez));0!=i&&(i=1/i);var o=new n;return o.x=i*n.dot(t,n.cross(this.ey,this.ez)),o.y=i*n.dot(this.ex,n.cross(t,this.ez)),o.z=i*n.dot(this.ex,n.cross(this.ey,t)),o},e.prototype.solve22=function(t){var i=this.ex.x,o=this.ey.x,e=this.ex.y,n=this.ey.y,r=i*n-o*e;0!=r&&(r=1/r);var m=s.zero();return m.x=r*(n*t.x-o*t.y),m.y=r*(i*t.y-e*t.x),m},e.prototype.getInverse22=function(t){var i=this.ex.x,o=this.ey.x,e=this.ex.y,s=this.ey.y,n=i*s-o*e;0!=n&&(n=1/n),t.ex.x=n*s,t.ey.x=-n*o,t.ex.z=0,t.ex.y=-n*e,t.ey.y=n*i,t.ey.z=0,t.ez.x=0,t.ez.y=0,t.ez.z=0},e.prototype.getSymInverse33=function(t){var i=n.dot(this.ex,n.cross(this.ey,this.ez));0!=i&&(i=1/i);var o=this.ex.x,e=this.ey.x,s=this.ez.x,r=this.ey.y,m=this.ez.y,a=this.ez.z;t.ex.x=i*(r*a-m*m),t.ex.y=i*(s*m-e*a),t.ex.z=i*(e*m-s*r),t.ey.x=t.ex.y,t.ey.y=i*(o*a-s*s),t.ey.z=i*(s*e-o*m),t.ez.x=t.ex.z,t.ez.y=t.ey.z,t.ez.z=i*(o*r-e*e)},e.mul=function(t,i){if(i&&"z"in i&&"y"in i&&"x"in i){var o=t.ex.x*i.x+t.ey.x*i.y+t.ez.x*i.z,e=t.ex.y*i.x+t.ey.y*i.y+t.ez.y*i.z,r=t.ex.z*i.x+t.ey.z*i.y+t.ez.z*i.z;return new n(o,e,r)}if(i&&"y"in i&&"x"in i){var o=t.ex.x*i.x+t.ey.x*i.y,e=t.ex.y*i.x+t.ey.y*i.y;return s.neo(o,e)}},e.add=function(t,i){return new n(t.x+i.x,t.y+i.y,t.z+i.z)}},{"../util/common":50,"./Math":18,"./Vec2":23,"./Vec3":24}],18:[function(t,i,o){DEBUG=!1,ASSERT=!1;var e=(t("../util/common"),t("../util/create")),s=Math,n=i.exports=e(s);n.EPSILON=1e-9,n.isFinite=function(t){return"number"==typeof t&&isFinite(t)&&!isNaN(t)},n.assert=function(t){},n.invSqrt=function(t){return 1/s.sqrt(t)},n.nextPowerOfTwo=function(t){return t|=t>>1,t|=t>>2,t|=t>>4,t|=t>>8,t|=t>>16,t+1},n.isPowerOfTwo=function(t){return t>0&&0==(t&t-1)},n.mod=function(t,i,o){return"undefined"==typeof i?(o=1,i=0):"undefined"==typeof o&&(o=i,i=0),o>i?(t=(t-i)%(o-i),t+(t<0?o:i)):(t=(t-o)%(i-o),t+(t<=0?i:o))},n.clamp=function(t,i,o){return t<i?i:t>o?o:t},n.random=function(t,i){return"undefined"==typeof t?(i=1,t=0):"undefined"==typeof i&&(i=t,t=0),t==i?t:s.random()*(i-t)+t}},{"../util/common":50,"../util/create":51}],19:[function(t,i,o){function e(){this.c=s.zero(),this.a=0}DEBUG=!1,ASSERT=!1,i.exports=e;var s=t("./Vec2"),n=t("./Rot");e.prototype.getTransform=function(t,i){return t.q.set(this.a),t.p.set(s.sub(this.c,n.mul(t.q,i))),t}},{"./Rot":20,"./Vec2":23}],20:[function(t,i,o){function e(t){return this instanceof e?void("number"==typeof t?this.setAngle(t):"object"==typeof t?this.set(t):this.setIdentity()):new e(t)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("./Vec2")),n=t("./Math");e.neo=function(t){var i=Object.create(e.prototype);return i.setAngle(t),i},e.clone=function(t){Object.create(e.prototype);return ojb.s=t.s,ojb.c=t.c,ojb},e.identity=function(t){var i=Object.create(e.prototype);return i.s=0,i.c=1,i},e.isValid=function(t){return t&&n.isFinite(t.s)&&n.isFinite(t.c)},e.assert=function(t){},e.prototype.setIdentity=function(){this.s=0,this.c=1},e.prototype.set=function(t){"object"==typeof t?(this.s=t.s,this.c=t.c):(this.s=n.sin(t),this.c=n.cos(t))},e.prototype.setAngle=function(t){this.s=n.sin(t),this.c=n.cos(t)},e.prototype.getAngle=function(){return n.atan2(this.s,this.c)},e.prototype.getXAxis=function(){return s.neo(this.c,this.s)},e.prototype.getYAxis=function(){return s.neo(-this.s,this.c)},e.mul=function(t,i){if("c"in i&&"s"in i){var o=e.identity();return o.s=t.s*i.c+t.c*i.s,o.c=t.c*i.c-t.s*i.s,o}if("x"in i&&"y"in i)return s.neo(t.c*i.x-t.s*i.y,t.s*i.x+t.c*i.y)},e.mulSub=function(t,i,o){var e=t.c*(i.x-o.x)-t.s*(i.y-o.y),n=t.s*(i.x-o.y)+t.c*(i.y-o.y);return s.neo(e,n)},e.mulT=function(t,i){if("c"in i&&"s"in i){var o=e.identity();return o.s=t.c*i.s-t.s*i.c,o.c=t.c*i.c+t.s*i.s,o}if("x"in i&&"y"in i)return s.neo(t.c*i.x+t.s*i.y,-t.s*i.x+t.c*i.y)}},{"../util/common":50,"./Math":18,"./Vec2":23}],21:[function(t,i,o){function e(t,i){this.localCenter=n.zero(),this.c=n.zero(),this.a=0,this.alpha0=0,this.c0=n.zero(),this.a0=0}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("./Math")),n=t("./Vec2"),r=t("./Rot"),m=t("./Transform");e.prototype.setTransform=function(t){var i=m.mul(t,this.localCenter);this.c.set(i),this.c0.set(i),this.a=t.q.getAngle(),this.a0=t.q.getAngle()},e.prototype.setLocalCenter=function(t,i){this.localCenter.set(t);var o=m.mul(i,this.localCenter);this.c.set(o),this.c0.set(o)},e.prototype.getTransform=function(t,i){i="undefined"==typeof i?0:i,t.q.setAngle((1-i)*this.a0+i*this.a),t.p.wSet(1-i,this.c0,i,this.c),t.p.sub(r.mul(t.q,this.localCenter))},e.prototype.advance=function(t){var i=(t-this.alpha0)/(1-this.alpha0);this.c0.wSet(i,this.c,1-i,this.c0),this.a0=i*this.a+(1-i)*this.a0,this.alpha0=t},e.prototype.forward=function(){this.a0=this.a,this.c0.set(this.c)},e.prototype.normalize=function(){var t=s.mod(this.a0,-s.PI,+s.PI);this.a-=this.a0-t,this.a0=t},e.prototype.clone=function(){var t=new e;return t.localCenter.set(this.localCenter),t.alpha0=this.alpha0,t.a0=this.a0,t.a=this.a,t.c0.set(this.c0),t.c.set(this.c),t},e.prototype.set=function(t){this.localCenter.set(t.localCenter),this.alpha0=t.alpha0,this.a0=t.a0,this.a=t.a,this.c0.set(t.c0),this.c.set(t.c)}},{"../util/common":50,"./Math":18,"./Rot":20,"./Transform":22,"./Vec2":23}],22:[function(t,i,o){function e(t,i){return this instanceof e?(this.p=s.zero(),this.q=n.identity(),"undefined"!=typeof t&&this.p.set(t),void("undefined"!=typeof i&&this.q.set(i))):new e(t,i)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("./Vec2")),n=t("./Rot");e.clone=function(t){var i=Object.create(e.prototype);return i.p=s.clone(t.p),i.q=n.clone(t.q),i},e.neo=function(t,i){var o=Object.create(e.prototype);return o.p=s.clone(t),o.q=n.clone(i),o},e.identity=function(){var t=Object.create(e.prototype);return t.p=s.zero(),t.q=n.identity(),t},e.prototype.setIdentity=function(){this.p.setZero(),this.q.setIdentity()},e.prototype.set=function(t,i){e.isValid(t)?(this.p.set(t.p),this.q.set(t.q)):(this.p.set(t),this.q.set(i))},e.isValid=function(t){return t&&s.isValid(t.p)&&n.isValid(t.q)},e.assert=function(t){},e.mul=function(t,i){if(Array.isArray(i)){for(var o=[],r=0;r<i.length;r++)o[r]=e.mul(t,i[r]);return o}if("x"in i&&"y"in i){var m=t.q.c*i.x-t.q.s*i.y+t.p.x,a=t.q.s*i.x+t.q.c*i.y+t.p.y;return s.neo(m,a)}if("p"in i&&"q"in i){var h=e.identity();return h.q=n.mul(t.q,i.q),h.p=s.add(n.mul(t.q,i.p),t.p),h}},e.mulT=function(t,i){if("x"in i&&"y"in i){var o=i.x-t.p.x,r=i.y-t.p.y,m=t.q.c*o+t.q.s*r,a=-t.q.s*o+t.q.c*r;return s.neo(m,a)}if("p"in i&&"q"in i){var h=e.identity();return h.q.set(n.mulT(t.q,i.q)),h.p.set(n.mulT(t.q,s.sub(i.p,t.p))),h}}},{"../util/common":50,"./Rot":20,"./Vec2":23}],23:[function(t,i,o){function e(t,i){return this instanceof e?void("undefined"==typeof t?(this.x=0,this.y=0):"object"==typeof t?(this.x=t.x,this.y=t.y):(this.x=t,this.y=i)):new e(t,i)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("./Math"));e.zero=function(){var t=Object.create(e.prototype);return t.x=0,t.y=0,t},e.neo=function(t,i){var o=Object.create(e.prototype);return o.x=t,o.y=i,o},e.clone=function(t,i){return e.neo(t.x,t.y)},e.prototype.toString=function(){return JSON.stringify(this)},e.isValid=function(t){return t&&s.isFinite(t.x)&&s.isFinite(t.y)},e.assert=function(t){},e.prototype.clone=function(t){return e.clone(this,t)},e.prototype.setZero=function(){return this.x=0,this.y=0,this},e.prototype.set=function(t,i){return"object"==typeof t?(this.x=t.x,this.y=t.y):(this.x=t,this.y=i),this},e.prototype.wSet=function(t,i,o,e){var s=t*i.x,n=t*i.y;return"undefined"==typeof o&&"undefined"==typeof e||(s+=o*e.x,n+=o*e.y),this.x=s,this.y=n,this},e.prototype.add=function(t){return this.x+=t.x,this.y+=t.y,this},e.prototype.wAdd=function(t,i,o,e){var s=t*i.x,n=t*i.y;return"undefined"==typeof o&&"undefined"==typeof e||(s+=o*e.x,n+=o*e.y),this.x+=s,this.y+=n,this},e.prototype.wSub=function(t,i,o,e){var s=t*i.x,n=t*i.y;return"undefined"==typeof o&&"undefined"==typeof e||(s+=o*e.x,n+=o*e.y),this.x-=s,this.y-=n,this},e.prototype.sub=function(t){return this.x-=t.x,this.y-=t.y,this},e.prototype.mul=function(t){return this.x*=t,this.y*=t,this},e.prototype.length=function(){return e.lengthOf(this)},e.prototype.lengthSquared=function(){return e.lengthSquared(this)},e.prototype.normalize=function(){var t=this.length();if(t<s.EPSILON)return 0;var i=1/t;return this.x*=i,this.y*=i,t},e.lengthOf=function(t){return s.sqrt(t.x*t.x+t.y*t.y)},e.lengthSquared=function(t){return t.x*t.x+t.y*t.y},e.distance=function(t,i){var o=t.x-i.x,e=t.y-i.y;return s.sqrt(o*o+e*e)},e.distanceSquared=function(t,i){var o=t.x-i.x,e=t.y-i.y;return o*o+e*e},e.areEqual=function(t,i){return t==i||"object"==typeof i&&null!==i&&t.x==i.x&&t.y==i.y},e.skew=function(t){return e.neo(-t.y,t.x)},e.dot=function(t,i){return t.x*i.x+t.y*i.y},e.cross=function(t,i){return"number"==typeof i?e.neo(i*t.y,-i*t.x):"number"==typeof t?e.neo(-t*i.y,t*i.x):t.x*i.y-t.y*i.x},e.addCross=function(t,i,o){return"number"==typeof o?e.neo(o*i.y+t.x,-o*i.x+t.y):"number"==typeof i?e.neo(-i*o.y+t.x,i*o.x+t.y):void 0},e.add=function(t,i){return e.neo(t.x+i.x,t.y+i.y)},e.wAdd=function(t,i,o,s){var n=e.zero();return n.wAdd(t,i,o,s),n},e.sub=function(t,i){return e.neo(t.x-i.x,t.y-i.y)},e.mul=function(t,i){return"object"==typeof t?e.neo(t.x*i,t.y*i):"object"==typeof i?e.neo(t*i.x,t*i.y):void 0},e.prototype.neg=function(){return this.x=-this.x,this.y=-this.y,this},e.neg=function(t){return e.neo(-t.x,-t.y)},e.abs=function(t){return e.neo(s.abs(t.x),s.abs(t.y))},e.mid=function(t,i){return e.neo(.5*(t.x+i.x),.5*(t.y+i.y))},e.upper=function(t,i){return e.neo(s.max(t.x,i.x),s.max(t.y,i.y))},e.lower=function(t,i){return e.neo(s.min(t.x,i.x),s.min(t.y,i.y))},e.prototype.clamp=function(t){var i=this.x*this.x+this.y*this.y;if(i>t*t){var o=s.invSqrt(i);this.x*=o*t,this.y*=o*t}return this},e.clamp=function(t,i){return t=e.neo(t.x,t.y),t.clamp(i),t}},{"../util/common":50,"./Math":18}],24:[function(t,i,o){function e(t,i,o){return this instanceof e?void("undefined"==typeof t?(this.x=0,this.y=0,this.z=0):"object"==typeof t?(this.x=t.x,this.y=t.y,this.z=t.z):(this.x=t,this.y=i,this.z=o)):new e(t,i,o)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("./Math"));e.prototype.toString=function(){return JSON.stringify(this)},e.isValid=function(t){return t&&s.isFinite(t.x)&&s.isFinite(t.y)&&s.isFinite(t.z)},e.assert=function(t){},e.prototype.setZero=function(){return this.x=0,this.y=0,this.z=0,this},e.prototype.set=function(t,i,o){return this.x=t,this.y=i,this.z=o,this},e.prototype.add=function(t){return this.x+=t.x,this.y+=t.y,this.z+=t.z,this},e.prototype.sub=function(t){return this.x-=t.x,this.y-=t.y,this.z-=t.z,this},e.prototype.mul=function(t){return this.x*=t,this.y*=t,this.z*=t,this},e.areEqual=function(t,i){return t==i||"object"==typeof i&&null!==i&&t.x==i.x&&t.y==i.y&&t.z==i.z},e.dot=function(t,i){return t.x*i.x+t.y*i.y+t.z*i.z},e.cross=function(t,i){return new e(t.y*i.z-t.z*i.y,t.z*i.x-t.x*i.z,t.x*i.y-t.y*i.x)},e.add=function(t,i){return new e(t.x+i.x,t.y+i.y,t.z+i.z)},e.sub=function(t,i){return new e(t.x-i.x,t.y-i.y,t.z-i.z)},e.mul=function(t,i){return new e(i*t.x,i*t.y,i*t.z)},e.prototype.neg=function(t){return this.x=-this.x,this.y=-this.y,this.z=-this.z,this},e.neg=function(t){return new e((-t.x),(-t.y),(-t.z))}},{"../util/common":50,"./Math":18}],25:[function(t,i,o){function e(){this.v=s.zero(),this.w=0}DEBUG=!1,ASSERT=!1,i.exports=e;var s=t("./Vec2")},{"./Vec2":23}],26:[function(t,i,o){DEBUG=!1,ASSERT=!1,o.toString=function(t){t="string"==typeof t?t:"\n";var i="";for(var o in this)"function"!=typeof this[o]&&"object"!=typeof this[o]&&(i+=o+": "+this[o]+t);return i}},{}],27:[function(t,i,o){function e(t,i,o,n,r){return this instanceof e?(t=s(t,_),c.call(this,t,i,n),this.m_type=e.TYPE,this.m_localAnchorA=t.localAnchorA||i.getLocalPoint(o),this.m_localAnchorB=t.localAnchorB||n.getLocalPoint(r),this.m_length=a.distance(r,o),this.m_frequencyHz=t.frequencyHz,this.m_dampingRatio=t.dampingRatio,this.m_impulse=0,this.m_gamma=0,this.m_bias=0,this.m_u,this.m_rA,this.m_rB,this.m_localCenterA,this.m_localCenterB,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,void this.m_mass):new e(t,i,o,n,r)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=t("../util/options"),n=t("../util/create"),r=t("../Settings"),m=t("../common/Math"),a=t("../common/Vec2"),h=(t("../common/Vec3"),t("../common/Mat22"),t("../common/Mat33"),t("../common/Rot")),c=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint"));e.TYPE="distance-joint",e._super=c,e.prototype=n(e._super.prototype);var _={frequencyHz:0,dampingRatio:0};e.prototype.getLocalAnchorA=function(){return this.m_localAnchorA},e.prototype.getLocalAnchorB=function(){return this.m_localAnchorB},e.prototype.setLength=function(t){this.m_length=t},e.prototype.getLength=function(){return this.m_length},e.prototype.setFrequency=function(t){this.m_frequencyHz=t},e.prototype.getFrequency=function(){return this.m_frequencyHz},e.prototype.setDampingRatio=function(t){this.m_dampingRatio=t},e.prototype.getDampingRatio=function(){return this.m_dampingRatio},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){var i=a.mul(t*this.m_impulse,this.m_u);return i},e.prototype.getReactionTorque=function(t){return 0},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,
-this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyA.c_velocity.v,s=this.m_bodyA.c_velocity.w,n=this.m_bodyB.c_position.c,c=this.m_bodyB.c_position.a,_=this.m_bodyB.c_velocity.v,l=this.m_bodyB.c_velocity.w,u=h.neo(o),p=h.neo(c);this.m_rA=h.mul(u,a.sub(this.m_localAnchorA,this.m_localCenterA)),this.m_rB=h.mul(p,a.sub(this.m_localAnchorB,this.m_localCenterB)),this.m_u=a.sub(a.add(n,this.m_rB),a.add(i,this.m_rA));var y=this.m_u.length();y>r.linearSlop?this.m_u.mul(1/y):this.m_u.set(0,0);var d=a.cross(this.m_rA,this.m_u),v=a.cross(this.m_rB,this.m_u),f=this.m_invMassA+this.m_invIA*d*d+this.m_invMassB+this.m_invIB*v*v;if(this.m_mass=0!=f?1/f:0,this.m_frequencyHz>0){var A=y-this.m_length,x=2*m.PI*this.m_frequencyHz,g=2*this.m_mass*this.m_dampingRatio*x,b=this.m_mass*x*x,B=t.dt;this.m_gamma=B*(g+B*b),this.m_gamma=0!=this.m_gamma?1/this.m_gamma:0,this.m_bias=A*B*b*this.m_gamma,f+=this.m_gamma,this.m_mass=0!=f?1/f:0}else this.m_gamma=0,this.m_bias=0;if(t.warmStarting){this.m_impulse*=t.dtRatio;var w=a.mul(this.m_impulse,this.m_u);e.wSub(this.m_invMassA,w),s-=this.m_invIA*a.cross(this.m_rA,w),_.wAdd(this.m_invMassB,w),l+=this.m_invIB*a.cross(this.m_rB,w)}else this.m_impulse=0;this.m_bodyA.c_velocity.v.set(e),this.m_bodyA.c_velocity.w=s,this.m_bodyB.c_velocity.v.set(_),this.m_bodyB.c_velocity.w=l},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=a.add(i,a.cross(o,this.m_rA)),r=a.add(e,a.cross(s,this.m_rB)),m=a.dot(this.m_u,r)-a.dot(this.m_u,n),h=-this.m_mass*(m+this.m_bias+this.m_gamma*this.m_impulse);this.m_impulse+=h;var c=a.mul(h,this.m_u);i.wSub(this.m_invMassA,c),o-=this.m_invIA*a.cross(this.m_rA,c),e.wAdd(this.m_invMassB,c),s+=this.m_invIB*a.cross(this.m_rB,c),this.m_bodyA.c_velocity.v.set(i),this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v.set(e),this.m_bodyB.c_velocity.w=s},e.prototype.solvePositionConstraints=function(t){if(this.m_frequencyHz>0)return!0;var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyB.c_position.c,s=this.m_bodyB.c_position.a,n=h.neo(o),c=h.neo(s),_=h.mulSub(n,this.m_localAnchorA,this.m_localCenterA),l=h.mulSub(c,this.m_localAnchorB,this.m_localCenterB),u=a.sub(a.add(e,l),a.add(i,_)),p=u.normalize(),y=p-this.m_length;y=m.clamp(y,-r.maxLinearCorrection,r.maxLinearCorrection);var d=-this.m_mass*y,v=a.mul(d,u);return i.wSub(this.m_invMassA,v),o-=this.m_invIA*a.cross(_,v),e.wAdd(this.m_invMassB,v),s+=this.m_invIB*a.cross(l,v),this.m_bodyA.c_position.c.set(i),this.m_bodyA.c_position.a=o,this.m_bodyB.c_position.c.set(e),this.m_bodyB.c_position.a=s,m.abs(y)<r.linearSlop}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],28:[function(t,i,o){function e(t,i,o,n){return this instanceof e?(t=s(t,_),c.call(this,t,i,o),this.m_type=e.TYPE,n?(this.m_localAnchorA=i.getLocalPoint(n),this.m_localAnchorB=o.getLocalPoint(n)):(this.m_localAnchorA=m.zero(),this.m_localAnchorB=m.zero()),this.m_linearImpulse=m.zero(),this.m_angularImpulse=0,this.m_maxForce=t.maxForce,this.m_maxTorque=t.maxTorque,this.m_rA,this.m_rB,this.m_localCenterA,this.m_localCenterB,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,this.m_linearMass,void this.m_angularMass):new e(t,i,o,n)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/options")),n=t("../util/create"),r=(t("../Settings"),t("../common/Math")),m=t("../common/Vec2"),a=(t("../common/Vec3"),t("../common/Mat22")),h=(t("../common/Mat33"),t("../common/Rot")),c=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint"));e.TYPE="friction-joint",e._super=c,e.prototype=n(e._super.prototype);var _={maxForce:0,maxTorque:0};e.prototype.getLocalAnchorA=function(){return this.m_localAnchorA},e.prototype.getLocalAnchorB=function(){return this.m_localAnchorB},e.prototype.setMaxForce=function(t){this.m_maxForce=t},e.prototype.getMaxForce=function(){return this.m_maxForce},e.prototype.setMaxTorque=function(t){this.m_maxTorque=t},e.prototype.getMaxTorque=function(){return this.m_maxTorque},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){return t*this.m_linearImpulse},e.prototype.getReactionTorque=function(t){return t*this.m_angularImpulse},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyA.c_position.a,o=this.m_bodyA.c_velocity.v,e=this.m_bodyA.c_velocity.w,s=this.m_bodyB.c_position.a,n=this.m_bodyB.c_velocity.v,r=this.m_bodyB.c_velocity.w,c=h.neo(i),_=h.neo(s);this.m_rA=h.mul(c,m.sub(this.m_localAnchorA,this.m_localCenterA)),this.m_rB=h.mul(_,m.sub(this.m_localAnchorB,this.m_localCenterB));var l=this.m_invMassA,u=this.m_invMassB,p=this.m_invIA,y=this.m_invIB,d=new a;if(d.ex.x=l+u+p*this.m_rA.y*this.m_rA.y+y*this.m_rB.y*this.m_rB.y,d.ex.y=-p*this.m_rA.x*this.m_rA.y-y*this.m_rB.x*this.m_rB.y,d.ey.x=d.ex.y,d.ey.y=l+u+p*this.m_rA.x*this.m_rA.x+y*this.m_rB.x*this.m_rB.x,this.m_linearMass=d.getInverse(),this.m_angularMass=p+y,this.m_angularMass>0&&(this.m_angularMass=1/this.m_angularMass),t.warmStarting){this.m_linearImpulse.mul(t.dtRatio),this.m_angularImpulse*=t.dtRatio;var v=m.neo(this.m_linearImpulse.x,this.m_linearImpulse.y);o.wSub(l,v),e-=p*(m.cross(this.m_rA,v)+this.m_angularImpulse),n.wAdd(u,v),r+=y*(m.cross(this.m_rB,v)+this.m_angularImpulse)}else this.m_linearImpulse.setZero(),this.m_angularImpulse=0;this.m_bodyA.c_velocity.v=o,this.m_bodyA.c_velocity.w=e,this.m_bodyB.c_velocity.v=n,this.m_bodyB.c_velocity.w=r},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=this.m_invMassA,h=this.m_invMassB,c=this.m_invIA,_=this.m_invIB,l=t.dt,u=s-o,p=-this.m_angularMass*u,y=this.m_angularImpulse,d=l*this.m_maxTorque;this.m_angularImpulse=r.clamp(this.m_angularImpulse+p,-d,d),p=this.m_angularImpulse-y,o-=c*p,s+=_*p;var u=m.sub(m.add(e,m.cross(s,this.m_rB)),m.add(i,m.cross(o,this.m_rA))),p=m.neg(a.mul(this.m_linearMass,u)),y=this.m_linearImpulse;this.m_linearImpulse.add(p);var d=l*this.m_maxForce;this.m_linearImpulse.lengthSquared()>d*d&&(this.m_linearImpulse.normalize(),this.m_linearImpulse.mul(d)),p=m.sub(this.m_linearImpulse,y),i.wSub(n,p),o-=c*m.cross(this.m_rA,p),e.wAdd(h,p),s+=_*m.cross(this.m_rB,p),this.m_bodyA.c_velocity.v=i,this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v=e,this.m_bodyB.c_velocity.w=s},e.prototype.solvePositionConstraints=function(t){return!0}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],29:[function(t,i,o){function e(t,i,o,n,r,l){if(!(this instanceof e))return new e(t,i,o,n,r,l);t=s(t,_),h.call(this,t,i,o),this.m_type=e.TYPE,this.m_joint1=n,this.m_joint2=r,this.m_type1=this.m_joint1.getType(),this.m_type2=this.m_joint2.getType();var u,p;this.m_bodyC=this.m_joint1.getBodyA(),this.m_bodyA=this.m_joint1.getBodyB();var y=this.m_bodyA.m_xf,d=this.m_bodyA.m_sweep.a,v=this.m_bodyC.m_xf,f=this.m_bodyC.m_sweep.a;if(this.m_type1==c.TYPE){var A=n;this.m_localAnchorC=A.m_localAnchorA,this.m_localAnchorA=A.m_localAnchorB,this.m_referenceAngleA=A.m_referenceAngle,this.m_localAxisC=m.zero(),u=d-f-this.m_referenceAngleA}else{var x=n;this.m_localAnchorC=x.m_localAnchorA,this.m_localAnchorA=x.m_localAnchorB,this.m_referenceAngleA=x.m_referenceAngle,this.m_localAxisC=x.m_localXAxisA;var g=this.m_localAnchorC,b=a.mulT(v.q,m.add(a.mul(y.q,this.m_localAnchorA),m.sub(y.p,v.p)));u=m.dot(b,this.m_localAxisC)-m.dot(g,this.m_localAxisC)}this.m_bodyD=this.m_joint2.getBodyA(),this.m_bodyB=this.m_joint2.getBodyB();var B=this.m_bodyB.m_xf,w=this.m_bodyB.m_sweep.a,S=this.m_bodyD.m_xf,C=this.m_bodyD.m_sweep.a;if(this.m_type2==c.TYPE){var A=r;this.m_localAnchorD=A.m_localAnchorA,this.m_localAnchorB=A.m_localAnchorB,this.m_referenceAngleB=A.m_referenceAngle,this.m_localAxisD=m.zero(),p=w-C-this.m_referenceAngleB}else{var x=r;this.m_localAnchorD=x.m_localAnchorA,this.m_localAnchorB=x.m_localAnchorB,this.m_referenceAngleB=x.m_referenceAngle,this.m_localAxisD=x.m_localXAxisA;var M=this.m_localAnchorD,I=a.mulT(S.q,m.add(a.mul(B.q,this.m_localAnchorB),m.sub(B.p,S.p)));p=m.dot(I,this.m_localAxisD)-m.dot(M,this.m_localAxisD)}this.m_ratio=l||t.ratio,this.m_constant=u+this.m_ratio*p,this.m_impulse=0,this.m_lcA,this.m_lcB,this.m_lcC,this.m_lcD,this.m_mA,this.m_mB,this.m_mC,this.m_mD,this.m_iA,this.m_iB,this.m_iC,this.m_iD,this.m_JvAC,this.m_JvBD,this.m_JwA,this.m_JwB,this.m_JwC,this.m_JwD,this.m_mass}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/options")),n=t("../util/create"),r=t("../Settings"),m=(t("../common/Math"),t("../common/Vec2")),a=(t("../common/Vec3"),t("../common/Mat22"),t("../common/Mat33"),t("../common/Rot")),h=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint")),c=t("./RevoluteJoint");t("./PrismaticJoint");e.TYPE="gear-joint",e._super=h,e.prototype=n(e._super.prototype);var _={ratio:1};e.prototype.getJoint1=function(){return this.m_joint1},e.prototype.getJoint2=function(){return this.m_joint2},e.prototype.setRatio=function(t){this.m_ratio=t},e.prototype.setRatio=function(){return this.m_ratio},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){var i=this.m_impulse*this.m_JvAC;return t*i},e.prototype.getReactionTorque=function(t){var i=this.m_impulse*this.m_JwA;return t*i},e.prototype.initVelocityConstraints=function(t){this.m_lcA=this.m_bodyA.m_sweep.localCenter,this.m_lcB=this.m_bodyB.m_sweep.localCenter,this.m_lcC=this.m_bodyC.m_sweep.localCenter,this.m_lcD=this.m_bodyD.m_sweep.localCenter,this.m_mA=this.m_bodyA.m_invMass,this.m_mB=this.m_bodyB.m_invMass,this.m_mC=this.m_bodyC.m_invMass,this.m_mD=this.m_bodyD.m_invMass,this.m_iA=this.m_bodyA.m_invI,this.m_iB=this.m_bodyB.m_invI,this.m_iC=this.m_bodyC.m_invI,this.m_iD=this.m_bodyD.m_invI;var i=this.m_bodyA.c_position.a,o=this.m_bodyA.c_velocity.v,e=this.m_bodyA.c_velocity.w,s=this.m_bodyB.c_position.a,n=this.m_bodyB.c_velocity.v,r=this.m_bodyB.c_velocity.w,h=this.m_bodyC.c_position.a,_=this.m_bodyC.c_velocity.v,l=this.m_bodyC.c_velocity.w,u=this.m_bodyD.c_position.a,p=this.m_bodyD.c_velocity.v,y=this.m_bodyD.c_velocity.w,d=a.neo(i),v=a.neo(s),f=a.neo(h),A=a.neo(u);if(this.m_mass=0,this.m_type1==c.TYPE)this.m_JvAC=m.zero(),this.m_JwA=1,this.m_JwC=1,this.m_mass+=this.m_iA+this.m_iC;else{var x=a.mul(f,this.m_localAxisC),g=a.mulSub(f,this.m_localAnchorC,this.m_lcC),b=a.mulSub(d,this.m_localAnchorA,this.m_lcA);this.m_JvAC=x,this.m_JwC=m.cross(g,x),this.m_JwA=m.cross(b,x),this.m_mass+=this.m_mC+this.m_mA+this.m_iC*this.m_JwC*this.m_JwC+this.m_iA*this.m_JwA*this.m_JwA}if(this.m_type2==c.TYPE)this.m_JvBD=m.zero(),this.m_JwB=this.m_ratio,this.m_JwD=this.m_ratio,this.m_mass+=this.m_ratio*this.m_ratio*(this.m_iB+this.m_iD);else{var x=a.mul(A,this.m_localAxisD),B=a.mulSub(A,this.m_localAnchorD,this.m_lcD),w=a.mulSub(v,this.m_localAnchorB,this.m_lcB);this.m_JvBD=m.mul(this.m_ratio,x),this.m_JwD=this.m_ratio*m.cross(B,x),this.m_JwB=this.m_ratio*m.cross(w,x),this.m_mass+=this.m_ratio*this.m_ratio*(this.m_mD+this.m_mB)+this.m_iD*this.m_JwD*this.m_JwD+this.m_iB*this.m_JwB*this.m_JwB}this.m_mass=this.m_mass>0?1/this.m_mass:0,t.warmStarting?(o.wAdd(this.m_mA*this.m_impulse,this.m_JvAC),e+=this.m_iA*this.m_impulse*this.m_JwA,n.wAdd(this.m_mB*this.m_impulse,this.m_JvBD),r+=this.m_iB*this.m_impulse*this.m_JwB,_.wSub(this.m_mC*this.m_impulse,this.m_JvAC),l-=this.m_iC*this.m_impulse*this.m_JwC,p.wSub(this.m_mD*this.m_impulse,this.m_JvBD),y-=this.m_iD*this.m_impulse*this.m_JwD):this.m_impulse=0,this.m_bodyA.c_velocity.v.set(o),this.m_bodyA.c_velocity.w=e,this.m_bodyB.c_velocity.v.set(n),this.m_bodyB.c_velocity.w=r,this.m_bodyC.c_velocity.v.set(_),this.m_bodyC.c_velocity.w=l,this.m_bodyD.c_velocity.v.set(p),this.m_bodyD.c_velocity.w=y},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=this.m_bodyC.c_velocity.v,r=this.m_bodyC.c_velocity.w,a=this.m_bodyD.c_velocity.v,h=this.m_bodyD.c_velocity.w,c=m.dot(this.m_JvAC,i)-m.dot(this.m_JvAC,n)+m.dot(this.m_JvBD,e)-m.dot(this.m_JvBD,a);c+=this.m_JwA*o-this.m_JwC*r+(this.m_JwB*s-this.m_JwD*h);var _=-this.m_mass*c;this.m_impulse+=_,i.wAdd(this.m_mA*_,this.m_JvAC),o+=this.m_iA*_*this.m_JwA,e.wAdd(this.m_mB*_,this.m_JvBD),s+=this.m_iB*_*this.m_JwB,n.wSub(this.m_mC*_,this.m_JvAC),r-=this.m_iC*_*this.m_JwC,a.wSub(this.m_mD*_,this.m_JvBD),h-=this.m_iD*_*this.m_JwD,this.m_bodyA.c_velocity.v.set(i),this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v.set(e),this.m_bodyB.c_velocity.w=s,this.m_bodyC.c_velocity.v.set(n),this.m_bodyC.c_velocity.w=r,this.m_bodyD.c_velocity.v.set(a),this.m_bodyD.c_velocity.w=h},e.prototype.solvePositionConstraints=function(t){var i,o,e,s,n,h,_,l,u=this.m_bodyA.c_position.c,p=this.m_bodyA.c_position.a,y=this.m_bodyB.c_position.c,d=this.m_bodyB.c_position.a,v=this.m_bodyC.c_position.c,f=this.m_bodyC.c_position.a,A=this.m_bodyD.c_position.c,x=this.m_bodyD.c_position.a,g=a.neo(p),b=a.neo(d),B=a.neo(f),w=a.neo(x),S=0,C=0;if(this.m_type1==c.TYPE)e=m.zero(),n=1,_=1,C+=this.m_iA+this.m_iC,i=p-f-this.m_referenceAngleA;else{var M=a.mul(B,this.m_localAxisC),I=a.mulSub(B,this.m_localAnchorC,this.m_lcC),T=a.mulSub(g,this.m_localAnchorA,this.m_lcA);e=M,_=m.cross(I,M),n=m.cross(T,M),C+=this.m_mC+this.m_mA+this.m_iC*_*_+this.m_iA*n*n;var P=this.m_localAnchorC-this.m_lcC,V=a.mulT(B,m.add(T,m.sub(u,v)));i=Dot(V-P,this.m_localAxisC)}if(this.m_type2==c.TYPE)s=m.zero(),h=this.m_ratio,l=this.m_ratio,C+=this.m_ratio*this.m_ratio*(this.m_iB+this.m_iD),o=d-x-this.m_referenceAngleB;else{var M=a.mul(w,this.m_localAxisD),z=a.mulSub(w,this.m_localAnchorD,this.m_lcD),L=a.mulSub(b,this.m_localAnchorB,this.m_lcB);s=m.mul(this.m_ratio,M),l=this.m_ratio*m.cross(z,M),h=this.m_ratio*m.cross(L,M),C+=this.m_ratio*this.m_ratio*(this.m_mD+this.m_mB)+this.m_iD*l*l+this.m_iB*h*h;var R=m.sub(this.m_localAnchorD,this.m_lcD),F=a.mulT(w,m.add(L,m.sub(y,A)));o=m.dot(F,this.m_localAxisD)-m.dot(R,this.m_localAxisD)}var D=i+this.m_ratio*o-this.m_constant,q=0;return C>0&&(q=-D/C),u.wAdd(this.m_mA*q,e),p+=this.m_iA*q*n,y.wAdd(this.m_mB*q,s),d+=this.m_iB*q*h,v.wAdd(this.m_mC*q,e),f-=this.m_iC*q*_,A.wAdd(this.m_mD*q,s),x-=this.m_iD*q*l,this.m_bodyA.c_position.c.set(u),this.m_bodyA.c_position.a=p,this.m_bodyB.c_position.c.set(y),this.m_bodyB.c_position.a=d,this.m_bodyC.c_position.c.set(v),this.m_bodyC.c_position.a=f,this.m_bodyD.c_position.c.set(A),this.m_bodyD.c_position.a=x,S<r.linearSlop}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52,"./PrismaticJoint":32,"./RevoluteJoint":34}],30:[function(t,i,o){function e(t,i,o){if(!(this instanceof e))return new e(t,i,o);t=s(t,_),c.call(this,t,i,o),this.m_type=e.TYPE;var n=o.getPosition();this.m_linearOffset=i.getLocalPoint(n);var r=i.getAngle(),a=o.getAngle();this.m_angularOffset=a-r,this.m_linearImpulse=m.zero(),this.m_angularImpulse=0,this.m_maxForce=t.maxForce,this.m_maxTorque=t.maxTorque,this.m_correctionFactor=t.correctionFactor,this.m_rA,this.m_rB,this.m_localCenterA,this.m_localCenterB,this.m_linearError,this.m_angularError,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,this.m_linearMass,this.m_angularMass}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/options")),n=t("../util/create"),r=(t("../Settings"),t("../common/Math")),m=t("../common/Vec2"),a=(t("../common/Vec3"),t("../common/Mat22")),h=(t("../common/Mat33"),t("../common/Rot")),c=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint"));e.TYPE="motor-joint",e._super=c,e.prototype=n(e._super.prototype);var _={maxForce:1,maxTorque:1,correctionFactor:.3};e.prototype.setMaxForce=function(t){this.m_maxForce=t},e.prototype.getMaxForce=function(){return this.m_maxForce},e.prototype.setMaxTorque=function(t){this.m_maxTorque=t},e.prototype.getMaxTorque=function(){return this.m_maxTorque},e.prototype.setCorrectionFactor=function(t){this.m_correctionFactor=t},e.prototype.getCorrectionFactor=function(){return this.m_correctionFactor},e.prototype.setLinearOffset=function(t){t.x==this.m_linearOffset.x&&t.y==this.m_linearOffset.y||(this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_linearOffset=t)},e.prototype.getLinearOffset=function(){return this.m_linearOffset},e.prototype.setAngularOffset=function(t){t!=this.m_angularOffset&&(this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_angularOffset=t)},e.prototype.getAngularOffset=function(){return this.m_angularOffset},e.prototype.getAnchorA=function(){return this.m_bodyA.getPosition()},e.prototype.getAnchorB=function(){return this.m_bodyB.getPosition()},e.prototype.getReactionForce=function(t){return t*this.m_linearImpulse},e.prototype.getReactionTorque=function(t){return t*this.m_angularImpulse},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyA.c_velocity.v,s=this.m_bodyA.c_velocity.w,n=this.m_bodyB.c_position.c,r=this.m_bodyB.c_position.a,c=this.m_bodyB.c_velocity.v,_=this.m_bodyB.c_velocity.w,l=h.neo(o),u=h.neo(r);this.m_rA=h.mul(l,m.neg(this.m_localCenterA)),this.m_rB=h.mul(u,m.neg(this.m_localCenterB));var p=this.m_invMassA,y=this.m_invMassB,d=this.m_invIA,v=this.m_invIB,f=new a;if(f.ex.x=p+y+d*this.m_rA.y*this.m_rA.y+v*this.m_rB.y*this.m_rB.y,f.ex.y=-d*this.m_rA.x*this.m_rA.y-v*this.m_rB.x*this.m_rB.y,f.ey.x=f.ex.y,f.ey.y=p+y+d*this.m_rA.x*this.m_rA.x+v*this.m_rB.x*this.m_rB.x,this.m_linearMass=f.getInverse(),this.m_angularMass=d+v,this.m_angularMass>0&&(this.m_angularMass=1/this.m_angularMass),this.m_linearError=m.zero(),this.m_linearError.wAdd(1,n,1,this.m_rB),this.m_linearError.wSub(1,i,1,this.m_rA),this.m_linearError.sub(h.mul(l,this.m_linearOffset)),this.m_angularError=r-o-this.m_angularOffset,t.warmStarting){this.m_linearImpulse.mul(t.dtRatio),this.m_angularImpulse*=t.dtRatio;var A=m.neo(this.m_linearImpulse.x,this.m_linearImpulse.y);e.wSub(p,A),s-=d*(m.cross(this.m_rA,A)+this.m_angularImpulse),c.wAdd(y,A),_+=v*(m.cross(this.m_rB,A)+this.m_angularImpulse)}else this.m_linearImpulse.setZero(),this.m_angularImpulse=0;this.m_bodyA.c_velocity.v=e,this.m_bodyA.c_velocity.w=s,this.m_bodyB.c_velocity.v=c,this.m_bodyB.c_velocity.w=_},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=this.m_invMassA,h=this.m_invMassB,c=this.m_invIA,_=this.m_invIB,l=t.dt,u=t.inv_dt,p=s-o+u*this.m_correctionFactor*this.m_angularError,y=-this.m_angularMass*p,d=this.m_angularImpulse,v=l*this.m_maxTorque;this.m_angularImpulse=r.clamp(this.m_angularImpulse+y,-v,v),y=this.m_angularImpulse-d,o-=c*y,s+=_*y;var p=m.zero();p.wAdd(1,e,1,m.cross(s,this.m_rB)),p.wSub(1,i,1,m.cross(o,this.m_rA)),p.wAdd(u*this.m_correctionFactor,this.m_linearError);var y=m.neg(a.mul(this.m_linearMass,p)),d=m.clone(this.m_linearImpulse);this.m_linearImpulse.add(y);var v=l*this.m_maxForce;this.m_linearImpulse.clamp(v),y=m.sub(this.m_linearImpulse,d),i.wSub(n,y),o-=c*m.cross(this.m_rA,y),e.wAdd(h,y),s+=_*m.cross(this.m_rB,y),this.m_bodyA.c_velocity.v=i,this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v=e,this.m_bodyB.c_velocity.w=s},e.prototype.solvePositionConstraints=function(t){return!0}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],31:[function(t,i,o){function e(t,i,o,n){return this instanceof e?(t=s(t,l),_.call(this,t,i,o),this.m_type=e.TYPE,this.m_targetA=m.clone(n),this.m_localAnchorB=c.mulT(this.m_bodyB.getTransform(),this.m_targetA),this.m_maxForce=t.maxForce,this.m_impulse=m.zero(),this.m_frequencyHz=t.frequencyHz,this.m_dampingRatio=t.dampingRatio,this.m_beta=0,this.m_gamma=0,this.m_rB=m.zero(),this.m_localCenterB=m.zero(),this.m_invMassB=0,this.m_invIB=0,this.mass=new a,void(this.m_C=m.zero())):new e(t,i,o,n)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/options")),n=t("../util/create"),r=t("../common/Math"),m=t("../common/Vec2"),a=(t("../common/Vec3"),t("../common/Mat22")),h=(t("../common/Mat33"),t("../common/Rot")),c=(t("../common/Sweep"),t("../common/Transform")),_=(t("../common/Velocity"),t("../common/Position"),t("../Joint"));e.TYPE="mouse-joint",e._super=_,e.prototype=n(e._super.prototype);var l={maxForce:0,frequencyHz:5,dampingRatio:.7};e.prototype.setTarget=function(t){0==this.m_bodyB.isAwake()&&this.m_bodyB.setAwake(!0),this.m_targetA=m.clone(t)},e.prototype.getTarget=function(){return this.m_targetA},e.prototype.setMaxForce=function(t){this.m_maxForce=t},e.getMaxForce=function(){return this.m_maxForce},e.prototype.setFrequency=function(t){this.m_frequencyHz=t},e.prototype.getFrequency=function(){return this.m_frequencyHz},e.prototype.setDampingRatio=function(t){this.m_dampingRatio=t},e.prototype.getDampingRatio=function(){return this.m_dampingRatio},e.prototype.getAnchorA=function(){return m.clone(this.m_targetA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){return m.mul(t,this.m_impulse)},e.prototype.getReactionTorque=function(t){return 0*t},e.prototype.shiftOrigin=function(t){this.m_targetA.sub(t)},e.prototype.initVelocityConstraints=function(t){this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyB.c_position,o=this.m_bodyB.c_velocity,e=i.c,s=i.a,n=o.v,c=o.w,_=h.neo(s),l=this.m_bodyB.getMass(),u=2*r.PI*this.m_frequencyHz,p=2*l*this.m_dampingRatio*u,y=l*(u*u),d=t.dt;this.m_gamma=d*(p+d*y),0!=this.m_gamma&&(this.m_gamma=1/this.m_gamma),this.m_beta=d*y*this.m_gamma,this.m_rB=h.mul(_,m.sub(this.m_localAnchorB,this.m_localCenterB));var v=new a;v.ex.x=this.m_invMassB+this.m_invIB*this.m_rB.y*this.m_rB.y+this.m_gamma,v.ex.y=-this.m_invIB*this.m_rB.x*this.m_rB.y,v.ey.x=v.ex.y,v.ey.y=this.m_invMassB+this.m_invIB*this.m_rB.x*this.m_rB.x+this.m_gamma,this.m_mass=v.getInverse(),this.m_C.set(e),this.m_C.wAdd(1,this.m_rB,-1,this.m_targetA),this.m_C.mul(this.m_beta),c*=.98,t.warmStarting?(this.m_impulse.mul(t.dtRatio),n.wAdd(this.m_invMassB,this.m_impulse),c+=this.m_invIB*m.cross(this.m_rB,this.m_impulse)):this.m_impulse.setZero(),o.v.set(n),o.w=c},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyB.c_velocity,o=m.clone(i.v),e=i.w,s=m.cross(e,this.m_rB);s.add(o),s.wAdd(1,this.m_C,this.m_gamma,this.m_impulse),s.neg();var n=a.mul(this.m_mass,s),r=m.clone(this.m_impulse);this.m_impulse.add(n);var h=t.dt*this.m_maxForce;this.m_impulse.clamp(h),n=m.sub(this.m_impulse,r),o.wAdd(this.m_invMassB,n),e+=this.m_invIB*m.cross(this.m_rB,n),i.v.set(o),i.w=e},e.prototype.solvePositionConstraints=function(t){return!0}},{"../Joint":5,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],32:[function(t,i,o){function e(t,i,o,n,r){return this instanceof e?(t=s(t,f),u.call(this,t,i,o),this.m_type=e.TYPE,this.m_localAnchorA=t.localAnchorA||i.getLocalPoint(n),this.m_localAnchorB=t.localAnchorB||o.getLocalPoint(n),this.m_localXAxisA=t.localAxisA||i.getLocalVector(r),this.m_localXAxisA.normalize(),this.m_localYAxisA=a.cross(1,this.m_localXAxisA),this.m_referenceAngle=o.getAngle()-i.getAngle(),this.m_impulse=h(),this.m_motorMass=0,this.m_motorImpulse=0,this.m_lowerTranslation=t.lowerTranslation,this.m_upperTranslation=t.upperTranslation,this.m_maxMotorForce=t.maxMotorForce,this.m_motorSpeed=t.motorSpeed,this.m_enableLimit=t.enableLimit,this.m_enableMotor=t.enableMotor,this.m_limitState=p,this.m_axis=a.zero(),this.m_perp=a.zero(),this.m_localCenterA,this.m_localCenterB,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,this.m_axis,this.m_perp,this.m_s1,this.m_s2,this.m_a1,this.m_a2,this.m_K=new _,void this.m_motorMass):new e(t,i,o,n,r)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/options")),n=t("../util/create"),r=t("../Settings"),m=t("../common/Math"),a=t("../common/Vec2"),h=t("../common/Vec3"),c=t("../common/Mat22"),_=t("../common/Mat33"),l=t("../common/Rot"),u=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint")),p=0,y=1,d=2,v=3;e.TYPE="prismatic-joint",e._super=u,e.prototype=n(e._super.prototype);var f={enableLimit:!1,lowerTranslation:0,upperTranslation:0,enableMotor:!1,maxMotorForce:0,motorSpeed:0};e.prototype.getLocalAnchorA=function(){return this.m_localAnchorA},e.prototype.getLocalAnchorB=function(){return this.m_localAnchorB},e.prototype.getLocalAxisA=function(){return this.m_localXAxisA},e.prototype.getReferenceAngle=function(){return this.m_referenceAngle},e.prototype.getJointTranslation=function(){var t=this.m_bodyA.getWorldPoint(this.m_localAnchorA),i=this.m_bodyB.getWorldPoint(this.m_localAnchorB),o=a.sub(i,t),e=this.m_bodyA.getWorldVector(this.m_localXAxisA),s=a.dot(o,e);return s},e.prototype.getJointSpeed=function(){var t=this.m_bodyA,i=this.m_bodyB,o=Mul(t.m_xf.q,this.m_localAnchorA-t.m_sweep.localCenter),e=Mul(i.m_xf.q,this.m_localAnchorB-i.m_sweep.localCenter),s=t.m_sweep.c+o,n=i.m_sweep.c+e,r=n-s,m=Mul(t.m_xf.q,this.m_localXAxisA),a=t.m_linearVelocity,h=i.m_linearVelocity,c=t.m_angularVelocity,_=i.m_angularVelocity,l=Dot(r,Cross(c,m))+Dot(m,h+Cross(_,e)-a-Cross(c,o));return l},e.prototype.isLimitEnabled=function(){return this.m_enableLimit},e.prototype.enableLimit=function(t){t!=this.m_enableLimit&&(this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_enableLimit=t,this.m_impulse.z=0)},e.prototype.getLowerLimit=function(){return this.m_lowerTranslation},e.prototype.getUpperLimit=function(){return this.m_upperTranslation},e.prototype.setLimits=function(t,i){t==this.m_lowerTranslation&&i==this.m_upperTranslation||(this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_lowerTranslation=t,this.m_upperTranslation=i,this.m_impulse.z=0)},e.prototype.isMotorEnabled=function(){return this.m_enableMotor},e.prototype.enableMotor=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_enableMotor=t},e.prototype.setMotorSpeed=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_motorSpeed=t},e.prototype.setMaxMotorForce=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_maxMotorForce=t},e.prototype.getMotorSpeed=function(){return this.m_motorSpeed},e.prototype.getMotorForce=function(t){return t*this.m_motorImpulse},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){return t*(this.m_impulse.x*this.m_perp+(this.m_motorImpulse+this.m_impulse.z)*this.m_axis)},e.prototype.getReactionTorque=function(t){return t*this.m_impulse.y},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyA.c_velocity.v,s=this.m_bodyA.c_velocity.w,n=this.m_bodyB.c_position.c,h=this.m_bodyB.c_position.a,c=this.m_bodyB.c_velocity.v,_=this.m_bodyB.c_velocity.w,u=l.neo(o),f=l.neo(h),A=l.mul(u,a.sub(this.m_localAnchorA,this.m_localCenterA)),x=l.mul(f,a.sub(this.m_localAnchorB,this.m_localCenterB)),g=a.zero();g.wAdd(1,n,1,x),g.wSub(1,i,1,A);var b=this.m_invMassA,B=this.m_invMassB,w=this.m_invIA,S=this.m_invIB;this.m_axis=l.mul(u,this.m_localXAxisA),this.m_a1=a.cross(a.add(g,A),this.m_axis),this.m_a2=a.cross(x,this.m_axis),this.m_motorMass=b+B+w*this.m_a1*this.m_a1+S*this.m_a2*this.m_a2,this.m_motorMass>0&&(this.m_motorMass=1/this.m_motorMass),this.m_perp=l.mul(u,this.m_localYAxisA),this.m_s1=a.cross(a.add(g,A),this.m_perp),this.m_s2=a.cross(x,this.m_perp);var C=(a.cross(A,this.m_perp),b+B+w*this.m_s1*this.m_s1+S*this.m_s2*this.m_s2),M=w*this.m_s1+S*this.m_s2,I=w*this.m_s1*this.m_a1+S*this.m_s2*this.m_a2,T=w+S;0==T&&(T=1);var P=w*this.m_a1+S*this.m_a2,V=b+B+w*this.m_a1*this.m_a1+S*this.m_a2*this.m_a2;if(this.m_K.ex.set(C,M,I),this.m_K.ey.set(M,T,P),this.m_K.ez.set(I,P,V),this.m_enableLimit){var z=a.dot(this.m_axis,g);m.abs(this.m_upperTranslation-this.m_lowerTranslation)<2*r.linearSlop?this.m_limitState=v:z<=this.m_lowerTranslation?this.m_limitState!=y&&(this.m_limitState=y,this.m_impulse.z=0):z>=this.m_upperTranslation?this.m_limitState!=d&&(this.m_limitState=d,this.m_impulse.z=0):(this.m_limitState=p,this.m_impulse.z=0)}else this.m_limitState=p,this.m_impulse.z=0;if(0==this.m_enableMotor&&(this.m_motorImpulse=0),t.warmStarting){this.m_impulse.mul(t.dtRatio),this.m_motorImpulse*=t.dtRatio;var L=a.wAdd(this.m_impulse.x,this.m_perp,this.m_motorImpulse+this.m_impulse.z,this.m_axis),R=this.m_impulse.x*this.m_s1+this.m_impulse.y+(this.m_motorImpulse+this.m_impulse.z)*this.m_a1,F=this.m_impulse.x*this.m_s2+this.m_impulse.y+(this.m_motorImpulse+this.m_impulse.z)*this.m_a2;e.wSub(b,L),s-=w*R,c.wAdd(B,L),_+=S*F}else this.m_impulse.setZero(),this.m_motorImpulse=0;this.m_bodyA.c_velocity.v.set(e),this.m_bodyA.c_velocity.w=s,this.m_bodyB.c_velocity.v.set(c),this.m_bodyB.c_velocity.w=_},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=this.m_invMassA,r=this.m_invMassB,c=this.m_invIA,_=this.m_invIB;if(this.m_enableMotor&&this.m_limitState!=v){var l=a.dot(this.m_axis,a.sub(e,i))+this.m_a2*s-this.m_a1*o,u=this.m_motorMass*(this.m_motorSpeed-l),f=this.m_motorImpulse,A=t.dt*this.m_maxMotorForce;this.m_motorImpulse=m.clamp(this.m_motorImpulse+u,-A,A),u=this.m_motorImpulse-f;var x=a.zero().wSet(u,this.m_axis),g=u*this.m_a1,b=u*this.m_a2;i.wSub(n,x),o-=c*g,e.wAdd(r,x),s+=_*b}var B=a.zero();if(B.x+=a.dot(this.m_perp,e)+this.m_s2*s,B.x-=a.dot(this.m_perp,i)+this.m_s1*o,B.y=s-o,this.m_enableLimit&&this.m_limitState!=p){
-var w=0;w+=a.dot(this.m_axis,e)+this.m_a2*s,w-=a.dot(this.m_axis,i)+this.m_a1*o;var l=h(B.x,B.y,w),S=h(this.m_impulse),C=this.m_K.solve33(h.neg(l));this.m_impulse.add(C),this.m_limitState==y?this.m_impulse.z=m.max(this.m_impulse.z,0):this.m_limitState==d&&(this.m_impulse.z=m.min(this.m_impulse.z,0));var M=a.wAdd(-1,B,-(this.m_impulse.z-S.z),a.neo(this.m_K.ez.x,this.m_K.ez.y)),I=a.add(this.m_K.solve22(M),a.neo(S.x,S.y));this.m_impulse.x=I.x,this.m_impulse.y=I.y,C=h.sub(this.m_impulse,S);var x=a.wAdd(C.x,this.m_perp,C.z,this.m_axis),g=C.x*this.m_s1+C.y+C.z*this.m_a1,b=C.x*this.m_s2+C.y+C.z*this.m_a2;i.wSub(n,x),o-=c*g,e.wAdd(r,x),s+=_*b}else{var C=this.m_K.solve22(a.neg(B));this.m_impulse.x+=C.x,this.m_impulse.y+=C.y;var x=a.zero().wAdd(C.x,this.m_perp),g=C.x*this.m_s1+C.y,b=C.x*this.m_s2+C.y;i.wSub(n,x),o-=c*g,e.wAdd(r,x),s+=_*b}this.m_bodyA.c_velocity.v=i,this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v=e,this.m_bodyB.c_velocity.w=s},e.prototype.solvePositionConstraints=function(t){var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyB.c_position.c,s=this.m_bodyB.c_position.a,n=l.neo(o),u=l.neo(s),p=this.m_invMassA,y=this.m_invMassB,d=this.m_invIA,v=this.m_invIB,f=l.mul(n,a.sub(this.m_localAnchorA,this.m_localCenterA)),A=l.mul(u,a.sub(this.m_localAnchorB,this.m_localCenterB)),x=a.sub(a.add(e,A),a.add(i,f)),g=l.mul(n,this.m_localXAxisA),b=a.cross(a.add(x,f),g),B=a.cross(A,g),w=l.mul(n,this.m_localYAxisA),S=a.cross(a.add(x,f),w),C=a.cross(A,w),M=h(),I=a.zero();I.x=a.dot(w,x),I.y=s-o-this.m_referenceAngle;var T=m.abs(I.x),P=m.abs(I.y),V=r.linearSlop,z=r.maxLinearCorrection,L=!1,R=0;if(this.m_enableLimit){var F=a.dot(g,x);m.abs(this.m_upperTranslation-this.m_lowerTranslation)<2*V?(R=m.clamp(F,-z,z),T=m.max(T,m.abs(F)),L=!0):F<=this.m_lowerTranslation?(R=m.clamp(F-this.m_lowerTranslation+V,-z,0),T=m.max(T,this.m_lowerTranslation-F),L=!0):F>=this.m_upperTranslation&&(R=m.clamp(F-this.m_upperTranslation-V,0,z),T=m.max(T,F-this.m_upperTranslation),L=!0)}if(L){var D=p+y+d*S*S+v*C*C,q=d*S+v*C,E=d*S*b+v*C*B,k=d+v;0==k&&(k=1);var j=d*b+v*B,J=p+y+d*b*b+v*B*B,O=new _;O.ex.set(D,q,E),O.ey.set(q,k,j),O.ez.set(E,j,J);var N=h();N.x=I.x,N.y=I.y,N.z=R,M=O.solve33(h.neg(N))}else{var D=p+y+d*S*S+v*C*C,q=d*S+v*C,k=d+v;0==k&&(k=1);var O=new c;O.ex.set(D,q),O.ey.set(q,k);var G=O.solve(a.neg(I));M.x=G.x,M.y=G.y,M.z=0}var U=a.wAdd(M.x,w,M.z,g),W=M.x*S+M.y+M.z*b,Y=M.x*C+M.y+M.z*B;return i.wSub(p,U),o-=d*W,e.wAdd(y,U),s+=v*Y,this.m_bodyA.c_position.c=i,this.m_bodyA.c_position.a=o,this.m_bodyB.c_position.c=e,this.m_bodyB.c_position.a=s,T<=r.linearSlop&&P<=r.angularSlop}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],33:[function(t,i,o){function e(t,i,o,n,r,m,h,c){return this instanceof e?(t=s(t,l),_.call(this,t,i,o),this.m_type=e.TYPE,this.m_groundAnchorA=n,this.m_groundAnchorB=r,this.m_localAnchorA=i.getLocalPoint(m),this.m_localAnchorB=o.getLocalPoint(h),this.m_lengthA=a.distance(m,n),this.m_lengthB=a.distance(h,r),this.m_ratio=t.ratio||c,this.m_constant=this.m_lengthA+this.m_ratio*this.m_lengthB,this.m_impulse=0,this.m_uA,this.m_uB,this.m_rA,this.m_rB,this.m_localCenterA,this.m_localCenterB,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,void this.m_mass):new e(t,i,o,n,r,m,h,c)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/options")),n=t("../util/create"),r=t("../Settings"),m=t("../common/Math"),a=t("../common/Vec2"),h=t("../common/Vec3"),c=(t("../common/Mat22"),t("../common/Mat33"),t("../common/Rot")),_=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint"));e.TYPE="pulley-joint",e.MIN_PULLEY_LENGTH=2,e._super=_,e.prototype=n(e._super.prototype);var l={collideConnected:!0};e.prototype.getGroundAnchorA=function(){return this.m_groundAnchorA},e.prototype.getGroundAnchorB=function(){return this.m_groundAnchorB},e.prototype.getLengthA=function(){return this.m_lengthA},e.prototype.getLengthB=function(){return this.m_lengthB},e.prototype.setRatio=function(){return this.m_ratio},e.prototype.getCurrentLengthA=function(){var t=this.m_bodyA.getWorldPoint(this.m_localAnchorA),i=this.m_groundAnchorA;return a.distance(t,i)},e.prototype.getCurrentLengthB=function(){var t=this.m_bodyB.getWorldPoint(this.m_localAnchorB),i=this.m_groundAnchorB;return a.distance(t,i)},e.prototype.shiftOrigin=function(t){this.m_groundAnchorA-=t,this.m_groundAnchorB-=t},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){return h.mul(t*this.m_impulse,this.m_uB)},e.prototype.getReactionTorque=function(t){return 0},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyA.c_velocity.v,s=this.m_bodyA.c_velocity.w,n=this.m_bodyB.c_position.c,m=this.m_bodyB.c_position.a,h=this.m_bodyB.c_velocity.v,_=this.m_bodyB.c_velocity.w,l=c.neo(o),u=c.neo(m);this.m_rA=c.mul(l,a.sub(this.m_localAnchorA,this.m_localCenterA)),this.m_rB=c.mul(u,a.sub(this.m_localAnchorB,this.m_localCenterB)),this.m_uA=a.sub(a.add(i,this.m_rA),this.m_groundAnchorA),this.m_uB=a.sub(a.add(n,this.m_rB),this.m_groundAnchorB);var p=this.m_uA.length(),y=this.m_uB.length();p>10*r.linearSlop?this.m_uA.mul(1/p):this.m_uA.setZero(),y>10*r.linearSlop?this.m_uB.mul(1/y):this.m_uB.setZero();var d=a.cross(this.m_rA,this.m_uA),v=a.cross(this.m_rB,this.m_uB),f=this.m_invMassA+this.m_invIA*d*d,A=this.m_invMassB+this.m_invIB*v*v;if(this.m_mass=f+this.m_ratio*this.m_ratio*A,this.m_mass>0&&(this.m_mass=1/this.m_mass),t.warmStarting){this.m_impulse*=t.dtRatio;var x=a.mul(-this.m_impulse,this.m_uA),g=a.mul(-this.m_ratio*this.m_impulse,this.m_uB);e.wAdd(this.m_invMassA,x),s+=this.m_invIA*a.cross(this.m_rA,x),h.wAdd(this.m_invMassB,g),_+=this.m_invIB*a.cross(this.m_rB,g)}else this.m_impulse=0;this.m_bodyA.c_velocity.v=e,this.m_bodyA.c_velocity.w=s,this.m_bodyB.c_velocity.v=h,this.m_bodyB.c_velocity.w=_},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=a.add(i,a.cross(o,this.m_rA)),r=a.add(e,a.cross(s,this.m_rB)),m=-a.dot(this.m_uA,n)-this.m_ratio*a.dot(this.m_uB,r),h=-this.m_mass*m;this.m_impulse+=h;var c=a.zero().wSet(-h,this.m_uA),_=a.zero().wSet(-this.m_ratio*h,this.m_uB);i.wAdd(this.m_invMassA,c),o+=this.m_invIA*a.cross(this.m_rA,c),e.wAdd(this.m_invMassB,_),s+=this.m_invIB*a.cross(this.m_rB,_),this.m_bodyA.c_velocity.v=i,this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v=e,this.m_bodyB.c_velocity.w=s},e.prototype.solvePositionConstraints=function(t){var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyB.c_position.c,s=this.m_bodyB.c_position.a,n=c.neo(o),h=c.neo(s),_=c.mul(n,a.sub(this.m_localAnchorA,this.m_localCenterA)),l=c.mul(h,a.sub(this.m_localAnchorB,this.m_localCenterB)),u=a.sub(a.add(i,this.m_rA),this.m_groundAnchorA),p=a.sub(a.add(e,this.m_rB),this.m_groundAnchorB),y=u.length(),d=p.length();y>10*r.linearSlop?u.mul(1/y):u.setZero(),d>10*r.linearSlop?p.mul(1/d):p.setZero();var v=a.cross(_,u),f=a.cross(l,p),A=this.m_invMassA+this.m_invIA*v*v,x=this.m_invMassB+this.m_invIB*f*f,g=A+this.m_ratio*this.m_ratio*x;g>0&&(g=1/g);var b=this.m_constant-y-this.m_ratio*d,B=m.abs(b),w=-g*b,S=a.zero().wSet(-w,u),C=a.zero().wSet(-this.m_ratio*w,p);return i.wAdd(this.m_invMassA,S),o+=this.m_invIA*a.cross(_,S),e.wAdd(this.m_invMassB,C),s+=this.m_invIB*a.cross(l,C),this.m_bodyA.c_position.c=i,this.m_bodyA.c_position.a=o,this.m_bodyB.c_position.c=e,this.m_bodyB.c_position.a=s,B<r.linearSlop}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],34:[function(t,i,o){function e(t,i,o,n){return this instanceof e?(t=s(t,f),u.call(this,t,i,o),this.m_type=e.TYPE,this.m_localAnchorA=t.localAnchorA||i.getLocalPoint(n),this.m_localAnchorB=t.localAnchorB||o.getLocalPoint(n),this.m_referenceAngle=o.getAngle()-i.getAngle(),this.m_impulse=h(),this.m_motorImpulse=0,this.m_lowerAngle=t.lowerAngle,this.m_upperAngle=t.upperAngle,this.m_maxMotorTorque=t.maxMotorTorque,this.m_motorSpeed=t.motorSpeed,this.m_enableLimit=t.enableLimit,this.m_enableMotor=t.enableMotor,this.m_rA,this.m_rB,this.m_localCenterA,this.m_localCenterB,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,this.m_mass=new _,this.m_motorMass,void(this.m_limitState=p)):new e(t,i,o,n)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/options")),n=t("../util/create"),r=t("../Settings"),m=t("../common/Math"),a=t("../common/Vec2"),h=t("../common/Vec3"),c=t("../common/Mat22"),_=t("../common/Mat33"),l=t("../common/Rot"),u=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint")),p=0,y=1,d=2,v=3;e.TYPE="revolute-joint",e._super=u,e.prototype=n(e._super.prototype);var f={lowerAngle:0,upperAngle:0,maxMotorTorque:0,motorSpeed:0,enableLimit:!1,enableMotor:!1};e.prototype.getLocalAnchorA=function(){return this.m_localAnchorA},e.prototype.getLocalAnchorB=function(){return this.m_localAnchorB},e.prototype.getReferenceAngle=function(){return this.m_referenceAngle},e.prototype.getJointAngle=function(){var t=this.m_bodyA,i=this.m_bodyB;return i.m_sweep.a-t.m_sweep.a-this.m_referenceAngle},e.prototype.getJointSpeed=function(){var t=this.m_bodyA,i=this.m_bodyB;return i.m_angularVelocity-t.m_angularVelocity},e.prototype.isMotorEnabled=function(){return this.m_enableMotor},e.prototype.enableMotor=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_enableMotor=t},e.prototype.getMotorTorque=function(t){return t*this.m_motorImpulse},e.prototype.setMotorSpeed=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_motorSpeed=t},e.prototype.getMotorSpeed=function(){return this.m_motorSpeed},e.prototype.setMaxMotorTorque=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_maxMotorTorque=t},e.prototype.isLimitEnabled=function(){return this.m_enableLimit},e.prototype.enableLimit=function(t){t!=this.m_enableLimit&&(this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_enableLimit=t,this.m_impulse.z=0)},e.prototype.getLowerLimit=function(){return this.m_lowerAngle},e.prototype.getUpperLimit=function(){return this.m_upperAngle},e.prototype.setLimits=function(t,i){t==this.m_lowerAngle&&i==this.m_upperAngle||(this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_impulse.z=0,this.m_lowerAngle=t,this.m_upperAngle=i)},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){var i=a.neo(this.m_impulse.x,this.m_impulse.y);return t*i},e.prototype.getReactionTorque=function(t){return t*this.m_impulse.z},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyA.c_position.a,o=this.m_bodyA.c_velocity.v,e=this.m_bodyA.c_velocity.w,s=this.m_bodyB.c_position.a,n=this.m_bodyB.c_velocity.v,h=this.m_bodyB.c_velocity.w,c=l.neo(i),_=l.neo(s);this.m_rA=l.mul(c,a.sub(this.m_localAnchorA,this.m_localCenterA)),this.m_rB=l.mul(_,a.sub(this.m_localAnchorB,this.m_localCenterB));var u=this.m_invMassA,f=this.m_invMassB,A=this.m_invIA,x=this.m_invIB,g=A+x==0;if(this.m_mass.ex.x=u+f+this.m_rA.y*this.m_rA.y*A+this.m_rB.y*this.m_rB.y*x,this.m_mass.ey.x=-this.m_rA.y*this.m_rA.x*A-this.m_rB.y*this.m_rB.x*x,this.m_mass.ez.x=-this.m_rA.y*A-this.m_rB.y*x,this.m_mass.ex.y=this.m_mass.ey.x,this.m_mass.ey.y=u+f+this.m_rA.x*this.m_rA.x*A+this.m_rB.x*this.m_rB.x*x,this.m_mass.ez.y=this.m_rA.x*A+this.m_rB.x*x,this.m_mass.ex.z=this.m_mass.ez.x,this.m_mass.ey.z=this.m_mass.ez.y,this.m_mass.ez.z=A+x,this.m_motorMass=A+x,this.m_motorMass>0&&(this.m_motorMass=1/this.m_motorMass),(0==this.m_enableMotor||g)&&(this.m_motorImpulse=0),this.m_enableLimit&&0==g){var b=s-i-this.m_referenceAngle;m.abs(this.m_upperAngle-this.m_lowerAngle)<2*r.angularSlop?this.m_limitState=v:b<=this.m_lowerAngle?(this.m_limitState!=y&&(this.m_impulse.z=0),this.m_limitState=y):b>=this.m_upperAngle?(this.m_limitState!=d&&(this.m_impulse.z=0),this.m_limitState=d):(this.m_limitState=p,this.m_impulse.z=0)}else this.m_limitState=p;if(t.warmStarting){this.m_impulse.mul(t.dtRatio),this.m_motorImpulse*=t.dtRatio;var B=a.neo(this.m_impulse.x,this.m_impulse.y);o.wSub(u,B),e-=A*(a.cross(this.m_rA,B)+this.m_motorImpulse+this.m_impulse.z),n.wAdd(f,B),h+=x*(a.cross(this.m_rB,B)+this.m_motorImpulse+this.m_impulse.z)}else this.m_impulse.setZero(),this.m_motorImpulse=0;this.m_bodyA.c_velocity.v=o,this.m_bodyA.c_velocity.w=e,this.m_bodyB.c_velocity.v=n,this.m_bodyB.c_velocity.w=h},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=this.m_invMassA,r=this.m_invMassB,c=this.m_invIA,_=this.m_invIB,l=c+_==0;if(this.m_enableMotor&&this.m_limitState!=v&&0==l){var u=s-o-this.m_motorSpeed,f=-this.m_motorMass*u,A=this.m_motorImpulse,x=t.dt*this.m_maxMotorTorque;this.m_motorImpulse=m.clamp(this.m_motorImpulse+f,-x,x),f=this.m_motorImpulse-A,o-=c*f,s+=_*f}if(this.m_enableLimit&&this.m_limitState!=p&&0==l){var g=a.zero();g.wAdd(1,e,1,a.cross(s,this.m_rB)),g.wSub(1,i,1,a.cross(o,this.m_rA));var b=s-o,u=h(g.x,g.y,b),f=h.neg(this.m_mass.solve33(u));if(this.m_limitState==v)this.m_impulse.add(f);else if(this.m_limitState==y){var B=this.m_impulse.z+f.z;if(B<0){var w=a.wAdd(-1,g,this.m_impulse.z,a.neo(this.m_mass.ez.x,this.m_mass.ez.y)),S=this.m_mass.solve22(w);f.x=S.x,f.y=S.y,f.z=-this.m_impulse.z,this.m_impulse.x+=S.x,this.m_impulse.y+=S.y,this.m_impulse.z=0}else this.m_impulse.add(f)}else if(this.m_limitState==d){var B=this.m_impulse.z+f.z;if(B>0){var w=a.wAdd(-1,g,this.m_impulse.z,a.neo(this.m_mass.ez.x,this.m_mass.ez.y)),S=this.m_mass.solve22(w);f.x=S.x,f.y=S.y,f.z=-this.m_impulse.z,this.m_impulse.x+=S.x,this.m_impulse.y+=S.y,this.m_impulse.z=0}else this.m_impulse.add(f)}var C=a.neo(f.x,f.y);i.wSub(n,C),o-=c*(a.cross(this.m_rA,C)+f.z),e.wAdd(r,C),s+=_*(a.cross(this.m_rB,C)+f.z)}else{var u=a.zero();u.wAdd(1,e,1,a.cross(s,this.m_rB)),u.wSub(1,i,1,a.cross(o,this.m_rA));var f=this.m_mass.solve22(a.neg(u));this.m_impulse.x+=f.x,this.m_impulse.y+=f.y,i.wSub(n,f),o-=c*a.cross(this.m_rA,f),e.wAdd(r,f),s+=_*a.cross(this.m_rB,f)}this.m_bodyA.c_velocity.v=i,this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v=e,this.m_bodyB.c_velocity.w=s},e.prototype.solvePositionConstraints=function(t){var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyB.c_position.c,s=this.m_bodyB.c_position.a,n=l.neo(o),h=l.neo(s),_=0,u=0,f=this.m_invIA+this.m_invIB==0;if(this.m_enableLimit&&this.m_limitState!=p&&0==f){var A=s-o-this.m_referenceAngle,x=0;if(this.m_limitState==v){var g=m.clamp(A-this.m_lowerAngle,-r.maxAngularCorrection,r.maxAngularCorrection);x=-this.m_motorMass*g,_=m.abs(g)}else if(this.m_limitState==y){var g=A-this.m_lowerAngle;_=-g,g=m.clamp(g+r.angularSlop,-r.maxAngularCorrection,0),x=-this.m_motorMass*g}else if(this.m_limitState==d){var g=A-this.m_upperAngle;_=g,g=m.clamp(g-r.angularSlop,0,r.maxAngularCorrection),x=-this.m_motorMass*g}o-=this.m_invIA*x,s+=this.m_invIB*x}n.set(o),h.set(s);var b=l.mul(n,a.sub(this.m_localAnchorA,this.m_localCenterA)),B=l.mul(h,a.sub(this.m_localAnchorB,this.m_localCenterB)),g=a.zero();g.wAdd(1,e,1,B),g.wSub(1,i,1,b),u=g.length();var w=this.m_invMassA,S=this.m_invMassB,C=this.m_invIA,M=this.m_invIB,I=new c;I.ex.x=w+S+C*b.y*b.y+M*B.y*B.y,I.ex.y=-C*b.x*b.y-M*B.x*B.y,I.ey.x=I.ex.y,I.ey.y=w+S+C*b.x*b.x+M*B.x*B.x;var T=a.neg(I.solve(g));return i.wSub(w,T),o-=C*a.cross(b,T),e.wAdd(S,T),s+=M*a.cross(B,T),this.m_bodyA.c_position.c.set(i),this.m_bodyA.c_position.a=o,this.m_bodyB.c_position.c.set(e),this.m_bodyB.c_position.a=s,u<=r.linearSlop&&_<=r.angularSlop}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],35:[function(t,i,o){function e(t,i,o,n){return this instanceof e?(t=s(t,u),c.call(this,t,i,o),this.m_type=e.TYPE,this.m_localAnchorA=t.localAnchorA||i.getLocalPoint(n),this.m_localAnchorB=t.localAnchorB||o.getLocalPoint(n),this.m_maxLength=t.maxLength,this.m_mass=0,this.m_impulse=0,this.m_length=0,this.m_state=_,this.m_u,this.m_rA,this.m_rB,this.m_localCenterA,this.m_localCenterB,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,void this.m_mass):new e(t,i,o,n)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=t("../util/options"),n=t("../util/create"),r=t("../Settings"),m=t("../common/Math"),a=t("../common/Vec2"),h=(t("../common/Vec3"),t("../common/Mat22"),t("../common/Mat33"),t("../common/Rot")),c=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint")),_=0,l=2;e.TYPE="rope-joint",e._super=c,e.prototype=n(e._super.prototype);var u={maxLength:0};e.prototype.getLocalAnchorA=function(){return this.m_localAnchorA},e.prototype.getLocalAnchorB=function(){return this.m_localAnchorB},e.prototype.setMaxLength=function(t){this.m_maxLength=t},e.prototype.getMaxLength=function(){return this.m_maxLength},e.prototype.getLimitState=function(){return this.m_state},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){var i=t*this.m_impulse*this.m_u;return i},e.prototype.getReactionTorque=function(t){return 0},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyA.c_velocity.v,s=this.m_bodyA.c_velocity.w,n=this.m_bodyB.c_position.c,m=this.m_bodyB.c_position.a,c=this.m_bodyB.c_velocity.v,u=this.m_bodyB.c_velocity.w,p=h.neo(o),y=h.neo(m);this.m_rA=h.mulSub(p,this.m_localAnchorA,this.m_localCenterA),this.m_rB=h.mulSub(y,this.m_localAnchorB,this.m_localCenterB),this.m_u=a.zero(),this.m_u.wAdd(1,n,1,this.m_rB),this.m_u.wSub(1,i,1,this.m_rA),this.m_length=this.m_u.length();var d=this.m_length-this.m_maxLength;if(d>0?this.m_state=l:this.m_state=_,!(this.m_length>r.linearSlop))return this.m_u.setZero(),this.m_mass=0,void(this.m_impulse=0);this.m_u.mul(1/this.m_length);var v=a.cross(this.m_rA,this.m_u),f=a.cross(this.m_rB,this.m_u),A=this.m_invMassA+this.m_invIA*v*v+this.m_invMassB+this.m_invIB*f*f;if(this.m_mass=0!=A?1/A:0,t.warmStarting){this.m_impulse*=t.dtRatio;var x=a.mul(this.m_impulse,this.m_u);e.wSub(this.m_invMassA,x),s-=this.m_invIA*a.cross(this.m_rA,x),c.wAdd(this.m_invMassB,x),u+=this.m_invIB*a.cross(this.m_rB,x)}else this.m_impulse=0;this.m_bodyA.c_velocity.v.set(e),this.m_bodyA.c_velocity.w=s,this.m_bodyB.c_velocity.v.set(c),this.m_bodyB.c_velocity.w=u},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=a.addCross(i,o,this.m_rA),r=a.addCross(e,s,this.m_rB),h=this.m_length-this.m_maxLength,c=a.dot(this.m_u,a.sub(r,n));h<0&&(c+=t.inv_dt*h);var _=-this.m_mass*c,l=this.m_impulse;this.m_impulse=m.min(0,this.m_impulse+_),_=this.m_impulse-l;var u=a.mul(_,this.m_u);i.wSub(this.m_invMassA,u),o-=this.m_invIA*a.cross(this.m_rA,u),e.wAdd(this.m_invMassB,u),s+=this.m_invIB*a.cross(this.m_rB,u),this.m_bodyA.c_velocity.v=i,this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v=e,this.m_bodyB.c_velocity.w=s},e.prototype.solvePositionConstraints=function(t){var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyB.c_position.c,s=this.m_bodyB.c_position.a,n=h.neo(o),c=h.neo(s),_=h.mulSub(n,this.m_localAnchorA,this.m_localCenterA),l=h.mulSub(c,this.m_localAnchorB,this.m_localCenterB),u=a.zero();u.wAdd(1,e,1,l),u.wSub(1,i,1,_);var p=u.normalize(),y=p-this.m_maxLength;y=m.clamp(y,0,r.maxLinearCorrection);var d=-this.m_mass*y,v=a.mul(d,u);return i.wSub(this.m_invMassA,v),o-=this.m_invIA*a.cross(_,v),e.wAdd(this.m_invMassB,v),s+=this.m_invIB*a.cross(l,v),this.m_bodyA.c_position.c.set(i),this.m_bodyA.c_position.a=o,this.m_bodyB.c_position.c.set(e),this.m_bodyB.c_position.a=s,p-this.m_maxLength<r.linearSlop}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],36:[function(t,i,o){function e(t,i,o,n){return this instanceof e?(t=s(t,u),l.call(this,t,i,o),this.m_type=e.TYPE,this.m_localAnchorA=i.getLocalPoint(n),this.m_localAnchorB=o.getLocalPoint(n),this.m_referenceAngle=o.getAngle()-i.getAngle(),this.m_frequencyHz=t.frequencyHz,this.m_dampingRatio=t.dampingRatio,this.m_impulse=h(),this.m_bias=0,this.m_gamma=0,this.m_rA,this.m_rB,this.m_localCenterA,this.m_localCenterB,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,void(this.m_mass=new c)):new e(t,i,o,n)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=t("../util/options"),n=t("../util/create"),r=t("../Settings"),m=t("../common/Math"),a=t("../common/Vec2"),h=t("../common/Vec3"),c=(t("../common/Mat22"),t("../common/Mat33")),_=t("../common/Rot"),l=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint"));e.TYPE="weld-joint",e._super=l,e.prototype=n(e._super.prototype);var u={frequencyHz:0,dampingRatio:0};e.prototype.getLocalAnchorA=function(){return this.m_localAnchorA},e.prototype.getLocalAnchorB=function(){return this.m_localAnchorB},e.prototype.getReferenceAngle=function(){return this.m_referenceAngle},e.prototype.setFrequency=function(t){this.m_frequencyHz=t},e.prototype.getFrequency=function(){return this.m_frequencyHz},e.prototype.setDampingRatio=function(t){this.m_dampingRatio=t},e.prototype.getDampingRatio=function(){return this.m_dampingRatio},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){var i=a.neo(this.m_impulse.x,this.m_impulse.y);return t*i},e.prototype.getReactionTorque=function(t){return t*this.m_impulse.z},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_bodyA.c_position.a,o=this.m_bodyA.c_velocity.v,e=this.m_bodyA.c_velocity.w,s=this.m_bodyB.c_position.a,n=this.m_bodyB.c_velocity.v,r=this.m_bodyB.c_velocity.w,h=_.neo(i),l=_.neo(s);this.m_rA=_.mul(h,a.sub(this.m_localAnchorA,this.m_localCenterA)),this.m_rB=_.mul(l,a.sub(this.m_localAnchorB,this.m_localCenterB));var u=this.m_invMassA,p=this.m_invMassB,y=this.m_invIA,d=this.m_invIB,v=new c;if(v.ex.x=u+p+this.m_rA.y*this.m_rA.y*y+this.m_rB.y*this.m_rB.y*d,v.ey.x=-this.m_rA.y*this.m_rA.x*y-this.m_rB.y*this.m_rB.x*d,v.ez.x=-this.m_rA.y*y-this.m_rB.y*d,v.ex.y=v.ey.x,v.ey.y=u+p+this.m_rA.x*this.m_rA.x*y+this.m_rB.x*this.m_rB.x*d,v.ez.y=this.m_rA.x*y+this.m_rB.x*d,v.ex.z=v.ez.x,v.ey.z=v.ez.y,v.ez.z=y+d,this.m_frequencyHz>0){v.getInverse22(this.m_mass);var f=y+d,A=f>0?1/f:0,x=s-i-this.m_referenceAngle,g=2*m.PI*this.m_frequencyHz,b=2*A*this.m_dampingRatio*g,B=A*g*g,w=t.dt;this.m_gamma=w*(b+w*B),this.m_gamma=0!=this.m_gamma?1/this.m_gamma:0,this.m_bias=x*w*B*this.m_gamma,f+=this.m_gamma,this.m_mass.ez.z=0!=f?1/f:0}else 0==v.ez.z?(v.getInverse22(this.m_mass),this.m_gamma=0,this.m_bias=0):(v.getSymInverse33(this.m_mass),this.m_gamma=0,this.m_bias=0);if(t.warmStarting){this.m_impulse.mul(t.dtRatio);var S=a.neo(this.m_impulse.x,this.m_impulse.y);o.wSub(u,S),e-=y*(a.cross(this.m_rA,S)+this.m_impulse.z),n.wAdd(p,S),r+=d*(a.cross(this.m_rB,S)+this.m_impulse.z)}else this.m_impulse.setZero();this.m_bodyA.c_velocity.v=o,this.m_bodyA.c_velocity.w=e,this.m_bodyB.c_velocity.v=n,this.m_bodyB.c_velocity.w=r},e.prototype.solveVelocityConstraints=function(t){var i=this.m_bodyA.c_velocity.v,o=this.m_bodyA.c_velocity.w,e=this.m_bodyB.c_velocity.v,s=this.m_bodyB.c_velocity.w,n=this.m_invMassA,r=this.m_invMassB,m=this.m_invIA,_=this.m_invIB;if(this.m_frequencyHz>0){var l=s-o,u=-this.m_mass.ez.z*(l+this.m_bias+this.m_gamma*this.m_impulse.z);this.m_impulse.z+=u,o-=m*u,s+=_*u;var p=a.zero();p.wAdd(1,e,1,a.cross(s,this.m_rB)),p.wSub(1,i,1,a.cross(o,this.m_rA));var y=a.neg(c.mul(this.m_mass,p));this.m_impulse.x+=y.x,this.m_impulse.y+=y.y;var d=a.clone(y);i.wSub(n,d),o-=m*a.cross(this.m_rA,d),e.wAdd(r,d),s+=_*a.cross(this.m_rB,d)}else{var p=a.zero();p.wAdd(1,e,1,a.cross(s,this.m_rB)),p.wSub(1,i,1,a.cross(o,this.m_rA));var l=s-o,v=h(p.x,p.y,l),f=h.neg(c.mul(this.m_mass,v));this.m_impulse.add(f);var d=a.neo(f.x,f.y);i.wSub(n,d),o-=m*(a.cross(this.m_rA,d)+f.z),e.wAdd(r,d),s+=_*(a.cross(this.m_rB,d)+f.z)}this.m_bodyA.c_velocity.v=i,this.m_bodyA.c_velocity.w=o,this.m_bodyB.c_velocity.v=e,this.m_bodyB.c_velocity.w=s},e.prototype.solvePositionConstraints=function(t){var i,o,e=this.m_bodyA.c_position.c,s=this.m_bodyA.c_position.a,n=this.m_bodyB.c_position.c,l=this.m_bodyB.c_position.a,u=_.neo(s),p=_.neo(l),y=this.m_invMassA,d=this.m_invMassB,v=this.m_invIA,f=this.m_invIB,A=_.mul(u,a.sub(this.m_localAnchorA,this.m_localCenterA)),x=_.mul(p,a.sub(this.m_localAnchorB,this.m_localCenterB)),g=new c;if(g.ex.x=y+d+A.y*A.y*v+x.y*x.y*f,g.ey.x=-A.y*A.x*v-x.y*x.x*f,g.ez.x=-A.y*v-x.y*f,g.ex.y=g.ey.x,g.ey.y=y+d+A.x*A.x*v+x.x*x.x*f,g.ez.y=A.x*v+x.x*f,g.ex.z=g.ez.x,g.ey.z=g.ez.y,g.ez.z=v+f,this.m_frequencyHz>0){var b=a.zero();b.wAdd(1,n,1,x),b.wSub(1,e,1,A),i=b.length(),o=0;var B=a.neg(g.solve22(b));e.wSub(y,B),s-=v*a.cross(A,B),n.wAdd(d,B),l+=f*a.cross(x,B)}else{var b=a.zero();b.wAdd(1,n,1,x),b.wSub(1,e,1,A);var w=l-s-this.m_referenceAngle;i=b.length(),o=m.abs(w);var S=h(b.x,b.y,w),C=h();if(g.ez.z>0)C=h.neg(g.solve33(S));else{var M=a.neg(g.solve22(b));C.set(M.x,M.y,0)}var B=a.neo(C.x,C.y);e.wSub(y,B),s-=v*(a.cross(A,B)+C.z),n.wAdd(d,B),l+=f*(a.cross(x,B)+C.z)}return this.m_bodyA.c_position.c=e,this.m_bodyA.c_position.a=s,this.m_bodyB.c_position.c=n,this.m_bodyB.c_position.a=l,i<=r.linearSlop&&o<=r.angularSlop}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],37:[function(t,i,o){function e(t,i,o,n,r){return this instanceof e?(t=s(t,_),c.call(this,t,i,o),this.m_type=e.TYPE,this.m_localAnchorA=i.getLocalPoint(n),this.m_localAnchorB=o.getLocalPoint(n),this.m_localXAxisA=i.getLocalVector(r||a.neo(1,0)),this.m_localYAxisA=a.cross(1,this.m_localXAxisA),this.m_mass=0,this.m_impulse=0,this.m_motorMass=0,this.m_motorImpulse=0,this.m_springMass=0,this.m_springImpulse=0,this.m_maxMotorTorque=t.maxMotorTorque,this.m_motorSpeed=t.motorSpeed,this.m_enableMotor=t.enableMotor,this.m_frequencyHz=t.frequencyHz,this.m_dampingRatio=t.dampingRatio,this.m_bias=0,this.m_gamma=0,this.m_localCenterA,this.m_localCenterB,this.m_invMassA,this.m_invMassB,this.m_invIA,this.m_invIB,this.m_ax=a.zero(),this.m_ay=a.zero(),this.m_sAx,this.m_sBx,this.m_sAy,void this.m_sBy):new e(t,i,o,n,r)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=t("../util/options"),n=t("../util/create"),r=t("../Settings"),m=t("../common/Math"),a=t("../common/Vec2"),h=(t("../common/Vec3"),t("../common/Mat22"),t("../common/Mat33"),t("../common/Rot")),c=(t("../common/Sweep"),t("../common/Transform"),t("../common/Velocity"),t("../common/Position"),t("../Joint"));e.TYPE="wheel-joint",e._super=c,e.prototype=n(e._super.prototype);var _={enableMotor:!1,maxMotorTorque:0,motorSpeed:0,frequencyHz:2,dampingRatio:.7};e.prototype.getLocalAnchorA=function(){return this.m_localAnchorA},e.prototype.getLocalAnchorB=function(){return this.m_localAnchorB},e.prototype.getLocalAxisA=function(){return this.m_localXAxisA},e.prototype.getJointTranslation=function(){var t=this.m_bodyA,i=this.m_bodyB,o=t.getWorldPoint(this.m_localAnchorA),e=i.getWorldPoint(this.m_localAnchorB),s=e-o,n=t.getWorldVector(this.m_localXAxisA),r=Dot(s,n);return r},e.prototype.getJointSpeed=function(){var t=this.m_bodyA.m_angularVelocity,i=this.m_bodyB.m_angularVelocity;return i-t},e.prototype.isMotorEnabled=function(){return this.m_enableMotor},e.prototype.enableMotor=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_enableMotor=t},e.prototype.setMotorSpeed=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_motorSpeed=t},e.prototype.getMotorSpeed=function(){return this.m_motorSpeed},e.prototype.setMaxMotorTorque=function(t){this.m_bodyA.setAwake(!0),this.m_bodyB.setAwake(!0),this.m_maxMotorTorque=t},e.prototype.getMaxMotorTorque=function(){return this.m_maxMotorTorque},e.prototype.getMotorTorque=function(t){return t*this.m_motorImpulse},e.prototype.setSpringFrequencyHz=function(t){this.m_frequencyHz=t},e.prototype.getSpringFrequencyHz=function(){return this.m_frequencyHz},e.prototype.setSpringDampingRatio=function(t){this.m_dampingRatio=t},e.prototype.getSpringDampingRatio=function(){return this.m_dampingRatio},e.prototype.getAnchorA=function(){return this.m_bodyA.getWorldPoint(this.m_localAnchorA)},e.prototype.getAnchorB=function(){return this.m_bodyB.getWorldPoint(this.m_localAnchorB)},e.prototype.getReactionForce=function(t){return t*(this.m_impulse*this.m_ay+this.m_springImpulse*this.m_ax)},e.prototype.getReactionTorque=function(t){return t*this.m_motorImpulse},e.prototype.initVelocityConstraints=function(t){this.m_localCenterA=this.m_bodyA.m_sweep.localCenter,this.m_localCenterB=this.m_bodyB.m_sweep.localCenter,this.m_invMassA=this.m_bodyA.m_invMass,this.m_invMassB=this.m_bodyB.m_invMass,this.m_invIA=this.m_bodyA.m_invI,this.m_invIB=this.m_bodyB.m_invI;var i=this.m_invMassA,o=this.m_invMassB,e=this.m_invIA,s=this.m_invIB,n=this.m_bodyA.c_position.c,r=this.m_bodyA.c_position.a,c=this.m_bodyA.c_velocity.v,_=this.m_bodyA.c_velocity.w,l=this.m_bodyB.c_position.c,u=this.m_bodyB.c_position.a,p=this.m_bodyB.c_velocity.v,y=this.m_bodyB.c_velocity.w,d=h.neo(r),v=h.neo(u),f=h.mul(d,a.sub(this.m_localAnchorA,this.m_localCenterA)),A=h.mul(v,a.sub(this.m_localAnchorB,this.m_localCenterB)),x=a.zero();if(x.wAdd(1,l,1,A),x.wSub(1,n,1,f),this.m_ay=h.mul(d,this.m_localYAxisA),this.m_sAy=a.cross(a.add(x,f),this.m_ay),this.m_sBy=a.cross(A,this.m_ay),this.m_mass=i+o+e*this.m_sAy*this.m_sAy+s*this.m_sBy*this.m_sBy,
-this.m_mass>0&&(this.m_mass=1/this.m_mass),this.m_springMass=0,this.m_bias=0,this.m_gamma=0,this.m_frequencyHz>0){this.m_ax=h.mul(d,this.m_localXAxisA),this.m_sAx=a.cross(a.add(x,f),this.m_ax),this.m_sBx=a.cross(A,this.m_ax);var g=i+o+e*this.m_sAx*this.m_sAx+s*this.m_sBx*this.m_sBx;if(g>0){this.m_springMass=1/g;var b=a.dot(x,this.m_ax),B=2*m.PI*this.m_frequencyHz,x=2*this.m_springMass*this.m_dampingRatio*B,w=this.m_springMass*B*B,S=t.dt;this.m_gamma=S*(x+S*w),this.m_gamma>0&&(this.m_gamma=1/this.m_gamma),this.m_bias=b*S*w*this.m_gamma,this.m_springMass=g+this.m_gamma,this.m_springMass>0&&(this.m_springMass=1/this.m_springMass)}}else this.m_springImpulse=0;if(this.m_enableMotor?(this.m_motorMass=e+s,this.m_motorMass>0&&(this.m_motorMass=1/this.m_motorMass)):(this.m_motorMass=0,this.m_motorImpulse=0),t.warmStarting){this.m_impulse*=t.dtRatio,this.m_springImpulse*=t.dtRatio,this.m_motorImpulse*=t.dtRatio;var C=a.wAdd(this.m_impulse,this.m_ay,this.m_springImpulse,this.m_ax),M=this.m_impulse*this.m_sAy+this.m_springImpulse*this.m_sAx+this.m_motorImpulse,I=this.m_impulse*this.m_sBy+this.m_springImpulse*this.m_sBx+this.m_motorImpulse;c.wSub(this.m_invMassA,C),_-=this.m_invIA*M,p.wAdd(this.m_invMassB,C),y+=this.m_invIB*I}else this.m_impulse=0,this.m_springImpulse=0,this.m_motorImpulse=0;this.m_bodyA.c_velocity.v.set(c),this.m_bodyA.c_velocity.w=_,this.m_bodyB.c_velocity.v.set(p),this.m_bodyB.c_velocity.w=y},e.prototype.solveVelocityConstraints=function(t){var i=this.m_invMassA,o=this.m_invMassB,e=this.m_invIA,s=this.m_invIB,n=this.m_bodyA.c_velocity.v,r=this.m_bodyA.c_velocity.w,h=this.m_bodyB.c_velocity.v,c=this.m_bodyB.c_velocity.w,_=a.dot(this.m_ax,h)-a.dot(this.m_ax,n)+this.m_sBx*c-this.m_sAx*r,l=-this.m_springMass*(_+this.m_bias+this.m_gamma*this.m_springImpulse);this.m_springImpulse+=l;var u=a.zero().wSet(l,this.m_ax),p=l*this.m_sAx,y=l*this.m_sBx;n.wSub(i,u),r-=e*p,h.wAdd(o,u),c+=s*y;var _=c-r-this.m_motorSpeed,l=-this.m_motorMass*_,d=this.m_motorImpulse,v=t.dt*this.m_maxMotorTorque;this.m_motorImpulse=m.clamp(this.m_motorImpulse+l,-v,v),l=this.m_motorImpulse-d,r-=e*l,c+=s*l;var _=a.dot(this.m_ay,h)-a.dot(this.m_ay,n)+this.m_sBy*c-this.m_sAy*r,l=-this.m_mass*_;this.m_impulse+=l;var u=a.zero().wSet(l,this.m_ay),p=l*this.m_sAy,y=l*this.m_sBy;n.wSub(i,u),r-=e*p,h.wAdd(o,u),c+=s*y,this.m_bodyA.c_velocity.v.set(n),this.m_bodyA.c_velocity.w=r,this.m_bodyB.c_velocity.v.set(h),this.m_bodyB.c_velocity.w=c},e.prototype.solvePositionConstraints=function(t){var i=this.m_bodyA.c_position.c,o=this.m_bodyA.c_position.a,e=this.m_bodyB.c_position.c,s=this.m_bodyB.c_position.a,n=h.neo(o),c=h.neo(s),_=h.mul(n,a.sub(this.m_localAnchorA,this.m_localCenterA)),l=h.mul(c,a.sub(this.m_localAnchorB,this.m_localCenterB)),u=a.zero();u.wAdd(1,e,1,l),u.wSub(1,i,1,_);var p,y=h.mul(n,this.m_localYAxisA),d=a.cross(a.sub(u,_),y),v=a.cross(l,y),f=a.dot(u,y),A=this.m_invMassA+this.m_invMassB+this.m_invIA*this.m_sAy*this.m_sAy+this.m_invIB*this.m_sBy*this.m_sBy;p=0!=A?-f/A:0;var x=a.zero().wSet(p,y),g=p*d,b=p*v;return i.wSub(this.m_invMassA,x),o-=this.m_invIA*g,e.wAdd(this.m_invMassB,x),s+=this.m_invIB*b,this.m_bodyA.c_position.c.set(i),this.m_bodyA.c_position.a=o,this.m_bodyB.c_position.c.set(e),this.m_bodyB.c_position.a=s,m.abs(f)<=r.linearSlop}},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],38:[function(t,i,o){function e(t,i,o,s){if(!(this instanceof e))return new e(t,i,o,s);if(e._super.call(this),this.m_vertices[0]=m.neo(-t,-i),this.m_vertices[1]=m.neo(t,-i),this.m_vertices[2]=m.neo(t,i),this.m_vertices[3]=m.neo(-t,i),this.m_normals[0]=m.neo(0,-1),this.m_normals[1]=m.neo(1,0),this.m_normals[2]=m.neo(0,1),this.m_normals[3]=m.neo(-1,0),this.m_count=4,o&&"x"in o&&"y"in o){s=s||0,this.m_centroid.set(o);var a=n.identity();a.p.set(o),a.q.set(s);for(var h=0;h<this.m_count;++h)this.m_vertices[h]=n.mul(a,this.m_vertices[h]),this.m_normals[h]=r.mul(a.q,this.m_normals[h])}}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/create")),n=(t("../util/options"),t("../common/Math"),t("../common/Transform")),r=t("../common/Rot"),m=t("../common/Vec2"),a=(t("../collision/AABB"),t("../Settings"),t("./PolygonShape"));e._super=a,e.prototype=s(e._super.prototype),e.TYPE="polygon"},{"../Settings":7,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52,"./PolygonShape":47}],39:[function(t,i,o){function e(t,i){return this instanceof e?(e._super.call(this),this.m_type=e.TYPE,this.m_radius=m.polygonRadius,this.m_vertices=[],this.m_count=0,this.m_prevVertex=null,this.m_nextVertex=null,this.m_hasPrevVertex=!1,this.m_hasNextVertex=!1,void(t&&t.length&&(i?this._createLoop(t):this._createChain(t)))):new e(t,i)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/create")),n=(t("../util/options"),t("../common/Math"),t("../common/Transform")),r=(t("../common/Rot"),t("../common/Vec2")),m=(t("../collision/AABB"),t("../Settings")),a=t("../Shape"),h=t("./EdgeShape");e._super=a,e.prototype=s(e._super.prototype),e.TYPE="chain",e.prototype._createLoop=function(t){for(var i=1;i<t.length;++i){t[i-1],t[i]}this.m_vertices.length=0,this.m_count=t.length+1;for(var i=0;i<t.length;++i)this.m_vertices[i]=t[i].clone();return this.m_vertices[t.length]=t[0].clone(),this.m_prevVertex=this.m_vertices[this.m_count-2],this.m_nextVertex=this.m_vertices[1],this.m_hasPrevVertex=!0,this.m_hasNextVertex=!0,this},e.prototype._createChain=function(t){for(var i=1;i<t.length;++i){t[i-1],t[i]}this.m_count=t.length;for(var i=0;i<t.length;++i)this.m_vertices[i]=t[i].clone();return this.m_hasPrevVertex=!1,this.m_hasNextVertex=!1,this.m_prevVertex=null,this.m_nextVertex=null,this},e.prototype._setPrevVertex=function(t){this.m_prevVertex=t,this.m_hasPrevVertex=!0},e.prototype._setNextVertex=function(t){this.m_nextVertex=t,this.m_hasNextVertex=!0},e.prototype._clone=function(){var t=new e;return t.createChain(this.m_vertices),t.m_type=this.m_type,t.m_radius=this.m_radius,t.m_prevVertex=this.m_prevVertex,t.m_nextVertex=this.m_nextVertex,t.m_hasPrevVertex=this.m_hasPrevVertex,t.m_hasNextVertex=this.m_hasNextVertex,t},e.prototype.getChildCount=function(){return this.m_count-1},e.prototype.getChildEdge=function(t,i){t.m_type=h.TYPE,t.m_radius=this.m_radius,t.m_vertex1=this.m_vertices[i],t.m_vertex2=this.m_vertices[i+1],i>0?(t.m_vertex0=this.m_vertices[i-1],t.m_hasVertex0=!0):(t.m_vertex0=this.m_prevVertex,t.m_hasVertex0=this.m_hasPrevVertex),i<this.m_count-2?(t.m_vertex3=this.m_vertices[i+2],t.m_hasVertex3=!0):(t.m_vertex3=this.m_nextVertex,t.m_hasVertex3=this.m_hasNextVertex)},e.prototype.getVertex=function(t){return t<this.m_count?this.m_vertices[t]:this.m_vertices[0]},e.prototype.testPoint=function(t,i){return!1},e.prototype.rayCast=function(t,i,o,e){var s=new h(this.getVertex(e),this.getVertex(e+1));return s.rayCast(t,i,o,0)},e.prototype.computeAABB=function(t,i,o){var e=n.mul(i,this.getVertex(o)),s=n.mul(i,this.getVertex(o+1));t.combinePoints(e,s)},e.prototype.computeMass=function(t,i){t.mass=0,t.center=r.neo(),t.I=0},e.prototype.computeDistanceProxy=function(t,i){t.m_buffer[0]=this.getVertex(i),t.m_buffer[1]=this.getVertex(i+1),t.m_vertices=t.m_buffer,t.m_count=2,t.m_radius=this.m_radius}},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52,"./EdgeShape":46}],40:[function(t,i,o){function e(t,i){return this instanceof e?(e._super.call(this),this.m_type=e.TYPE,this.m_p=m.zero(),this.m_radius=1,void("object"==typeof t&&m.isValid(t)?(this.m_p.set(t),"number"==typeof i&&(this.m_radius=i)):"number"==typeof t&&(this.m_radius=t))):new e(t,i)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=(t("../util/common"),t("../util/create")),n=(t("../util/options"),t("../common/Math")),r=(t("../common/Transform"),t("../common/Rot")),m=t("../common/Vec2"),a=(t("../collision/AABB"),t("../Settings"),t("../Shape"));e._super=a,e.prototype=s(e._super.prototype),e.TYPE="circle",e.prototype.getRadius=function(){return this.m_radius},e.prototype.getCenter=function(){return this.m_p},e.prototype.getSupportVertex=function(t){return this.m_p},e.prototype.getVertex=function(t){return this.m_p},e.prototype.getVertexCount=function(t){return 1},e.prototype._clone=function(){var t=new e;return t.m_type=this.m_type,t.m_radius=this.m_radius,t.m_p=this.m_p.clone(),t},e.prototype.getChildCount=function(){return 1},e.prototype.testPoint=function(t,i){var o=m.add(t.p,r.mul(t.q,this.m_p)),e=m.sub(i,o);return m.dot(e,e)<=this.m_radius*this.m_radius},e.prototype.rayCast=function(t,i,o,e){var s=m.add(o.p,r.mul(o.q,this.m_p)),a=m.sub(i.p1,s),h=m.dot(a,a)-this.m_radius*this.m_radius,c=m.sub(i.p2,i.p1),_=m.dot(a,c),l=m.dot(c,c),u=_*_-l*h;if(u<0||l<n.EPSILON)return!1;var p=-(_+n.sqrt(u));return 0<=p&&p<=i.maxFraction*l&&(p/=l,t.fraction=p,t.normal=m.add(a,m.mul(p,c)),t.normal.normalize(),!0)},e.prototype.computeAABB=function(t,i,o){var e=m.add(i.p,r.mul(i.q,this.m_p));t.lowerBound.set(e.x-this.m_radius,e.y-this.m_radius),t.upperBound.set(e.x+this.m_radius,e.y+this.m_radius)},e.prototype.computeMass=function(t,i){t.mass=i*n.PI*this.m_radius*this.m_radius,t.center=this.m_p,t.I=t.mass*(.5*this.m_radius*this.m_radius+m.dot(this.m_p,this.m_p))},e.prototype.computeDistanceProxy=function(t){t.m_vertices.push(this.m_p),t.m_count=1,t.m_radius=this.m_radius}},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52}],41:[function(t,i,o){function e(t,i,o,e,n,r,m){s(t,o.getShape(),i,r.getShape(),n)}function s(t,i,o,e,s){t.pointCount=0;var m=n.mul(o,i.m_p),h=n.mul(s,e.m_p),c=r.distanceSquared(h,m),_=i.m_radius,l=e.m_radius,u=_+l;c>u*u||(t.type=a.e_circles,t.localPoint.set(i.m_p),t.localNormal.setZero(),t.pointCount=1,t.points[0].localPoint.set(e.m_p),t.points[0].id.key=0)}DEBUG=!1,ASSERT=!1;var n=(t("../util/common"),t("../util/create"),t("../common/Math"),t("../common/Transform")),r=t("../common/Vec2"),m=(t("../Settings"),t("../Shape"),t("../Contact")),a=t("../Manifold"),h=t("./CircleShape");m.addType(h.TYPE,h.TYPE,e),o.CollideCircles=s},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./CircleShape":40}],42:[function(t,i,o){function e(t,i,o,e,n,r,m){s(t,o.getShape(),i,r.getShape(),n)}function s(t,i,o,e,s){t.pointCount=0;for(var h=r.mul(s,e.m_p),c=r.mulT(o,h),_=0,l=-(1/0),u=i.m_radius+e.m_radius,p=i.m_count,y=i.m_vertices,d=i.m_normals,v=0;v<p;++v){var f=m.dot(d[v],m.sub(c,y[v]));if(f>u)return;f>l&&(l=f,_=v)}var A=_,x=A+1<p?A+1:0,g=y[A],b=y[x];if(l<n.EPSILON)return t.pointCount=1,t.type=a.e_faceA,t.localNormal.set(d[_]),t.localPoint.wSet(.5,g,.5,b),t.points[0].localPoint=e.m_p,void(t.points[0].id.key=0);var B=m.dot(m.sub(c,g),m.sub(b,g)),w=m.dot(m.sub(c,b),m.sub(g,b));if(B<=0){if(m.distanceSquared(c,g)>u*u)return;t.pointCount=1,t.type=a.e_faceA,t.localNormal.wSet(1,c,-1,g),t.localNormal.normalize(),t.localPoint=g,t.points[0].localPoint.set(e.m_p),t.points[0].id.key=0}else if(w<=0){if(m.distanceSquared(c,b)>u*u)return;t.pointCount=1,t.type=a.e_faceA,t.localNormal.wSet(1,c,-1,b),t.localNormal.normalize(),t.localPoint.set(b),t.points[0].localPoint.set(e.m_p),t.points[0].id.key=0}else{var S=m.mid(g,b),l=m.dot(c,d[A])-m.dot(S,d[A]);if(l>u)return;t.pointCount=1,t.type=a.e_faceA,t.localNormal.set(d[A]),t.localPoint.set(S),t.points[0].localPoint.set(e.m_p),t.points[0].id.key=0}}DEBUG=!1,ASSERT=!1;var n=(t("../util/common"),t("../common/Math")),r=t("../common/Transform"),m=(t("../common/Rot"),t("../common/Vec2")),a=(t("../collision/AABB"),t("../Settings"),t("../Manifold")),h=t("../Contact"),c=(t("../Shape"),t("./CircleShape")),_=t("./PolygonShape");h.addType(_.TYPE,c.TYPE,e)},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./CircleShape":40,"./PolygonShape":47}],43:[function(t,i,o){function e(t,i,o,e,s,r,m){var a=o.getShape(),h=r.getShape();n(t,a,i,h,s)}function s(t,i,o,e,s,r,m){var a=o.getShape(),h=new c;a.getChildEdge(h,e);var _=h,l=r.getShape();n(t,_,i,l,s)}function n(t,i,o,e,s){t.pointCount=0;var n=r.mulT(o,r.mul(s,e.m_p)),a=i.m_vertex1,c=i.m_vertex2,_=m.sub(c,a),l=m.dot(_,m.sub(c,n)),u=m.dot(_,m.sub(n,a)),p=i.m_radius+e.m_radius;if(u<=0){var y=m.clone(a),d=m.sub(n,y),v=m.dot(d,d);if(v>p*p)return;if(i.m_hasVertex0){var f=i.m_vertex0,A=a,x=m.sub(A,f),g=m.dot(x,m.sub(A,n));if(g>0)return}return t.type=h.e_circles,t.localNormal.setZero(),t.localPoint.set(y),t.pointCount=1,t.points[0].localPoint.set(e.m_p),t.points[0].id.key=0,t.points[0].id.cf.indexA=0,t.points[0].id.cf.typeA=h.e_vertex,t.points[0].id.cf.indexB=0,void(t.points[0].id.cf.typeB=h.e_vertex)}if(l<=0){var y=m.clone(c),d=m.sub(n,y),v=m.dot(d,d);if(v>p*p)return;if(i.m_hasVertex3){var b=i.m_vertex3,B=c,w=m.sub(b,B),S=m.dot(w,m.sub(n,B));if(S>0)return}return t.type=h.e_circles,t.localNormal.setZero(),t.localPoint.set(y),t.pointCount=1,t.points[0].localPoint.set(e.m_p),t.points[0].id.key=0,t.points[0].id.cf.indexA=1,t.points[0].id.cf.typeA=h.e_vertex,t.points[0].id.cf.indexB=0,void(t.points[0].id.cf.typeB=h.e_vertex)}var C=m.dot(_,_),y=m.wAdd(l/C,a,u/C,c),d=m.sub(n,y),v=m.dot(d,d);if(!(v>p*p)){var M=m.neo(-_.y,_.x);m.dot(M,m.sub(n,a))<0&&M.set(-M.x,-M.y),M.normalize(),t.type=h.e_faceA,t.localNormal=M,t.localPoint.set(a),t.pointCount=1,t.points[0].localPoint.set(e.m_p),t.points[0].id.key=0,t.points[0].id.cf.indexA=0,t.points[0].id.cf.typeA=h.e_face,t.points[0].id.cf.indexB=0,t.points[0].id.cf.typeB=h.e_vertex}}DEBUG=!1,ASSERT=!1;var r=(t("../util/common"),t("../util/create"),t("../common/Math"),t("../common/Transform")),m=t("../common/Vec2"),a=(t("../common/Rot"),t("../Settings"),t("../Shape"),t("../Contact")),h=t("../Manifold"),c=t("./EdgeShape"),_=t("./ChainShape"),l=t("./CircleShape");a.addType(c.TYPE,l.TYPE,e),a.addType(_.TYPE,l.TYPE,s)},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./CircleShape":40,"./EdgeShape":46}],44:[function(t,i,o){function e(t,i,o,e,s,n,r){a(t,o.getShape(),i,n.getShape(),s)}function s(t,i,o,e,s,n,r){var m=o.getShape(),h=new d;m.getChildEdge(h,e),a(t,h,i,n.getShape(),s)}function n(){this.type,this.index,this.separation}function r(){this.vertices=[],this.normals=[],this.count=0}function m(){this.i1,this.i2,this.v1,this.v2,this.normal=_.zero(),this.sideNormal1=_.zero(),this.sideOffset1,this.sideNormal2=_.zero(),this.sideOffset2}function a(t,i,o,e,s){var n=c.mulT(o,s),r=c.mul(n,e.m_centroid),m=i.m_vertex0,a=i.m_vertex1,p=i.m_vertex2,d=i.m_vertex3,v=i.m_hasVertex0,f=i.m_hasVertex3,C=_.sub(p,a);C.normalize();var M=_.neo(C.y,-C.x),I=_.dot(M,_.sub(r,a)),T=0,P=0,V=!1,z=!1;if(v){var L=_.sub(a,m);L.normalize();var R=_.neo(L.y,-L.x);V=_.cross(L,C)>=0,T=_.dot(R,r)-_.dot(R,m)}if(f){var F=_.sub(d,p);F.normalize();var D=_.neo(F.y,-F.x);z=_.cross(C,F)>0,P=_.dot(D,r)-_.dot(D,p)}var q,E=_.zero(),k=_.zero(),j=_.zero();v&&f?V&&z?(q=T>=0||I>=0||P>=0,q?(E.set(M),k.set(R),j.set(D)):(E.wSet(-1,M),k.wSet(-1,M),j.wSet(-1,M))):V?(q=T>=0||I>=0&&P>=0,q?(E.set(M),k.set(R),j.set(M)):(E.wSet(-1,M),k.wSet(-1,D),j.wSet(-1,M))):z?(q=P>=0||T>=0&&I>=0,q?(E.set(M),k.set(M),j.set(D)):(E.wSet(-1,M),k.wSet(-1,M),j.wSet(-1,R))):(q=T>=0&&I>=0&&P>=0,q?(E.set(M),k.set(M),j.set(M)):(E.wSet(-1,M),k.wSet(-1,D),j.wSet(-1,R))):v?V?(q=T>=0||I>=0,q?(E.set(M),k.set(R),j.wSet(-1,M)):(E.wSet(-1,M),k.set(M),j.wSet(-1,M))):(q=T>=0&&I>=0,q?(E.set(M),k.set(M),j.wSet(-1,M)):(E.wSet(-1,M),k.set(M),j.wSet(-1,R))):f?z?(q=I>=0||P>=0,q?(E.set(M),k.wSet(-1,M),j.set(D)):(E.wSet(-1,M),k.wSet(-1,M),j.set(M))):(q=I>=0&&P>=0,q?(E.set(M),k.wSet(-1,M),j.set(M)):(E.wSet(-1,M),k.wSet(-1,D),j.set(M))):(q=I>=0,q?(E.set(M),k.wSet(-1,M),j.wSet(-1,M)):(E.wSet(-1,M),k.set(M),j.set(M))),w.count=e.m_count;for(var J=0;J<e.m_count;++J)w.vertices[J]=c.mul(n,e.m_vertices[J]),w.normals[J]=l.mul(n.q,e.m_normals[J]);var O=2*u.polygonRadius;t.pointCount=0,b.type=x,b.index=q?0:1,b.separation=1/0;for(var J=0;J<w.count;++J){var N=_.dot(E,_.sub(w.vertices[J],a));N<b.separation&&(b.separation=N)}if(b.type!=A&&!(b.separation>O)){B.type=A,B.index=-1,B.separation=-(1/0);for(var G=_.neo(-E.y,E.x),J=0;J<w.count;++J){var U=_.neg(w.normals[J]),W=_.dot(U,_.sub(w.vertices[J],a)),Y=_.dot(U,_.sub(w.vertices[J],p)),N=h.min(W,Y);if(N>O){B.type=g,B.index=J,B.separation=N;break}if(_.dot(U,G)>=0){if(_.dot(_.sub(U,j),E)<-u.angularSlop)continue}else if(_.dot(_.sub(U,k),E)<-u.angularSlop)continue;N>B.separation&&(B.type=g,B.index=J,B.separation=N)}if(!(B.type!=A&&B.separation>O)){var H,Z=.98,K=.001;H=B.type==A?b:B.separation>Z*b.separation+K?B:b;var X=[new y.clipVertex,new y.clipVertex];if(H.type==x){t.type=y.e_faceA;for(var Q=0,$=_.dot(E,w.normals[0]),J=1;J<w.count;++J){var tt=_.dot(E,w.normals[J]);tt<$&&($=tt,Q=J)}var it=Q,ot=it+1<w.count?it+1:0;X[0].v=w.vertices[it],X[0].id.cf.indexA=0,X[0].id.cf.indexB=it,X[0].id.cf.typeA=y.e_face,X[0].id.cf.typeB=y.e_vertex,X[1].v=w.vertices[ot],X[1].id.cf.indexA=0,X[1].id.cf.indexB=ot,X[1].id.cf.typeA=y.e_face,X[1].id.cf.typeB=y.e_vertex,q?(S.i1=0,S.i2=1,S.v1=a,S.v2=p,S.normal.set(M)):(S.i1=1,S.i2=0,S.v1=p,S.v2=a,S.normal.wSet(-1,M))}else t.type=y.e_faceB,X[0].v=a,X[0].id.cf.indexA=0,X[0].id.cf.indexB=H.index,X[0].id.cf.typeA=y.e_vertex,X[0].id.cf.typeB=y.e_face,X[1].v=p,X[1].id.cf.indexA=0,X[1].id.cf.indexB=H.index,X[1].id.cf.typeA=y.e_vertex,X[1].id.cf.typeB=y.e_face,S.i1=H.index,S.i2=S.i1+1<w.count?S.i1+1:0,S.v1=w.vertices[S.i1],S.v2=w.vertices[S.i2],S.normal.set(w.normals[S.i1]);S.sideNormal1.set(S.normal.y,-S.normal.x),S.sideNormal2.wSet(-1,S.sideNormal1),S.sideOffset1=_.dot(S.sideNormal1,S.v1),S.sideOffset2=_.dot(S.sideNormal2,S.v2);var et,st=[new y.clipVertex,new y.clipVertex],nt=[new y.clipVertex,new y.clipVertex];if(et=y.clipSegmentToLine(st,X,S.sideNormal1,S.sideOffset1,S.i1),!(et<u.maxManifoldPoints||(et=y.clipSegmentToLine(nt,st,S.sideNormal2,S.sideOffset2,S.i2),et<u.maxManifoldPoints))){H.type==x?(t.localNormal=_.clone(S.normal),t.localPoint=_.clone(S.v1)):(t.localNormal=_.clone(e.m_normals[S.i1]),t.localPoint=_.clone(e.m_vertices[S.i1]));for(var rt=0,J=0;J<u.maxManifoldPoints;++J){var mt=_.dot(S.normal,_.sub(nt[J].v,S.v1));if(mt<=O){var at=t.points[rt];H.type==x?(at.localPoint=c.mulT(n,nt[J].v),at.id=nt[J].id):(at.localPoint=nt[J].v,at.id.cf.typeA=nt[J].id.cf.typeB,at.id.cf.typeB=nt[J].id.cf.typeA,at.id.cf.indexA=nt[J].id.cf.indexB,at.id.cf.indexB=nt[J].id.cf.indexA),++rt}}t.pointCount=rt}}}}DEBUG=!1,ASSERT=!1;var h=(t("../util/common"),t("../util/create"),t("../common/Math")),c=t("../common/Transform"),_=t("../common/Vec2"),l=t("../common/Rot"),u=t("../Settings"),p=(t("../Shape"),t("../Contact")),y=t("../Manifold"),d=t("./EdgeShape"),v=t("./ChainShape"),f=t("./PolygonShape");p.addType(d.TYPE,f.TYPE,e),p.addType(v.TYPE,f.TYPE,s);var A=-1,x=1,g=2,b=new n,B=new n,w=new r,S=new m},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./EdgeShape":46,"./PolygonShape":47}],45:[function(t,i,o){function e(t,i,o,e,s,n,m){r(t,o.getShape(),i,n.getShape(),s)}function s(t,i,o,e){for(var n=t.m_count,r=o.m_count,c=t.m_normals,_=t.m_vertices,l=o.m_vertices,u=m.mulT(e,i),p=0,y=-(1/0),d=0;d<n;++d){for(var v=a.mul(u.q,c[d]),f=m.mul(u,_[d]),A=1/0,x=0;x<r;++x){var g=h.dot(v,l[x])-h.dot(v,f);g<A&&(A=g)}A>y&&(y=A,p=d)}s._maxSeparation=y,s._bestIndex=p}function n(t,i,o,e,s,n){for(var r=i.m_normals,c=s.m_count,l=s.m_vertices,u=s.m_normals,p=a.mulT(n.q,a.mul(o.q,r[e])),y=0,d=1/0,v=0;v<c;++v){var f=h.dot(p,u[v]);f<d&&(d=f,y=v)}var A=y,x=A+1<c?A+1:0;t[0].v=m.mul(n,l[A]),t[0].id.cf.indexA=e,t[0].id.cf.indexB=A,t[0].id.cf.typeA=_.e_face,t[0].id.cf.typeB=_.e_vertex,t[1].v=m.mul(n,l[x]),t[1].id.cf.indexA=e,t[1].id.cf.indexB=x,t[1].id.cf.typeA=_.e_face,t[1].id.cf.typeB=_.e_vertex}function r(t,i,o,e,r){t.pointCount=0;var l=i.m_radius+e.m_radius;s(i,o,e,r);var u=s._bestIndex,p=s._maxSeparation;if(!(p>l)){s(e,r,i,o);var y=s._bestIndex,d=s._maxSeparation;if(!(d>l)){var v,f,A,x,g,b,B=.1*c.linearSlop;d>p+B?(v=e,f=i,A=r,x=o,g=y,t.type=_.e_faceB,b=1):(v=i,f=e,A=o,x=r,g=u,t.type=_.e_faceA,b=0);var w=[new _.clipVertex,new _.clipVertex];n(w,v,A,g,f,x);var S=v.m_count,C=v.m_vertices,M=g,I=g+1<S?g+1:0,T=C[M],P=C[I],V=h.sub(P,T);V.normalize();var z=h.cross(V,1),L=h.wAdd(.5,T,.5,P),R=a.mul(A.q,V),F=h.cross(R,1);T=m.mul(A,T),P=m.mul(A,P);var D,q=h.dot(F,T),E=-h.dot(R,T)+l,k=h.dot(R,P)+l,j=[new _.clipVertex,new _.clipVertex],J=[new _.clipVertex,new _.clipVertex];if(D=_.clipSegmentToLine(j,w,h.neg(R),E,M),!(D<2||(D=_.clipSegmentToLine(J,j,R,k,I),D<2))){t.localNormal=z,t.localPoint=L;for(var O=0,N=0;N<J.length;++N){var G=h.dot(F,J[N].v)-q;if(G<=l){var U=t.points[O];if(U.localPoint.set(m.mulT(x,J[N].v)),U.id=J[N].id,b){var W=U.id.cf,Y=W.indexA,H=W.indexB,Z=W.typeA,K=W.typeB;W.indexA=H,W.indexB=Y,W.typeA=K,W.typeB=Z}++O}}t.pointCount=O}}}}DEBUG=!1,ASSERT=!1;var m=(t("../util/common"),t("../common/Math"),t("../common/Transform")),a=t("../common/Rot"),h=t("../common/Vec2"),c=(t("../collision/AABB"),t("../Settings")),_=t("../Manifold"),l=t("../Contact"),u=(t("../Shape"),t("./PolygonShape"));i.exports=r,l.addType(u.TYPE,u.TYPE,e)},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./PolygonShape":47}],46:[function(t,i,o){function e(t,i){return this instanceof e?(e._super.call(this),this.m_type=e.TYPE,this.m_radius=n.polygonRadius,this.m_vertex1=t?h.clone(t):h.zero(),this.m_vertex2=i?h.clone(i):h.zero(),this.m_vertex0=h.zero(),this.m_vertex3=h.zero(),this.m_hasVertex0=!1,void(this.m_hasVertex3=!1)):new e(t,i)}DEBUG=!1,ASSERT=!1,i.exports=e;var s=t("../util/create"),n=(t("../util/options"),t("../Settings")),r=t("../Shape"),m=(t("../common/Math"),t("../common/Transform")),a=t("../common/Rot"),h=t("../common/Vec2");t("../collision/AABB");e._super=r,e.prototype=s(e._super.prototype),e.TYPE="edge",e.prototype.setNext=function(t){return t?(this.m_vertex3.set(t),this.m_hasVertex3=!0):(this.m_vertex3.setZero(),this.m_hasVertex3=!1),this},e.prototype.setPrev=function(t){return t?(this.m_vertex0.set(t),this.m_hasVertex0=!0):(this.m_vertex0.setZero(),this.m_hasVertex0=!1),this},e.prototype._set=function(t,i){return this.m_vertex1.set(t),this.m_vertex2.set(i),this.m_hasVertex0=!1,this.m_hasVertex3=!1,this},e.prototype._clone=function(){var t=new e;return t.m_type=this.m_type,t.m_radius=this.m_radius,t.m_vertex1.set(this.m_vertex1),t.m_vertex2.set(this.m_vertex2),t.m_vertex0.set(this.m_vertex0),t.m_vertex3.set(this.m_vertex3),t.m_hasVertex0=this.m_hasVertex0,t.m_hasVertex3=this.m_hasVertex3,t},e.prototype.getChildCount=function(){return 1},e.prototype.testPoint=function(t,i){return!1},e.prototype.rayCast=function(t,i,o,e){var s=a.mulT(o.q,h.sub(i.p1,o.p)),n=a.mulT(o.q,h.sub(i.p2,o.p)),r=h.sub(n,s),m=this.m_vertex1,c=this.m_vertex2,_=h.sub(c,m),l=h.neo(_.y,-_.x);l.normalize();var u=h.dot(l,h.sub(m,s)),p=h.dot(l,r);if(0==p)return!1;var y=u/p;if(y<0||i.maxFraction<y)return!1;var d=h.add(s,h.mul(y,r)),v=h.sub(c,m),f=h.dot(v,v);if(0==f)return!1;var A=h.dot(h.sub(d,m),v)/f;return!(A<0||1<A)&&(t.fraction=y,u>0?t.normal=a.mul(o.q,l).neg():t.normal=a.mul(o.q,l),!0)},e.prototype.computeAABB=function(t,i,o){var e=m.mul(i,this.m_vertex1),s=m.mul(i,this.m_vertex2);t.combinePoints(e,s),t.extend(this.m_radius)},e.prototype.computeMass=function(t,i){t.mass=0,t.center.wSet(.5,this.m_vertex1,.5,this.m_vertex2),t.I=0},e.prototype.computeDistanceProxy=function(t){t.m_vertices.push(this.m_vertex1),t.m_vertices.push(this.m_vertex2),t.m_count=2,t.m_radius=this.m_radius}},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/create":51,"../util/options":52}],47:[function(t,i,o){function e(t){return this instanceof e?(e._super.call(this),this.m_type=e.TYPE,this.m_radius=c.polygonRadius,this.m_centroid=h.zero(),this.m_vertices=[],this.m_normals=[],this.m_count=0,void(t&&t.length&&this._set(t))):new e(t)}function s(t,i){for(var o,e=h.zero(),s=0,n=h.zero(),r=1/3,o=0;o<i;++o){var m=n,a=t[o],c=o+1<i?t[o+1]:t[0],_=h.sub(a,m),l=h.sub(c,m),u=h.cross(_,l),p=.5*u;s+=p,e.wAdd(p*r,m),e.wAdd(p*r,a),e.wAdd(p*r,c)}return e.mul(1/s),e}DEBUG=!1,ASSERT=!1,i.exports=e;var n=(t("../util/common"),t("../util/create")),r=(t("../util/options"),t("../common/Math")),m=t("../common/Transform"),a=t("../common/Rot"),h=t("../common/Vec2"),c=(t("../collision/AABB"),t("../Settings")),_=t("../Shape");e._super=_,e.prototype=n(e._super.prototype),e.TYPE="polygon",e.prototype.getVertex=function(t){return this.m_vertices[t]},e.prototype._clone=function(){var t=new e;t.m_type=this.m_type,t.m_radius=this.m_radius,t.m_count=this.m_count,t.m_centroid.set(this.m_centroid);for(var i=0;i<this.m_count;i++)t.m_vertices.push(this.m_vertices[i].clone());for(var i=0;i<this.m_normals.length;i++)t.m_normals.push(this.m_normals[i].clone());return t},e.prototype.getChildCount=function(){return 1},e.prototype._set=function(t){if(t.length<3)return void SetAsBox(1,1);for(var i=r.min(t.length,c.maxPolygonVertices),o=[],e=0,n=0;n<i;++n){for(var m=t[n],a=!0,_=0;_<e;++_)if(h.distanceSquared(m,o[_])<.25*c.linearSlopSquared){a=!1;break}a&&(o[e++]=m)}if(i=e,i<3)return void SetAsBox(1,1);for(var l=0,u=o[0].x,n=1;n<i;++n){var p=o[n].x;(p>u||p==u&&o[n].y<o[l].y)&&(l=n,u=p)}for(var y=[],d=0,v=l;;){y[d]=v;for(var f=0,_=1;_<i;++_)if(f!=v){var A=h.sub(o[f],o[y[d]]),m=h.sub(o[_],o[y[d]]),x=h.cross(A,m);x<0&&(f=_),0==x&&m.lengthSquared()>A.lengthSquared()&&(f=_)}else f=_;if(++d,v=f,f==l)break}if(d<3)return void SetAsBox(1,1);this.m_count=d;for(var n=0;n<d;++n)this.m_vertices[n]=o[y[n]];for(var n=0;n<d;++n){var g=n,b=n+1<d?n+1:0,B=h.sub(this.m_vertices[b],this.m_vertices[g]);this.m_normals[n]=h.cross(B,1),this.m_normals[n].normalize()}this.m_centroid=s(this.m_vertices,d)},e.prototype.testPoint=function(t,i){for(var o=a.mulT(t.q,h.sub(i,t.p)),e=0;e<this.m_count;++e){var s=h.dot(this.m_normals[e],h.sub(o,this.m_vertices[e]));if(s>0)return!1}return!0},e.prototype.rayCast=function(t,i,o,e){for(var s=a.mulT(o.q,h.sub(i.p1,o.p)),n=a.mulT(o.q,h.sub(i.p2,o.p)),r=h.sub(n,s),m=0,c=i.maxFraction,_=-1,l=0;l<this.m_count;++l){var u=h.dot(this.m_normals[l],h.sub(this.m_vertices[l],s)),p=h.dot(this.m_normals[l],r);if(0==p){if(u<0)return!1}else p<0&&u<m*p?(m=u/p,_=l):p>0&&u<c*p&&(c=u/p);if(c<m)return!1}return _>=0&&(t.fraction=m,t.normal=a.mul(o.q,this.m_normals[_]),!0)},e.prototype.computeAABB=function(t,i,o){for(var e=1/0,s=1/0,n=-(1/0),a=-(1/0),h=0;h<this.m_count;++h){var c=m.mul(i,this.m_vertices[h]);e=r.min(e,c.x),n=r.max(n,c.x),s=r.min(s,c.y),a=r.max(a,c.y)}t.lowerBound.set(e,s),t.upperBound.set(n,a),t.extend(this.m_radius)},e.prototype.computeMass=function(t,i){for(var o=h.zero(),e=0,s=0,n=h.zero(),r=0;r<this.m_count;++r)n.add(this.m_vertices[r]);n.mul(1/this.m_count);for(var m=1/3,r=0;r<this.m_count;++r){var a=h.sub(this.m_vertices[r],n),c=r+1<this.m_count?h.sub(this.m_vertices[r+1],n):h.sub(this.m_vertices[0],n),_=h.cross(a,c),l=.5*_;e+=l,o.wAdd(l*m,a,l*m,c);var u=a.x,p=a.y,y=c.x,d=c.y,v=u*u+y*u+y*y,f=p*p+d*p+d*d;s+=.25*m*_*(v+f)}t.mass=i*e,o.mul(1/e),t.center.wSet(1,o,1,n),t.I=i*s,t.I+=t.mass*(h.dot(t.center,t.center)-h.dot(o,o))},e.prototype.validate=function(){for(var t=0;t<this.m_count;++t)for(var i=t,o=t<this.m_count-1?i+1:0,e=this.m_vertices[i],s=h.sub(this.m_vertices[o],e),n=0;n<this.m_count;++n)if(n!=i&&n!=o){var r=h.sub(this.m_vertices[n],e),m=h.cross(s,r);if(m<0)return!1}return!0},e.prototype.computeDistanceProxy=function(t){t.m_vertices=this.m_vertices,t.m_count=this.m_count,t.m_radius=this.m_radius}},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52}],48:[function(t,i,o){function e(t){var i=[],o=t.max||1/0,e=t.create,s=t.allocate,n=t.release,r=t.discard,m=0,a=0,h=0,c=0;this.max=function(t){return"number"==typeof t?(o=t,this):o},this.size=function(){return i.length},this.allocate=function(){var t;return i.length>0?t=i.shift():(m++,t="function"==typeof e?e():{}),a++,"function"==typeof s&&s(t),t},this.release=function(t){i.length<o?(h++,"function"==typeof n&&n(t),i.push(t)):(c++,"function"==typeof r&&(t=r(t)))},this.toString=function(){return" +"+m+" >"+a+" <"+h+" -"+c+" ="+i.length+"/"+o}}DEBUG=!1,ASSERT=!1,i.exports=e},{}],49:[function(t,i,o){DEBUG=!1,ASSERT=!1,i.exports.now=function(){return Date.now()},i.exports.diff=function(t){return Date.now()-t}},{}],50:[function(t,i,o){DEBUG=!1,ASSERT=!1,o.debug=function(){},o.assert=function(t,i,o){}},{}],51:[function(t,i,o){function e(){}"function"==typeof Object.create?i.exports=function(t,i){return Object.create.call(Object,t,i)}:i.exports=function(t,i){if(i)throw Error("Second argument is not supported!");if("object"!=typeof t||null===t)throw Error("Invalid prototype!");return e.prototype=t,new e}},{}],52:[function(t,i,o){DEBUG=!1,ASSERT=!1;Object.prototype.propertyIsEnumerable;i.exports=function(t,i){null!==t&&"undefined"!=typeof t||(t={});for(var o in i)i.hasOwnProperty(o)&&"undefined"==typeof t[o]&&(t[o]=i[o]);if("function"==typeof Object.getOwnPropertySymbols)for(var e=Object.getOwnPropertySymbols(i),s=0;s<e.length;s++){var n=e[s];i.propertyIsEnumerable(n)&&"undefined"==typeof t[o]&&(t[n]=i[n])}return t}},{}]},{},[1])(1)});
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = World;
+
+var options = __webpack_require__(45);
+var common = __webpack_require__(46);
+var Vec2 = __webpack_require__(47);
+var BroadPhase = __webpack_require__(50);
+var Solver = __webpack_require__(55);
+var Body = __webpack_require__(56);
+var Contact = __webpack_require__(64);
+
+/**
+ * @typedef {Object} WorldDef
+ *
+ * @prop {Vec2} [gravity = { x : 0, y : 0}]
+ * @prop {boolean} [allowSleep = true]
+ * @prop {boolean} [warmStarting = false]
+ * @prop {boolean} [continuousPhysics = false]
+ * @prop {boolean} [subStepping = false]
+ * @prop {boolean} [blockSolve = true]
+ * @prop {int} [velocityIterations = 8] For the velocity constraint solver.
+ * @prop {int} [positionIterations = 3] For the position constraint solver.
+ */
+var WorldDef = {
+  gravity : Vec2.zero(),
+  allowSleep : true,
+  warmStarting : true,
+  continuousPhysics : true,
+  subStepping : false,
+  blockSolve : true,
+  velocityIterations : 8,
+  positionIterations : 3
+};
+
+/**
+ * @param {WordDef|Vec2} def World definition or gravity vector.
+ */
+function World(def) {
+  if (!(this instanceof World)) {
+    return new World(def);
+  }
+
+  if (def && Vec2.isValid(def)) {
+    def = {gravity : def};
+  }
+
+  def = options(def, WorldDef);
+
+  this.m_solver = new Solver(this);
+
+  this.m_broadPhase = new BroadPhase();
+
+  this.m_contactList = null;
+  this.m_contactCount = 0;
+
+  this.m_bodyList = null;
+  this.m_bodyCount = 0;
+
+  this.m_jointList = null;
+  this.m_jointCount = 0;
+
+  this.m_stepComplete = true;
+
+  this.m_allowSleep = def.allowSleep;
+  this.m_gravity = Vec2.clone(def.gravity);
+
+  this.m_clearForces = true;
+  this.m_newFixture = false;
+  this.m_locked = false;
+
+  // These are for debugging the solver.
+  this.m_warmStarting = def.warmStarting;
+  this.m_continuousPhysics = def.continuousPhysics;
+  this.m_subStepping = def.subStepping;
+
+  this.m_blockSolve = def.blockSolve;
+  this.m_velocityIterations = def.velocityIterations;
+  this.m_positionIterations = def.positionIterations;
+
+  this.m_t = 0;
+
+  this.m_stepCount = 0;
+
+  // Broad-phase callback.
+  this.addPair = this.createContact.bind(this);
+}
+
+World.prototype._serialize = function() {
+  var bodies = [];
+  var joints = [];
+
+  for (var b = this.getBodyList(); b; b = b.getNext()) {
+    bodies.push(b);
+  }
+
+  // for (var j = this.getJointList(); j; j = j.getNext()) {
+  //   joints.push(j);
+  // }
+
+  return {
+    gravity: this.m_gravity,
+    bodies: bodies,
+    // joints: joints,
+  };
+};
+
+World._deserialize = function(data) {
+  var world = new World(data.gravity);
+  data.bodies && data.bodies.reverse().forEach(function(data) {
+    world._addBody(Body._deserialize(world, data));
+  });
+
+  return world;
+};
+
+/**
+ * Get the world body list. With the returned body, use Body.getNext to get the
+ * next body in the world list. A null body indicates the end of the list.
+ *
+ * @return the head of the world body list.
+ */
+World.prototype.getBodyList = function() {
+  return this.m_bodyList;
+}
+
+/**
+ * Get the world joint list. With the returned joint, use Joint.getNext to get
+ * the next joint in the world list. A null joint indicates the end of the list.
+ *
+ * @return the head of the world joint list.
+ */
+World.prototype.getJointList = function() {
+  return this.m_jointList;
+}
+
+/**
+ * Get the world contact list. With the returned contact, use Contact.getNext to
+ * get the next contact in the world list. A null contact indicates the end of
+ * the list.
+ *
+ * @return the head of the world contact list. Warning: contacts are created and
+ *         destroyed in the middle of a time step. Use ContactListener to avoid
+ *         missing contacts.
+ */
+World.prototype.getContactList = function() {
+  return this.m_contactList;
+}
+
+World.prototype.getBodyCount = function() {
+  return this.m_bodyCount;
+}
+
+World.prototype.getJointCount = function() {
+  return this.m_jointCount;
+}
+
+/**
+ * Get the number of contacts (each may have 0 or more contact points).
+ */
+World.prototype.getContactCount = function() {
+  return this.m_contactCount;
+}
+
+/**
+ * Change the global gravity vector.
+ */
+World.prototype.setGravity = function(gravity) {
+  this.m_gravity = gravity;
+}
+
+/**
+ * Get the global gravity vector.
+ */
+World.prototype.getGravity = function() {
+  return this.m_gravity;
+}
+
+/**
+ * Is the world locked (in the middle of a time step).
+ */
+World.prototype.isLocked = function() {
+  return this.m_locked;
+}
+
+/**
+ * Enable/disable sleep.
+ */
+World.prototype.setAllowSleeping = function(flag) {
+  if (flag == this.m_allowSleep) {
+    return;
+  }
+
+  this.m_allowSleep = flag;
+  if (this.m_allowSleep == false) {
+    for (var b = this.m_bodyList; b; b = b.m_next) {
+      b.setAwake(true);
+    }
+  }
+}
+
+World.prototype.getAllowSleeping = function() {
+  return this.m_allowSleep;
+}
+
+/**
+ * Enable/disable warm starting. For testing.
+ */
+World.prototype.setWarmStarting = function(flag) {
+  this.m_warmStarting = flag;
+}
+
+World.prototype.getWarmStarting = function() {
+  return this.m_warmStarting;
+}
+
+/**
+ * Enable/disable continuous physics. For testing.
+ */
+World.prototype.setContinuousPhysics = function(flag) {
+  this.m_continuousPhysics = flag;
+}
+
+World.prototype.getContinuousPhysics = function() {
+  return this.m_continuousPhysics;
+}
+
+/**
+ * Enable/disable single stepped continuous physics. For testing.
+ */
+World.prototype.setSubStepping = function(flag) {
+  this.m_subStepping = flag;
+}
+
+World.prototype.getSubStepping = function() {
+  return this.m_subStepping;
+}
+
+/**
+ * Set flag to control automatic clearing of forces after each time step.
+ */
+World.prototype.setAutoClearForces = function(flag) {
+  this.m_clearForces = flag;
+}
+
+/**
+ * Get the flag that controls automatic clearing of forces after each time step.
+ */
+World.prototype.getAutoClearForces = function() {
+  return this.m_clearForces;
+}
+
+/**
+ * Manually clear the force buffer on all bodies. By default, forces are cleared
+ * automatically after each call to step. The default behavior is modified by
+ * calling setAutoClearForces. The purpose of this function is to support
+ * sub-stepping. Sub-stepping is often used to maintain a fixed sized time step
+ * under a variable frame-rate. When you perform sub-stepping you will disable
+ * auto clearing of forces and instead call clearForces after all sub-steps are
+ * complete in one pass of your game loop.
+ *
+ * @see setAutoClearForces
+ */
+World.prototype.clearForces = function() {
+  for (var body = this.m_bodyList; body; body = body.getNext()) {
+    body.m_force.setZero();
+    body.m_torque = 0.0;
+  }
+}
+
+/**
+ * @function World~rayCastCallback
+ *
+ * @param fixture
+ */
+
+/**
+ * Query the world for all fixtures that potentially overlap the provided AABB.
+ *
+ * @param {World~queryCallback} queryCallback Called for each fixture
+ *          found in the query AABB. It may return `false` to terminate the
+ *          query.
+ *
+ * @param aabb The query box.
+ */
+World.prototype.queryAABB = function(aabb, queryCallback) {
+  _ASSERT && common.assert(typeof queryCallback === 'function');
+  var broadPhase = this.m_broadPhase;
+  this.m_broadPhase.query(aabb, function(proxyId) { //TODO GC
+    var proxy = broadPhase.getUserData(proxyId); // FixtureProxy
+    return queryCallback(proxy.fixture);
+  });
+}
+
+/**
+ * @function World~rayCastCallback
+ *
+ * Callback class for ray casts. See World.rayCast
+ *
+ * Called for each fixture found in the query. You control how the ray cast
+ * proceeds by returning a float: return -1: ignore this fixture and continue
+ * return 0: terminate the ray cast return fraction: clip the ray to this point
+ * return 1: don't clip the ray and continue
+ *
+ * @param fixture The fixture hit by the ray
+ * @param point The point of initial intersection
+ * @param normal The normal vector at the point of intersection
+ * @param fraction
+ *
+ * @return {float} -1 to filter, 0 to terminate, fraction to clip the ray for
+ *         closest hit, 1 to continue
+ */
+
+/**
+ *
+ * Ray-cast the world for all fixtures in the path of the ray. Your callback
+ * controls whether you get the closest point, any point, or n-points. The
+ * ray-cast ignores shapes that contain the starting point.
+ *
+ * @param {World~RayCastCallback} reportFixtureCallback A user implemented
+ *          callback function.
+ * @param point1 The ray starting point
+ * @param point2 The ray ending point
+ */
+World.prototype.rayCast = function(point1, point2, reportFixtureCallback) {
+  _ASSERT && common.assert(typeof reportFixtureCallback === 'function');
+  var broadPhase = this.m_broadPhase;
+
+  this.m_broadPhase.rayCast({
+    maxFraction : 1.0,
+    p1 : point1,
+    p2 : point2
+  }, function(input, proxyId) { // TODO GC
+    var proxy = broadPhase.getUserData(proxyId); // FixtureProxy
+    var fixture = proxy.fixture;
+    var index = proxy.childIndex;
+    var output = {}; // TODO GC
+    var hit = fixture.rayCast(output, input, index);
+    if (hit) {
+      var fraction = output.fraction;
+      var point = Vec2.add(Vec2.mul((1.0 - fraction), input.p1), Vec2.mul(fraction, input.p2));
+      return reportFixtureCallback(fixture, point, output.normal, fraction);
+    }
+    return input.maxFraction;
+  });
+}
+
+/**
+ * Get the number of broad-phase proxies.
+ */
+World.prototype.getProxyCount = function() {
+  return this.m_broadPhase.getProxyCount();
+}
+
+/**
+ * Get the height of broad-phase dynamic tree.
+ */
+World.prototype.getTreeHeight = function() {
+  return this.m_broadPhase.getTreeHeight();
+}
+
+/**
+ * Get the balance of broad-phase dynamic tree.
+ *
+ * @returns {int}
+ */
+World.prototype.getTreeBalance = function() {
+  return this.m_broadPhase.getTreeBalance();
+}
+
+/**
+ * Get the quality metric of broad-phase dynamic tree. The smaller the better.
+ * The minimum is 1.
+ *
+ * @returns {float}
+ */
+World.prototype.getTreeQuality = function() {
+  return this.m_broadPhase.getTreeQuality();
+}
+
+/**
+ * Shift the world origin. Useful for large worlds. The body shift formula is:
+ * position -= newOrigin
+ *
+ * @param {Vec2} newOrigin The new origin with respect to the old origin
+ */
+World.prototype.shiftOrigin = function(newOrigin) {
+  _ASSERT && common.assert(this.m_locked == false);
+  if (this.m_locked) {
+    return;
+  }
+
+  for (var b = this.m_bodyList; b; b = b.m_next) {
+    b.m_xf.p.sub(newOrigin);
+    b.m_sweep.c0.sub(newOrigin);
+    b.m_sweep.c.sub(newOrigin);
+  }
+
+  for (var j = this.m_jointList; j; j = j.m_next) {
+    j.shiftOrigin(newOrigin);
+  }
+
+  this.m_broadPhase.shiftOrigin(newOrigin);
+}
+
+/**
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {Body} body
+ */
+World.prototype._addBody = function(body) {
+  _ASSERT && common.assert(this.isLocked() === false);
+  if (this.isLocked()) {
+    return;
+  }
+
+  // Add to world doubly linked list.
+  body.m_prev = null;
+  body.m_next = this.m_bodyList;
+  if (this.m_bodyList) {
+    this.m_bodyList.m_prev = body;
+  }
+  this.m_bodyList = body;
+  ++this.m_bodyCount;
+}
+
+/**
+ * Create a rigid body given a definition. No reference to the definition is
+ * retained.
+ *
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {BodyDef|Vec2} def Body definition or position.
+ * @param {float} angle Body angle if def is position.
+ */
+World.prototype.createBody = function(def, angle) {
+  _ASSERT && common.assert(this.isLocked() == false);
+  if (this.isLocked()) {
+    return null;
+  }
+
+  if (def && Vec2.isValid(def)) {
+    def = {
+      position : def,
+      angle : angle
+    };
+  }
+
+  var body = new Body(this, def);
+
+  this._addBody(body);
+
+  return body;
+}
+
+World.prototype.createDynamicBody = function(def, angle) {
+  if (!def) {
+    def = {};
+  } else if (Vec2.isValid(def)) {
+    def = { position : def, angle : angle };
+  }
+  def.type = 'dynamic';
+  return this.createBody(def);
+}
+
+World.prototype.createKinematicBody = function(def, angle) {
+  if (!def) {
+    def = {};
+  } else if (Vec2.isValid(def)) {
+    def = { position : def, angle : angle };
+  }
+  def.type = 'kinematic';
+  return this.createBody(def);
+}
+
+/**
+ * Destroy a rigid body given a definition. No reference to the definition is
+ * retained.
+ *
+ * Warning: This automatically deletes all associated shapes and joints.
+ *
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {Body} b
+ */
+World.prototype.destroyBody = function(b) {
+  _ASSERT && common.assert(this.m_bodyCount > 0);
+  _ASSERT && common.assert(this.isLocked() == false);
+  if (this.isLocked()) {
+    return;
+  }
+
+  if (b.m_destroyed) {
+    return false;
+  }
+
+  // Delete the attached joints.
+  var je = b.m_jointList;
+  while (je) {
+    var je0 = je;
+    je = je.next;
+
+    this.publish('remove-joint', je0.joint);
+    this.destroyJoint(je0.joint);
+
+    b.m_jointList = je;
+  }
+  b.m_jointList = null;
+
+  // Delete the attached contacts.
+  var ce = b.m_contactList;
+  while (ce) {
+    var ce0 = ce;
+    ce = ce.next;
+
+    this.destroyContact(ce0.contact);
+
+    b.m_contactList = ce;
+  }
+  b.m_contactList = null;
+
+  // Delete the attached fixtures. This destroys broad-phase proxies.
+  var f = b.m_fixtureList;
+  while (f) {
+    var f0 = f;
+    f = f.m_next;
+
+    this.publish('remove-fixture', f0);
+    f0.destroyProxies(this.m_broadPhase);
+
+    b.m_fixtureList = f;
+  }
+  b.m_fixtureList = null;
+
+  // Remove world body list.
+  if (b.m_prev) {
+    b.m_prev.m_next = b.m_next;
+  }
+
+  if (b.m_next) {
+    b.m_next.m_prev = b.m_prev;
+  }
+
+  if (b == this.m_bodyList) {
+    this.m_bodyList = b.m_next;
+  }
+
+  b.m_destroyed = true;
+
+  --this.m_bodyCount;
+
+  this.publish('remove-body', b);
+
+  return true;
+}
+
+/**
+ * Create a joint to constrain bodies together. No reference to the definition
+ * is retained. This may cause the connected bodies to cease colliding.
+ *
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {Joint} join
+ * @param {Body} bodyB
+ * @param {Body} bodyA
+ */
+World.prototype.createJoint = function(joint) {
+  _ASSERT && common.assert(!!joint.m_bodyA);
+  _ASSERT && common.assert(!!joint.m_bodyB);
+  _ASSERT && common.assert(this.isLocked() == false);
+  if (this.isLocked()) {
+    return null;
+  }
+
+  // Connect to the world list.
+  joint.m_prev = null;
+  joint.m_next = this.m_jointList;
+  if (this.m_jointList) {
+    this.m_jointList.m_prev = joint;
+  }
+  this.m_jointList = joint;
+  ++this.m_jointCount;
+
+  // Connect to the bodies' doubly linked lists.
+  joint.m_edgeA.joint = joint;
+  joint.m_edgeA.other = joint.m_bodyB;
+  joint.m_edgeA.prev = null;
+  joint.m_edgeA.next = joint.m_bodyA.m_jointList;
+  if (joint.m_bodyA.m_jointList)
+    joint.m_bodyA.m_jointList.prev = joint.m_edgeA;
+  joint.m_bodyA.m_jointList = joint.m_edgeA;
+
+  joint.m_edgeB.joint = joint;
+  joint.m_edgeB.other = joint.m_bodyA;
+  joint.m_edgeB.prev = null;
+  joint.m_edgeB.next = joint.m_bodyB.m_jointList;
+  if (joint.m_bodyB.m_jointList)
+    joint.m_bodyB.m_jointList.prev = joint.m_edgeB;
+  joint.m_bodyB.m_jointList = joint.m_edgeB;
+
+  // If the joint prevents collisions, then flag any contacts for filtering.
+  if (joint.m_collideConnected == false) {
+    for (var edge = joint.m_bodyB.getContactList(); edge; edge = edge.next) {
+      if (edge.other == joint.m_bodyA) {
+        // Flag the contact for filtering at the next time step (where either
+        // body is awake).
+        edge.contact.flagForFiltering();
+      }
+    }
+  }
+
+  // Note: creating a joint doesn't wake the bodies.
+
+  return joint;
+}
+
+/**
+ * Destroy a joint. This may cause the connected bodies to begin colliding.
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {Joint} join
+ */
+World.prototype.destroyJoint = function(joint) {
+  _ASSERT && common.assert(this.isLocked() == false);
+  if (this.isLocked()) {
+    return;
+  }
+
+  // Remove from the doubly linked list.
+  if (joint.m_prev) {
+    joint.m_prev.m_next = joint.m_next;
+  }
+
+  if (joint.m_next) {
+    joint.m_next.m_prev = joint.m_prev;
+  }
+
+  if (joint == this.m_jointList) {
+    this.m_jointList = joint.m_next;
+  }
+
+  // Disconnect from bodies.
+  var bodyA = joint.m_bodyA;
+  var bodyB = joint.m_bodyB;
+
+  // Wake up connected bodies.
+  bodyA.setAwake(true);
+  bodyB.setAwake(true);
+
+  // Remove from body 1.
+  if (joint.m_edgeA.prev) {
+    joint.m_edgeA.prev.next = joint.m_edgeA.next;
+  }
+
+  if (joint.m_edgeA.next) {
+    joint.m_edgeA.next.prev = joint.m_edgeA.prev;
+  }
+
+  if (joint.m_edgeA == bodyA.m_jointList) {
+    bodyA.m_jointList = joint.m_edgeA.next;
+  }
+
+  joint.m_edgeA.prev = null;
+  joint.m_edgeA.next = null;
+
+  // Remove from body 2
+  if (joint.m_edgeB.prev) {
+    joint.m_edgeB.prev.next = joint.m_edgeB.next;
+  }
+
+  if (joint.m_edgeB.next) {
+    joint.m_edgeB.next.prev = joint.m_edgeB.prev;
+  }
+
+  if (joint.m_edgeB == bodyB.m_jointList) {
+    bodyB.m_jointList = joint.m_edgeB.next;
+  }
+
+  joint.m_edgeB.prev = null;
+  joint.m_edgeB.next = null;
+
+  _ASSERT && common.assert(this.m_jointCount > 0);
+  --this.m_jointCount;
+
+  // If the joint prevents collisions, then flag any contacts for filtering.
+  if (joint.m_collideConnected == false) {
+    var edge = bodyB.getContactList();
+    while (edge) {
+      if (edge.other == bodyA) {
+        // Flag the contact for filtering at the next time step (where either
+        // body is awake).
+        edge.contact.flagForFiltering();
+      }
+
+      edge = edge.next;
+    }
+  }
+
+  this.publish('remove-joint', joint);
+}
+
+var s_step = new Solver.TimeStep(); // reuse
+
+/**
+ * Take a time step. This performs collision detection, integration, and
+ * constraint solution.
+ *
+ * Broad-phase, narrow-phase, solve and solve time of impacts.
+ *
+ * @param {float} timeStep Time step, this should not vary.
+ * @param {int} velocityIterations
+ * @param {int} positionIterations
+ */
+World.prototype.step = function(timeStep, velocityIterations, positionIterations) {
+
+  if ((velocityIterations | 0) !== velocityIterations) {
+    // TODO: remove this in future
+    velocityIterations = 0;
+  }
+
+  velocityIterations = velocityIterations || this.m_velocityIterations;
+  positionIterations = positionIterations || this.m_positionIterations;
+
+  // TODO: move this to testbed
+  this.m_stepCount++;
+
+  // If new fixtures were added, we need to find the new contacts.
+  if (this.m_newFixture) {
+    this.findNewContacts();
+    this.m_newFixture = false;
+  }
+
+  this.m_locked = true;
+
+  s_step.reset(timeStep);
+  s_step.velocityIterations = velocityIterations;
+  s_step.positionIterations = positionIterations;
+  s_step.warmStarting = this.m_warmStarting;
+  s_step.blockSolve = this.m_blockSolve;
+
+  // Update contacts. This is where some contacts are destroyed.
+  this.updateContacts();
+
+  // Integrate velocities, solve velocity constraints, and integrate positions.
+  if (this.m_stepComplete && timeStep > 0.0) {
+    this.m_solver.solveWorld(s_step);
+
+    // Synchronize fixtures, check for out of range bodies.
+    for (var b = this.m_bodyList; b; b = b.getNext()) {
+      // If a body was not in an island then it did not move.
+      if (b.m_islandFlag == false) {
+        continue;
+      }
+
+      if (b.isStatic()) {
+        continue;
+      }
+
+      // Update fixtures (for broad-phase).
+      b.synchronizeFixtures();
+    }
+    // Look for new contacts.
+    this.findNewContacts();
+  }
+
+  // Handle TOI events.
+  if (this.m_continuousPhysics && timeStep > 0.0) {
+    this.m_solver.solveWorldTOI(s_step);
+  }
+
+  if (this.m_clearForces) {
+    this.clearForces();
+  }
+
+  this.m_locked = false;
+}
+
+/**
+ * Call this method to find new contacts.
+ */
+World.prototype.findNewContacts = function() {
+  this.m_broadPhase.updatePairs(this.addPair);
+}
+
+/**
+ * @private
+ *
+ * @param {FixtureProxy} proxyA
+ * @param {FixtureProxy} proxyB
+ */
+World.prototype.createContact = function(proxyA, proxyB) {
+  var fixtureA = proxyA.fixture;
+  var fixtureB = proxyB.fixture;
+
+  var indexA = proxyA.childIndex;
+  var indexB = proxyB.childIndex;
+
+  var bodyA = fixtureA.getBody();
+  var bodyB = fixtureB.getBody();
+
+  // Are the fixtures on the same body?
+  if (bodyA == bodyB) {
+    return;
+  }
+
+  // TODO_ERIN use a hash table to remove a potential bottleneck when both
+  // bodies have a lot of contacts.
+  // Does a contact already exist?
+  var edge = bodyB.getContactList(); // ContactEdge
+  while (edge) {
+    if (edge.other == bodyA) {
+      var fA = edge.contact.getFixtureA();
+      var fB = edge.contact.getFixtureB();
+      var iA = edge.contact.getChildIndexA();
+      var iB = edge.contact.getChildIndexB();
+
+      if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
+        // A contact already exists.
+        return;
+      }
+
+      if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA) {
+        // A contact already exists.
+        return;
+      }
+    }
+
+    edge = edge.next;
+  }
+
+  if (bodyB.shouldCollide(bodyA) == false) {
+    return;
+  }
+  if (fixtureB.shouldCollide(fixtureA) == false) {
+    return;
+  }
+
+  // Call the factory.
+  var contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
+  if (contact == null) {
+    return;
+  }
+
+  // Insert into the world.
+  contact.m_prev = null;
+  if (this.m_contactList != null) {
+    contact.m_next = this.m_contactList;
+    this.m_contactList.m_prev = contact;
+  }
+  this.m_contactList = contact;
+
+  ++this.m_contactCount;
+}
+
+/**
+ * Removes old non-overlapping contacts, applies filters and updates contacts.
+ */
+World.prototype.updateContacts = function() {
+  // Update awake contacts.
+  var c, next_c = this.m_contactList;
+  while (c = next_c) {
+    next_c = c.getNext()
+    var fixtureA = c.getFixtureA();
+    var fixtureB = c.getFixtureB();
+    var indexA = c.getChildIndexA();
+    var indexB = c.getChildIndexB();
+    var bodyA = fixtureA.getBody();
+    var bodyB = fixtureB.getBody();
+
+    // Is this contact flagged for filtering?
+    if (c.m_filterFlag) {
+      if (bodyB.shouldCollide(bodyA) == false) {
+        this.destroyContact(c);
+        continue;
+      }
+
+      if (fixtureB.shouldCollide(fixtureA) == false) {
+        this.destroyContact(c);
+        continue;
+      }
+
+      // Clear the filtering flag.
+      c.m_filterFlag = false;
+    }
+
+    var activeA = bodyA.isAwake() && !bodyA.isStatic();
+    var activeB = bodyB.isAwake() && !bodyB.isStatic();
+
+    // At least one body must be awake and it must be dynamic or kinematic.
+    if (activeA == false && activeB == false) {
+      continue;
+    }
+
+    var proxyIdA = fixtureA.m_proxies[indexA].proxyId;
+    var proxyIdB = fixtureB.m_proxies[indexB].proxyId;
+    var overlap = this.m_broadPhase.testOverlap(proxyIdA, proxyIdB);
+
+    // Here we destroy contacts that cease to overlap in the broad-phase.
+    if (overlap == false) {
+      this.destroyContact(c);
+      continue;
+    }
+
+    // The contact persists.
+    c.update(this);
+  }
+}
+
+/**
+ * @param {Contact} contact
+ */
+World.prototype.destroyContact = function(contact) {
+  Contact.destroy(contact, this);
+
+  // Remove from the world.
+  if (contact.m_prev) {
+    contact.m_prev.m_next = contact.m_next;
+  }
+  if (contact.m_next) {
+    contact.m_next.m_prev = contact.m_prev;
+  }
+  if (contact == this.m_contactList) {
+    this.m_contactList = contact.m_next;
+  }
+
+  --this.m_contactCount;
+}
+
+World.prototype._listeners = null;
+
+/**
+ * Register an event listener.
+ *
+ * @param {string} name
+ * @param {function} listener
+ */
+World.prototype.on = function(name, listener) {
+  if (typeof name !== 'string' || typeof listener !== 'function') {
+    return this;
+  }
+  if (!this._listeners) {
+    this._listeners = {};
+  }
+  if (!this._listeners[name]) {
+    this._listeners[name] = [];
+  }
+  this._listeners[name].push(listener);
+  return this;
+};
+
+/**
+ * Remove an event listener.
+ *
+ * @param {string} name
+ * @param {function} listener
+ */
+World.prototype.off = function(name, listener) {
+  if (typeof name !== 'string' || typeof listener !== 'function') {
+    return this;
+  }
+  var listeners = this._listeners && this._listeners[name];
+  if (!listeners || !listeners.length) {
+    return this;
+  }
+  var index = listeners.indexOf(listener);
+  if (index >= 0) {
+    listeners.splice(index, 1);
+  }
+  return this;
+};
+
+World.prototype.publish = function(name, arg1, arg2, arg3) {
+  var listeners = this._listeners && this._listeners[name];
+  if (!listeners || !listeners.length) {
+    return 0;
+  }
+  for (var l = 0; l < listeners.length; l++) {
+    listeners[l].call(this, arg1, arg2, arg3);
+  }
+  return listeners.length;
+};
+
+/**
+ * @event World#remove-body
+ * @event World#remove-joint
+ * @event World#remove-fixture
+ *
+ * Joints and fixtures are destroyed when their associated body is destroyed.
+ * Register a destruction listener so that you may nullify references to these
+ * joints and shapes.
+ *
+ * `function(object)` is called when any joint or fixture is about to
+ * be destroyed due to the destruction of one of its attached or parent bodies.
+ */
+
+/**
+ * @private
+ * @param {Contact} contact
+ */
+World.prototype.beginContact = function(contact) {
+  this.publish('begin-contact', contact);
+};
+
+/**
+ * @event World#begin-contact
+ *
+ * Called when two fixtures begin to touch.
+ *
+ * Implement contact callbacks to get contact information. You can use these
+ * results for things like sounds and game logic. You can also get contact
+ * results by traversing the contact lists after the time step. However, you
+ * might miss some contacts because continuous physics leads to sub-stepping.
+ * Additionally you may receive multiple callbacks for the same contact in a
+ * single time step. You should strive to make your callbacks efficient because
+ * there may be many callbacks per time step.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
+ */
+
+/**
+ * @private
+ * @param {Contact} contact
+ */
+World.prototype.endContact = function(contact) {
+  this.publish('end-contact', contact);
+};
+
+/**
+ * @event World#end-contact
+ *
+ * Called when two fixtures cease to touch.
+ *
+ * Implement contact callbacks to get contact information. You can use these
+ * results for things like sounds and game logic. You can also get contact
+ * results by traversing the contact lists after the time step. However, you
+ * might miss some contacts because continuous physics leads to sub-stepping.
+ * Additionally you may receive multiple callbacks for the same contact in a
+ * single time step. You should strive to make your callbacks efficient because
+ * there may be many callbacks per time step.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
+ */
+
+/**
+ * @private
+ * @param {Contact} contact
+ * @param {Manifold} oldManifold
+ */
+World.prototype.preSolve = function(contact, oldManifold) {
+  this.publish('pre-solve', contact, oldManifold);
+};
+
+/**
+ * @event World#pre-solve
+ *
+ * This is called after a contact is updated. This allows you to inspect a
+ * contact before it goes to the solver. If you are careful, you can modify the
+ * contact manifold (e.g. disable contact). A copy of the old manifold is
+ * provided so that you can detect changes. Note: this is called only for awake
+ * bodies. Note: this is called even when the number of contact points is zero.
+ * Note: this is not called for sensors. Note: if you set the number of contact
+ * points to zero, you will not get an endContact callback. However, you may get
+ * a beginContact callback the next step.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
+ */
+
+/**
+ * @private
+ * @param {Contact} contact
+ * @param {ContactImpulse} impulse
+ */
+World.prototype.postSolve = function(contact, impulse) {
+  this.publish('post-solve', contact, impulse);
+};
+
+/**
+ * @event World#post-solve
+ *
+ * This lets you inspect a contact after the solver is finished. This is useful
+ * for inspecting impulses. Note: the contact manifold does not include time of
+ * impact impulses, which can be arbitrarily large if the sub-step is small.
+ * Hence the impulse is provided explicitly in a separate data structure. Note:
+ * this is only called for contacts that are touching, solid, and awake.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
+ */
+
+/**
+ * Register a contact filter to provide specific control over collision.
+ * Otherwise the default filter is used (defaultFilter). The listener is owned
+ * by you and must remain in scope.
+ *
+ * Moved to Fixture.
+ */
+
 
 /***/ }),
-/* 43 */
+/* 45 */
+/***/ (function(module, exports) {
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+module.exports = function(to, from) {
+  if (to === null || typeof to === 'undefined') {
+    to = {};
+  }
+
+  for ( var key in from) {
+    if (from.hasOwnProperty(key) && typeof to[key] === 'undefined') {
+      to[key] = from[key];
+    }
+  }
+
+  if (typeof Object.getOwnPropertySymbols === 'function') {
+    var symbols = Object.getOwnPropertySymbols(from);
+    for (var i = 0; i < symbols.length; i++) {
+      var symbol = symbols[i];
+      if (from.propertyIsEnumerable(symbol) && typeof to[key] === 'undefined') {
+        to[symbol] = from[symbol];
+      }
+    }
+  }
+  return to;
+};
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+exports.debug = function() {
+  if (!_DEBUG) return;
+  console.log.apply(console, arguments);
+};
+
+exports.assert = function(statement, err, log) {
+  if (!_ASSERT) return;
+  if (statement) return;
+  log && console.log(log);
+  throw new Error(err);
+};
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Vec2;
+
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+
+function Vec2(x, y) {
+  if (!(this instanceof Vec2)) {
+    return new Vec2(x, y);
+  }
+  if (typeof x === 'undefined') {
+    this.x = 0;
+    this.y = 0;
+  } else if (typeof x === 'object') {
+    this.x = x.x;
+    this.y = x.y;
+  } else {
+    this.x = x;
+    this.y = y;
+  }
+  _ASSERT && Vec2.assert(this);
+}
+
+Vec2.prototype._serialize = function() {
+  return {
+    x: this.x,
+    y: this.y
+  };
+};
+
+Vec2._deserialize = function(data) {
+  var obj = Object.create(Vec2.prototype);
+  obj.x = data.x;
+  obj.y = data.y;
+  return obj;
+};
+
+Vec2.zero = function() {
+  var obj = Object.create(Vec2.prototype);
+  obj.x = 0;
+  obj.y = 0;
+  return obj;
+};
+
+Vec2.neo = function(x, y) {
+  var obj = Object.create(Vec2.prototype);
+  obj.x = x;
+  obj.y = y;
+  return obj;
+};
+
+Vec2.clone = function(v) {
+  _ASSERT && Vec2.assert(v);
+  return Vec2.neo(v.x, v.y);
+};
+
+Vec2.prototype.toString = function() {
+  return JSON.stringify(this);
+};
+
+/**
+ * Does this vector contain finite coordinates?
+ */
+Vec2.isValid = function(v) {
+  return v && Math.isFinite(v.x) && Math.isFinite(v.y);
+}
+
+Vec2.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!Vec2.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid Vec2!');
+  }
+}
+
+Vec2.prototype.clone = function() {
+  return Vec2.clone(this);
+}
+
+/**
+ * Set this vector to all zeros.
+ * 
+ * @returns this
+ */
+Vec2.prototype.setZero = function() {
+  this.x = 0.0;
+  this.y = 0.0;
+  return this;
+}
+
+/**
+ * Set this vector to some specified coordinates.
+ * 
+ * @returns this
+ */
+Vec2.prototype.set = function(x, y) {
+  if (typeof x === 'object') {
+    _ASSERT && Vec2.assert(x);
+    this.x = x.x;
+    this.y = x.y;
+  } else {
+    _ASSERT && Math.assert(x);
+    _ASSERT && Math.assert(y);
+    this.x = x;
+    this.y = y;
+  }
+  return this;
+}
+
+/**
+ * @deprecated Use setCombine or setMul
+ */
+Vec2.prototype.wSet = function(a, v, b, w) {
+  if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+    return this.setCombine(a, v, b, w);
+  } else {
+    return this.setMul(a, v);
+  }
+}
+
+/**
+ * Set linear combination of v and w: `a * v + b * w`
+ */
+Vec2.prototype.setCombine = function(a, v, b, w) {
+  _ASSERT && Math.assert(a);
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Math.assert(b);
+  _ASSERT && Vec2.assert(w);
+  var x = a * v.x + b * w.x;
+  var y = a * v.y + b * w.y;
+
+  // `this` may be `w`
+  this.x = x;
+  this.y = y;
+  return this;
+}
+
+Vec2.prototype.setMul = function(a, v) {
+  _ASSERT && Math.assert(a);
+  _ASSERT && Vec2.assert(v);
+  var x = a * v.x;
+  var y = a * v.y;
+
+  this.x = x;
+  this.y = y;
+  return this;
+}
+
+/**
+ * Add a vector to this vector.
+ * 
+ * @returns this
+ */
+Vec2.prototype.add = function(w) {
+  _ASSERT && Vec2.assert(w);
+  this.x += w.x;
+  this.y += w.y;
+  return this;
+}
+
+/**
+ * @deprecated Use addCombine or addMul
+ */
+Vec2.prototype.wAdd = function(a, v, b, w) {
+  if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+    return this.addCombine(a, v, b, w);
+  } else {
+    return this.addMul(a, v);
+  }
+}
+
+/**
+ * Add linear combination of v and w: `a * v + b * w`
+ */
+Vec2.prototype.addCombine = function(a, v, b, w) {
+  _ASSERT && Math.assert(a);
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Math.assert(b);
+  _ASSERT && Vec2.assert(w);
+
+  var x = a * v.x + b * w.x;
+  var y = a * v.y + b * w.y;
+
+  // `this` may be `w`
+  this.x += x;
+  this.y += y;
+  return this;
+}
+
+Vec2.prototype.addMul = function(a, v) {
+  _ASSERT && Math.assert(a);
+  _ASSERT && Vec2.assert(v);
+  var x = a * v.x;
+  var y = a * v.y;
+
+  this.x += x;
+  this.y += y;
+  return this;
+}
+
+/**
+ * @deprecated Use subCombine or subMul
+ */
+Vec2.prototype.wSub = function(a, v, b, w) {
+  if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+    return this.subCombine(a, v, b, w);
+  } else {
+    return this.subMul(a, v);
+  }}
+
+/**
+ * Subtract linear combination of v and w: `a * v + b * w`
+ */
+Vec2.prototype.subCombine = function(a, v, b, w) {
+  _ASSERT && Math.assert(a);
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Math.assert(b);
+  _ASSERT && Vec2.assert(w);
+  var x = a * v.x + b * w.x;
+  var y = a * v.y + b * w.y;
+
+  // `this` may be `w`
+  this.x -= x;
+  this.y -= y;
+  return this;
+}
+
+Vec2.prototype.subMul = function(a, v) {
+  _ASSERT && Math.assert(a);
+  _ASSERT && Vec2.assert(v);
+  var x = a * v.x;
+  var y = a * v.y;
+
+  this.x -= x;
+  this.y -= y;
+  return this;
+}
+
+/**
+ * Subtract a vector from this vector
+ * 
+ * @returns this
+ */
+Vec2.prototype.sub = function(w) {
+  _ASSERT && Vec2.assert(w);
+  this.x -= w.x;
+  this.y -= w.y;
+  return this;
+}
+
+/**
+ * Multiply this vector by a scalar.
+ * 
+ * @returns this
+ */
+Vec2.prototype.mul = function(m) {
+  _ASSERT && Math.assert(m);
+  this.x *= m;
+  this.y *= m;
+  return this;
+}
+
+/**
+ * Get the length of this vector (the norm).
+ * 
+ * For performance, use this instead of lengthSquared (if possible).
+ */
+Vec2.prototype.length = function() {
+  return Vec2.lengthOf(this);
+}
+
+/**
+ * Get the length squared.
+ */
+Vec2.prototype.lengthSquared = function() {
+  return Vec2.lengthSquared(this);
+}
+
+/**
+ * Convert this vector into a unit vector.
+ * 
+ * @returns old length
+ */
+Vec2.prototype.normalize = function() {
+  var length = this.length();
+  if (length < Math.EPSILON) {
+    return 0.0;
+  }
+  var invLength = 1.0 / length;
+  this.x *= invLength;
+  this.y *= invLength;
+  return length;
+}
+
+/**
+ * Get the length of this vector (the norm).
+ *
+ * For performance, use this instead of lengthSquared (if possible).
+ */
+Vec2.lengthOf = function(v) {
+  _ASSERT && Vec2.assert(v);
+  return Math.sqrt(v.x * v.x + v.y * v.y);
+}
+
+/**
+ * Get the length squared.
+ */
+Vec2.lengthSquared = function(v) {
+  _ASSERT && Vec2.assert(v);
+  return v.x * v.x + v.y * v.y;
+}
+
+Vec2.distance = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  var dx = v.x - w.x, dy = v.y - w.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+Vec2.distanceSquared = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  var dx = v.x - w.x, dy = v.y - w.y;
+  return dx * dx + dy * dy;
+}
+
+Vec2.areEqual = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  return v == w || typeof w === 'object' && w !== null && v.x === w.x && v.y === w.y;
+}
+
+/**
+ * Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
+ */
+Vec2.skew = function(v) {
+  _ASSERT && Vec2.assert(v);
+  return Vec2.neo(-v.y, v.x);
+}
+
+/**
+ * Perform the dot product on two vectors.
+ */
+Vec2.dot = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  return v.x * w.x + v.y * w.y;
+}
+
+/**
+ * Perform the cross product on two vectors. In 2D this produces a scalar.
+ * 
+ * Perform the cross product on a vector and a scalar. In 2D this produces a
+ * vector.
+ */
+Vec2.cross = function(v, w) {
+  if (typeof w === 'number') {
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Math.assert(w);
+    return Vec2.neo(w * v.y, -w * v.x);
+
+  } else if (typeof v === 'number') {
+    _ASSERT && Math.assert(v);
+    _ASSERT && Vec2.assert(w);
+    return Vec2.neo(-v * w.y, v * w.x);
+
+  } else {
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
+    return v.x * w.y - v.y * w.x
+  }
+}
+
+/**
+ * Returns `a + (v x w)`
+ */
+Vec2.addCross = function(a, v, w) {
+  if (typeof w === 'number') {
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Math.assert(w);
+    return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
+
+  } else if (typeof v === 'number') {
+    _ASSERT && Math.assert(v);
+    _ASSERT && Vec2.assert(w);
+    return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
+  }
+
+  _ASSERT && common.assert(false);
+}
+
+Vec2.add = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  return Vec2.neo(v.x + w.x, v.y + w.y);
+}
+
+/**
+ * @deprecated Use combine
+ */
+Vec2.wAdd = function(a, v, b, w) {
+  if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+    return Vec2.combine(a, v, b, w);
+  } else {
+    return Vec2.mul(a, v);
+  }
+}
+
+Vec2.combine = function(a, v, b, w) {
+  return Vec2.zero().setCombine(a, v, b, w);
+}
+
+Vec2.sub = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  return Vec2.neo(v.x - w.x, v.y - w.y);
+}
+
+Vec2.mul = function(a, b) {
+  if (typeof a === 'object') {
+    _ASSERT && Vec2.assert(a);
+    _ASSERT && Math.assert(b);
+    return Vec2.neo(a.x * b, a.y * b);
+
+  } else if (typeof b === 'object') {
+    _ASSERT && Math.assert(a);
+    _ASSERT && Vec2.assert(b);
+    return Vec2.neo(a * b.x, a * b.y);
+  }
+}
+
+Vec2.prototype.neg = function() {
+  this.x = -this.x;
+  this.y = -this.y;
+  return this;
+}
+
+Vec2.neg = function(v) {
+  _ASSERT && Vec2.assert(v);
+  return Vec2.neo(-v.x, -v.y);
+}
+
+Vec2.abs = function(v) {
+  _ASSERT && Vec2.assert(v);
+  return Vec2.neo(Math.abs(v.x), Math.abs(v.y));
+}
+
+Vec2.mid = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  return Vec2.neo((v.x + w.x) * 0.5, (v.y + w.y) * 0.5);
+}
+
+Vec2.upper = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  return Vec2.neo(Math.max(v.x, w.x), Math.max(v.y, w.y));
+}
+
+Vec2.lower = function(v, w) {
+  _ASSERT && Vec2.assert(v);
+  _ASSERT && Vec2.assert(w);
+  return Vec2.neo(Math.min(v.x, w.x), Math.min(v.y, w.y));
+}
+
+Vec2.prototype.clamp = function(max) {
+  var lengthSqr = this.x * this.x + this.y * this.y;
+  if (lengthSqr > max * max) {
+    var invLength = Math.invSqrt(lengthSqr);
+    this.x *= invLength * max;
+    this.y *= invLength * max;
+  }
+  return this;
+}
+
+Vec2.clamp = function(v, max) {
+  v = Vec2.neo(v.x, v.y);
+  v.clamp(max);
+  return v;
+}
+
+/**
+ * @experimental
+ */
+Vec2.scaleFn = function (x, y) {
+  return function (v) {
+    return Vec2.neo(v.x * x, v.y * y);
+  };
+}
+
+/**
+ * @experimental
+ */
+Vec2.translateFn = function(x, y) {
+  return function (v) {
+    return Vec2.neo(v.x + x, v.y + y);
+  };
+}
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var native = Math;
+var math = module.exports = create(native);
+
+math.EPSILON = 1e-9; // TODO
+
+/**
+ * This function is used to ensure that a floating point number is not a NaN or
+ * infinity.
+ */
+math.isFinite = function(x) {
+  return (typeof x === 'number') && isFinite(x) && !isNaN(x);
+}
+
+math.assert = function(x) {
+  if (!_ASSERT) return;
+  if (!math.isFinite(x)) {
+    _DEBUG && common.debug(x);
+    throw new Error('Invalid Number!');
+  }
+}
+
+/**
+ * TODO: This is a approximate yet fast inverse square-root.
+ */
+math.invSqrt = function(x) {
+  // TODO
+  return 1 / native.sqrt(x);
+}
+
+/**
+ * Next Largest Power of 2 Given a binary integer value x, the next largest
+ * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
+ * upper bits into the lower bits. This process yields a bit vector with the
+ * same most significant 1 as x, but all 1's below it. Adding 1 to that value
+ * yields the next largest power of 2. For a 32-bit value:
+ */
+math.nextPowerOfTwo = function(x) {
+  // TODO
+  x |= (x >> 1);
+  x |= (x >> 2);
+  x |= (x >> 4);
+  x |= (x >> 8);
+  x |= (x >> 16);
+  return x + 1;
+}
+
+math.isPowerOfTwo = function(x) {
+  return x > 0 && (x & (x - 1)) == 0;
+}
+
+math.mod = function(num, min, max) {
+  if (typeof min === 'undefined') {
+    max = 1, min = 0;
+  } else if (typeof max === 'undefined') {
+    max = min, min = 0;
+  }
+  if (max > min) {
+    num = (num - min) % (max - min);
+    return num + (num < 0 ? max : min);
+  } else {
+    num = (num - max) % (min - max);
+    return num + (num <= 0 ? min : max);
+  }
+};
+
+math.clamp = function(num, min, max) {
+  if (num < min) {
+    return min;
+  } else if (num > max) {
+    return max;
+  } else {
+    return num;
+  }
+};
+
+math.random = function(min, max) {
+  if (typeof min === 'undefined') {
+    max = 1;
+    min = 0;
+  } else if (typeof max === 'undefined') {
+    max = min;
+    min = 0;
+  }
+  return min == max ? min : native.random() * (max - min) + min;
+};
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+if (typeof Object.create == 'function') {
+  module.exports = function(proto, props) {
+    return Object.create.call(Object, proto, props);
+  };
+} else {
+  module.exports = function(proto, props) {
+    if (props)
+      throw Error('Second argument is not supported!');
+    if (typeof proto !== 'object' || proto === null)
+      throw Error('Invalid prototype!');
+    noop.prototype = proto;
+    return new noop;
+  };
+  function noop() {
+  }
+}
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var Settings = __webpack_require__(51);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var AABB = __webpack_require__(52);
+var DynamicTree = __webpack_require__(53);
+
+module.exports = BroadPhase;
+
+/**
+ * The broad-phase wraps and extends a dynamic-tree to keep track of moved
+ * objects and query them on update.
+ */
+function BroadPhase() {
+  this.m_tree = new DynamicTree();
+  this.m_proxyCount = 0;
+  this.m_moveBuffer = [];
+  this.queryCallback = this.queryCallback.bind(this);
+};
+
+/**
+ * Get user data from a proxy. Returns null if the id is invalid.
+ */
+BroadPhase.prototype.getUserData = function(proxyId) {
+  return this.m_tree.getUserData(proxyId);
+}
+
+/**
+ * Test overlap of fat AABBs.
+ */
+BroadPhase.prototype.testOverlap = function(proxyIdA, proxyIdB) {
+  var aabbA = this.m_tree.getFatAABB(proxyIdA);
+  var aabbB = this.m_tree.getFatAABB(proxyIdB);
+  return AABB.testOverlap(aabbA, aabbB);
+}
+
+/**
+ * Get the fat AABB for a proxy.
+ */
+BroadPhase.prototype.getFatAABB = function(proxyId) {
+  return this.m_tree.getFatAABB(proxyId);
+}
+
+/**
+ * Get the number of proxies.
+ */
+BroadPhase.prototype.getProxyCount = function() {
+  return this.m_proxyCount;
+}
+
+/**
+ * Get the height of the embedded tree.
+ */
+BroadPhase.prototype.getTreeHeight = function() {
+  return this.m_tree.getHeight();
+}
+
+/**
+ * Get the balance (integer) of the embedded tree.
+ */
+BroadPhase.prototype.getTreeBalance = function() {
+  return this.m_tree.getMaxBalance();
+}
+
+/**
+ * Get the quality metric of the embedded tree.
+ */
+BroadPhase.prototype.getTreeQuality = function() {
+  return this.m_tree.getAreaRatio();
+}
+
+/**
+ * Query an AABB for overlapping proxies. The callback class is called for each
+ * proxy that overlaps the supplied AABB.
+ */
+BroadPhase.prototype.query = function(aabb, queryCallback) {
+  this.m_tree.query(aabb, queryCallback);
+}
+
+/**
+ * Ray-cast against the proxies in the tree. This relies on the callback to
+ * perform a exact ray-cast in the case were the proxy contains a shape. The
+ * callback also performs the any collision filtering. This has performance
+ * roughly equal to k * log(n), where k is the number of collisions and n is the
+ * number of proxies in the tree.
+ * 
+ * @param input The ray-cast input data. The ray extends from p1 to p1 +
+ *          maxFraction * (p2 - p1).
+ * @param rayCastCallback A function that is called for each proxy that is hit by
+ *          the ray.
+ */
+BroadPhase.prototype.rayCast = function(input, rayCastCallback) {
+  this.m_tree.rayCast(input, rayCastCallback);
+}
+
+/**
+ * Shift the world origin. Useful for large worlds. The shift formula is:
+ * position -= newOrigin
+ * 
+ * @param newOrigin The new origin with respect to the old origin
+ */
+BroadPhase.prototype.shiftOrigin = function(newOrigin) {
+  this.m_tree.shiftOrigin(newOrigin);
+}
+
+/**
+ * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
+ * is called.
+ */
+BroadPhase.prototype.createProxy = function(aabb, userData) {
+  _ASSERT && common.assert(AABB.isValid(aabb));
+  var proxyId = this.m_tree.createProxy(aabb, userData);
+  this.m_proxyCount++;
+  this.bufferMove(proxyId);
+  return proxyId;
+}
+
+/**
+ * Destroy a proxy. It is up to the client to remove any pairs.
+ */
+BroadPhase.prototype.destroyProxy = function(proxyId) {
+  this.unbufferMove(proxyId);
+  this.m_proxyCount--;
+  this.m_tree.destroyProxy(proxyId);
+}
+
+/**
+ * Call moveProxy as many times as you like, then when you are done call
+ * UpdatePairs to finalized the proxy pairs (for your time step).
+ */
+BroadPhase.prototype.moveProxy = function(proxyId, aabb, displacement) {
+  _ASSERT && common.assert(AABB.isValid(aabb));
+  var changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
+  if (changed) {
+    this.bufferMove(proxyId);
+  }
+}
+
+/**
+ * Call to trigger a re-processing of it's pairs on the next call to
+ * UpdatePairs.
+ */
+BroadPhase.prototype.touchProxy = function(proxyId) {
+  this.bufferMove(proxyId);
+}
+
+BroadPhase.prototype.bufferMove = function(proxyId) {
+  this.m_moveBuffer.push(proxyId);
+}
+
+BroadPhase.prototype.unbufferMove = function(proxyId) {
+  for (var i = 0; i < this.m_moveBuffer.length; ++i) {
+    if (this.m_moveBuffer[i] == proxyId) {
+      this.m_moveBuffer[i] = null;
+    }
+  }
+}
+
+/**
+ * @function BroadPhase~addPair
+ * @param {Object} userDataA
+ * @param {Object} userDataB
+ */
+
+/**
+ * Update the pairs. This results in pair callbacks. This can only add pairs.
+ * 
+ * @param {BroadPhase~AddPair} addPairCallback
+ */
+BroadPhase.prototype.updatePairs = function(addPairCallback) {
+  _ASSERT && common.assert(typeof addPairCallback === 'function');
+  this.m_callback = addPairCallback;
+
+  // Perform tree queries for all moving proxies.
+  while (this.m_moveBuffer.length > 0) {
+    this.m_queryProxyId = this.m_moveBuffer.pop();
+    if (this.m_queryProxyId === null) {
+      continue;
+    }
+
+    // We have to query the tree with the fat AABB so that
+    // we don't fail to create a pair that may touch later.
+    var fatAABB = this.m_tree.getFatAABB(this.m_queryProxyId);
+
+    // Query tree, create pairs and add them pair buffer.
+    this.m_tree.query(fatAABB, this.queryCallback);
+  }
+
+  // Try to keep the tree balanced.
+  // this.m_tree.rebalance(4);
+}
+
+BroadPhase.prototype.queryCallback = function(proxyId) {
+  // A proxy cannot form a pair with itself.
+  if (proxyId == this.m_queryProxyId) {
+    return true;
+  }
+
+  var proxyIdA = Math.min(proxyId, this.m_queryProxyId);
+  var proxyIdB = Math.max(proxyId, this.m_queryProxyId);
+
+  // TODO: Skip any duplicate pairs.
+
+  var userDataA = this.m_tree.getUserData(proxyIdA);
+  var userDataB = this.m_tree.getUserData(proxyIdB);
+
+  // Send the pairs back to the client.
+  this.m_callback(userDataA, userDataB);
+
+  return true;
+}
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+// TODO merge with World options?
+
+var Settings = exports;
+
+/**
+ * Tuning constants based on meters-kilograms-seconds (MKS) units.
+ */
+
+// Collision
+/**
+ * The maximum number of contact points between two convex shapes. Do not change
+ * this value.
+ */
+Settings.maxManifoldPoints = 2;
+
+/**
+ * The maximum number of vertices on a convex polygon. You cannot increase this
+ * too much because BlockAllocator has a maximum object size.
+ */
+Settings.maxPolygonVertices = 12;
+
+/**
+ * This is used to fatten AABBs in the dynamic tree. This allows proxies to move
+ * by a small amount without triggering a tree adjustment. This is in meters.
+ */
+Settings.aabbExtension = 0.1;
+
+/**
+ * This is used to fatten AABBs in the dynamic tree. This is used to predict the
+ * future position based on the current displacement. This is a dimensionless
+ * multiplier.
+ */
+Settings.aabbMultiplier = 2.0;
+
+/**
+ * A small length used as a collision and constraint tolerance. Usually it is
+ * chosen to be numerically significant, but visually insignificant.
+ */
+Settings.linearSlop = 0.005;
+Settings.linearSlopSquared = Settings.linearSlop * Settings.linearSlop;
+
+/**
+ * A small angle used as a collision and constraint tolerance. Usually it is
+ * chosen to be numerically significant, but visually insignificant.
+ */
+Settings.angularSlop = (2.0 / 180.0 * Math.PI);
+
+/**
+ * The radius of the polygon/edge shape skin. This should not be modified.
+ * Making this smaller means polygons will have an insufficient buffer for
+ * continuous collision. Making it larger may create artifacts for vertex
+ * collision.
+ */
+Settings.polygonRadius = (2.0 * Settings.linearSlop);
+
+/**
+ * Maximum number of sub-steps per contact in continuous physics simulation.
+ */
+Settings.maxSubSteps = 8;
+
+// Dynamics
+
+/**
+ * Maximum number of contacts to be handled to solve a TOI impact.
+ */
+Settings.maxTOIContacts = 32;
+
+/**
+ * Maximum iterations to solve a TOI.
+ */
+Settings.maxTOIIterations = 20;
+
+/**
+ * Maximum iterations to find Distance.
+ */
+Settings.maxDistnceIterations = 20;
+
+/**
+ * A velocity threshold for elastic collisions. Any collision with a relative
+ * linear velocity below this threshold will be treated as inelastic.
+ */
+Settings.velocityThreshold = 1.0;
+
+/**
+ * The maximum linear position correction used when solving constraints. This
+ * helps to prevent overshoot.
+ */
+Settings.maxLinearCorrection = 0.2;
+
+/**
+ * The maximum angular position correction used when solving constraints. This
+ * helps to prevent overshoot.
+ */
+Settings.maxAngularCorrection = (8.0 / 180.0 * Math.PI);
+
+/**
+ * The maximum linear velocity of a body. This limit is very large and is used
+ * to prevent numerical problems. You shouldn't need to adjust this.
+ */
+Settings.maxTranslation = 2.0;
+Settings.maxTranslationSquared = (Settings.maxTranslation * Settings.maxTranslation);
+
+/**
+ * The maximum angular velocity of a body. This limit is very large and is used
+ * to prevent numerical problems. You shouldn't need to adjust this.
+ */
+Settings.maxRotation = (0.5 * Math.PI)
+Settings.maxRotationSquared = (Settings.maxRotation * Settings.maxRotation)
+
+/**
+ * This scale factor controls how fast overlap is resolved. Ideally this would
+ * be 1 so that overlap is removed in one time step. However using values close
+ * to 1 often lead to overshoot.
+ */
+Settings.baumgarte = 0.2;
+Settings.toiBaugarte = 0.75;
+
+// Sleep
+
+/**
+ * The time that a body must be still before it will go to sleep.
+ */
+Settings.timeToSleep = 0.5;
+
+/**
+ * A body cannot sleep if its linear velocity is above this tolerance.
+ */
+Settings.linearSleepTolerance = 0.01;
+
+Settings.linearSleepToleranceSqr = Math.pow(Settings.linearSleepTolerance, 2);
+
+/**
+ * A body cannot sleep if its angular velocity is above this tolerance.
+ */
+Settings.angularSleepTolerance = (2.0 / 180.0 * Math.PI);
+
+Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
+
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var Settings = __webpack_require__(51);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+
+module.exports = AABB;
+
+function AABB(lower, upper) {
+  if (!(this instanceof AABB)) {
+    return new AABB(lower, upper);
+  }
+
+  this.lowerBound = Vec2.zero();
+  this.upperBound = Vec2.zero();
+
+  if (typeof lower === 'object') {
+    this.lowerBound.set(lower);
+  }
+  if (typeof upper === 'object') {
+    this.upperBound.set(upper);
+  }
+};
+
+/**
+ * Verify that the bounds are sorted.
+ */
+AABB.prototype.isValid = function() {
+  return AABB.isValid(this);
+}
+
+AABB.isValid = function(aabb) {
+  var d = Vec2.sub(aabb.upperBound, aabb.lowerBound);
+  var valid = d.x >= 0.0 && d.y >= 0.0 && Vec2.isValid(aabb.lowerBound) && Vec2.isValid(aabb.upperBound);
+  return valid;
+}
+
+AABB.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!AABB.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid AABB!');
+  }
+}
+
+/**
+ * Get the center of the AABB.
+ */
+AABB.prototype.getCenter = function() {
+  return Vec2.neo((this.lowerBound.x + this.upperBound.x) * 0.5, (this.lowerBound.y + this.upperBound.y) * 0.5);
+}
+
+/**
+ * Get the extents of the AABB (half-widths).
+ */
+AABB.prototype.getExtents = function() {
+  return Vec2.neo((this.upperBound.x - this.lowerBound.x) * 0.5, (this.upperBound.y - this.lowerBound.y) * 0.5);
+}
+
+/**
+ * Get the perimeter length.
+ */
+AABB.prototype.getPerimeter = function() {
+  return 2.0 * (this.upperBound.x - this.lowerBound.x + this.upperBound.y - this.lowerBound.y);
+}
+
+/**
+ * Combine one or two AABB into this one.
+ */
+AABB.prototype.combine = function(a, b) {
+  b = b || this;
+
+  var lowerA = a.lowerBound;
+  var upperA = a.upperBound;
+  var lowerB = b.lowerBound;
+  var upperB = b.upperBound;
+
+  var lowerX = Math.min(lowerA.x, lowerB.x);
+  var lowerY = Math.min(lowerA.y, lowerB.y);
+  var upperX = Math.max(upperB.x, upperA.x);
+  var upperY = Math.max(upperB.y, upperA.y);
+
+  this.lowerBound.set(lowerX, lowerY);
+  this.upperBound.set(upperX, upperY);
+}
+
+AABB.prototype.combinePoints = function(a, b) {
+  this.lowerBound.set(Math.min(a.x, b.x), Math.min(a.y, b.y));
+  this.upperBound.set(Math.max(a.x, b.x), Math.max(a.y, b.y));
+}
+
+AABB.prototype.set = function(aabb) {
+  this.lowerBound.set(aabb.lowerBound.x, aabb.lowerBound.y);
+  this.upperBound.set(aabb.upperBound.x, aabb.upperBound.y);
+}
+
+AABB.prototype.contains = function(aabb) {
+  var result = true;
+  result = result && this.lowerBound.x <= aabb.lowerBound.x;
+  result = result && this.lowerBound.y <= aabb.lowerBound.y;
+  result = result && aabb.upperBound.x <= this.upperBound.x;
+  result = result && aabb.upperBound.y <= this.upperBound.y;
+  return result;
+}
+
+AABB.prototype.extend = function(value) {
+  AABB.extend(this, value);
+}
+
+AABB.extend = function(aabb, value) {
+  aabb.lowerBound.x -= value;
+  aabb.lowerBound.y -= value;
+  aabb.upperBound.x += value;
+  aabb.upperBound.y += value;
+}
+
+AABB.testOverlap = function(a, b) {
+  var d1x = b.lowerBound.x - a.upperBound.x;
+  var d2x = a.lowerBound.x - b.upperBound.x;
+
+  var d1y = b.lowerBound.y - a.upperBound.y;
+  var d2y = a.lowerBound.y - b.upperBound.y;
+
+  if (d1x > 0 || d1y > 0 || d2x > 0 || d2y > 0) {
+    return false;
+  }
+  return true;
+}
+
+AABB.areEqual = function(a, b) {
+  return Vec2.areEqual(a.lowerBound, b.lowerBound) && Vec2.areEqual(a.upperBound, b.upperBound);
+}
+
+AABB.diff = function(a, b) {
+  var wD = Math.max(0, Math.min(a.upperBound.x, b.upperBound.x) - Math.max(b.lowerBound.x, a.lowerBound.x))
+  var hD = Math.max(0, Math.min(a.upperBound.y, b.upperBound.y) - Math.max(b.lowerBound.y, a.lowerBound.y));
+
+  var wA = a.upperBound.x - a.lowerBound.x;
+  var hA = a.upperBound.y - a.lowerBound.y;
+
+  var wB = b.upperBound.x - b.lowerBound.x;
+  var hB = b.upperBound.y - b.lowerBound.y;
+
+  return wA * hA + wB * hB - wD * hD;
+};
+
+/**
+ * @typedef RayCastInput
+ *
+ * Ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).
+ *
+ * @prop {Vec2} p1
+ * @prop {Vec2} p2
+ * @prop {number} maxFraction
+ */
+
+/**
+ * @typedef RayCastInput
+ *
+ * Ray-cast output data. The ray hits at p1 + fraction * (p2 - p1), where p1 and
+ * p2 come from RayCastInput.
+ *
+ * @prop {Vec2} normal
+ * @prop {number} fraction
+ */
+
+/**
+ * @param {RayCastOutput} output
+ * @param {RayCastInput} input
+ * @returns {boolean}
+ */
+AABB.prototype.rayCast = function(output, input) {
+  // From Real-time Collision Detection, p179.
+
+  var tmin = -Infinity;
+  var tmax = Infinity;
+
+  var p = input.p1;
+  var d = Vec2.sub(input.p2, input.p1);
+  var absD = Vec2.abs(d);
+
+  var normal = Vec2.zero();
+
+  for (var f = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
+    if (absD.x < Math.EPSILON) {
+      // Parallel.
+      if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
+        return false;
+      }
+    } else {
+      var inv_d = 1.0 / d[f];
+      var t1 = (this.lowerBound[f] - p[f]) * inv_d;
+      var t2 = (this.upperBound[f] - p[f]) * inv_d;
+
+      // Sign of the normal vector.
+      var s = -1.0;
+
+      if (t1 > t2) {
+        var temp = t1;
+        t1 = t2, t2 = temp;
+        s = 1.0;
+      }
+
+      // Push the min up
+      if (t1 > tmin) {
+        normal.setZero();
+        normal[f] = s;
+        tmin = t1;
+      }
+
+      // Pull the max down
+      tmax = Math.min(tmax, t2);
+
+      if (tmin > tmax) {
+        return false;
+      }
+    }
+  }
+
+  // Does the ray start inside the box?
+  // Does the ray intersect beyond the max fraction?
+  if (tmin < 0.0 || input.maxFraction < tmin) {
+    return false;
+  }
+
+  // Intersection.
+  output.fraction = tmin;
+  output.normal = normal;
+  return true;
+}
+
+AABB.prototype.toString = function() {
+  return JSON.stringify(this);
+}
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var Settings = __webpack_require__(51);
+var common = __webpack_require__(46);
+var Pool = __webpack_require__(54);
+var Vec2 = __webpack_require__(47);
+var Math = __webpack_require__(48);
+var AABB = __webpack_require__(52);
+
+module.exports = DynamicTree;
+
+/**
+ * A node in the dynamic tree. The client does not interact with this directly.
+ * 
+ * @prop {AABB} aabb Enlarged AABB
+ * @prop {integer} height 0: leaf, -1: free node
+ */
+function TreeNode(id) {
+  this.id = id;
+  this.aabb = new AABB();
+  this.userData = null;
+  this.parent = null;
+  this.child1 = null;
+  this.child2 = null;
+  this.height = -1;
+
+  this.toString = function() {
+    return this.id + ": " + this.userData;
+  }
+};
+
+TreeNode.prototype.isLeaf = function() {
+  return this.child1 == null;
+}
+/**
+ * A dynamic AABB tree broad-phase, inspired by Nathanael Presson's btDbvt. A
+ * dynamic tree arranges data in a binary tree to accelerate queries such as
+ * volume queries and ray casts. Leafs are proxies with an AABB. In the tree we
+ * expand the proxy AABB by `aabbExtension` so that the proxy AABB is bigger
+ * than the client object. This allows the client object to move by small
+ * amounts without triggering a tree update.
+ * 
+ * Nodes are pooled and relocatable, so we use node indices rather than
+ * pointers.
+ */
+function DynamicTree() {
+  this.m_root = null;
+  this.m_nodes = {}
+  this.m_lastProxyId = 0;
+
+  this.m_pool = new Pool({
+    create : function() {
+      return new TreeNode();
+    }
+  });
+};
+
+/**
+ * Get proxy user data.
+ * 
+ * @return the proxy user data or 0 if the id is invalid.
+ */
+DynamicTree.prototype.getUserData = function(id) {
+  var node = this.m_nodes[id];
+  _ASSERT && common.assert(!!node);
+  return node.userData;
+}
+
+/**
+ * Get the fat AABB for a node id.
+ * 
+ * @return the proxy user data or 0 if the id is invalid.
+ */
+DynamicTree.prototype.getFatAABB = function(id) {
+  var node = this.m_nodes[id];
+  _ASSERT && common.assert(!!node);
+  return node.aabb;
+}
+
+DynamicTree.prototype.allocateNode = function() {
+  var node = this.m_pool.allocate();
+  node.id = ++this.m_lastProxyId;
+  node.userData = null;
+  node.parent = null;
+  node.child1 = null;
+  node.child2 = null;
+  node.height = -1;
+  this.m_nodes[node.id] = node;
+  return node;
+}
+
+DynamicTree.prototype.freeNode = function(node) {
+  this.m_pool.release(node);
+  node.height = -1;
+  delete this.m_nodes[node.id];
+}
+
+/**
+ * Create a proxy in the tree as a leaf node. We return the index of the node
+ * instead of a pointer so that we can grow the node pool.
+ * 
+ * Create a proxy. Provide a tight fitting AABB and a userData pointer.
+ */
+DynamicTree.prototype.createProxy = function(aabb, userData) {
+  _ASSERT && common.assert(AABB.isValid(aabb))
+
+  var node = this.allocateNode()
+
+  node.aabb.set(aabb);
+
+  // Fatten the aabb.
+  AABB.extend(node.aabb, Settings.aabbExtension);
+
+  node.userData = userData;
+  node.height = 0;
+
+  this.insertLeaf(node);
+
+  return node.id;
+}
+
+/**
+ * Destroy a proxy. This asserts if the id is invalid.
+ */
+DynamicTree.prototype.destroyProxy = function(id) {
+  var node = this.m_nodes[id];
+
+  _ASSERT && common.assert(!!node);
+  _ASSERT && common.assert(node.isLeaf());
+
+  this.removeLeaf(node);
+  this.freeNode(node);
+}
+
+/**
+ * Move a proxy with a swepted AABB. If the proxy has moved outside of its
+ * fattened AABB, then the proxy is removed from the tree and re-inserted.
+ * Otherwise the function returns immediately.
+ * 
+ * @param id
+ * @param aabb
+ * @param {Vec2} d Displacement
+ * 
+ * @return true if the proxy was re-inserted.
+ */
+DynamicTree.prototype.moveProxy = function(id, aabb, d) {
+  _ASSERT && common.assert(AABB.isValid(aabb));
+  _ASSERT && common.assert(!d || Vec2.isValid(d));
+
+  var node = this.m_nodes[id];
+
+  _ASSERT && common.assert(!!node);
+  _ASSERT && common.assert(node.isLeaf());
+
+  if (node.aabb.contains(aabb)) {
+    return false;
+  }
+
+  this.removeLeaf(node);
+
+  node.aabb.set(aabb)
+
+  // Extend AABB.
+  aabb = node.aabb;
+  AABB.extend(aabb, Settings.aabbExtension);
+
+  // Predict AABB displacement.
+  // var d = Vec2.mul(Settings.aabbMultiplier, displacement);
+
+  if (d.x < 0.0) {
+    aabb.lowerBound.x += d.x * Settings.aabbMultiplier;
+  } else {
+    aabb.upperBound.x += d.x * Settings.aabbMultiplier;
+  }
+
+  if (d.y < 0.0) {
+    aabb.lowerBound.y += d.y * Settings.aabbMultiplier;
+  } else {
+    aabb.upperBound.y += d.y * Settings.aabbMultiplier;
+  }
+
+  this.insertLeaf(node);
+
+  return true;
+}
+
+DynamicTree.prototype.insertLeaf = function(leaf) {
+  _ASSERT && common.assert(AABB.isValid(leaf.aabb));
+
+  if (this.m_root == null) {
+    this.m_root = leaf;
+    this.m_root.parent = null;
+    return;
+  }
+
+  // Find the best sibling for this node
+  var leafAABB = leaf.aabb;
+  var index = this.m_root;
+  while (index.isLeaf() == false) {
+    var child1 = index.child1;
+    var child2 = index.child2;
+
+    var area = index.aabb.getPerimeter();
+
+    var combinedAABB = new AABB();
+    combinedAABB.combine(index.aabb, leafAABB);
+    var combinedArea = combinedAABB.getPerimeter();
+
+    // Cost of creating a new parent for this node and the new leaf
+    var cost = 2.0 * combinedArea;
+
+    // Minimum cost of pushing the leaf further down the tree
+    var inheritanceCost = 2.0 * (combinedArea - area);
+
+    // Cost of descending into child1
+    var cost1;
+    if (child1.isLeaf()) {
+      var aabb = new AABB();
+      aabb.combine(leafAABB, child1.aabb);
+      cost1 = aabb.getPerimeter() + inheritanceCost;
+    } else {
+      var aabb = new AABB();
+      aabb.combine(leafAABB, child1.aabb);
+      var oldArea = child1.aabb.getPerimeter();
+      var newArea = aabb.getPerimeter();
+      cost1 = (newArea - oldArea) + inheritanceCost;
+    }
+
+    // Cost of descending into child2
+    var cost2;
+    if (child2.isLeaf()) {
+      var aabb = new AABB();
+      aabb.combine(leafAABB, child2.aabb);
+      cost2 = aabb.getPerimeter() + inheritanceCost;
+    } else {
+      var aabb = new AABB();
+      aabb.combine(leafAABB, child2.aabb);
+      var oldArea = child2.aabb.getPerimeter();
+      var newArea = aabb.getPerimeter();
+      cost2 = newArea - oldArea + inheritanceCost;
+    }
+
+    // Descend according to the minimum cost.
+    if (cost < cost1 && cost < cost2) {
+      break;
+    }
+
+    // Descend
+    if (cost1 < cost2) {
+      index = child1;
+    } else {
+      index = child2;
+    }
+  }
+
+  var sibling = index;
+
+  // Create a new parent.
+  var oldParent = sibling.parent;
+  var newParent = this.allocateNode();
+  newParent.parent = oldParent;
+  newParent.userData = null;
+  newParent.aabb.combine(leafAABB, sibling.aabb);
+  newParent.height = sibling.height + 1;
+
+  if (oldParent != null) {
+    // The sibling was not the root.
+    if (oldParent.child1 == sibling) {
+      oldParent.child1 = newParent;
+    } else {
+      oldParent.child2 = newParent;
+    }
+
+    newParent.child1 = sibling;
+    newParent.child2 = leaf;
+    sibling.parent = newParent;
+    leaf.parent = newParent;
+  } else {
+    // The sibling was the root.
+    newParent.child1 = sibling;
+    newParent.child2 = leaf;
+    sibling.parent = newParent;
+    leaf.parent = newParent;
+    this.m_root = newParent;
+  }
+
+  // Walk back up the tree fixing heights and AABBs
+  index = leaf.parent;
+  while (index != null) {
+    index = this.balance(index);
+
+    var child1 = index.child1;
+    var child2 = index.child2;
+
+    _ASSERT && common.assert(child1 != null);
+    _ASSERT && common.assert(child2 != null);
+
+    index.height = 1 + Math.max(child1.height, child2.height);
+    index.aabb.combine(child1.aabb, child2.aabb);
+
+    index = index.parent;
+  }
+
+  // validate();
+}
+
+DynamicTree.prototype.removeLeaf = function(leaf) {
+  if (leaf == this.m_root) {
+    this.m_root = null;
+    return;
+  }
+
+  var parent = leaf.parent;
+  var grandParent = parent.parent;
+  var sibling;
+  if (parent.child1 == leaf) {
+    sibling = parent.child2;
+  } else {
+    sibling = parent.child1;
+  }
+
+  if (grandParent != null) {
+    // Destroy parent and connect sibling to grandParent.
+    if (grandParent.child1 == parent) {
+      grandParent.child1 = sibling;
+    } else {
+      grandParent.child2 = sibling;
+    }
+    sibling.parent = grandParent;
+    this.freeNode(parent);
+
+    // Adjust ancestor bounds.
+    var index = grandParent;
+    while (index != null) {
+      index = this.balance(index);
+
+      var child1 = index.child1;
+      var child2 = index.child2;
+
+      index.aabb.combine(child1.aabb, child2.aabb);
+      index.height = 1 + Math.max(child1.height, child2.height);
+
+      index = index.parent;
+    }
+  } else {
+    this.m_root = sibling;
+    sibling.parent = null;
+    this.freeNode(parent);
+  }
+
+  // validate();
+}
+
+/**
+ * Perform a left or right rotation if node A is imbalanced. Returns the new
+ * root index.
+ */
+DynamicTree.prototype.balance = function(iA) {
+  _ASSERT && common.assert(iA != null);
+
+  var A = iA;
+  if (A.isLeaf() || A.height < 2) {
+    return iA;
+  }
+
+  var B = A.child1;
+  var C = A.child2;
+
+  var balance = C.height - B.height;
+
+  // Rotate C up
+  if (balance > 1) {
+    var F = C.child1;
+    var G = C.child2;
+
+    // Swap A and C
+    C.child1 = A;
+    C.parent = A.parent;
+    A.parent = C;
+
+    // A's old parent should point to C
+    if (C.parent != null) {
+      if (C.parent.child1 == iA) {
+        C.parent.child1 = C;
+      } else {
+        C.parent.child2 = C;
+      }
+    } else {
+      this.m_root = C;
+    }
+
+    // Rotate
+    if (F.height > G.height) {
+      C.child2 = F;
+      A.child2 = G;
+      G.parent = A;
+      A.aabb.combine(B.aabb, G.aabb);
+      C.aabb.combine(A.aabb, F.aabb);
+
+      A.height = 1 + Math.max(B.height, G.height);
+      C.height = 1 + Math.max(A.height, F.height);
+    } else {
+      C.child2 = G;
+      A.child2 = F;
+      F.parent = A;
+      A.aabb.combine(B.aabb, F.aabb);
+      C.aabb.combine(A.aabb, G.aabb);
+
+      A.height = 1 + Math.max(B.height, F.height);
+      C.height = 1 + Math.max(A.height, G.height);
+    }
+
+    return C;
+  }
+
+  // Rotate B up
+  if (balance < -1) {
+    var D = B.child1;
+    var E = B.child2;
+
+    // Swap A and B
+    B.child1 = A;
+    B.parent = A.parent;
+    A.parent = B;
+
+    // A's old parent should point to B
+    if (B.parent != null) {
+      if (B.parent.child1 == A) {
+        B.parent.child1 = B;
+      } else {
+        B.parent.child2 = B;
+      }
+    } else {
+      this.m_root = B;
+    }
+
+    // Rotate
+    if (D.height > E.height) {
+      B.child2 = D;
+      A.child1 = E;
+      E.parent = A;
+      A.aabb.combine(C.aabb, E.aabb);
+      B.aabb.combine(A.aabb, D.aabb);
+
+      A.height = 1 + Math.max(C.height, E.height);
+      B.height = 1 + Math.max(A.height, D.height);
+    } else {
+      B.child2 = E;
+      A.child1 = D;
+      D.parent = A;
+      A.aabb.combine(C.aabb, D.aabb);
+      B.aabb.combine(A.aabb, E.aabb);
+
+      A.height = 1 + Math.max(C.height, D.height);
+      B.height = 1 + Math.max(A.height, E.height);
+    }
+
+    return B;
+  }
+
+  return A;
+}
+
+/**
+ * Compute the height of the binary tree in O(N) time. Should not be called
+ * often.
+ */
+DynamicTree.prototype.getHeight = function() {
+  if (this.m_root == null) {
+    return 0;
+  }
+
+  return this.m_root.height;
+}
+
+/**
+ * Get the ratio of the sum of the node areas to the root area.
+ */
+DynamicTree.prototype.getAreaRatio = function() {
+  if (this.m_root == null) {
+    return 0.0;
+  }
+
+  var root = this.m_root;
+  var rootArea = root.aabb.getPerimeter();
+
+  var totalArea = 0.0;
+  var node, it = iteratorPool.allocate().preorder();
+  while (node = it.next()) {
+    if (node.height < 0) {
+      // Free node in pool
+      continue;
+    }
+
+    totalArea += node.aabb.getPerimeter();
+  }
+
+  iteratorPool.release(it);
+
+  return totalArea / rootArea;
+}
+
+/**
+ * Compute the height of a sub-tree.
+ */
+DynamicTree.prototype.computeHeight = function(id) {
+  var node;
+  if (typeof id !== 'undefined') {
+    node = this.m_nodes[id];
+  } else {
+    node = this.m_root;
+  }
+
+  // _ASSERT && common.assert(0 <= id && id < this.m_nodeCapacity);
+
+  if (node.isLeaf()) {
+    return 0;
+  }
+
+  var height1 = ComputeHeight(node.child1);
+  var height2 = ComputeHeight(node.child2);
+  return 1 + Math.max(height1, height2);
+}
+
+DynamicTree.prototype.validateStructure = function(node) {
+  if (node == null) {
+    return;
+  }
+
+  if (node == this.m_root) {
+    _ASSERT && common.assert(node.parent == null);
+  }
+
+  var child1 = node.child1;
+  var child2 = node.child2;
+
+  if (node.isLeaf()) {
+    _ASSERT && common.assert(child1 == null);
+    _ASSERT && common.assert(child2 == null);
+    _ASSERT && common.assert(node.height == 0);
+    return;
+  }
+
+  // _ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+  // _ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+
+  _ASSERT && common.assert(child1.parent == node);
+  _ASSERT && common.assert(child2.parent == node);
+
+  this.validateStructure(child1);
+  this.validateStructure(child2);
+}
+
+DynamicTree.prototype.validateMetrics = function(node) {
+  if (node == null) {
+    return;
+  }
+
+  var child1 = node.child1;
+  var child2 = node.child2;
+
+  if (node.isLeaf()) {
+    _ASSERT && common.assert(child1 == null);
+    _ASSERT && common.assert(child2 == null);
+    _ASSERT && common.assert(node.height == 0);
+    return;
+  }
+
+  // _ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+  // _ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+
+  var height1 = this.m_nodes[child1].height;
+  var height2 = this.m_nodes[child2].height;
+  var height = 1 + Math.max(height1, height2);
+  _ASSERT && common.assert(node.height == height);
+
+  var aabb = new AABB();
+  aabb.combine(child1.aabb, child2.aabb);
+
+  _ASSERT && common.assert(AABB.areEqual(aabb, node.aabb));
+
+  this.validateMetrics(child1);
+  this.validateMetrics(child2);
+}
+
+// Validate this tree. For testing.
+DynamicTree.prototype.validate = function() {
+  ValidateStructure(this.m_root);
+  ValidateMetrics(this.m_root);
+
+  _ASSERT && common.assert(this.getHeight() == this.computeHeight());
+}
+
+/**
+ * Get the maximum balance of an node in the tree. The balance is the difference
+ * in height of the two children of a node.
+ */
+DynamicTree.prototype.getMaxBalance = function() {
+  var maxBalance = 0;
+  var node, it = iteratorPool.allocate().preorder();
+  while (node = it.next()) {
+    if (node.height <= 1) {
+      continue;
+    }
+
+    _ASSERT && common.assert(node.isLeaf() == false);
+
+    var balance = Math.abs(node.child2.height - node.child1.height);
+    maxBalance = Math.max(maxBalance, balance);
+  }
+  iteratorPool.release(it);
+
+  return maxBalance;
+}
+
+/**
+ * Build an optimal tree. Very expensive. For testing.
+ */
+DynamicTree.prototype.rebuildBottomUp = function() {
+  var nodes = [];
+  var count = 0;
+
+  // Build array of leaves. Free the rest.
+  var node, it = iteratorPool.allocate().preorder();
+  while (node = it.next()) {
+    if (node.height < 0) {
+      // free node in pool
+      continue;
+    }
+
+    if (node.isLeaf()) {
+      node.parent = null;
+      nodes[count] = node;
+      ++count;
+    } else {
+      this.freeNode(node);
+    }
+  }
+  iteratorPool.release(it);
+
+  while (count > 1) {
+    var minCost = Infinity;
+    var iMin = -1, jMin = -1;
+    for (var i = 0; i < count; ++i) {
+      var aabbi = nodes[i].aabb;
+      for (var j = i + 1; j < count; ++j) {
+        var aabbj = nodes[j].aabb;
+        var b = new AABB();
+        b.combine(aabbi, aabbj);
+        var cost = b.getPerimeter();
+        if (cost < minCost) {
+          iMin = i;
+          jMin = j;
+          minCost = cost;
+        }
+      }
+    }
+
+    var child1 = nodes[iMin];
+    var child2 = nodes[jMin];
+
+    var parent = this.allocateNode();
+    parent.child1 = child1;
+    parent.child2 = child2;
+    parent.height = 1 + Math.max(child1.height, child2.height);
+    parent.aabb.combine(child1.aabb, child2.aabb);
+    parent.parent = null;
+
+    child1.parent = parent;
+    child2.parent = parent;
+
+    nodes[jMin] = nodes[count - 1];
+    nodes[iMin] = parent;
+    --count;
+  }
+
+  this.m_root = nodes[0];
+
+  this.validate();
+}
+
+/**
+ * Shift the world origin. Useful for large worlds. The shift formula is:
+ * position -= newOrigin
+ * 
+ * @param newOrigin The new origin with respect to the old origin
+ */
+DynamicTree.prototype.shiftOrigin = function(newOrigin) {
+  // Build array of leaves. Free the rest.
+  var node, it = iteratorPool.allocate().preorder();
+  while (node = it.next()) {
+    var aabb = node.aabb;
+    aabb.lowerBound.x -= newOrigin.x;
+    aabb.lowerBound.y -= newOrigin.y;
+    aabb.upperBound.x -= newOrigin.x;
+    aabb.upperBound.y -= newOrigin.y;
+  }
+  iteratorPool.release(it);
+}
+
+/**
+ * @function {DynamicTree~queryCallback}
+ * 
+ * @param id Node id.
+ */
+
+/**
+ * Query an AABB for overlapping proxies. The callback class is called for each
+ * proxy that overlaps the supplied AABB.
+ * 
+ * @param {DynamicTree~queryCallback} queryCallback
+ */
+DynamicTree.prototype.query = function(aabb, queryCallback) {
+  _ASSERT && common.assert(typeof queryCallback === 'function')
+  var stack = stackPool.allocate();
+
+  stack.push(this.m_root);
+  while (stack.length > 0) {
+    var node = stack.pop();
+    if (node == null) {
+      continue;
+    }
+
+    if (AABB.testOverlap(node.aabb, aabb)) {
+      if (node.isLeaf()) {
+        var proceed = queryCallback(node.id);
+        if (proceed == false) {
+          return;
+        }
+      } else {
+        stack.push(node.child1);
+        stack.push(node.child2);
+      }
+    }
+  }
+
+  stackPool.release(stack);
+}
+
+/**
+ * Ray-cast against the proxies in the tree. This relies on the callback to
+ * perform a exact ray-cast in the case were the proxy contains a shape. The
+ * callback also performs the any collision filtering. This has performance
+ * roughly equal to k * log(n), where k is the number of collisions and n is the
+ * number of proxies in the tree.
+ * 
+ * @param input The ray-cast input data. The ray extends from p1 to p1 +
+ *          maxFraction * (p2 - p1).
+ * @param rayCastCallback A function that is called for each proxy that is hit by
+ *          the ray.
+ */
+DynamicTree.prototype.rayCast = function(input, rayCastCallback) { // TODO GC
+  _ASSERT && common.assert(typeof rayCastCallback === 'function')
+  var p1 = input.p1;
+  var p2 = input.p2;
+  var r = Vec2.sub(p2, p1);
+  _ASSERT && common.assert(r.lengthSquared() > 0.0);
+  r.normalize();
+
+  // v is perpendicular to the segment.
+  var v = Vec2.cross(1.0, r);
+  var abs_v = Vec2.abs(v);
+
+  // Separating axis for segment (Gino, p80).
+  // |dot(v, p1 - c)| > dot(|v|, h)
+
+  var maxFraction = input.maxFraction;
+
+  // Build a bounding box for the segment.
+  var segmentAABB = new AABB();
+  var t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);
+  segmentAABB.combinePoints(p1, t);
+
+  var stack = stackPool.allocate();
+  var subInput = inputPool.allocate();
+
+  stack.push(this.m_root);
+  while (stack.length > 0) {
+    var node = stack.pop();
+    if (node == null) {
+      continue;
+    }
+
+    if (AABB.testOverlap(node.aabb, segmentAABB) == false) {
+      continue;
+    }
+
+    // Separating axis for segment (Gino, p80).
+    // |dot(v, p1 - c)| > dot(|v|, h)
+    var c = node.aabb.getCenter();
+    var h = node.aabb.getExtents();
+    var separation = Math.abs(Vec2.dot(v, Vec2.sub(p1, c)))
+        - Vec2.dot(abs_v, h);
+    if (separation > 0.0) {
+      continue;
+    }
+
+    if (node.isLeaf()) {
+      subInput.p1 = Vec2.clone(input.p1);
+      subInput.p2 = Vec2.clone(input.p2);
+      subInput.maxFraction = maxFraction;
+
+      var value = rayCastCallback(subInput, node.id);
+
+      if (value == 0.0) {
+        // The client has terminated the ray cast.
+        return;
+      }
+
+      if (value > 0.0) {
+        // update segment bounding box.
+        maxFraction = value;
+        t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);
+        segmentAABB.combinePoints(p1, t);
+      }
+    } else {
+      stack.push(node.child1);
+      stack.push(node.child2);
+    }
+  }
+
+  stackPool.release(stack);
+  inputPool.release(subInput);
+}
+
+var inputPool = new Pool({
+  create : function() {
+    return {};
+  },
+  release : function(stack) {
+  }
+});
+
+var stackPool = new Pool({
+  create : function() {
+    return [];
+  },
+  release : function(stack) {
+    stack.length = 0;
+  }
+});
+
+var iteratorPool = new Pool({
+  create : function() {
+    return new Iterator();
+  },
+  release : function(iterator) {
+    iterator.close();
+  }
+});
+
+function Iterator() {
+  var parents = [];
+  var states = [];
+  return {
+    preorder : function(root) {
+      parents.length = 0;
+      parents.push(root);
+      states.length = 0;
+      states.push(0);
+      return this;
+    },
+    next : function() {
+      while (parents.length > 0) {
+        var i = parents.length - 1;
+        var node = parents[i];
+        if (states[i] === 0) {
+          states[i] = 1;
+          return node;
+        }
+        if (states[i] === 1) {
+          states[i] = 2;
+          if (node.child1) {
+            parents.push(node.child1);
+            states.push(1);
+            return node.child1;
+          }
+        }
+        if (states[i] === 2) {
+          states[i] = 3;
+          if (node.child2) {
+            parents.push(node.child2);
+            states.push(1);
+            return node.child2;
+          }
+        }
+        parents.pop();
+        states.pop();
+      }
+    },
+    close : function() {
+      parents.length = 0;
+    }
+  };
+}
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Pool;
+
+function Pool(opts) {
+  var _list = [];
+  var _max = opts.max || Infinity;
+
+  var _createFn = opts.create;
+  var _outFn = opts.allocate;
+  var _inFn = opts.release;
+  var _discardFn = opts.discard;
+
+  var _createCount = 0;
+  var _outCount = 0;
+  var _inCount = 0;
+  var _discardCount = 0;
+
+  this.max = function(n) {
+    if (typeof n === 'number') {
+      _max = n;
+      return this;
+    }
+    return _max;
+  };
+
+  this.size = function() {
+    return _list.length;
+  };
+
+  this.allocate = function() {
+    var item;
+    if (_list.length > 0) {
+      item = _list.shift();
+    } else {
+      _createCount++;
+      if (typeof _createFn === 'function') {
+        item = _createFn();
+      } else {
+        item = {};
+      }
+    }
+    _outCount++;
+    if (typeof _outFn === 'function') {
+      _outFn(item);
+    }
+    return item;
+  };
+
+  this.release = function(item) {
+    if (_list.length < _max) {
+      _inCount++;
+      if (typeof _inFn === 'function') {
+        _inFn(item);
+      }
+      _list.push(item);
+    } else {
+      _discardCount++;
+      if (typeof _discardFn === 'function') {
+        item = _discardFn(item);
+      }
+    }
+  };
+
+  this.toString = function() {
+    return " +" + _createCount + " >" + _outCount + " <" + _inCount + " -"
+        + _discardCount + " =" + _list.length + "/" + _max;
+  };
+}
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Solver;
+module.exports.TimeStep = TimeStep;
+
+var Settings = __webpack_require__(51);
+var common = __webpack_require__(46);
+
+var Vec2 = __webpack_require__(47);
+var Math = __webpack_require__(48);
+
+var Body = __webpack_require__(56);
+var Contact = __webpack_require__(64);
+var Joint = __webpack_require__(71);
+
+var TimeOfImpact = __webpack_require__(72);
+var TOIInput = TimeOfImpact.Input;
+var TOIOutput = TimeOfImpact.Output;
+
+var Distance = __webpack_require__(67);
+var DistanceInput = Distance.Input;
+var DistanceOutput = Distance.Output;
+var DistanceProxy = Distance.Proxy;
+var SimplexCache = Distance.Cache;
+
+function TimeStep(dt) {
+  this.dt = 0; // time step
+  this.inv_dt = 0; // inverse time step (0 if dt == 0)
+  this.velocityIterations = 0;
+  this.positionIterations = 0;
+  this.warmStarting = false;
+  this.blockSolve = true;
+
+  // timestep ratio for variable timestep
+  this.inv_dt0 = 0.0;
+  this.dtRatio = 1; // dt * inv_dt0
+}
+
+TimeStep.prototype.reset = function(dt) {
+  if (this.dt > 0.0) {
+    this.inv_dt0 = this.inv_dt;
+  }
+  this.dt = dt;
+  this.inv_dt = dt == 0 ? 0 : 1 / dt;
+  this.dtRatio = dt * this.inv_dt0;
+}
+
+/**
+ * Finds and solves islands. An island is a connected subset of the world.
+ * 
+ * @param {World} world
+ */
+function Solver(world) {
+  this.m_world = world;
+  this.m_stack = [];
+  this.m_bodies = [];
+  this.m_contacts = [];
+  this.m_joints = [];
+}
+
+Solver.prototype.clear = function() {
+  this.m_stack.length = 0;
+  this.m_bodies.length = 0;
+  this.m_contacts.length = 0;
+  this.m_joints.length = 0;
+}
+
+Solver.prototype.addBody = function(body) {
+  _ASSERT && common.assert(body instanceof Body, 'Not a Body!', body);
+  this.m_bodies.push(body);
+  // why?
+//  body.c_position.c.setZero();
+//  body.c_position.a = 0;
+//  body.c_velocity.v.setZero();
+//  body.c_velocity.w = 0;
+};
+
+Solver.prototype.addContact = function(contact) {
+  _ASSERT && common.assert(contact instanceof Contact, 'Not a Contact!', contact);
+  this.m_contacts.push(contact);
+};
+
+Solver.prototype.addJoint = function(joint) {
+  _ASSERT && common.assert(joint instanceof Joint, 'Not a Joint!', joint);
+  this.m_joints.push(joint);
+};
+
+/**
+ * @param {TimeStep} step
+ */
+Solver.prototype.solveWorld = function(step) {
+  var world = this.m_world;
+
+  // Clear all the island flags.
+  for (var b = world.m_bodyList; b; b = b.m_next) {
+    b.m_islandFlag = false;
+  }
+  for (var c = world.m_contactList; c; c = c.m_next) {
+    c.m_islandFlag = false;
+  }
+  for (var j = world.m_jointList; j; j = j.m_next) {
+    j.m_islandFlag = false;
+  }
+
+  // Build and simulate all awake islands.
+  var stack = this.m_stack;
+  var loop = -1;
+  for (var seed = world.m_bodyList; seed; seed = seed.m_next) {
+    loop++;
+    if (seed.m_islandFlag) {
+      continue;
+    }
+
+    if (seed.isAwake() == false || seed.isActive() == false) {
+      continue;
+    }
+
+    // The seed can be dynamic or kinematic.
+    if (seed.isStatic()) {
+      continue;
+    }
+
+    // Reset island and stack.
+    this.clear();
+
+    stack.push(seed);
+
+    seed.m_islandFlag = true;
+
+    // Perform a depth first search (DFS) on the constraint graph.
+    while (stack.length > 0) {
+      // Grab the next body off the stack and add it to the island.
+      var b = stack.pop();
+      _ASSERT && common.assert(b.isActive() == true);
+      this.addBody(b);
+
+      // Make sure the body is awake.
+      b.setAwake(true);
+
+      // To keep islands as small as possible, we don't
+      // propagate islands across static bodies.
+      if (b.isStatic()) {
+        continue;
+      }
+      
+      // Search all contacts connected to this body.
+      for (var ce = b.m_contactList; ce; ce = ce.next) {
+        var contact = ce.contact;
+
+        // Has this contact already been added to an island?
+        if (contact.m_islandFlag) {
+          continue;
+        }
+
+        // Is this contact solid and touching?
+        if (contact.isEnabled() == false || contact.isTouching() == false) {
+          continue;
+        }
+
+        // Skip sensors.
+        var sensorA = contact.m_fixtureA.m_isSensor;
+        var sensorB = contact.m_fixtureB.m_isSensor;
+        if (sensorA || sensorB) {
+          continue;
+        }
+
+        this.addContact(contact);
+        contact.m_islandFlag = true;
+
+        var other = ce.other;
+
+        // Was the other body already added to this island?
+        if (other.m_islandFlag) {
+          continue;
+        }
+
+        // _ASSERT && common.assert(stack.length < world.m_bodyCount);
+        stack.push(other);
+        other.m_islandFlag = true;
+      }
+
+      // Search all joints connect to this body.
+      for (var je = b.m_jointList; je; je = je.next) {
+        if (je.joint.m_islandFlag == true) {
+          continue;
+        }
+
+        var other = je.other;
+
+        // Don't simulate joints connected to inactive bodies.
+        if (other.isActive() == false) {
+          continue;
+        }
+
+        this.addJoint(je.joint);
+        je.joint.m_islandFlag = true;
+
+        if (other.m_islandFlag) {
+          continue;
+        }
+
+        // _ASSERT && common.assert(stack.length < world.m_bodyCount);
+        stack.push(other);
+        other.m_islandFlag = true;
+      }
+    }
+
+    this.solveIsland(step);
+
+    // Post solve cleanup.
+    for (var i = 0; i < this.m_bodies.length; ++i) {
+      // Allow static bodies to participate in other islands.
+      // TODO: are they added at all?
+      var b = this.m_bodies[i];
+      if (b.isStatic()) {
+        b.m_islandFlag = false;
+      }
+    }
+  }
+}
+
+/**
+ * @param {TimeStep} step
+ */
+Solver.prototype.solveIsland = function(step) {
+  // B2: Island Solve
+  var world = this.m_world;
+  var gravity = world.m_gravity;
+  var allowSleep = world.m_allowSleep;
+
+  var h = step.dt;
+
+  // Integrate velocities and apply damping. Initialize the body state.
+  for (var i = 0; i < this.m_bodies.length; ++i) {
+    var body = this.m_bodies[i];
+
+    var c = Vec2.clone(body.m_sweep.c);
+    var a = body.m_sweep.a;
+    var v = Vec2.clone(body.m_linearVelocity);
+    var w = body.m_angularVelocity;
+
+    // Store positions for continuous collision.
+    body.m_sweep.c0.set(body.m_sweep.c);
+    body.m_sweep.a0 = body.m_sweep.a;
+
+    if (body.isDynamic()) {
+      // Integrate velocities.
+      v.addMul(h * body.m_gravityScale, gravity);
+      v.addMul(h * body.m_invMass, body.m_force);
+      w += h * body.m_invI * body.m_torque;
+      /**
+       * <pre>
+       * Apply damping.
+       * ODE: dv/dt + c * v = 0
+       * Solution: v(t) = v0 * exp(-c * t)
+       * Time step: v(t + dt) = v0 * exp(-c * (t + dt)) = v0 * exp(-c * t) * exp(-c * dt) = v * exp(-c * dt)
+       * v2 = exp(-c * dt) * v1
+       * Pade approximation:
+       * v2 = v1 * 1 / (1 + c * dt)
+       * </pre>
+       */
+      v.mul(1.0 / (1.0 + h * body.m_linearDamping));
+      w *= 1.0 / (1.0 + h * body.m_angularDamping);
+    }
+
+    body.c_position.c = c;
+    body.c_position.a = a;
+    body.c_velocity.v = v;
+    body.c_velocity.w = w;
+  }
+
+  for (var i = 0; i < this.m_contacts.length; ++i) {
+    var contact = this.m_contacts[i];
+    contact.initConstraint(step);
+  }
+
+  _DEBUG && this.printBodies('M: ');
+
+  for (var i = 0; i < this.m_contacts.length; ++i) {
+    var contact = this.m_contacts[i];
+    contact.initVelocityConstraint(step);
+  }
+
+  _DEBUG && this.printBodies('R: ');
+
+  if (step.warmStarting) {
+    // Warm start.
+    for (var i = 0; i < this.m_contacts.length; ++i) {
+      var contact = this.m_contacts[i];
+      contact.warmStartConstraint(step);
+    }
+  }
+
+  _DEBUG && this.printBodies('Q: ');
+  
+  for (var i = 0; i < this.m_joints.length; ++i) {
+    var joint = this.m_joints[i];
+    joint.initVelocityConstraints(step);
+  }
+
+  _DEBUG && this.printBodies('E: ');
+
+  // Solve velocity constraints
+  for (var i = 0; i < step.velocityIterations; ++i) {
+    for (var j = 0; j < this.m_joints.length; ++j) {
+      var joint = this.m_joints[j];
+      joint.solveVelocityConstraints(step);
+    }
+
+    for (var j = 0; j < this.m_contacts.length; ++j) {
+      var contact = this.m_contacts[j];
+      contact.solveVelocityConstraint(step);
+    }
+  }
+
+  _DEBUG && this.printBodies('D: ');
+
+  // Store impulses for warm starting
+  for (var i = 0; i < this.m_contacts.length; ++i) {
+    var contact = this.m_contacts[i];
+    contact.storeConstraintImpulses(step);
+  }
+
+  _DEBUG && this.printBodies('C: ');
+
+  // Integrate positions
+  for (var i = 0; i < this.m_bodies.length; ++i) {
+    var body = this.m_bodies[i];
+
+    var c = Vec2.clone(body.c_position.c);
+    var a = body.c_position.a;
+    var v = Vec2.clone(body.c_velocity.v);
+    var w = body.c_velocity.w;
+
+    // Check for large velocities
+    var translation = Vec2.mul(h, v);
+    if (Vec2.lengthSquared(translation) > Settings.maxTranslationSquared) {
+      var ratio = Settings.maxTranslation / translation.length();
+      v.mul(ratio);
+    }
+
+    var rotation = h * w;
+    if (rotation * rotation > Settings.maxRotationSquared) {
+      var ratio = Settings.maxRotation / Math.abs(rotation);
+      w *= ratio;
+    }
+
+    // Integrate
+    c.addMul(h, v);
+    a += h * w;
+
+    body.c_position.c.set(c);
+    body.c_position.a = a;
+    body.c_velocity.v.set(v);
+    body.c_velocity.w = w;
+  }
+
+  _DEBUG && this.printBodies('B: ');
+
+  // Solve position constraints
+  var positionSolved = false;
+  for (var i = 0; i < step.positionIterations; ++i) {
+    var minSeparation = 0.0;
+    for (var j = 0; j < this.m_contacts.length; ++j) {
+      var contact = this.m_contacts[j];
+      var separation = contact.solvePositionConstraint(step);
+      minSeparation = Math.min(minSeparation, separation);
+    }
+    // We can't expect minSpeparation >= -Settings.linearSlop because we don't
+    // push the separation above -Settings.linearSlop.
+    var contactsOkay = minSeparation >= -3.0 * Settings.linearSlop;
+
+    var jointsOkay = true;
+    for (var j = 0; j < this.m_joints.length; ++j) {
+      var joint = this.m_joints[j];
+      var jointOkay = joint.solvePositionConstraints(step);
+      jointsOkay = jointsOkay && jointOkay;
+    }
+
+    if (contactsOkay && jointsOkay) {
+      // Exit early if the position errors are small.
+      positionSolved = true;
+      break;
+    }
+  }
+
+  _DEBUG && this.printBodies('L: ');
+
+  // Copy state buffers back to the bodies
+  for (var i = 0; i < this.m_bodies.length; ++i) {
+    var body = this.m_bodies[i];
+
+    body.m_sweep.c.set(body.c_position.c);
+    body.m_sweep.a = body.c_position.a;
+    body.m_linearVelocity.set(body.c_velocity.v);
+    body.m_angularVelocity = body.c_velocity.w;
+    body.synchronizeTransform();
+  }
+
+  this.postSolveIsland();
+
+  if (allowSleep) {
+    var minSleepTime = Infinity;
+
+    var linTolSqr = Settings.linearSleepToleranceSqr;
+    var angTolSqr = Settings.angularSleepToleranceSqr;
+
+    for (var i = 0; i < this.m_bodies.length; ++i) {
+      var body = this.m_bodies[i];
+      if (body.isStatic()) {
+        continue;
+      }
+
+      if ((body.m_autoSleepFlag == false)
+          || (body.m_angularVelocity * body.m_angularVelocity > angTolSqr)
+          || (Vec2.lengthSquared(body.m_linearVelocity) > linTolSqr)) {
+        body.m_sleepTime = 0.0;
+        minSleepTime = 0.0;
+      } else {
+        body.m_sleepTime += h;
+        minSleepTime = Math.min(minSleepTime, body.m_sleepTime);
+      }
+    }
+
+    if (minSleepTime >= Settings.timeToSleep && positionSolved) {
+      for (var i = 0; i < this.m_bodies.length; ++i) {
+        var body = this.m_bodies[i];
+        body.setAwake(false);
+      }
+    }
+  }
+};
+
+Solver.prototype.printBodies = function(tag) {
+  for (var i = 0; i < this.m_bodies.length; ++i) {
+    var b = this.m_bodies[i];
+    common.debug(tag, b.c_position.a, b.c_position.c.x, b.c_position.c.y, b.c_velocity.w, b.c_velocity.v.x, b.c_velocity.v.y);
+  }
+};
+
+var s_subStep = new TimeStep(); // reuse
+
+/**
+ * Find TOI contacts and solve them.
+ *
+ * @param {TimeStep} step
+ */
+Solver.prototype.solveWorldTOI = function(step) {
+  var world = this.m_world;
+
+  if (world.m_stepComplete) {
+    for (var b = world.m_bodyList; b; b = b.m_next) {
+      b.m_islandFlag = false;
+      b.m_sweep.alpha0 = 0.0;
+    }
+
+    for (var c = world.m_contactList; c; c = c.m_next) {
+      // Invalidate TOI
+      c.m_toiFlag = false;
+      c.m_islandFlag = false;
+      c.m_toiCount = 0;
+      c.m_toi = 1.0;
+    }
+  }
+
+  // Find TOI events and solve them.
+  for (;;) {
+    // Find the first TOI.
+    var minContact = null; // Contact
+    var minAlpha = 1.0;
+
+    for (var c = world.m_contactList; c; c = c.m_next) {
+      // Is this contact disabled?
+      if (c.isEnabled() == false) {
+        continue;
+      }
+
+      // Prevent excessive sub-stepping.
+      if (c.m_toiCount > Settings.maxSubSteps) {
+        continue;
+      }
+
+      var alpha = 1.0;
+      if (c.m_toiFlag) {
+        // This contact has a valid cached TOI.
+        alpha = c.m_toi;
+      } else {
+        var fA = c.getFixtureA();
+        var fB = c.getFixtureB();
+
+        // Is there a sensor?
+        if (fA.isSensor() || fB.isSensor()) {
+          continue;
+        }
+
+        var bA = fA.getBody();
+        var bB = fB.getBody();
+
+        _ASSERT && common.assert(bA.isDynamic() || bB.isDynamic());
+
+        var activeA = bA.isAwake() && !bA.isStatic();
+        var activeB = bB.isAwake() && !bB.isStatic();
+
+        // Is at least one body active (awake and dynamic or kinematic)?
+        if (activeA == false && activeB == false) {
+          continue;
+        }
+
+        var collideA = bA.isBullet() || !bA.isDynamic();
+        var collideB = bB.isBullet() || !bB.isDynamic();
+
+        // Are these two non-bullet dynamic bodies?
+        if (collideA == false && collideB == false) {
+          continue;
+        }
+
+        // Compute the TOI for this contact.
+        // Put the sweeps onto the same time interval.
+        var alpha0 = bA.m_sweep.alpha0;
+
+        if (bA.m_sweep.alpha0 < bB.m_sweep.alpha0) {
+          alpha0 = bB.m_sweep.alpha0;
+          bA.m_sweep.advance(alpha0);
+        } else if (bB.m_sweep.alpha0 < bA.m_sweep.alpha0) {
+          alpha0 = bA.m_sweep.alpha0;
+          bB.m_sweep.advance(alpha0);
+        }
+
+        _ASSERT && common.assert(alpha0 < 1.0);
+
+        var indexA = c.getChildIndexA();
+        var indexB = c.getChildIndexB();
+
+        var sweepA = bA.m_sweep;
+        var sweepB = bB.m_sweep;
+
+        // Compute the time of impact in interval [0, minTOI]
+        var input = new TOIInput(); // TODO: reuse
+        input.proxyA.set(fA.getShape(), indexA);
+        input.proxyB.set(fB.getShape(), indexB);
+        input.sweepA.set(bA.m_sweep);
+        input.sweepB.set(bB.m_sweep);
+        input.tMax = 1.0;
+
+        var output = new TOIOutput(); // TODO: reuse
+        TimeOfImpact(output, input);
+
+        // Beta is the fraction of the remaining portion of the [time?].
+        var beta = output.t;
+        if (output.state == TOIOutput.e_touching) {
+          alpha = Math.min(alpha0 + (1.0 - alpha0) * beta, 1.0);
+        } else {
+          alpha = 1.0;
+        }
+
+        c.m_toi = alpha;
+        c.m_toiFlag = true;
+      }
+
+      if (alpha < minAlpha) {
+        // This is the minimum TOI found so far.
+        minContact = c;
+        minAlpha = alpha;
+      }
+    }
+
+    if (minContact == null || 1.0 - 10.0 * Math.EPSILON < minAlpha) {
+      // No more TOI events. Done!
+      world.m_stepComplete = true;
+      break;
+    }
+
+    // Advance the bodies to the TOI.
+    var fA = minContact.getFixtureA();
+    var fB = minContact.getFixtureB();
+    var bA = fA.getBody();
+    var bB = fB.getBody();
+
+    var backup1 = bA.m_sweep.clone();
+    var backup2 = bB.m_sweep.clone();
+
+    bA.advance(minAlpha);
+    bB.advance(minAlpha);
+
+    // The TOI contact likely has some new contact points.
+    minContact.update(world);
+    minContact.m_toiFlag = false;
+    ++minContact.m_toiCount;
+
+    // Is the contact solid?
+    if (minContact.isEnabled() == false || minContact.isTouching() == false) {
+      // Restore the sweeps.
+      minContact.setEnabled(false);
+      bA.m_sweep.set(backup1);
+      bB.m_sweep.set(backup2);
+      bA.synchronizeTransform();
+      bB.synchronizeTransform();
+      continue;
+    }
+
+    bA.setAwake(true);
+    bB.setAwake(true);
+
+    // Build the island
+    this.clear();
+    this.addBody(bA);
+    this.addBody(bB);
+    this.addContact(minContact);
+
+    bA.m_islandFlag = true;
+    bB.m_islandFlag = true;
+    minContact.m_islandFlag = true;
+
+    // Get contacts on bodyA and bodyB.
+    var bodies = [ bA, bB ];
+    for (var i = 0; i < bodies.length; ++i) {
+      var body = bodies[i];
+      if (body.isDynamic()) {
+        for (var ce = body.m_contactList; ce; ce = ce.next) {
+          // if (this.m_bodyCount == this.m_bodyCapacity) { break; }
+          // if (this.m_contactCount == this.m_contactCapacity) { break; }
+
+          var contact = ce.contact;
+
+          // Has this contact already been added to the island?
+          if (contact.m_islandFlag) {
+            continue;
+          }
+
+          // Only add if either is static, kinematic or bullet.
+          var other = ce.other;
+          if (other.isDynamic() && !body.isBullet() && !other.isBullet()) {
+            continue;
+          }
+
+          // Skip sensors.
+          var sensorA = contact.m_fixtureA.m_isSensor;
+          var sensorB = contact.m_fixtureB.m_isSensor;
+          if (sensorA || sensorB) {
+            continue;
+          }
+
+          // Tentatively advance the body to the TOI.
+          var backup = other.m_sweep.clone();
+          if (other.m_islandFlag == false) {
+            other.advance(minAlpha);
+          }
+
+          // Update the contact points
+          contact.update(world);
+
+          // Was the contact disabled by the user?
+          // Are there contact points?
+          if (contact.isEnabled() == false || contact.isTouching() == false) {
+            other.m_sweep.set(backup);
+            other.synchronizeTransform();
+            continue;
+          }
+
+          // Add the contact to the island
+          contact.m_islandFlag = true;
+          this.addContact(contact);
+
+          // Has the other body already been added to the island?
+          if (other.m_islandFlag) {
+            continue;
+          }
+
+          // Add the other body to the island.
+          other.m_islandFlag = true;
+
+          if (!other.isStatic()) {
+            other.setAwake(true);
+          }
+
+          this.addBody(other);
+        }
+      }
+    }
+
+    s_subStep.reset((1.0 - minAlpha) * step.dt);
+    s_subStep.dtRatio = 1.0;
+    s_subStep.positionIterations = 20;
+    s_subStep.velocityIterations = step.velocityIterations;
+    s_subStep.warmStarting = false;
+
+    this.solveIslandTOI(s_subStep, bA, bB);
+
+    // Reset island flags and synchronize broad-phase proxies.
+    for (var i = 0; i < this.m_bodies.length; ++i) {
+      var body = this.m_bodies[i];
+      body.m_islandFlag = false;
+
+      if (!body.isDynamic()) {
+        continue;
+      }
+
+      body.synchronizeFixtures();
+
+      // Invalidate all contact TOIs on this displaced body.
+      for (var ce = body.m_contactList; ce; ce = ce.next) {
+        ce.contact.m_toiFlag = false;
+        ce.contact.m_islandFlag = false;
+      }
+    }
+
+    // Commit fixture proxy movements to the broad-phase so that new contacts
+    // are created.
+    // Also, some contacts can be destroyed.
+    world.findNewContacts();
+
+    if (world.m_subStepping) {
+      world.m_stepComplete = false;
+      break;
+    }
+  }
+
+  if (_DEBUG) for (var b = world.m_bodyList; b; b = b.m_next) {
+    var c = b.m_sweep.c;
+    var a = b.m_sweep.a;
+    var v = b.m_linearVelocity;
+    var w = b.m_angularVelocity;
+  }
+}
+
+/**
+ * @param {TimeStep} subStep
+ * @param toiA
+ * @param toiB
+ */
+Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
+  var world = this.m_world;
+
+  // Initialize the body state.
+  for (var i = 0; i < this.m_bodies.length; ++i) {
+    var body = this.m_bodies[i];
+    body.c_position.c.set(body.m_sweep.c);
+    body.c_position.a = body.m_sweep.a;
+    body.c_velocity.v.set(body.m_linearVelocity);
+    body.c_velocity.w = body.m_angularVelocity;
+  }
+
+  for (var i = 0; i < this.m_contacts.length; ++i) {
+    var contact = this.m_contacts[i];
+    contact.initConstraint(subStep);
+  }
+
+  // Solve position constraints.
+  for (var i = 0; i < subStep.positionIterations; ++i) {
+    var minSeparation = 0.0;
+    for (var j = 0; j < this.m_contacts.length; ++j) {
+      var contact = this.m_contacts[j];
+      var separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
+      minSeparation = Math.min(minSeparation, separation);
+    }
+    // We can't expect minSpeparation >= -Settings.linearSlop because we don't
+    // push the separation above -Settings.linearSlop.
+    var contactsOkay = minSeparation >= -1.5 * Settings.linearSlop;
+    if (contactsOkay) {
+      break;
+    }
+  }
+
+  if (false) { var cache, output, input, indexB, indexA, bB, bA, fB, fA, c, i; }
+
+  // Leap of faith to new safe state.
+  toiA.m_sweep.c0.set(toiA.c_position.c);
+  toiA.m_sweep.a0 = toiA.c_position.a;
+  toiB.m_sweep.c0.set(toiB.c_position.c);
+  toiB.m_sweep.a0 = toiB.c_position.a;
+
+  // No warm starting is needed for TOI events because warm
+  // starting impulses were applied in the discrete solver.
+  for (var i = 0; i < this.m_contacts.length; ++i) {
+    var contact = this.m_contacts[i];
+    contact.initVelocityConstraint(subStep);
+  }
+
+  // Solve velocity constraints.
+  for (var i = 0; i < subStep.velocityIterations; ++i) {
+    for (var j = 0; j < this.m_contacts.length; ++j) {
+      var contact = this.m_contacts[j];
+      contact.solveVelocityConstraint(subStep);
+    }
+  }
+
+  // Don't store the TOI contact forces for warm starting
+  // because they can be quite large.
+
+  var h = subStep.dt;
+
+  // Integrate positions
+  for (var i = 0; i < this.m_bodies.length; ++i) {
+    var body = this.m_bodies[i];
+
+    var c = Vec2.clone(body.c_position.c);
+    var a = body.c_position.a;
+    var v = Vec2.clone(body.c_velocity.v);
+    var w = body.c_velocity.w;
+
+    // Check for large velocities
+    var translation = Vec2.mul(h, v);
+    if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared) {
+      var ratio = Settings.maxTranslation / translation.length();
+      v.mul(ratio);
+    }
+
+    var rotation = h * w;
+    if (rotation * rotation > Settings.maxRotationSquared) {
+      var ratio = Settings.maxRotation / Math.abs(rotation);
+      w *= ratio;
+    }
+
+    // Integrate
+    c.addMul(h, v);
+    a += h * w;
+
+    body.c_position.c = c;
+    body.c_position.a = a;
+    body.c_velocity.v = v;
+    body.c_velocity.w = w;
+
+    // Sync bodies
+    body.m_sweep.c = c;
+    body.m_sweep.a = a;
+    body.m_linearVelocity = v;
+    body.m_angularVelocity = w;
+    body.synchronizeTransform();
+  }
+
+  this.postSolveIsland();
+};
+
+/**
+ * Contact impulses for reporting. Impulses are used instead of forces because
+ * sub-step forces may approach infinity for rigid body collisions. These match
+ * up one-to-one with the contact points in Manifold.
+ */
+function ContactImpulse() {
+  this.normalImpulses = [];
+  this.tangentImpulses = [];
+};
+
+Solver.prototype.postSolveIsland = function() {
+  // TODO: report contact.v_points instead of new object?
+  var impulse = new ContactImpulse();
+  for (var c = 0; c < this.m_contacts.length; ++c) {
+    var contact = this.m_contacts[c];
+    for (var p = 0; p < contact.v_points.length; ++p) {
+      impulse.normalImpulses.push(contact.v_points[p].normalImpulse);
+      impulse.tangentImpulses.push(contact.v_points[p].tangentImpulse);
+    }
+    this.m_world.postSolve(contact, impulse);
+  }
+};
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Body;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+var Math = __webpack_require__(48);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Fixture = __webpack_require__(62);
+var Shape = __webpack_require__(63);
+var World = __webpack_require__(44);
+
+var staticBody = Body.STATIC = 'static';
+var kinematicBody = Body.KINEMATIC = 'kinematic';
+var dynamicBody = Body.DYNAMIC = 'dynamic';
+
+/**
+ * @typedef {Object} BodyDef
+ *
+ * @prop type Body types are static, kinematic, or dynamic. Note: if a dynamic
+ *       body would have zero mass, the mass is set to one.
+ *
+ * @prop position The world position of the body. Avoid creating bodies at the
+ *       origin since this can lead to many overlapping shapes.
+ *
+ * @prop angle The world angle of the body in radians.
+ *
+ * @prop linearVelocity The linear velocity of the body's origin in world
+ *       co-ordinates.
+ *
+ * @prop angularVelocity
+ *
+ * @prop linearDamping Linear damping is use to reduce the linear velocity. The
+ *       damping parameter can be larger than 1.0 but the damping effect becomes
+ *       sensitive to the time step when the damping parameter is large.
+ *
+ * @prop angularDamping Angular damping is use to reduce the angular velocity.
+ *       The damping parameter can be larger than 1.0 but the damping effect
+ *       becomes sensitive to the time step when the damping parameter is large.
+ *
+ * @prop fixedRotation Should this body be prevented from rotating? Useful for
+ *       characters.
+ *
+ * @prop bullet Is this a fast moving body that should be prevented from
+ *       tunneling through other moving bodies? Note that all bodies are
+ *       prevented from tunneling through kinematic and static bodies. This
+ *       setting is only considered on dynamic bodies. Warning: You should use
+ *       this flag sparingly since it increases processing time.
+ *
+ * @prop active Does this body start out active?
+ *
+ * @prop awake Is this body initially awake or sleeping?
+ *
+ * @prop allowSleep Set this flag to false if this body should never fall
+ *       asleep. Note that this increases CPU usage.
+ */
+var BodyDef = {
+  type : staticBody,
+  position : Vec2.zero(),
+  angle : 0.0,
+
+  linearVelocity : Vec2.zero(),
+  angularVelocity : 0.0,
+
+  linearDamping : 0.0,
+  angularDamping : 0.0,
+
+  fixedRotation : false,
+  bullet : false,
+  gravityScale : 1.0,
+
+  allowSleep : true,
+  awake : true,
+  active : true,
+
+  userData : null
+};
+
+/**
+ * @class
+ * 
+ * A rigid body composed of one or more fixtures.
+ * 
+ * @param {World} world
+ * @param {BodyDef} def
+ */
+function Body(world, def) {
+
+  def = options(def, BodyDef);
+
+  _ASSERT && common.assert(Vec2.isValid(def.position));
+  _ASSERT && common.assert(Vec2.isValid(def.linearVelocity));
+  _ASSERT && common.assert(Math.isFinite(def.angle));
+  _ASSERT && common.assert(Math.isFinite(def.angularVelocity));
+  _ASSERT && common.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
+  _ASSERT && common.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
+
+  this.m_world = world;
+
+  this.m_awakeFlag = def.awake;
+  this.m_autoSleepFlag = def.allowSleep;
+  this.m_bulletFlag = def.bullet;
+  this.m_fixedRotationFlag = def.fixedRotation;
+  this.m_activeFlag = def.active;
+
+  this.m_islandFlag = false;
+  this.m_toiFlag = false;
+
+  this.m_userData = def.userData;
+  this.m_type = def.type;
+
+  if (this.m_type == dynamicBody) {
+    this.m_mass = 1.0;
+    this.m_invMass = 1.0;
+  } else {
+    this.m_mass = 0.0;
+    this.m_invMass = 0.0;
+  }
+
+  // Rotational inertia about the center of mass.
+  this.m_I = 0.0;
+  this.m_invI = 0.0;
+
+  // the body origin transform
+  this.m_xf = Transform.identity();
+  this.m_xf.p = Vec2.clone(def.position);
+  this.m_xf.q.setAngle(def.angle);
+
+  // the swept motion for CCD
+  this.m_sweep = new Sweep();
+  this.m_sweep.setTransform(this.m_xf);
+
+  // position and velocity correction
+  this.c_velocity = new Velocity();
+  this.c_position = new Position();
+
+  this.m_force = Vec2.zero();
+  this.m_torque = 0.0;
+
+  this.m_linearVelocity = Vec2.clone(def.linearVelocity);
+  this.m_angularVelocity = def.angularVelocity;
+
+  this.m_linearDamping = def.linearDamping;
+  this.m_angularDamping = def.angularDamping;
+  this.m_gravityScale = def.gravityScale;
+
+  this.m_sleepTime = 0.0;
+
+  this.m_jointList = null;
+  this.m_contactList = null;
+  this.m_fixtureList = null;
+
+  this.m_prev = null;
+  this.m_next = null;
+
+  this.m_destroyed = false;
+}
+
+Body.prototype._serialize = function() {
+  var fixtures = [];
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    fixtures.push(f);
+  }
+  return {
+    type: this.m_type,
+    position: this.m_xf.p,
+    angle: this.m_xf.q.getAngle(),
+    linearVelocity: this.m_linearVelocity,
+    angularVelocity: this.m_angularVelocity,
+    fixtures: fixtures,
+  };
+};
+
+Body._deserialize = function(world, data) {
+  var body = new Body(world, data);
+
+  data.fixtures.forEach(function(data) {
+    var fixture = Fixture._deserialize(body, data);
+    body._addFixture(fixture);
+  });
+
+  return body;
+};
+
+Body.prototype.isWorldLocked = function() {
+  return this.m_world && this.m_world.isLocked() ? true : false;
+};
+
+Body.prototype.getWorld = function() {
+  return this.m_world;
+};
+
+Body.prototype.getNext = function() {
+  return this.m_next;
+};
+
+Body.prototype.setUserData = function(data) {
+  this.m_userData = data;
+};
+
+Body.prototype.getUserData = function() {
+  return this.m_userData;
+};
+
+Body.prototype.getFixtureList = function() {
+  return this.m_fixtureList;
+};
+
+Body.prototype.getJointList = function() {
+  return this.m_jointList;
+};
+
+/**
+ * Warning: this list changes during the time step and you may miss some
+ * collisions if you don't use ContactListener.
+ */
+Body.prototype.getContactList = function() {
+  return this.m_contactList;
+};
+
+Body.prototype.isStatic = function() {
+  return this.m_type == staticBody;
+};
+
+Body.prototype.isDynamic = function() {
+  return this.m_type == dynamicBody;
+};
+
+Body.prototype.isKinematic = function() {
+  return this.m_type == kinematicBody;
+};
+
+/**
+ * This will alter the mass and velocity.
+ */
+Body.prototype.setStatic = function() {
+  this.setType(staticBody);
+  return this;
+};
+
+Body.prototype.setDynamic = function() {
+  this.setType(dynamicBody);
+  return this;
+};
+
+Body.prototype.setKinematic = function() {
+  this.setType(kinematicBody);
+  return this;
+};
+
+/**
+ * @private
+ */
+Body.prototype.getType = function() {
+  return this.m_type;
+};
+
+/**
+ * 
+ * @private
+ */
+Body.prototype.setType = function(type) {
+  _ASSERT && common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return;
+  }
+
+  if (this.m_type == type) {
+    return;
+  }
+
+  this.m_type = type;
+
+  this.resetMassData();
+
+  if (this.m_type == staticBody) {
+    this.m_linearVelocity.setZero();
+    this.m_angularVelocity = 0.0;
+    this.m_sweep.forward();
+    this.synchronizeFixtures();
+  }
+
+  this.setAwake(true);
+
+  this.m_force.setZero();
+  this.m_torque = 0.0;
+
+  // Delete the attached contacts.
+  var ce = this.m_contactList;
+  while (ce) {
+    var ce0 = ce;
+    ce = ce.next;
+    this.m_world.destroyContact(ce0.contact);
+  }
+  this.m_contactList = null;
+
+  // Touch the proxies so that new contacts will be created (when appropriate)
+  var broadPhase = this.m_world.m_broadPhase;
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    var proxyCount = f.m_proxyCount;
+    for (var i = 0; i < proxyCount; ++i) {
+      broadPhase.touchProxy(f.m_proxies[i].proxyId);
+    }
+  }
+};
+
+Body.prototype.isBullet = function() {
+  return this.m_bulletFlag;
+};
+
+/**
+ * Should this body be treated like a bullet for continuous collision detection?
+ */
+Body.prototype.setBullet = function(flag) {
+  this.m_bulletFlag = !!flag;
+};
+
+Body.prototype.isSleepingAllowed = function() {
+  return this.m_autoSleepFlag;
+};
+
+Body.prototype.setSleepingAllowed = function(flag) {
+  this.m_autoSleepFlag = !!flag;
+  if (this.m_autoSleepFlag == false) {
+    this.setAwake(true);
+  }
+};
+
+Body.prototype.isAwake = function() {
+  return this.m_awakeFlag;
+};
+
+/**
+ * Set the sleep state of the body. A sleeping body has very low CPU cost.
+ * 
+ * @param flag Set to true to wake the body, false to put it to sleep.
+ */
+Body.prototype.setAwake = function(flag) {
+  if (flag) {
+    if (this.m_awakeFlag == false) {
+      this.m_awakeFlag = true;
+      this.m_sleepTime = 0.0;
+    }
+  } else {
+    this.m_awakeFlag = false;
+    this.m_sleepTime = 0.0;
+    this.m_linearVelocity.setZero();
+    this.m_angularVelocity = 0.0;
+    this.m_force.setZero();
+    this.m_torque = 0.0;
+  }
+};
+
+Body.prototype.isActive = function() {
+  return this.m_activeFlag;
+};
+
+/**
+ * Set the active state of the body. An inactive body is not simulated and
+ * cannot be collided with or woken up. If you pass a flag of true, all fixtures
+ * will be added to the broad-phase. If you pass a flag of false, all fixtures
+ * will be removed from the broad-phase and all contacts will be destroyed.
+ * Fixtures and joints are otherwise unaffected.
+ * 
+ * You may continue to create/destroy fixtures and joints on inactive bodies.
+ * Fixtures on an inactive body are implicitly inactive and will not participate
+ * in collisions, ray-casts, or queries. Joints connected to an inactive body
+ * are implicitly inactive. An inactive body is still owned by a World object
+ * and remains
+ */
+Body.prototype.setActive = function(flag) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (flag == this.m_activeFlag) {
+    return;
+  }
+
+  this.m_activeFlag = !!flag;
+
+  if (this.m_activeFlag) {
+    // Create all proxies.
+    var broadPhase = this.m_world.m_broadPhase;
+    for (var f = this.m_fixtureList; f; f = f.m_next) {
+      f.createProxies(broadPhase, this.m_xf);
+    }
+    // Contacts are created the next time step.
+
+  } else {
+    // Destroy all proxies.
+    var broadPhase = this.m_world.m_broadPhase;
+    for (var f = this.m_fixtureList; f; f = f.m_next) {
+      f.destroyProxies(broadPhase);
+    }
+
+    // Destroy the attached contacts.
+    var ce = this.m_contactList;
+    while (ce) {
+      var ce0 = ce;
+      ce = ce.next;
+      this.m_world.destroyContact(ce0.contact);
+    }
+    this.m_contactList = null;
+  }
+};
+
+Body.prototype.isFixedRotation = function() {
+  return this.m_fixedRotationFlag;
+};
+
+/**
+ * Set this body to have fixed rotation. This causes the mass to be reset.
+ */
+Body.prototype.setFixedRotation = function(flag) {
+  if (this.m_fixedRotationFlag == flag) {
+    return;
+  }
+
+  this.m_fixedRotationFlag = !!flag;
+
+  this.m_angularVelocity = 0.0;
+
+  this.resetMassData();
+};
+
+/**
+ * Get the world transform for the body's origin.
+ */
+Body.prototype.getTransform = function() {
+  return this.m_xf;
+};
+
+/**
+ * Set the position of the body's origin and rotation. Manipulating a body's
+ * transform may cause non-physical behavior. Note: contacts are updated on the
+ * next call to World.step.
+ * 
+ * @param position The world position of the body's local origin.
+ * @param angle The world rotation in radians.
+ */
+Body.prototype.setTransform = function(position, angle) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+  if (this.isWorldLocked() == true) {
+    return;
+  }
+
+  this.m_xf.set(position, angle);
+  this.m_sweep.setTransform(this.m_xf);
+
+  var broadPhase = this.m_world.m_broadPhase;
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    f.synchronize(broadPhase, this.m_xf, this.m_xf);
+  }
+};
+
+Body.prototype.synchronizeTransform = function() {
+  this.m_sweep.getTransform(this.m_xf, 1);
+};
+
+/**
+ * Update fixtures in broad-phase.
+ */
+Body.prototype.synchronizeFixtures = function() {
+  var xf = Transform.identity();
+
+  this.m_sweep.getTransform(xf, 0);
+
+  var broadPhase = this.m_world.m_broadPhase;
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    f.synchronize(broadPhase, xf, this.m_xf);
+  }
+};
+
+/**
+ * Used in TOI.
+ */
+Body.prototype.advance = function(alpha) {
+  // Advance to the new safe time. This doesn't sync the broad-phase.
+  this.m_sweep.advance(alpha);
+  this.m_sweep.c.set(this.m_sweep.c0);
+  this.m_sweep.a = this.m_sweep.a0;
+  this.m_sweep.getTransform(this.m_xf, 1);
+};
+
+/**
+ * Get the world position for the body's origin.
+ */
+Body.prototype.getPosition = function() {
+  return this.m_xf.p;
+};
+
+Body.prototype.setPosition = function(p) {
+  this.setTransform(p, this.m_sweep.a);
+};
+
+/**
+ * Get the current world rotation angle in radians.
+ */
+Body.prototype.getAngle = function() {
+  return this.m_sweep.a;
+};
+
+Body.prototype.setAngle = function(angle) {
+  this.setTransform(this.m_xf.p, angle);
+};
+
+/**
+ * Get the world position of the center of mass.
+ */
+Body.prototype.getWorldCenter = function() {
+  return this.m_sweep.c;
+};
+
+/**
+ * Get the local position of the center of mass.
+ */
+Body.prototype.getLocalCenter = function() {
+  return this.m_sweep.localCenter;
+};
+
+/**
+ * Get the linear velocity of the center of mass.
+ * 
+ * @return the linear velocity of the center of mass.
+ */
+Body.prototype.getLinearVelocity = function() {
+  return this.m_linearVelocity;
+};
+
+/**
+ * Get the world linear velocity of a world point attached to this body.
+ * 
+ * @param worldPoint A point in world coordinates.
+ */
+Body.prototype.getLinearVelocityFromWorldPoint = function(worldPoint) {
+  var localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
+  return Vec2.add(this.m_linearVelocity, Vec2.cross(this.m_angularVelocity,
+      localCenter));
+};
+
+/**
+ * Get the world velocity of a local point.
+ * 
+ * @param localPoint A point in local coordinates.
+ */
+Body.prototype.getLinearVelocityFromLocalPoint = function(localPoint) {
+  return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
+};
+
+/**
+ * Set the linear velocity of the center of mass.
+ * 
+ * @param v The new linear velocity of the center of mass.
+ */
+Body.prototype.setLinearVelocity = function(v) {
+  if (this.m_type == staticBody) {
+    return;
+  }
+  if (Vec2.dot(v, v) > 0.0) {
+    this.setAwake(true);
+  }
+  this.m_linearVelocity.set(v);
+};
+
+/**
+ * Get the angular velocity.
+ * 
+ * @returns the angular velocity in radians/second.
+ */
+Body.prototype.getAngularVelocity = function() {
+  return this.m_angularVelocity;
+};
+
+/**
+ * Set the angular velocity.
+ * 
+ * @param omega The new angular velocity in radians/second.
+ */
+Body.prototype.setAngularVelocity = function(w) {
+  if (this.m_type == staticBody) {
+    return;
+  }
+  if (w * w > 0.0) {
+    this.setAwake(true);
+  }
+  this.m_angularVelocity = w;
+};
+
+Body.prototype.getLinearDamping = function() {
+  return this.m_linearDamping;
+};
+
+Body.prototype.setLinearDamping = function(linearDamping) {
+  this.m_linearDamping = linearDamping;
+};
+
+Body.prototype.getAngularDamping = function() {
+  return this.m_angularDamping;
+};
+
+Body.prototype.setAngularDamping = function(angularDamping) {
+  this.m_angularDamping = angularDamping;
+};
+
+Body.prototype.getGravityScale = function() {
+  return this.m_gravityScale;
+};
+
+/**
+ * Scale the gravity applied to this body.
+ */
+Body.prototype.setGravityScale = function(scale) {
+  this.m_gravityScale = scale;
+};
+
+/**
+ * Get the total mass of the body.
+ * 
+ * @returns The mass, usually in kilograms (kg).
+ */
+Body.prototype.getMass = function() {
+  return this.m_mass;
+};
+
+/**
+ * Get the rotational inertia of the body about the local origin.
+ * 
+ * @return the rotational inertia, usually in kg-m^2.
+ */
+Body.prototype.getInertia = function() {
+  return this.m_I + this.m_mass
+      * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
+};
+
+/**
+ * @typedef {Object} MassData This holds the mass data computed for a shape.
+ * 
+ * @prop mass The mass of the shape, usually in kilograms.
+ * @prop center The position of the shape's centroid relative to the shape's
+ *       origin.
+ * @prop I The rotational inertia of the shape about the local origin.
+ */
+function MassData() {
+  this.mass = 0;
+  this.center = Vec2.zero();
+  this.I = 0;
+};
+
+/**
+ * Copy the mass data of the body to data.
+ */
+Body.prototype.getMassData = function(data) {
+  data.mass = this.m_mass;
+  data.I = this.getInertia();
+  data.center.set(this.m_sweep.localCenter);
+};
+
+/**
+ * This resets the mass properties to the sum of the mass properties of the
+ * fixtures. This normally does not need to be called unless you called
+ * SetMassData to override the mass and you later want to reset the mass.
+ */
+Body.prototype.resetMassData = function() {
+  // Compute mass data from shapes. Each shape has its own density.
+  this.m_mass = 0.0;
+  this.m_invMass = 0.0;
+  this.m_I = 0.0;
+  this.m_invI = 0.0;
+  this.m_sweep.localCenter.setZero();
+
+  // Static and kinematic bodies have zero mass.
+  if (this.isStatic() || this.isKinematic()) {
+    this.m_sweep.c0.set(this.m_xf.p);
+    this.m_sweep.c.set(this.m_xf.p);
+    this.m_sweep.a0 = this.m_sweep.a;
+    return;
+  }
+
+  _ASSERT && common.assert(this.isDynamic());
+
+  // Accumulate mass over all fixtures.
+  var localCenter = Vec2.zero();
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    if (f.m_density == 0.0) {
+      continue;
+    }
+
+    var massData = new MassData();
+    f.getMassData(massData);
+    this.m_mass += massData.mass;
+    localCenter.addMul(massData.mass, massData.center);
+    this.m_I += massData.I;
+  }
+
+  // Compute center of mass.
+  if (this.m_mass > 0.0) {
+    this.m_invMass = 1.0 / this.m_mass;
+    localCenter.mul(this.m_invMass);
+
+  } else {
+    // Force all dynamic bodies to have a positive mass.
+    this.m_mass = 1.0;
+    this.m_invMass = 1.0;
+  }
+
+  if (this.m_I > 0.0 && this.m_fixedRotationFlag == false) {
+    // Center the inertia about the center of mass.
+    this.m_I -= this.m_mass * Vec2.dot(localCenter, localCenter);
+    _ASSERT && common.assert(this.m_I > 0.0);
+    this.m_invI = 1.0 / this.m_I;
+
+  } else {
+    this.m_I = 0.0;
+    this.m_invI = 0.0;
+  }
+
+  // Move center of mass.
+  var oldCenter = Vec2.clone(this.m_sweep.c);
+  this.m_sweep.setLocalCenter(localCenter, this.m_xf);
+
+  // Update center of mass velocity.
+  this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
+      this.m_sweep.c, oldCenter)));
+};
+
+/**
+ * Set the mass properties to override the mass properties of the fixtures. Note
+ * that this changes the center of mass position. Note that creating or
+ * destroying fixtures can also alter the mass. This function has no effect if
+ * the body isn't dynamic.
+ * 
+ * @param massData The mass properties.
+ */
+Body.prototype.setMassData = function(massData) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+  if (this.isWorldLocked() == true) {
+    return;
+  }
+
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+
+  this.m_invMass = 0.0;
+  this.m_I = 0.0;
+  this.m_invI = 0.0;
+
+  this.m_mass = massData.mass;
+  if (this.m_mass <= 0.0) {
+    this.m_mass = 1.0;
+  }
+
+  this.m_invMass = 1.0 / this.m_mass;
+
+  if (massData.I > 0.0 && this.m_fixedRotationFlag == false) {
+    this.m_I = massData.I - this.m_mass
+        * Vec2.dot(massData.center, massData.center);
+    _ASSERT && common.assert(this.m_I > 0.0);
+    this.m_invI = 1.0 / this.m_I;
+  }
+
+  // Move center of mass.
+  var oldCenter = Vec2.clone(this.m_sweep.c);
+  this.m_sweep.setLocalCenter(massData.center, this.m_xf);
+
+  // Update center of mass velocity.
+  this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
+      this.m_sweep.c, oldCenter)));
+};
+
+/**
+ * Apply a force at a world point. If the force is not applied at the center of
+ * mass, it will generate a torque and affect the angular velocity. This wakes
+ * up the body.
+ * 
+ * @param force The world force vector, usually in Newtons (N).
+ * @param point The world position of the point of application.
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyForce = function(force, point, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+  // Don't accumulate a force if the body is sleeping.
+  if (this.m_awakeFlag) {
+    this.m_force.add(force);
+    this.m_torque += Vec2.cross(Vec2.sub(point, this.m_sweep.c), force);
+  }
+};
+
+/**
+ * Apply a force to the center of mass. This wakes up the body.
+ * 
+ * @param force The world force vector, usually in Newtons (N).
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyForceToCenter = function(force, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+  // Don't accumulate a force if the body is sleeping
+  if (this.m_awakeFlag) {
+    this.m_force.add(force);
+  }
+};
+
+/**
+ * Apply a torque. This affects the angular velocity without affecting the
+ * linear velocity of the center of mass. This wakes up the body.
+ * 
+ * @param torque About the z-axis (out of the screen), usually in N-m.
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyTorque = function(torque, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+  // Don't accumulate a force if the body is sleeping
+  if (this.m_awakeFlag) {
+    this.m_torque += torque;
+  }
+};
+
+/**
+ * Apply an impulse at a point. This immediately modifies the velocity. It also
+ * modifies the angular velocity if the point of application is not at the
+ * center of mass. This wakes up the body.
+ * 
+ * @param impulse The world impulse vector, usually in N-seconds or kg-m/s.
+ * @param point The world position of the point of application.
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyLinearImpulse = function(impulse, point, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+
+  // Don't accumulate velocity if the body is sleeping
+  if (this.m_awakeFlag) {
+    this.m_linearVelocity.addMul(this.m_invMass, impulse);
+    this.m_angularVelocity += this.m_invI * Vec2.cross(Vec2.sub(point, this.m_sweep.c), impulse);
+  }
+};
+
+/**
+ * Apply an angular impulse.
+ * 
+ * @param impulse The angular impulse in units of kg*m*m/s
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyAngularImpulse = function(impulse, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+  // Don't accumulate velocity if the body is sleeping
+  if (this.m_awakeFlag) {
+    this.m_angularVelocity += this.m_invI * impulse;
+  }
+};
+
+/**
+ * This is used to prevent connected bodies (by joints) from colliding,
+ * depending on the joint's collideConnected flag.
+ */
+Body.prototype.shouldCollide = function(that) {
+  // At least one body should be dynamic.
+  if (this.m_type != dynamicBody && that.m_type != dynamicBody) {
+    return false;
+  }
+  // Does a joint prevent collision?
+  for (var jn = this.m_jointList; jn; jn = jn.next) {
+    if (jn.other == that) {
+      if (jn.joint.m_collideConnected == false) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+Body.prototype._addFixture = function(fixture) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return null;
+  }
+
+  if (this.m_activeFlag) {
+    var broadPhase = this.m_world.m_broadPhase;
+    fixture.createProxies(broadPhase, this.m_xf);
+  }
+
+  fixture.m_next = this.m_fixtureList;
+  this.m_fixtureList = fixture;
+
+  // Adjust mass properties if needed.
+  if (fixture.m_density > 0.0) {
+    this.resetMassData();
+  }
+
+  // Let the world know we have a new fixture. This will cause new contacts
+  // to be created at the beginning of the next time step.
+  this.m_world.m_newFixture = true;
+
+  return fixture
+};
+
+/**
+ * Creates a fixture and attach it to this body.
+ * 
+ * If the density is non-zero, this function automatically updates the mass of
+ * the body.
+ * 
+ * Contacts are not created until the next time step.
+ * 
+ * Warning: This function is locked during callbacks.
+
+ * @param {Shape|FixtureDef} shape Shape or fixture definition.
+ * @param {FixtureDef|number} fixdef Fixture definition or just density.
+ */
+Body.prototype.createFixture = function(shape, fixdef) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return null;
+  }
+
+  var fixture = new Fixture(this, shape, fixdef);
+  this._addFixture(fixture);
+  return fixture
+};
+
+/**
+ * Destroy a fixture. This removes the fixture from the broad-phase and destroys
+ * all contacts associated with this fixture. This will automatically adjust the
+ * mass of the body if the body is dynamic and the fixture has positive density.
+ * All fixtures attached to a body are implicitly destroyed when the body is
+ * destroyed.
+ * 
+ * Warning: This function is locked during callbacks.
+ * 
+ * @param fixture The fixture to be removed.
+ */
+Body.prototype.destroyFixture = function(fixture) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return;
+  }
+
+  _ASSERT && common.assert(fixture.m_body == this);
+
+  // Remove the fixture from this body's singly linked list.
+  var found = false;
+  if (this.m_fixtureList === fixture) {
+    this.m_fixtureList = fixture.m_next;
+    found = true;
+
+  } else {
+    var node = this.m_fixtureList;
+    while (node != null) {
+      if (node.m_next === fixture) {
+        node.m_next = fixture.m_next;
+        found = true;
+        break;
+      }
+      node = node.m_next;
+    }
+  }
+
+  // You tried to remove a shape that is not attached to this body.
+  _ASSERT && common.assert(found);
+
+  // Destroy any contacts associated with the fixture.
+  var edge = this.m_contactList;
+  while (edge) {
+    var c = edge.contact;
+    edge = edge.next;
+
+    var fixtureA = c.getFixtureA();
+    var fixtureB = c.getFixtureB();
+
+    if (fixture == fixtureA || fixture == fixtureB) {
+      // This destroys the contact and removes it from
+      // this body's contact list.
+      this.m_world.destroyContact(c);
+    }
+  }
+
+  if (this.m_activeFlag) {
+    var broadPhase = this.m_world.m_broadPhase;
+    fixture.destroyProxies(broadPhase);
+  }
+
+  fixture.m_body = null;
+  fixture.m_next = null;
+
+  this.m_world.publish('remove-fixture', fixture);
+
+  // Reset the mass data.
+  this.resetMassData();
+};
+
+/**
+ * Get the corresponding world point of a local point.
+ */
+Body.prototype.getWorldPoint = function(localPoint) {
+  return Transform.mulVec2(this.m_xf, localPoint);
+};
+
+/**
+ * Get the corresponding world vector of a local vector.
+ */
+Body.prototype.getWorldVector = function(localVector) {
+  return Rot.mulVec2(this.m_xf.q, localVector);
+};
+
+/**
+ * Gets the corresponding local point of a world point.
+ */
+Body.prototype.getLocalPoint = function(worldPoint) {
+  return Transform.mulTVec2(this.m_xf, worldPoint);
+};
+
+/**
+ * 
+ * Gets the corresponding local vector of a world vector.
+ */
+Body.prototype.getLocalVector = function(worldVector) {
+  return Rot.mulTVec2(this.m_xf.q, worldVector);
+};
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Rot;
+
+var common = __webpack_require__(46);
+var Vec2 = __webpack_require__(47);
+var Math = __webpack_require__(48);
+
+// TODO merge with Transform
+
+/**
+ * Initialize from an angle in radians.
+ */
+function Rot(angle) {
+  if (!(this instanceof Rot)) {
+    return new Rot(angle);
+  }
+  if (typeof angle === 'number') {
+    this.setAngle(angle);
+  } else if (typeof angle === 'object') {
+      this.set(angle);
+  } else {
+    this.setIdentity();
+  }
+}
+
+Rot.neo = function(angle) {
+  var obj = Object.create(Rot.prototype);
+  obj.setAngle(angle);
+  return obj;
+};
+
+Rot.clone = function(rot) {
+  _ASSERT && Rot.assert(rot);
+  var obj = Object.create(Rot.prototype);
+  obj.s = rot.s;
+  obj.c = rot.c;
+  return obj;
+};
+
+Rot.identity = function() {
+  var obj = Object.create(Rot.prototype);
+  obj.s = 0.0;
+  obj.c = 1.0;
+  return obj;
+};
+
+Rot.isValid = function(o) {
+  return o && Math.isFinite(o.s) && Math.isFinite(o.c);
+}
+
+Rot.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!Rot.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid Rot!');
+  }
+}
+
+/**
+ * Set to the identity rotation.
+ */
+Rot.prototype.setIdentity = function() {
+  this.s = 0.0;
+  this.c = 1.0;
+}
+
+Rot.prototype.set = function(angle) {
+  if (typeof angle === 'object') {
+    _ASSERT && Rot.assert(angle);
+    this.s = angle.s;
+    this.c = angle.c;
+
+  } else {
+    _ASSERT && Math.assert(angle);
+    // TODO_ERIN optimize
+    this.s = Math.sin(angle);
+    this.c = Math.cos(angle);
+  }
+}
+
+/**
+ * Set using an angle in radians.
+ */
+Rot.prototype.setAngle = function(angle) {
+  _ASSERT && Math.assert(angle);
+  // TODO_ERIN optimize
+  this.s = Math.sin(angle);
+  this.c = Math.cos(angle);
+};
+
+/**
+ * Get the angle in radians.
+ */
+Rot.prototype.getAngle = function() {
+  return Math.atan2(this.s, this.c);
+}
+
+/**
+ * Get the x-axis.
+ */
+Rot.prototype.getXAxis = function() {
+  return Vec2.neo(this.c, this.s);
+}
+
+/**
+ * Get the u-axis.
+ */
+Rot.prototype.getYAxis = function() {
+  return Vec2.neo(-this.s, this.c);
+}
+
+/**
+ * Multiply two rotations: q * r
+ * 
+ * @returns Rot
+ * 
+ * Rotate a vector
+ * 
+ * @returns Vec2
+ */
+Rot.mul = function(rot, m) {
+  _ASSERT && Rot.assert(rot);
+  if ('c' in m && 's' in m) {
+    _ASSERT && Rot.assert(m);
+    // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
+    // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
+    // s = qs * rc + qc * rs
+    // c = qc * rc - qs * rs
+    var qr = Rot.identity();
+    qr.s = rot.s * m.c + rot.c * m.s;
+    qr.c = rot.c * m.c - rot.s * m.s;
+    return qr;
+
+  } else if ('x' in m && 'y' in m) {
+    _ASSERT && Vec2.assert(m);
+    return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+  }
+}
+
+Rot.mulRot = function(rot, m) {
+  _ASSERT && Rot.assert(rot);
+  _ASSERT && Rot.assert(m);
+  // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
+  // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
+  // s = qs * rc + qc * rs
+  // c = qc * rc - qs * rs
+  var qr = Rot.identity();
+  qr.s = rot.s * m.c + rot.c * m.s;
+  qr.c = rot.c * m.c - rot.s * m.s;
+  return qr;
+}
+
+Rot.mulVec2 = function(rot, m) {
+  _ASSERT && Rot.assert(rot);
+  _ASSERT && Vec2.assert(m);
+  return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+}
+
+Rot.mulSub = function(rot, v, w) {
+  var x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
+  var y = rot.s * (v.x - w.x) + rot.c * (v.y - w.y);
+  return Vec2.neo(x, y);
+}
+
+/**
+ * Transpose multiply two rotations: qT * r
+ * 
+ * @returns Rot
+ * 
+ * Inverse rotate a vector
+ * 
+ * @returns Vec2
+ */
+Rot.mulT = function(rot, m) {
+  if ('c' in m && 's' in m) {
+    _ASSERT && Rot.assert(m);
+    // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
+    // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
+    // s = qc * rs - qs * rc
+    // c = qc * rc + qs * rs
+    var qr = Rot.identity();
+    qr.s = rot.c * m.s - rot.s * m.c;
+    qr.c = rot.c * m.c + rot.s * m.s;
+    return qr;
+
+  } else if ('x' in m && 'y' in m) {
+    _ASSERT && Vec2.assert(m);
+    return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+  }
+}
+
+Rot.mulTRot = function(rot, m) {
+  _ASSERT && Rot.assert(m);
+  // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
+  // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
+  // s = qc * rs - qs * rc
+  // c = qc * rc + qs * rs
+  var qr = Rot.identity();
+  qr.s = rot.c * m.s - rot.s * m.c;
+  qr.c = rot.c * m.c + rot.s * m.s;
+  return qr;
+}
+
+Rot.mulTVec2 = function(rot, m) {
+  _ASSERT && Vec2.assert(m);
+  return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+}
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Sweep;
+
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+var Transform = __webpack_require__(59);
+
+/**
+ * This describes the motion of a body/shape for TOI computation. Shapes are
+ * defined with respect to the body origin, which may not coincide with the
+ * center of mass. However, to support dynamics we must interpolate the center
+ * of mass position.
+ * 
+ * @prop {Vec2} localCenter Local center of mass position
+ * @prop {Vec2} c World center position
+ * @prop {float} a World angle
+ * @prop {float} alpha0 Fraction of the current time step in the range [0,1], c0
+ *       and a0 are c and a at alpha0.
+ */
+function Sweep(c, a) {
+  _ASSERT && common.assert(typeof c === 'undefined');
+  _ASSERT && common.assert(typeof a === 'undefined');
+  this.localCenter = Vec2.zero();
+  this.c = Vec2.zero();
+  this.a = 0;
+  this.alpha0 = 0;
+  this.c0 = Vec2.zero();
+  this.a0 = 0;
+}
+
+Sweep.prototype.setTransform = function(xf) {
+  var c = Transform.mulVec2(xf, this.localCenter);
+  this.c.set(c);
+  this.c0.set(c);
+
+  this.a = xf.q.getAngle();
+  this.a0 = xf.q.getAngle();
+};
+
+Sweep.prototype.setLocalCenter = function(localCenter, xf) {
+  this.localCenter.set(localCenter);
+
+  var c = Transform.mulVec2(xf, this.localCenter);
+  this.c.set(c);
+  this.c0.set(c);
+};
+
+/**
+ * Get the interpolated transform at a specific time.
+ * 
+ * @param xf
+ * @param beta A factor in [0,1], where 0 indicates alpha0
+ */
+Sweep.prototype.getTransform = function(xf, beta) {
+  beta = typeof beta === 'undefined' ? 0 : beta;
+  xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
+  xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
+
+  // shift to origin
+  xf.p.sub(Rot.mulVec2(xf.q, this.localCenter));
+};
+
+/**
+ * Advance the sweep forward, yielding a new initial state.
+ * 
+ * @param {float} alpha The new initial time
+ */
+Sweep.prototype.advance = function(alpha) {
+  _ASSERT && common.assert(this.alpha0 < 1.0);
+  var beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
+  this.c0.setCombine(beta, this.c, 1 - beta, this.c0);
+  this.a0 = beta * this.a + (1 - beta) * this.a0;
+  this.alpha0 = alpha;
+};
+
+Sweep.prototype.forward = function() {
+  this.a0 = this.a;
+  this.c0.set(this.c);
+};
+
+/**
+ * normalize the angles in radians to be between -pi and pi.
+ */
+Sweep.prototype.normalize = function() {
+  var a0 = Math.mod(this.a0, -Math.PI, +Math.PI);
+  this.a -= this.a0 - a0;
+  this.a0 = a0;
+};
+
+Sweep.prototype.clone = function() {
+  var clone = new Sweep();
+  clone.localCenter.set(this.localCenter);
+  clone.alpha0 = this.alpha0;
+  clone.a0 = this.a0;
+  clone.a = this.a;
+  clone.c0.set(this.c0);
+  clone.c.set(this.c);
+  return clone;
+};
+
+Sweep.prototype.set = function(that) {
+  this.localCenter.set(that.localCenter);
+  this.alpha0 = that.alpha0;
+  this.a0 = that.a0;
+  this.a = that.a;
+  this.c0.set(that.c0);
+  this.c.set(that.c);
+};
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Transform;
+
+var common = __webpack_require__(46);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+
+// TODO merge with Rot
+
+/**
+ * A transform contains translation and rotation. It is used to represent the
+ * position and orientation of rigid frames. Initialize using a position vector
+ * and a rotation.
+ *
+ * @prop {Vec2} position
+ * @prop {Rot} rotation
+ */
+function Transform(position, rotation) {
+  if (!(this instanceof Transform)) {
+    return new Transform(position, rotation);
+  }
+  this.p = Vec2.zero();
+  this.q = Rot.identity();
+  if (typeof position !== 'undefined') {
+    this.p.set(position);
+  }
+  if (typeof rotation !== 'undefined') {
+    this.q.set(rotation);
+  }
+};
+
+Transform.clone = function(xf) {
+  var obj = Object.create(Transform.prototype);
+  obj.p = Vec2.clone(xf.p);
+  obj.q = Rot.clone(xf.q);
+  return obj;
+};
+
+Transform.neo = function(position, rotation) {
+  var obj = Object.create(Transform.prototype);
+  obj.p = Vec2.clone(position);
+  obj.q = Rot.clone(rotation);
+  return obj;
+};
+
+Transform.identity = function() {
+  var obj = Object.create(Transform.prototype);
+  obj.p = Vec2.zero();
+  obj.q = Rot.identity();
+  return obj;
+};
+
+/**
+ * Set this to the identity transform.
+ */
+Transform.prototype.setIdentity = function() {
+  this.p.setZero();
+  this.q.setIdentity();
+}
+
+/**
+ * Set this based on the position and angle.
+ */
+Transform.prototype.set = function(a, b) {
+  if (typeof b === 'undefined') {
+    this.p.set(a.p);
+    this.q.set(a.q);
+  } else {
+    this.p.set(a);
+    this.q.set(b);
+  }
+}
+
+Transform.isValid = function(o) {
+  return o && Vec2.isValid(o.p) && Rot.isValid(o.q);
+}
+
+Transform.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!Transform.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid Transform!');
+  }
+}
+
+/**
+ * @param {Transform} a
+ * @param {Vec2} b
+ * @returns {Vec2}
+ *
+ * @param {Transform} a
+ * @param {Transform} b
+ * @returns {Transform}
+ */
+Transform.mul = function(a, b) {
+  _ASSERT && Transform.assert(a);
+  if (Array.isArray(b)) {
+    var arr = [];
+    for (var i = 0; i < b.length; i++) {
+      arr[i] = Transform.mul(a, b[i]);
+    }
+    return arr;
+
+  } else if ('x' in b && 'y' in b) {
+    _ASSERT && Vec2.assert(b);
+    var x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
+    var y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
+    return Vec2.neo(x, y);
+
+  } else if ('p' in b && 'q' in b) {
+    _ASSERT && Transform.assert(b);
+    // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
+    // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
+    var xf = Transform.identity();
+    xf.q = Rot.mulRot(a.q, b.q);
+    xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
+    return xf;
+  }
+}
+
+/**
+ * @deprecated Use mulFn instead.
+ */
+Transform.mulAll = function(a, b) {
+  _ASSERT && Transform.assert(a);
+  var arr = [];
+  for (var i = 0; i < b.length; i++) {
+    arr[i] = Transform.mul(a, b[i]);
+  }
+  return arr;
+}
+
+/**
+ * @experimental
+ */
+Transform.mulFn = function(a) {
+  _ASSERT && Transform.assert(a);
+  return function(b) {
+    return Transform.mul(a, b);
+  };
+}
+
+Transform.mulVec2 = function(a, b) {
+  _ASSERT && Transform.assert(a);
+  _ASSERT && Vec2.assert(b);
+  var x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
+  var y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
+  return Vec2.neo(x, y);
+}
+
+Transform.mulXf = function(a, b) {
+  _ASSERT && Transform.assert(a);
+  _ASSERT && Transform.assert(b);
+  // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
+  // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
+  var xf = Transform.identity();
+  xf.q = Rot.mulRot(a.q, b.q);
+  xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
+  return xf;
+}
+
+/**
+ * @param {Transform} a
+ * @param {Vec2} b
+ * @returns {Vec2}
+ *
+ * @param {Transform} a
+ * @param {Transform} b
+ * @returns {Transform}
+ */
+Transform.mulT = function(a, b) {
+  _ASSERT && Transform.assert(a);
+  if ('x' in b && 'y' in b) {
+    _ASSERT && Vec2.assert(b)
+    var px = b.x - a.p.x;
+    var py = b.y - a.p.y;
+    var x = (a.q.c * px + a.q.s * py);
+    var y = (-a.q.s * px + a.q.c * py);
+    return Vec2.neo(x, y);
+
+  } else if ('p' in b && 'q' in b) {
+    _ASSERT && Transform.assert(b);
+    // v2 = A.q' * (B.q * v1 + B.p - A.p)
+    // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
+    var xf = Transform.identity();
+    xf.q.set(Rot.mulTRot(a.q, b.q));
+    xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
+    return xf;
+  }
+}
+
+Transform.mulTVec2 = function(a, b) {
+  _ASSERT && Transform.assert(a);
+  _ASSERT && Vec2.assert(b)
+  var px = b.x - a.p.x;
+  var py = b.y - a.p.y;
+  var x = (a.q.c * px + a.q.s * py);
+  var y = (-a.q.s * px + a.q.c * py);
+  return Vec2.neo(x, y);
+}
+
+Transform.mulTXf = function(a, b) {
+  _ASSERT && Transform.assert(a);
+  _ASSERT && Transform.assert(b);
+  // v2 = A.q' * (B.q * v1 + B.p - A.p)
+  // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
+  var xf = Transform.identity();
+  xf.q.set(Rot.mulTRot(a.q, b.q));
+  xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
+  return xf;
+}
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Velocity;
+
+var Vec2 = __webpack_require__(47);
+
+/**
+ * @prop {Vec2} v linear
+ * @prop {float} w angular
+ */
+function Velocity() {
+  this.v = Vec2.zero();
+  this.w = 0;
+}
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Position;
+
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+
+/**
+ * @prop {Vec2} c location
+ * @prop {float} a angle
+ */
+function Position() {
+  this.c = Vec2.zero();
+  this.a = 0;
+}
+
+Position.prototype.getTransform = function(xf, p) {
+  xf.q.set(this.a);
+  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+  return xf;
+}
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Fixture;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+
+var AABB = __webpack_require__(52);
+
+var Shape = __webpack_require__(63);
+
+/**
+ * @typedef {Object} FixtureDef
+ *
+ * A fixture definition is used to create a fixture. This class defines an
+ * abstract fixture definition. You can reuse fixture definitions safely.
+ * 
+ * @prop friction The friction coefficient, usually in the range [0,1]
+ * @prop restitution The restitution (elasticity) usually in the range [0,1]
+ * @prop density The density, usually in kg/m^2
+ * @prop isSensor A sensor shape collects contact information but never
+ *       generates a collision response
+ * @prop userData
+ * @prop filterGroupIndex Zero, positive or negative collision group. Fixtures with same positive groupIndex always collide and fixtures with same
+ * negative groupIndex never collide.
+ * @prop filterCategoryBits Collision category bit or bits that this fixture belongs
+ *       to. If groupIndex is zero or not matching, then at least one bit in this fixture
+ * categoryBits should match other fixture maskBits and vice versa.
+ * @prop filterMaskBits Collision category bit or bits that this fixture accept for
+ *       collision.
+ */
+var FixtureDef = {
+  userData : null,
+  friction : 0.2,
+  restitution : 0.0,
+  density : 0.0,
+  isSensor : false,
+
+  filterGroupIndex : 0,
+  filterCategoryBits : 0x0001,
+  filterMaskBits : 0xFFFF
+};
+
+/**
+ * This proxy is used internally to connect shape children to the broad-phase.
+ */
+function FixtureProxy(fixture, childIndex) {
+  this.aabb = new AABB();
+  this.fixture = fixture;
+  this.childIndex = childIndex;
+  this.proxyId;
+};
+
+/**
+ * A fixture is used to attach a shape to a body for collision detection. A
+ * fixture inherits its transform from its parent. Fixtures hold additional
+ * non-geometric data such as friction, collision filters, etc. Fixtures are
+ * created via Body.createFixture.
+ * 
+ * @param {Body} body
+ * @param {Shape|FixtureDef} shape Shape of fixture definition.
+ * @param {FixtureDef|number} def Fixture definition or number.
+ */
+function Fixture(body, shape, def) {
+  if (shape.shape) {
+    def = shape;
+    shape = shape.shape;
+
+  } else if (typeof def === 'number') {
+    def = {density : def};
+  }
+
+  def = options(def, FixtureDef);
+
+  this.m_body = body;
+
+  this.m_friction = def.friction;
+  this.m_restitution = def.restitution;
+  this.m_density = def.density;
+  this.m_isSensor = def.isSensor;
+
+  this.m_filterGroupIndex = def.filterGroupIndex;
+  this.m_filterCategoryBits = def.filterCategoryBits;
+  this.m_filterMaskBits = def.filterMaskBits;
+
+  // TODO validate shape
+  this.m_shape = shape; //.clone();
+
+  this.m_next = null;
+
+  this.m_proxies = [];
+  this.m_proxyCount = 0;
+
+  var childCount = this.m_shape.getChildCount();
+  for (var i = 0; i < childCount; ++i) {
+    this.m_proxies[i] = new FixtureProxy(this, i);
+  }
+
+  this.m_userData = def.userData;
+};
+
+/**
+ * Re-setup fixture.
+ * @private
+ */
+Fixture.prototype._reset = function() {
+  var body = this.getBody();
+  var broadPhase = body.m_world.m_broadPhase;
+  this.destroyProxies(broadPhase);
+  if (this.m_shape._reset) {
+    this.m_shape._reset();
+  }
+  var childCount = this.m_shape.getChildCount();
+  for (var i = 0; i < childCount; ++i) {
+    this.m_proxies[i] = new FixtureProxy(this, i);
+  }
+  this.createProxies(broadPhase, body.m_xf);
+  body.resetMassData();
+};
+
+Fixture.prototype._serialize = function() {
+  return {
+    friction: this.m_friction,
+    restitution: this.m_restitution,
+    density: this.m_density,
+    isSensor: this.m_isSensor,
+
+    filterGroupIndex: this.m_filterGroupIndex,
+    filterCategoryBits: this.m_filterCategoryBits,
+    filterMaskBits: this.m_filterMaskBits,
+
+    shape: this.m_shape,
+
+    userData: this.m_userData,
+  };
+};
+
+Fixture._deserialize = function(body, data) {
+  var shape = Shape._deserialize(data.shape);
+  var fixture = shape && new Fixture(body, shape, data);
+  return fixture;
+};
+
+/**
+ * Get the type of the child shape. You can use this to down cast to the
+ * concrete shape.
+ */
+Fixture.prototype.getType = function() {
+  return this.m_shape.getType();
+}
+
+/**
+ * Get the child shape. You can modify the child shape, however you should not
+ * change the number of vertices because this will crash some collision caching
+ * mechanisms. Manipulating the shape may lead to non-physical behavior.
+ */
+Fixture.prototype.getShape = function() {
+  return this.m_shape;
+}
+/**
+ * A sensor shape collects contact information but never generates a collision
+ * response.
+ */
+Fixture.prototype.isSensor = function() {
+  return this.m_isSensor;
+}
+
+/**
+ * Set if this fixture is a sensor.
+ */
+Fixture.prototype.setSensor = function(sensor) {
+  if (sensor != this.m_isSensor) {
+    this.m_body.setAwake(true);
+    this.m_isSensor = sensor;
+  }
+}
+
+/**
+ * Get the contact filtering data.
+ */
+// Fixture.prototype.getFilterData = function() {
+//   return this.m_filter;
+// }
+
+/**
+ * Get the user data that was assigned in the fixture definition. Use this to
+ * store your application specific data.
+ */
+Fixture.prototype.getUserData = function() {
+  return this.m_userData;
+}
+
+/**
+ * Set the user data. Use this to store your application specific data.
+ */
+Fixture.prototype.setUserData = function(data) {
+  this.m_userData = data;
+}
+
+/**
+ * Get the parent body of this fixture. This is null if the fixture is not
+ * attached.
+ */
+Fixture.prototype.getBody = function() {
+  return this.m_body;
+}
+
+/**
+ * Get the next fixture in the parent body's fixture list.
+ */
+Fixture.prototype.getNext = function() {
+  return this.m_next;
+}
+
+/**
+ * Get the density of this fixture.
+ */
+Fixture.prototype.getDensity = function() {
+  return this.m_density;
+}
+
+/**
+ * Set the density of this fixture. This will _not_ automatically adjust the
+ * mass of the body. You must call Body.resetMassData to update the body's mass.
+ */
+Fixture.prototype.setDensity = function(density) {
+  _ASSERT && common.assert(Math.isFinite(density) && density >= 0.0);
+  this.m_density = density;
+}
+
+/**
+ * Get the coefficient of friction, usually in the range [0,1].
+ */
+Fixture.prototype.getFriction = function() {
+  return this.m_friction;
+}
+
+/**
+ * Set the coefficient of friction. This will not change the friction of
+ * existing contacts.
+ */
+Fixture.prototype.setFriction = function(friction) {
+  this.m_friction = friction;
+}
+
+/**
+ * Get the coefficient of restitution.
+ */
+Fixture.prototype.getRestitution = function() {
+  return this.m_restitution;
+}
+
+/**
+ * Set the coefficient of restitution. This will not change the restitution of
+ * existing contacts.
+ */
+Fixture.prototype.setRestitution = function(restitution) {
+  this.m_restitution = restitution;
+}
+
+/**
+ * Test a point in world coordinates for containment in this fixture.
+ */
+Fixture.prototype.testPoint = function(p) {
+  return this.m_shape.testPoint(this.m_body.getTransform(), p);
+}
+
+/**
+ * Cast a ray against this shape.
+ */
+Fixture.prototype.rayCast = function(output, input, childIndex) {
+  return this.m_shape.rayCast(output, input, this.m_body.getTransform(), childIndex);
+}
+
+/**
+ * Get the mass data for this fixture. The mass data is based on the density and
+ * the shape. The rotational inertia is about the shape's origin. This operation
+ * may be expensive.
+ */
+Fixture.prototype.getMassData = function(massData) {
+  this.m_shape.computeMass(massData, this.m_density);
+}
+
+/**
+ * Get the fixture's AABB. This AABB may be enlarge and/or stale. If you need a
+ * more accurate AABB, compute it using the shape and the body transform.
+ */
+Fixture.prototype.getAABB = function(childIndex) {
+  _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
+  return this.m_proxies[childIndex].aabb;
+}
+
+/**
+ * These support body activation/deactivation.
+ */
+Fixture.prototype.createProxies = function(broadPhase, xf) {
+  _ASSERT && common.assert(this.m_proxyCount == 0);
+
+  // Create proxies in the broad-phase.
+  this.m_proxyCount = this.m_shape.getChildCount();
+
+  for (var i = 0; i < this.m_proxyCount; ++i) {
+    var proxy = this.m_proxies[i];
+    this.m_shape.computeAABB(proxy.aabb, xf, i);
+    proxy.proxyId = broadPhase.createProxy(proxy.aabb, proxy);
+  }
+}
+
+Fixture.prototype.destroyProxies = function(broadPhase) {
+  // Destroy proxies in the broad-phase.
+  for (var i = 0; i < this.m_proxyCount; ++i) {
+    var proxy = this.m_proxies[i];
+    broadPhase.destroyProxy(proxy.proxyId);
+    proxy.proxyId = null;
+  }
+
+  this.m_proxyCount = 0;
+}
+
+/**
+ * Updates this fixture proxy in broad-phase (with combined AABB of current and
+ * next transformation).
+ */
+Fixture.prototype.synchronize = function(broadPhase, xf1, xf2) {
+  for (var i = 0; i < this.m_proxyCount; ++i) {
+    var proxy = this.m_proxies[i];
+    // Compute an AABB that covers the swept shape (may miss some rotation
+    // effect).
+    var aabb1 = new AABB();
+    var aabb2 = new AABB();
+    this.m_shape.computeAABB(aabb1, xf1, proxy.childIndex);
+    this.m_shape.computeAABB(aabb2, xf2, proxy.childIndex);
+
+    proxy.aabb.combine(aabb1, aabb2);
+
+    var displacement = Vec2.sub(xf2.p, xf1.p);
+
+    broadPhase.moveProxy(proxy.proxyId, proxy.aabb, displacement);
+  }
+}
+
+/**
+ * Set the contact filtering data. This will not update contacts until the next
+ * time step when either parent body is active and awake. This automatically
+ * calls refilter.
+ */
+Fixture.prototype.setFilterData = function(filter) {
+  this.m_filterGroupIndex = filter.groupIndex;
+  this.m_filterCategoryBits = filter.categoryBits;
+  this.m_filterMaskBits = filter.maskBits;
+  this.refilter();
+}
+
+Fixture.prototype.getFilterGroupIndex = function() {
+  return this.m_filterGroupIndex;
+}
+
+Fixture.prototype.getFilterCategoryBits = function() {
+  return this.m_filterCategoryBits;
+}
+
+Fixture.prototype.getFilterMaskBits = function() {
+  return this.m_filterMaskBits;
+}
+
+/**
+ * Call this if you want to establish collision that was previously disabled by
+ * ContactFilter.
+ */
+Fixture.prototype.refilter = function() {
+  if (this.m_body == null) {
+    return;
+  }
+
+  // Flag associated contacts for filtering.
+  var edge = this.m_body.getContactList();
+  while (edge) {
+    var contact = edge.contact;
+    var fixtureA = contact.getFixtureA();
+    var fixtureB = contact.getFixtureB();
+    if (fixtureA == this || fixtureB == this) {
+      contact.flagForFiltering();
+    }
+
+    edge = edge.next;
+  }
+
+  var world = this.m_body.getWorld();
+
+  if (world == null) {
+    return;
+  }
+
+  // Touch each proxy so that new pairs may be created
+  var broadPhase = world.m_broadPhase;
+  for (var i = 0; i < this.m_proxyCount; ++i) {
+    broadPhase.touchProxy(this.m_proxies[i].proxyId);
+  }
+}
+
+/**
+ * Implement this method to provide collision filtering, if you want finer
+ * control over contact creation.
+ * 
+ * Return true if contact calculations should be performed between these two
+ * fixtures.
+ * 
+ * Warning: for performance reasons this is only called when the AABBs begin to
+ * overlap.
+ * 
+ * @param {Fixture} fixtureA
+ * @param {Fixture} fixtureB
+ */
+Fixture.prototype.shouldCollide = function(that) {
+
+  if (that.m_filterGroupIndex == this.m_filterGroupIndex && that.m_filterGroupIndex != 0) {
+    return that.m_filterGroupIndex > 0;
+  }
+
+  var collide = (that.m_filterMaskBits & this.m_filterCategoryBits) != 0
+      && (that.m_filterCategoryBits & this.m_filterMaskBits) != 0;
+  return collide;
+}
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Shape;
+
+var Math = __webpack_require__(48);
+
+/**
+ * A shape is used for collision detection. You can create a shape however you
+ * like. Shapes used for simulation in World are created automatically when a
+ * Fixture is created. Shapes may encapsulate one or more child shapes.
+ */
+function Shape() {
+  this.m_type;
+  this.m_radius;
+}
+
+Shape.prototype._reset = function() {
+};
+
+Shape.prototype._serialize = function() {
+  return {};
+};
+
+Shape.TYPES = {};
+
+Shape._deserialize = function(data) {
+  var clazz = Shape.TYPES[data.type];
+  return clazz && clazz._deserialize && clazz._deserialize(data);
+};
+
+Shape.isValid = function(shape) {
+  return !!shape;
+};
+
+Shape.prototype.getRadius = function() {
+  return this.m_radius;
+};
+
+/**
+ * Get the type of this shape. You can use this to down cast to the concrete
+ * shape.
+ * 
+ * @return the shape type.
+ */
+Shape.prototype.getType = function() {
+  return this.m_type;
+};
+
+/**
+ * @deprecated Shapes should be treated as immutable.
+ *
+ * clone the concrete shape.
+ */
+Shape.prototype._clone = function() {
+};
+
+/**
+ * // Get the number of child primitives.
+ */
+Shape.prototype.getChildCount = function() {
+};
+
+/**
+ * Test a point for containment in this shape. This only works for convex
+ * shapes.
+ * 
+ * @param {Transform} xf The shape world transform.
+ * @param p A point in world coordinates.
+ */
+Shape.prototype.testPoint = function(xf, p) {
+};
+
+/**
+ * Cast a ray against a child shape.
+ * 
+ * @param {RayCastOutput} output The ray-cast results.
+ * @param {RayCastInput} input The ray-cast input parameters.
+ * @param {Transform} transform The transform to be applied to the shape.
+ * @param childIndex The child shape index
+ */
+Shape.prototype.rayCast = function(output, input, transform, childIndex) {
+};
+
+/**
+ * Given a transform, compute the associated axis aligned bounding box for a
+ * child shape.
+ * 
+ * @param {AABB} aabb Returns the axis aligned box.
+ * @param {Transform} xf The world transform of the shape.
+ * @param childIndex The child shape
+ */
+Shape.prototype.computeAABB = function(aabb, xf, childIndex) {
+};
+
+/**
+ * Compute the mass properties of this shape using its dimensions and density.
+ * The inertia tensor is computed about the local origin.
+ * 
+ * @param {MassData} massData Returns the mass data for this shape.
+ * @param density The density in kilograms per meter squared.
+ */
+Shape.prototype.computeMass = function(massData, density) {
+};
+
+/**
+ * @param {DistanceProxy} proxy
+ */
+Shape.prototype.computeDistanceProxy = function(proxy) {
+};
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var DEBUG_SOLVER = false;
+
+var common = __webpack_require__(46);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Transform = __webpack_require__(59);
+var Mat22 = __webpack_require__(65);
+var Rot = __webpack_require__(57);
+
+var Settings = __webpack_require__(51);
+var Manifold = __webpack_require__(66);
+var Distance = __webpack_require__(67);
+
+module.exports = Contact;
+
+/**
+ * A contact edge is used to connect bodies and contacts together in a contact
+ * graph where each body is a node and each contact is an edge. A contact edge
+ * belongs to a doubly linked list maintained in each attached body. Each
+ * contact has two contact nodes, one for each attached body.
+ * 
+ * @prop {Contact} contact The contact
+ * @prop {ContactEdge} prev The previous contact edge in the body's contact list
+ * @prop {ContactEdge} next The next contact edge in the body's contact list
+ * @prop {Body} other Provides quick access to the other body attached.
+ */
+function ContactEdge(contact) {
+  this.contact = contact;
+  this.prev;
+  this.next;
+  this.other;
+};
+
+/**
+ * @function Contact~evaluate
+ * 
+ * @param manifold
+ * @param xfA
+ * @param fixtureA
+ * @param indexA
+ * @param xfB
+ * @param fixtureB
+ * @param indexB
+ */
+
+/**
+ * The class manages contact between two shapes. A contact exists for each
+ * overlapping AABB in the broad-phase (except if filtered). Therefore a contact
+ * object may exist that has no contact points.
+ * 
+ * @param {Fixture} fA
+ * @param {int} indexA
+ * @param {Fixture} fB
+ * @param {int} indexB
+ * @param {Contact~evaluate} evaluateFcn
+ */
+function Contact(fA, indexA, fB, indexB, evaluateFcn) {
+  // Nodes for connecting bodies.
+  this.m_nodeA = new ContactEdge(this);
+  this.m_nodeB = new ContactEdge(this);
+
+  this.m_fixtureA = fA;
+  this.m_fixtureB = fB;
+
+  this.m_indexA = indexA;
+  this.m_indexB = indexB;
+
+  this.m_evaluateFcn = evaluateFcn;
+
+  this.m_manifold = new Manifold();
+
+  this.m_prev = null;
+  this.m_next = null;
+
+  this.m_toi = 1.0;
+  this.m_toiCount = 0;
+  // This contact has a valid TOI in m_toi
+  this.m_toiFlag = false;
+
+  this.m_friction = mixFriction(this.m_fixtureA.m_friction,
+      this.m_fixtureB.m_friction);
+  this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution,
+      this.m_fixtureB.m_restitution);
+
+  this.m_tangentSpeed = 0.0;
+
+  // This contact can be disabled (by user)
+  this.m_enabledFlag = true;
+
+  // Used when crawling contact graph when forming islands.
+  this.m_islandFlag = false;
+
+  // Set when the shapes are touching.
+  this.m_touchingFlag = false;
+
+  // This contact needs filtering because a fixture filter was changed.
+  this.m_filterFlag = false;
+
+  // This bullet contact had a TOI event
+  this.m_bulletHitFlag = false;
+
+  this.v_points = []; // VelocityConstraintPoint[maxManifoldPoints]
+  this.v_normal = Vec2.zero();
+  this.v_normalMass = new Mat22();
+  this.v_K = new Mat22();
+  this.v_pointCount;
+
+  this.v_tangentSpeed;
+  this.v_friction;
+  this.v_restitution;
+
+  this.v_invMassA;
+  this.v_invMassB;
+  this.v_invIA;
+  this.v_invIB;
+
+  this.p_localPoints = [] // Vec2[maxManifoldPoints];
+  this.p_localNormal = Vec2.zero();
+  this.p_localPoint = Vec2.zero();
+  this.p_localCenterA = Vec2.zero();
+  this.p_localCenterB = Vec2.zero();
+  this.p_type; // Manifold.Type
+  this.p_radiusA;
+  this.p_radiusB;
+  this.p_pointCount;
+
+  this.p_invMassA;
+  this.p_invMassB;
+  this.p_invIA;
+  this.p_invIB;
+}
+
+Contact.prototype.initConstraint = function(step) {
+  var fixtureA = this.m_fixtureA;
+  var fixtureB = this.m_fixtureB;
+
+  var shapeA = fixtureA.getShape();
+  var shapeB = fixtureB.getShape();
+
+  var bodyA = fixtureA.getBody();
+  var bodyB = fixtureB.getBody();
+
+  var manifold = this.getManifold();
+
+  var pointCount = manifold.pointCount;
+  _ASSERT && common.assert(pointCount > 0);
+
+  this.v_invMassA = bodyA.m_invMass;
+  this.v_invMassB = bodyB.m_invMass;
+  this.v_invIA = bodyA.m_invI;
+  this.v_invIB = bodyB.m_invI;
+
+  this.v_friction = this.m_friction;
+  this.v_restitution = this.m_restitution;
+  this.v_tangentSpeed = this.m_tangentSpeed;
+
+  this.v_pointCount = pointCount;
+
+  this.v_K.setZero();
+  this.v_normalMass.setZero();
+
+  this.p_invMassA = bodyA.m_invMass;
+  this.p_invMassB = bodyB.m_invMass;
+  this.p_invIA = bodyA.m_invI;
+  this.p_invIB = bodyB.m_invI;
+  this.p_localCenterA = Vec2.clone(bodyA.m_sweep.localCenter);
+  this.p_localCenterB = Vec2.clone(bodyB.m_sweep.localCenter);
+
+  this.p_radiusA = shapeA.m_radius;
+  this.p_radiusB = shapeB.m_radius;
+
+  this.p_type = manifold.type;
+  this.p_localNormal = Vec2.clone(manifold.localNormal);
+  this.p_localPoint = Vec2.clone(manifold.localPoint);
+  this.p_pointCount = pointCount;
+
+  for (var j = 0; j < pointCount; ++j) {
+    var cp = manifold.points[j]; // ManifoldPoint
+    var vcp = this.v_points[j] = new VelocityConstraintPoint();
+
+    if (step.warmStarting) {
+      vcp.normalImpulse = step.dtRatio * cp.normalImpulse;
+      vcp.tangentImpulse = step.dtRatio * cp.tangentImpulse;
+
+    } else {
+      vcp.normalImpulse = 0.0;
+      vcp.tangentImpulse = 0.0;
+    }
+
+    vcp.rA.setZero();
+    vcp.rB.setZero();
+    vcp.normalMass = 0.0;
+    vcp.tangentMass = 0.0;
+    vcp.velocityBias = 0.0;
+
+    this.p_localPoints[j] = Vec2.clone(cp.localPoint);
+
+  }
+};
+
+/**
+ * Get the contact manifold. Do not modify the manifold unless you understand
+ * the internals of the library.
+ */
+Contact.prototype.getManifold = function() {
+  return this.m_manifold;
+}
+
+/**
+ * Get the world manifold.
+ * 
+ * @param {WorldManifold} [worldManifold]
+ */
+Contact.prototype.getWorldManifold = function(worldManifold) {
+  var bodyA = this.m_fixtureA.getBody();
+  var bodyB = this.m_fixtureB.getBody();
+  var shapeA = this.m_fixtureA.getShape();
+  var shapeB = this.m_fixtureB.getShape();
+
+  return this.m_manifold.getWorldManifold(worldManifold, bodyA.getTransform(),
+      shapeA.m_radius, bodyB.getTransform(), shapeB.m_radius);
+}
+
+/**
+ * Enable/disable this contact. This can be used inside the pre-solve contact
+ * listener. The contact is only disabled for the current time step (or sub-step
+ * in continuous collisions).
+ */
+Contact.prototype.setEnabled = function(flag) {
+  this.m_enabledFlag = !!flag;
+}
+
+/**
+ * Has this contact been disabled?
+ */
+Contact.prototype.isEnabled = function() {
+  return this.m_enabledFlag;
+}
+
+/**
+ * Is this contact touching?
+ */
+Contact.prototype.isTouching = function() {
+  return this.m_touchingFlag;
+}
+
+/**
+ * Get the next contact in the world's contact list.
+ */
+Contact.prototype.getNext = function() {
+  return this.m_next;
+}
+
+/**
+ * Get fixture A in this contact.
+ */
+Contact.prototype.getFixtureA = function() {
+  return this.m_fixtureA;
+}
+
+/**
+ * Get fixture B in this contact.
+ */
+Contact.prototype.getFixtureB = function() {
+  return this.m_fixtureB;
+}
+
+/**
+ * Get the child primitive index for fixture A.
+ */
+Contact.prototype.getChildIndexA = function() {
+  return this.m_indexA;
+}
+
+/**
+ * Get the child primitive index for fixture B.
+ */
+Contact.prototype.getChildIndexB = function() {
+  return this.m_indexB;
+}
+
+/**
+ * Flag this contact for filtering. Filtering will occur the next time step.
+ */
+Contact.prototype.flagForFiltering = function() {
+  this.m_filterFlag = true;
+}
+
+/**
+ * Override the default friction mixture. You can call this in
+ * ContactListener.preSolve. This value persists until set or reset.
+ */
+Contact.prototype.setFriction = function(friction) {
+  this.m_friction = friction;
+}
+
+/**
+ * Get the friction.
+ */
+Contact.prototype.getFriction = function() {
+  return this.m_friction;
+}
+
+/**
+ * Reset the friction mixture to the default value.
+ */
+Contact.prototype.resetFriction = function() {
+  this.m_friction = mixFriction(this.m_fixtureA.m_friction,
+      this.m_fixtureB.m_friction);
+}
+
+/**
+ * Override the default restitution mixture. You can call this in
+ * ContactListener.preSolve. The value persists until you set or reset.
+ */
+Contact.prototype.setRestitution = function(restitution) {
+  this.m_restitution = restitution;
+}
+
+/**
+ * Get the restitution.
+ */
+Contact.prototype.getRestitution = function() {
+  return this.m_restitution;
+}
+
+/**
+ * Reset the restitution to the default value.
+ */
+Contact.prototype.resetRestitution = function() {
+  this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution,
+      this.m_fixtureB.m_restitution);
+}
+
+/**
+ * Set the desired tangent speed for a conveyor belt behavior. In meters per
+ * second.
+ */
+Contact.prototype.setTangentSpeed = function(speed) {
+  this.m_tangentSpeed = speed;
+}
+
+/**
+ * Get the desired tangent speed. In meters per second.
+ */
+Contact.prototype.getTangentSpeed = function() {
+  return this.m_tangentSpeed;
+}
+
+/**
+ * Called by Update method, and implemented by subclasses.
+ */
+Contact.prototype.evaluate = function(manifold, xfA, xfB) {
+  this.m_evaluateFcn(manifold, xfA, this.m_fixtureA, this.m_indexA, xfB,
+      this.m_fixtureB, this.m_indexB);
+};
+
+/**
+ * Updates the contact manifold and touching status.
+ * 
+ * Note: do not assume the fixture AABBs are overlapping or are valid.
+ * 
+ * @param {function} listener.beginContact
+ * @param {function} listener.endContact
+ * @param {function} listener.preSolve
+ */
+Contact.prototype.update = function(listener) {
+
+  // Re-enable this contact.
+  this.m_enabledFlag = true;
+
+  var touching = false;
+  var wasTouching = this.m_touchingFlag;
+
+  var sensorA = this.m_fixtureA.isSensor();
+  var sensorB = this.m_fixtureB.isSensor();
+  var sensor = sensorA || sensorB;
+
+  var bodyA = this.m_fixtureA.getBody();
+  var bodyB = this.m_fixtureB.getBody();
+  var xfA = bodyA.getTransform();
+  var xfB = bodyB.getTransform();
+
+  // Is this contact a sensor?
+  if (sensor) {
+    var shapeA = this.m_fixtureA.getShape();
+    var shapeB = this.m_fixtureB.getShape();
+    touching = Distance.testOverlap(shapeA, this.m_indexA, shapeB,
+        this.m_indexB, xfA, xfB);
+
+    // Sensors don't generate manifolds.
+    this.m_manifold.pointCount = 0;
+  } else {
+
+    // TODO reuse manifold
+    var oldManifold = this.m_manifold;
+    this.m_manifold = new Manifold();
+
+    this.evaluate(this.m_manifold, xfA, xfB);
+    touching = this.m_manifold.pointCount > 0;
+
+    // Match old contact ids to new contact ids and copy the
+    // stored impulses to warm start the solver.
+    for (var i = 0; i < this.m_manifold.pointCount; ++i) {
+      var nmp = this.m_manifold.points[i];
+      nmp.normalImpulse = 0.0;
+      nmp.tangentImpulse = 0.0;
+
+      for (var j = 0; j < oldManifold.pointCount; ++j) {
+        var omp = oldManifold.points[j];
+        if (omp.id.key == nmp.id.key) { // ContactID.key
+          nmp.normalImpulse = omp.normalImpulse;
+          nmp.tangentImpulse = omp.tangentImpulse;
+          break;
+        }
+      }
+    }
+
+    if (touching != wasTouching) {
+      bodyA.setAwake(true);
+      bodyB.setAwake(true);
+    }
+  }
+
+  this.m_touchingFlag = touching;
+
+  if (wasTouching == false && touching == true && listener) {
+    listener.beginContact(this);
+  }
+
+  if (wasTouching == true && touching == false && listener) {
+    listener.endContact(this);
+  }
+
+  if (sensor == false && touching && listener) {
+    listener.preSolve(this, oldManifold);
+  }
+}
+
+Contact.prototype.solvePositionConstraint = function(step) {
+  return this._solvePositionConstraint(step, false);
+}
+
+Contact.prototype.solvePositionConstraintTOI = function(step, toiA, toiB) {
+  return this._solvePositionConstraint(step, true, toiA, toiB);
+}
+
+Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
+
+  var fixtureA = this.m_fixtureA;
+  var fixtureB = this.m_fixtureB;
+
+  var bodyA = fixtureA.getBody();
+  var bodyB = fixtureB.getBody();
+
+  var velocityA = bodyA.c_velocity;
+  var velocityB = bodyB.c_velocity;
+  var positionA = bodyA.c_position;
+  var positionB = bodyB.c_position;
+
+  var localCenterA = Vec2.clone(this.p_localCenterA);
+  var localCenterB = Vec2.clone(this.p_localCenterB);
+
+  var mA = 0.0;
+  var iA = 0.0;
+  if (!toi || (bodyA == toiA || bodyA == toiB)) {
+    mA = this.p_invMassA;
+    iA = this.p_invIA;
+  }
+
+  var mB = 0.0;
+  var iB = 0.0;
+  if (!toi || (bodyB == toiA || bodyB == toiB)) {
+    mB = this.p_invMassB;
+    iB = this.p_invIB;
+  }
+
+  var cA = Vec2.clone(positionA.c);
+  var aA = positionA.a;
+
+  var cB = Vec2.clone(positionB.c);
+  var aB = positionB.a;
+
+  var minSeparation = 0.0;
+
+  // Solve normal constraints
+  for (var j = 0; j < this.p_pointCount; ++j) {
+    var xfA = Transform.identity();
+    var xfB = Transform.identity();
+    xfA.q.set(aA);
+    xfB.q.set(aB);
+    xfA.p = Vec2.sub(cA, Rot.mulVec2(xfA.q, localCenterA));
+    xfB.p = Vec2.sub(cB, Rot.mulVec2(xfB.q, localCenterB));
+
+    // PositionSolverManifold
+    var normal, point, separation;
+    switch (this.p_type) {
+    case Manifold.e_circles:
+      var pointA = Transform.mulVec2(xfA, this.p_localPoint);
+      var pointB = Transform.mulVec2(xfB, this.p_localPoints[0]);
+      normal = Vec2.sub(pointB, pointA);
+      normal.normalize();
+      point = Vec2.combine(0.5, pointA, 0.5, pointB);
+      separation = Vec2.dot(Vec2.sub(pointB, pointA), normal) - this.p_radiusA
+          - this.p_radiusB;
+      break;
+
+    case Manifold.e_faceA:
+      normal = Rot.mulVec2(xfA.q, this.p_localNormal);
+      var planePoint = Transform.mulVec2(xfA, this.p_localPoint);
+      var clipPoint = Transform.mulVec2(xfB, this.p_localPoints[j]);
+      separation = Vec2.dot(Vec2.sub(clipPoint, planePoint), normal)
+          - this.p_radiusA - this.p_radiusB;
+      point = clipPoint;
+      break;
+
+    case Manifold.e_faceB:
+      normal = Rot.mulVec2(xfB.q, this.p_localNormal);
+      var planePoint = Transform.mulVec2(xfB, this.p_localPoint);
+      var clipPoint = Transform.mulVec2(xfA, this.p_localPoints[j]);
+      separation = Vec2.dot(Vec2.sub(clipPoint, planePoint), normal)
+          - this.p_radiusA - this.p_radiusB;
+      point = clipPoint;
+
+      // Ensure normal points from A to B
+      normal.mul(-1);
+      break;
+    }
+
+    var rA = Vec2.sub(point, cA);
+    var rB = Vec2.sub(point, cB);
+
+    // Track max constraint error.
+    minSeparation = Math.min(minSeparation, separation);
+
+    var baumgarte = toi ? Settings.toiBaugarte : Settings.baumgarte;
+    var linearSlop = Settings.linearSlop;
+    var maxLinearCorrection = Settings.maxLinearCorrection;
+
+    // Prevent large corrections and allow slop.
+    var C = Math.clamp(baumgarte * (separation + linearSlop),
+        -maxLinearCorrection, 0.0);
+
+    // Compute the effective mass.
+    var rnA = Vec2.cross(rA, normal);
+    var rnB = Vec2.cross(rB, normal);
+    var K = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
+
+    // Compute normal impulse
+    var impulse = K > 0.0 ? -C / K : 0.0;
+
+    var P = Vec2.mul(impulse, normal);
+
+    cA.subMul(mA, P);
+    aA -= iA * Vec2.cross(rA, P);
+
+    cB.addMul(mB, P);
+    aB += iB * Vec2.cross(rB, P);
+  }
+
+  positionA.c.set(cA);
+  positionA.a = aA;
+
+  positionB.c.set(cB);
+  positionB.a = aB;
+
+  return minSeparation;
+}
+
+// TODO merge with ManifoldPoint
+function VelocityConstraintPoint() {
+  this.rA = Vec2.zero();
+  this.rB = Vec2.zero();
+  this.normalImpulse = 0;
+  this.tangentImpulse = 0;
+  this.normalMass = 0;
+  this.tangentMass = 0;
+  this.velocityBias = 0;
+}
+
+Contact.prototype.initVelocityConstraint = function(step) {
+  var fixtureA = this.m_fixtureA;
+  var fixtureB = this.m_fixtureB;
+
+  var bodyA = fixtureA.getBody();
+  var bodyB = fixtureB.getBody();
+
+  var velocityA = bodyA.c_velocity;
+  var velocityB = bodyB.c_velocity;
+
+  var positionA = bodyA.c_position;
+  var positionB = bodyB.c_position;
+
+  var radiusA = this.p_radiusA;
+  var radiusB = this.p_radiusB;
+  var manifold = this.getManifold();
+
+  var mA = this.v_invMassA;
+  var mB = this.v_invMassB;
+  var iA = this.v_invIA;
+  var iB = this.v_invIB;
+  var localCenterA = Vec2.clone(this.p_localCenterA);
+  var localCenterB = Vec2.clone(this.p_localCenterB);
+
+  var cA = Vec2.clone(positionA.c);
+  var aA = positionA.a;
+  var vA = Vec2.clone(velocityA.v);
+  var wA = velocityA.w;
+
+  var cB = Vec2.clone(positionB.c);
+  var aB = positionB.a;
+  var vB = Vec2.clone(velocityB.v);
+  var wB = velocityB.w;
+
+  _ASSERT && common.assert(manifold.pointCount > 0);
+
+  var xfA = Transform.identity();
+  var xfB = Transform.identity();
+  xfA.q.set(aA);
+  xfB.q.set(aB);
+  xfA.p.setCombine(1, cA, -1, Rot.mulVec2(xfA.q, localCenterA));
+  xfB.p.setCombine(1, cB, -1, Rot.mulVec2(xfB.q, localCenterB));
+
+  var worldManifold = manifold.getWorldManifold(null, xfA, radiusA, xfB, radiusB);
+
+  this.v_normal.set(worldManifold.normal);
+
+  for (var j = 0; j < this.v_pointCount; ++j) {
+    var vcp = this.v_points[j]; // VelocityConstraintPoint
+
+    vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
+    vcp.rB.set(Vec2.sub(worldManifold.points[j], cB));
+
+    var rnA = Vec2.cross(vcp.rA, this.v_normal);
+    var rnB = Vec2.cross(vcp.rB, this.v_normal);
+
+    var kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
+
+    vcp.normalMass = kNormal > 0.0 ? 1.0 / kNormal : 0.0;
+
+    var tangent = Vec2.cross(this.v_normal, 1.0);
+
+    var rtA = Vec2.cross(vcp.rA, tangent);
+    var rtB = Vec2.cross(vcp.rB, tangent);
+
+    var kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
+
+    vcp.tangentMass = kTangent > 0.0 ? 1.0 / kTangent : 0.0;
+
+    // Setup a velocity bias for restitution.
+    vcp.velocityBias = 0.0;
+    var vRel = Vec2.dot(this.v_normal, vB)
+        + Vec2.dot(this.v_normal, Vec2.cross(wB, vcp.rB))
+        - Vec2.dot(this.v_normal, vA)
+        - Vec2.dot(this.v_normal, Vec2.cross(wA, vcp.rA));
+    if (vRel < -Settings.velocityThreshold) {
+      vcp.velocityBias = -this.v_restitution * vRel;
+    }
+  }
+
+  // If we have two points, then prepare the block solver.
+  if (this.v_pointCount == 2 && step.blockSolve) {
+    var vcp1 = this.v_points[0]; // VelocityConstraintPoint
+    var vcp2 = this.v_points[1]; // VelocityConstraintPoint
+
+    var rn1A = Vec2.cross(vcp1.rA, this.v_normal);
+    var rn1B = Vec2.cross(vcp1.rB, this.v_normal);
+    var rn2A = Vec2.cross(vcp2.rA, this.v_normal);
+    var rn2B = Vec2.cross(vcp2.rB, this.v_normal);
+
+    var k11 = mA + mB + iA * rn1A * rn1A + iB * rn1B * rn1B;
+    var k22 = mA + mB + iA * rn2A * rn2A + iB * rn2B * rn2B;
+    var k12 = mA + mB + iA * rn1A * rn2A + iB * rn1B * rn2B;
+
+    // Ensure a reasonable condition number.
+    var k_maxConditionNumber = 1000.0;
+    if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
+      // K is safe to invert.
+      this.v_K.ex.set(k11, k12);
+      this.v_K.ey.set(k12, k22);
+      this.v_normalMass.set(this.v_K.getInverse());
+    } else {
+      // The constraints are redundant, just use one.
+      // TODO_ERIN use deepest?
+      this.v_pointCount = 1;
+    }
+  }
+
+  positionA.c.set(cA);
+  positionA.a = aA;
+  velocityA.v.set(vA);
+  velocityA.w = wA;
+
+  positionB.c.set(cB);
+  positionB.a = aB;
+  velocityB.v.set(vB);
+  velocityB.w = wB;
+};
+
+Contact.prototype.warmStartConstraint = function(step) {
+  var fixtureA = this.m_fixtureA;
+  var fixtureB = this.m_fixtureB;
+
+  var bodyA = fixtureA.getBody();
+  var bodyB = fixtureB.getBody();
+
+  var velocityA = bodyA.c_velocity;
+  var velocityB = bodyB.c_velocity;
+  var positionA = bodyA.c_position;
+  var positionB = bodyB.c_position;
+
+  var mA = this.v_invMassA;
+  var iA = this.v_invIA;
+  var mB = this.v_invMassB;
+  var iB = this.v_invIB;
+
+  var vA = Vec2.clone(velocityA.v);
+  var wA = velocityA.w;
+  var vB = Vec2.clone(velocityB.v);
+  var wB = velocityB.w;
+
+  var normal = this.v_normal;
+  var tangent = Vec2.cross(normal, 1.0);
+
+  for (var j = 0; j < this.v_pointCount; ++j) {
+    var vcp = this.v_points[j]; // VelocityConstraintPoint
+
+    var P = Vec2.combine(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
+    wA -= iA * Vec2.cross(vcp.rA, P);
+    vA.subMul(mA, P);
+    wB += iB * Vec2.cross(vcp.rB, P);
+    vB.addMul(mB, P);
+  }
+
+  velocityA.v.set(vA);
+  velocityA.w = wA;
+  velocityB.v.set(vB);
+  velocityB.w = wB;
+};
+
+Contact.prototype.storeConstraintImpulses = function(step) {
+  var manifold = this.m_manifold;
+  for (var j = 0; j < this.v_pointCount; ++j) {
+    manifold.points[j].normalImpulse = this.v_points[j].normalImpulse;
+    manifold.points[j].tangentImpulse = this.v_points[j].tangentImpulse;
+  }
+};
+
+Contact.prototype.solveVelocityConstraint = function(step) {
+  var bodyA = this.m_fixtureA.m_body;
+  var bodyB = this.m_fixtureB.m_body;
+
+  var velocityA = bodyA.c_velocity;
+  var positionA = bodyA.c_position;
+
+  var velocityB = bodyB.c_velocity;
+  var positionB = bodyB.c_position;
+
+  var mA = this.v_invMassA;
+  var iA = this.v_invIA;
+  var mB = this.v_invMassB;
+  var iB = this.v_invIB;
+
+  var vA = Vec2.clone(velocityA.v);
+  var wA = velocityA.w;
+  var vB = Vec2.clone(velocityB.v);
+  var wB = velocityB.w;
+
+  var normal = this.v_normal;
+  var tangent = Vec2.cross(normal, 1.0);
+  var friction = this.v_friction;
+
+  _ASSERT && common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
+
+  // Solve tangent constraints first because non-penetration is more important
+  // than friction.
+  for (var j = 0; j < this.v_pointCount; ++j) {
+    var vcp = this.v_points[j]; // VelocityConstraintPoint
+
+    // Relative velocity at contact
+    var dv = Vec2.zero();
+    dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
+    dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
+
+    // Compute tangent force
+    var vt = Vec2.dot(dv, tangent) - this.v_tangentSpeed;
+    var lambda = vcp.tangentMass * (-vt);
+
+    // Clamp the accumulated force
+    var maxFriction = friction * vcp.normalImpulse;
+    var newImpulse = Math.clamp(vcp.tangentImpulse + lambda, -maxFriction,
+        maxFriction);
+    lambda = newImpulse - vcp.tangentImpulse;
+    vcp.tangentImpulse = newImpulse;
+
+    // Apply contact impulse
+    var P = Vec2.mul(lambda, tangent);
+
+    vA.subMul(mA, P);
+    wA -= iA * Vec2.cross(vcp.rA, P);
+
+    vB.addMul(mB, P);
+    wB += iB * Vec2.cross(vcp.rB, P);
+  }
+
+  // Solve normal constraints
+  if (this.v_pointCount == 1 || step.blockSolve == false) {
+    for (var i = 0; i < this.v_pointCount; ++i) {
+      var vcp = this.v_points[i]; // VelocityConstraintPoint
+
+      // Relative velocity at contact
+      var dv = Vec2.zero();
+      dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
+      dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
+
+      // Compute normal impulse
+      var vn = Vec2.dot(dv, normal);
+      var lambda = -vcp.normalMass * (vn - vcp.velocityBias);
+
+      // Clamp the accumulated impulse
+      var newImpulse = Math.max(vcp.normalImpulse + lambda, 0.0);
+      lambda = newImpulse - vcp.normalImpulse;
+      vcp.normalImpulse = newImpulse;
+
+      // Apply contact impulse
+      var P = Vec2.mul(lambda, normal);
+
+      vA.subMul(mA, P);
+      wA -= iA * Vec2.cross(vcp.rA, P);
+
+      vB.addMul(mB, P);
+      wB += iB * Vec2.cross(vcp.rB, P);
+    }
+  } else {
+    // Block solver developed in collaboration with Dirk Gregorius (back in
+    // 01/07 on Box2D_Lite).
+    // Build the mini LCP for this contact patch
+    //
+    // vn = A * x + b, vn >= 0, , vn >= 0, x >= 0 and vn_i * x_i = 0 with i =
+    // 1..2
+    //
+    // A = J * W * JT and J = ( -n, -r1 x n, n, r2 x n )
+    // b = vn0 - velocityBias
+    //
+    // The system is solved using the "Total enumeration method" (s. Murty).
+    // The complementary constraint vn_i * x_i
+    // implies that we must have in any solution either vn_i = 0 or x_i = 0.
+    // So for the 2D contact problem the cases
+    // vn1 = 0 and vn2 = 0, x1 = 0 and x2 = 0, x1 = 0 and vn2 = 0, x2 = 0 and
+    // vn1 = 0 need to be tested. The first valid
+    // solution that satisfies the problem is chosen.
+    // 
+    // In order to account of the accumulated impulse 'a' (because of the
+    // iterative nature of the solver which only requires
+    // that the accumulated impulse is clamped and not the incremental
+    // impulse) we change the impulse variable (x_i).
+    //
+    // Substitute:
+    // 
+    // x = a + d
+    // 
+    // a := old total impulse
+    // x := new total impulse
+    // d := incremental impulse
+    //
+    // For the current iteration we extend the formula for the incremental
+    // impulse
+    // to compute the new total impulse:
+    //
+    // vn = A * d + b
+    // = A * (x - a) + b
+    // = A * x + b - A * a
+    // = A * x + b'
+    // b' = b - A * a;
+
+    var vcp1 = this.v_points[0]; // VelocityConstraintPoint
+    var vcp2 = this.v_points[1]; // VelocityConstraintPoint
+
+    var a = Vec2.neo(vcp1.normalImpulse, vcp2.normalImpulse);
+    _ASSERT && common.assert(a.x >= 0.0 && a.y >= 0.0);
+
+    // Relative velocity at contact
+    var dv1 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp1.rB)).sub(vA).sub(Vec2.cross(wA, vcp1.rA));
+    var dv2 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp2.rB)).sub(vA).sub(Vec2.cross(wA, vcp2.rA));
+
+    // Compute normal velocity
+    var vn1 = Vec2.dot(dv1, normal);
+    var vn2 = Vec2.dot(dv2, normal);
+
+    var b = Vec2.neo(vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
+
+    // Compute b'
+    b.sub(Mat22.mulVec2(this.v_K, a));
+
+    var k_errorTol = 1e-3;
+    // NOT_USED(k_errorTol);
+
+    for (;;) {
+      //
+      // Case 1: vn = 0
+      //
+      // 0 = A * x + b'
+      //
+      // Solve for x:
+      //
+      // x = - inv(A) * b'
+      //
+      var x = Mat22.mulVec2(this.v_normalMass, b).neg();
+
+      if (x.x >= 0.0 && x.y >= 0.0) {
+        // Get the incremental impulse
+        var d = Vec2.sub(x, a);
+
+        // Apply incremental impulse
+        var P1 = Vec2.mul(d.x, normal);
+        var P2 = Vec2.mul(d.y, normal);
+
+        vA.subCombine(mA, P1, mA, P2);
+        wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+
+        vB.addCombine(mB, P1, mB, P2);
+        wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+
+        // Accumulate
+        vcp1.normalImpulse = x.x;
+        vcp2.normalImpulse = x.y;
+
+        if (DEBUG_SOLVER) {
+          // Postconditions
+          dv1 = vB + Vec2.cross(wB, vcp1.rB) - vA - Vec2.cross(wA, vcp1.rA);
+          dv2 = vB + Vec2.cross(wB, vcp2.rB) - vA - Vec2.cross(wA, vcp2.rA);
+
+          // Compute normal velocity
+          vn1 = Dot(dv1, normal);
+          vn2 = Dot(dv2, normal);
+
+          _ASSERT && common.assert(Abs(vn1 - vcp1.velocityBias) < k_errorTol);
+          _ASSERT && common.assert(Abs(vn2 - vcp2.velocityBias) < k_errorTol);
+        }
+        break;
+      }
+
+      //
+      // Case 2: vn1 = 0 and x2 = 0
+      //
+      // 0 = a11 * x1 + a12 * 0 + b1'
+      // vn2 = a21 * x1 + a22 * 0 + b2'
+      //
+      x.x = -vcp1.normalMass * b.x;
+      x.y = 0.0;
+      vn1 = 0.0;
+      vn2 = this.v_K.ex.y * x.x + b.y;
+
+      if (x.x >= 0.0 && vn2 >= 0.0) {
+        // Get the incremental impulse
+        var d = Vec2.sub(x, a);
+
+        // Apply incremental impulse
+        var P1 = Vec2.mul(d.x, normal);
+        var P2 = Vec2.mul(d.y, normal);
+        vA.subCombine(mA, P1, mA, P2);
+        wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+
+        vB.addCombine(mB, P1, mB, P2);
+        wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+
+        // Accumulate
+        vcp1.normalImpulse = x.x;
+        vcp2.normalImpulse = x.y;
+
+        if (DEBUG_SOLVER) {
+          // Postconditions
+          var dv1B = Vec2.add(vB, Vec2.cross(wB, vcp1.rB));
+          var dv1A = Vec2.add(vA, Vec2.cross(wA, vcp1.rA));
+          var dv1 = Vec2.sub(dv1B, dv1A);
+
+          // Compute normal velocity
+          vn1 = Vec2.dot(dv1, normal);
+
+          _ASSERT && common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
+        }
+        break;
+      }
+
+      //
+      // Case 3: vn2 = 0 and x1 = 0
+      //
+      // vn1 = a11 * 0 + a12 * x2 + b1'
+      // 0 = a21 * 0 + a22 * x2 + b2'
+      //
+      x.x = 0.0;
+      x.y = -vcp2.normalMass * b.y;
+      vn1 = this.v_K.ey.x * x.y + b.x;
+      vn2 = 0.0;
+
+      if (x.y >= 0.0 && vn1 >= 0.0) {
+        // Resubstitute for the incremental impulse
+        var d = Vec2.sub(x, a);
+
+        // Apply incremental impulse
+        var P1 = Vec2.mul(d.x, normal);
+        var P2 = Vec2.mul(d.y, normal);
+        vA.subCombine(mA, P1, mA, P2);
+        wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+
+        vB.addCombine(mB, P1, mB, P2);
+        wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+
+        // Accumulate
+        vcp1.normalImpulse = x.x;
+        vcp2.normalImpulse = x.y;
+
+        if (DEBUG_SOLVER) {
+          // Postconditions
+          var dv2B = Vec2.add(vB, Vec2.cross(wB, vcp2.rB));
+          var dv2A = Vec2.add(vA, Vec2.cross(wA, vcp2.rA));
+          var dv1 = Vec2.sub(dv2B, dv2A);
+
+          // Compute normal velocity
+          vn2 = Vec2.dot(dv2, normal);
+
+          _ASSERT && common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
+        }
+        break;
+      }
+
+      //
+      // Case 4: x1 = 0 and x2 = 0
+      // 
+      // vn1 = b1
+      // vn2 = b2;
+      //
+      x.x = 0.0;
+      x.y = 0.0;
+      vn1 = b.x;
+      vn2 = b.y;
+
+      if (vn1 >= 0.0 && vn2 >= 0.0) {
+        // Resubstitute for the incremental impulse
+        var d = Vec2.sub(x, a);
+
+        // Apply incremental impulse
+        var P1 = Vec2.mul(d.x, normal);
+        var P2 = Vec2.mul(d.y, normal);
+        vA.subCombine(mA, P1, mA, P2);
+        wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+
+        vB.addCombine(mB, P1, mB, P2);
+        wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+
+        // Accumulate
+        vcp1.normalImpulse = x.x;
+        vcp2.normalImpulse = x.y;
+
+        break;
+      }
+
+      // No solution, give up. This is hit sometimes, but it doesn't seem to
+      // matter.
+      break;
+    }
+  }
+
+  velocityA.v.set(vA);
+  velocityA.w = wA;
+
+  velocityB.v.set(vB);
+  velocityB.w = wB;
+};
+
+/**
+ * Friction mixing law. The idea is to allow either fixture to drive the
+ * restitution to zero. For example, anything slides on ice.
+ */
+function mixFriction(friction1, friction2) {
+  return Math.sqrt(friction1 * friction2);
+}
+
+/**
+ * Restitution mixing law. The idea is allow for anything to bounce off an
+ * inelastic surface. For example, a superball bounces on anything.
+ */
+function mixRestitution(restitution1, restitution2) {
+  return restitution1 > restitution2 ? restitution1 : restitution2;
+}
+
+var s_registers = [];
+
+/**
+ * @param fn function(fixtureA, indexA, fixtureB, indexB) Contact
+ */
+Contact.addType = function(type1, type2, callback) {
+
+  s_registers[type1] = s_registers[type1] || {};
+  s_registers[type1][type2] = callback;
+}
+
+Contact.create = function(fixtureA, indexA, fixtureB, indexB) {
+  var typeA = fixtureA.getType(); // Shape.Type
+  var typeB = fixtureB.getType(); // Shape.Type
+
+  // TODO: pool contacts
+  var contact, evaluateFcn;
+  if (evaluateFcn = s_registers[typeA] && s_registers[typeA][typeB]) {
+    contact = new Contact(fixtureA, indexA, fixtureB, indexB, evaluateFcn);
+  } else if (evaluateFcn = s_registers[typeB] && s_registers[typeB][typeA]) {
+    contact = new Contact(fixtureB, indexB, fixtureA, indexA, evaluateFcn);
+  } else {
+    return null;
+  }
+
+  // Contact creation may swap fixtures.
+  fixtureA = contact.getFixtureA();
+  fixtureB = contact.getFixtureB();
+  indexA = contact.getChildIndexA();
+  indexB = contact.getChildIndexB();
+  var bodyA = fixtureA.getBody();
+  var bodyB = fixtureB.getBody();
+
+  // Connect to body A
+  contact.m_nodeA.contact = contact;
+  contact.m_nodeA.other = bodyB;
+
+  contact.m_nodeA.prev = null;
+  contact.m_nodeA.next = bodyA.m_contactList;
+  if (bodyA.m_contactList != null) {
+    bodyA.m_contactList.prev = contact.m_nodeA;
+  }
+  bodyA.m_contactList = contact.m_nodeA;
+
+  // Connect to body B
+  contact.m_nodeB.contact = contact;
+  contact.m_nodeB.other = bodyA;
+
+  contact.m_nodeB.prev = null;
+  contact.m_nodeB.next = bodyB.m_contactList;
+  if (bodyB.m_contactList != null) {
+    bodyB.m_contactList.prev = contact.m_nodeB;
+  }
+  bodyB.m_contactList = contact.m_nodeB;
+
+  // Wake up the bodies
+  if (fixtureA.isSensor() == false && fixtureB.isSensor() == false) {
+    bodyA.setAwake(true);
+    bodyB.setAwake(true);
+  }
+
+  return contact;
+}
+
+Contact.destroy = function(contact, listener) {
+  var fixtureA = contact.m_fixtureA;
+  var fixtureB = contact.m_fixtureB;
+
+  var bodyA = fixtureA.getBody();
+  var bodyB = fixtureB.getBody();
+
+  if (contact.isTouching()) {
+    listener.endContact(contact);
+  }
+
+  // Remove from body 1
+  if (contact.m_nodeA.prev) {
+    contact.m_nodeA.prev.next = contact.m_nodeA.next;
+  }
+
+  if (contact.m_nodeA.next) {
+    contact.m_nodeA.next.prev = contact.m_nodeA.prev;
+  }
+
+  if (contact.m_nodeA == bodyA.m_contactList) {
+    bodyA.m_contactList = contact.m_nodeA.next;
+  }
+
+  // Remove from body 2
+  if (contact.m_nodeB.prev) {
+    contact.m_nodeB.prev.next = contact.m_nodeB.next;
+  }
+
+  if (contact.m_nodeB.next) {
+    contact.m_nodeB.next.prev = contact.m_nodeB.prev;
+  }
+
+  if (contact.m_nodeB == bodyB.m_contactList) {
+    bodyB.m_contactList = contact.m_nodeB.next;
+  }
+
+  if (contact.m_manifold.pointCount > 0 && fixtureA.isSensor() == false
+      && fixtureB.isSensor() == false) {
+    bodyA.setAwake(true);
+    bodyB.setAwake(true);
+  }
+
+  var typeA = fixtureA.getType(); // Shape.Type
+  var typeB = fixtureB.getType(); // Shape.Type
+
+  var destroyFcn = s_registers[typeA][typeB].destroyFcn;
+  if (typeof destroyFcn === 'function') {
+    destroyFcn(contact);
+  }
+};
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Mat22;
+
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+
+/**
+ * A 2-by-2 matrix. Stored in column-major order.
+ */
+function Mat22(a, b, c, d) {
+  if (typeof a === 'object' && a !== null) {
+    this.ex = Vec2.clone(a);
+    this.ey = Vec2.clone(b);
+  } else if (typeof a === 'number') {
+    this.ex = Vec2.neo(a, c);
+    this.ey = Vec2.neo(b, d)
+  } else {
+    this.ex = Vec2.zero();
+    this.ey = Vec2.zero()
+  }
+};
+
+Mat22.prototype.toString = function() {
+  return JSON.stringify(this);
+};
+
+Mat22.isValid = function(o) {
+  return o && Vec2.isValid(o.ex) && Vec2.isValid(o.ey);
+};
+
+Mat22.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!Mat22.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid Mat22!');
+  }
+};
+
+Mat22.prototype.set = function(a, b, c, d) {
+  if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
+      && typeof d === 'number') {
+    this.ex.set(a, c);
+    this.ey.set(b, d);
+
+  } else if (typeof a === 'object' && typeof b === 'object') {
+    this.ex.set(a);
+    this.ey.set(b);
+
+  } else if (typeof a === 'object') {
+    _ASSERT && Mat22.assert(a);
+    this.ex.set(a.ex);
+    this.ey.set(a.ey);
+
+  } else {
+    _ASSERT && common.assert(false);
+  }
+}
+
+Mat22.prototype.setIdentity = function() {
+  this.ex.x = 1.0;
+  this.ey.x = 0.0;
+  this.ex.y = 0.0;
+  this.ey.y = 1.0;
+}
+
+Mat22.prototype.setZero = function() {
+  this.ex.x = 0.0;
+  this.ey.x = 0.0;
+  this.ex.y = 0.0;
+  this.ey.y = 0.0;
+}
+
+Mat22.prototype.getInverse = function() {
+  var a = this.ex.x;
+  var b = this.ey.x;
+  var c = this.ex.y;
+  var d = this.ey.y;
+  var det = a * d - b * c;
+  if (det != 0.0) {
+    det = 1.0 / det;
+  }
+  var imx = new Mat22();
+  imx.ex.x = det * d;
+  imx.ey.x = -det * b;
+  imx.ex.y = -det * c;
+  imx.ey.y = det * a;
+  return imx;
+}
+
+/**
+ * Solve A * x = b, where b is a column vector. This is more efficient than
+ * computing the inverse in one-shot cases.
+ */
+Mat22.prototype.solve = function(v) {
+  _ASSERT && Vec2.assert(v);
+  var a = this.ex.x;
+  var b = this.ey.x;
+  var c = this.ex.y;
+  var d = this.ey.y;
+  var det = a * d - b * c;
+  if (det != 0.0) {
+    det = 1.0 / det;
+  }
+  var w = Vec2.zero();
+  w.x = det * (d * v.x - b * v.y);
+  w.y = det * (a * v.y - c * v.x);
+  return w;
+}
+
+/**
+ * Multiply a matrix times a vector. If a rotation matrix is provided, then this
+ * transforms the vector from one frame to another.
+ */
+Mat22.mul = function(mx, v) {
+  if (v && 'x' in v && 'y' in v) {
+    _ASSERT && Vec2.assert(v);
+    var x = mx.ex.x * v.x + mx.ey.x * v.y;
+    var y = mx.ex.y * v.x + mx.ey.y * v.y;
+    return Vec2.neo(x, y);
+
+  } else if (v && 'ex' in v && 'ey' in v) { // Mat22
+    _ASSERT && Mat22.assert(v);
+    return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+  }
+
+  _ASSERT && common.assert(false);
+}
+
+Mat22.mulVec2 = function(mx, v) {
+  _ASSERT && Vec2.assert(v);
+  var x = mx.ex.x * v.x + mx.ey.x * v.y;
+  var y = mx.ex.y * v.x + mx.ey.y * v.y;
+  return Vec2.neo(x, y);
+}
+
+Mat22.mulMat22 = function(mx, v) {
+  _ASSERT && Mat22.assert(v);
+  return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+  _ASSERT && common.assert(false);
+}
+
+/**
+ * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
+ * then this transforms the vector from one frame to another (inverse
+ * transform).
+ */
+Mat22.mulT = function(mx, v) {
+  if (v && 'x' in v && 'y' in v) { // Vec2
+    _ASSERT && Vec2.assert(v);
+    return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+
+  } else if (v && 'ex' in v && 'ey' in v) { // Mat22
+    _ASSERT && Mat22.assert(v);
+    var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+    var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+    return new Mat22(c1, c2);
+  }
+
+  _ASSERT && common.assert(false);
+}
+
+Mat22.mulTVec2 = function(mx, v) {
+  _ASSERT && Mat22.assert(mx);
+  _ASSERT && Vec2.assert(v);
+  return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+}
+
+Mat22.mulTMat22 = function(mx, v) {
+  _ASSERT && Mat22.assert(mx);
+  _ASSERT && Mat22.assert(v);
+  var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+  var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+  return new Mat22(c1, c2);
+}
+
+Mat22.abs = function(mx) {
+  _ASSERT && Mat22.assert(mx);
+  return new Mat22(Vec2.abs(mx.ex), Vec2.abs(mx.ey));
+}
+
+Mat22.add = function(mx1, mx2) {
+  _ASSERT && Mat22.assert(mx1);
+  _ASSERT && Mat22.assert(mx2);
+  return new Mat22(Vec2.add(mx1.ex + mx2.ex), Vec2.add(mx1.ey + mx2.ey));
+}
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var common = __webpack_require__(46);
+
+var Vec2 = __webpack_require__(47);
+var Transform = __webpack_require__(59);
+var Math = __webpack_require__(48);
+var Rot = __webpack_require__(57);
+
+module.exports = Manifold;
+module.exports.clipSegmentToLine = clipSegmentToLine;
+module.exports.clipVertex = ClipVertex;
+module.exports.getPointStates = getPointStates;
+module.exports.PointState = PointState;
+
+// Manifold Type
+Manifold.e_circles = 0;
+Manifold.e_faceA = 1;
+Manifold.e_faceB = 2;
+
+// ContactFeature Type
+Manifold.e_vertex = 0;
+Manifold.e_face = 1;
+
+/**
+ * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
+ * method of Contact subclasses.
+ * 
+ * Supported manifold types are e_faceA or e_faceB for clip point versus plane
+ * with radius and e_circles point versus point with radius.
+ * 
+ * We store contacts in this way so that position correction can account for
+ * movement, which is critical for continuous physics. All contact scenarios
+ * must be expressed in one of these types. This structure is stored across time
+ * steps, so we keep it small.
+ * 
+ * @prop type e_circle, e_faceA, e_faceB
+ * @prop localPoint Usage depends on manifold type:<br>
+ *       e_circles: the local center of circleA <br>
+ *       e_faceA: the center of faceA <br>
+ *       e_faceB: the center of faceB
+ * @prop localNormal Usage depends on manifold type:<br>
+ *       e_circles: not used <br>
+ *       e_faceA: the normal on polygonA <br>
+ *       e_faceB: the normal on polygonB
+ * @prop points The points of contact {ManifoldPoint[]}
+ * @prop pointCount The number of manifold points
+ */
+function Manifold() {
+  this.type;
+  this.localNormal = Vec2.zero();
+  this.localPoint = Vec2.zero();
+  this.points = [ new ManifoldPoint(), new ManifoldPoint() ];
+  this.pointCount = 0;
+};
+
+/**
+ * A manifold point is a contact point belonging to a contact manifold. It holds
+ * details related to the geometry and dynamics of the contact points.
+ * 
+ * This structure is stored across time steps, so we keep it small.
+ * 
+ * Note: impulses are used for internal caching and may not provide reliable
+ * contact forces, especially for high speed collisions.
+ * 
+ * @prop {Vec2} localPoint Usage depends on manifold type:<br>
+ *       e_circles: the local center of circleB<br>
+ *       e_faceA: the local center of cirlceB or the clip point of polygonB<br>
+ *       e_faceB: the clip point of polygonA.
+ * @prop normalImpulse The non-penetration impulse
+ * @prop tangentImpulse The friction impulse
+ * @prop {ContactID} id Uniquely identifies a contact point between two shapes
+ *       to facilatate warm starting
+ */
+function ManifoldPoint() {
+  this.localPoint = Vec2.zero();
+  this.normalImpulse = 0;
+  this.tangentImpulse = 0;
+  this.id = new ContactID();
+};
+
+/**
+ * Contact ids to facilitate warm starting.
+ * 
+ * @prop {ContactFeature} cf
+ * @prop key Used to quickly compare contact ids.
+ * 
+ */
+function ContactID() {
+  this.cf = new ContactFeature();
+};
+
+Object.defineProperty(ContactID.prototype, 'key', {
+  get: function() {
+    return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
+  },
+  enumerable: true,
+  configurable: true
+});
+
+ContactID.prototype.set = function(o) {
+  // this.key = o.key;
+  this.cf.set(o.cf);
+};
+
+/**
+ * The features that intersect to form the contact point.
+ * 
+ * @prop indexA Feature index on shapeA
+ * @prop indexB Feature index on shapeB
+ * @prop typeA The feature type on shapeA
+ * @prop typeB The feature type on shapeB
+ */
+function ContactFeature() {
+  this.indexA;
+  this.indexB;
+  this.typeA;
+  this.typeB;
+};
+
+ContactFeature.prototype.set = function(o) {
+  this.indexA = o.indexA;
+  this.indexB = o.indexB;
+  this.typeA = o.typeA;
+  this.typeB = o.typeB;
+};
+
+/**
+ * This is used to compute the current state of a contact manifold.
+ * 
+ * @prop normal World vector pointing from A to B
+ * @prop points World contact point (point of intersection)
+ * @prop separations A negative value indicates overlap, in meters
+ */
+function WorldManifold() {
+  this.normal;
+  this.points = []; // [maxManifoldPoints]
+  this.separations = []; // float[maxManifoldPoints]
+};
+
+/**
+ * Evaluate the manifold with supplied transforms. This assumes modest motion
+ * from the original state. This does not change the point count, impulses, etc.
+ * The radii must come from the shapes that generated the manifold.
+ * 
+ * @param {WorldManifold} [wm]
+ */
+Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
+  if (this.pointCount == 0) {
+    return;
+  }
+
+  wm = wm || new WorldManifold();
+
+  var normal = wm.normal;
+  var points = wm.points;
+  var separations = wm.separations;
+
+  // TODO: improve
+  switch (this.type) {
+  case Manifold.e_circles:
+    normal = Vec2.neo(1.0, 0.0);
+    var pointA = Transform.mulVec2(xfA, this.localPoint);
+    var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
+    var dist = Vec2.sub(pointB, pointA);
+    if (Vec2.lengthSquared(dist) > Math.EPSILON * Math.EPSILON) {
+      normal.set(dist);
+      normal.normalize();
+    }
+    points[0] = Vec2.mid(pointA, pointB);
+    separations[0] = -radiusB - radiusA;
+    points.length = 1;
+    separations.length = 1;
+    break;
+
+  case Manifold.e_faceA:
+    normal = Rot.mulVec2(xfA.q, this.localNormal);
+    var planePoint = Transform.mulVec2(xfA, this.localPoint);
+
+    for (var i = 0; i < this.pointCount; ++i) {
+      var clipPoint = Transform.mulVec2(xfB, this.points[i].localPoint);
+      var cA = Vec2.clone(clipPoint).addMul(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+      var cB = Vec2.clone(clipPoint).subMul(radiusB, normal);
+      points[i] = Vec2.mid(cA, cB);
+      separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
+    }
+    points.length = this.pointCount;
+    separations.length = this.pointCount;
+    break;
+
+  case Manifold.e_faceB:
+    normal = Rot.mulVec2(xfB.q, this.localNormal);
+    var planePoint = Transform.mulVec2(xfB, this.localPoint);
+
+    for (var i = 0; i < this.pointCount; ++i) {
+      var clipPoint = Transform.mulVec2(xfA, this.points[i].localPoint);
+      var cB = Vec2.combine(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+      var cA = Vec2.combine(1, clipPoint, -radiusA, normal);
+      points[i] = Vec2.mid(cA, cB);
+      separations[i] = Vec2.dot(Vec2.sub(cA, cB), normal);
+    }
+    points.length = this.pointCount;
+    separations.length = this.pointCount;
+    // Ensure normal points from A to B.
+    normal.mul(-1);
+    break;
+  }
+
+  wm.normal = normal;
+  wm.points = points;
+  wm.separations = separations;
+  return wm;
+}
+
+/**
+ * This is used for determining the state of contact points.
+ * 
+ * @prop {0} nullState Point does not exist
+ * @prop {1} addState Point was added in the update
+ * @prop {2} persistState Point persisted across the update
+ * @prop {3} removeState Point was removed in the update
+ */
+var PointState = {
+  // TODO: use constants
+  nullState : 0,
+  addState : 1,
+  persistState : 2,
+  removeState : 3
+};
+
+/**
+ * Compute the point states given two manifolds. The states pertain to the
+ * transition from manifold1 to manifold2. So state1 is either persist or remove
+ * while state2 is either add or persist.
+ * 
+ * @param {PointState[Settings.maxManifoldPoints]} state1
+ * @param {PointState[Settings.maxManifoldPoints]} state2
+ */
+function getPointStates(state1, state2, manifold1, manifold2) {
+  // for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
+  // state1[i] = PointState.nullState;
+  // state2[i] = PointState.nullState;
+  // }
+
+  // Detect persists and removes.
+  for (var i = 0; i < manifold1.pointCount; ++i) {
+    var id = manifold1.points[i].id;// ContactID
+
+    state1[i] = PointState.removeState;
+
+    for (var j = 0; j < manifold2.pointCount; ++j) {
+      if (manifold2.points[j].id.key == id.key) {
+        state1[i] = PointState.persistState;
+        break;
+      }
+    }
+  }
+
+  // Detect persists and adds.
+  for (var i = 0; i < manifold2.pointCount; ++i) {
+    var id = manifold2.points[i].id;// ContactID
+
+    state2[i] = PointState.addState;
+
+    for (var j = 0; j < manifold1.pointCount; ++j) {
+      if (manifold1.points[j].id.key == id.key) {
+        state2[i] = PointState.persistState;
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Used for computing contact manifolds.
+ * 
+ * @prop {Vec2} v
+ * @prop {ContactID} id
+ */
+function ClipVertex() {
+  this.v = Vec2.zero();
+  this.id = new ContactID();
+};
+
+ClipVertex.prototype.set = function(o) {
+  this.v.set(o.v);
+  this.id.set(o.id);
+};
+
+/**
+ * Clipping for contact manifolds. Sutherland-Hodgman clipping.
+ * 
+ * @param {ClipVertex[2]} vOut
+ * @param {ClipVertex[2]} vIn
+ */
+function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
+  // Start with no output points
+  var numOut = 0;
+
+  // Calculate the distance of end points to the line
+  var distance0 = Vec2.dot(normal, vIn[0].v) - offset;
+  var distance1 = Vec2.dot(normal, vIn[1].v) - offset;
+
+  // If the points are behind the plane
+  if (distance0 <= 0.0)
+    vOut[numOut++].set(vIn[0]);
+  if (distance1 <= 0.0)
+    vOut[numOut++].set(vIn[1]);
+
+  // If the points are on different sides of the plane
+  if (distance0 * distance1 < 0.0) {
+    // Find intersection point of edge and plane
+    var interp = distance0 / (distance0 - distance1);
+    vOut[numOut].v.setCombine(1 - interp, vIn[0].v, interp, vIn[1].v);
+
+    // VertexA is hitting edgeB.
+    vOut[numOut].id.cf.indexA = vertexIndexA;
+    vOut[numOut].id.cf.indexB = vIn[0].id.cf.indexB;
+    vOut[numOut].id.cf.typeA = Manifold.e_vertex;
+    vOut[numOut].id.cf.typeB = Manifold.e_face;
+    ++numOut;
+  }
+
+  return numOut;
+}
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Distance;
+
+module.exports.Input = DistanceInput;
+module.exports.Output = DistanceOutput;
+module.exports.Proxy = DistanceProxy;
+module.exports.Cache = SimplexCache;
+
+var Settings = __webpack_require__(51);
+var common = __webpack_require__(46);
+
+var stats = __webpack_require__(68);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+/**
+ * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
+ */
+
+stats.gjkCalls = 0;
+stats.gjkIters = 0;
+stats.gjkMaxIters = 0;
+
+/**
+ * Input for Distance. You have to option to use the shape radii in the
+ * computation. Even
+ */
+function DistanceInput() {
+  this.proxyA = new DistanceProxy();
+  this.proxyB = new DistanceProxy();
+  this.transformA = null;
+  this.transformB = null;
+  this.useRadii = false;
+};
+
+/**
+ * Output for Distance.
+ *
+ * @prop {Vec2} pointA closest point on shapeA
+ * @prop {Vec2} pointB closest point on shapeB
+ * @prop distance
+ * @prop iterations number of GJK iterations used
+ */
+function DistanceOutput() {
+  this.pointA = Vec2.zero();
+  this.pointB = Vec2.zero();
+  this.distance;
+  this.iterations;
+}
+
+/**
+ * Used to warm start Distance. Set count to zero on first call.
+ *
+ * @prop {number} metric length or area
+ * @prop {array} indexA vertices on shape A
+ * @prop {array} indexB vertices on shape B
+ * @prop {number} count
+ */
+function SimplexCache() {
+  this.metric = 0;
+  this.indexA = [];
+  this.indexB = [];
+  this.count = 0;
+};
+
+/**
+ * Compute the closest points between two shapes. Supports any combination of:
+ * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
+ * the first call set SimplexCache.count to zero.
+ *
+ * @param {DistanceOutput} output
+ * @param {SimplexCache} cache
+ * @param {DistanceInput} input
+ */
+function Distance(output, cache, input) {
+  ++stats.gjkCalls;
+
+  var proxyA = input.proxyA;
+  var proxyB = input.proxyB;
+  var xfA = input.transformA;
+  var xfB = input.transformB;
+
+  // Initialize the simplex.
+  var simplex = new Simplex();
+  simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
+
+  // Get simplex vertices as an array.
+  var vertices = simplex.m_v;// SimplexVertex
+  var k_maxIters = Settings.maxDistnceIterations;
+
+  // These store the vertices of the last simplex so that we
+  // can check for duplicates and prevent cycling.
+  var saveA = [];
+  var saveB = []; // int[3]
+  var saveCount = 0;
+
+  var distanceSqr1 = Infinity;
+  var distanceSqr2 = Infinity;
+
+  // Main iteration loop.
+  var iter = 0;
+  while (iter < k_maxIters) {
+    // Copy simplex so we can identify duplicates.
+    saveCount = simplex.m_count;
+    for (var i = 0; i < saveCount; ++i) {
+      saveA[i] = vertices[i].indexA;
+      saveB[i] = vertices[i].indexB;
+    }
+
+    simplex.solve();
+
+    // If we have 3 points, then the origin is in the corresponding triangle.
+    if (simplex.m_count == 3) {
+      break;
+    }
+
+    // Compute closest point.
+    var p = simplex.getClosestPoint();
+    distanceSqr2 = p.lengthSquared();
+
+    // Ensure progress
+    if (distanceSqr2 >= distanceSqr1) {
+      // break;
+    }
+    distanceSqr1 = distanceSqr2;
+
+    // Get search direction.
+    var d = simplex.getSearchDirection();
+
+    // Ensure the search direction is numerically fit.
+    if (d.lengthSquared() < Math.EPSILON * Math.EPSILON) {
+      // The origin is probably contained by a line segment
+      // or triangle. Thus the shapes are overlapped.
+
+      // We can't return zero here even though there may be overlap.
+      // In case the simplex is a point, segment, or triangle it is difficult
+      // to determine if the origin is contained in the CSO or very close to it.
+      break;
+    }
+
+    // Compute a tentative new simplex vertex using support points.
+    var vertex = vertices[simplex.m_count]; // SimplexVertex
+
+    vertex.indexA = proxyA.getSupport(Rot.mulTVec2(xfA.q, Vec2.neg(d)));
+    vertex.wA = Transform.mulVec2(xfA, proxyA.getVertex(vertex.indexA));
+
+    vertex.indexB = proxyB.getSupport(Rot.mulTVec2(xfB.q, d));
+    vertex.wB = Transform.mulVec2(xfB, proxyB.getVertex(vertex.indexB));
+
+    vertex.w = Vec2.sub(vertex.wB, vertex.wA);
+
+    // Iteration count is equated to the number of support point calls.
+    ++iter;
+    ++stats.gjkIters;
+
+    // Check for duplicate support points. This is the main termination
+    // criteria.
+    var duplicate = false;
+    for (var i = 0; i < saveCount; ++i) {
+      if (vertex.indexA == saveA[i] && vertex.indexB == saveB[i]) {
+        duplicate = true;
+        break;
+      }
+    }
+
+    // If we found a duplicate support point we must exit to avoid cycling.
+    if (duplicate) {
+      break;
+    }
+
+    // New vertex is ok and needed.
+    ++simplex.m_count;
+  }
+
+  stats.gjkMaxIters = Math.max(stats.gjkMaxIters, iter);
+
+  // Prepare output.
+  simplex.getWitnessPoints(output.pointA, output.pointB);
+  output.distance = Vec2.distance(output.pointA, output.pointB);
+  output.iterations = iter;
+
+  // Cache the simplex.
+  simplex.writeCache(cache);
+
+  // Apply radii if requested.
+  if (input.useRadii) {
+    var rA = proxyA.m_radius;
+    var rB = proxyB.m_radius;
+
+    if (output.distance > rA + rB && output.distance > Math.EPSILON) {
+      // Shapes are still no overlapped.
+      // Move the witness points to the outer surface.
+      output.distance -= rA + rB;
+      var normal = Vec2.sub(output.pointB, output.pointA);
+      normal.normalize();
+      output.pointA.addMul(rA, normal);
+      output.pointB.subMul(rB, normal);
+    } else {
+      // Shapes are overlapped when radii are considered.
+      // Move the witness points to the middle.
+      var p = Vec2.mid(output.pointA, output.pointB);
+      output.pointA.set(p);
+      output.pointB.set(p);
+      output.distance = 0.0;
+    }
+  }
+}
+
+/**
+ * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
+ */
+function DistanceProxy() {
+  this.m_buffer = []; // Vec2[2]
+  this.m_vertices = []; // Vec2[]
+  this.m_count = 0;
+  this.m_radius = 0;
+};
+
+/**
+ * Get the vertex count.
+ */
+DistanceProxy.prototype.getVertexCount = function() {
+  return this.m_count;
+}
+
+/**
+ * Get a vertex by index. Used by Distance.
+ */
+DistanceProxy.prototype.getVertex = function(index) {
+  _ASSERT && common.assert(0 <= index && index < this.m_count);
+  return this.m_vertices[index];
+}
+
+/**
+ * Get the supporting vertex index in the given direction.
+ */
+DistanceProxy.prototype.getSupport = function(d) {
+  var bestIndex = 0;
+  var bestValue = Vec2.dot(this.m_vertices[0], d);
+  for (var i = 0; i < this.m_count; ++i) {
+    var value = Vec2.dot(this.m_vertices[i], d);
+    if (value > bestValue) {
+      bestIndex = i;
+      bestValue = value;
+    }
+  }
+  return bestIndex;
+}
+
+/**
+ * Get the supporting vertex in the given direction.
+ */
+DistanceProxy.prototype.getSupportVertex = function(d) {
+  return this.m_vertices[this.getSupport(d)];
+}
+
+/**
+ * Initialize the proxy using the given shape. The shape must remain in scope
+ * while the proxy is in use.
+ */
+DistanceProxy.prototype.set = function(shape, index) {
+  // TODO remove, use shape instead
+  _ASSERT && common.assert(typeof shape.computeDistanceProxy === 'function');
+  shape.computeDistanceProxy(this, index);
+}
+
+function SimplexVertex() {
+  this.indexA; // wA index
+  this.indexB; // wB index
+  this.wA = Vec2.zero(); // support point in proxyA
+  this.wB = Vec2.zero(); // support point in proxyB
+  this.w = Vec2.zero(); // wB - wA
+  this.a; // barycentric coordinate for closest point
+};
+
+SimplexVertex.prototype.set = function(v) {
+  this.indexA = v.indexA;
+  this.indexB = v.indexB;
+  this.wA = Vec2.clone(v.wA);
+  this.wB = Vec2.clone(v.wB);
+  this.w = Vec2.clone(v.w);
+  this.a = v.a;
+};
+
+function Simplex() {
+  this.m_v1 = new SimplexVertex();
+  this.m_v2 = new SimplexVertex();
+  this.m_v3 = new SimplexVertex();
+  this.m_v = [ this.m_v1, this.m_v2, this.m_v3 ];
+  this.m_count;
+};
+
+Simplex.prototype.print = function() {
+  if (this.m_count == 3) {
+    return ["+" + this.m_count,
+      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
+      this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y,
+      this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y
+    ].toString();
+
+  } else if (this.m_count == 2) {
+    return ["+" + this.m_count,
+      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
+      this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y
+    ].toString();
+
+  } else if (this.m_count == 1) {
+    return ["+" + this.m_count,
+      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y
+    ].toString();
+
+  } else {
+    return "+" + this.m_count;
+  }
+};
+
+// (SimplexCache, DistanceProxy, ...)
+Simplex.prototype.readCache = function(cache, proxyA, transformA, proxyB, transformB) {
+  _ASSERT && common.assert(cache.count <= 3);
+
+  // Copy data from cache.
+  this.m_count = cache.count;
+  for (var i = 0; i < this.m_count; ++i) {
+    var v = this.m_v[i];
+    v.indexA = cache.indexA[i];
+    v.indexB = cache.indexB[i];
+    var wALocal = proxyA.getVertex(v.indexA);
+    var wBLocal = proxyB.getVertex(v.indexB);
+    v.wA = Transform.mulVec2(transformA, wALocal);
+    v.wB = Transform.mulVec2(transformB, wBLocal);
+    v.w = Vec2.sub(v.wB, v.wA);
+    v.a = 0.0;
+  }
+
+  // Compute the new simplex metric, if it is substantially different than
+  // old metric then flush the simplex.
+  if (this.m_count > 1) {
+    var metric1 = cache.metric;
+    var metric2 = this.getMetric();
+    if (metric2 < 0.5 * metric1 || 2.0 * metric1 < metric2
+        || metric2 < Math.EPSILON) {
+      // Reset the simplex.
+      this.m_count = 0;
+    }
+  }
+
+  // If the cache is empty or invalid...
+  if (this.m_count == 0) {
+    var v = this.m_v[0];// SimplexVertex
+    v.indexA = 0;
+    v.indexB = 0;
+    var wALocal = proxyA.getVertex(0);
+    var wBLocal = proxyB.getVertex(0);
+    v.wA = Transform.mulVec2(transformA, wALocal);
+    v.wB = Transform.mulVec2(transformB, wBLocal);
+    v.w = Vec2.sub(v.wB, v.wA);
+    v.a = 1.0;
+    this.m_count = 1;
+  }
+}
+
+// (SimplexCache)
+Simplex.prototype.writeCache = function(cache) {
+  cache.metric = this.getMetric();
+  cache.count = this.m_count;
+  for (var i = 0; i < this.m_count; ++i) {
+    cache.indexA[i] = this.m_v[i].indexA;
+    cache.indexB[i] = this.m_v[i].indexB;
+  }
+}
+
+Simplex.prototype.getSearchDirection = function() {
+  switch (this.m_count) {
+  case 1:
+    return Vec2.neg(this.m_v1.w);
+
+  case 2: {
+    var e12 = Vec2.sub(this.m_v2.w, this.m_v1.w);
+    var sgn = Vec2.cross(e12, Vec2.neg(this.m_v1.w));
+    if (sgn > 0.0) {
+      // Origin is left of e12.
+      return Vec2.cross(1.0, e12);
+    } else {
+      // Origin is right of e12.
+      return Vec2.cross(e12, 1.0);
+    }
+  }
+
+  default:
+    _ASSERT && common.assert(false);
+    return Vec2.zero();
+  }
+}
+
+Simplex.prototype.getClosestPoint = function() {
+  switch (this.m_count) {
+  case 0:
+    _ASSERT && common.assert(false);
+    return Vec2.zero();
+
+  case 1:
+    return Vec2.clone(this.m_v1.w);
+
+  case 2:
+    return Vec2.combine(this.m_v1.a, this.m_v1.w, this.m_v2.a, this.m_v2.w);
+
+  case 3:
+    return Vec2.zero();
+
+  default:
+    _ASSERT && common.assert(false);
+    return Vec2.zero();
+  }
+}
+
+Simplex.prototype.getWitnessPoints = function(pA, pB) {
+  switch (this.m_count) {
+  case 0:
+    _ASSERT && common.assert(false);
+    break;
+
+  case 1:
+    pA.set(this.m_v1.wA);
+    pB.set(this.m_v1.wB);
+    break;
+
+  case 2:
+    pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
+    pB.setCombine(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
+    break;
+
+  case 3:
+    pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
+    pA.addMul(this.m_v3.a, this.m_v3.wA);
+    pB.set(pA);
+    break;
+
+  default:
+    _ASSERT && common.assert(false);
+    break;
+  }
+}
+
+Simplex.prototype.getMetric = function() {
+  switch (this.m_count) {
+  case 0:
+    _ASSERT && common.assert(false);
+    return 0.0;
+
+  case 1:
+    return 0.0;
+
+  case 2:
+    return Vec2.distance(this.m_v1.w, this.m_v2.w);
+
+  case 3:
+    return Vec2.cross(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w,
+        this.m_v1.w));
+
+  default:
+    _ASSERT && common.assert(false);
+    return 0.0;
+  }
+}
+
+Simplex.prototype.solve = function() {
+  switch (this.m_count) {
+  case 1:
+    break;
+
+  case 2:
+    this.solve2();
+    break;
+
+  case 3:
+    this.solve3();
+    break;
+
+  default:
+    _ASSERT && common.assert(false);
+  }
+}
+
+// Solve a line segment using barycentric coordinates.
+//
+// p = a1 * w1 + a2 * w2
+// a1 + a2 = 1
+//
+// The vector from the origin to the closest point on the line is
+// perpendicular to the line.
+// e12 = w2 - w1
+// dot(p, e) = 0
+// a1 * dot(w1, e) + a2 * dot(w2, e) = 0
+//
+// 2-by-2 linear system
+// [1 1 ][a1] = [1]
+// [w1.e12 w2.e12][a2] = [0]
+//
+// Define
+// d12_1 = dot(w2, e12)
+// d12_2 = -dot(w1, e12)
+// d12 = d12_1 + d12_2
+//
+// Solution
+// a1 = d12_1 / d12
+// a2 = d12_2 / d12
+Simplex.prototype.solve2 = function() {
+  var w1 = this.m_v1.w;
+  var w2 = this.m_v2.w;
+  var e12 = Vec2.sub(w2, w1);
+
+  // w1 region
+  var d12_2 = -Vec2.dot(w1, e12);
+  if (d12_2 <= 0.0) {
+    // a2 <= 0, so we clamp it to 0
+    this.m_v1.a = 1.0;
+    this.m_count = 1;
+    return;
+  }
+
+  // w2 region
+  var d12_1 = Vec2.dot(w2, e12);
+  if (d12_1 <= 0.0) {
+    // a1 <= 0, so we clamp it to 0
+    this.m_v2.a = 1.0;
+    this.m_count = 1;
+    this.m_v1.set(this.m_v2);
+    return;
+  }
+
+  // Must be in e12 region.
+  var inv_d12 = 1.0 / (d12_1 + d12_2);
+  this.m_v1.a = d12_1 * inv_d12;
+  this.m_v2.a = d12_2 * inv_d12;
+  this.m_count = 2;
+}
+
+// Possible regions:
+// - points[2]
+// - edge points[0]-points[2]
+// - edge points[1]-points[2]
+// - inside the triangle
+Simplex.prototype.solve3 = function() {
+  var w1 = this.m_v1.w;
+  var w2 = this.m_v2.w;
+  var w3 = this.m_v3.w;
+
+  // Edge12
+  // [1 1 ][a1] = [1]
+  // [w1.e12 w2.e12][a2] = [0]
+  // a3 = 0
+  var e12 = Vec2.sub(w2, w1);
+  var w1e12 = Vec2.dot(w1, e12);
+  var w2e12 = Vec2.dot(w2, e12);
+  var d12_1 = w2e12;
+  var d12_2 = -w1e12;
+
+  // Edge13
+  // [1 1 ][a1] = [1]
+  // [w1.e13 w3.e13][a3] = [0]
+  // a2 = 0
+  var e13 = Vec2.sub(w3, w1);
+  var w1e13 = Vec2.dot(w1, e13);
+  var w3e13 = Vec2.dot(w3, e13);
+  var d13_1 = w3e13;
+  var d13_2 = -w1e13;
+
+  // Edge23
+  // [1 1 ][a2] = [1]
+  // [w2.e23 w3.e23][a3] = [0]
+  // a1 = 0
+  var e23 = Vec2.sub(w3, w2);// Vec2
+  var w2e23 = Vec2.dot(w2, e23);
+  var w3e23 = Vec2.dot(w3, e23);
+  var d23_1 = w3e23;
+  var d23_2 = -w2e23;
+
+  // Triangle123
+  var n123 = Vec2.cross(e12, e13);
+
+  var d123_1 = n123 * Vec2.cross(w2, w3);
+  var d123_2 = n123 * Vec2.cross(w3, w1);
+  var d123_3 = n123 * Vec2.cross(w1, w2);
+
+  // w1 region
+  if (d12_2 <= 0.0 && d13_2 <= 0.0) {
+    this.m_v1.a = 1.0;
+    this.m_count = 1;
+    return;
+  }
+
+  // e12
+  if (d12_1 > 0.0 && d12_2 > 0.0 && d123_3 <= 0.0) {
+    var inv_d12 = 1.0 / (d12_1 + d12_2);
+    this.m_v1.a = d12_1 * inv_d12;
+    this.m_v2.a = d12_2 * inv_d12;
+    this.m_count = 2;
+    return;
+  }
+
+  // e13
+  if (d13_1 > 0.0 && d13_2 > 0.0 && d123_2 <= 0.0) {
+    var inv_d13 = 1.0 / (d13_1 + d13_2);
+    this.m_v1.a = d13_1 * inv_d13;
+    this.m_v3.a = d13_2 * inv_d13;
+    this.m_count = 2;
+    this.m_v2.set(this.m_v3);
+    return;
+  }
+
+  // w2 region
+  if (d12_1 <= 0.0 && d23_2 <= 0.0) {
+    this.m_v2.a = 1.0;
+    this.m_count = 1;
+    this.m_v1.set(this.m_v2);
+    return;
+  }
+
+  // w3 region
+  if (d13_1 <= 0.0 && d23_1 <= 0.0) {
+    this.m_v3.a = 1.0;
+    this.m_count = 1;
+    this.m_v1.set(this.m_v3);
+    return;
+  }
+
+  // e23
+  if (d23_1 > 0.0 && d23_2 > 0.0 && d123_1 <= 0.0) {
+    var inv_d23 = 1.0 / (d23_1 + d23_2);
+    this.m_v2.a = d23_1 * inv_d23;
+    this.m_v3.a = d23_2 * inv_d23;
+    this.m_count = 2;
+    this.m_v1.set(this.m_v3);
+    return;
+  }
+
+  // Must be in triangle123
+  var inv_d123 = 1.0 / (d123_1 + d123_2 + d123_3);
+  this.m_v1.a = d123_1 * inv_d123;
+  this.m_v2.a = d123_2 * inv_d123;
+  this.m_v3.a = d123_3 * inv_d123;
+  this.m_count = 3;
+}
+
+/**
+ * Determine if two generic shapes overlap.
+ */
+Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
+  var input = new DistanceInput();
+  input.proxyA.set(shapeA, indexA);
+  input.proxyB.set(shapeB, indexB);
+  input.transformA = xfA;
+  input.transformB = xfB;
+  input.useRadii = true;
+
+  var cache = new SimplexCache();
+
+  var output = new DistanceOutput();
+  Distance(output, cache, input);
+
+  return output.distance < 10.0 * Math.EPSILON;
+}
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports) {
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+exports.toString = function(newline) {
+  newline = typeof newline === 'string' ? newline : '\n';
+  var string = "";
+  for (var name in this) {
+    if (typeof this[name] !== 'function' && typeof this[name] !== 'object') {
+      string += name + ': ' + this[name] + newline;
+    }
+  }
+  return string;
+};
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Vec3;
+
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+
+function Vec3(x, y, z) {
+  if (!(this instanceof Vec3)) {
+    return new Vec3(x, y, z);
+  }
+  if (typeof x === 'undefined') {
+    this.x = 0, this.y = 0, this.z = 0;
+  } else if (typeof x === 'object') {
+    this.x = x.x, this.y = x.y, this.z = x.z;
+  } else {
+    this.x = x, this.y = y, this.z = z;
+  }
+  _ASSERT && Vec3.assert(this);
+};
+
+Vec3.prototype._serialize = function() {
+  return {
+    x: this.x,
+    y: this.y,
+    z: this.z
+  };
+};
+
+Vec3._deserialize = function(data) {
+  var obj = Object.create(Vec3.prototype);
+  obj.x = data.x;
+  obj.y = data.y;
+  obj.z = data.z;
+  return obj;
+};
+
+Vec3.neo = function(x, y, z) {
+  var obj = Object.create(Vec3.prototype);
+  obj.x = x;
+  obj.y = y;
+  obj.z = z;
+  return obj;
+};
+
+Vec3.clone = function(v) {
+  _ASSERT && Vec3.assert(v);
+  return Vec3.neo(v.x, v.y, v.z);
+};
+
+Vec3.prototype.toString = function() {
+  return JSON.stringify(this);
+};
+
+/**
+ * Does this vector contain finite coordinates?
+ */
+Vec3.isValid = function(v) {
+  return v && Math.isFinite(v.x) && Math.isFinite(v.y) && Math.isFinite(v.z);
+}
+
+Vec3.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!Vec3.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid Vec3!');
+  }
+}
+
+Vec3.prototype.setZero = function() {
+  this.x = 0.0;
+  this.y = 0.0;
+  this.z = 0.0;
+  return this;
+}
+
+Vec3.prototype.set = function(x, y, z) {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  return this;
+}
+
+Vec3.prototype.add = function(w) {
+  this.x += w.x;
+  this.y += w.y;
+  this.z += w.z;
+  return this;
+}
+
+Vec3.prototype.sub = function(w) {
+  this.x -= w.x;
+  this.y -= w.y;
+  this.z -= w.z;
+  return this;
+}
+
+Vec3.prototype.mul = function(m) {
+  this.x *= m;
+  this.y *= m;
+  this.z *= m;
+  return this;
+}
+
+Vec3.areEqual = function(v, w) {
+  _ASSERT && Vec3.assert(v);
+  _ASSERT && Vec3.assert(w);
+  return v == w ||
+    typeof v === 'object' && v !== null &&
+    typeof w === 'object' && w !== null &&
+    v.x === w.x && v.y === w.y && v.z === w.z;
+}
+
+/**
+ * Perform the dot product on two vectors.
+ */
+Vec3.dot = function(v, w) {
+  return v.x * w.x + v.y * w.y + v.z * w.z;
+}
+
+/**
+ * Perform the cross product on two vectors. In 2D this produces a scalar.
+ */
+Vec3.cross = function(v, w) {
+  return new Vec3(
+    v.y * w.z - v.z * w.y,
+    v.z * w.x - v.x * w.z,
+    v.x * w.y - v.y * w.x
+  );
+}
+
+Vec3.add = function(v, w) {
+  return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
+}
+
+Vec3.sub = function(v, w) {
+  return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
+}
+
+Vec3.mul = function(v, m) {
+  return new Vec3(m * v.x, m * v.y, m * v.z);
+}
+
+Vec3.prototype.neg = function() {
+  this.x = -this.x;
+  this.y = -this.y;
+  this.z = -this.z;
+  return this;
+}
+
+Vec3.neg = function(v) {
+  return new Vec3(-v.x, -v.y, -v.z);
+}
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Mat33;
+
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+
+/**
+ * A 3-by-3 matrix. Stored in column-major order.
+ */
+function Mat33(a, b, c) {
+  if (typeof a === 'object' && a !== null) {
+    this.ex = Vec3.clone(a);
+    this.ey = Vec3.clone(b);
+    this.ez = Vec3.clone(c);
+  } else {
+    this.ex = Vec3();
+    this.ey = Vec3();
+    this.ez = Vec3();
+  }
+};
+
+Mat33.prototype.toString = function() {
+  return JSON.stringify(this);
+};
+
+Mat33.isValid = function(o) {
+  return o && Vec3.isValid(o.ex) && Vec3.isValid(o.ey) && Vec3.isValid(o.ez);
+};
+
+Mat33.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!Mat33.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid Mat33!');
+  }
+};
+
+/**
+ * Set this matrix to all zeros.
+ */
+Mat33.prototype.setZero = function() {
+  this.ex.setZero();
+  this.ey.setZero();
+  this.ez.setZero();
+  return this;
+}
+
+/**
+ * Solve A * x = b, where b is a column vector. This is more efficient than
+ * computing the inverse in one-shot cases.
+ * 
+ * @param {Vec3} v
+ * @returns {Vec3}
+ */
+Mat33.prototype.solve33 = function(v) {
+  var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+  if (det != 0.0) {
+    det = 1.0 / det;
+  }
+  var r = new Vec3();
+  r.x = det * Vec3.dot(v, Vec3.cross(this.ey, this.ez));
+  r.y = det * Vec3.dot(this.ex, Vec3.cross(v, this.ez));
+  r.z = det * Vec3.dot(this.ex, Vec3.cross(this.ey, v));
+  return r;
+}
+
+/**
+ * Solve A * x = b, where b is a column vector. This is more efficient than
+ * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
+ * equation.
+ * 
+ * @param {Vec2} v
+ * 
+ * @returns {Vec2}
+ */
+Mat33.prototype.solve22 = function(v) {
+  var a11 = this.ex.x;
+  var a12 = this.ey.x;
+  var a21 = this.ex.y;
+  var a22 = this.ey.y;
+  var det = a11 * a22 - a12 * a21;
+  if (det != 0.0) {
+    det = 1.0 / det;
+  }
+  var r = Vec2.zero();
+  r.x = det * (a22 * v.x - a12 * v.y);
+  r.y = det * (a11 * v.y - a21 * v.x);
+  return r;
+}
+
+/**
+ * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
+ * singular.
+ * 
+ * @param {Mat33} M
+ */
+Mat33.prototype.getInverse22 = function(M) {
+  var a = this.ex.x;
+  var b = this.ey.x;
+  var c = this.ex.y;
+  var d = this.ey.y;
+  var det = a * d - b * c;
+  if (det != 0.0) {
+    det = 1.0 / det;
+  }
+  M.ex.x = det * d;
+  M.ey.x = -det * b;
+  M.ex.z = 0.0;
+  M.ex.y = -det * c;
+  M.ey.y = det * a;
+  M.ey.z = 0.0;
+  M.ez.x = 0.0;
+  M.ez.y = 0.0;
+  M.ez.z = 0.0;
+}
+
+/**
+ * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
+ * if singular.
+ * 
+ * @param {Mat33} M
+ */
+Mat33.prototype.getSymInverse33 = function(M) {
+  var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+  if (det != 0.0) {
+    det = 1.0 / det;
+  }
+  var a11 = this.ex.x;
+  var a12 = this.ey.x;
+  var a13 = this.ez.x;
+  var a22 = this.ey.y;
+  var a23 = this.ez.y;
+  var a33 = this.ez.z;
+
+  M.ex.x = det * (a22 * a33 - a23 * a23);
+  M.ex.y = det * (a13 * a23 - a12 * a33);
+  M.ex.z = det * (a12 * a23 - a13 * a22);
+
+  M.ey.x = M.ex.y;
+  M.ey.y = det * (a11 * a33 - a13 * a13);
+  M.ey.z = det * (a13 * a12 - a11 * a23);
+
+  M.ez.x = M.ex.z;
+  M.ez.y = M.ey.z;
+  M.ez.z = det * (a11 * a22 - a12 * a12);
+}
+
+/**
+ * Multiply a matrix times a vector.
+ * 
+ * @param {Mat33} a
+ * @param {Vec3|Vec2} b
+ * 
+ * @returns {Vec3|Vec2}
+ */
+Mat33.mul = function(a, b) {
+  _ASSERT && Mat33.assert(a);
+  if (b && 'z' in b && 'y' in b && 'x' in b) {
+    _ASSERT && Vec3.assert(b);
+    var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+    var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+    var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+    return new Vec3(x, y, z);
+
+  } else if (b && 'y' in b && 'x' in b) {
+    _ASSERT && Vec2.assert(b);
+    var x = a.ex.x * b.x + a.ey.x * b.y;
+    var y = a.ex.y * b.x + a.ey.y * b.y;
+    return Vec2.neo(x, y);
+  }
+
+  _ASSERT && common.assert(false);
+}
+
+Mat33.mulVec3 = function(a, b) {
+  _ASSERT && Mat33.assert(a);
+  _ASSERT && Vec3.assert(b);
+  var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+  var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+  var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+  return new Vec3(x, y, z);
+}
+
+Mat33.mulVec2 = function(a, b) {
+  _ASSERT && Mat33.assert(a);
+  _ASSERT && Vec2.assert(b);
+  var x = a.ex.x * b.x + a.ey.x * b.y;
+  var y = a.ex.y * b.x + a.ey.y * b.y;
+  return Vec2.neo(x, y);
+}
+
+Mat33.add = function(a, b) {
+  _ASSERT && Mat33.assert(a);
+  _ASSERT && Mat33.assert(b);
+  return new Mat33(
+    Vec3.add(a.ex + b.ex),
+    Vec3.add(a.ey + b.ey),
+    Vec3.add(a.ez + b.ez)
+  );
+}
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Joint;
+
+var common = __webpack_require__(46);
+
+/**
+ * A joint edge is used to connect bodies and joints together in a joint graph
+ * where each body is a node and each joint is an edge. A joint edge belongs to
+ * a doubly linked list maintained in each attached body. Each joint has two
+ * joint nodes, one for each attached body.
+ * 
+ * @prop {Body} other provides quick access to the other body attached.
+ * @prop {Joint} joint the joint
+ * @prop {JointEdge} prev the previous joint edge in the body's joint list
+ * @prop {JointEdge} next the next joint edge in the body's joint list
+ */
+function JointEdge() {
+  this.other = null;
+  this.joint = null;
+  this.prev = null;
+  this.next = null;
+};
+
+/**
+ * @typedef {Object} JointDef
+ *
+ * Joint definitions are used to construct joints.
+ * 
+ * @prop userData Use this to attach application specific data to your joints.
+ *       void userData;
+ * @prop {boolean} collideConnected Set this flag to true if the attached bodies
+ *       should collide.
+ *
+ * @prop {Body} bodyA The first attached body.
+ * @prop {Body} bodyB The second attached body.
+ */
+
+var DEFAULTS = {
+  userData : null,
+  collideConnected : false
+};
+
+/**
+ * The base joint class. Joints are used to constraint two bodies together in
+ * various fashions. Some joints also feature limits and motors.
+ * 
+ * @param {JointDef} def
+ */
+function Joint(def, bodyA, bodyB) {
+  bodyA = def.bodyA || bodyA;
+  bodyB = def.bodyB || bodyB;
+
+  _ASSERT && common.assert(bodyA);
+  _ASSERT && common.assert(bodyB);
+  _ASSERT && common.assert(bodyA != bodyB);
+
+  this.m_type = 'unknown-joint';
+
+  this.m_bodyA = bodyA;
+  this.m_bodyB = bodyB;
+
+  this.m_index = 0;
+  this.m_collideConnected = !!def.collideConnected;
+
+  this.m_prev = null;
+  this.m_next = null;
+
+  this.m_edgeA = new JointEdge();
+  this.m_edgeB = new JointEdge();
+
+  this.m_islandFlag = false;
+  this.m_userData = def.userData;
+};
+
+/**
+ * Short-cut function to determine if either body is inactive.
+ * 
+ * @returns {boolean}
+ */
+Joint.prototype.isActive = function() {
+  return this.m_bodyA.isActive() && this.m_bodyB.isActive();
+}
+
+/**
+ * Get the type of the concrete joint.
+ * 
+ * @returns JointType
+ */
+Joint.prototype.getType = function() {
+  return this.m_type;
+}
+
+/**
+ * Get the first body attached to this joint.
+ * 
+ * @returns Body
+ */
+Joint.prototype.getBodyA = function() {
+  return this.m_bodyA;
+}
+
+/**
+ * Get the second body attached to this joint.
+ * 
+ * @returns Body
+ */
+Joint.prototype.getBodyB = function() {
+  return this.m_bodyB;
+}
+
+/**
+ * Get the next joint the world joint list.
+ * 
+ * @returns Joint
+ */
+Joint.prototype.getNext = function() {
+  return this.m_next;
+}
+
+Joint.prototype.getUserData = function() {
+  return this.m_userData;
+}
+
+Joint.prototype.setUserData = function(data) {
+  this.m_userData = data;
+}
+
+/**
+ * Get collide connected. Note: modifying the collide connect flag won't work
+ * correctly because the flag is only checked when fixture AABBs begin to
+ * overlap.
+ * 
+ * @returns {boolean}
+ */
+Joint.prototype.getCollideConnected = function() {
+  return this.m_collideConnected;
+};
+
+/**
+ * Get the anchor point on bodyA in world coordinates.
+ * 
+ * @return {Vec2}
+ */
+Joint.prototype.getAnchorA = function() {
+};
+
+/**
+ * Get the anchor point on bodyB in world coordinates.
+ * 
+ * @return {Vec2}
+ */
+Joint.prototype.getAnchorB = function() {
+};
+
+/**
+ * Get the reaction force on bodyB at the joint anchor in Newtons.
+ * 
+ * @param {float} inv_dt
+ * @return {Vec2}
+ */
+Joint.prototype.getReactionForce = function(inv_dt) {
+};
+
+/**
+ * Get the reaction torque on bodyB in N*m.
+ * 
+ * @param {float} inv_dt
+ * @return {float}
+ */
+Joint.prototype.getReactionTorque = function(inv_dt) {
+};
+
+/**
+ * Shift the origin for any points stored in world coordinates.
+ * 
+ * @param {Vec2} newOrigin
+ */
+Joint.prototype.shiftOrigin = function(newOrigin) {
+};
+
+/**
+ */
+Joint.prototype.initVelocityConstraints = function(step) {
+};
+
+/**
+ */
+Joint.prototype.solveVelocityConstraints = function(step) {
+};
+
+/**
+ * This returns true if the position errors are within tolerance.
+ */
+Joint.prototype.solvePositionConstraints = function(step) {
+};
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = TimeOfImpact;
+module.exports.Input = TOIInput;
+module.exports.Output = TOIOutput;
+
+var Settings = __webpack_require__(51);
+
+var common = __webpack_require__(46);
+var Timer = __webpack_require__(73);
+
+var stats = __webpack_require__(68);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Distance = __webpack_require__(67);
+var DistanceInput = Distance.Input;
+var DistanceOutput = Distance.Output;
+var DistanceProxy = Distance.Proxy;
+var SimplexCache = Distance.Cache;
+
+/**
+ * Input parameters for TimeOfImpact.
+ * 
+ * @prop {DistanceProxy} proxyA
+ * @prop {DistanceProxy} proxyB
+ * @prop {Sweep} sweepA
+ * @prop {Sweep} sweepB
+ * @prop tMax defines sweep interval [0, tMax]
+ */
+function TOIInput() {
+  this.proxyA = new DistanceProxy();
+  this.proxyB = new DistanceProxy();
+  this.sweepA = new Sweep();
+  this.sweepB = new Sweep();
+  this.tMax;
+};
+
+// TOIOutput State
+TOIOutput.e_unknown = 0;
+TOIOutput.e_failed = 1;
+TOIOutput.e_overlapped = 2;
+TOIOutput.e_touching = 3;
+TOIOutput.e_separated = 4;
+
+/**
+ * Output parameters for TimeOfImpact.
+ * 
+ * @prop state
+ * @prop t
+ */
+function TOIOutput() {
+  this.state;
+  this.t;
+};
+
+stats.toiTime = 0;
+stats.toiMaxTime = 0;
+stats.toiCalls = 0;
+stats.toiIters = 0;
+stats.toiMaxIters = 0;
+stats.toiRootIters = 0;
+stats.toiMaxRootIters = 0;
+
+/**
+ * Compute the upper bound on time before two shapes penetrate. Time is
+ * represented as a fraction between [0,tMax]. This uses a swept separating axis
+ * and may miss some intermediate, non-tunneling collision. If you change the
+ * time interval, you should call this function again.
+ * 
+ * Note: use Distance to compute the contact point and normal at the time of
+ * impact.
+ * 
+ * CCD via the local separating axis method. This seeks progression by computing
+ * the largest time at which separation is maintained.
+ */
+function TimeOfImpact(output, input) {
+  var timer = Timer.now();
+
+  ++stats.toiCalls;
+
+  output.state = TOIOutput.e_unknown;
+  output.t = input.tMax;
+
+  var proxyA = input.proxyA; // DistanceProxy
+  var proxyB = input.proxyB; // DistanceProxy
+
+  var sweepA = input.sweepA; // Sweep
+  var sweepB = input.sweepB; // Sweep
+
+  // Large rotations can make the root finder fail, so we normalize the
+  // sweep angles.
+  sweepA.normalize();
+  sweepB.normalize();
+
+  var tMax = input.tMax;
+
+  var totalRadius = proxyA.m_radius + proxyB.m_radius;
+  var target = Math.max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
+  var tolerance = 0.25 * Settings.linearSlop;
+  _ASSERT && common.assert(target > tolerance);
+
+  var t1 = 0.0;
+  var k_maxIterations = Settings.maxTOIIterations;
+  var iter = 0;
+
+  // Prepare input for distance query.
+  var cache = new SimplexCache();
+
+  var distanceInput = new DistanceInput();
+  distanceInput.proxyA = input.proxyA;
+  distanceInput.proxyB = input.proxyB;
+  distanceInput.useRadii = false;
+
+  // The outer loop progressively attempts to compute new separating axes.
+  // This loop terminates when an axis is repeated (no progress is made).
+  for (;;) {
+    var xfA = Transform.identity();
+    var xfB = Transform.identity();
+    sweepA.getTransform(xfA, t1);
+    sweepB.getTransform(xfB, t1);
+
+    // Get the distance between shapes. We can also use the results
+    // to get a separating axis.
+    distanceInput.transformA = xfA;
+    distanceInput.transformB = xfB;
+    var distanceOutput = new DistanceOutput();
+    Distance(distanceOutput, cache, distanceInput);
+
+    // If the shapes are overlapped, we give up on continuous collision.
+    if (distanceOutput.distance <= 0.0) {
+      // Failure!
+      output.state = TOIOutput.e_overlapped;
+      output.t = 0.0;
+      break;
+    }
+
+    if (distanceOutput.distance < target + tolerance) {
+      // Victory!
+      output.state = TOIOutput.e_touching;
+      output.t = t1;
+      break;
+    }
+
+    // Initialize the separating axis.
+    var fcn = new SeparationFunction();
+    fcn.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
+
+    if (false) { var f, i, x, fs, xs, dx, N; }
+
+    // Compute the TOI on the separating axis. We do this by successively
+    // resolving the deepest point. This loop is bounded by the number of
+    // vertices.
+    var done = false;
+    var t2 = tMax;
+    var pushBackIter = 0;
+    for (;;) {
+      // Find the deepest point at t2. Store the witness point indices.
+      var s2 = fcn.findMinSeparation(t2);
+      var indexA = fcn.indexA;
+      var indexB = fcn.indexB;
+
+      // Is the final configuration separated?
+      if (s2 > target + tolerance) {
+        // Victory!
+        output.state = TOIOutput.e_separated;
+        output.t = tMax;
+        done = true;
+        break;
+      }
+
+      // Has the separation reached tolerance?
+      if (s2 > target - tolerance) {
+        // Advance the sweeps
+        t1 = t2;
+        break;
+      }
+
+      // Compute the initial separation of the witness points.
+      var s1 = fcn.evaluate(t1);
+      var indexA = fcn.indexA;
+      var indexB = fcn.indexB;
+
+      // Check for initial overlap. This might happen if the root finder
+      // runs out of iterations.
+      if (s1 < target - tolerance) {
+        output.state = TOIOutput.e_failed;
+        output.t = t1;
+        done = true;
+        break;
+      }
+
+      // Check for touching
+      if (s1 <= target + tolerance) {
+        // Victory! t1 should hold the TOI (could be 0.0).
+        output.state = TOIOutput.e_touching;
+        output.t = t1;
+        done = true;
+        break;
+      }
+
+      // Compute 1D root of: f(x) - target = 0
+      var rootIterCount = 0;
+      var a1 = t1, a2 = t2;
+      for (;;) {
+        // Use a mix of the secant rule and bisection.
+        var t;
+        if (rootIterCount & 1) {
+          // Secant rule to improve convergence.
+          t = a1 + (target - s1) * (a2 - a1) / (s2 - s1);
+        } else {
+          // Bisection to guarantee progress.
+          t = 0.5 * (a1 + a2);
+        }
+
+        ++rootIterCount;
+        ++stats.toiRootIters;
+
+        var s = fcn.evaluate(t);
+        var indexA = fcn.indexA;
+        var indexB = fcn.indexB;
+
+        if (Math.abs(s - target) < tolerance) {
+          // t2 holds a tentative value for t1
+          t2 = t;
+          break;
+        }
+
+        // Ensure we continue to bracket the root.
+        if (s > target) {
+          a1 = t;
+          s1 = s;
+        } else {
+          a2 = t;
+          s2 = s;
+        }
+
+        if (rootIterCount == 50) {
+          break;
+        }
+      }
+
+      stats.toiMaxRootIters = Math.max(stats.toiMaxRootIters, rootIterCount);
+
+      ++pushBackIter;
+
+      if (pushBackIter == Settings.maxPolygonVertices) {
+        break;
+      }
+    }
+
+    ++iter;
+    ++stats.toiIters;
+
+    if (done) {
+      break;
+    }
+
+    if (iter == k_maxIterations) {
+      // Root finder got stuck. Semi-victory.
+      output.state = TOIOutput.e_failed;
+      output.t = t1;
+      break;
+    }
+  }
+
+  stats.toiMaxIters = Math.max(stats.toiMaxIters, iter);
+
+  var time = Timer.diff(timer);
+  stats.toiMaxTime = Math.max(stats.toiMaxTime, time);
+  stats.toiTime += time;
+}
+
+// SeparationFunction Type
+var e_points = 1;
+var e_faceA = 2;
+var e_faceB = 3;
+
+function SeparationFunction() {
+  this.m_proxyA = new DistanceProxy();
+  this.m_proxyB = new DistanceProxy();
+  this.m_sweepA;// Sweep
+  this.m_sweepB;// Sweep
+  this.m_type;
+  this.m_localPoint = Vec2.zero();
+  this.m_axis = Vec2.zero();
+};
+
+// TODO_ERIN might not need to return the separation
+
+/**
+ * @param {SimplexCache} cache
+ * @param {DistanceProxy} proxyA
+ * @param {Sweep} sweepA
+ * @param {DistanceProxy} proxyB
+ * @param {Sweep} sweepB
+ * @param {float} t1
+ */
+SeparationFunction.prototype.initialize = function(cache, proxyA, sweepA, proxyB, sweepB, t1) {
+  this.m_proxyA = proxyA;
+  this.m_proxyB = proxyB;
+  var count = cache.count;
+  _ASSERT && common.assert(0 < count && count < 3);
+
+  this.m_sweepA = sweepA;
+  this.m_sweepB = sweepB;
+
+  var xfA = Transform.identity();
+  var xfB = Transform.identity();
+  this.m_sweepA.getTransform(xfA, t1);
+  this.m_sweepB.getTransform(xfB, t1);
+
+  if (count == 1) {
+    this.m_type = e_points;
+    var localPointA = this.m_proxyA.getVertex(cache.indexA[0]);
+    var localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
+    var pointA = Transform.mulVec2(xfA, localPointA);
+    var pointB = Transform.mulVec2(xfB, localPointB);
+    this.m_axis.setCombine(1, pointB, -1, pointA);
+    var s = this.m_axis.normalize();
+    return s;
+
+  } else if (cache.indexA[0] == cache.indexA[1]) {
+    // Two points on B and one on A.
+    this.m_type = e_faceB;
+    var localPointB1 = proxyB.getVertex(cache.indexB[0]);
+    var localPointB2 = proxyB.getVertex(cache.indexB[1]);
+
+    this.m_axis = Vec2.cross(Vec2.sub(localPointB2, localPointB1), 1.0);
+    this.m_axis.normalize();
+    var normal = Rot.mulVec2(xfB.q, this.m_axis);
+
+    this.m_localPoint = Vec2.mid(localPointB1, localPointB2);
+    var pointB = Transform.mulVec2(xfB, this.m_localPoint);
+
+    var localPointA = proxyA.getVertex(cache.indexA[0]);
+    var pointA = Transform.mulVec2(xfA, localPointA);
+
+    var s = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
+    if (s < 0.0) {
+      this.m_axis = Vec2.neg(this.m_axis);
+      s = -s;
+    }
+    return s;
+
+  } else {
+    // Two points on A and one or two points on B.
+    this.m_type = e_faceA;
+    var localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
+    var localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
+
+    this.m_axis = Vec2.cross(Vec2.sub(localPointA2, localPointA1), 1.0);
+    this.m_axis.normalize();
+    var normal = Rot.mulVec2(xfA.q, this.m_axis);
+
+    this.m_localPoint = Vec2.mid(localPointA1, localPointA2);
+    var pointA = Transform.mulVec2(xfA, this.m_localPoint);
+
+    var localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
+    var pointB = Transform.mulVec2(xfB, localPointB);
+
+    var s = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
+    if (s < 0.0) {
+      this.m_axis = Vec2.neg(this.m_axis);
+      s = -s;
+    }
+    return s;
+  }
+};
+
+SeparationFunction.prototype.compute = function(find, t) {
+  // It was findMinSeparation and evaluate
+  var xfA = Transform.identity();
+  var xfB = Transform.identity();
+  this.m_sweepA.getTransform(xfA, t);
+  this.m_sweepB.getTransform(xfB, t);
+
+  switch (this.m_type) {
+  case e_points: {
+    if (find) {
+      var axisA = Rot.mulTVec2(xfA.q, this.m_axis);
+      var axisB = Rot.mulTVec2(xfB.q, Vec2.neg(this.m_axis));
+
+      this.indexA = this.m_proxyA.getSupport(axisA);
+      this.indexB = this.m_proxyB.getSupport(axisB);
+    }
+
+    var localPointA = this.m_proxyA.getVertex(this.indexA);
+    var localPointB = this.m_proxyB.getVertex(this.indexB);
+
+    var pointA = Transform.mulVec2(xfA, localPointA);
+    var pointB = Transform.mulVec2(xfB, localPointB);
+
+    var sep = Vec2.dot(pointB, this.m_axis) - Vec2.dot(pointA, this.m_axis);
+    return sep;
+  }
+
+  case e_faceA: {
+    var normal = Rot.mulVec2(xfA.q, this.m_axis);
+    var pointA = Transform.mulVec2(xfA, this.m_localPoint);
+
+    if (find) {
+      var axisB = Rot.mulTVec2(xfB.q, Vec2.neg(normal));
+
+      this.indexA = -1;
+      this.indexB = this.m_proxyB.getSupport(axisB);
+    }
+
+    var localPointB = this.m_proxyB.getVertex(this.indexB);
+    var pointB = Transform.mulVec2(xfB, localPointB);
+
+    var sep = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
+    return sep;
+  }
+
+  case e_faceB: {
+    var normal = Rot.mulVec2(xfB.q, this.m_axis);
+    var pointB = Transform.mulVec2(xfB, this.m_localPoint);
+
+    if (find) {
+      var axisA = Rot.mulTVec2(xfA.q, Vec2.neg(normal));
+
+      this.indexB = -1;
+      this.indexA = this.m_proxyA.getSupport(axisA);
+    }
+
+    var localPointA = this.m_proxyA.getVertex(this.indexA);
+    var pointA = Transform.mulVec2(xfA, localPointA);
+
+    var sep = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
+    return sep;
+  }
+
+  default:
+    _ASSERT && common.assert(false);
+    if (find) {
+      this.indexA = -1;
+      this.indexB = -1;
+    }
+    return 0.0;
+  }
+};
+
+SeparationFunction.prototype.findMinSeparation = function(t) {
+  return this.compute(true, t);
+};
+
+SeparationFunction.prototype.evaluate = function(t) {
+  return this.compute(false, t);
+};
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports) {
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports.now = function() {
+  return Date.now();
+}
+
+module.exports.diff = function(time) {
+  return Date.now() - time;
+}
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = CircleShape;
+
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var options = __webpack_require__(45);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+
+CircleShape._super = Shape;
+CircleShape.prototype = create(CircleShape._super.prototype);
+
+CircleShape.TYPE = 'circle';
+Shape.TYPES[CircleShape.TYPE] = CircleShape;
+
+function CircleShape(a, b) {
+  if (!(this instanceof CircleShape)) {
+    return new CircleShape(a, b);
+  }
+
+  CircleShape._super.call(this);
+
+  this.m_type = CircleShape.TYPE;
+  this.m_p = Vec2.zero();
+  this.m_radius = 1;
+
+  if (typeof a === 'object' && Vec2.isValid(a)) {
+    this.m_p.set(a);
+
+    if (typeof b === 'number') {
+      this.m_radius = b;
+    }
+
+  } else if (typeof a === 'number') {
+    this.m_radius = a;
+  }
+}
+
+CircleShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    p: this.m_p,
+    radius: this.m_radius,
+  };
+};
+
+CircleShape._deserialize = function(data) {
+  return new CircleShape(data.p, data.radius);
+};
+
+CircleShape.prototype.getRadius = function() {
+  return this.m_radius;
+}
+
+CircleShape.prototype.getCenter = function() {
+  return this.m_p;
+}
+
+CircleShape.prototype.getVertex = function(index) {
+  _ASSERT && common.assert(index == 0);
+  return this.m_p;
+}
+
+CircleShape.prototype.getVertexCount = function(index) {
+  return 1;
+}
+
+/**
+ * @deprecated
+ */
+CircleShape.prototype._clone = function() {
+  var clone = new CircleShape();
+  clone.m_type = this.m_type;
+  clone.m_radius = this.m_radius;
+  clone.m_p = this.m_p.clone();
+  return clone;
+}
+
+CircleShape.prototype.getChildCount = function() {
+  return 1;
+}
+
+CircleShape.prototype.testPoint = function(xf, p) {
+  var center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+  var d = Vec2.sub(p, center);
+  return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
+}
+
+// Collision Detection in Interactive 3D Environments by Gino van den Bergen
+// From Section 3.1.2
+// x = s + a * r
+// norm(x) = radius
+CircleShape.prototype.rayCast = function(output, input, xf, childIndex) {
+
+  var position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+  var s = Vec2.sub(input.p1, position);
+  var b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
+
+  // Solve quadratic equation.
+  var r = Vec2.sub(input.p2, input.p1);
+  var c = Vec2.dot(s, r);
+  var rr = Vec2.dot(r, r);
+  var sigma = c * c - rr * b;
+
+  // Check for negative discriminant and short segment.
+  if (sigma < 0.0 || rr < Math.EPSILON) {
+    return false;
+  }
+
+  // Find the point of intersection of the line with the circle.
+  var a = -(c + Math.sqrt(sigma));
+
+  // Is the intersection point on the segment?
+  if (0.0 <= a && a <= input.maxFraction * rr) {
+    a /= rr;
+    output.fraction = a;
+    output.normal = Vec2.add(s, Vec2.mul(a, r));
+    output.normal.normalize();
+    return true;
+  }
+
+  return false;
+}
+
+CircleShape.prototype.computeAABB = function(aabb, xf, childIndex) {
+  var p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+  aabb.lowerBound.set(p.x - this.m_radius, p.y - this.m_radius);
+  aabb.upperBound.set(p.x + this.m_radius, p.y + this.m_radius);
+}
+
+CircleShape.prototype.computeMass = function(massData, density) {
+  massData.mass = density * Math.PI * this.m_radius * this.m_radius;
+  massData.center = this.m_p;
+  // inertia about the local origin
+  massData.I = massData.mass
+      * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
+}
+
+CircleShape.prototype.computeDistanceProxy = function(proxy) {
+  proxy.m_vertices.push(this.m_p);
+  proxy.m_count = 1;
+  proxy.m_radius = this.m_radius;
+};
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = EdgeShape;
+
+var create = __webpack_require__(49);
+var options = __webpack_require__(45);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+
+EdgeShape._super = Shape;
+EdgeShape.prototype = create(EdgeShape._super.prototype);
+
+EdgeShape.TYPE = 'edge';
+Shape.TYPES[EdgeShape.TYPE] = EdgeShape;
+
+/**
+ * A line segment (edge) shape. These can be connected in chains or loops to
+ * other edge shapes. The connectivity information is used to ensure correct
+ * contact normals.
+ */
+function EdgeShape(v1, v2) {
+  if (!(this instanceof EdgeShape)) {
+    return new EdgeShape(v1, v2);
+  }
+
+  EdgeShape._super.call(this);
+
+  this.m_type = EdgeShape.TYPE;
+  this.m_radius = Settings.polygonRadius;
+
+  // These are the edge vertices
+  this.m_vertex1 = v1 ? Vec2.clone(v1) : Vec2.zero();
+  this.m_vertex2 = v2 ? Vec2.clone(v2) : Vec2.zero();
+
+  // Optional adjacent vertices. These are used for smooth collision.
+  // Used by chain shape.
+  this.m_vertex0 = Vec2.zero();
+  this.m_vertex3 = Vec2.zero();
+  this.m_hasVertex0 = false;
+  this.m_hasVertex3 = false;
+}
+
+EdgeShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    vertex1: this.m_vertex1,
+    vertex2: this.m_vertex2,
+
+    vertex0: this.m_vertex0,
+    vertex3: this.m_vertex3,
+    hasVertex0: this.m_hasVertex0,
+    hasVertex3: this.m_hasVertex3,
+  };
+};
+
+EdgeShape._deserialize = function(data) {
+  var shape = new EdgeShape(data.vertex1, data.vertex2);
+  if (shape.hasVertex0) {
+    shape.setPrev(data.vertex0);
+  }
+  if (shape.hasVertex3) {
+    shape.setNext(data.vertex3);
+  }
+  return shape;
+};
+
+EdgeShape.prototype.setNext = function(v3) {
+  if (v3) {
+    this.m_vertex3.set(v3);
+    this.m_hasVertex3 = true;
+  } else {
+    this.m_vertex3.setZero();
+    this.m_hasVertex3 = false;
+  }
+  return this;
+};
+
+EdgeShape.prototype.setPrev = function(v0) {
+  if (v0) {
+    this.m_vertex0.set(v0);
+    this.m_hasVertex0 = true;
+  } else {
+    this.m_vertex0.setZero();
+    this.m_hasVertex0 = false;
+  }
+  return this;
+};
+
+/**
+ * Set this as an isolated edge.
+ */
+EdgeShape.prototype._set = function(v1, v2) {
+  this.m_vertex1.set(v1);
+  this.m_vertex2.set(v2);
+  this.m_hasVertex0 = false;
+  this.m_hasVertex3 = false;
+  return this;
+}
+
+/**
+ * @deprecated
+ */
+EdgeShape.prototype._clone = function() {
+  var clone = new EdgeShape();
+  clone.m_type = this.m_type;
+  clone.m_radius = this.m_radius;
+  clone.m_vertex1.set(this.m_vertex1);
+  clone.m_vertex2.set(this.m_vertex2);
+  clone.m_vertex0.set(this.m_vertex0);
+  clone.m_vertex3.set(this.m_vertex3);
+  clone.m_hasVertex0 = this.m_hasVertex0;
+  clone.m_hasVertex3 = this.m_hasVertex3;
+  return clone;
+}
+
+EdgeShape.prototype.getChildCount = function() {
+  return 1;
+}
+
+EdgeShape.prototype.testPoint = function(xf, p) {
+  return false;
+}
+
+// p = p1 + t * d
+// v = v1 + s * e
+// p1 + t * d = v1 + s * e
+// s * e - t * d = p1 - v1
+EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
+  // NOT_USED(childIndex);
+
+  // Put the ray into the edge's frame of reference.
+  var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+  var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
+  var d = Vec2.sub(p2, p1);
+
+  var v1 = this.m_vertex1;
+  var v2 = this.m_vertex2;
+  var e = Vec2.sub(v2, v1);
+  var normal = Vec2.neo(e.y, -e.x);
+  normal.normalize();
+
+  // q = p1 + t * d
+  // dot(normal, q - v1) = 0
+  // dot(normal, p1 - v1) + t * dot(normal, d) = 0
+  var numerator = Vec2.dot(normal, Vec2.sub(v1, p1));
+  var denominator = Vec2.dot(normal, d);
+
+  if (denominator == 0.0) {
+    return false;
+  }
+
+  var t = numerator / denominator;
+  if (t < 0.0 || input.maxFraction < t) {
+    return false;
+  }
+
+  var q = Vec2.add(p1, Vec2.mul(t, d));
+
+  // q = v1 + s * r
+  // s = dot(q - v1, r) / dot(r, r)
+  var r = Vec2.sub(v2, v1);
+  var rr = Vec2.dot(r, r);
+  if (rr == 0.0) {
+    return false;
+  }
+
+  var s = Vec2.dot(Vec2.sub(q, v1), r) / rr;
+  if (s < 0.0 || 1.0 < s) {
+    return false;
+  }
+
+  output.fraction = t;
+  if (numerator > 0.0) {
+    output.normal = Rot.mulVec2(xf.q, normal).neg();
+  } else {
+    output.normal = Rot.mulVec2(xf.q, normal);
+  }
+  return true;
+}
+
+EdgeShape.prototype.computeAABB = function(aabb, xf, childIndex) {
+  var v1 = Transform.mulVec2(xf, this.m_vertex1);
+  var v2 = Transform.mulVec2(xf, this.m_vertex2);
+
+  aabb.combinePoints(v1, v2);
+  aabb.extend(this.m_radius)
+}
+
+EdgeShape.prototype.computeMass = function(massData, density) {
+  massData.mass = 0.0;
+  massData.center.setCombine(0.5, this.m_vertex1, 0.5, this.m_vertex2);
+  massData.I = 0.0;
+}
+
+EdgeShape.prototype.computeDistanceProxy = function(proxy) {
+  proxy.m_vertices.push(this.m_vertex1);
+  proxy.m_vertices.push(this.m_vertex2);
+  proxy.m_count = 2;
+  proxy.m_radius = this.m_radius;
+};
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = PolygonShape;
+
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var options = __webpack_require__(45);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+
+PolygonShape._super = Shape;
+PolygonShape.prototype = create(PolygonShape._super.prototype);
+
+PolygonShape.TYPE = 'polygon';
+Shape.TYPES[PolygonShape.TYPE] = PolygonShape;
+
+/**
+ * A convex polygon. It is assumed that the interior of the polygon is to the
+ * left of each edge. Polygons have a maximum number of vertices equal to
+ * Settings.maxPolygonVertices. In most cases you should not need many vertices
+ * for a convex polygon. extends Shape
+ */
+function PolygonShape(vertices) {
+  if (!(this instanceof PolygonShape)) {
+    return new PolygonShape(vertices);
+  }
+
+  PolygonShape._super.call(this);
+
+  this.m_type = PolygonShape.TYPE;
+  this.m_radius = Settings.polygonRadius;
+  this.m_centroid = Vec2.zero();
+  this.m_vertices = []; // Vec2[Settings.maxPolygonVertices]
+  this.m_normals = []; // Vec2[Settings.maxPolygonVertices]
+  this.m_count = 0;
+
+  if (vertices && vertices.length) {
+    this._set(vertices);
+  }
+}
+
+PolygonShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    centroid: this.m_centroid,
+
+    vertices: this.m_vertices,
+    normals: this.m_normals,
+    count: this.m_count,
+  };
+};
+
+PolygonShape._deserialize = function(data) {
+  var shape = new PolygonShape(data.vertices);
+  return shape;
+};
+
+PolygonShape.prototype.getVertex = function(index) {
+  _ASSERT && common.assert(0 <= index && index < this.m_count);
+  return this.m_vertices[index];
+}
+
+/**
+ * @deprecated
+ */
+PolygonShape.prototype._clone = function() {
+  var clone = new PolygonShape();
+  clone.m_type = this.m_type;
+  clone.m_radius = this.m_radius;
+  clone.m_count = this.m_count;
+  clone.m_centroid.set(this.m_centroid);
+  for (var i = 0; i < this.m_count; i++) {
+    clone.m_vertices.push(this.m_vertices[i].clone());
+  }
+  for (var i = 0; i < this.m_normals.length; i++) {
+    clone.m_normals.push(this.m_normals[i].clone());
+  }
+  return clone;
+}
+
+PolygonShape.prototype.getChildCount = function() {
+  return 1;
+}
+
+function ComputeCentroid(vs, count) {
+  _ASSERT && common.assert(count >= 3);
+
+  var c = Vec2.zero();
+  var area = 0.0;
+
+  // pRef is the reference point for forming triangles.
+  // It's location doesn't change the result (except for rounding error).
+  var pRef = Vec2.zero();
+  if (false) { var i; }
+
+  var inv3 = 1.0 / 3.0;
+
+  for (var i = 0; i < count; ++i) {
+    // Triangle vertices.
+    var p1 = pRef;
+    var p2 = vs[i];
+    var p3 = i + 1 < count ? vs[i + 1] : vs[0];
+
+    var e1 = Vec2.sub(p2, p1);
+    var e2 = Vec2.sub(p3, p1);
+
+    var D = Vec2.cross(e1, e2);
+
+    var triangleArea = 0.5 * D;
+    area += triangleArea;
+
+    // Area weighted centroid
+    c.addMul(triangleArea * inv3, p1);
+    c.addMul(triangleArea * inv3, p2);
+    c.addMul(triangleArea * inv3, p3);
+  }
+
+  // Centroid
+  _ASSERT && common.assert(area > Math.EPSILON);
+  c.mul(1.0 / area);
+  return c;
+}
+
+PolygonShape.prototype._reset = function() {
+  this._set(this.m_vertices)
+}
+
+/**
+ * @private
+ *
+ * Create a convex hull from the given array of local points. The count must be
+ * in the range [3, Settings.maxPolygonVertices].
+ *
+ * Warning: the points may be re-ordered, even if they form a convex polygon
+ * Warning: collinear points are handled but not removed. Collinear points may
+ * lead to poor stacking behavior.
+ */
+PolygonShape.prototype._set = function(vertices) {
+  _ASSERT && common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
+  if (vertices.length < 3) {
+    this._setAsBox(1.0, 1.0);
+    return;
+  }
+
+  var n = Math.min(vertices.length, Settings.maxPolygonVertices);
+
+  // Perform welding and copy vertices into local buffer.
+  var ps = [];// [Settings.maxPolygonVertices];
+  var tempCount = 0;
+  for (var i = 0; i < n; ++i) {
+    var v = vertices[i];
+
+    var unique = true;
+    for (var j = 0; j < tempCount; ++j) {
+      if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
+        unique = false;
+        break;
+      }
+    }
+
+    if (unique) {
+      ps[tempCount++] = v;
+    }
+  }
+
+  n = tempCount;
+  if (n < 3) {
+    // Polygon is degenerate.
+    _ASSERT && common.assert(false);
+    this._setAsBox(1.0, 1.0);
+    return;
+  }
+
+  // Create the convex hull using the Gift wrapping algorithm
+  // http://en.wikipedia.org/wiki/Gift_wrapping_algorithm
+
+  // Find the right most point on the hull
+  var i0 = 0;
+  var x0 = ps[0].x;
+  for (var i = 1; i < n; ++i) {
+    var x = ps[i].x;
+    if (x > x0 || (x == x0 && ps[i].y < ps[i0].y)) {
+      i0 = i;
+      x0 = x;
+    }
+  }
+
+  var hull = [];// [Settings.maxPolygonVertices];
+  var m = 0;
+  var ih = i0;
+
+  for (;;) {
+    hull[m] = ih;
+
+    var ie = 0;
+    for (var j = 1; j < n; ++j) {
+      if (ie == ih) {
+        ie = j;
+        continue;
+      }
+
+      var r = Vec2.sub(ps[ie], ps[hull[m]]);
+      var v = Vec2.sub(ps[j], ps[hull[m]]);
+      var c = Vec2.cross(r, v);
+      if (c < 0.0) {
+        ie = j;
+      }
+
+      // Collinearity check
+      if (c == 0.0 && v.lengthSquared() > r.lengthSquared()) {
+        ie = j;
+      }
+    }
+
+    ++m;
+    ih = ie;
+
+    if (ie == i0) {
+      break;
+    }
+  }
+
+  if (m < 3) {
+    // Polygon is degenerate.
+    _ASSERT && common.assert(false);
+    this._setAsBox(1.0, 1.0);
+    return;
+  }
+
+  this.m_count = m;
+
+  // Copy vertices.
+  for (var i = 0; i < m; ++i) {
+    this.m_vertices[i] = ps[hull[i]];
+  }
+
+  // Compute normals. Ensure the edges have non-zero length.
+  for (var i = 0; i < m; ++i) {
+    var i1 = i;
+    var i2 = i + 1 < m ? i + 1 : 0;
+    var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
+    _ASSERT && common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
+    this.m_normals[i] = Vec2.cross(edge, 1.0);
+    this.m_normals[i].normalize();
+  }
+
+  // Compute the polygon centroid.
+  this.m_centroid = ComputeCentroid(this.m_vertices, m);
+}
+
+/**
+ * @private
+ */
+PolygonShape.prototype._setAsBox = function(hx, hy, center, angle) {
+  this.m_vertices[0] = Vec2.neo(-hx, -hy);
+  this.m_vertices[1] = Vec2.neo(hx, -hy);
+  this.m_vertices[2] = Vec2.neo(hx, hy);
+  this.m_vertices[3] = Vec2.neo(-hx, hy);
+
+  this.m_normals[0] = Vec2.neo(0.0, -1.0);
+  this.m_normals[1] = Vec2.neo(1.0, 0.0);
+  this.m_normals[2] = Vec2.neo(0.0, 1.0);
+  this.m_normals[3] = Vec2.neo(-1.0, 0.0);
+
+  this.m_count = 4;
+
+  if (Vec2.isValid(center)) {
+    angle = angle || 0;
+
+    this.m_centroid.set(center);
+
+    var xf = Transform.identity();
+    xf.p.set(center);
+    xf.q.set(angle);
+
+    // Transform vertices and normals.
+    for (var i = 0; i < this.m_count; ++i) {
+      this.m_vertices[i] = Transform.mulVec2(xf, this.m_vertices[i]);
+      this.m_normals[i] = Rot.mulVec2(xf.q, this.m_normals[i]);
+    }
+  }
+}
+
+PolygonShape.prototype.testPoint = function(xf, p) {
+  var pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
+
+  for (var i = 0; i < this.m_count; ++i) {
+    var dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
+    if (dot > 0.0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
+
+  // Put the ray into the polygon's frame of reference.
+  var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+  var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
+  var d = Vec2.sub(p2, p1);
+
+  var lower = 0.0;
+  var upper = input.maxFraction;
+
+  var index = -1;
+
+  for (var i = 0; i < this.m_count; ++i) {
+    // p = p1 + a * d
+    // dot(normal, p - v) = 0
+    // dot(normal, p1 - v) + a * dot(normal, d) = 0
+    var numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
+    var denominator = Vec2.dot(this.m_normals[i], d);
+
+    if (denominator == 0.0) {
+      if (numerator < 0.0) {
+        return false;
+      }
+    } else {
+      // Note: we want this predicate without division:
+      // lower < numerator / denominator, where denominator < 0
+      // Since denominator < 0, we have to flip the inequality:
+      // lower < numerator / denominator <==> denominator * lower > numerator.
+      if (denominator < 0.0 && numerator < lower * denominator) {
+        // Increase lower.
+        // The segment enters this half-space.
+        lower = numerator / denominator;
+        index = i;
+      } else if (denominator > 0.0 && numerator < upper * denominator) {
+        // Decrease upper.
+        // The segment exits this half-space.
+        upper = numerator / denominator;
+      }
+    }
+
+    // The use of epsilon here causes the assert on lower to trip
+    // in some cases. Apparently the use of epsilon was to make edge
+    // shapes work, but now those are handled separately.
+    // if (upper < lower - Math.EPSILON)
+    if (upper < lower) {
+      return false;
+    }
+  }
+
+  _ASSERT && common.assert(0.0 <= lower && lower <= input.maxFraction);
+
+  if (index >= 0) {
+    output.fraction = lower;
+    output.normal = Rot.mulVec2(xf.q, this.m_normals[index]);
+    return true;
+  }
+
+  return false;
+};
+
+PolygonShape.prototype.computeAABB = function(aabb, xf, childIndex) {
+  var minX = Infinity, minY = Infinity;
+  var maxX = -Infinity, maxY = -Infinity;
+  for (var i = 0; i < this.m_count; ++i) {
+    var v = Transform.mulVec2(xf, this.m_vertices[i]);
+    minX = Math.min(minX, v.x);
+    maxX = Math.max(maxX, v.x);
+    minY = Math.min(minY, v.y);
+    maxY = Math.max(maxY, v.y);
+  }
+
+  aabb.lowerBound.set(minX, minY);
+  aabb.upperBound.set(maxX, maxY);
+  aabb.extend(this.m_radius);
+}
+
+PolygonShape.prototype.computeMass = function(massData, density) {
+  // Polygon mass, centroid, and inertia.
+  // Let rho be the polygon density in mass per unit area.
+  // Then:
+  // mass = rho * int(dA)
+  // centroid.x = (1/mass) * rho * int(x * dA)
+  // centroid.y = (1/mass) * rho * int(y * dA)
+  // I = rho * int((x*x + y*y) * dA)
+  //
+  // We can compute these integrals by summing all the integrals
+  // for each triangle of the polygon. To evaluate the integral
+  // for a single triangle, we make a change of variables to
+  // the (u,v) coordinates of the triangle:
+  // x = x0 + e1x * u + e2x * v
+  // y = y0 + e1y * u + e2y * v
+  // where 0 <= u && 0 <= v && u + v <= 1.
+  //
+  // We integrate u from [0,1-v] and then v from [0,1].
+  // We also need to use the Jacobian of the transformation:
+  // D = cross(e1, e2)
+  //
+  // Simplification: triangle centroid = (1/3) * (p1 + p2 + p3)
+  //
+  // The rest of the derivation is handled by computer algebra.
+
+  _ASSERT && common.assert(this.m_count >= 3);
+
+  var center = Vec2.zero();
+  var area = 0.0;
+  var I = 0.0;
+
+  // s is the reference point for forming triangles.
+  // It's location doesn't change the result (except for rounding error).
+  var s = Vec2.zero();
+
+  // This code would put the reference point inside the polygon.
+  for (var i = 0; i < this.m_count; ++i) {
+    s.add(this.m_vertices[i]);
+  }
+  s.mul(1.0 / this.m_count);
+
+  var k_inv3 = 1.0 / 3.0;
+
+  for (var i = 0; i < this.m_count; ++i) {
+    // Triangle vertices.
+    var e1 = Vec2.sub(this.m_vertices[i], s);
+    var e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2
+        .sub(this.m_vertices[0], s);
+
+    var D = Vec2.cross(e1, e2);
+
+    var triangleArea = 0.5 * D;
+    area += triangleArea;
+
+    // Area weighted centroid
+    center.addCombine(triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
+
+    var ex1 = e1.x;
+    var ey1 = e1.y;
+    var ex2 = e2.x;
+    var ey2 = e2.y;
+
+    var intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
+    var inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
+
+    I += (0.25 * k_inv3 * D) * (intx2 + inty2);
+  }
+
+  // Total mass
+  massData.mass = density * area;
+
+  // Center of mass
+  _ASSERT && common.assert(area > Math.EPSILON);
+  center.mul(1.0 / area);
+  massData.center.setCombine(1, center, 1, s);
+
+  // Inertia tensor relative to the local origin (point s).
+  massData.I = density * I;
+
+  // Shift to center of mass then to original body origin.
+  massData.I += massData.mass
+      * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
+}
+
+// Validate convexity. This is a very time consuming operation.
+// @returns true if valid
+PolygonShape.prototype.validate = function() {
+  for (var i = 0; i < this.m_count; ++i) {
+    var i1 = i;
+    var i2 = i < this.m_count - 1 ? i1 + 1 : 0;
+    var p = this.m_vertices[i1];
+    var e = Vec2.sub(this.m_vertices[i2], p);
+
+    for (var j = 0; j < this.m_count; ++j) {
+      if (j == i1 || j == i2) {
+        continue;
+      }
+
+      var v = Vec2.sub(this.m_vertices[j], p);
+      var c = Vec2.cross(e, v);
+      if (c < 0.0) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+PolygonShape.prototype.computeDistanceProxy = function(proxy) {
+  proxy.m_vertices = this.m_vertices;
+  proxy.m_count = this.m_count;
+  proxy.m_radius = this.m_radius;
+};
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = ChainShape;
+
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var options = __webpack_require__(45);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var EdgeShape = __webpack_require__(75);
+
+ChainShape._super = Shape;
+ChainShape.prototype = create(ChainShape._super.prototype);
+
+ChainShape.TYPE = 'chain';
+Shape.TYPES[ChainShape.TYPE] = ChainShape;
+
+/**
+ * A chain shape is a free form sequence of line segments. The chain has
+ * two-sided collision, so you can use inside and outside collision. Therefore,
+ * you may use any winding order. Connectivity information is used to create
+ * smooth collisions.
+ * 
+ * WARNING: The chain will not collide properly if there are self-intersections.
+ */
+function ChainShape(vertices, loop) {
+  if (!(this instanceof ChainShape)) {
+    return new ChainShape(vertices, loop);
+  }
+
+  ChainShape._super.call(this);
+
+  this.m_type = ChainShape.TYPE;
+  this.m_radius = Settings.polygonRadius;
+  this.m_vertices = [];
+  this.m_count = 0;
+  this.m_prevVertex = null;
+  this.m_nextVertex = null;
+  this.m_hasPrevVertex = false;
+  this.m_hasNextVertex = false;
+
+  this.m_isLoop = loop;
+
+  if (vertices && vertices.length) {
+    if (loop) {
+      this._createLoop(vertices);
+    } else {
+      this._createChain(vertices);
+    }
+  }
+}
+
+ChainShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    vertices: this.m_vertices,
+    isLoop: this.m_isLoop,
+    prevVertex: this.m_prevVertex,
+    nextVertex: this.m_nextVertex,
+    hasPrevVertex: this.m_hasPrevVertex,
+    hasNextVertex: this.m_hasNextVertex,
+  };
+};
+
+ChainShape._deserialize = function(data) {
+  var shape = new ChainShape(data.vertices.map(Vec2._deserialize), data.isLoop);
+  return shape;
+};
+
+// ChainShape.clear = function() {
+// this.m_vertices.length = 0;
+// this.m_count = 0;
+// }
+
+/**
+ * Create a loop. This automatically adjusts connectivity.
+ * 
+ * @param vertices an array of vertices, these are copied
+ * @param count the vertex count
+ */
+ChainShape.prototype._createLoop = function(vertices) {
+  _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
+  _ASSERT && common.assert(vertices.length >= 3);
+  for (var i = 1; i < vertices.length; ++i) {
+    var v1 = vertices[i - 1];
+    var v2 = vertices[i];
+    // If the code crashes here, it means your vertices are too close together.
+    _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+  }
+
+  this.m_vertices.length = 0;
+  this.m_count = vertices.length + 1;
+  for (var i = 0; i < vertices.length; ++i) {
+    this.m_vertices[i] = vertices[i].clone();
+  }
+  this.m_vertices[vertices.length] = vertices[0].clone();
+
+  this.m_prevVertex = this.m_vertices[this.m_count - 2];
+  this.m_nextVertex = this.m_vertices[1];
+  this.m_hasPrevVertex = true;
+  this.m_hasNextVertex = true;
+  return this;
+}
+
+/**
+ * Create a chain with isolated end vertices.
+ * 
+ * @param vertices an array of vertices, these are copied
+ * @param count the vertex count
+ */
+ChainShape.prototype._createChain = function(vertices) {
+  _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
+  _ASSERT && common.assert(vertices.length >= 2);
+  for (var i = 1; i < vertices.length; ++i) {
+    // If the code crashes here, it means your vertices are too close together.
+    var v1 = vertices[i - 1];
+    var v2 = vertices[i];
+    _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+  }
+
+  this.m_count = vertices.length;
+  for (var i = 0; i < vertices.length; ++i) {
+    this.m_vertices[i] = vertices[i].clone();
+  }
+
+  this.m_hasPrevVertex = false;
+  this.m_hasNextVertex = false;
+  this.m_prevVertex = null;
+  this.m_nextVertex = null;
+  return this;
+}
+
+/**
+ * Establish connectivity to a vertex that precedes the first vertex. Don't call
+ * this for loops.
+ */
+ChainShape.prototype._setPrevVertex = function(prevVertex) {
+  this.m_prevVertex = prevVertex;
+  this.m_hasPrevVertex = true;
+}
+
+/**
+ * Establish connectivity to a vertex that follows the last vertex. Don't call
+ * this for loops.
+ */
+ChainShape.prototype._setNextVertex = function(nextVertex) {
+  this.m_nextVertex = nextVertex;
+  this.m_hasNextVertex = true;
+}
+
+/**
+ * @deprecated
+ */
+ChainShape.prototype._clone = function() {
+  var clone = new ChainShape();
+  clone.createChain(this.m_vertices);
+  clone.m_type = this.m_type;
+  clone.m_radius = this.m_radius;
+  clone.m_prevVertex = this.m_prevVertex;
+  clone.m_nextVertex = this.m_nextVertex;
+  clone.m_hasPrevVertex = this.m_hasPrevVertex;
+  clone.m_hasNextVertex = this.m_hasNextVertex;
+  return clone;
+}
+
+ChainShape.prototype.getChildCount = function() {
+  // edge count = vertex count - 1
+  return this.m_count - 1;
+}
+
+// Get a child edge.
+ChainShape.prototype.getChildEdge = function(edge, childIndex) {
+  _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count - 1);
+  edge.m_type = EdgeShape.TYPE;
+  edge.m_radius = this.m_radius;
+
+  edge.m_vertex1 = this.m_vertices[childIndex];
+  edge.m_vertex2 = this.m_vertices[childIndex + 1];
+
+  if (childIndex > 0) {
+    edge.m_vertex0 = this.m_vertices[childIndex - 1];
+    edge.m_hasVertex0 = true;
+  } else {
+    edge.m_vertex0 = this.m_prevVertex;
+    edge.m_hasVertex0 = this.m_hasPrevVertex;
+  }
+
+  if (childIndex < this.m_count - 2) {
+    edge.m_vertex3 = this.m_vertices[childIndex + 2];
+    edge.m_hasVertex3 = true;
+  } else {
+    edge.m_vertex3 = this.m_nextVertex;
+    edge.m_hasVertex3 = this.m_hasNextVertex;
+  }
+}
+
+ChainShape.prototype.getVertex = function(index) {
+  _ASSERT && common.assert(0 <= index && index <= this.m_count);
+  if (index < this.m_count) {
+    return this.m_vertices[index];
+  } else {
+    return this.m_vertices[0];
+  }
+}
+
+/**
+ * This always return false.
+ */
+ChainShape.prototype.testPoint = function(xf, p) {
+  return false;
+}
+
+ChainShape.prototype.rayCast = function(output, input, xf, childIndex) {
+  _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+
+  var edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
+  return edgeShape.rayCast(output, input, xf, 0);
+}
+
+ChainShape.prototype.computeAABB = function(aabb, xf, childIndex) {
+  _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+
+  var v1 = Transform.mulVec2(xf, this.getVertex(childIndex));
+  var v2 = Transform.mulVec2(xf, this.getVertex(childIndex + 1));
+
+  aabb.combinePoints(v1, v2);
+}
+
+/**
+ * Chains have zero mass.
+ */
+ChainShape.prototype.computeMass = function(massData, density) {
+  massData.mass = 0.0;
+  massData.center = Vec2.neo();
+  massData.I = 0.0;
+}
+
+ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
+  _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+  proxy.m_buffer[0] = this.getVertex(childIndex);
+  proxy.m_buffer[1] = this.getVertex(childIndex + 1);
+  proxy.m_vertices = proxy.m_buffer;
+  proxy.m_count = 2;
+  proxy.m_radius = this.m_radius;
+};
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = BoxShape;
+
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var PolygonShape = __webpack_require__(76);
+
+BoxShape._super = PolygonShape;
+BoxShape.prototype = create(BoxShape._super.prototype);
+
+BoxShape.TYPE = 'polygon';
+
+/**
+ * A rectangle polygon which extend PolygonShape.
+ */
+function BoxShape(hx, hy, center, angle) {
+  if (!(this instanceof BoxShape)) {
+    return new BoxShape(hx, hy, center, angle);
+  }
+
+  BoxShape._super.call(this);
+
+  this._setAsBox(hx, hy, center, angle);
+}
+
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Vec2 = __webpack_require__(47);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var Contact = __webpack_require__(64);
+var Manifold = __webpack_require__(66);
+var CircleShape = __webpack_require__(74);
+
+Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
+
+function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+  _ASSERT && common.assert(fixtureA.getType() == CircleShape.TYPE);
+  _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+  CollideCircles(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
+}
+
+function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
+  manifold.pointCount = 0;
+
+  var pA = Transform.mulVec2(xfA, circleA.m_p);
+  var pB = Transform.mulVec2(xfB, circleB.m_p);
+
+  var distSqr = Vec2.distanceSquared(pB, pA);
+  var rA = circleA.m_radius;
+  var rB = circleB.m_radius;
+  var radius = rA + rB;
+  if (distSqr > radius * radius) {
+    return;
+  }
+
+  manifold.type = Manifold.e_circles;
+  manifold.localPoint.set(circleA.m_p);
+  manifold.localNormal.setZero();
+  manifold.pointCount = 1;
+  manifold.points[0].localPoint.set(circleB.m_p);
+
+  // manifold.points[0].id.key = 0;
+  manifold.points[0].id.cf.indexA = 0;
+  manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+  manifold.points[0].id.cf.indexB = 0;
+  manifold.points[0].id.cf.typeB = Manifold.e_vertex;
+}
+
+exports.CollideCircles = CollideCircles;
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var Contact = __webpack_require__(64);
+var Manifold = __webpack_require__(66);
+var EdgeShape = __webpack_require__(75);
+var ChainShape = __webpack_require__(77);
+var CircleShape = __webpack_require__(74);
+
+Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
+Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
+
+function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB,
+    indexB) {
+  _ASSERT && common.assert(fixtureA.getType() == EdgeShape.TYPE);
+  _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+
+  var shapeA = fixtureA.getShape();
+  var shapeB = fixtureB.getShape();
+
+  CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
+}
+
+function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB,
+    indexB) {
+  _ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
+  _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+
+  var chain = fixtureA.getShape();
+  var edge = new EdgeShape();
+  chain.getChildEdge(edge, indexA);
+
+  var shapeA = edge;
+  var shapeB = fixtureB.getShape();
+
+  CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
+}
+
+// Compute contact points for edge versus circle.
+// This accounts for edge connectivity.
+function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
+  manifold.pointCount = 0;
+
+  // Compute circle in frame of edge
+  var Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
+
+  var A = edgeA.m_vertex1;
+  var B = edgeA.m_vertex2;
+  var e = Vec2.sub(B, A);
+
+  // Barycentric coordinates
+  var u = Vec2.dot(e, Vec2.sub(B, Q));
+  var v = Vec2.dot(e, Vec2.sub(Q, A));
+
+  var radius = edgeA.m_radius + circleB.m_radius;
+
+  // Region A
+  if (v <= 0.0) {
+    var P = Vec2.clone(A);
+    var d = Vec2.sub(Q, P);
+    var dd = Vec2.dot(d, d);
+    if (dd > radius * radius) {
+      return;
+    }
+
+    // Is there an edge connected to A?
+    if (edgeA.m_hasVertex0) {
+      var A1 = edgeA.m_vertex0;
+      var B1 = A;
+      var e1 = Vec2.sub(B1, A1);
+      var u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
+
+      // Is the circle in Region AB of the previous edge?
+      if (u1 > 0.0) {
+        return;
+      }
+    }
+
+    manifold.type = Manifold.e_circles;
+    manifold.localNormal.setZero();
+    manifold.localPoint.set(P);
+    manifold.pointCount = 1;
+    manifold.points[0].localPoint.set(circleB.m_p);
+
+    // manifold.points[0].id.key = 0;
+    manifold.points[0].id.cf.indexA = 0;
+    manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+    manifold.points[0].id.cf.indexB = 0;
+    manifold.points[0].id.cf.typeB = Manifold.e_vertex;
+    return;
+  }
+
+  // Region B
+  if (u <= 0.0) {
+    var P = Vec2.clone(B);
+    var d = Vec2.sub(Q, P);
+    var dd = Vec2.dot(d, d);
+    if (dd > radius * radius) {
+      return;
+    }
+
+    // Is there an edge connected to B?
+    if (edgeA.m_hasVertex3) {
+      var B2 = edgeA.m_vertex3;
+      var A2 = B;
+      var e2 = Vec2.sub(B2, A2);
+      var v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
+
+      // Is the circle in Region AB of the next edge?
+      if (v2 > 0.0) {
+        return;
+      }
+    }
+
+    manifold.type = Manifold.e_circles;
+    manifold.localNormal.setZero();
+    manifold.localPoint.set(P);
+    manifold.pointCount = 1;
+    manifold.points[0].localPoint.set(circleB.m_p);
+
+    // manifold.points[0].id.key = 0;
+    manifold.points[0].id.cf.indexA = 1;
+    manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+    manifold.points[0].id.cf.indexB = 0;
+    manifold.points[0].id.cf.typeB = Manifold.e_vertex;
+    return;
+  }
+
+  // Region AB
+  var den = Vec2.dot(e, e);
+  _ASSERT && common.assert(den > 0.0);
+  var P = Vec2.combine(u / den, A, v / den, B);
+  var d = Vec2.sub(Q, P);
+  var dd = Vec2.dot(d, d);
+  if (dd > radius * radius) {
+    return;
+  }
+
+  var n = Vec2.neo(-e.y, e.x);
+  if (Vec2.dot(n, Vec2.sub(Q, A)) < 0.0) {
+    n.set(-n.x, -n.y);
+  }
+  n.normalize();
+
+  manifold.type = Manifold.e_faceA;
+  manifold.localNormal = n;
+  manifold.localPoint.set(A);
+  manifold.pointCount = 1;
+  manifold.points[0].localPoint.set(circleB.m_p);
+
+  // manifold.points[0].id.key = 0;
+  manifold.points[0].id.cf.indexA = 0;
+  manifold.points[0].id.cf.typeA = Manifold.e_face;
+  manifold.points[0].id.cf.indexB = 0;
+  manifold.points[0].id.cf.typeB = Manifold.e_vertex;
+}
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Manifold = __webpack_require__(66);
+var Contact = __webpack_require__(64);
+var Shape = __webpack_require__(63);
+var PolygonShape = __webpack_require__(76);
+
+module.exports = CollidePolygons;
+
+Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
+
+function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+  _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
+  _ASSERT && common.assert(fixtureB.getType() == PolygonShape.TYPE);
+  CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
+}
+
+/**
+ * Find the max separation between poly1 and poly2 using edge normals from
+ * poly1.
+ */
+function FindMaxSeparation(poly1, xf1, poly2, xf2) {
+  var count1 = poly1.m_count;
+  var count2 = poly2.m_count;
+  var n1s = poly1.m_normals;
+  var v1s = poly1.m_vertices;
+  var v2s = poly2.m_vertices;
+  var xf = Transform.mulTXf(xf2, xf1);
+
+  var bestIndex = 0;
+  var maxSeparation = -Infinity;
+  for (var i = 0; i < count1; ++i) {
+    // Get poly1 normal in frame2.
+    var n = Rot.mulVec2(xf.q, n1s[i]);
+    var v1 = Transform.mulVec2(xf, v1s[i]);
+
+    // Find deepest point for normal i.
+    var si = Infinity;
+    for (var j = 0; j < count2; ++j) {
+      var sij = Vec2.dot(n, v2s[j]) - Vec2.dot(n, v1);
+      if (sij < si) {
+        si = sij;
+      }
+    }
+
+    if (si > maxSeparation) {
+      maxSeparation = si;
+      bestIndex = i;
+    }
+  }
+
+  // used to keep last FindMaxSeparation call values
+  FindMaxSeparation._maxSeparation = maxSeparation;
+  FindMaxSeparation._bestIndex = bestIndex;
+}
+
+/**
+ * @param {ClipVertex[2]} c
+ * @param {int} edge1
+ */
+function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
+  var normals1 = poly1.m_normals;
+
+  var count2 = poly2.m_count;
+  var vertices2 = poly2.m_vertices;
+  var normals2 = poly2.m_normals;
+
+  _ASSERT && common.assert(0 <= edge1 && edge1 < poly1.m_count);
+
+  // Get the normal of the reference edge in poly2's frame.
+  var normal1 = Rot.mulT(xf2.q, Rot.mulVec2(xf1.q, normals1[edge1]));
+
+  // Find the incident edge on poly2.
+  var index = 0;
+  var minDot = Infinity;
+  for (var i = 0; i < count2; ++i) {
+    var dot = Vec2.dot(normal1, normals2[i]);
+    if (dot < minDot) {
+      minDot = dot;
+      index = i;
+    }
+  }
+
+  // Build the clip vertices for the incident edge.
+  var i1 = index;
+  var i2 = i1 + 1 < count2 ? i1 + 1 : 0;
+
+  c[0].v = Transform.mulVec2(xf2, vertices2[i1]);
+  c[0].id.cf.indexA = edge1;
+  c[0].id.cf.indexB = i1;
+  c[0].id.cf.typeA = Manifold.e_face;
+  c[0].id.cf.typeB = Manifold.e_vertex;
+
+  c[1].v = Transform.mulVec2(xf2, vertices2[i2]);
+  c[1].id.cf.indexA = edge1;
+  c[1].id.cf.indexB = i2;
+  c[1].id.cf.typeA = Manifold.e_face;
+  c[1].id.cf.typeB = Manifold.e_vertex;
+}
+
+/**
+ * 
+ * Find edge normal of max separation on A - return if separating axis is found<br>
+ * Find edge normal of max separation on B - return if separation axis is found<br>
+ * Choose reference edge as min(minA, minB)<br>
+ * Find incident edge<br>
+ * Clip
+ * 
+ * The normal points from 1 to 2
+ */
+function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
+  manifold.pointCount = 0;
+  var totalRadius = polyA.m_radius + polyB.m_radius;
+
+  FindMaxSeparation(polyA, xfA, polyB, xfB);
+  var edgeA = FindMaxSeparation._bestIndex;
+  var separationA = FindMaxSeparation._maxSeparation;
+  if (separationA > totalRadius)
+    return;
+
+  FindMaxSeparation(polyB, xfB, polyA, xfA);
+  var edgeB = FindMaxSeparation._bestIndex;
+  var separationB = FindMaxSeparation._maxSeparation;
+  if (separationB > totalRadius)
+    return;
+
+  var poly1; // reference polygon
+  var poly2; // incident polygon
+  var xf1;
+  var xf2;
+  var edge1; // reference edge
+  var flip;
+  var k_tol = 0.1 * Settings.linearSlop;
+
+  if (separationB > separationA + k_tol) {
+    poly1 = polyB;
+    poly2 = polyA;
+    xf1 = xfB;
+    xf2 = xfA;
+    edge1 = edgeB;
+    manifold.type = Manifold.e_faceB;
+    flip = 1;
+  } else {
+    poly1 = polyA;
+    poly2 = polyB;
+    xf1 = xfA;
+    xf2 = xfB;
+    edge1 = edgeA;
+    manifold.type = Manifold.e_faceA;
+    flip = 0;
+  }
+
+  var incidentEdge = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+  FindIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
+
+  var count1 = poly1.m_count;
+  var vertices1 = poly1.m_vertices;
+
+  var iv1 = edge1;
+  var iv2 = edge1 + 1 < count1 ? edge1 + 1 : 0;
+
+  var v11 = vertices1[iv1];
+  var v12 = vertices1[iv2];
+
+  var localTangent = Vec2.sub(v12, v11);
+  localTangent.normalize();
+
+  var localNormal = Vec2.cross(localTangent, 1.0);
+  var planePoint = Vec2.combine(0.5, v11, 0.5, v12);
+
+  var tangent = Rot.mulVec2(xf1.q, localTangent);
+  var normal = Vec2.cross(tangent, 1.0);
+
+  v11 = Transform.mulVec2(xf1, v11);
+  v12 = Transform.mulVec2(xf1, v12);
+
+  // Face offset.
+  var frontOffset = Vec2.dot(normal, v11);
+
+  // Side offsets, extended by polytope skin thickness.
+  var sideOffset1 = -Vec2.dot(tangent, v11) + totalRadius;
+  var sideOffset2 = Vec2.dot(tangent, v12) + totalRadius;
+
+  // Clip incident edge against extruded edge1 side edges.
+  var clipPoints1 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+  var clipPoints2 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+  var np;
+
+  // Clip to box side 1
+  np = Manifold.clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg(tangent),
+      sideOffset1, iv1);
+
+  if (np < 2) {
+    return;
+  }
+
+  // Clip to negative box side 1
+  np = Manifold.clipSegmentToLine(clipPoints2, clipPoints1, tangent,
+      sideOffset2, iv2);
+
+  if (np < 2) {
+    return;
+  }
+
+  // Now clipPoints2 contains the clipped points.
+  manifold.localNormal = localNormal;
+  manifold.localPoint = planePoint;
+
+  var pointCount = 0;
+  for (var i = 0; i < clipPoints2.length/* maxManifoldPoints */; ++i) {
+    var separation = Vec2.dot(normal, clipPoints2[i].v) - frontOffset;
+
+    if (separation <= totalRadius) {
+      var cp = manifold.points[pointCount]; // ManifoldPoint
+      cp.localPoint.set(Transform.mulTVec2(xf2, clipPoints2[i].v));
+      cp.id = clipPoints2[i].id;
+      if (flip) {
+        // Swap features
+        var cf = cp.id.cf; // ContactFeature
+        var indexA = cf.indexA;
+        var indexB = cf.indexB;
+        var typeA = cf.typeA;
+        var typeB = cf.typeB;
+        cf.indexA = indexB;
+        cf.indexB = indexA;
+        cf.typeA = typeB;
+        cf.typeB = typeA;
+      }
+      ++pointCount;
+    }
+  }
+
+  manifold.pointCount = pointCount;
+}
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Manifold = __webpack_require__(66);
+var Contact = __webpack_require__(64);
+var Shape = __webpack_require__(63);
+var CircleShape = __webpack_require__(74);
+var PolygonShape = __webpack_require__(76);
+
+Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
+
+function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+  _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
+  _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+  CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(),
+      xfB);
+}
+
+function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
+  manifold.pointCount = 0;
+
+  // Compute circle position in the frame of the polygon.
+  var c = Transform.mulVec2(xfB, circleB.m_p);
+  var cLocal = Transform.mulTVec2(xfA, c);
+
+  // Find the min separating edge.
+  var normalIndex = 0;
+  var separation = -Infinity;
+  var radius = polygonA.m_radius + circleB.m_radius;
+  var vertexCount = polygonA.m_count;
+  var vertices = polygonA.m_vertices;
+  var normals = polygonA.m_normals;
+
+  for (var i = 0; i < vertexCount; ++i) {
+    var s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
+
+    if (s > radius) {
+      // Early out.
+      return;
+    }
+
+    if (s > separation) {
+      separation = s;
+      normalIndex = i;
+    }
+  }
+
+  // Vertices that subtend the incident face.
+  var vertIndex1 = normalIndex;
+  var vertIndex2 = vertIndex1 + 1 < vertexCount ? vertIndex1 + 1 : 0;
+  var v1 = vertices[vertIndex1];
+  var v2 = vertices[vertIndex2];
+
+  // If the center is inside the polygon ...
+  if (separation < Math.EPSILON) {
+    manifold.pointCount = 1;
+    manifold.type = Manifold.e_faceA;
+    manifold.localNormal.set(normals[normalIndex]);
+    manifold.localPoint.setCombine(0.5, v1, 0.5, v2);
+    manifold.points[0].localPoint = circleB.m_p;
+
+    // manifold.points[0].id.key = 0;
+    manifold.points[0].id.cf.indexA = 0;
+    manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+    manifold.points[0].id.cf.indexB = 0;
+    manifold.points[0].id.cf.typeB = Manifold.e_vertex;
+    return;
+  }
+
+  // Compute barycentric coordinates
+  var u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
+  var u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
+  if (u1 <= 0.0) {
+    if (Vec2.distanceSquared(cLocal, v1) > radius * radius) {
+      return;
+    }
+
+    manifold.pointCount = 1;
+    manifold.type = Manifold.e_faceA;
+    manifold.localNormal.setCombine(1, cLocal, -1, v1);
+    manifold.localNormal.normalize();
+    manifold.localPoint = v1;
+    manifold.points[0].localPoint.set(circleB.m_p);
+
+    // manifold.points[0].id.key = 0;
+    manifold.points[0].id.cf.indexA = 0;
+    manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+    manifold.points[0].id.cf.indexB = 0;
+    manifold.points[0].id.cf.typeB = Manifold.e_vertex;
+  } else if (u2 <= 0.0) {
+    if (Vec2.distanceSquared(cLocal, v2) > radius * radius) {
+      return;
+    }
+
+    manifold.pointCount = 1;
+    manifold.type = Manifold.e_faceA;
+    manifold.localNormal.setCombine(1, cLocal, -1, v2);
+    manifold.localNormal.normalize();
+    manifold.localPoint.set(v2);
+    manifold.points[0].localPoint.set(circleB.m_p);
+
+    // manifold.points[0].id.key = 0;
+    manifold.points[0].id.cf.indexA = 0;
+    manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+    manifold.points[0].id.cf.indexB = 0;
+    manifold.points[0].id.cf.typeB = Manifold.e_vertex;
+  } else {
+    var faceCenter = Vec2.mid(v1, v2);
+    var separation = Vec2.dot(cLocal, normals[vertIndex1])
+        - Vec2.dot(faceCenter, normals[vertIndex1]);
+    if (separation > radius) {
+      return;
+    }
+
+    manifold.pointCount = 1;
+    manifold.type = Manifold.e_faceA;
+    manifold.localNormal.set(normals[vertIndex1]);
+    manifold.localPoint.set(faceCenter);
+    manifold.points[0].localPoint.set(circleB.m_p);
+
+    // manifold.points[0].id.key = 0;
+    manifold.points[0].id.cf.indexA = 0;
+    manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+    manifold.points[0].id.cf.indexB = 0;
+    manifold.points[0].id.cf.typeB = Manifold.e_vertex;
+  }
+}
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var Contact = __webpack_require__(64);
+var Manifold = __webpack_require__(66);
+var EdgeShape = __webpack_require__(75);
+var ChainShape = __webpack_require__(77);
+var PolygonShape = __webpack_require__(76);
+
+Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
+Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
+
+function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
+  _ASSERT && common.assert(fA.getType() == EdgeShape.TYPE);
+  _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
+
+  CollideEdgePolygon(manifold, fA.getShape(), xfA, fB.getShape(), xfB);
+}
+
+function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
+  _ASSERT && common.assert(fA.getType() == ChainShape.TYPE);
+  _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
+
+  var chain = fA.getShape();
+  var edge = new EdgeShape();
+  chain.getChildEdge(edge, indexA);
+
+  CollideEdgePolygon(manifold, edge, xfA, fB.getShape(), xfB);
+}
+
+// EPAxis Type
+var e_unknown = -1;
+var e_edgeA = 1;
+var e_edgeB = 2;
+
+// VertexType unused?
+var e_isolated = 0;
+var e_concave = 1;
+var e_convex = 2;
+
+// This structure is used to keep track of the best separating axis.
+function EPAxis() {
+  this.type; // Type
+  this.index;
+  this.separation;
+};
+
+// This holds polygon B expressed in frame A.
+function TempPolygon() {
+  this.vertices = []; // Vec2[Settings.maxPolygonVertices]
+  this.normals = []; // Vec2[Settings.maxPolygonVertices];
+  this.count = 0;
+};
+
+// Reference face used for clipping
+function ReferenceFace() {
+  this.i1, this.i2; // int
+  this.v1, this.v2; // v
+  this.normal = Vec2.zero();
+  this.sideNormal1 = Vec2.zero();
+  this.sideOffset1; // float
+  this.sideNormal2 = Vec2.zero();
+  this.sideOffset2; // float
+};
+
+// reused
+var edgeAxis = new EPAxis();
+var polygonAxis = new EPAxis();
+var polygonBA = new TempPolygon();
+var rf = new ReferenceFace();
+
+/**
+ * This function collides and edge and a polygon, taking into account edge
+ * adjacency.
+ */
+function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
+  // Algorithm:
+  // 1. Classify v1 and v2
+  // 2. Classify polygon centroid as front or back
+  // 3. Flip normal if necessary
+  // 4. Initialize normal range to [-pi, pi] about face normal
+  // 5. Adjust normal range according to adjacent edges
+  // 6. Visit each separating axes, only accept axes within the range
+  // 7. Return if _any_ axis indicates separation
+  // 8. Clip
+
+  var m_type1, m_type2; // VertexType unused?
+
+  var xf = Transform.mulTXf(xfA, xfB);
+
+  var centroidB = Transform.mulVec2(xf, polygonB.m_centroid);
+
+  var v0 = edgeA.m_vertex0;
+  var v1 = edgeA.m_vertex1;
+  var v2 = edgeA.m_vertex2;
+  var v3 = edgeA.m_vertex3;
+
+  var hasVertex0 = edgeA.m_hasVertex0;
+  var hasVertex3 = edgeA.m_hasVertex3;
+
+  var edge1 = Vec2.sub(v2, v1);
+  edge1.normalize();
+  var normal1 = Vec2.neo(edge1.y, -edge1.x);
+  var offset1 = Vec2.dot(normal1, Vec2.sub(centroidB, v1));
+  var offset0 = 0.0;
+  var offset2 = 0.0;
+  var convex1 = false;
+  var convex2 = false;
+
+  // Is there a preceding edge?
+  if (hasVertex0) {
+    var edge0 = Vec2.sub(v1, v0);
+    edge0.normalize();
+    var normal0 = Vec2.neo(edge0.y, -edge0.x);
+    convex1 = Vec2.cross(edge0, edge1) >= 0.0;
+    offset0 = Vec2.dot(normal0, centroidB) - Vec2.dot(normal0, v0);
+  }
+
+  // Is there a following edge?
+  if (hasVertex3) {
+    var edge2 = Vec2.sub(v3, v2);
+    edge2.normalize();
+    var normal2 = Vec2.neo(edge2.y, -edge2.x);
+    convex2 = Vec2.cross(edge1, edge2) > 0.0;
+    offset2 = Vec2.dot(normal2, centroidB) - Vec2.dot(normal2, v2);
+  }
+
+  var front;
+  var normal = Vec2.zero();
+  var lowerLimit = Vec2.zero();
+  var upperLimit = Vec2.zero();
+
+  // Determine front or back collision. Determine collision normal limits.
+  if (hasVertex0 && hasVertex3) {
+    if (convex1 && convex2) {
+      front = offset0 >= 0.0 || offset1 >= 0.0 || offset2 >= 0.0;
+      if (front) {
+        normal.set(normal1);
+        lowerLimit.set(normal0);
+        upperLimit.set(normal2);
+      } else {
+        normal.setMul(-1, normal1);
+        lowerLimit.setMul(-1, normal1);
+        upperLimit.setMul(-1, normal1);
+      }
+    } else if (convex1) {
+      front = offset0 >= 0.0 || (offset1 >= 0.0 && offset2 >= 0.0);
+      if (front) {
+        normal.set(normal1);
+        lowerLimit.set(normal0);
+        upperLimit.set(normal1);
+      } else {
+        normal.setMul(-1, normal1);
+        lowerLimit.setMul(-1, normal2);
+        upperLimit.setMul(-1, normal1);
+      }
+    } else if (convex2) {
+      front = offset2 >= 0.0 || (offset0 >= 0.0 && offset1 >= 0.0);
+      if (front) {
+        normal.set(normal1);
+        lowerLimit.set(normal1);
+        upperLimit.set(normal2);
+      } else {
+        normal.setMul(-1, normal1);
+        lowerLimit.setMul(-1, normal1);
+        upperLimit.setMul(-1, normal0);
+      }
+    } else {
+      front = offset0 >= 0.0 && offset1 >= 0.0 && offset2 >= 0.0;
+      if (front) {
+        normal.set(normal1);
+        lowerLimit.set(normal1);
+        upperLimit.set(normal1);
+      } else {
+        normal.setMul(-1, normal1);
+        lowerLimit.setMul(-1, normal2);
+        upperLimit.setMul(-1, normal0);
+      }
+    }
+  } else if (hasVertex0) {
+    if (convex1) {
+      front = offset0 >= 0.0 || offset1 >= 0.0;
+      if (front) {
+        normal.set(normal1);
+        lowerLimit.set(normal0);
+        upperLimit.setMul(-1, normal1);
+      } else {
+        normal.setMul(-1, normal1);
+        lowerLimit.set(normal1);
+        upperLimit.setMul(-1, normal1);
+      }
+    } else {
+      front = offset0 >= 0.0 && offset1 >= 0.0;
+      if (front) {
+        normal.set(normal1);
+        lowerLimit.set(normal1);
+        upperLimit.setMul(-1, normal1);
+      } else {
+        normal.setMul(-1, normal1);
+        lowerLimit.set(normal1);
+        upperLimit.setMul(-1, normal0);
+      }
+    }
+  } else if (hasVertex3) {
+    if (convex2) {
+      front = offset1 >= 0.0 || offset2 >= 0.0;
+      if (front) {
+        normal.set(normal1);
+        lowerLimit.setMul(-1, normal1);
+        upperLimit.set(normal2);
+      } else {
+        normal.setMul(-1, normal1);
+        lowerLimit.setMul(-1, normal1);
+        upperLimit.set(normal1);
+      }
+    } else {
+      front = offset1 >= 0.0 && offset2 >= 0.0;
+      if (front) {
+        normal.set(normal1);
+        lowerLimit.setMul(-1, normal1);
+        upperLimit.set(normal1);
+      } else {
+        normal.setMul(-1, normal1);
+        lowerLimit.setMul(-1, normal2);
+        upperLimit.set(normal1);
+      }
+    }
+  } else {
+    front = offset1 >= 0.0;
+    if (front) {
+      normal.set(normal1);
+      lowerLimit.setMul(-1, normal1);
+      upperLimit.setMul(-1, normal1);
+    } else {
+      normal.setMul(-1, normal1);
+      lowerLimit.set(normal1);
+      upperLimit.set(normal1);
+    }
+  }
+
+  // Get polygonB in frameA
+  polygonBA.count = polygonB.m_count;
+  for (var i = 0; i < polygonB.m_count; ++i) {
+    polygonBA.vertices[i] = Transform.mulVec2(xf, polygonB.m_vertices[i]);
+    polygonBA.normals[i] = Rot.mulVec2(xf.q, polygonB.m_normals[i]);
+  }
+
+  var radius = 2.0 * Settings.polygonRadius;
+
+  manifold.pointCount = 0;
+
+  { // ComputeEdgeSeparation
+    edgeAxis.type = e_edgeA;
+    edgeAxis.index = front ? 0 : 1;
+    edgeAxis.separation = Infinity;
+
+    for (var i = 0; i < polygonBA.count; ++i) {
+      var s = Vec2.dot(normal, Vec2.sub(polygonBA.vertices[i], v1));
+      if (s < edgeAxis.separation) {
+        edgeAxis.separation = s;
+      }
+    }
+  }
+
+  // If no valid normal can be found than this edge should not collide.
+  if (edgeAxis.type == e_unknown) {
+    return;
+  }
+
+  if (edgeAxis.separation > radius) {
+    return;
+  }
+
+  { // ComputePolygonSeparation
+    polygonAxis.type = e_unknown;
+    polygonAxis.index = -1;
+    polygonAxis.separation = -Infinity;
+
+    var perp = Vec2.neo(-normal.y, normal.x);
+
+    for (var i = 0; i < polygonBA.count; ++i) {
+      var n = Vec2.neg(polygonBA.normals[i]);
+
+      var s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
+      var s2 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v2));
+      var s = Math.min(s1, s2);
+
+      if (s > radius) {
+        // No collision
+        polygonAxis.type = e_edgeB;
+        polygonAxis.index = i;
+        polygonAxis.separation = s;
+        break;
+      }
+
+      // Adjacency
+      if (Vec2.dot(n, perp) >= 0.0) {
+        if (Vec2.dot(Vec2.sub(n, upperLimit), normal) < -Settings.angularSlop) {
+          continue;
+        }
+      } else {
+        if (Vec2.dot(Vec2.sub(n, lowerLimit), normal) < -Settings.angularSlop) {
+          continue;
+        }
+      }
+
+      if (s > polygonAxis.separation) {
+        polygonAxis.type = e_edgeB;
+        polygonAxis.index = i;
+        polygonAxis.separation = s;
+      }
+    }
+  }
+
+  if (polygonAxis.type != e_unknown && polygonAxis.separation > radius) {
+    return;
+  }
+
+  // Use hysteresis for jitter reduction.
+  var k_relativeTol = 0.98;
+  var k_absoluteTol = 0.001;
+
+  var primaryAxis;
+  if (polygonAxis.type == e_unknown) {
+    primaryAxis = edgeAxis;
+  } else if (polygonAxis.separation > k_relativeTol * edgeAxis.separation + k_absoluteTol) {
+    primaryAxis = polygonAxis;
+  } else {
+    primaryAxis = edgeAxis;
+  }
+
+  var ie = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+
+  if (primaryAxis.type == e_edgeA) {
+    manifold.type = Manifold.e_faceA;
+
+    // Search for the polygon normal that is most anti-parallel to the edge
+    // normal.
+    var bestIndex = 0;
+    var bestValue = Vec2.dot(normal, polygonBA.normals[0]);
+    for (var i = 1; i < polygonBA.count; ++i) {
+      var value = Vec2.dot(normal, polygonBA.normals[i]);
+      if (value < bestValue) {
+        bestValue = value;
+        bestIndex = i;
+      }
+    }
+
+    var i1 = bestIndex;
+    var i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
+
+    ie[0].v = polygonBA.vertices[i1];
+    ie[0].id.cf.indexA = 0;
+    ie[0].id.cf.indexB = i1;
+    ie[0].id.cf.typeA = Manifold.e_face;
+    ie[0].id.cf.typeB = Manifold.e_vertex;
+
+    ie[1].v = polygonBA.vertices[i2];
+    ie[1].id.cf.indexA = 0;
+    ie[1].id.cf.indexB = i2;
+    ie[1].id.cf.typeA = Manifold.e_face;
+    ie[1].id.cf.typeB = Manifold.e_vertex;
+
+    if (front) {
+      rf.i1 = 0;
+      rf.i2 = 1;
+      rf.v1 = v1;
+      rf.v2 = v2;
+      rf.normal.set(normal1);
+    } else {
+      rf.i1 = 1;
+      rf.i2 = 0;
+      rf.v1 = v2;
+      rf.v2 = v1;
+      rf.normal.setMul(-1, normal1);
+    }
+  } else {
+    manifold.type = Manifold.e_faceB;
+
+    ie[0].v = v1;
+    ie[0].id.cf.indexA = 0;
+    ie[0].id.cf.indexB = primaryAxis.index;
+    ie[0].id.cf.typeA = Manifold.e_vertex;
+    ie[0].id.cf.typeB = Manifold.e_face;
+
+    ie[1].v = v2;
+    ie[1].id.cf.indexA = 0;
+    ie[1].id.cf.indexB = primaryAxis.index;
+    ie[1].id.cf.typeA = Manifold.e_vertex;
+    ie[1].id.cf.typeB = Manifold.e_face;
+
+    rf.i1 = primaryAxis.index;
+    rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
+    rf.v1 = polygonBA.vertices[rf.i1];
+    rf.v2 = polygonBA.vertices[rf.i2];
+    rf.normal.set(polygonBA.normals[rf.i1]);
+  }
+
+  rf.sideNormal1.set(rf.normal.y, -rf.normal.x);
+  rf.sideNormal2.setMul(-1, rf.sideNormal1);
+  rf.sideOffset1 = Vec2.dot(rf.sideNormal1, rf.v1);
+  rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
+
+  // Clip incident edge against extruded edge1 side edges.
+  var clipPoints1 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+  var clipPoints2 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+
+  var np;
+
+  // Clip to box side 1
+  np = Manifold.clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
+
+  if (np < Settings.maxManifoldPoints) {
+    return;
+  }
+
+  // Clip to negative box side 1
+  np = Manifold.clipSegmentToLine(clipPoints2, clipPoints1, rf.sideNormal2, rf.sideOffset2, rf.i2);
+
+  if (np < Settings.maxManifoldPoints) {
+    return;
+  }
+
+  // Now clipPoints2 contains the clipped points.
+  if (primaryAxis.type == e_edgeA) {
+    manifold.localNormal = Vec2.clone(rf.normal);
+    manifold.localPoint = Vec2.clone(rf.v1);
+  } else {
+    manifold.localNormal = Vec2.clone(polygonB.m_normals[rf.i1]);
+    manifold.localPoint = Vec2.clone(polygonB.m_vertices[rf.i1]);
+  }
+
+  var pointCount = 0;
+  for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
+    var separation = Vec2.dot(rf.normal, Vec2.sub(clipPoints2[i].v, rf.v1));
+
+    if (separation <= radius) {
+      var cp = manifold.points[pointCount]; // ManifoldPoint
+
+      if (primaryAxis.type == e_edgeA) {
+        cp.localPoint = Transform.mulT(xf, clipPoints2[i].v);
+        cp.id = clipPoints2[i].id;
+      } else {
+        cp.localPoint = clipPoints2[i].v;
+        cp.id.cf.typeA = clipPoints2[i].id.cf.typeB;
+        cp.id.cf.typeB = clipPoints2[i].id.cf.typeA;
+        cp.id.cf.indexA = clipPoints2[i].id.cf.indexB;
+        cp.id.cf.indexB = clipPoints2[i].id.cf.indexA;
+      }
+
+      ++pointCount;
+    }
+  }
+
+  manifold.pointCount = pointCount;
+}
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = DistanceJoint;
+
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+DistanceJoint.TYPE = 'distance-joint';
+
+DistanceJoint._super = Joint;
+DistanceJoint.prototype = create(DistanceJoint._super.prototype);
+
+/**
+ * @typedef {Object} DistanceJointDef
+ *
+ * Distance joint definition. This requires defining an anchor point on both
+ * bodies and the non-zero length of the distance joint. The definition uses
+ * local anchor points so that the initial configuration can violate the
+ * constraint slightly. This helps when saving and loading a game. Warning: Do
+ * not use a zero or short length.
+ * 
+ * @prop {float} frequencyHz The mass-spring-damper frequency in Hertz. A value
+ *       of 0 disables softness.
+ * @prop {float} dampingRatio The damping ratio. 0 = no damping, 1 = critical
+ *       damping.
+ *
+ * @prop {Vec2} def.localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} def.localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {number} def.length Distance length.
+ */
+
+var DEFAULTS = {
+  frequencyHz : 0.0,
+  dampingRatio : 0.0
+};
+
+/**
+ * A distance joint constrains two points on two bodies to remain at a fixed
+ * distance from each other. You can view this as a massless, rigid rod.
+ *
+ * @param {DistanceJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ * @param {Vec2} anchorA Anchor A in global coordination.
+ * @param {Vec2} anchorB Anchor B in global coordination.
+ */
+function DistanceJoint(def, bodyA, bodyB, anchorA, anchorB) {
+  if (!(this instanceof DistanceJoint)) {
+    return new DistanceJoint(def, bodyA, bodyB, anchorA, anchorB);
+  }
+
+  // order of constructor arguments is changed in v0.2
+  if (bodyB && anchorA && ('m_type' in anchorA) && ('x' in bodyB) && ('y' in bodyB)) {
+    var temp = bodyB;
+    bodyB = anchorA;
+    anchorA = temp;
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = DistanceJoint.TYPE;
+
+  // Solver shared
+  this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero();
+  this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero();
+  this.m_length = Math.isFinite(def.length) ? def.length :
+    Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
+  this.m_frequencyHz = def.frequencyHz;
+  this.m_dampingRatio = def.dampingRatio;
+  this.m_impulse = 0.0;
+  this.m_gamma = 0.0;
+  this.m_bias = 0.0;
+
+  // Solver temp
+  this.m_u; // Vec2
+  this.m_rA; // Vec2
+  this.m_rB; // Vec2
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_invMassA;
+  this.m_invMassB;
+  this.m_invIA;
+  this.m_invIB;
+  this.m_mass;
+
+  // 1-D constrained system
+  // m (v2 - v1) = lambda
+  // v2 + (beta/h) * x1 + gamma * lambda = 0, gamma has units of inverse mass.
+  // x2 = x1 + h * v2
+
+  // 1-D mass-damper-spring system
+  // m (v2 - v1) + h * d * v2 + h * k *
+
+  // C = norm(p2 - p1) - L
+  // u = (p2 - p1) / norm(p2 - p1)
+  // Cdot = dot(u, v2 + cross(w2, r2) - v1 - cross(w1, r1))
+  // J = [-u -cross(r1, u) u cross(r2, u)]
+  // K = J * invM * JT
+  // = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
+};
+
+/**
+ * The local anchor point relative to bodyA's origin.
+ */
+DistanceJoint.prototype.getLocalAnchorA = function() {
+  return this.m_localAnchorA;
+}
+
+/**
+ * The local anchor point relative to bodyB's origin.
+ */
+DistanceJoint.prototype.getLocalAnchorB = function() {
+  return this.m_localAnchorB;
+}
+
+/**
+ * Set/get the natural length. Manipulating the length can lead to non-physical
+ * behavior when the frequency is zero.
+ */
+DistanceJoint.prototype.setLength = function(length) {
+  this.m_length = length;
+}
+
+DistanceJoint.prototype.getLength = function() {
+  return this.m_length;
+}
+
+DistanceJoint.prototype.setFrequency = function(hz) {
+  this.m_frequencyHz = hz;
+}
+
+DistanceJoint.prototype.getFrequency = function() {
+  return this.m_frequencyHz;
+}
+
+DistanceJoint.prototype.setDampingRatio = function(ratio) {
+  this.m_dampingRatio = ratio;
+}
+
+DistanceJoint.prototype.getDampingRatio = function() {
+  return this.m_dampingRatio;
+}
+
+DistanceJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+}
+
+DistanceJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+DistanceJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
+}
+
+DistanceJoint.prototype.getReactionTorque = function(inv_dt) {
+  return 0.0;
+}
+
+DistanceJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+  this.m_u = Vec2.sub(Vec2.add(cB, this.m_rB), Vec2.add(cA, this.m_rA));
+
+  // Handle singularity.
+  var length = this.m_u.length();
+  if (length > Settings.linearSlop) {
+    this.m_u.mul(1.0 / length);
+  } else {
+    this.m_u.set(0.0, 0.0);
+  }
+
+  var crAu = Vec2.cross(this.m_rA, this.m_u);
+  var crBu = Vec2.cross(this.m_rB, this.m_u);
+  var invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB
+      + this.m_invIB * crBu * crBu;
+
+  // Compute the effective mass matrix.
+  this.m_mass = invMass != 0.0 ? 1.0 / invMass : 0.0;
+
+  if (this.m_frequencyHz > 0.0) {
+    var C = length - this.m_length;
+
+    // Frequency
+    var omega = 2.0 * Math.PI * this.m_frequencyHz;
+
+    // Damping coefficient
+    var d = 2.0 * this.m_mass * this.m_dampingRatio * omega;
+
+    // Spring stiffness
+    var k = this.m_mass * omega * omega;
+
+    // magic formulas
+    var h = step.dt;
+    this.m_gamma = h * (d + h * k);
+    this.m_gamma = this.m_gamma != 0.0 ? 1.0 / this.m_gamma : 0.0;
+    this.m_bias = C * h * k * this.m_gamma;
+
+    invMass += this.m_gamma;
+    this.m_mass = invMass != 0.0 ? 1.0 / invMass : 0.0;
+  } else {
+    this.m_gamma = 0.0;
+    this.m_bias = 0.0;
+  }
+
+  if (step.warmStarting) {
+    // Scale the impulse to support a variable time step.
+    this.m_impulse *= step.dtRatio;
+
+    var P = Vec2.mul(this.m_impulse, this.m_u);
+
+    vA.subMul(this.m_invMassA, P);
+    wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+
+    vB.addMul(this.m_invMassB, P);
+    wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+
+  } else {
+    this.m_impulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v.set(vA);
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v.set(vB);
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+DistanceJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  // Cdot = dot(u, v + cross(w, r))
+  var vpA = Vec2.add(vA, Vec2.cross(wA, this.m_rA));
+  var vpB = Vec2.add(vB, Vec2.cross(wB, this.m_rB));
+  var Cdot = Vec2.dot(this.m_u, vpB) - Vec2.dot(this.m_u, vpA);
+
+  var impulse = -this.m_mass
+      * (Cdot + this.m_bias + this.m_gamma * this.m_impulse);
+  this.m_impulse += impulse;
+
+  var P = Vec2.mul(impulse, this.m_u);
+  vA.subMul(this.m_invMassA, P);
+  wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+  vB.addMul(this.m_invMassB, P);
+  wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+
+  this.m_bodyA.c_velocity.v.set(vA);
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v.set(vB);
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+DistanceJoint.prototype.solvePositionConstraints = function(step) {
+  if (this.m_frequencyHz > 0.0) {
+    // There is no position correction for soft distance constraints.
+    return true;
+  }
+
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
+  var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
+  var u = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
+
+  var length = u.normalize();
+  var C = length - this.m_length;
+  C = Math
+      .clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
+
+  var impulse = -this.m_mass * C;
+  var P = Vec2.mul(impulse, u);
+
+  cA.subMul(this.m_invMassA, P);
+  aA -= this.m_invIA * Vec2.cross(rA, P);
+  cB.addMul(this.m_invMassB, P);
+  aB += this.m_invIB * Vec2.cross(rB, P);
+
+  this.m_bodyA.c_position.c.set(cA);
+  this.m_bodyA.c_position.a = aA;
+  this.m_bodyB.c_position.c.set(cB);
+  this.m_bodyB.c_position.a = aB;
+
+  return Math.abs(C) < Settings.linearSlop;
+}
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = FrictionJoint;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+FrictionJoint.TYPE = 'friction-joint';
+
+FrictionJoint._super = Joint;
+FrictionJoint.prototype = create(FrictionJoint._super.prototype);
+
+/**
+ * @typedef {Object} FrictionJointDef
+ *
+ * Friction joint definition.
+ * 
+ * @prop {float} maxForce The maximum friction force in N.
+ * @prop {float} maxTorque The maximum friction torque in N-m.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ */
+
+var DEFAULTS = {
+  maxForce : 0.0,
+  maxTorque : 0.0,
+};
+
+/**
+ * Friction joint. This is used for top-down friction. It provides 2D
+ * translational friction and angular friction.
+ *
+ * @param {FrictionJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ * @param {Vec2} anchor Anchor in global coordination.
+ */
+function FrictionJoint(def, bodyA, bodyB, anchor) {
+  if (!(this instanceof FrictionJoint)) {
+    return new FrictionJoint(def, bodyA, bodyB, anchor);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = FrictionJoint.TYPE;
+
+  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+
+  // Solver shared
+  this.m_linearImpulse = Vec2.zero();
+  this.m_angularImpulse = 0.0;
+  this.m_maxForce = def.maxForce;
+  this.m_maxTorque = def.maxTorque;
+
+  // Solver temp
+  this.m_rA; // Vec2
+  this.m_rB; // Vec2
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_invMassA; // float
+  this.m_invMassB; // float
+  this.m_invIA; // float
+  this.m_invIB; // float
+  this.m_linearMass; // Mat22
+  this.m_angularMass; // float
+
+  // Point-to-point constraint
+  // Cdot = v2 - v1
+  // = v2 + cross(w2, r2) - v1 - cross(w1, r1)
+  // J = [-I -r1_skew I r2_skew ]
+  // Identity used:
+  // w k % (rx i + ry j) = w * (-ry i + rx j)
+
+  // Angle constraint
+  // Cdot = w2 - w1
+  // J = [0 0 -1 0 0 1]
+  // K = invI1 + invI2
+}
+
+/**
+ * The local anchor point relative to bodyA's origin.
+ */
+FrictionJoint.prototype.getLocalAnchorA = function() {
+  return this.m_localAnchorA;
+}
+
+/**
+ * The local anchor point relative to bodyB's origin.
+ */
+FrictionJoint.prototype.getLocalAnchorB = function() {
+  return this.m_localAnchorB;
+}
+
+/**
+ * Set the maximum friction force in N.
+ */
+FrictionJoint.prototype.setMaxForce = function(force) {
+  _ASSERT && common.assert(Math.isFinite(force) && force >= 0.0);
+  this.m_maxForce = force;
+}
+
+/**
+ * Get the maximum friction force in N.
+ */
+FrictionJoint.prototype.getMaxForce = function() {
+  return this.m_maxForce;
+}
+
+/**
+ * Set the maximum friction torque in N*m.
+ */
+FrictionJoint.prototype.setMaxTorque = function(torque) {
+  _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0.0);
+  this.m_maxTorque = torque;
+}
+
+/**
+ * Get the maximum friction torque in N*m.
+ */
+FrictionJoint.prototype.getMaxTorque = function() {
+  return this.m_maxTorque;
+}
+
+FrictionJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+}
+
+FrictionJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+FrictionJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.mul(inv_dt, this.m_linearImpulse);
+}
+
+FrictionJoint.prototype.getReactionTorque = function(inv_dt) {
+  return inv_dt * this.m_angularImpulse;
+}
+
+FrictionJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA), qB = Rot.neo(aB);
+
+  // Compute the effective mass matrix.
+  this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+
+  // J = [-I -r1_skew I r2_skew]
+  // [ 0 -1 0 1]
+  // r_skew = [-ry; rx]
+
+  // Matlab
+  // K = [ mA+r1y^2*iA+mB+r2y^2*iB, -r1y*iA*r1x-r2y*iB*r2x, -r1y*iA-r2y*iB]
+  // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
+  // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
+
+  var mA = this.m_invMassA, mB = this.m_invMassB; // float
+  var iA = this.m_invIA, iB = this.m_invIB; // float
+
+  var K = new Mat22()
+  K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
+      * this.m_rB.y;
+  K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
+  K.ey.x = K.ex.y;
+  K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x
+      * this.m_rB.x;
+
+  this.m_linearMass = K.getInverse();
+
+  this.m_angularMass = iA + iB;
+  if (this.m_angularMass > 0.0) {
+    this.m_angularMass = 1.0 / this.m_angularMass;
+  }
+
+  if (step.warmStarting) {
+    // Scale impulses to support a variable time step.
+    this.m_linearImpulse.mul(step.dtRatio);
+    this.m_angularImpulse *= step.dtRatio;
+
+    var P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
+
+    vA.subMul(mA, P);
+    wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
+
+    vB.addMul(mB, P);
+    wB += iB * (Vec2.cross(this.m_rB, P) + this.m_angularImpulse);
+
+  } else {
+    this.m_linearImpulse.setZero();
+    this.m_angularImpulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+FrictionJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var mA = this.m_invMassA, mB = this.m_invMassB; // float
+  var iA = this.m_invIA, iB = this.m_invIB; // float
+
+  var h = step.dt; // float
+
+  // Solve angular friction
+  {
+    var Cdot = wB - wA; // float
+    var impulse = -this.m_angularMass * Cdot; // float
+
+    var oldImpulse = this.m_angularImpulse; // float
+    var maxImpulse = h * this.m_maxTorque; // float
+    this.m_angularImpulse = Math.clamp(this.m_angularImpulse + impulse,
+        -maxImpulse, maxImpulse);
+    impulse = this.m_angularImpulse - oldImpulse;
+
+    wA -= iA * impulse;
+    wB += iB * impulse;
+  }
+
+  // Solve linear friction
+  {
+    var Cdot = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, this.m_rB)), Vec2.add(vA,
+        Vec2.cross(wA, this.m_rA))); // Vec2
+
+    var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot)); // Vec2
+    var oldImpulse = this.m_linearImpulse; // Vec2
+    this.m_linearImpulse.add(impulse);
+
+    var maxImpulse = h * this.m_maxForce; // float
+
+    if (this.m_linearImpulse.lengthSquared() > maxImpulse * maxImpulse) {
+      this.m_linearImpulse.normalize();
+      this.m_linearImpulse.mul(maxImpulse);
+    }
+
+    impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
+
+    vA.subMul(mA, impulse);
+    wA -= iA * Vec2.cross(this.m_rA, impulse);
+
+    vB.addMul(mB, impulse);
+    wB += iB * Vec2.cross(this.m_rB, impulse);
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+FrictionJoint.prototype.solvePositionConstraints = function(step) {
+  return true;
+}
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = GearJoint;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+var RevoluteJoint = __webpack_require__(87);
+var PrismaticJoint = __webpack_require__(88);
+
+GearJoint.TYPE = 'gear-joint';
+
+GearJoint._super = Joint;
+GearJoint.prototype = create(GearJoint._super.prototype);
+
+/**
+ * @typedef {Object} GearJointDef
+ *
+ * Gear joint definition.
+ *
+ * @prop {float} ratio The gear ratio. See GearJoint for explanation.
+ *
+ * @prop {RevoluteJoint|PrismaticJoint} joint1 The first revolute/prismatic
+ *          joint attached to the gear joint.
+ * @prop {PrismaticJoint|RevoluteJoint} joint2 The second prismatic/revolute
+ *          joint attached to the gear joint.
+ */
+
+var DEFAULTS = {
+  ratio : 1.0
+};
+
+/**
+ * A gear joint is used to connect two joints together. Either joint can be a
+ * revolute or prismatic joint. You specify a gear ratio to bind the motions
+ * together: coordinate1 + ratio * coordinate2 = constant
+ * 
+ * The ratio can be negative or positive. If one joint is a revolute joint and
+ * the other joint is a prismatic joint, then the ratio will have units of
+ * length or units of 1/length. Warning: You have to manually destroy the gear
+ * joint if joint1 or joint2 is destroyed.
+ * 
+ * This definition requires two existing revolute or prismatic joints (any
+ * combination will work).
+ *
+ * @param {GearJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
+  if (!(this instanceof GearJoint)) {
+    return new GearJoint(def, bodyA, bodyB, joint1, joint2, ratio);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = GearJoint.TYPE;
+
+  _ASSERT && common.assert(joint1.m_type === RevoluteJoint.TYPE
+      || joint1.m_type === PrismaticJoint.TYPE);
+  _ASSERT && common.assert(joint2.m_type === RevoluteJoint.TYPE
+      || joint2.m_type === PrismaticJoint.TYPE);
+
+  this.m_joint1 = joint1 ? joint1 : def.joint1;
+  this.m_joint2 = joint2 ? joint2 : def.joint2;
+  this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
+
+  this.m_type1 = this.m_joint1.getType();
+  this.m_type2 = this.m_joint2.getType();
+
+  // joint1 connects body A to body C
+  // joint2 connects body B to body D
+
+  var coordinateA, coordinateB; // float
+
+  // TODO_ERIN there might be some problem with the joint edges in Joint.
+
+  this.m_bodyC = this.m_joint1.getBodyA();
+  this.m_bodyA = this.m_joint1.getBodyB();
+
+  // Get geometry of joint1
+  var xfA = this.m_bodyA.m_xf;
+  var aA = this.m_bodyA.m_sweep.a;
+  var xfC = this.m_bodyC.m_xf;
+  var aC = this.m_bodyC.m_sweep.a;
+
+  if (this.m_type1 === RevoluteJoint.TYPE) {
+    var revolute = this.m_joint1;// RevoluteJoint
+    this.m_localAnchorC = revolute.m_localAnchorA;
+    this.m_localAnchorA = revolute.m_localAnchorB;
+    this.m_referenceAngleA = revolute.m_referenceAngle;
+    this.m_localAxisC = Vec2.zero();
+
+    coordinateA = aA - aC - this.m_referenceAngleA;
+  } else {
+    var prismatic = this.m_joint1; // PrismaticJoint
+    this.m_localAnchorC = prismatic.m_localAnchorA;
+    this.m_localAnchorA = prismatic.m_localAnchorB;
+    this.m_referenceAngleA = prismatic.m_referenceAngle;
+    this.m_localAxisC = prismatic.m_localXAxisA;
+
+    var pC = this.m_localAnchorC;
+    var pA = Rot.mulTVec2(xfC.q, Vec2.add(Rot.mul(xfA.q, this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
+    coordinateA = Vec2.dot(pA, this.m_localAxisC) - Vec2.dot(pC, this.m_localAxisC);
+  }
+
+  this.m_bodyD = this.m_joint2.getBodyA();
+  this.m_bodyB = this.m_joint2.getBodyB();
+
+  // Get geometry of joint2
+  var xfB = this.m_bodyB.m_xf;
+  var aB = this.m_bodyB.m_sweep.a;
+  var xfD = this.m_bodyD.m_xf;
+  var aD = this.m_bodyD.m_sweep.a;
+
+  if (this.m_type2 === RevoluteJoint.TYPE) {
+    var revolute = this.m_joint2; // RevoluteJoint
+    this.m_localAnchorD = revolute.m_localAnchorA;
+    this.m_localAnchorB = revolute.m_localAnchorB;
+    this.m_referenceAngleB = revolute.m_referenceAngle;
+    this.m_localAxisD = Vec2.zero();
+
+    coordinateB = aB - aD - this.m_referenceAngleB;
+  } else {
+    var prismatic = this.m_joint2; // PrismaticJoint
+    this.m_localAnchorD = prismatic.m_localAnchorA;
+    this.m_localAnchorB = prismatic.m_localAnchorB;
+    this.m_referenceAngleB = prismatic.m_referenceAngle;
+    this.m_localAxisD = prismatic.m_localXAxisA;
+
+    var pD = this.m_localAnchorD;
+    var pB = Rot.mulTVec2(xfD.q, Vec2.add(Rot.mul(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
+    coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
+  }
+
+  this.m_constant = coordinateA + this.m_ratio * coordinateB;
+
+  this.m_impulse = 0.0;
+
+  // Solver temp
+  this.m_lcA, this.m_lcB, this.m_lcC, this.m_lcD; // Vec2
+  this.m_mA, this.m_mB, this.m_mC, this.m_mD; // float
+  this.m_iA, this.m_iB, this.m_iC, this.m_iD; // float
+  this.m_JvAC, this.m_JvBD; // Vec2
+  this.m_JwA, this.m_JwB, this.m_JwC, this.m_JwD; // float
+  this.m_mass; // float
+
+  // Gear Joint:
+  // C0 = (coordinate1 + ratio * coordinate2)_initial
+  // C = (coordinate1 + ratio * coordinate2) - C0 = 0
+  // J = [J1 ratio * J2]
+  // K = J * invM * JT
+  // = J1 * invM1 * J1T + ratio * ratio * J2 * invM2 * J2T
+  //
+  // Revolute:
+  // coordinate = rotation
+  // Cdot = angularVelocity
+  // J = [0 0 1]
+  // K = J * invM * JT = invI
+  //
+  // Prismatic:
+  // coordinate = dot(p - pg, ug)
+  // Cdot = dot(v + cross(w, r), ug)
+  // J = [ug cross(r, ug)]
+  // K = J * invM * JT = invMass + invI * cross(r, ug)^2
+};
+
+/**
+ * Get the first joint.
+ */
+GearJoint.prototype.getJoint1 = function() {
+  return this.m_joint1;
+}
+
+/**
+ * Get the second joint.
+ */
+GearJoint.prototype.getJoint2 = function() {
+  return this.m_joint2;
+}
+
+/**
+ * Set/Get the gear ratio.
+ */
+GearJoint.prototype.setRatio = function(ratio) {
+  _ASSERT && common.assert(Math.isFinite(ratio));
+  this.m_ratio = ratio;
+}
+
+GearJoint.prototype.getRatio = function() {
+  return this.m_ratio;
+}
+
+GearJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+}
+
+GearJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+GearJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.mul(this.m_impulse, this.m_JvAC).mul(inv_dt);
+}
+
+GearJoint.prototype.getReactionTorque = function(inv_dt) {
+  var L = this.m_impulse * this.m_JwA; // float
+  return inv_dt * L;
+}
+
+GearJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_lcA = this.m_bodyA.m_sweep.localCenter;
+  this.m_lcB = this.m_bodyB.m_sweep.localCenter;
+  this.m_lcC = this.m_bodyC.m_sweep.localCenter;
+  this.m_lcD = this.m_bodyD.m_sweep.localCenter;
+  this.m_mA = this.m_bodyA.m_invMass;
+  this.m_mB = this.m_bodyB.m_invMass;
+  this.m_mC = this.m_bodyC.m_invMass;
+  this.m_mD = this.m_bodyD.m_invMass;
+  this.m_iA = this.m_bodyA.m_invI;
+  this.m_iB = this.m_bodyB.m_invI;
+  this.m_iC = this.m_bodyC.m_invI;
+  this.m_iD = this.m_bodyD.m_invI;
+
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var aC = this.m_bodyC.c_position.a;
+  var vC = this.m_bodyC.c_velocity.v;
+  var wC = this.m_bodyC.c_velocity.w;
+
+  var aD = this.m_bodyD.c_position.a;
+  var vD = this.m_bodyD.c_velocity.v;
+  var wD = this.m_bodyD.c_velocity.w;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+  var qC = Rot.neo(aC);
+  var qD = Rot.neo(aD);
+
+  this.m_mass = 0.0;
+
+  if (this.m_type1 == RevoluteJoint.TYPE) {
+    this.m_JvAC = Vec2.zero();
+    this.m_JwA = 1.0;
+    this.m_JwC = 1.0;
+    this.m_mass += this.m_iA + this.m_iC;
+  } else {
+    var u = Rot.mulVec2(qC, this.m_localAxisC); // Vec2
+    var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
+    var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
+    this.m_JvAC = u;
+    this.m_JwC = Vec2.cross(rC, u);
+    this.m_JwA = Vec2.cross(rA, u);
+    this.m_mass += this.m_mC + this.m_mA + this.m_iC * this.m_JwC * this.m_JwC + this.m_iA * this.m_JwA * this.m_JwA;
+  }
+
+  if (this.m_type2 == RevoluteJoint.TYPE) {
+    this.m_JvBD = Vec2.zero();
+    this.m_JwB = this.m_ratio;
+    this.m_JwD = this.m_ratio;
+    this.m_mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
+  } else {
+    var u = Rot.mulVec2(qD, this.m_localAxisD); // Vec2
+    var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD); // Vec2
+    var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB); // Vec2
+    this.m_JvBD = Vec2.mul(this.m_ratio, u);
+    this.m_JwD = this.m_ratio * Vec2.cross(rD, u);
+    this.m_JwB = this.m_ratio * Vec2.cross(rB, u);
+    this.m_mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * this.m_JwD * this.m_JwD + this.m_iB * this.m_JwB * this.m_JwB;
+  }
+
+  // Compute effective mass.
+  this.m_mass = this.m_mass > 0.0 ? 1.0 / this.m_mass : 0.0;
+
+  if (step.warmStarting) {
+    vA.addMul(this.m_mA * this.m_impulse, this.m_JvAC);
+    wA += this.m_iA * this.m_impulse * this.m_JwA;
+    
+    vB.addMul(this.m_mB * this.m_impulse, this.m_JvBD);
+    wB += this.m_iB * this.m_impulse * this.m_JwB;
+    
+    vC.subMul(this.m_mC * this.m_impulse, this.m_JvAC);
+    wC -= this.m_iC * this.m_impulse * this.m_JwC;
+  
+    vD.subMul(this.m_mD * this.m_impulse, this.m_JvBD);
+    wD -= this.m_iD * this.m_impulse * this.m_JwD;
+
+  } else {
+    this.m_impulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v.set(vA);
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v.set(vB);
+  this.m_bodyB.c_velocity.w = wB;
+  this.m_bodyC.c_velocity.v.set(vC);
+  this.m_bodyC.c_velocity.w = wC;
+  this.m_bodyD.c_velocity.v.set(vD);
+  this.m_bodyD.c_velocity.w = wD;
+}
+
+GearJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+  var vC = this.m_bodyC.c_velocity.v;
+  var wC = this.m_bodyC.c_velocity.w;
+  var vD = this.m_bodyD.c_velocity.v;
+  var wD = this.m_bodyD.c_velocity.w;
+
+  var Cdot = Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC)
+      + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD); // float
+  Cdot += (this.m_JwA * wA - this.m_JwC * wC)
+      + (this.m_JwB * wB - this.m_JwD * wD);
+
+  var impulse = -this.m_mass * Cdot; // float
+  this.m_impulse += impulse;
+
+  vA.addMul(this.m_mA * impulse, this.m_JvAC);
+  wA += this.m_iA * impulse * this.m_JwA;
+  vB.addMul(this.m_mB * impulse, this.m_JvBD);
+  wB += this.m_iB * impulse * this.m_JwB;
+  vC.subMul(this.m_mC * impulse, this.m_JvAC);
+  wC -= this.m_iC * impulse * this.m_JwC;
+  vD.subMul(this.m_mD * impulse, this.m_JvBD);
+  wD -= this.m_iD * impulse * this.m_JwD;
+
+  this.m_bodyA.c_velocity.v.set(vA);
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v.set(vB);
+  this.m_bodyB.c_velocity.w = wB;
+  this.m_bodyC.c_velocity.v.set(vC);
+  this.m_bodyC.c_velocity.w = wC;
+  this.m_bodyD.c_velocity.v.set(vD);
+  this.m_bodyD.c_velocity.w = wD;
+}
+
+GearJoint.prototype.solvePositionConstraints = function(step) {
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+  var cC = this.m_bodyC.c_position.c;
+  var aC = this.m_bodyC.c_position.a;
+  var cD = this.m_bodyD.c_position.c;
+  var aD = this.m_bodyD.c_position.a;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+  var qC = Rot.neo(aC);
+  var qD = Rot.neo(aD);
+
+  var linearError = 0.0; // float
+
+  var coordinateA, coordinateB; // float
+
+  var JvAC, JvBD; // Vec2
+  var JwA, JwB, JwC, JwD; // float
+  var mass = 0.0; // float
+
+  if (this.m_type1 == RevoluteJoint.TYPE) {
+    JvAC = Vec2.zero();
+    JwA = 1.0;
+    JwC = 1.0;
+    mass += this.m_iA + this.m_iC;
+
+    coordinateA = aA - aC - this.m_referenceAngleA;
+  } else {
+    var u = Rot.mulVec2(qC, this.m_localAxisC); // Vec2
+    var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
+    var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
+    JvAC = u;
+    JwC = Vec2.cross(rC, u);
+    JwA = Vec2.cross(rA, u);
+    mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
+
+    var pC = Vec2.sub(this.m_localAnchorC, this.m_lcC); // Vec2
+    var pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC))); // Vec2
+    coordinateA = Vec2.dot(Vec2.sub(pA, pC), this.m_localAxisC);
+  }
+
+  if (this.m_type2 == RevoluteJoint.TYPE) {
+    JvBD = Vec2.zero();
+    JwB = this.m_ratio;
+    JwD = this.m_ratio;
+    mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
+
+    coordinateB = aB - aD - this.m_referenceAngleB;
+  } else {
+    var u = Rot.mulVec2(qD, this.m_localAxisD);
+    var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
+    var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
+    JvBD = Vec2.mul(this.m_ratio, u);
+    JwD = this.m_ratio * Vec2.cross(rD, u);
+    JwB = this.m_ratio * Vec2.cross(rB, u);
+    mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD
+        * JwD * JwD + this.m_iB * JwB * JwB;
+
+    var pD = Vec2.sub(this.m_localAnchorD, this.m_lcD); // Vec2
+    var pB = Rot.mulTVec2(qD, Vec2.add(rB, Vec2.sub(cB, cD))); // Vec2
+    coordinateB = Vec2.dot(pB, this.m_localAxisD)
+        - Vec2.dot(pD, this.m_localAxisD);
+  }
+
+  var C = (coordinateA + this.m_ratio * coordinateB) - this.m_constant; // float
+
+  var impulse = 0.0; // float
+  if (mass > 0.0) {
+    impulse = -C / mass;
+  }
+
+  cA.addMul(this.m_mA * impulse, JvAC);
+  aA += this.m_iA * impulse * JwA;
+  cB.addMul(this.m_mB * impulse, JvBD);
+  aB += this.m_iB * impulse * JwB;
+  cC.subMul(this.m_mC * impulse, JvAC);
+  aC -= this.m_iC * impulse * JwC;
+  cD.subMul(this.m_mD * impulse, JvBD);
+  aD -= this.m_iD * impulse * JwD;
+
+  this.m_bodyA.c_position.c.set(cA);
+  this.m_bodyA.c_position.a = aA;
+  this.m_bodyB.c_position.c.set(cB);
+  this.m_bodyB.c_position.a = aB;
+  this.m_bodyC.c_position.c.set(cC);
+  this.m_bodyC.c_position.a = aC;
+  this.m_bodyD.c_position.c.set(cD);
+  this.m_bodyD.c_position.a = aD;
+
+  // TODO_ERIN not implemented
+  return linearError < Settings.linearSlop;
+}
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = RevoluteJoint;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+var inactiveLimit = 0;
+var atLowerLimit = 1;
+var atUpperLimit = 2;
+var equalLimits = 3;
+
+RevoluteJoint.TYPE = 'revolute-joint';
+
+RevoluteJoint._super = Joint;
+RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
+
+/**
+ * @typedef {Object} RevoluteJointDef
+ *
+ * Revolute joint definition. This requires defining an anchor point where the
+ * bodies are joined. The definition uses local anchor points so that the
+ * initial configuration can violate the constraint slightly. You also need to
+ * specify the initial relative angle for joint limits. This helps when saving
+ * and loading a game.
+ * 
+ * The local anchor points are measured from the body's origin rather than the
+ * center of mass because: 1. you might not know where the center of mass will
+ * be. 2. if you add/remove shapes from a body and recompute the mass, the
+ * joints will be broken.
+ * 
+ * @prop {bool} enableLimit A flag to enable joint limits.
+ * @prop {bool} enableMotor A flag to enable the joint motor.
+ * @prop {float} lowerAngle The lower angle for the joint limit (radians).
+ * @prop {float} upperAngle The upper angle for the joint limit (radians).
+ * @prop {float} motorSpeed The desired motor speed. Usually in radians per
+ *       second.
+ * @prop {float} maxMotorTorque The maximum motor torque used to achieve the
+ *       desired motor speed. Usually in N-m.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {float} referenceAngle The bodyB angle minus bodyA angle in the
+ *       reference state (radians).
+ */
+
+var DEFAULTS = {
+  lowerAngle : 0.0,
+  upperAngle : 0.0,
+  maxMotorTorque : 0.0,
+  motorSpeed : 0.0,
+  enableLimit : false,
+  enableMotor : false
+};
+
+/**
+ * A revolute joint constrains two bodies to share a common point while they are
+ * free to rotate about the point. The relative rotation about the shared point
+ * is the joint angle. You can limit the relative rotation with a joint limit
+ * that specifies a lower and upper angle. You can use a motor to drive the
+ * relative rotation about the shared point. A maximum motor torque is provided
+ * so that infinite forces are not generated.
+ *
+ * @param {RevoluteJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function RevoluteJoint(def, bodyA, bodyB, anchor) {
+  if (!(this instanceof RevoluteJoint)) {
+    return new RevoluteJoint(def, bodyA, bodyB, anchor);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = RevoluteJoint.TYPE;
+
+  this.m_localAnchorA =  anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+  this.m_localAnchorB =  anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+
+  this.m_impulse = Vec3();
+  this.m_motorImpulse = 0.0;
+
+  this.m_lowerAngle = def.lowerAngle;
+  this.m_upperAngle = def.upperAngle;
+  this.m_maxMotorTorque = def.maxMotorTorque;
+  this.m_motorSpeed = def.motorSpeed;
+  this.m_enableLimit = def.enableLimit;
+  this.m_enableMotor = def.enableMotor;
+
+  // Solver temp
+  this.m_rA; // Vec2
+  this.m_rB; // Vec2
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_invMassA; // float
+  this.m_invMassB; // float
+  this.m_invIA; // float
+  this.m_invIB; // float
+  // effective mass for point-to-point constraint.
+  this.m_mass = new Mat33();
+  // effective mass for motor/limit angular constraint.
+  this.m_motorMass; // float
+  this.m_limitState = inactiveLimit;
+
+  // Point-to-point constraint
+  // C = p2 - p1
+  // Cdot = v2 - v1
+  // = v2 + cross(w2, r2) - v1 - cross(w1, r1)
+  // J = [-I -r1_skew I r2_skew ]
+  // Identity used:
+  // w k % (rx i + ry j) = w * (-ry i + rx j)
+
+  // Motor constraint
+  // Cdot = w2 - w1
+  // J = [0 0 -1 0 0 1]
+  // K = invI1 + invI2
+}
+
+/**
+ * The local anchor point relative to bodyA's origin.
+ */
+RevoluteJoint.prototype.getLocalAnchorA = function() {
+  return this.m_localAnchorA;
+}
+
+/**
+ * The local anchor point relative to bodyB's origin.
+ */
+RevoluteJoint.prototype.getLocalAnchorB = function() {
+  return this.m_localAnchorB;
+}
+
+/**
+ * Get the reference angle.
+ */
+RevoluteJoint.prototype.getReferenceAngle = function() {
+  return this.m_referenceAngle;
+}
+
+/**
+ * Get the current joint angle in radians.
+ */
+RevoluteJoint.prototype.getJointAngle = function() {
+  var bA = this.m_bodyA;
+  var bB = this.m_bodyB;
+  return bB.m_sweep.a - bA.m_sweep.a - this.m_referenceAngle;
+}
+
+/**
+ * Get the current joint angle speed in radians per second.
+ */
+RevoluteJoint.prototype.getJointSpeed = function() {
+  var bA = this.m_bodyA;
+  var bB = this.m_bodyB;
+  return bB.m_angularVelocity - bA.m_angularVelocity;
+}
+
+/**
+ * Is the joint motor enabled?
+ */
+RevoluteJoint.prototype.isMotorEnabled = function() {
+  return this.m_enableMotor;
+}
+
+/**
+ * Enable/disable the joint motor.
+ */
+RevoluteJoint.prototype.enableMotor = function(flag) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_enableMotor = flag;
+}
+
+/**
+ * Get the current motor torque given the inverse time step. Unit is N*m.
+ */
+RevoluteJoint.prototype.getMotorTorque = function(inv_dt) {
+  return inv_dt * this.m_motorImpulse;
+}
+
+/**
+ * Set the motor speed in radians per second.
+ */
+RevoluteJoint.prototype.setMotorSpeed = function(speed) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_motorSpeed = speed;
+}
+
+/**
+ * Get the motor speed in radians per second.
+ */
+RevoluteJoint.prototype.getMotorSpeed = function() {
+  return this.m_motorSpeed;
+}
+
+/**
+ * Set the maximum motor torque, usually in N-m.
+ */
+RevoluteJoint.prototype.setMaxMotorTorque = function(torque) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_maxMotorTorque = torque;
+}
+
+/**
+ * Is the joint limit enabled?
+ */
+RevoluteJoint.prototype.isLimitEnabled = function() {
+  return this.m_enableLimit;
+}
+
+/**
+ * Enable/disable the joint limit.
+ */
+RevoluteJoint.prototype.enableLimit = function(flag) {
+  if (flag != this.m_enableLimit) {
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_enableLimit = flag;
+    this.m_impulse.z = 0.0;
+  }
+}
+
+/**
+ * Get the lower joint limit in radians.
+ */
+RevoluteJoint.prototype.getLowerLimit = function() {
+  return this.m_lowerAngle;
+}
+
+/**
+ * Get the upper joint limit in radians.
+ */
+RevoluteJoint.prototype.getUpperLimit = function() {
+  return this.m_upperAngle;
+}
+
+/**
+ * Set the joint limits in radians.
+ */
+RevoluteJoint.prototype.setLimits = function(lower, upper) {
+  _ASSERT && common.assert(lower <= upper);
+
+  if (lower != this.m_lowerAngle || upper != this.m_upperAngle) {
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_impulse.z = 0.0;
+    this.m_lowerAngle = lower;
+    this.m_upperAngle = upper;
+  }
+}
+
+RevoluteJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+}
+
+RevoluteJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+/**
+ * Get the reaction force given the inverse time step. Unit is N.
+ */
+RevoluteJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
+}
+
+/**
+ * Get the reaction torque due to the joint limit given the inverse time step.
+ * Unit is N*m.
+ */
+RevoluteJoint.prototype.getReactionTorque = function(inv_dt) {
+  return inv_dt * this.m_impulse.z;
+}
+
+RevoluteJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+
+  // J = [-I -r1_skew I r2_skew]
+  // [ 0 -1 0 1]
+  // r_skew = [-ry; rx]
+
+  // Matlab
+  // K = [ mA+r1y^2*iA+mB+r2y^2*iB, -r1y*iA*r1x-r2y*iB*r2x, -r1y*iA-r2y*iB]
+  // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
+  // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
+
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB; // float
+  var iA = this.m_invIA;
+  var iB = this.m_invIB; // float
+
+  var fixedRotation = (iA + iB === 0.0); // bool
+
+  this.m_mass.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y
+      * this.m_rB.y * iB;
+  this.m_mass.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y
+      * this.m_rB.x * iB;
+  this.m_mass.ez.x = -this.m_rA.y * iA - this.m_rB.y * iB;
+  this.m_mass.ex.y = this.m_mass.ey.x;
+  this.m_mass.ey.y = mA + mB + this.m_rA.x * this.m_rA.x * iA + this.m_rB.x
+      * this.m_rB.x * iB;
+  this.m_mass.ez.y = this.m_rA.x * iA + this.m_rB.x * iB;
+  this.m_mass.ex.z = this.m_mass.ez.x;
+  this.m_mass.ey.z = this.m_mass.ez.y;
+  this.m_mass.ez.z = iA + iB;
+
+  this.m_motorMass = iA + iB;
+  if (this.m_motorMass > 0.0) {
+    this.m_motorMass = 1.0 / this.m_motorMass;
+  }
+
+  if (this.m_enableMotor == false || fixedRotation) {
+    this.m_motorImpulse = 0.0;
+  }
+
+  if (this.m_enableLimit && fixedRotation == false) {
+    var jointAngle = aB - aA - this.m_referenceAngle; // float
+
+    if (Math.abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * Settings.angularSlop) {
+      this.m_limitState = equalLimits;
+
+    } else if (jointAngle <= this.m_lowerAngle) {
+      if (this.m_limitState != atLowerLimit) {
+        this.m_impulse.z = 0.0;
+      }
+      this.m_limitState = atLowerLimit;
+
+    } else if (jointAngle >= this.m_upperAngle) {
+      if (this.m_limitState != atUpperLimit) {
+        this.m_impulse.z = 0.0;
+      }
+      this.m_limitState = atUpperLimit;
+
+    } else {
+      this.m_limitState = inactiveLimit;
+      this.m_impulse.z = 0.0;
+    }
+
+  } else {
+    this.m_limitState = inactiveLimit;
+  }
+
+  if (step.warmStarting) {
+    // Scale impulses to support a variable time step.
+    this.m_impulse.mul(step.dtRatio);
+    this.m_motorImpulse *= step.dtRatio;
+
+    var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
+
+    vA.subMul(mA, P);
+    wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
+
+    vB.addMul(mB, P);
+    wB += iB * (Vec2.cross(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
+
+  } else {
+    this.m_impulse.setZero();
+    this.m_motorImpulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+RevoluteJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB; // float
+  var iA = this.m_invIA;
+  var iB = this.m_invIB; // float
+
+  var fixedRotation = (iA + iB === 0.0); // bool
+
+  // Solve motor constraint.
+  if (this.m_enableMotor && this.m_limitState != equalLimits
+      && fixedRotation == false) {
+    var Cdot = wB - wA - this.m_motorSpeed; // float
+    var impulse = -this.m_motorMass * Cdot; // float
+    var oldImpulse = this.m_motorImpulse; // float
+    var maxImpulse = step.dt * this.m_maxMotorTorque; // float
+    this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse,
+        -maxImpulse, maxImpulse);
+    impulse = this.m_motorImpulse - oldImpulse;
+
+    wA -= iA * impulse;
+    wB += iB * impulse;
+  }
+
+  // Solve limit constraint.
+  if (this.m_enableLimit && this.m_limitState != inactiveLimit
+      && fixedRotation == false) {
+    var Cdot1 = Vec2.zero();
+    Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
+    Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+    var Cdot2 = wB - wA; // float
+    var Cdot = Vec3(Cdot1.x, Cdot1.y, Cdot2);
+
+    var impulse = Vec3.neg(this.m_mass.solve33(Cdot)); // Vec3
+
+    if (this.m_limitState == equalLimits) {
+      this.m_impulse.add(impulse);
+
+    } else if (this.m_limitState == atLowerLimit) {
+      var newImpulse = this.m_impulse.z + impulse.z; // float
+
+      if (newImpulse < 0.0) {
+        var rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y)); // Vec2
+        var reduced = this.m_mass.solve22(rhs); // Vec2
+        impulse.x = reduced.x;
+        impulse.y = reduced.y;
+        impulse.z = -this.m_impulse.z;
+        this.m_impulse.x += reduced.x;
+        this.m_impulse.y += reduced.y;
+        this.m_impulse.z = 0.0;
+
+      } else {
+        this.m_impulse.add(impulse);
+      }
+
+    } else if (this.m_limitState == atUpperLimit) {
+      var newImpulse = this.m_impulse.z + impulse.z; // float
+
+      if (newImpulse > 0.0) {
+        var rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y)); // Vec2
+        var reduced = this.m_mass.solve22(rhs); // Vec2
+        impulse.x = reduced.x;
+        impulse.y = reduced.y;
+        impulse.z = -this.m_impulse.z;
+        this.m_impulse.x += reduced.x;
+        this.m_impulse.y += reduced.y;
+        this.m_impulse.z = 0.0;
+
+      } else {
+        this.m_impulse.add(impulse);
+      }
+    }
+
+    var P = Vec2.neo(impulse.x, impulse.y);
+
+    vA.subMul(mA, P);
+    wA -= iA * (Vec2.cross(this.m_rA, P) + impulse.z);
+
+    vB.addMul(mB, P);
+    wB += iB * (Vec2.cross(this.m_rB, P) + impulse.z);
+
+  } else {
+    // Solve point-to-point constraint
+    var Cdot = Vec2.zero();
+    Cdot.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
+    Cdot.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+    var impulse = this.m_mass.solve22(Vec2.neg(Cdot)); // Vec2
+
+    this.m_impulse.x += impulse.x;
+    this.m_impulse.y += impulse.y;
+
+    vA.subMul(mA, impulse);
+    wA -= iA * Vec2.cross(this.m_rA, impulse);
+
+    vB.addMul(mB, impulse);
+    wB += iB * Vec2.cross(this.m_rB, impulse);
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+RevoluteJoint.prototype.solvePositionConstraints = function(step) {
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  var angularError = 0.0; // float
+  var positionError = 0.0; // float
+
+  var fixedRotation = (this.m_invIA + this.m_invIB == 0.0); // bool
+
+  // Solve angular limit constraint.
+  if (this.m_enableLimit && this.m_limitState != inactiveLimit
+      && fixedRotation == false) {
+    var angle = aB - aA - this.m_referenceAngle; // float
+    var limitImpulse = 0.0; // float
+
+    if (this.m_limitState == equalLimits) {
+      // Prevent large angular corrections
+      var C = Math.clamp(angle - this.m_lowerAngle,
+          -Settings.maxAngularCorrection, Settings.maxAngularCorrection); // float
+      limitImpulse = -this.m_motorMass * C;
+      angularError = Math.abs(C);
+
+    } else if (this.m_limitState == atLowerLimit) {
+      var C = angle - this.m_lowerAngle; // float
+      angularError = -C;
+
+      // Prevent large angular corrections and allow some slop.
+      C = Math.clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection,
+          0.0);
+      limitImpulse = -this.m_motorMass * C;
+
+    } else if (this.m_limitState == atUpperLimit) {
+      var C = angle - this.m_upperAngle; // float
+      angularError = C;
+
+      // Prevent large angular corrections and allow some slop.
+      C = Math.clamp(C - Settings.angularSlop, 0.0,
+          Settings.maxAngularCorrection);
+      limitImpulse = -this.m_motorMass * C;
+    }
+
+    aA -= this.m_invIA * limitImpulse;
+    aB += this.m_invIB * limitImpulse;
+  }
+
+  // Solve point-to-point constraint.
+  {
+    qA.set(aA);
+    qB.set(aB);
+    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA)); // Vec2
+    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
+
+    var C = Vec2.zero();
+    C.addCombine(1, cB, 1, rB);
+    C.subCombine(1, cA, 1, rA);
+    positionError = C.length();
+
+    var mA = this.m_invMassA;
+    var mB = this.m_invMassB; // float
+    var iA = this.m_invIA;
+    var iB = this.m_invIB; // float
+
+    var K = new Mat22();
+    K.ex.x = mA + mB + iA * rA.y * rA.y + iB * rB.y * rB.y;
+    K.ex.y = -iA * rA.x * rA.y - iB * rB.x * rB.y;
+    K.ey.x = K.ex.y;
+    K.ey.y = mA + mB + iA * rA.x * rA.x + iB * rB.x * rB.x;
+
+    var impulse = Vec2.neg(K.solve(C)); // Vec2
+
+    cA.subMul(mA, impulse);
+    aA -= iA * Vec2.cross(rA, impulse);
+
+    cB.addMul(mB, impulse);
+    aB += iB * Vec2.cross(rB, impulse);
+  }
+
+  this.m_bodyA.c_position.c.set(cA);
+  this.m_bodyA.c_position.a = aA;
+  this.m_bodyB.c_position.c.set(cB);
+  this.m_bodyB.c_position.a = aB;
+
+  return positionError <= Settings.linearSlop
+      && angularError <= Settings.angularSlop;
+}
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = PrismaticJoint;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+var inactiveLimit = 0;
+var atLowerLimit = 1;
+var atUpperLimit = 2;
+var equalLimits = 3;
+
+PrismaticJoint.TYPE = 'prismatic-joint';
+
+PrismaticJoint._super = Joint;
+PrismaticJoint.prototype = create(PrismaticJoint._super.prototype);
+
+/**
+ * @typedef {Object} PrismaticJointDef
+ *
+ * Prismatic joint definition. This requires defining a line of motion using an
+ * axis and an anchor point. The definition uses local anchor points and a local
+ * axis so that the initial configuration can violate the constraint slightly.
+ * The joint translation is zero when the local anchor points coincide in world
+ * space. Using local anchors and a local axis helps when saving and loading a
+ * game.
+ * 
+ * @prop {boolean} enableLimit Enable/disable the joint limit.
+ * @prop {float} lowerTranslation The lower translation limit, usually in
+ *       meters.
+ * @prop {float} upperTranslation The upper translation limit, usually in
+ *       meters.
+ * @prop {boolean} enableMotor Enable/disable the joint motor.
+ * @prop {float} maxMotorForce The maximum motor torque, usually in N-m.
+ * @prop {float} motorSpeed The desired motor speed in radians per second.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {Vec2} localAxisA The local translation unit axis in bodyA.
+ * @prop {float} referenceAngle The constrained angle between the bodies:
+ *       bodyB_angle - bodyA_angle.
+ */
+
+var DEFAULTS = {
+  enableLimit : false,
+  lowerTranslation : 0.0,
+  upperTranslation : 0.0,
+  enableMotor : false,
+  maxMotorForce : 0.0,
+  motorSpeed : 0.0
+};
+
+/**
+ * A prismatic joint. This joint provides one degree of freedom: translation
+ * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
+ * joint limit to restrict the range of motion and a joint motor to drive the
+ * motion or to model joint friction.
+ *
+ * @param {PrismaticJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
+  if (!(this instanceof PrismaticJoint)) {
+    return new PrismaticJoint(def, bodyA, bodyB, anchor, axis);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = PrismaticJoint.TYPE;
+
+  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_localXAxisA = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0);
+  this.m_localXAxisA.normalize();
+  this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
+  this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+
+  this.m_impulse = Vec3();
+  this.m_motorMass = 0.0;
+  this.m_motorImpulse = 0.0;
+
+  this.m_lowerTranslation = def.lowerTranslation;
+  this.m_upperTranslation = def.upperTranslation;
+  this.m_maxMotorForce = def.maxMotorForce;
+  this.m_motorSpeed = def.motorSpeed;
+  this.m_enableLimit = def.enableLimit;
+  this.m_enableMotor = def.enableMotor;
+  this.m_limitState = inactiveLimit;
+
+  this.m_axis = Vec2.zero();
+  this.m_perp = Vec2.zero();
+
+  // Solver temp
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_invMassA; // float
+  this.m_invMassB; // float
+  this.m_invIA; // float
+  this.m_invIB; // float
+  this.m_axis, this.m_perp; // Vec2
+  this.m_s1, this.m_s2; // float
+  this.m_a1, this.m_a2; // float
+  this.m_K = new Mat33();
+  this.m_motorMass; // float
+
+  // Linear constraint (point-to-line)
+  // d = p2 - p1 = x2 + r2 - x1 - r1
+  // C = dot(perp, d)
+  // Cdot = dot(d, cross(w1, perp)) + dot(perp, v2 + cross(w2, r2) - v1 -
+  // cross(w1, r1))
+  // = -dot(perp, v1) - dot(cross(d + r1, perp), w1) + dot(perp, v2) +
+  // dot(cross(r2, perp), v2)
+  // J = [-perp, -cross(d + r1, perp), perp, cross(r2,perp)]
+  //
+  // Angular constraint
+  // C = a2 - a1 + a_initial
+  // Cdot = w2 - w1
+  // J = [0 0 -1 0 0 1]
+  //
+  // K = J * invM * JT
+  //
+  // J = [-a -s1 a s2]
+  // [0 -1 0 1]
+  // a = perp
+  // s1 = cross(d + r1, a) = cross(p2 - x1, a)
+  // s2 = cross(r2, a) = cross(p2 - x2, a)
+
+  // Motor/Limit linear constraint
+  // C = dot(ax1, d)
+  // Cdot = = -dot(ax1, v1) - dot(cross(d + r1, ax1), w1) + dot(ax1, v2) +
+  // dot(cross(r2, ax1), v2)
+  // J = [-ax1 -cross(d+r1,ax1) ax1 cross(r2,ax1)]
+
+  // Block Solver
+  // We develop a block solver that includes the joint limit. This makes the
+  // limit stiff (inelastic) even
+  // when the mass has poor distribution (leading to large torques about the
+  // joint anchor points).
+  //
+  // The Jacobian has 3 rows:
+  // J = [-uT -s1 uT s2] // linear
+  // [0 -1 0 1] // angular
+  // [-vT -a1 vT a2] // limit
+  //
+  // u = perp
+  // v = axis
+  // s1 = cross(d + r1, u), s2 = cross(r2, u)
+  // a1 = cross(d + r1, v), a2 = cross(r2, v)
+
+  // M * (v2 - v1) = JT * df
+  // J * v2 = bias
+  //
+  // v2 = v1 + invM * JT * df
+  // J * (v1 + invM * JT * df) = bias
+  // K * df = bias - J * v1 = -Cdot
+  // K = J * invM * JT
+  // Cdot = J * v1 - bias
+  //
+  // Now solve for f2.
+  // df = f2 - f1
+  // K * (f2 - f1) = -Cdot
+  // f2 = invK * (-Cdot) + f1
+  //
+  // Clamp accumulated limit impulse.
+  // lower: f2(3) = max(f2(3), 0)
+  // upper: f2(3) = min(f2(3), 0)
+  //
+  // Solve for correct f2(1:2)
+  // K(1:2, 1:2) * f2(1:2) = -Cdot(1:2) - K(1:2,3) * f2(3) + K(1:2,1:3) * f1
+  // = -Cdot(1:2) - K(1:2,3) * f2(3) + K(1:2,1:2) * f1(1:2) + K(1:2,3) * f1(3)
+  // K(1:2, 1:2) * f2(1:2) = -Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3)) +
+  // K(1:2,1:2) * f1(1:2)
+  // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
+  // f1(1:2)
+  //
+  // Now compute impulse to be applied:
+  // df = f2 - f1
+}
+
+/**
+ * The local anchor point relative to bodyA's origin.
+ */
+PrismaticJoint.prototype.getLocalAnchorA = function() {
+  return this.m_localAnchorA;
+}
+
+/**
+ * The local anchor point relative to bodyB's origin.
+ */
+PrismaticJoint.prototype.getLocalAnchorB = function() {
+  return this.m_localAnchorB;
+}
+
+/**
+ * The local joint axis relative to bodyA.
+ */
+PrismaticJoint.prototype.getLocalAxisA = function() {
+  return this.m_localXAxisA;
+}
+
+/**
+ * Get the reference angle.
+ */
+PrismaticJoint.prototype.getReferenceAngle = function() {
+  return this.m_referenceAngle;
+}
+
+/**
+ * Get the current joint translation, usually in meters.
+ */
+PrismaticJoint.prototype.getJointTranslation = function() {
+  var pA = this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+  var pB = this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+  var d = Vec2.sub(pB, pA);
+  var axis = this.m_bodyA.getWorldVector(this.m_localXAxisA);
+
+  var translation = Vec2.dot(d, axis);
+  return translation;
+}
+
+/**
+ * Get the current joint translation speed, usually in meters per second.
+ */
+PrismaticJoint.prototype.getJointSpeed = function() {
+  var bA = this.m_bodyA;
+  var bB = this.m_bodyB;
+
+  var rA = Rot.mulVec2(bA.m_xf.q, Vec2.sub(this.m_localAnchorA, bA.m_sweep.localCenter)); // Vec2
+  var rB = Rot.mulVec2(bB.m_xf.q, Vec2.sub(this.m_localAnchorB, bB.m_sweep.localCenter)); // Vec2
+  var p1 = Vec2.add(bA.m_sweep.c, rA); // Vec2
+  var p2 = Vec2.add(bB.m_sweep.c, rB); // Vec2
+  var d = Vec2.sub(p2, p1); // Vec2
+  var axis = Rot.mulVec2(bA.m_xf.q, this.m_localXAxisA); // Vec2
+
+  var vA = bA.m_linearVelocity; // Vec2
+  var vB = bB.m_linearVelocity; // Vec2
+  var wA = bA.m_angularVelocity; // float
+  var wB = bB.m_angularVelocity; // float
+
+  var speed = Vec2.dot(d, Vec2.cross(wA, axis))
+      + Vec2.dot(axis, Vec2.sub(Vec2.addCross(vB, wB, rB), Vec2.addCross(vA, wA, rA))); // float
+  return speed;
+}
+
+/**
+ * Is the joint limit enabled?
+ */
+PrismaticJoint.prototype.isLimitEnabled = function() {
+  return this.m_enableLimit;
+}
+
+/**
+ * Enable/disable the joint limit.
+ */
+PrismaticJoint.prototype.enableLimit = function(flag) {
+  if (flag != this.m_enableLimit) {
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_enableLimit = flag;
+    this.m_impulse.z = 0.0;
+  }
+}
+
+/**
+ * Get the lower joint limit, usually in meters.
+ */
+PrismaticJoint.prototype.getLowerLimit = function() {
+  return this.m_lowerTranslation;
+}
+
+/**
+ * Get the upper joint limit, usually in meters.
+ */
+PrismaticJoint.prototype.getUpperLimit = function() {
+  return this.m_upperTranslation;
+}
+
+/**
+ * Set the joint limits, usually in meters.
+ */
+PrismaticJoint.prototype.setLimits = function(lower, upper) {
+  _ASSERT && common.assert(lower <= upper);
+  if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_lowerTranslation = lower;
+    this.m_upperTranslation = upper;
+    this.m_impulse.z = 0.0;
+  }
+}
+
+/**
+ * Is the joint motor enabled?
+ */
+PrismaticJoint.prototype.isMotorEnabled = function() {
+  return this.m_enableMotor;
+}
+
+/**
+ * Enable/disable the joint motor.
+ */
+PrismaticJoint.prototype.enableMotor = function(flag) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_enableMotor = flag;
+}
+
+/**
+ * Set the motor speed, usually in meters per second.
+ */
+PrismaticJoint.prototype.setMotorSpeed = function(speed) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_motorSpeed = speed;
+}
+
+/**
+ * Set the maximum motor force, usually in N.
+ */
+PrismaticJoint.prototype.setMaxMotorForce = function(force) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_maxMotorForce = force;
+}
+
+/**
+ * Get the motor speed, usually in meters per second.
+ */
+PrismaticJoint.prototype.getMotorSpeed = function() {
+  return this.m_motorSpeed;
+}
+
+/**
+ * Get the current motor force given the inverse time step, usually in N.
+ */
+PrismaticJoint.prototype.getMotorForce = function(inv_dt) {
+  return inv_dt * this.m_motorImpulse;
+}
+
+PrismaticJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+}
+
+PrismaticJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+PrismaticJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis).mul(inv_dt);
+}
+
+PrismaticJoint.prototype.getReactionTorque = function(inv_dt) {
+  return inv_dt * this.m_impulse.y;
+}
+
+PrismaticJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  // Compute the effective masses.
+  var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+  var d = Vec2.zero();
+  d.addCombine(1, cB, 1, rB);
+  d.subCombine(1, cA, 1, rA);
+
+  var mA = this.m_invMassA, mB = this.m_invMassB;
+  var iA = this.m_invIA, iB = this.m_invIB;
+
+  // Compute motor Jacobian and effective mass.
+  {
+    this.m_axis = Rot.mulVec2(qA, this.m_localXAxisA);
+    this.m_a1 = Vec2.cross(Vec2.add(d, rA), this.m_axis);
+    this.m_a2 = Vec2.cross(rB, this.m_axis);
+
+    this.m_motorMass = mA + mB + iA * this.m_a1 * this.m_a1 + iB * this.m_a2
+        * this.m_a2;
+    if (this.m_motorMass > 0.0) {
+      this.m_motorMass = 1.0 / this.m_motorMass;
+    }
+  }
+
+  // Prismatic constraint.
+  {
+    this.m_perp = Rot.mulVec2(qA, this.m_localYAxisA);
+
+    this.m_s1 = Vec2.cross(Vec2.add(d, rA), this.m_perp);
+    this.m_s2 = Vec2.cross(rB, this.m_perp);
+
+    var s1test = Vec2.cross(rA, this.m_perp);
+
+    var k11 = mA + mB + iA * this.m_s1 * this.m_s1 + iB * this.m_s2 * this.m_s2;
+    var k12 = iA * this.m_s1 + iB * this.m_s2;
+    var k13 = iA * this.m_s1 * this.m_a1 + iB * this.m_s2 * this.m_a2;
+    var k22 = iA + iB;
+    if (k22 == 0.0) {
+      // For bodies with fixed rotation.
+      k22 = 1.0;
+    }
+    var k23 = iA * this.m_a1 + iB * this.m_a2;
+    var k33 = mA + mB + iA * this.m_a1 * this.m_a1 + iB * this.m_a2 * this.m_a2;
+
+    this.m_K.ex.set(k11, k12, k13);
+    this.m_K.ey.set(k12, k22, k23);
+    this.m_K.ez.set(k13, k23, k33);
+  }
+
+  // Compute motor and limit terms.
+  if (this.m_enableLimit) {
+
+    var jointTranslation = Vec2.dot(this.m_axis, d); // float
+    if (Math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
+      this.m_limitState = equalLimits;
+
+    } else if (jointTranslation <= this.m_lowerTranslation) {
+      if (this.m_limitState != atLowerLimit) {
+        this.m_limitState = atLowerLimit;
+        this.m_impulse.z = 0.0;
+      }
+
+    } else if (jointTranslation >= this.m_upperTranslation) {
+      if (this.m_limitState != atUpperLimit) {
+        this.m_limitState = atUpperLimit;
+        this.m_impulse.z = 0.0;
+      }
+
+    } else {
+      this.m_limitState = inactiveLimit;
+      this.m_impulse.z = 0.0;
+    }
+
+  } else {
+    this.m_limitState = inactiveLimit;
+    this.m_impulse.z = 0.0;
+  }
+
+  if (this.m_enableMotor == false) {
+    this.m_motorImpulse = 0.0;
+  }
+
+  if (step.warmStarting) {
+    // Account for variable time step.
+    this.m_impulse.mul(step.dtRatio);
+    this.m_motorImpulse *= step.dtRatio;
+
+    var P = Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse
+        + this.m_impulse.z, this.m_axis);
+    var LA = this.m_impulse.x * this.m_s1 + this.m_impulse.y
+        + (this.m_motorImpulse + this.m_impulse.z) * this.m_a1;
+    var LB = this.m_impulse.x * this.m_s2 + this.m_impulse.y
+        + (this.m_motorImpulse + this.m_impulse.z) * this.m_a2;
+
+    vA.subMul(mA, P);
+    wA -= iA * LA;
+
+    vB.addMul(mB, P);
+    wB += iB * LB;
+  } else {
+    this.m_impulse.setZero();
+    this.m_motorImpulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v.set(vA);
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v.set(vB);
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+PrismaticJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB;
+  var iA = this.m_invIA;
+  var iB = this.m_invIB;
+
+  // Solve linear motor constraint.
+  if (this.m_enableMotor && this.m_limitState != equalLimits) {
+    var Cdot = Vec2.dot(this.m_axis, Vec2.sub(vB, vA)) + this.m_a2 * wB
+        - this.m_a1 * wA;
+    var impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
+    var oldImpulse = this.m_motorImpulse;
+    var maxImpulse = step.dt * this.m_maxMotorForce;
+    this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse,
+        -maxImpulse, maxImpulse);
+    impulse = this.m_motorImpulse - oldImpulse;
+
+    var P = Vec2.mul(impulse, this.m_axis);
+    var LA = impulse * this.m_a1;
+    var LB = impulse * this.m_a2;
+
+    vA.subMul(mA, P);
+    wA -= iA * LA;
+
+    vB.addMul(mB, P);
+    wB += iB * LB;
+  }
+
+  var Cdot1 = Vec2.zero();
+  Cdot1.x += Vec2.dot(this.m_perp, vB) + this.m_s2 * wB;
+  Cdot1.x -= Vec2.dot(this.m_perp, vA) + this.m_s1 * wA;
+  Cdot1.y = wB - wA;
+
+  if (this.m_enableLimit && this.m_limitState != inactiveLimit) {
+    // Solve prismatic and limit constraint in block form.
+    var Cdot2 = 0;
+    Cdot2 += Vec2.dot(this.m_axis, vB) + this.m_a2 * wB;
+    Cdot2 -= Vec2.dot(this.m_axis, vA) + this.m_a1 * wA;
+
+    var Cdot = Vec3(Cdot1.x, Cdot1.y, Cdot2);
+
+    var f1 = Vec3(this.m_impulse);
+    var df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
+    this.m_impulse.add(df);
+
+    if (this.m_limitState == atLowerLimit) {
+      this.m_impulse.z = Math.max(this.m_impulse.z, 0.0);
+    } else if (this.m_limitState == atUpperLimit) {
+      this.m_impulse.z = Math.min(this.m_impulse.z, 0.0);
+    }
+
+    // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
+    // f1(1:2)
+    var b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y)); // Vec2
+    var f2r = Vec2.add(this.m_K.solve22(b), Vec2.neo(f1.x, f1.y)); // Vec2
+    this.m_impulse.x = f2r.x;
+    this.m_impulse.y = f2r.y;
+
+    df = Vec3.sub(this.m_impulse, f1);
+
+    var P = Vec2.combine(df.x, this.m_perp, df.z, this.m_axis); // Vec2
+    var LA = df.x * this.m_s1 + df.y + df.z * this.m_a1; // float
+    var LB = df.x * this.m_s2 + df.y + df.z * this.m_a2; // float
+
+    vA.subMul(mA, P);
+    wA -= iA * LA;
+
+    vB.addMul(mB, P);
+    wB += iB * LB;
+  } else {
+    // Limit is inactive, just solve the prismatic constraint in block form.
+    var df = this.m_K.solve22(Vec2.neg(Cdot1)); // Vec2
+    this.m_impulse.x += df.x;
+    this.m_impulse.y += df.y;
+
+    var P = Vec2.mul(df.x, this.m_perp); // Vec2
+    var LA = df.x * this.m_s1 + df.y; // float
+    var LB = df.x * this.m_s2 + df.y; // float
+
+    vA.subMul(mA, P);
+    wA -= iA * LA;
+
+    vB.addMul(mB, P);
+    wB += iB * LB;
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+PrismaticJoint.prototype.solvePositionConstraints = function(step) {
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB;
+  var iA = this.m_invIA;
+  var iB = this.m_invIB;
+
+  // Compute fresh Jacobians
+  var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA)); // Vec2
+  var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
+  var d = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA)); // Vec2
+
+  var axis = Rot.mulVec2(qA, this.m_localXAxisA); // Vec2
+  var a1 = Vec2.cross(Vec2.add(d, rA), axis); // float
+  var a2 = Vec2.cross(rB, axis); // float
+  var perp = Rot.mulVec2(qA, this.m_localYAxisA); // Vec2
+
+  var s1 = Vec2.cross(Vec2.add(d, rA), perp); // float
+  var s2 = Vec2.cross(rB, perp); // float
+
+  var impulse = Vec3();
+  var C1 = Vec2.zero(); // Vec2
+  C1.x = Vec2.dot(perp, d);
+  C1.y = aB - aA - this.m_referenceAngle;
+
+  var linearError = Math.abs(C1.x); // float
+  var angularError = Math.abs(C1.y); // float
+
+  var linearSlop = Settings.linearSlop;
+  var maxLinearCorrection = Settings.maxLinearCorrection;
+
+  var active = false; // bool
+  var C2 = 0.0; // float
+  if (this.m_enableLimit) {
+
+    var translation = Vec2.dot(axis, d); // float
+    if (Math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
+      // Prevent large angular corrections
+      C2 = Math.clamp(translation, -maxLinearCorrection, maxLinearCorrection);
+      linearError = Math.max(linearError, Math.abs(translation));
+      active = true;
+
+    } else if (translation <= this.m_lowerTranslation) {
+      // Prevent large linear corrections and allow some slop.
+      C2 = Math.clamp(translation - this.m_lowerTranslation + linearSlop,
+          -maxLinearCorrection, 0.0);
+      linearError = Math
+          .max(linearError, this.m_lowerTranslation - translation);
+      active = true;
+
+    } else if (translation >= this.m_upperTranslation) {
+      // Prevent large linear corrections and allow some slop.
+      C2 = Math.clamp(translation - this.m_upperTranslation - linearSlop, 0.0,
+          maxLinearCorrection);
+      linearError = Math
+          .max(linearError, translation - this.m_upperTranslation);
+      active = true;
+    }
+  }
+
+  if (active) {
+    var k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2; // float
+    var k12 = iA * s1 + iB * s2; // float
+    var k13 = iA * s1 * a1 + iB * s2 * a2; // float
+    var k22 = iA + iB; // float
+    if (k22 == 0.0) {
+      // For fixed rotation
+      k22 = 1.0;
+    }
+    var k23 = iA * a1 + iB * a2; // float
+    var k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2; // float
+
+    var K = new Mat33()
+    K.ex.set(k11, k12, k13);
+    K.ey.set(k12, k22, k23);
+    K.ez.set(k13, k23, k33);
+
+    var C = Vec3();
+    C.x = C1.x;
+    C.y = C1.y;
+    C.z = C2;
+
+    impulse = K.solve33(Vec3.neg(C));
+  } else {
+    var k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2; // float
+    var k12 = iA * s1 + iB * s2; // float
+    var k22 = iA + iB; // float
+    if (k22 == 0.0) {
+      k22 = 1.0;
+    }
+
+    var K = new Mat22();
+    K.ex.set(k11, k12);
+    K.ey.set(k12, k22);
+
+    var impulse1 = K.solve(Vec2.neg(C1)); // Vec2
+    impulse.x = impulse1.x;
+    impulse.y = impulse1.y;
+    impulse.z = 0.0;
+  }
+
+  var P = Vec2.combine(impulse.x, perp, impulse.z, axis); // Vec2
+  var LA = impulse.x * s1 + impulse.y + impulse.z * a1; // float
+  var LB = impulse.x * s2 + impulse.y + impulse.z * a2; // float
+
+  cA.subMul(mA, P);
+  aA -= iA * LA;
+  cB.addMul(mB, P);
+  aB += iB * LB;
+
+  this.m_bodyA.c_position.c = cA;
+  this.m_bodyA.c_position.a = aA;
+  this.m_bodyB.c_position.c = cB;
+  this.m_bodyB.c_position.a = aB;
+
+  return linearError <= Settings.linearSlop
+      && angularError <= Settings.angularSlop;
+}
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = MotorJoint;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+MotorJoint.TYPE = 'motor-joint';
+
+MotorJoint._super = Joint;
+MotorJoint.prototype = create(MotorJoint._super.prototype);
+
+/**
+ * @typedef {Object} MotorJointDef
+ *
+ * Motor joint definition.
+ * 
+ * @prop {float} angularOffset The bodyB angle minus bodyA angle in radians.
+ * @prop {float} maxForce The maximum motor force in N.
+ * @prop {float} maxTorque The maximum motor torque in N-m.
+ * @prop {float} correctionFactor Position correction factor in the range [0,1].
+ * @prop {Vec2} linearOffset Position of bodyB minus the position of bodyA, in
+ *       bodyA's frame, in meters.
+ */
+
+var DEFAULTS = {
+  maxForce : 1.0,
+  maxTorque : 1.0,
+  correctionFactor : 0.3
+};
+
+/**
+ * A motor joint is used to control the relative motion between two bodies. A
+ * typical usage is to control the movement of a dynamic body with respect to
+ * the ground.
+ *
+ * @param {MotorJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function MotorJoint(def, bodyA, bodyB) {
+  if (!(this instanceof MotorJoint)) {
+    return new MotorJoint(def, bodyA, bodyB);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = MotorJoint.TYPE;
+
+  this.m_linearOffset = def.linearOffset ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
+
+  var angleA = bodyA.getAngle();
+  var angleB = bodyB.getAngle();
+  this.m_angularOffset = angleB - angleA;
+
+  this.m_linearImpulse = Vec2.zero();
+  this.m_angularImpulse = 0.0;
+
+  this.m_maxForce = def.maxForce;
+  this.m_maxTorque = def.maxTorque;
+  this.m_correctionFactor = def.correctionFactor;
+
+  // Solver temp
+  this.m_rA; // Vec2
+  this.m_rB; // Vec2
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_linearError; // Vec2
+  this.m_angularError; // float
+  this.m_invMassA; // float
+  this.m_invMassB; // float
+  this.m_invIA; // float
+  this.m_invIB; // float
+  this.m_linearMass; // Mat22
+  this.m_angularMass; // float
+
+  // Point-to-point constraint
+  // Cdot = v2 - v1
+  // = v2 + cross(w2, r2) - v1 - cross(w1, r1)
+  // J = [-I -r1_skew I r2_skew ]
+  // Identity used:
+  // w k % (rx i + ry j) = w * (-ry i + rx j)
+
+  // Angle constraint
+  // Cdot = w2 - w1
+  // J = [0 0 -1 0 0 1]
+  // K = invI1 + invI2
+}
+
+/**
+ * Set the maximum friction force in N.
+ */
+MotorJoint.prototype.setMaxForce = function(force) {
+  _ASSERT && common.assert(Math.isFinite(force) && force >= 0.0);
+  this.m_maxForce = force;
+}
+
+/**
+ * Get the maximum friction force in N.
+ */
+MotorJoint.prototype.getMaxForce = function() {
+  return this.m_maxForce;
+}
+
+/**
+ * Set the maximum friction torque in N*m.
+ */
+MotorJoint.prototype.setMaxTorque = function(torque) {
+  _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0.0);
+  this.m_maxTorque = torque;
+}
+
+/**
+ * Get the maximum friction torque in N*m.
+ */
+MotorJoint.prototype.getMaxTorque = function() {
+  return this.m_maxTorque;
+}
+
+/**
+ * Set the position correction factor in the range [0,1].
+ */
+MotorJoint.prototype.setCorrectionFactor = function(factor) {
+  _ASSERT && common.assert(Math.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
+  this.m_correctionFactor = factor;
+}
+
+/**
+ * Get the position correction factor in the range [0,1].
+ */
+MotorJoint.prototype.getCorrectionFactor = function() {
+  return this.m_correctionFactor;
+}
+
+/**
+ * Set/get the target linear offset, in frame A, in meters.
+ */
+MotorJoint.prototype.setLinearOffset = function(linearOffset) {
+  if (linearOffset.x != this.m_linearOffset.x
+      || linearOffset.y != this.m_linearOffset.y) {
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_linearOffset = linearOffset;
+  }
+}
+
+MotorJoint.prototype.getLinearOffset = function() {
+  return this.m_linearOffset;
+}
+
+/**
+ * Set/get the target angular offset, in radians.
+ */
+MotorJoint.prototype.setAngularOffset = function(angularOffset) {
+  if (angularOffset != this.m_angularOffset) {
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_angularOffset = angularOffset;
+  }
+}
+
+MotorJoint.prototype.getAngularOffset = function() {
+  return this.m_angularOffset;
+}
+
+MotorJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getPosition();
+}
+
+MotorJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getPosition();
+}
+
+MotorJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.mul(inv_dt, this.m_linearImpulse);
+}
+
+MotorJoint.prototype.getReactionTorque = function(inv_dt) {
+  return inv_dt * this.m_angularImpulse;
+}
+
+MotorJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA), qB = Rot.neo(aB);
+
+  // Compute the effective mass matrix.
+  this.m_rA = Rot.mulVec2(qA, Vec2.neg(this.m_localCenterA));
+  this.m_rB = Rot.mulVec2(qB, Vec2.neg(this.m_localCenterB));
+
+  // J = [-I -r1_skew I r2_skew]
+  // [ 0 -1 0 1]
+  // r_skew = [-ry; rx]
+
+  // Matlab
+  // K = [ mA+r1y^2*iA+mB+r2y^2*iB, -r1y*iA*r1x-r2y*iB*r2x, -r1y*iA-r2y*iB]
+  // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
+  // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
+
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB;
+  var iA = this.m_invIA;
+  var iB = this.m_invIB;
+
+  var K = new Mat22();
+  K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
+      * this.m_rB.y;
+  K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
+  K.ey.x = K.ex.y;
+  K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x
+      * this.m_rB.x;
+
+  this.m_linearMass = K.getInverse();
+
+  this.m_angularMass = iA + iB;
+  if (this.m_angularMass > 0.0) {
+    this.m_angularMass = 1.0 / this.m_angularMass;
+  }
+
+  this.m_linearError = Vec2.zero();
+  this.m_linearError.addCombine(1, cB, 1, this.m_rB);
+  this.m_linearError.subCombine(1, cA, 1, this.m_rA);
+  this.m_linearError.sub(Rot.mulVec2(qA, this.m_linearOffset));
+
+  this.m_angularError = aB - aA - this.m_angularOffset;
+
+  if (step.warmStarting) {
+    // Scale impulses to support a variable time step.
+    this.m_linearImpulse.mul(step.dtRatio);
+    this.m_angularImpulse *= step.dtRatio;
+
+    var P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
+
+    vA.subMul(mA, P);
+    wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
+
+    vB.addMul(mB, P);
+    wB += iB * (Vec2.cross(this.m_rB, P) + this.m_angularImpulse);
+
+  } else {
+    this.m_linearImpulse.setZero();
+    this.m_angularImpulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+MotorJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var mA = this.m_invMassA, mB = this.m_invMassB;
+  var iA = this.m_invIA, iB = this.m_invIB;
+
+  var h = step.dt;
+  var inv_h = step.inv_dt;
+
+  // Solve angular friction
+  {
+    var Cdot = wB - wA + inv_h * this.m_correctionFactor * this.m_angularError;
+    var impulse = -this.m_angularMass * Cdot;
+
+    var oldImpulse = this.m_angularImpulse;
+    var maxImpulse = h * this.m_maxTorque;
+    this.m_angularImpulse = Math.clamp(this.m_angularImpulse + impulse,
+        -maxImpulse, maxImpulse);
+    impulse = this.m_angularImpulse - oldImpulse;
+
+    wA -= iA * impulse;
+    wB += iB * impulse;
+  }
+
+  // Solve linear friction
+  {
+    var Cdot = Vec2.zero();
+    Cdot.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
+    Cdot.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+    Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
+
+    var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
+    var oldImpulse = Vec2.clone(this.m_linearImpulse);
+    this.m_linearImpulse.add(impulse);
+
+    var maxImpulse = h * this.m_maxForce;
+
+    this.m_linearImpulse.clamp(maxImpulse);
+
+    impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
+
+    vA.subMul(mA, impulse);
+    wA -= iA * Vec2.cross(this.m_rA, impulse);
+
+    vB.addMul(mB, impulse);
+    wB += iB * Vec2.cross(this.m_rB, impulse);
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+MotorJoint.prototype.solvePositionConstraints = function(step) {
+  return true;
+}
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = MouseJoint;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+MouseJoint.TYPE = 'mouse-joint';
+
+MouseJoint._super = Joint;
+MouseJoint.prototype = create(MouseJoint._super.prototype);
+
+/**
+ * @typedef {Object} MouseJointDef
+ *
+ * Mouse joint definition. This requires a world target point, tuning
+ * parameters, and the time step.
+ * 
+ * @prop [maxForce = 0.0] The maximum constraint force that can be exerted to
+ *       move the candidate body. Usually you will express as some multiple of
+ *       the weight (multiplier * mass * gravity).
+ * @prop [frequencyHz = 5.0] The response speed.
+ * @prop [dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
+ *       damping.
+ *
+ * @prop {Vec2} target The initial world target point. This is assumed to
+ *       coincide with the body anchor initially.
+ */
+
+var DEFAULTS = {
+  maxForce : 0.0,
+  frequencyHz : 5.0,
+  dampingRatio : 0.7
+};
+
+/**
+ * A mouse joint is used to make a point on a body track a specified world
+ * point. This a soft constraint with a maximum force. This allows the
+ * constraint to stretch and without applying huge forces.
+ * 
+ * NOTE: this joint is not documented in the manual because it was developed to
+ * be used in the testbed. If you want to learn how to use the mouse joint, look
+ * at the testbed.
+ *
+ * @param {MouseJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function MouseJoint(def, bodyA, bodyB, target) {
+  if (!(this instanceof MouseJoint)) {
+    return new MouseJoint(def, bodyA, bodyB, target);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = MouseJoint.TYPE;
+
+  _ASSERT && common.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0.0);
+  _ASSERT && common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
+  _ASSERT && common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
+
+  this.m_targetA = target ? Vec2.clone(target) : def.target || Vec2.zero();
+  this.m_localAnchorB = Transform.mulTVec2(bodyB.getTransform(), this.m_targetA);
+
+  this.m_maxForce = def.maxForce;
+  this.m_impulse = Vec2.zero();
+
+  this.m_frequencyHz = def.frequencyHz;
+  this.m_dampingRatio = def.dampingRatio;
+
+  this.m_beta = 0.0;
+  this.m_gamma = 0.0;
+
+  // Solver temp
+  this.m_rB = Vec2.zero();
+  this.m_localCenterB = Vec2.zero();
+  this.m_invMassB = 0.0;
+  this.m_invIB = 0.0;
+  this.mass = new Mat22()
+  this.m_C = Vec2.zero();
+
+  // p = attached point, m = mouse point
+  // C = p - m
+  // Cdot = v
+  // = v + cross(w, r)
+  // J = [I r_skew]
+  // Identity used:
+  // w k % (rx i + ry j) = w * (-ry i + rx j)
+}
+
+/**
+ * Use this to update the target point.
+ */
+MouseJoint.prototype.setTarget = function(target) {
+  if (this.m_bodyB.isAwake() == false) {
+    this.m_bodyB.setAwake(true);
+  }
+  this.m_targetA = Vec2.clone(target);
+}
+
+MouseJoint.prototype.getTarget = function() {
+  return this.m_targetA;
+}
+
+/**
+ * Set/get the maximum force in Newtons.
+ */
+MouseJoint.prototype.setMaxForce = function(force) {
+  this.m_maxForce = force;
+}
+
+MouseJoint.getMaxForce = function() {
+  return this.m_maxForce;
+}
+
+/**
+ * Set/get the frequency in Hertz.
+ */
+MouseJoint.prototype.setFrequency = function(hz) {
+  this.m_frequencyHz = hz;
+}
+
+MouseJoint.prototype.getFrequency = function() {
+  return this.m_frequencyHz;
+}
+
+/**
+ * Set/get the damping ratio (dimensionless).
+ */
+MouseJoint.prototype.setDampingRatio = function(ratio) {
+  this.m_dampingRatio = ratio;
+}
+
+MouseJoint.prototype.getDampingRatio = function() {
+  return this.m_dampingRatio;
+}
+
+MouseJoint.prototype.getAnchorA = function() {
+  return Vec2.clone(this.m_targetA);
+}
+
+MouseJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+MouseJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.mul(inv_dt, this.m_impulse);
+}
+
+MouseJoint.prototype.getReactionTorque = function(inv_dt) {
+  return inv_dt * 0.0;
+}
+
+MouseJoint.prototype.shiftOrigin = function(newOrigin) {
+  this.m_targetA.sub(newOrigin);
+}
+
+MouseJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var position = this.m_bodyB.c_position;
+  var velocity = this.m_bodyB.c_velocity;
+
+  var cB = position.c;
+  var aB = position.a;
+  var vB = velocity.v;
+  var wB = velocity.w;
+
+  var qB = Rot.neo(aB);
+
+  var mass = this.m_bodyB.getMass();
+
+  // Frequency
+  var omega = 2.0 * Math.PI * this.m_frequencyHz;
+
+  // Damping coefficient
+  var d = 2.0 * mass * this.m_dampingRatio * omega;
+
+  // Spring stiffness
+  var k = mass * (omega * omega);
+
+  // magic formulas
+  // gamma has units of inverse mass.
+  // beta has units of inverse time.
+  var h = step.dt;
+  _ASSERT && common.assert(d + h * k > Math.EPSILON);
+  this.m_gamma = h * (d + h * k);
+  if (this.m_gamma != 0.0) {
+    this.m_gamma = 1.0 / this.m_gamma;
+  }
+  this.m_beta = h * k * this.m_gamma;
+
+  // Compute the effective mass matrix.
+  this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+
+  // K = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) *
+  // invI2 * skew(r2)]
+  // = [1/m1+1/m2 0 ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y
+  // -r1.x*r1.y]
+  // [ 0 1/m1+1/m2] [-r1.x*r1.y r1.x*r1.x] [-r1.x*r1.y r1.x*r1.x]
+  var K = new Mat22();
+  K.ex.x = this.m_invMassB + this.m_invIB * this.m_rB.y * this.m_rB.y
+      + this.m_gamma;
+  K.ex.y = -this.m_invIB * this.m_rB.x * this.m_rB.y;
+  K.ey.x = K.ex.y;
+  K.ey.y = this.m_invMassB + this.m_invIB * this.m_rB.x * this.m_rB.x
+      + this.m_gamma;
+
+  this.m_mass = K.getInverse();
+
+  this.m_C.set(cB);
+  this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
+  this.m_C.mul(this.m_beta);
+
+  // Cheat with some damping
+  wB *= 0.98;
+
+  if (step.warmStarting) {
+    this.m_impulse.mul(step.dtRatio);
+    vB.addMul(this.m_invMassB, this.m_impulse);
+    wB += this.m_invIB * Vec2.cross(this.m_rB, this.m_impulse);
+
+  } else {
+    this.m_impulse.setZero();
+  }
+
+  velocity.v.set(vB);
+  velocity.w = wB;
+}
+
+MouseJoint.prototype.solveVelocityConstraints = function(step) {
+  var velocity = this.m_bodyB.c_velocity;
+  var vB = Vec2.clone(velocity.v);
+  var wB = velocity.w;
+
+  // Cdot = v + cross(w, r)
+
+  var Cdot = Vec2.cross(wB, this.m_rB);
+  Cdot.add(vB);
+
+  Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);
+  Cdot.neg();
+
+  var impulse = Mat22.mulVec2(this.m_mass, Cdot);
+
+  var oldImpulse = Vec2.clone(this.m_impulse);
+  this.m_impulse.add(impulse);
+  var maxImpulse = step.dt * this.m_maxForce;
+  this.m_impulse.clamp(maxImpulse);
+  impulse = Vec2.sub(this.m_impulse, oldImpulse);
+
+  vB.addMul(this.m_invMassB, impulse);
+  wB += this.m_invIB * Vec2.cross(this.m_rB, impulse);
+
+  velocity.v.set(vB);
+  velocity.w = wB;
+}
+
+MouseJoint.prototype.solvePositionConstraints = function(step) {
+  return true;
+}
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = PulleyJoint;
+
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+PulleyJoint.TYPE = 'pulley-joint';
+PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
+
+PulleyJoint._super = Joint;
+PulleyJoint.prototype = create(PulleyJoint._super.prototype);
+
+/**
+ * @typedef {Object} PulleyJointDef
+ *
+ * Pulley joint definition. This requires two ground anchors, two dynamic body
+ * anchor points, and a pulley ratio.
+ *
+ * @prop {Vec2} groundAnchorA The first ground anchor in world coordinates.
+ *          This point never moves.
+ * @prop {Vec2} groundAnchorB The second ground anchor in world coordinates.
+ *          This point never moves.
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {float} ratio The pulley ratio, used to simulate a block-and-tackle.
+ * @prop {float} lengthA The reference length for the segment attached to bodyA.
+ * @prop {float} lengthB The reference length for the segment attached to bodyB.
+ */
+var PulleyJointDef = {
+  collideConnected : true
+};
+
+/**
+ * The pulley joint is connected to two bodies and two fixed ground points. The
+ * pulley supports a ratio such that: length1 + ratio * length2 <= constant
+ * 
+ * Yes, the force transmitted is scaled by the ratio.
+ * 
+ * Warning: the pulley joint can get a bit squirrelly by itself. They often work
+ * better when combined with prismatic joints. You should also cover the the
+ * anchor points with static shapes to prevent one side from going to zero
+ * length.
+ *
+ * @param {PulleyJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio) {
+  if (!(this instanceof PulleyJoint)) {
+    return new PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio);
+  }
+
+  def = options(def, PulleyJointDef);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = PulleyJoint.TYPE;
+  this.m_groundAnchorA = groundA ? groundA : def.groundAnchorA || Vec2.neo(-1.0, 1.0);
+  this.m_groundAnchorB = groundB ? groundB : def.groundAnchorB || Vec2.neo(1.0, 1.0);
+  this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1.0, 0.0);
+  this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1.0, 0.0);
+  this.m_lengthA = Math.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
+  this.m_lengthB = Math.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
+  this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
+
+  _ASSERT && common.assert(ratio > Math.EPSILON);
+
+  this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
+
+  this.m_impulse = 0.0;
+
+  // Solver temp
+  this.m_uA; // Vec2
+  this.m_uB; // Vec2
+  this.m_rA; // Vec2
+  this.m_rB; // Vec2
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_invMassA; // float
+  this.m_invMassB; // float
+  this.m_invIA; // float
+  this.m_invIB; // float
+  this.m_mass; // float
+
+  // Pulley:
+  // length1 = norm(p1 - s1)
+  // length2 = norm(p2 - s2)
+  // C0 = (length1 + ratio * length2)_initial
+  // C = C0 - (length1 + ratio * length2)
+  // u1 = (p1 - s1) / norm(p1 - s1)
+  // u2 = (p2 - s2) / norm(p2 - s2)
+  // Cdot = -dot(u1, v1 + cross(w1, r1)) - ratio * dot(u2, v2 + cross(w2, r2))
+  // J = -[u1 cross(r1, u1) ratio * u2 ratio * cross(r2, u2)]
+  // K = J * invM * JT
+  // = invMass1 + invI1 * cross(r1, u1)^2 + ratio^2 * (invMass2 + invI2 *
+  // cross(r2, u2)^2)
+}
+
+/**
+ * Get the first ground anchor.
+ */
+PulleyJoint.prototype.getGroundAnchorA = function() {
+  return this.m_groundAnchorA;
+}
+
+/**
+ * Get the second ground anchor.
+ */
+PulleyJoint.prototype.getGroundAnchorB = function() {
+  return this.m_groundAnchorB;
+}
+
+/**
+ * Get the current length of the segment attached to bodyA.
+ */
+PulleyJoint.prototype.getLengthA = function() {
+  return this.m_lengthA;
+}
+
+/**
+ * Get the current length of the segment attached to bodyB.
+ */
+PulleyJoint.prototype.getLengthB = function() {
+  return this.m_lengthB;
+}
+
+/**
+ * Get the pulley ratio.
+ */
+PulleyJoint.prototype.getRatio = function() {
+  return this.m_ratio;
+}
+
+/**
+ * Get the current length of the segment attached to bodyA.
+ */
+PulleyJoint.prototype.getCurrentLengthA = function() {
+  var p = this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+  var s = this.m_groundAnchorA;
+  return Vec2.distance(p, s);
+}
+
+/**
+ * Get the current length of the segment attached to bodyB.
+ */
+PulleyJoint.prototype.getCurrentLengthB = function() {
+  var p = this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+  var s = this.m_groundAnchorB;
+  return Vec2.distance(p, s);
+}
+
+PulleyJoint.prototype.shiftOrigin = function(newOrigin) {
+  this.m_groundAnchorA.sub(newOrigin);
+  this.m_groundAnchorB.sub(newOrigin);
+}
+
+PulleyJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+}
+
+PulleyJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+PulleyJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.mul(this.m_impulse, this.m_uB).mul(inv_dt);
+}
+
+PulleyJoint.prototype.getReactionTorque = function(inv_dt) {
+  return 0.0;
+}
+
+PulleyJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+
+  // Get the pulley axes.
+  this.m_uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
+  this.m_uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
+
+  var lengthA = this.m_uA.length();
+  var lengthB = this.m_uB.length();
+
+  if (lengthA > 10.0 * Settings.linearSlop) {
+    this.m_uA.mul(1.0 / lengthA);
+  } else {
+    this.m_uA.setZero();
+  }
+
+  if (lengthB > 10.0 * Settings.linearSlop) {
+    this.m_uB.mul(1.0 / lengthB);
+  } else {
+    this.m_uB.setZero();
+  }
+
+  // Compute effective mass.
+  var ruA = Vec2.cross(this.m_rA, this.m_uA); // float
+  var ruB = Vec2.cross(this.m_rB, this.m_uB); // float
+
+  var mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
+  var mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
+
+  this.m_mass = mA + this.m_ratio * this.m_ratio * mB;
+
+  if (this.m_mass > 0.0) {
+    this.m_mass = 1.0 / this.m_mass;
+  }
+
+  if (step.warmStarting) {
+    // Scale impulses to support variable time steps.
+    this.m_impulse *= step.dtRatio;
+
+    // Warm starting.
+    var PA = Vec2.mul(-this.m_impulse, this.m_uA);
+    var PB = Vec2.mul(-this.m_ratio * this.m_impulse, this.m_uB);
+
+    vA.addMul(this.m_invMassA, PA);
+    wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
+
+    vB.addMul(this.m_invMassB, PB);
+    wB += this.m_invIB * Vec2.cross(this.m_rB, PB);
+
+  } else {
+    this.m_impulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+PulleyJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var vpA = Vec2.add(vA, Vec2.cross(wA, this.m_rA));
+  var vpB = Vec2.add(vB, Vec2.cross(wB, this.m_rB));
+
+  var Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio
+      * Vec2.dot(this.m_uB, vpB); // float
+  var impulse = -this.m_mass * Cdot; // float
+  this.m_impulse += impulse;
+
+  var PA = Vec2.mul(-impulse, this.m_uA); // Vec2
+  var PB = Vec2.mul(-this.m_ratio * impulse, this.m_uB); // Vec2
+  vA.addMul(this.m_invMassA, PA);
+  wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
+  vB.addMul(this.m_invMassB, PB);
+  wB += this.m_invIB * Vec2.cross(this.m_rB, PB);
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+PulleyJoint.prototype.solvePositionConstraints = function(step) {
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+
+  var qA = Rot.neo(aA), qB = Rot.neo(aB);
+
+  var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+
+  // Get the pulley axes.
+  var uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
+  var uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
+
+  var lengthA = uA.length();
+  var lengthB = uB.length();
+
+  if (lengthA > 10.0 * Settings.linearSlop) {
+    uA.mul(1.0 / lengthA);
+  } else {
+    uA.setZero();
+  }
+
+  if (lengthB > 10.0 * Settings.linearSlop) {
+    uB.mul(1.0 / lengthB);
+  } else {
+    uB.setZero();
+  }
+
+  // Compute effective mass.
+  var ruA = Vec2.cross(rA, uA);
+  var ruB = Vec2.cross(rB, uB);
+
+  var mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
+  var mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
+
+  var mass = mA + this.m_ratio * this.m_ratio * mB; // float
+
+  if (mass > 0.0) {
+    mass = 1.0 / mass;
+  }
+
+  var C = this.m_constant - lengthA - this.m_ratio * lengthB; // float
+  var linearError = Math.abs(C); // float
+
+  var impulse = -mass * C; // float
+
+  var PA = Vec2.mul(-impulse, uA); // Vec2
+  var PB = Vec2.mul(-this.m_ratio * impulse, uB); // Vec2
+
+  cA.addMul(this.m_invMassA, PA);
+  aA += this.m_invIA * Vec2.cross(rA, PA);
+  cB.addMul(this.m_invMassB, PB);
+  aB += this.m_invIB * Vec2.cross(rB, PB);
+
+  this.m_bodyA.c_position.c = cA;
+  this.m_bodyA.c_position.a = aA;
+  this.m_bodyB.c_position.c = cB;
+  this.m_bodyB.c_position.a = aB;
+
+  return linearError < Settings.linearSlop;
+}
+
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = RopeJoint;
+
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+var inactiveLimit = 0;
+var atLowerLimit = 1;
+var atUpperLimit = 2;
+var equalLimits = 3;
+
+RopeJoint.TYPE = 'rope-joint';
+
+RopeJoint._super = Joint;
+RopeJoint.prototype = create(RopeJoint._super.prototype);
+
+/**
+ * @typedef {Object} RopeJointDef
+ *
+ * Rope joint definition. This requires two body anchor points and a maximum
+ * lengths. Note: by default the connected objects will not collide. see
+ * collideConnected in JointDef.
+ *
+ * @prop {float} maxLength The maximum length of the rope. Warning: this must be
+ *       larger than linearSlop or the joint will have no effect.
+ *
+ * @prop {Vec2} def.localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} def.localAnchorB The local anchor point relative to bodyB's origin.
+ */
+
+var DEFAULTS = {
+  maxLength : 0.0,
+};
+
+/**
+ * A rope joint enforces a maximum distance between two points on two bodies. It
+ * has no other effect.
+ * 
+ * Warning: if you attempt to change the maximum length during the simulation
+ * you will get some non-physical behavior.
+ * 
+ * A model that would allow you to dynamically modify the length would have some
+ * sponginess, so I chose not to implement it that way. See DistanceJoint if you
+ * want to dynamically control length.
+ *
+ * @param {RopeJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function RopeJoint(def, bodyA, bodyB, anchor) {
+  if (!(this instanceof RopeJoint)) {
+    return new RopeJoint(def, bodyA, bodyB, anchor);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = RopeJoint.TYPE;
+  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.neo(-1.0, 0.0);
+  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.neo(1.0, 0.0);
+
+  this.m_maxLength = def.maxLength;
+
+  this.m_mass = 0.0;
+  this.m_impulse = 0.0;
+  this.m_length = 0.0;
+  this.m_state = inactiveLimit;
+
+  // Solver temp
+  this.m_u; // Vec2
+  this.m_rA; // Vec2
+  this.m_rB; // Vec2
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_invMassA; // float
+  this.m_invMassB; // float
+  this.m_invIA; // float
+  this.m_invIB; // float
+  this.m_mass; // float
+
+  // Limit:
+  // C = norm(pB - pA) - L
+  // u = (pB - pA) / norm(pB - pA)
+  // Cdot = dot(u, vB + cross(wB, rB) - vA - cross(wA, rA))
+  // J = [-u -cross(rA, u) u cross(rB, u)]
+  // K = J * invM * JT
+  // = invMassA + invIA * cross(rA, u)^2 + invMassB + invIB * cross(rB, u)^2
+};
+
+/**
+ * The local anchor point relative to bodyA's origin.
+ */
+RopeJoint.prototype.getLocalAnchorA = function() {
+  return this.m_localAnchorA;
+}
+
+/**
+ * The local anchor point relative to bodyB's origin.
+ */
+RopeJoint.prototype.getLocalAnchorB = function() {
+  return this.m_localAnchorB;
+}
+
+/**
+ * Set/Get the maximum length of the rope.
+ */
+RopeJoint.prototype.setMaxLength = function(length) {
+  this.m_maxLength = length;
+}
+
+RopeJoint.prototype.getMaxLength = function() {
+  return this.m_maxLength;
+}
+
+RopeJoint.prototype.getLimitState = function() {
+  // TODO LimitState
+  return this.m_state;
+}
+
+RopeJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+}
+
+RopeJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+RopeJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
+}
+
+RopeJoint.prototype.getReactionTorque = function(inv_dt) {
+  return 0.0;
+}
+
+RopeJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  this.m_rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
+  this.m_rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
+  this.m_u = Vec2.zero();
+  this.m_u.addCombine(1, cB, 1, this.m_rB);
+  this.m_u.subCombine(1, cA, 1, this.m_rA); // Vec2
+
+  this.m_length = this.m_u.length();
+
+  var C = this.m_length - this.m_maxLength; // float
+  if (C > 0.0) {
+    this.m_state = atUpperLimit;
+  } else {
+    this.m_state = inactiveLimit;
+  }
+
+  if (this.m_length > Settings.linearSlop) {
+    this.m_u.mul(1.0 / this.m_length);
+  } else {
+    this.m_u.setZero();
+    this.m_mass = 0.0;
+    this.m_impulse = 0.0;
+    return;
+  }
+
+  // Compute effective mass.
+  var crA = Vec2.cross(this.m_rA, this.m_u); // float
+  var crB = Vec2.cross(this.m_rB, this.m_u); // float
+  var invMass = this.m_invMassA + this.m_invIA * crA * crA + this.m_invMassB
+      + this.m_invIB * crB * crB; // float
+
+  this.m_mass = invMass != 0.0 ? 1.0 / invMass : 0.0;
+
+  if (step.warmStarting) {
+    // Scale the impulse to support a variable time step.
+    this.m_impulse *= step.dtRatio;
+
+    var P = Vec2.mul(this.m_impulse, this.m_u);
+    
+    vA.subMul(this.m_invMassA, P);
+    wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+    
+    vB.addMul(this.m_invMassB, P);
+    wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+    
+  } else {
+    this.m_impulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v.set(vA);
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v.set(vB);
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+RopeJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  // Cdot = dot(u, v + cross(w, r))
+  var vpA = Vec2.addCross(vA, wA, this.m_rA); // Vec2
+  var vpB = Vec2.addCross(vB, wB, this.m_rB); // Vec2
+  var C = this.m_length - this.m_maxLength; // float
+  var Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA)); // float
+
+  // Predictive constraint.
+  if (C < 0.0) {
+    Cdot += step.inv_dt * C;
+  }
+
+  var impulse = -this.m_mass * Cdot; // float
+  var oldImpulse = this.m_impulse; // float
+  this.m_impulse = Math.min(0.0, this.m_impulse + impulse);
+  impulse = this.m_impulse - oldImpulse;
+
+  var P = Vec2.mul(impulse, this.m_u); // Vec2
+  vA.subMul(this.m_invMassA, P);
+  wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+  vB.addMul(this.m_invMassB, P);
+  wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+RopeJoint.prototype.solvePositionConstraints = function(step) {
+  var cA = this.m_bodyA.c_position.c; // Vec2
+  var aA = this.m_bodyA.c_position.a; // float
+  var cB = this.m_bodyB.c_position.c; // Vec2
+  var aB = this.m_bodyB.c_position.a; // float
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
+  var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
+  var u = Vec2.zero();
+  u.addCombine(1, cB, 1, rB);
+  u.subCombine(1, cA, 1, rA); // Vec2
+
+  var length = u.normalize(); // float
+  var C = length - this.m_maxLength; // float
+
+  C = Math.clamp(C, 0.0, Settings.maxLinearCorrection);
+
+  var impulse = -this.m_mass * C; // float
+  var P = Vec2.mul(impulse, u); // Vec2
+
+  cA.subMul(this.m_invMassA, P);
+  aA -= this.m_invIA * Vec2.cross(rA, P);
+  cB.addMul(this.m_invMassB, P);
+  aB += this.m_invIB * Vec2.cross(rB, P);
+
+  this.m_bodyA.c_position.c.set(cA);
+  this.m_bodyA.c_position.a = aA;
+  this.m_bodyB.c_position.c.set(cB);
+  this.m_bodyB.c_position.a = aB;
+
+  return length - this.m_maxLength < Settings.linearSlop;
+}
+
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = WeldJoint;
+
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+WeldJoint.TYPE = 'weld-joint';
+
+WeldJoint._super = Joint;
+WeldJoint.prototype = create(WeldJoint._super.prototype);
+
+/**
+ * @typedef {Object} WeldJointDef
+ *
+ * Weld joint definition. You need to specify local anchor points where they are
+ * attached and the relative body angle. The position of the anchor points is
+ * important for computing the reaction torque.
+ * 
+ * @prop {float} frequencyHz The mass-spring-damper frequency in Hertz. Rotation
+ *       only. Disable softness with a value of 0.
+ * @prop {float} dampingRatio The damping ratio. 0 = no damping, 1 = critical
+ *       damping.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {float} referenceAngle The bodyB angle minus bodyA angle in the
+ *       reference state (radians).
+ */
+var DEFAULTS = {
+  frequencyHz : 0.0,
+  dampingRatio : 0.0,
+}
+
+/**
+ * A weld joint essentially glues two bodies together. A weld joint may distort
+ * somewhat because the island constraint solver is approximate.
+ *
+ * @param {WeldJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function WeldJoint(def, bodyA, bodyB, anchor) {
+  if (!(this instanceof WeldJoint)) {
+    return new WeldJoint(def, bodyA, bodyB, anchor);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = WeldJoint.TYPE;
+
+  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+
+  this.m_frequencyHz = def.frequencyHz;
+  this.m_dampingRatio = def.dampingRatio;
+
+  this.m_impulse = Vec3();
+
+  this.m_bias = 0.0;
+  this.m_gamma = 0.0;
+
+  // Solver temp
+  this.m_rA; // Vec2
+  this.m_rB; // Vec2
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_invMassA; // float
+  this.m_invMassB; // float
+  this.m_invIA; // float
+  this.m_invIB; // float
+  this.m_mass = new Mat33();
+
+  // Point-to-point constraint
+  // C = p2 - p1
+  // Cdot = v2 - v1
+  // / = v2 + cross(w2, r2) - v1 - cross(w1, r1)
+  // J = [-I -r1_skew I r2_skew ]
+  // Identity used:
+  // w k % (rx i + ry j) = w * (-ry i + rx j)
+
+  // Angle constraint
+  // C = angle2 - angle1 - referenceAngle
+  // Cdot = w2 - w1
+  // J = [0 0 -1 0 0 1]
+  // K = invI1 + invI2
+}
+
+/**
+ * The local anchor point relative to bodyA's origin.
+ */
+WeldJoint.prototype.getLocalAnchorA = function() {
+  return this.m_localAnchorA;
+};
+
+/**
+ * The local anchor point relative to bodyB's origin.
+ */
+WeldJoint.prototype.getLocalAnchorB = function() {
+  return this.m_localAnchorB;
+};
+
+/**
+ * Get the reference angle.
+ */
+WeldJoint.prototype.getReferenceAngle = function() {
+  return this.m_referenceAngle;
+};
+
+/**
+ * Set/get frequency in Hz.
+ */
+WeldJoint.prototype.setFrequency = function(hz) {
+  this.m_frequencyHz = hz;
+};
+
+WeldJoint.prototype.getFrequency = function() {
+  return this.m_frequencyHz;
+};
+
+/**
+ * Set/get damping ratio.
+ */
+WeldJoint.prototype.setDampingRatio = function(ratio) {
+  this.m_dampingRatio = ratio;
+};
+
+WeldJoint.prototype.getDampingRatio = function() {
+  return this.m_dampingRatio;
+};
+
+WeldJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+};
+
+WeldJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+};
+
+WeldJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
+};
+
+WeldJoint.prototype.getReactionTorque = function(inv_dt) {
+  return inv_dt * this.m_impulse.z;
+};
+
+WeldJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA), qB = Rot.neo(aB);
+
+  this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+
+  // J = [-I -r1_skew I r2_skew]
+  // [ 0 -1 0 1]
+  // r_skew = [-ry; rx]
+
+  // Matlab
+  // K = [ mA+r1y^2*iA+mB+r2y^2*iB, -r1y*iA*r1x-r2y*iB*r2x, -r1y*iA-r2y*iB]
+  // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
+  // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
+
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB; // float
+  var iA = this.m_invIA;
+  var iB = this.m_invIB; // float
+
+  var K = new Mat33();
+  K.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y
+      * iB;
+  K.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y * this.m_rB.x * iB;
+  K.ez.x = -this.m_rA.y * iA - this.m_rB.y * iB;
+  K.ex.y = K.ey.x;
+  K.ey.y = mA + mB + this.m_rA.x * this.m_rA.x * iA + this.m_rB.x * this.m_rB.x
+      * iB;
+  K.ez.y = this.m_rA.x * iA + this.m_rB.x * iB;
+  K.ex.z = K.ez.x;
+  K.ey.z = K.ez.y;
+  K.ez.z = iA + iB;
+
+  if (this.m_frequencyHz > 0.0) {
+    K.getInverse22(this.m_mass);
+
+    var invM = iA + iB; // float
+    var m = invM > 0.0 ? 1.0 / invM : 0.0; // float
+
+    var C = aB - aA - this.m_referenceAngle; // float
+
+    // Frequency
+    var omega = 2.0 * Math.PI * this.m_frequencyHz; // float
+
+    // Damping coefficient
+    var d = 2.0 * m * this.m_dampingRatio * omega; // float
+
+    // Spring stiffness
+    var k = m * omega * omega; // float
+
+    // magic formulas
+    var h = step.dt; // float
+    this.m_gamma = h * (d + h * k);
+    this.m_gamma = this.m_gamma != 0.0 ? 1.0 / this.m_gamma : 0.0;
+    this.m_bias = C * h * k * this.m_gamma;
+
+    invM += this.m_gamma;
+    this.m_mass.ez.z = invM != 0.0 ? 1.0 / invM : 0.0;
+  } else if (K.ez.z == 0.0) {
+    K.getInverse22(this.m_mass);
+    this.m_gamma = 0.0;
+    this.m_bias = 0.0;
+  } else {
+    K.getSymInverse33(this.m_mass);
+    this.m_gamma = 0.0;
+    this.m_bias = 0.0;
+  }
+
+  if (step.warmStarting) {
+    // Scale impulses to support a variable time step.
+    this.m_impulse.mul(step.dtRatio);
+
+    var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
+
+    vA.subMul(mA, P);
+    wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_impulse.z);
+
+    vB.addMul(mB, P);
+    wB += iB * (Vec2.cross(this.m_rB, P) + this.m_impulse.z);
+
+  } else {
+    this.m_impulse.setZero();
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+WeldJoint.prototype.solveVelocityConstraints = function(step) {
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB; // float
+  var iA = this.m_invIA;
+  var iB = this.m_invIB; // float
+
+  if (this.m_frequencyHz > 0.0) {
+    var Cdot2 = wB - wA; // float
+
+    var impulse2 = -this.m_mass.ez.z
+        * (Cdot2 + this.m_bias + this.m_gamma * this.m_impulse.z); // float
+    this.m_impulse.z += impulse2;
+
+    wA -= iA * impulse2;
+    wB += iB * impulse2;
+
+    var Cdot1 = Vec2.zero();
+    Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
+    Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA)); // Vec2
+
+    var impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1)); // Vec2
+    this.m_impulse.x += impulse1.x;
+    this.m_impulse.y += impulse1.y;
+
+    var P = Vec2.clone(impulse1); // Vec2
+
+    vA.subMul(mA, P);
+    wA -= iA * Vec2.cross(this.m_rA, P);
+
+    vB.addMul(mB, P);
+    wB += iB * Vec2.cross(this.m_rB, P);
+  } else {
+    var Cdot1 = Vec2.zero();
+    Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
+    Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA)); // Vec2
+    var Cdot2 = wB - wA; // float
+    var Cdot = Vec3(Cdot1.x, Cdot1.y, Cdot2); // Vec3
+
+    var impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot)); // Vec3
+    this.m_impulse.add(impulse);
+
+    var P = Vec2.neo(impulse.x, impulse.y);
+
+    vA.subMul(mA, P);
+    wA -= iA * (Vec2.cross(this.m_rA, P) + impulse.z);
+
+    vB.addMul(mB, P);
+    wB += iB * (Vec2.cross(this.m_rB, P) + impulse.z);
+  }
+
+  this.m_bodyA.c_velocity.v = vA;
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v = vB;
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+WeldJoint.prototype.solvePositionConstraints = function(step) {
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+
+  var qA = Rot.neo(aA), qB = Rot.neo(aB);
+
+  var mA = this.m_invMassA, mB = this.m_invMassB; // float
+  var iA = this.m_invIA, iB = this.m_invIB; // float
+
+  var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+
+  var positionError, angularError; // float
+
+  var K = new Mat33();
+  K.ex.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
+  K.ey.x = -rA.y * rA.x * iA - rB.y * rB.x * iB;
+  K.ez.x = -rA.y * iA - rB.y * iB;
+  K.ex.y = K.ey.x;
+  K.ey.y = mA + mB + rA.x * rA.x * iA + rB.x * rB.x * iB;
+  K.ez.y = rA.x * iA + rB.x * iB;
+  K.ex.z = K.ez.x;
+  K.ey.z = K.ez.y;
+  K.ez.z = iA + iB;
+
+  if (this.m_frequencyHz > 0.0) {
+    var C1 = Vec2.zero();
+    C1.addCombine(1, cB, 1, rB);
+    C1.subCombine(1, cA, 1, rA); // Vec2
+
+    positionError = C1.length();
+    angularError = 0.0;
+
+    var P = Vec2.neg(K.solve22(C1)); // Vec2
+
+    cA.subMul(mA, P);
+    aA -= iA * Vec2.cross(rA, P);
+
+    cB.addMul(mB, P);
+    aB += iB * Vec2.cross(rB, P);
+  } else {
+    var C1 = Vec2.zero();
+    C1.addCombine(1, cB, 1, rB);
+    C1.subCombine(1, cA, 1, rA);
+
+    var C2 = aB - aA - this.m_referenceAngle; // float
+
+    positionError = C1.length();
+    angularError = Math.abs(C2);
+
+    var C = Vec3(C1.x, C1.y, C2);
+
+    var impulse = Vec3();
+    if (K.ez.z > 0.0) {
+      impulse = Vec3.neg(K.solve33(C));
+    } else {
+      var impulse2 = Vec2.neg(K.solve22(C1));
+      impulse.set(impulse2.x, impulse2.y, 0.0);
+    }
+
+    var P = Vec2.neo(impulse.x, impulse.y);
+
+    cA.subMul(mA, P);
+    aA -= iA * (Vec2.cross(rA, P) + impulse.z);
+
+    cB.addMul(mB, P);
+    aB += iB * (Vec2.cross(rB, P) + impulse.z);
+  }
+
+  this.m_bodyA.c_position.c = cA;
+  this.m_bodyA.c_position.a = aA;
+  this.m_bodyB.c_position.c = cB;
+  this.m_bodyB.c_position.a = aB;
+
+  return positionError <= Settings.linearSlop
+      && angularError <= Settings.angularSlop;
+}
+
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = WheelJoint;
+
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
+
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
+
+var Joint = __webpack_require__(71);
+
+WheelJoint.TYPE = 'wheel-joint';
+
+WheelJoint._super = Joint;
+WheelJoint.prototype = create(WheelJoint._super.prototype);
+
+/**
+ * @typedef {Object} WheelJointDef
+ *
+ * Wheel joint definition. This requires defining a line of motion using an axis
+ * and an anchor point. The definition uses local anchor points and a local axis
+ * so that the initial configuration can violate the constraint slightly. The
+ * joint translation is zero when the local anchor points coincide in world
+ * space. Using local anchors and a local axis helps when saving and loading a
+ * game.
+ * 
+ * @prop {boolean} enableMotor Enable/disable the joint motor.
+ * @prop {float} maxMotorTorque The maximum motor torque, usually in N-m.
+ * @prop {float} motorSpeed The desired motor speed in radians per second.
+ * @prop {float} frequencyHz Suspension frequency, zero indicates no suspension.
+ * @prop {float} dampingRatio Suspension damping ratio, one indicates critical
+ *       damping.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {Vec2} localAxisA The local translation axis in bodyA.
+ */
+var DEFAULTS = {
+  enableMotor : false,
+  maxMotorTorque : 0.0,
+  motorSpeed : 0.0,
+  frequencyHz : 2.0,
+  dampingRatio : 0.7,
+};
+
+/**
+ * A wheel joint. This joint provides two degrees of freedom: translation along
+ * an axis fixed in bodyA and rotation in the plane. In other words, it is a
+ * point to line constraint with a rotational motor and a linear spring/damper.
+ * This joint is designed for vehicle suspensions.
+ *
+ * @param {WheelJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ */
+function WheelJoint(def, bodyA, bodyB, anchor, axis) {
+  if (!(this instanceof WheelJoint)) {
+    return new WheelJoint(def, bodyA, bodyB, anchor, axis);
+  }
+
+  def = options(def, DEFAULTS);
+  Joint.call(this, def, bodyA, bodyB);
+  bodyA = this.m_bodyA;
+  bodyB = this.m_bodyB;
+
+  this.m_type = WheelJoint.TYPE;
+
+  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_localAxis = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0);
+
+  this.m_localXAxisA = this.m_localAxis;
+  this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
+
+  this.m_mass = 0.0;
+  this.m_impulse = 0.0;
+  this.m_motorMass = 0.0;
+  this.m_motorImpulse = 0.0;
+  this.m_springMass = 0.0;
+  this.m_springImpulse = 0.0;
+
+  this.m_maxMotorTorque = def.maxMotorTorque;
+  this.m_motorSpeed = def.motorSpeed;
+  this.m_enableMotor = def.enableMotor;
+
+  this.m_frequencyHz = def.frequencyHz;
+  this.m_dampingRatio = def.dampingRatio;
+
+  this.m_bias = 0.0;
+  this.m_gamma = 0.0;
+
+  // Solver temp
+  this.m_localCenterA; // Vec2
+  this.m_localCenterB; // Vec2
+  this.m_invMassA; // float
+  this.m_invMassB; // float
+  this.m_invIA; // float
+  this.m_invIB; // float
+
+  this.m_ax = Vec2.zero();
+  this.m_ay = Vec2.zero(); // Vec2
+  this.m_sAx;
+  this.m_sBx; // float
+  this.m_sAy;
+  this.m_sBy; // float
+
+  // Linear constraint (point-to-line)
+  // d = pB - pA = xB + rB - xA - rA
+  // C = dot(ay, d)
+  // Cdot = dot(d, cross(wA, ay)) + dot(ay, vB + cross(wB, rB) - vA - cross(wA,
+  // rA))
+  // = -dot(ay, vA) - dot(cross(d + rA, ay), wA) + dot(ay, vB) + dot(cross(rB,
+  // ay), vB)
+  // J = [-ay, -cross(d + rA, ay), ay, cross(rB, ay)]
+
+  // Spring linear constraint
+  // C = dot(ax, d)
+  // Cdot = = -dot(ax, vA) - dot(cross(d + rA, ax), wA) + dot(ax, vB) +
+  // dot(cross(rB, ax), vB)
+  // J = [-ax -cross(d+rA, ax) ax cross(rB, ax)]
+
+  // Motor rotational constraint
+  // Cdot = wB - wA
+  // J = [0 0 -1 0 0 1]
+}
+
+/**
+ * The local anchor point relative to bodyA's origin.
+ */
+WheelJoint.prototype.getLocalAnchorA = function() {
+  return this.m_localAnchorA;
+}
+
+/**
+ * The local anchor point relative to bodyB's origin.
+ */
+WheelJoint.prototype.getLocalAnchorB = function() {
+  return this.m_localAnchorB;
+}
+
+/**
+ * The local joint axis relative to bodyA.
+ */
+WheelJoint.prototype.getLocalAxisA = function() {
+  return this.m_localXAxisA;
+}
+
+/**
+ * Get the current joint translation, usually in meters.
+ */
+WheelJoint.prototype.getJointTranslation = function() {
+  var bA = this.m_bodyA;
+  var bB = this.m_bodyB;
+
+  var pA = bA.getWorldPoint(this.m_localAnchorA); // Vec2
+  var pB = bB.getWorldPoint(this.m_localAnchorB); // Vec2
+  var d = Vec2.sub(pB, pA); // Vec2
+  var axis = bA.getWorldVector(this.m_localXAxisA); // Vec2
+
+  var translation = Vec2.dot(d, axis); // float
+  return translation;
+}
+
+/**
+ * Get the current joint translation speed, usually in meters per second.
+ */
+WheelJoint.prototype.getJointSpeed = function() {
+  var wA = this.m_bodyA.m_angularVelocity;
+  var wB = this.m_bodyB.m_angularVelocity;
+  return wB - wA;
+}
+
+/**
+ * Is the joint motor enabled?
+ */
+WheelJoint.prototype.isMotorEnabled = function() {
+  return this.m_enableMotor;
+}
+
+/**
+ * Enable/disable the joint motor.
+ */
+WheelJoint.prototype.enableMotor = function(flag) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_enableMotor = flag;
+}
+
+/**
+ * Set the motor speed, usually in radians per second.
+ */
+WheelJoint.prototype.setMotorSpeed = function(speed) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_motorSpeed = speed;
+}
+
+/**
+ * Get the motor speed, usually in radians per second.
+ */
+WheelJoint.prototype.getMotorSpeed = function() {
+  return this.m_motorSpeed;
+}
+
+/**
+ * Set/Get the maximum motor force, usually in N-m.
+ */
+WheelJoint.prototype.setMaxMotorTorque = function(torque) {
+  this.m_bodyA.setAwake(true);
+  this.m_bodyB.setAwake(true);
+  this.m_maxMotorTorque = torque;
+}
+
+WheelJoint.prototype.getMaxMotorTorque = function() {
+  return this.m_maxMotorTorque;
+}
+
+/**
+ * Get the current motor torque given the inverse time step, usually in N-m.
+ */
+WheelJoint.prototype.getMotorTorque = function(inv_dt) {
+  return inv_dt * this.m_motorImpulse;
+}
+
+/**
+ * Set/Get the spring frequency in hertz. Setting the frequency to zero disables
+ * the spring.
+ */
+WheelJoint.prototype.setSpringFrequencyHz = function(hz) {
+  this.m_frequencyHz = hz;
+}
+
+WheelJoint.prototype.getSpringFrequencyHz = function() {
+  return this.m_frequencyHz;
+}
+
+/**
+ * Set/Get the spring damping ratio
+ */
+WheelJoint.prototype.setSpringDampingRatio = function(ratio) {
+  this.m_dampingRatio = ratio;
+}
+
+WheelJoint.prototype.getSpringDampingRatio = function() {
+  return this.m_dampingRatio;
+}
+
+WheelJoint.prototype.getAnchorA = function() {
+  return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+}
+
+WheelJoint.prototype.getAnchorB = function() {
+  return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+}
+
+WheelJoint.prototype.getReactionForce = function(inv_dt) {
+  return Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax).mul(inv_dt);
+}
+
+WheelJoint.prototype.getReactionTorque = function(inv_dt) {
+  return inv_dt * this.m_motorImpulse;
+}
+
+WheelJoint.prototype.initVelocityConstraints = function(step) {
+  this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+  this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+  this.m_invMassA = this.m_bodyA.m_invMass;
+  this.m_invMassB = this.m_bodyB.m_invMass;
+  this.m_invIA = this.m_bodyA.m_invI;
+  this.m_invIB = this.m_bodyB.m_invI;
+
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB; // float
+  var iA = this.m_invIA;
+  var iB = this.m_invIB; // float
+
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  // Compute the effective masses.
+  var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+  var d = Vec2.zero();
+  d.addCombine(1, cB, 1, rB);
+  d.subCombine(1, cA, 1, rA); // Vec2
+
+  // Point to line constraint
+  {
+    this.m_ay = Rot.mulVec2(qA, this.m_localYAxisA);
+    this.m_sAy = Vec2.cross(Vec2.add(d, rA), this.m_ay);
+    this.m_sBy = Vec2.cross(rB, this.m_ay);
+
+    this.m_mass = mA + mB + iA * this.m_sAy * this.m_sAy + iB * this.m_sBy
+        * this.m_sBy;
+
+    if (this.m_mass > 0.0) {
+      this.m_mass = 1.0 / this.m_mass;
+    }
+  }
+
+  // Spring constraint
+  this.m_springMass = 0.0;
+  this.m_bias = 0.0;
+  this.m_gamma = 0.0;
+  if (this.m_frequencyHz > 0.0) {
+    this.m_ax = Rot.mulVec2(qA, this.m_localXAxisA);
+    this.m_sAx = Vec2.cross(Vec2.add(d, rA), this.m_ax);
+    this.m_sBx = Vec2.cross(rB, this.m_ax);
+
+    var invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
+        * this.m_sBx; // float
+
+    if (invMass > 0.0) {
+      this.m_springMass = 1.0 / invMass;
+
+      var C = Vec2.dot(d, this.m_ax); // float
+
+      // Frequency
+      var omega = 2.0 * Math.PI * this.m_frequencyHz; // float
+
+      // Damping coefficient
+      var d = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
+
+      // Spring stiffness
+      var k = this.m_springMass * omega * omega; // float
+
+      // magic formulas
+      var h = step.dt; // float
+      this.m_gamma = h * (d + h * k);
+      if (this.m_gamma > 0.0) {
+        this.m_gamma = 1.0 / this.m_gamma;
+      }
+
+      this.m_bias = C * h * k * this.m_gamma;
+
+      this.m_springMass = invMass + this.m_gamma;
+      if (this.m_springMass > 0.0) {
+        this.m_springMass = 1.0 / this.m_springMass;
+      }
+    }
+  } else {
+    this.m_springImpulse = 0.0;
+  }
+
+  // Rotational motor
+  if (this.m_enableMotor) {
+    this.m_motorMass = iA + iB;
+    if (this.m_motorMass > 0.0) {
+      this.m_motorMass = 1.0 / this.m_motorMass;
+    }
+  } else {
+    this.m_motorMass = 0.0;
+    this.m_motorImpulse = 0.0;
+  }
+
+  if (step.warmStarting) {
+    // Account for variable time step.
+    this.m_impulse *= step.dtRatio;
+    this.m_springImpulse *= step.dtRatio;
+    this.m_motorImpulse *= step.dtRatio;
+
+    var P = Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax);
+    var LA = this.m_impulse * this.m_sAy + this.m_springImpulse * this.m_sAx + this.m_motorImpulse;
+    var LB = this.m_impulse * this.m_sBy + this.m_springImpulse * this.m_sBx + this.m_motorImpulse;
+
+    vA.subMul(this.m_invMassA, P);
+    wA -= this.m_invIA * LA;
+
+    vB.addMul(this.m_invMassB, P);
+    wB += this.m_invIB * LB;
+
+  } else {
+    this.m_impulse = 0.0;
+    this.m_springImpulse = 0.0;
+    this.m_motorImpulse = 0.0;
+  }
+
+  this.m_bodyA.c_velocity.v.set(vA);
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v.set(vB);
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+WheelJoint.prototype.solveVelocityConstraints = function(step) {
+  var mA = this.m_invMassA;
+  var mB = this.m_invMassB; // float
+  var iA = this.m_invIA;
+  var iB = this.m_invIB; // float
+
+  var vA = this.m_bodyA.c_velocity.v;
+  var wA = this.m_bodyA.c_velocity.w;
+  var vB = this.m_bodyB.c_velocity.v;
+  var wB = this.m_bodyB.c_velocity.w;
+
+  // Solve spring constraint
+  {
+    var Cdot = Vec2.dot(this.m_ax, vB) - Vec2.dot(this.m_ax, vA) + this.m_sBx
+        * wB - this.m_sAx * wA; // float
+    var impulse = -this.m_springMass
+        * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse); // float
+    this.m_springImpulse += impulse;
+
+    var P = Vec2.mul(impulse, this.m_ax); // Vec2
+    var LA = impulse * this.m_sAx; // float
+    var LB = impulse * this.m_sBx; // float
+
+    vA.subMul(mA, P);
+    wA -= iA * LA;
+
+    vB.addMul(mB, P);
+    wB += iB * LB;
+  }
+
+  // Solve rotational motor constraint
+  {
+    var Cdot = wB - wA - this.m_motorSpeed; // float
+    var impulse = -this.m_motorMass * Cdot; // float
+
+    var oldImpulse = this.m_motorImpulse; // float
+    var maxImpulse = step.dt * this.m_maxMotorTorque; // float
+    this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse,
+        -maxImpulse, maxImpulse);
+    impulse = this.m_motorImpulse - oldImpulse;
+
+    wA -= iA * impulse;
+    wB += iB * impulse;
+  }
+
+  // Solve point to line constraint
+  {
+    var Cdot = Vec2.dot(this.m_ay, vB) - Vec2.dot(this.m_ay, vA) + this.m_sBy
+        * wB - this.m_sAy * wA; // float
+    var impulse = -this.m_mass * Cdot; // float
+    this.m_impulse += impulse;
+
+    var P = Vec2.mul(impulse, this.m_ay); // Vec2
+    var LA = impulse * this.m_sAy; // float
+    var LB = impulse * this.m_sBy; // float
+
+    vA.subMul(mA, P);
+    wA -= iA * LA;
+
+    vB.addMul(mB, P);
+    wB += iB * LB;
+  }
+
+  this.m_bodyA.c_velocity.v.set(vA);
+  this.m_bodyA.c_velocity.w = wA;
+  this.m_bodyB.c_velocity.v.set(vB);
+  this.m_bodyB.c_velocity.w = wB;
+}
+
+WheelJoint.prototype.solvePositionConstraints = function(step) {
+  var cA = this.m_bodyA.c_position.c;
+  var aA = this.m_bodyA.c_position.a;
+  var cB = this.m_bodyB.c_position.c;
+  var aB = this.m_bodyB.c_position.a;
+
+  var qA = Rot.neo(aA);
+  var qB = Rot.neo(aB);
+
+  var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+  var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+  var d = Vec2.zero();
+  d.addCombine(1, cB, 1, rB);
+  d.subCombine(1, cA, 1, rA);
+
+  var ay = Rot.mulVec2(qA, this.m_localYAxisA);
+
+  var sAy = Vec2.cross(Vec2.add(d, rA), ay); // float
+  var sBy = Vec2.cross(rB, ay); // float
+
+  var C = Vec2.dot(d, ay); // float
+
+  var k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy
+      * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy; // float
+
+  var impulse; // float
+  if (k != 0.0) {
+    impulse = -C / k;
+  } else {
+    impulse = 0.0;
+  }
+
+  var P = Vec2.mul(impulse, ay); // Vec2
+  var LA = impulse * sAy; // float
+  var LB = impulse * sBy; // float
+
+  cA.subMul(this.m_invMassA, P);
+  aA -= this.m_invIA * LA;
+  cB.addMul(this.m_invMassB, P);
+  aB += this.m_invIB * LB;
+
+  this.m_bodyA.c_position.c.set(cA);
+  this.m_bodyA.c_position.a = aA;
+  this.m_bodyB.c_position.c.set(cB);
+  this.m_bodyB.c_position.a = aB;
+
+  return Math.abs(C) <= Settings.linearSlop;
+}
+
+
+/***/ }),
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6631,7 +24400,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
-/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(44);
+/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(96);
 /* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(33);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(15);
@@ -7223,7 +24992,7 @@ class ObjectVisualData2D
 
 
 /***/ }),
-/* 44 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7266,13 +25035,13 @@ class ScaledFrame
 
 
 /***/ }),
-/* 45 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectData3D", function() { return ObjectData3D; });
-/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(46);
+/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(98);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 
 // 
@@ -7339,7 +25108,7 @@ class ObjectData3D
 
 
 /***/ }),
-/* 46 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7442,13 +25211,13 @@ class ObjectVisualData3D
 
 
 /***/ }),
-/* 47 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "actionManager", function() { return actionManager; });
-/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(48);
+/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(100);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
@@ -7596,6 +25365,14 @@ class ActionManager
         this.mouseKeyCodeMap.set( 'LEFT MOUSE',   0 );
         this.mouseKeyCodeMap.set( 'MIDDLE MOUSE', 1 );
         this.mouseKeyCodeMap.set( 'RIGHT MOUSE',  2 );
+    }
+    
+    // 
+    //  DESC: Load data from file path
+    //
+    clearLastDeviceUsed()
+    {
+        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEVICE_NULL"];
     }
     
     // 
@@ -7799,7 +25576,7 @@ var actionManager = new ActionManager;
 
 
 /***/ }),
-/* 48 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7848,20 +25625,20 @@ class KeyCodeAction
 
 
 /***/ }),
-/* 49 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "menuManager", function() { return menuManager; });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(47);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(99);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(39);
-/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(50);
-/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(87);
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(88);
+/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
+/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(139);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(140);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(18);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
@@ -8322,7 +26099,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     }
     
     // 
-    //  DESC: Activate a tree to be used
+    //  DESC: Activate a tree to be used based on group
     //
     activateTreeGroup( group, treeStr )
     {
@@ -8377,7 +26154,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
             {
                 if( key === treeStr )
                 {
-                    ActivateTree( groupIter.first, treeIter.first );
+                    this.deactivateTreeGroup( groupKey, key );
                     return;
                 }
             }
@@ -8818,19 +26595,14 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     //
     getMenu( name )
     {
-        let menu = undefined;
-
         for( let [ groupKey, groupMap ] of this.menuMapMap.entries() )
         {
-            menu = groupMap.get( name );
+            let menu = groupMap.get( name );
             if( menu !== undefined )
-                break;
+                return menu;
         }
 
-        if( menu === undefined )
-            throw new Error( `Menu being asked for is missing (${name})!` );
-
-        return menu;
+        throw new Error( `Menu being asked for is missing (${name})!` );
     }
     
     // 
@@ -8878,9 +26650,46 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
 
         return menu;
     }
+    
+    // 
+    //  Get a reference to the tree
+    //
+    getTree( treeStr )
+    {
+        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        {
+            for( let [ key, tree ] of groupMap.entries() )
+            {
+                if( key === treeStr )
+                    return tree;
+            }
+        }
+
+        // If you got this far, it's a problem
+        throw new Error( `Menu tree doesn't exist (${treeStr})!` );
+    }
+    
+    // 
+    //  Get a reference to the tree based on group
+    //
+    getTreeGroup( group, treeStr )
+    {
+        let groupMap = this.menuTreeMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            // Find the tree in the map
+            let tree = groupMap.get( treeStr );
+            if( tree !== undefined )
+                return tree;
+            
+            throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
+        }
+        
+        throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
+    }
 
     // 
-    //  Get a pointer to the active tree
+    //  Get a reference to the active tree
     //
     getActiveTree()
     {
@@ -8896,6 +26705,36 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
         }
 
         return tree;
+    }
+    
+    // 
+    //  DESC: See if the tree is in the active list
+    //
+    isTreeInActivelist( treeStr )
+    {
+        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        {
+            for( let [ key, tree ] of groupMap.entries() )
+            {
+                if( key === treeStr )
+                {
+                    if( tree.interfaceMenu )
+                    {
+                        let index = this.activeInterTreeAry.indexOf( tree );
+                        if( index > -1 )
+                            return true;
+                    }
+                    else
+                    {
+                        let index = this.activeMenuTreeAry.indexOf( tree );
+                        if( index > -1 )
+                            return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
 
     // 
@@ -8923,29 +26762,30 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     //
     get allowEventHandling() { return this.allow; }
     set allowEventHandling( value ) { this.allow = value; }
+
 }
 
 var menuManager = new MenuManager;
 
 
 /***/ }),
-/* 50 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Menu", function() { return Menu; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(51);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(53);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(105);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(54);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(106);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(26);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(72);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(124);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(70);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(122);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(25);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(76);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(128);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 // 
@@ -9818,13 +27658,13 @@ class Menu extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 
 
 /***/ }),
-/* 51 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object2D", function() { return Object2D; });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(52);
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -9954,7 +27794,7 @@ class Object2D extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
 
 
 /***/ }),
-/* 52 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10206,7 +28046,7 @@ class Object
 
 
 /***/ }),
-/* 53 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10287,23 +28127,23 @@ class ScrollParam
 }
 
 /***/ }),
-/* 54 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sprite", function() { return Sprite; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(55);
-/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(61);
-/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(62);
-/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(63);
-/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(64);
-/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(65);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(70);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
+/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(113);
+/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(114);
+/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(115);
+/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(116);
+/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(117);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(122);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(25);
-/* harmony import */ var _spritedata__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(71);
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(51);
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(60);
+/* harmony import */ var _spritedata__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(123);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(103);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(112);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 
@@ -10330,7 +28170,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class Sprite
 {
-    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_12__["SPRITE_DEFAULT_ID"] )
+    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_12__["DEFAULT_ID"] )
     {
         // The object data
         this.objData = objData
@@ -10509,7 +28349,7 @@ class Sprite
     physicsUpdate()
     {
         if( this.physicsComponent )
-            this.physicsComponent.update( this );
+            this.physicsComponent.update();
     }
     
     // 
@@ -10633,23 +28473,23 @@ class Sprite
 
 
 /***/ }),
-/* 55 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentQuad", function() { return VisualComponentQuad; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(56);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 /* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(57);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4);
 /* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(59);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(111);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(18);
@@ -10793,7 +28633,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 56 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10854,13 +28694,13 @@ class ivisualComponent
 
 
 /***/ }),
-/* 57 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FontData", function() { return FontData; });
-/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(58);
+/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(110);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 
 // 
@@ -10917,7 +28757,7 @@ class FontData
 
 
 /***/ }),
-/* 58 */
+/* 110 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11033,14 +28873,14 @@ class FontProperties
 
 
 /***/ }),
-/* 59 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Camera", function() { return Camera; });
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(60);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(112);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
@@ -11210,13 +29050,13 @@ class Camera extends _3d_object3d__WEBPACK_IMPORTED_MODULE_1__["Object3D"]
 }
 
 /***/ }),
-/* 60 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object3D", function() { return Object3D; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(51);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -11276,23 +29116,23 @@ class Object3D extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 
 
 /***/ }),
-/* 61 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentSpriteSheet", function() { return VisualComponentSpriteSheet; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(55);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 /* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(57);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4);
 /* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(59);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(111);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(18);
@@ -11407,23 +29247,23 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 62 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentScaledFrame", function() { return VisualComponentScaledFrame; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(55);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 /* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(57);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4);
 /* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(59);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(111);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(18);
@@ -11507,23 +29347,23 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 63 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentFont", function() { return VisualComponentFont; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(55);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 /* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(57);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4);
 /* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(59);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(111);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(18);
@@ -12088,13 +29928,13 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
 
 
 /***/ }),
-/* 64 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponent3D", function() { return VisualComponent3D; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(56);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(19);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
@@ -12223,16 +30063,16 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
 
 
 /***/ }),
-/* 65 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsComponent2D", function() { return PhysicsComponent2D; });
-/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(66);
+/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
-/* harmony import */ var _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_2__);
 
 // 
 //  FILE NAME: physicscomponent2d.js
@@ -12244,12 +30084,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-//import * as planck from '../../Box2D/planck';
 
 class PhysicsComponent2D
 {
-    constructor( physicsData )
+    constructor( physicsData, sprite )
     {
+        // Parent sprite
+        this.sprite = null;
+                
         // Body type
         this.bodyType = null;
 
@@ -12262,9 +30104,6 @@ class PhysicsComponent2D
 
         // Pointer to the world
         this.world = null;
-        
-        // Flag to indicate static body
-        this.staticBody = false;
         
         if( physicsData.isActive() )
         {
@@ -12285,25 +30124,26 @@ class PhysicsComponent2D
     {
         if( this.world !== null )
         {
-            this.createBody( sprite );
-            this.createFixture( sprite );
+            this.sprite = sprite;
+            this.createBody();
+            this.createFixture();
         }
     }
     
     // 
     //  DESC: Create the body
     //
-    createBody( sprite )
+    createBody()
     {
         if( !this.body )
         {
-            let physicsData = sprite.objData.physicsData;
+            let physicsData = this.sprite.objData.physicsData;
             let worldDef = {
                 type : physicsData.bodyType,
-                position : _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( sprite.object.pos.x * this.pixelsToMeters, -(sprite.object.pos.y * this.pixelsToMeters) ),
-                angle : -sprite.object.rot.z,
+                position : planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( this.sprite.object.pos.x * this.pixelsToMeters, -(this.sprite.object.pos.y * this.pixelsToMeters) ),
+                angle : -this.sprite.object.rot.z,
 
-                linearVelocity : _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero(),
+                linearVelocity : planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero(),
                 angularVelocity : 0.0,
 
                 linearDamping : physicsData.linearDamping,
@@ -12317,47 +30157,44 @@ class PhysicsComponent2D
                 awake : true,
                 active : true,
 
-                userData : sprite };
+                userData : this.sprite };
 
             // Create the body
             this.body = this.world.createBody( worldDef );
-            
-            if( physicsData.bodyType === 'static' )
-                this.staticBody = true;
         }
     }
 
     // 
     //  DESC: Create the fixture
     //
-    createFixture( sprite )
+    createFixture()
     {
-        let fixtureAry = sprite.objData.physicsData.fixtureAry;
+        let fixtureAry = this.sprite.objData.physicsData.fixtureAry;
 
         for( let i = 0; i < fixtureAry.length; ++i )
         {
             // Create the fixture
-            if( fixtureAry[i].shape === _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Circle"].TYPE )
-                this.createCircularShapeFixture( sprite, fixtureAry[i] );
+            if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__["Circle"].TYPE )
+                this.createCircularShapeFixture( fixtureAry[i] );
 
-            else if( fixtureAry[i].shape === _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Edge"].TYPE )
-                this.createEdgeShapeFixture( sprite, fixtureAry[i] );
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__["Edge"].TYPE )
+                this.createEdgeShapeFixture( fixtureAry[i] );
 
-            else if( fixtureAry[i].shape === _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Polygon"].TYPE )
-                this.createPolygonShapeFixture( sprite, fixtureAry[i] );
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__["Polygon"].TYPE )
+                this.createPolygonShapeFixture( fixtureAry[i] );
 
-            else if( fixtureAry[i].shape === _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Chain"].TYPE )
-                this.createChainShapeFixture( sprite, fixtureAry[i] );
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__["Chain"].TYPE )
+                this.createChainShapeFixture( fixtureAry[i] );
         }
     }
     
     // 
     //  DESC: Create the circular shape fixture
     //
-    getFixtureDef( sprite, fixture )
+    getFixtureDef( fixture )
     {
         let fixtureDef = {
-            userData : sprite,
+            userData : this.sprite,
             friction : fixture.friction,
             restitution : fixture.restitution,
             density : fixture.density,
@@ -12373,11 +30210,11 @@ class PhysicsComponent2D
     // 
     //  DESC: Create the circular shape fixture
     //
-    createCircularShapeFixture( sprite, fixture )
+    createCircularShapeFixture( fixture )
     {
         this.body.createFixture(
-            _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Circle"]( (fixture.radius * sprite.object.scale.x) * this.pixelsToMeters ),
-            this.getFixtureDef( sprite, fixture ) );
+            planck_js__WEBPACK_IMPORTED_MODULE_2__["Circle"]( (fixture.radius * this.sprite.object.scale.x) * this.pixelsToMeters ),
+            this.getFixtureDef( fixture ) );
     }
 
     // 
@@ -12385,7 +30222,7 @@ class PhysicsComponent2D
     //  NOTE: An edge is a line segment of two points
     //        This is no different then making a polygon from points
     //
-    createEdgeShapeFixture( sprite, fixture )
+    createEdgeShapeFixture( fixture )
     {
         // Do a sanity check because we need two points to define an edge
         if( fixture.vertAry.length !== 2 )
@@ -12393,35 +30230,35 @@ class PhysicsComponent2D
 
         // Apply scale to the size and divide by 2
         let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
-            sprite.objData.size.w * sprite.object.scale.x * 0.5,
-            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
 
         // Convert the points to world location in meters
         let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
+        this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
 
         this.body.createFixture(
-            _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Edge"]( Vec2Ary[0], Vec2Ary[1] ),
-            this.getFixtureDef( sprite, fixture ) );
+            planck_js__WEBPACK_IMPORTED_MODULE_2__["Edge"]( Vec2Ary[0], Vec2Ary[1] ),
+            this.getFixtureDef( fixture ) );
     }
 
     // 
     //  DESC: Create the polygon shape fixture
     //
-    createPolygonShapeFixture( sprite, fixture )
+    createPolygonShapeFixture( fixture )
     {
         let Vec2Ary = [];
 
         // Apply scale to the size and divide by 2
         let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
-            sprite.objData.size.w * sprite.object.scale.x * 0.5,
-            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
 
         // Is this polygon shape defined by a vector of points?
         if( fixture.vertAry.length )
         {
             // Convert the points to world location in meters
-            this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
+            this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
         }
         
         // If vector points are not supplied, build a square based on the object size
@@ -12429,43 +30266,43 @@ class PhysicsComponent2D
         {
             // Bottom and left mod have their signs flipped so that a positive mod always means
             // expansion of the side, and a negative mod always means a contraction of the side
-            let topMod = fixture.topMod * sprite.object.scale.y;
-            let bottomMod = -fixture.bottomMod * sprite.object.scale.y;
-            let leftMod = -fixture.leftMod * sprite.object.scale.x;
-            let rightMod = fixture.rightMod * sprite.object.scale.x;
+            let topMod = fixture.topMod * this.sprite.object.scale.y;
+            let bottomMod = -fixture.bottomMod * this.sprite.object.scale.y;
+            let leftMod = -fixture.leftMod * this.sprite.object.scale.x;
+            let rightMod = fixture.rightMod * this.sprite.object.scale.x;
 
             // Convert to meters
             // Box2D polygons are defined using Counter Clockwise Winding (CCW)
             Vec2Ary.push(
-                _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
                     (-size.w + leftMod) * this.pixelsToMeters,
                     (size.h + topMod) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
-                _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
                     (-size.w + leftMod) * this.pixelsToMeters,
                     (-size.h + bottomMod) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
-                _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
                     (size.w + rightMod) * this.pixelsToMeters,
                     (-size.h + bottomMod) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
-                _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
                     (size.w + rightMod) * this.pixelsToMeters,
                     (size.h + topMod) * this.pixelsToMeters ) );
         }
 
         this.body.createFixture(
-            _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Polygon"]( Vec2Ary ),
-            this.getFixtureDef( sprite, fixture ) );
+            planck_js__WEBPACK_IMPORTED_MODULE_2__["Polygon"]( Vec2Ary ),
+            this.getFixtureDef( fixture ) );
     }
 
     // 
     //  DESC: Create the chain shape fixture
     //
-    createChainShapeFixture( sprite, fixture )
+    createChainShapeFixture( fixture )
     {
         // Do a sanity check because we need more then 1 point to define a chain
         if( fixture.vertAry.length > 1 )
@@ -12473,16 +30310,16 @@ class PhysicsComponent2D
         
         // Apply scale to the size and divide by 2
         let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
-            sprite.objData.size.w * sprite.object.scale.x * 0.5,
-            sprite.objData.size.h * sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
 
         // Convert the points to world location in meters
         let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, sprite.object.scale );
+        this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
 
         this.body.createFixture(
-            _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Chain"]( Vec2Ary, fixture.chainLoop ),
-            this.getFixtureDef( sprite, fixture ) );
+            planck_js__WEBPACK_IMPORTED_MODULE_2__["Chain"]( Vec2Ary, fixture.chainLoop ),
+            this.getFixtureDef( fixture ) );
     }
 
     // 
@@ -12495,7 +30332,7 @@ class PhysicsComponent2D
         for( let i = 0; i < fixture.vertAry.length; ++i )
         {
             polyPointAry.push(
-                _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( ((fixture.vertAry[i].x * scale.x) - size.w) * this.pixelsToMeters,
+                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( ((fixture.vertAry[i].x * scale.x) - size.w) * this.pixelsToMeters,
                              ((fixture.vertAry[i].y * scale.y) - size.h) * this.pixelsToMeters ) );
         }
     }
@@ -12503,20 +30340,37 @@ class PhysicsComponent2D
     // 
     //  DESC: Update the physics
     //
-    update( sprite )
+    update()
     {
         if( this.isActive() )
         {
-            //CStatCounter::Instance().IncPhysicsObjectsCounter();
-
-            if( !this.staticBody && this.body.isAwake() )
+            if( !this.body.isStatic() && this.body.isAwake() )
             {
-                let pos = this.body.getPosition();
-                let angle = this.body.getAngle();
-                sprite.object.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
-                sprite.object.setRotXYZ( 0, 0, -angle, false );
+                //CStatCounter::Instance().IncPhysicsObjectsCounter();
+                
+                this.applyTransforms();
             }
         }
+    }
+    
+    // 
+    //  DESC: Update the physics
+    //
+    applyTransforms()
+    {
+        let pos = this.body.getPosition();
+        let angle = this.body.getAngle();
+        this.sprite.object.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
+        this.sprite.object.setRotXYZ( 0, 0, -angle, false );
+    }
+    
+    // 
+    //  DESC: Set the physics to be active
+    //
+    setActive( active )
+    {
+        if( this.body )
+            this.body.setActive( active );
     }
     
     // 
@@ -12524,7 +30378,7 @@ class PhysicsComponent2D
     //
     isActive()
     {
-        return (this.body !== null);
+        return (this.body && this.body.isActive());
     }
 
     // 
@@ -12542,27 +30396,43 @@ class PhysicsComponent2D
     // 
     //  DESC: Set the physics position and rotation
     //
-    setTransform( x, y, angle, resetVelocity )
+    setTransform( x, y, angle, resetVelocity = false )
     {
         if( this.body !== null )
         {
-            this.body.setTransform( _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ), angle );
+            this.body.setTransform( planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ), angle );
 
             if( resetVelocity )
             {
-                this.body.setLinearVelocity( _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero() );
+                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero() );
                 this.body.setAngularVelocity( 0 );
             }
+            
+            // If this body is staic, need to apply the transforms the the sprite position
+            if( this.body.isStatic() )
+                this.applyTransforms();
         }
     }
 
     // 
-    //  DESC: Set the linear velocity
+    //  DESC: Set the physics position and rotation
     //
-    setLinearVelocity( x, y )
+    setPosition( x, y, resetVelocity = false )
     {
         if( this.body !== null )
-            this.body.setLinearVelocity( _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
+        {
+            this.body.setPosition( planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
+
+            if( resetVelocity )
+            {
+                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero() );
+                this.body.setAngularVelocity( 0 );
+            }
+            
+            // If this body is staic, need to apply the transforms the the sprite position
+            if( this.body.isStatic() )
+                this.applyTransforms();
+        }
     }
     
     // 
@@ -12586,15 +30456,15 @@ class PhysicsComponent2D
 
 
 /***/ }),
-/* 66 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "physicsWorldManager", function() { return physicsWorldManager; });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(67);
-/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(69);
+/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
+/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(121);
 
 // 
 //  FILE NAME: physicsworldmanager.js
@@ -12710,16 +30580,16 @@ var physicsWorldManager = new PhysicsWorldManager;
 
 
 /***/ }),
-/* 67 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsWorld2D", function() { return PhysicsWorld2D; });
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(68);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
-/* harmony import */ var _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
-/* harmony import */ var _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_2__);
 
 // 
 //  FILE NAME: physicsworld2d.js
@@ -12731,14 +30601,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-//import * as planck from '../../Box2D/planck';
 
 class PhysicsWorld2D
 {
     constructor()
     {
         // Box2D world
-        this.world = _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["World"]();
+        this.world = planck_js__WEBPACK_IMPORTED_MODULE_2__["World"]();
         
         // All bodies that are handled by this physics world
         this.bodyAry = [];
@@ -12784,7 +30653,7 @@ class PhysicsWorld2D
         let gravityNode = node.getElementsByTagName( "gravity" );
         if( gravityNode.length )
         {
-            let gravity = _Box2D_planck_min__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+            let gravity = planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
                 Number( gravityNode[0].getAttribute( "x" ) ),
                 Number( gravityNode[0].getAttribute( "y" ) ) );
 
@@ -12909,7 +30778,7 @@ class PhysicsWorld2D
 
 
 /***/ }),
-/* 68 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12988,7 +30857,7 @@ var highResTimer = new HighResTimer;
 
 
 /***/ }),
-/* 69 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13009,7 +30878,7 @@ class PhysicsWorld3D
 
 
 /***/ }),
-/* 70 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13073,13 +30942,13 @@ class ScriptComponent
 
 
 /***/ }),
-/* 71 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteData", function() { return SpriteData; });
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(57);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(109);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -13096,7 +30965,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteData
 {
-    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["SPRITE_DEFAULT_ID"] )
+    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -13161,13 +31030,13 @@ class SpriteData
 
 
 /***/ }),
-/* 72 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControlNavNode", function() { return UIControlNavNode; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(73);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -13225,25 +31094,25 @@ class UIControlNavNode
 
 
 /***/ }),
-/* 73 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControl", function() { return UIControl; });
-/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(74);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(53);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(54);
+/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
-/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(75);
+/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(127);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(30);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(26);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(47);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(70);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(99);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(122);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(25);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(35);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5);
@@ -14222,13 +32091,13 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
 
 /***/ }),
-/* 74 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControlBase", function() { return ControlBase; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(51);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
@@ -14355,7 +32224,7 @@ class ControlBase extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 }
 
 /***/ }),
-/* 75 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14403,22 +32272,22 @@ class Quad
 
 
 /***/ }),
-/* 76 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(77);
-/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(78);
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(79);
-/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(80);
-/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(81);
-/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(82);
-/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(83);
-/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(84);
-/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(86);
+/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(129);
+/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(130);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(131);
+/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(132);
+/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(133);
+/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(134);
+/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(135);
+/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(136);
+/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(138);
 // 
 //  FILE NAME: uicontrolfactory.js
 //  DESC:      factory for control creation
@@ -14492,13 +32361,13 @@ function create( node, group )
 
 
 /***/ }),
-/* 77 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UILabel", function() { return UILabel; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(73);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -14523,13 +32392,13 @@ class UILabel extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 78 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButton", function() { return UIButton; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(73);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -14553,15 +32422,15 @@ class UIButton extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 79 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISubControl", function() { return UISubControl; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(73);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(72);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(76);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(124);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(128);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
 // 
@@ -15182,13 +33051,13 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 80 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButtonList", function() { return UIButtonList; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(79);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
 /* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
@@ -15438,13 +33307,13 @@ class UIButtonList extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubCont
 
 
 /***/ }),
-/* 81 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UICheckBox", function() { return UICheckBox; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(73);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -15496,13 +33365,13 @@ class UICheckBox extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 82 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISlider", function() { return UISlider; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(79);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
@@ -15855,21 +33724,21 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"
 
 
 /***/ }),
-/* 83 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIScrollBox", function() { return UIScrollBox; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(79);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(54);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(26);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(68);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(120);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(35);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(76);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(128);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -16802,16 +34671,16 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
 
 
 /***/ }),
-/* 84 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIMeter", function() { return UIMeter; });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(85);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(68);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(137);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(73);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(125);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(25);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
@@ -17237,7 +35106,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
 
 /***/ }),
-/* 85 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17341,14 +35210,14 @@ class Timer
 
 
 /***/ }),
-/* 86 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIProgressBar", function() { return UIProgressBar; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(73);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(54);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(30);
@@ -17676,7 +35545,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 87 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17736,6 +35605,52 @@ class MenuTree
 
             this.rootMenu.activateMenu();
         }
+    }
+    
+    // 
+    //  DESC: Set the default menu
+    //
+    setDefaultMenu( menuStr )
+    {
+        let menu = this.menuMap.get( menuStr );
+        if( menu !== undefined )
+            this.defaultMenu = menu;
+        else
+            throw new Error( `Menu being set is missing (${menuStr})!` );
+    }
+    
+    // 
+    //  DESC: Set the root menu
+    //
+    setRootMenu( menuStr )
+    {
+        let menu = this.menuMap.get( menuStr );
+        if( menu !== undefined )
+            this.rootMenu = menu;
+        else
+            throw new Error( `Menu being set is missing (${menuStr})!` );
+    }
+    
+    // 
+    //  DESC: Is the default menu
+    //
+    isDefaultMenu( menuStr )
+    {
+        if( this.defaultMenu && this.defaultMenu.name === menuStr )
+            return true
+        
+        return false;
+    }
+    
+    // 
+    //  DESC: Is the root menu
+    //
+    isRootMenu( menuStr )
+    {
+        if( this.rootMenu && this.rootMenu.name === menuStr )
+            return true
+        
+        return false;
     }
 
     // 
@@ -18074,13 +35989,13 @@ class MenuTree
 
 
 /***/ }),
-/* 88 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cameraManager", function() { return cameraManager; });
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(111);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
 
 // 
@@ -18254,7 +36169,7 @@ var cameraManager = new CameraManager;
 
 
 /***/ }),
-/* 89 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18295,15 +36210,15 @@ var loadManager = new LoadManager;
 
 
 /***/ }),
-/* 90 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "soundManager", function() { return soundManager; });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(91);
-/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(92);
+/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(143);
+/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(144);
 
 // 
 //  FILE NAME: soundmanager.js
@@ -18570,7 +36485,7 @@ var soundManager = new SoundManager;
 
 
 /***/ }),
-/* 91 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18743,7 +36658,7 @@ class Sound
 
 
 /***/ }),
-/* 92 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18904,7 +36819,7 @@ class PlayList
 
 
 /***/ }),
-/* 93 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19087,13 +37002,13 @@ var strategyManager = new StrategyManager;
 
 
 /***/ }),
-/* 94 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "strategyLoader", function() { return strategyLoader; });
-/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(93);
+/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(145);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
 
 // 
@@ -19195,16 +37110,17 @@ var strategyLoader = new Strategyloader;
 
 
 /***/ }),
-/* 95 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActorStrategy", function() { return ActorStrategy; });
-/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(96);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(97);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(54);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(99);
+/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(148);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(151);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 
 //
 //  FILE NAME: actorstrategy.js
@@ -19218,20 +37134,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 {
     constructor()
     {
         super();
-
-        // ID Offset for this strategy
-        this.idOffset = 0;
-
-        // ID Direction
-        this.idDir = 1;
-
-        // Id increment member
-        this.idInc = 0;
 
         // Map of the node data
         this.dataMap = new Map;
@@ -19316,23 +37224,20 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     //
     create( dataName, instanceName = null, makeActive = true )
     {
-        // Create a unique node id
-        let nodeId =  ((this.idInc++) + this.idOffset) * this.idDir;
-
         // Get the data for this data name
-        let nodeLst = this.getData( dataName ).dataAry;
+        let nodeAry = this.getData( dataName ).dataAry;
 
         // Build the node list
         let headNode = null;
-        for( let i = 0; i < nodeLst.length; i++ )
+        for( let i = 0; i < nodeAry.length; i++ )
         {
-            let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_3__["create"]( nodeLst[i], nodeId );
+            let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_3__["create"]( nodeAry[i] );
 
             if( headNode === null )
                 headNode = node;
 
-            else if( !headNode.addNode( node, nodeLst[i].nodeName ) )
-                throw new Error( `Parent node not found or node does not support adding children (${nodeLst[i].nodeName}, ${node.parentId})!` );
+            else if( !headNode.addNode( node, nodeAry[i].nodeName ) )
+                throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
         }
 
         // Add the node to the array for adding to the active list
@@ -19491,7 +37396,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
                 if( index !== -1 )
                     this.nodeAry.splice( index, 1 );
                 else
-                    throw new Error( `Node id can't be found (${id})!` );
+                    throw new Error( `Node id can't be found to remove from active list!` );
             }
         }
     }
@@ -19515,7 +37420,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
                     this.nodeAry.splice( index, 1 );
                 }
                 else
-                    throw new Error( `Node id can't be found (${id})!` );
+                    throw new Error( `Node can't be found to delete!` );
                 
                 // If this same node is in the map, delete it here too.
                 for( let [ key, obj ] of this.nodeMap.entries() )
@@ -19535,13 +37440,13 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
 
 /***/ }),
-/* 96 */
+/* 148 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iStrategy", function() { return iStrategy; });
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(88);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 
 // 
 //  FILE NAME: istrategy.js
@@ -19580,13 +37485,13 @@ class iStrategy
 
 
 /***/ }),
-/* 97 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeDataList", function() { return NodeDataList; });
-/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(98);
+/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(150);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 //
@@ -19607,7 +37512,7 @@ class NodeDataList
         defGroup = '',
         defObjName = '',
         defAIName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["SPRITE_DEFAULT_ID"] )
+        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
     {
         // Array of the node data
         this.dataAry = [];
@@ -19637,9 +37542,9 @@ class NodeDataList
         if( attr )
             nodeName = attr;
         
-        this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__["NODE_DEFAULT_ID"];
+        this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"];
         
-        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__["PARENT_NODE_DEFAULT_ID"], defaultGroup, defaultObjName, defaultAIName, defId );
+        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"], defaultGroup, defaultObjName, defaultAIName, defId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
@@ -19672,13 +37577,13 @@ class NodeDataList
 
 
 /***/ }),
-/* 98 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeData", function() { return NodeData; });
-/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(71);
+/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(123);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 //
@@ -19696,12 +37601,12 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
     constructor(
         xmlNode,
         nodeName,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["NODE_DEFAULT_ID"],
-        parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["PARENT_NODE_DEFAULT_ID"],
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"],
+        parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"],
         defGroup = '',
         defObjName = '',
         defAIName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["SPRITE_DEFAULT_ID"] )
+        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
     {
         super( xmlNode.firstElementChild, defGroup, defObjName, defAIName, defId );
 
@@ -19746,7 +37651,7 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
 
 
 /***/ }),
-/* 99 */
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19754,13 +37659,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(54);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(86);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(84);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(100);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(102);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(103);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(106);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(138);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(136);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(152);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(154);
+/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(155);
+/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(158);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -19784,14 +37689,14 @@ __webpack_require__.r(__webpack_exports__);
 // 
 //  DESC: Load files
 //
-function create( nodeData, nodeId )
+function create( nodeData )
 {
     let node = null;
     
     // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
     if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["ENT_SPRITE"] )
     {
-        node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_5__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeId );
+        node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_5__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
         
         LoadSprite( node, nodeData );
     }
@@ -19803,13 +37708,13 @@ function create( nodeData, nodeId )
     }
     else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["ENT_SPRITE_MULTI_LIST"] )
     {
-        node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_8__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeId, nodeData.nodeId, nodeData.parenNodetId );
+        node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_8__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadSprite( node, nodeData );
     }
     else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["ENT_UI_CONTROL"] )
     {
-        node = CreateUIControlNode( nodeData, nodeId );
+        node = CreateUIControlNode( nodeData, nodeData.id );
     }
     else
         throw new Error( `Node type not defined (${nodeData.nodeName}).` );
@@ -19847,7 +37752,7 @@ function LoadObject( object, nodeData )
 // 
 //  DESC: Create the UI Control node
 //
-function CreateUIControlNode( nodeData, nodeId )
+function CreateUIControlNode( nodeData )
 {
     let control = null;
     
@@ -19868,14 +37773,14 @@ function CreateUIControlNode( nodeData, nodeId )
 
 
 /***/ }),
-/* 100 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNode", function() { return SpriteNode; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(101);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(54);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
 
@@ -19893,7 +37798,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 {
-    constructor( objectData, spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["SPRITE_DEFAULT_ID"] )
+    constructor( objectData, spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
     {
         super();
         
@@ -19966,7 +37871,7 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 101 */
+/* 153 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19996,7 +37901,7 @@ class iNode
     //
     getId()
     {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_0__["NODE_DEFAULT_ID"];
+        return _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"];
     }
     
     // 
@@ -20004,7 +37909,7 @@ class iNode
     //
     getParentId()
     {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_0__["PARENT_NODE_DEFAULT_ID"];
+        return _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"];
     }
     
     // 
@@ -20090,13 +37995,13 @@ class iNode
 
 
 /***/ }),
-/* 102 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControlNode", function() { return UIControlNode; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(101);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -20161,7 +38066,7 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
     //
     getId()
     {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_1__["SPRITE_DEFAULT_ID"];
+        return _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"];
     }
     
     // 
@@ -20175,14 +38080,14 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 103 */
+/* 155 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectNodeMultiLst", function() { return ObjectNodeMultiLst; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(51);
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(104);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(156);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -20199,9 +38104,9 @@ __webpack_require__.r(__webpack_exports__);
 class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["NodeMultiLst"]
 {
     constructor(
-        objectId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["OBJECT_DEFAULT_ID"],
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["NODE_DEFAULT_ID"],
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["PARENT_NODE_DEFAULT_ID"] )
+        objectId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
     {
         super( nodeId, parentId );
         
@@ -20261,13 +38166,13 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
 }
 
 /***/ }),
-/* 104 */
+/* 156 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeMultiLst", function() { return NodeMultiLst; });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -20282,7 +38187,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
 {
-    constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_1__["NODE_DEFAULT_ID"], parentId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["PARENT_NODE_DEFAULT_ID"] )
+    constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"], parentId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
     {
         super( id, parentId )
         
@@ -20504,13 +38409,13 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
 
 
 /***/ }),
-/* 105 */
+/* 157 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(101);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -20637,14 +38542,14 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 106 */
+/* 158 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNodeMultiLst", function() { return SpriteNodeMultiLst; });
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(54);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
 
@@ -20664,9 +38569,9 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
 {
     constructor(
         objectData,
-        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["SPRITE_DEFAULT_ID"],
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["NODE_DEFAULT_ID"],
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["PARENT_NODE_DEFAULT_ID"] )
+        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
     {
         super( nodeId, parentId );
         
@@ -20748,7 +38653,7 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
 
 
 /***/ }),
-/* 107 */
+/* 159 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20757,16 +38662,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TitleScreenState", function() { return TitleScreenState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(108);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(160);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(49);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(93);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(95);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(94);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(70);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(68);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(101);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(145);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(147);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(146);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(122);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(120);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(25);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(89);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(141);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(39);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(24);
@@ -20921,14 +38826,14 @@ function load()
 
 
 /***/ }),
-/* 108 */
+/* 160 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommonState", function() { return CommonState; });
 /* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(49);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(101);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(24);
@@ -21007,7 +38912,7 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 109 */
+/* 161 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21018,7 +38923,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FadeTo", function() { return FadeTo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ColorTo", function() { return ColorTo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(68);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(25);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
@@ -21347,15 +39252,15 @@ function loadScripts()
 
 
 /***/ }),
-/* 110 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(68);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(109);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(161);
 
 //
 //  FILE NAME: statescripts.js
@@ -21406,18 +39311,18 @@ function loadScripts()
 
 
 /***/ }),
-/* 111 */
+/* 163 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(68);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(90);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(142);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(161);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 //
@@ -21595,7 +39500,6 @@ class Menu_TransOut extends _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["FadeTo
     //
     isFinished() { return this.finished; }
 }
-
 
 //
 //  DESC: Script for setting the look of the disabled state
@@ -22438,7 +40342,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 112 */
+/* 164 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22449,17 +40353,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 /* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(89);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(141);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(95);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(93);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(94);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(68);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(70);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(147);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(145);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(146);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(120);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(122);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(3);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(107);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(113);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(159);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(165);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(24);
 
 // 
@@ -22673,7 +40577,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 113 */
+/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22681,25 +40585,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ASSET_COUNT", function() { return ASSET_COUNT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Level1State", function() { return Level1State; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(160);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(49);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(68);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(70);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(101);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(120);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(122);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(25);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(66);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(118);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(89);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(90);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(93);
-/* harmony import */ var _library_strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(114);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(95);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(94);
-/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(3);
-/* harmony import */ var _library_common_point__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(11);
-/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(5);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(24);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(18);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(141);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(142);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(145);
+/* harmony import */ var _library_strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(166);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(147);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(99);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(146);
+/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(3);
+/* harmony import */ var _library_common_point__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(11);
+/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(5);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(24);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(18);
 
 // 
 //  FILE NAME: level1state.js
@@ -22728,18 +40633,38 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const ASSET_COUNT = 15;
+
+const ASSET_COUNT = 18;
 
 const SPRITE_PEG = -2,
-      STRAWBERRY = 0;
+      MULTIPLIER = 0,
+      MULTI_SPRITE_OFFSET_Y = -470;
 
 class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState"]
 {
     constructor( gameLoopCallback = null )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_17__["EGS_LEVEL_1"], _statedefs__WEBPACK_IMPORTED_MODULE_17__["EGS_GAME_LOAD"], gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_18__["EGS_LEVEL_1"], _statedefs__WEBPACK_IMPORTED_MODULE_18__["EGS_GAME_LOAD"], gameLoopCallback );
+        
+        // Multiplier positions
+        this.multiXPosAllAry = [-640,-480,-320,-160,0,160,320,480,640];
+        
+        // A multidimensional to hold the spots to randomly place the multiplier based on it's current position.
+        this.multiXPosAry = [];
+        this.multiXPosAry.push( [-160,0,160,320,480,640] );
+        this.multiXPosAry.push( [0,160,320,480,640] );
+        this.multiXPosAry.push( [160,320,480,640] );
+        this.multiXPosAry.push( [-640,320,480,640] );
+        this.multiXPosAry.push( [-640,-480,480,640] );
+        this.multiXPosAry.push( [-640,-480,-320,640] );
+        this.multiXPosAry.push( [-640,-480,-320,-160] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,0] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,0,160] );
         
         this.physicsWorld = _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].getWorld( "(game)" );
+        
+        // Clear the last device used so that the button on start game menu is active by default
+        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_13__["actionManager"].clearLastDeviceUsed();
         
         // Add the contact listeners
         this.physicsWorld.world.on( 'begin-contact', this.beginContact.bind(this) );
@@ -22756,17 +40681,29 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         // Total win
         this.totalWin = 0;
         
-        // Unblock the menu messaging and activate needed trees
-        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].allowEventHandling = true;
-        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].activateTree( ['pause_tree'] );
-        
         // Clear the event queue
         _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__["eventManager"].clear();
         
+        // Unblock the menu messaging and activate needed trees
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].allowEventHandling = true;
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree('pause_tree').setDefaultMenu('game_start_menu');
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].activateTree( ['pause_tree'] );
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' ).transitionMenu();
+        
         // Activate the strategies to run
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-stage_');
+        this.multiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-multiplier_');
         this.gameStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-game_');
         let uiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-ui_');
+        
+        // Create the multiplier sprite used to colide with the balls
+        // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
+        this.multiNode = this.multiStrategy.create('dog_head');
+        this.multiIndexPos = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomInt"](0, this.multiXPosAllAry.length-1);
+        this.multiNode.getSprite().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+        
+        // Force an updated to show UI elements
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].update();
         
         // get the ui elements
         this.uiWinMeter = uiStrategy.get( 'UIMeter' ).getControl();
@@ -22791,18 +40728,18 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         if( event.type === 'mouseup' && !_library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].isMenuActive() )
         {
             // Get the spot on the screen they clicked
-            let ratio = 1.0 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_14__["settings"].orthoAspectRatio.h;
+            let ratio = 1.0 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].orthoAspectRatio.h;
             let y = 600;
-            let x = (ratio * (event.clientX + _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__["eventManager"].mouseOffsetX)) - _library_utilities_settings__WEBPACK_IMPORTED_MODULE_14__["settings"].defaultSize_half.w;
+            let x = (ratio * (event.clientX + _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__["eventManager"].mouseOffsetX)) - _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].defaultSize_half.w;
             
             // Set a random rotation
-            let angle = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 350) * _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["DEG_TO_RAD"];
+            let angle = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomInt"](0, 350) * _library_common_defs__WEBPACK_IMPORTED_MODULE_17__["DEG_TO_RAD"];
             
             // Get the random rotation
-            let rot = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomArbitrary"]( -3, 3 );
+            let rot = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomArbitrary"]( -3, 3 );
             
             let ball = '';
-            switch(_library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 4))
+            switch(_library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomInt"](0, 3))
             {
                 case 0:
                     ball = 'tennis_ball_green';
@@ -22811,12 +40748,9 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
                     ball = 'tennis_ball_pink';
                 break;
                 case 2:
-                    ball = 'dog_head';
-                break;
-                case 3:
                     ball = 'frisbee';
                 break;
-                case 4:
+                case 3:
                     ball = 'bone_biscuit';
                 break;
             } 
@@ -22829,10 +40763,19 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         else if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["EGE_MENU_GAME_STATE_CHANGE"] )
+            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_17__["EGE_MENU_GAME_STATE_CHANGE"] )
             {
-                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["ETC_BEGIN"] )
+                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_17__["ETC_BEGIN"] )
                     this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__["scriptManager"].get('ScreenFade')( 1, 0, 500, true ) );
+            }
+            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_17__["EGE_MENU_TRANS_OUT"] )
+            {
+                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_17__["ETC_END"] )
+                {
+                    let tree = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' );
+                    if( tree.isDefaultMenu('game_start_menu') )
+                        tree.setDefaultMenu('pause_menu');
+                }
             }
         }
     }
@@ -22843,7 +40786,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].deleteStrategy( ['_level-1-stage_','_level-1-game_','_level-ui_'] );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].deleteStrategy( ['_level-1-stage_','_level-1-game_','_level-ui_','_level-1-multiplier_'] );
         
         _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].freeGroup( ['(level_1)'] );
         
@@ -22871,7 +40814,24 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         this.scriptComponent.update();
         
         if( !_library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].active )
+        {
             _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].update();
+            
+            // NOTE: Can't reposition an static or kinematic. Must create a new one
+            if( !this.multiNode.getSprite().physicsComponent.isActive() )
+            {
+                // Destroy the current one
+                this.multiStrategy.destroy( this.multiNode );
+
+                // Create a new one
+                let posAry = this.multiXPosAry[this.multiIndexPos];
+                let index = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomInt"](0, posAry.length-1);
+                let offsetX = posAry[index];
+                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
+                this.multiNode = this.multiStrategy.create('dog_head');
+                this.multiNode.getSprite().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+            }
+        }
     }
     
     // 
@@ -22912,23 +40872,16 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             else if( spriteB.id === SPRITE_PEG )
                 spriteB.setFrame(1);
             
-            /*else if( (spriteA.id == STRAWBERRY) || (spriteB.id == STRAWBERRY) )
+            else if( (spriteA.id == MULTIPLIER) || (spriteB.id == MULTIPLIER) )
             {
-                // Delete the old strawberry
-                this.spriteStrategy.postCommand( defs.ESSC_DELETE_SPRITE, STRAWBERRY );
                 this.multiplier++;
-                
-                // Create a new one
-                let posAry = this.multiXPosAry[this.multiIndexPos];
-                let index = genFunc.randomInt(0, posAry.length-1);
-                let offsetX = posAry[index];
-                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
-                this.strawberryData.pos.x = offsetX;
-                this.spriteStrategy.postCommand( defs.ESSC_CREATE_SPRITE, 'strawberry' );
-                
-                // Update the multiplier meter
-                this.multiSprite.visualComponent.createFontString( `${this.multiplier}x` );
-            }*/
+
+                // Disable the physics
+                this.multiNode.getSprite().physicsComponent.setActive( false );
+
+                // Update the ui multiplier value
+                this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
+            }
         }
     }
     
@@ -22952,7 +40905,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     
     removeFixture( object )
     {
-        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["SPRITE_DEFAULT_ID"]) )
+        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_17__["DEFAULT_ID"]) )
         {
             this.totalWin += this.multiplier;
             this.uiWinMeter.startBangUp( this.totalWin );
@@ -22996,23 +40949,27 @@ function load()
 
     // Create the actor strategy
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
+        ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].addStrategy( '_level-1-multiplier_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__["ActorStrategy"], callback ) );
+
+    // Create the actor strategy
+    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
         ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].addStrategy( '_level-ui_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__["ActorStrategy"], callback ) );
         
     // Load the strategies
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__["strategyLoader"].load( 'data/objects/strategy/level1/strategy.loader', callback ));
+        ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__["strategyLoader"].load( 'data/objects/strategy/level1/strategy.loader', callback ));
 }
 
 
 /***/ }),
-/* 114 */
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StageStrategy", function() { return StageStrategy; });
-/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(96);
-/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(115);
+/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(148);
+/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(167);
 
 // 
 //  FILE NAME: stagestrategy.js
@@ -23115,15 +41072,15 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
 
 /***/ }),
-/* 115 */
+/* 167 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sector", function() { return Sector; });
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(60);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(97);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(99);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(112);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(151);
 
 // 
 //  FILE NAME: sector.js
@@ -23277,14 +41234,14 @@ class Sector extends _3d_object3d__WEBPACK_IMPORTED_MODULE_0__["Object3D"]
 
 
 /***/ }),
-/* 116 */
+/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartConfirmBtn", function() { return SmartConfirmBtn; });
-/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(117);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(49);
+/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(169);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(101);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -23336,7 +41293,7 @@ class SmartConfirmBtn extends _library_gui_ismartguibase__WEBPACK_IMPORTED_MODUL
     
 
 /***/ }),
-/* 117 */
+/* 169 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23413,14 +41370,14 @@ class SmartGuiControl extends iSmartGui
 
 
 /***/ }),
-/* 118 */
+/* 170 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(93);
+/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(171);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(145);
 
 // 
 //  FILE NAME: aiball.js
@@ -23456,7 +41413,7 @@ class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBa
 
 
 /***/ }),
-/* 119 */
+/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

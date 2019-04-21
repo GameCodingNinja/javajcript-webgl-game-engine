@@ -14,12 +14,12 @@ export class NodeData extends SpriteData
     constructor(
         xmlNode,
         nodeName,
-        nodeId = defs.NODE_DEFAULT_ID,
-        parenNodetId = defs.PARENT_NODE_DEFAULT_ID,
+        nodeId = defs.DEFAULT_ID,
+        parenNodetId = defs.DEFAULT_ID,
         defGroup = '',
         defObjName = '',
         defAIName = '',
-        defId = defs.SPRITE_DEFAULT_ID )
+        defId = defs.DEFAULT_ID )
     {
         super( xmlNode.firstElementChild, defGroup, defObjName, defAIName, defId );
 

@@ -13,7 +13,7 @@ import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 
 export class SpriteNode extends iNode
 {
-    constructor( objectData, spriteId = defs.SPRITE_DEFAULT_ID )
+    constructor( objectData, spriteId = defs.DEFAULT_ID )
     {
         super();
         

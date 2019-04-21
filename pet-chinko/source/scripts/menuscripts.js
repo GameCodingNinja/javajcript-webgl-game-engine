@@ -175,7 +175,6 @@ class Menu_TransOut extends utilScripts.FadeTo
     isFinished() { return this.finished; }
 }
 
-
 //
 //  DESC: Script for setting the look of the disabled state
 //

@@ -20,14 +20,14 @@ import * as defs from '../common/defs';
 // 
 //  DESC: Load files
 //
-export function create( nodeData, nodeId )
+export function create( nodeData )
 {
     let node = null;
     
     // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
     if( nodeData.nodeType === defs.ENT_SPRITE )
     {
-        node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeId );
+        node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id );
         
         LoadSprite( node, nodeData );
     }
@@ -39,13 +39,13 @@ export function create( nodeData, nodeId )
     }
     else if( nodeData.nodeType === defs.ENT_SPRITE_MULTI_LIST )
     {
-        node = new SpriteNodeMultiLst( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeId, nodeData.nodeId, nodeData.parenNodetId );
+        node = new SpriteNodeMultiLst( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadSprite( node, nodeData );
     }
     else if( nodeData.nodeType === defs.ENT_UI_CONTROL )
     {
-        node = CreateUIControlNode( nodeData, nodeId );
+        node = CreateUIControlNode( nodeData, nodeData.id );
     }
     else
         throw new Error( `Node type not defined (${nodeData.nodeName}).` );
@@ -83,7 +83,7 @@ function LoadObject( object, nodeData )
 // 
 //  DESC: Create the UI Control node
 //
-function CreateUIControlNode( nodeData, nodeId )
+function CreateUIControlNode( nodeData )
 {
     let control = null;
     

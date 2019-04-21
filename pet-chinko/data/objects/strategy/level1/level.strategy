@@ -8,10 +8,6 @@
         <sprite2d objectName="tennis_ball_pink" id="2"/>
     </node>
     
-    <node name="dog_head" type="spriteNode">
-        <sprite2d objectName="dog_head" id="3"/>
-    </node>
-    
     <node name="frisbee" type="spriteNode">
         <sprite2d objectName="frisbee" id="4"/>
     </node>

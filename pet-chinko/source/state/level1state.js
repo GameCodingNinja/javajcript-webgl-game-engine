@@ -19,6 +19,7 @@ import { soundManager } from '../../../library/managers/soundmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { StageStrategy } from '../../../library/strategy/stagestrategy';
 import { ActorStrategy } from '../../../library/strategy/actorstrategy';
+import { actionManager } from '../../../library/managers/actionmanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { settings } from '../../../library/utilities/settings';
 import { Point } from '../../../library/common/point';
@@ -26,10 +27,11 @@ import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-export const ASSET_COUNT = 15;
+export const ASSET_COUNT = 18;
 
 const SPRITE_PEG = -2,
-      STRAWBERRY = 0;
+      MULTIPLIER = 0,
+      MULTI_SPRITE_OFFSET_Y = -470;
 
 export class Level1State extends CommonState
 {
@@ -37,7 +39,25 @@ export class Level1State extends CommonState
     {
         super( stateDefs.EGS_LEVEL_1, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
+        // Multiplier positions
+        this.multiXPosAllAry = [-640,-480,-320,-160,0,160,320,480,640];
+        
+        // A multidimensional to hold the spots to randomly place the multiplier based on it's current position.
+        this.multiXPosAry = [];
+        this.multiXPosAry.push( [-160,0,160,320,480,640] );
+        this.multiXPosAry.push( [0,160,320,480,640] );
+        this.multiXPosAry.push( [160,320,480,640] );
+        this.multiXPosAry.push( [-640,320,480,640] );
+        this.multiXPosAry.push( [-640,-480,480,640] );
+        this.multiXPosAry.push( [-640,-480,-320,640] );
+        this.multiXPosAry.push( [-640,-480,-320,-160] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,0] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,0,160] );
+        
         this.physicsWorld = physicsWorldManager.getWorld( "(game)" );
+        
+        // Clear the last device used so that the button on start game menu is active by default
+        actionManager.clearLastDeviceUsed();
         
         // Add the contact listeners
         this.physicsWorld.world.on( 'begin-contact', this.beginContact.bind(this) );
@@ -54,17 +74,29 @@ export class Level1State extends CommonState
         // Total win
         this.totalWin = 0;
         
-        // Unblock the menu messaging and activate needed trees
-        menuManager.allowEventHandling = true;
-        menuManager.activateTree( ['pause_tree'] );
-        
         // Clear the event queue
         eventManager.clear();
         
+        // Unblock the menu messaging and activate needed trees
+        menuManager.allowEventHandling = true;
+        menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
+        menuManager.activateTree( ['pause_tree'] );
+        menuManager.getTree( 'pause_tree' ).transitionMenu();
+        
         // Activate the strategies to run
         strategyManager.activateStrategy('_level-1-stage_');
+        this.multiStrategy = strategyManager.activateStrategy('_level-1-multiplier_');
         this.gameStrategy = strategyManager.activateStrategy('_level-1-game_');
         let uiStrategy = strategyManager.activateStrategy('_level-ui_');
+        
+        // Create the multiplier sprite used to colide with the balls
+        // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
+        this.multiNode = this.multiStrategy.create('dog_head');
+        this.multiIndexPos = genFunc.randomInt(0, this.multiXPosAllAry.length-1);
+        this.multiNode.getSprite().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+        
+        // Force an updated to show UI elements
+        strategyManager.update();
         
         // get the ui elements
         this.uiWinMeter = uiStrategy.get( 'UIMeter' ).getControl();
@@ -100,7 +132,7 @@ export class Level1State extends CommonState
             let rot = genFunc.randomArbitrary( -3, 3 );
             
             let ball = '';
-            switch(genFunc.randomInt(0, 4))
+            switch(genFunc.randomInt(0, 3))
             {
                 case 0:
                     ball = 'tennis_ball_green';
@@ -109,12 +141,9 @@ export class Level1State extends CommonState
                     ball = 'tennis_ball_pink';
                 break;
                 case 2:
-                    ball = 'dog_head';
-                break;
-                case 3:
                     ball = 'frisbee';
                 break;
-                case 4:
+                case 3:
                     ball = 'bone_biscuit';
                 break;
             } 
@@ -132,6 +161,15 @@ export class Level1State extends CommonState
                 if( event.detail.arg[0] === defs.ETC_BEGIN )
                     this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
+            else if( event.detail.type === defs.EGE_MENU_TRANS_OUT )
+            {
+                if( event.detail.arg[0] === defs.ETC_END )
+                {
+                    let tree = menuManager.getTree( 'pause_tree' );
+                    if( tree.isDefaultMenu('game_start_menu') )
+                        tree.setDefaultMenu('pause_menu');
+                }
+            }
         }
     }
     
@@ -141,7 +179,7 @@ export class Level1State extends CommonState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_level-1-stage_','_level-1-game_','_level-ui_'] );
+        strategyManager.deleteStrategy( ['_level-1-stage_','_level-1-game_','_level-ui_','_level-1-multiplier_'] );
         
         objectDataManager.freeGroup( ['(level_1)'] );
         
@@ -169,7 +207,24 @@ export class Level1State extends CommonState
         this.scriptComponent.update();
         
         if( !menuManager.active )
+        {
             strategyManager.update();
+            
+            // NOTE: Can't reposition an static or kinematic. Must create a new one
+            if( !this.multiNode.getSprite().physicsComponent.isActive() )
+            {
+                // Destroy the current one
+                this.multiStrategy.destroy( this.multiNode );
+
+                // Create a new one
+                let posAry = this.multiXPosAry[this.multiIndexPos];
+                let index = genFunc.randomInt(0, posAry.length-1);
+                let offsetX = posAry[index];
+                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
+                this.multiNode = this.multiStrategy.create('dog_head');
+                this.multiNode.getSprite().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+            }
+        }
     }
     
     // 
@@ -210,23 +265,16 @@ export class Level1State extends CommonState
             else if( spriteB.id === SPRITE_PEG )
                 spriteB.setFrame(1);
             
-            /*else if( (spriteA.id == STRAWBERRY) || (spriteB.id == STRAWBERRY) )
+            else if( (spriteA.id == MULTIPLIER) || (spriteB.id == MULTIPLIER) )
             {
-                // Delete the old strawberry
-                this.spriteStrategy.postCommand( defs.ESSC_DELETE_SPRITE, STRAWBERRY );
                 this.multiplier++;
-                
-                // Create a new one
-                let posAry = this.multiXPosAry[this.multiIndexPos];
-                let index = genFunc.randomInt(0, posAry.length-1);
-                let offsetX = posAry[index];
-                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
-                this.strawberryData.pos.x = offsetX;
-                this.spriteStrategy.postCommand( defs.ESSC_CREATE_SPRITE, 'strawberry' );
-                
-                // Update the multiplier meter
-                this.multiSprite.visualComponent.createFontString( `${this.multiplier}x` );
-            }*/
+
+                // Disable the physics
+                this.multiNode.getSprite().physicsComponent.setActive( false );
+
+                // Update the ui multiplier value
+                this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
+            }
         }
     }
     
@@ -250,7 +298,7 @@ export class Level1State extends CommonState
     
     removeFixture( object )
     {
-        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > defs.SPRITE_DEFAULT_ID) )
+        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > defs.DEFAULT_ID) )
         {
             this.totalWin += this.multiplier;
             this.uiWinMeter.startBangUp( this.totalWin );
@@ -291,6 +339,10 @@ export function load()
     // Create the actor strategy
     loadManager.add(
         ( callback ) => strategyManager.addStrategy( '_level-1-game_', new ActorStrategy, callback ) );
+
+    // Create the actor strategy
+    loadManager.add(
+        ( callback ) => strategyManager.addStrategy( '_level-1-multiplier_', new ActorStrategy, callback ) );
 
     // Create the actor strategy
     loadManager.add(

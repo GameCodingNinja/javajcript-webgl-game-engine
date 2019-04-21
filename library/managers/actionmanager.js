@@ -147,6 +147,14 @@ class ActionManager
     // 
     //  DESC: Load data from file path
     //
+    clearLastDeviceUsed()
+    {
+        this.lastDeviceUsed = defs.DEVICE_NULL;
+    }
+    
+    // 
+    //  DESC: Load data from file path
+    //
     load( filePath, callback )
     {
         genFunc.downloadFile( 'xml', filePath,
