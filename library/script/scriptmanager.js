@@ -20,10 +20,7 @@ class ScriptManager
     {
         // Sanity check to make sure the script has not already been added in
         if( this.scriptMap.has( name ) )
-        {
             throw new Error( `Script name has already been added (${name}).` );
-            return;
-        }
         
         this.scriptMap.set( name, factory );
     }
@@ -36,10 +33,7 @@ class ScriptManager
         let scriptFactory = this.scriptMap.get( name );
         
         if( scriptFactory === undefined )
-        {
             throw new Error( `Script name could not be found! (${name})` );
-            return null;
-        }
         
         return scriptFactory;
     }

@@ -10,7 +10,6 @@ import { Timer } from '../utilities/timer';
 import { highResTimer } from '../utilities/highresolutiontimer';
 import { Size } from '../common/size';
 import { UIControl } from './uicontrol';
-import { scriptManager } from '../script/scriptmanager';
 import * as defs from '../common/defs';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
@@ -250,7 +249,7 @@ export class UIMeter extends UIControl
         {
             this.terminalVelocity = range / (bangRange.estimatedTime * 1000.0);
             this.impulse = range / (bangRange.estimatedTime * bangRange.estimatedTime * 500.0);
-            this.acceleration = impulse;
+            this.acceleration = this.impulse;
         }
 
         // Set the timer to allow the bang-up to start off slowly

@@ -7,8 +7,6 @@
 "use strict";
 
 import { gl } from '../system/device';
-import { Point } from '../common/point';
-import { UV } from '../common/uv';
 import * as meshFileHeader from '../common/meshbinaryfileheader';
 import * as mesh3d from '../common/mesh3d';
 

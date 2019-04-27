@@ -14,10 +14,8 @@ import { VisualComponent3D } from '../3d/visualcomponent3d';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
 import { scriptManager } from '../script/scriptmanager';
-import { SpriteData } from './spritedata';
 import { Object2D } from '../2d/object2d';
 import { Object3D } from '../3d/object3d';
-import { Matrix } from '../utilities/matrix';
 import * as defs from '../common/defs';
 
 export class Sprite

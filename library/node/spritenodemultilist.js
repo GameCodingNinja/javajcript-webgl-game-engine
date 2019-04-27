@@ -9,7 +9,6 @@
 import { NodeMultiLst } from './nodemultilist';
 import { Sprite } from '../sprite/sprite';
 import * as defs from '../common/defs';
-import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 
 export class SpriteNodeMultiLst extends NodeMultiLst
 {

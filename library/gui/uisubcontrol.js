@@ -7,6 +7,7 @@
 "use strict";
 import { UIControl } from './uicontrol';
 import { UIControlNavNode } from '../gui/uicontrolnavnode';
+import { eventManager } from '../managers/eventmanager';
 import * as UIControlFactory from './uicontrolfactory';
 import * as defs from '../common/defs';
 
@@ -513,7 +514,7 @@ export class UISubControl extends UIControl
             {
                 if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
                 {
-                    this.activeNode = controlNodeAry[i];
+                    this.activeNode = this.controlNodeAry[i];
 
                     found = true;
                 }

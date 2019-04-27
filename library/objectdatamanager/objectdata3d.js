@@ -8,7 +8,6 @@
 
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
 import { ObjectVisualData3D } from './objectvisualdata3d';
-import * as parseHelper from '../utilities/xmlparsehelper';
 
 export class ObjectData3D
 {

@@ -5,7 +5,6 @@
 
 "use strict";
 import { KeyCodeAction } from '../common/keycodeaction';
-import { Point } from '../common/point';
 import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
 

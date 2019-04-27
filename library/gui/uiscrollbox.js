@@ -9,9 +9,9 @@ import { UISubControl } from './uisubcontrol';
 import { Point } from '../common/point';
 import { Sprite } from '../sprite/sprite';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
-import { gl, device } from '../system/device';
 import { eventManager } from '../managers/eventmanager';
 import { highResTimer } from '../utilities/highresolutiontimer';
+import { gl } from '../system/device';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as UIControlFactory from './uicontrolfactory';
 import * as defs from '../common/defs';
@@ -917,7 +917,7 @@ export class UIScrollBox extends UISubControl
             {
                 if( this.scrollControlAry[i].state > defs.ECS_INACTIVE )
                 {
-                    result = scrollControlAry[i].getActiveControl();
+                    result = this.scrollControlAry[i].getActiveControl();
                     break;
                 }
             }

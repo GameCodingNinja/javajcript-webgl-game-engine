@@ -9,7 +9,6 @@
 import { iNode } from './inode';
 import { Sprite } from '../sprite/sprite';
 import * as defs from '../common/defs';
-import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 
 export class SpriteNode extends iNode
 {

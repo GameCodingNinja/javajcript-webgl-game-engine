@@ -8,7 +8,6 @@
 
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { signalManager } from '../managers/signalmanager';
-import { Sprite } from '../sprite/sprite';
 import { UIProgressBar } from '../gui/uiprogressbar';
 import { UIMeter } from '../gui/uimeter';
 import { SpriteNode } from '../node/spritenode';
@@ -33,7 +32,7 @@ export function create( nodeData )
     }
     else if( nodeData.nodeType === defs.ENT_OBJECT_MULTI_LIST )
     {
-        node = new ObjectNodeMultiLst( nodeId, nodeData.nodeId, nodeData.parenNodetId );
+        node = new ObjectNodeMultiLst( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadObject( node, nodeData );
     }

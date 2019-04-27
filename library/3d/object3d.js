@@ -8,7 +8,6 @@
 
 import { Object2D } from '../2d/object2d';
 import { Matrix } from '../utilities/matrix';
-import * as defs from '../common/defs';
 
 export class Object3D extends Object2D
 {

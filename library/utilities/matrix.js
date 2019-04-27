@@ -10,7 +10,6 @@ const NO_ROT = 0;
 const ROT_Z  = 1;
 const ROT_Y  = 2;
 const ROT_X  = 4;
-const ROT_ALL = ROT_Z | ROT_Y | ROT_X;
 
 // Global temp matrix to be reused so that an object
 // specific one doesn't have to be created each time

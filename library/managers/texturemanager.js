@@ -86,13 +86,9 @@ class TextureManager
             
             throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
         }
-        // Santy check.
-        else
-        {
-            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
-        }
 
-        return null;
+        // Santy check.
+        throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
     }
 
     //

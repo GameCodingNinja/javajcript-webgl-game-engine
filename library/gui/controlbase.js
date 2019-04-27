@@ -8,7 +8,6 @@
 
 import { Object2D } from '../2d/object2d';
 import { settings } from '../utilities/settings';
-import { DynamicOffset } from '../common/dynamicoffset';
 import { assetHolder } from '../utilities/assetholder';
 import * as parseHelper from '../utilities/xmlparsehelper';
 

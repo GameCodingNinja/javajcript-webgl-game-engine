@@ -5,7 +5,6 @@
 //
 
 "use strict";
-import { UIControl } from './uicontrol';
 import * as defs from '../common/defs';
 
 export class UIControlNavNode

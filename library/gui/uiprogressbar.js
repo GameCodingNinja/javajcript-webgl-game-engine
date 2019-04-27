@@ -251,7 +251,7 @@ export class UIProgressBar extends UIControl
                     gl.depthMask( true );
 
 
-                    this.spriteAry[i].render( matrix );
+                    this.spriteAry[i].render( this.matrix );
 
 
                     // Finished using stencil
@@ -289,7 +289,7 @@ export class UIProgressBar extends UIControl
             if( this.alignment == defs.EHA_HORZ_LEFT )
                 posX -= (this.progressBarSize.w - offset) / 2;
 
-            else if( m_alignment.horz == defs.EHA_HORZ_RIGHT )
+            else if( this.alignment.horz == defs.EHA_HORZ_RIGHT )
                 posX += (this.progressBarSize.w - offset) / 2;
         }
         else

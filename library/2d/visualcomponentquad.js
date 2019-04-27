@@ -10,16 +10,10 @@ import { ivisualComponent } from '../common/ivisualcomponent';
 import { shaderManager } from '../managers/shadermanager';
 import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
-import { fontManager } from '../managers/fontmanager';
-import { FontData } from '../common/fontdata';
 import { Matrix } from '../utilities/matrix';
 import { Color } from '../common/color';
-import { Size } from '../common/size';
-import { Vertex2d } from '../common/vertex2d';
-import { Camera } from '../common/camera';
 import { gl } from '../system/device';
 import * as defs from '../common/defs';
-import * as genFunc from '../utilities/genfunc';
 
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one

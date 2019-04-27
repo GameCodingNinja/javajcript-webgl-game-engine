@@ -5,8 +5,6 @@
 //
 
 "use strict";
-import { Rect } from '../common/rect';
-import { Size } from '../common/size';
 
 export class SpriteSheetGlyph
 {

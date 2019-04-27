@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "/home/howie/Development/javajcript-webgl-game-engine/library"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "pet-chinko"
+	}
+}

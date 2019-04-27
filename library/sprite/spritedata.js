@@ -6,8 +6,6 @@
 
 "use strict";
 
-import { FontData } from '../common/fontdata';
-import { scriptManager } from '../script/scriptmanager';
 import * as defs from '../common/defs';
 
 export class SpriteData

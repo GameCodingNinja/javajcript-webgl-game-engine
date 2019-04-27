@@ -7,7 +7,6 @@
 "use strict";
 
 import { iNode } from './inode';
-import * as defs from '../common/defs';
 
 export class Node extends iNode
 {

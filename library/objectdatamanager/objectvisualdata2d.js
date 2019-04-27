@@ -9,7 +9,6 @@
 import { Rect } from '../common/rect';
 import { Color } from '../common/color';
 import { Size } from '../common/size';
-import { Vertex2d } from '../common/vertex2d';
 import { ScaledFrame } from '../common/scaledframe';
 import { SpriteSheet } from '../sprite/spritesheet';
 import { textureManager } from '../managers/texturemanager';
@@ -18,7 +17,6 @@ import { spriteSheetManager } from '../managers/spritesheetmanager';
 import { assetHolder } from '../utilities/assetholder';
 import * as defs from '../common/defs';
 import * as parseHelper from '../utilities/xmlparsehelper';
-import * as genFunc from '../utilities/genfunc';
 
 export class ObjectVisualData2D
 {
@@ -270,7 +268,7 @@ export class ObjectVisualData2D
             {
                 for( let i = 0; i < this.textureSequenceCount; ++i )
                 {
-                    let NUM = i;
+                    let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
                     let filePath = eval('`' + this.textureFilePath + '`');
                     this.textureAry.push( textureManager.getTexture( group, filePath ) );
                 }
@@ -539,10 +537,8 @@ export class ObjectVisualData2D
     {
         if( this.genType === defs.EGT_SPRITE_SHEET )
             return this.spriteSheet.getCount();
-        else
-            return this.textureAry.length;
 
-        return 0;
+        return this.textureAry.length;
     }
     
     // 
@@ -568,7 +564,7 @@ export class ObjectVisualData2D
         {
             for( let i = 0; i < this.textureSequenceCount; ++i )
             {
-                let NUM = i;
+                let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
                 filePathAry.push( eval('`' + this.textureFilePath + '`') );
             }
         }

@@ -13,7 +13,6 @@ import { textureManager } from '../managers/texturemanager';
 import { Matrix } from '../utilities/matrix';
 import { Color } from '../common/color';
 import { gl } from '../system/device';
-import * as defs from '../common/defs'
 
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one

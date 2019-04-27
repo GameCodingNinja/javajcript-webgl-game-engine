@@ -14,8 +14,6 @@ import { spriteSheetManager } from '../managers/spritesheetmanager';
 import { assetHolder } from '../utilities/assetholder';
 import { ObjectData2D } from './objectdata2d';
 import { ObjectData3D } from './objectdata3d';
-import * as genFunc from '../utilities/genfunc';
-import * as defs from '../common/defs';
 
 const LOAD_2D = 0;
 const LOAD_3D = 1;
@@ -301,13 +299,11 @@ class ObjectDataManager extends ManagerBase
             let objData = groupMap.get( name );
             if( objData )
                 return objData;
-            else
-                throw new Error( `Object data not found (${group}, ${name})!` );
+
+            throw new Error( `Object data not found (${group}, ${name})!` );
         }
-        else
-            throw new Error( `Object group not found (${group}, ${name})!` );
-        
-        return null;
+
+        throw new Error( `Object group not found (${group}, ${name})!` );
     }
 }
 

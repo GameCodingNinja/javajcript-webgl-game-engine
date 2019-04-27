@@ -91,7 +91,6 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _library_node_nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(156);
 
 // 
 //  FILE NAME: main.js
@@ -102,9 +101,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 // Create the game
-var game = new _game_js__WEBPACK_IMPORTED_MODULE_0__["Game"];
+new _game_js__WEBPACK_IMPORTED_MODULE_0__["Game"];
 
 
 /***/ }),
@@ -117,20 +115,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _library_managers_meshmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(18);
-/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(19);
-/* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(21);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(159);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(164);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(165);
-/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(168);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(170);
-/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(8);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(26);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(120);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(24);
+/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
+/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(15);
+/* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(17);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(158);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(163);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(164);
+/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(167);
+/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(169);
+/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(8);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(22);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(117);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: game.js
@@ -156,13 +153,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 class Game
 {
     constructor()
     {
         // Set the shader init callback
-        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_6__["shaderManager"].initShaderCallback = this.shaderInitCallBack.bind(this);
+        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__["shaderManager"].initShaderCallback = this.shaderInitCallBack.bind(this);
         
         // Set the smart gui call back
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
@@ -171,7 +167,7 @@ class Game
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_aiCreate( this.aiCreateCallBack.bind(this) );
 
         // Load the settings
-        Object(_library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_5__["downloadFile"])( 'xml', 'data/settings/settings.cfg',
+        Object(_library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_4__["downloadFile"])( 'xml', 'data/settings/settings.cfg',
             ( xmlNode ) =>
             {
                 _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].load( xmlNode );
@@ -185,58 +181,58 @@ class Game
     init()
     {
         // Create the projection matrixes
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["device"].createProjMatrix();
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["device"].createProjMatrix();
         
         // Do we add stencil buffer
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].createStencilBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].REPLACE);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].REPLACE);
         
         // Depth testing is off by default. Enable it?
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].DEPTH_TEST);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].DEPTH_TEST);
     
         // Init the clear color
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
         
         // Init the stencil clear mask based on the bit size of the mask
         // Stencil buffer can only be 1 or 8 bits per pixel
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 1 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].ALWAYS, 1, 0x1);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].stencilMask(0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].ALWAYS, 1, 0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilMask(0x1);
         }
         else if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 8 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].ALWAYS, 1, 0xFF);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].stencilMask(0xff);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].ALWAYS, 1, 0xFF);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilMask(0xff);
         }
         
         // Cull the back face
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].CCW);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].BACK);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].CULL_FACE);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].CCW);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].BACK);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].CULL_FACE);
         
         // Enable alpha blending
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].BLEND);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].ONE_MINUS_SRC_ALPHA);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].BLEND);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].ONE_MINUS_SRC_ALPHA);
 
         // Make the zero texture the active texture
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].TEXTURE0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].TEXTURE0);
         
         // Init the clear buffer mask
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearTargetBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].COLOR_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].COLOR_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].DEPTH_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].DEPTH_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearStencilBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].STENCIL_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].STENCIL_BUFFER_BIT;
         
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].clear( this.clearBufferMask );
         
         // Create the startup state
-        this.gameState = new _state_startupstate__WEBPACK_IMPORTED_MODULE_7__["StartUpState"]( this.gameLoop.bind(this) );
+        this.gameState = new _state_startupstate__WEBPACK_IMPORTED_MODULE_6__["StartUpState"]( this.gameLoop.bind(this) );
     }
     
     // 
@@ -245,7 +241,7 @@ class Game
     smartGuiControlCreateCallBack( control )
     {
         if( control.faction === 'decision_btn' )
-            control.smartGui = new _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_11__["SmartConfirmBtn"]( control );
+            control.smartGui = new _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_10__["SmartConfirmBtn"]( control );
     }
     
     // 
@@ -254,7 +250,7 @@ class Game
     aiCreateCallBack( aiName, obj )
     {
         if( aiName === 'aiBall' )
-            obj.setAI( new _ai_aiball__WEBPACK_IMPORTED_MODULE_12__["aiBall"]( obj ) );
+            obj.setAI( new _ai_aiball__WEBPACK_IMPORTED_MODULE_11__["aiBall"]( obj ) );
     }
     
     // 
@@ -262,7 +258,7 @@ class Game
     //
     shaderInitCallBack( shaderId )
     {
-        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_6__["shaderManager"].setShaderValue4fv( shaderId, 'additive', [0,0,0,1] );
+        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__["shaderManager"].setShaderValue4fv( shaderId, 'additive', [0,0,0,1] );
     }
     
     // 
@@ -274,14 +270,14 @@ class Game
         {
             this.gameState.cleanUp();
             
-            if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_16__["EGS_TITLE_SCREEN"] )
-                this.gameState = new _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_8__["TitleScreenState"]( this.gameLoop.bind(this) );
+            if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_TITLE_SCREEN"] )
+                this.gameState = new _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_7__["TitleScreenState"]( this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_16__["EGS_GAME_LOAD"] )
-                this.gameState = new _state_loadstate__WEBPACK_IMPORTED_MODULE_9__["LoadState"]( this.gameState.stateMessage, this.gameLoop.bind(this) );
+            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_GAME_LOAD"] )
+                this.gameState = new _state_loadstate__WEBPACK_IMPORTED_MODULE_8__["LoadState"]( this.gameState.stateMessage, this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_16__["EGS_LEVEL_1"] )
-                this.gameState = new _state_level1state__WEBPACK_IMPORTED_MODULE_10__["Level1State"]( this.gameLoop.bind(this) );
+            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_LEVEL_1"] )
+                this.gameState = new _state_level1state__WEBPACK_IMPORTED_MODULE_9__["Level1State"]( this.gameLoop.bind(this) );
             
             return true;
         }
@@ -297,7 +293,7 @@ class Game
         let event = null;
         
         // Handle events on the queue
-        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_14__["eventManager"].pollEvent()) )
+        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_13__["eventManager"].pollEvent()) )
             this.handleEvent( event );
     }
     
@@ -323,7 +319,7 @@ class Game
         this.pollEvents();
         
         // Get our elapsed time
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__["highResTimer"].calcElapsedTime();
         
         // Handle the physics
         this.gameState.physics();
@@ -335,15 +331,15 @@ class Game
         this.gameState.transform();
 
         // Clear the back buffer
-        _library_system_device__WEBPACK_IMPORTED_MODULE_13__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].clear( this.clearBufferMask );
         
         // Do the rendering
         this.gameState.render();
         
         // Apparently it's a good practice to do this at the end of a render cycle
-        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_6__["shaderManager"].unbind();
+        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__["shaderManager"].unbind();
         _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].unbind();
-        _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_4__["vertexBufferManager"].unbind();
+        _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].unbind();
 
         // Continues the loop
         requestAnimationFrame( this.gameLoop.bind(this) );
@@ -1204,13 +1200,9 @@ class TextureManager
             
             throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
         }
-        // Santy check.
-        else
-        {
-            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
-        }
 
-        return null;
+        // Santy check.
+        throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
     }
 
     //
@@ -1368,7 +1360,6 @@ const NO_ROT = 0;
 const ROT_Z  = 1;
 const ROT_Y  = 2;
 const ROT_X  = 4;
-const ROT_ALL = ROT_Z | ROT_Y | ROT_X;
 
 // Global temp matrix to be reused so that an object
 // specific one doesn't have to be created each time
@@ -1788,713 +1779,11 @@ class Matrix
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "meshManager", function() { return meshManager; });
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony import */ var _common_uv__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
-/* harmony import */ var _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
-/* harmony import */ var _common_mesh3d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
-
-//
-//  FILE NAME: meshmanager.js
-//  DESC:      mesh manager class singleton
-//
-
-
-
-
-
-
-
-
-
-class MeshManager
-{
-    constructor()
-    {
-        // Map containing a group array of vbo, ibo and texture id's
-        this.meshBufMapMap = new Map;
-
-        // Map for collision mesh
-        //this.collisionMeshBufMapMap = new Map;
-        
-        // counter for indexing into binary data when loading
-        this.counter = 0;
-    }
-    
-    //
-    //  DESC: Load the binary mesh data
-    //  NOTE: To keep it simple, loading the textures is done seperately
-    //
-    load( group, filePath, binaryData )
-    {
-        // Create the group map if it doesn't already exist
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap === undefined )
-        {
-            groupMap = new Map;
-            this.meshBufMapMap.set( group, groupMap );
-        }
-        
-        let meshGrp = groupMap.get( filePath );
-        if( meshGrp === undefined )
-        {
-            meshGrp = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_4__["MeshGroup"];
-            groupMap.set( filePath, meshGrp );
-            
-            this.loadData( group, filePath, binaryData, meshGrp );
-        }
-        
-        return meshGrp;
-    }
-    
-    //
-    //  DESC: Load the binary mesh data
-    //
-    loadData( group, filePath, binaryData, meshGrp )
-    {
-        this.counter = 0;
-
-        // Load the binary data into the data view for easy access to different data types
-        let dataView = new DataView( binaryData );
-        
-        // Load the binary mesh file header
-        let fileHeader = this.loadFileHeader( dataView, group, filePath );
-        
-        
-        // Check to insure we are in the correct spot in the binary file
-        this.tagCheck( dataView, (fileHeader.text_count > 0), group, filePath );
-        
-        // Load the texture file paths
-        this.loadTexturePaths( dataView, fileHeader, meshGrp );
-        
-        
-        // Check to insure we are in the correct spot in the binary file
-        this.tagCheck( dataView, true, group, filePath );
-        
-        // Load the verts
-        let vertAry = [];
-        this.loadVerts( dataView, fileHeader, vertAry );
-        
-        
-        // Check to insure we are in the correct spot in the binary file
-        this.tagCheck( dataView, true, group, filePath );
-        
-        // Load the normals
-        let normAry = [];
-        this.loadNormals( dataView, fileHeader, normAry );
-        
-        
-        // Check to insure we are in the correct spot in the binary file
-        this.tagCheck( dataView, (fileHeader.uv_count > 0), group, filePath );
-        
-        // Load the uv's
-        let uvAry = [];
-        this.loadUVs( dataView, fileHeader, uvAry );
-        
-        // Build the meshes
-        this.buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry );
-    }
-    
-    //
-    //  DESC: Load the binary mesh file header
-    //
-    loadFileHeader( dataView, group, filePath )
-    {
-        let fileHeader = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__["MeshBinaryFileHeader"];
-        
-        fileHeader.file_header      = dataView.getUint32( this.counter, true ); this.counter += 4;
-        fileHeader.vert_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.uv_count         = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.vert_norm_count  = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.face_group_count = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.text_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.joint_count      = dataView.getUint16( this.counter, true ); this.counter += 2;
-        
-        // Check to make sure we're loading in the right kind of file
-        if( fileHeader.file_header !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__["MESH_FILE_HEADER"] )
-            throw new Error( `File header mismatch! (${group}, ${filePath}).` );
-        
-        return fileHeader;
-    }
-    
-    //
-    //  DESC: Load the binary mesh file header
-    //
-    loadTexturePaths( dataView, fileHeader, meshGrp )
-    {
-        for( let i = 0; i < fileHeader.text_count; ++i )
-        {
-            let uniqueTextAry = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__["BinaryTexture"];
-            meshGrp.uniqueTexturePathAry.push( uniqueTextAry );
-
-            uniqueTextAry.type = dataView.getInt8( this.counter, true ); this.counter += 1;
-
-            for( let j = 0; j < _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__["TEXT_PATH_SIZE"]; ++j )
-            {
-                let charCode = dataView.getInt8( this.counter, true ); this.counter += 1;
-
-                if( charCode )
-                {
-                    uniqueTextAry.path += String.fromCharCode(charCode);
-                }
-                else
-                {
-                    this.counter += _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__["TEXT_PATH_SIZE"] - j - 1;
-                    break;
-                }
-            }
-        }
-    }
-    
-    //
-    //  DESC: Load the verts
-    //
-    loadVerts( dataView, fileHeader, vertAry )
-    {
-        // Load the verts
-        for( let i = 0; i < fileHeader.vert_count; ++i )
-        {
-            let data = [0,0,0];
-            vertAry.push( data );
-            
-            for( let j = 0; j < 3; ++j )
-            {
-                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
-            }
-        }
-    }
-    
-    //
-    //  DESC: Load the normals
-    //
-    loadNormals( dataView, fileHeader, normAry )
-    {
-        for( let i = 0; i < fileHeader.vert_norm_count; ++i )
-        {
-            let data = [0,0,0];
-            normAry.push( data );
-            
-            for( let j = 0; j < 3; ++j )
-            {
-                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
-            }
-        }
-    }
-    
-    //
-    //  DESC: Load the uv's
-    //
-    loadUVs( dataView, fileHeader, uvAry )
-    {
-        // Load the normals
-        for( let i = 0; i < fileHeader.uv_count; ++i )
-        {
-            let data = [0,0];
-            uvAry.push( data );
-            
-            for( let j = 0; j < 2; ++j )
-            {
-                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
-            }
-        }
-    }
-    
-    //
-    //  DESC: Build the meshes
-    //
-    buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry )
-    {
-        let faceGroup = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__["BinaryFaceGroup"];
-        
-        // Read in each face group
-        for( let i = 0; i < fileHeader.face_group_count; ++i )
-        {
-            // Check to insure we are in the correct spot in the binary file
-            this.tagCheck( dataView, true, group, filePath );
-            
-            // Allocate the mesh storage
-            let mesh = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_4__["Mesh"];
-            meshGrp.meshAry.push( mesh );
-            
-            faceGroup.groupFaceCount = dataView.getUint16( this.counter, true ); this.counter += 2;
-            faceGroup.vertexBufCount = dataView.getUint16( this.counter, true ); this.counter += 2;
-            faceGroup.indexBufCount  = dataView.getUint16( this.counter, true ); this.counter += 2;
-            faceGroup.textureCount   = dataView.getUint16( this.counter, true ); this.counter += 2;
-            
-            // Read in the indexes that are the textures
-            for( let j = 0; j < faceGroup.textureCount; ++j )
-            {
-                mesh.textureIndexAry.push( dataView.getUint16( this.counter, true ) );
-                this.counter += 2;
-            }
-
-            // Read in the indexes used to create the VBO
-            let vertBufAry = [];
-            for( let j = 0; j < faceGroup.vertexBufCount; ++j )
-            {
-                let binaryVertex = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__["BinaryVertex"];
-                vertBufAry.push( binaryVertex );
-                
-                binaryVertex.vert = dataView.getUint16( this.counter, true ); this.counter += 2;
-                binaryVertex.norm = dataView.getUint16( this.counter, true ); this.counter += 2;
-                
-                if( fileHeader.uv_count )
-                {
-                    binaryVertex.uv = dataView.getUint16( this.counter, true ); this.counter += 2;
-                }
-            }
-
-            // Read in the indexes that are the IBO
-            let iboAry = [];
-            for( let j = 0; j < faceGroup.indexBufCount; ++j )
-            {
-                iboAry.push( dataView.getUint16( this.counter, true ) );
-                this.counter += 2;
-            }
-            
-            // Create a temporary array for building the VBO
-            let vboAry = [];
-
-            // Build the VBO
-            for( let j = 0; j < faceGroup.vertexBufCount; ++j )
-            {
-                Array.prototype.push.apply( vboAry, vertAry[ vertBufAry[j].vert ] );
-                Array.prototype.push.apply( vboAry, normAry[ vertBufAry[j].norm ] );
-                
-                if( fileHeader.uv_count )
-                    Array.prototype.push.apply( vboAry, uvAry[ vertBufAry[j].uv ] );
-            }
-            
-            // Create the vbo
-            mesh.vbo = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, mesh.vbo );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, new Float32Array(vboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, null );
-            
-            // Create the ibo
-            mesh.ibo = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, mesh.ibo );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, new Uint16Array(iboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, null );
-            
-            // Save the number of indexes in the IBO buffer - Will need this for the render call
-            mesh.iboCount = faceGroup.indexBufCount;
-        }
-    }
-    
-    //
-    //  DESC: Load the binary mesh file header
-    //
-    tagCheck( dataView, allowCheck, group, filePath )
-    {
-        if( allowCheck )
-        {
-            let tag = dataView.getUint32( this.counter, true ); this.counter += 4;
-            if( tag !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_3__["TAG_CHECK"] )
-                throw new Error( `Tag check mismatch! (${group}, ${filePath}).` );
-        }
-    }
-    
-    //
-    //  DESC: Delete the group of textures
-    //
-    deleteGroup( group )
-    {
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            for( let [ key, meshGrp ] of groupMap.entries() )
-            {
-                for( let i = 0; i < meshGrp.meshAry.length; ++i )
-                {
-                    _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].deleteBuffer( meshGrp.meshAry[i].vbo );
-                    _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].deleteBuffer( meshGrp.meshAry[i].ibo );
-                }
-            }
-
-            this.meshBufMapMap.delete( group );
-        }
-    }
-}
-
-var meshManager = new MeshManager;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Point", function() { return Point; });
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-
-// 
-//  FILE NAME:  point.js
-//  DESC:       Point class
-//
-
-
-
-
-
-class Point
-{
-    constructor( x = 0, y = 0, z = 0 )
-    {
-        this.data = new Float32Array([x,y,z]);
-    }
-    
-    set x(value) { this.data[0] = value; }
-    get x() { return this.data[0]; }
-    
-    set y(value) { this.data[1] = value; }
-    get y() { return this.data[1]; }
-    
-    set z(value) { this.data[2] = value; }
-    get z() { return this.data[2]; }
-    
-    copy( obj )
-    {
-        this.data[0] = obj.data[0];
-        this.data[1] = obj.data[1];
-        this.data[2] = obj.data[2];
-    }
-    
-    convertToRads()
-    {
-        this.x *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
-        this.y *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
-        this.z *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
-    }
-    
-    setXYZ( x = 0, y = 0, z = 0 )
-    {
-        this.data[0] = x;
-        this.data[1] = y;
-        this.data[2] = z;
-    }
-    
-    set( point )
-    {
-        this.data[0] = point.data[0];
-        this.data[1] = point.data[1];
-        this.data[2] = point.data[2];
-    }
-    
-    incXYZ( x = 0, y = 0, z = 0 )
-    {
-        this.data[0] += x;
-        this.data[1] += y;
-        this.data[2] += z;
-    }
-    
-    inc( point )
-    {
-        this.data[0] += point.data[0];
-        this.data[1] += point.data[1];
-        this.data[2] += point.data[2];
-    }
-
-    cap( value )
-    {
-        if( value > 0 )
-        {
-            if( this.x > value )
-            {
-                this.x -= value;
-            }
-            else if ( this.x < 0 )
-            {
-                this.x += value;
-            }
-
-            if( this.y > value )
-            {
-                this.y -= value;
-            }
-            else if ( this.y < 0 )
-            {
-                this.y += value;
-            }
-
-            if( this.z > value )
-            {
-                this.z -= value;
-            }
-            else if ( this.z < 0 )
-            {
-                this.z += value;
-            }
-        }
-        else
-        {
-            if( this.x > value )
-            {
-                this.x += value;
-            }
-            else if ( this.x < 0 )
-            {
-                this.x -= value;
-            }
-
-            if( this.y > value )
-            {
-                this.y += value;
-            }
-            else if ( this.y < 0 )
-            {
-                this.y -= value;
-            }
-
-            if( this.z > value )
-            {
-                this.z += value;
-            }
-            else if ( this.z < 0 )
-            {
-                this.z -= value;
-            }
-        }
-    }
-    
-    getInvert()
-    {
-        return new Point(-this.data[0], -this.data[1], -this.data[2]);
-    }
-    
-    invert()
-    {
-        this.data[0] = -this.data[0];
-        this.data[1] = -this.data[1];
-        this.data[2] = -this.data[2];
-    }
-    
-    isEmpty()
-    {
-        if( (this.x == 0) && (this.y == 0) && (this.z == 0) )
-            return true;
-        
-        return false;
-    }
-    
-    isXEmpty()
-    {
-        return (0 === this.x);
-    }
-
-    isYEmpty()
-    {
-        return (0 === this.y);
-    }
-
-    isZEmpty()
-    {
-        return (0 === this.z);
-    }
-    
-    isEquilXYZ( x, y, z )
-    {
-        if( this.data[0] === x )
-        {
-            if( this.data[1] === y )
-            {
-                if( this.data[2] === z )
-                {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
-    }
-}
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UV", function() { return UV; });
-
-// 
-//  FILE NAME:  uv.js
-//  DESC:       uv class
-//
-
-
-
-class UV
-{
-    constructor( u = 0, v = 0 )
-    {
-        this.data = new Float32Array([u,v]);
-    }
-    
-    set u(value) { this.data[0] = value; }
-    get u() { return this.data[0]; }
-    
-    set v(value) { this.data[1] = value; }
-    get v() { return this.data[1]; }
-}
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MESH_FILE_HEADER", function() { return MESH_FILE_HEADER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TAG_CHECK", function() { return TAG_CHECK; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TEXT_PATH_SIZE", function() { return TEXT_PATH_SIZE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOINT_NAME_SIZE", function() { return JOINT_NAME_SIZE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeshBinaryFileHeader", function() { return MeshBinaryFileHeader; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryTexture", function() { return BinaryTexture; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryFaceGroup", function() { return BinaryFaceGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryFace", function() { return BinaryFace; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryVertex", function() { return BinaryVertex; });
-
-//
-//  FILE NAME: meshbinaryfileheader.js
-//  DESC:      mesh binary file headers
-//
-
-
-
-// Hex for RSS (Rabbid Squirrel Sprite)
-const MESH_FILE_HEADER = 0x415382AE;
-
-// Hex for tag check
-const TAG_CHECK = 0x6A82Fc4d;
-
-// Max character sizes for the texture path and joint name
-const TEXT_PATH_SIZE = 128;
-const JOINT_NAME_SIZE = 20;
-
-class MeshBinaryFileHeader
-{
-    constructor()
-    {
-        this.file_header      = 0; // uint32
-        this.vert_count       = 0; // uint16
-        this.uv_count         = 0; // uint16
-        this.vert_norm_count  = 0; // uint16
-        this.face_group_count = 0; // uint16
-        this.text_count       = 0; // uint16
-        this.joint_count      = 0; // uint16
-    }
-}
-
-// class for reading in texture info
-class BinaryTexture
-{
-    constructor()
-    {
-        this.type = 0;       // int8
-        this.path = '';      // file path [TEXT_PATH_SIZE]
-    }
-};
-
-// Class for reading and writing the total face count within a group and the material
-// it belongs to
-class BinaryFaceGroup
-{
-    constructor()
-    {
-        this.groupFaceCount = 0; // uint16
-        this.vertexBufCount = 0; // uint16
-        this.indexBufCount  = 0; // uint16
-        this.textureCount   = 0; // uint16
-    }
-};
-
-// Class for reading and writing face information
-class BinaryFace
-{
-    constructor()
-    {
-        this.vert = [];
-        this.norm = [];
-        this.uv = [];
-    }
-};
-
-// Class for reading and writing face information
-class BinaryVertex
-{
-    constructor()
-    {
-        this.vert = 0;
-        this.norm = 0;
-        this.uv = 0;
-    }
-};
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeshGroup", function() { return MeshGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mesh", function() { return Mesh; });
-
-//
-//  FILE NAME: mesh3d.js
-//  DESC:      3D mesh class
-//
-
-
-
-class MeshGroup
-{
-    constructor()
-    {
-        // Array texture paths for loading
-        this.uniqueTexturePathAry = [];
-        
-        // Array of loaded textures
-        this.meshAry = [];
-    }
-}
-
-class Mesh
-{
-    constructor()
-    {
-        // Texture indexes into the uniqueTexturePathAry
-        this.textureIndexAry = [];
-        
-        // Loaded texture data
-        this.textureAry = [];
-
-        // VBO
-        this.vbo = null;
-
-        // IBO
-        this.ibo = null;
-
-        // Number of IBOs needed for rendering
-        this.iboCount = 0;
-    }
-}
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vertexBufferManager", function() { return vertexBufferManager; });
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_quad2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
+/* harmony import */ var _common_quad2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
 
 //
 //  FILE NAME: vertexbuffermanager.js
@@ -2906,13 +2195,204 @@ var vertexBufferManager = new VertexBufferManager;
 
 
 /***/ }),
-/* 16 */
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Point", function() { return Point; });
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+
+// 
+//  FILE NAME:  point.js
+//  DESC:       Point class
+//
+
+
+
+
+
+class Point
+{
+    constructor( x = 0, y = 0, z = 0 )
+    {
+        this.data = new Float32Array([x,y,z]);
+    }
+    
+    set x(value) { this.data[0] = value; }
+    get x() { return this.data[0]; }
+    
+    set y(value) { this.data[1] = value; }
+    get y() { return this.data[1]; }
+    
+    set z(value) { this.data[2] = value; }
+    get z() { return this.data[2]; }
+    
+    copy( obj )
+    {
+        this.data[0] = obj.data[0];
+        this.data[1] = obj.data[1];
+        this.data[2] = obj.data[2];
+    }
+    
+    convertToRads()
+    {
+        this.x *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
+        this.y *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
+        this.z *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
+    }
+    
+    setXYZ( x = 0, y = 0, z = 0 )
+    {
+        this.data[0] = x;
+        this.data[1] = y;
+        this.data[2] = z;
+    }
+    
+    set( point )
+    {
+        this.data[0] = point.data[0];
+        this.data[1] = point.data[1];
+        this.data[2] = point.data[2];
+    }
+    
+    incXYZ( x = 0, y = 0, z = 0 )
+    {
+        this.data[0] += x;
+        this.data[1] += y;
+        this.data[2] += z;
+    }
+    
+    inc( point )
+    {
+        this.data[0] += point.data[0];
+        this.data[1] += point.data[1];
+        this.data[2] += point.data[2];
+    }
+
+    cap( value )
+    {
+        if( value > 0 )
+        {
+            if( this.x > value )
+            {
+                this.x -= value;
+            }
+            else if ( this.x < 0 )
+            {
+                this.x += value;
+            }
+
+            if( this.y > value )
+            {
+                this.y -= value;
+            }
+            else if ( this.y < 0 )
+            {
+                this.y += value;
+            }
+
+            if( this.z > value )
+            {
+                this.z -= value;
+            }
+            else if ( this.z < 0 )
+            {
+                this.z += value;
+            }
+        }
+        else
+        {
+            if( this.x > value )
+            {
+                this.x += value;
+            }
+            else if ( this.x < 0 )
+            {
+                this.x -= value;
+            }
+
+            if( this.y > value )
+            {
+                this.y += value;
+            }
+            else if ( this.y < 0 )
+            {
+                this.y -= value;
+            }
+
+            if( this.z > value )
+            {
+                this.z += value;
+            }
+            else if ( this.z < 0 )
+            {
+                this.z -= value;
+            }
+        }
+    }
+    
+    getInvert()
+    {
+        return new Point(-this.data[0], -this.data[1], -this.data[2]);
+    }
+    
+    invert()
+    {
+        this.data[0] = -this.data[0];
+        this.data[1] = -this.data[1];
+        this.data[2] = -this.data[2];
+    }
+    
+    isEmpty()
+    {
+        if( (this.x == 0) && (this.y == 0) && (this.z == 0) )
+            return true;
+        
+        return false;
+    }
+    
+    isXEmpty()
+    {
+        return (0 === this.x);
+    }
+
+    isYEmpty()
+    {
+        return (0 === this.y);
+    }
+
+    isZEmpty()
+    {
+        return (0 === this.z);
+    }
+    
+    isEquilXYZ( x, y, z )
+    {
+        if( this.data[0] === x )
+        {
+            if( this.data[1] === y )
+            {
+                if( this.data[2] === z )
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+}
+
+
+/***/ }),
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quad2d", function() { return Quad2d; });
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 
 // 
 //  FILE NAME:  quad2d.js
@@ -2932,7 +2412,7 @@ class Quad2d
 
 
 /***/ }),
-/* 17 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2971,7 +2451,7 @@ class Vertex2d
 
 
 /***/ }),
-/* 18 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3154,15 +2634,15 @@ function shuffle( array )
 
 
 /***/ }),
-/* 19 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shaderManager", function() { return shaderManager; });
-/* harmony import */ var _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
+/* harmony import */ var _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
 
 // 
 //  FILE NAME: shadermanager.js
@@ -3447,7 +2927,7 @@ var shaderManager = new ShaderManager;
 
 
 /***/ }),
-/* 20 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3500,39 +2980,39 @@ class ShaderData
 
 
 /***/ }),
-/* 21 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StartUpState", function() { return StartUpState; });
-/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(25);
+/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(27);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(99);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(101);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(141);
-/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(140);
+/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
+/* harmony import */ var _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(23);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(26);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(98);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(100);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(139);
+/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(137);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(2);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(142);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(118);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(145);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(146);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(140);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(115);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(143);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(144);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(8);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(120);
-/* harmony import */ var _library_gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(138);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(122);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(147);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(159);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(161);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(162);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(163);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(24);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(117);
+/* harmony import */ var _library_gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(135);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(119);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(145);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(158);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(160);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(161);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(162);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(20);
 
 //
 //  FILE NAME: startupstate.js
@@ -3797,14 +3277,14 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 22 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameState", function() { return GameState; });
-/* harmony import */ var _statemessage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
+/* harmony import */ var _statemessage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: gamestate.js
@@ -3895,7 +3375,7 @@ class GameState
 
 
 /***/ }),
-/* 23 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3926,7 +3406,7 @@ class StateMessage
 
 
 /***/ }),
-/* 24 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3964,7 +3444,7 @@ const ESE_STATE_EVENTS         = 1000,
 
 
 /***/ }),
-/* 25 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3992,10 +3472,7 @@ class ScriptManager
     {
         // Sanity check to make sure the script has not already been added in
         if( this.scriptMap.has( name ) )
-        {
             throw new Error( `Script name has already been added (${name}).` );
-            return;
-        }
         
         this.scriptMap.set( name, factory );
     }
@@ -4008,10 +3485,7 @@ class ScriptManager
         let scriptFactory = this.scriptMap.get( name );
         
         if( scriptFactory === undefined )
-        {
             throw new Error( `Script name could not be found! (${name})` );
-            return null;
-        }
         
         return scriptFactory;
     }
@@ -4021,7 +3495,7 @@ var scriptManager = new ScriptManager;
 
 
 /***/ }),
-/* 26 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4170,14 +3644,14 @@ var eventManager = new EventManager;
 
 
 /***/ }),
-/* 27 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fontManager", function() { return fontManager; });
-/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 //
@@ -4237,10 +3711,7 @@ class FontManager
 
                 // Sanity check to make sure the font has not already been added in
                 if( this.fontMap.has( name ) )
-                {
                     throw new Error( `Font name has already been loaded (${name}).` );
-                    return;
-                }
 
                 // Add the font to our list
                 this.fontMap.set( name, new _2d_font__WEBPACK_IMPORTED_MODULE_0__["Font"] );
@@ -4331,7 +3802,7 @@ var fontManager = new FontManager;
 
 
 /***/ }),
-/* 28 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4339,15 +3810,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CharData", function() { return CharData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Font", function() { return Font; });
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
-/* harmony import */ var _common_texture__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
 //  FILE NAME:  font.js
 //  DESC:       font class
 //
-
 
 
 
@@ -4399,7 +3868,7 @@ class Font
     loadFromNode( group, name, xmlNode )
     {
         // load the texture
-        this.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__["textureManager"].getTexture( group, name );
+        this.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].getTexture( group, name );
 
         // Get the padding
         let padding = xmlNode.getElementsByTagName('info')[0].getAttribute('padding');
@@ -4461,7 +3930,7 @@ class Font
 
 
 /***/ }),
-/* 29 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4505,29 +3974,25 @@ class Rect
 
 
 /***/ }),
-/* 30 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "objectDataManager", function() { return objectDataManager; });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(10);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(32);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(39);
-/* harmony import */ var _objectdata2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(40);
-/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(97);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(18);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
+/* harmony import */ var _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(28);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(31);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(38);
+/* harmony import */ var _objectdata2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(39);
+/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(96);
 
 //
 //  FILE NAME: objactdatamanager.js
 //  DESC:      Singlton that holds a map of all 2D/3D object data used for later loading
 //
-
-
 
 
 
@@ -4824,13 +4289,11 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
             let objData = groupMap.get( name );
             if( objData )
                 return objData;
-            else
-                throw new Error( `Object data not found (${group}, ${name})!` );
+
+            throw new Error( `Object data not found (${group}, ${name})!` );
         }
-        else
-            throw new Error( `Object group not found (${group}, ${name})!` );
-        
-        return null;
+
+        throw new Error( `Object group not found (${group}, ${name})!` );
     }
 }
 
@@ -4838,13 +4301,13 @@ var objectDataManager = new ObjectDataManager;
 
 
 /***/ }),
-/* 31 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ManagerBase", function() { return ManagerBase; });
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 
 //
 //  FILE NAME: managerbase.js
@@ -4999,13 +4462,490 @@ class ManagerBase
 
 
 /***/ }),
-/* 32 */
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "meshManager", function() { return meshManager; });
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
+/* harmony import */ var _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
+
+//
+//  FILE NAME: meshmanager.js
+//  DESC:      mesh manager class singleton
+//
+
+
+
+
+
+
+
+class MeshManager
+{
+    constructor()
+    {
+        // Map containing a group array of vbo, ibo and texture id's
+        this.meshBufMapMap = new Map;
+
+        // Map for collision mesh
+        //this.collisionMeshBufMapMap = new Map;
+        
+        // counter for indexing into binary data when loading
+        this.counter = 0;
+    }
+    
+    //
+    //  DESC: Load the binary mesh data
+    //  NOTE: To keep it simple, loading the textures is done seperately
+    //
+    load( group, filePath, binaryData )
+    {
+        // Create the group map if it doesn't already exist
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.meshBufMapMap.set( group, groupMap );
+        }
+        
+        let meshGrp = groupMap.get( filePath );
+        if( meshGrp === undefined )
+        {
+            meshGrp = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__["MeshGroup"];
+            groupMap.set( filePath, meshGrp );
+            
+            this.loadData( group, filePath, binaryData, meshGrp );
+        }
+        
+        return meshGrp;
+    }
+    
+    //
+    //  DESC: Load the binary mesh data
+    //
+    loadData( group, filePath, binaryData, meshGrp )
+    {
+        this.counter = 0;
+
+        // Load the binary data into the data view for easy access to different data types
+        let dataView = new DataView( binaryData );
+        
+        // Load the binary mesh file header
+        let fileHeader = this.loadFileHeader( dataView, group, filePath );
+        
+        
+        // Check to insure we are in the correct spot in the binary file
+        this.tagCheck( dataView, (fileHeader.text_count > 0), group, filePath );
+        
+        // Load the texture file paths
+        this.loadTexturePaths( dataView, fileHeader, meshGrp );
+        
+        
+        // Check to insure we are in the correct spot in the binary file
+        this.tagCheck( dataView, true, group, filePath );
+        
+        // Load the verts
+        let vertAry = [];
+        this.loadVerts( dataView, fileHeader, vertAry );
+        
+        
+        // Check to insure we are in the correct spot in the binary file
+        this.tagCheck( dataView, true, group, filePath );
+        
+        // Load the normals
+        let normAry = [];
+        this.loadNormals( dataView, fileHeader, normAry );
+        
+        
+        // Check to insure we are in the correct spot in the binary file
+        this.tagCheck( dataView, (fileHeader.uv_count > 0), group, filePath );
+        
+        // Load the uv's
+        let uvAry = [];
+        this.loadUVs( dataView, fileHeader, uvAry );
+        
+        // Build the meshes
+        this.buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry );
+    }
+    
+    //
+    //  DESC: Load the binary mesh file header
+    //
+    loadFileHeader( dataView, group, filePath )
+    {
+        let fileHeader = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["MeshBinaryFileHeader"];
+        
+        fileHeader.file_header      = dataView.getUint32( this.counter, true ); this.counter += 4;
+        fileHeader.vert_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.uv_count         = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.vert_norm_count  = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.face_group_count = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.text_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.joint_count      = dataView.getUint16( this.counter, true ); this.counter += 2;
+        
+        // Check to make sure we're loading in the right kind of file
+        if( fileHeader.file_header !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["MESH_FILE_HEADER"] )
+            throw new Error( `File header mismatch! (${group}, ${filePath}).` );
+        
+        return fileHeader;
+    }
+    
+    //
+    //  DESC: Load the binary mesh file header
+    //
+    loadTexturePaths( dataView, fileHeader, meshGrp )
+    {
+        for( let i = 0; i < fileHeader.text_count; ++i )
+        {
+            let uniqueTextAry = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["BinaryTexture"];
+            meshGrp.uniqueTexturePathAry.push( uniqueTextAry );
+
+            uniqueTextAry.type = dataView.getInt8( this.counter, true ); this.counter += 1;
+
+            for( let j = 0; j < _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["TEXT_PATH_SIZE"]; ++j )
+            {
+                let charCode = dataView.getInt8( this.counter, true ); this.counter += 1;
+
+                if( charCode )
+                {
+                    uniqueTextAry.path += String.fromCharCode(charCode);
+                }
+                else
+                {
+                    this.counter += _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["TEXT_PATH_SIZE"] - j - 1;
+                    break;
+                }
+            }
+        }
+    }
+    
+    //
+    //  DESC: Load the verts
+    //
+    loadVerts( dataView, fileHeader, vertAry )
+    {
+        // Load the verts
+        for( let i = 0; i < fileHeader.vert_count; ++i )
+        {
+            let data = [0,0,0];
+            vertAry.push( data );
+            
+            for( let j = 0; j < 3; ++j )
+            {
+                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
+            }
+        }
+    }
+    
+    //
+    //  DESC: Load the normals
+    //
+    loadNormals( dataView, fileHeader, normAry )
+    {
+        for( let i = 0; i < fileHeader.vert_norm_count; ++i )
+        {
+            let data = [0,0,0];
+            normAry.push( data );
+            
+            for( let j = 0; j < 3; ++j )
+            {
+                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
+            }
+        }
+    }
+    
+    //
+    //  DESC: Load the uv's
+    //
+    loadUVs( dataView, fileHeader, uvAry )
+    {
+        // Load the normals
+        for( let i = 0; i < fileHeader.uv_count; ++i )
+        {
+            let data = [0,0];
+            uvAry.push( data );
+            
+            for( let j = 0; j < 2; ++j )
+            {
+                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
+            }
+        }
+    }
+    
+    //
+    //  DESC: Build the meshes
+    //
+    buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry )
+    {
+        let faceGroup = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["BinaryFaceGroup"];
+        
+        // Read in each face group
+        for( let i = 0; i < fileHeader.face_group_count; ++i )
+        {
+            // Check to insure we are in the correct spot in the binary file
+            this.tagCheck( dataView, true, group, filePath );
+            
+            // Allocate the mesh storage
+            let mesh = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__["Mesh"];
+            meshGrp.meshAry.push( mesh );
+            
+            faceGroup.groupFaceCount = dataView.getUint16( this.counter, true ); this.counter += 2;
+            faceGroup.vertexBufCount = dataView.getUint16( this.counter, true ); this.counter += 2;
+            faceGroup.indexBufCount  = dataView.getUint16( this.counter, true ); this.counter += 2;
+            faceGroup.textureCount   = dataView.getUint16( this.counter, true ); this.counter += 2;
+            
+            // Read in the indexes that are the textures
+            for( let j = 0; j < faceGroup.textureCount; ++j )
+            {
+                mesh.textureIndexAry.push( dataView.getUint16( this.counter, true ) );
+                this.counter += 2;
+            }
+
+            // Read in the indexes used to create the VBO
+            let vertBufAry = [];
+            for( let j = 0; j < faceGroup.vertexBufCount; ++j )
+            {
+                let binaryVertex = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["BinaryVertex"];
+                vertBufAry.push( binaryVertex );
+                
+                binaryVertex.vert = dataView.getUint16( this.counter, true ); this.counter += 2;
+                binaryVertex.norm = dataView.getUint16( this.counter, true ); this.counter += 2;
+                
+                if( fileHeader.uv_count )
+                {
+                    binaryVertex.uv = dataView.getUint16( this.counter, true ); this.counter += 2;
+                }
+            }
+
+            // Read in the indexes that are the IBO
+            let iboAry = [];
+            for( let j = 0; j < faceGroup.indexBufCount; ++j )
+            {
+                iboAry.push( dataView.getUint16( this.counter, true ) );
+                this.counter += 2;
+            }
+            
+            // Create a temporary array for building the VBO
+            let vboAry = [];
+
+            // Build the VBO
+            for( let j = 0; j < faceGroup.vertexBufCount; ++j )
+            {
+                Array.prototype.push.apply( vboAry, vertAry[ vertBufAry[j].vert ] );
+                Array.prototype.push.apply( vboAry, normAry[ vertBufAry[j].norm ] );
+                
+                if( fileHeader.uv_count )
+                    Array.prototype.push.apply( vboAry, uvAry[ vertBufAry[j].uv ] );
+            }
+            
+            // Create the vbo
+            mesh.vbo = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, mesh.vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, new Float32Array(vboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, null );
+            
+            // Create the ibo
+            mesh.ibo = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, mesh.ibo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, new Uint16Array(iboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, null );
+            
+            // Save the number of indexes in the IBO buffer - Will need this for the render call
+            mesh.iboCount = faceGroup.indexBufCount;
+        }
+    }
+    
+    //
+    //  DESC: Load the binary mesh file header
+    //
+    tagCheck( dataView, allowCheck, group, filePath )
+    {
+        if( allowCheck )
+        {
+            let tag = dataView.getUint32( this.counter, true ); this.counter += 4;
+            if( tag !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["TAG_CHECK"] )
+                throw new Error( `Tag check mismatch! (${group}, ${filePath}).` );
+        }
+    }
+    
+    //
+    //  DESC: Delete the group of textures
+    //
+    deleteGroup( group )
+    {
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            for( let [ key, meshGrp ] of groupMap.entries() )
+            {
+                for( let i = 0; i < meshGrp.meshAry.length; ++i )
+                {
+                    _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].deleteBuffer( meshGrp.meshAry[i].vbo );
+                    _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].deleteBuffer( meshGrp.meshAry[i].ibo );
+                }
+            }
+
+            this.meshBufMapMap.delete( group );
+        }
+    }
+}
+
+var meshManager = new MeshManager;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MESH_FILE_HEADER", function() { return MESH_FILE_HEADER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TAG_CHECK", function() { return TAG_CHECK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TEXT_PATH_SIZE", function() { return TEXT_PATH_SIZE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOINT_NAME_SIZE", function() { return JOINT_NAME_SIZE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeshBinaryFileHeader", function() { return MeshBinaryFileHeader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryTexture", function() { return BinaryTexture; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryFaceGroup", function() { return BinaryFaceGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryFace", function() { return BinaryFace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryVertex", function() { return BinaryVertex; });
+
+//
+//  FILE NAME: meshbinaryfileheader.js
+//  DESC:      mesh binary file headers
+//
+
+
+
+// Hex for RSS (Rabbid Squirrel Sprite)
+const MESH_FILE_HEADER = 0x415382AE;
+
+// Hex for tag check
+const TAG_CHECK = 0x6A82Fc4d;
+
+// Max character sizes for the texture path and joint name
+const TEXT_PATH_SIZE = 128;
+const JOINT_NAME_SIZE = 20;
+
+class MeshBinaryFileHeader
+{
+    constructor()
+    {
+        this.file_header      = 0; // uint32
+        this.vert_count       = 0; // uint16
+        this.uv_count         = 0; // uint16
+        this.vert_norm_count  = 0; // uint16
+        this.face_group_count = 0; // uint16
+        this.text_count       = 0; // uint16
+        this.joint_count      = 0; // uint16
+    }
+}
+
+// class for reading in texture info
+class BinaryTexture
+{
+    constructor()
+    {
+        this.type = 0;       // int8
+        this.path = '';      // file path [TEXT_PATH_SIZE]
+    }
+};
+
+// Class for reading and writing the total face count within a group and the material
+// it belongs to
+class BinaryFaceGroup
+{
+    constructor()
+    {
+        this.groupFaceCount = 0; // uint16
+        this.vertexBufCount = 0; // uint16
+        this.indexBufCount  = 0; // uint16
+        this.textureCount   = 0; // uint16
+    }
+};
+
+// Class for reading and writing face information
+class BinaryFace
+{
+    constructor()
+    {
+        this.vert = [];
+        this.norm = [];
+        this.uv = [];
+    }
+};
+
+// Class for reading and writing face information
+class BinaryVertex
+{
+    constructor()
+    {
+        this.vert = 0;
+        this.norm = 0;
+        this.uv = 0;
+    }
+};
+
+/***/ }),
+/* 30 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeshGroup", function() { return MeshGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mesh", function() { return Mesh; });
+
+//
+//  FILE NAME: mesh3d.js
+//  DESC:      3D mesh class
+//
+
+
+
+class MeshGroup
+{
+    constructor()
+    {
+        // Array texture paths for loading
+        this.uniqueTexturePathAry = [];
+        
+        // Array of loaded textures
+        this.meshAry = [];
+    }
+}
+
+class Mesh
+{
+    constructor()
+    {
+        // Texture indexes into the uniqueTexturePathAry
+        this.textureIndexAry = [];
+        
+        // Loaded texture data
+        this.textureAry = [];
+
+        // VBO
+        this.vbo = null;
+
+        // IBO
+        this.ibo = null;
+
+        // Number of IBOs needed for rendering
+        this.iboCount = 0;
+    }
+}
+
+
+/***/ }),
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "spriteSheetManager", function() { return spriteSheetManager; });
-/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
+/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
 
 //
 //  FILE NAME: spritesheetmanager.js
@@ -5087,16 +5027,16 @@ var spriteSheetManager = new SpriteSheetManager;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteSheet", function() { return SpriteSheet; });
-/* harmony import */ var _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
+/* harmony import */ var _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(29);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(35);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(25);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
 
 // 
 //  FILE NAME:  spritesheet.js
@@ -5334,21 +5274,17 @@ class SpriteSheet
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteSheetGlyph", function() { return SpriteSheetGlyph; });
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(29);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 
 // 
 //  FILE NAME:  spritesheetglyph.js
 //  DESC:       Class to hold sprite sheet glyph data
 //
-
-
 
 
 
@@ -5369,7 +5305,7 @@ class SpriteSheetGlyph
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5387,12 +5323,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadHorzAlignment", function() { return loadHorzAlignment; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadVertAlignment", function() { return loadVertAlignment; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadDynamicOffset", function() { return loadDynamicOffset; });
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(29);
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(17);
-/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(37);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(25);
+/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
+/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 // 
@@ -5796,7 +5732,7 @@ function loadDynamicOffset( node )
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5933,13 +5869,13 @@ class Color
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicOffset", function() { return DynamicOffset; });
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(38);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
 /* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
@@ -6030,7 +5966,7 @@ class DynamicOffset
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6129,7 +6065,7 @@ class BitMask
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6219,23 +6155,21 @@ var assetHolder = new AssetHolder;
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectData2D", function() { return ObjectData2D; });
-/* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
-/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(95);
+/* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(94);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
 
 // 
 //  FILE NAME: objectdata2d.js
 //  DESC:      Class that holds a 2D object data
 //
-
 
 
 
@@ -6283,7 +6217,7 @@ class ObjectData2D
         this.group = group;
 
         // Load the size
-        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__["loadSize"]( node, this.size );
+        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadSize"]( node, this.size );
 
         // Load the visual data
         this.visualData.loadObjData( node );
@@ -6304,14 +6238,14 @@ class ObjectData2D
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fixture", function() { return Fixture; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectPhysicsData2D", function() { return ObjectPhysicsData2D; });
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_0__);
 
 // 
@@ -6581,68 +6515,68 @@ class ObjectPhysicsData2D
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.internal = {};
 
-exports.Serializer = __webpack_require__(43);
+exports.Serializer = __webpack_require__(42);
 
-exports.Math = __webpack_require__(48);
-exports.Vec2 = __webpack_require__(47);
-exports.Vec3 = __webpack_require__(69);
-exports.Mat22 = __webpack_require__(65);
-exports.Mat33 = __webpack_require__(70);
-exports.Transform = __webpack_require__(59);
-exports.Rot = __webpack_require__(57);
+exports.Math = __webpack_require__(47);
+exports.Vec2 = __webpack_require__(46);
+exports.Vec3 = __webpack_require__(68);
+exports.Mat22 = __webpack_require__(64);
+exports.Mat33 = __webpack_require__(69);
+exports.Transform = __webpack_require__(58);
+exports.Rot = __webpack_require__(56);
 
-exports.AABB = __webpack_require__(52);
+exports.AABB = __webpack_require__(51);
 
-exports.Shape = __webpack_require__(63);
-exports.Fixture = __webpack_require__(62);
-exports.Body = __webpack_require__(56);
-exports.Contact = __webpack_require__(64);
-exports.Joint = __webpack_require__(71);
-exports.World = __webpack_require__(44);
+exports.Shape = __webpack_require__(62);
+exports.Fixture = __webpack_require__(61);
+exports.Body = __webpack_require__(55);
+exports.Contact = __webpack_require__(63);
+exports.Joint = __webpack_require__(70);
+exports.World = __webpack_require__(43);
 
-exports.Circle = __webpack_require__(74);
-exports.Edge = __webpack_require__(75);
-exports.Polygon = __webpack_require__(76);
-exports.Chain = __webpack_require__(77);
-exports.Box = __webpack_require__(78);
+exports.Circle = __webpack_require__(73);
+exports.Edge = __webpack_require__(74);
+exports.Polygon = __webpack_require__(75);
+exports.Chain = __webpack_require__(76);
+exports.Box = __webpack_require__(77);
 
+__webpack_require__(78);
 __webpack_require__(79);
-__webpack_require__(80);
-exports.internal.CollidePolygons = __webpack_require__(81);
+exports.internal.CollidePolygons = __webpack_require__(80);
+__webpack_require__(81);
 __webpack_require__(82);
-__webpack_require__(83);
 
-exports.DistanceJoint = __webpack_require__(84);
-exports.FrictionJoint = __webpack_require__(85);
-exports.GearJoint = __webpack_require__(86);
-exports.MotorJoint = __webpack_require__(89);
-exports.MouseJoint = __webpack_require__(90);
-exports.PrismaticJoint = __webpack_require__(88);
-exports.PulleyJoint = __webpack_require__(91);
-exports.RevoluteJoint = __webpack_require__(87);
-exports.RopeJoint = __webpack_require__(92);
-exports.WeldJoint = __webpack_require__(93);
-exports.WheelJoint = __webpack_require__(94);
+exports.DistanceJoint = __webpack_require__(83);
+exports.FrictionJoint = __webpack_require__(84);
+exports.GearJoint = __webpack_require__(85);
+exports.MotorJoint = __webpack_require__(88);
+exports.MouseJoint = __webpack_require__(89);
+exports.PrismaticJoint = __webpack_require__(87);
+exports.PulleyJoint = __webpack_require__(90);
+exports.RevoluteJoint = __webpack_require__(86);
+exports.RopeJoint = __webpack_require__(91);
+exports.WeldJoint = __webpack_require__(92);
+exports.WheelJoint = __webpack_require__(93);
 
-exports.internal.Sweep= __webpack_require__(58);
-exports.internal.stats = __webpack_require__(68);
-exports.internal.Manifold = __webpack_require__(66);
-exports.internal.Distance = __webpack_require__(67);
-exports.internal.TimeOfImpact = __webpack_require__(72);
-exports.internal.DynamicTree = __webpack_require__(53);
-exports.internal.Settings = __webpack_require__(51);
+exports.internal.Sweep= __webpack_require__(57);
+exports.internal.stats = __webpack_require__(67);
+exports.internal.Manifold = __webpack_require__(65);
+exports.internal.Distance = __webpack_require__(66);
+exports.internal.TimeOfImpact = __webpack_require__(71);
+exports.internal.DynamicTree = __webpack_require__(52);
+exports.internal.Settings = __webpack_require__(50);
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var World = __webpack_require__(44);
+var World = __webpack_require__(43);
 
 exports.toJson = function(world) {
   return JSON.stringify(world._serialize(), function(key, value) {
@@ -6663,7 +6597,7 @@ exports.fromJson = function(string) {
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -6690,13 +6624,13 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = World;
 
-var options = __webpack_require__(45);
-var common = __webpack_require__(46);
-var Vec2 = __webpack_require__(47);
-var BroadPhase = __webpack_require__(50);
-var Solver = __webpack_require__(55);
-var Body = __webpack_require__(56);
-var Contact = __webpack_require__(64);
+var options = __webpack_require__(44);
+var common = __webpack_require__(45);
+var Vec2 = __webpack_require__(46);
+var BroadPhase = __webpack_require__(49);
+var Solver = __webpack_require__(54);
+var Body = __webpack_require__(55);
+var Contact = __webpack_require__(63);
 
 /**
  * @typedef {Object} WorldDef
@@ -7784,7 +7718,7 @@ World.prototype.postSolve = function(contact, impulse) {
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports) {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -7817,7 +7751,7 @@ module.exports = function(to, from) {
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -7836,7 +7770,7 @@ exports.assert = function(statement, err, log) {
 };
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -7863,8 +7797,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Vec2;
 
-var common = __webpack_require__(46);
-var Math = __webpack_require__(48);
+var common = __webpack_require__(45);
+var Math = __webpack_require__(47);
 
 function Vec2(x, y) {
   if (!(this instanceof Vec2)) {
@@ -8361,7 +8295,7 @@ Vec2.translateFn = function(x, y) {
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8386,8 +8320,8 @@ Vec2.translateFn = function(x, y) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(46);
-var create = __webpack_require__(49);
+var common = __webpack_require__(45);
+var create = __webpack_require__(48);
 var native = Math;
 var math = module.exports = create(native);
 
@@ -8476,7 +8410,7 @@ math.random = function(min, max) {
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports) {
 
 if (typeof Object.create == 'function') {
@@ -8498,7 +8432,7 @@ if (typeof Object.create == 'function') {
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8523,11 +8457,11 @@ if (typeof Object.create == 'function') {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(51);
-var common = __webpack_require__(46);
-var Math = __webpack_require__(48);
-var AABB = __webpack_require__(52);
-var DynamicTree = __webpack_require__(53);
+var Settings = __webpack_require__(50);
+var common = __webpack_require__(45);
+var Math = __webpack_require__(47);
+var AABB = __webpack_require__(51);
+var DynamicTree = __webpack_require__(52);
 
 module.exports = BroadPhase;
 
@@ -8736,7 +8670,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports) {
 
 /*
@@ -8902,7 +8836,7 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8927,9 +8861,9 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(51);
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
+var Settings = __webpack_require__(50);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
 
 module.exports = AABB;
 
@@ -9161,7 +9095,7 @@ AABB.prototype.toString = function() {
 }
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -9186,12 +9120,12 @@ AABB.prototype.toString = function() {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(51);
-var common = __webpack_require__(46);
-var Pool = __webpack_require__(54);
-var Vec2 = __webpack_require__(47);
-var Math = __webpack_require__(48);
-var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(50);
+var common = __webpack_require__(45);
+var Pool = __webpack_require__(53);
+var Vec2 = __webpack_require__(46);
+var Math = __webpack_require__(47);
+var AABB = __webpack_require__(51);
 
 module.exports = DynamicTree;
 
@@ -10082,7 +10016,7 @@ function Iterator() {
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports) {
 
 /*
@@ -10175,7 +10109,7 @@ function Pool(opts) {
 }
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -10203,21 +10137,21 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 module.exports = Solver;
 module.exports.TimeStep = TimeStep;
 
-var Settings = __webpack_require__(51);
-var common = __webpack_require__(46);
+var Settings = __webpack_require__(50);
+var common = __webpack_require__(45);
 
-var Vec2 = __webpack_require__(47);
-var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(46);
+var Math = __webpack_require__(47);
 
-var Body = __webpack_require__(56);
-var Contact = __webpack_require__(64);
-var Joint = __webpack_require__(71);
+var Body = __webpack_require__(55);
+var Contact = __webpack_require__(63);
+var Joint = __webpack_require__(70);
 
-var TimeOfImpact = __webpack_require__(72);
+var TimeOfImpact = __webpack_require__(71);
 var TOIInput = TimeOfImpact.Input;
 var TOIOutput = TimeOfImpact.Output;
 
-var Distance = __webpack_require__(67);
+var Distance = __webpack_require__(66);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -11056,7 +10990,7 @@ Solver.prototype.postSolveIsland = function() {
 
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11083,20 +11017,20 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Body;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
 
-var Vec2 = __webpack_require__(47);
-var Rot = __webpack_require__(57);
-var Math = __webpack_require__(48);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Vec2 = __webpack_require__(46);
+var Rot = __webpack_require__(56);
+var Math = __webpack_require__(47);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Fixture = __webpack_require__(62);
-var Shape = __webpack_require__(63);
-var World = __webpack_require__(44);
+var Fixture = __webpack_require__(61);
+var Shape = __webpack_require__(62);
+var World = __webpack_require__(43);
 
 var staticBody = Body.STATIC = 'static';
 var kinematicBody = Body.KINEMATIC = 'kinematic';
@@ -12137,7 +12071,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12164,9 +12098,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Rot;
 
-var common = __webpack_require__(46);
-var Vec2 = __webpack_require__(47);
-var Math = __webpack_require__(48);
+var common = __webpack_require__(45);
+var Vec2 = __webpack_require__(46);
+var Math = __webpack_require__(47);
 
 // TODO merge with Transform
 
@@ -12371,7 +12305,7 @@ Rot.mulTVec2 = function(rot, m) {
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12398,11 +12332,11 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Sweep;
 
-var common = __webpack_require__(46);
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Rot = __webpack_require__(57);
-var Transform = __webpack_require__(59);
+var common = __webpack_require__(45);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Rot = __webpack_require__(56);
+var Transform = __webpack_require__(58);
 
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
@@ -12508,7 +12442,7 @@ Sweep.prototype.set = function(that) {
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12535,9 +12469,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Transform;
 
-var common = __webpack_require__(46);
-var Vec2 = __webpack_require__(47);
-var Rot = __webpack_require__(57);
+var common = __webpack_require__(45);
+var Vec2 = __webpack_require__(46);
+var Rot = __webpack_require__(56);
 
 // TODO merge with Rot
 
@@ -12746,7 +12680,7 @@ Transform.mulTXf = function(a, b) {
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12773,7 +12707,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Velocity;
 
-var Vec2 = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
 
 /**
  * @prop {Vec2} v linear
@@ -12782,6 +12716,52 @@ var Vec2 = __webpack_require__(47);
 function Velocity() {
   this.v = Vec2.zero();
   this.w = 0;
+}
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
+module.exports = Position;
+
+var Vec2 = __webpack_require__(46);
+var Rot = __webpack_require__(56);
+
+/**
+ * @prop {Vec2} c location
+ * @prop {float} a angle
+ */
+function Position() {
+  this.c = Vec2.zero();
+  this.a = 0;
+}
+
+Position.prototype.getTransform = function(xf, p) {
+  xf.q.set(this.a);
+  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+  return xf;
 }
 
 /***/ }),
@@ -12810,63 +12790,17 @@ function Velocity() {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-module.exports = Position;
-
-var Vec2 = __webpack_require__(47);
-var Rot = __webpack_require__(57);
-
-/**
- * @prop {Vec2} c location
- * @prop {float} a angle
- */
-function Position() {
-  this.c = Vec2.zero();
-  this.a = 0;
-}
-
-Position.prototype.getTransform = function(xf, p) {
-  xf.q.set(this.a);
-  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
-  return xf;
-}
-
-/***/ }),
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 module.exports = Fixture;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
 
-var AABB = __webpack_require__(52);
+var AABB = __webpack_require__(51);
 
-var Shape = __webpack_require__(63);
+var Shape = __webpack_require__(62);
 
 /**
  * @typedef {Object} FixtureDef
@@ -13283,7 +13217,7 @@ Fixture.prototype.shouldCollide = function(that) {
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13310,7 +13244,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Shape;
 
-var Math = __webpack_require__(48);
+var Math = __webpack_require__(47);
 
 /**
  * A shape is used for collision detection. You can create a shape however you
@@ -13418,7 +13352,7 @@ Shape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13445,17 +13379,17 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 var DEBUG_SOLVER = false;
 
-var common = __webpack_require__(46);
+var common = __webpack_require__(45);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Transform = __webpack_require__(59);
-var Mat22 = __webpack_require__(65);
-var Rot = __webpack_require__(57);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Transform = __webpack_require__(58);
+var Mat22 = __webpack_require__(64);
+var Rot = __webpack_require__(56);
 
-var Settings = __webpack_require__(51);
-var Manifold = __webpack_require__(66);
-var Distance = __webpack_require__(67);
+var Settings = __webpack_require__(50);
+var Manifold = __webpack_require__(65);
+var Distance = __webpack_require__(66);
 
 module.exports = Contact;
 
@@ -14648,7 +14582,7 @@ Contact.destroy = function(contact, listener) {
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14675,9 +14609,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Mat22;
 
-var common = __webpack_require__(46);
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
+var common = __webpack_require__(45);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
 
 /**
  * A 2-by-2 matrix. Stored in column-major order.
@@ -14861,7 +14795,7 @@ Mat22.add = function(mx1, mx2) {
 
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14886,12 +14820,12 @@ Mat22.add = function(mx1, mx2) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(46);
+var common = __webpack_require__(45);
 
-var Vec2 = __webpack_require__(47);
-var Transform = __webpack_require__(59);
-var Math = __webpack_require__(48);
-var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(46);
+var Transform = __webpack_require__(58);
+var Math = __webpack_require__(47);
+var Rot = __webpack_require__(56);
 
 module.exports = Manifold;
 module.exports.clipSegmentToLine = clipSegmentToLine;
@@ -15212,7 +15146,7 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15244,21 +15178,21 @@ module.exports.Output = DistanceOutput;
 module.exports.Proxy = DistanceProxy;
 module.exports.Cache = SimplexCache;
 
-var Settings = __webpack_require__(51);
-var common = __webpack_require__(46);
+var Settings = __webpack_require__(50);
+var common = __webpack_require__(45);
 
-var stats = __webpack_require__(68);
+var stats = __webpack_require__(67);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -15909,7 +15843,7 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 }
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports) {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -15927,7 +15861,7 @@ exports.toString = function(newline) {
 };
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15954,8 +15888,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Vec3;
 
-var common = __webpack_require__(46);
-var Math = __webpack_require__(48);
+var common = __webpack_require__(45);
+var Math = __webpack_require__(47);
 
 function Vec3(x, y, z) {
   if (!(this instanceof Vec3)) {
@@ -16106,7 +16040,7 @@ Vec3.neg = function(v) {
 
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16133,10 +16067,10 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Mat33;
 
-var common = __webpack_require__(46);
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
+var common = __webpack_require__(45);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -16335,7 +16269,7 @@ Mat33.add = function(a, b) {
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16362,7 +16296,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Joint;
 
-var common = __webpack_require__(46);
+var common = __webpack_require__(45);
 
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
@@ -16556,7 +16490,7 @@ Joint.prototype.solvePositionConstraints = function(step) {
 };
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16585,25 +16519,25 @@ module.exports = TimeOfImpact;
 module.exports.Input = TOIInput;
 module.exports.Output = TOIOutput;
 
-var Settings = __webpack_require__(51);
+var Settings = __webpack_require__(50);
 
-var common = __webpack_require__(46);
-var Timer = __webpack_require__(73);
+var common = __webpack_require__(45);
+var Timer = __webpack_require__(72);
 
-var stats = __webpack_require__(68);
+var stats = __webpack_require__(67);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Distance = __webpack_require__(67);
+var Distance = __webpack_require__(66);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -17041,7 +16975,7 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports) {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -17057,7 +16991,7 @@ module.exports.diff = function(time) {
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17084,16 +17018,16 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = CircleShape;
 
-var common = __webpack_require__(46);
-var create = __webpack_require__(49);
-var options = __webpack_require__(45);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Rot = __webpack_require__(57);
-var Vec2 = __webpack_require__(47);
-var AABB = __webpack_require__(52);
-var Settings = __webpack_require__(51);
-var Shape = __webpack_require__(63);
+var common = __webpack_require__(45);
+var create = __webpack_require__(48);
+var options = __webpack_require__(44);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Rot = __webpack_require__(56);
+var Vec2 = __webpack_require__(46);
+var AABB = __webpack_require__(51);
+var Settings = __webpack_require__(50);
+var Shape = __webpack_require__(62);
 
 CircleShape._super = Shape;
 CircleShape.prototype = create(CircleShape._super.prototype);
@@ -17233,7 +17167,7 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17260,15 +17194,15 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = EdgeShape;
 
-var create = __webpack_require__(49);
-var options = __webpack_require__(45);
-var Settings = __webpack_require__(51);
-var Shape = __webpack_require__(63);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Rot = __webpack_require__(57);
-var Vec2 = __webpack_require__(47);
-var AABB = __webpack_require__(52);
+var create = __webpack_require__(48);
+var options = __webpack_require__(44);
+var Settings = __webpack_require__(50);
+var Shape = __webpack_require__(62);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Rot = __webpack_require__(56);
+var Vec2 = __webpack_require__(46);
+var AABB = __webpack_require__(51);
 
 EdgeShape._super = Shape;
 EdgeShape.prototype = create(EdgeShape._super.prototype);
@@ -17465,7 +17399,7 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17492,16 +17426,16 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PolygonShape;
 
-var common = __webpack_require__(46);
-var create = __webpack_require__(49);
-var options = __webpack_require__(45);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Rot = __webpack_require__(57);
-var Vec2 = __webpack_require__(47);
-var AABB = __webpack_require__(52);
-var Settings = __webpack_require__(51);
-var Shape = __webpack_require__(63);
+var common = __webpack_require__(45);
+var create = __webpack_require__(48);
+var options = __webpack_require__(44);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Rot = __webpack_require__(56);
+var Vec2 = __webpack_require__(46);
+var AABB = __webpack_require__(51);
+var Settings = __webpack_require__(50);
+var Shape = __webpack_require__(62);
 
 PolygonShape._super = Shape;
 PolygonShape.prototype = create(PolygonShape._super.prototype);
@@ -17982,7 +17916,7 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 };
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18009,17 +17943,17 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = ChainShape;
 
-var common = __webpack_require__(46);
-var create = __webpack_require__(49);
-var options = __webpack_require__(45);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Rot = __webpack_require__(57);
-var Vec2 = __webpack_require__(47);
-var AABB = __webpack_require__(52);
-var Settings = __webpack_require__(51);
-var Shape = __webpack_require__(63);
-var EdgeShape = __webpack_require__(75);
+var common = __webpack_require__(45);
+var create = __webpack_require__(48);
+var options = __webpack_require__(44);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Rot = __webpack_require__(56);
+var Vec2 = __webpack_require__(46);
+var AABB = __webpack_require__(51);
+var Settings = __webpack_require__(50);
+var Shape = __webpack_require__(62);
+var EdgeShape = __webpack_require__(74);
 
 ChainShape._super = Shape;
 ChainShape.prototype = create(ChainShape._super.prototype);
@@ -18258,7 +18192,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 };
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18285,9 +18219,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = BoxShape;
 
-var common = __webpack_require__(46);
-var create = __webpack_require__(49);
-var PolygonShape = __webpack_require__(76);
+var common = __webpack_require__(45);
+var create = __webpack_require__(48);
+var PolygonShape = __webpack_require__(75);
 
 BoxShape._super = PolygonShape;
 BoxShape.prototype = create(BoxShape._super.prototype);
@@ -18310,7 +18244,7 @@ function BoxShape(hx, hy, center, angle) {
 
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18335,16 +18269,16 @@ function BoxShape(hx, hy, center, angle) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(46);
-var create = __webpack_require__(49);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Vec2 = __webpack_require__(47);
-var Settings = __webpack_require__(51);
-var Shape = __webpack_require__(63);
-var Contact = __webpack_require__(64);
-var Manifold = __webpack_require__(66);
-var CircleShape = __webpack_require__(74);
+var common = __webpack_require__(45);
+var create = __webpack_require__(48);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Vec2 = __webpack_require__(46);
+var Settings = __webpack_require__(50);
+var Shape = __webpack_require__(62);
+var Contact = __webpack_require__(63);
+var Manifold = __webpack_require__(65);
+var CircleShape = __webpack_require__(73);
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
@@ -18384,7 +18318,7 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
 exports.CollideCircles = CollideCircles;
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18409,19 +18343,19 @@ exports.CollideCircles = CollideCircles;
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(46);
-var create = __webpack_require__(49);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Vec2 = __webpack_require__(47);
-var Rot = __webpack_require__(57);
-var Settings = __webpack_require__(51);
-var Shape = __webpack_require__(63);
-var Contact = __webpack_require__(64);
-var Manifold = __webpack_require__(66);
-var EdgeShape = __webpack_require__(75);
-var ChainShape = __webpack_require__(77);
-var CircleShape = __webpack_require__(74);
+var common = __webpack_require__(45);
+var create = __webpack_require__(48);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Vec2 = __webpack_require__(46);
+var Rot = __webpack_require__(56);
+var Settings = __webpack_require__(50);
+var Shape = __webpack_require__(62);
+var Contact = __webpack_require__(63);
+var Manifold = __webpack_require__(65);
+var EdgeShape = __webpack_require__(74);
+var ChainShape = __webpack_require__(76);
+var CircleShape = __webpack_require__(73);
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
@@ -18573,7 +18507,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18598,17 +18532,17 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(46);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Rot = __webpack_require__(57);
-var Vec2 = __webpack_require__(47);
-var AABB = __webpack_require__(52);
-var Settings = __webpack_require__(51);
-var Manifold = __webpack_require__(66);
-var Contact = __webpack_require__(64);
-var Shape = __webpack_require__(63);
-var PolygonShape = __webpack_require__(76);
+var common = __webpack_require__(45);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Rot = __webpack_require__(56);
+var Vec2 = __webpack_require__(46);
+var AABB = __webpack_require__(51);
+var Settings = __webpack_require__(50);
+var Manifold = __webpack_require__(65);
+var Contact = __webpack_require__(63);
+var Shape = __webpack_require__(62);
+var PolygonShape = __webpack_require__(75);
 
 module.exports = CollidePolygons;
 
@@ -18840,7 +18774,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18865,18 +18799,18 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(46);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Rot = __webpack_require__(57);
-var Vec2 = __webpack_require__(47);
-var AABB = __webpack_require__(52);
-var Settings = __webpack_require__(51);
-var Manifold = __webpack_require__(66);
-var Contact = __webpack_require__(64);
-var Shape = __webpack_require__(63);
-var CircleShape = __webpack_require__(74);
-var PolygonShape = __webpack_require__(76);
+var common = __webpack_require__(45);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Rot = __webpack_require__(56);
+var Vec2 = __webpack_require__(46);
+var AABB = __webpack_require__(51);
+var Settings = __webpack_require__(50);
+var Manifold = __webpack_require__(65);
+var Contact = __webpack_require__(63);
+var Shape = __webpack_require__(62);
+var CircleShape = __webpack_require__(73);
+var PolygonShape = __webpack_require__(75);
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
@@ -18999,7 +18933,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19024,19 +18958,19 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(46);
-var create = __webpack_require__(49);
-var Math = __webpack_require__(48);
-var Transform = __webpack_require__(59);
-var Vec2 = __webpack_require__(47);
-var Rot = __webpack_require__(57);
-var Settings = __webpack_require__(51);
-var Shape = __webpack_require__(63);
-var Contact = __webpack_require__(64);
-var Manifold = __webpack_require__(66);
-var EdgeShape = __webpack_require__(75);
-var ChainShape = __webpack_require__(77);
-var PolygonShape = __webpack_require__(76);
+var common = __webpack_require__(45);
+var create = __webpack_require__(48);
+var Math = __webpack_require__(47);
+var Transform = __webpack_require__(58);
+var Vec2 = __webpack_require__(46);
+var Rot = __webpack_require__(56);
+var Settings = __webpack_require__(50);
+var Shape = __webpack_require__(62);
+var Contact = __webpack_require__(63);
+var Manifold = __webpack_require__(65);
+var EdgeShape = __webpack_require__(74);
+var ChainShape = __webpack_require__(76);
+var PolygonShape = __webpack_require__(75);
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
@@ -19488,7 +19422,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19515,22 +19449,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = DistanceJoint;
 
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 DistanceJoint.TYPE = 'distance-joint';
 
@@ -19843,7 +19777,7 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19870,23 +19804,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = FrictionJoint;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 FrictionJoint.TYPE = 'friction-joint';
 
@@ -20161,7 +20095,7 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -20188,26 +20122,26 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = GearJoint;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
-var RevoluteJoint = __webpack_require__(87);
-var PrismaticJoint = __webpack_require__(88);
+var RevoluteJoint = __webpack_require__(86);
+var PrismaticJoint = __webpack_require__(87);
 
 GearJoint.TYPE = 'gear-joint';
 
@@ -20644,7 +20578,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -20671,23 +20605,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = RevoluteJoint;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -21274,7 +21208,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 88 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -21301,23 +21235,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PrismaticJoint;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -22026,7 +21960,7 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 89 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -22053,23 +21987,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = MotorJoint;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 MotorJoint.TYPE = 'motor-joint';
 
@@ -22395,7 +22329,7 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 90 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -22422,22 +22356,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = MouseJoint;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 MouseJoint.TYPE = 'mouse-joint';
 
@@ -22701,7 +22635,7 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -22728,23 +22662,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PulleyJoint;
 
-var common = __webpack_require__(46);
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var common = __webpack_require__(45);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
@@ -23086,7 +23020,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -23113,22 +23047,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = RopeJoint;
 
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -23408,7 +23342,7 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 93 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -23435,22 +23369,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = WeldJoint;
 
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 WeldJoint.TYPE = 'weld-joint';
 
@@ -23844,7 +23778,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 94 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -23871,22 +23805,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = WheelJoint;
 
-var options = __webpack_require__(45);
-var create = __webpack_require__(49);
-var Settings = __webpack_require__(51);
+var options = __webpack_require__(44);
+var create = __webpack_require__(48);
+var Settings = __webpack_require__(50);
 
-var Math = __webpack_require__(48);
-var Vec2 = __webpack_require__(47);
-var Vec3 = __webpack_require__(69);
-var Mat22 = __webpack_require__(65);
-var Mat33 = __webpack_require__(70);
-var Rot = __webpack_require__(57);
-var Sweep = __webpack_require__(58);
-var Transform = __webpack_require__(59);
-var Velocity = __webpack_require__(60);
-var Position = __webpack_require__(61);
+var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(46);
+var Vec3 = __webpack_require__(68);
+var Mat22 = __webpack_require__(64);
+var Mat33 = __webpack_require__(69);
+var Rot = __webpack_require__(56);
+var Sweep = __webpack_require__(57);
+var Transform = __webpack_require__(58);
+var Velocity = __webpack_require__(59);
+var Position = __webpack_require__(60);
 
-var Joint = __webpack_require__(71);
+var Joint = __webpack_require__(70);
 
 WheelJoint.TYPE = 'wheel-joint';
 
@@ -24390,32 +24324,28 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectVisualData2D", function() { return ObjectVisualData2D; });
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(29);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
-/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(96);
-/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(33);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(15);
-/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(32);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(39);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(5);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(18);
+/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(95);
+/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(32);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
+/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(31);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(38);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(34);
 
 // 
 //  FILE NAME: ojectvisualdata2d.js
 //  DESC:      Class containing the 2D object's visual data
 //
-
-
 
 
 
@@ -24445,7 +24375,7 @@ class ObjectVisualData2D
         this.ibo = null;
 
         // VBO/IBO generation type
-        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_NULL"];
+        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_NULL"];
 
         // Name of the shader
         this.shaderID = null;
@@ -24484,7 +24414,7 @@ class ObjectVisualData2D
         this.defaultUniformScale = 1;
         
         // Mirror value
-        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_NULL"];
+        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EM_NULL"];
     }
     
     // 
@@ -24513,13 +24443,13 @@ class ObjectVisualData2D
         
         if( obj.scaledFrame )
         {
-            this.scaledFrame = new _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__["ScaledFrame"];
+            this.scaledFrame = new _common_scaledframe__WEBPACK_IMPORTED_MODULE_3__["ScaledFrame"];
             this.scaledFrame.copy( obj.scaledFrame );
         }
         
         if( obj.spriteSheet )
         {
-            this.spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__["SpriteSheet"];
+            this.spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_4__["SpriteSheet"];
             this.spriteSheet.copy( obj.spriteSheet );
         }
     }
@@ -24559,32 +24489,32 @@ class ObjectVisualData2D
                 if( genTypeStr )
                 {
                     if( genTypeStr === 'quad' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_QUAD"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_QUAD"];
 
                     else if( genTypeStr === 'sprite_sheet' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SPRITE_SHEET"];
 
                     else if( genTypeStr === 'scaled_frame' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SCALED_FRAME"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SCALED_FRAME"];
 
                     else if( genTypeStr === 'mesh_file' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_MESH_FILE"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_MESH_FILE"];
 
                     else if( genTypeStr === 'font' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_FONT"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_FONT"];
                 }
                 
                 let mirrorStr = meshNode[0].getAttribute('mirror');
                 if( mirrorStr )
                 {
                     if( mirrorStr === 'horizontal' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL"];
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EM_HORIZONTAL"];
 
                     else if( mirrorStr === 'vertical' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_VERTICAL"];
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EM_VERTICAL"];
 
                     else if( mirrorStr === 'horizontal_vertical' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL_VERTICAL"];
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_9__["EM_HORIZONTAL_VERTICAL"];
                 }
                 
                 let spriteSheetNode = meshNode[0].getElementsByTagName( 'spriteSheet' );
@@ -24626,14 +24556,14 @@ class ObjectVisualData2D
                     
                     // make sure this is a valid sprite sheet before allocating
                     if( (this.spriteSheet === null) && (this.glyphIDs || defaultIndex || glyphCount || columns) )
-                        this.spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__["SpriteSheet"]( defaultIndex, glyphCount, columns );
+                        this.spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_4__["SpriteSheet"]( defaultIndex, glyphCount, columns );
                 }
 
                 let scaledFrameNode = meshNode[0].getElementsByTagName( 'scaledFrame' );
                 if( scaledFrameNode.length )
                 {
                     if( this.scaledFrame === null )
-                        this.scaledFrame = new _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__["ScaledFrame"];
+                        this.scaledFrame = new _common_scaledframe__WEBPACK_IMPORTED_MODULE_3__["ScaledFrame"];
                     
                     this.scaledFrame.frame.w = Number(scaledFrameNode[0].getAttribute( 'thicknessWidth' ));
                     this.scaledFrame.frame.h = Number(scaledFrameNode[0].getAttribute( 'thicknessHeight' ));
@@ -24660,10 +24590,10 @@ class ObjectVisualData2D
             }
 
             // Load the color
-            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__["loadColor"]( visualNode[0], this.color );
+            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__["loadColor"]( visualNode[0], this.color );
 
             // Raise an exception if there's a genType but no shader
-            if( (this.genType != _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_NULL"]) && (this.shaderID === null) )
+            if( (this.genType != _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_NULL"]) && (this.shaderID === null) )
                 throw new Error( 'Shader effect or techique not set!' );
         }
     }
@@ -24681,20 +24611,20 @@ class ObjectVisualData2D
             {
                 for( let i = 0; i < this.textureSequenceCount; ++i )
                 {
-                    let NUM = i;
+                    let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
                     let filePath = eval('`' + this.textureFilePath + '`');
-                    this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__["textureManager"].getTexture( group, filePath ) );
+                    this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__["textureManager"].getTexture( group, filePath ) );
                 }
             }
             else
-                this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__["textureManager"].getTexture( group, this.textureFilePath ) );
+                this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__["textureManager"].getTexture( group, this.textureFilePath ) );
             
             // If the passed in size is empty, set it to the texture size
             if( size.isEmpty() )
                 size.copy( this.textureAry[0].size );
         }
         
-        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_QUAD"] )
+        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_QUAD"] )
         {
             this.generateQuad( group );
             
@@ -24703,7 +24633,7 @@ class ObjectVisualData2D
             size.w = Math.trunc(this.vertexScale.w);
             size.h = Math.trunc(this.vertexScale.h);
         }
-        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
+        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SPRITE_SHEET"] )
         {
             // Build the simple (grid) sprite sheet from XML data
             if( this.spriteSheetFilePath === null )
@@ -24715,7 +24645,7 @@ class ObjectVisualData2D
             else
             {
                 // This will return the sprite sheet if it's been loaded
-                let spriteSheet = _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__["spriteSheetManager"].get( group, this.spriteSheetFilePath );
+                let spriteSheet = _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_7__["spriteSheetManager"].get( group, this.spriteSheetFilePath );
 
                 // Copy the needed glyph data from the manager
                 spriteSheet.copyTo( this.spriteSheet, this.glyphIDs );
@@ -24732,12 +24662,12 @@ class ObjectVisualData2D
             size.w = Math.trunc(this.vertexScale.w);
             size.h = Math.trunc(this.vertexScale.h);
         }
-        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SCALED_FRAME"] )
+        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SCALED_FRAME"] )
         {
             if( this.glyphIDs !== null )
             {
                 // This will return the sprite sheet
-                let spriteSheet = _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__["spriteSheetManager"].get( group, this.spriteSheetFilePath );
+                let spriteSheet = _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_7__["spriteSheetManager"].get( group, this.spriteSheetFilePath );
 
                 // Get the glyph to make the frame with
                 let glyph = spriteSheet.findGlyph( this.glyphIDs[0] );
@@ -24780,7 +24710,7 @@ class ObjectVisualData2D
         let horzStr = '';
         let vertStr = '';
         
-        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL"]) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL_VERTICAL"]) )
+        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EM_HORIZONTAL"]) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EM_HORIZONTAL_VERTICAL"]) )
         {
             horzStr = '_horz';
             
@@ -24790,7 +24720,7 @@ class ObjectVisualData2D
             vertAry[5 * 3 + 3] = 0.0;
         }
         
-        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_VERTICAL"]) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL_VERTICAL"]) )
+        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EM_VERTICAL"]) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EM_HORIZONTAL_VERTICAL"]) )
         {
             vertStr = '_vert';
             
@@ -24800,8 +24730,8 @@ class ObjectVisualData2D
             vertAry[5 * 3 + 4] = 0.0;
         }
         
-        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createVBO( group, 'guad_0011' + horzStr + vertStr, vertAry );
-        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createIBO( group, 'quad_0123', [0, 1, 2, 3], true );
+        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__["vertexBufferManager"].createVBO( group, 'guad_0011' + horzStr + vertStr, vertAry );
+        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__["vertexBufferManager"].createIBO( group, 'quad_0123', [0, 1, 2, 3], true );
         
         this.iboCount = 4;
     }
@@ -24816,7 +24746,7 @@ class ObjectVisualData2D
         let gSize = glyphSize;
         let vboName = 'scaled_frame_' + frameSize.w + '_' + frameSize.h + '_' + frame.w + '_' + frame.h + '_' + tSize.w + '_' + tSize.h + '_' + gSize.w + '_' + gSize.h;
 
-        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createScaledFrame(
+        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__["vertexBufferManager"].createScaledFrame(
             group, vboName, this.scaledFrame, textureSize, glyphSize, frameSize, textureOffset );
 
         let iboAry = [
@@ -24831,7 +24761,7 @@ class ObjectVisualData2D
             3,7,1,     3,10,7 ];
 
         // Create the reusable IBO buffer
-        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createIBO( group, 'scaled_frame', iboAry, true );
+        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__["vertexBufferManager"].createIBO( group, 'scaled_frame', iboAry, true );
 
         // Set the ibo count depending on the number of quads being rendered
         // If the center quad is not used, just adjust the ibo count because
@@ -24868,7 +24798,7 @@ class ObjectVisualData2D
             Array.prototype.push.apply( iboAry, [ 3,7,1, 3,10,7 ] );
 
         // See if it already exists before loading the mesh file
-        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].isVBO( group, name );
+        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__["vertexBufferManager"].isVBO( group, name );
         if( this.vbo === null )
         {
             // Load a mesh from XML file
@@ -24876,12 +24806,12 @@ class ObjectVisualData2D
             this.loadMeshFromXML( group, textureSize, frameSize, textureOffset, 16, meshFileVertAry, iboAry );
 
             // create the vbo
-            this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createScaledFrame(
+            this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__["vertexBufferManager"].createScaledFrame(
                 group, name, this.scaledFrame, textureSize, glyphSize, frameSize, textureOffset, meshFileVertAry );
         }
         
         // Create the reusable IBO buffer
-        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createIBO( group, name, iboAry, true );
+        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__["vertexBufferManager"].createIBO( group, name, iboAry, true );
         this.iboCount = iboAry.length;
     }
     
@@ -24904,7 +24834,7 @@ class ObjectVisualData2D
         let centerAlignSize = new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](-(frameSize.w / 2), (frameSize.h / 2));
 
         // Open and parse the XML file:
-        let node = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__["assetHolder"].get( group, this.meshFilePath );
+        let node = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_8__["assetHolder"].get( group, this.meshFilePath );
         let vboNode = node.getElementsByTagName( 'vbo' );
         
         if( vboNode.length )
@@ -24914,7 +24844,7 @@ class ObjectVisualData2D
             for( let i = 0; i < vertNode.length; ++i )
             {
                 // Load the 2D vert
-                let vert = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__["loadVertex2d"]( vertNode[i] );
+                let vert = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__["loadVertex2d"]( vertNode[i] );
                 
                 // This converts the data to a center aligned vertex buffer
                 vertAry.push( centerAlignSize.w + vert.x + additionalOffsetX );
@@ -24940,7 +24870,7 @@ class ObjectVisualData2D
     //
     isActive()
     {
-        return (this.genType !== _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_NULL"]);
+        return (this.genType !== _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_NULL"]);
     }
     
     // 
@@ -24948,12 +24878,10 @@ class ObjectVisualData2D
     //
     getFrameCount()
     {
-        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
+        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SPRITE_SHEET"] )
             return this.spriteSheet.getCount();
-        else
-            return this.textureAry.length;
 
-        return 0;
+        return this.textureAry.length;
     }
     
     // 
@@ -24979,7 +24907,7 @@ class ObjectVisualData2D
         {
             for( let i = 0; i < this.textureSequenceCount; ++i )
             {
-                let NUM = i;
+                let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
                 filePathAry.push( eval('`' + this.textureFilePath + '`') );
             }
         }
@@ -24992,7 +24920,7 @@ class ObjectVisualData2D
 
 
 /***/ }),
-/* 96 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25035,14 +24963,13 @@ class ScaledFrame
 
 
 /***/ }),
-/* 97 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectData3D", function() { return ObjectData3D; });
-/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(98);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
+/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(97);
 
 // 
 //  FILE NAME: objectdata3d.js
@@ -25052,7 +24979,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
-
 
 
 class ObjectData3D
@@ -25108,15 +25034,15 @@ class ObjectData3D
 
 
 /***/ }),
-/* 98 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectVisualData3D", function() { return ObjectVisualData3D; });
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(34);
 
 // 
 //  FILE NAME: ojectvisualdata3d.js
@@ -25211,21 +25137,19 @@ class ObjectVisualData3D
 
 
 /***/ }),
-/* 99 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "actionManager", function() { return actionManager; });
-/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(100);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 // 
 //  FILE NAME: actionmanager.js
 //  DESC:      Class for handling action mapping
 //
-
 
 
 
@@ -25249,7 +25173,7 @@ class ActionManager
         this.allowAction = true;
         
         // Last device used
-        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEVICE_NULL"];
+        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEVICE_NULL"];
         
         this.keyboardKeyCodeMap.set( '---', -1 );
         this.keyboardKeyCodeMap.set( 'RETURN', 13 );
@@ -25372,7 +25296,7 @@ class ActionManager
     //
     clearLastDeviceUsed()
     {
-        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEVICE_NULL"];
+        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEVICE_NULL"];
     }
     
     // 
@@ -25380,7 +25304,7 @@ class ActionManager
     //
     load( filePath, callback )
     {
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', filePath,
+        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
             ( xmlNode ) =>
             {
                 this.loadFromNode( xmlNode );
@@ -25493,39 +25417,39 @@ class ActionManager
     //
     wasAction( event, actionStr )
     {
-        let result = _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_IDLE"];
+        let result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_IDLE"];
 
         if( this.allowAction )
         {
             // Check for keyboard event
             if( event instanceof KeyboardEvent )
             {
-                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__["KEYBOARD"];
+                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__["KEYBOARD"];
 
                 if( this.wasActionMap( event.keyCode, actionStr, this.keyboardActionMap ) )
                 {
-                    result = _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_UP"];
+                    result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_UP"];
 
                     // Check for the "D" character code for keydown
                     if( event.type.charCodeAt(3) === 100 )
                     {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_DOWN"];
+                        result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_DOWN"];
                     }
                 }
             }
             // Check for mouse event
             else if( event instanceof MouseEvent )
             {
-                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__["MOUSE"];
+                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__["MOUSE"];
 
                 if( this.wasActionMap( event.button, actionStr, this.mouseActionMap ) )
                 {
-                    result = _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_UP"];
+                    result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_UP"];
 
                     // Check for the "D" character code for mousedown
                     if( event.type.charCodeAt(5) === 100 )
                     {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_DOWN"];
+                        result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_DOWN"];
                     }
                 }
             }
@@ -25558,17 +25482,17 @@ class ActionManager
     //
     wasLastDeviceGamepad()
     {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_3__["GAMEPAD"]);
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__["GAMEPAD"]);
     }
 
     wasLastDeviceKeyboard()
     {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_3__["KEYBOARD"]);
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__["KEYBOARD"]);
     }
 
     wasLastDeviceMouse()
     {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_3__["MOUSE"]);
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__["MOUSE"]);
     }
 }
 
@@ -25576,7 +25500,7 @@ var actionManager = new ActionManager;
 
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25625,21 +25549,21 @@ class KeyCodeAction
 
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "menuManager", function() { return menuManager; });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(99);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(98);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(39);
-/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
-/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(139);
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(140);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(18);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(38);
+/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(101);
+/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(136);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(137);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(14);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -26769,24 +26693,24 @@ var menuManager = new MenuManager;
 
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Menu", function() { return Menu; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
-/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(105);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
+/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(104);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(106);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(26);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(124);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(122);
-/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(25);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(128);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(105);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(121);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(26);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(119);
+/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(21);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(122);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(34);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 // 
 //  FILE NAME: menu.js
@@ -27658,13 +27582,13 @@ class Menu extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object2D", function() { return Object2D; });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -27794,7 +27718,7 @@ class Object2D extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
 
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27802,8 +27726,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object", function() { return Object; });
 /* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(35);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 
 // 
@@ -28046,7 +27970,7 @@ class Object
 
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28127,25 +28051,23 @@ class ScrollParam
 }
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sprite", function() { return Sprite; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
-/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(113);
-/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(114);
-/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(115);
-/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(116);
-/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(117);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(122);
-/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(25);
-/* harmony import */ var _spritedata__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(123);
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(103);
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(112);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
+/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(108);
+/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(109);
+/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(110);
+/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(113);
+/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(114);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(119);
+/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(21);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(102);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(120);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(5);
 
 // 
 //  FILE NAME:  sprite.js
@@ -28166,11 +28088,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
 class Sprite
 {
-    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_12__["DEFAULT_ID"] )
+    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_10__["DEFAULT_ID"] )
     {
         // The object data
         this.objData = objData
@@ -28199,18 +28119,18 @@ class Sprite
         // Allocate the sprite specific objects
         if( this.objData.constructor.name == 'ObjectData2D' )
         {
-            this.object = new _2d_object2d__WEBPACK_IMPORTED_MODULE_9__["Object2D"]
+            this.object = new _2d_object2d__WEBPACK_IMPORTED_MODULE_8__["Object2D"]
             
-            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EGT_QUAD"] )
+            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_QUAD"] )
                 this.visualComponent = new _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EGT_SPRITE_SHEET"] )
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
                 this.visualComponent = new _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__["VisualComponentSpriteSheet"]( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EGT_SCALED_FRAME"] )
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SCALED_FRAME"] )
                 this.visualComponent = new _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__["VisualComponentScaledFrame"]( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EGT_FONT"] )
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_FONT"] )
                 this.visualComponent = new _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__["VisualComponentFont"]( objData.visualData );
             
             if( objData.physicsData.isActive() )
@@ -28218,7 +28138,7 @@ class Sprite
         }
         else if( this.objData.constructor.name == 'ObjectData3D' )
         {
-            this.object = new _3d_object3d__WEBPACK_IMPORTED_MODULE_10__["Object3D"]
+            this.object = new _3d_object3d__WEBPACK_IMPORTED_MODULE_9__["Object3D"]
             this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__["VisualComponent3D"]( objData.visualData );
         }
         
@@ -28446,7 +28366,7 @@ class Sprite
         {
             this.visualComponent.setFrame( index );
 
-            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EGT_SPRITE_SHEET"] )
+            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
                 this.object.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
     }
@@ -28473,26 +28393,20 @@ class Sprite
 
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentQuad", function() { return VisualComponentQuad; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4);
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(111);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(18);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
 //  FILE NAME:  visualcomponentquad.js
@@ -28510,16 +28424,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
 // allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__["Matrix"];
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__["Matrix"];
 
 class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__["ivisualComponent"]
 {
@@ -28540,7 +28448,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
         this.ibo = visualData.ibo;
         this.iboCount = visualData.iboCount;
         this.texture = visualData.getTexture();
-        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_7__["Color"];
+        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
         
         if( visualData.isActive() )
         {
@@ -28576,20 +28484,20 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
             _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
             
             // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
             
             if( this.texture )
             {
                 // Bind the texture
                 _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
 
                 // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
             }
             
             // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform4fv( this.colorLocation, this.color.data );
             
             // Calculate the final matrix
             gFinalMatrix.initilizeMatrix();
@@ -28598,10 +28506,10 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
 
             // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
             
             // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].UNSIGNED_BYTE, 0);
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].UNSIGNED_BYTE, 0);
         }
     }
     
@@ -28610,7 +28518,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
     //
     allowRender()
     {
-        return (this.visualData.genType != _common_defs__WEBPACK_IMPORTED_MODULE_12__["EGT_NULL"]);
+        return (this.visualData.genType != _common_defs__WEBPACK_IMPORTED_MODULE_7__["EGT_NULL"]);
     }
     
     //
@@ -28633,7 +28541,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28694,13 +28602,784 @@ class ivisualComponent
 
 
 /***/ }),
+/* 108 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentSpriteSheet", function() { return VisualComponentSpriteSheet; });
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+
+// 
+//  FILE NAME:  visualcomponentspritesheet.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+
+
+
+
+
+
+// Global final matrix to be reused by every render call so that an object specific
+// one doesn't have to be created each time a render call is made or a perminate one
+// allocated and heald within each class
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__["Matrix"];
+
+class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
+{
+    constructor( visualData )
+    {
+        super( visualData );
+        
+        if( visualData.isActive() )
+        {
+            this.glyphLocation = this.shaderData.getLocation( 'glyphRect' );
+
+            this.glyphUV = visualData.spriteSheet.getGlyph().uv;
+            this.frameIndex = visualData.spriteSheet.defaultIndex;
+
+            // Local vertex scale for sprite sheets that might have glyphs of different sizes
+            this.vertexScale = new _common_size__WEBPACK_IMPORTED_MODULE_5__["Size"];
+            this.vertexScale.copy( this.visualData.vertexScale );
+        }
+    }
+
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+        if( this.allowRender() )
+        {
+            // Bind the VBO and IBO
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
+
+            // Bind the shader.
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
+            
+            // Setup the vertex attribute shader data
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            
+            if( this.texture )
+            {
+                // Bind the texture
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+
+                // Setup the UV attribute shade data
+                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            }
+            
+            // Send the color to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            
+            // Calculate the final matrix
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.setScaleFromSize( this.vertexScale );
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+
+            // Send the final matrix to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+
+            // Send the glyph rect
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform4fv( this.glyphLocation, this.glyphUV.data );
+            
+            // Do the render
+            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].UNSIGNED_BYTE, 0);
+        }
+    }
+    
+    //
+    //  DESC: Set the frame ID from index
+    //
+    setFrame( index )
+    {
+        this.frameIndex = index;
+        
+        let glyph = this.visualData.spriteSheet.getGlyph( index );
+
+        this.vertexScale.w = glyph.size.w * this.visualData.defaultUniformScale;
+        this.vertexScale.h = glyph.size.h * this.visualData.defaultUniformScale;
+
+        this.glyphUV = glyph.uv;
+    }
+}
+
+
+/***/ }),
 /* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentScaledFrame", function() { return VisualComponentScaledFrame; });
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
+
+// 
+//  FILE NAME:  visualcomponentscaledframe.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+
+
+
+
+
+// Global final matrix to be reused by every render call so that an object specific
+// one doesn't have to be created each time a render call is made or a perminate one
+// allocated and heald within each class
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__["Matrix"];
+
+class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
+{
+    constructor( visualData )
+    {
+        super( visualData );
+    }
+
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+        if( this.allowRender() )
+        {
+            // Bind the VBO and IBO
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
+
+            // Bind the shader.
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
+            
+            // Setup the vertex attribute shader data
+            _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            
+            if( this.texture )
+            {
+                // Bind the texture
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+
+                // Setup the UV attribute shade data
+                _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            }
+            
+            // Send the color to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            
+            // Calculate the final matrix
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+
+            // Send the final matrix to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            
+            // Do the render
+            _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].UNSIGNED_BYTE, 0);
+        }
+    }
+}
+
+
+/***/ }),
+/* 110 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentFont", function() { return VisualComponentFont; });
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(111);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(8);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(14);
+
+// 
+//  FILE NAME:  visualcomponentfont.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Global final matrix to be reused by every render call so that an object specific
+// one doesn't have to be created each time a render call is made or a perminate one
+// allocated and heald within each class
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__["Matrix"];
+
+class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
+{
+    constructor( visualData )
+    {
+        super( visualData );
+        
+        if( visualData.isActive() )
+        {
+            this.uvLocation = this.shaderData.getLocation( 'in_uv' );
+            this.text0Location = this.shaderData.getLocation( 'text0' );
+            
+            // Allocate the storage for the font if this is a font sprite
+            this.fontData = new _common_fontdata__WEBPACK_IMPORTED_MODULE_5__["FontData"];
+        }
+    }
+    
+    //
+    //  DESC: Delete the custom VBO for this font
+    //
+    deleteFontVBO()
+    {
+        // Delete the VBO if this is a font
+        if( (this.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EGT_FONT"]) && (this.vbo !== null) )
+        {
+            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].deleteBuffer( this.vbo );
+            this.vbo = null;
+        }
+
+        // The IBO for the font is managed by the vertex buffer manager.
+        // Font IBO are all the same with the only difference being
+        // length of the character string.
+    }
+
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+        if( this.allowRender() )
+        {
+            // Bind the VBO and IBO
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
+
+            // Bind the shader.
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
+            
+            // Setup the vertex attribute shader data
+            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            
+            if( this.texture )
+            {
+                // Bind the texture
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+
+                // Setup the UV attribute shade data
+                _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            }
+            
+            // Send the color to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            
+            // Calculate the final matrix
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+
+            // Send the final matrix to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            
+            // Do the render
+            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].UNSIGNED_SHORT, 0);
+        }
+    }
+    
+    //
+    //  DESC: Is rendering allowed?
+    //
+    allowRender()
+    {
+        return (this.fontData.fontString && this.vbo);
+    }
+    
+    //
+    //  DESC: Is this a font sprite
+    //
+    isFontSprite()
+    {
+        return true;
+    }
+    
+    //
+    //  DESC: Load the font properties from XML node
+    //
+    loadFontPropFromNode( node )
+    {
+        if( this.fontData )
+            this.fontData.loadFromNode( node );
+    }
+    
+    //
+    //  DESC: Set the font properties
+    //
+    setFontProperties( fontName, hAlign = null, vAlign = null, kerning = null, sKern = null, lineWrapWidth = null, lineWrapHeight = null )
+    {
+        if( this.fontData )
+        {
+            this.fontData.fontProp.fontName = fontName;
+            
+            if( hAlign )
+                this.fontData.fontProp.hAlign = hAlign;
+            
+            if( vAlign )
+                this.fontData.fontProp.hAlign = vAlign;
+            
+            if( kerning )
+                this.fontData.fontProp.kerning = kerning;
+            
+            if( sKern )
+                this.fontData.fontProp.spaceCharKerning = sKern;
+            
+            if( lineWrapWidth )
+                this.fontData.fontProp.lineWrapWidth = lineWrapWidth;
+            
+            if( lineWrapHeight )
+                this.fontData.fontProp.lineWrapHeight = lineWrapHeight;
+        }
+    }
+    
+    //
+    //  DESC: Create the font string from data
+    //
+    createFontStringFromData()
+    {
+        if( (this.fontData !== null) && this.fontData.fontString )
+            this.createFontString( this.fontData.fontString );
+    }
+
+    //
+    //  DESC: Create the font string
+    //
+    createFontString( fontString )
+    {
+        // Qualify if we want to build the font string
+        if( (this.fontData !== null) &&
+            (fontString !== '') &&
+            (this.fontData.fontProp.fontName !== null) &&
+            ((fontString !== this.fontData.fontString) || (this.vbo === null)) )
+        {
+            this.fontData.fontStrSize.reset();
+            let lastCharDif = 0;
+
+            let font = _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].getFont( this.fontData.fontProp.fontName );
+
+            this.texture = font.texture;
+
+            this.fontData.fontString = fontString;
+
+            // count up the number of space characters
+            let spaceCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__["countStrOccurrence"]( this.fontData.fontString, ' ' );
+
+            // count up the number of bar | characters
+            let barCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__["countStrOccurrence"]( this.fontData.fontString, '|' );
+
+            // Size of the allocation
+            const charCount = this.fontData.fontString.length - spaceCharCount - barCharCount;
+            this.iboCount = charCount * 6;
+            
+            // Set a flag to indicate if the IBO should be built
+            const BUILD_FONT_IBO = (this.iboCount > _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].currentMaxFontIndices);
+            
+            // Allocate the vert array
+            let vertAry = new Array(charCount * 4 * 5);
+
+            // Create a buffer to hold the indicies
+            let indexAry = null;
+            
+            // Should we build or rebuild the font IBO
+            if( BUILD_FONT_IBO )
+                indexAry = new Array(this.iboCount);
+
+            let xOffset = 0;
+            let width = 0;
+            let lineHeightOffset = 0;
+            let lineHeightWrap = font.lineHeight + font.vertPadding + this.fontData.fontProp.lineWrapHeight;
+            let initialHeightOffset = font.baselineOffset + font.vertPadding;
+            let lineSpace = font.lineHeight - font.baselineOffset;
+
+            let counter = 0;
+            let vertAryIndex = 0;
+            let lineCount = 0;
+
+            // Get the size of the texture
+            let textureSize = font.texture.size;
+
+            // Handle the horizontal alignment
+            let lineWidthOffsetAry = this.calcLineWidthOffset( font, this.fontData.fontString );
+
+            // Set the initial line offset
+            xOffset = lineWidthOffsetAry[lineCount++];
+
+            // Handle the vertical alighnmenrt
+            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EVA_VERT_TOP"] )
+                lineHeightOffset = -initialHeightOffset;
+
+            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EVA_VERT_CENTER"] )
+            {
+                lineHeightOffset = -(initialHeightOffset - ((font.baselineOffset-lineSpace) / 2) - font.vertPadding);
+
+                if( lineWidthOffsetAry.length > 1 )
+                    lineHeightOffset = ((lineHeightWrap * lineWidthOffsetAry.length) / 2) - font.baselineOffset;
+            }
+
+            else if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EVA_VERT_BOTTOM"] )
+            {
+                lineHeightOffset = -(initialHeightOffset - font.baselineOffset - font.vertPadding);
+
+                if( lineWidthOffsetAry.length > 1 )
+                    lineHeightOffset += (lineHeightWrap * (lineWidthOffsetAry.length-1));
+            }
+
+            // Remove any fractional component of the line height offset
+            lineHeightOffset = Math.trunc(lineHeightOffset);
+
+            // Setup each character in the vertex buffer
+            for( let i = 0; i < this.fontData.fontString.length; ++i )
+            {
+                let id = this.fontData.fontString.charCodeAt(i);
+
+                // Line wrap if '|' character was used
+                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_PIPE"] )
+                {
+                    xOffset = lineWidthOffsetAry[lineCount];
+                    width = 0;
+
+                    lineHeightOffset += -lineHeightWrap;
+                    ++lineCount;
+                }
+                else
+                {
+                    // See if we can find the character
+                    let charData = font.getCharData(id);
+
+                    // Ignore space characters
+                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                    {
+                        let rect = charData.rect;
+
+                        let yOffset = (font.lineHeight - rect.y2 - charData.offset.h) + lineHeightOffset;
+
+                        // Check if the width or height is odd. If so, we offset
+                        // by 0.5 for proper orthographic rendering
+                        // speed enhancement - if( Math.trunc(rect.x2) % 2 != 0 )
+                        let additionalOffsetX = 0;
+                        if( Math.trunc(rect.x2) & 1 !== 0 )
+                            additionalOffsetX = 0.5;
+
+                        let additionalOffsetY = 0;
+                        if( Math.trunc(rect.y2) & 1 !== 0 )
+                            additionalOffsetY = 0.5;
+                        
+                        vertAry[vertAryIndex]   = xOffset + charData.offset.w + additionalOffsetX;
+                        vertAry[vertAryIndex+1] = yOffset + additionalOffsetY;
+                        vertAry[vertAryIndex+2] = 0;
+                        vertAry[vertAryIndex+3] = rect.x1 / textureSize.w;
+                        vertAry[vertAryIndex+4] = (rect.y1 + rect.y2) / textureSize.h;
+
+                        // Calculate the second vertex of the first face
+                        vertAry[vertAryIndex+5] = xOffset + rect.x2 + charData.offset.w + additionalOffsetX;
+                        vertAry[vertAryIndex+6] = yOffset + rect.y2 + additionalOffsetY;
+                        vertAry[vertAryIndex+7] = 0;
+                        vertAry[vertAryIndex+8] = (rect.x1 + rect.x2) / textureSize.w;
+                        vertAry[vertAryIndex+9] = rect.y1 / textureSize.h;
+
+                        // Calculate the third vertex of the first face
+                        vertAry[vertAryIndex+10] = vertAry[vertAryIndex];
+                        vertAry[vertAryIndex+11] = vertAry[vertAryIndex+6];
+                        vertAry[vertAryIndex+12] = 0;
+                        vertAry[vertAryIndex+13] = vertAry[vertAryIndex+3];
+                        vertAry[vertAryIndex+14] = vertAry[vertAryIndex+9];
+
+                        // Calculate the second vertex of the second face
+                        vertAry[vertAryIndex+15] = vertAry[vertAryIndex+5];
+                        vertAry[vertAryIndex+16] = vertAry[vertAryIndex+1];
+                        vertAry[vertAryIndex+17] = 0;
+                        vertAry[vertAryIndex+18] = vertAry[vertAryIndex+8];
+                        vertAry[vertAryIndex+19] = vertAry[vertAryIndex+4];
+                        
+                        vertAryIndex += 20;
+
+                        if( BUILD_FONT_IBO )
+                        {
+                            // Create the indicies into the VBO
+                            let arrayIndex = counter * 6;
+                            let vertIndex = counter * 4;
+
+                            indexAry[arrayIndex]   = vertIndex;
+                            indexAry[arrayIndex+1] = vertIndex+1;
+                            indexAry[arrayIndex+2] = vertIndex+2;
+
+                            indexAry[arrayIndex+3] = vertIndex;
+                            indexAry[arrayIndex+4] = vertIndex+3;
+                            indexAry[arrayIndex+5] = vertIndex+1;
+                        }
+
+                        ++counter;
+                    }
+
+                    // Inc the font position
+                    let inc = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+
+                    // Add in any additional spacing for the space character
+                    if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                        inc += this.fontData.fontProp.spaceCharKerning;
+
+                    width += inc;
+                    xOffset += inc;
+
+                    // Get the longest width of this font string
+                    if( this.fontData.fontStrSize.w < width )
+                    {
+                        this.fontData.fontStrSize.w = width;
+
+                        // This is the space between this character and the next.
+                        // Save this difference so that it can be subtracted at the end
+                        lastCharDif = inc - charData.rect.x2;
+                    }
+
+                    // Wrap to another line
+                    if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] ) && (this.fontData.fontProp.lineWrapWidth > 0) )
+                    {
+                        let nextWord = 0;
+
+                        // Get the length of the next word to see if if should wrap
+                        for( let j = i+1; j < this.fontData.fontString.length; ++j )
+                        {
+                            id = this.fontData.fontString.charCodeAt(j);
+
+                            if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_PIPE"] )
+                            {
+                                // See if we can find the character
+                                let anotherCharData = font.getCharData(id);
+
+                                // Break here when space is found
+                                // Don't add the space to the size of the next word
+                                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                                    break;
+
+                                // Don't count the
+                                nextWord += anotherCharData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+                            }
+                        }
+
+                        if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
+                        {
+                            xOffset = lineWidthOffsetAry[lineCount++];
+                            width = 0;
+
+                            lineHeightOffset += -lineHeightWrap;
+                        }
+                    }
+                }
+            }
+
+            // Subtract the extra space after the last character
+            this.fontData.fontStrSize.w -= lastCharDif;
+            this.fontData.fontStrSize.h = font.lineHeight;
+
+            // Save the data
+            // If one doesn't exist, create the VBO and IBO for this font
+            if( this.vbo === null )
+                this.vbo = _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].createBuffer();
+
+            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ARRAY_BUFFER, this.vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ARRAY_BUFFER, null );
+
+            // All fonts share the same IBO because it's always the same and the only difference is it's length
+            // This updates the current IBO if it exceeds the current max
+            this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].createDynamicFontIBO( _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].groupName, 'dynamic_font_ibo', indexAry, this.iboCount );
+        }
+        else if( (this.fontData !== null) &&
+                 (fontString !== '') &&
+                 (fontString !== this.fontData.fontString) &&
+                 (this.vbo !== null) )
+        {
+            this.fontData.fontString = '';
+        }
+    }
+
+    //
+    //  DESC: Add up all the character widths
+    //
+    calcLineWidthOffset( font, str )
+    {
+        let firstCharOffset = 0;
+        let lastCharOffset = 0;
+        let spaceWidth = 0;
+        let width = 0;
+        let counter = 0;
+        let lineWidthOffsetAry = [];
+
+        for( let i = 0; i < str.length; ++i )
+        {
+            let id = str.charCodeAt(i);
+
+            // Line wrap if '|' character was used
+            if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_PIPE"] )
+            {
+                // Add the line width to the vector based on horz alignment
+                this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
+
+                counter = 0;
+                width = 0;
+            }
+            else
+            {
+                // Get the next character
+                let charData = font.getCharData( id );
+
+                if(counter === 0)
+                    firstCharOffset = charData.offset.w;
+
+                spaceWidth = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+
+                // Add in any additional spacing for the space character
+                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                    spaceWidth += this.fontData.fontProp.spaceCharKerning;
+
+                width += spaceWidth;
+
+                if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                    lastCharOffset = charData.offset.w;
+
+                ++counter;
+            }
+
+            // Wrap to another line
+            if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"]) && (this.fontData.fontProp.lineWrapWidth > 0) )
+            {
+                let nextWord = 0;
+
+                // Get the length of the next word to see if if should wrap
+                for( let j = i+1; j < str.length; ++j )
+                {
+                    id = str.charCodeAt(j);
+
+                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_PIPE"] )
+                    {
+                        // See if we can find the character
+                        let charData = font.getCharData(id);
+
+                        // Break here when space is found
+                        // Don't add the space to the size of the next word
+                        if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                            break;
+
+                        // Don't count the
+                        nextWord += charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+                    }
+                }
+
+                if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
+                {
+                    // Add the line width to the vector based on horz alignment
+                    this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width-spaceWidth, firstCharOffset, lastCharOffset );
+
+                    counter = 0;
+                    width = 0;
+                }
+            }
+        }
+
+        // Add the line width to the vector based on horz alignment
+        this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
+
+        return lineWidthOffsetAry;
+    }
+
+    //
+    //  DESC: Add the line width to the array based on horz alignment
+    //
+    addLineWithToAry( font, lineWidthOffsetAry, hAlign, width, firstCharOffset, lastCharOffset )
+    {
+        if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EHA_HORZ_LEFT"] )
+            lineWidthOffsetAry.push(-(firstCharOffset + font.horzPadding));
+
+        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EHA_HORZ_CENTER"] )
+            lineWidthOffsetAry.push(-((width - font.horzPadding) / 2));
+
+        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EHA_HORZ_RIGHT"] )
+            lineWidthOffsetAry.push(-(width - lastCharOffset - font.horzPadding));
+
+        // Remove any fractional component of the last index
+        lineWidthOffsetAry[lineWidthOffsetAry.length-1] = Math.trunc(lineWidthOffsetAry[lineWidthOffsetAry.length-1]);
+    }
+    
+    //
+    //  DESC: Get/Set the displayed font string
+    //
+    getFontString()
+    {
+        if( this.fontData === null )
+            throw new Error( `Can't ask for the font string from a sprite that is not a sprite font!` );
+
+        return this.fontData.fontString;
+    }
+
+    setFontString( fontString )
+    {
+        if( this.fontData === null )
+            throw new Error( `Can't set a font string for a sprite that is not a sprite font!` );
+        
+        this.fontData.fontString = fontString;
+    }
+    
+    //
+    //  DESC: Get the font size
+    //
+    getFontSize()
+    {
+        if( !this.fontData )
+            throw new Error( `Can't ask for the font size from a sprite that is not defined!` );
+
+        return this.fontData.fontStrSize;
+    }
+}
+
+
+/***/ }),
+/* 111 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FontData", function() { return FontData; });
-/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(110);
+/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(112);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 
 // 
@@ -28757,14 +29436,14 @@ class FontData
 
 
 /***/ }),
-/* 110 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FontProperties", function() { return FontProperties; });
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -28873,1081 +29552,24 @@ class FontProperties
 
 
 /***/ }),
-/* 111 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Camera", function() { return Camera; });
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(112);
-/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: camera.js
-//  DESC:      class that holds the camera position and rotation
-//
-
-
-
-
-
-
-
-
-class Camera extends _3d_object3d__WEBPACK_IMPORTED_MODULE_1__["Object3D"]
-{
-    constructor()
-    {
-        super();
-        
-        this.projectionMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"];
-        this.finalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"];
-        
-        this.projType = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].projectionType;
-        this.minZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].minZdist;
-        this.maxZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].maxZdist;
-        this.angle = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].viewAngle;
-
-        // Create the projection matrix
-        this.createProjectionMatrix();
-        
-        // Do the initial transform
-        super.transform();
-        
-        // Calculate the final matrix
-        this.calcFinalMatrix();
-    }
-    
-    //
-    //  DESC: Init the camera from XML
-    //
-    initFromXml( xmlNode )
-    {
-        let attr = xmlNode.getAttribute('projectType');
-        if( attr )
-        {
-            if( attr === 'orthographic' )
-                this.projType = _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_ORTHOGRAPHIC"];
-            else
-                this.projType = _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_PERSPECTIVE"];
-        }
-        
-        attr = xmlNode.getAttribute('minZDist');
-        if( attr )
-            this.minZDist = Number(attr);
-
-        attr = xmlNode.getAttribute('maxZDist');
-        if( attr )
-            this.maxZDist = Number(attr);
-
-        attr = xmlNode.getAttribute('view_angle');
-        if( attr )
-            this.angle = Number(attr) * _defs__WEBPACK_IMPORTED_MODULE_3__["DEG_TO_RAD"];
-        
-        // Load the transforms
-        this.loadTransFromNode( xmlNode );
-        
-        // Create the projection matrix
-        this.createProjectionMatrix();
-        
-        // Do the initial transform
-        super.transform();
-        
-        // Calculate the final matrix
-        this.calcFinalMatrix();
-    }
-    
-    //
-    //  DESC: Create the projection matrix
-    //
-    init( projType, minZDist, maxZDist, angle )
-    {
-        this.projType = projType;
-        this.minZDist = minZDist;
-        this.maxZDist = maxZDist;
-        this.angle = angle;
-        
-        // Create the projection matrix
-        this.createProjectionMatrix();
-        
-        // Do the initial transform
-        super.transform();
-        
-        // Calculate the final matrix
-        this.calcFinalMatrix();
-    }
-    
-    //
-    //  DESC: Create the projection matrix
-    //
-    createProjectionMatrix()
-    {
-        if( this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_PERSPECTIVE"] )
-        {
-            this.projectionMatrix.perspectiveFovRH(
-                this.angle,
-                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].screenAspectRatio.w,
-                this.minZDist,
-                this.maxZDist );
-        }
-        else
-        {
-            this.projectionMatrix.orthographicRH(
-                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].defaultSize.w,
-                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].defaultSize.h,
-                this.minZDist,
-                this.maxZDist );
-        }
-    }
-    
-    //
-    //  DESC: Set the object's position
-    //
-    setPos( pos )
-    {
-        super.setPosXYZ( -pos.x, -pos.y, -pos.z );
-    }
-    
-    setPosXYZ( x = 0, y = 0, z = 0 )
-    {
-        super.setPosXYZ( -x, -y, -z );
-    }
-    
-    incPos( pos )
-    {
-        super.incPosXYZ( -pos.x, -pos.y, -pos.z );
-    }
-    
-    incPosXYZ( x = 0, y = 0, z = 0 )
-    {
-        super.incPosXYZ( -x, -y, -z );
-    }
-    
-    //
-    //  DESC: Transform
-    //
-    transform()
-    {
-        let wasTransformed = this.parameters.isSet( _defs__WEBPACK_IMPORTED_MODULE_3__["TRANSFORM"] );
-    
-        super.transform();
-
-        if( wasTransformed )
-            this.calcFinalMatrix();
-    }
-    
-    //
-    //  DESC: Calculate the final matrix
-    //
-    calcFinalMatrix()
-    {
-        this.finalMatrix.initilizeMatrix();
-        this.finalMatrix.mergeMatrix( this.matrix.matrix );
-        this.finalMatrix.mergeMatrix( this.projectionMatrix.matrix );
-    }
-}
-
-/***/ }),
-/* 112 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object3D", function() { return Object3D; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-
-// 
-//  FILE NAME:  object3d.js
-//  DESC:       object 3D class
-//
-
-
-
-
-
-
-
-class Object3D extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
-{
-    constructor()
-    {
-        super();
-        
-        // Matrix for rotations only
-        // Basicly used for normal calculations
-        this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
-    }
-    
-    //
-    //  DESC: Set the translation/rotation from Bullet Physics
-    //
-    /*setTransform( trans )
-    {
-        this.parameters.add( defs.MATRIX_ROTATION | defs.TRANSFORM );
-
-        // Set the position
-        const btVector3 & btVec = trans.getOrigin();
-        SetPos( CPoint<float>(btVec.x(), btVec.y(), btVec.z()) );
-
-        // Set the rotation
-        const btMatrix3x3 & btMat = trans.getBasis();
-        for( int i = 0; i < 3; ++i )
-        {
-            const btVector3 & vec = btMat.getRow(i);
-            m_rotMatrix.SetColumn( i, CPoint<float>(vec.x(), vec.y(), vec.z()) );
-        }
-    }*/
-
-    //
-    //  DESC: Apply the rotation
-    //
-    applyRotation( matrix )
-    {
-        super.applyRotation( matrix );
-
-        this.rotMatrix.initilizeMatrix();
-        this.rotMatrix.rotate( this.rot );
-    }
-}
-
-
-/***/ }),
 /* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentSpriteSheet", function() { return VisualComponentSpriteSheet; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4);
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(111);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(18);
-
-// 
-//  FILE NAME:  visualcomponentspritesheet.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Global final matrix to be reused by every render call so that an object specific
-// one doesn't have to be created each time a render call is made or a perminate one
-// allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__["Matrix"];
-
-class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
-{
-    constructor( visualData )
-    {
-        super( visualData );
-        
-        if( visualData.isActive() )
-        {
-            this.glyphLocation = this.shaderData.getLocation( 'glyphRect' );
-
-            this.glyphUV = visualData.spriteSheet.getGlyph().uv;
-            this.frameIndex = visualData.spriteSheet.defaultIndex;
-
-            // Local vertex scale for sprite sheets that might have glyphs of different sizes
-            this.vertexScale = new _common_size__WEBPACK_IMPORTED_MODULE_8__["Size"];
-            this.vertexScale.copy( this.visualData.vertexScale );
-        }
-    }
-
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-        if( this.allowRender() )
-        {
-            // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
-
-            // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
-            
-            // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
-            
-            if( this.texture )
-            {
-                // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
-
-                // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
-            }
-            
-            // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform4fv( this.colorLocation, this.color.data );
-            
-            // Calculate the final matrix
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.setScaleFromSize( this.vertexScale );
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-
-            // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-
-            // Send the glyph rect
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform4fv( this.glyphLocation, this.glyphUV.data );
-            
-            // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].UNSIGNED_BYTE, 0);
-        }
-    }
-    
-    //
-    //  DESC: Set the frame ID from index
-    //
-    setFrame( index )
-    {
-        this.frameIndex = index;
-        
-        let glyph = this.visualData.spriteSheet.getGlyph( index );
-
-        this.vertexScale.w = glyph.size.w * this.visualData.defaultUniformScale;
-        this.vertexScale.h = glyph.size.h * this.visualData.defaultUniformScale;
-
-        this.glyphUV = glyph.uv;
-    }
-}
-
-
-/***/ }),
-/* 114 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentScaledFrame", function() { return VisualComponentScaledFrame; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4);
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(111);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(18);
-
-// 
-//  FILE NAME:  visualcomponentscaledframe.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Global final matrix to be reused by every render call so that an object specific
-// one doesn't have to be created each time a render call is made or a perminate one
-// allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__["Matrix"];
-
-class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
-{
-    constructor( visualData )
-    {
-        super( visualData );
-    }
-
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-        if( this.allowRender() )
-        {
-            // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
-
-            // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
-            
-            // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
-            
-            if( this.texture )
-            {
-                // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
-
-                // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
-            }
-            
-            // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform4fv( this.colorLocation, this.color.data );
-            
-            // Calculate the final matrix
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-
-            // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-            
-            // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].UNSIGNED_BYTE, 0);
-        }
-    }
-}
-
-
-/***/ }),
-/* 115 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentFont", function() { return VisualComponentFont; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4);
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(111);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(18);
-
-// 
-//  FILE NAME:  visualcomponentfont.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Global final matrix to be reused by every render call so that an object specific
-// one doesn't have to be created each time a render call is made or a perminate one
-// allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__["Matrix"];
-
-class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
-{
-    constructor( visualData )
-    {
-        super( visualData );
-        
-        if( visualData.isActive() )
-        {
-            this.uvLocation = this.shaderData.getLocation( 'in_uv' );
-            this.text0Location = this.shaderData.getLocation( 'text0' );
-            
-            // Allocate the storage for the font if this is a font sprite
-            this.fontData = new _common_fontdata__WEBPACK_IMPORTED_MODULE_5__["FontData"];
-        }
-    }
-    
-    //
-    //  DESC: Delete the custom VBO for this font
-    //
-    deleteFontVBO()
-    {
-        // Delete the VBO if this is a font
-        if( (this.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EGT_FONT"]) && (this.vbo !== null) )
-        {
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].deleteBuffer( this.vbo );
-            this.vbo = null;
-        }
-
-        // The IBO for the font is managed by the vertex buffer manager.
-        // Font IBO are all the same with the only difference being
-        // length of the character string.
-    }
-
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-        if( this.allowRender() )
-        {
-            // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
-
-            // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
-            
-            // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
-            
-            if( this.texture )
-            {
-                // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
-
-                // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
-            }
-            
-            // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniform4fv( this.colorLocation, this.color.data );
-            
-            // Calculate the final matrix
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-
-            // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-            
-            // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].UNSIGNED_SHORT, 0);
-        }
-    }
-    
-    //
-    //  DESC: Is rendering allowed?
-    //
-    allowRender()
-    {
-        return (this.fontData.fontString && this.vbo);
-    }
-    
-    //
-    //  DESC: Is this a font sprite
-    //
-    isFontSprite()
-    {
-        return true;
-    }
-    
-    //
-    //  DESC: Load the font properties from XML node
-    //
-    loadFontPropFromNode( node )
-    {
-        if( this.fontData )
-            this.fontData.loadFromNode( node );
-    }
-    
-    //
-    //  DESC: Set the font properties
-    //
-    setFontProperties( fontName, hAlign = null, vAlign = null, kerning = null, sKern = null, lineWrapWidth = null, lineWrapHeight = null )
-    {
-        if( this.fontData )
-        {
-            this.fontData.fontProp.fontName = fontName;
-            
-            if( hAlign )
-                this.fontData.fontProp.hAlign = hAlign;
-            
-            if( vAlign )
-                this.fontData.fontProp.hAlign = vAlign;
-            
-            if( kerning )
-                this.fontData.fontProp.kerning = kerning;
-            
-            if( sKern )
-                this.fontData.fontProp.spaceCharKerning = sKern;
-            
-            if( lineWrapWidth )
-                this.fontData.fontProp.lineWrapWidth = lineWrapWidth;
-            
-            if( lineWrapHeight )
-                this.fontData.fontProp.lineWrapHeight = lineWrapHeight;
-        }
-    }
-    
-    //
-    //  DESC: Create the font string from data
-    //
-    createFontStringFromData()
-    {
-        if( (this.fontData !== null) && this.fontData.fontString )
-            this.createFontString( this.fontData.fontString );
-    }
-
-    //
-    //  DESC: Create the font string
-    //
-    createFontString( fontString )
-    {
-        // Qualify if we want to build the font string
-        if( (this.fontData !== null) &&
-            (fontString !== '') &&
-            (this.fontData.fontProp.fontName !== null) &&
-            ((fontString !== this.fontData.fontString) || (this.vbo === null)) )
-        {
-            this.fontData.fontStrSize.reset();
-            let lastCharDif = 0;
-
-            let font = _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].getFont( this.fontData.fontProp.fontName );
-
-            this.texture = font.texture;
-
-            this.fontData.fontString = fontString;
-
-            // count up the number of space characters
-            let spaceCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__["countStrOccurrence"]( this.fontData.fontString, ' ' );
-
-            // count up the number of bar | characters
-            let barCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__["countStrOccurrence"]( this.fontData.fontString, '|' );
-
-            // Size of the allocation
-            const charCount = this.fontData.fontString.length - spaceCharCount - barCharCount;
-            this.iboCount = charCount * 6;
-            
-            // Set a flag to indicate if the IBO should be built
-            const BUILD_FONT_IBO = (this.iboCount > _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].currentMaxFontIndices);
-            
-            // Allocate the vert array
-            let vertAry = new Array(charCount * 4 * 5);
-
-            // Create a buffer to hold the indicies
-            let indexAry = null;
-            
-            // Should we build or rebuild the font IBO
-            if( BUILD_FONT_IBO )
-                indexAry = new Array(this.iboCount);
-
-            let xOffset = 0;
-            let width = 0;
-            let lineHeightOffset = 0;
-            let lineHeightWrap = font.lineHeight + font.vertPadding + this.fontData.fontProp.lineWrapHeight;
-            let initialHeightOffset = font.baselineOffset + font.vertPadding;
-            let lineSpace = font.lineHeight - font.baselineOffset;
-
-            let counter = 0;
-            let vertAryIndex = 0;
-            let lineCount = 0;
-
-            // Get the size of the texture
-            let textureSize = font.texture.size;
-
-            // Handle the horizontal alignment
-            let lineWidthOffsetAry = this.calcLineWidthOffset( font, this.fontData.fontString );
-
-            // Set the initial line offset
-            xOffset = lineWidthOffsetAry[lineCount++];
-
-            // Handle the vertical alighnmenrt
-            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EVA_VERT_TOP"] )
-                lineHeightOffset = -initialHeightOffset;
-
-            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EVA_VERT_CENTER"] )
-            {
-                lineHeightOffset = -(initialHeightOffset - ((font.baselineOffset-lineSpace) / 2) - font.vertPadding);
-
-                if( lineWidthOffsetAry.length > 1 )
-                    lineHeightOffset = ((lineHeightWrap * lineWidthOffsetAry.length) / 2) - font.baselineOffset;
-            }
-
-            else if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EVA_VERT_BOTTOM"] )
-            {
-                lineHeightOffset = -(initialHeightOffset - font.baselineOffset - font.vertPadding);
-
-                if( lineWidthOffsetAry.length > 1 )
-                    lineHeightOffset += (lineHeightWrap * (lineWidthOffsetAry.length-1));
-            }
-
-            // Remove any fractional component of the line height offset
-            lineHeightOffset = Math.trunc(lineHeightOffset);
-
-            // Setup each character in the vertex buffer
-            for( let i = 0; i < this.fontData.fontString.length; ++i )
-            {
-                let id = this.fontData.fontString.charCodeAt(i);
-
-                // Line wrap if '|' character was used
-                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_PIPE"] )
-                {
-                    xOffset = lineWidthOffsetAry[lineCount];
-                    width = 0;
-
-                    lineHeightOffset += -lineHeightWrap;
-                    ++lineCount;
-                }
-                else
-                {
-                    // See if we can find the character
-                    let charData = font.getCharData(id);
-
-                    // Ignore space characters
-                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_SPACE"] )
-                    {
-                        let rect = charData.rect;
-
-                        let yOffset = (font.lineHeight - rect.y2 - charData.offset.h) + lineHeightOffset;
-
-                        // Check if the width or height is odd. If so, we offset
-                        // by 0.5 for proper orthographic rendering
-                        // speed enhancement - if( Math.trunc(rect.x2) % 2 != 0 )
-                        let additionalOffsetX = 0;
-                        if( Math.trunc(rect.x2) & 1 !== 0 )
-                            additionalOffsetX = 0.5;
-
-                        let additionalOffsetY = 0;
-                        if( Math.trunc(rect.y2) & 1 !== 0 )
-                            additionalOffsetY = 0.5;
-                        
-                        vertAry[vertAryIndex]   = xOffset + charData.offset.w + additionalOffsetX;
-                        vertAry[vertAryIndex+1] = yOffset + additionalOffsetY;
-                        vertAry[vertAryIndex+2] = 0;
-                        vertAry[vertAryIndex+3] = rect.x1 / textureSize.w;
-                        vertAry[vertAryIndex+4] = (rect.y1 + rect.y2) / textureSize.h;
-
-                        // Calculate the second vertex of the first face
-                        vertAry[vertAryIndex+5] = xOffset + rect.x2 + charData.offset.w + additionalOffsetX;
-                        vertAry[vertAryIndex+6] = yOffset + rect.y2 + additionalOffsetY;
-                        vertAry[vertAryIndex+7] = 0;
-                        vertAry[vertAryIndex+8] = (rect.x1 + rect.x2) / textureSize.w;
-                        vertAry[vertAryIndex+9] = rect.y1 / textureSize.h;
-
-                        // Calculate the third vertex of the first face
-                        vertAry[vertAryIndex+10] = vertAry[vertAryIndex];
-                        vertAry[vertAryIndex+11] = vertAry[vertAryIndex+6];
-                        vertAry[vertAryIndex+12] = 0;
-                        vertAry[vertAryIndex+13] = vertAry[vertAryIndex+3];
-                        vertAry[vertAryIndex+14] = vertAry[vertAryIndex+9];
-
-                        // Calculate the second vertex of the second face
-                        vertAry[vertAryIndex+15] = vertAry[vertAryIndex+5];
-                        vertAry[vertAryIndex+16] = vertAry[vertAryIndex+1];
-                        vertAry[vertAryIndex+17] = 0;
-                        vertAry[vertAryIndex+18] = vertAry[vertAryIndex+8];
-                        vertAry[vertAryIndex+19] = vertAry[vertAryIndex+4];
-                        
-                        vertAryIndex += 20;
-
-                        if( BUILD_FONT_IBO )
-                        {
-                            // Create the indicies into the VBO
-                            let arrayIndex = counter * 6;
-                            let vertIndex = counter * 4;
-
-                            indexAry[arrayIndex]   = vertIndex;
-                            indexAry[arrayIndex+1] = vertIndex+1;
-                            indexAry[arrayIndex+2] = vertIndex+2;
-
-                            indexAry[arrayIndex+3] = vertIndex;
-                            indexAry[arrayIndex+4] = vertIndex+3;
-                            indexAry[arrayIndex+5] = vertIndex+1;
-                        }
-
-                        ++counter;
-                    }
-
-                    // Inc the font position
-                    let inc = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
-
-                    // Add in any additional spacing for the space character
-                    if( id === _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_SPACE"] )
-                        inc += this.fontData.fontProp.spaceCharKerning;
-
-                    width += inc;
-                    xOffset += inc;
-
-                    // Get the longest width of this font string
-                    if( this.fontData.fontStrSize.w < width )
-                    {
-                        this.fontData.fontStrSize.w = width;
-
-                        // This is the space between this character and the next.
-                        // Save this difference so that it can be subtracted at the end
-                        lastCharDif = inc - charData.rect.x2;
-                    }
-
-                    // Wrap to another line
-                    if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_SPACE"] ) && (this.fontData.fontProp.lineWrapWidth > 0) )
-                    {
-                        let nextWord = 0;
-
-                        // Get the length of the next word to see if if should wrap
-                        for( let j = i+1; j < this.fontData.fontString.length; ++j )
-                        {
-                            id = this.fontData.fontString.charCodeAt(j);
-
-                            if( id != _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_PIPE"] )
-                            {
-                                // See if we can find the character
-                                let anotherCharData = font.getCharData(id);
-
-                                // Break here when space is found
-                                // Don't add the space to the size of the next word
-                                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_SPACE"] )
-                                    break;
-
-                                // Don't count the
-                                nextWord += anotherCharData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
-                            }
-                        }
-
-                        if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
-                        {
-                            xOffset = lineWidthOffsetAry[lineCount++];
-                            width = 0;
-
-                            lineHeightOffset += -lineHeightWrap;
-                        }
-                    }
-                }
-            }
-
-            // Subtract the extra space after the last character
-            this.fontData.fontStrSize.w -= lastCharDif;
-            this.fontData.fontStrSize.h = font.lineHeight;
-
-            // Save the data
-            // If one doesn't exist, create the VBO and IBO for this font
-            if( this.vbo === null )
-                this.vbo = _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].createBuffer();
-
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ARRAY_BUFFER, this.vbo );
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ARRAY_BUFFER, null );
-
-            // All fonts share the same IBO because it's always the same and the only difference is it's length
-            // This updates the current IBO if it exceeds the current max
-            this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].createDynamicFontIBO( _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].groupName, 'dynamic_font_ibo', indexAry, this.iboCount );
-        }
-        else if( (this.fontData !== null) &&
-                 (fontString !== '') &&
-                 (fontString !== this.fontData.fontString) &&
-                 (this.vbo !== null) )
-        {
-            this.fontData.fontString = '';
-        }
-    }
-
-    //
-    //  DESC: Add up all the character widths
-    //
-    calcLineWidthOffset( font, str )
-    {
-        let firstCharOffset = 0;
-        let lastCharOffset = 0;
-        let spaceWidth = 0;
-        let width = 0;
-        let counter = 0;
-        let lineWidthOffsetAry = [];
-
-        for( let i = 0; i < str.length; ++i )
-        {
-            let id = str.charCodeAt(i);
-
-            // Line wrap if '|' character was used
-            if( id === _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_PIPE"] )
-            {
-                // Add the line width to the vector based on horz alignment
-                this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
-
-                counter = 0;
-                width = 0;
-            }
-            else
-            {
-                // Get the next character
-                let charData = font.getCharData( id );
-
-                if(counter === 0)
-                    firstCharOffset = charData.offset.w;
-
-                spaceWidth = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
-
-                // Add in any additional spacing for the space character
-                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_SPACE"] )
-                    spaceWidth += this.fontData.fontProp.spaceCharKerning;
-
-                width += spaceWidth;
-
-                if( id != _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_SPACE"] )
-                    lastCharOffset = charData.offset.w;
-
-                ++counter;
-            }
-
-            // Wrap to another line
-            if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_SPACE"]) && (this.fontData.fontProp.lineWrapWidth > 0) )
-            {
-                let nextWord = 0;
-
-                // Get the length of the next word to see if if should wrap
-                for( let j = i+1; j < str.length; ++j )
-                {
-                    id = str.charCodeAt(j);
-
-                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_PIPE"] )
-                    {
-                        // See if we can find the character
-                        let charData = font.getCharData(id);
-
-                        // Break here when space is found
-                        // Don't add the space to the size of the next word
-                        if( id === _common_defs__WEBPACK_IMPORTED_MODULE_12__["CHAR_CODE_SPACE"] )
-                            break;
-
-                        // Don't count the
-                        nextWord += charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
-                    }
-                }
-
-                if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
-                {
-                    // Add the line width to the vector based on horz alignment
-                    this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width-spaceWidth, firstCharOffset, lastCharOffset );
-
-                    counter = 0;
-                    width = 0;
-                }
-            }
-        }
-
-        // Add the line width to the vector based on horz alignment
-        this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
-
-        return lineWidthOffsetAry;
-    }
-
-    //
-    //  DESC: Add the line width to the array based on horz alignment
-    //
-    addLineWithToAry( font, lineWidthOffsetAry, hAlign, width, firstCharOffset, lastCharOffset )
-    {
-        if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EHA_HORZ_LEFT"] )
-            lineWidthOffsetAry.push(-(firstCharOffset + font.horzPadding));
-
-        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EHA_HORZ_CENTER"] )
-            lineWidthOffsetAry.push(-((width - font.horzPadding) / 2));
-
-        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_12__["EHA_HORZ_RIGHT"] )
-            lineWidthOffsetAry.push(-(width - lastCharOffset - font.horzPadding));
-
-        // Remove any fractional component of the last index
-        lineWidthOffsetAry[lineWidthOffsetAry.length-1] = Math.trunc(lineWidthOffsetAry[lineWidthOffsetAry.length-1]);
-    }
-    
-    //
-    //  DESC: Get/Set the displayed font string
-    //
-    getFontString()
-    {
-        if( this.fontData === null )
-            throw new Error( `Can't ask for the font string from a sprite that is not a sprite font!` );
-
-        return this.fontData.fontString;
-    }
-
-    setFontString( fontString )
-    {
-        if( this.fontData === null )
-            throw new Error( `Can't set a font string for a sprite that is not a sprite font!` );
-        
-        this.fontData.fontString = fontString;
-    }
-    
-    //
-    //  DESC: Get the font size
-    //
-    getFontSize()
-    {
-        if( !this.fontData )
-        {
-            throw new Error( `Can't ask for the font size from a sprite that is not defined!` );
-            return null;
-        }
-
-        return this.fontData.fontStrSize;
-    }
-}
-
-
-/***/ }),
-/* 116 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponent3D", function() { return VisualComponent3D; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(19);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
 //  FILE NAME:  visualcomponent3d.js
 //  DESC:       Class for handling the visual part of the sprite
 //
-
 
 
 
@@ -30063,15 +29685,15 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
 
 
 /***/ }),
-/* 117 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsComponent2D", function() { return PhysicsComponent2D; });
-/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
+/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(115);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(41);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_2__);
 
 // 
@@ -30087,7 +29709,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class PhysicsComponent2D
 {
-    constructor( physicsData, sprite )
+    constructor( physicsData )
     {
         // Parent sprite
         this.sprite = null;
@@ -30456,15 +30078,15 @@ class PhysicsComponent2D
 
 
 /***/ }),
-/* 118 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "physicsWorldManager", function() { return physicsWorldManager; });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
-/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(121);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(116);
+/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(118);
 
 // 
 //  FILE NAME: physicsworldmanager.js
@@ -30580,15 +30202,15 @@ var physicsWorldManager = new PhysicsWorldManager;
 
 
 /***/ }),
-/* 119 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsWorld2D", function() { return PhysicsWorld2D; });
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(117);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(41);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_2__);
 
 // 
@@ -30778,7 +30400,7 @@ class PhysicsWorld2D
 
 
 /***/ }),
-/* 120 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30857,7 +30479,7 @@ var highResTimer = new HighResTimer;
 
 
 /***/ }),
-/* 121 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30878,7 +30500,7 @@ class PhysicsWorld3D
 
 
 /***/ }),
-/* 122 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30942,19 +30564,18 @@ class ScriptComponent
 
 
 /***/ }),
-/* 123 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteData", function() { return SpriteData; });
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(109);
-/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object3D", function() { return Object3D; });
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 
 // 
-//  FILE NAME: spritedata.js
-//  DESC:      Sprite data class
+//  FILE NAME:  object3d.js
+//  DESC:       object 3D class
 //
 
 
@@ -30962,88 +30583,63 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-class SpriteData
+class Object3D extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 {
-    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
+    constructor()
     {
-        // XML node
-        this.xmlNode = xmlNode;
+        super();
+        
+        // Matrix for rotations only
+        // Basicly used for normal calculations
+        this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
+    }
+    
+    //
+    //  DESC: Set the translation/rotation from Bullet Physics
+    //
+    /*setTransform( trans )
+    {
+        this.parameters.add( defs.MATRIX_ROTATION | defs.TRANSFORM );
 
-        // Sprite name
-        this.name = null;
-        
-        // Group Name
-        this.group = defGroup;
-        
-        // Object name
-        this.objectName = defObjName;
-        
-        // AI name
-        this.aiName = defAIName;
-        
-        // Sprite Id
-        this.id = defId;
-        
-        // Sprite type
-        this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EST_NULL"];
-        
-        // Get the name of this specific sprite instance
-        let attr = xmlNode.getAttribute( 'name' );
-        if( attr )
-            this.name = attr;
-        
-        // Get the group this sprite belongs to
-        attr = xmlNode.getAttribute( 'group' );
-        if( attr )
-            this.group = attr;
-        
-        // Get the object data name
-        attr = xmlNode.getAttribute( 'objectName' );
-        if( attr)
-            this.objectName = attr;
+        // Set the position
+        const btVector3 & btVec = trans.getOrigin();
+        SetPos( CPoint<float>(btVec.x(), btVec.y(), btVec.z()) );
 
-        // Get the sprite's AI name
-        attr = xmlNode.getAttribute( 'aiName' );
-        if( attr !== null )
-            this.aiName = attr;
+        // Set the rotation
+        const btMatrix3x3 & btMat = trans.getBasis();
+        for( int i = 0; i < 3; ++i )
+        {
+            const btVector3 & vec = btMat.getRow(i);
+            m_rotMatrix.SetColumn( i, CPoint<float>(vec.x(), vec.y(), vec.z()) );
+        }
+    }*/
 
-        // Get the sprite's unique id number
-        attr = xmlNode.getAttribute( "id" );
-        if( attr )
-            this.id = Number(attr);
-        
-        // Get the node type
-        if( xmlNode.nodeName == 'object2d' )
-            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EST_OBJECT2D"];
+    //
+    //  DESC: Apply the rotation
+    //
+    applyRotation( matrix )
+    {
+        super.applyRotation( matrix );
 
-        else if( xmlNode.nodeName == 'object3d' )
-            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EST_OBJECT3D"];
-
-        else if( xmlNode.nodeName == 'sprite2d' )
-            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EST_SPRITE2D"];
-
-        else if( xmlNode.nodeName == 'sprite3d' )
-            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EST_SPRITE3D"];
+        this.rotMatrix.initilizeMatrix();
+        this.rotMatrix.rotate( this.rot );
     }
 }
 
 
 /***/ }),
-/* 124 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControlNavNode", function() { return UIControlNavNode; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: uicontrolnavnode.js
 //  DESC:      UI Control Navigation Node
 //
-
 
 
 
@@ -31067,25 +30663,25 @@ class UIControlNavNode
     //
     setNode( navId, node )
     {
-        if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENAV_NODE_UP"] )
+        if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_UP"] )
             this.upNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENAV_NODE_DOWN"] )
+        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_DOWN"] )
             this.downNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENAV_NODE_LEFT"] )
+        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_LEFT"] )
             this.leftNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENAV_NODE_RIGHT"] )
+        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_RIGHT"] )
             this.rightNode = node;
     }
 
     getNode( navNode )
     {
-        if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENAV_NODE_UP"] )
+        if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_UP"] )
             return this.upNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENAV_NODE_DOWN"] )
+        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_DOWN"] )
             return this.downNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENAV_NODE_LEFT"] )
+        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_LEFT"] )
             return this.leftNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENAV_NODE_RIGHT"] )
+        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_RIGHT"] )
             return this.rightNode;
 
         return null;
@@ -31094,27 +30690,147 @@ class UIControlNavNode
 
 
 /***/ }),
-/* 125 */
+/* 122 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
+/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(123);
+/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(127);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(128);
+/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(129);
+/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(130);
+/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(131);
+/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(132);
+/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(133);
+/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(135);
+// 
+//  FILE NAME: uicontrolfactory.js
+//  DESC:      factory for control creation
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 
+//  DESC: Create the control info from XML node
+//
+function create( node, group )
+{
+    let control = null;
+
+    // Get the control type. This is required
+    let ctrlType = node.getAttribute( 'controlType' );
+
+    // New up the control with its respected control type
+    if( ctrlType === 'label' )
+        control = new _uilabel__WEBPACK_IMPORTED_MODULE_1__["UILabel"]( group );
+
+    else if( ctrlType === 'button' )
+        control = new _uibutton__WEBPACK_IMPORTED_MODULE_2__["UIButton"]( group );
+
+    else if( ctrlType === 'sub_control' )
+        control = new _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__["UISubControl"]( group );
+
+    else if( ctrlType === 'button_list' )
+        control = new _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__["UIButtonList"]( group );
+
+    else if( ctrlType === 'check_box' )
+        control = new _uicheckbox__WEBPACK_IMPORTED_MODULE_5__["UICheckBox"]( group );
+
+    else if( ctrlType === 'slider' )
+        control = new _uislider__WEBPACK_IMPORTED_MODULE_6__["UISlider"]( group );
+
+    else if( ctrlType === 'scroll_box' )
+        control = new _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__["UIScrollBox"]( group );
+
+    else if( ctrlType === 'meter' )
+        control = new _uimeter__WEBPACK_IMPORTED_MODULE_8__["UIMeter"]( group );
+
+    else if( ctrlType === 'progress_bar' )
+        control = new _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__["UIProgressBar"]( group );
+
+    else
+        throw new Error( `UI Control not defined! (${ctrlType})` );
+
+    // Have the control load it's share
+    control.loadFromNode( node );
+
+    // Broadcast signal to let the game handle smart gui inits
+    _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_smartGui( control );
+
+    // Do any smart gui Create
+    control.smartCreate();
+
+    return control;
+
+}
+
+
+/***/ }),
+/* 123 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UILabel", function() { return UILabel; });
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: uilabel.js
+//  DESC:      Class for user interface labels
+//
+
+
+
+
+
+class UILabel extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
+{
+    constructor( group )
+    {
+        super( group );
+        
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_LABEL"];
+    }
+}
+
+
+
+/***/ }),
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControl", function() { return UIControl; });
-/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
+/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(104);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(105);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
-/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(127);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
+/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(126);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(25);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(30);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(26);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(99);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(122);
-/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(25);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(35);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(26);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(22);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(98);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(119);
+/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(21);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(34);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5);
 
 // 
@@ -32091,23 +31807,21 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
 
 /***/ }),
-/* 126 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControlBase", function() { return ControlBase; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
 
 // 
 //  FILE NAME: controlbase.js
 //  DESC:      Control base class
 //
-
 
 
 
@@ -32183,7 +31897,7 @@ class ControlBase extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 
             // Load xml specific control code
             // Use the preloaded since many controls reuse xml files
-            this.loadControlFromNode( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_3__["assetHolder"].get( this.group, controlFilePath ) );
+            this.loadControlFromNode( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__["assetHolder"].get( this.group, controlFilePath ) );
         }
         // Load from the node if we have a sprite list
         else if( xmlNode.getElementsByTagName( 'spriteLst' ).length )
@@ -32206,7 +31920,7 @@ class ControlBase extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
     loadDynamicOffsetFromNode( xmlNode )
     {
         // Load the dynamic offset
-        this.dynamicOffset = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__["loadDynamicOffset"]( xmlNode );
+        this.dynamicOffset = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadDynamicOffset"]( xmlNode );
 
         // Set the dynamic position
         this.setDynamicPos();
@@ -32224,7 +31938,7 @@ class ControlBase extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 }
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32272,133 +31986,13 @@ class Quad
 
 
 /***/ }),
-/* 128 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
-/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(129);
-/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(130);
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(131);
-/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(132);
-/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(133);
-/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(134);
-/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(135);
-/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(136);
-/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(138);
-// 
-//  FILE NAME: uicontrolfactory.js
-//  DESC:      factory for control creation
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 
-//  DESC: Create the control info from XML node
-//
-function create( node, group )
-{
-    let control = null;
-
-    // Get the control type. This is required
-    let ctrlType = node.getAttribute( 'controlType' );
-
-    // New up the control with its respected control type
-    if( ctrlType === 'label' )
-        control = new _uilabel__WEBPACK_IMPORTED_MODULE_1__["UILabel"]( group );
-
-    else if( ctrlType === 'button' )
-        control = new _uibutton__WEBPACK_IMPORTED_MODULE_2__["UIButton"]( group );
-
-    else if( ctrlType === 'sub_control' )
-        control = new _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__["UISubControl"]( group );
-
-    else if( ctrlType === 'button_list' )
-        control = new _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__["UIButtonList"]( group );
-
-    else if( ctrlType === 'check_box' )
-        control = new _uicheckbox__WEBPACK_IMPORTED_MODULE_5__["UICheckBox"]( group );
-
-    else if( ctrlType === 'slider' )
-        control = new _uislider__WEBPACK_IMPORTED_MODULE_6__["UISlider"]( group );
-
-    else if( ctrlType === 'scroll_box' )
-        control = new _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__["UIScrollBox"]( group );
-
-    else if( ctrlType === 'meter' )
-        control = new _uimeter__WEBPACK_IMPORTED_MODULE_8__["UIMeter"]( group );
-
-    else if( ctrlType === 'progress_bar' )
-        control = new _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__["UIProgressBar"]( group );
-
-    else
-        throw new Error( `UI Control not defined! (${ctrlType})` );
-
-    // Have the control load it's share
-    control.loadFromNode( node );
-
-    // Broadcast signal to let the game handle smart gui inits
-    _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_smartGui( control );
-
-    // Do any smart gui Create
-    control.smartCreate();
-
-    return control;
-
-}
-
-
-/***/ }),
-/* 129 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UILabel", function() { return UILabel; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uilabel.js
-//  DESC:      Class for user interface labels
-//
-
-
-
-
-
-class UILabel extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
-{
-    constructor( group )
-    {
-        super( group );
-        
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_LABEL"];
-    }
-}
-
-
-
-/***/ }),
-/* 130 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButton", function() { return UIButton; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -32422,21 +32016,23 @@ class UIButton extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 131 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISubControl", function() { return UISubControl; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(124);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(128);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(121);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(122);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: uisubcontrol.js
 //  DESC:      Class for user interface controls with sub-controls
 //
+
 
 
 
@@ -32450,7 +32046,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     {
         super( group );
         
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECT_SUB_CONTROL"];
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECT_SUB_CONTROL"];
         
         // Arry of sub-controls
         this.subControlAry = [];
@@ -32498,7 +32094,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
             for( let i = 0; i < controlNode.length; ++i )
             {
                 // The reference is placed within an array for all controls
-                let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_2__["create"]( controlNode[i], this.group );
+                let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_3__["create"]( controlNode[i], this.group );
                 
                 this.subControlAry.push( control );
 
@@ -32555,10 +32151,10 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         let navNode = node.getElementsByTagName( 'navigate' );
         if( navNode.length )
         {
-            this.setNodes( navNode, nodeIndex, 'up',    _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_UP"],    navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'down',  _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_DOWN"],  navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'left',  _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_LEFT"],  navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'right', _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_RIGHT"], navNodeMap );
+            this.setNodes( navNode, nodeIndex, 'up',    _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_UP"],    navNodeMap );
+            this.setNodes( navNode, nodeIndex, 'down',  _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_DOWN"],  navNodeMap );
+            this.setNodes( navNode, nodeIndex, 'left',  _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_LEFT"],  navNodeMap );
+            this.setNodes( navNode, nodeIndex, 'right', _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_RIGHT"], navNodeMap );
         }
     }
 
@@ -32629,51 +32225,51 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
         if( this.isActive() && (event instanceof CustomEvent) )
         {
-            if( (event.detail.type >= _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_UP_ACTION"]) &&
-                (event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_RIGHT_ACTION"]) )
+            if( (event.detail.type >= _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_UP_ACTION"]) &&
+                (event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_RIGHT_ACTION"]) )
             {
-                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_UP_ACTION"] )
+                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_UP_ACTION"] )
                 {
                     this.onUpAction( event );
                 }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_DOWN_ACTION"] )
+                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_DOWN_ACTION"] )
                 {
                     this.onDownAction( event );
                 }
-                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_LEFT_ACTION"] )
+                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_LEFT_ACTION"] )
                 {
                     this.onLeftAction( event );
                 }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_RIGHT_ACTION"] )
+                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_RIGHT_ACTION"] )
                 {
                     this.onRightAction( event );
                 }
             }
-            else if( (event.detail.type >= _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_SCROLL_UP"]) &&
-                     (event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_SCROLL_RIGHT"]) )
+            else if( (event.detail.type >= _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_UP"]) &&
+                     (event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_RIGHT"]) )
             {
-                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_SCROLL_UP"] )
+                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_UP"] )
                 {
                     this.onUpScroll( event );
                 }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_SCROLL_DOWN"] )
+                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_DOWN"] )
                 {
                     this.onDownScroll( event );
                 }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_SCROLL_LEFT"] )
+                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_LEFT"] )
                 {
                     this.onLeftScroll( event );
                 }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_SCROLL_RIGHT"] )
+                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_RIGHT"] )
                 {
                     this.onRightScroll( event );
                 }
             }
-            else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_TAB_LEFT"] )
+            else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_TAB_LEFT"] )
             {
                 this.onTabLeft( event );
             }
-            else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_TAB_RIGHT"] )
+            else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_TAB_RIGHT"] )
             {
                 this.onTabRight( event );
             }
@@ -32685,7 +32281,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     //
     onUpAction( event )
     {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_UP"] );
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_UP"] );
     }
 
     // 
@@ -32693,7 +32289,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     //
     onDownAction( event )
     {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_DOWN"] );
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_DOWN"] );
     }
 
     // 
@@ -32701,7 +32297,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     //
     onLeftAction( event )
     {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_LEFT"] );
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_LEFT"] );
     }
 
     // 
@@ -32709,7 +32305,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     //
     onRightAction( event )
     {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_RIGHT"] );
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_RIGHT"] );
     }
 
     // 
@@ -32717,7 +32313,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     //
     onUpScroll( event )
     {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_UP"] );
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_UP"] );
     }
 
     // 
@@ -32725,7 +32321,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     //
     onDownScroll( event )
     {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_DOWN"] );
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_DOWN"] );
     }
 
     // 
@@ -32733,7 +32329,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     //
     onLeftScroll( event )
     {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_LEFT"] );
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_LEFT"] );
     }
 
     // 
@@ -32741,7 +32337,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     //
     onRightScroll( event )
     {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_3__["ENAV_NODE_RIGHT"] );
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_RIGHT"] );
     }
 
     // 
@@ -32782,9 +32378,9 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
                 {
                     this.activeNode = navNode;
 
-                    eventManager.dispatchEvent(
-                        _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                        _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECS_ACTIVE"],
+                    _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent(
+                        _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_CONTROL_STATE_CHANGE"],
+                        _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_ACTIVE"],
                         navNode.uiControl );
 
                     break;
@@ -32805,13 +32401,13 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         }
         else
         {
-            let state = event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_3__["EMSC_STATE"]];
+            let state = event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["EMSC_STATE"]];
 
-            let ctrl = this.findSubControlByRef( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_3__["EMSC_CONTROL"]] );
+            let ctrl = this.findSubControlByRef( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["EMSC_CONTROL"]] );
 
             // Restart the active state of the sub control if something
             // changed in the child controls or their children controls
-            if( (state === _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECS_ACTIVE"]) && (ctrl !== null) )
+            if( (state === _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_ACTIVE"]) && (ctrl !== null) )
             {
                 if( ctrl.state != state )
                 {
@@ -32823,7 +32419,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
                 }
             }
             // The sub control doesn't respond to selected message
-            else if( state < _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECS_SELECTED"] )
+            else if( state < _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_SELECTED"] )
                 super.onStateChange( event );
         }
     }
@@ -32947,7 +32543,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
             {
                 if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
                 {
-                    this.activeNode = controlNodeAry[i];
+                    this.activeNode = this.controlNodeAry[i];
 
                     found = true;
                 }
@@ -33038,7 +32634,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
         for( let i = 0; i < this.subControlAry.length; ++i )
         {
-            if( this.subControlAry[i].getState() > _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECS_INACTIVE"] )
+            if( this.subControlAry[i].getState() > _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_INACTIVE"] )
             {
                 result = this.subControlAry[i].getActiveControl();
                 break;
@@ -33051,15 +32647,15 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 132 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButtonList", function() { return UIButtonList; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
 // 
@@ -33307,13 +32903,13 @@ class UIButtonList extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubCont
 
 
 /***/ }),
-/* 133 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UICheckBox", function() { return UICheckBox; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -33365,16 +32961,16 @@ class UICheckBox extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 134 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISlider", function() { return UISlider; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 
 // 
@@ -33724,21 +33320,21 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"
 
 
 /***/ }),
-/* 135 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIScrollBox", function() { return UIScrollBox; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(26);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(120);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(35);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(128);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(105);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(117);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(34);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(122);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -34098,16 +33694,16 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
 
         // Disable rendering to the color buffer
         // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].colorMask( false, false, false, false );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].colorMask( false, false, false, false );
         
         // Disable rendering to the depth mask
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].depthMask( false );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].depthMask( false );
 
         // Start using the stencil
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].enable( _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].STENCIL_TEST );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].enable( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].STENCIL_TEST );
 
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].ALWAYS, 0x1, 0x1 );
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].REPLACE );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].ALWAYS, 0x1, 0x1 );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].REPLACE );
 
 
         this.stencilMaskSprite.render( camera );
@@ -34115,16 +33711,16 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
 
         // Re-enable color
         // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].colorMask( true, true, true, true );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].colorMask( true, true, true, true );
 
         // Where a 1 was not rendered
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].EQUAL, 0x1, 0x1 );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].EQUAL, 0x1, 0x1 );
 
         // Keep the pixel
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].KEEP, _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].KEEP, _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].KEEP );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP );
 
         // Enable rendering to the depth mask
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].depthMask( true );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].depthMask( true );
 
 
         for( let i = this.visStartPos; i < this.visEndPos; ++i )
@@ -34132,7 +33728,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
 
 
         // Finished using stencil
-        _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].disable( _system_device__WEBPACK_IMPORTED_MODULE_4__["gl"].STENCIL_TEST );
+        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].disable( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].STENCIL_TEST );
     }
 
     // 
@@ -34273,7 +33869,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
         // try to activate the current control
         if( (scrollResult & IN_VIEWABLE_AREA) && !(scrollResult & NEW_ACTIVE_CTRL) )
         {
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__["eventManager"].dispatchEvent(
+            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent(
                 _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_CONTROL_STATE_CHANGE"],
                 _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECS_ACTIVE"],
                 this.scrollControlAry[this.activeScrollCtrl] );
@@ -34405,7 +34001,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
             (scrollControlIndex < this.scrollControlAry.length) &&
             !this.scrollControlAry[scrollControlIndex].isDisabled() )
         {
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__["eventManager"].dispatchEvent(
+            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent(
                 _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_CONTROL_STATE_CHANGE"],
                 _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECS_ACTIVE"],
                 this.scrollControlAry[scrollControlIndex] );
@@ -34447,10 +34043,10 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
     {
         if( this.scrollVector )
         {
-            let dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_6__["highResTimer"].elapsedTime * this.scrollSpeed;
+            let dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__["highResTimer"].elapsedTime * this.scrollSpeed;
 
             if( this.paging )
-                dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_6__["highResTimer"].elapsedTime * this.pageSpeed;
+                dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__["highResTimer"].elapsedTime * this.pageSpeed;
 
             if( this.scrollVector > 0 )
                 this.scrollCurPos += dist;
@@ -34551,7 +34147,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
         let result = super.onSubControlMouseMove( event );
 
         // We only care about the scroll controls if the point is within the scroll box
-        if( !result && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__["eventManager"].mouseOffsetX, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__["eventManager"].mouseOffsetY ) )
+        if( !result && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].mouseOffsetX, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].mouseOffsetY ) )
         {
             for( let i = this.visStartPos; i < this.visEndPos && !result; ++i )
             {
@@ -34659,7 +34255,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
             {
                 if( this.scrollControlAry[i].state > _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECS_INACTIVE"] )
                 {
-                    result = scrollControlAry[i].getActiveControl();
+                    result = this.scrollControlAry[i].getActiveControl();
                     break;
                 }
             }
@@ -34671,25 +34267,23 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
 
 
 /***/ }),
-/* 136 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIMeter", function() { return UIMeter; });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(137);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(134);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(125);
-/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(25);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(124);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(34);
 
 // 
 //  FILE NAME: uimeter.js
 //  DESC:      Class for user interface meters
 //
-
 
 
 
@@ -34727,7 +34321,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
     {
         super( group );
         
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_5__["ECT_METER"];
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECT_METER"];
         
         // Current value
         this.currentValue = 0;
@@ -34818,7 +34412,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
         // Get the max size of the font string to fit within this meter.
         // As the string get's bigger, it will be scaled to fit.
-        this.maxFontStrSize = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_6__["loadSize"]( node );
+        this.maxFontStrSize = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__["loadSize"]( node );
         
         // If no meter scripts are defined, display the current value
         if( node.getElementsByTagName( 'meterScript' ).length == 0 )
@@ -34936,7 +34530,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
         {
             this.terminalVelocity = range / (bangRange.estimatedTime * 1000.0);
             this.impulse = range / (bangRange.estimatedTime * bangRange.estimatedTime * 500.0);
-            this.acceleration = impulse;
+            this.acceleration = this.impulse;
         }
 
         // Set the timer to allow the bang-up to start off slowly
@@ -35106,7 +34700,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
 
 /***/ }),
-/* 137 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35210,17 +34804,17 @@ class Timer
 
 
 /***/ }),
-/* 138 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIProgressBar", function() { return UIProgressBar; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(30);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
@@ -35476,7 +35070,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
                     _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].depthMask( true );
 
 
-                    this.spriteAry[i].render( matrix );
+                    this.spriteAry[i].render( this.matrix );
 
 
                     // Finished using stencil
@@ -35514,7 +35108,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
             if( this.alignment == _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_LEFT"] )
                 posX -= (this.progressBarSize.w - offset) / 2;
 
-            else if( m_alignment.horz == _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_RIGHT"] )
+            else if( this.alignment.horz == _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_RIGHT"] )
                 posX += (this.progressBarSize.w - offset) / 2;
         }
         else
@@ -35545,13 +35139,13 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 139 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuTree", function() { return MenuTree; });
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 // 
 //  FILE NAME: menutree.js
@@ -35989,14 +35583,14 @@ class MenuTree
 
 
 /***/ }),
-/* 140 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cameraManager", function() { return cameraManager; });
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(111);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 
 // 
 //  FILE NAME: cameramanager.js
@@ -36169,7 +35763,184 @@ var cameraManager = new CameraManager;
 
 
 /***/ }),
-/* 141 */
+/* 138 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Camera", function() { return Camera; });
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
+/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: camera.js
+//  DESC:      class that holds the camera position and rotation
+//
+
+
+
+
+
+
+
+
+class Camera extends _3d_object3d__WEBPACK_IMPORTED_MODULE_1__["Object3D"]
+{
+    constructor()
+    {
+        super();
+        
+        this.projectionMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"];
+        this.finalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"];
+        
+        this.projType = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].projectionType;
+        this.minZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].minZdist;
+        this.maxZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].maxZdist;
+        this.angle = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].viewAngle;
+
+        // Create the projection matrix
+        this.createProjectionMatrix();
+        
+        // Do the initial transform
+        super.transform();
+        
+        // Calculate the final matrix
+        this.calcFinalMatrix();
+    }
+    
+    //
+    //  DESC: Init the camera from XML
+    //
+    initFromXml( xmlNode )
+    {
+        let attr = xmlNode.getAttribute('projectType');
+        if( attr )
+        {
+            if( attr === 'orthographic' )
+                this.projType = _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_ORTHOGRAPHIC"];
+            else
+                this.projType = _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_PERSPECTIVE"];
+        }
+        
+        attr = xmlNode.getAttribute('minZDist');
+        if( attr )
+            this.minZDist = Number(attr);
+
+        attr = xmlNode.getAttribute('maxZDist');
+        if( attr )
+            this.maxZDist = Number(attr);
+
+        attr = xmlNode.getAttribute('view_angle');
+        if( attr )
+            this.angle = Number(attr) * _defs__WEBPACK_IMPORTED_MODULE_3__["DEG_TO_RAD"];
+        
+        // Load the transforms
+        this.loadTransFromNode( xmlNode );
+        
+        // Create the projection matrix
+        this.createProjectionMatrix();
+        
+        // Do the initial transform
+        super.transform();
+        
+        // Calculate the final matrix
+        this.calcFinalMatrix();
+    }
+    
+    //
+    //  DESC: Create the projection matrix
+    //
+    init( projType, minZDist, maxZDist, angle )
+    {
+        this.projType = projType;
+        this.minZDist = minZDist;
+        this.maxZDist = maxZDist;
+        this.angle = angle;
+        
+        // Create the projection matrix
+        this.createProjectionMatrix();
+        
+        // Do the initial transform
+        super.transform();
+        
+        // Calculate the final matrix
+        this.calcFinalMatrix();
+    }
+    
+    //
+    //  DESC: Create the projection matrix
+    //
+    createProjectionMatrix()
+    {
+        if( this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_PERSPECTIVE"] )
+        {
+            this.projectionMatrix.perspectiveFovRH(
+                this.angle,
+                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].screenAspectRatio.w,
+                this.minZDist,
+                this.maxZDist );
+        }
+        else
+        {
+            this.projectionMatrix.orthographicRH(
+                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].defaultSize.w,
+                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].defaultSize.h,
+                this.minZDist,
+                this.maxZDist );
+        }
+    }
+    
+    //
+    //  DESC: Set the object's position
+    //
+    setPos( pos )
+    {
+        super.setPosXYZ( -pos.x, -pos.y, -pos.z );
+    }
+    
+    setPosXYZ( x = 0, y = 0, z = 0 )
+    {
+        super.setPosXYZ( -x, -y, -z );
+    }
+    
+    incPos( pos )
+    {
+        super.incPosXYZ( -pos.x, -pos.y, -pos.z );
+    }
+    
+    incPosXYZ( x = 0, y = 0, z = 0 )
+    {
+        super.incPosXYZ( -x, -y, -z );
+    }
+    
+    //
+    //  DESC: Transform
+    //
+    transform()
+    {
+        let wasTransformed = this.parameters.isSet( _defs__WEBPACK_IMPORTED_MODULE_3__["TRANSFORM"] );
+    
+        super.transform();
+
+        if( wasTransformed )
+            this.calcFinalMatrix();
+    }
+    
+    //
+    //  DESC: Calculate the final matrix
+    //
+    calcFinalMatrix()
+    {
+        this.finalMatrix.initilizeMatrix();
+        this.finalMatrix.mergeMatrix( this.matrix.matrix );
+        this.finalMatrix.mergeMatrix( this.projectionMatrix.matrix );
+    }
+}
+
+/***/ }),
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36210,15 +35981,15 @@ var loadManager = new LoadManager;
 
 
 /***/ }),
-/* 142 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "soundManager", function() { return soundManager; });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(143);
-/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(144);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(141);
+/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(142);
 
 // 
 //  FILE NAME: soundmanager.js
@@ -36485,7 +36256,7 @@ var soundManager = new SoundManager;
 
 
 /***/ }),
-/* 143 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36658,7 +36429,7 @@ class Sound
 
 
 /***/ }),
-/* 144 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36667,7 +36438,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_RANDOM", function() { return EST_RANDOM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_SEQUENTIAL", function() { return EST_SEQUENTIAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayList", function() { return PlayList; });
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 
 // 
 //  FILE NAME: playlist.js
@@ -36819,13 +36590,13 @@ class PlayList
 
 
 /***/ }),
-/* 145 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "strategyManager", function() { return strategyManager; });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
 
 // 
 //  FILE NAME: strategymanager.js
@@ -37002,14 +36773,14 @@ var strategyManager = new StrategyManager;
 
 
 /***/ }),
-/* 146 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "strategyLoader", function() { return strategyLoader; });
-/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(145);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(143);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 
 // 
 //  FILE NAME: strategyloader.js
@@ -37110,23 +36881,21 @@ var strategyLoader = new Strategyloader;
 
 
 /***/ }),
-/* 147 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActorStrategy", function() { return ActorStrategy; });
-/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(148);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(151);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
+/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(146);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(150);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
 //
 //  FILE NAME: actorstrategy.js
 //  DESC:      Basic sprite strategy 2d class
 //
-
 
 
 
@@ -37168,7 +36937,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         let defaultGroup = '';
         let defaultObjName = '';
         let defaultAIName = '';
-        let defaultId = -1;
+        let defaultId = _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEFAULT_ID"];
 
         let attr = node.getAttribute( 'defaultGroup' );
         if( attr !== null )
@@ -37194,7 +36963,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
                 throw new Error( `Actor strategy missing node name!` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( node.children[i], defaultGroup, defaultObjName, defaultAIName ) );
+            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( node.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
         }
     }
 
@@ -37231,7 +37000,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         let headNode = null;
         for( let i = 0; i < nodeAry.length; i++ )
         {
-            let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_3__["create"]( nodeAry[i] );
+            let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__["create"]( nodeAry[i] );
 
             if( headNode === null )
                 headNode = node;
@@ -37440,13 +37209,13 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
 
 /***/ }),
-/* 148 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iStrategy", function() { return iStrategy; });
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(137);
 
 // 
 //  FILE NAME: istrategy.js
@@ -37485,13 +37254,13 @@ class iStrategy
 
 
 /***/ }),
-/* 149 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeDataList", function() { return NodeDataList; });
-/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(150);
+/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(148);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 //
@@ -37577,13 +37346,13 @@ class NodeDataList
 
 
 /***/ }),
-/* 150 */
+/* 148 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeData", function() { return NodeData; });
-/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(123);
+/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(149);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 //
@@ -37651,28 +37420,110 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
 
 
 /***/ }),
-/* 151 */
+/* 149 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteData", function() { return SpriteData; });
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: spritedata.js
+//  DESC:      Sprite data class
+//
+
+
+
+
+
+class SpriteData
+{
+    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"] )
+    {
+        // XML node
+        this.xmlNode = xmlNode;
+
+        // Sprite name
+        this.name = null;
+        
+        // Group Name
+        this.group = defGroup;
+        
+        // Object name
+        this.objectName = defObjName;
+        
+        // AI name
+        this.aiName = defAIName;
+        
+        // Sprite Id
+        this.id = defId;
+        
+        // Sprite type
+        this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_NULL"];
+        
+        // Get the name of this specific sprite instance
+        let attr = xmlNode.getAttribute( 'name' );
+        if( attr )
+            this.name = attr;
+        
+        // Get the group this sprite belongs to
+        attr = xmlNode.getAttribute( 'group' );
+        if( attr )
+            this.group = attr;
+        
+        // Get the object data name
+        attr = xmlNode.getAttribute( 'objectName' );
+        if( attr)
+            this.objectName = attr;
+
+        // Get the sprite's AI name
+        attr = xmlNode.getAttribute( 'aiName' );
+        if( attr !== null )
+            this.aiName = attr;
+
+        // Get the sprite's unique id number
+        attr = xmlNode.getAttribute( "id" );
+        if( attr )
+            this.id = Number(attr);
+        
+        // Get the node type
+        if( xmlNode.nodeName == 'object2d' )
+            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_OBJECT2D"];
+
+        else if( xmlNode.nodeName == 'object3d' )
+            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_OBJECT3D"];
+
+        else if( xmlNode.nodeName == 'sprite2d' )
+            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_SPRITE2D"];
+
+        else if( xmlNode.nodeName == 'sprite3d' )
+            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_SPRITE3D"];
+    }
+}
+
+
+/***/ }),
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(138);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(136);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(152);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(154);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(155);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(158);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(135);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(133);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(151);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(153);
+/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(154);
+/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(157);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: nodefactory.js
 //  DESC:      Class factory for node creation
 //
-
 
 
 
@@ -37694,25 +37545,25 @@ function create( nodeData )
     let node = null;
     
     // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
-    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["ENT_SPRITE"] )
+    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_SPRITE"] )
     {
-        node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_5__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
+        node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_4__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["ENT_OBJECT_MULTI_LIST"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_OBJECT_MULTI_LIST"] )
     {
-        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_7__["ObjectNodeMultiLst"]( nodeId, nodeData.nodeId, nodeData.parenNodetId );
+        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__["ObjectNodeMultiLst"]( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadObject( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["ENT_SPRITE_MULTI_LIST"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_SPRITE_MULTI_LIST"] )
     {
-        node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_8__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+        node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["ENT_UI_CONTROL"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_UI_CONTROL"] )
     {
         node = CreateUIControlNode( nodeData, nodeData.id );
     }
@@ -37756,11 +37607,11 @@ function CreateUIControlNode( nodeData )
 {
     let control = null;
     
-    if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECT_PROGRESS_BAR"] )
-        control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_3__["UIProgressBar"]( nodeData.group );
+    if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_8__["ECT_PROGRESS_BAR"] )
+        control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__["UIProgressBar"]( nodeData.group );
     
-    else if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECT_METER"] )
-        control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_4__["UIMeter"]( nodeData.group );
+    else if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_8__["ECT_METER"] )
+        control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__["UIMeter"]( nodeData.group );
     
     else
         throw new Error( `Node control type not defined (${nodeData.nodeName}).` );
@@ -37768,27 +37619,25 @@ function CreateUIControlNode( nodeData )
     control.loadFromNode( nodeData.xmlNode );
     control.init();
     
-    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_6__["UIControlNode"]( control );
+    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__["UIControlNode"]( control );
 }
 
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNode", function() { return SpriteNode; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(152);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
 
 // 
 //  FILE NAME: spritenode.js
 //  DESC:      Sprite node class for rendering just one sprite
 //
-
 
 
 
@@ -37871,7 +37720,7 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -37995,13 +37844,13 @@ class iNode
 
 
 /***/ }),
-/* 154 */
+/* 153 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControlNode", function() { return UIControlNode; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(152);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -38080,14 +37929,14 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 155 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectNodeMultiLst", function() { return ObjectNodeMultiLst; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(156);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(155);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -38166,13 +38015,13 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
 }
 
 /***/ }),
-/* 156 */
+/* 155 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeMultiLst", function() { return NodeMultiLst; });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -38409,20 +38258,18 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
 
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(152);
 
 // 
 //  FILE NAME: node.js
 //  DESC:      Node class
 //
-
 
 
 
@@ -38542,22 +38389,20 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNodeMultiLst", function() { return SpriteNodeMultiLst; });
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(155);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
 
 // 
 //  FILE NAME: spritenodemultilist.js
 //  DESC:      Sprite node multi link list class
 //
-
 
 
 
@@ -38653,7 +38498,7 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
 
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38661,20 +38506,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ASSET_COUNT", function() { return ASSET_COUNT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TitleScreenState", function() { return TitleScreenState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(160);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(101);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(145);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(147);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(146);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(122);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(120);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(25);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(141);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(39);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(159);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(100);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(143);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(145);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(144);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(119);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(117);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(21);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(139);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(38);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(24);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: titlescreenstate.js
@@ -38826,23 +38671,21 @@ function load()
 
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommonState", function() { return CommonState; });
-/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(101);
-/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
-/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(24);
+/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(100);
+/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: commonstate.js
 //  DESC:      CommonState Class State
 //
-
 
 
 
@@ -38869,9 +38712,9 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_GAME_STATE_CHANGE"] )
+            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_2__["EGE_MENU_GAME_STATE_CHANGE"] )
             {
-                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_3__["ETC_BEGIN"] )
+                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_2__["ETC_BEGIN"] )
                 {
                     // Block all message processing in the menu manager
                     _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__["menuManager"].allowEventHandling = false;
@@ -38880,7 +38723,7 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
                     this.stateMessage.setMsg( this.getGameState(event.detail.arg[1]), this.gameState );
                 }
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_4__["ESE_FADE_OUT_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_3__["ESE_FADE_OUT_COMPLETE"] )
             {
                 // Clear out all the trees
                 _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__["menuManager"].clearActiveTrees();
@@ -38912,7 +38755,7 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 161 */
+/* 160 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38923,12 +38766,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FadeTo", function() { return FadeTo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ColorTo", function() { return ColorTo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
-/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(25);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(24);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(117);
+/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 
 //
 //  FILE NAME: utilityscripts.js
@@ -39252,15 +39095,15 @@ function loadScripts()
 
 
 /***/ }),
-/* 162 */
+/* 161 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(161);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(160);
 
 //
 //  FILE NAME: statescripts.js
@@ -39311,18 +39154,18 @@ function loadScripts()
 
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(142);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(161);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(117);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(140);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(160);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 //
@@ -40342,29 +40185,29 @@ function loadScripts()
 
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoadState", function() { return LoadState; });
-/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
+/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(141);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
+/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(139);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(26);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(147);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(145);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(146);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(120);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(122);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(145);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(143);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(144);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(117);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(119);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(3);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(159);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(165);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(24);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(158);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(164);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: loadstate.js
@@ -40577,7 +40420,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40585,26 +40428,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ASSET_COUNT", function() { return ASSET_COUNT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Level1State", function() { return Level1State; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(160);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(101);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(120);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(122);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(25);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(118);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(141);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(142);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(145);
-/* harmony import */ var _library_strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(166);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(147);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(99);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(146);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(159);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(100);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(117);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(119);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(115);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(26);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(139);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(140);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(143);
+/* harmony import */ var _library_strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(165);
+/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(145);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(98);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(144);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(3);
 /* harmony import */ var _library_common_point__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(11);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(5);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(24);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(18);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(20);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(14);
 
 // 
 //  FILE NAME: level1state.js
@@ -40962,14 +40805,14 @@ function load()
 
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StageStrategy", function() { return StageStrategy; });
-/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(148);
-/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(167);
+/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(146);
+/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(166);
 
 // 
 //  FILE NAME: stagestrategy.js
@@ -41072,15 +40915,15 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sector", function() { return Sector; });
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(112);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(151);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(150);
 
 // 
 //  FILE NAME: sector.js
@@ -41234,14 +41077,14 @@ class Sector extends _3d_object3d__WEBPACK_IMPORTED_MODULE_0__["Object3D"]
 
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartConfirmBtn", function() { return SmartConfirmBtn; });
-/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(169);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(101);
+/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(168);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(100);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -41293,7 +41136,7 @@ class SmartConfirmBtn extends _library_gui_ismartguibase__WEBPACK_IMPORTED_MODUL
     
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41370,14 +41213,14 @@ class SmartGuiControl extends iSmartGui
 
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(171);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(145);
+/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(170);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(143);
 
 // 
 //  FILE NAME: aiball.js
@@ -41413,7 +41256,7 @@ class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBa
 
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

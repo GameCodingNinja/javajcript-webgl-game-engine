@@ -8,7 +8,6 @@
 
 import { GameState } from './gamestate';
 import { menuManager } from '../../../library/gui/menumanager';
-import { device } from '../../../library/system/device';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 

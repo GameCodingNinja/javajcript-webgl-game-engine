@@ -7,7 +7,6 @@
 "use strict";
 import { gl, device } from './device';
 import { textureManager } from '../managers/texturemanager';
-import { meshManager } from '../managers/meshmanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { shaderManager } from '../managers/shadermanager';
 import { eventManager } from '../managers/eventmanager';

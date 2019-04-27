@@ -12,7 +12,7 @@ import * as planck from 'planck-js';
 
 export class PhysicsComponent2D
 {
-    constructor( physicsData, sprite )
+    constructor( physicsData )
     {
         // Parent sprite
         this.sprite = null;

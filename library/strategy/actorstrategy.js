@@ -8,7 +8,6 @@
 
 import { iStrategy } from './istrategy';
 import { NodeDataList } from '../node/nodedatalist';
-import { Sprite } from '../sprite/sprite';
 import * as nodeFactory from '../node/nodefactory';
 import * as defs from '../common/defs';
 
@@ -45,7 +44,7 @@ export class ActorStrategy extends iStrategy
         let defaultGroup = '';
         let defaultObjName = '';
         let defaultAIName = '';
-        let defaultId = -1;
+        let defaultId = defs.DEFAULT_ID;
 
         let attr = node.getAttribute( 'defaultGroup' );
         if( attr !== null )
@@ -71,7 +70,7 @@ export class ActorStrategy extends iStrategy
                 throw new Error( `Actor strategy missing node name!` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new NodeDataList( node.children[i], defaultGroup, defaultObjName, defaultAIName ) );
+            this.dataMap.set( nodeName, new NodeDataList( node.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
         }
     }
 

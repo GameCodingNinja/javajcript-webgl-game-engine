@@ -13,10 +13,6 @@ import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { fontManager } from '../managers/fontmanager';
 import { FontData } from '../common/fontdata';
 import { Matrix } from '../utilities/matrix';
-import { Color } from '../common/color';
-import { Size } from '../common/size';
-import { Vertex2d } from '../common/vertex2d';
-import { Camera } from '../common/camera';
 import { gl } from '../system/device';
 import * as defs from '../common/defs';
 import * as genFunc from '../utilities/genfunc';
@@ -548,10 +544,7 @@ export class VisualComponentFont extends VisualComponentQuad
     getFontSize()
     {
         if( !this.fontData )
-        {
             throw new Error( `Can't ask for the font size from a sprite that is not defined!` );
-            return null;
-        }
 
         return this.fontData.fontStrSize;
     }
