@@ -40634,7 +40634,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const ASSET_COUNT = 18;
+const ASSET_COUNT = 19;
 
 const SPRITE_PEG = -2,
       MULTIPLIER = 0,

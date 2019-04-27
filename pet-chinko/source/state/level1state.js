@@ -27,7 +27,7 @@ import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-export const ASSET_COUNT = 18;
+export const ASSET_COUNT = 19;
 
 const SPRITE_PEG = -2,
       MULTIPLIER = 0,
