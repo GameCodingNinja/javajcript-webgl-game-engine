@@ -8,7 +8,6 @@
 
 import { Size } from '../common/size';
 import { Rect } from '../common/rect';
-import { Texture } from '../common/texture';
 import { textureManager } from '../managers/texturemanager';
 
 export class CharData
