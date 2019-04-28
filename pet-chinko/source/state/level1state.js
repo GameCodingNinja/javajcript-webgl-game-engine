@@ -22,7 +22,6 @@ import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { settings } from '../../../library/utilities/settings';
-import { Point } from '../../../library/common/point';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 import * as genFunc from '../../../library/utilities/genfunc';

@@ -18,7 +18,7 @@ import * as stateDefs from '../state/statedefs';
 //
 export class Hold
 {
-    constructor( sprite )
+    constructor()
     {
         this.time = 0;
         this.finished = false;

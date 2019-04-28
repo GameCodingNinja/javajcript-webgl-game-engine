@@ -8,8 +8,6 @@
 
 import { GameState } from './gamestate';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { textureManager } from '../../../library/managers/texturemanager';
-import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'

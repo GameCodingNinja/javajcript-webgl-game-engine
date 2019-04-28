@@ -17,7 +17,6 @@ import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
-import { assetHolder } from '../../../library/utilities/assetholder';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 

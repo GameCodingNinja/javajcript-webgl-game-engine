@@ -7,7 +7,6 @@
 "use strict";
 
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as utilScripts from './utilityscripts';
 
 //

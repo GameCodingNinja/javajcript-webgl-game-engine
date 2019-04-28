@@ -8,11 +8,15 @@
 
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
 import { ObjectVisualData3D } from './objectvisualdata3d';
+import * as defs from '../common/defs';
 
 export class ObjectData3D
 {
     constructor()
     {
+        // Set the object data type
+        this.objDataType = defs.EODT_OBJECT_DATA_3D;
+
         // Visual data of the object
         this.visualData = new ObjectVisualData3D;
 

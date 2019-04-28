@@ -10,11 +10,15 @@ import { ObjectPhysicsData2D } from './objectphysicsdata2d';
 import { ObjectVisualData2D } from './objectvisualdata2d';
 import { Size } from '../common/size';
 import * as parseHelper from '../utilities/xmlparsehelper';
+import * as defs from '../common/defs';
 
 export class ObjectData2D
 {
     constructor()
     {
+        // Set the object data type
+        this.objDataType = defs.EODT_OBJECT_DATA_2D;
+
         // Visual data of the object
         this.visualData = new ObjectVisualData2D;
 

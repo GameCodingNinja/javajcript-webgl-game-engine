@@ -9,8 +9,6 @@
 import { GameState } from './gamestate';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { textureManager } from '../../../library/managers/texturemanager';
-import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { fontManager } from '../../../library/managers/fontmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
@@ -23,9 +21,7 @@ import { soundManager } from '../../../library/managers/soundmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
-import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { UIProgressBar } from '../../../library/gui/uiprogressbar';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import * as titleScreenState from '../state/titlescreenstate';

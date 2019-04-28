@@ -11,6 +11,7 @@ import { VisualComponentSpriteSheet } from '../2d/visualcomponentspritesheet';
 import { VisualComponentScaledFrame } from '../2d/visualcomponentscaledframe';
 import { VisualComponentFont } from '../2d/visualcomponentfont';
 import { VisualComponent3D } from '../3d/visualcomponent3d';
+import { NullVisualComponent } from '../common/nullvisualcomponent';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
 import { scriptManager } from '../script/scriptmanager';
@@ -47,7 +48,7 @@ export class Sprite
         this.scriptComponent = new ScriptComponent;
         
         // Allocate the sprite specific objects
-        if( this.objData.constructor.name == 'ObjectData2D' )
+        if( this.objData.objDataType === defs.EODT_OBJECT_DATA_2D )
         {
             this.object = new Object2D
             
@@ -66,11 +67,15 @@ export class Sprite
             if( objData.physicsData.isActive() )
                 this.physicsComponent = new PhysicsComponent2D( objData.physicsData );
         }
-        else if( this.objData.constructor.name == 'ObjectData3D' )
+        else if( this.objData.objDataType === defs.EODT_OBJECT_DATA_3D )
         {
             this.object = new Object3D
             this.visualComponent = new VisualComponent3D( objData.visualData );
         }
+
+        // Allocate the null component if no visual component was created
+        if( this.visualComponent === null )
+            this.visualComponent = new NullVisualComponent();
         
         // If there's no visual data, set the hide flag
         this.object.setVisible( objData.visualData.isActive() );

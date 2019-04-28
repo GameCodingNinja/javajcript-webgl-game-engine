@@ -1,10 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "/home/howie/Development/javajcript-webgl-game-engine/library"
+			"path": "."
 		},
 		{
-			"path": "."
+			"path": "/home/howie/Development/javajcript-webgl-game-engine/library"
 		}
 	],
 	"settings": {
