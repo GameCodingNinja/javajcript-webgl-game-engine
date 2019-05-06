@@ -1,8 +1,9 @@
+<?xml version="1.0"?>
 <node defaultGroup="(level_1)">
 
-    <node name="UIMeter" type="uiControlNode">
+    <node name="uiWinMeter" type="uiControlNode">
         
-        <uiMeter spriteApplyIndex="1" stencilMaskSprite="">
+        <uiMeter>
             <position x="-840" y="-430" z="0"/>
             <!-- Max size of font string in meter -->
             <size width="175" height="55"/>
@@ -16,6 +17,42 @@
             </bangRange>
             
             <spriteLst>
+
+                <sprite objectName="level_font">
+                    <position x="0" y="50" z="0"/>
+                    <font fontName="dejavu_sans_reg_32" fontString="Win Meter"/>
+                </sprite>
+      
+                <sprite objectName="meter_frame"/>
+
+                <sprite objectName="level_font">
+                    <position x="0" y="-1" z="0"/>
+                    <font fontName="dejavu_sans_cond_45">
+                        <attributes kerning="-2"/>
+                    </font>
+                </sprite>
+
+            </spriteLst>
+        </uiMeter>
+    </node>
+
+    <node name="uiBallMeter" type="uiControlNode">
+        
+        <uiMeter>
+            <position x="840" y="-430" z="0"/>
+            <!-- Max size of font string in meter -->
+            <size width="175" height="55"/>
+            <!-- <meterScript onInit="Meter_OnInit" onStart="Meter_OnStart" onStop="Meter_OnStop" onClear="Meter_OnClear"/> -->
+            <bangRange fastBangTime="500" scaleType="axis">
+                <range target="100" bangUpType="rampUp" velocity="10.0"  estimatedTime="300" slowStartTime="100"/>
+            </bangRange>
+            
+            <spriteLst>
+
+                <sprite objectName="level_font">
+                    <position x="0" y="50" z="0"/>
+                    <font fontName="dejavu_sans_reg_32" fontString="Ball Meter"/>
+                </sprite>
       
                 <sprite objectName="meter_frame"/>
 
@@ -30,7 +67,7 @@
         </uiMeter>
     </node>
     
-    <node name="multiplier" type="spriteNode">
+    <node name="uiMultiplier" type="spriteNode">
         
         <sprite2d objectName="level_font">
             <position x="-840" y="-495" z="0"/>
@@ -39,6 +76,34 @@
             </font>
         </sprite2d>
 
+    </node>
+
+    <node name="ui_tennis_ball_green" type="spriteNode">
+        <sprite2d objectName="ui_tennis_ball_green" id="0">
+            <position x="840" y="-495" z="0"/>
+            <scale x="0.5" y="0.5" z="0.5"/>
+        </sprite2d>
+    </node>
+
+    <node name="ui_tennis_ball_pink" type="spriteNode">
+        <sprite2d objectName="ui_tennis_ball_pink" id="0">
+            <position x="840" y="-495" z="0"/>
+            <scale x="0.5" y="0.5" z="0.5"/>
+        </sprite2d>
+    </node>
+
+    <node name="ui_frisbee" type="spriteNode">
+        <sprite2d objectName="ui_frisbee" id="0">
+            <position x="840" y="-495" z="0"/>
+            <scale x="0.5" y="0.5" z="0.5"/>
+        </sprite2d>
+    </node>
+
+    <node name="ui_bone_biscuit" type="spriteNode">
+        <sprite2d objectName="ui_bone_biscuit" id="0">
+            <position x="840" y="-495" z="0"/>
+            <scale x="0.5" y="0.5" z="0.5"/>
+        </sprite2d>
     </node>
 
 </node>

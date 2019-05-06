@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <objectDataList2D>
 
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
@@ -80,6 +81,30 @@
                     </fixture>
                 </fixtureLst>
             </physics>
+        </object>
+
+        <object name="ui_tennis_ball_green">
+            <visual>
+                <texture file="data/textures/levelArt/tennisball100x100.png"/>
+            </visual>
+        </object>
+        
+        <object name="ui_tennis_ball_pink">
+            <visual>
+                <texture file="data/textures/levelArt/tennisballpink100x100.png"/>
+            </visual>
+        </object>
+        
+        <object name="ui_frisbee">
+            <visual>
+                <texture file="data/textures/levelArt/frisbee100x100.png"/>
+            </visual>
+        </object>
+        
+        <object name="ui_bone_biscuit">
+            <visual>
+                <texture file="data/textures/levelArt/bone_biscuit.png"/>
+            </visual>
         </object>
 
         <object name="peg">

@@ -748,9 +748,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VISIBLE", function() { return VISIBLE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SPRITE2D", function() { return SPRITE2D; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ACTOR2D", function() { return ACTOR2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESSC_DELETE_SPRITE", function() { return ESSC_DELETE_SPRITE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESSC_CREATE_SPRITE", function() { return ESSC_CREATE_SPRITE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESSC_DELETE_PHYSICS", function() { return ESSC_DELETE_PHYSICS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_IN", function() { return EGE_MENU_TRANS_IN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_OUT", function() { return EGE_MENU_TRANS_OUT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_ESCAPE_ACTION", function() { return EGE_MENU_ESCAPE_ACTION; });
@@ -858,6 +855,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_CHANGE_FOCUS", function() { return ECAT_CHANGE_FOCUS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_GAME_STATE_CHANGE", function() { return ECAT_GAME_STATE_CHANGE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_QUIT_GAME", function() { return ECAT_QUIT_GAME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_ACTION_EVENT", function() { return ECAT_ACTION_EVENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECSF_ON_ACTIVE", function() { return ECSF_ON_ACTIVE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECSF_ON_SELECTED", function() { return ECSF_ON_SELECTED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EO_HORIZONTAL", function() { return EO_HORIZONTAL; });
@@ -943,11 +941,6 @@ const VISIBLE            = 0x100;
 // Type bits
 const SPRITE2D           = 0x200,
              ACTOR2D            = 0x400;
-
-// Sprite strategy command
-const ESSC_DELETE_SPRITE   = 0,
-             ESSC_CREATE_SPRITE   = 1,
-             ESSC_DELETE_PHYSICS  = 2;
 
 // EGameEvent
 // Menu events
@@ -1094,7 +1087,8 @@ const ECAT_NULL              = 0,
              ECAT_CLOSE             = 5,
              ECAT_CHANGE_FOCUS      = 6,
              ECAT_GAME_STATE_CHANGE = 7,
-             ECAT_QUIT_GAME         = 8;
+             ECAT_QUIT_GAME         = 8,
+             ECAT_ACTION_EVENT      = 9;
 
 // EControlScriptFunctions
 const ECSF_ON_ACTIVE   = 0,
@@ -3049,7 +3043,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const STARTUP_ASSET_COUNT = 58,
+const STARTUP_ASSET_COUNT = 60,
       MIN_LOAD_TIME = 1500;
 
 class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
@@ -28405,6 +28399,28 @@ class Sprite
     {
         return this.id;
     }
+
+    //
+    //  DESC: Is the physics active
+    //
+    isPhysicsActive()
+    {
+        if( this.physicsComponent && this.physicsComponent.isActive() )
+            return true;
+
+        return false;
+    }
+
+    //
+    //  DESC: Is the physics awake
+    //
+    isPhysicsAwake()
+    {
+        if( this.isPhysicsActive() && this.physicsComponent.isAwake() )
+            return true;
+
+        return false;
+    }
 }
 
 
@@ -30070,6 +30086,14 @@ class PhysicsComponent2D
     }
 
     // 
+    //  DESC: Is this component awake?
+    //
+    isAwake()
+    {
+        return (this.body && !this.body.isStatic() && this.body.isAwake() );
+    }
+
+    // 
     //  DESC: Update the physics
     //
     destroyBody()
@@ -31293,6 +31317,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             else if( this.actionType === _common_defs__WEBPACK_IMPORTED_MODULE_15__["ECAT_GAME_STATE_CHANGE"] )
                 _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_GAME_STATE_CHANGE"], _common_defs__WEBPACK_IMPORTED_MODULE_15__["ETC_BEGIN"], this.executionAction );
 
+            else if( this.actionType === _common_defs__WEBPACK_IMPORTED_MODULE_15__["ECAT_ACTION_EVENT"] )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_15__["ECAT_ACTION_EVENT"], this.executionAction, this );
+
             // Smart gui execution
             this.smartExecuteAction();
 
@@ -31659,6 +31686,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
         else if( value === 'quit_game' )
             this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_15__["ECAT_QUIT_GAME"];
+        
+        else if( value === 'action_event' )
+            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_15__["ECAT_ACTION_EVENT"];
     }
 
     // 
@@ -34543,6 +34573,17 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
     }
 
     //
+    //  DESC: Start the bang range
+    //
+    incBangUp( amount )
+    {
+        this.targetValue += amount;
+        this.bangUp = true;
+
+        this.setBangRange();
+    }
+
+    //
     //  DESC: Set the bang range
     //
     setBangRange()
@@ -34648,7 +34689,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
                 }
             }
             // Linear bang up from the start
-            else if( this.bangRange.this.bangType === EBT_LINEAR )
+            else if( this.bangRange.bangType === EBT_LINEAR )
             {
                 this.currentValue += this.velocity;
 
@@ -37034,6 +37075,15 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     }
 
     //
+    //  DESC: Clear out all nodes
+    //
+    clear()
+    {
+        for( let i = 0; i < this.nodeAry.length; i++ )
+            this.deleteAry.push( this.nodeAry[i] );
+    }
+
+    //
     //  DESC: Do some cleanup
     //
     cleanUp()
@@ -37091,6 +37141,48 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
         return headNode;
     }
+
+    //
+    //  DESC: activate node
+    //
+    activateCount()
+    {
+        return this.nodeAry.length;
+    }
+
+    //
+    //  DESC: Count of awake nodes
+    //
+    awakeCount()
+    {
+        let result = 0;
+
+        for( let i = 0; i < this.nodeAry.length; i++ )
+        {
+            let sprite = this.nodeAry[i].getSprite();
+            if( sprite.isPhysicsActive() )
+                if( sprite.isPhysicsAwake() )
+                    result += 1;
+        }
+
+        return result;
+    }
+
+    //
+    //  DESC: activate node
+    //
+    isPhysicsAwake()
+    {
+        for( let i = 0; i < this.nodeAry.length; i++ )
+        {
+            let sprite = this.nodeAry[i].getSprite();
+            if( sprite.isPhysicsActive() )
+                if( sprite.isPhysicsAwake() )
+                    return true;
+        }
+
+        return false;
+    }
     
     //
     //  DESC: activate node
@@ -37122,14 +37214,29 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         {
             let index = this.nodeAry.findIndex( (obj) => obj === node );
             if( index !== -1 )
-                console.log( `Node is not active (${instanceName})!` );
-            else
                 this.deactivateAry.push( this.nodeAry[index] );
+            else
+                console.log( `Node is not active (${instanceName})!` );
         }
         else
             console.log( `Node can't be found (%s) (${instanceName})!` );
     }
-    
+
+    //
+    //  DESC: deactivate all the nodes
+    //
+    deactivateAll()
+    {
+        for( let [ key, node ] of this.nodeMap.entries() )
+        {
+            let index = this.nodeAry.findIndex( (obj) => obj === node );
+            if( index !== -1 )
+                this.deactivateAry.push( this.nodeAry[index] );
+            else
+                console.log( `Node is not active (${key})!` );
+        }
+    }
+
     //
     //  DESC: destroy the node
     //
@@ -37171,14 +37278,14 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         for( let i = 0; i < this.nodeAry.length; i++ )
             this.nodeAry[i].update();
 
-        // Add created nodes to the active list
-        this.addToActiveList();
-
         // Remove nodes from the active list
         this.removeFromActiveList();
         
         // Remove deleted nodes from the active list and map
         this.deleteFromActiveList();
+
+        // Add created nodes to the active list
+        this.addToActiveList();
     }
 
     //
@@ -37233,6 +37340,8 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
                 else
                     throw new Error( `Node id can't be found to remove from active list!` );
             }
+
+            this.deactivateAry = [];
         }
     }
     
@@ -37270,6 +37379,15 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
             this.deleteAry = [];
         }
+    }
+
+    //
+    //  DESC: Set all the ids to the default id
+    //
+    setAllToDefaultId()
+    {
+        for( let i = 0; i < this.nodeAry.length; i++ )
+            this.nodeAry[i].setId( _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEFAULT_ID"] );
     }
 }
 
@@ -37766,6 +37884,14 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
     {
         return this.sprite.id;
     }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.sprite.id = id;
+    }
     
     // 
     //  DESC: Set the AI.
@@ -37817,6 +37943,13 @@ class iNode
     getId()
     {
         return _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"];
+    }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
     }
     
     // 
@@ -38069,6 +38202,14 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
     getId()
     {
         return this.objectId;
+    }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.objectId = id;
     }
     
     // 
@@ -38543,6 +38684,14 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
     getId()
     {
         return this.sprite.id;
+    }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.sprite.id = id;
     }
     
     // 
@@ -40573,12 +40722,12 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         // Create the script component and add a script
         this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__["ScriptComponent"];
         this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__["scriptManager"].get('ScreenFade')( 0, 1, 500 ) );
+
+        // Game active flag
+        this.gameActive = false;
         
         // Multiplier value
         this.multiplier = 1;
-        
-        // Total win
-        this.totalWin = 0;
         
         // Clear the event queue
         _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__["eventManager"].clear();
@@ -40592,29 +40741,41 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         // Activate the strategies to run
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-stage_');
         this.multiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-multiplier_');
-        this.gameStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-game_');
-        let uiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-ui_');
-        
+        this.ballStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-ball_');
+        this.uiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-ui_');
+
         // Create the multiplier sprite used to colide with the balls
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
         this.multiNode = this.multiStrategy.create('dog_head');
         this.multiIndexPos = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, this.multiXPosAllAry.length-1);
         this.multiNode.getSprite().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+
+        // Randomly pick the first ball
+        this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 3);
+
+        // Get the ball instance name
+        let ballInstanceName = this.getBallInstanceName( this.ballIndex );
+
+        // Active the ui ball that is to drop
+        this.uiStrategy.activateNode( 'ui_' + ballInstanceName );
         
+        // get the ui elements
+        this.uiWinMeter = this.uiStrategy.get( 'uiWinMeter' ).getControl();
+        this.uiBallMeter = this.uiStrategy.get( 'uiBallMeter' ).getControl();
+        this.uiMultiplier = this.uiStrategy.get( 'uiMultiplier' ).getSprite();
+
         // Force an updated to show UI elements
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].update();
         
-        // get the ui elements
-        this.uiWinMeter = uiStrategy.get( 'UIMeter' ).getControl();
-        this.uiMultiplier = uiStrategy.get( 'multiplier' ).getSprite();
-        
-        // Reset the elapsed time before entering the render loop
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__["highResTimer"].calcElapsedTime();
-        
-        requestAnimationFrame( this.callback );
-        
+        // Start the music
         this.index = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
         _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].play( `(level_${this.index})`, 'music_0', true );
+
+        // Reset the elapsed time before entering the render loop
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__["highResTimer"].calcElapsedTime();
+
+        // Start the animation loop
+        requestAnimationFrame( this.callback );
     }
     
     // 
@@ -40624,8 +40785,11 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     {
         super.handleEvent( event );
         
-        if( event.type === 'mouseup' && !_library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].isMenuActive() )
+        if( event.type === 'mouseup' && !_library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].isMenuActive() && this.uiBallMeter.targetValue > 0 )
         {
+            // Dec the ball meter
+            this.uiBallMeter.incBangUp( -1 );
+
             // Get the spot on the screen they clicked
             let ratio = 1.0 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].orthoAspectRatio.h;
             let y = 600;
@@ -40636,28 +40800,26 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             
             // Get the random rotation
             let rot = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomArbitrary"]( -3, 3 );
-            
-            let ball = '';
-            switch(_library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 3))
-            {
-                case 0:
-                    ball = 'tennis_ball_green';
-                break;
-                case 1:
-                    ball = 'tennis_ball_pink';
-                break;
-                case 2:
-                    ball = 'frisbee';
-                break;
-                case 3:
-                    ball = 'bone_biscuit';
-                break;
-            } 
+
+            // Save the old ball index and generate a new one
+            let oldBallIndex = this.ballIndex;
+            this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 3);
+
+            // Get the ball instance names
+            let instanceNameA = this.getBallInstanceName( oldBallIndex );
+            let instanceNameB = this.getBallInstanceName( this.ballIndex );
             
             // Create the ball
-            let node = this.gameStrategy.create( ball );
+            let node = this.ballStrategy.create( instanceNameA );
             node.getSprite().physicsComponent.setTransform( x, y, angle, true );
             node.getSprite().physicsComponent.applyAngularImpulse( rot );
+
+            // Deactivate/Activate if they are different
+            if( oldBallIndex !== this.ballIndex )
+            {
+                this.uiStrategy.deactivateNode( 'ui_' + instanceNameA );
+                this.uiStrategy.activateNode( 'ui_' + instanceNameB );
+            }
         }
         else if( event instanceof CustomEvent )
         {
@@ -40672,11 +40834,45 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
                 if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["ETC_END"] )
                 {
                     let tree = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' );
-                    if( tree.isDefaultMenu('game_start_menu') )
+                    if( !tree.isDefaultMenu('pause_menu') )
                         tree.setDefaultMenu('pause_menu');
                 }
             }
+            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["ECAT_ACTION_EVENT"] && event.detail.arg[0] === 'play_game' )
+            {
+                _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' ).transitionMenu();
+                this.multiplier = 1;
+                this.gameActive = true;
+                this.uiBallMeter.incBangUp( 60 );
+                this.ballStrategy.setAllToDefaultId();
+                this.uiWinMeter.clear();
+                this.ballStrategy.clear();
+            }
         }
+    }
+
+    // 
+    //  DESC: get ball instance name
+    //
+    getBallInstanceName( index )
+    {
+        let result = '';
+        switch(index)
+        {
+            case 0:
+                result = 'tennis_ball_green';
+            break;
+            case 1:
+                result = 'tennis_ball_pink';
+            break;
+            case 2:
+                result = 'frisbee';
+            break;
+            case 3:
+                result = 'bone_biscuit';
+            break;
+        }
+        return result;
     }
     
     // 
@@ -40685,7 +40881,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].deleteStrategy( ['_level-1-stage_','_level-1-game_','_level-ui_','_level-1-multiplier_'] );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].deleteStrategy( ['_level-1-stage_','_level-1-ball_','_level-ui_','_level-1-multiplier_'] );
         
         _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].freeGroup( ['(level_1)'] );
         
@@ -40730,6 +40926,18 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
                 this.multiNode = this.multiStrategy.create('dog_head');
                 this.multiNode.getSprite().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
             }
+
+            // Is the game over
+            if( this.gameActive &&
+                this.uiBallMeter.currentValue === 0 &&
+                !this.uiWinMeter.isBanging() &&
+                (this.ballStrategy.activateCount() === 0 ||
+                !this.ballStrategy.isPhysicsAwake()) )
+            {
+                this.gameActive = false;
+                _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree('pause_tree').setDefaultMenu('game_over_menu');
+                _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' ).transitionMenu();
+            }
         }
     }
     
@@ -40771,7 +40979,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             else if( spriteB.id === SPRITE_PEG )
                 spriteB.setFrame(1);
             
-            else if( (spriteA.id == MULTIPLIER) || (spriteB.id == MULTIPLIER) )
+            else if( (spriteA.id === MULTIPLIER) || (spriteB.id === MULTIPLIER) )
             {
                 this.multiplier++;
 
@@ -40780,6 +40988,10 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
 
                 // Update the ui multiplier value
                 this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
+
+                // Add 30 more balls
+                if( (spriteA.id === 5) || (spriteB.id === 5) )
+                    this.uiBallMeter.incBangUp( 15 );
             }
         }
     }
@@ -40805,10 +41017,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     removeFixture( object )
     {
         if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["DEFAULT_ID"]) )
-        {
-            this.totalWin += this.multiplier;
-            this.uiWinMeter.startBangUp( this.totalWin );
-        }
+            this.uiWinMeter.incBangUp( this.multiplier );
     }
 }
 
@@ -40844,7 +41053,7 @@ function load()
 
     // Create the actor strategy
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].addStrategy( '_level-1-game_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__["ActorStrategy"], callback ) );
+        ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].addStrategy( '_level-1-ball_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__["ActorStrategy"], callback ) );
 
     // Create the actor strategy
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
@@ -41297,7 +41506,7 @@ class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBa
         this.node = node;
         this.sprite = node.sprite;
         
-        this.strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__["strategyManager"].get( '_level-1-game_' );
+        this.strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__["strategyManager"].get( '_level-1-ball_' );
     }
     
     // 

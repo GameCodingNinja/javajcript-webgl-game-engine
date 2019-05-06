@@ -18,7 +18,7 @@ export class aiBall extends iaiBase
         this.node = node;
         this.sprite = node.sprite;
         
-        this.strategy = strategyManager.get( '_level-1-game_' );
+        this.strategy = strategyManager.get( '_level-1-ball_' );
     }
     
     // 

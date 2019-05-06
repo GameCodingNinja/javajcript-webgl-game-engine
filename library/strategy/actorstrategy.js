@@ -75,6 +75,15 @@ export class ActorStrategy extends iStrategy
     }
 
     //
+    //  DESC: Clear out all nodes
+    //
+    clear()
+    {
+        for( let i = 0; i < this.nodeAry.length; i++ )
+            this.deleteAry.push( this.nodeAry[i] );
+    }
+
+    //
     //  DESC: Do some cleanup
     //
     cleanUp()
@@ -132,6 +141,48 @@ export class ActorStrategy extends iStrategy
 
         return headNode;
     }
+
+    //
+    //  DESC: activate node
+    //
+    activateCount()
+    {
+        return this.nodeAry.length;
+    }
+
+    //
+    //  DESC: Count of awake nodes
+    //
+    awakeCount()
+    {
+        let result = 0;
+
+        for( let i = 0; i < this.nodeAry.length; i++ )
+        {
+            let sprite = this.nodeAry[i].getSprite();
+            if( sprite.isPhysicsActive() )
+                if( sprite.isPhysicsAwake() )
+                    result += 1;
+        }
+
+        return result;
+    }
+
+    //
+    //  DESC: activate node
+    //
+    isPhysicsAwake()
+    {
+        for( let i = 0; i < this.nodeAry.length; i++ )
+        {
+            let sprite = this.nodeAry[i].getSprite();
+            if( sprite.isPhysicsActive() )
+                if( sprite.isPhysicsAwake() )
+                    return true;
+        }
+
+        return false;
+    }
     
     //
     //  DESC: activate node
@@ -163,14 +214,29 @@ export class ActorStrategy extends iStrategy
         {
             let index = this.nodeAry.findIndex( (obj) => obj === node );
             if( index !== -1 )
-                console.log( `Node is not active (${instanceName})!` );
-            else
                 this.deactivateAry.push( this.nodeAry[index] );
+            else
+                console.log( `Node is not active (${instanceName})!` );
         }
         else
             console.log( `Node can't be found (%s) (${instanceName})!` );
     }
-    
+
+    //
+    //  DESC: deactivate all the nodes
+    //
+    deactivateAll()
+    {
+        for( let [ key, node ] of this.nodeMap.entries() )
+        {
+            let index = this.nodeAry.findIndex( (obj) => obj === node );
+            if( index !== -1 )
+                this.deactivateAry.push( this.nodeAry[index] );
+            else
+                console.log( `Node is not active (${key})!` );
+        }
+    }
+
     //
     //  DESC: destroy the node
     //
@@ -212,14 +278,14 @@ export class ActorStrategy extends iStrategy
         for( let i = 0; i < this.nodeAry.length; i++ )
             this.nodeAry[i].update();
 
-        // Add created nodes to the active list
-        this.addToActiveList();
-
         // Remove nodes from the active list
         this.removeFromActiveList();
         
         // Remove deleted nodes from the active list and map
         this.deleteFromActiveList();
+
+        // Add created nodes to the active list
+        this.addToActiveList();
     }
 
     //
@@ -274,6 +340,8 @@ export class ActorStrategy extends iStrategy
                 else
                     throw new Error( `Node id can't be found to remove from active list!` );
             }
+
+            this.deactivateAry = [];
         }
     }
     
@@ -311,5 +379,14 @@ export class ActorStrategy extends iStrategy
 
             this.deleteAry = [];
         }
+    }
+
+    //
+    //  DESC: Set all the ids to the default id
+    //
+    setAllToDefaultId()
+    {
+        for( let i = 0; i < this.nodeAry.length; i++ )
+            this.nodeAry[i].setId( defs.DEFAULT_ID );
     }
 }

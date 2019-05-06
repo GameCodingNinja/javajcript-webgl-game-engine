@@ -20,8 +20,8 @@
         <file path="data/objects/strategy/level1/ui.strategy"/>
     </groupList>
     
-    <groupList groupName="_level-1-game_">
-        <file path="data/objects/strategy/level1/level.strategy"/>
+    <groupList groupName="_level-1-ball_">
+        <file path="data/objects/strategy/level1/ball.strategy"/>
     </groupList>
     
     <groupList groupName="_level-1-multiplier_">

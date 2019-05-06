@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <objectDataList2D>
 
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
@@ -25,6 +26,10 @@
         
         <object name="confirmation_menu_bg">
             <size width="545" height="295"/>
+        </object>
+
+        <object name="game_over_menu_bg">
+            <size width="645" height="295"/>
         </object>
         
         <object name="help_menu_bg">

@@ -22,14 +22,14 @@
   
     <menuControls>
 
-        <!-- Resume Button -->
-        <control name="resume_btn" controlType="button" defaultState="inactive">
+        <!-- Start Game Button -->
+        <control name="start_game_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55_frame.ctrl"/>
             <position x="0" y="-150" z="0"/>
             <fontStringLst>
                 <string text="Start Game"/>
             </fontStringLst>
-            <action actionType="back"/>
+            <action actionType="action_event" executionAction="play_game"/>
             <!--<navigate up="main_menu_btn" down="help_btn"/>-->
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>

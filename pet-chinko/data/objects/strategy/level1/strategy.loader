@@ -1,8 +1,15 @@
+<?xml version="1.0"?>
 <strategyLst>
     
     <strategy name="_level-ui_">
-        <node name="UIMeter" instance="UIMeter"/>
-        <node name="multiplier" instance="multiplier"/>
+        <node name="uiWinMeter" instance="uiWinMeter"/>
+        <node name="uiBallMeter" instance="uiBallMeter"/>
+        <node name="uiMultiplier" instance="uiMultiplier"/>
+
+        <node name="ui_tennis_ball_green" instance="ui_tennis_ball_green" active="false"/>
+        <node name="ui_tennis_ball_pink" instance="ui_tennis_ball_pink" active="false"/>
+        <node name="ui_frisbee" instance="ui_frisbee" active="false"/>
+        <node name="ui_bone_biscuit" instance="ui_bone_biscuit" active="false"/>
     </strategy>
   
 </strategyLst>

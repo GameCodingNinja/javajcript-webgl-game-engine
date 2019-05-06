@@ -64,6 +64,14 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     {
         return this.objectId;
     }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.objectId = id;
+    }
     
     // 
     //  DESC: Set the AI.

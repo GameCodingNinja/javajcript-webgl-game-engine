@@ -65,6 +65,14 @@ export class SpriteNode extends iNode
     {
         return this.sprite.id;
     }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.sprite.id = id;
+    }
     
     // 
     //  DESC: Set the AI.

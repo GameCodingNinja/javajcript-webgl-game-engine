@@ -66,12 +66,12 @@ export class Level1State extends CommonState
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+
+        // Game active flag
+        this.gameActive = false;
         
         // Multiplier value
         this.multiplier = 1;
-        
-        // Total win
-        this.totalWin = 0;
         
         // Clear the event queue
         eventManager.clear();
@@ -85,29 +85,41 @@ export class Level1State extends CommonState
         // Activate the strategies to run
         strategyManager.activateStrategy('_level-1-stage_');
         this.multiStrategy = strategyManager.activateStrategy('_level-1-multiplier_');
-        this.gameStrategy = strategyManager.activateStrategy('_level-1-game_');
-        let uiStrategy = strategyManager.activateStrategy('_level-ui_');
-        
+        this.ballStrategy = strategyManager.activateStrategy('_level-1-ball_');
+        this.uiStrategy = strategyManager.activateStrategy('_level-ui_');
+
         // Create the multiplier sprite used to colide with the balls
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
         this.multiNode = this.multiStrategy.create('dog_head');
         this.multiIndexPos = genFunc.randomInt(0, this.multiXPosAllAry.length-1);
         this.multiNode.getSprite().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+
+        // Randomly pick the first ball
+        this.ballIndex = genFunc.randomInt(0, 3);
+
+        // Get the ball instance name
+        let ballInstanceName = this.getBallInstanceName( this.ballIndex );
+
+        // Active the ui ball that is to drop
+        this.uiStrategy.activateNode( 'ui_' + ballInstanceName );
         
+        // get the ui elements
+        this.uiWinMeter = this.uiStrategy.get( 'uiWinMeter' ).getControl();
+        this.uiBallMeter = this.uiStrategy.get( 'uiBallMeter' ).getControl();
+        this.uiMultiplier = this.uiStrategy.get( 'uiMultiplier' ).getSprite();
+
         // Force an updated to show UI elements
         strategyManager.update();
         
-        // get the ui elements
-        this.uiWinMeter = uiStrategy.get( 'UIMeter' ).getControl();
-        this.uiMultiplier = uiStrategy.get( 'multiplier' ).getSprite();
-        
-        // Reset the elapsed time before entering the render loop
-        highResTimer.calcElapsedTime();
-        
-        requestAnimationFrame( this.callback );
-        
+        // Start the music
         this.index = menuManager.getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
         soundManager.play( `(level_${this.index})`, 'music_0', true );
+
+        // Reset the elapsed time before entering the render loop
+        highResTimer.calcElapsedTime();
+
+        // Start the animation loop
+        requestAnimationFrame( this.callback );
     }
     
     // 
@@ -117,8 +129,11 @@ export class Level1State extends CommonState
     {
         super.handleEvent( event );
         
-        if( event.type === 'mouseup' && !menuManager.isMenuActive() )
+        if( event.type === 'mouseup' && !menuManager.isMenuActive() && this.uiBallMeter.targetValue > 0 )
         {
+            // Dec the ball meter
+            this.uiBallMeter.incBangUp( -1 );
+
             // Get the spot on the screen they clicked
             let ratio = 1.0 / settings.orthoAspectRatio.h;
             let y = 600;
@@ -129,28 +144,26 @@ export class Level1State extends CommonState
             
             // Get the random rotation
             let rot = genFunc.randomArbitrary( -3, 3 );
-            
-            let ball = '';
-            switch(genFunc.randomInt(0, 3))
-            {
-                case 0:
-                    ball = 'tennis_ball_green';
-                break;
-                case 1:
-                    ball = 'tennis_ball_pink';
-                break;
-                case 2:
-                    ball = 'frisbee';
-                break;
-                case 3:
-                    ball = 'bone_biscuit';
-                break;
-            } 
+
+            // Save the old ball index and generate a new one
+            let oldBallIndex = this.ballIndex;
+            this.ballIndex = genFunc.randomInt(0, 3);
+
+            // Get the ball instance names
+            let instanceNameA = this.getBallInstanceName( oldBallIndex );
+            let instanceNameB = this.getBallInstanceName( this.ballIndex );
             
             // Create the ball
-            let node = this.gameStrategy.create( ball );
+            let node = this.ballStrategy.create( instanceNameA );
             node.getSprite().physicsComponent.setTransform( x, y, angle, true );
             node.getSprite().physicsComponent.applyAngularImpulse( rot );
+
+            // Deactivate/Activate if they are different
+            if( oldBallIndex !== this.ballIndex )
+            {
+                this.uiStrategy.deactivateNode( 'ui_' + instanceNameA );
+                this.uiStrategy.activateNode( 'ui_' + instanceNameB );
+            }
         }
         else if( event instanceof CustomEvent )
         {
@@ -165,11 +178,45 @@ export class Level1State extends CommonState
                 if( event.detail.arg[0] === defs.ETC_END )
                 {
                     let tree = menuManager.getTree( 'pause_tree' );
-                    if( tree.isDefaultMenu('game_start_menu') )
+                    if( !tree.isDefaultMenu('pause_menu') )
                         tree.setDefaultMenu('pause_menu');
                 }
             }
+            else if( event.detail.type === defs.ECAT_ACTION_EVENT && event.detail.arg[0] === 'play_game' )
+            {
+                menuManager.getTree( 'pause_tree' ).transitionMenu();
+                this.multiplier = 1;
+                this.gameActive = true;
+                this.uiBallMeter.incBangUp( 60 );
+                this.ballStrategy.setAllToDefaultId();
+                this.uiWinMeter.clear();
+                this.ballStrategy.clear();
+            }
         }
+    }
+
+    // 
+    //  DESC: get ball instance name
+    //
+    getBallInstanceName( index )
+    {
+        let result = '';
+        switch(index)
+        {
+            case 0:
+                result = 'tennis_ball_green';
+            break;
+            case 1:
+                result = 'tennis_ball_pink';
+            break;
+            case 2:
+                result = 'frisbee';
+            break;
+            case 3:
+                result = 'bone_biscuit';
+            break;
+        }
+        return result;
     }
     
     // 
@@ -178,7 +225,7 @@ export class Level1State extends CommonState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_level-1-stage_','_level-1-game_','_level-ui_','_level-1-multiplier_'] );
+        strategyManager.deleteStrategy( ['_level-1-stage_','_level-1-ball_','_level-ui_','_level-1-multiplier_'] );
         
         objectDataManager.freeGroup( ['(level_1)'] );
         
@@ -223,6 +270,18 @@ export class Level1State extends CommonState
                 this.multiNode = this.multiStrategy.create('dog_head');
                 this.multiNode.getSprite().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
             }
+
+            // Is the game over
+            if( this.gameActive &&
+                this.uiBallMeter.currentValue === 0 &&
+                !this.uiWinMeter.isBanging() &&
+                (this.ballStrategy.activateCount() === 0 ||
+                !this.ballStrategy.isPhysicsAwake()) )
+            {
+                this.gameActive = false;
+                menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
+                menuManager.getTree( 'pause_tree' ).transitionMenu();
+            }
         }
     }
     
@@ -264,7 +323,7 @@ export class Level1State extends CommonState
             else if( spriteB.id === SPRITE_PEG )
                 spriteB.setFrame(1);
             
-            else if( (spriteA.id == MULTIPLIER) || (spriteB.id == MULTIPLIER) )
+            else if( (spriteA.id === MULTIPLIER) || (spriteB.id === MULTIPLIER) )
             {
                 this.multiplier++;
 
@@ -273,6 +332,10 @@ export class Level1State extends CommonState
 
                 // Update the ui multiplier value
                 this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
+
+                // Add 30 more balls
+                if( (spriteA.id === 5) || (spriteB.id === 5) )
+                    this.uiBallMeter.incBangUp( 15 );
             }
         }
     }
@@ -298,10 +361,7 @@ export class Level1State extends CommonState
     removeFixture( object )
     {
         if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > defs.DEFAULT_ID) )
-        {
-            this.totalWin += this.multiplier;
-            this.uiWinMeter.startBangUp( this.totalWin );
-        }
+            this.uiWinMeter.incBangUp( this.multiplier );
     }
 }
 
@@ -337,7 +397,7 @@ export function load()
 
     // Create the actor strategy
     loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-1-game_', new ActorStrategy, callback ) );
+        ( callback ) => strategyManager.addStrategy( '_level-1-ball_', new ActorStrategy, callback ) );
 
     // Create the actor strategy
     loadManager.add(

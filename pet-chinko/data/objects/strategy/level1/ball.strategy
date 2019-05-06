@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <node defaultGroup="(level_1)" defaultAIName="aiBall">
     
     <node name="tennis_ball_green" type="spriteNode">

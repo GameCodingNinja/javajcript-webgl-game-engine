@@ -307,6 +307,14 @@ export class PhysicsComponent2D
     }
 
     // 
+    //  DESC: Is this component awake?
+    //
+    isAwake()
+    {
+        return (this.body && !this.body.isStatic() && this.body.isAwake() );
+    }
+
+    // 
     //  DESC: Update the physics
     //
     destroyBody()

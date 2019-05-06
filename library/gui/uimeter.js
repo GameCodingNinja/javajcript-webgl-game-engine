@@ -196,6 +196,17 @@ export class UIMeter extends UIControl
     }
 
     //
+    //  DESC: Start the bang range
+    //
+    incBangUp( amount )
+    {
+        this.targetValue += amount;
+        this.bangUp = true;
+
+        this.setBangRange();
+    }
+
+    //
     //  DESC: Set the bang range
     //
     setBangRange()
@@ -301,7 +312,7 @@ export class UIMeter extends UIControl
                 }
             }
             // Linear bang up from the start
-            else if( this.bangRange.this.bangType === EBT_LINEAR )
+            else if( this.bangRange.bangType === EBT_LINEAR )
             {
                 this.currentValue += this.velocity;
 

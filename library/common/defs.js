@@ -76,11 +76,6 @@ export const VISIBLE            = 0x100;
 export const SPRITE2D           = 0x200,
              ACTOR2D            = 0x400;
 
-// Sprite strategy command
-export const ESSC_DELETE_SPRITE   = 0,
-             ESSC_CREATE_SPRITE   = 1,
-             ESSC_DELETE_PHYSICS  = 2;
-
 // EGameEvent
 // Menu events
 export const EGE_MENU_TRANS_IN             = 100,
@@ -226,7 +221,8 @@ export const ECAT_NULL              = 0,
              ECAT_CLOSE             = 5,
              ECAT_CHANGE_FOCUS      = 6,
              ECAT_GAME_STATE_CHANGE = 7,
-             ECAT_QUIT_GAME         = 8;
+             ECAT_QUIT_GAME         = 8,
+             ECAT_ACTION_EVENT      = 9;
 
 // EControlScriptFunctions
 export const ECSF_ON_ACTIVE   = 0,

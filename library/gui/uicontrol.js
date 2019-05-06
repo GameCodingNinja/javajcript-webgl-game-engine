@@ -393,6 +393,9 @@ export class UIControl extends ControlBase
             else if( this.actionType === defs.ECAT_GAME_STATE_CHANGE )
                 eventManager.dispatchEvent( defs.EGE_MENU_GAME_STATE_CHANGE, defs.ETC_BEGIN, this.executionAction );
 
+            else if( this.actionType === defs.ECAT_ACTION_EVENT )
+                eventManager.dispatchEvent( defs.ECAT_ACTION_EVENT, this.executionAction, this );
+
             // Smart gui execution
             this.smartExecuteAction();
 
@@ -759,6 +762,9 @@ export class UIControl extends ControlBase
 
         else if( value === 'quit_game' )
             this.actionType = defs.ECAT_QUIT_GAME;
+        
+        else if( value === 'action_event' )
+            this.actionType = defs.ECAT_ACTION_EVENT;
     }
 
     // 

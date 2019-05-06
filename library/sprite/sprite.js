@@ -324,4 +324,26 @@ export class Sprite
     {
         return this.id;
     }
+
+    //
+    //  DESC: Is the physics active
+    //
+    isPhysicsActive()
+    {
+        if( this.physicsComponent && this.physicsComponent.isActive() )
+            return true;
+
+        return false;
+    }
+
+    //
+    //  DESC: Is the physics awake
+    //
+    isPhysicsAwake()
+    {
+        if( this.isPhysicsActive() && this.physicsComponent.isAwake() )
+            return true;
+
+        return false;
+    }
 }

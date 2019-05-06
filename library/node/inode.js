@@ -23,6 +23,13 @@ export class iNode
     {
         return defs.DEFAULT_ID;
     }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+    }
     
     // 
     //  DESC: Get the parent id
