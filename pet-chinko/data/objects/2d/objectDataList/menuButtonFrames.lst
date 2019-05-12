@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <objectDataList2D>
     
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
@@ -102,6 +103,18 @@
                 </mesh>
             </visual>
             <size width="33" height="41"/>
+        </object>
+
+        <object name="360x360_select_frame">
+            <visual>
+                <texture file="data/textures/menu/PetchinkoSelectBox.png"/>
+                <mesh genType="scaled_frame">
+                    <spriteSheet file=""/>
+                    <scaledFrame thicknessWidth="40" thicknessHeight="40" centerQuad="false"/>
+                </mesh>
+                <color r="1" g="1" b="1" a="1"/>
+            </visual>
+            <size width="360" height="360"/>
         </object>
 
     </objectList>

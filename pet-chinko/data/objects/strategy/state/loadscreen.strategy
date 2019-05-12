@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <node defaultGroup="(loadingScreen)">
     
     <node name="logo" type="spriteNode">

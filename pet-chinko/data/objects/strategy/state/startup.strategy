@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <node defaultGroup="(startup)">
     
     <node name="logo" type="spriteNode">

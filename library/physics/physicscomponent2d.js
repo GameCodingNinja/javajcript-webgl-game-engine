@@ -200,23 +200,23 @@ export class PhysicsComponent2D
             // Box2D polygons are defined using Counter Clockwise Winding (CCW)
             Vec2Ary.push(
                 planck.Vec2(
-                    (-size.w + leftMod) * this.pixelsToMeters,
-                    (size.h + topMod) * this.pixelsToMeters ) );
+                    (-(size.w + leftMod)) * this.pixelsToMeters,
+                    (size.h + bottomMod) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
                 planck.Vec2(
-                    (-size.w + leftMod) * this.pixelsToMeters,
-                    (-size.h + bottomMod) * this.pixelsToMeters ) );
-
-            Vec2Ary.push(
-                planck.Vec2(
-                    (size.w + rightMod) * this.pixelsToMeters,
-                    (-size.h + bottomMod) * this.pixelsToMeters ) );
+                    (-(size.w + leftMod)) * this.pixelsToMeters,
+                    (-(size.h + topMod)) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
                 planck.Vec2(
                     (size.w + rightMod) * this.pixelsToMeters,
-                    (size.h + topMod) * this.pixelsToMeters ) );
+                    (-(size.h + topMod)) * this.pixelsToMeters ) );
+
+            Vec2Ary.push(
+                planck.Vec2(
+                    (size.w + rightMod) * this.pixelsToMeters,
+                    (size.h + bottomMod) * this.pixelsToMeters ) );
         }
 
         this.body.createFixture(

@@ -119,11 +119,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(15);
 /* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(17);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(159);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(164);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(165);
-/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(168);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(170);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(161);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(172);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(173);
+/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(176);
+/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(178);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(8);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(22);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(118);
@@ -2464,6 +2464,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomInt", function() { return randomInt; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomArbitrary", function() { return randomArbitrary; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shuffle", function() { return shuffle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringLoadXML", function() { return stringLoadXML; });
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
 // 
@@ -2634,6 +2635,14 @@ function shuffle( array )
     }
 }
 
+// 
+//  DESC: Load the XML string into a dom object
+//
+function stringLoadXML( stringData )
+{
+    let parser = new DOMParser();
+    return parser.parseFromString( stringData, "application/xml" );
+}
 
 /***/ }),
 /* 15 */
@@ -3005,12 +3014,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(145);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(118);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(120);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(146);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(159);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(161);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(162);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(163);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(14);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(161);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(164);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(165);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(166);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(20);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(167);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(168);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(169);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(170);
+/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(171);
 
 //
 //  FILE NAME: startupstate.js
@@ -3043,6 +3057,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// Load data from bundle as string
+
+
+
+
+
+
 const STARTUP_ASSET_COUNT = 60,
       MIN_LOAD_TIME = 1500;
 
@@ -3051,6 +3072,11 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     constructor( gameLoopCallback )
     {
         super( _statedefs__WEBPACK_IMPORTED_MODULE_22__["EGS_STARTUP"], _statedefs__WEBPACK_IMPORTED_MODULE_22__["EGS_TITLE_SCREEN"], gameLoopCallback );
+
+        // Load the list tables
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_23__["default"] ) );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_24__["default"] ) );
+        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_9__["cameraManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_25__["default"] ) );
 
         // Load the scripts
         _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_19__["loadScripts"]();
@@ -3072,10 +3098,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         let groupAry = ['(startup)'];
 
         // Load the shaders
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].load( 'data/shaders/shader.cfg', callback ) );
-
-        // Load the object data list tables
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadListTable( 'data/objects/2d/objectDataList/dataListTable.lst', callback ));
+        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_26__["default"] ), callback ) );
 
         // Load the object data XML's
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadXMLGroup2D( groupAry, callback ) );
@@ -3085,18 +3108,12 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
         // Create OpenGL objects from the loaded data
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].createFromData( groupAry, callback ));
-        
-        // Load the camera manager
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_9__["cameraManager"].load( 'data/objects/camera.lst', callback ));
-        
-        // Load the list table for the strategy manager
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].loadListTable( 'data/objects/strategy/strageyListTable.lst', callback ));
-        
-        // Create the actor strategy
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].addStrategy( '_startup_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_17__["ActorStrategy"], callback ) );
-        
-        // Load the strategies
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__["strategyLoader"].load( 'data/objects/strategy/state/startup.loader', this.preloadComplete.bind(this) ));
+
+        // Create and load all the actor strategies. NOTE: This adds it to the load manager
+        _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_27__["default"] ) );
+
+        // Last thing to do is call the preload complete function
+        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => this.preloadComplete() );
         
         // Start the load
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].load();
@@ -29979,23 +29996,23 @@ class PhysicsComponent2D
             // Box2D polygons are defined using Counter Clockwise Winding (CCW)
             Vec2Ary.push(
                 planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
-                    (-size.w + leftMod) * this.pixelsToMeters,
-                    (size.h + topMod) * this.pixelsToMeters ) );
+                    (-(size.w + leftMod)) * this.pixelsToMeters,
+                    (size.h + bottomMod) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
                 planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
-                    (-size.w + leftMod) * this.pixelsToMeters,
-                    (-size.h + bottomMod) * this.pixelsToMeters ) );
-
-            Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
-                    (size.w + rightMod) * this.pixelsToMeters,
-                    (-size.h + bottomMod) * this.pixelsToMeters ) );
+                    (-(size.w + leftMod)) * this.pixelsToMeters,
+                    (-(size.h + topMod)) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
                 planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
                     (size.w + rightMod) * this.pixelsToMeters,
-                    (size.h + topMod) * this.pixelsToMeters ) );
+                    (-(size.h + topMod)) * this.pixelsToMeters ) );
+
+            Vec2Ary.push(
+                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                    (size.w + rightMod) * this.pixelsToMeters,
+                    (size.h + bottomMod) * this.pixelsToMeters ) );
         }
 
         this.body.createFixture(
@@ -36887,7 +36904,9 @@ var strategyManager = new StrategyManager;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "strategyLoader", function() { return strategyLoader; });
 /* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(144);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
+/* harmony import */ var _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(146);
+/* harmony import */ var _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(159);
+/* harmony import */ var _managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(140);
 
 // 
 //  FILE NAME: strategyloader.js
@@ -36899,38 +36918,58 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 class Strategyloader
 {
     constructor()
     {
     }
-    
+
     // 
-    //  DESC: Load the file defining what the strategy holds
+    //  DESC: Add to the load manager in specific order
     //
-    load( filePath, callback )
+    load( xmlNode )
     {
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
-            ( xmlNode ) => this.loadStartegy( xmlNode, filePath, callback ));
+        let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
+
+        // Have the load manager create the strategy
+        for( let i = 0; i < strategyNode.length; ++i )
+        {
+            let strategyName = strategyNode[i].getAttribute( 'name' );
+            if( !strategyName )
+                throw new Error( `Strategy name not defined.` );
+
+            let strategyType = strategyNode[i].getAttribute( 'type' );
+            if( !strategyType )
+                throw new Error( `Strategy type not defined.` );
+
+            if( strategyType == 'actor' )
+                _managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add( ( callback ) => _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].addStrategy( strategyName, new _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__["ActorStrategy"], callback ) );
+
+            else if( strategyType == 'stage' )
+                _managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add( ( callback ) => _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].addStrategy( strategyName, new _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__["StageStrategy"], callback ) );
+        }
+
+        // Preload the strategies
+        _managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add( ( callback ) => this.loadStartegy( xmlNode, callback ));
     }
     
     // 
     //  DESC: Load the strategies
     //
-    loadStartegy( xmlNode, filePath, callback )
+    loadStartegy( xmlNode, callback )
     {
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
 
         for( let i = 0; i < strategyNode.length; ++i )
         {
             let strategyName = strategyNode[i].getAttribute( 'name' );
-            if( !strategyName )
-                throw new Error( `Strategy name not defined (${filePath}).` );
 
             // Try to get the strategy
             let strategy = _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].get( strategyName );
             if( !strategy )
-                throw new Error( `Strategy name not defined (${strategyName}, ${filePath}).` );
+                throw new Error( `Strategy name not defined (${strategyName}).` );
 
             // Apply a camera if one is defined
             let cameraId = strategyNode[i].getAttribute( 'camera' );
@@ -36938,7 +36977,7 @@ class Strategyloader
                 strategy.setCamera( cameraId );
             
             // Populate the strategies with their objects
-            this.populateStartegy( strategyNode[i], strategy, filePath );
+            this.populateStartegy( strategyNode[i], strategy );
         }
         
         callback();
@@ -36947,7 +36986,7 @@ class Strategyloader
     // 
     //  DESC: Populate the strategies with their objects
     //
-    populateStartegy( xmlNode, strategy, filePath )
+    populateStartegy( xmlNode, strategy )
     {
         let nodeLst = xmlNode.getElementsByTagName( 'node' );
 
@@ -36961,14 +37000,14 @@ class Strategyloader
             // See if there is a sprite that needs to be init. There should only be one
             let spriteNode = nodeLst[i].getElementsByTagName( 'sprite' );
             if( spriteNode.length )
-                this.initSprite( spriteNode[0], node.getSprite(), filePath );
+                this.initSprite( spriteNode[0], node.getSprite() );
         }
     }
     
     // 
     //  DESC: Populate the strategies with their objects
     //
-    initSprite( xmlNode, sprite, filePath )
+    initSprite( xmlNode, sprite )
     {
         // Set any transforms
         sprite.object.loadTransFromNode( xmlNode );
@@ -38718,22 +38757,295 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StageStrategy", function() { return StageStrategy; });
+/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(147);
+/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(160);
+
+// 
+//  FILE NAME: stagestrategy.js
+//  DESC:      Stage strategy
+//
+
+
+
+
+
+
+class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
+{
+    constructor()
+    {
+        super();
+        
+        // Sector array
+        this.sectorAry = [];
+    }
+    
+    //
+    //  DESC: Load the data from xml node
+    //
+    loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
+    {
+        let sectorNode = node.getElementsByTagName( 'sector' );
+
+        for( let i = 0; i < sectorNode.length; ++i )
+        {
+            let sector = new _sector__WEBPACK_IMPORTED_MODULE_1__["Sector"];
+            this.sectorAry.push( sector );
+            
+            sector.loadTransFromNode( sectorNode[i] );
+            
+            let sectorFile = sectorNode[i].getAttribute('file');
+            
+            // load the sector file
+            downloadFileCallback(
+                'xml',
+                strategyId,
+                sectorFile,
+                finishCallback,
+                ( group, xmlNode, filePath, finishCallback ) => 
+                {
+                    // Call the sector function to load the data
+                    sector.loadFromNode( group, xmlNode, filePath, finishCallback );
+                });
+        }
+    }
+
+    //
+    //  DESC: Do some cleanup
+    //
+    cleanUp()
+    {
+        for( let i = 0; i < this.sectorAry.length; ++i )
+            this.sectorAry[i].cleanUp();
+    }
+    
+    //
+    //  DESC: Get sprite by sector index and name
+    //
+    get( name, index = 0 )
+    {
+        let sector = this.sectorAry[index];
+        if( !sector )
+            throw new Error( `Sector index can't be found (${name}, ${index})!` );
+        
+        return sector.get( name );
+    }
+
+    //
+    //  DESC: Update the sector
+    //
+    update()
+    {
+        for( let i = 0; i < this.sectorAry.length; ++i )
+            this.sectorAry[i].update();
+    }
+
+    //
+    //  DESC: Transform the sector
+    //
+    transform()
+    {
+        for( let i = 0; i < this.sectorAry.length; ++i )
+            this.sectorAry[i].transform();
+    }
+
+    //
+    //  DESC: Render the sector
+    //
+    render()
+    {
+        for( let i = 0; i < this.sectorAry.length; ++i ) 
+            this.sectorAry[i].render( this.camera );
+    }
+}
+
+
+/***/ }),
+/* 160 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sector", function() { return Sector; });
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(148);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(151);
+
+// 
+//  FILE NAME: sector.js
+//  DESC:      Class the creates & renders all the sector nodess
+//
+
+
+
+
+
+
+
+class Sector extends _3d_object3d__WEBPACK_IMPORTED_MODULE_0__["Object3D"]
+{
+    constructor()
+    {
+        super();
+        
+        // node allocation array
+        this.nodeAry = [];
+        
+        // Map of nodes that have names
+        this.nodeMap = new Map;
+    }
+    
+    //
+    //  DESC: Load the data from xml node
+    //
+    loadFromNode( strategyId, node, filePath, finishCallback )
+    {
+        let defaultGroup = '';
+        let defaultObjName = '';
+        let defaultAIName = '';
+        let defaultId = -1;
+        
+        let attr = node.getAttribute( 'defaultGroup' );
+        if( attr )
+            defaultGroup = attr;
+        
+        attr = node.getAttribute( 'defaultObjectName' );
+        if( attr )
+            defaultObjName = attr;
+        
+        attr = node.getAttribute( 'defaultAIName' );
+        if( attr )
+            defaultAIName = attr;
+        
+        attr = node.getAttribute( 'defaultId' );
+        if( attr )
+            defaultId = Number(attr);
+        
+        let sectorNode = node.children;
+
+        for( let i = 0; i < sectorNode.length; ++i )
+        {
+            // Allocate the node data list to load this node
+            let nodeAry = new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( sectorNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ).dataAry;
+            
+            // Build the node list
+            let headNode = null;
+            for( let j = 0; j < nodeAry.length; j++ )
+            {
+                let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__["create"]( nodeAry[j], nodeAry[j].id );
+
+                if( headNode === null )
+                    headNode = node;
+
+                else if( !headNode.addNode( node, nodeAry[j].nodeName ) )
+                    throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
+            }
+            
+            // Add to the node array
+            this.nodeAry.push( headNode );
+            
+            // If it has a name, add it to the map for easy retrieval
+            if( headNode.nodeName )
+                this.nodeMap.set( headNode.nodeName, headNode );
+        }
+    }
+    
+    //
+    //  DESC: Do any pre-game loop init's
+    //
+    init()
+    {
+        // Create any font strings
+        // This allows for delayed VBO create so that the fonts can be allocated during a load screen
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].init();
+    }
+
+    //
+    //  DESC: Do some cleanup
+    //
+    cleanUp()
+    {
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].cleanUp();
+    }
+    
+    //
+    //  DESC: Get node by name
+    //
+    get( name )
+    {
+        let node = this.nodeMap.get( name );
+        if( !node )
+            throw new Error( `Sprite name can't be found (${name})!` );
+        
+        return node;
+    }
+    
+    //
+    //  DESC: Destroy this sector
+    //
+    destroy()
+    {
+        this.cleanUp();
+        this.nodeAry = [];
+    }
+
+    //
+    //  DESC: Update the nodess
+    //
+    update()
+    {
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].update();
+    }
+
+    //
+    //  DESC: Transform the nodes
+    //
+    transform()
+    {
+        super.transform();
+        
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].transform( this );
+    }
+
+    //
+    //  DESC: Render the nodess
+    //
+    render( camera )
+    {
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].render( camera );
+    }
+}
+
+
+/***/ }),
+/* 161 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ASSET_COUNT", function() { return ASSET_COUNT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TitleScreenState", function() { return TitleScreenState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(160);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(162);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(100);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(144);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(146);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(145);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(120);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(118);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(21);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(140);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(145);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(120);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(118);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(21);
+/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(140);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(14);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
+/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(163);
 
 // 
 //  FILE NAME: titlescreenstate.js
@@ -38756,6 +39068,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// Load data from bundle as string
+
+
 const ASSET_COUNT = 4;
 
 class TitleScreenState extends _commonstate__WEBPACK_IMPORTED_MODULE_1__["CommonState"]
@@ -38767,8 +39082,8 @@ class TitleScreenState extends _commonstate__WEBPACK_IMPORTED_MODULE_1__["Common
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__["strategyManager"].activateStrategy('_title-screen_');
         
         // Create the script component and add a script
-        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__["ScriptComponent"];
-        this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__["scriptManager"].get('ScreenFade')( 0, 1, 500 ) );
+        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__["ScriptComponent"];
+        this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__["scriptManager"].get('ScreenFade')( 0, 1, 500 ) );
 
         // Unblock the menu messaging and activate needed trees
         _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__["menuManager"].allowEventHandling = true;
@@ -38778,7 +39093,7 @@ class TitleScreenState extends _commonstate__WEBPACK_IMPORTED_MODULE_1__["Common
         _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__["eventManager"].clear();
         
         // Reset the elapsed time before entering the render loop
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__["highResTimer"].calcElapsedTime();
         
         // Start the game loop
         requestAnimationFrame( this.callback );
@@ -38806,7 +39121,7 @@ class TitleScreenState extends _commonstate__WEBPACK_IMPORTED_MODULE_1__["Common
             if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_GAME_STATE_CHANGE"] )
             {
                 if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_11__["ETC_BEGIN"] )
-                    this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__["scriptManager"].get('ScreenFade')( 1, 0, 500, true ) );
+                    this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__["scriptManager"].get('ScreenFade')( 1, 0, 500, true ) );
             }
         }
     }
@@ -38862,29 +39177,24 @@ function unload()
 function load()
 {
     // Load the xml group
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add(
+    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_9__["loadManager"].add(
         ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__["objectDataManager"].loadXMLGroup2D( ['(title_screen)'], callback ) );
 
     // Load all the assets associated with this group
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add(
+    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_9__["loadManager"].add(
         ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__["objectDataManager"].loadAssets2D( ['(title_screen)'], callback ) );
 
     // Create OpenGL objects from the loaded data
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add(
+    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_9__["loadManager"].add(
         ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__["objectDataManager"].createFromData( ['(title_screen)'], callback ) );
 
-    // Create the background strategy
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add(
-        ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__["strategyManager"].addStrategy( '_title-screen_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_5__["ActorStrategy"], callback ) );
-
-    // Load the strategies
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_10__["loadManager"].add(
-        ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__["strategyLoader"].load( 'data/objects/strategy/state/titlescreen.loader', callback ));
+    // Create and load all the actor strategies. NOTE: This adds it to the load manager
+    _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__["stringLoadXML"]( raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_13__["default"] ) );
 }
 
 
 /***/ }),
-/* 160 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38968,7 +39278,15 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 161 */
+/* 163 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_title-screen_\" type=\"actor\">\r\n        <node name=\"background\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
+
+/***/ }),
+/* 164 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39308,14 +39626,14 @@ function loadScripts()
 
 
 /***/ }),
-/* 162 */
+/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(161);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(164);
 
 //
 //  FILE NAME: statescripts.js
@@ -39365,7 +39683,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 163 */
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39376,7 +39694,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(141);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(161);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(164);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 //
@@ -40396,7 +40714,47 @@ function loadScripts()
 
 
 /***/ }),
-/* 164 */
+/* 167 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(startup)\">\r\n        <file path=\"data/objects/2d/objectDataList/startupDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(loadingScreen)\">\r\n        <file path=\"data/objects/2d/objectDataList/loadingScreenDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/objectDataList/menuBackgrounds.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuButtonFrames.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuMisc.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(title_screen)\">\r\n        <file path=\"data/objects/2d/objectDataList/titleScreenDataList.lst\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"(level_1)\">\r\n        <file path=\"data/objects/2d/objectDataList/level1DataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+
+/***/ }),
+/* 168 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_startup_\">\r\n        <file path=\"data/objects/strategy/state/startup.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_title-screen_\">\r\n        <file path=\"data/objects/strategy/state/titlescreen.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_loading-screen_\">\r\n        <file path=\"data/objects/strategy/state/loadscreen.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_level-1-stage_\">\r\n        <file path=\"data/objects/strategy/level1/stage.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-ui_\">\r\n        <file path=\"data/objects/strategy/level1/ui.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-ball_\">\r\n        <file path=\"data/objects/strategy/level1/ball.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-multiplier_\">\r\n        <file path=\"data/objects/strategy/level1/multiplier.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+
+/***/ }),
+/* 169 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
+
+/***/ }),
+/* 170 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
+
+/***/ }),
+/* 171 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
+
+/***/ }),
+/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40414,9 +40772,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(118);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(120);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(3);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(159);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(165);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(14);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(161);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(173);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
+/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(175);
 
 // 
 //  FILE NAME: loadstate.js
@@ -40441,13 +40801,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+// Load data from bundle as string
+
+
 const MIN_LOAD_TIME = 1000;
 
 class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 {
     constructor( stateMessage, gameLoopCallback )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_GAME_LOAD"], stateMessage.loadState, gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_GAME_LOAD"], stateMessage.loadState, gameLoopCallback );
         
         this.stateMessage.loadState = stateMessage.loadState;
         this.stateMessage.unloadState = stateMessage.unloadState;
@@ -40485,14 +40849,12 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         // Create OpenGL objects from the loaded data
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add(
             ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__["objectDataManager"].createFromData( groupAry, callback ));
-    
-        // Create the background strategy
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add(
-            ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_7__["strategyManager"].addStrategy( '_loading-screen_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_6__["ActorStrategy"], callback ) );
-    
-            // Load the strategies
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add(
-            ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_8__["strategyLoader"].load( 'data/objects/strategy/state/loadscreen.loader', this.preloadComplete.bind(this) ));
+
+        // Create and load all the actor strategies. NOTE: This adds it to the load manager
+        _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_8__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__["default"] ) );
+
+        // Last thing to do is call the preload complete function
+        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add( ( callback ) => this.preloadComplete() );
     
         // Start the load
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].load();
@@ -40532,15 +40894,15 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     {
         if( event instanceof CustomEvent )
         {
-            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_14__["ESE_FADE_IN_COMPLETE"] )
+            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_15__["ESE_FADE_IN_COMPLETE"] )
             {
                 this.assetLoad();
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_14__["ESE_FADE_OUT_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_15__["ESE_FADE_OUT_COMPLETE"] )
             {
                 this.stateChange = true;
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_14__["ESE_ASSET_LOAD_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_15__["ESE_ASSET_LOAD_COMPLETE"] )
             {
                 let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__["highResTimer"].timerStop();
                 
@@ -40594,20 +40956,20 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         // Set the timer to see how long the load takes
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__["highResTimer"].timerStart();
         
-        if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_TITLE_SCREEN"] )
+        if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_TITLE_SCREEN"] )
         {
-            this.maxLoadCount = _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_12__["ASSET_COUNT"];
-            _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_12__["load"]();
+            this.maxLoadCount = _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__["ASSET_COUNT"];
+            _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__["load"]();
         }
-        else if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_LEVEL_1"] )
+        else if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_LEVEL_1"] )
         {
-            this.maxLoadCount = _state_level1state__WEBPACK_IMPORTED_MODULE_13__["ASSET_COUNT"];
-            _state_level1state__WEBPACK_IMPORTED_MODULE_13__["load"]();
+            this.maxLoadCount = _state_level1state__WEBPACK_IMPORTED_MODULE_14__["ASSET_COUNT"];
+            _state_level1state__WEBPACK_IMPORTED_MODULE_14__["load"]();
         }
         
         // Last thing to do is send a message that the asset load is complete
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add(
-            ( callback ) => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_14__["ESE_ASSET_LOAD_COMPLETE"] ) );
+            ( callback ) => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_15__["ESE_ASSET_LOAD_COMPLETE"] ) );
         
         // Start the load
         _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].load();
@@ -40627,7 +40989,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 165 */
+/* 173 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40635,7 +40997,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ASSET_COUNT", function() { return ASSET_COUNT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Level1State", function() { return Level1State; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(160);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(162);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(100);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(118);
@@ -40646,14 +41008,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(140);
 /* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(141);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(144);
-/* harmony import */ var _library_strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(166);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(146);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(98);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(145);
-/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(3);
-/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(5);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(20);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(14);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(98);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(145);
+/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(3);
+/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(5);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(14);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(174);
 
 // 
 //  FILE NAME: level1state.js
@@ -40680,6 +41041,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// Load data from bundle as string
 
 
 const ASSET_COUNT = 19;
@@ -40692,7 +41054,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
 {
     constructor( gameLoopCallback = null )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_17__["EGS_LEVEL_1"], _statedefs__WEBPACK_IMPORTED_MODULE_17__["EGS_GAME_LOAD"], gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_LEVEL_1"], _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_GAME_LOAD"], gameLoopCallback );
         
         // Multiplier positions
         this.multiXPosAllAry = [-640,-480,-320,-160,0,160,320,480,640];
@@ -40712,7 +41074,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         this.physicsWorld = _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].getWorld( "(game)" );
         
         // Clear the last device used so that the button on start game menu is active by default
-        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_13__["actionManager"].clearLastDeviceUsed();
+        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__["actionManager"].clearLastDeviceUsed();
         
         // Add the contact listeners
         this.physicsWorld.world.on( 'begin-contact', this.beginContact.bind(this) );
@@ -40747,11 +41109,11 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         // Create the multiplier sprite used to colide with the balls
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
         this.multiNode = this.multiStrategy.create('dog_head');
-        this.multiIndexPos = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, this.multiXPosAllAry.length-1);
+        this.multiIndexPos = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, this.multiXPosAllAry.length-1);
         this.multiNode.getSprite().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
 
         // Randomly pick the first ball
-        this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 3);
+        this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, 3);
 
         // Get the ball instance name
         let ballInstanceName = this.getBallInstanceName( this.ballIndex );
@@ -40791,19 +41153,19 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             this.uiBallMeter.incBangUp( -1 );
 
             // Get the spot on the screen they clicked
-            let ratio = 1.0 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].orthoAspectRatio.h;
+            let ratio = 1.0 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].orthoAspectRatio.h;
             let y = 600;
-            let x = (ratio * (event.clientX + _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__["eventManager"].mouseOffsetX)) - _library_utilities_settings__WEBPACK_IMPORTED_MODULE_15__["settings"].defaultSize_half.w;
+            let x = (ratio * (event.clientX + _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__["eventManager"].mouseOffsetX)) - _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].defaultSize_half.w;
             
             // Set a random rotation
-            let angle = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 350) * _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["DEG_TO_RAD"];
+            let angle = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, 350) * _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["DEG_TO_RAD"];
             
             // Get the random rotation
-            let rot = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomArbitrary"]( -3, 3 );
+            let rot = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomArbitrary"]( -3, 3 );
 
             // Save the old ball index and generate a new one
             let oldBallIndex = this.ballIndex;
-            this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, 3);
+            this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, 3);
 
             // Get the ball instance names
             let instanceNameA = this.getBallInstanceName( oldBallIndex );
@@ -40824,21 +41186,21 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         else if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["EGE_MENU_GAME_STATE_CHANGE"] )
+            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_GAME_STATE_CHANGE"] )
             {
-                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["ETC_BEGIN"] )
+                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["ETC_BEGIN"] )
                     this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__["scriptManager"].get('ScreenFade')( 1, 0, 500, true ) );
             }
-            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["EGE_MENU_TRANS_OUT"] )
+            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_TRANS_OUT"] )
             {
-                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["ETC_END"] )
+                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["ETC_END"] )
                 {
                     let tree = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' );
                     if( !tree.isDefaultMenu('pause_menu') )
                         tree.setDefaultMenu('pause_menu');
                 }
             }
-            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["ECAT_ACTION_EVENT"] && event.detail.arg[0] === 'play_game' )
+            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"] && event.detail.arg[0] === 'play_game' )
             {
                 _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' ).transitionMenu();
                 this.multiplier = 1;
@@ -40920,7 +41282,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
 
                 // Create a new one
                 let posAry = this.multiXPosAry[this.multiIndexPos];
-                let index = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["randomInt"](0, posAry.length-1);
+                let index = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, posAry.length-1);
                 let offsetX = posAry[index];
                 this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
                 this.multiNode = this.multiStrategy.create('dog_head');
@@ -41016,7 +41378,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     
     removeFixture( object )
     {
-        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_16__["DEFAULT_ID"]) )
+        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["DEFAULT_ID"]) )
             this.uiWinMeter.incBangUp( this.multiplier );
     }
 }
@@ -41046,309 +41408,57 @@ function load()
 
     // Load the Sound Manager group
     _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].loadGroup( [`(level_${index})`], callback ));
+
+    // Create and load all the actor strategies. NOTE: This adds it to the load manager
+    _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_12__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["stringLoadXML"]( raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_17__["default"] ) );
+
         
     // Create the stage strategy
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].addStrategy( '_level-1-stage_', new _library_strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_11__["StageStrategy"], callback ) );
+    /*loadManager.add(
+        ( callback ) => strategyManager.addStrategy( '_level-1-stage_', new StageStrategy, callback ) );
 
     // Create the actor strategy
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].addStrategy( '_level-1-ball_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__["ActorStrategy"], callback ) );
+    loadManager.add(
+        ( callback ) => strategyManager.addStrategy( '_level-1-ball_', new ActorStrategy, callback ) );
 
     // Create the actor strategy
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].addStrategy( '_level-1-multiplier_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__["ActorStrategy"], callback ) );
+    loadManager.add(
+        ( callback ) => strategyManager.addStrategy( '_level-1-multiplier_', new ActorStrategy, callback ) );
 
     // Create the actor strategy
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].addStrategy( '_level-ui_', new _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_12__["ActorStrategy"], callback ) );
+    loadManager.add(
+        ( callback ) => strategyManager.addStrategy( '_level-ui_', new ActorStrategy, callback ) );
         
     // Load the strategies
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__["strategyLoader"].load( 'data/objects/strategy/level1/strategy.loader', callback ));
+    loadManager.add(
+        ( callback ) => strategyLoader.load( 'data/objects/strategy/level1/strategy.loader', callback ));*/
 }
 
 
 /***/ }),
-/* 166 */
+/* 174 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StageStrategy", function() { return StageStrategy; });
-/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(147);
-/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(167);
-
-// 
-//  FILE NAME: stagestrategy.js
-//  DESC:      Stage strategy
-//
-
-
-
-
-
-
-class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
-{
-    constructor()
-    {
-        super();
-        
-        // Sector array
-        this.sectorAry = [];
-    }
-    
-    //
-    //  DESC: Load the data from xml node
-    //
-    loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
-    {
-        let sectorNode = node.getElementsByTagName( 'sector' );
-
-        for( let i = 0; i < sectorNode.length; ++i )
-        {
-            let sector = new _sector__WEBPACK_IMPORTED_MODULE_1__["Sector"];
-            this.sectorAry.push( sector );
-            
-            sector.loadTransFromNode( sectorNode[i] );
-            
-            let sectorFile = sectorNode[i].getAttribute('file');
-            
-            // load the sector file
-            downloadFileCallback(
-                'xml',
-                strategyId,
-                sectorFile,
-                finishCallback,
-                ( group, xmlNode, filePath, finishCallback ) => 
-                {
-                    // Call the sector function to load the data
-                    sector.loadFromNode( group, xmlNode, filePath, finishCallback );
-                });
-        }
-    }
-
-    //
-    //  DESC: Do some cleanup
-    //
-    cleanUp()
-    {
-        for( let i = 0; i < this.sectorAry.length; ++i )
-            this.sectorAry[i].cleanUp();
-    }
-    
-    //
-    //  DESC: Get sprite by sector index and name
-    //
-    get( name, index = 0 )
-    {
-        let sector = this.sectorAry[index];
-        if( !sector )
-            throw new Error( `Sector index can't be found (${name}, ${index})!` );
-        
-        return sector.get( name );
-    }
-
-    //
-    //  DESC: Update the sector
-    //
-    update()
-    {
-        for( let i = 0; i < this.sectorAry.length; ++i )
-            this.sectorAry[i].update();
-    }
-
-    //
-    //  DESC: Transform the sector
-    //
-    transform()
-    {
-        for( let i = 0; i < this.sectorAry.length; ++i )
-            this.sectorAry[i].transform();
-    }
-
-    //
-    //  DESC: Render the sector
-    //
-    render()
-    {
-        for( let i = 0; i < this.sectorAry.length; ++i ) 
-            this.sectorAry[i].render( this.camera );
-    }
-}
-
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_level-1-stage_\" type=\"stage\"/>\r\n    <strategy name=\"_level-1-ball_\" type=\"actor\"/>\r\n    <strategy name=\"_level-1-multiplier_\" type=\"actor\"/>\r\n    \r\n    <strategy name=\"_level-ui_\" type=\"actor\">\r\n        <node name=\"uiWinMeter\" instance=\"uiWinMeter\"/>\r\n        <node name=\"uiBallMeter\" instance=\"uiBallMeter\"/>\r\n        <node name=\"uiMultiplier\" instance=\"uiMultiplier\"/>\r\n\r\n        <node name=\"ui_tennis_ball_green\" instance=\"ui_tennis_ball_green\" active=\"false\"/>\r\n        <node name=\"ui_tennis_ball_pink\" instance=\"ui_tennis_ball_pink\" active=\"false\"/>\r\n        <node name=\"ui_frisbee\" instance=\"ui_frisbee\" active=\"false\"/>\r\n        <node name=\"ui_bone_biscuit\" instance=\"ui_bone_biscuit\" active=\"false\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 167 */
+/* 175 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sector", function() { return Sector; });
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(148);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(151);
-
-// 
-//  FILE NAME: sector.js
-//  DESC:      Class the creates & renders all the sector nodess
-//
-
-
-
-
-
-
-
-class Sector extends _3d_object3d__WEBPACK_IMPORTED_MODULE_0__["Object3D"]
-{
-    constructor()
-    {
-        super();
-        
-        // node allocation array
-        this.nodeAry = [];
-        
-        // Map of nodes that have names
-        this.nodeMap = new Map;
-    }
-    
-    //
-    //  DESC: Load the data from xml node
-    //
-    loadFromNode( strategyId, node, filePath, finishCallback )
-    {
-        let defaultGroup = '';
-        let defaultObjName = '';
-        let defaultAIName = '';
-        let defaultId = -1;
-        
-        let attr = node.getAttribute( 'defaultGroup' );
-        if( attr )
-            defaultGroup = attr;
-        
-        attr = node.getAttribute( 'defaultObjectName' );
-        if( attr )
-            defaultObjName = attr;
-        
-        attr = node.getAttribute( 'defaultAIName' );
-        if( attr )
-            defaultAIName = attr;
-        
-        attr = node.getAttribute( 'defaultId' );
-        if( attr )
-            defaultId = Number(attr);
-        
-        let sectorNode = node.children;
-
-        for( let i = 0; i < sectorNode.length; ++i )
-        {
-            // Allocate the node data list to load this node
-            let nodeAry = new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( sectorNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ).dataAry;
-            
-            // Build the node list
-            let headNode = null;
-            for( let j = 0; j < nodeAry.length; j++ )
-            {
-                let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__["create"]( nodeAry[j], nodeAry[j].id );
-
-                if( headNode === null )
-                    headNode = node;
-
-                else if( !headNode.addNode( node, nodeAry[j].nodeName ) )
-                    throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
-            }
-            
-            // Add to the node array
-            this.nodeAry.push( headNode );
-            
-            // If it has a name, add it to the map for easy retrieval
-            if( headNode.nodeName )
-                this.nodeMap.set( headNode.nodeName, headNode );
-        }
-    }
-    
-    //
-    //  DESC: Do any pre-game loop init's
-    //
-    init()
-    {
-        // Create any font strings
-        // This allows for delayed VBO create so that the fonts can be allocated during a load screen
-        for( let i = 0; i < this.nodeAry.length; ++i )
-            this.nodeAry[i].init();
-    }
-
-    //
-    //  DESC: Do some cleanup
-    //
-    cleanUp()
-    {
-        for( let i = 0; i < this.nodeAry.length; ++i )
-            this.nodeAry[i].cleanUp();
-    }
-    
-    //
-    //  DESC: Get node by name
-    //
-    get( name )
-    {
-        let node = this.nodeMap.get( name );
-        if( !node )
-            throw new Error( `Sprite name can't be found (${name})!` );
-        
-        return node;
-    }
-    
-    //
-    //  DESC: Destroy this sector
-    //
-    destroy()
-    {
-        this.cleanUp();
-        this.nodeAry = [];
-    }
-
-    //
-    //  DESC: Update the nodess
-    //
-    update()
-    {
-        for( let i = 0; i < this.nodeAry.length; ++i )
-            this.nodeAry[i].update();
-    }
-
-    //
-    //  DESC: Transform the nodes
-    //
-    transform()
-    {
-        super.transform();
-        
-        for( let i = 0; i < this.nodeAry.length; ++i )
-            this.nodeAry[i].transform( this );
-    }
-
-    //
-    //  DESC: Render the nodess
-    //
-    render( camera )
-    {
-        for( let i = 0; i < this.nodeAry.length; ++i )
-            this.nodeAry[i].render( camera );
-    }
-}
-
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_loading-screen_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"loadAnim\" instance=\"loadAnim\">\r\n            <sprite>\r\n                <script prepare=\"animate\"/>\r\n            </sprite>\r\n        </node>\r\n        <node name=\"load_font\" instance=\"load_font\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 168 */
+/* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartConfirmBtn", function() { return SmartConfirmBtn; });
-/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(169);
+/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(177);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(100);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -41401,7 +41511,7 @@ class SmartConfirmBtn extends _library_gui_ismartguibase__WEBPACK_IMPORTED_MODUL
     
 
 /***/ }),
-/* 169 */
+/* 177 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41478,13 +41588,13 @@ class SmartGuiControl extends iSmartGui
 
 
 /***/ }),
-/* 170 */
+/* 178 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(171);
+/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(179);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(144);
 
 // 
@@ -41521,7 +41631,7 @@ class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBa
 
 
 /***/ }),
-/* 171 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

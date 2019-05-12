@@ -166,3 +166,12 @@ export function shuffle( array )
         }
     }
 }
+
+// 
+//  DESC: Load the XML string into a dom object
+//
+export function stringLoadXML( stringData )
+{
+    let parser = new DOMParser();
+    return parser.parseFromString( stringData, "application/xml" );
+}

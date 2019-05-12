@@ -17,8 +17,6 @@ import { objectDataManager } from '../../../library/objectdatamanager/objectdata
 import { loadManager } from '../../../library/managers/loadmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
-import { StageStrategy } from '../../../library/strategy/stagestrategy';
-import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { settings } from '../../../library/utilities/settings';
@@ -26,7 +24,10 @@ import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-export const ASSET_COUNT = 19;
+// Load data from bundle as string
+import level1StrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
+
+export const ASSET_COUNT = 18;
 
 const SPRITE_PEG = -2,
       MULTIPLIER = 0,
@@ -390,9 +391,13 @@ export function load()
 
     // Load the Sound Manager group
     loadManager.add( ( callback ) => soundManager.loadGroup( [`(level_${index})`], callback ));
+
+    // Create and load all the actor strategies. NOTE: This adds it to the load manager
+    strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) );
+
         
     // Create the stage strategy
-    loadManager.add(
+    /*loadManager.add(
         ( callback ) => strategyManager.addStrategy( '_level-1-stage_', new StageStrategy, callback ) );
 
     // Create the actor strategy
@@ -409,5 +414,5 @@ export function load()
         
     // Load the strategies
     loadManager.add(
-        ( callback ) => strategyLoader.load( 'data/objects/strategy/level1/strategy.loader', callback ));
+        ( callback ) => strategyLoader.load( 'data/objects/strategy/level1/strategy.loader', callback ));*/
 }

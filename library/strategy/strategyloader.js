@@ -7,40 +7,60 @@
 "use strict";
 
 import { strategyManager } from '../strategy/strategymanager';
-import * as genFunc from '../utilities/genfunc';
+import { ActorStrategy } from '../strategy/actorstrategy';
+import { StageStrategy } from '../strategy/stagestrategy';
+import { loadManager } from '../managers/loadmanager';
 
 class Strategyloader
 {
     constructor()
     {
     }
-    
+
     // 
-    //  DESC: Load the file defining what the strategy holds
+    //  DESC: Add to the load manager in specific order
     //
-    load( filePath, callback )
+    load( xmlNode )
     {
-        genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadStartegy( xmlNode, filePath, callback ));
+        let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
+
+        // Have the load manager create the strategy
+        for( let i = 0; i < strategyNode.length; ++i )
+        {
+            let strategyName = strategyNode[i].getAttribute( 'name' );
+            if( !strategyName )
+                throw new Error( `Strategy name not defined.` );
+
+            let strategyType = strategyNode[i].getAttribute( 'type' );
+            if( !strategyType )
+                throw new Error( `Strategy type not defined.` );
+
+            if( strategyType == 'actor' )
+                loadManager.add( ( callback ) => strategyManager.addStrategy( strategyName, new ActorStrategy, callback ) );
+
+            else if( strategyType == 'stage' )
+                loadManager.add( ( callback ) => strategyManager.addStrategy( strategyName, new StageStrategy, callback ) );
+        }
+
+        // Preload the strategies
+        loadManager.add( ( callback ) => this.loadStartegy( xmlNode, callback ));
     }
     
     // 
     //  DESC: Load the strategies
     //
-    loadStartegy( xmlNode, filePath, callback )
+    loadStartegy( xmlNode, callback )
     {
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
 
         for( let i = 0; i < strategyNode.length; ++i )
         {
             let strategyName = strategyNode[i].getAttribute( 'name' );
-            if( !strategyName )
-                throw new Error( `Strategy name not defined (${filePath}).` );
 
             // Try to get the strategy
             let strategy = strategyManager.get( strategyName );
             if( !strategy )
-                throw new Error( `Strategy name not defined (${strategyName}, ${filePath}).` );
+                throw new Error( `Strategy name not defined (${strategyName}).` );
 
             // Apply a camera if one is defined
             let cameraId = strategyNode[i].getAttribute( 'camera' );
@@ -48,7 +68,7 @@ class Strategyloader
                 strategy.setCamera( cameraId );
             
             // Populate the strategies with their objects
-            this.populateStartegy( strategyNode[i], strategy, filePath );
+            this.populateStartegy( strategyNode[i], strategy );
         }
         
         callback();
@@ -57,7 +77,7 @@ class Strategyloader
     // 
     //  DESC: Populate the strategies with their objects
     //
-    populateStartegy( xmlNode, strategy, filePath )
+    populateStartegy( xmlNode, strategy )
     {
         let nodeLst = xmlNode.getElementsByTagName( 'node' );
 
@@ -71,14 +91,14 @@ class Strategyloader
             // See if there is a sprite that needs to be init. There should only be one
             let spriteNode = nodeLst[i].getElementsByTagName( 'sprite' );
             if( spriteNode.length )
-                this.initSprite( spriteNode[0], node.getSprite(), filePath );
+                this.initSprite( spriteNode[0], node.getSprite() );
         }
     }
     
     // 
     //  DESC: Populate the strategies with their objects
     //
-    initSprite( xmlNode, sprite, filePath )
+    initSprite( xmlNode, sprite )
     {
         // Set any transforms
         sprite.object.loadTransFromNode( xmlNode );

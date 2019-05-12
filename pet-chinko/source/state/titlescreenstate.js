@@ -11,14 +11,17 @@ import { CommonState } from './commonstate';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
-import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
+
+// Load data from bundle as string
+import titleScreenStrategyLoader from 'raw-loader!../../data/objects/strategy/state/titlescreen.loader';
 
 export const ASSET_COUNT = 4;
 
@@ -137,11 +140,6 @@ export function load()
     loadManager.add(
         ( callback ) => objectDataManager.createFromData( ['(title_screen)'], callback ) );
 
-    // Create the background strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_title-screen_', new ActorStrategy, callback ) );
-
-    // Load the strategies
-    loadManager.add(
-        ( callback ) => strategyLoader.load( 'data/objects/strategy/state/titlescreen.loader', callback ));
+    // Create and load all the actor strategies. NOTE: This adds it to the load manager
+    strategyLoader.load( genFunc.stringLoadXML( titleScreenStrategyLoader ) );
 }

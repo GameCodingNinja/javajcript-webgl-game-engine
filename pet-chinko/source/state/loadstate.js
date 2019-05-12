@@ -18,9 +18,13 @@ import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { settings } from '../../../library/utilities/settings';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as level1State from '../state/level1state';
 import * as stateDefs from './statedefs';
+
+// Load data from bundle as string
+import loadScreenStrategyLoader from 'raw-loader!../../data/objects/strategy/state/loadscreen.loader';
 
 const MIN_LOAD_TIME = 1000;
 
@@ -66,14 +70,12 @@ export class LoadState extends GameState
         // Create OpenGL objects from the loaded data
         loadManager.add(
             ( callback ) => objectDataManager.createFromData( groupAry, callback ));
-    
-        // Create the background strategy
-        loadManager.add(
-            ( callback ) => strategyManager.addStrategy( '_loading-screen_', new ActorStrategy, callback ) );
-    
-            // Load the strategies
-        loadManager.add(
-            ( callback ) => strategyLoader.load( 'data/objects/strategy/state/loadscreen.loader', this.preloadComplete.bind(this) ));
+
+        // Create and load all the actor strategies. NOTE: This adds it to the load manager
+        strategyLoader.load( genFunc.stringLoadXML( loadScreenStrategyLoader ) );
+
+        // Last thing to do is call the preload complete function
+        loadManager.add( ( callback ) => this.preloadComplete() );
     
         // Start the load
         loadManager.load();

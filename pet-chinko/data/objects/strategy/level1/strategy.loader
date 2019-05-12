@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <strategyLst>
+
+    <strategy name="_level-1-stage_" type="stage"/>
+    <strategy name="_level-1-ball_" type="actor"/>
+    <strategy name="_level-1-multiplier_" type="actor"/>
     
-    <strategy name="_level-ui_">
+    <strategy name="_level-ui_" type="actor">
         <node name="uiWinMeter" instance="uiWinMeter"/>
         <node name="uiBallMeter" instance="uiBallMeter"/>
         <node name="uiMultiplier" instance="uiMultiplier"/>

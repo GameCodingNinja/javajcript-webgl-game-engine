@@ -140,7 +140,9 @@
             <physics>
                 <body type="kinematic"/>
                 <fixtureLst>
-                    <fixture shape="circle" radius="10" sensor="true"/>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-60" bottom="0" left="10" right="10"/>
+                    </fixture>
                 </fixtureLst>
             </physics>
         </object>

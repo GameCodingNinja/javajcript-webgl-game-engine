@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <cameraLst>
     
     <default projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0"/>
