@@ -9,7 +9,6 @@
 import { signalManager } from '../../../library/managers/signalmanager';
 import { settings } from '../../../library/utilities/settings';
 import { textureManager } from '../../../library/managers/texturemanager';
-import { meshManager } from '../../../library/managers/meshmanager';
 import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { downloadFile } from '../../../library/utilities/genfunc';
 import { shaderManager } from '../../../library/managers/shadermanager';

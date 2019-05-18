@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<node defaultGroup="(loadingScreen)">
+    
+    <node name="loadAnim" type="spriteNode">
+        
+        <sprite2d objectName="loadAnim">
+            <scriptLst>
+                <script animate="State_PlayLoadAnim" group="(state)"/>
+            </scriptLst>
+        </sprite2d>
+
+    </node>
+    
+    <node name="load_font" type="spriteNode">
+        
+        <sprite2d objectName="load_font">
+            <font fontName="dejavu_sans_cond_24" fontString="0%">
+                <attributes kerning="-1"/>
+            </font>
+        </sprite2d>
+
+    </node>
+
+</node>

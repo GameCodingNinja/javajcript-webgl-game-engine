@@ -9,8 +9,6 @@
 import { GameState } from './gamestate';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { textureManager } from '../../../library/managers/texturemanager';
-import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { fontManager } from '../../../library/managers/fontmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
@@ -23,19 +21,23 @@ import { soundManager } from '../../../library/managers/soundmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
-import { Sprite } from '../../../library/sprite/sprite';
-import { gl, device } from '../../../library/system/device';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { UIProgressBar } from '../../../library/gui/uiprogressbar';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
-import { ActorStrategy } from '../../../library/strategy/actorstrategy';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
 import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as stateDefs from './statedefs';
 
-const STARTUP_ASSET_COUNT = 86,
+// Load data from bundle as string
+import dataListTable from 'raw-loader!../../data/objects/2d/objectDataList/dataListTable.lst';
+import strategyListTable from 'raw-loader!../../data/objects/strategy/strageyListTable.lst';
+import cameraListTable from 'raw-loader!../../data/objects/camera.lst';
+import shaderCfg from 'raw-loader!../../data/shaders/shader.cfg';
+import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
+
+const STARTUP_ASSET_COUNT = 87,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState
@@ -43,6 +45,11 @@ export class StartUpState extends GameState
     constructor( gameLoopCallback )
     {
         super( stateDefs.EGS_STARTUP, stateDefs.EGS_TITLE_SCREEN, gameLoopCallback );
+
+        // Load the list tables
+        objectDataManager.loadListTableFromNode( genFunc.stringLoadXML( dataListTable ) );
+        strategyManager.loadListTableFromNode( genFunc.stringLoadXML( strategyListTable ) );
+        cameraManager.loadFromNode( genFunc.stringLoadXML( cameraListTable ) );
 
         // Load the scripts
         utilScripts.loadScripts();
@@ -67,10 +74,7 @@ export class StartUpState extends GameState
         let groupAry = ['(startup)'];
 
         // Load the shaders
-        loadManager.add( ( callback ) => shaderManager.load( 'data/shaders/shader.cfg', callback ) );
-
-        // Load the object data list tables
-        loadManager.add( ( callback ) => objectDataManager.loadListTable( 'data/objects/2d/objectDataList/dataListTable.lst', callback ));
+        loadManager.add( ( callback ) => shaderManager.loadFromNode( genFunc.stringLoadXML( shaderCfg ), callback ) );
 
         // Load the object data XML's
         loadManager.add( ( callback ) => objectDataManager.loadXMLGroup2D( groupAry, callback ) );
@@ -81,17 +85,11 @@ export class StartUpState extends GameState
         // Create OpenGL objects from the loaded data
         loadManager.add( ( callback ) => objectDataManager.createFromData( groupAry, callback ));
         
-        // Load the camera manager
-        loadManager.add( ( callback ) => cameraManager.load( 'data/objects/camera.lst', callback ));
-        
-        // Load the list table for the strategy manager
-        loadManager.add( ( callback ) => strategyManager.loadListTable( 'data/objects/spritestrategy/spriteStrageyListTable.lst', callback ));
-        
-        // Create the actor strategy
-        loadManager.add( ( callback ) => strategyManager.addStrategy( '(startup)', new ActorStrategy, callback ) );
-        
-        // Load the strategies
-        loadManager.add( ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/startupLoad.cfg', this.preloadComplete.bind(this) ));
+        // Create and load all the actor strategies. NOTE: This adds it to the load manager
+        strategyLoader.load( genFunc.stringLoadXML( startUpStrategyLoader ) );
+
+        // Last thing to do is call the preload complete function
+        loadManager.add( ( callback ) => this.preloadComplete() );
         
         // Start the load
         loadManager.load();
@@ -106,10 +104,10 @@ export class StartUpState extends GameState
         this.camera = cameraManager.getDefault();
         
         // Prepare the strategies to run
-        this.progressBar = strategyManager.get( '(startup)' ).get( 'UIProgressBar' ).getControl();
+        this.progressBar = strategyManager.get( '_startup_' ).get( 'UIProgressBar' ).getControl();
         this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
         
-        strategyManager.activateStrategy('(startup)');
+        strategyManager.activateStrategy('_startup_');
 
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -258,7 +256,7 @@ export class StartUpState extends GameState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['(startup)'] );
+        strategyManager.deleteStrategy( ['_startup_'] );
 
         // Free the state assets from the video memory
         objectDataManager.freeGroup( ['(startup)'] );

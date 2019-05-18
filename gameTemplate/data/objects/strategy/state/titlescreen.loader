@@ -1,6 +1,7 @@
+<?xml version="1.0"?>
 <strategyLst>
     
-    <strategy name="(cube)" camera="cubeCamera">
+    <strategy name="_cube_" camera="cubeCamera" type="actor">
         <node name="cube" instance="cube">
             <sprite>
                 <script prepare="rotate"/>
@@ -8,7 +9,7 @@
         </node>
     </strategy>
 
-    <strategy name="(background)" type="actor">
+    <strategy name="_title_screen_" type="actor">
         <node name="background"/>
     </strategy>
   

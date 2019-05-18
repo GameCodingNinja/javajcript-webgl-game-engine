@@ -394,25 +394,4 @@ export function load()
 
     // Create and load all the actor strategies. NOTE: This adds it to the load manager
     strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) );
-
-        
-    // Create the stage strategy
-    /*loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-1-stage_', new StageStrategy, callback ) );
-
-    // Create the actor strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-1-ball_', new ActorStrategy, callback ) );
-
-    // Create the actor strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-1-multiplier_', new ActorStrategy, callback ) );
-
-    // Create the actor strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-ui_', new ActorStrategy, callback ) );
-        
-    // Load the strategies
-    loadManager.add(
-        ( callback ) => strategyLoader.load( 'data/objects/strategy/level1/strategy.loader', callback ));*/
 }

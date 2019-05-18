@@ -1,11 +1,10 @@
+<?xml version="1.0"?>
 <objectDataList2D>
 
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
-    <default  name="">
+    <default name="">
         <visual>
-            <mesh genType="quad"/>
             <color r="1" g="1" b="1" a="1"/>
-            <shader id="shader_2d_spriteSheet"/>
         </visual>
     </default>
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
@@ -18,6 +17,16 @@
                 <mesh genType="sprite_sheet">
                     <spriteSheet defIndex="0" glyphCount="18" columns="6"/>
                 </mesh>
+                <shader id="shader_2d_spriteSheet"/>
+            </visual>
+        </object>
+
+        <object name="load_font">
+            <visual>
+                <mesh genType="font">
+                    <spriteSheet file=""/>
+                </mesh>
+                <shader id="shader_2d"/>
             </visual>
         </object>
 

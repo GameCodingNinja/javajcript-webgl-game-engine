@@ -1,10 +1,11 @@
+<?xml version="1.0"?>
 <node defaultGroup="(level_1)" defaultAIName="aiBall">
     
+    <!--
     <node name="multiListTestNode" type="objectNodeMultiList" defaultAIName="">
 
         <object2d>
             <position x="400" y="-200" z="0"/>
-            <!--<scale x=".5" y=".5" z="1"/>-->
         </object2d>
 
         <node type="spriteNodeMultiList">
@@ -89,6 +90,7 @@
         </node>
 
     </node>
+    -->
     
     <node name="square_red" type="spriteNode">
         

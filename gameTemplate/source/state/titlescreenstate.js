@@ -8,23 +8,22 @@
 
 import { eventManager } from '../../../library/managers/eventmanager';
 import { CommonState } from './commonstate';
-import { Sprite } from '../../../library/sprite/sprite';
-import { Camera } from '../../../library/common/camera';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
-import { shaderManager } from '../../../library/managers/shadermanager';
 import { menuManager } from '../../../library/gui/menumanager';
-import { device } from '../../../library/system/device';
 import { strategyManager } from '../../../library/strategy/strategymanager';
-import { ActorStrategy } from '../../../library/strategy/actorstrategy';
-import { StageStrategy } from '../../../library/strategy/stagestrategy';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
-import { assetHolder } from '../../../library/utilities/assetholder';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
+
+// Load data from bundle as string
+import titleScreenStrategyLoader from 'raw-loader!../../data/objects/strategy/state/titlescreen.loader';
+
+export const ASSET_COUNT = 12;
 
 export class TitleScreenState extends CommonState
 {
@@ -32,8 +31,8 @@ export class TitleScreenState extends CommonState
     {
         super( stateDefs.EGS_TITLE_SCREEN, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
-        strategyManager.activateStrategy('(background)');
-        strategyManager.activateStrategy('(cube)');
+        strategyManager.activateStrategy('_title_screen_');
+        strategyManager.activateStrategy('_cube_');
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -120,7 +119,7 @@ export class TitleScreenState extends CommonState
 function unload()
 {
     // Only delete the strategy(s) used in this state. Don't use clear().
-    strategyManager.deleteStrategy( ['(background)','(cube)'] );
+    strategyManager.deleteStrategy( ['_title_screen_','_cube_'] );
     
     // Free the object data
     objectDataManager.freeGroup( ['(title_screen)','(cube)'] );
@@ -155,15 +154,6 @@ export function load()
     loadManager.add(
         ( callback ) => objectDataManager.createFromData( ['(cube)'], callback ) );
 
-    // Create the background strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '(background)', new ActorStrategy, callback ) );
-
-    // Create the background strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '(cube)', new ActorStrategy, callback ) );
-
-    // Load the strategies
-    loadManager.add(
-        ( callback ) => strategyLoader.load( 'data/objects/spritestrategy/titlescreenLoad.cfg', callback ));
+    // Create and load all the actor strategies. NOTE: This adds it to the load manager
+    strategyLoader.load( genFunc.stringLoadXML( titleScreenStrategyLoader ) );
 }

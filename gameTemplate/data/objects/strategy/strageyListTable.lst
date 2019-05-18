@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<listTable>
+    
+    <groupList groupName="_startup_">
+        <file path="data/objects/strategy/state/startup.strategy"/>
+    </groupList>
+    
+    <groupList groupName="_title_screen_">
+        <file path="data/objects/strategy/state/titlescreen.strategy"/>
+    </groupList>
+    
+    <groupList groupName="_cube_">
+        <file path="data/objects/strategy/actor/cube.lst"/>
+    </groupList>
+
+    <groupList groupName="_loading-screen_">
+        <file path="data/objects/strategy/state/loadscreen.strategy"/>
+    </groupList>
+
+    <groupList groupName="_level-1-stage_">
+        <file path="data/objects/strategy/level1/stage.strategy"/>
+    </groupList>
+    
+    <groupList groupName="_level-1-ball_">
+        <file path="data/objects/strategy/level1/ball.strategy"/>
+    </groupList>
+    
+    <!--<groupList groupName="_main_">
+        <file path="data/objects/strategy/mainNode.lst"/>
+    </groupList>-->
+  
+</listTable>

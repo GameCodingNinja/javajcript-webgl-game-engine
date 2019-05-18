@@ -7,22 +7,23 @@
 "use strict";
 
 import { GameState } from './gamestate';
-import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { textureManager } from '../../../library/managers/texturemanager';
-import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { loadManager } from '../../../library/managers/loadmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { settings } from '../../../library/utilities/settings';
-import { Sprite } from '../../../library/sprite/sprite';
-import { Camera } from '../../../library/common/camera';
+import { signalManager } from '../../../library/managers/signalmanager';
+import { strategyManager } from '../../../library/strategy/strategymanager';
+import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
-import { gl, device } from '../../../library/system/device';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from './titlescreenstate';
 import * as level1State from './level1state';
 import * as stateDefs from './statedefs';
+
+// Load data from bundle as string
+import loadScreenStrategyLoader from 'raw-loader!../../data/objects/strategy/state/loadscreen.loader';
 
 const MIN_LOAD_TIME = 1000;
 
@@ -35,7 +36,8 @@ export class LoadState extends GameState
         this.stateMessage.loadState = stateMessage.loadState;
         this.stateMessage.unloadState = stateMessage.unloadState;
         
-        this.camera = new Camera();
+        this.loadCounter = 0;
+        this.maxLoadCount = 0;
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -66,7 +68,13 @@ export class LoadState extends GameState
 
         // Create OpenGL objects from the loaded data
         loadManager.add(
-            ( callback ) => objectDataManager.createFromData( groupAry, this.preloadComplete.bind(this) ));
+            ( callback ) => objectDataManager.createFromData( groupAry, callback ));
+
+        // Create and load all the actor strategies. NOTE: This adds it to the load manager
+        strategyLoader.load( genFunc.stringLoadXML( loadScreenStrategyLoader ) );
+
+        // Last thing to do is call the preload complete function
+        loadManager.add( ( callback ) => this.preloadComplete() );
     
         // Start the load
         loadManager.load();
@@ -77,16 +85,26 @@ export class LoadState extends GameState
     //
     preloadComplete()
     {
-        this.loadAnim = new Sprite( objectDataManager.getData( '(loadingScreen)', 'loadAnim' ) );
-        this.loadAnim.object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
-        this.loadAnim.prepareScriptFactory( scriptManager.get('State_PlayLoadAnim') );
-        this.loadAnim.object.transform();
+        // Position at the bottom of the screen.
+        let strategy = strategyManager.activateStrategy( '_loading-screen_' );
+        strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        this.loadFont = strategy.get( 'load_font' ).getSprite();
+        this.loadFont.object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
 
         // Start the game loop
         requestAnimationFrame( this.callback );
+    }
+
+    // 
+    //  DESC: Load callback
+    //
+    loadCallback()
+    {
+        ++this.loadCounter;
+        this.loadFont.visualComponent.createFontString( `${Math.trunc((this.loadCounter / this.maxLoadCount) * 100)}%` );
     }
     
     // 
@@ -113,8 +131,11 @@ export class LoadState extends GameState
                     this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
                 else
                     setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
+
+                // Disconnect to the load signal
+                signalManager.clear_loadComplete();
         
-                //console.log('Load State Complete!');
+                console.log(`${this.getStateStr(this.stateMessage.loadState)} Count: ${this.loadCounter}`);
             }
         }
     }
@@ -125,7 +146,15 @@ export class LoadState extends GameState
     update()
     {
         this.scriptComponent.update();
-        this.loadAnim.update();
+        strategyManager.update();
+    }
+
+    // 
+    //  DESC: Transform the game objects
+    //
+    transform()
+    {
+        strategyManager.transform();
     }
     
     // 
@@ -133,7 +162,7 @@ export class LoadState extends GameState
     //
     render()
     {
-        this.loadAnim.render( this.camera );
+        strategyManager.render();
     }
     
     // 
@@ -141,15 +170,22 @@ export class LoadState extends GameState
     //
     assetLoad()
     {
+        // Set the function to be called to update the progress bar during the download
+        signalManager.connect_loadComplete( this.loadCallback.bind(this) );
+
         // Set the timer to see how long the load takes
         highResTimer.timerStart();
         
         if( this.stateMessage.loadState === stateDefs.EGS_TITLE_SCREEN )
+        {
+            this.maxLoadCount = titleScreenState.ASSET_COUNT;
             titleScreenState.load();
-        
+        }
         else if( this.stateMessage.loadState === stateDefs.EGS_LEVEL_1 )
+        {
+            this.maxLoadCount = level1State.ASSET_COUNT;
             level1State.load();
-        
+        }
         // Last thing to do is send a message that the asset load is complete
         loadManager.add(
             ( callback ) => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) );
@@ -166,6 +202,7 @@ export class LoadState extends GameState
         // Free the state assets from the video memory
         objectDataManager.freeGroup( ['(loadingScreen)'] );
         
-        this.loadAnim.cleanUp();
+        // Only delete the strategy(s) used in this state. Don't use clear().
+        strategyManager.deleteStrategy( ['_loading-screen_'] );
     }
 }

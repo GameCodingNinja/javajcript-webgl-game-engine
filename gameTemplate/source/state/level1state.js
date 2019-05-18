@@ -14,14 +14,19 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { loadManager } from '../../../library/managers/loadmanager';
-import { soundManager } from '../../../library/managers/soundmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { StageStrategy } from '../../../library/strategy/stagestrategy';
 import { ActorStrategy } from '../../../library/strategy/actorstrategy';
-import { device } from '../../../library/system/device';
+import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { CommonState } from './commonstate';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
+
+// Load data from bundle as string
+import level1StrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
+
+export const ASSET_COUNT = 12;
 
 export class Level1State extends CommonState
 {
@@ -43,8 +48,8 @@ export class Level1State extends CommonState
         eventManager.clear();
         
         // Prepare the strategies to run
-        strategyManager.activateStrategy('(stage1)');
-        strategyManager.activateStrategy('(sprite)');
+        strategyManager.activateStrategy('_level-1-stage_');
+        strategyManager.activateStrategy('_level-1-ball_');
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -76,7 +81,7 @@ export class Level1State extends CommonState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['(stage1)','(sprite)'] );
+        strategyManager.deleteStrategy( ['_level-1-stage_','_level-1-ball_'] );
         
         objectDataManager.freeGroup( ['(level_1)'] );
         
@@ -148,27 +153,7 @@ export function load()
     // Load the physics list table and group
     loadManager.add(
         ( callback ) => physicsWorldManager.loadWorldGroup2D( '(game)', callback ));
-        
-    // Create the stage strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '(stage1)', new StageStrategy, callback ) );
 
-    // Create the actor strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '(sprite)', new ActorStrategy, callback ) );
-
-    // Create the ball sprites
-    loadManager.add(
-        ( callback ) => 
-        {
-            let sprites = ['triangle_blue', 'triangle_green', 'circle_blue', 'circle_green', 'circle_red', 'square_red'];
-            
-            // Get the sprite strategy
-            let strategy = strategyManager.get( '(sprite)' );
-        
-            for( let i = 0; i < 24; ++i )
-                strategy.create(sprites[i % 6] );
-            
-            callback()
-        } );
+    // Create and load all the actor strategies. NOTE: This adds it to the load manager
+    strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) );
 }

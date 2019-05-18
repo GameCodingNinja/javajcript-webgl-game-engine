@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <fontLst>
 
   <listGroup name="(font)"/>
@@ -16,12 +17,15 @@
     <font name="dejavu_sans_bold_50" file="data/textures/fonts/dejavu_sans_bold_50"/>
     <font name="dejavu_sans_bold_70" file="data/textures/fonts/dejavu_sans_bold_70"/>
     <font name="dejavu_sans_reg_32" file="data/textures/fonts/dejavu_sans_reg_32"/>
-    <!--<font name="dejavu_sans_reg_70" file="data/textures/fonts/dejavu_sans_reg_70"/>
+    <font name="dejavu_sans_cond_24" file="data/textures/fonts/dejavu_sans_cond_24"/>
+
+    <!--
+    <font name="dejavu_sans_reg_70" file="data/textures/fonts/dejavu_sans_reg_70"/>
     <font name="dejavu_sans_reg_bold_14" file="data/textures/fonts/dejavu_sans_reg_bold_14"/>
     <font name="dejavu_sans_reg_32" file="data/textures/fonts/dejavu_sans_reg_32"/>
     <font name="dejavu_sans_cond_28" file="data/textures/fonts/dejavu_sans_cond_28"/>
     <font name="dejavu_sans_reg_28" file="data/textures/fonts/dejavu_sans_reg_28"/>
-    <font name="dejavu_sans_cond_24" file="data/textures/fonts/dejavu_sans_cond_24"/>-->
+    -->
 
   </fonts>
   

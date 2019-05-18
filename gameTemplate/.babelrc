@@ -1,3 +1,0 @@
-{
-  "presets": ['../../../../../lib/node_modules/babel-preset-es2015'], "compact" : false
-}

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<strategyLst>
+
+    <strategy name="_level-1-stage_" type="stage"/>
+    <strategy name="_level-1-ball_" type="actor">
+    
+        <node name="triangle_blue"/>
+        <node name="triangle_green"/>
+        <node name="circle_blue"/>
+        <node name="circle_green"/>
+        <node name="circle_red"/>
+        <node name="square_red"/>
+
+        <node name="triangle_blue"/>
+        <node name="triangle_green"/>
+        <node name="circle_blue"/>
+        <node name="circle_green"/>
+        <node name="circle_red"/>
+        <node name="square_red"/>
+
+        <node name="triangle_blue"/>
+        <node name="triangle_green"/>
+        <node name="circle_blue"/>
+        <node name="circle_green"/>
+        <node name="circle_red"/>
+        <node name="square_red"/>
+
+        <node name="triangle_blue"/>
+        <node name="triangle_green"/>
+        <node name="circle_blue"/>
+        <node name="circle_green"/>
+        <node name="circle_red"/>
+        <node name="square_red"/>
+
+    </strategy>
+  
+</strategyLst>
