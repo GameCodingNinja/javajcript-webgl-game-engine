@@ -39,15 +39,56 @@ class MeshManager
         }
         
         let meshGrp = groupMap.get( filePath );
-        if( meshGrp === undefined )
+        if( meshGrp === undefined || meshGrp === -1 )
         {
             meshGrp = new mesh3d.MeshGroup;
             groupMap.set( filePath, meshGrp );
             
             this.loadData( group, filePath, binaryData, meshGrp );
         }
-        
+
         return meshGrp;
+    }
+
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, filePath )
+    {
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.meshBufMapMap.set( group, groupMap );
+        }
+        
+        let meshGrp = groupMap.get( filePath );
+        if( meshGrp === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( filePath, -1 );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    //
+    //  DESC: Get the 2D texture class
+    //
+    get( group, filePath )
+    {
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap === undefined )
+            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
+
+        let meshBuf = groupMap.get( filePath );
+        if( meshBuf === undefined || meshBuf === -1 )
+            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
+
+        return meshBuf;
     }
     
     //

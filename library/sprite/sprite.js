@@ -48,7 +48,7 @@ export class Sprite
         this.scriptComponent = new ScriptComponent;
         
         // Allocate the sprite specific objects
-        if( this.objData.objDataType === defs.EODT_OBJECT_DATA_2D )
+        if( this.objData.is2D() )
         {
             this.object = new Object2D
             
@@ -67,7 +67,7 @@ export class Sprite
             if( objData.physicsData.isActive() )
                 this.physicsComponent = new PhysicsComponent2D( objData.physicsData );
         }
-        else if( this.objData.objDataType === defs.EODT_OBJECT_DATA_3D )
+        else if( this.objData.is3D() )
         {
             this.object = new Object3D
             this.visualComponent = new VisualComponent3D( objData.visualData );

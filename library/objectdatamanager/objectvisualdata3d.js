@@ -76,7 +76,7 @@ export class ObjectVisualData3D
                 
                 let textPath = this.meshGrp.uniqueTexturePathAry[textIndex].path;
                 
-                this.meshGrp.meshAry[i].textureAry.push( textureManager.getTexture( group, textPath ) );
+                this.meshGrp.meshAry[i].textureAry.push( textureManager.get( group, textPath ) );
             }
         }
     }

@@ -17,45 +17,26 @@ class ShaderManager
         this.shaderMap = new Map;
         this.currentShaderData = null;
         this.currentAttributeCount = 0;
-        this.loadCompleteCallback = null;
-        this.loadCounter = 0;
-        this.initShaderCallback = null;
-    }
-    
-    // 
-    //  DESC: Load the shader from file path
-    //
-    load( filePath, callback )
-    {
-        genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode, callback ) );
     }
     
     // 
     //  DESC: Load the shader from xml node
     //
-    loadFromNode( xmlNode, callback )
+    loadFromNode( xmlNode )
     {
+        let promiseAry = [];
+
         if( xmlNode )
         {
             let shader = xmlNode.getElementsByTagName('shader');
             if( shader )
             {
-                this.loadCompleteCallback = callback;
-                
                 for( let i = 0; i < shader.length; ++i )
-                {
-                    // Use a counter to determine when the load is done because there's
-                    // no garentee they will finish in the order executed
-                    // Always do this before the load
-                    ++this.loadCounter;
-                    
-                    this.createShader( shader[i] );
-                }
+                    promiseAry.push( this.createShader( shader[i] ) );
             }
         }
-        else
-            callback();
+
+        return Promise.all( promiseAry );
     }
     
     // 
@@ -77,32 +58,21 @@ class ShaderManager
         this.shaderMap.set( shaderTxtId, shaderData );
         
         // Create the vertex shader
-        genFunc.downloadFile( 'txt', vertexNode[0].getAttribute('file'),
-            ( vertText ) =>
-            {
-                this.create( gl.VERTEX_SHADER, shaderData, shaderTxtId, vertText );
-                
-                genFunc.downloadFile( 'txt', fragmentNode[0].getAttribute('file'),
-                    ( fragText ) =>
-                    {
-                        // Create the shaders from the shader files
-                        this.create( gl.FRAGMENT_SHADER, shaderData, shaderTxtId, fragText );
-                        
-                        // Combine the shaders into a program
-                        this.createProgram( shaderData );
-                        
-                        // Find the location of the custom shader variables
-                        this.locateShaderVariables( shaderData, vertexNode[0].getElementsByTagName('dataType'), fragmentNode[0].getElementsByTagName('dataType') );
-                        
-                        // Send out a signal to init this shader
-                        this.initShaderCallback( shaderTxtId );
-                        
-                        // Always do this after the load
-                        --this.loadCounter;
+        let vertPromise = genFunc.downloadFile( 'txt', vertexNode[0].getAttribute('file') )
+            .then(( vertText ) => this.create( gl.VERTEX_SHADER, shaderData, shaderTxtId, vertText ) );
 
-                        if( this.loadCounter === 0 )
-                            this.loadCompleteCallback();
-                    });
+        // Create the frag shader
+        let fragPromise = genFunc.downloadFile( 'txt', fragmentNode[0].getAttribute('file') )
+            .then( (fragText ) => this.create( gl.FRAGMENT_SHADER, shaderData, shaderTxtId, fragText ) );
+            
+        return Promise.all( [vertPromise, fragPromise] )
+            .then(() =>
+            {
+                // Combine the shaders into a program
+                this.createProgram( shaderData );
+                
+                // Find the location of the custom shader variables
+                this.locateShaderVariables( shaderData, vertexNode[0].getElementsByTagName('dataType'), fragmentNode[0].getElementsByTagName('dataType') );
             });
     }
     
@@ -120,8 +90,8 @@ class ShaderManager
         
         // Compile the shader and check for error
         gl.compileShader(id);
-	if( !gl.getShaderParameter(id, gl.COMPILE_STATUS) )
-            throw new Error( `ERROR compiling shader! (${gl.getShaderInfoLog(id)}).` );
+        if( !gl.getShaderParameter(id, gl.COMPILE_STATUS) )
+                throw new Error( `ERROR compiling shader! (${gl.getShaderInfoLog(id)}).` );
         
         if( shaderType === gl.VERTEX_SHADER )
             shaderData.vertexId = id;
@@ -240,10 +210,8 @@ class ShaderManager
         let shader = this.shaderMap.get( shaderId );
         if( shader !== undefined )
             return shader;
-        else
-            throw new Error( `ERROR Shader has not been created! (${shaderId}).` );
-        
-        return null;
+ 
+        throw new Error( `ERROR Shader has not been created! (${shaderId}).` );
     }
     
     // 
@@ -273,7 +241,7 @@ class ShaderManager
     //
     setAllShaderValue4fv( locationId, data )
     {
-        for( let [ key, shaderData ] of this.shaderMap.entries() )
+        for( let key of this.shaderMap.keys() )
             this.setShaderValue4fv( key, locationId, data );
     }
 }

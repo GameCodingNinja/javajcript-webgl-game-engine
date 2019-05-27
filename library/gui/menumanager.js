@@ -81,8 +81,10 @@ class MenuManager extends ManagerBase
     // 
     //  DESC: Load the menu group
     //
-    preloadGroup( groupAry, finishCallback )
+    loadGroupXML( groupAry )
     {
+        let promiseAry = [];
+
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
@@ -99,7 +101,14 @@ class MenuManager extends ManagerBase
                     this.menuTreeMapMap.set( group, new Map );
 
                     for( let i = 0; i < pathAry.length; ++i )
-                        this.downloadFile( 'xml', group, pathAry[i], finishCallback, this.preload.bind(this) );
+                    {
+                        let filePath = pathAry[i];
+
+                        promiseAry.push( 
+                            genFunc.downloadFile( 'xml', filePath )
+                                .then(( xmlNode ) => this.loadFromNode( group, xmlNode ))
+                                .catch(( error ) => { console.error(error.stack); throw error; }));
+                    }
                 }
                 else
                 {
@@ -111,29 +120,33 @@ class MenuManager extends ManagerBase
                 throw new Error( `Menu Manager list group name can't be found (${group})!` );
             }
         }
+
+        return Promise.all( promiseAry );
     }
     
     //
     //  DESC: Load all object information from an xml node
     //
-    preload( group, node, filePath, finishCallback )
+    loadFromNode( group, xmlNode )
     {
         // Load the menus from node
-        this.preloadMenuXML( group, node, finishCallback );
+        return this.loadMenuFromNode( group, xmlNode )
 
-        // Load the trees from node
-        this.loadTreesFromNode( group, node );
+            // Load the trees from node
+            .then(() => this.loadTreesFromNode( group, xmlNode ))
     }
     
     //
     //  DESC: preload all object information from an xml node
     //
-    preloadMenuXML( group, node, finishCallback )
+    loadMenuFromNode( group, xmlNode )
     {
+        let promiseAry = [];
+
         // Get the menu group map
         let groupMap = this.menuMapMap.get( group );
         
-        let menuNode = node.getElementsByTagName('menu');
+        let menuNode = xmlNode.getElementsByTagName('menu');
 
         for( let i = 0; i < menuNode.length; ++i )
         {
@@ -160,23 +173,24 @@ class MenuManager extends ManagerBase
             menu.loadDynamicOffsetFromNode( menuNode[i] );
 
             // Check if this file has already been loaded
-            if( !assetHolder.has( group, filePath ) )
+            if( assetHolder.allowLoad( group, filePath ) )
             {
-                // Set a place holder for the data to be loaded
-                assetHolder.set( group, filePath );
-
                 // Load the menu XML file
-                this.downloadFile( 'xml', group, filePath, finishCallback,
-                    ( group, xmlNode, filePath, finishCallback ) => 
-                    {
-                        // Store the preloaded XML file
-                        assetHolder.set( group, filePath, xmlNode );
+                promiseAry.push( 
+                    genFunc.downloadFile( 'xml', filePath )
+                        .then(( node ) => 
+                        {
+                            // Store the preloaded XML file
+                            assetHolder.set( group, filePath, node );
 
-                        // Recurse back until all XML files are loaded
-                        this.preloadControlXML( group, xmlNode, finishCallback );
-                    });
+                            // Recurse back until all XML files are loaded
+                            return this.loadControlFromNode( group, node );
+                        })
+                        .catch(( error ) => { console.error(error.stack); throw error; }));
             }
         }
+
+        return Promise.all( promiseAry );
     }
     
     //
@@ -229,16 +243,18 @@ class MenuManager extends ManagerBase
     }
     
     //
-    //  DESC: preload the menu controls from menu node
+    //  DESC: load the menu controls from menu node
+    //        NOTE: Promise using recursive function
     //
-    preloadControlXML( group, node, finishCallback )
+    loadControlFromNode( group, xmlNode )
     {
+        let promiseAry = [];
         let controlLst = ['staticMenuControls', 'mouseOnlyControls', 'menuControls', 'subControlList', 'scrollBoxControlList'];
         
         // Load the control XML files
         for( let i = 0; i < controlLst.length; ++i )
         {
-            let nodeLst = node.getElementsByTagName( controlLst[i] );
+            let nodeLst = xmlNode.getElementsByTagName( controlLst[i] );
             if( nodeLst.length )
             {
                 let controlNode = nodeLst[0].getElementsByTagName( 'control' );
@@ -251,33 +267,34 @@ class MenuManager extends ManagerBase
                         let filePath = filePathNode[0].getAttribute('file');
                         if( filePath )
                         {
-                            // Check if this file has already been loaded
-                            if( !assetHolder.has( group, filePath ) )
+                            // Check if this file has already been scheduled for loading
+                            if( assetHolder.allowLoad( group, filePath ) )
                             {
-                                // Set a place holder for the data to be loaded
-                                assetHolder.set( group, filePath );
-                                
-                                this.downloadFile( 'xml', group, filePath, finishCallback,
-                                    ( group, xmlNode, filePath, finishCallback ) => 
+                                promiseAry.push(
+                                    genFunc.downloadFile( 'xml', filePath )
+                                    .then(( node ) => 
                                     {
                                         // Store the preloaded XML file
-                                        assetHolder.set( group, filePath, xmlNode );
-
-                                        // Recurse back until all XML files are loaded for this control
-                                        this.preloadControlXML( group, xmlNode, finishCallback );
-                                    });
+                                        assetHolder.set( group, filePath, node );
+            
+                                        // Recurse back until all XML files are loaded
+                                        return this.loadControlFromNode( group, node );
+                                    })
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
                             }
                         }
                     }
                 }
             }
         }
+
+        return Promise.all( promiseAry );
     }
     
     //
-    //  DESC: Load all object information from an xml node
+    //  DESC: Create menu objects from loaded xml data
     //
-    createGroup( groupAry, doInit = true )
+    createFromData( groupAry )
     {
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
@@ -288,13 +305,13 @@ class MenuManager extends ManagerBase
             if( groupMap === undefined )
                 throw new Error( `Group map can't be found! (${group}).` );
 
-            for( let [ key, menu ] of groupMap.entries() )
+            for( let menu of groupMap.values() )
             {
                 // Get the menu XML node
-                let node = assetHolder.get( group, menu.filePath );
+                let xmlNode = assetHolder.get( group, menu.filePath );
 
                 // Have the menu load it's share
-                menu.loadFromNode( node );
+                menu.loadFromNode( xmlNode );
 
                 // Broadcast signal to let the game handle smart menu inits
                 signalManager.broadcast_smartMenu( menu );
@@ -303,12 +320,13 @@ class MenuManager extends ManagerBase
                 menu.smartCreate();
             }
 
-            if( doInit )
-                this.initGroup( group );
+            this.initGroup( group );
         }
         
         // Temporary assets can now be freed
-        assetHolder.deleteGroup( groupAry );
+        //assetHolder.deleteGroup( groupAry );
+
+        return 0;
     }
 
     //
@@ -329,7 +347,7 @@ class MenuManager extends ManagerBase
             if( groupMap !== undefined )
             {
                 // Remove it from the tree vectors if it is there
-                for( let [ key, menuTree ] of groupMap.entries() )
+                for( let menuTree of groupMap.values() )
                 {
                     if( menuTree.interfaceMenu )
                     {
@@ -363,7 +381,7 @@ class MenuManager extends ManagerBase
         let groupMap = this.menuMapMap.get( group );
         if( groupMap !== undefined )
         {
-            for( let [ key, menu ] of groupMap.entries() )
+            for( let menu of groupMap.values() )
                 menu.init();
         }
         else
@@ -381,7 +399,7 @@ class MenuManager extends ManagerBase
         let groupMap = this.menuMapMap.get( group );
         if( groupMap !== undefined )
         {
-            for( let [ key, menu ] of groupMap.entries() )
+            for( let menu of groupMap.values() )
                 menu.cleanUp();
         }
         else
@@ -393,15 +411,10 @@ class MenuManager extends ManagerBase
     // 
     //  DESC: Load the menu action list from XML
     //
-    loadMenuAction( filePath, callback )
+    loadMenuAction( filePath )
     {
-        genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) =>
-            {
-                this.loadMenuActionFromNode( xmlNode );
-                
-                callback();
-            });
+        return genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) => this.loadMenuActionFromNode( xmlNode ));
     }
 
     // 
@@ -435,7 +448,7 @@ class MenuManager extends ManagerBase
             
             for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
             {
-                for( let [ key, tree ] of groupMap.entries() )
+                for( let key of groupMap.keys() )
                 {
                     if( key === treeStr )
                     {
@@ -507,7 +520,7 @@ class MenuManager extends ManagerBase
     {
         for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
         {
-            for( let [ key, tree ] of groupMap.entries() )
+            for( let key of groupMap.keys() )
             {
                 if( key === treeStr )
                 {
@@ -952,7 +965,7 @@ class MenuManager extends ManagerBase
     //
     getMenu( name )
     {
-        for( let [ groupKey, groupMap ] of this.menuMapMap.entries() )
+        for( let groupMap of this.menuMapMap.values() )
         {
             let menu = groupMap.get( name );
             if( menu !== undefined )
@@ -1013,7 +1026,7 @@ class MenuManager extends ManagerBase
     //
     getTree( treeStr )
     {
-        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        for( let groupMap of this.menuTreeMapMap.values() )
         {
             for( let [ key, tree ] of groupMap.entries() )
             {
@@ -1069,7 +1082,7 @@ class MenuManager extends ManagerBase
     //
     isTreeInActivelist( treeStr )
     {
-        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        for( let groupMap of this.menuTreeMapMap.values() )
         {
             for( let [ key, tree ] of groupMap.entries() )
             {
@@ -1099,8 +1112,8 @@ class MenuManager extends ManagerBase
     //
     resetTransform()
     {
-        for( let [ groupKey, groupMap ] of this.menuMapMap.entries() )
-            for( let [ key, menu ] of groupMap.entries() )
+        for( let groupMap of this.menuMapMap.values() )
+            for( let menu of groupMap.values() )
                 menu.forceTransform();
     }
 
@@ -1109,8 +1122,8 @@ class MenuManager extends ManagerBase
     //
     resetDynamicOffset()
     {
-        for( let [ groupKey, groupMap ] of this.menuMapMap.entries() )
-            for( let [ key, menu ] of groupMap.entries() )
+        for( let groupMap of this.menuMapMap.values() )
+            for( let menu of groupMap.values() )
                 menu.resetDynamicPos();
     }
     

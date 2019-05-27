@@ -14,9 +14,7 @@ import { spriteSheetManager } from '../managers/spritesheetmanager';
 import { assetHolder } from '../utilities/assetholder';
 import { ObjectData2D } from './objectdata2d';
 import { ObjectData3D } from './objectdata3d';
-
-const LOAD_2D = 0;
-const LOAD_3D = 1;
+import * as genFunc from '../utilities/genfunc';
 
 class ObjectDataManager extends ManagerBase
 {
@@ -24,35 +22,37 @@ class ObjectDataManager extends ManagerBase
     {
         super();
 
-        this.loadType;
         this.objectDataMapMap = new Map;
     }
 
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadXMLGroup2D( groupAry, finishCallback )
+    loadGroup( groupAry )
     {
-        this.loadType = LOAD_2D;
-        super.loadGroup( 'Object data list', this.objectDataMapMap, groupAry, finishCallback );
-    }
-    
-    loadXMLGroup3D( groupAry, finishCallback )
-    {
-        this.loadType = LOAD_3D;
-        super.loadGroup( 'Object data list', this.objectDataMapMap, groupAry, finishCallback );
+        return super.loadGroupAry( 'Object data list', this.objectDataMapMap, groupAry )
+            .then(() => this.loadAssets( groupAry ))
+            .then(() => this.createFromData( groupAry ));
     }
 
     //
     //  DESC: Load all object information from an xml node
     //
-    loadFromNode( group, node, filePath, finishCallback )
+    loadFromNode( group, node )
     {
+        const LOAD_2D = 0;
+        const LOAD_3D = 1;
+
         // Get the group map
         let groupMap = this.objectDataMapMap.get( group );
-        
+
+        // Determin the laod type
+        let loadType = LOAD_2D;
+        if( node.nodeName === 'objectDataList3D' )
+            loadType = LOAD_3D;
+
         let defaultData;
-        if( this.loadType === LOAD_2D )
+        if( loadType === LOAD_2D )
             defaultData = new ObjectData2D;
         else
             defaultData = new ObjectData3D;
@@ -71,9 +71,8 @@ class ObjectDataManager extends ManagerBase
             // Check that this object doesn't already exist
             if( groupMap.get(name) === undefined )
             {
-                // Make a copy of the default object
                 let objData
-                if( this.loadType === LOAD_2D )
+                if( loadType === LOAD_2D )
                     objData = new ObjectData2D;
                 else
                     objData = new ObjectData3D;
@@ -83,9 +82,6 @@ class ObjectDataManager extends ManagerBase
                 // Load in the object data
                 objData.loadObjData( objNode[i], group, name );
 
-                // Debug output
-                //console.log(JSON.stringify(objData));
-
                 // Save it to the map map
                 groupMap.set( name, objData );
             }
@@ -94,152 +90,125 @@ class ObjectDataManager extends ManagerBase
                 throw new Error( `Group object already exists (${group}, ${name})!` );
             }
         }
-
-        // Debug output
-        //console.log(JSON.stringify(defaultData));
     }
-    
+
     //
     //  DESC: Load all the assets associated with these groups
     //
-    loadAssets2D( groupAry, finishCallback )
+    loadAssets( groupAry )
     {
+        let promiseAry = [];
+
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
-            
+
             // Get the group map
             let groupMap = this.objectDataMapMap.get( group );
             if( groupMap !== undefined )
             {
-                let dupPathCheck = [];
-
-                for( let [ key, objData ] of groupMap.entries() )
+                for( let objData of groupMap.values() )
                 {
-                    // Load the textures
-                    let filePathAry = objData.visualData.getTextureFilePathAry();
-
-                    for( let i = 0; i < filePathAry.length; ++i )
+                    // Load 2D elements
+                    if( objData.is2D() )
                     {
-                        let filePath = filePathAry[i];
-                        
-                        if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
-                        {
-                            // Add to the array to check for duplication
-                            dupPathCheck.push( filePath );
+                        let filePathAry = objData.visualData.getTextureFilePathAry();
 
-                            // Load the texture file
-                            this.downloadFile( 'img', group, filePath, finishCallback,
-                                ( group, image, filePath, finishCallback ) =>
-                                {
-                                    textureManager.load( group, filePath, image );
-                                });
+                        for( let i = 0; i < filePathAry.length; ++i )
+                        {
+                            let filePath = filePathAry[i];
+
+                            if( filePath && textureManager.allowLoad( group, filePath ) )
+                            {
+                                // Load the texture file
+                                promiseAry.push( 
+                                    genFunc.downloadFile( 'img', filePath )
+                                        .then(( image ) => textureManager.load( group, filePath, image ))
+                                        .catch(( error ) => { console.error(error.stack); throw error; }));
+                            }
+                        }
+                        
+                        // Load the XML mesh
+                        let meshFilePath = objData.visualData.meshFilePath;
+                        if( meshFilePath && assetHolder.allowLoad( group, meshFilePath ) )
+                        {
+                            // Load the mesh file
+                            promiseAry.push( 
+                                genFunc.downloadFile( 'xml', meshFilePath )
+                                    .then(( xmlNode ) => assetHolder.set( group, meshFilePath, xmlNode ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
+                        }
+
+                        // Load the XML sprite sheet
+                        let spriteSheetfilePath = objData.visualData.spriteSheetFilePath;
+                        if( spriteSheetfilePath && spriteSheetManager.allowLoad( group, spriteSheetfilePath ) )
+                        {
+                            // Load the mesh file
+                            promiseAry.push( 
+                                genFunc.downloadFile( 'xml', spriteSheetfilePath )
+                                    .then(( xmlNode ) => spriteSheetManager.load( group, spriteSheetfilePath, xmlNode ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
                         }
                     }
-                    
-                    // Load the meshes
-                    filePathAry = [objData.visualData.meshFilePath, objData.visualData.spriteSheetFilePath];
-
-                    for( let i = 0; i < filePathAry.length; ++i )
+                    // Load 3D elements
+                    else
                     {
-                        if( filePathAry[i] && (dupPathCheck.indexOf(filePathAry[i]) === -1) )
-                        {
-                            // Add to the array to check for duplication
-                            dupPathCheck.push( filePathAry[i] );
+                        let filePath = objData.visualData.meshFilePath;
 
+                        if( filePath && meshManager.allowLoad( group, filePath ) )
+                        {
                             // Load the mesh file
-                            this.downloadFile( 'xml', group, filePathAry[i], finishCallback,
-                                ( group, xmlNode, filePath, finishCallback ) =>
-                                {
-                                    if( filePath === objData.visualData.spriteSheetFilePath )
-                                        spriteSheetManager.load( group, filePath, xmlNode );
-                                    
-                                    // Save the mesh file xml node for later
-                                    else
-                                        assetHolder.set( group, filePath, xmlNode );
-                                });
+                            promiseAry.push( 
+                                genFunc.downloadFile( 'binary', filePath )
+                                    .then(( binaryFile ) => this.loadMesh3D( group, filePath, objData, binaryFile ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
                         }
                     }
                 }
-
-                // If there's nothing to load or it was loaded via assetHolder, call the complete callback
-                if( this.loadCounter === 0 )
-                    finishCallback();
             }
             else
             {
                 throw new Error( `Can't download asset because object group does not exist (${group})!` );
             }
         }
+
+        return Promise.all( promiseAry );
     }
-    
+
     //
     //  DESC: Load all the assets associated with this group
     //
-    loadAssets3D( groupAry, finishCallback )
+    loadMesh3D( group, binaryFilePath, objData, binaryFile )
     {
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        let promiseAry = [];
+
+        objData.visualData.meshGrp =
+            meshManager.load( group, binaryFilePath, binaryFile );
+
+        let filePathAry = objData.visualData.meshGrp.uniqueTexturePathAry;
+
+        // Load the mesh textures
+        for( let i = 0; i < filePathAry.length; ++i )
         {
-            let group = groupAry[grp];
+            let filePath = filePathAry[i].path;
             
-            // Get the group map
-            let groupMap = this.objectDataMapMap.get( group );
-            if( groupMap !== undefined )
+            if( filePath && textureManager.allowLoad( group, filePath ) )
             {
-                let dupPathCheck = [];
-
-                for( let [ key, objData ] of groupMap.entries() )
-                {
-                    let filePath = objData.visualData.meshFilePath;
-
-                    if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
-                    {
-                        // Add to the array to check for duplication
-                        dupPathCheck.push( filePath );
-
-                        // Load the mesh file
-                        this.downloadFile( 'binary', group, filePath, finishCallback,
-                            ( group, binaryFile, filePath, finishCallback ) =>
-                            {
-                                objData.visualData.meshGrp =
-                                    meshManager.load( group, filePath, binaryFile );
-                            
-                                // Load the mesh textures
-                                for( let i = 0; i < objData.visualData.meshGrp.uniqueTexturePathAry.length; ++i )
-                                {
-                                    filePath = objData.visualData.meshGrp.uniqueTexturePathAry[i].path;
-                                    
-                                    if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
-                                    {
-                                        dupPathCheck.push( filePath );
-
-                                        // Load the texture file
-                                        this.downloadFile( 'img', group, filePath, finishCallback,
-                                            ( group, image, filePath, finishCallback ) =>
-                                            {
-                                                textureManager.load( group, filePath, image );
-                                            });
-                                    }
-                                }
-                            });
-                    }
-                }
-
-                // If there's nothing to load or it was loaded via assetHolder, call the complete callback
-                if( this.loadCounter === 0 )
-                    finishCallback();
-            }
-            else
-            {
-                throw new Error( `Can't load mesh data because object group does not exist (${group})!` );
+                // Load the texture file
+                promiseAry.push( 
+                    genFunc.downloadFile( 'img', filePath )
+                        .then(( image ) => textureManager.load( group, filePath, image ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }));
             }
         }
+
+        return Promise.all( promiseAry );
     }
 
     //
     //  DESC: Create OpenGL objects from data
     //
-    createFromData( groupAry, callback )
+    createFromData( groupAry )
     {
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
@@ -250,16 +219,16 @@ class ObjectDataManager extends ManagerBase
             if( groupMap !== undefined )
             {
                 // Create OpenGL objects from data
-                for( let [ key, objData ] of groupMap.entries() )
+                for( let objData of groupMap.values() )
                     objData.createFromData( group );
             }
         }
+
+        return 0;
         
         // Temporary assets can now be freed
-        assetHolder.deleteGroup( groupAry );
-        spriteSheetManager.deleteGroup( groupAry );
-        
-        callback();
+        //assetHolder.deleteGroup( groupAry );
+        //spriteSheetManager.deleteGroup( groupAry );
     }
     
     //

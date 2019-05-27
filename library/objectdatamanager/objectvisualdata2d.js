@@ -270,11 +270,11 @@ export class ObjectVisualData2D
                 {
                     let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
                     let filePath = eval('`' + this.textureFilePath + '`');
-                    this.textureAry.push( textureManager.getTexture( group, filePath ) );
+                    this.textureAry.push( textureManager.get( group, filePath ) );
                 }
             }
             else
-                this.textureAry.push( textureManager.getTexture( group, this.textureFilePath ) );
+                this.textureAry.push( textureManager.get( group, this.textureFilePath ) );
             
             // If the passed in size is empty, set it to the texture size
             if( size.isEmpty() )

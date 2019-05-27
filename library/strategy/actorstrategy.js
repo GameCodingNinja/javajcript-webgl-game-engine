@@ -39,38 +39,38 @@ export class ActorStrategy extends iStrategy
     //
     //  DESC: Load the node data from xml
     //
-    loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
+    loadFromNode( xmlNode, filePath )
     {
         let defaultGroup = '';
         let defaultObjName = '';
         let defaultAIName = '';
         let defaultId = defs.DEFAULT_ID;
 
-        let attr = node.getAttribute( 'defaultGroup' );
+        let attr = xmlNode.getAttribute( 'defaultGroup' );
         if( attr !== null )
             defaultGroup = attr;
 
-        attr = node.getAttribute( 'defaultObjectName' );
+        attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr !== null )
             defaultObjName = attr;
 
-        attr = node.getAttribute( 'defaultAIName' );
+        attr = xmlNode.getAttribute( 'defaultAIName' );
         if( attr !== null )
             defaultAIName = attr;
 
-        attr = node.getAttribute( 'defaultId' );
+        attr = xmlNode.getAttribute( 'defaultId' );
         if( attr !== null )
             defaultId = Number(attr);
 
-        for( let i = 0; i < node.children.length; ++i )
+        for( let i = 0; i < xmlNode.children.length; ++i )
         {
             // There must be a name associated with this node data
-            let nodeName = node.children[i].getAttribute( 'name' );
+            let nodeName = xmlNode.children[i].getAttribute( 'name' );
             if( !nodeName )
-                throw new Error( `Actor strategy missing node name!` );
+                throw new Error( `Actor strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new NodeDataList( node.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
+            this.dataMap.set( nodeName, new NodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
         }
     }
 

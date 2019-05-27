@@ -12,27 +12,29 @@ class AssetHolder
     {
         this.loadMapMap = new Map;
     }
-    
-    // 
-    //  DESC: Check for the data
-    //
-    has( group, name )
-    {
-        // Get the group map
-        let groupMap = this.loadMapMap.get( group );
-        if( groupMap === undefined )
-            return false;
-        
-        return groupMap.has(name);
-    }
-    
+
     // 
     //  DESC: Set the data
     //
     set( group, name, data = null )
     {
-        //console.log(`AssetHolder Set: ${group}, ${name}`);
-        
+        let groupMap = this.loadMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.loadMapMap.set( group, groupMap );
+        }
+
+        let asset = groupMap.get( name );
+        if( asset === undefined || asset === -1 )
+            groupMap.set( name, data );
+    }
+    
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, name )
+    {
         let groupMap = this.loadMapMap.get( group );
         if( groupMap === undefined )
         {
@@ -40,7 +42,17 @@ class AssetHolder
             this.loadMapMap.set( group, groupMap );
         }
         
-        groupMap.set( name, data );
+        let asset = groupMap.get( name );
+        if( asset === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( name, -1 );
+
+            return true;
+        }
+
+        return false;
     }
     
     // 
@@ -53,7 +65,7 @@ class AssetHolder
             throw new Error( `Group does not exist! (${group}).` );
             
         let data = groupMap.get( name );
-        if( data === undefined )
+        if( data === undefined || data === -1 )
             throw new Error( `Data does not exist! (${name}).` );
         
         return data;

@@ -21,7 +21,7 @@ export class SetStrategy extends iSpriteStrategy
     //
     //  DESC: Load the data from xml node
     //
-    loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
+    loadFromNode( strategyId, node, filePath )
     {
         // Get the symbols set name
         let group = node.getAttribute( "group" );

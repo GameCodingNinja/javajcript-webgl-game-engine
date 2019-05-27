@@ -9,7 +9,6 @@
 import { strategyManager } from '../strategy/strategymanager';
 import { ActorStrategy } from '../strategy/actorstrategy';
 import { StageStrategy } from '../strategy/stagestrategy';
-import { loadManager } from '../managers/loadmanager';
 
 class Strategyloader
 {
@@ -22,6 +21,7 @@ class Strategyloader
     //
     load( xmlNode )
     {
+        let promiseAry = [];
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
 
         // Have the load manager create the strategy
@@ -36,20 +36,24 @@ class Strategyloader
                 throw new Error( `Strategy type not defined.` );
 
             if( strategyType == 'actor' )
-                loadManager.add( ( callback ) => strategyManager.addStrategy( strategyName, new ActorStrategy, callback ) );
+                promiseAry.push( strategyManager.addStrategy( strategyName, new ActorStrategy ) );
 
             else if( strategyType == 'stage' )
-                loadManager.add( ( callback ) => strategyManager.addStrategy( strategyName, new StageStrategy, callback ) );
+                promiseAry.push( strategyManager.addStrategy( strategyName, new StageStrategy ) );
+
+            else
+                throw new Error( `Unknown strategy type (${strategyType})!` );
         }
 
         // Preload the strategies
-        loadManager.add( ( callback ) => this.loadStartegy( xmlNode, callback ));
+        return Promise.all( promiseAry )
+            .then(() => this.loadStartegy( xmlNode ));
     }
     
     // 
     //  DESC: Load the strategies
     //
-    loadStartegy( xmlNode, callback )
+    loadStartegy( xmlNode )
     {
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
 
@@ -70,8 +74,6 @@ class Strategyloader
             // Populate the strategies with their objects
             this.populateStartegy( strategyNode[i], strategy );
         }
-        
-        callback();
     }
     
     // 

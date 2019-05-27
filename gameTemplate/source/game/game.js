@@ -10,7 +10,6 @@ import { signalManager } from '../../../library/managers/signalmanager';
 import { settings } from '../../../library/utilities/settings';
 import { textureManager } from '../../../library/managers/texturemanager';
 import { vertexBufferManager } from '../../../library/managers/vertexbuffermanager';
-import { downloadFile } from '../../../library/utilities/genfunc';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { StartUpState } from '../state/startupstate';
 import { TitleScreenState } from '../state/titlescreenstate';
@@ -22,6 +21,10 @@ import { gl, device } from '../../../library/system/device';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as stateDefs from '../state/statedefs';
+import * as genFunc from '../../../library/utilities/genfunc';
+
+// Load data from bundle as string
+import settingsCfg from 'raw-loader!../../data/settings/settings.cfg';
 
 export class Game
 {
@@ -37,12 +40,10 @@ export class Game
         signalManager.connect_aiCreate( this.aiCreateCallBack.bind(this) );
 
         // Load the settings
-        downloadFile( 'xml', 'data/settings/settings.cfg',
-            ( xmlNode ) =>
-            {
-                settings.load( xmlNode );
-                this.init();
-            });
+        settings.loadFromNode( genFunc.stringLoadXML( settingsCfg ) );
+
+        // Init the game
+        this.init();
     }
     
     // 

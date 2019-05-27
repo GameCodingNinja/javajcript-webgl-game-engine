@@ -26,30 +26,30 @@ export class Sector extends Object3D
     //
     //  DESC: Load the data from xml node
     //
-    loadFromNode( strategyId, node, filePath, finishCallback )
+    loadFromNode( xmlNode, filePath )
     {
         let defaultGroup = '';
         let defaultObjName = '';
         let defaultAIName = '';
         let defaultId = -1;
         
-        let attr = node.getAttribute( 'defaultGroup' );
+        let attr = xmlNode.getAttribute( 'defaultGroup' );
         if( attr )
             defaultGroup = attr;
         
-        attr = node.getAttribute( 'defaultObjectName' );
+        attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr )
             defaultObjName = attr;
         
-        attr = node.getAttribute( 'defaultAIName' );
+        attr = xmlNode.getAttribute( 'defaultAIName' );
         if( attr )
             defaultAIName = attr;
         
-        attr = node.getAttribute( 'defaultId' );
+        attr = xmlNode.getAttribute( 'defaultId' );
         if( attr )
             defaultId = Number(attr);
         
-        let sectorNode = node.children;
+        let sectorNode = xmlNode.children;
 
         for( let i = 0; i < sectorNode.length; ++i )
         {
@@ -66,7 +66,7 @@ export class Sector extends Object3D
                     headNode = node;
 
                 else if( !headNode.addNode( node, nodeAry[j].nodeName ) )
-                    throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
+                    throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId}, ${filePath})!` );
             }
             
             // Add to the node array

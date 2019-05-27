@@ -14,7 +14,6 @@ import { fontManager } from '../../../library/managers/fontmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
-import { loadManager } from '../../../library/managers/loadmanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
@@ -23,6 +22,8 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
+import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
+import { assetHolder } from '../../../library/utilities/assetholder';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
@@ -31,13 +32,20 @@ import * as menuScripts from '../scripts/menuscripts';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
-import dataListTable from 'raw-loader!../../data/objects/2d/objectDataList/dataListTable.lst';
+import dataListTable2D from 'raw-loader!../../data/objects/2d/objectDataList/dataListTable.lst';
+import dataListTable3D from 'raw-loader!../../data/objects/3d/objectDataList/dataListTable.lst';
 import strategyListTable from 'raw-loader!../../data/objects/strategy/strageyListTable.lst';
+import soundManagerListTable from 'raw-loader!../../data/sound/soundListTable.lst';
+import physicsManagerListTable from 'raw-loader!../../data/objects/2d/physics/physicsListTable.lst';
+import menuManagerListTable from 'raw-loader!../../data/objects/2d/menu/menuListTable.lst';
+import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst';
 import cameraListTable from 'raw-loader!../../data/objects/camera.lst';
 import shaderCfg from 'raw-loader!../../data/shaders/shader.cfg';
+import actionManagerCfg from 'raw-loader!../../data/settings/controllerMapping.cfg';
+import menuActionLst from 'raw-loader!../../data/objects/2d/menu/menu_action.list';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
-const STARTUP_ASSET_COUNT = 87,
+const STARTUP_ASSET_COUNT = 80,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState
@@ -47,13 +55,24 @@ export class StartUpState extends GameState
         super( stateDefs.EGS_STARTUP, stateDefs.EGS_TITLE_SCREEN, gameLoopCallback );
 
         // Load the list tables
-        objectDataManager.loadListTableFromNode( genFunc.stringLoadXML( dataListTable ) );
+        objectDataManager.loadListTableFromNode( genFunc.stringLoadXML( dataListTable2D ) );
+        objectDataManager.loadListTableFromNode( genFunc.stringLoadXML( dataListTable3D ) );
         strategyManager.loadListTableFromNode( genFunc.stringLoadXML( strategyListTable ) );
+        soundManager.loadListTableFromNode( genFunc.stringLoadXML( soundManagerListTable ) );
+        physicsWorldManager.loadListTableFromNode( genFunc.stringLoadXML( physicsManagerListTable ) );
+        menuManager.loadListTableFromNode( genFunc.stringLoadXML( menuManagerListTable ) );
         cameraManager.loadFromNode( genFunc.stringLoadXML( cameraListTable ) );
+        actionManager.loadFromNode( genFunc.stringLoadXML( actionManagerCfg ) );
+        menuManager.loadMenuActionFromNode( genFunc.stringLoadXML( menuActionLst ) );
 
         // Load the scripts
         utilScripts.loadScripts();
         stateScripts.loadScripts();
+        menuScripts.loadScripts();
+                
+        // Set the default camera
+        // NOTE: Can only call this after Camera Manager has been loaded
+        menuManager.setDefaultCamera();
 
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -73,26 +92,27 @@ export class StartUpState extends GameState
     {
         let groupAry = ['(startup)'];
 
-        // Load the shaders
-        loadManager.add( ( callback ) => shaderManager.loadFromNode( genFunc.stringLoadXML( shaderCfg ), callback ) );
+        Promise.all([
 
-        // Load the object data XML's
-        loadManager.add( ( callback ) => objectDataManager.loadXMLGroup2D( groupAry, callback ) );
+            // Load the shaders
+            shaderManager.loadFromNode( genFunc.stringLoadXML( shaderCfg ) ),
 
-        // Load all the assets associated with this group
-        loadManager.add( ( callback ) => objectDataManager.loadAssets2D( groupAry, callback ) );
+            // Load the object data
+            objectDataManager.loadGroup( ['(startup)'] )
 
-        // Create OpenGL objects from the loaded data
-        loadManager.add( ( callback ) => objectDataManager.createFromData( groupAry, callback ));
-        
-        // Create and load all the actor strategies. NOTE: This adds it to the load manager
-        strategyLoader.load( genFunc.stringLoadXML( startUpStrategyLoader ) );
+        ])
+        // Create and load all the actor strategies.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( startUpStrategyLoader ) ))
+
+        // Clean up the temporary files
+        .then(() =>
+        {
+            assetHolder.deleteGroup( groupAry );
+            spriteSheetManager.deleteGroup( groupAry );
+        })
 
         // Last thing to do is call the preload complete function
-        loadManager.add( ( callback ) => this.preloadComplete() );
-        
-        // Start the load
-        loadManager.load();
+        .then(() => this.preloadComplete() );
     }
 
     //
@@ -187,59 +207,39 @@ export class StartUpState extends GameState
 
         let groupAry = ['(menu)'];
 
-        // Load the list tables
-        loadManager.add( ( callback ) => soundManager.loadListTable( 'data/sound/soundListTable.lst', callback ));
-        loadManager.add( ( callback ) => objectDataManager.loadListTable( 'data/objects/3d/objectDataList/dataListTable.lst', callback ));
-        loadManager.add( ( callback ) => physicsWorldManager.loadListTable( 'data/objects/2d/physics/physicsListTable.lst', callback ));
-        loadManager.add( ( callback ) => menuManager.loadListTable( 'data/objects/2d/menu/menuListTable.lst', callback ));
+        Promise.all([
 
-        // Load the fonts
-        loadManager.add( ( callback ) => fontManager.load( 'data/textures/fonts/font.lst', callback ));
+            // Load the Sound Manager group
+            soundManager.loadGroup( groupAry ),
 
-        // Load the xml group
-        loadManager.add( ( callback ) => objectDataManager.loadXMLGroup2D( groupAry, callback ));
+            // Load the Object Manager group
+            objectDataManager.loadGroup( groupAry ),
 
-        // Load all the assets associated with this group
-        loadManager.add( ( callback ) => objectDataManager.loadAssets2D( groupAry, callback ));
+            // Load the fonts
+            fontManager.loadFromNode( genFunc.stringLoadXML( fontManagerListTable ) ),
 
-        // Create OpenGL objects from the loaded data
-        loadManager.add( ( callback ) => objectDataManager.createFromData( groupAry, callback ));
+            // Load the menu XMLs
+            menuManager.loadGroupXML( groupAry )
+        ])
+        .then( () => Promise.all([
 
-        // Load the Sound Manager group
-        loadManager.add( ( callback ) => soundManager.loadGroup( groupAry, callback ));
+            // Create menu objects from loaded xml data
+            menuManager.createFromData( groupAry ),
 
-        // Load the action manager
-        loadManager.add( ( callback ) => actionManager.load( 'data/settings/controllerMapping.cfg', callback ));
+            // Load the state specific assets
+            titleScreenState.load()
 
-        // Load the menu action
-        loadManager.add( ( callback ) => menuManager.loadMenuAction( 'data/objects/2d/menu/menu_action.list', callback ));
+        ]))
 
-        // Preload the menu group
-        loadManager.add( ( callback ) => menuManager.preloadGroup( ['(menu)'], callback ));
+        // Clean up the temporary files
+        .then(() =>
+        {
+            assetHolder.deleteGroup( groupAry );
+            spriteSheetManager.deleteGroup( groupAry );
+        })
 
-        loadManager.add(
-            ( callback ) =>
-            {
-                // Load the menu scripts before creating the menus
-                menuScripts.loadScripts();
-                
-                // Set the default camera
-                menuManager.setDefaultCamera();
-
-                // Create the menu group
-                menuManager.createGroup( ['(menu)'] );
-
-                callback();
-            });
-
-        // Load the state specific assets
-        titleScreenState.load();
-
-        // Last thing to do is send a message that the asset load is complete
-        loadManager.add( ( callback ) => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) );
-
-        // Start the load
-        loadManager.load();
+        // Last thing to do is to dispatch the event that the load is complete
+        .then( () => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) )
     }
 
     //

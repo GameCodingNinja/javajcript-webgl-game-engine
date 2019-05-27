@@ -24,7 +24,7 @@ class StrategyManager extends ManagerBase
     //
     //  DESC: Add strategy which will load it's data from XML node
     //
-    addStrategy( strategyId, strategy, finishCallback )
+    addStrategy( strategyId, strategy )
     {
         // Check for duplicate Id's
         if( this.strategyMap.has( strategyId ) )
@@ -34,17 +34,17 @@ class StrategyManager extends ManagerBase
         this.strategyMap.set( strategyId, strategy );
         
         // Load all the xml's
-        super.load( strategyId, finishCallback );
+        return super.load( strategyId );
     }
     
     //
     //  DESC: Load strategy data from an xml node
     //
-    loadFromNode( strategyId, node, filePath, finishCallback )
+    loadFromNode( strategyId, node, filePath )
     {
         let strategy = this.strategyMap.get( strategyId );
         
-        strategy.loadFromNode( strategyId, node, filePath, this.downloadFile.bind(this), finishCallback );
+        strategy.loadFromNode( node, filePath );
     }
     
     //

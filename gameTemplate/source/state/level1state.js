@@ -13,12 +13,11 @@ import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
-import { loadManager } from '../../../library/managers/loadmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
-import { StageStrategy } from '../../../library/strategy/stagestrategy';
-import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { CommonState } from './commonstate';
+import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
+import { assetHolder } from '../../../library/utilities/assetholder';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
@@ -138,22 +137,20 @@ export class Level1State extends CommonState
 //
 export function load()
 {
-    // Load the xml group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadXMLGroup2D( ['(level_1)'], callback ) );
+    let groupAry = ['(level_1)'];
+    
+    return objectDataManager.loadGroup( groupAry )
 
-    // Load all the assets associated with this group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadAssets2D( ['(level_1)'], callback ) );
+        // Load the physics list table and group
+        .then(() => physicsWorldManager.loadWorldGroup2D( '(game)' ))
 
-    // Create OpenGL objects from the loaded data
-    loadManager.add(
-        ( callback ) => objectDataManager.createFromData( ['(level_1)'], callback ) );
+        // Create and load all the actor strategies.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) ))
 
-    // Load the physics list table and group
-    loadManager.add(
-        ( callback ) => physicsWorldManager.loadWorldGroup2D( '(game)', callback ));
-
-    // Create and load all the actor strategies. NOTE: This adds it to the load manager
-    strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) );
+        // Clean up the temporary files
+        .then(() =>
+        {
+            assetHolder.deleteGroup( groupAry );
+            spriteSheetManager.deleteGroup( groupAry );
+        })
 }

@@ -15,7 +15,8 @@ import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { loadManager } from '../../../library/managers/loadmanager';
+import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
+import { assetHolder } from '../../../library/utilities/assetholder';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
@@ -130,30 +131,17 @@ function unload()
 //
 export function load()
 {
-    // Load the xml group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadXMLGroup2D( ['(title_screen)'], callback ) );
+    let groupAry = ['(title_screen)','(cube)'];
 
-    // Load all the textures associated with this group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadAssets2D( ['(title_screen)'], callback ) );
+    return objectDataManager.loadGroup( groupAry )
 
-    // Create OpenGL objects from the loaded data
-    loadManager.add(
-        ( callback ) => objectDataManager.createFromData( ['(title_screen)'], callback ) );
+        // Create and load all the actor strategies.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( titleScreenStrategyLoader ) ))
 
-    // Load the object data list table and (startup) group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadXMLGroup3D( ['(cube)'], callback ) );
-
-    // Load all the assets associated with this group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadAssets3D( ['(cube)'], callback ) );
-
-    // Combine the meshes with their textures
-    loadManager.add(
-        ( callback ) => objectDataManager.createFromData( ['(cube)'], callback ) );
-
-    // Create and load all the actor strategies. NOTE: This adds it to the load manager
-    strategyLoader.load( genFunc.stringLoadXML( titleScreenStrategyLoader ) );
+        // Clean up the temporary files
+        .then(() =>
+        {
+            assetHolder.deleteGroup( groupAry );
+            spriteSheetManager.deleteGroup( groupAry );
+        })
 }

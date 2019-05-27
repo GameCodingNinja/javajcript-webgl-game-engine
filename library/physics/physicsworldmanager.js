@@ -9,6 +9,7 @@
 import { ManagerBase } from '../managers/managerbase';
 import { PhysicsWorld2D } from './physicsworld2d';
 import { PhysicsWorld3D } from './physicsworld3d';
+import * as genFunc from '../utilities/genfunc';
 
 const LOAD_2D = 0;
 const LOAD_3D = 1;
@@ -25,17 +26,17 @@ class PhysicsWorldManager extends ManagerBase
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadWorldGroup2D( group, finishCallback )
+    loadWorldGroup2D( group )
     {
-        this.loadWorldGroup( LOAD_2D, group, finishCallback );
+        return this.loadWorldGroup( LOAD_2D, group );
     }
     
-    loadWorldGroup3D( group, finishCallback )
+    loadWorldGroup3D( group )
     {
-        this.loadWorldGroup( LOAD_3D, group, finishCallback );
+        return this.loadWorldGroup( LOAD_3D, group );
     }
     
-    loadWorldGroup( loadType, group, finishCallback )
+    loadWorldGroup( loadType, group )
     {
         // Make sure the group we are looking for has been defined in the list table file
         let pathAry = this.listTableMap.get( group );
@@ -52,17 +53,10 @@ class PhysicsWorldManager extends ManagerBase
 
                 // There will only be one xml per physics world
                 let filePath = pathAry[0];
-                
-                this.downloadFile( 'xml', group, filePath, finishCallback,
-                    ( group, xmlNode, filePath, finishCallback ) => 
-                    {
-                        // Load from an xml node
-                        this.loadFromNode( group, xmlNode, filePath );
-                    });
-                
-                // If there's nothing to load, call the complete callback
-                if( this.loadCounter === 0 )
-                    finishCallback();
+
+                return genFunc.downloadFile( 'xml', filePath )
+                        .then(( xmlNode ) => this.loadFromNode( group, xmlNode, filePath ))
+                        .catch(( error ) => { console.error(error.stack); throw error; });
             }
             else
             {
@@ -78,14 +72,14 @@ class PhysicsWorldManager extends ManagerBase
     //
     //  DESC: Load from an xml node
     //
-    loadFromNode( group, node, filePath )
+    loadFromNode( group, xmlNode, filePath )
     {
         // Get the physics world
         let world = this.worldMap.get( group );
         if( world === undefined )
             throw new Error( `Physics World doesn't exist (${group}, ${filePath})!` );
         
-        world.loadFromNode( node );
+        world.loadFromNode( xmlNode );
     }
     
     //

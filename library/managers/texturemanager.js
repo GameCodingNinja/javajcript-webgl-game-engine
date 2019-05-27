@@ -36,9 +36,9 @@ class TextureManager
         }
 
         let texture = groupMap.get( filePath );
-        if( texture === undefined )
+        if( texture === undefined || texture === -1 )
         {
-            let texture = new Texture;
+            texture = new Texture;
             texture.id = gl.createTexture();
             texture.size.w = image.width;
             texture.size.h = image.height;
@@ -57,6 +57,31 @@ class TextureManager
         return texture;
     }
 
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, filePath )
+    {
+        let groupMap = this.textureForMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.textureForMapMap.set( group, groupMap );
+        }
+        
+        let texture = groupMap.get( filePath );
+        if( texture === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( filePath, -1 );
+
+            return true;
+        }
+
+        return false;
+    }
+
     //
     //  DESC: Delete the group of textures
     //
@@ -65,7 +90,7 @@ class TextureManager
         let groupMap = this.textureForMapMap.get( group );
         if( groupMap !== undefined )
         {
-            for( let [ key, texture ] of groupMap.entries() )
+            for( let texture of groupMap.values() )
                 gl.deleteTexture( texture.id );
             
             this.textureForMapMap.delete( group );
@@ -75,20 +100,17 @@ class TextureManager
     //
     //  DESC: Get the 2D texture class
     //
-    getTexture( group, filePath )
+    get( group, filePath )
     {
         let groupMap = this.textureForMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            let texture = groupMap.get( filePath );
-            if( texture !== undefined )
-                return texture;
-            
-            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
-        }
+        if( groupMap === undefined )
+            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
 
-        // Santy check.
-        throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
+        let texture = groupMap.get( filePath );
+        if( texture === undefined || texture === -1 )
+            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
+        
+        return texture;
     }
 
     //

@@ -26,15 +26,10 @@ class CameraManager
     // 
     //  DESC: Load the camera list
     //
-    load( filePath, callback )
+    load( filePath )
     {
-        genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) =>
-            {
-                this.loadFromNode( xmlNode );
-                
-                callback();
-            });
+        return genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
     // 

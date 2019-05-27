@@ -8,6 +8,7 @@
 
 import { iStrategy } from './istrategy';
 import { Sector } from './sector';
+import * as genFunc from '../utilities/genfunc';
 
 export class StageStrategy extends iStrategy
 {
@@ -22,9 +23,10 @@ export class StageStrategy extends iStrategy
     //
     //  DESC: Load the data from xml node
     //
-    loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
+    loadFromNode( xmlNode )
     {
-        let sectorNode = node.getElementsByTagName( 'sector' );
+        let promiseAry = [];
+        let sectorNode = xmlNode.getElementsByTagName( 'sector' );
 
         for( let i = 0; i < sectorNode.length; ++i )
         {
@@ -33,20 +35,15 @@ export class StageStrategy extends iStrategy
             
             sector.loadTransFromNode( sectorNode[i] );
             
-            let sectorFile = sectorNode[i].getAttribute('file');
-            
-            // load the sector file
-            downloadFileCallback(
-                'xml',
-                strategyId,
-                sectorFile,
-                finishCallback,
-                ( group, xmlNode, filePath, finishCallback ) => 
-                {
-                    // Call the sector function to load the data
-                    sector.loadFromNode( group, xmlNode, filePath, finishCallback );
-                });
+            let sectorFilePath = sectorNode[i].getAttribute('file');
+
+            promiseAry.push( 
+                genFunc.downloadFile( 'xml', sectorFilePath )
+                    .then(( xmlNode ) => sector.loadFromNode( xmlNode, sectorFilePath ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }));
         }
+
+        return Promise.all( promiseAry );
     }
 
     //

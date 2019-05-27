@@ -34,6 +34,10 @@ export class PhysicsComponent2D
         {
             this.world = physicsWorldManager.getWorld( physicsData.world );
 
+            // MAke sure the world has been loaded
+            if( this.world.pixelsPerMeter == 0 )
+                throw new Error( `Physics world not loaded (${physicsData.world})!` );
+
             // Re-init the constants to the values needed
             this.metersToPixels = this.world.pixelsPerMeter;
             this.pixelsToMeters = 1.0 / this.metersToPixels;

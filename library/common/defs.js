@@ -102,11 +102,6 @@ export const EGE_MENU_TRANS_IN             = 100,
              EGE_MENU_TAB_LEFT             = 121,
              EGE_MENU_TAB_RIGHT            = 122;
 
-// EObjectDataType
-export const EODT_NULL     = 0,
-             EODT_OBJECT_DATA_2D = 1,
-             EODT_OBJECT_DATA_3D = 2;
-
 // ESpriteType
 export const EST_NULL     = 0,
              EST_OBJECT2D = 1,

@@ -9,6 +9,7 @@
 import { ManagerBase } from '../managers/managerbase';
 import { Sound } from '../common/sound';
 import { PlayList } from '../common/playlist';
+import * as genFunc from '../utilities/genfunc';
 
 class SoundManager extends ManagerBase
 {
@@ -38,21 +39,23 @@ class SoundManager extends ManagerBase
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadGroup( groupAry, finishCallback )
+    loadGroup( groupAry )
     {
-        super.loadGroup( 'Sound', this.soundMapMap, groupAry, finishCallback );
+        return super.loadGroupAry( 'Sound', this.soundMapMap, groupAry );
     }
     
     //
     //  DESC: Load sound data from an xml node
     //
-    loadFromNode( group, node, filePath, finishCallback )
+    loadFromNode( group, xmlNode, filePath )
     {
+        let promiseAry = [];
+
         // Get the group map
         let groupMap = this.soundMapMap.get( group );
         
         // Get the node to the sound files to be loaded into a buffer
-        let loadFilesNode = node.getElementsByTagName( 'load' );
+        let loadFilesNode = xmlNode.getElementsByTagName( 'load' );
         
         // Load the buffered sounds
         for( let i = 0; i < loadFilesNode.length; ++i )
@@ -69,17 +72,16 @@ class SoundManager extends ManagerBase
             
             // Load from node
             snd.loadFromNode( loadFilesNode[i] );
-            
-            this.downloadFile( 'binary', group, filePath, finishCallback,
-                ( group, audioData, filePath, finishCallback ) => 
-                {
-                    // Call the class function to load the data
-                    this.loadFromBinaryData( group, id, audioData, filePath, finishCallback );
-                });
+
+            // Load the sound file
+            promiseAry.push( 
+                genFunc.downloadFile( 'binary', filePath )
+                    .then(( binary ) => this.loadFromBinaryData( group, id, binary, filePath ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }));
         }
         
         // Get the node to the sound files
-        let playListNode = node.getElementsByTagName( 'playList' );
+        let playListNode = xmlNode.getElementsByTagName( 'playList' );
         if( playListNode.length )
         {
             let groupMap = new Map;
@@ -102,12 +104,14 @@ class SoundManager extends ManagerBase
                 playLst.loadFromNode( playListNode[i], this.soundMapMap.get( group ), group, filePath );
             }
         }
+
+        return Promise.all( promiseAry );
     }
     
     //
     //  DESC: Load from binary data
     //
-    loadFromBinaryData( group, id, audioData, filePath, finishCallback )
+    loadFromBinaryData( group, id, audioData, filePath )
     {
         // Increment the load counter because the decoder is asynchronous
         ++this.loadCounter;
@@ -120,17 +124,8 @@ class SoundManager extends ManagerBase
         
         // Create a sound buffer and decode
         this.context.decodeAudioData( audioData,
-            (soundBuffer) =>
-            {
-                sound.init( this.context, soundBuffer );
-                
-                // Decrement the load counter
-                --this.loadCounter;
-                
-                if( this.loadCounter === 0 )
-                    finishCallback();
-            },
-            (error) => console.log(`Error decoding audio data (${error.err})!`) );
+            (soundBuffer) => sound.init( this.context, soundBuffer ),
+            (error) => console.log(`Error decoding audio data (${error.err}, ${filePath})!`) );
     }
     
     //
@@ -148,7 +143,7 @@ class SoundManager extends ManagerBase
             
             // Stop any currently playing files
             let groupMap = this.soundMapMap.get( group );
-            for( let [ key, sound ] of groupMap.entries() )
+            for( let sound of groupMap.values() )
                 sound.stop();
 
             // Erase the group
@@ -168,16 +163,14 @@ class SoundManager extends ManagerBase
         // Check if this is a playlist sound ID
         let playLst = this.getPlayList( group, soundID );
         if( playLst )
-        {
             return playLst.getSound();
-        }
 
         let groupMap = this.soundMapMap.get( group );
-        if( !groupMap )
+        if( groupMap === undefined )
             throw new Error( `Sound group name can't be found (${group})!` );
 
         let snd = groupMap.get( soundID );
-        if( !snd )
+        if( snd === undefined )
             throw new Error( `Sound ID can't be found (${group}, ${soundID})!` );
 
         return snd;
@@ -190,10 +183,8 @@ class SoundManager extends ManagerBase
     {
         // Check if this is a playlist sound ID
         let groupMap = this.playListMapMap.get( group );
-        if( groupMap )
-        {
+        if( groupMap !== undefined )
             return groupMap.get( playLstID );
-        }
         
         return undefined;
     }

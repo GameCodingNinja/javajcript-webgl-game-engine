@@ -28,7 +28,7 @@ class SpriteSheetManager
         }
         
         let spriteSheet = groupMap.get( filePath );
-        if( spriteSheet === undefined )
+        if( spriteSheet === undefined || spriteSheet === -1 )
         {
             spriteSheet = new SpriteSheet;
             
@@ -38,6 +38,31 @@ class SpriteSheetManager
             // Add a new entry to the map
             groupMap.set( filePath, spriteSheet );
         }
+    }
+
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, filePath )
+    {
+        let groupMap = this.spriteSheetMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.spriteSheetMapMap.set( group, groupMap );
+        }
+        
+        let spriteSheet = groupMap.get( filePath );
+        if( spriteSheet === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( filePath, -1 );
+
+            return true;
+        }
+
+        return false;
     }
     
     //

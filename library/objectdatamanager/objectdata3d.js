@@ -6,16 +6,15 @@
 
 "use strict";
 
+import { iObjectdata } from './iobjectdata';
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
 import { ObjectVisualData3D } from './objectvisualdata3d';
-import * as defs from '../common/defs';
 
-export class ObjectData3D
+export class ObjectData3D extends iObjectdata
 {
     constructor()
     {
-        // Set the object data type
-        this.objDataType = defs.EODT_OBJECT_DATA_3D;
+        super();
 
         // Visual data of the object
         this.visualData = new ObjectVisualData3D;
@@ -41,17 +40,16 @@ export class ObjectData3D
     // 
     //  DESC: Load the object data from the passed in node
     //
-    loadObjData( node, group, name )
+    loadObjData( xmlNode, group, name )
     {
         this.name = name;
         this.group = group;
 
         // Load the visual data
-        this.visualData.loadObjData( node );
+        this.visualData.loadObjData( xmlNode );
 
         // Load the physics data
-        //m_physicsData.LoadFromNode( node );
-
+        //m_physicsData.LoadFromNode( xmlNode );
     }
     
     // 
@@ -61,5 +59,13 @@ export class ObjectData3D
     {
         // Create the visuales
         this.visualData.addTexturesToMesh( group );
+    }
+
+    // 
+    //  DESC: Is this 3D object data?
+    //
+    is3D()
+    {
+        return true;
     }
 }

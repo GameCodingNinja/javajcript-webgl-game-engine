@@ -8,7 +8,6 @@
 
 import { Size } from '../common/size';
 import { Rect } from '../common/rect';
-import { textureManager } from '../managers/texturemanager';
 
 export class CharData
 {
@@ -44,7 +43,7 @@ export class Font
         // Vertival padding
         this.vertPadding = 0;
 
-        // The texture
+        // The texture in set from font manager
         this.texture = null;
     }
     
@@ -53,9 +52,6 @@ export class Font
     //
     loadFromNode( group, name, xmlNode )
     {
-        // load the texture
-        this.texture = textureManager.getTexture( group, name );
-
         // Get the padding
         let padding = xmlNode.getElementsByTagName('info')[0].getAttribute('padding');
         this.horzPadding = Number(padding.substr(6,1));

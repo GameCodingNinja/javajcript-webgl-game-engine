@@ -7,6 +7,7 @@
 "use strict";
 import { Size } from '../common/size';
 import * as defs from '../common/defs';
+import * as genFunc from '../utilities/genfunc';
 
 class Settings
 {
@@ -34,11 +35,21 @@ class Settings
         this.sectorSize = 0;
         this.sectorSizeHalf = 0;
     }
+
+    // 
+    //  DESC: Load the data list tables from file path
+    //
+    load( filePath, callback )
+    {
+        return genFunc.downloadFile( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode ))
+            .next(() => callback());
+    }
     
     // 
     //  DESC: Load data from XML node
     //
-    load( node )
+    loadFromNode( node )
     {
         if( node )
         {
