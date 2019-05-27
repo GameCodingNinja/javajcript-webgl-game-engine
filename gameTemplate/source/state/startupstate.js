@@ -238,6 +238,9 @@ export class StartUpState extends GameState
             spriteSheetManager.deleteGroup( groupAry );
         })
 
+        // Time out to give it a few cycles to update the last value
+        .then(() => {return new Promise(resolve => setTimeout(resolve, 500))})
+
         // Last thing to do is to dispatch the event that the load is complete
         .then( () => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) )
     }
