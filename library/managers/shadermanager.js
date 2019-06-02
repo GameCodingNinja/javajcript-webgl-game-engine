@@ -8,6 +8,7 @@
 
 import { ShaderData } from '../common/shaderdata';
 import { gl, device } from '../system/device';
+import { signalManager } from '../managers/signalmanager';
 import * as genFunc from '../utilities/genfunc';
 
 class ShaderManager
@@ -44,26 +45,26 @@ class ShaderManager
     //
     createShader( node )
     {
-        let shaderTxtId = node.getAttribute('Id');
+        let shaderId = node.getAttribute('Id');
         
         let vertexNode = node.getElementsByTagName('vertDataLst');
         let fragmentNode = node.getElementsByTagName('fragDataLst');
         
         // Check for duplicate
-        if( this.shaderMap.has(shaderTxtId) )
-            throw new Error( `Shader of this name already exists (${shaderTxtId}).` );
+        if( this.shaderMap.has(shaderId) )
+            throw new Error( `Shader of this name already exists (${shaderId}).` );
         
         // Add an entry to the map
         let shaderData = new ShaderData;
-        this.shaderMap.set( shaderTxtId, shaderData );
+        this.shaderMap.set( shaderId, shaderData );
         
         // Create the vertex shader
         let vertPromise = genFunc.downloadFile( 'txt', vertexNode[0].getAttribute('file') )
-            .then(( vertText ) => this.create( gl.VERTEX_SHADER, shaderData, shaderTxtId, vertText ) );
+            .then(( vertText ) => this.create( gl.VERTEX_SHADER, shaderData, shaderId, vertText ) );
 
         // Create the frag shader
         let fragPromise = genFunc.downloadFile( 'txt', fragmentNode[0].getAttribute('file') )
-            .then( (fragText ) => this.create( gl.FRAGMENT_SHADER, shaderData, shaderTxtId, fragText ) );
+            .then( (fragText ) => this.create( gl.FRAGMENT_SHADER, shaderData, shaderId, fragText ) );
             
         return Promise.all( [vertPromise, fragPromise] )
             .then(() =>
@@ -73,6 +74,9 @@ class ShaderManager
                 
                 // Find the location of the custom shader variables
                 this.locateShaderVariables( shaderData, vertexNode[0].getElementsByTagName('dataType'), fragmentNode[0].getElementsByTagName('dataType') );
+
+                // Init the shader
+                signalManager.broadcast_initShader( shaderId );
             });
     }
     

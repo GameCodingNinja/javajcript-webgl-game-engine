@@ -114,20 +114,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
-/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(15);
-/* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(17);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(161);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(172);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(173);
-/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(176);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(178);
-/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(8);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(22);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(118);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
+/* harmony import */ var _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
+/* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(161);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(178);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(179);
+/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(182);
+/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(184);
+/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(22);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(119);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(6);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(186);
 
 // 
 //  FILE NAME: game.js
@@ -153,12 +154,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// Load data from bundle as string
+
+
 class Game
 {
     constructor()
     {
-        // Set the shader init callback
-        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__["shaderManager"].initShaderCallback = this.shaderInitCallBack.bind(this);
+        // Set the init shader callback
+        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_initShader( this.initShaderCallBack.bind(this) );
         
         // Set the smart gui call back
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
@@ -167,12 +171,10 @@ class Game
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_aiCreate( this.aiCreateCallBack.bind(this) );
 
         // Load the settings
-        Object(_library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_4__["downloadFile"])( 'xml', 'data/settings/settings.cfg',
-            ( xmlNode ) =>
-            {
-                _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].load( xmlNode );
-                this.init();
-            });
+        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_15__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__["default"] ) );
+
+        // Init the game
+        this.init();
     }
     
     // 
@@ -181,58 +183,58 @@ class Game
     init()
     {
         // Create the projection matrixes
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["device"].createProjMatrix();
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["device"].createProjMatrix();
         
         // Do we add stencil buffer
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].createStencilBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].REPLACE);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].REPLACE);
         
         // Depth testing is off by default. Enable it?
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].DEPTH_TEST);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].DEPTH_TEST);
     
         // Init the clear color
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
         
         // Init the stencil clear mask based on the bit size of the mask
         // Stencil buffer can only be 1 or 8 bits per pixel
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 1 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].ALWAYS, 1, 0x1);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilMask(0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ALWAYS, 1, 0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilMask(0x1);
         }
         else if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 8 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].ALWAYS, 1, 0xFF);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].stencilMask(0xff);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ALWAYS, 1, 0xFF);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilMask(0xff);
         }
         
         // Cull the back face
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].CCW);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].BACK);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].CULL_FACE);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].CCW);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].BACK);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].CULL_FACE);
         
         // Enable alpha blending
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].BLEND);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].ONE_MINUS_SRC_ALPHA);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].BLEND);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ONE_MINUS_SRC_ALPHA);
 
         // Make the zero texture the active texture
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].TEXTURE0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].TEXTURE0);
         
         // Init the clear buffer mask
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearTargetBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].COLOR_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].COLOR_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].DEPTH_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].DEPTH_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearStencilBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].STENCIL_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].STENCIL_BUFFER_BIT;
         
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].clear( this.clearBufferMask );
         
         // Create the startup state
-        this.gameState = new _state_startupstate__WEBPACK_IMPORTED_MODULE_6__["StartUpState"]( this.gameLoop.bind(this) );
+        this.gameState = new _state_startupstate__WEBPACK_IMPORTED_MODULE_5__["StartUpState"]( this.gameLoop.bind(this) );
     }
     
     // 
@@ -241,7 +243,7 @@ class Game
     smartGuiControlCreateCallBack( control )
     {
         if( control.faction === 'decision_btn' )
-            control.smartGui = new _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_10__["SmartConfirmBtn"]( control );
+            control.smartGui = new _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__["SmartConfirmBtn"]( control );
     }
     
     // 
@@ -250,15 +252,15 @@ class Game
     aiCreateCallBack( aiName, obj )
     {
         if( aiName === 'aiBall' )
-            obj.setAI( new _ai_aiball__WEBPACK_IMPORTED_MODULE_11__["aiBall"]( obj ) );
+            obj.setAI( new _ai_aiball__WEBPACK_IMPORTED_MODULE_10__["aiBall"]( obj ) );
     }
     
     // 
     //  DESC: Callback for shader init
     //
-    shaderInitCallBack( shaderId )
+    initShaderCallBack( shaderId )
     {
-        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__["shaderManager"].setShaderValue4fv( shaderId, 'additive', [0,0,0,1] );
+        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__["shaderManager"].setShaderValue4fv( shaderId, 'additive', [0,0,0,1] );
     }
     
     // 
@@ -270,14 +272,14 @@ class Game
         {
             this.gameState.cleanUp();
             
-            if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_TITLE_SCREEN"] )
-                this.gameState = new _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_7__["TitleScreenState"]( this.gameLoop.bind(this) );
+            if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_TITLE_SCREEN"] )
+                this.gameState = new _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__["TitleScreenState"]( this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_GAME_LOAD"] )
-                this.gameState = new _state_loadstate__WEBPACK_IMPORTED_MODULE_8__["LoadState"]( this.gameState.stateMessage, this.gameLoop.bind(this) );
+            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_GAME_LOAD"] )
+                this.gameState = new _state_loadstate__WEBPACK_IMPORTED_MODULE_7__["LoadState"]( this.gameState.stateMessage, this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_LEVEL_1"] )
-                this.gameState = new _state_level1state__WEBPACK_IMPORTED_MODULE_9__["Level1State"]( this.gameLoop.bind(this) );
+            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_LEVEL_1"] )
+                this.gameState = new _state_level1state__WEBPACK_IMPORTED_MODULE_8__["Level1State"]( this.gameLoop.bind(this) );
             
             return true;
         }
@@ -293,7 +295,7 @@ class Game
         let event = null;
         
         // Handle events on the queue
-        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_13__["eventManager"].pollEvent()) )
+        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_12__["eventManager"].pollEvent()) )
             this.handleEvent( event );
     }
     
@@ -319,7 +321,7 @@ class Game
         this.pollEvents();
         
         // Get our elapsed time
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__["highResTimer"].calcElapsedTime();
         
         // Handle the physics
         this.gameState.physics();
@@ -331,13 +333,13 @@ class Game
         this.gameState.transform();
 
         // Clear the back buffer
-        _library_system_device__WEBPACK_IMPORTED_MODULE_12__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].clear( this.clearBufferMask );
         
         // Do the rendering
         this.gameState.render();
         
         // Apparently it's a good practice to do this at the end of a render cycle
-        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_5__["shaderManager"].unbind();
+        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__["shaderManager"].unbind();
         _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].unbind();
         _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].unbind();
 
@@ -371,6 +373,7 @@ class SignalManager
         this.aiCreateSignal = [];
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
+        this.initShaderSignal = [];
     }
     
     // 
@@ -412,15 +415,39 @@ class SignalManager
     {
         this.resolutionChangeSignal.push( slot );
     }
-    
+
     // 
-    //  DESC: Disconnect to the load signal
+    //  DESC: Connect to the init shader signal
+    //
+    connect_initShader( slot )
+    {
+        this.initShaderSignal.push( slot );
+    }
+
+    // 
+    //  DESC: Disconnect all to the load signal
     //
     clear_loadComplete()
     {
         this.loadCompleteSignal = [];
     }
-    
+
+    // 
+    //  DESC: Disconnect all to resolution change
+    //
+    clear_resolutionChange()
+    {
+        this.resolutionChangeSignal = [];
+    }
+
+    // 
+    //  DESC: Disconnect all to init shader
+    //
+    clear_initShader()
+    {
+        this.initShaderSignal = [];
+    }
+
     // 
     //  DESC: Broadcast smart gui control signal
     //
@@ -465,6 +492,15 @@ class SignalManager
         for( let i = 0; i < this.resolutionChangeSignal.length; ++i )
             this.resolutionChangeSignal[i]();
     }
+
+    // 
+    //  DESC: Broadcast the init shader
+    //
+    broadcast_initShader( shaderId )
+    {
+        for( let i = 0; i < this.initShaderSignal.length; ++i )
+            this.initShaderSignal[i](shaderId);
+    }
 }
 
 var signalManager = new SignalManager;
@@ -479,11 +515,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "settings", function() { return settings; });
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: settings.js
 //  DESC:      game settings singleton class
 //
+
 
 
 
@@ -515,11 +553,21 @@ class Settings
         this.sectorSize = 0;
         this.sectorSizeHalf = 0;
     }
+
+    // 
+    //  DESC: Load the data list tables from file path
+    //
+    load( filePath, callback )
+    {
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode ))
+            .next(() => callback());
+    }
     
     // 
     //  DESC: Load data from XML node
     //
-    load( node )
+    loadFromNode( node )
     {
         if( node )
         {
@@ -771,9 +819,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_RIGHT", function() { return EGE_MENU_SCROLL_RIGHT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_LEFT", function() { return EGE_MENU_TAB_LEFT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_RIGHT", function() { return EGE_MENU_TAB_RIGHT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EODT_NULL", function() { return EODT_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EODT_OBJECT_DATA_2D", function() { return EODT_OBJECT_DATA_2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EODT_OBJECT_DATA_3D", function() { return EODT_OBJECT_DATA_3D; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_NULL", function() { return EST_NULL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_OBJECT2D", function() { return EST_OBJECT2D; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_OBJECT3D", function() { return EST_OBJECT3D; });
@@ -968,11 +1013,6 @@ const EGE_MENU_TRANS_IN             = 100,
              EGE_MENU_TAB_LEFT             = 121,
              EGE_MENU_TAB_RIGHT            = 122;
 
-// EObjectDataType
-const EODT_NULL     = 0,
-             EODT_OBJECT_DATA_2D = 1,
-             EODT_OBJECT_DATA_3D = 2;
-
 // ESpriteType
 const EST_NULL     = 0,
              EST_OBJECT2D = 1,
@@ -1111,9 +1151,209 @@ const EM_NULL                = 0,
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadFile", function() { return downloadFile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "countStrOccurrence", function() { return countStrOccurrence; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "modulus", function() { return modulus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomInt", function() { return randomInt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomArbitrary", function() { return randomArbitrary; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shuffle", function() { return shuffle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringLoadXML", function() { return stringLoadXML; });
+/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+// 
+//  FILE NAME: genfunc.js
+//  DESC:      General mutipurpose functions
+//
+
+
+
+
+
+var sessionCacheBustNo = Math.random();
+
+// 
+//  DESC: Load files via a promise
+//
+function downloadFile( fileType, filePath )
+{
+    return new Promise((resolve, reject) => {
+            
+        let request = null;
+        
+        if( fileType !== 'img' )
+            request = new XMLHttpRequest();
+        
+        if( fileType === 'xml' )
+        {
+            //console.log(`Load XML: ${filePath}`);
+            request.responseType = 'document';
+            request.overrideMimeType('text/xml');
+        }
+        else if( fileType === 'txt' )
+        {
+            //console.log(`Load Text: ${filePath}`);
+            request.responseType = 'text';
+            request.overrideMimeType('text/plain');
+        }
+        else if( fileType === 'binary' )
+        {
+            //console.log(`Load Binary: ${filePath}`);
+            request.responseType = 'arraybuffer';
+        }
+        else if( fileType === 'img' )
+        {
+            //console.log(`Load Image: ${filePath}`);
+        }
+        else
+        {
+            throw new Error( `Unknown file type (${filePath})!` );
+        }
+
+        if( request )
+        {
+            // Asynchronous reading of an xml file. Synchronous has been deprecated
+            request.onreadystatechange =
+                function()
+                {
+                    if( this.readyState === 4 )
+                    {
+                        if( (this.status >= 200 && this.status < 300) || this.status === 304 ) 
+                        {
+                            // This need to be called before the "resolve" is
+                            _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_loadComplete();
+
+                            if( fileType === 'xml' && this.responseXML )
+                                resolve(this.responseXML.childNodes[0]);
+
+                            else if( fileType === 'txt' && this.responseText )
+                                resolve(this.responseText);
+
+                            else if( fileType === 'binary' && this.response )
+                                resolve(this.response);
+                                
+                            else
+                                reject( Error(`Error Loading (${filePath}), file type (${fileType}) not defined!`) );
+                        }
+                        else
+                        {
+                            reject( Error(`HTTP Request failed: ${filePath}`) );
+                        }
+                    }
+                }
+
+            // Define which file to open and send the request. True = asynchronous
+            request.open('GET', filePath + '?cache_buster=' + sessionCacheBustNo, true);
+            request.send();
+        }
+        // Images are handled differently
+        else
+        {
+            let image = new Image();
+            
+            image.onload = () => { _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_loadComplete(); resolve(image); }
+            image.onerror = () => reject( Error(`Error downloading file: ${filePath}`) );
+
+            image.src = filePath;
+        }
+    });
+}
+
+// 
+//  DESC: Count the number of occurrences of sub string
+//
+function countStrOccurrence( searchStr, subStr )
+{
+    let result = 0;
+    let found = -1;
+
+    do
+    {
+        found = searchStr.indexOf( subStr, found+1 );
+
+        if( found != -1 )
+            ++result;
+    }
+    while( found != -1 );
+
+    return result;
+}
+
+// 
+//  DESC: Perform a modulus operation on the passed in floats
+//
+function modulus( v1, v2 )
+{
+    return (v1 - v2 * Math.floor(v1 / v2));
+}
+
+// 
+//  DESC: Generate a random number
+//
+function randomInt( min, max )
+{
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomArbitrary( min, max )
+{
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+// 
+//  DESC: Shuffle array
+//
+function shuffle( array )
+{
+    if( array.length > 2 )
+    {
+        let currentIndex = array.length, temp, randomIndex;
+
+        // Get the last sound that was just played
+        let oldLastElement = array[array.length-1];
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex)
+        {
+            // Pick a remaining element...
+            randomIndex = Math.floor( Math.random() * currentIndex );
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temp = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temp;
+        }
+        
+        // Make sure the new first element is not the old last one.
+        if( oldLastElement === array[0] )
+        {
+            randomIndex = Math.trunc(array.length / 2);
+            array[0] = array[randomIndex];
+            array[randomIndex] = oldLastElement;
+        }
+    }
+}
+
+// 
+//  DESC: Load the XML string into a dom object
+//
+function stringLoadXML( stringData )
+{
+    let parser = new DOMParser();
+    return parser.parseFromString( stringData, "application/xml" );
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textureManager", function() { return textureManager; });
-/* harmony import */ var _common_texture__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+/* harmony import */ var _common_texture__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 
 //
 //  FILE NAME: texturemanager.js
@@ -1152,9 +1392,9 @@ class TextureManager
         }
 
         let texture = groupMap.get( filePath );
-        if( texture === undefined )
+        if( texture === undefined || texture === -1 )
         {
-            let texture = new _common_texture__WEBPACK_IMPORTED_MODULE_0__["Texture"];
+            texture = new _common_texture__WEBPACK_IMPORTED_MODULE_0__["Texture"];
             texture.id = _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].createTexture();
             texture.size.w = image.width;
             texture.size.h = image.height;
@@ -1173,6 +1413,31 @@ class TextureManager
         return texture;
     }
 
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, filePath )
+    {
+        let groupMap = this.textureForMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.textureForMapMap.set( group, groupMap );
+        }
+        
+        let texture = groupMap.get( filePath );
+        if( texture === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( filePath, -1 );
+
+            return true;
+        }
+
+        return false;
+    }
+
     //
     //  DESC: Delete the group of textures
     //
@@ -1181,7 +1446,7 @@ class TextureManager
         let groupMap = this.textureForMapMap.get( group );
         if( groupMap !== undefined )
         {
-            for( let [ key, texture ] of groupMap.entries() )
+            for( let texture of groupMap.values() )
                 _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].deleteTexture( texture.id );
             
             this.textureForMapMap.delete( group );
@@ -1191,20 +1456,17 @@ class TextureManager
     //
     //  DESC: Get the 2D texture class
     //
-    getTexture( group, filePath )
+    get( group, filePath )
     {
         let groupMap = this.textureForMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            let texture = groupMap.get( filePath );
-            if( texture !== undefined )
-                return texture;
-            
-            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
-        }
+        if( groupMap === undefined )
+            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
 
-        // Santy check.
-        throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
+        let texture = groupMap.get( filePath );
+        if( texture === undefined || texture === -1 )
+            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
+        
+        return texture;
     }
 
     //
@@ -1236,7 +1498,7 @@ var textureManager = new TextureManager;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1270,7 +1532,7 @@ class Texture
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1278,7 +1540,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "device", function() { return device; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gl", function() { return gl; });
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 
 // 
 //  FILE NAME: device.js
@@ -1344,7 +1606,7 @@ var gl = device.glContext;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1776,16 +2038,16 @@ class Matrix
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vertexBufferManager", function() { return vertexBufferManager; });
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_quad2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
+/* harmony import */ var _common_quad2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
 
 //
 //  FILE NAME: vertexbuffermanager.js
@@ -2197,7 +2459,7 @@ var vertexBufferManager = new VertexBufferManager;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2388,13 +2650,13 @@ class Point
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quad2d", function() { return Quad2d; });
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 
 // 
 //  FILE NAME:  quad2d.js
@@ -2414,7 +2676,7 @@ class Quad2d
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2453,198 +2715,6 @@ class Vertex2d
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadFile", function() { return downloadFile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "countStrOccurrence", function() { return countStrOccurrence; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "modulus", function() { return modulus; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomInt", function() { return randomInt; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomArbitrary", function() { return randomArbitrary; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shuffle", function() { return shuffle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringLoadXML", function() { return stringLoadXML; });
-/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-
-// 
-//  FILE NAME: genfunc.js
-//  DESC:      General mutipurpose functions
-//
-
-
-
-
-
-var sessionCacheBustNo = Math.random();
-
-// 
-//  DESC: Load files
-//
-function downloadFile( fileType, filepath, callback )
-{
-    let request = null;
-    
-    if( fileType !== 'img' )
-        request = new XMLHttpRequest();
-    
-    if( fileType === 'xml' )
-    {
-        //console.log(`Load XML: ${filepath}`);
-        request.responseType = 'document';
-        request.overrideMimeType('text/xml');
-    }
-    else if( fileType === 'txt' )
-    {
-        //console.log(`Load Text: ${filepath}`);
-        request.responseType = 'text';
-        request.overrideMimeType('text/plain');
-    }
-    else if( fileType === 'binary' )
-    {
-        //console.log(`Load Binary: ${filepath}`);
-        request.responseType = 'arraybuffer';
-    }
-    else if( fileType === 'img' )
-    {
-        //console.log(`Load Image: ${filepath}`);
-    }
-
-    if( request )
-    {
-        // Asynchronous reading of an xml file. Synchronous has been deprecated
-        request.onreadystatechange =
-            function()
-            {
-                if( this.readyState === 4 )
-                {
-                    if( (this.status >= 200 && this.status < 300) || this.status === 304 ) 
-                    {
-                        if( fileType === 'xml' && this.responseXML )
-                                callback(this.responseXML.childNodes[0]);
-
-                        else if( fileType === 'txt' && this.responseText )
-                                callback(this.responseText);
-
-                        else if( fileType === 'binary' && this.response )
-                                callback(this.response);
-                            
-                        else
-                            console.log(`Error Loading: ${filepath}`);
-                        
-                        _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_loadComplete();
-                    }
-                    else
-                    {
-                        throw new Error( `HTTP Request failed (${filepath}).` );
-                    }
-                }
-            }
-
-        // Define which file to open and send the request. True = asynchronous
-        request.open('GET', filepath + '?cache_buster=' + sessionCacheBustNo, true);
-        request.send();
-    }
-    // Images are handled differently
-    else
-    {
-        let image = new Image();
-        
-        image.onload = () => { callback(image); _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_loadComplete(); }
-        image.onerror = ( event ) => { throw new Error( `Error downloading file (${filepath})!` ); }
-
-        image.src = filepath;
-    }
-}
-
-// 
-//  DESC: Count the number of occurrences of sub string
-//
-function countStrOccurrence( searchStr, subStr )
-{
-    let result = 0;
-    let found = -1;
-
-    do
-    {
-        found = searchStr.indexOf( subStr, found+1 );
-
-        if( found != -1 )
-            ++result;
-    }
-    while( found != -1 );
-
-    return result;
-}
-
-// 
-//  DESC: Perform a modulus operation on the passed in floats
-//
-function modulus( v1, v2 )
-{
-    return (v1 - v2 * Math.floor(v1 / v2));
-}
-
-// 
-//  DESC: Generate a random number
-//
-function randomInt( min, max )
-{
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function randomArbitrary( min, max )
-{
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
-// 
-//  DESC: Shuffle array
-//
-function shuffle( array )
-{
-    if( array.length > 2 )
-    {
-        let currentIndex = array.length, temp, randomIndex;
-
-        // Get the last sound that was just played
-        let oldLastElement = array[array.length-1];
-
-        // While there remain elements to shuffle...
-        while (0 !== currentIndex)
-        {
-            // Pick a remaining element...
-            randomIndex = Math.floor( Math.random() * currentIndex );
-            currentIndex -= 1;
-
-            // And swap it with the current element.
-            temp = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temp;
-        }
-        
-        // Make sure the new first element is not the old last one.
-        if( oldLastElement === array[0] )
-        {
-            randomIndex = Math.trunc(array.length / 2);
-            array[0] = array[randomIndex];
-            array[randomIndex] = oldLastElement;
-        }
-    }
-}
-
-// 
-//  DESC: Load the XML string into a dom object
-//
-function stringLoadXML( stringData )
-{
-    let parser = new DOMParser();
-    return parser.parseFromString( stringData, "application/xml" );
-}
-
-/***/ }),
 /* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2652,13 +2722,15 @@ function stringLoadXML( stringData )
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shaderManager", function() { return shaderManager; });
 /* harmony import */ var _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: shadermanager.js
 //  DESC:      shader class singleton
 //
+
 
 
 
@@ -2673,45 +2745,26 @@ class ShaderManager
         this.shaderMap = new Map;
         this.currentShaderData = null;
         this.currentAttributeCount = 0;
-        this.loadCompleteCallback = null;
-        this.loadCounter = 0;
-        this.initShaderCallback = null;
-    }
-    
-    // 
-    //  DESC: Load the shader from file path
-    //
-    load( filePath, callback )
-    {
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode, callback ) );
     }
     
     // 
     //  DESC: Load the shader from xml node
     //
-    loadFromNode( xmlNode, callback )
+    loadFromNode( xmlNode )
     {
+        let promiseAry = [];
+
         if( xmlNode )
         {
             let shader = xmlNode.getElementsByTagName('shader');
             if( shader )
             {
-                this.loadCompleteCallback = callback;
-                
                 for( let i = 0; i < shader.length; ++i )
-                {
-                    // Use a counter to determine when the load is done because there's
-                    // no garentee they will finish in the order executed
-                    // Always do this before the load
-                    ++this.loadCounter;
-                    
-                    this.createShader( shader[i] );
-                }
+                    promiseAry.push( this.createShader( shader[i] ) );
             }
         }
-        else
-            callback();
+
+        return Promise.all( promiseAry );
     }
     
     // 
@@ -2719,46 +2772,38 @@ class ShaderManager
     //
     createShader( node )
     {
-        let shaderTxtId = node.getAttribute('Id');
+        let shaderId = node.getAttribute('Id');
         
         let vertexNode = node.getElementsByTagName('vertDataLst');
         let fragmentNode = node.getElementsByTagName('fragDataLst');
         
         // Check for duplicate
-        if( this.shaderMap.has(shaderTxtId) )
-            throw new Error( `Shader of this name already exists (${shaderTxtId}).` );
+        if( this.shaderMap.has(shaderId) )
+            throw new Error( `Shader of this name already exists (${shaderId}).` );
         
         // Add an entry to the map
         let shaderData = new _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__["ShaderData"];
-        this.shaderMap.set( shaderTxtId, shaderData );
+        this.shaderMap.set( shaderId, shaderData );
         
         // Create the vertex shader
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'txt', vertexNode[0].getAttribute('file'),
-            ( vertText ) =>
-            {
-                this.create( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].VERTEX_SHADER, shaderData, shaderTxtId, vertText );
-                
-                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'txt', fragmentNode[0].getAttribute('file'),
-                    ( fragText ) =>
-                    {
-                        // Create the shaders from the shader files
-                        this.create( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].FRAGMENT_SHADER, shaderData, shaderTxtId, fragText );
-                        
-                        // Combine the shaders into a program
-                        this.createProgram( shaderData );
-                        
-                        // Find the location of the custom shader variables
-                        this.locateShaderVariables( shaderData, vertexNode[0].getElementsByTagName('dataType'), fragmentNode[0].getElementsByTagName('dataType') );
-                        
-                        // Send out a signal to init this shader
-                        this.initShaderCallback( shaderTxtId );
-                        
-                        // Always do this after the load
-                        --this.loadCounter;
+        let vertPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__["downloadFile"]( 'txt', vertexNode[0].getAttribute('file') )
+            .then(( vertText ) => this.create( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].VERTEX_SHADER, shaderData, shaderId, vertText ) );
 
-                        if( this.loadCounter === 0 )
-                            this.loadCompleteCallback();
-                    });
+        // Create the frag shader
+        let fragPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__["downloadFile"]( 'txt', fragmentNode[0].getAttribute('file') )
+            .then( (fragText ) => this.create( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].FRAGMENT_SHADER, shaderData, shaderId, fragText ) );
+            
+        return Promise.all( [vertPromise, fragPromise] )
+            .then(() =>
+            {
+                // Combine the shaders into a program
+                this.createProgram( shaderData );
+                
+                // Find the location of the custom shader variables
+                this.locateShaderVariables( shaderData, vertexNode[0].getElementsByTagName('dataType'), fragmentNode[0].getElementsByTagName('dataType') );
+
+                // Init the shader
+                _managers_signalmanager__WEBPACK_IMPORTED_MODULE_2__["signalManager"].broadcast_initShader( shaderId );
             });
     }
     
@@ -2776,8 +2821,8 @@ class ShaderManager
         
         // Compile the shader and check for error
         _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].compileShader(id);
-	if( !_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getShaderParameter(id, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].COMPILE_STATUS) )
-            throw new Error( `ERROR compiling shader! (${_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getShaderInfoLog(id)}).` );
+        if( !_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getShaderParameter(id, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].COMPILE_STATUS) )
+                throw new Error( `ERROR compiling shader! (${_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getShaderInfoLog(id)}).` );
         
         if( shaderType === _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].VERTEX_SHADER )
             shaderData.vertexId = id;
@@ -2896,10 +2941,8 @@ class ShaderManager
         let shader = this.shaderMap.get( shaderId );
         if( shader !== undefined )
             return shader;
-        else
-            throw new Error( `ERROR Shader has not been created! (${shaderId}).` );
-        
-        return null;
+ 
+        throw new Error( `ERROR Shader has not been created! (${shaderId}).` );
     }
     
     // 
@@ -2929,7 +2972,7 @@ class ShaderManager
     //
     setAllShaderValue4fv( locationId, data )
     {
-        for( let [ key, shaderData ] of this.shaderMap.entries() )
+        for( let key of this.shaderMap.keys() )
             this.setShaderValue4fv( key, locationId, data );
     }
 }
@@ -3003,33 +3046,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
 /* harmony import */ var _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(98);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(100);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(140);
-/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(138);
-/* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(2);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(141);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(116);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(144);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(145);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(118);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(120);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(14);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(161);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(164);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(165);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(166);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(167);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(168);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(169);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(170);
-/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(171);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(99);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(101);
+/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(139);
+/* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(2);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(141);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(117);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(144);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(145);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(119);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(121);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(31);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(38);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(6);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(161);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(164);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(165);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(166);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(20);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(167);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(168);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(169);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(170);
+/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(171);
+/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(172);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(173);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(174);
+/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(175);
+/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(176);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(177);
 
 //
 //  FILE NAME: startupstate.js
 //  DESC:      startup state class
 //
+
 
 
 
@@ -3064,26 +3115,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const STARTUP_ASSET_COUNT = 60,
+
+
+
+
+
+
+const STARTUP_ASSET_COUNT = 54,
       MIN_LOAD_TIME = 1500;
 
 class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 {
     constructor( gameLoopCallback )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_22__["EGS_STARTUP"], _statedefs__WEBPACK_IMPORTED_MODULE_22__["EGS_TITLE_SCREEN"], gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_23__["EGS_STARTUP"], _statedefs__WEBPACK_IMPORTED_MODULE_23__["EGS_TITLE_SCREEN"], gameLoopCallback );
 
         // Load the list tables
-        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_23__["default"] ) );
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_24__["default"] ) );
-        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_9__["cameraManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_25__["default"] ) );
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_24__["default"] ) );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_25__["default"] ) );
+        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__["cameraManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_26__["default"] ) );
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__["soundManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_29__["default"] ) );
+        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__["physicsWorldManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_30__["default"] ) );
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_31__["default"] ) );
+        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__["actionManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_33__["default"] ) );
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadMenuActionFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_34__["default"] ) );
 
         // Load the scripts
-        _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_19__["loadScripts"]();
-        _scripts_statescripts__WEBPACK_IMPORTED_MODULE_20__["loadScripts"]();
+        _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__["loadScripts"]();
+        _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__["loadScripts"]();
+        _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__["loadScripts"]();
+
+        // Set the default camera
+        // NOTE: Can only call this after Camera Manager has been loaded
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].setDefaultCamera();
 
         // Create the script component and add a script
-        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_16__["ScriptComponent"];
+        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_15__["ScriptComponent"];
         this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__["scriptManager"].get('ScreenFade')( 0, 1, 500 ) );
 
         // Preload assets for the startup screen
@@ -3097,26 +3164,27 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     {
         let groupAry = ['(startup)'];
 
-        // Load the shaders
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_26__["default"] ), callback ) );
+        Promise.all([
 
-        // Load the object data XML's
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadXMLGroup2D( groupAry, callback ) );
+            // Load the shaders
+            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_27__["default"] ) ),
 
-        // Load all the assets associated with this group
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadAssets2D( groupAry, callback ) );
+            // Load the object data
+            _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadGroup( ['(startup)'] )
 
-        // Create OpenGL objects from the loaded data
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].createFromData( groupAry, callback ));
+        ])
+        // Create and load all the actor strategies.
+        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_28__["default"] ) ))
 
-        // Create and load all the actor strategies. NOTE: This adds it to the load manager
-        _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_14__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_27__["default"] ) );
+        // Clean up the temporary files
+        .then(() =>
+        {
+            _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__["assetHolder"].deleteGroup( groupAry );
+            _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__["spriteSheetManager"].deleteGroup( groupAry );
+        })
 
         // Last thing to do is call the preload complete function
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => this.preloadComplete() );
-        
-        // Start the load
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].load();
+        .then(() => this.preloadComplete() );
     }
 
     //
@@ -3124,17 +3192,14 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     preloadComplete()
     {
-        // Set the camera
-        this.camera = _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_9__["cameraManager"].getDefault();
-        
         // Prepare the strategies to run
-        this.progressBar = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].get( '_startup_' ).get( 'UIProgressBar' ).getControl();
+        this.progressBar = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].get( '_startup_' ).get( 'UIProgressBar' ).getControl();
         this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
         
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].activateStrategy('_startup_');
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].activateStrategy('_startup_');
 
         // Reset the elapsed time before entering the render loop
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__["highResTimer"].calcElapsedTime();
 
         // Start the game loop
         requestAnimationFrame( this.callback );
@@ -3147,17 +3212,17 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     {
         if( event instanceof CustomEvent )
         {
-            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_22__["ESE_FADE_IN_COMPLETE"] )
+            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_23__["ESE_FADE_IN_COMPLETE"] )
             {
                 this.assetLoad();
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_22__["ESE_FADE_OUT_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_23__["ESE_FADE_OUT_COMPLETE"] )
             {
                 this.stateChange = true;
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_22__["ESE_ASSET_LOAD_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_23__["ESE_ASSET_LOAD_COMPLETE"] )
             {
-                let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__["highResTimer"].timerStop();
+                let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__["highResTimer"].timerStop();
 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
@@ -3166,9 +3231,9 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
                     setTimeout( () => this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__["scriptManager"].get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
                 
                 // Disconnect to the load signal
-                _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_10__["signalManager"].clear_loadComplete();
+                _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__["signalManager"].clear_loadComplete();
 
-                console.log('StartUp State load complete!: ' + this.progressBar.curValue );
+                console.log( 'StartUp State load complete!: ' + this.progressBar.curValue );
             }
         }
     }
@@ -3179,7 +3244,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     update()
     {
         this.scriptComponent.update();
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].update();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].update();
     }
     
     // 
@@ -3187,7 +3252,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     transform()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].transform();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].transform();
     }
 
     //
@@ -3195,7 +3260,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     render()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].render();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].render();
     }
 
     //
@@ -3204,73 +3269,49 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     assetLoad()
     {
         // Set the timer to see how long the load takes
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_15__["highResTimer"].timerStart();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__["highResTimer"].timerStart();
 
         // Set the function to be called to update the progress bar during the download
-        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_10__["signalManager"].connect_loadComplete( this.loadCallback.bind(this) );
+        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__["signalManager"].connect_loadComplete( this.progressBar.incCurrentValue.bind(this.progressBar) );
 
         let groupAry = ['(menu)'];
 
-        // Load the list tables
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_11__["soundManager"].loadListTable( 'data/sound/soundListTable.lst', callback ));
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_12__["physicsWorldManager"].loadListTable( 'data/objects/2d/physics/physicsListTable.lst', callback ));
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadListTable( 'data/objects/2d/menu/menuListTable.lst', callback ));
+        Promise.all([
 
-        // Load the fonts
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].load( 'data/textures/fonts/font.lst', callback ));
+            // Load the Sound Manager group
+            _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__["soundManager"].loadGroup( groupAry ),
 
-        // Load the xml group
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadXMLGroup2D( groupAry, callback ));
+            // Load the Object Manager group
+            _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadGroup( groupAry ),
 
-        // Load all the assets associated with this group
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadAssets2D( groupAry, callback ));
+            // Load the fonts
+            _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_32__["default"] ) ),
 
-        // Create OpenGL objects from the loaded data
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].createFromData( groupAry, callback ));
+            // Load the menu XMLs
+            _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadGroupXML( groupAry )
+        ])
+        .then( () => Promise.all([
 
-        // Load the Sound Manager group
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_11__["soundManager"].loadGroup( groupAry, callback ));
+            // Create menu objects from loaded xml data
+            _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].createFromData( groupAry ),
 
-        // Load the action manager
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__["actionManager"].load( 'data/settings/controllerMapping.cfg', callback ));
+            // Load the state specific assets
+            _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_19__["load"]()
 
-        // Load the menu action
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadMenuAction( 'data/objects/2d/menu/menu_action.list', callback ));
+        ]))
 
-        // Preload the menu group
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].preloadGroup( ['(menu)'], callback ));
+        // Clean up the temporary files
+        .then(() =>
+        {
+            _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__["assetHolder"].deleteGroup( groupAry );
+            _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__["spriteSheetManager"].deleteGroup( groupAry );
+        })
 
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-            ( callback ) =>
-            {
-                // Load the menu scripts before creating the menus
-                _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_21__["loadScripts"]();
-                
-                // Set the default camera
-                _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].setDefaultCamera();
+        // Time out to give it a few cycles to update the last value
+        .then(() => {return new Promise(resolve => setTimeout(resolve, 500))})
 
-                // Create the menu group
-                _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].createGroup( ['(menu)'] );
-
-                callback();
-            });
-
-        // Load the state specific assets
-        _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_18__["load"]();
-
-        // Last thing to do is send a message that the asset load is complete
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_22__["ESE_ASSET_LOAD_COMPLETE"] ) );
-
-        // Start the load
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].load();
-    }
-
-    //
-    //  DESC: Load callback function
-    //
-    loadCallback()
-    {
-        this.progressBar.incCurrentValue();
+        // Last thing to do is to dispatch the event that the load is complete
+        .then( () => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_23__["ESE_ASSET_LOAD_COMPLETE"] ) )
     }
 
     //
@@ -3279,7 +3320,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_13__["strategyManager"].deleteStrategy( ['_startup_'] );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].deleteStrategy( ['_startup_'] );
 
         // Free the state assets from the video memory
         _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].freeGroup( ['(startup)'] );
@@ -3662,8 +3703,8 @@ var eventManager = new EventManager;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fontManager", function() { return fontManager; });
 /* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 //
 //  FILE NAME: fontmanager.js
@@ -3684,36 +3725,32 @@ class FontManager
 
         // Group name
         this.group = '';
-        
-        // Load helpers
-        this.loadCompleteCallback = null;
-        this.loadCounter = 0;
+    }
+    
+    // 
+    //  DESC: Load the data list tables from file path
+    //
+    load( filePath )
+    {
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
     //
     //  DESC: Load the fonts from xml node
     //
-    load( filePath, callback )
+    loadFromNode( xmlNode )
     {
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode, callback ) );
-    }
-    
-    //
-    //  DESC: Load the fonts from xml node
-    //
-    loadFromNode( node, callback )
-    {
-        if( node )
-        {
-            this.loadCompleteCallback = callback;
+        let promiseAry = [];
 
+        if( xmlNode )
+        {
             // Get the group the textures will be saves as
-            let listGroupNode = node.getElementsByTagName('listGroup');
+            let listGroupNode = xmlNode.getElementsByTagName('listGroup');
             this.group = listGroupNode[0].getAttribute( 'name' );
 
             // Get the list of font info
-            let fontNode = node.getElementsByTagName('font');
+            let fontNode = xmlNode.getElementsByTagName('font');
 
             for( let i = 0; i < fontNode.length; ++i )
             {
@@ -3726,47 +3763,25 @@ class FontManager
 
                 // Add the font to our list
                 this.fontMap.set( name, new _2d_font__WEBPACK_IMPORTED_MODULE_0__["Font"] );
-                
-                // Use a counter to determine when the load is done because there's
-                // no garentee they will finish in the order executed.
-                // Always do this before the load
-                ++this.loadCounter;
 
-                // Load the character info from file
-                this.downloadFontFiles( name, fontNode[i].getAttribute( 'file' ) );
+                let filePath = fontNode[i].getAttribute( 'file' );
+
+                // Load the texture file
+                let textureFilePath = filePath + '.png'
+                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'img', textureFilePath )
+                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( this.group, name, image ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }) );
+
+                // Load the xml file describing the font characteristics
+                let fontFilePath = filePath + '.fnt'
+                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', fontFilePath )
+                        .then(( fontXmlNode ) => this.loadFont( name, fontXmlNode ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }) );
             }
         }
-        else
-            callback();
-    }
-    
-    //
-    //  DESC: Download the XML and texture via file path
-    //
-    downloadFontFiles( name, filePath )
-    {
-        // Create the vertex shader
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'img', filePath + '.png',
-            ( image ) =>
-            {
-                // Load the image as a texture in the texture manager
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].load( this.group, name, image );
-                
-                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath + '.fnt',
-                    ( xmlNode ) =>
-                    {
-                        // Load the font
-                        this.loadFont( name, xmlNode );
 
-                        // Always do this after the load
-                        --this.loadCounter;
-                        
-                        if( this.loadCounter === 0 )
-                        {
-                            this.loadCompleteCallback();
-                        }
-                    });
-            });
+        return Promise.all( promiseAry )
+                    .then(() => this.setFontTexture());
     }
     
     //
@@ -3779,6 +3794,15 @@ class FontManager
             throw new Error( `Font name has not been added to the map (${name}).` );
         
         font.loadFromNode( this.group, name, xmlNode );
+    }
+
+    //
+    //  DESC: Set the textures to the font object
+    //
+    setFontTexture()
+    {
+        for( let [ key, font ] of this.fontMap.entries() )
+            font.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].get( this.group, key );
     }
     
     //
@@ -3822,13 +3846,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Font", function() { return Font; });
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
 //  FILE NAME:  font.js
 //  DESC:       font class
 //
-
 
 
 
@@ -3869,7 +3891,7 @@ class Font
         // Vertival padding
         this.vertPadding = 0;
 
-        // The texture
+        // The texture in set from font manager
         this.texture = null;
     }
     
@@ -3878,9 +3900,6 @@ class Font
     //
     loadFromNode( group, name, xmlNode )
     {
-        // load the texture
-        this.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].getTexture( group, name );
-
         // Get the padding
         let padding = xmlNode.getElementsByTagName('info')[0].getAttribute('padding');
         this.horzPadding = Number(padding.substr(6,1));
@@ -3992,13 +4011,14 @@ class Rect
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "objectDataManager", function() { return objectDataManager; });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(28);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
 /* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(31);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(38);
 /* harmony import */ var _objectdata2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(39);
-/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(96);
+/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(97);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
 
 //
 //  FILE NAME: objactdatamanager.js
@@ -4016,8 +4036,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const LOAD_2D = 0;
-const LOAD_3D = 1;
 
 class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["ManagerBase"]
 {
@@ -4025,35 +4043,37 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
     {
         super();
 
-        this.loadType;
         this.objectDataMapMap = new Map;
     }
 
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadXMLGroup2D( groupAry, finishCallback )
+    loadGroup( groupAry )
     {
-        this.loadType = LOAD_2D;
-        super.loadGroup( 'Object data list', this.objectDataMapMap, groupAry, finishCallback );
-    }
-    
-    loadXMLGroup3D( groupAry, finishCallback )
-    {
-        this.loadType = LOAD_3D;
-        super.loadGroup( 'Object data list', this.objectDataMapMap, groupAry, finishCallback );
+        return super.loadGroupAry( 'Object data list', this.objectDataMapMap, groupAry )
+            .then(() => this.loadAssets( groupAry ))
+            .then(() => this.createFromData( groupAry ));
     }
 
     //
     //  DESC: Load all object information from an xml node
     //
-    loadFromNode( group, node, filePath, finishCallback )
+    loadFromNode( group, node )
     {
+        const LOAD_2D = 0;
+        const LOAD_3D = 1;
+
         // Get the group map
         let groupMap = this.objectDataMapMap.get( group );
-        
+
+        // Determin the laod type
+        let loadType = LOAD_2D;
+        if( node.nodeName === 'objectDataList3D' )
+            loadType = LOAD_3D;
+
         let defaultData;
-        if( this.loadType === LOAD_2D )
+        if( loadType === LOAD_2D )
             defaultData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__["ObjectData2D"];
         else
             defaultData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__["ObjectData3D"];
@@ -4072,9 +4092,8 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
             // Check that this object doesn't already exist
             if( groupMap.get(name) === undefined )
             {
-                // Make a copy of the default object
                 let objData
-                if( this.loadType === LOAD_2D )
+                if( loadType === LOAD_2D )
                     objData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__["ObjectData2D"];
                 else
                     objData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__["ObjectData3D"];
@@ -4084,9 +4103,6 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
                 // Load in the object data
                 objData.loadObjData( objNode[i], group, name );
 
-                // Debug output
-                //console.log(JSON.stringify(objData));
-
                 // Save it to the map map
                 groupMap.set( name, objData );
             }
@@ -4095,152 +4111,125 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
                 throw new Error( `Group object already exists (${group}, ${name})!` );
             }
         }
-
-        // Debug output
-        //console.log(JSON.stringify(defaultData));
     }
-    
+
     //
     //  DESC: Load all the assets associated with these groups
     //
-    loadAssets2D( groupAry, finishCallback )
+    loadAssets( groupAry )
     {
+        let promiseAry = [];
+
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
-            
+
             // Get the group map
             let groupMap = this.objectDataMapMap.get( group );
             if( groupMap !== undefined )
             {
-                let dupPathCheck = [];
-
-                for( let [ key, objData ] of groupMap.entries() )
+                for( let objData of groupMap.values() )
                 {
-                    // Load the textures
-                    let filePathAry = objData.visualData.getTextureFilePathAry();
-
-                    for( let i = 0; i < filePathAry.length; ++i )
+                    // Load 2D elements
+                    if( objData.is2D() )
                     {
-                        let filePath = filePathAry[i];
-                        
-                        if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
-                        {
-                            // Add to the array to check for duplication
-                            dupPathCheck.push( filePath );
+                        let filePathAry = objData.visualData.getTextureFilePathAry();
 
-                            // Load the texture file
-                            this.downloadFile( 'img', group, filePath, finishCallback,
-                                ( group, image, filePath, finishCallback ) =>
-                                {
-                                    _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( group, filePath, image );
-                                });
+                        for( let i = 0; i < filePathAry.length; ++i )
+                        {
+                            let filePath = filePathAry[i];
+
+                            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].allowLoad( group, filePath ) )
+                            {
+                                // Load the texture file
+                                promiseAry.push( 
+                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'img', filePath )
+                                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( group, filePath, image ))
+                                        .catch(( error ) => { console.error(error.stack); throw error; }));
+                            }
+                        }
+                        
+                        // Load the XML mesh
+                        let meshFilePath = objData.visualData.meshFilePath;
+                        if( meshFilePath && _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__["assetHolder"].allowLoad( group, meshFilePath ) )
+                        {
+                            // Load the mesh file
+                            promiseAry.push( 
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', meshFilePath )
+                                    .then(( xmlNode ) => _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__["assetHolder"].set( group, meshFilePath, xmlNode ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
+                        }
+
+                        // Load the XML sprite sheet
+                        let spriteSheetfilePath = objData.visualData.spriteSheetFilePath;
+                        if( spriteSheetfilePath && _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__["spriteSheetManager"].allowLoad( group, spriteSheetfilePath ) )
+                        {
+                            // Load the mesh file
+                            promiseAry.push( 
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', spriteSheetfilePath )
+                                    .then(( xmlNode ) => _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__["spriteSheetManager"].load( group, spriteSheetfilePath, xmlNode ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
                         }
                     }
-                    
-                    // Load the meshes
-                    filePathAry = [objData.visualData.meshFilePath, objData.visualData.spriteSheetFilePath];
-
-                    for( let i = 0; i < filePathAry.length; ++i )
+                    // Load 3D elements
+                    else
                     {
-                        if( filePathAry[i] && (dupPathCheck.indexOf(filePathAry[i]) === -1) )
-                        {
-                            // Add to the array to check for duplication
-                            dupPathCheck.push( filePathAry[i] );
+                        let filePath = objData.visualData.meshFilePath;
 
+                        if( filePath && _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__["meshManager"].allowLoad( group, filePath ) )
+                        {
                             // Load the mesh file
-                            this.downloadFile( 'xml', group, filePathAry[i], finishCallback,
-                                ( group, xmlNode, filePath, finishCallback ) =>
-                                {
-                                    if( filePath === objData.visualData.spriteSheetFilePath )
-                                        _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__["spriteSheetManager"].load( group, filePath, xmlNode );
-                                    
-                                    // Save the mesh file xml node for later
-                                    else
-                                        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__["assetHolder"].set( group, filePath, xmlNode );
-                                });
+                            promiseAry.push( 
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'binary', filePath )
+                                    .then(( binaryFile ) => this.loadMesh3D( group, filePath, objData, binaryFile ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
                         }
                     }
                 }
-
-                // If there's nothing to load or it was loaded via assetHolder, call the complete callback
-                if( this.loadCounter === 0 )
-                    finishCallback();
             }
             else
             {
                 throw new Error( `Can't download asset because object group does not exist (${group})!` );
             }
         }
+
+        return Promise.all( promiseAry );
     }
-    
+
     //
     //  DESC: Load all the assets associated with this group
     //
-    loadAssets3D( groupAry, finishCallback )
+    loadMesh3D( group, binaryFilePath, objData, binaryFile )
     {
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        let promiseAry = [];
+
+        objData.visualData.meshGrp =
+            _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__["meshManager"].load( group, binaryFilePath, binaryFile );
+
+        let filePathAry = objData.visualData.meshGrp.uniqueTexturePathAry;
+
+        // Load the mesh textures
+        for( let i = 0; i < filePathAry.length; ++i )
         {
-            let group = groupAry[grp];
+            let filePath = filePathAry[i].path;
             
-            // Get the group map
-            let groupMap = this.objectDataMapMap.get( group );
-            if( groupMap !== undefined )
+            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].allowLoad( group, filePath ) )
             {
-                let dupPathCheck = [];
-
-                for( let [ key, objData ] of groupMap.entries() )
-                {
-                    let filePath = objData.visualData.meshFilePath;
-
-                    if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
-                    {
-                        // Add to the array to check for duplication
-                        dupPathCheck.push( filePath );
-
-                        // Load the mesh file
-                        this.downloadFile( 'binary', group, filePath, finishCallback,
-                            ( group, binaryFile, filePath, finishCallback ) =>
-                            {
-                                objData.visualData.meshGrp =
-                                    _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__["meshManager"].load( group, filePath, binaryFile );
-                            
-                                // Load the mesh textures
-                                for( let i = 0; i < objData.visualData.meshGrp.uniqueTexturePathAry.length; ++i )
-                                {
-                                    filePath = objData.visualData.meshGrp.uniqueTexturePathAry[i].path;
-                                    
-                                    if( filePath && (dupPathCheck.indexOf(filePath) === -1) )
-                                    {
-                                        dupPathCheck.push( filePath );
-
-                                        // Load the texture file
-                                        this.downloadFile( 'img', group, filePath, finishCallback,
-                                            ( group, image, filePath, finishCallback ) =>
-                                            {
-                                                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( group, filePath, image );
-                                            });
-                                    }
-                                }
-                            });
-                    }
-                }
-
-                // If there's nothing to load or it was loaded via assetHolder, call the complete callback
-                if( this.loadCounter === 0 )
-                    finishCallback();
-            }
-            else
-            {
-                throw new Error( `Can't load mesh data because object group does not exist (${group})!` );
+                // Load the texture file
+                promiseAry.push( 
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'img', filePath )
+                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( group, filePath, image ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }));
             }
         }
+
+        return Promise.all( promiseAry );
     }
 
     //
     //  DESC: Create OpenGL objects from data
     //
-    createFromData( groupAry, callback )
+    createFromData( groupAry )
     {
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
@@ -4251,16 +4240,16 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
             if( groupMap !== undefined )
             {
                 // Create OpenGL objects from data
-                for( let [ key, objData ] of groupMap.entries() )
+                for( let objData of groupMap.values() )
                     objData.createFromData( group );
             }
         }
+
+        return 0;
         
         // Temporary assets can now be freed
-        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__["assetHolder"].deleteGroup( groupAry );
-        _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__["spriteSheetManager"].deleteGroup( groupAry );
-        
-        callback();
+        //assetHolder.deleteGroup( groupAry );
+        //spriteSheetManager.deleteGroup( groupAry );
     }
     
     //
@@ -4318,7 +4307,7 @@ var objectDataManager = new ObjectDataManager;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ManagerBase", function() { return ManagerBase; });
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 //
 //  FILE NAME: managerbase.js
@@ -4334,23 +4323,15 @@ class ManagerBase
     constructor()
     {
         this.listTableMap = new Map;
-        
-        // load counter
-        this.loadCounter = 0;
     }
     
     // 
     //  DESC: Load the data list tables from file path
     //
-    loadListTable( filePath, callback )
+    loadListTable( filePath )
     {
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__["downloadFile"]( 'xml', filePath,
-            ( xmlNode ) =>
-            {
-                this.loadListTableFromNode( xmlNode );
-                
-                callback();
-            });
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__["downloadFile"]( 'xml', filePath,
+            ( xmlNode ) => this.loadListTableFromNode( xmlNode ));
     }
     
     // 
@@ -4371,9 +4352,7 @@ class ManagerBase
                 {
                     let pathAry = [];
                     for( let j = 0; j < fileLst.length; ++j )
-                    {
                         pathAry.push( fileLst[j].getAttribute('path') );
-                    }
 
                     this.listTableMap.set( groupName, pathAry );
                 }
@@ -4382,34 +4361,12 @@ class ManagerBase
     }
     
     //
-    //  DESC: Load the XML file
+    //  DESC: Load the group array
     //
-    downloadFile( fileType, group, filePath, finishCallback, loadCallback )
+    loadGroupAry( groupNameStr, groupMapMap, groupAry )
     {
-        // Use a counter to determine when the load is done because there's
-        // no garentee they will finish in the order executed
-        // Always do this before the load
-        ++this.loadCounter;
-                    
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__["downloadFile"]( fileType, filePath,
-            ( fileData ) =>
-            {
-                // Load all object information from an xml node
-                loadCallback( group, fileData, filePath, finishCallback );
+        let promiseAry = [];
 
-                // Always do this after the load
-                --this.loadCounter;
-
-                if( this.loadCounter === 0 )
-                    finishCallback();
-            });
-    }
-    
-    //
-    //  DESC: Load all XML's associated with this group
-    //
-    loadGroup( groupNameStr, groupMapMap, groupAry, finishCallback )
-    {
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
@@ -4424,7 +4381,7 @@ class ManagerBase
                     // Create a new group map inside of our map
                     groupMapMap.set( group, new Map );
 
-                    this.load( group, finishCallback );
+                    promiseAry.push( this.load( group ) );
                 }
                 else
                 {
@@ -4436,30 +4393,29 @@ class ManagerBase
                 throw new Error( `${groupNameStr} group name can't be found (${group})!` );
             }
         }
-    }
-    
-    //
-    //  DESC: Load all XML's associated with this group
-    //
-    load( group, finishCallback )
-    {
-        // Make sure the group we are looking for has been defined in the list table file
-        let pathAry = this.listTableMap.get( group );
-        if( pathAry !== undefined )
-        {
-            for( let i = 0; i < pathAry.length; ++i )
-            {
-                this.downloadFile( 'xml', group, pathAry[i], finishCallback,
-                    ( group, xmlNode, filePath, finishCallback ) => 
-                    {
-                        // Call the class function to load the data
-                        this.loadFromNode( group, xmlNode, filePath, finishCallback );
-                    });
-            }
 
-            // If there's nothing to load, call the complete callback
-            if( this.loadCounter === 0 )
-                finishCallback();
+        return Promise.all( promiseAry );
+    }
+
+    //
+    //  DESC: Load the group
+    //
+    load( group )
+    {
+        let promiseAry = [];
+
+        // Make sure the group we are looking for has been defined in the list table file
+        let filePathAry = this.listTableMap.get( group );
+        if( filePathAry !== undefined )
+        {
+            for( let i = 0; i < filePathAry.length; ++i )
+            {
+                let filePath = filePathAry[i];
+                promiseAry.push( 
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__["downloadFile"]( 'xml', filePath )
+                        .then(( xmlNode ) => this.loadFromNode( group, xmlNode, filePath ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }));
+            }
         }
         else
         {
@@ -4468,6 +4424,8 @@ class ManagerBase
             else
                 throw new Error( `Group description in list table does not exist (${group})!` );
         }
+
+        return Promise.all( promiseAry );
     }
 }
 
@@ -4479,7 +4437,7 @@ class ManagerBase
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "meshManager", function() { return meshManager; });
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
 /* harmony import */ var _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
 /* harmony import */ var _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
 
@@ -4523,15 +4481,56 @@ class MeshManager
         }
         
         let meshGrp = groupMap.get( filePath );
-        if( meshGrp === undefined )
+        if( meshGrp === undefined || meshGrp === -1 )
         {
             meshGrp = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__["MeshGroup"];
             groupMap.set( filePath, meshGrp );
             
             this.loadData( group, filePath, binaryData, meshGrp );
         }
-        
+
         return meshGrp;
+    }
+
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, filePath )
+    {
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.meshBufMapMap.set( group, groupMap );
+        }
+        
+        let meshGrp = groupMap.get( filePath );
+        if( meshGrp === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( filePath, -1 );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    //
+    //  DESC: Get the 2D texture class
+    //
+    get( group, filePath )
+    {
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap === undefined )
+            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
+
+        let meshBuf = groupMap.get( filePath );
+        if( meshBuf === undefined || meshBuf === -1 )
+            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
+
+        return meshBuf;
     }
     
     //
@@ -4987,7 +4986,7 @@ class SpriteSheetManager
         }
         
         let spriteSheet = groupMap.get( filePath );
-        if( spriteSheet === undefined )
+        if( spriteSheet === undefined || spriteSheet === -1 )
         {
             spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__["SpriteSheet"];
             
@@ -4997,6 +4996,31 @@ class SpriteSheetManager
             // Add a new entry to the map
             groupMap.set( filePath, spriteSheet );
         }
+    }
+
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, filePath )
+    {
+        let groupMap = this.spriteSheetMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.spriteSheetMapMap.set( group, groupMap );
+        }
+        
+        let spriteSheet = groupMap.get( filePath );
+        if( spriteSheet === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( filePath, -1 );
+
+            return true;
+        }
+
+        return false;
     }
     
     //
@@ -5336,9 +5360,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadDynamicOffset", function() { return loadDynamicOffset; });
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(25);
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
+/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
 /* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
@@ -5887,7 +5911,7 @@ class Color
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicOffset", function() { return DynamicOffset; });
 /* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
-/* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
+/* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 // 
@@ -6096,27 +6120,29 @@ class AssetHolder
     {
         this.loadMapMap = new Map;
     }
-    
-    // 
-    //  DESC: Check for the data
-    //
-    has( group, name )
-    {
-        // Get the group map
-        let groupMap = this.loadMapMap.get( group );
-        if( groupMap === undefined )
-            return false;
-        
-        return groupMap.has(name);
-    }
-    
+
     // 
     //  DESC: Set the data
     //
     set( group, name, data = null )
     {
-        //console.log(`AssetHolder Set: ${group}, ${name}`);
-        
+        let groupMap = this.loadMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.loadMapMap.set( group, groupMap );
+        }
+
+        let asset = groupMap.get( name );
+        if( asset === undefined || asset === -1 )
+            groupMap.set( name, data );
+    }
+    
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, name )
+    {
         let groupMap = this.loadMapMap.get( group );
         if( groupMap === undefined )
         {
@@ -6124,7 +6150,17 @@ class AssetHolder
             this.loadMapMap.set( group, groupMap );
         }
         
-        groupMap.set( name, data );
+        let asset = groupMap.get( name );
+        if( asset === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( name, -1 );
+
+            return true;
+        }
+
+        return false;
     }
     
     // 
@@ -6137,7 +6173,7 @@ class AssetHolder
             throw new Error( `Group does not exist! (${group}).` );
             
         let data = groupMap.get( name );
-        if( data === undefined )
+        if( data === undefined || data === -1 )
             throw new Error( `Data does not exist! (${name}).` );
         
         return data;
@@ -6172,11 +6208,11 @@ var assetHolder = new AssetHolder;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectData2D", function() { return ObjectData2D; });
-/* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
-/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(94);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
+/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(41);
+/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(95);
+/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(34);
 
 // 
 //  FILE NAME: objectdata2d.js
@@ -6191,18 +6227,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectData2D
+class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__["iObjectdata"]
 {
     constructor()
     {
-        // Set the object data type
-        this.objDataType = _common_defs__WEBPACK_IMPORTED_MODULE_4__["EODT_OBJECT_DATA_2D"];
+        super();
 
         // Visual data of the object
-        this.visualData = new _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_1__["ObjectVisualData2D"];
+        this.visualData = new _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__["ObjectVisualData2D"];
 
         // Physics data of the object
-        this.physicsData = new _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_0__["ObjectPhysicsData2D"];
+        this.physicsData = new _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__["ObjectPhysicsData2D"];
 
         // The name of the object data
         this.name = null;
@@ -6211,7 +6246,7 @@ class ObjectData2D
         this.group = null;
 
         // The initial size of the object
-        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"];
+        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__["Size"];
     }
     
     // 
@@ -6233,7 +6268,7 @@ class ObjectData2D
         this.group = group;
 
         // Load the size
-        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadSize"]( node, this.size );
+        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__["loadSize"]( node, this.size );
 
         // Load the visual data
         this.visualData.loadObjData( node );
@@ -6250,6 +6285,14 @@ class ObjectData2D
         // Create the visuales
         this.visualData.createFromData( group, this.size );
     }
+
+    // 
+    //  DESC: Is this 2D object data?
+    //
+    is2D()
+    {
+        return true;
+    }
 }
 
 
@@ -6259,9 +6302,48 @@ class ObjectData2D
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iObjectdata", function() { return iObjectdata; });
+
+// 
+//  FILE NAME: iobjectdata.js
+//  DESC:      Object data interface class
+//
+
+
+
+class iObjectdata
+{
+    constructor()
+    {
+    }
+    
+    // 
+    //  DESC: Is this 2D object data?
+    //
+    is2D()
+    {
+        return false;
+    }
+
+    // 
+    //  DESC: Is this 3D object data?
+    //
+    is3D()
+    {
+        return false;
+    }
+}
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fixture", function() { return Fixture; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectPhysicsData2D", function() { return ObjectPhysicsData2D; });
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_0__);
 
 // 
@@ -6531,68 +6613,68 @@ class ObjectPhysicsData2D
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.internal = {};
 
-exports.Serializer = __webpack_require__(42);
+exports.Serializer = __webpack_require__(43);
 
-exports.Math = __webpack_require__(47);
-exports.Vec2 = __webpack_require__(46);
-exports.Vec3 = __webpack_require__(68);
-exports.Mat22 = __webpack_require__(64);
-exports.Mat33 = __webpack_require__(69);
-exports.Transform = __webpack_require__(58);
-exports.Rot = __webpack_require__(56);
+exports.Math = __webpack_require__(48);
+exports.Vec2 = __webpack_require__(47);
+exports.Vec3 = __webpack_require__(69);
+exports.Mat22 = __webpack_require__(65);
+exports.Mat33 = __webpack_require__(70);
+exports.Transform = __webpack_require__(59);
+exports.Rot = __webpack_require__(57);
 
-exports.AABB = __webpack_require__(51);
+exports.AABB = __webpack_require__(52);
 
-exports.Shape = __webpack_require__(62);
-exports.Fixture = __webpack_require__(61);
-exports.Body = __webpack_require__(55);
-exports.Contact = __webpack_require__(63);
-exports.Joint = __webpack_require__(70);
-exports.World = __webpack_require__(43);
+exports.Shape = __webpack_require__(63);
+exports.Fixture = __webpack_require__(62);
+exports.Body = __webpack_require__(56);
+exports.Contact = __webpack_require__(64);
+exports.Joint = __webpack_require__(71);
+exports.World = __webpack_require__(44);
 
-exports.Circle = __webpack_require__(73);
-exports.Edge = __webpack_require__(74);
-exports.Polygon = __webpack_require__(75);
-exports.Chain = __webpack_require__(76);
-exports.Box = __webpack_require__(77);
+exports.Circle = __webpack_require__(74);
+exports.Edge = __webpack_require__(75);
+exports.Polygon = __webpack_require__(76);
+exports.Chain = __webpack_require__(77);
+exports.Box = __webpack_require__(78);
 
-__webpack_require__(78);
 __webpack_require__(79);
-exports.internal.CollidePolygons = __webpack_require__(80);
-__webpack_require__(81);
+__webpack_require__(80);
+exports.internal.CollidePolygons = __webpack_require__(81);
 __webpack_require__(82);
+__webpack_require__(83);
 
-exports.DistanceJoint = __webpack_require__(83);
-exports.FrictionJoint = __webpack_require__(84);
-exports.GearJoint = __webpack_require__(85);
-exports.MotorJoint = __webpack_require__(88);
-exports.MouseJoint = __webpack_require__(89);
-exports.PrismaticJoint = __webpack_require__(87);
-exports.PulleyJoint = __webpack_require__(90);
-exports.RevoluteJoint = __webpack_require__(86);
-exports.RopeJoint = __webpack_require__(91);
-exports.WeldJoint = __webpack_require__(92);
-exports.WheelJoint = __webpack_require__(93);
+exports.DistanceJoint = __webpack_require__(84);
+exports.FrictionJoint = __webpack_require__(85);
+exports.GearJoint = __webpack_require__(86);
+exports.MotorJoint = __webpack_require__(89);
+exports.MouseJoint = __webpack_require__(90);
+exports.PrismaticJoint = __webpack_require__(88);
+exports.PulleyJoint = __webpack_require__(91);
+exports.RevoluteJoint = __webpack_require__(87);
+exports.RopeJoint = __webpack_require__(92);
+exports.WeldJoint = __webpack_require__(93);
+exports.WheelJoint = __webpack_require__(94);
 
-exports.internal.Sweep= __webpack_require__(57);
-exports.internal.stats = __webpack_require__(67);
-exports.internal.Manifold = __webpack_require__(65);
-exports.internal.Distance = __webpack_require__(66);
-exports.internal.TimeOfImpact = __webpack_require__(71);
-exports.internal.DynamicTree = __webpack_require__(52);
-exports.internal.Settings = __webpack_require__(50);
+exports.internal.Sweep= __webpack_require__(58);
+exports.internal.stats = __webpack_require__(68);
+exports.internal.Manifold = __webpack_require__(66);
+exports.internal.Distance = __webpack_require__(67);
+exports.internal.TimeOfImpact = __webpack_require__(72);
+exports.internal.DynamicTree = __webpack_require__(53);
+exports.internal.Settings = __webpack_require__(51);
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var World = __webpack_require__(43);
+var World = __webpack_require__(44);
 
 exports.toJson = function(world) {
   return JSON.stringify(world._serialize(), function(key, value) {
@@ -6613,7 +6695,7 @@ exports.fromJson = function(string) {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -6640,13 +6722,13 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = World;
 
-var options = __webpack_require__(44);
-var common = __webpack_require__(45);
-var Vec2 = __webpack_require__(46);
-var BroadPhase = __webpack_require__(49);
-var Solver = __webpack_require__(54);
-var Body = __webpack_require__(55);
-var Contact = __webpack_require__(63);
+var options = __webpack_require__(45);
+var common = __webpack_require__(46);
+var Vec2 = __webpack_require__(47);
+var BroadPhase = __webpack_require__(50);
+var Solver = __webpack_require__(55);
+var Body = __webpack_require__(56);
+var Contact = __webpack_require__(64);
 
 /**
  * @typedef {Object} WorldDef
@@ -7734,7 +7816,7 @@ World.prototype.postSolve = function(contact, impulse) {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports) {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -7767,7 +7849,7 @@ module.exports = function(to, from) {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -7786,7 +7868,7 @@ exports.assert = function(statement, err, log) {
 };
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -7813,8 +7895,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Vec2;
 
-var common = __webpack_require__(45);
-var Math = __webpack_require__(47);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
 
 function Vec2(x, y) {
   if (!(this instanceof Vec2)) {
@@ -8311,7 +8393,7 @@ Vec2.translateFn = function(x, y) {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8336,8 +8418,8 @@ Vec2.translateFn = function(x, y) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(45);
-var create = __webpack_require__(48);
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
 var native = Math;
 var math = module.exports = create(native);
 
@@ -8426,7 +8508,7 @@ math.random = function(min, max) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 if (typeof Object.create == 'function') {
@@ -8448,7 +8530,7 @@ if (typeof Object.create == 'function') {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8473,11 +8555,11 @@ if (typeof Object.create == 'function') {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(50);
-var common = __webpack_require__(45);
-var Math = __webpack_require__(47);
-var AABB = __webpack_require__(51);
-var DynamicTree = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var AABB = __webpack_require__(52);
+var DynamicTree = __webpack_require__(53);
 
 module.exports = BroadPhase;
 
@@ -8686,7 +8768,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports) {
 
 /*
@@ -8852,7 +8934,7 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8877,9 +8959,9 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(50);
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
+var Settings = __webpack_require__(51);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
 
 module.exports = AABB;
 
@@ -9111,7 +9193,7 @@ AABB.prototype.toString = function() {
 }
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -9136,12 +9218,12 @@ AABB.prototype.toString = function() {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(50);
-var common = __webpack_require__(45);
-var Pool = __webpack_require__(53);
-var Vec2 = __webpack_require__(46);
-var Math = __webpack_require__(47);
-var AABB = __webpack_require__(51);
+var Settings = __webpack_require__(51);
+var common = __webpack_require__(46);
+var Pool = __webpack_require__(54);
+var Vec2 = __webpack_require__(47);
+var Math = __webpack_require__(48);
+var AABB = __webpack_require__(52);
 
 module.exports = DynamicTree;
 
@@ -10032,7 +10114,7 @@ function Iterator() {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 /*
@@ -10125,7 +10207,7 @@ function Pool(opts) {
 }
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -10153,21 +10235,21 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 module.exports = Solver;
 module.exports.TimeStep = TimeStep;
 
-var Settings = __webpack_require__(50);
-var common = __webpack_require__(45);
+var Settings = __webpack_require__(51);
+var common = __webpack_require__(46);
 
-var Vec2 = __webpack_require__(46);
-var Math = __webpack_require__(47);
+var Vec2 = __webpack_require__(47);
+var Math = __webpack_require__(48);
 
-var Body = __webpack_require__(55);
-var Contact = __webpack_require__(63);
-var Joint = __webpack_require__(70);
+var Body = __webpack_require__(56);
+var Contact = __webpack_require__(64);
+var Joint = __webpack_require__(71);
 
-var TimeOfImpact = __webpack_require__(71);
+var TimeOfImpact = __webpack_require__(72);
 var TOIInput = TimeOfImpact.Input;
 var TOIOutput = TimeOfImpact.Output;
 
-var Distance = __webpack_require__(66);
+var Distance = __webpack_require__(67);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -11006,7 +11088,7 @@ Solver.prototype.postSolveIsland = function() {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11033,20 +11115,20 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Body;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
 
-var Vec2 = __webpack_require__(46);
-var Rot = __webpack_require__(56);
-var Math = __webpack_require__(47);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+var Math = __webpack_require__(48);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Fixture = __webpack_require__(61);
-var Shape = __webpack_require__(62);
-var World = __webpack_require__(43);
+var Fixture = __webpack_require__(62);
+var Shape = __webpack_require__(63);
+var World = __webpack_require__(44);
 
 var staticBody = Body.STATIC = 'static';
 var kinematicBody = Body.KINEMATIC = 'kinematic';
@@ -12087,7 +12169,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12114,9 +12196,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Rot;
 
-var common = __webpack_require__(45);
-var Vec2 = __webpack_require__(46);
-var Math = __webpack_require__(47);
+var common = __webpack_require__(46);
+var Vec2 = __webpack_require__(47);
+var Math = __webpack_require__(48);
 
 // TODO merge with Transform
 
@@ -12321,7 +12403,7 @@ Rot.mulTVec2 = function(rot, m) {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12348,11 +12430,11 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Sweep;
 
-var common = __webpack_require__(45);
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Rot = __webpack_require__(56);
-var Transform = __webpack_require__(58);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+var Transform = __webpack_require__(59);
 
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
@@ -12458,7 +12540,7 @@ Sweep.prototype.set = function(that) {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12485,9 +12567,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Transform;
 
-var common = __webpack_require__(45);
-var Vec2 = __webpack_require__(46);
-var Rot = __webpack_require__(56);
+var common = __webpack_require__(46);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
 
 // TODO merge with Rot
 
@@ -12696,7 +12778,7 @@ Transform.mulTXf = function(a, b) {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12723,7 +12805,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Velocity;
 
-var Vec2 = __webpack_require__(46);
+var Vec2 = __webpack_require__(47);
 
 /**
  * @prop {Vec2} v linear
@@ -12732,52 +12814,6 @@ var Vec2 = __webpack_require__(46);
 function Velocity() {
   this.v = Vec2.zero();
   this.w = 0;
-}
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
-module.exports = Position;
-
-var Vec2 = __webpack_require__(46);
-var Rot = __webpack_require__(56);
-
-/**
- * @prop {Vec2} c location
- * @prop {float} a angle
- */
-function Position() {
-  this.c = Vec2.zero();
-  this.a = 0;
-}
-
-Position.prototype.getTransform = function(xf, p) {
-  xf.q.set(this.a);
-  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
-  return xf;
 }
 
 /***/ }),
@@ -12806,17 +12842,63 @@ Position.prototype.getTransform = function(xf, p) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
+module.exports = Position;
+
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+
+/**
+ * @prop {Vec2} c location
+ * @prop {float} a angle
+ */
+function Position() {
+  this.c = Vec2.zero();
+  this.a = 0;
+}
+
+Position.prototype.getTransform = function(xf, p) {
+  xf.q.set(this.a);
+  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+  return xf;
+}
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 module.exports = Fixture;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
 
-var AABB = __webpack_require__(51);
+var AABB = __webpack_require__(52);
 
-var Shape = __webpack_require__(62);
+var Shape = __webpack_require__(63);
 
 /**
  * @typedef {Object} FixtureDef
@@ -13233,7 +13315,7 @@ Fixture.prototype.shouldCollide = function(that) {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13260,7 +13342,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Shape;
 
-var Math = __webpack_require__(47);
+var Math = __webpack_require__(48);
 
 /**
  * A shape is used for collision detection. You can create a shape however you
@@ -13368,7 +13450,7 @@ Shape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13395,17 +13477,17 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 var DEBUG_SOLVER = false;
 
-var common = __webpack_require__(45);
+var common = __webpack_require__(46);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Transform = __webpack_require__(58);
-var Mat22 = __webpack_require__(64);
-var Rot = __webpack_require__(56);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Transform = __webpack_require__(59);
+var Mat22 = __webpack_require__(65);
+var Rot = __webpack_require__(57);
 
-var Settings = __webpack_require__(50);
-var Manifold = __webpack_require__(65);
-var Distance = __webpack_require__(66);
+var Settings = __webpack_require__(51);
+var Manifold = __webpack_require__(66);
+var Distance = __webpack_require__(67);
 
 module.exports = Contact;
 
@@ -14598,7 +14680,7 @@ Contact.destroy = function(contact, listener) {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14625,9 +14707,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Mat22;
 
-var common = __webpack_require__(45);
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
 
 /**
  * A 2-by-2 matrix. Stored in column-major order.
@@ -14811,7 +14893,7 @@ Mat22.add = function(mx1, mx2) {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14836,12 +14918,12 @@ Mat22.add = function(mx1, mx2) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(45);
+var common = __webpack_require__(46);
 
-var Vec2 = __webpack_require__(46);
-var Transform = __webpack_require__(58);
-var Math = __webpack_require__(47);
-var Rot = __webpack_require__(56);
+var Vec2 = __webpack_require__(47);
+var Transform = __webpack_require__(59);
+var Math = __webpack_require__(48);
+var Rot = __webpack_require__(57);
 
 module.exports = Manifold;
 module.exports.clipSegmentToLine = clipSegmentToLine;
@@ -15162,7 +15244,7 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15194,21 +15276,21 @@ module.exports.Output = DistanceOutput;
 module.exports.Proxy = DistanceProxy;
 module.exports.Cache = SimplexCache;
 
-var Settings = __webpack_require__(50);
-var common = __webpack_require__(45);
+var Settings = __webpack_require__(51);
+var common = __webpack_require__(46);
 
-var stats = __webpack_require__(67);
+var stats = __webpack_require__(68);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -15859,7 +15941,7 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 }
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports) {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -15877,7 +15959,7 @@ exports.toString = function(newline) {
 };
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15904,8 +15986,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Vec3;
 
-var common = __webpack_require__(45);
-var Math = __webpack_require__(47);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
 
 function Vec3(x, y, z) {
   if (!(this instanceof Vec3)) {
@@ -16056,7 +16138,7 @@ Vec3.neg = function(v) {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16083,10 +16165,10 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Mat33;
 
-var common = __webpack_require__(45);
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -16285,7 +16367,7 @@ Mat33.add = function(a, b) {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16312,7 +16394,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Joint;
 
-var common = __webpack_require__(45);
+var common = __webpack_require__(46);
 
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
@@ -16506,7 +16588,7 @@ Joint.prototype.solvePositionConstraints = function(step) {
 };
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16535,25 +16617,25 @@ module.exports = TimeOfImpact;
 module.exports.Input = TOIInput;
 module.exports.Output = TOIOutput;
 
-var Settings = __webpack_require__(50);
+var Settings = __webpack_require__(51);
 
-var common = __webpack_require__(45);
-var Timer = __webpack_require__(72);
+var common = __webpack_require__(46);
+var Timer = __webpack_require__(73);
 
-var stats = __webpack_require__(67);
+var stats = __webpack_require__(68);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Distance = __webpack_require__(66);
+var Distance = __webpack_require__(67);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -16991,7 +17073,7 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -17007,7 +17089,7 @@ module.exports.diff = function(time) {
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17034,16 +17116,16 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = CircleShape;
 
-var common = __webpack_require__(45);
-var create = __webpack_require__(48);
-var options = __webpack_require__(44);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Rot = __webpack_require__(56);
-var Vec2 = __webpack_require__(46);
-var AABB = __webpack_require__(51);
-var Settings = __webpack_require__(50);
-var Shape = __webpack_require__(62);
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var options = __webpack_require__(45);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
 
 CircleShape._super = Shape;
 CircleShape.prototype = create(CircleShape._super.prototype);
@@ -17183,7 +17265,7 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17210,15 +17292,15 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = EdgeShape;
 
-var create = __webpack_require__(48);
-var options = __webpack_require__(44);
-var Settings = __webpack_require__(50);
-var Shape = __webpack_require__(62);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Rot = __webpack_require__(56);
-var Vec2 = __webpack_require__(46);
-var AABB = __webpack_require__(51);
+var create = __webpack_require__(49);
+var options = __webpack_require__(45);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
 
 EdgeShape._super = Shape;
 EdgeShape.prototype = create(EdgeShape._super.prototype);
@@ -17415,7 +17497,7 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17442,16 +17524,16 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PolygonShape;
 
-var common = __webpack_require__(45);
-var create = __webpack_require__(48);
-var options = __webpack_require__(44);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Rot = __webpack_require__(56);
-var Vec2 = __webpack_require__(46);
-var AABB = __webpack_require__(51);
-var Settings = __webpack_require__(50);
-var Shape = __webpack_require__(62);
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var options = __webpack_require__(45);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
 
 PolygonShape._super = Shape;
 PolygonShape.prototype = create(PolygonShape._super.prototype);
@@ -17932,7 +18014,7 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 };
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17959,17 +18041,17 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = ChainShape;
 
-var common = __webpack_require__(45);
-var create = __webpack_require__(48);
-var options = __webpack_require__(44);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Rot = __webpack_require__(56);
-var Vec2 = __webpack_require__(46);
-var AABB = __webpack_require__(51);
-var Settings = __webpack_require__(50);
-var Shape = __webpack_require__(62);
-var EdgeShape = __webpack_require__(74);
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var options = __webpack_require__(45);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var EdgeShape = __webpack_require__(75);
 
 ChainShape._super = Shape;
 ChainShape.prototype = create(ChainShape._super.prototype);
@@ -18208,7 +18290,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 };
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18235,9 +18317,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = BoxShape;
 
-var common = __webpack_require__(45);
-var create = __webpack_require__(48);
-var PolygonShape = __webpack_require__(75);
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var PolygonShape = __webpack_require__(76);
 
 BoxShape._super = PolygonShape;
 BoxShape.prototype = create(BoxShape._super.prototype);
@@ -18260,7 +18342,7 @@ function BoxShape(hx, hy, center, angle) {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18285,16 +18367,16 @@ function BoxShape(hx, hy, center, angle) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(45);
-var create = __webpack_require__(48);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Vec2 = __webpack_require__(46);
-var Settings = __webpack_require__(50);
-var Shape = __webpack_require__(62);
-var Contact = __webpack_require__(63);
-var Manifold = __webpack_require__(65);
-var CircleShape = __webpack_require__(73);
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Vec2 = __webpack_require__(47);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var Contact = __webpack_require__(64);
+var Manifold = __webpack_require__(66);
+var CircleShape = __webpack_require__(74);
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
@@ -18334,7 +18416,7 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
 exports.CollideCircles = CollideCircles;
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18359,19 +18441,19 @@ exports.CollideCircles = CollideCircles;
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(45);
-var create = __webpack_require__(48);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Vec2 = __webpack_require__(46);
-var Rot = __webpack_require__(56);
-var Settings = __webpack_require__(50);
-var Shape = __webpack_require__(62);
-var Contact = __webpack_require__(63);
-var Manifold = __webpack_require__(65);
-var EdgeShape = __webpack_require__(74);
-var ChainShape = __webpack_require__(76);
-var CircleShape = __webpack_require__(73);
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var Contact = __webpack_require__(64);
+var Manifold = __webpack_require__(66);
+var EdgeShape = __webpack_require__(75);
+var ChainShape = __webpack_require__(77);
+var CircleShape = __webpack_require__(74);
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
@@ -18523,7 +18605,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18548,17 +18630,17 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(45);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Rot = __webpack_require__(56);
-var Vec2 = __webpack_require__(46);
-var AABB = __webpack_require__(51);
-var Settings = __webpack_require__(50);
-var Manifold = __webpack_require__(65);
-var Contact = __webpack_require__(63);
-var Shape = __webpack_require__(62);
-var PolygonShape = __webpack_require__(75);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Manifold = __webpack_require__(66);
+var Contact = __webpack_require__(64);
+var Shape = __webpack_require__(63);
+var PolygonShape = __webpack_require__(76);
 
 module.exports = CollidePolygons;
 
@@ -18790,7 +18872,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18815,18 +18897,18 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(45);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Rot = __webpack_require__(56);
-var Vec2 = __webpack_require__(46);
-var AABB = __webpack_require__(51);
-var Settings = __webpack_require__(50);
-var Manifold = __webpack_require__(65);
-var Contact = __webpack_require__(63);
-var Shape = __webpack_require__(62);
-var CircleShape = __webpack_require__(73);
-var PolygonShape = __webpack_require__(75);
+var common = __webpack_require__(46);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Rot = __webpack_require__(57);
+var Vec2 = __webpack_require__(47);
+var AABB = __webpack_require__(52);
+var Settings = __webpack_require__(51);
+var Manifold = __webpack_require__(66);
+var Contact = __webpack_require__(64);
+var Shape = __webpack_require__(63);
+var CircleShape = __webpack_require__(74);
+var PolygonShape = __webpack_require__(76);
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
@@ -18949,7 +19031,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18974,19 +19056,19 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(45);
-var create = __webpack_require__(48);
-var Math = __webpack_require__(47);
-var Transform = __webpack_require__(58);
-var Vec2 = __webpack_require__(46);
-var Rot = __webpack_require__(56);
-var Settings = __webpack_require__(50);
-var Shape = __webpack_require__(62);
-var Contact = __webpack_require__(63);
-var Manifold = __webpack_require__(65);
-var EdgeShape = __webpack_require__(74);
-var ChainShape = __webpack_require__(76);
-var PolygonShape = __webpack_require__(75);
+var common = __webpack_require__(46);
+var create = __webpack_require__(49);
+var Math = __webpack_require__(48);
+var Transform = __webpack_require__(59);
+var Vec2 = __webpack_require__(47);
+var Rot = __webpack_require__(57);
+var Settings = __webpack_require__(51);
+var Shape = __webpack_require__(63);
+var Contact = __webpack_require__(64);
+var Manifold = __webpack_require__(66);
+var EdgeShape = __webpack_require__(75);
+var ChainShape = __webpack_require__(77);
+var PolygonShape = __webpack_require__(76);
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
@@ -19438,7 +19520,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19465,22 +19547,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = DistanceJoint;
 
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 DistanceJoint.TYPE = 'distance-joint';
 
@@ -19793,7 +19875,7 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19820,23 +19902,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = FrictionJoint;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 FrictionJoint.TYPE = 'friction-joint';
 
@@ -20111,7 +20193,7 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -20138,26 +20220,26 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = GearJoint;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
-var RevoluteJoint = __webpack_require__(86);
-var PrismaticJoint = __webpack_require__(87);
+var RevoluteJoint = __webpack_require__(87);
+var PrismaticJoint = __webpack_require__(88);
 
 GearJoint.TYPE = 'gear-joint';
 
@@ -20594,7 +20676,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -20621,23 +20703,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = RevoluteJoint;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -21224,7 +21306,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -21251,23 +21333,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PrismaticJoint;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -21976,7 +22058,7 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -22003,23 +22085,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = MotorJoint;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 MotorJoint.TYPE = 'motor-joint';
 
@@ -22345,7 +22427,7 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -22372,22 +22454,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = MouseJoint;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 MouseJoint.TYPE = 'mouse-joint';
 
@@ -22651,7 +22733,7 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -22678,23 +22760,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PulleyJoint;
 
-var common = __webpack_require__(45);
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var common = __webpack_require__(46);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
@@ -23036,7 +23118,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -23063,22 +23145,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = RopeJoint;
 
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -23358,7 +23440,7 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -23385,22 +23467,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = WeldJoint;
 
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 WeldJoint.TYPE = 'weld-joint';
 
@@ -23794,7 +23876,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -23821,22 +23903,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = WheelJoint;
 
-var options = __webpack_require__(44);
-var create = __webpack_require__(48);
-var Settings = __webpack_require__(50);
+var options = __webpack_require__(45);
+var create = __webpack_require__(49);
+var Settings = __webpack_require__(51);
 
-var Math = __webpack_require__(47);
-var Vec2 = __webpack_require__(46);
-var Vec3 = __webpack_require__(68);
-var Mat22 = __webpack_require__(64);
-var Mat33 = __webpack_require__(69);
-var Rot = __webpack_require__(56);
-var Sweep = __webpack_require__(57);
-var Transform = __webpack_require__(58);
-var Velocity = __webpack_require__(59);
-var Position = __webpack_require__(60);
+var Math = __webpack_require__(48);
+var Vec2 = __webpack_require__(47);
+var Vec3 = __webpack_require__(69);
+var Mat22 = __webpack_require__(65);
+var Mat33 = __webpack_require__(70);
+var Rot = __webpack_require__(57);
+var Sweep = __webpack_require__(58);
+var Transform = __webpack_require__(59);
+var Velocity = __webpack_require__(60);
+var Position = __webpack_require__(61);
 
-var Joint = __webpack_require__(70);
+var Joint = __webpack_require__(71);
 
 WheelJoint.TYPE = 'wheel-joint';
 
@@ -24340,7 +24422,7 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24349,10 +24431,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(95);
+/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(96);
 /* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(32);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
 /* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(31);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(38);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
@@ -24629,11 +24711,11 @@ class ObjectVisualData2D
                 {
                     let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
                     let filePath = eval('`' + this.textureFilePath + '`');
-                    this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__["textureManager"].getTexture( group, filePath ) );
+                    this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__["textureManager"].get( group, filePath ) );
                 }
             }
             else
-                this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__["textureManager"].getTexture( group, this.textureFilePath ) );
+                this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_5__["textureManager"].get( group, this.textureFilePath ) );
             
             // If the passed in size is empty, set it to the texture size
             if( size.isEmpty() )
@@ -24936,7 +25018,7 @@ class ObjectVisualData2D
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24979,14 +25061,14 @@ class ScaledFrame
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectData3D", function() { return ObjectData3D; });
-/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(97);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(98);
 
 // 
 //  FILE NAME: objectdata3d.js
@@ -24995,19 +25077,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
 
 
-
-class ObjectData3D
+class ObjectData3D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__["iObjectdata"]
 {
     constructor()
     {
-        // Set the object data type
-        this.objDataType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EODT_OBJECT_DATA_3D"];
+        super();
 
         // Visual data of the object
-        this.visualData = new _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_0__["ObjectVisualData3D"];
+        this.visualData = new _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__["ObjectVisualData3D"];
 
         // Physics data of the object
         //CObjectPhysicsData2D m_physicsData;
@@ -25030,17 +25111,16 @@ class ObjectData3D
     // 
     //  DESC: Load the object data from the passed in node
     //
-    loadObjData( node, group, name )
+    loadObjData( xmlNode, group, name )
     {
         this.name = name;
         this.group = group;
 
         // Load the visual data
-        this.visualData.loadObjData( node );
+        this.visualData.loadObjData( xmlNode );
 
         // Load the physics data
-        //m_physicsData.LoadFromNode( node );
-
+        //m_physicsData.LoadFromNode( xmlNode );
     }
     
     // 
@@ -25051,18 +25131,26 @@ class ObjectData3D
         // Create the visuales
         this.visualData.addTexturesToMesh( group );
     }
+
+    // 
+    //  DESC: Is this 3D object data?
+    //
+    is3D()
+    {
+        return true;
+    }
 }
 
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectVisualData3D", function() { return ObjectVisualData3D; });
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(34);
 
 // 
@@ -25142,7 +25230,7 @@ class ObjectVisualData3D
                 
                 let textPath = this.meshGrp.uniqueTexturePathAry[textIndex].path;
                 
-                this.meshGrp.meshAry[i].textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].getTexture( group, textPath ) );
+                this.meshGrp.meshAry[i].textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].get( group, textPath ) );
             }
         }
     }
@@ -25158,14 +25246,14 @@ class ObjectVisualData3D
 
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "actionManager", function() { return actionManager; });
-/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
+/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(100);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 // 
 //  FILE NAME: actionmanager.js
@@ -25323,15 +25411,10 @@ class ActionManager
     // 
     //  DESC: Load data from file path
     //
-    load( filePath, callback )
+    load( filePath )
     {
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
-            ( xmlNode ) =>
-            {
-                this.loadFromNode( xmlNode );
-                
-                callback();
-            });
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
     // 
@@ -25521,7 +25604,7 @@ var actionManager = new ActionManager;
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25570,21 +25653,21 @@ class KeyCodeAction
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "menuManager", function() { return menuManager; });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(98);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(99);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(38);
-/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(101);
-/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(137);
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(138);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(14);
+/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
+/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(138);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(139);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -25669,8 +25752,10 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     // 
     //  DESC: Load the menu group
     //
-    preloadGroup( groupAry, finishCallback )
+    loadGroupXML( groupAry )
     {
+        let promiseAry = [];
+
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
@@ -25687,7 +25772,14 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
                     this.menuTreeMapMap.set( group, new Map );
 
                     for( let i = 0; i < pathAry.length; ++i )
-                        this.downloadFile( 'xml', group, pathAry[i], finishCallback, this.preload.bind(this) );
+                    {
+                        let filePath = pathAry[i];
+
+                        promiseAry.push( 
+                            _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath )
+                                .then(( xmlNode ) => this.loadFromNode( group, xmlNode ))
+                                .catch(( error ) => { console.error(error.stack); throw error; }));
+                    }
                 }
                 else
                 {
@@ -25699,29 +25791,33 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
                 throw new Error( `Menu Manager list group name can't be found (${group})!` );
             }
         }
+
+        return Promise.all( promiseAry );
     }
     
     //
     //  DESC: Load all object information from an xml node
     //
-    preload( group, node, filePath, finishCallback )
+    loadFromNode( group, xmlNode )
     {
         // Load the menus from node
-        this.preloadMenuXML( group, node, finishCallback );
+        return this.loadMenuFromNode( group, xmlNode )
 
-        // Load the trees from node
-        this.loadTreesFromNode( group, node );
+            // Load the trees from node
+            .then(() => this.loadTreesFromNode( group, xmlNode ))
     }
     
     //
     //  DESC: preload all object information from an xml node
     //
-    preloadMenuXML( group, node, finishCallback )
+    loadMenuFromNode( group, xmlNode )
     {
+        let promiseAry = [];
+
         // Get the menu group map
         let groupMap = this.menuMapMap.get( group );
         
-        let menuNode = node.getElementsByTagName('menu');
+        let menuNode = xmlNode.getElementsByTagName('menu');
 
         for( let i = 0; i < menuNode.length; ++i )
         {
@@ -25748,23 +25844,24 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
             menu.loadDynamicOffsetFromNode( menuNode[i] );
 
             // Check if this file has already been loaded
-            if( !_utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].has( group, filePath ) )
+            if( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].allowLoad( group, filePath ) )
             {
-                // Set a place holder for the data to be loaded
-                _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].set( group, filePath );
-
                 // Load the menu XML file
-                this.downloadFile( 'xml', group, filePath, finishCallback,
-                    ( group, xmlNode, filePath, finishCallback ) => 
-                    {
-                        // Store the preloaded XML file
-                        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].set( group, filePath, xmlNode );
+                promiseAry.push( 
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath )
+                        .then(( node ) => 
+                        {
+                            // Store the preloaded XML file
+                            _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].set( group, filePath, node );
 
-                        // Recurse back until all XML files are loaded
-                        this.preloadControlXML( group, xmlNode, finishCallback );
-                    });
+                            // Recurse back until all XML files are loaded
+                            return this.loadControlFromNode( group, node );
+                        })
+                        .catch(( error ) => { console.error(error.stack); throw error; }));
             }
         }
+
+        return Promise.all( promiseAry );
     }
     
     //
@@ -25817,16 +25914,18 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     }
     
     //
-    //  DESC: preload the menu controls from menu node
+    //  DESC: load the menu controls from menu node
+    //        NOTE: Promise using recursive function
     //
-    preloadControlXML( group, node, finishCallback )
+    loadControlFromNode( group, xmlNode )
     {
+        let promiseAry = [];
         let controlLst = ['staticMenuControls', 'mouseOnlyControls', 'menuControls', 'subControlList', 'scrollBoxControlList'];
         
         // Load the control XML files
         for( let i = 0; i < controlLst.length; ++i )
         {
-            let nodeLst = node.getElementsByTagName( controlLst[i] );
+            let nodeLst = xmlNode.getElementsByTagName( controlLst[i] );
             if( nodeLst.length )
             {
                 let controlNode = nodeLst[0].getElementsByTagName( 'control' );
@@ -25839,33 +25938,34 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
                         let filePath = filePathNode[0].getAttribute('file');
                         if( filePath )
                         {
-                            // Check if this file has already been loaded
-                            if( !_utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].has( group, filePath ) )
+                            // Check if this file has already been scheduled for loading
+                            if( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].allowLoad( group, filePath ) )
                             {
-                                // Set a place holder for the data to be loaded
-                                _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].set( group, filePath );
-                                
-                                this.downloadFile( 'xml', group, filePath, finishCallback,
-                                    ( group, xmlNode, filePath, finishCallback ) => 
+                                promiseAry.push(
+                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath )
+                                    .then(( node ) => 
                                     {
                                         // Store the preloaded XML file
-                                        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].set( group, filePath, xmlNode );
-
-                                        // Recurse back until all XML files are loaded for this control
-                                        this.preloadControlXML( group, xmlNode, finishCallback );
-                                    });
+                                        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].set( group, filePath, node );
+            
+                                        // Recurse back until all XML files are loaded
+                                        return this.loadControlFromNode( group, node );
+                                    })
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
                             }
                         }
                     }
                 }
             }
         }
+
+        return Promise.all( promiseAry );
     }
     
     //
-    //  DESC: Load all object information from an xml node
+    //  DESC: Create menu objects from loaded xml data
     //
-    createGroup( groupAry, doInit = true )
+    createFromData( groupAry )
     {
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
@@ -25876,13 +25976,13 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
             if( groupMap === undefined )
                 throw new Error( `Group map can't be found! (${group}).` );
 
-            for( let [ key, menu ] of groupMap.entries() )
+            for( let menu of groupMap.values() )
             {
                 // Get the menu XML node
-                let node = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].get( group, menu.filePath );
+                let xmlNode = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].get( group, menu.filePath );
 
                 // Have the menu load it's share
-                menu.loadFromNode( node );
+                menu.loadFromNode( xmlNode );
 
                 // Broadcast signal to let the game handle smart menu inits
                 _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__["signalManager"].broadcast_smartMenu( menu );
@@ -25891,12 +25991,13 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
                 menu.smartCreate();
             }
 
-            if( doInit )
-                this.initGroup( group );
+            this.initGroup( group );
         }
         
         // Temporary assets can now be freed
-        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].deleteGroup( groupAry );
+        //assetHolder.deleteGroup( groupAry );
+
+        return 0;
     }
 
     //
@@ -25917,7 +26018,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
             if( groupMap !== undefined )
             {
                 // Remove it from the tree vectors if it is there
-                for( let [ key, menuTree ] of groupMap.entries() )
+                for( let menuTree of groupMap.values() )
                 {
                     if( menuTree.interfaceMenu )
                     {
@@ -25951,7 +26052,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
         let groupMap = this.menuMapMap.get( group );
         if( groupMap !== undefined )
         {
-            for( let [ key, menu ] of groupMap.entries() )
+            for( let menu of groupMap.values() )
                 menu.init();
         }
         else
@@ -25969,7 +26070,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
         let groupMap = this.menuMapMap.get( group );
         if( groupMap !== undefined )
         {
-            for( let [ key, menu ] of groupMap.entries() )
+            for( let menu of groupMap.values() )
                 menu.cleanUp();
         }
         else
@@ -25981,15 +26082,10 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     // 
     //  DESC: Load the menu action list from XML
     //
-    loadMenuAction( filePath, callback )
+    loadMenuAction( filePath )
     {
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath,
-            ( xmlNode ) =>
-            {
-                this.loadMenuActionFromNode( xmlNode );
-                
-                callback();
-            });
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath,
+            ( xmlNode ) => this.loadMenuActionFromNode( xmlNode ));
     }
 
     // 
@@ -26023,7 +26119,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
             
             for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
             {
-                for( let [ key, tree ] of groupMap.entries() )
+                for( let key of groupMap.keys() )
                 {
                     if( key === treeStr )
                     {
@@ -26095,7 +26191,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     {
         for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
         {
-            for( let [ key, tree ] of groupMap.entries() )
+            for( let key of groupMap.keys() )
             {
                 if( key === treeStr )
                 {
@@ -26540,7 +26636,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     //
     getMenu( name )
     {
-        for( let [ groupKey, groupMap ] of this.menuMapMap.entries() )
+        for( let groupMap of this.menuMapMap.values() )
         {
             let menu = groupMap.get( name );
             if( menu !== undefined )
@@ -26601,7 +26697,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     //
     getTree( treeStr )
     {
-        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        for( let groupMap of this.menuTreeMapMap.values() )
         {
             for( let [ key, tree ] of groupMap.entries() )
             {
@@ -26657,7 +26753,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     //
     isTreeInActivelist( treeStr )
     {
-        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        for( let groupMap of this.menuTreeMapMap.values() )
         {
             for( let [ key, tree ] of groupMap.entries() )
             {
@@ -26687,8 +26783,8 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     //
     resetTransform()
     {
-        for( let [ groupKey, groupMap ] of this.menuMapMap.entries() )
-            for( let [ key, menu ] of groupMap.entries() )
+        for( let groupMap of this.menuMapMap.values() )
+            for( let menu of groupMap.values() )
                 menu.forceTransform();
     }
 
@@ -26697,8 +26793,8 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
     //
     resetDynamicOffset()
     {
-        for( let [ groupKey, groupMap ] of this.menuMapMap.entries() )
-            for( let [ key, menu ] of groupMap.entries() )
+        for( let groupMap of this.menuMapMap.values() )
+            for( let menu of groupMap.values() )
                 menu.resetDynamicPos();
     }
     
@@ -26714,23 +26810,23 @@ var menuManager = new MenuManager;
 
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Menu", function() { return Menu; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(104);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(105);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(105);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(106);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(122);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(123);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(26);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(120);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(121);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(21);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(123);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(124);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(34);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 // 
@@ -27603,14 +27699,14 @@ class Menu extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object2D", function() { return Object2D; });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -27739,13 +27835,13 @@ class Object2D extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object", function() { return Object; });
-/* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
@@ -27991,7 +28087,7 @@ class Object
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28072,23 +28168,23 @@ class ScrollParam
 }
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sprite", function() { return Sprite; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
-/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(108);
-/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(109);
-/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(110);
-/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(113);
-/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(114);
-/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(115);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(120);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
+/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(109);
+/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(110);
+/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(111);
+/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(114);
+/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(115);
+/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(116);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(121);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(21);
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(102);
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(121);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(103);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(122);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5);
 
 // 
@@ -28140,7 +28236,7 @@ class Sprite
         this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__["ScriptComponent"];
         
         // Allocate the sprite specific objects
-        if( this.objData.objDataType === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EODT_OBJECT_DATA_2D"] )
+        if( this.objData.is2D() )
         {
             this.object = new _2d_object2d__WEBPACK_IMPORTED_MODULE_9__["Object2D"]
             
@@ -28159,7 +28255,7 @@ class Sprite
             if( objData.physicsData.isActive() )
                 this.physicsComponent = new _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_6__["PhysicsComponent2D"]( objData.physicsData );
         }
-        else if( this.objData.objDataType === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EODT_OBJECT_DATA_3D"] )
+        else if( this.objData.is3D() )
         {
             this.object = new _3d_object3d__WEBPACK_IMPORTED_MODULE_10__["Object3D"]
             this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__["VisualComponent3D"]( objData.visualData );
@@ -28442,19 +28538,19 @@ class Sprite
 
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentQuad", function() { return VisualComponentQuad; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
@@ -28590,7 +28686,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28651,19 +28747,19 @@ class ivisualComponent
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentSpriteSheet", function() { return VisualComponentSpriteSheet; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 
 // 
 //  FILE NAME:  visualcomponentspritesheet.js
@@ -28768,18 +28864,18 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentScaledFrame", function() { return VisualComponentScaledFrame; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
 
 // 
 //  FILE NAME:  visualcomponentscaledframe.js
@@ -28852,22 +28948,22 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentFont", function() { return VisualComponentFont; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
 /* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(111);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(8);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(112);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(14);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
 
 // 
 //  FILE NAME:  visualcomponentfont.js
@@ -29422,13 +29518,13 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FontData", function() { return FontData; });
-/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(112);
+/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(113);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 
 // 
@@ -29485,7 +29581,7 @@ class FontData
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29601,19 +29697,19 @@ class FontProperties
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponent3D", function() { return VisualComponent3D; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 
 // 
 //  FILE NAME:  visualcomponent3d.js
@@ -29734,13 +29830,13 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NullVisualComponent", function() { return NullVisualComponent; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(107);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
 
 // 
 //  FILE NAME:  visualcomponentquad.js
@@ -29784,15 +29880,15 @@ class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsComponent2D", function() { return PhysicsComponent2D; });
-/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(116);
+/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(117);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(41);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_2__);
 
 // 
@@ -29829,6 +29925,10 @@ class PhysicsComponent2D
         if( physicsData.isActive() )
         {
             this.world = _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__["physicsWorldManager"].getWorld( physicsData.world );
+
+            // MAke sure the world has been loaded
+            if( this.world.pixelsPerMeter == 0 )
+                throw new Error( `Physics world not loaded (${physicsData.world})!` );
 
             // Re-init the constants to the values needed
             this.metersToPixels = this.world.pixelsPerMeter;
@@ -30185,20 +30285,22 @@ class PhysicsComponent2D
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "physicsWorldManager", function() { return physicsWorldManager; });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
-/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
-/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(119);
+/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(118);
+/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(120);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: physicsworldmanager.js
 //  DESC:      Physics manager class singleton
 //
+
 
 
 
@@ -30221,17 +30323,17 @@ class PhysicsWorldManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadWorldGroup2D( group, finishCallback )
+    loadWorldGroup2D( group )
     {
-        this.loadWorldGroup( LOAD_2D, group, finishCallback );
+        return this.loadWorldGroup( LOAD_2D, group );
     }
     
-    loadWorldGroup3D( group, finishCallback )
+    loadWorldGroup3D( group )
     {
-        this.loadWorldGroup( LOAD_3D, group, finishCallback );
+        return this.loadWorldGroup( LOAD_3D, group );
     }
     
-    loadWorldGroup( loadType, group, finishCallback )
+    loadWorldGroup( loadType, group )
     {
         // Make sure the group we are looking for has been defined in the list table file
         let pathAry = this.listTableMap.get( group );
@@ -30248,17 +30350,10 @@ class PhysicsWorldManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE
 
                 // There will only be one xml per physics world
                 let filePath = pathAry[0];
-                
-                this.downloadFile( 'xml', group, filePath, finishCallback,
-                    ( group, xmlNode, filePath, finishCallback ) => 
-                    {
-                        // Load from an xml node
-                        this.loadFromNode( group, xmlNode, filePath );
-                    });
-                
-                // If there's nothing to load, call the complete callback
-                if( this.loadCounter === 0 )
-                    finishCallback();
+
+                return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__["downloadFile"]( 'xml', filePath )
+                        .then(( xmlNode ) => this.loadFromNode( group, xmlNode, filePath ))
+                        .catch(( error ) => { console.error(error.stack); throw error; });
             }
             else
             {
@@ -30274,14 +30369,14 @@ class PhysicsWorldManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE
     //
     //  DESC: Load from an xml node
     //
-    loadFromNode( group, node, filePath )
+    loadFromNode( group, xmlNode, filePath )
     {
         // Get the physics world
         let world = this.worldMap.get( group );
         if( world === undefined )
             throw new Error( `Physics World doesn't exist (${group}, ${filePath})!` );
         
-        world.loadFromNode( node );
+        world.loadFromNode( xmlNode );
     }
     
     //
@@ -30309,15 +30404,15 @@ var physicsWorldManager = new PhysicsWorldManager;
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsWorld2D", function() { return PhysicsWorld2D; });
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(41);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_2__);
 
 // 
@@ -30507,7 +30602,7 @@ class PhysicsWorld2D
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30586,7 +30681,7 @@ var highResTimer = new HighResTimer;
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30607,7 +30702,7 @@ class PhysicsWorld3D
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30671,14 +30766,14 @@ class ScriptComponent
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object3D", function() { return Object3D; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 
 // 
 //  FILE NAME:  object3d.js
@@ -30735,7 +30830,7 @@ class Object3D extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30797,22 +30892,22 @@ class UIControlNavNode
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(124);
-/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(128);
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(129);
-/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(130);
-/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(131);
-/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(132);
-/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(133);
-/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(134);
-/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(136);
+/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(125);
+/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(129);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(130);
+/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(131);
+/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(132);
+/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(133);
+/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(134);
+/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(135);
+/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(137);
 // 
 //  FILE NAME: uicontrolfactory.js
 //  DESC:      factory for control creation
@@ -30886,13 +30981,13 @@ function create( node, group )
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UILabel", function() { return UILabel; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -30917,25 +31012,25 @@ class UILabel extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControl", function() { return UIControl; });
-/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(104);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(105);
+/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
-/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(127);
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
+/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(128);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(25);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(10);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(26);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(22);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(98);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(120);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(99);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(121);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(21);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(34);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5);
@@ -31920,13 +32015,13 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControlBase", function() { return ControlBase; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
@@ -32051,13 +32146,13 @@ class ControlBase extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 }
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quad", function() { return Quad; });
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 
 // 
 //  FILE NAME:  quad.js
@@ -32099,13 +32194,13 @@ class Quad
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButton", function() { return UIButton; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -32129,16 +32224,16 @@ class UIButton extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISubControl", function() { return UISubControl; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(122);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(123);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(123);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(124);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 
 // 
@@ -32760,13 +32855,13 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButtonList", function() { return UIButtonList; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(129);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(130);
 /* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
@@ -33016,13 +33111,13 @@ class UIButtonList extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubCont
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UICheckBox", function() { return UICheckBox; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -33074,14 +33169,14 @@ class UICheckBox extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISlider", function() { return UISlider; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(129);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(130);
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
@@ -33433,21 +33528,21 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"
 
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIScrollBox", function() { return UIScrollBox; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(129);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(105);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(130);
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(118);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(119);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(34);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(123);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(124);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -34380,16 +34475,16 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIMeter", function() { return UIMeter; });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(118);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(125);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(126);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(34);
 
@@ -34824,7 +34919,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34928,18 +35023,18 @@ class Timer
 
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIProgressBar", function() { return UIProgressBar; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 // 
@@ -35263,7 +35358,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35707,14 +35802,14 @@ class MenuTree
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cameraManager", function() { return cameraManager; });
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: cameramanager.js
@@ -35743,15 +35838,10 @@ class CameraManager
     // 
     //  DESC: Load the camera list
     //
-    load( filePath, callback )
+    load( filePath )
     {
-        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
-            ( xmlNode ) =>
-            {
-                this.loadFromNode( xmlNode );
-                
-                callback();
-            });
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
     // 
@@ -35887,14 +35977,14 @@ var cameraManager = new CameraManager;
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Camera", function() { return Camera; });
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(121);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(122);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
@@ -36064,47 +36154,6 @@ class Camera extends _3d_object3d__WEBPACK_IMPORTED_MODULE_1__["Object3D"]
 }
 
 /***/ }),
-/* 140 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadManager", function() { return loadManager; });
-
-// 
-//  FILE NAME: loadmanager.js
-//  DESC:      LoadManager class
-//
-
-
-
-class LoadManager
-{
-    constructor()
-    {
-        this.objects = [];
-    }
-    
-    add(obj)
-    {
-        this.objects.push(obj);
-    }
-    
-    load()
-    {
-        if( this.objects.length > 0 )
-        {
-            let obj = this.objects.shift();
-            obj( this.load.bind(this) );
-        }
-    }
-}
-
-var loadManager = new LoadManager;
-
-
-
-/***/ }),
 /* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -36114,11 +36163,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
 /* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(142);
 /* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(143);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: soundmanager.js
 //  DESC:      Sound Manager class singleton
 //
+
 
 
 
@@ -36154,21 +36205,23 @@ class SoundManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["M
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadGroup( groupAry, finishCallback )
+    loadGroup( groupAry )
     {
-        super.loadGroup( 'Sound', this.soundMapMap, groupAry, finishCallback );
+        return super.loadGroupAry( 'Sound', this.soundMapMap, groupAry );
     }
     
     //
     //  DESC: Load sound data from an xml node
     //
-    loadFromNode( group, node, filePath, finishCallback )
+    loadFromNode( group, xmlNode, filePath )
     {
+        let promiseAry = [];
+
         // Get the group map
         let groupMap = this.soundMapMap.get( group );
         
         // Get the node to the sound files to be loaded into a buffer
-        let loadFilesNode = node.getElementsByTagName( 'load' );
+        let loadFilesNode = xmlNode.getElementsByTagName( 'load' );
         
         // Load the buffered sounds
         for( let i = 0; i < loadFilesNode.length; ++i )
@@ -36185,17 +36238,16 @@ class SoundManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["M
             
             // Load from node
             snd.loadFromNode( loadFilesNode[i] );
-            
-            this.downloadFile( 'binary', group, filePath, finishCallback,
-                ( group, audioData, filePath, finishCallback ) => 
-                {
-                    // Call the class function to load the data
-                    this.loadFromBinaryData( group, id, audioData, filePath, finishCallback );
-                });
+
+            // Load the sound file
+            promiseAry.push( 
+                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__["downloadFile"]( 'binary', filePath )
+                    .then(( binary ) => this.loadFromBinaryData( group, id, binary, filePath ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }));
         }
         
         // Get the node to the sound files
-        let playListNode = node.getElementsByTagName( 'playList' );
+        let playListNode = xmlNode.getElementsByTagName( 'playList' );
         if( playListNode.length )
         {
             let groupMap = new Map;
@@ -36218,35 +36270,32 @@ class SoundManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["M
                 playLst.loadFromNode( playListNode[i], this.soundMapMap.get( group ), group, filePath );
             }
         }
+
+        return Promise.all( promiseAry );
     }
     
     //
     //  DESC: Load from binary data
     //
-    loadFromBinaryData( group, id, audioData, filePath, finishCallback )
+    loadFromBinaryData( group, id, audioData, filePath )
     {
-        // Increment the load counter because the decoder is asynchronous
-        ++this.loadCounter;
-        
         // Get the group map
         let groupMap = this.soundMapMap.get( group );
         
         // Get the sound
         let sound = groupMap.get( id );
+
+        return new Promise((resolve, reject) => {
         
-        // Create a sound buffer and decode
-        this.context.decodeAudioData( audioData,
-            (soundBuffer) =>
-            {
-                sound.init( this.context, soundBuffer );
-                
-                // Decrement the load counter
-                --this.loadCounter;
-                
-                if( this.loadCounter === 0 )
-                    finishCallback();
-            },
-            (error) => console.log(`Error decoding audio data (${error.err})!`) );
+            // Create a sound buffer and decode
+            this.context.decodeAudioData( audioData,
+                (soundBuffer) => 
+                {
+                    sound.init( this.context, soundBuffer );
+                    resolve();
+                },
+                (error) => reject( Error(`Error decoding audio data (${error.err}, ${filePath})!`) ) );
+        });
     }
     
     //
@@ -36264,7 +36313,7 @@ class SoundManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["M
             
             // Stop any currently playing files
             let groupMap = this.soundMapMap.get( group );
-            for( let [ key, sound ] of groupMap.entries() )
+            for( let sound of groupMap.values() )
                 sound.stop();
 
             // Erase the group
@@ -36284,16 +36333,14 @@ class SoundManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["M
         // Check if this is a playlist sound ID
         let playLst = this.getPlayList( group, soundID );
         if( playLst )
-        {
             return playLst.getSound();
-        }
 
         let groupMap = this.soundMapMap.get( group );
-        if( !groupMap )
+        if( groupMap === undefined )
             throw new Error( `Sound group name can't be found (${group})!` );
 
         let snd = groupMap.get( soundID );
-        if( !snd )
+        if( snd === undefined )
             throw new Error( `Sound ID can't be found (${group}, ${soundID})!` );
 
         return snd;
@@ -36306,10 +36353,8 @@ class SoundManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["M
     {
         // Check if this is a playlist sound ID
         let groupMap = this.playListMapMap.get( group );
-        if( groupMap )
-        {
+        if( groupMap !== undefined )
             return groupMap.get( playLstID );
-        }
         
         return undefined;
     }
@@ -36562,7 +36607,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_RANDOM", function() { return EST_RANDOM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_SEQUENTIAL", function() { return EST_SEQUENTIAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayList", function() { return PlayList; });
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: playlist.js
@@ -36747,7 +36792,7 @@ class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__
     //
     //  DESC: Add strategy which will load it's data from XML node
     //
-    addStrategy( strategyId, strategy, finishCallback )
+    addStrategy( strategyId, strategy )
     {
         // Check for duplicate Id's
         if( this.strategyMap.has( strategyId ) )
@@ -36757,17 +36802,17 @@ class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__
         this.strategyMap.set( strategyId, strategy );
         
         // Load all the xml's
-        super.load( strategyId, finishCallback );
+        return super.load( strategyId );
     }
     
     //
     //  DESC: Load strategy data from an xml node
     //
-    loadFromNode( strategyId, node, filePath, finishCallback )
+    loadFromNode( strategyId, node, filePath )
     {
         let strategy = this.strategyMap.get( strategyId );
         
-        strategy.loadFromNode( strategyId, node, filePath, this.downloadFile.bind(this), finishCallback );
+        strategy.loadFromNode( node, filePath );
     }
     
     //
@@ -36906,13 +36951,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(144);
 /* harmony import */ var _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(146);
 /* harmony import */ var _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(159);
-/* harmony import */ var _managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(140);
 
 // 
 //  FILE NAME: strategyloader.js
 //  DESC:      Helper class for loading strategies
 //
-
 
 
 
@@ -36931,6 +36974,7 @@ class Strategyloader
     //
     load( xmlNode )
     {
+        let promiseAry = [];
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
 
         // Have the load manager create the strategy
@@ -36945,20 +36989,24 @@ class Strategyloader
                 throw new Error( `Strategy type not defined.` );
 
             if( strategyType == 'actor' )
-                _managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add( ( callback ) => _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].addStrategy( strategyName, new _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__["ActorStrategy"], callback ) );
+                promiseAry.push( _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].addStrategy( strategyName, new _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__["ActorStrategy"] ) );
 
             else if( strategyType == 'stage' )
-                _managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add( ( callback ) => _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].addStrategy( strategyName, new _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__["StageStrategy"], callback ) );
+                promiseAry.push( _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].addStrategy( strategyName, new _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__["StageStrategy"] ) );
+
+            else
+                throw new Error( `Unknown strategy type (${strategyType})!` );
         }
 
         // Preload the strategies
-        _managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add( ( callback ) => this.loadStartegy( xmlNode, callback ));
+        return Promise.all( promiseAry )
+            .then(() => this.loadStartegy( xmlNode ));
     }
     
     // 
     //  DESC: Load the strategies
     //
-    loadStartegy( xmlNode, callback )
+    loadStartegy( xmlNode )
     {
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
 
@@ -36979,8 +37027,6 @@ class Strategyloader
             // Populate the strategies with their objects
             this.populateStartegy( strategyNode[i], strategy );
         }
-        
-        callback();
     }
     
     // 
@@ -37078,38 +37124,38 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     //
     //  DESC: Load the node data from xml
     //
-    loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
+    loadFromNode( xmlNode, filePath )
     {
         let defaultGroup = '';
         let defaultObjName = '';
         let defaultAIName = '';
         let defaultId = _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEFAULT_ID"];
 
-        let attr = node.getAttribute( 'defaultGroup' );
+        let attr = xmlNode.getAttribute( 'defaultGroup' );
         if( attr !== null )
             defaultGroup = attr;
 
-        attr = node.getAttribute( 'defaultObjectName' );
+        attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr !== null )
             defaultObjName = attr;
 
-        attr = node.getAttribute( 'defaultAIName' );
+        attr = xmlNode.getAttribute( 'defaultAIName' );
         if( attr !== null )
             defaultAIName = attr;
 
-        attr = node.getAttribute( 'defaultId' );
+        attr = xmlNode.getAttribute( 'defaultId' );
         if( attr !== null )
             defaultId = Number(attr);
 
-        for( let i = 0; i < node.children.length; ++i )
+        for( let i = 0; i < xmlNode.children.length; ++i )
         {
             // There must be a name associated with this node data
-            let nodeName = node.children[i].getAttribute( 'name' );
+            let nodeName = xmlNode.children[i].getAttribute( 'name' );
             if( !nodeName )
-                throw new Error( `Actor strategy missing node name!` );
+                throw new Error( `Actor strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( node.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
+            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( xmlNode.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
         }
     }
 
@@ -37438,7 +37484,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iStrategy", function() { return iStrategy; });
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
 
 // 
 //  FILE NAME: istrategy.js
@@ -37735,8 +37781,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(136);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(134);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(137);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(135);
 /* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(152);
 /* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(154);
 /* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(155);
@@ -37854,7 +37900,7 @@ function CreateUIControlNode( nodeData )
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNode", function() { return SpriteNode; });
 /* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -38173,7 +38219,7 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectNodeMultiLst", function() { return ObjectNodeMultiLst; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
+/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(156);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -38642,7 +38688,7 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNodeMultiLst", function() { return SpriteNodeMultiLst; });
 /* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -38760,11 +38806,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StageStrategy", function() { return StageStrategy; });
 /* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(147);
 /* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(160);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: stagestrategy.js
 //  DESC:      Stage strategy
 //
+
 
 
 
@@ -38784,9 +38832,10 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     //
     //  DESC: Load the data from xml node
     //
-    loadFromNode( strategyId, node, filePath, downloadFileCallback, finishCallback )
+    loadFromNode( xmlNode )
     {
-        let sectorNode = node.getElementsByTagName( 'sector' );
+        let promiseAry = [];
+        let sectorNode = xmlNode.getElementsByTagName( 'sector' );
 
         for( let i = 0; i < sectorNode.length; ++i )
         {
@@ -38795,20 +38844,15 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
             
             sector.loadTransFromNode( sectorNode[i] );
             
-            let sectorFile = sectorNode[i].getAttribute('file');
-            
-            // load the sector file
-            downloadFileCallback(
-                'xml',
-                strategyId,
-                sectorFile,
-                finishCallback,
-                ( group, xmlNode, filePath, finishCallback ) => 
-                {
-                    // Call the sector function to load the data
-                    sector.loadFromNode( group, xmlNode, filePath, finishCallback );
-                });
+            let sectorFilePath = sectorNode[i].getAttribute('file');
+
+            promiseAry.push( 
+                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', sectorFilePath )
+                    .then(( xmlNode ) => sector.loadFromNode( xmlNode, sectorFilePath ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }));
         }
+
+        return Promise.all( promiseAry );
     }
 
     //
@@ -38868,7 +38912,7 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sector", function() { return Sector; });
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
+/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(122);
 /* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(148);
 /* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(151);
 
@@ -38899,30 +38943,30 @@ class Sector extends _3d_object3d__WEBPACK_IMPORTED_MODULE_0__["Object3D"]
     //
     //  DESC: Load the data from xml node
     //
-    loadFromNode( strategyId, node, filePath, finishCallback )
+    loadFromNode( xmlNode, filePath )
     {
         let defaultGroup = '';
         let defaultObjName = '';
         let defaultAIName = '';
         let defaultId = -1;
         
-        let attr = node.getAttribute( 'defaultGroup' );
+        let attr = xmlNode.getAttribute( 'defaultGroup' );
         if( attr )
             defaultGroup = attr;
         
-        attr = node.getAttribute( 'defaultObjectName' );
+        attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr )
             defaultObjName = attr;
         
-        attr = node.getAttribute( 'defaultAIName' );
+        attr = xmlNode.getAttribute( 'defaultAIName' );
         if( attr )
             defaultAIName = attr;
         
-        attr = node.getAttribute( 'defaultId' );
+        attr = xmlNode.getAttribute( 'defaultId' );
         if( attr )
             defaultId = Number(attr);
         
-        let sectorNode = node.children;
+        let sectorNode = xmlNode.children;
 
         for( let i = 0; i < sectorNode.length; ++i )
         {
@@ -38939,7 +38983,7 @@ class Sector extends _3d_object3d__WEBPACK_IMPORTED_MODULE_0__["Object3D"]
                     headNode = node;
 
                 else if( !headNode.addNode( node, nodeAry[j].nodeName ) )
-                    throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
+                    throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId}, ${filePath})!` );
             }
             
             // Add to the node array
@@ -39035,17 +39079,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
 /* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(162);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(100);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(101);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(144);
 /* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(145);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(120);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(118);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(121);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(119);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(21);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(140);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(14);
-/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(163);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(31);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(38);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(6);
+/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(20);
+/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(163);
 
 // 
 //  FILE NAME: titlescreenstate.js
@@ -39068,16 +39113,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 // Load data from bundle as string
 
 
-const ASSET_COUNT = 4;
+const ASSET_COUNT = 3;
 
 class TitleScreenState extends _commonstate__WEBPACK_IMPORTED_MODULE_1__["CommonState"]
 {
     constructor( gameLoopCallback )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_12__["EGS_TITLE_SCREEN"], _statedefs__WEBPACK_IMPORTED_MODULE_12__["EGS_GAME_LOAD"], gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_13__["EGS_TITLE_SCREEN"], _statedefs__WEBPACK_IMPORTED_MODULE_13__["EGS_GAME_LOAD"], gameLoopCallback );
         
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__["strategyManager"].activateStrategy('_title-screen_');
         
@@ -39118,9 +39164,9 @@ class TitleScreenState extends _commonstate__WEBPACK_IMPORTED_MODULE_1__["Common
         if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_GAME_STATE_CHANGE"] )
+            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_12__["EGE_MENU_GAME_STATE_CHANGE"] )
             {
-                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_11__["ETC_BEGIN"] )
+                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_12__["ETC_BEGIN"] )
                     this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__["scriptManager"].get('ScreenFade')( 1, 0, 500, true ) );
             }
         }
@@ -39176,20 +39222,19 @@ function unload()
 //
 function load()
 {
-    // Load the xml group
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_9__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__["objectDataManager"].loadXMLGroup2D( ['(title_screen)'], callback ) );
+    let groupAry = ['(title_screen)'];
 
-    // Load all the assets associated with this group
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_9__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__["objectDataManager"].loadAssets2D( ['(title_screen)'], callback ) );
+    return _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__["objectDataManager"].loadGroup( groupAry )
 
-    // Create OpenGL objects from the loaded data
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_9__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__["objectDataManager"].createFromData( ['(title_screen)'], callback ) );
+        // Create and load all the actor strategies.
+        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_11__["stringLoadXML"]( raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_14__["default"] ) ))
 
-    // Create and load all the actor strategies. NOTE: This adds it to the load manager
-    _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__["stringLoadXML"]( raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_13__["default"] ) );
+        // Clean up the temporary files
+        .then(() =>
+        {
+            _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_10__["assetHolder"].deleteGroup( groupAry );
+            _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_9__["spriteSheetManager"].deleteGroup( groupAry );
+        })
 }
 
 
@@ -39201,7 +39246,7 @@ function load()
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CommonState", function() { return CommonState; });
 /* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(100);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(101);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
 
@@ -39297,7 +39342,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FadeTo", function() { return FadeTo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ColorTo", function() { return ColorTo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
@@ -39689,7 +39734,7 @@ function loadScripts()
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(141);
@@ -40735,7 +40780,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
 /* 170 */
@@ -40759,24 +40804,72 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
+
+/***/ }),
+/* 173 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
+
+/***/ }),
+/* 174 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+
+/***/ }),
+/* 175 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
+
+/***/ }),
+/* 176 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<controllerMapping>\n\t<keyboardMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"W\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"S\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"A\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"D\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"ARROW UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"ARROW DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"ARROW LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"ARROW RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"RETURN\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Escape\" componetId=\"ESCAPE\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"LEFT SHIFT\" defaultId=\"LEFT SHIFT\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"[\" defaultId=\"[\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"]\" defaultId=\"]\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Up\" componetId=\"W\" defaultId=\"W\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Down\" componetId=\"S\" defaultId=\"S\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Left\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Right\" componetId=\"D\" defaultId=\"D\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"E\" defaultId=\"E\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</keyboardMapping>\n\t<mouseMapping>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<!-- Game specific controls -->\n\t\t\t<actionMap action=\"Shoot\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"MIDDLE MOUSE\" defaultId=\"MIDDLE MOUSE\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</mouseMapping>\n\t<gamepadMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"L STICK UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"L STICK DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"L STICK LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"L STICK RIGHT\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Back\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"START\" defaultId=\"START\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"L BUMPER\" defaultId=\"L BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"R BUMPER\" defaultId=\"R BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</gamepadMapping>\n</controllerMapping>\n");
+
+/***/ }),
+/* 177 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<menuActionList>\r\n\r\n    <backAction>Menu Back</backAction>\r\n    <toggleAction>Menu Toggle</toggleAction>\r\n    <escapeAction>Menu Escape</escapeAction>\r\n    <selectAction>Menu Select</selectAction>\r\n    <upAction>Menu Up</upAction>\r\n    <downAction>Menu Down</downAction>\r\n    <leftAction>Menu Left</leftAction>\r\n    <rightAction>Menu Right</rightAction>\r\n    <tabLeft>Menu Tab Left</tabLeft>\r\n    <tabRight>Menu Tab Right</tabRight>\r\n    <defaultTree>pause_tree</defaultTree>\r\n\r\n</menuActionList>\r\n\r\n");
+
+/***/ }),
+/* 178 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoadState", function() { return LoadState; });
 /* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(140);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2);
-/* harmony import */ var _library_strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(146);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(144);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(145);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(118);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(120);
-/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(3);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(14);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(144);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(145);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(119);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(121);
+/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(3);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(31);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(38);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
 /* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(161);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(173);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(179);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(175);
+/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(181);
 
 // 
 //  FILE NAME: loadstate.js
@@ -40820,7 +40913,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         this.maxLoadCount = 0;
         
         // Create the script component and add a script
-        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_10__["ScriptComponent"];
+        this.scriptComponent = new _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__["ScriptComponent"];
         this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].get('ScreenFade')( 0, 1, 250 ) );
         
         // Clear the event queue
@@ -40836,28 +40929,46 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     preload()
     {
         let groupAry = ['(loadingScreen)'];
+
+        // Load the Object Manager group
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__["objectDataManager"].loadGroup( groupAry )
+
+            // Create and load all the actor strategies.
+            .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__["default"] ) ))
+
+            // Clean up the temporary files
+            .then(() =>
+            {
+                _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__["assetHolder"].deleteGroup( groupAry );
+                _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__["spriteSheetManager"].deleteGroup( groupAry );
+            })
+
+            // Last thing to do is call the preload complete function
+            .then(() => this.preloadComplete() );
+
+        /*let groupAry = ['(loadingScreen)'];
         
         // Load the menu assets
         // Load the xml group
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add(
-            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__["objectDataManager"].loadXMLGroup2D( groupAry, callback ) );
+        loadManager.add(
+            ( callback ) => objectDataManager.loadXMLGroup2D( groupAry, callback ) );
 
         // Load all the assets associated with this group
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add(
-            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__["objectDataManager"].loadAssets2D( groupAry, callback ) );
+        loadManager.add(
+            ( callback ) => objectDataManager.loadAssets2D( groupAry, callback ) );
 
         // Create OpenGL objects from the loaded data
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add(
-            ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__["objectDataManager"].createFromData( groupAry, callback ));
+        loadManager.add(
+            ( callback ) => objectDataManager.createFromData( groupAry, callback ));
 
         // Create and load all the actor strategies. NOTE: This adds it to the load manager
-        _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_8__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__["default"] ) );
+        strategyLoader.load( genFunc.stringLoadXML( loadScreenStrategyLoader ) );
 
         // Last thing to do is call the preload complete function
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add( ( callback ) => this.preloadComplete() );
+        loadManager.add( ( callback ) => this.preloadComplete() );
     
         // Start the load
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].load();
+        loadManager.load();*/
     }
     
     // 
@@ -40866,13 +40977,13 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     preloadComplete()
     {
         // Position at the bottom of the screen.
-        let strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_7__["strategyManager"].activateStrategy( '_loading-screen_' );
-        strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_11__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_11__["settings"].defaultSize_half.h - 150), 0 );
+        let strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__["strategyManager"].activateStrategy( '_loading-screen_' );
+        strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.h - 150), 0 );
         this.loadFont = strategy.get( 'load_font' ).getSprite();
-        this.loadFont.object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_11__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_11__["settings"].defaultSize_half.h - 150), 0 );
+        this.loadFont.object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.h - 150), 0 );
         
         // Reset the elapsed time before entering the render loop
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__["highResTimer"].calcElapsedTime();
 
         // Start the game loop
         requestAnimationFrame( this.callback );
@@ -40904,7 +41015,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
             }
             else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_15__["ESE_ASSET_LOAD_COMPLETE"] )
             {
-                let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__["highResTimer"].timerStop();
+                let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__["highResTimer"].timerStop();
                 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
@@ -40913,7 +41024,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
                     setTimeout( () => this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
                 
                 // Disconnect to the load signal
-                _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_5__["signalManager"].clear_loadComplete();
+                _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__["signalManager"].clear_loadComplete();
         
                 console.log(`${this.getStateStr(this.stateMessage.loadState)} Count: ${this.loadCounter}`);
             }
@@ -40926,7 +41037,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     update()
     {
         this.scriptComponent.update();
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_7__["strategyManager"].update();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__["strategyManager"].update();
     }
     
     // 
@@ -40934,7 +41045,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     transform()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_7__["strategyManager"].transform();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__["strategyManager"].transform();
     }
     
     // 
@@ -40942,7 +41053,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     render()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_7__["strategyManager"].render();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__["strategyManager"].render();
     }
     
     // 
@@ -40951,28 +41062,51 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     assetLoad()
     {
         // Set the function to be called to update the progress bar during the download
-        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_5__["signalManager"].connect_loadComplete( this.loadCallback.bind(this) );
+        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__["signalManager"].connect_loadComplete( this.loadCallback.bind(this) );
         
         // Set the timer to see how long the load takes
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__["highResTimer"].timerStart();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__["highResTimer"].timerStart();
+
+        let promise = 0;
         
         if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_TITLE_SCREEN"] )
         {
             this.maxLoadCount = _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__["ASSET_COUNT"];
-            _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__["load"]();
+            promise = _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__["load"]();
         }
         else if( this.stateMessage.loadState === _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_LEVEL_1"] )
         {
             this.maxLoadCount = _state_level1state__WEBPACK_IMPORTED_MODULE_14__["ASSET_COUNT"];
-            _state_level1state__WEBPACK_IMPORTED_MODULE_14__["load"]();
+            promise = _state_level1state__WEBPACK_IMPORTED_MODULE_14__["load"]();
+        }
+
+        return promise
+
+            // Time out to give it a few cycles to update the last value
+            .then(() => {return new Promise(resolve => setTimeout(resolve, 500))})
+
+            // Last thing to do is to dispatch the event that the load is complete
+            .then( () => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_15__["ESE_ASSET_LOAD_COMPLETE"] ) );
+
+            
+        
+        /*if( this.stateMessage.loadState === stateDefs.EGS_TITLE_SCREEN )
+        {
+            this.maxLoadCount = titleScreenState.ASSET_COUNT;
+            titleScreenState.load();
+        }
+        else if( this.stateMessage.loadState === stateDefs.EGS_LEVEL_1 )
+        {
+            this.maxLoadCount = level1State.ASSET_COUNT;
+            level1State.load();
         }
         
         // Last thing to do is send a message that the asset load is complete
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].add(
-            ( callback ) => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_15__["ESE_ASSET_LOAD_COMPLETE"] ) );
+        loadManager.add(
+            ( callback ) => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) );
         
         // Start the load
-        _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_3__["loadManager"].load();
+        loadManager.load();*/
     }
     
     // 
@@ -40980,16 +41114,16 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     //
     cleanUp()
     {
-        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__["objectDataManager"].freeGroup( ['(loadingScreen)'] );
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__["objectDataManager"].freeGroup( ['(loadingScreen)'] );
         
         // Only delete the strategy(s) used in this state. Don't use clear().
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_7__["strategyManager"].deleteStrategy( ['_loading-screen_'] );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__["strategyManager"].deleteStrategy( ['_loading-screen_'] );
     }
 }
 
 
 /***/ }),
-/* 173 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40999,22 +41133,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
 /* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(162);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(100);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(118);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(120);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(101);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(119);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(121);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(116);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(117);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(140);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(141);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(144);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(98);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(145);
-/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(3);
-/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(5);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(14);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(174);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(141);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(144);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(99);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(145);
+/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(3);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(31);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(38);
+/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(20);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(6);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(180);
 
 // 
 //  FILE NAME: level1state.js
@@ -41041,10 +41176,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 // Load data from bundle as string
 
 
-const ASSET_COUNT = 19;
+const ASSET_COUNT = 18;
 
 const SPRITE_PEG = -2,
       MULTIPLIER = 0,
@@ -41054,7 +41190,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
 {
     constructor( gameLoopCallback = null )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_LEVEL_1"], _statedefs__WEBPACK_IMPORTED_MODULE_15__["EGS_GAME_LOAD"], gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_16__["EGS_LEVEL_1"], _statedefs__WEBPACK_IMPORTED_MODULE_16__["EGS_GAME_LOAD"], gameLoopCallback );
         
         // Multiplier positions
         this.multiXPosAllAry = [-640,-480,-320,-160,0,160,320,480,640];
@@ -41074,7 +41210,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         this.physicsWorld = _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].getWorld( "(game)" );
         
         // Clear the last device used so that the button on start game menu is active by default
-        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__["actionManager"].clearLastDeviceUsed();
+        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_10__["actionManager"].clearLastDeviceUsed();
         
         // Add the contact listeners
         this.physicsWorld.world.on( 'begin-contact', this.beginContact.bind(this) );
@@ -41101,19 +41237,19 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' ).transitionMenu();
         
         // Activate the strategies to run
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-stage_');
-        this.multiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-multiplier_');
-        this.ballStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-1-ball_');
-        this.uiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].activateStrategy('_level-ui_');
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].activateStrategy('_level-1-stage_');
+        this.multiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].activateStrategy('_level-1-multiplier_');
+        this.ballStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].activateStrategy('_level-1-ball_');
+        this.uiStrategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].activateStrategy('_level-ui_');
 
         // Create the multiplier sprite used to colide with the balls
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
         this.multiNode = this.multiStrategy.create('dog_head');
-        this.multiIndexPos = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, this.multiXPosAllAry.length-1);
+        this.multiIndexPos = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["randomInt"](0, this.multiXPosAllAry.length-1);
         this.multiNode.getSprite().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
 
         // Randomly pick the first ball
-        this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, 3);
+        this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["randomInt"](0, 3);
 
         // Get the ball instance name
         let ballInstanceName = this.getBallInstanceName( this.ballIndex );
@@ -41127,11 +41263,11 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         this.uiMultiplier = this.uiStrategy.get( 'uiMultiplier' ).getSprite();
 
         // Force an updated to show UI elements
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].update();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].update();
         
         // Start the music
         this.index = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].play( `(level_${this.index})`, 'music_0', true );
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].play( `(level_${this.index})`, 'music_0', true );
 
         // Reset the elapsed time before entering the render loop
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__["highResTimer"].calcElapsedTime();
@@ -41153,19 +41289,19 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             this.uiBallMeter.incBangUp( -1 );
 
             // Get the spot on the screen they clicked
-            let ratio = 1.0 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].orthoAspectRatio.h;
+            let ratio = 1.0 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__["settings"].orthoAspectRatio.h;
             let y = 600;
-            let x = (ratio * (event.clientX + _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__["eventManager"].mouseOffsetX)) - _library_utilities_settings__WEBPACK_IMPORTED_MODULE_13__["settings"].defaultSize_half.w;
+            let x = (ratio * (event.clientX + _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__["eventManager"].mouseOffsetX)) - _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__["settings"].defaultSize_half.w;
             
             // Set a random rotation
-            let angle = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, 350) * _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["DEG_TO_RAD"];
+            let angle = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["randomInt"](0, 350) * _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["DEG_TO_RAD"];
             
             // Get the random rotation
-            let rot = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomArbitrary"]( -3, 3 );
+            let rot = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["randomArbitrary"]( -3, 3 );
 
             // Save the old ball index and generate a new one
             let oldBallIndex = this.ballIndex;
-            this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, 3);
+            this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["randomInt"](0, 3);
 
             // Get the ball instance names
             let instanceNameA = this.getBallInstanceName( oldBallIndex );
@@ -41186,21 +41322,21 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         else if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_GAME_STATE_CHANGE"] )
+            if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_GAME_STATE_CHANGE"] )
             {
-                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["ETC_BEGIN"] )
+                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["ETC_BEGIN"] )
                     this.scriptComponent.set( _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__["scriptManager"].get('ScreenFade')( 1, 0, 500, true ) );
             }
-            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_TRANS_OUT"] )
+            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TRANS_OUT"] )
             {
-                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["ETC_END"] )
+                if( event.detail.arg[0] === _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["ETC_END"] )
                 {
                     let tree = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' );
                     if( !tree.isDefaultMenu('pause_menu') )
                         tree.setDefaultMenu('pause_menu');
                 }
             }
-            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"] && event.detail.arg[0] === 'play_game' )
+            else if( event.detail.type === _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["ECAT_ACTION_EVENT"] && event.detail.arg[0] === 'play_game' )
             {
                 _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getTree( 'pause_tree' ).transitionMenu();
                 this.multiplier = 1;
@@ -41238,21 +41374,6 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     }
     
     // 
-    //  DESC: Clean up after the startup state
-    //
-    cleanUp()
-    {
-        // Only delete the strategy(s) used in this state. Don't use clear().
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].deleteStrategy( ['_level-1-stage_','_level-1-ball_','_level-ui_','_level-1-multiplier_'] );
-        
-        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].freeGroup( ['(level_1)'] );
-        
-        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].destroyWorld( "(game)" );
-
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].freeGroup( [`(level_${this.index})`]);
-    }
-    
-    // 
     //  DESC: Handle the physics
     //
     physics()
@@ -41272,7 +41393,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         
         if( !_library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].active )
         {
-            _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].update();
+            _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].update();
             
             // NOTE: Can't reposition an static or kinematic. Must create a new one
             if( !this.multiNode.getSprite().physicsComponent.isActive() )
@@ -41282,7 +41403,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
 
                 // Create a new one
                 let posAry = this.multiXPosAry[this.multiIndexPos];
-                let index = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["randomInt"](0, posAry.length-1);
+                let index = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["randomInt"](0, posAry.length-1);
                 let offsetX = posAry[index];
                 this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
                 this.multiNode = this.multiStrategy.create('dog_head');
@@ -41310,7 +41431,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     {
         super.transform();
         
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].transform();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].transform();
     }
     
     // 
@@ -41320,7 +41441,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     {
         super.render();
         
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_10__["strategyManager"].render();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].render();
         
         _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].render();
     }
@@ -41378,8 +41499,23 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     
     removeFixture( object )
     {
-        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_14__["DEFAULT_ID"]) )
+        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["DEFAULT_ID"]) )
             this.uiWinMeter.incBangUp( this.multiplier );
+    }
+
+    // 
+    //  DESC: Clean up after the startup state
+    //
+    cleanUp()
+    {
+        // Only delete the strategy(s) used in this state. Don't use clear().
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].deleteStrategy( ['_level-1-stage_','_level-1-ball_','_level-ui_','_level-1-multiplier_'] );
+        
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].freeGroup( ['(level_1)'] );
+        
+        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].destroyWorld( "(game)" );
+
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].freeGroup( [`(level_${this.index})`]);
     }
 }
 
@@ -41388,55 +41524,76 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
 //
 function load()
 {
+    let groupAry = ['(level_1)'];
+
+    let sndIndex = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
+    
+    return Promise.all([
+
+        // Load all the assets associated with this group(s)
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].loadGroup( groupAry ),
+
+        // Load the physics world
+        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].loadWorldGroup2D( '(game)' ),
+
+        // Load the Sound Manager group
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].loadGroup( [`(level_${sndIndex})`] )
+    ])
+
+    // Create and load all the actor strategies.
+    .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["stringLoadXML"]( raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_18__["default"] ) ))
+
+    // Clean up the temporary files
+    .then(() =>
+    {
+        _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_14__["assetHolder"].deleteGroup( groupAry );
+        _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_13__["spriteSheetManager"].deleteGroup( groupAry );
+    })
+    
+    
+    /*objectDataManager.loadGroup( groupAry )
+
+        // Load the physics list table and group
+        .then(() => physicsWorldManager.loadWorldGroup2D( '(game)' ))
+
+        // Create and load all the actor strategies.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) ))
+
+        // Clean up the temporary files
+        .then(() =>
+        {
+            assetHolder.deleteGroup( groupAry );
+            spriteSheetManager.deleteGroup( groupAry );
+        })*/
+
     // Load the xml group
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].loadXMLGroup2D( ['(level_1)'], callback ) );
+    /*loadManager.add(
+        ( callback ) => objectDataManager.loadXMLGroup2D( ['(level_1)'], callback ) );
 
     // Load all the assets associated with this group
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].loadAssets2D( ['(level_1)'], callback ) );
+    loadManager.add(
+        ( callback ) => objectDataManager.loadAssets2D( ['(level_1)'], callback ) );
 
     // Create OpenGL objects from the loaded data
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].createFromData( ['(level_1)'], callback ) );
+    loadManager.add(
+        ( callback ) => objectDataManager.createFromData( ['(level_1)'], callback ) );
 
     // Load the physics list table and group
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add(
-        ( callback ) => _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].loadWorldGroup2D( '(game)', callback ));
+    loadManager.add(
+        ( callback ) => physicsWorldManager.loadWorldGroup2D( '(game)', callback ));
 
-    let index = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
+    let index = menuManager.getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
 
     // Load the Sound Manager group
-    _library_managers_loadmanager__WEBPACK_IMPORTED_MODULE_8__["loadManager"].add( ( callback ) => _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_9__["soundManager"].loadGroup( [`(level_${index})`], callback ));
+    loadManager.add( ( callback ) => soundManager.loadGroup( [`(level_${index})`], callback ));
 
     // Create and load all the actor strategies. NOTE: This adds it to the load manager
-    _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_12__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_16__["stringLoadXML"]( raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_17__["default"] ) );
-
-        
-    // Create the stage strategy
-    /*loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-1-stage_', new StageStrategy, callback ) );
-
-    // Create the actor strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-1-ball_', new ActorStrategy, callback ) );
-
-    // Create the actor strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-1-multiplier_', new ActorStrategy, callback ) );
-
-    // Create the actor strategy
-    loadManager.add(
-        ( callback ) => strategyManager.addStrategy( '_level-ui_', new ActorStrategy, callback ) );
-        
-    // Load the strategies
-    loadManager.add(
-        ( callback ) => strategyLoader.load( 'data/objects/strategy/level1/strategy.loader', callback ));*/
+    strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) );*/
 }
 
 
 /***/ }),
-/* 174 */
+/* 180 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41444,7 +41601,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_level-1-stage_\" type=\"stage\"/>\r\n    <strategy name=\"_level-1-ball_\" type=\"actor\"/>\r\n    <strategy name=\"_level-1-multiplier_\" type=\"actor\"/>\r\n    \r\n    <strategy name=\"_level-ui_\" type=\"actor\">\r\n        <node name=\"uiWinMeter\" instance=\"uiWinMeter\"/>\r\n        <node name=\"uiBallMeter\" instance=\"uiBallMeter\"/>\r\n        <node name=\"uiMultiplier\" instance=\"uiMultiplier\"/>\r\n\r\n        <node name=\"ui_tennis_ball_green\" instance=\"ui_tennis_ball_green\" active=\"false\"/>\r\n        <node name=\"ui_tennis_ball_pink\" instance=\"ui_tennis_ball_pink\" active=\"false\"/>\r\n        <node name=\"ui_frisbee\" instance=\"ui_frisbee\" active=\"false\"/>\r\n        <node name=\"ui_bone_biscuit\" instance=\"ui_bone_biscuit\" active=\"false\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 175 */
+/* 181 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41452,14 +41609,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_loading-screen_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"loadAnim\" instance=\"loadAnim\">\r\n            <sprite>\r\n                <script prepare=\"animate\"/>\r\n            </sprite>\r\n        </node>\r\n        <node name=\"load_font\" instance=\"load_font\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 176 */
+/* 182 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartConfirmBtn", function() { return SmartConfirmBtn; });
-/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(177);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(100);
+/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(183);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(101);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -41511,7 +41668,7 @@ class SmartConfirmBtn extends _library_gui_ismartguibase__WEBPACK_IMPORTED_MODUL
     
 
 /***/ }),
-/* 177 */
+/* 183 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41588,13 +41745,13 @@ class SmartGuiControl extends iSmartGui
 
 
 /***/ }),
-/* 178 */
+/* 184 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(179);
+/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(185);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(144);
 
 // 
@@ -41631,7 +41788,7 @@ class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBa
 
 
 /***/ }),
-/* 179 */
+/* 185 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41684,6 +41841,14 @@ class iaiBase
     }
 }
 
+
+/***/ }),
+/* 186 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<settings>\n\t<display>\n\t\t<resolution width=\"1280\" height=\"720\" fullscreen=\"false\"/>\n\t\t<default width=\"1920\" height=\"1080\" orientation=\"landscape\"/>\n\t</display>\n\t<device>\n\t\t<!-- Currently only supports version 2.0 to 3.2 depending on your video card -->\n\t\t<!-- Profile can be \"core\", \"compatibility\" or \"es\" -->\n\t\t<!-- <OpenGL major=\"2\" minor=\"1\" profile=\"core\"/> -->\n\t\t<OpenGL major=\"2\" minor=\"0\" profile=\"core\"/>\n\t\t<projection projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45\"/>\n\t\t<!-- options: point, linear, anisotropic_2X, anisotropic_4X, anisotropic_8X, anisotropic_16X -->\n\t\t<anisotropicFiltering level=\"anisotropic_8X\"/>\n\t\t<backbuffer tripleBuffering=\"false\" VSync=\"true\"/>\n\t\t<depthStencilBuffer enableDepthBuffer=\"false\" createStencilBuffer=\"true\" clearStencilBuffer=\"true\" stencilBufferBitSize=\"1\"/>\n\t\t<targetBuffer clear=\"true\"/>\n\t\t<shadowBuffer create=\"false\" width=\"1024\" height=\"1024\"/>\n\t\t<postProcessBuffer create=\"true\">\n\t\t\t<buffer scale=\"1.0\" format=\"backbuffer\"/>\n\t\t\t<buffer scale=\"1.0\" format=\"backbuffer\"/>\n\t\t</postProcessBuffer>\n\t\t<!-- Dead Zone values as percentage -->\n\t\t<joypad stickDeadZone=\"30\"/>\n\t\t<threads minThreadCount=\"2\" maxThreadCount=\"0\"/>\n\t</device>\n\t<!-- frequency is usually 22050 or 44100. The lower the frequency, the more latency -->\n\t<!-- sound_channels is the output ie mono, stero, quad, etc -->\n\t<!-- mix_channels is the number of channels used for mixing whixh means the \n    total number of soinds that can be played at the same time -->\n\t<!-- chunksize is the amount of memory use for mixing. The larger the memory, the more latency  -->\n\t<sound frequency=\"44100\" sound_channels=\"2\" mix_channels=\"8\" chunksize=\"1024\"/>\n\t<world sectorSize=\"1024\"/>\n</settings>\n");
 
 /***/ })
 /******/ ]);

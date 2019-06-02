@@ -15,6 +15,7 @@ class SignalManager
         this.aiCreateSignal = [];
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
+        this.initShaderSignal = [];
     }
     
     // 
@@ -56,15 +57,39 @@ class SignalManager
     {
         this.resolutionChangeSignal.push( slot );
     }
-    
+
     // 
-    //  DESC: Disconnect to the load signal
+    //  DESC: Connect to the init shader signal
+    //
+    connect_initShader( slot )
+    {
+        this.initShaderSignal.push( slot );
+    }
+
+    // 
+    //  DESC: Disconnect all to the load signal
     //
     clear_loadComplete()
     {
         this.loadCompleteSignal = [];
     }
-    
+
+    // 
+    //  DESC: Disconnect all to resolution change
+    //
+    clear_resolutionChange()
+    {
+        this.resolutionChangeSignal = [];
+    }
+
+    // 
+    //  DESC: Disconnect all to init shader
+    //
+    clear_initShader()
+    {
+        this.initShaderSignal = [];
+    }
+
     // 
     //  DESC: Broadcast smart gui control signal
     //
@@ -108,6 +133,15 @@ class SignalManager
     {
         for( let i = 0; i < this.resolutionChangeSignal.length; ++i )
             this.resolutionChangeSignal[i]();
+    }
+
+    // 
+    //  DESC: Broadcast the init shader
+    //
+    broadcast_initShader( shaderId )
+    {
+        for( let i = 0; i < this.initShaderSignal.length; ++i )
+            this.initShaderSignal[i](shaderId);
     }
 }
 

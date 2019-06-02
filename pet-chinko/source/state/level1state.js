@@ -14,12 +14,13 @@ import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
-import { loadManager } from '../../../library/managers/loadmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { settings } from '../../../library/utilities/settings';
+import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
+import { assetHolder } from '../../../library/utilities/assetholder';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 import * as genFunc from '../../../library/utilities/genfunc';
@@ -221,21 +222,6 @@ export class Level1State extends CommonState
     }
     
     // 
-    //  DESC: Clean up after the startup state
-    //
-    cleanUp()
-    {
-        // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_level-1-stage_','_level-1-ball_','_level-ui_','_level-1-multiplier_'] );
-        
-        objectDataManager.freeGroup( ['(level_1)'] );
-        
-        physicsWorldManager.destroyWorld( "(game)" );
-
-        soundManager.freeGroup( [`(level_${this.index})`]);
-    }
-    
-    // 
     //  DESC: Handle the physics
     //
     physics()
@@ -364,6 +350,21 @@ export class Level1State extends CommonState
         if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > defs.DEFAULT_ID) )
             this.uiWinMeter.incBangUp( this.multiplier );
     }
+
+    // 
+    //  DESC: Clean up after the startup state
+    //
+    cleanUp()
+    {
+        // Only delete the strategy(s) used in this state. Don't use clear().
+        strategyManager.deleteStrategy( ['_level-1-stage_','_level-1-ball_','_level-ui_','_level-1-multiplier_'] );
+        
+        objectDataManager.freeGroup( ['(level_1)'] );
+        
+        physicsWorldManager.destroyWorld( "(game)" );
+
+        soundManager.freeGroup( [`(level_${this.index})`]);
+    }
 }
 
 // 
@@ -371,8 +372,50 @@ export class Level1State extends CommonState
 //
 export function load()
 {
+    let groupAry = ['(level_1)'];
+
+    let sndIndex = menuManager.getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
+    
+    return Promise.all([
+
+        // Load all the assets associated with this group(s)
+        objectDataManager.loadGroup( groupAry ),
+
+        // Load the physics world
+        physicsWorldManager.loadWorldGroup2D( '(game)' ),
+
+        // Load the Sound Manager group
+        soundManager.loadGroup( [`(level_${sndIndex})`] )
+    ])
+
+    // Create and load all the actor strategies.
+    .then(() => strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) ))
+
+    // Clean up the temporary files
+    .then(() =>
+    {
+        assetHolder.deleteGroup( groupAry );
+        spriteSheetManager.deleteGroup( groupAry );
+    })
+    
+    
+    /*objectDataManager.loadGroup( groupAry )
+
+        // Load the physics list table and group
+        .then(() => physicsWorldManager.loadWorldGroup2D( '(game)' ))
+
+        // Create and load all the actor strategies.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) ))
+
+        // Clean up the temporary files
+        .then(() =>
+        {
+            assetHolder.deleteGroup( groupAry );
+            spriteSheetManager.deleteGroup( groupAry );
+        })*/
+
     // Load the xml group
-    loadManager.add(
+    /*loadManager.add(
         ( callback ) => objectDataManager.loadXMLGroup2D( ['(level_1)'], callback ) );
 
     // Load all the assets associated with this group
@@ -393,5 +436,5 @@ export function load()
     loadManager.add( ( callback ) => soundManager.loadGroup( [`(level_${index})`], callback ));
 
     // Create and load all the actor strategies. NOTE: This adds it to the load manager
-    strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) );
+    strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) );*/
 }

@@ -78,9 +78,6 @@ export class StartUpState extends GameState
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
 
-        // Init the progress bar counter
-        this.progressCounter = 0;
-
         // Preload assets for the startup screen
         this.preload();
     }
@@ -120,9 +117,6 @@ export class StartUpState extends GameState
     //
     preloadComplete()
     {
-        // Set the camera
-        this.camera = cameraManager.getDefault();
-        
         // Prepare the strategies to run
         this.progressBar = strategyManager.get( '_startup_' ).get( 'UIProgressBar' ).getControl();
         this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
@@ -164,7 +158,7 @@ export class StartUpState extends GameState
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();
 
-                console.log('StartUp State load complete!: ' + this.progressCounter);
+                console.log('StartUp State load complete!: ' + this.progressBar.curValue);
             }
         }
     }
@@ -203,7 +197,7 @@ export class StartUpState extends GameState
         highResTimer.timerStart();
 
         // Set the function to be called to update the progress bar during the download
-        signalManager.connect_loadComplete( this.progressbarUpdate.bind(this) );
+        signalManager.connect_loadComplete( this.progressBar.incCurrentValue.bind(this.progressBar) );
 
         let groupAry = ['(menu)'];
 
@@ -243,14 +237,6 @@ export class StartUpState extends GameState
 
         // Last thing to do is to dispatch the event that the load is complete
         .then( () => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) )
-    }
-
-    //
-    //  DESC: progress bar update callback function
-    //
-    progressbarUpdate()
-    {
-        this.progressBar.incCurrentValue( ++this.progressCounter );
     }
 
     //

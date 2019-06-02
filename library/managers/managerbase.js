@@ -13,9 +13,6 @@ export class ManagerBase
     constructor()
     {
         this.listTableMap = new Map;
-        
-        // load counter
-        this.loadCounter = 0;
     }
     
     // 

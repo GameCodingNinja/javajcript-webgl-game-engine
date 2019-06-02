@@ -24,24 +24,24 @@ export function downloadFile( fileType, filePath )
         
         if( fileType === 'xml' )
         {
-            console.log(`Load XML: ${filePath}`);
+            //console.log(`Load XML: ${filePath}`);
             request.responseType = 'document';
             request.overrideMimeType('text/xml');
         }
         else if( fileType === 'txt' )
         {
-            console.log(`Load Text: ${filePath}`);
+            //console.log(`Load Text: ${filePath}`);
             request.responseType = 'text';
             request.overrideMimeType('text/plain');
         }
         else if( fileType === 'binary' )
         {
-            console.log(`Load Binary: ${filePath}`);
+            //console.log(`Load Binary: ${filePath}`);
             request.responseType = 'arraybuffer';
         }
         else if( fileType === 'img' )
         {
-            console.log(`Load Image: ${filePath}`);
+            //console.log(`Load Image: ${filePath}`);
         }
         else
         {

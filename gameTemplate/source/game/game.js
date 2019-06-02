@@ -30,8 +30,8 @@ export class Game
 {
     constructor()
     {
-        // Set the shader init callback
-        shaderManager.initShaderCallback = this.shaderInitCallBack.bind(this);
+        // Set the init shader callback
+        signalManager.connect_initShader( this.initShaderCallBack.bind(this) );
         
         // Set the smart gui call back
         signalManager.connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
@@ -127,9 +127,9 @@ export class Game
     // 
     //  DESC: Callback for shader init
     //
-    shaderInitCallBack( shaderId )
+    initShaderCallBack( shaderId )
     {
-        shaderManager.setShaderValue4fv( shaderId, 'additive', [0,0,0,1] );
+        shaderManager.setShaderValue4fv( shaderId, 'additive', [1,0,0,1] );
     }
     
     // 

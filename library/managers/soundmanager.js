@@ -113,19 +113,23 @@ class SoundManager extends ManagerBase
     //
     loadFromBinaryData( group, id, audioData, filePath )
     {
-        // Increment the load counter because the decoder is asynchronous
-        ++this.loadCounter;
-        
         // Get the group map
         let groupMap = this.soundMapMap.get( group );
         
         // Get the sound
         let sound = groupMap.get( id );
+
+        return new Promise((resolve, reject) => {
         
-        // Create a sound buffer and decode
-        this.context.decodeAudioData( audioData,
-            (soundBuffer) => sound.init( this.context, soundBuffer ),
-            (error) => console.log(`Error decoding audio data (${error.err}, ${filePath})!`) );
+            // Create a sound buffer and decode
+            this.context.decodeAudioData( audioData,
+                (soundBuffer) => 
+                {
+                    sound.init( this.context, soundBuffer );
+                    resolve();
+                },
+                (error) => reject( Error(`Error decoding audio data (${error.err}, ${filePath})!`) ) );
+        });
     }
     
     //

@@ -9,15 +9,15 @@
 import { GameState } from './gamestate';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
-import { loadManager } from '../../../library/managers/loadmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { signalManager } from '../../../library/managers/signalmanager';
-import { ActorStrategy } from '../../../library/strategy/actorstrategy';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { settings } from '../../../library/utilities/settings';
+import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
+import { assetHolder } from '../../../library/utilities/assetholder';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as level1State from '../state/level1state';
@@ -57,6 +57,24 @@ export class LoadState extends GameState
     preload()
     {
         let groupAry = ['(loadingScreen)'];
+
+        // Load the Object Manager group
+        objectDataManager.loadGroup( groupAry )
+
+            // Create and load all the actor strategies.
+            .then(() => strategyLoader.load( genFunc.stringLoadXML( loadScreenStrategyLoader ) ))
+
+            // Clean up the temporary files
+            .then(() =>
+            {
+                assetHolder.deleteGroup( groupAry );
+                spriteSheetManager.deleteGroup( groupAry );
+            })
+
+            // Last thing to do is call the preload complete function
+            .then(() => this.preloadComplete() );
+
+        /*let groupAry = ['(loadingScreen)'];
         
         // Load the menu assets
         // Load the xml group
@@ -78,7 +96,7 @@ export class LoadState extends GameState
         loadManager.add( ( callback ) => this.preloadComplete() );
     
         // Start the load
-        loadManager.load();
+        loadManager.load();*/
     }
     
     // 
@@ -176,8 +194,31 @@ export class LoadState extends GameState
         
         // Set the timer to see how long the load takes
         highResTimer.timerStart();
+
+        let promise = 0;
         
         if( this.stateMessage.loadState === stateDefs.EGS_TITLE_SCREEN )
+        {
+            this.maxLoadCount = titleScreenState.ASSET_COUNT;
+            promise = titleScreenState.load();
+        }
+        else if( this.stateMessage.loadState === stateDefs.EGS_LEVEL_1 )
+        {
+            this.maxLoadCount = level1State.ASSET_COUNT;
+            promise = level1State.load();
+        }
+
+        return promise
+
+            // Time out to give it a few cycles to update the last value
+            .then(() => {return new Promise(resolve => setTimeout(resolve, 500))})
+
+            // Last thing to do is to dispatch the event that the load is complete
+            .then( () => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) );
+
+            
+        
+        /*if( this.stateMessage.loadState === stateDefs.EGS_TITLE_SCREEN )
         {
             this.maxLoadCount = titleScreenState.ASSET_COUNT;
             titleScreenState.load();
@@ -193,7 +234,7 @@ export class LoadState extends GameState
             ( callback ) => eventManager.dispatchEvent( stateDefs.ESE_ASSET_LOAD_COMPLETE ) );
         
         // Start the load
-        loadManager.load();
+        loadManager.load();*/
     }
     
     // 
