@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<menu>
+    
+    <scriptLst>
+        <script transIn="Menu_TransIn"/>
+        <script transOut="Menu_TransOut"/>
+    </scriptLst>
+
+    <staticMenuControls>
+
+        <!-- Key Bindings Label -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
+            <position x="0" y="355" z="0"/>
+            <fontStringLst>
+                <string text="Key Bindings"/>
+            </fontStringLst>
+        </control>
+
+        <!-- Key Bind Controls Label -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/key_binding_label.ctrl"/>
+            <position x="-17" y="295" z="0"/>
+            <fontStringLst>
+                <string text="Action"/>
+                <string text="Keyboard                 Mouse             Controller"/>
+            </fontStringLst>
+        </control>
+        
+        <!-- instructions Label -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/key_binding_instructions_label.ctrl"/>
+            <position x="-500" y="-340" z="0"/>
+            <fontStringLst>
+                <string text="Select the desired action to change. Press the button of the device to bind.|Press the same device button to unbind. Press Esc to cancel."/>
+            </fontStringLst>
+        </control>
+
+    </staticMenuControls>
+
+    <mouseOnlyControls>
+
+        <!-- mouse-only close Button -->
+        <control name="close_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
+            <position x="495" y="360" z="0"/>
+            <fontStringLst>
+                <string text="x"/>
+            </fontStringLst>
+            <action actionType="close"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+
+        <!-- mouse-only close Button -->
+        <control name="back_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/back_button.ctrl"/>
+            <position x="465" y="360" z="0"/>
+            <fontStringLst>
+                <string text="^"/>
+            </fontStringLst>
+            <action actionType="back"/>
+            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+        </control>
+    
+    </mouseOnlyControls>
+  
+    <menuControls>
+
+        <!-- Key binding scroll box -->
+        <control name="key_binding_scroll_box" controlType="scroll_box" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/key_binding_scroll_box.ctrl"/>
+            <position x="-37" y="-15" z="0"/>
+            <scroll startDelay="750" scrollDelay="300" up="true" down="true" scrollSpeed="0.17" pageSpeed="1.0"/>
+            <!-- size modifier for collision rect -->
+            <!--<rect x1="0" y1="0" x2="200" y2="0"/>-->
+        </control>
+
+    </menuControls>
+
+    <spriteList>
+
+        <sprite objectName="key_bindings_menu_bg">
+            <script>
+                <transition in="Menu_TransIn" out="Menu_TransOut"/>
+            </script>
+        </sprite>
+    
+    </spriteList>
+  
+</menu>
+

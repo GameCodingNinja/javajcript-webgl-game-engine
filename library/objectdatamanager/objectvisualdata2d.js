@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { iObjectVisualData } from './iobjectvisualdata';
 import { Rect } from '../common/rect';
 import { Color } from '../common/color';
 import { Size } from '../common/size';
@@ -18,10 +19,12 @@ import { assetHolder } from '../utilities/assetholder';
 import * as defs from '../common/defs';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
-export class ObjectVisualData2D
+export class ObjectVisualData2D extends iObjectVisualData
 {
     constructor()
     {
+        super();
+        
         // texture id
         this.textureAry = [];
 
@@ -130,7 +133,10 @@ export class ObjectVisualData2D
                 let attr = textureNode[0].getAttribute( 'file' );
                 // Check for null because might want to replace with an empty string
                 if( attr !== null )
+                {
                     this.textureFilePath = attr;
+                    this.textureSequenceCount = 1;
+                }
                 
                 attr = textureNode[0].getAttribute( 'count' );
                 // Check for null because might want to replace with an empty string

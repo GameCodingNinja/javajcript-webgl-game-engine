@@ -24,6 +24,14 @@ class ScriptManager
         
         this.scriptMap.set( name, factory );
     }
+
+    //
+    //  DESC: Delete the script by name
+    //
+    delete( name )
+    {
+        this.scriptMap.delete( name );
+    }
     
     //
     //  DESC: Get the script by name

@@ -34,7 +34,7 @@ export function create( nodeData )
     {
         node = new ObjectNodeMultiLst( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
-        LoadObject( node, nodeData );
+        node.object.loadTransFromNode( nodeData.xmlNode );
     }
     else if( nodeData.nodeType === defs.ENT_SPRITE_MULTI_LIST )
     {
@@ -69,14 +69,6 @@ function LoadSprite( node, nodeData )
     // Broadcast the signal to create the sprite AI
     if( nodeData.aiName !== '' )
         signalManager.broadcast_aiCreate( nodeData.aiName, node );
-}
-
-// 
-//  DESC: Load the sprite data
-//
-function LoadObject( object, nodeData )
-{
-    object.loadTransFromNode( nodeData.xmlNode );
 }
 
 // 

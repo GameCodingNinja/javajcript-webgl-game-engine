@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<listTable>
+    
+    <groupList groupName="(space_ship)">
+        <file path="data/objects/2d/objectDataList/spaceShipDataList.lst"/>
+    </groupList>
+  
+</listTable>

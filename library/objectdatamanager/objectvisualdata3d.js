@@ -6,14 +6,17 @@
 
 "use strict";
 
+import { iObjectVisualData } from './iobjectvisualdata';
 import { Color } from '../common/color';
 import { textureManager } from '../managers/texturemanager';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
-export class ObjectVisualData3D
+export class ObjectVisualData3D extends iObjectVisualData
 {
     constructor()
     {
+        super();
+        
         // Mesh group object
         this.meshGrp = null;
 

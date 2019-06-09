@@ -6,11 +6,11 @@
 
 "use strict";
 
-import { iObjectdata } from './iobjectdata';
+import { iObjectData } from './iobjectdata';
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
 import { ObjectVisualData3D } from './objectvisualdata3d';
 
-export class ObjectData3D extends iObjectdata
+export class ObjectData3D extends iObjectData
 {
     constructor()
     {

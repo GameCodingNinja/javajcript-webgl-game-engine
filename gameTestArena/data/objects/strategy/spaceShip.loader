@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<strategyLst>
+    
+    <strategy name="_space_ship_" type="actor">
+        <node name="player_ship">
+            <sprite name="fire_tail">
+                <script prepare="update"/>
+            </sprite>
+        </node>
+    </strategy>
+  
+</strategyLst>

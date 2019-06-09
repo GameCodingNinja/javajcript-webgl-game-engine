@@ -6,7 +6,7 @@
 
 "use strict";
 
-export class iObjectdata
+export class iObjectData
 {
     constructor()
     {

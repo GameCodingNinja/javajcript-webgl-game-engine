@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="key_binding_slider_frame">
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+            </scriptLst>
+        </sprite>
+    
+    </spriteList>
+
+    <settings maxTravelDistPixels="505"/>
+
+    <subControlList>
+
+        <control controlType="button" defaultState="inactive" mouseSelectDown="true">
+            <filePath file="data/objects/2d/menu/control/button_slider.ctrl"/>
+            <rotation z="90"/>
+        </control>
+
+    </subControlList>
+
+</UIControl>

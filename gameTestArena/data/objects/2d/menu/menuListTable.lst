@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<listTable>
+
+    <groupList groupName="(menu)">
+        <file path="data/objects/2d/menu/main_menu.cfg"/>
+    </groupList>
+  
+</listTable>

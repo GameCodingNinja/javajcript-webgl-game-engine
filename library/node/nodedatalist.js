@@ -70,7 +70,7 @@ export class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new NodeData( node, nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defaultAIName, defId );
+                let childNodeData = new NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defaultAIName, defId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children

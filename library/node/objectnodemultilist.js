@@ -33,6 +33,9 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     {
         if( this.ai )
             this.ai.update();
+
+        // Call the parent but it has to be last
+        super.update();
     }
     
     //

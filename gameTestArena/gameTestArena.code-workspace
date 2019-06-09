@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "/home/howie/Development/javajcript-webgl-game-engine/library"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "gameTestArena"
+	}
+}

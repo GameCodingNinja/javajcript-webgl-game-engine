@@ -90,10 +90,16 @@ class Strategyloader
             let active = nodeLst[i].getAttribute( 'active' );
             let node = strategy.create( name, instance, (!active || active === 'true') );
             
-            // See if there is a sprite that needs to be init. There should only be one
-            let spriteNode = nodeLst[i].getElementsByTagName( 'sprite' );
-            if( spriteNode.length )
-                this.initSprite( spriteNode[0], node.getSprite() );
+            // See if there are sprites that needs to be init
+            let spriteNodeLst = nodeLst[i].getElementsByTagName( 'sprite' );
+            for( let i = 0; i < spriteNodeLst.length; ++i )
+            {
+                let spriteName = spriteNodeLst[i].getAttribute( 'name' );
+                if( spriteName )
+                    this.initSprite( spriteNodeLst[i], node.allNodeMap.get(spriteName).getSprite() );
+                else
+                    this.initSprite( spriteNodeLst[i], node.getSprite() );
+            }
         }
     }
     
@@ -103,15 +109,18 @@ class Strategyloader
     initSprite( xmlNode, sprite )
     {
         // Set any transforms
-        sprite.object.loadTransFromNode( xmlNode );
-        
-        // See if there are any scripts that need to be prepared to run
-        let scriptLst = xmlNode.getElementsByTagName( 'script' );
-        for( let i = 0; i < scriptLst.length; ++i )
+        if( sprite )
         {
-            let attr = scriptLst[i].getAttribute( 'prepare' );
-            if( attr )
-                sprite.prepareScript( attr );
+            sprite.object.loadTransFromNode( xmlNode );
+            
+            // See if there are any scripts that need to be prepared to run
+            let scriptLst = xmlNode.getElementsByTagName( 'script' );
+            for( let i = 0; i < scriptLst.length; ++i )
+            {
+                let attr = scriptLst[i].getAttribute( 'prepare' );
+                if( attr )
+                    sprite.prepareScript( attr );
+            }
         }
     }
 }

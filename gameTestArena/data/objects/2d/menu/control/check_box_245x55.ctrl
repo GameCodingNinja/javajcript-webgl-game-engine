@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="245x55_button_frame">
+            <scriptLst>
+                <script disabled="Control_Hidden"/>
+                <script inactive="Control_Hidden"/>
+                <script active="Control_Solid_Active"/>
+                <script selected="Control_Solid_Selected_visible"/>
+            </scriptLst>
+        </sprite>
+    
+        <sprite objectName="28x28_button_frame">
+            <position x="-97" y="0" z="0"/>
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Solid_Selected_visible"/>
+            </scriptLst>
+        </sprite>
+
+        <sprite objectName="control_font">
+            <position x="-75" y="0" z="0"/>
+            <font fontName="dejavu_sans_reg_40">
+                <alignment horzAlign="left" vertAlign="center"/>
+            </font>
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Selected_Dispatch_Exe_Act"/>
+            </scriptLst>
+        </sprite>
+
+        <!-- This sprite is toggled so it need to be last -->
+        <sprite objectName="control_font">
+            <font fontName="dejavu_sans_reg_bold_32"/>
+            <position x="-97.5" y="2" z="0"/>
+            <scriptLst>
+                <script disabled="Control_Disabled"/>
+                <script inactive="Control_Inactive"/>
+                <script active="Control_Active"/>
+                <script selected="Control_Selected_Visible"/>
+            </scriptLst>
+        </sprite>
+
+    </spriteList>
+
+</UIControl>

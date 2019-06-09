@@ -129,7 +129,7 @@ export class Game
     //
     initShaderCallBack( shaderId )
     {
-        shaderManager.setShaderValue4fv( shaderId, 'additive', [1,0,0,1] );
+        shaderManager.setShaderValue4fv( shaderId, 'additive', [0,0,0,1] );
     }
     
     // 

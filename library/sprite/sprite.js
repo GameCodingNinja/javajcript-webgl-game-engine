@@ -311,10 +311,7 @@ export class Sprite
     //
     getFrameCount()
     {
-        if( this.objData.visualData.spriteSheet )
-            return this.objData.visualData.spriteSheet.getCount();
-        
-        return 1;
+        return this.objData.visualData.getFrameCount();
     }
     
     // 

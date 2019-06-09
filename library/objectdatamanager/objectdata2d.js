@@ -6,13 +6,13 @@
 
 "use strict";
 
-import { iObjectdata } from './iobjectdata';
+import { iObjectData } from './iobjectdata';
 import { ObjectPhysicsData2D } from './objectphysicsdata2d';
 import { ObjectVisualData2D } from './objectvisualdata2d';
 import { Size } from '../common/size';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
-export class ObjectData2D extends iObjectdata
+export class ObjectData2D extends iObjectData
 {
     constructor()
     {

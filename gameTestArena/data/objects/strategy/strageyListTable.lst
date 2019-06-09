@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<listTable>
+    
+    <groupList groupName="_space_ship_">
+        <file path="data/objects/strategy/spaceShip.strategy"/>
+    </groupList>
+  
+</listTable>
