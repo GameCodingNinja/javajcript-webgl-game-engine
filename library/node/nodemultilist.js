@@ -226,7 +226,7 @@ export class NodeMultiLst extends Node
     {
         super.reset();
         
-        for( let [ key, node ] of this.allNodeMap.entries() )
+        for( let node of this.allNodeMap.values() )
             node.reset();
     }
 }

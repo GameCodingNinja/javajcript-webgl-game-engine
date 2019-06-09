@@ -14,7 +14,7 @@ export class ScriptComponent
     }
     
     // 
-    //  DESC: Update the script
+    //  DESC: Add a script
     //
     set( script )
     {
