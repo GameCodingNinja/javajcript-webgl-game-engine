@@ -13,7 +13,7 @@
             <sprite2d objectName="fire_tail">
                 <position x="-120" y="3" z="0"/>
                 <scriptLst>
-                    <script update="PlayerShip_FireTailAnim"/>
+                    <script fireTailAnim="PlayerShip_FireTailAnim"/>
                 </scriptLst>
             </sprite2d>
 

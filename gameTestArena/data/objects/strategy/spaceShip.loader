@@ -3,9 +3,14 @@
     
     <strategy name="_space_ship_" type="actor">
         <node name="player_ship">
-            <sprite name="fire_tail">
-                <script prepare="update"/>
-            </sprite>
+            <object>
+                <position x="500" y="-300" z="0"/>
+            </object>
+            <node name="fire_tail">
+                <sprite>
+                    <script prepare="fireTailAnim"/>
+                </sprite>
+            </node>
         </node>
     </strategy>
   

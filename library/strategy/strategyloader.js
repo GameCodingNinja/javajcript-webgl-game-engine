@@ -81,24 +81,53 @@ class Strategyloader
     //
     populateStartegy( xmlNode, strategy )
     {
-        let nodeLst = xmlNode.getElementsByTagName( 'node' );
+        let nodeLst = xmlNode.children;
 
         for( let i = 0; i < nodeLst.length; ++i )
         {
-            let name = nodeLst[i].getAttribute( 'name' );
-            let instance = nodeLst[i].getAttribute( 'instance' );
-            let active = nodeLst[i].getAttribute( 'active' );
-            let node = strategy.create( name, instance, (!active || active === 'true') );
-            
-            // See if there are sprites that needs to be init
-            let spriteNodeLst = nodeLst[i].getElementsByTagName( 'sprite' );
-            for( let i = 0; i < spriteNodeLst.length; ++i )
+            if( nodeLst[i].nodeName === 'node' )
             {
-                let spriteName = spriteNodeLst[i].getAttribute( 'name' );
-                if( spriteName )
-                    this.initSprite( spriteNodeLst[i], node.allNodeMap.get(spriteName).getSprite() );
-                else
-                    this.initSprite( spriteNodeLst[i], node.getSprite() );
+                // Get the name of the strategy node
+                let name = nodeLst[i].getAttribute( 'name' );
+
+                // Get the instance name if one is provided.
+                // Nodes with instance names are stored in a map so that a reference can be returned
+                let instance = nodeLst[i].getAttribute( 'instance' );
+
+                // Creating a node is automaticly active unless defined as false. Default true even if not specified
+                let active = nodeLst[i].getAttribute( 'active' );
+                let strategyNode = strategy.create( name, instance, (!active || active === 'true') );
+
+                // Get the children of this node
+                let childLst = nodeLst[i].children;
+
+                for( let j = 0; j < childLst.length; ++j )
+                {
+                    // If the parent node specified a sprite to init
+                    if( childLst[j].nodeName === 'object' )
+                    {
+                        let object = strategyNode.getObject();
+                        if( object )
+                            object.loadTransFromNode( childLst[j] );
+                        else
+                            console.log(`Strategy Loader Warning: Object defined for ${name} node but is not an object node.`);
+                    }
+
+                    else if( childLst[j].nodeName === 'sprite' )
+                        this.initSprite( childLst[j], strategyNode.getSprite() );
+
+                    // If the parent node specified a child node to init
+                    else if( childLst[j].nodeName === 'node' )
+                    {
+                        // Get the name of the child node
+                        let childName = childLst[j].getAttribute( 'name' );
+                        if( childName )
+                            if( !this.initSprite( childLst[j].firstElementChild, strategyNode.allNodeMap.get(childName).getSprite() ) )
+                                console.log(`Strategy Loader Warning: Child node defined for ${name} node can not be found.`);
+                        else
+                            console.log(`Strategy Loader Warning: Child node defined for ${name} node but child node name note defined.`);
+                    }
+                }
             }
         }
     }
@@ -121,7 +150,11 @@ class Strategyloader
                 if( attr )
                     sprite.prepareScript( attr );
             }
+
+            return true;
         }
+        
+        return false;    
     }
 }
 
