@@ -37,9 +37,9 @@ export class SpriteNode extends iNode
     transform( object = null )
     {
         if( object )
-            this.sprite.object.transform( object );
+            this.sprite.transform( object );
         else
-            this.sprite.object.transform();
+            this.sprite.transform();
     }
     
     //
@@ -53,7 +53,7 @@ export class SpriteNode extends iNode
     // 
     //  DESC: Get the sprite
     //
-    getSprite()
+    get()
     {
         return this.sprite;
     }

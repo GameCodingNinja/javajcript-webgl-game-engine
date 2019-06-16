@@ -116,7 +116,7 @@ export class StartUpState extends GameState
     preloadComplete()
     {
         // Prepare the strategies to run
-        this.progressBar = strategyManager.get( '_startup_' ).get( 'UIProgressBar' ).getControl();
+        this.progressBar = strategyManager.get( '_startup_' ).get( 'UIProgressBar' ).get();
         this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
         
         strategyManager.activateStrategy('_startup_');

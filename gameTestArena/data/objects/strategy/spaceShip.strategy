@@ -1,40 +1,40 @@
 <?xml version="1.0"?>
 <node defaultGroup="(space_ship)">
 
-    <node name="player_ship" type="objectNodeMultiList">
+    <node name="player_ship">
 
-        <object2d>
+        <object>
             <position x="-400" y="200" z="0"/>
             <scale x="1.5" y="1.5" z="1.5"/>
-        </object2d>
+        </object>
 
-        <node name="fire_tail" type="spriteNode">
+        <node name="fire_tail">
 
-            <sprite2d objectName="fire_tail">
+            <sprite objectName="fire_tail">
                 <position x="-120" y="3" z="0"/>
                 <scriptLst>
                     <script fireTailAnim="PlayerShip_FireTailAnim"/>
                 </scriptLst>
-            </sprite2d>
+            </sprite>
 
         </node>
 
-        <node name="ship_body" type="spriteNode">
+        <node name="ship_body">
 
-            <sprite2d objectName="player_ship">
-            </sprite2d>
+            <sprite objectName="player_ship">
+            </sprite>
 
         </node>
 
-        <node name="ship_gun" type="spriteNode">
+        <node name="ship_gun">
 
-            <sprite2d objectName="ship_gun">
+            <sprite objectName="ship_gun">
                 <centerPos x="10" y="0" z="0"/>
                 <position x="20" y="0" z="0"/>
                 <!--<scriptLst>
                     <script update="rotateGun"/>
                 </scriptLst>-->
-            </sprite2d>
+            </sprite>
 
         </node>
 

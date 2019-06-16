@@ -32,7 +32,7 @@ class State_PlayLoadAnim extends utilScripts.FrameExecute
     //
     frame()
     {
-        this.sprite.object.incRotXYZ( 0.0, 0.0, -30.0 );
+        this.sprite.incRotXYZ( 0.0, 0.0, -30.0 );
     }
 }
 

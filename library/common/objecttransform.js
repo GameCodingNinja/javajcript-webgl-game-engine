@@ -1,7 +1,7 @@
 
 // 
-//  FILE NAME:  object2d.js
-//  DESC:       object 2D class
+//  FILE NAME:  objecttransform.js
+//  DESC:       object transform class
 //
 
 "use strict";
@@ -10,14 +10,20 @@ import { Object } from '../common/object';
 import { Matrix } from '../utilities/matrix';
 import * as defs from '../common/defs';
 
-export class Object2D extends Object
+export class ObjectTransform extends Object
 {
-    constructor()
+    constructor( createRotMatrix = false )
     {
         super();
         
         // local matrix
         this.matrix = new Matrix;
+
+        // Matrix for rotations only
+        // Basicly used for normal calculations
+        this.rotMatrix = null;
+        if( createRotMatrix )
+            this.rotMatrix = new Matrix;
     }
     
     //
@@ -34,11 +40,11 @@ export class Object2D extends Object
 
         // Apply the scale
         if( this.parameters.isSet( defs.SCALE ) )
-            this.applyScale( matrix );
+            this.applyScale();
 
         // Apply the rotation
         if( this.parameters.isSet( defs.ROTATE ) )
-            this.applyRotation( matrix );
+            this.applyRotation();
 
         // Apply the translation
         if( this.parameters.isSet( defs.TRANSLATE ) )
@@ -80,7 +86,7 @@ export class Object2D extends Object
     //
     //  DESC: Apply the scale
     //
-    applyScale( matrix )
+    applyScale()
     {
         this.matrix.setScaleFromPoint( this.scale );
     }
@@ -88,7 +94,7 @@ export class Object2D extends Object
     //
     //  DESC: Apply the scale
     //
-    applyRotation( matrix )
+    applyRotation()
     {
         // Add in the center point prior to rotation
         if( this.parameters.isSet( defs.CENTER_POINT ) )
@@ -103,6 +109,12 @@ export class Object2D extends Object
             this.centerPos.invert();
             this.matrix.translate( this.centerPos );
             this.centerPos.invert();
+        }
+
+        if( this.rotMatrix )
+        {
+            this.rotMatrix.initilizeMatrix();
+            this.rotMatrix.rotate( this.rot );
         }
     }
 

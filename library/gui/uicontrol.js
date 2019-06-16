@@ -196,8 +196,8 @@ export class UIControl extends ControlBase
         else
         {
             // Find the largest size width and height of the different sprites for the controls size
-            let width = sprite.objData.size.w + Math.abs( sprite.object.pos.x );
-            let height = sprite.objData.size.h + Math.abs( sprite.object.pos.y );
+            let width = sprite.objData.size.w + Math.abs( sprite.pos.x );
+            let height = sprite.objData.size.h + Math.abs( sprite.pos.y );
 
             if( width > this.size.w )
                 this.size.w = width;
@@ -229,7 +229,7 @@ export class UIControl extends ControlBase
             super.transform();
 
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].object.transform( this );
+            this.spriteAry[i].transform( this );
 
         // Transform the collision
         this.transformCollision();

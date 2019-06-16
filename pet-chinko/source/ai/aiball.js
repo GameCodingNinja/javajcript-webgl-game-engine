@@ -26,7 +26,7 @@ export class aiBall extends iaiBase
     //
     update()
     {
-        if( this.sprite.object.pos.y < -600 )
+        if( this.sprite.pos.y < -600 )
             this.strategy.destroy( this.node );
     }
 }

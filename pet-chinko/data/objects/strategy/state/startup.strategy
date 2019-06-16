@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <node defaultGroup="(startup)">
     
-    <node name="logo" type="spriteNode">
+    <node name="logo">
         
-        <sprite2d objectName="logo"/>
+        <sprite objectName="logo"/>
 
     </node>
     
-    <node name="UIProgressBar" type="uiControlNode">
+    <node name="UIProgressBar">
         
         <uiProgressBar defaultState="inactive">
             <position x="0" y="-350" z="0"/>

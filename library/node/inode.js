@@ -27,7 +27,7 @@ export class iNode
     // 
     //  DESC: Set the id
     //
-    setId( id )
+    setId()
     {
     }
     
@@ -50,7 +50,7 @@ export class iNode
     // 
     //  DESC: Push back node into array
     //
-    findParent( searchNode )
+    findParent()
     {
         return null;
     }
@@ -74,7 +74,7 @@ export class iNode
     // 
     //  DESC: Get the child node
     //
-    getChildNode( nodeName )
+    getChildNode()
     {
         return null;
     }
@@ -88,17 +88,9 @@ export class iNode
     }
     
     // 
-    //  DESC: Get the sprite
-    //
-    getSprite()
-    {
-        return null;
-    }
-    
-    // 
     //  DESC: Get the object
     //
-    getObject()
+    get()
     {
         return null;
     }
@@ -106,9 +98,24 @@ export class iNode
     // 
     //  DESC: Set the AI.
     //
-    setAI( ai )
+    setAI()
     {
         // Empty by design
+    }
+
+    //
+    //  DESC: Render the sprite
+    //
+    render()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Update the nodes
+    //
+    update()
+    {
     }
     
     // 

@@ -238,7 +238,7 @@ export class UIMeter extends UIControl
         this.impulse = 0.0;
         this.bangScaleAdjustment.set(1,1);
 
-        this.fontSprite.object.setScaleXYZ( 1, 1, 1 );
+        this.fontSprite.setScaleXYZ( 1, 1, 1 );
 
         this.velocity = bangRange.velocity / 1000.0;
 

@@ -6,15 +6,15 @@
 
 "use strict";
 
-import { Object3D } from '../3d/object3d';
+import { ObjectTransform } from '../common/objecttransform';
 import { NodeDataList } from '../node/nodedatalist';
 import * as nodeFactory from '../node/nodefactory';
 
-export class Sector extends Object3D
+export class Sector extends ObjectTransform
 {
     constructor()
     {
-        super();
+        super(true);
         
         // node allocation array
         this.nodeAry = [];

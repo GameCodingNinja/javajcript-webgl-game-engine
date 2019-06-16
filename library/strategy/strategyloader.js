@@ -106,7 +106,7 @@ class Strategyloader
                     // If the parent node specified a sprite to init
                     if( childLst[j].nodeName === 'object' )
                     {
-                        let object = strategyNode.getObject();
+                        let object = strategyNode.get();
                         if( object )
                             object.loadTransFromNode( childLst[j] );
                         else
@@ -114,7 +114,7 @@ class Strategyloader
                     }
 
                     else if( childLst[j].nodeName === 'sprite' )
-                        this.initSprite( childLst[j], strategyNode.getSprite() );
+                        this.initSprite( childLst[j], strategyNode.get() );
 
                     // If the parent node specified a child node to init
                     else if( childLst[j].nodeName === 'node' )
@@ -122,7 +122,7 @@ class Strategyloader
                         // Get the name of the child node
                         let childName = childLst[j].getAttribute( 'name' );
                         if( childName )
-                            if( !this.initSprite( childLst[j].firstElementChild, strategyNode.allNodeMap.get(childName).getSprite() ) )
+                            if( !this.initSprite( childLst[j].firstElementChild, strategyNode.allNodeMap.get(childName).get() ) )
                                 console.log(`Strategy Loader Warning: Child node defined for ${name} node can not be found.`);
                         else
                             console.log(`Strategy Loader Warning: Child node defined for ${name} node but child node name note defined.`);
@@ -140,7 +140,7 @@ class Strategyloader
         // Set any transforms
         if( sprite )
         {
-            sprite.object.loadTransFromNode( xmlNode );
+            sprite.loadTransFromNode( xmlNode );
             
             // See if there are any scripts that need to be prepared to run
             let scriptLst = xmlNode.getElementsByTagName( 'script' );

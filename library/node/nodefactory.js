@@ -23,24 +23,23 @@ export function create( nodeData )
 {
     let node = null;
     
-    // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
     if( nodeData.nodeType === defs.ENT_SPRITE )
     {
-        node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id );
+        if( nodeData.hasChildrenNodes )
+            node = new SpriteNodeMultiLst( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+
+        // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
+        else
+            node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === defs.ENT_OBJECT_MULTI_LIST )
+    else if( nodeData.nodeType === defs.ENT_OBJECT )
     {
+        // Object node is automatically a multilist node because an object node without children is pretty useless
         node = new ObjectNodeMultiLst( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
-    }
-    else if( nodeData.nodeType === defs.ENT_SPRITE_MULTI_LIST )
-    {
-        node = new SpriteNodeMultiLst( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
-        
-        LoadSprite( node, nodeData );
     }
     else if( nodeData.nodeType === defs.ENT_UI_CONTROL )
     {

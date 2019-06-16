@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { ObjectTransform } from '../common/objecttransform';
 import { VisualComponentQuad } from '../2d/visualcomponentquad';
 import { VisualComponentSpriteSheet } from '../2d/visualcomponentspritesheet';
 import { VisualComponentScaledFrame } from '../2d/visualcomponentscaledframe';
@@ -15,14 +16,14 @@ import { NullVisualComponent } from '../common/nullvisualcomponent';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
 import { scriptManager } from '../script/scriptmanager';
-import { Object2D } from '../2d/object2d';
-import { Object3D } from '../3d/object3d';
 import * as defs from '../common/defs';
 
-export class Sprite
+export class Sprite extends ObjectTransform
 {
     constructor( objData, id = defs.DEFAULT_ID )
     {
+        super( objData.is3D() );
+
         // The object data
         this.objData = objData
         
@@ -31,9 +32,6 @@ export class Sprite
         
         // AI
         this.ai = null
-        
-        // Object
-        this.object = null
         
         // The visual part of the sprite
         this.visualComponent = null
@@ -48,10 +46,8 @@ export class Sprite
         this.scriptComponent = new ScriptComponent;
         
         // Allocate the sprite specific objects
-        if( this.objData.is2D() )
+        if( objData.is2D() )
         {
-            this.object = new Object2D
-            
             if( objData.visualData.genType === defs.EGT_QUAD )
                 this.visualComponent = new VisualComponentQuad( objData.visualData );
             
@@ -67,9 +63,8 @@ export class Sprite
             if( objData.physicsData.isActive() )
                 this.physicsComponent = new PhysicsComponent2D( objData.physicsData );
         }
-        else if( this.objData.is3D() )
+        else if( objData.is3D() )
         {
-            this.object = new Object3D
             this.visualComponent = new VisualComponent3D( objData.visualData );
         }
 
@@ -78,7 +73,7 @@ export class Sprite
             this.visualComponent = new NullVisualComponent();
         
         // If there's no visual data, set the hide flag
-        this.object.setVisible( objData.visualData.isActive() );
+        this.setVisible( objData.visualData.isActive() );
     }
     
     // 
@@ -86,7 +81,7 @@ export class Sprite
     //
     load( xmlNode )
     {
-        this.object.loadTransFromNode( xmlNode );
+        this.loadTransFromNode( xmlNode );
         this.initScriptFactoryFunctions( xmlNode );
 
         if( this.visualComponent.isFontSprite() )
@@ -212,8 +207,8 @@ export class Sprite
     //
     render( camera )
     {
-        if( this.object.isVisible() )
-            this.visualComponent.render( this.object, camera );
+        if( this.isVisible() )
+            this.visualComponent.render( this, camera );
     }
     
     // 
@@ -302,7 +297,7 @@ export class Sprite
             this.visualComponent.setFrame( index );
 
             if( this.objData.visualData.genType === defs.EGT_SPRITE_SHEET )
-                this.object.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
+                this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
     }
     

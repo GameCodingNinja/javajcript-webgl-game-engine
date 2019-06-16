@@ -30,9 +30,6 @@ export class SpriteData
         // Sprite Id
         this.id = defId;
         
-        // Sprite type
-        this.spriteType = defs.EST_NULL;
-        
         // Get the name of this specific sprite instance
         let attr = xmlNode.getAttribute( 'name' );
         if( attr )
@@ -57,18 +54,5 @@ export class SpriteData
         attr = xmlNode.getAttribute( "id" );
         if( attr )
             this.id = Number(attr);
-        
-        // Get the node type
-        if( xmlNode.nodeName == 'object2d' )
-            this.spriteType = defs.EST_OBJECT2D;
-
-        else if( xmlNode.nodeName == 'object3d' )
-            this.spriteType = defs.EST_OBJECT3D;
-
-        else if( xmlNode.nodeName == 'sprite2d' )
-            this.spriteType = defs.EST_SPRITE2D;
-
-        else if( xmlNode.nodeName == 'sprite3d' )
-            this.spriteType = defs.EST_SPRITE3D;
     }
 }

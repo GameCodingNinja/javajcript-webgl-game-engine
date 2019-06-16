@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { Object2D } from '../2d/object2d';
+import { ObjectTransform } from '../common/objecttransform';
 import { NodeMultiLst } from './nodemultilist';
 import * as defs from '../common/defs';
 
@@ -19,7 +19,7 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     {
         super( nodeId, parentId );
         
-        this.object = new Object2D;
+        this.object = new ObjectTransform(true);
         
         this.objectId = objectId;
         
@@ -55,7 +55,7 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     // 
     //  DESC: Get the object
     //
-    getObject()
+    get()
     {
         return this.object;
     }

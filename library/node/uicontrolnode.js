@@ -51,7 +51,7 @@ export class UIControlNode extends iNode
     // 
     //  DESC: Get the control
     //
-    getControl()
+    get()
     {
         return this.uiControl;
     }

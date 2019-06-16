@@ -43,9 +43,9 @@ export class Object3D extends Object2D
     //
     //  DESC: Apply the rotation
     //
-    applyRotation( matrix )
+    applyRotation()
     {
-        super.applyRotation( matrix );
+        super.applyRotation();
 
         this.rotMatrix.initilizeMatrix();
         this.rotMatrix.rotate( this.rot );

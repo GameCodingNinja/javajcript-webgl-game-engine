@@ -149,13 +149,13 @@ export class UIProgressBar extends UIControl
             this.stencilMaskSprite = new Sprite( objectDataManager.getData( this.group, stencilMaskSprite ) );
             
             // Get the size
-            this.progressBarSize.copy( this.stencilMaskSprite.object.objData.size );
+            this.progressBarSize.copy( this.stencilMaskSprite.objData.size );
 
             // Get the initial position
-            this.progressBarPos.copy( this.stencilMaskSprite.object.pos );
+            this.progressBarPos.copy( this.stencilMaskSprite.pos );
 
             // Get the initial scale
-            this.progressBarScale.copy( this.stencilMaskSprite.object.scale );
+            this.progressBarScale.copy( this.stencilMaskSprite.scale );
         }
         else
         {
@@ -163,10 +163,10 @@ export class UIProgressBar extends UIControl
             this.progressBarSize.copy( this.spriteAry[this.spriteApplyIndex].objData.size );
 
             // Get the initial position
-            this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].object.pos );
+            this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].pos );
 
             // Get the initial scale
-            this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].object.scale );
+            this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].scale );
         }
     }
 
@@ -198,7 +198,7 @@ export class UIProgressBar extends UIControl
         super.transform( object );
 
         if( this.stencilMaskSprite )
-            this.stencilMaskSprite.object.transform( this );
+            this.stencilMaskSprite.transform( this );
     }
     
     // 
@@ -307,13 +307,13 @@ export class UIProgressBar extends UIControl
 
         if( this.stencilMaskSprite )
         {
-            this.stencilMaskSprite.object.setScaleXYZ( scaleX, scaleY, 1 );
-            this.stencilMaskSprite.object.setPosXYZ( posX, posY );
+            this.stencilMaskSprite.setScaleXYZ( scaleX, scaleY, 1 );
+            this.stencilMaskSprite.setPosXYZ( posX, posY );
         }
         else
         {
-            this.spriteAry[this.spriteApplyIndex].object.setScaleXYZ( scaleX, scaleY, 1 );
-            this.spriteAry[this.spriteApplyIndex].object.setPosXYZ( posX, posY, 0 );
+            this.spriteAry[this.spriteApplyIndex].setScaleXYZ( scaleX, scaleY, 1 );
+            this.spriteAry[this.spriteApplyIndex].setPosXYZ( posX, posY, 0 );
         }
     }
 }

@@ -4,7 +4,7 @@
 //
 
 "use strict";
-import { Object2D } from '../2d/object2d';
+import { ObjectTransform } from '../common/objecttransform';
 import { DynamicOffset } from '../common/dynamicoffset';
 import { ScrollParam } from './scrollparam';
 import { settings } from '../utilities/settings';
@@ -18,7 +18,7 @@ import * as UIControlFactory from './uicontrolfactory';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as defs from '../common/defs';
 
-export class Menu extends Object2D
+export class Menu extends ObjectTransform
 {
     constructor( name, group, filePath )
     {
@@ -384,7 +384,7 @@ export class Menu extends Object2D
             super.transform();
             
             for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].object.transform( this );
+                this.spriteAry[i].transform( this );
             
             for( let i = 0; i < this.staticControlAry.length; ++i )
                 this.staticControlAry[i].transform( this );

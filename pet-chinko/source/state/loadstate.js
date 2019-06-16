@@ -106,9 +106,9 @@ export class LoadState extends GameState
     {
         // Position at the bottom of the screen.
         let strategy = strategyManager.activateStrategy( '_loading-screen_' );
-        strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
-        this.loadFont = strategy.get( 'load_font' ).getSprite();
-        this.loadFont.object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        strategy.get( 'loadAnim' ).get().setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        this.loadFont = strategy.get( 'load_font' ).get();
+        this.loadFont.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();

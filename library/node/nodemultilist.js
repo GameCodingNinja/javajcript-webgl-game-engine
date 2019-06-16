@@ -32,7 +32,7 @@ export class NodeMultiLst extends Node
     }
     
     // 
-    //  DESC: Recursive function to update nodes
+    //  DESC: Recursive function to clean up nodes
     //
     cleanUpRecursive( node )
     {
@@ -47,9 +47,8 @@ export class NodeMultiLst extends Node
 
                 if( nextNode !== null )
                 {
-                    // Update the children
-                    if( nextNode.getSprite() !== null )
-                        nextNode.getSprite().cleanUp();
+                    // Clean up the children
+                    nextNode.cleanUp();
 
                     // Call a recursive function again
                     this.updateRecursive( nextNode );
@@ -86,11 +85,7 @@ export class NodeMultiLst extends Node
                 if( nextNode !== null )
                 {
                     // Update the children
-                    if( nextNode.getSprite() !== null )
-                    {
-                        nextNode.getSprite().physicsUpdate();
-                        nextNode.getSprite().update();
-                    }
+                    nextNode.update();
 
                     // Call a recursive function again
                     this.updateRecursive( nextNode );
@@ -126,20 +121,8 @@ export class NodeMultiLst extends Node
 
                 if( nextNode != null )
                 {
-                    let nextObj = null;
-                    let obj = null;
-
-                    if( nextNode.getSprite() !== null )
-                        nextObj = nextNode.getSprite().object;
-
-                    else if( nextNode.getObject() !== null )
-                        nextObj = nextNode.getObject();
-
-                    if( node.getSprite() !== null )
-                        obj = node.getSprite().object;
-
-                    else if( node.getObject() !== null )
-                        obj = node.getObject();
+                    let nextObj = nextNode.get();
+                    let obj = node.get();
 
                     // Transform the child node
                     nextObj.transform( obj );
@@ -178,8 +161,7 @@ export class NodeMultiLst extends Node
 
                 if( nextNode != null )
                 {
-                    if( nextNode.getSprite() !== null )
-                        nextNode.getSprite().render( camera );
+                    nextNode.render( camera );
 
                     // Call a recursive function again
                     this.renderRecursive( nextNode, camera );

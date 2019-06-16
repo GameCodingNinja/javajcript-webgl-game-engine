@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <node defaultGroup="(level_1)">
 
-    <node name="uiWinMeter" type="uiControlNode">
+    <node name="uiWinMeter">
         
         <uiMeter>
             <position x="-840" y="-430" z="0"/>
@@ -36,7 +36,7 @@
         </uiMeter>
     </node>
 
-    <node name="uiBallMeter" type="uiControlNode">
+    <node name="uiBallMeter">
         
         <uiMeter>
             <position x="840" y="-430" z="0"/>
@@ -67,43 +67,43 @@
         </uiMeter>
     </node>
     
-    <node name="uiMultiplier" type="spriteNode">
+    <node name="uiMultiplier">
         
-        <sprite2d objectName="level_font">
+        <sprite objectName="level_font">
             <position x="-840" y="-495" z="0"/>
             <font fontName="dejavu_sans_bold_70" fontString="1x">
                 <attributes kerning="-2"/>
             </font>
-        </sprite2d>
+        </sprite>
 
     </node>
 
-    <node name="ui_tennis_ball_green" type="spriteNode">
-        <sprite2d objectName="ui_tennis_ball_green" id="0">
+    <node name="ui_tennis_ball_green">
+        <sprite objectName="ui_tennis_ball_green" id="0">
             <position x="840" y="-495" z="0"/>
             <scale x="0.5" y="0.5" z="0.5"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node name="ui_tennis_ball_pink" type="spriteNode">
-        <sprite2d objectName="ui_tennis_ball_pink" id="0">
+    <node name="ui_tennis_ball_pink">
+        <sprite objectName="ui_tennis_ball_pink" id="0">
             <position x="840" y="-495" z="0"/>
             <scale x="0.5" y="0.5" z="0.5"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node name="ui_frisbee" type="spriteNode">
-        <sprite2d objectName="ui_frisbee" id="0">
+    <node name="ui_frisbee">
+        <sprite objectName="ui_frisbee" id="0">
             <position x="840" y="-495" z="0"/>
             <scale x="0.5" y="0.5" z="0.5"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node name="ui_bone_biscuit" type="spriteNode">
-        <sprite2d objectName="ui_bone_biscuit" id="0">
+    <node name="ui_bone_biscuit">
+        <sprite objectName="ui_bone_biscuit" id="0">
             <position x="840" y="-495" z="0"/>
             <scale x="0.5" y="0.5" z="0.5"/>
-        </sprite2d>
+        </sprite>
     </node>
 
 </node>

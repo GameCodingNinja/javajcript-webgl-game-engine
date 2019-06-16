@@ -94,7 +94,7 @@ export class Level1State extends CommonState
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
         this.multiNode = this.multiStrategy.create('dog_head');
         this.multiIndexPos = genFunc.randomInt(0, this.multiXPosAllAry.length-1);
-        this.multiNode.getSprite().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+        this.multiNode.get().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
 
         // Randomly pick the first ball
         this.ballIndex = genFunc.randomInt(0, 3);
@@ -106,9 +106,9 @@ export class Level1State extends CommonState
         this.uiStrategy.activateNode( 'ui_' + ballInstanceName );
         
         // get the ui elements
-        this.uiWinMeter = this.uiStrategy.get( 'uiWinMeter' ).getControl();
-        this.uiBallMeter = this.uiStrategy.get( 'uiBallMeter' ).getControl();
-        this.uiMultiplier = this.uiStrategy.get( 'uiMultiplier' ).getSprite();
+        this.uiWinMeter = this.uiStrategy.get( 'uiWinMeter' ).get();
+        this.uiBallMeter = this.uiStrategy.get( 'uiBallMeter' ).get();
+        this.uiMultiplier = this.uiStrategy.get( 'uiMultiplier' ).get();
 
         // Force an updated to show UI elements
         strategyManager.update();
@@ -157,8 +157,8 @@ export class Level1State extends CommonState
             
             // Create the ball
             let node = this.ballStrategy.create( instanceNameA );
-            node.getSprite().physicsComponent.setTransform( x, y, angle, true );
-            node.getSprite().physicsComponent.applyAngularImpulse( rot );
+            node.get().physicsComponent.setTransform( x, y, angle, true );
+            node.get().physicsComponent.applyAngularImpulse( rot );
 
             // Deactivate/Activate if they are different
             if( oldBallIndex !== this.ballIndex )
@@ -244,7 +244,7 @@ export class Level1State extends CommonState
             strategyManager.update();
             
             // NOTE: Can't reposition an static or kinematic. Must create a new one
-            if( !this.multiNode.getSprite().physicsComponent.isActive() )
+            if( !this.multiNode.get().physicsComponent.isActive() )
             {
                 // Destroy the current one
                 this.multiStrategy.destroy( this.multiNode );
@@ -255,7 +255,7 @@ export class Level1State extends CommonState
                 let offsetX = posAry[index];
                 this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
                 this.multiNode = this.multiStrategy.create('dog_head');
-                this.multiNode.getSprite().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+                this.multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
             }
 
             // Is the game over
@@ -315,7 +315,7 @@ export class Level1State extends CommonState
                 this.multiplier++;
 
                 // Disable the physics
-                this.multiNode.getSprite().physicsComponent.setActive( false );
+                this.multiNode.get().physicsComponent.setActive( false );
 
                 // Update the ui multiplier value
                 this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
@@ -347,7 +347,7 @@ export class Level1State extends CommonState
     
     removeFixture( object )
     {
-        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > defs.DEFAULT_ID) )
+        if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.id > defs.DEFAULT_ID) )
             this.uiWinMeter.incBangUp( this.multiplier );
     }
 

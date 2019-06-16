@@ -23,7 +23,7 @@ export class SpriteNodeMultiLst extends NodeMultiLst
         this.sprite = new Sprite( objectData, spriteId );
         
         // Node type
-        this.type = defs.ENT_SPRITE_MULTI_LIST;
+        this.type = defs.ENT_SPRITE;
     }
     
     // 
@@ -44,9 +44,9 @@ export class SpriteNodeMultiLst extends NodeMultiLst
     transform( object )
     {
         if( object )
-            this.sprite.object.transform( object );
+            this.sprite.transform( object );
         else
-            this.sprite.object.transform();
+            this.sprite.transform();
         
         // Call the parent but it has to be last
         super.transform();
@@ -66,7 +66,7 @@ export class SpriteNodeMultiLst extends NodeMultiLst
     // 
     //  DESC: Get the sprite
     //
-    getSprite()
+    get()
     {
         return this.sprite;
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <node defaultGroup="(level_1)">
     
-    <node name="dog_head" type="spriteNode">
-        <sprite2d objectName="dog_head" id="0"/>
+    <node name="dog_head">
+        <sprite objectName="dog_head" id="0"/>
     </node>
 
 </node>

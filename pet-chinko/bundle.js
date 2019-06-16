@@ -118,17 +118,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(162);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(179);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(180);
-/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(183);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(185);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(161);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(178);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(179);
+/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(182);
+/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(184);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(22);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(120);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(187);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(186);
 
 // 
 //  FILE NAME: game.js
@@ -819,16 +819,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_RIGHT", function() { return EGE_MENU_SCROLL_RIGHT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_LEFT", function() { return EGE_MENU_TAB_LEFT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_RIGHT", function() { return EGE_MENU_TAB_RIGHT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_NULL", function() { return EST_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_OBJECT2D", function() { return EST_OBJECT2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_OBJECT3D", function() { return EST_OBJECT3D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_SPRITE2D", function() { return EST_SPRITE2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EST_SPRITE3D", function() { return EST_SPRITE3D; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_NULL", function() { return ENT_NULL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_OBJECT", function() { return ENT_OBJECT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_SPRITE", function() { return ENT_SPRITE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_OBJECT_MULTI_LIST", function() { return ENT_OBJECT_MULTI_LIST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_SPRITE_MULTI_LIST", function() { return ENT_SPRITE_MULTI_LIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_UI_CONTROL", function() { return ENT_UI_CONTROL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESMA_PRESS_TYPE", function() { return ESMA_PRESS_TYPE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESMA_DEVICE_TYPE", function() { return ESMA_DEVICE_TYPE; });
@@ -1012,21 +1005,12 @@ const EGE_MENU_TRANS_IN             = 100,
              EGE_MENU_SCROLL_RIGHT         = 120,
              EGE_MENU_TAB_LEFT             = 121,
              EGE_MENU_TAB_RIGHT            = 122;
-
-// ESpriteType
-const EST_NULL     = 0,
-             EST_OBJECT2D = 1,
-             EST_OBJECT3D = 2,
-             EST_SPRITE2D = 3,
-             EST_SPRITE3D = 4;
      
 // ENodeType
 const ENT_NULL              = 0,
              ENT_OBJECT            = 1,
              ENT_SPRITE            = 2,
-             ENT_OBJECT_MULTI_LIST = 3,
-             ENT_SPRITE_MULTI_LIST = 4,
-             ENT_UI_CONTROL        = 5;
+             ENT_UI_CONTROL        = 3;
 
 // ESelection Message Arguments
 const ESMA_PRESS_TYPE  = 0,
@@ -3048,33 +3032,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(26);
 /* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(100);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(102);
-/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(140);
+/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(139);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(2);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(142);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(141);
 /* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(118);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(145);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(146);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(144);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(145);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(120);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(122);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(31);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(38);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(6);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(162);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(165);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(166);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(167);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(161);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(164);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(165);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(166);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(168);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(169);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(170);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(171);
-/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(172);
-/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(173);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(174);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(175);
-/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(176);
-/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(177);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(178);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(167);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(168);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(169);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(170);
+/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(171);
+/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(172);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(173);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(174);
+/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(175);
+/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(176);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(177);
 
 //
 //  FILE NAME: startupstate.js
@@ -3193,7 +3177,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     preloadComplete()
     {
         // Prepare the strategies to run
-        this.progressBar = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].get( '_startup_' ).get( 'UIProgressBar' ).getControl();
+        this.progressBar = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].get( '_startup_' ).get( 'UIProgressBar' ).get();
         this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
         
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].activateStrategy('_startup_');
@@ -25723,8 +25707,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(38);
 /* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(103);
-/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(139);
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(140);
+/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(138);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(139);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
@@ -26874,17 +26858,17 @@ var menuManager = new MenuManager;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Menu", function() { return Menu; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
+/* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
 /* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
 /* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(106);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(107);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(124);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(123);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(26);
 /* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(122);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(21);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(125);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(124);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(34);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 // 
@@ -26907,7 +26891,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Menu extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
+class Menu extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
 {
     constructor( name, group, filePath )
     {
@@ -27273,7 +27257,7 @@ class Menu extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
             super.transform();
             
             for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].object.transform( this );
+                this.spriteAry[i].transform( this );
             
             for( let i = 0; i < this.staticControlAry.length; ++i )
                 this.staticControlAry[i].transform( this );
@@ -27762,14 +27746,14 @@ class Menu extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object2D", function() { return Object2D; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectTransform", function() { return ObjectTransform; });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
-//  FILE NAME:  object2d.js
-//  DESC:       object 2D class
+//  FILE NAME:  objecttransform.js
+//  DESC:       object transform class
 //
 
 
@@ -27778,14 +27762,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Object2D extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
+class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
 {
-    constructor()
+    constructor( createRotMatrix = false )
     {
         super();
         
         // local matrix
         this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
+
+        // Matrix for rotations only
+        // Basicly used for normal calculations
+        this.rotMatrix = null;
+        if( createRotMatrix )
+            this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
     }
     
     //
@@ -27802,11 +27792,11 @@ class Object2D extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
 
         // Apply the scale
         if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["SCALE"] ) )
-            this.applyScale( matrix );
+            this.applyScale();
 
         // Apply the rotation
         if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["ROTATE"] ) )
-            this.applyRotation( matrix );
+            this.applyRotation();
 
         // Apply the translation
         if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["TRANSLATE"] ) )
@@ -27848,7 +27838,7 @@ class Object2D extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
     //
     //  DESC: Apply the scale
     //
-    applyScale( matrix )
+    applyScale()
     {
         this.matrix.setScaleFromPoint( this.scale );
     }
@@ -27856,7 +27846,7 @@ class Object2D extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
     //
     //  DESC: Apply the scale
     //
-    applyRotation( matrix )
+    applyRotation()
     {
         // Add in the center point prior to rotation
         if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["CENTER_POINT"] ) )
@@ -27871,6 +27861,12 @@ class Object2D extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
             this.centerPos.invert();
             this.matrix.translate( this.centerPos );
             this.centerPos.invert();
+        }
+
+        if( this.rotMatrix )
+        {
+            this.rotMatrix.initilizeMatrix();
+            this.rotMatrix.rotate( this.rot );
         }
     }
 
@@ -28232,18 +28228,17 @@ class ScrollParam
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sprite", function() { return Sprite; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
-/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(110);
-/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(111);
-/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(112);
-/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(115);
-/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(116);
-/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(117);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(122);
-/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(21);
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(104);
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(123);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5);
+/* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(108);
+/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(110);
+/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(111);
+/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(112);
+/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(115);
+/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(116);
+/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(117);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(122);
+/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(21);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(5);
 
 // 
 //  FILE NAME:  sprite.js
@@ -28264,11 +28259,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-class Sprite
+class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
 {
-    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_11__["DEFAULT_ID"] )
+    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_10__["DEFAULT_ID"] )
     {
+        super( objData.is3D() );
+
         // The object data
         this.objData = objData
         
@@ -28277,9 +28273,6 @@ class Sprite
         
         // AI
         this.ai = null
-        
-        // Object
-        this.object = null
         
         // The visual part of the sprite
         this.visualComponent = null
@@ -28291,40 +28284,37 @@ class Sprite
         this.scriptFactoryMap = new Map;
         
         // The script part of the sprite
-        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_7__["ScriptComponent"];
+        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__["ScriptComponent"];
         
         // Allocate the sprite specific objects
-        if( this.objData.is2D() )
+        if( objData.is2D() )
         {
-            this.object = new _2d_object2d__WEBPACK_IMPORTED_MODULE_9__["Object2D"]
+            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_QUAD"] )
+                this.visualComponent = new _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__["VisualComponentQuad"]( objData.visualData );
             
-            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGT_QUAD"] )
-                this.visualComponent = new _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]( objData.visualData );
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
+                this.visualComponent = new _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__["VisualComponentSpriteSheet"]( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGT_SPRITE_SHEET"] )
-                this.visualComponent = new _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_1__["VisualComponentSpriteSheet"]( objData.visualData );
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SCALED_FRAME"] )
+                this.visualComponent = new _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__["VisualComponentScaledFrame"]( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGT_SCALED_FRAME"] )
-                this.visualComponent = new _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_2__["VisualComponentScaledFrame"]( objData.visualData );
-            
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGT_FONT"] )
-                this.visualComponent = new _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_3__["VisualComponentFont"]( objData.visualData );
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_FONT"] )
+                this.visualComponent = new _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__["VisualComponentFont"]( objData.visualData );
             
             if( objData.physicsData.isActive() )
-                this.physicsComponent = new _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_6__["PhysicsComponent2D"]( objData.physicsData );
+                this.physicsComponent = new _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__["PhysicsComponent2D"]( objData.physicsData );
         }
-        else if( this.objData.is3D() )
+        else if( objData.is3D() )
         {
-            this.object = new _3d_object3d__WEBPACK_IMPORTED_MODULE_10__["Object3D"]
-            this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_4__["VisualComponent3D"]( objData.visualData );
+            this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__["VisualComponent3D"]( objData.visualData );
         }
 
         // Allocate the null component if no visual component was created
         if( this.visualComponent === null )
-            this.visualComponent = new _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_5__["NullVisualComponent"]();
+            this.visualComponent = new _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__["NullVisualComponent"]();
         
         // If there's no visual data, set the hide flag
-        this.object.setVisible( objData.visualData.isActive() );
+        this.setVisible( objData.visualData.isActive() );
     }
     
     // 
@@ -28332,7 +28322,7 @@ class Sprite
     //
     load( xmlNode )
     {
-        this.object.loadTransFromNode( xmlNode );
+        this.loadTransFromNode( xmlNode );
         this.initScriptFactoryFunctions( xmlNode );
 
         if( this.visualComponent.isFontSprite() )
@@ -28353,7 +28343,7 @@ class Sprite
             let attr = scriptNode[i].attributes[0];
             if( attr )
                 // This allocates the script to the map
-                this.scriptFactoryMap.set( attr.name, _script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__["scriptManager"].get(attr.value)(this) );
+                this.scriptFactoryMap.set( attr.name, _script_scriptmanager__WEBPACK_IMPORTED_MODULE_9__["scriptManager"].get(attr.value)(this) );
         }
     }
     
@@ -28458,8 +28448,8 @@ class Sprite
     //
     render( camera )
     {
-        if( this.object.isVisible() )
-            this.visualComponent.render( this.object, camera );
+        if( this.isVisible() )
+            this.visualComponent.render( this, camera );
     }
     
     // 
@@ -28547,8 +28537,8 @@ class Sprite
         {
             this.visualComponent.setFrame( index );
 
-            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGT_SPRITE_SHEET"] )
-                this.object.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
+            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
+                this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
     }
     
@@ -30016,8 +30006,8 @@ class PhysicsComponent2D
             let physicsData = this.sprite.objData.physicsData;
             let worldDef = {
                 type : physicsData.bodyType,
-                position : planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( this.sprite.object.pos.x * this.pixelsToMeters, -(this.sprite.object.pos.y * this.pixelsToMeters) ),
-                angle : -this.sprite.object.rot.z,
+                position : planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( this.sprite.pos.x * this.pixelsToMeters, -(this.sprite.pos.y * this.pixelsToMeters) ),
+                angle : -this.sprite.rot.z,
 
                 linearVelocity : planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero(),
                 angularVelocity : 0.0,
@@ -30089,7 +30079,7 @@ class PhysicsComponent2D
     createCircularShapeFixture( fixture )
     {
         this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__["Circle"]( (fixture.radius * this.sprite.object.scale.x) * this.pixelsToMeters ),
+            planck_js__WEBPACK_IMPORTED_MODULE_2__["Circle"]( (fixture.radius * this.sprite.scale.x) * this.pixelsToMeters ),
             this.getFixtureDef( fixture ) );
     }
 
@@ -30106,12 +30096,12 @@ class PhysicsComponent2D
 
         // Apply scale to the size and divide by 2
         let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
-            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
-            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
 
         // Convert the points to world location in meters
         let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
+        this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
 
         this.body.createFixture(
             planck_js__WEBPACK_IMPORTED_MODULE_2__["Edge"]( Vec2Ary[0], Vec2Ary[1] ),
@@ -30127,14 +30117,14 @@ class PhysicsComponent2D
 
         // Apply scale to the size and divide by 2
         let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
-            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
-            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
 
         // Is this polygon shape defined by a vector of points?
         if( fixture.vertAry.length )
         {
             // Convert the points to world location in meters
-            this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
+            this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
         }
         
         // If vector points are not supplied, build a square based on the object size
@@ -30142,10 +30132,10 @@ class PhysicsComponent2D
         {
             // Bottom and left mod have their signs flipped so that a positive mod always means
             // expansion of the side, and a negative mod always means a contraction of the side
-            let topMod = fixture.topMod * this.sprite.object.scale.y;
-            let bottomMod = -fixture.bottomMod * this.sprite.object.scale.y;
-            let leftMod = -fixture.leftMod * this.sprite.object.scale.x;
-            let rightMod = fixture.rightMod * this.sprite.object.scale.x;
+            let topMod = fixture.topMod * this.sprite.scale.y;
+            let bottomMod = -fixture.bottomMod * this.sprite.scale.y;
+            let leftMod = -fixture.leftMod * this.sprite.scale.x;
+            let rightMod = fixture.rightMod * this.sprite.scale.x;
 
             // Convert to meters
             // Box2D polygons are defined using Counter Clockwise Winding (CCW)
@@ -30186,12 +30176,12 @@ class PhysicsComponent2D
         
         // Apply scale to the size and divide by 2
         let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
-            this.sprite.objData.size.w * this.sprite.object.scale.x * 0.5,
-            this.sprite.objData.size.h * this.sprite.object.scale.y * 0.5 );
+            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
 
         // Convert the points to world location in meters
         let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, this.sprite.object.scale );
+        this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
 
         this.body.createFixture(
             planck_js__WEBPACK_IMPORTED_MODULE_2__["Chain"]( Vec2Ary, fixture.chainLoop ),
@@ -30236,8 +30226,8 @@ class PhysicsComponent2D
     {
         let pos = this.body.getPosition();
         let angle = this.body.getAngle();
-        this.sprite.object.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
-        this.sprite.object.setRotXYZ( 0, 0, -angle, false );
+        this.sprite.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
+        this.sprite.setRotXYZ( 0, 0, -angle, false );
     }
     
     // 
@@ -30779,7 +30769,7 @@ class ScriptComponent
     }
     
     // 
-    //  DESC: Update the script
+    //  DESC: Add a script
     //
     set( script )
     {
@@ -30822,70 +30812,6 @@ class ScriptComponent
 
 /***/ }),
 /* 123 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object3D", function() { return Object3D; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
-
-// 
-//  FILE NAME:  object3d.js
-//  DESC:       object 3D class
-//
-
-
-
-
-
-
-class Object3D extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
-{
-    constructor()
-    {
-        super();
-        
-        // Matrix for rotations only
-        // Basicly used for normal calculations
-        this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
-    }
-    
-    //
-    //  DESC: Set the translation/rotation from Bullet Physics
-    //
-    /*setTransform( trans )
-    {
-        this.parameters.add( defs.MATRIX_ROTATION | defs.TRANSFORM );
-
-        // Set the position
-        const btVector3 & btVec = trans.getOrigin();
-        SetPos( CPoint<float>(btVec.x(), btVec.y(), btVec.z()) );
-
-        // Set the rotation
-        const btMatrix3x3 & btMat = trans.getBasis();
-        for( int i = 0; i < 3; ++i )
-        {
-            const btVector3 & vec = btMat.getRow(i);
-            m_rotMatrix.SetColumn( i, CPoint<float>(vec.x(), vec.y(), vec.z()) );
-        }
-    }*/
-
-    //
-    //  DESC: Apply the rotation
-    //
-    applyRotation( matrix )
-    {
-        super.applyRotation( matrix );
-
-        this.rotMatrix.initilizeMatrix();
-        this.rotMatrix.rotate( this.rot );
-    }
-}
-
-
-/***/ }),
-/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30947,22 +30873,22 @@ class UIControlNavNode
 
 
 /***/ }),
-/* 125 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(126);
-/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(130);
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(131);
-/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(132);
-/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(133);
-/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(134);
-/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(135);
-/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(136);
-/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(138);
+/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(125);
+/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(129);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(130);
+/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(131);
+/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(132);
+/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(133);
+/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(134);
+/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(135);
+/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(137);
 // 
 //  FILE NAME: uicontrolfactory.js
 //  DESC:      factory for control creation
@@ -31036,13 +30962,13 @@ function create( node, group )
 
 
 /***/ }),
-/* 126 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UILabel", function() { return UILabel; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -31067,18 +30993,18 @@ class UILabel extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControl", function() { return UIControl; });
-/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
+/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
 /* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(106);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(107);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
-/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(129);
+/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(128);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(25);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(10);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
@@ -31287,8 +31213,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         else
         {
             // Find the largest size width and height of the different sprites for the controls size
-            let width = sprite.objData.size.w + Math.abs( sprite.object.pos.x );
-            let height = sprite.objData.size.h + Math.abs( sprite.object.pos.y );
+            let width = sprite.objData.size.w + Math.abs( sprite.pos.x );
+            let height = sprite.objData.size.h + Math.abs( sprite.pos.y );
 
             if( width > this.size.w )
                 this.size.w = width;
@@ -31320,7 +31246,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             super.transform();
 
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].object.transform( this );
+            this.spriteAry[i].transform( this );
 
         // Transform the collision
         this.transformCollision();
@@ -32070,13 +31996,13 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
 
 /***/ }),
-/* 128 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControlBase", function() { return ControlBase; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
+/* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(34);
@@ -32093,7 +32019,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ControlBase extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
+class ControlBase extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
 {
     constructor( group )
     {
@@ -32201,7 +32127,7 @@ class ControlBase extends _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"]
 }
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32249,13 +32175,13 @@ class Quad
 
 
 /***/ }),
-/* 130 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButton", function() { return UIButton; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -32279,16 +32205,16 @@ class UIButton extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 131 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISubControl", function() { return UISubControl; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(124);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(123);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(125);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(124);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 
 // 
@@ -32910,13 +32836,13 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 132 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButtonList", function() { return UIButtonList; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(130);
 /* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
@@ -33166,13 +33092,13 @@ class UIButtonList extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubCont
 
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UICheckBox", function() { return UICheckBox; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -33224,13 +33150,13 @@ class UICheckBox extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISlider", function() { return UISlider; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(130);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
@@ -33583,13 +33509,13 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"
 
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIScrollBox", function() { return UIScrollBox; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(130);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(107);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
@@ -33597,7 +33523,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(120);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(34);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(125);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(124);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -33943,7 +33869,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
             this.scrollControlAry[i].transform( this );
 
         // Transform the mask
-        this.stencilMaskSprite.object.transform( this );
+        this.stencilMaskSprite.transform( this );
     }
 
     // 
@@ -34530,16 +34456,16 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubContr
 
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIMeter", function() { return UIMeter; });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(137);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
 /* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(127);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(126);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(34);
 
@@ -34782,7 +34708,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
         this.impulse = 0.0;
         this.bangScaleAdjustment.set(1,1);
 
-        this.fontSprite.object.setScaleXYZ( 1, 1, 1 );
+        this.fontSprite.setScaleXYZ( 1, 1, 1 );
 
         this.velocity = bangRange.velocity / 1000.0;
 
@@ -34974,7 +34900,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35078,13 +35004,13 @@ class Timer
 
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIProgressBar", function() { return UIProgressBar; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(107);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
@@ -35242,13 +35168,13 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
             this.stencilMaskSprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__["objectDataManager"].getData( this.group, stencilMaskSprite ) );
             
             // Get the size
-            this.progressBarSize.copy( this.stencilMaskSprite.object.objData.size );
+            this.progressBarSize.copy( this.stencilMaskSprite.objData.size );
 
             // Get the initial position
-            this.progressBarPos.copy( this.stencilMaskSprite.object.pos );
+            this.progressBarPos.copy( this.stencilMaskSprite.pos );
 
             // Get the initial scale
-            this.progressBarScale.copy( this.stencilMaskSprite.object.scale );
+            this.progressBarScale.copy( this.stencilMaskSprite.scale );
         }
         else
         {
@@ -35256,10 +35182,10 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
             this.progressBarSize.copy( this.spriteAry[this.spriteApplyIndex].objData.size );
 
             // Get the initial position
-            this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].object.pos );
+            this.progressBarPos.copy( this.spriteAry[this.spriteApplyIndex].pos );
 
             // Get the initial scale
-            this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].object.scale );
+            this.progressBarScale.copy( this.spriteAry[this.spriteApplyIndex].scale );
         }
     }
 
@@ -35291,7 +35217,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         super.transform( object );
 
         if( this.stencilMaskSprite )
-            this.stencilMaskSprite.object.transform( this );
+            this.stencilMaskSprite.transform( this );
     }
     
     // 
@@ -35400,20 +35326,20 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
         if( this.stencilMaskSprite )
         {
-            this.stencilMaskSprite.object.setScaleXYZ( scaleX, scaleY, 1 );
-            this.stencilMaskSprite.object.setPosXYZ( posX, posY );
+            this.stencilMaskSprite.setScaleXYZ( scaleX, scaleY, 1 );
+            this.stencilMaskSprite.setPosXYZ( posX, posY );
         }
         else
         {
-            this.spriteAry[this.spriteApplyIndex].object.setScaleXYZ( scaleX, scaleY, 1 );
-            this.spriteAry[this.spriteApplyIndex].object.setPosXYZ( posX, posY, 0 );
+            this.spriteAry[this.spriteApplyIndex].setScaleXYZ( scaleX, scaleY, 1 );
+            this.spriteAry[this.spriteApplyIndex].setPosXYZ( posX, posY, 0 );
         }
     }
 }
 
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35857,13 +35783,13 @@ class MenuTree
 
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cameraManager", function() { return cameraManager; });
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 
 // 
@@ -36032,14 +35958,14 @@ var cameraManager = new CameraManager;
 
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Camera", function() { return Camera; });
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(123);
+/* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(104);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
@@ -36055,11 +35981,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Camera extends _3d_object3d__WEBPACK_IMPORTED_MODULE_1__["Object3D"]
+class Camera extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__["ObjectTransform"]
 {
     constructor()
     {
-        super();
+        super(true);
         
         this.projectionMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"];
         this.finalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"];
@@ -36209,15 +36135,15 @@ class Camera extends _3d_object3d__WEBPACK_IMPORTED_MODULE_1__["Object3D"]
 }
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "soundManager", function() { return soundManager; });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
-/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(143);
-/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(144);
+/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(142);
+/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(143);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
@@ -36480,7 +36406,7 @@ var soundManager = new SoundManager;
 
 
 /***/ }),
-/* 143 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36653,7 +36579,7 @@ class Sound
 
 
 /***/ }),
-/* 144 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36814,7 +36740,7 @@ class PlayList
 
 
 /***/ }),
-/* 145 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36997,15 +36923,15 @@ var strategyManager = new StrategyManager;
 
 
 /***/ }),
-/* 146 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "strategyLoader", function() { return strategyLoader; });
-/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(145);
-/* harmony import */ var _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
-/* harmony import */ var _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(160);
+/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(144);
+/* harmony import */ var _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(146);
+/* harmony import */ var _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(159);
 
 // 
 //  FILE NAME: strategyloader.js
@@ -37114,7 +37040,7 @@ class Strategyloader
                     // If the parent node specified a sprite to init
                     if( childLst[j].nodeName === 'object' )
                     {
-                        let object = strategyNode.getObject();
+                        let object = strategyNode.get();
                         if( object )
                             object.loadTransFromNode( childLst[j] );
                         else
@@ -37122,7 +37048,7 @@ class Strategyloader
                     }
 
                     else if( childLst[j].nodeName === 'sprite' )
-                        this.initSprite( childLst[j], strategyNode.getSprite() );
+                        this.initSprite( childLst[j], strategyNode.get() );
 
                     // If the parent node specified a child node to init
                     else if( childLst[j].nodeName === 'node' )
@@ -37130,7 +37056,7 @@ class Strategyloader
                         // Get the name of the child node
                         let childName = childLst[j].getAttribute( 'name' );
                         if( childName )
-                            if( !this.initSprite( childLst[j].firstElementChild, strategyNode.allNodeMap.get(childName).getSprite() ) )
+                            if( !this.initSprite( childLst[j].firstElementChild, strategyNode.allNodeMap.get(childName).get() ) )
                                 console.log(`Strategy Loader Warning: Child node defined for ${name} node can not be found.`);
                         else
                             console.log(`Strategy Loader Warning: Child node defined for ${name} node but child node name note defined.`);
@@ -37148,7 +37074,7 @@ class Strategyloader
         // Set any transforms
         if( sprite )
         {
-            sprite.object.loadTransFromNode( xmlNode );
+            sprite.loadTransFromNode( xmlNode );
             
             // See if there are any scripts that need to be prepared to run
             let scriptLst = xmlNode.getElementsByTagName( 'script' );
@@ -37170,15 +37096,15 @@ var strategyLoader = new Strategyloader;
 
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActorStrategy", function() { return ActorStrategy; });
-/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(148);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(152);
+/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(147);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(148);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(151);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
 //
@@ -37341,7 +37267,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
         for( let i = 0; i < this.nodeAry.length; i++ )
         {
-            let sprite = this.nodeAry[i].getSprite();
+            let sprite = this.nodeAry[i].get();
             if( sprite.isPhysicsActive() )
                 if( sprite.isPhysicsAwake() )
                     result += 1;
@@ -37357,7 +37283,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     {
         for( let i = 0; i < this.nodeAry.length; i++ )
         {
-            let sprite = this.nodeAry[i].getSprite();
+            let sprite = this.nodeAry[i].get();
             if( sprite.isPhysicsActive() )
                 if( sprite.isPhysicsAwake() )
                     return true;
@@ -37575,13 +37501,13 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
 
 /***/ }),
-/* 148 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iStrategy", function() { return iStrategy; });
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
 
 // 
 //  FILE NAME: istrategy.js
@@ -37620,13 +37546,13 @@ class iStrategy
 
 
 /***/ }),
-/* 149 */
+/* 148 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeDataList", function() { return NodeDataList; });
-/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(150);
+/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(149);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 //
@@ -37712,13 +37638,13 @@ class NodeDataList
 
 
 /***/ }),
-/* 150 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeData", function() { return NodeData; });
-/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(151);
+/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(150);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 //
@@ -37757,36 +37683,46 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
         // Node type
         this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_NULL"];
 
-        // Get the node type
-        let attr = xmlNode.getAttribute( 'type' );
-        if( attr == "spriteNode" )
-            this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_SPRITE"];
+        // Is this a parent node with children?
+        this.hasChildrenNodes = false;
+        if( xmlNode.children.length > 1 )
+            this.hasChildrenNodes = true;
 
-        else if( attr == "objectNodeMultiList" )
-            this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_OBJECT_MULTI_LIST"];
-
-        else if( attr == "spriteNodeMultiList" )
-            this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_SPRITE_MULTI_LIST"];
-        
-        else if( attr == "uiControlNode" )
+        for( let i = 0; i < xmlNode.children.length; ++i )
         {
-            this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_UI_CONTROL"];
-            
-            if( xmlNode.firstElementChild.nodeName == 'uiProgressBar' )
+            if( xmlNode.children[i].nodeName == 'object' )
+            {
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_OBJECT"];
+                break;
+            }
+            else if( xmlNode.children[i].nodeName == 'sprite' )
+            {
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_SPRITE"];
+                break;
+            }
+            else if( xmlNode.children[i].nodeName == 'uiProgressBar' )
+            {
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_UI_CONTROL"];
                 this.uiControlType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_PROGRESS_BAR"];
-            
-            else if( xmlNode.firstElementChild.nodeName == 'uiMeter' )
+                break;
+            }
+            else if( xmlNode.children[i].nodeName == 'uiMeter' )
+            {
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_UI_CONTROL"];
                 this.uiControlType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_METER"];
-            
-            else
-                throw new Error( `Control type node not defined (${xmlNode.firstElementChild.nodeName}).` );
+                break;
+            }
         }
+
+        // Throw an error if a node type is not found
+        if( this.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_NULL"] )
+            throw new Error( `Node type not defined (${xmlNode.baseURI}).` );
     }
 }
 
 
 /***/ }),
-/* 151 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -37825,9 +37761,6 @@ class SpriteData
         // Sprite Id
         this.id = defId;
         
-        // Sprite type
-        this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_NULL"];
-        
         // Get the name of this specific sprite instance
         let attr = xmlNode.getAttribute( 'name' );
         if( attr )
@@ -37852,25 +37785,12 @@ class SpriteData
         attr = xmlNode.getAttribute( "id" );
         if( attr )
             this.id = Number(attr);
-        
-        // Get the node type
-        if( xmlNode.nodeName == 'object2d' )
-            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_OBJECT2D"];
-
-        else if( xmlNode.nodeName == 'object3d' )
-            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_OBJECT3D"];
-
-        else if( xmlNode.nodeName == 'sprite2d' )
-            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_SPRITE2D"];
-
-        else if( xmlNode.nodeName == 'sprite3d' )
-            this.spriteType = _common_defs__WEBPACK_IMPORTED_MODULE_0__["EST_SPRITE3D"];
     }
 }
 
 
 /***/ }),
-/* 152 */
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -37878,12 +37798,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(138);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(136);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(153);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(155);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(156);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(159);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(137);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(135);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(152);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(154);
+/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(155);
+/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(158);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
 
 // 
@@ -37910,24 +37830,23 @@ function create( nodeData )
 {
     let node = null;
     
-    // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
     if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_SPRITE"] )
     {
-        node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_4__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
+        if( nodeData.hasChildrenNodes )
+            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+
+        // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
+        else
+            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_4__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_OBJECT_MULTI_LIST"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_OBJECT"] )
     {
+        // Object node is automatically a multilist node because an object node without children is pretty useless
         node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__["ObjectNodeMultiLst"]( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
-    }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_SPRITE_MULTI_LIST"] )
-    {
-        node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
-        
-        LoadSprite( node, nodeData );
     }
     else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_UI_CONTROL"] )
     {
@@ -37982,13 +37901,13 @@ function CreateUIControlNode( nodeData )
 
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNode", function() { return SpriteNode; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(107);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -38030,9 +37949,9 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
     transform( object = null )
     {
         if( object )
-            this.sprite.object.transform( object );
+            this.sprite.transform( object );
         else
-            this.sprite.object.transform();
+            this.sprite.transform();
     }
     
     //
@@ -38046,7 +37965,7 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
     // 
     //  DESC: Get the sprite
     //
-    getSprite()
+    get()
     {
         return this.sprite;
     }
@@ -38086,7 +38005,7 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 154 */
+/* 153 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38122,7 +38041,7 @@ class iNode
     // 
     //  DESC: Set the id
     //
-    setId( id )
+    setId()
     {
     }
     
@@ -38145,7 +38064,7 @@ class iNode
     // 
     //  DESC: Push back node into array
     //
-    findParent( searchNode )
+    findParent()
     {
         return null;
     }
@@ -38169,7 +38088,7 @@ class iNode
     // 
     //  DESC: Get the child node
     //
-    getChildNode( nodeName )
+    getChildNode()
     {
         return null;
     }
@@ -38183,17 +38102,9 @@ class iNode
     }
     
     // 
-    //  DESC: Get the sprite
-    //
-    getSprite()
-    {
-        return null;
-    }
-    
-    // 
     //  DESC: Get the object
     //
-    getObject()
+    get()
     {
         return null;
     }
@@ -38201,9 +38112,24 @@ class iNode
     // 
     //  DESC: Set the AI.
     //
-    setAI( ai )
+    setAI()
     {
         // Empty by design
+    }
+
+    //
+    //  DESC: Render the sprite
+    //
+    render()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Update the nodes
+    //
+    update()
+    {
     }
     
     // 
@@ -38217,13 +38143,13 @@ class iNode
 
 
 /***/ }),
-/* 155 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControlNode", function() { return UIControlNode; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -38278,7 +38204,7 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
     // 
     //  DESC: Get the control
     //
-    getControl()
+    get()
     {
         return this.uiControl;
     }
@@ -38302,14 +38228,14 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 156 */
+/* 155 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectNodeMultiLst", function() { return ObjectNodeMultiLst; });
-/* harmony import */ var _2d_object2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(157);
+/* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(156);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -38332,7 +38258,7 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
     {
         super( nodeId, parentId );
         
-        this.object = new _2d_object2d__WEBPACK_IMPORTED_MODULE_0__["Object2D"];
+        this.object = new _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"](true);
         
         this.objectId = objectId;
         
@@ -38368,7 +38294,7 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
     // 
     //  DESC: Get the object
     //
-    getObject()
+    get()
     {
         return this.object;
     }
@@ -38399,13 +38325,13 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
 }
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeMultiLst", function() { return NodeMultiLst; });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(158);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -38441,7 +38367,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
     }
     
     // 
-    //  DESC: Recursive function to update nodes
+    //  DESC: Recursive function to clean up nodes
     //
     cleanUpRecursive( node )
     {
@@ -38456,9 +38382,8 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
 
                 if( nextNode !== null )
                 {
-                    // Update the children
-                    if( nextNode.getSprite() !== null )
-                        nextNode.getSprite().cleanUp();
+                    // Clean up the children
+                    nextNode.cleanUp();
 
                     // Call a recursive function again
                     this.updateRecursive( nextNode );
@@ -38495,11 +38420,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
                 if( nextNode !== null )
                 {
                     // Update the children
-                    if( nextNode.getSprite() !== null )
-                    {
-                        nextNode.getSprite().physicsUpdate();
-                        nextNode.getSprite().update();
-                    }
+                    nextNode.update();
 
                     // Call a recursive function again
                     this.updateRecursive( nextNode );
@@ -38535,20 +38456,8 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
 
                 if( nextNode != null )
                 {
-                    let nextObj = null;
-                    let obj = null;
-
-                    if( nextNode.getSprite() !== null )
-                        nextObj = nextNode.getSprite().object;
-
-                    else if( nextNode.getObject() !== null )
-                        nextObj = nextNode.getObject();
-
-                    if( node.getSprite() !== null )
-                        obj = node.getSprite().object;
-
-                    else if( node.getObject() !== null )
-                        obj = node.getObject();
+                    let nextObj = nextNode.get();
+                    let obj = node.get();
 
                     // Transform the child node
                     nextObj.transform( obj );
@@ -38587,8 +38496,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
 
                 if( nextNode != null )
                 {
-                    if( nextNode.getSprite() !== null )
-                        nextNode.getSprite().render( camera );
+                    nextNode.render( camera );
 
                     // Call a recursive function again
                     this.renderRecursive( nextNode, camera );
@@ -38635,20 +38543,20 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
     {
         super.reset();
         
-        for( let [ key, node ] of this.allNodeMap.entries() )
+        for( let node of this.allNodeMap.values() )
             node.reset();
     }
 }
 
 
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(153);
 
 // 
 //  FILE NAME: node.js
@@ -38773,13 +38681,13 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNodeMultiLst", function() { return SpriteNodeMultiLst; });
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(107);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -38807,7 +38715,7 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
         this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId );
         
         // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE_MULTI_LIST"];
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
     }
     
     // 
@@ -38828,9 +38736,9 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
     transform( object )
     {
         if( object )
-            this.sprite.object.transform( object );
+            this.sprite.transform( object );
         else
-            this.sprite.object.transform();
+            this.sprite.transform();
         
         // Call the parent but it has to be last
         super.transform();
@@ -38850,7 +38758,7 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
     // 
     //  DESC: Get the sprite
     //
-    getSprite()
+    get()
     {
         return this.sprite;
     }
@@ -38890,14 +38798,14 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
 
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StageStrategy", function() { return StageStrategy; });
-/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(148);
-/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(161);
+/* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(147);
+/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(160);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
@@ -38998,15 +38906,15 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
 
 /***/ }),
-/* 161 */
+/* 160 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sector", function() { return Sector; });
-/* harmony import */ var _3d_object3d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(123);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(152);
+/* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(148);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(151);
 
 // 
 //  FILE NAME: sector.js
@@ -39019,11 +38927,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Sector extends _3d_object3d__WEBPACK_IMPORTED_MODULE_0__["Object3D"]
+class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
 {
     constructor()
     {
-        super();
+        super(true);
         
         // node allocation array
         this.nodeAry = [];
@@ -39160,7 +39068,7 @@ class Sector extends _3d_object3d__WEBPACK_IMPORTED_MODULE_0__["Object3D"]
 
 
 /***/ }),
-/* 162 */
+/* 161 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39169,11 +39077,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TitleScreenState", function() { return TitleScreenState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(163);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(162);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(102);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(145);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(146);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(144);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(145);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(122);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(120);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(21);
@@ -39182,7 +39090,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(6);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(164);
+/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(163);
 
 // 
 //  FILE NAME: titlescreenstate.js
@@ -39331,7 +39239,7 @@ function load()
 
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39415,7 +39323,7 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39423,7 +39331,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_title-screen_\" type=\"actor\">\r\n        <node name=\"background\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39763,14 +39671,14 @@ function loadScripts()
 
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(165);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(164);
 
 //
 //  FILE NAME: statescripts.js
@@ -39805,7 +39713,7 @@ class State_PlayLoadAnim extends _utilityscripts__WEBPACK_IMPORTED_MODULE_1__["F
     //
     frame()
     {
-        this.sprite.object.incRotXYZ( 0.0, 0.0, -30.0 );
+        this.sprite.incRotXYZ( 0.0, 0.0, -30.0 );
     }
 }
 
@@ -39820,7 +39728,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39829,9 +39737,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(142);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(141);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(165);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(164);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 //
@@ -40105,7 +40013,7 @@ class Control_Hidden
     //
     execute()
     {
-        this.sprite.object.setVisible( false );
+        this.sprite.setVisible( false );
         
         this.finished = true;
     }
@@ -40138,7 +40046,7 @@ class Base_Control_Active
     //
     init( hiHSV, lowHSV )
     {
-        this.sprite.object.setVisible( true );
+        this.sprite.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
@@ -40256,7 +40164,7 @@ class Base_Control_Selected
     //
     init( hiHSV, lowHSV )
     {
-        this.sprite.object.setVisible( true );
+        this.sprite.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
@@ -40453,7 +40361,7 @@ class Control_Selected extends Base_Control_Selected
         super.execute();
         
         if( this.finished )
-            this.sprite.object.setVisible( false );
+            this.sprite.setVisible( false );
     }
     
     // 
@@ -40485,7 +40393,7 @@ class Control_Solid_Selected extends Base_Control_Selected
         super.execute();
         
         if( this.finished )
-            this.sprite.object.setVisible( false );
+            this.sprite.setVisible( false );
     }
     
     // 
@@ -40545,7 +40453,7 @@ class Base_Control_Fast_Selected
     //
     init( hiHSV )
     {
-        this.sprite.object.setVisible( true );
+        this.sprite.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
@@ -40699,7 +40607,7 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
 
         if( this.time < 0 )
         {
-            this.sprite.object.setVisible( false );
+            this.sprite.setVisible( false );
             this.finished = true;
         }
     }
@@ -40737,7 +40645,7 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
 
         if( this.time < 0 )
         {
-            this.sprite.object.setVisible( false );
+            this.sprite.setVisible( false );
             this.finished = true;
         }
     }
@@ -40851,7 +40759,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40859,7 +40767,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(startup)\">\r\n        <file path=\"data/objects/2d/objectDataList/startupDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(loadingScreen)\">\r\n        <file path=\"data/objects/2d/objectDataList/loadingScreenDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/objectDataList/menuBackgrounds.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuButtonFrames.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuMisc.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(title_screen)\">\r\n        <file path=\"data/objects/2d/objectDataList/titleScreenDataList.lst\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"(level_1)\">\r\n        <file path=\"data/objects/2d/objectDataList/level1DataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40867,7 +40775,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_startup_\">\r\n        <file path=\"data/objects/strategy/state/startup.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_title-screen_\">\r\n        <file path=\"data/objects/strategy/state/titlescreen.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_loading-screen_\">\r\n        <file path=\"data/objects/strategy/state/loadscreen.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_level-1-stage_\">\r\n        <file path=\"data/objects/strategy/level1/stage.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-ui_\">\r\n        <file path=\"data/objects/strategy/level1/ui.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-ball_\">\r\n        <file path=\"data/objects/strategy/level1/ball.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-multiplier_\">\r\n        <file path=\"data/objects/strategy/level1/multiplier.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40875,7 +40783,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40883,7 +40791,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
-/* 172 */
+/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40891,7 +40799,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 173 */
+/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40899,7 +40807,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 174 */
+/* 173 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40907,7 +40815,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 175 */
+/* 174 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40915,7 +40823,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 176 */
+/* 175 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40923,7 +40831,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
 
 /***/ }),
-/* 177 */
+/* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40931,7 +40839,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<controllerMapping>\n\t<keyboardMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"W\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"S\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"A\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"D\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"ARROW UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"ARROW DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"ARROW LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"ARROW RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"RETURN\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Escape\" componetId=\"ESCAPE\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"LEFT SHIFT\" defaultId=\"LEFT SHIFT\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"[\" defaultId=\"[\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"]\" defaultId=\"]\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Up\" componetId=\"W\" defaultId=\"W\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Down\" componetId=\"S\" defaultId=\"S\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Left\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Right\" componetId=\"D\" defaultId=\"D\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"E\" defaultId=\"E\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</keyboardMapping>\n\t<mouseMapping>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<!-- Game specific controls -->\n\t\t\t<actionMap action=\"Shoot\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"MIDDLE MOUSE\" defaultId=\"MIDDLE MOUSE\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</mouseMapping>\n\t<gamepadMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"L STICK UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"L STICK DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"L STICK LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"L STICK RIGHT\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Back\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"START\" defaultId=\"START\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"L BUMPER\" defaultId=\"L BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"R BUMPER\" defaultId=\"R BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</gamepadMapping>\n</controllerMapping>\n");
 
 /***/ }),
-/* 178 */
+/* 177 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40939,7 +40847,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<menuActionList>\r\n\r\n    <backAction>Menu Back</backAction>\r\n    <toggleAction>Menu Toggle</toggleAction>\r\n    <escapeAction>Menu Escape</escapeAction>\r\n    <selectAction>Menu Select</selectAction>\r\n    <upAction>Menu Up</upAction>\r\n    <downAction>Menu Down</downAction>\r\n    <leftAction>Menu Left</leftAction>\r\n    <rightAction>Menu Right</rightAction>\r\n    <tabLeft>Menu Tab Left</tabLeft>\r\n    <tabRight>Menu Tab Right</tabRight>\r\n    <defaultTree>pause_tree</defaultTree>\r\n\r\n</menuActionList>\r\n\r\n");
 
 /***/ }),
-/* 179 */
+/* 178 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40950,18 +40858,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(145);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(146);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(144);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(145);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(120);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(122);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(3);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(31);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(38);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(162);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(180);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(161);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(179);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(182);
+/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(181);
 
 // 
 //  FILE NAME: loadstate.js
@@ -41070,9 +40978,9 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     {
         // Position at the bottom of the screen.
         let strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__["strategyManager"].activateStrategy( '_loading-screen_' );
-        strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.h - 150), 0 );
-        this.loadFont = strategy.get( 'load_font' ).getSprite();
-        this.loadFont.object.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.h - 150), 0 );
+        strategy.get( 'loadAnim' ).get().setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.h - 150), 0 );
+        this.loadFont = strategy.get( 'load_font' ).get();
+        this.loadFont.setPosXYZ( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.w - 150, -(_library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__["settings"].defaultSize_half.h - 150), 0 );
         
         // Reset the elapsed time before entering the render loop
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__["highResTimer"].calcElapsedTime();
@@ -41215,7 +41123,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 180 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41223,7 +41131,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ASSET_COUNT", function() { return ASSET_COUNT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Level1State", function() { return Level1State; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "load", function() { return load; });
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(163);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(162);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(102);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(120);
@@ -41231,17 +41139,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
 /* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(118);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(26);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(142);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(145);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(141);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(144);
 /* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(100);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(146);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(145);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(3);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(31);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(38);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(181);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(180);
 
 // 
 //  FILE NAME: level1state.js
@@ -41338,7 +41246,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
         this.multiNode = this.multiStrategy.create('dog_head');
         this.multiIndexPos = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["randomInt"](0, this.multiXPosAllAry.length-1);
-        this.multiNode.getSprite().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+        this.multiNode.get().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
 
         // Randomly pick the first ball
         this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__["randomInt"](0, 3);
@@ -41350,9 +41258,9 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         this.uiStrategy.activateNode( 'ui_' + ballInstanceName );
         
         // get the ui elements
-        this.uiWinMeter = this.uiStrategy.get( 'uiWinMeter' ).getControl();
-        this.uiBallMeter = this.uiStrategy.get( 'uiBallMeter' ).getControl();
-        this.uiMultiplier = this.uiStrategy.get( 'uiMultiplier' ).getSprite();
+        this.uiWinMeter = this.uiStrategy.get( 'uiWinMeter' ).get();
+        this.uiBallMeter = this.uiStrategy.get( 'uiBallMeter' ).get();
+        this.uiMultiplier = this.uiStrategy.get( 'uiMultiplier' ).get();
 
         // Force an updated to show UI elements
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].update();
@@ -41401,8 +41309,8 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             
             // Create the ball
             let node = this.ballStrategy.create( instanceNameA );
-            node.getSprite().physicsComponent.setTransform( x, y, angle, true );
-            node.getSprite().physicsComponent.applyAngularImpulse( rot );
+            node.get().physicsComponent.setTransform( x, y, angle, true );
+            node.get().physicsComponent.applyAngularImpulse( rot );
 
             // Deactivate/Activate if they are different
             if( oldBallIndex !== this.ballIndex )
@@ -41488,7 +41396,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].update();
             
             // NOTE: Can't reposition an static or kinematic. Must create a new one
-            if( !this.multiNode.getSprite().physicsComponent.isActive() )
+            if( !this.multiNode.get().physicsComponent.isActive() )
             {
                 // Destroy the current one
                 this.multiStrategy.destroy( this.multiNode );
@@ -41499,7 +41407,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
                 let offsetX = posAry[index];
                 this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
                 this.multiNode = this.multiStrategy.create('dog_head');
-                this.multiNode.getSprite().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+                this.multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
             }
 
             // Is the game over
@@ -41559,7 +41467,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
                 this.multiplier++;
 
                 // Disable the physics
-                this.multiNode.getSprite().physicsComponent.setActive( false );
+                this.multiNode.get().physicsComponent.setActive( false );
 
                 // Update the ui multiplier value
                 this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
@@ -41591,7 +41499,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
     
     removeFixture( object )
     {
-        if( (Math.abs(object.m_userData.object.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["DEFAULT_ID"]) )
+        if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_15__["DEFAULT_ID"]) )
             this.uiWinMeter.incBangUp( this.multiplier );
     }
 
@@ -41685,7 +41593,7 @@ function load()
 
 
 /***/ }),
-/* 181 */
+/* 180 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41693,7 +41601,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_level-1-stage_\" type=\"stage\"/>\r\n    <strategy name=\"_level-1-ball_\" type=\"actor\"/>\r\n    <strategy name=\"_level-1-multiplier_\" type=\"actor\"/>\r\n    \r\n    <strategy name=\"_level-ui_\" type=\"actor\">\r\n        <node name=\"uiWinMeter\" instance=\"uiWinMeter\"/>\r\n        <node name=\"uiBallMeter\" instance=\"uiBallMeter\"/>\r\n        <node name=\"uiMultiplier\" instance=\"uiMultiplier\"/>\r\n\r\n        <node name=\"ui_tennis_ball_green\" instance=\"ui_tennis_ball_green\" active=\"false\"/>\r\n        <node name=\"ui_tennis_ball_pink\" instance=\"ui_tennis_ball_pink\" active=\"false\"/>\r\n        <node name=\"ui_frisbee\" instance=\"ui_frisbee\" active=\"false\"/>\r\n        <node name=\"ui_bone_biscuit\" instance=\"ui_bone_biscuit\" active=\"false\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 182 */
+/* 181 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41701,13 +41609,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_loading-screen_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"loadAnim\" instance=\"loadAnim\">\r\n            <sprite>\r\n                <script prepare=\"animate\"/>\r\n            </sprite>\r\n        </node>\r\n        <node name=\"load_font\" instance=\"load_font\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 183 */
+/* 182 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartConfirmBtn", function() { return SmartConfirmBtn; });
-/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(184);
+/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(183);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -41760,7 +41668,7 @@ class SmartConfirmBtn extends _library_gui_ismartguibase__WEBPACK_IMPORTED_MODUL
     
 
 /***/ }),
-/* 184 */
+/* 183 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41837,14 +41745,14 @@ class SmartGuiControl extends iSmartGui
 
 
 /***/ }),
-/* 185 */
+/* 184 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(145);
+/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(185);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(144);
 
 // 
 //  FILE NAME: aiball.js
@@ -41873,14 +41781,14 @@ class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBa
     //
     update()
     {
-        if( this.sprite.object.pos.y < -600 )
+        if( this.sprite.pos.y < -600 )
             this.strategy.destroy( this.node );
     }
 }
 
 
 /***/ }),
-/* 186 */
+/* 185 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41935,7 +41843,7 @@ class iaiBase
 
 
 /***/ }),
-/* 187 */
+/* 186 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

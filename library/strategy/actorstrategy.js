@@ -159,7 +159,7 @@ export class ActorStrategy extends iStrategy
 
         for( let i = 0; i < this.nodeAry.length; i++ )
         {
-            let sprite = this.nodeAry[i].getSprite();
+            let sprite = this.nodeAry[i].get();
             if( sprite.isPhysicsActive() )
                 if( sprite.isPhysicsAwake() )
                     result += 1;
@@ -175,7 +175,7 @@ export class ActorStrategy extends iStrategy
     {
         for( let i = 0; i < this.nodeAry.length; i++ )
         {
-            let sprite = this.nodeAry[i].getSprite();
+            let sprite = this.nodeAry[i].get();
             if( sprite.isPhysicsActive() )
                 if( sprite.isPhysicsAwake() )
                     return true;

@@ -7,15 +7,15 @@
 "use strict";
 
 import { Matrix } from '../utilities/matrix';
-import { Object3D } from '../3d/object3d';
+import { ObjectTransform } from '../common/objecttransform';
 import { settings } from '../utilities/settings';
 import * as defs from './defs';
 
-export class Camera extends Object3D
+export class Camera extends ObjectTransform
 {
     constructor()
     {
-        super();
+        super(true);
         
         this.projectionMatrix = new Matrix;
         this.finalMatrix = new Matrix;
