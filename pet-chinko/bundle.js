@@ -27764,9 +27764,9 @@ __webpack_require__.r(__webpack_exports__);
 
 class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
 {
-    constructor( createRotMatrix = false )
+    constructor( createRotMatrix = false, id = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
     {
-        super();
+        super( id );
         
         // local matrix
         this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
@@ -27915,10 +27915,13 @@ __webpack_require__.r(__webpack_exports__);
 
 class Object
 {
-    constructor()
+    constructor( id )
     {
         // Bitmask settings to record if the object needs to be transformed
         this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__["BitMask"](_common_defs__WEBPACK_IMPORTED_MODULE_4__["VISIBLE"]);
+
+        // Unique Id number
+        this.id = id;
     
         // Local position
         this.pos = new _point__WEBPACK_IMPORTED_MODULE_0__["Point"];
@@ -27935,6 +27938,14 @@ class Object
 
         // Offset due to a sprite sheet crop.
         this.cropOffset = new _size__WEBPACK_IMPORTED_MODULE_1__["Size"];
+    }
+
+    // 
+    //  DESC: Get the id
+    //
+    getId()
+    {
+        return this.id;
     }
 
     //
@@ -28263,13 +28274,10 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
 {
     constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_10__["DEFAULT_ID"] )
     {
-        super( objData.is3D() );
+        super( objData.is3D(), id );
 
         // The object data
         this.objData = objData
-        
-        // Unique Id number
-        this.id = id
         
         // AI
         this.ai = null
@@ -28548,14 +28556,6 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
     getFrameCount()
     {
         return this.objData.visualData.getFrameCount();
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.id;
     }
 
     //
@@ -36932,11 +36932,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(144);
 /* harmony import */ var _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(146);
 /* harmony import */ var _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(159);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: strategyloader.js
 //  DESC:      Helper class for loading strategies
 //
+
 
 
 
@@ -37015,80 +37017,76 @@ class Strategyloader
     //
     populateStartegy( xmlNode, strategy )
     {
-        let nodeLst = xmlNode.children;
+        let xmlNodeLst = xmlNode.children;
 
-        for( let i = 0; i < nodeLst.length; ++i )
+        for( let i = 0; i < xmlNodeLst.length; ++i )
         {
-            if( nodeLst[i].nodeName === 'node' )
+            if( xmlNodeLst[i].nodeName === 'node' )
             {
                 // Get the name of the strategy node
-                let name = nodeLst[i].getAttribute( 'name' );
+                let name = xmlNodeLst[i].getAttribute( 'name' );
 
                 // Get the instance name if one is provided.
                 // Nodes with instance names are stored in a map so that a reference can be returned
-                let instance = nodeLst[i].getAttribute( 'instance' );
+                let instance = xmlNodeLst[i].getAttribute( 'instance' );
 
                 // Creating a node is automaticly active unless defined as false. Default true even if not specified
-                let active = nodeLst[i].getAttribute( 'active' );
-                let strategyNode = strategy.create( name, instance, (!active || active === 'true') );
+                let active = xmlNodeLst[i].getAttribute( 'active' );
+                let headNode = strategy.create( name, instance, (!active || active === 'true') );
 
-                // Get the children of this node
-                let childLst = nodeLst[i].children;
-
-                for( let j = 0; j < childLst.length; ++j )
+                for( let j = 0; j < xmlNodeLst[i].children.length; ++j )
                 {
-                    // If the parent node specified a sprite to init
-                    if( childLst[j].nodeName === 'object' )
+                    let xmlChildNode = xmlNodeLst[i].children[j];
+
+                    // If the head node specified an object or sprite to init
+                    if( xmlChildNode.nodeName === 'object' || xmlChildNode.nodeName === 'sprite' )
                     {
-                        let object = strategyNode.get();
-                        if( object )
-                            object.loadTransFromNode( childLst[j] );
-                        else
-                            console.log(`Strategy Loader Warning: Object defined for ${name} node but is not an object node.`);
+                        this.init( xmlChildNode, headNode.get() );
                     }
 
-                    else if( childLst[j].nodeName === 'sprite' )
-                        this.initSprite( childLst[j], strategyNode.get() );
-
-                    // If the parent node specified a child node to init
-                    else if( childLst[j].nodeName === 'node' )
+                    // If the head node specified a child node to init
+                    else if( xmlChildNode.nodeName === 'node' )
                     {
                         // Get the name of the child node
-                        let childName = childLst[j].getAttribute( 'name' );
+                        let childName = xmlChildNode.getAttribute( 'name' );
                         if( childName )
-                            if( !this.initSprite( childLst[j].firstElementChild, strategyNode.allNodeMap.get(childName).get() ) )
-                                console.log(`Strategy Loader Warning: Child node defined for ${name} node can not be found.`);
+                        {
+                            let childNode = headNode.allNodeMap.get( childName );
+                            if( childNode )
+                            {
+                                this.init( xmlChildNode.firstElementChild, childNode.get() );
+                            }
+                            else
+                            {
+                                console.log(`Strategy Loader Warning: Child node defined for ${name} but can not be found.`);
+                            }
+                        }
                         else
-                            console.log(`Strategy Loader Warning: Child node defined for ${name} node but child node name note defined.`);
+                        {
+                            console.log(`Strategy Loader Warning: Child node defined for ${name} but child node name not defined. Can't initialize.`);
+                        }
                     }
                 }
             }
         }
     }
-    
+
     // 
-    //  DESC: Populate the strategies with their objects
+    //  DESC: Init the object with the xmlNode data
     //
-    initSprite( xmlNode, sprite )
+    init( xmlNode, object )
     {
         // Set any transforms
-        if( sprite )
-        {
-            sprite.loadTransFromNode( xmlNode );
-            
-            // See if there are any scripts that need to be prepared to run
-            let scriptLst = xmlNode.getElementsByTagName( 'script' );
-            for( let i = 0; i < scriptLst.length; ++i )
-            {
-                let attr = scriptLst[i].getAttribute( 'prepare' );
-                if( attr )
-                    sprite.prepareScript( attr );
-            }
+        object.loadTransFromNode( xmlNode );
 
-            return true;
-        }
-        
-        return false;    
+        // See if there are any scripts that need to be prepared to run
+        let scriptLst = xmlNode.getElementsByTagName( 'script' );
+        for( let i = 0; i < scriptLst.length; ++i )
+        {
+            let attr = scriptLst[i].getAttribute( 'prepare' );
+            if( attr )
+                object.prepareScript( attr );
+        }   
     }
 }
 
@@ -37683,10 +37681,11 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
         // Node type
         this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_NULL"];
 
-        // Is this a parent node with children?
+        // Is this a node with children nodes?
         this.hasChildrenNodes = false;
-        if( xmlNode.children.length > 1 )
-            this.hasChildrenNodes = true;
+        for( let i = 0; i < xmlNode.children.length; ++i )
+            if( xmlNode.children[i].nodeName == 'node' )
+                this.hasChildrenNodes = true;
 
         for( let i = 0; i < xmlNode.children.length; ++i )
         {
@@ -38258,9 +38257,10 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
     {
         super( nodeId, parentId );
         
-        this.object = new _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"](true);
-        
-        this.objectId = objectId;
+        this.object = new _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"](true, objectId);
+
+        // Node type
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_OBJECT"];
         
         this.ai = null;
     }
@@ -38304,7 +38304,7 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
     //
     getId()
     {
-        return this.objectId;
+        return this.object.id;
     }
 
     // 
@@ -38312,7 +38312,7 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
     //
     setId( id )
     {
-        this.objectId = id;
+        this.object.id = id;
     }
     
     // 

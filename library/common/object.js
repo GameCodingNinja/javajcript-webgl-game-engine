@@ -13,10 +13,13 @@ import * as defs from '../common/defs';
 
 export class Object
 {
-    constructor()
+    constructor( id )
     {
         // Bitmask settings to record if the object needs to be transformed
         this.parameters = new BitMask(defs.VISIBLE);
+
+        // Unique Id number
+        this.id = id;
     
         // Local position
         this.pos = new Point;
@@ -33,6 +36,14 @@ export class Object
 
         // Offset due to a sprite sheet crop.
         this.cropOffset = new Size;
+    }
+
+    // 
+    //  DESC: Get the id
+    //
+    getId()
+    {
+        return this.id;
     }
 
     //

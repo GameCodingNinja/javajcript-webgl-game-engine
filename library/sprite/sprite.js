@@ -22,13 +22,10 @@ export class Sprite extends ObjectTransform
 {
     constructor( objData, id = defs.DEFAULT_ID )
     {
-        super( objData.is3D() );
+        super( objData.is3D(), id );
 
         // The object data
         this.objData = objData
-        
-        // Unique Id number
-        this.id = id
         
         // AI
         this.ai = null
@@ -307,14 +304,6 @@ export class Sprite extends ObjectTransform
     getFrameCount()
     {
         return this.objData.visualData.getFrameCount();
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.id;
     }
 
     //

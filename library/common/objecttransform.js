@@ -12,9 +12,9 @@ import * as defs from '../common/defs';
 
 export class ObjectTransform extends Object
 {
-    constructor( createRotMatrix = false )
+    constructor( createRotMatrix = false, id = defs.DEFAULT_ID )
     {
-        super();
+        super( id );
         
         // local matrix
         this.matrix = new Matrix;

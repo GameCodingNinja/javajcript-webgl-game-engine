@@ -19,9 +19,10 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     {
         super( nodeId, parentId );
         
-        this.object = new ObjectTransform(true);
-        
-        this.objectId = objectId;
+        this.object = new ObjectTransform(true, objectId);
+
+        // Node type
+        this.type = defs.ENT_OBJECT;
         
         this.ai = null;
     }
@@ -65,7 +66,7 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     //
     getId()
     {
-        return this.objectId;
+        return this.object.id;
     }
 
     // 
@@ -73,7 +74,7 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     //
     setId( id )
     {
-        this.objectId = id;
+        this.object.id = id;
     }
     
     // 

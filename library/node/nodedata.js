@@ -35,10 +35,11 @@ export class NodeData extends SpriteData
         // Node type
         this.nodeType = defs.ENT_NULL;
 
-        // Is this a parent node with children?
+        // Is this a node with children nodes?
         this.hasChildrenNodes = false;
-        if( xmlNode.children.length > 1 )
-            this.hasChildrenNodes = true;
+        for( let i = 0; i < xmlNode.children.length; ++i )
+            if( xmlNode.children[i].nodeName == 'node' )
+                this.hasChildrenNodes = true;
 
         for( let i = 0; i < xmlNode.children.length; ++i )
         {
