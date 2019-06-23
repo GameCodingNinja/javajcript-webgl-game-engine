@@ -26953,8 +26953,8 @@ class Menu extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectT
     //
     loadFromNode( node )
     {
-        // Init the script function Ids
-        this.initScriptFunctionIds( node );
+        // Init the script Ids
+        this.initScriptIds( node );
         
         // Load the scroll data from node
         this.scrollParam.loadFromNode( node.getElementsByTagName( 'scroll' ) );
@@ -27009,15 +27009,15 @@ class Menu extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectT
     }
     
     // 
-    //  DESC: Init the script function Ids and add them to the map
+    //  DESC: Init the script Ids and add them to the map
     //        This function loads the attribute info reguardless of what it is
     //
-    initScriptFunctionIds( node )
+    initScriptIds( node )
     {
         // Check for scripting
         let scriptLst = node.getElementsByTagName( 'scriptLst' );
         if( scriptLst.length )
-            this.scriptComponent.initScriptFunctionIds( scriptLst[0] );
+            this.scriptComponent.initScriptIds( scriptLst[0] );
     }
     
     // 
@@ -27035,8 +27035,8 @@ class Menu extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectT
         // Load the transform data
         sprite.load( node );
 
-        // Init the script function Ids
-        sprite.scriptComponent.initScriptFunctionIds( node );
+        // Init the script Ids
+        sprite.scriptComponent.initScriptIds( node );
     }
 
     // 
@@ -28307,18 +28307,18 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
     load( xmlNode )
     {
         this.loadTransFromNode( xmlNode );
-        this.scriptComponent.initScriptFunctionIds( xmlNode );
+        this.scriptComponent.initScriptIds( xmlNode );
 
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.loadFontPropFromNode( xmlNode );
     }
 
     // 
-    //  DESC: Prepare the script class to run from factory id
+    //  DESC: Prepare the script class to run from id
     //
-    prepareScript( scriptFactoryId, forceUpdate = false )
+    prepareScript( scriptId, forceUpdate = false )
     {
-        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
+        let scriptFactory = this.scriptComponent.get( scriptId );
         if( scriptFactory )
         {
             this.scriptComponent.prepare( scriptFactory(this) );
@@ -30714,10 +30714,10 @@ class ScriptComponent
     }
 
     // 
-    //  DESC: Init the script function Ids and add them to the map
-    //        This function loads the attribute info reguardless of what it is
+    //  DESC: Init the script Ids and add them to the map
+    //        This loads the attribute info reguardless of what it is
     //
-    initScriptFunctionIds( xmlNode )
+    initScriptIds( xmlNode )
     {
         // Check for scripting
         let scriptNode = xmlNode.getElementsByTagName( 'script' );

@@ -81,8 +81,8 @@ export class Menu extends ObjectTransform
     //
     loadFromNode( node )
     {
-        // Init the script function Ids
-        this.initScriptFunctionIds( node );
+        // Init the script Ids
+        this.initScriptIds( node );
         
         // Load the scroll data from node
         this.scrollParam.loadFromNode( node.getElementsByTagName( 'scroll' ) );
@@ -137,15 +137,15 @@ export class Menu extends ObjectTransform
     }
     
     // 
-    //  DESC: Init the script function Ids and add them to the map
+    //  DESC: Init the script Ids and add them to the map
     //        This function loads the attribute info reguardless of what it is
     //
-    initScriptFunctionIds( node )
+    initScriptIds( node )
     {
         // Check for scripting
         let scriptLst = node.getElementsByTagName( 'scriptLst' );
         if( scriptLst.length )
-            this.scriptComponent.initScriptFunctionIds( scriptLst[0] );
+            this.scriptComponent.initScriptIds( scriptLst[0] );
     }
     
     // 
@@ -163,8 +163,8 @@ export class Menu extends ObjectTransform
         // Load the transform data
         sprite.load( node );
 
-        // Init the script function Ids
-        sprite.scriptComponent.initScriptFunctionIds( node );
+        // Init the script Ids
+        sprite.scriptComponent.initScriptIds( node );
     }
 
     // 

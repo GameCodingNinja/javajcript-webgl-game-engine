@@ -18,10 +18,10 @@ export class ScriptComponent
     }
 
     // 
-    //  DESC: Init the script function Ids and add them to the map
-    //        This function loads the attribute info reguardless of what it is
+    //  DESC: Init the script Ids and add them to the map
+    //        This loads the attribute info reguardless of what it is
     //
-    initScriptFunctionIds( xmlNode )
+    initScriptIds( xmlNode )
     {
         // Check for scripting
         let scriptNode = xmlNode.getElementsByTagName( 'script' );

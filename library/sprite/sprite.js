@@ -75,18 +75,18 @@ export class Sprite extends ObjectTransform
     load( xmlNode )
     {
         this.loadTransFromNode( xmlNode );
-        this.scriptComponent.initScriptFunctionIds( xmlNode );
+        this.scriptComponent.initScriptIds( xmlNode );
 
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.loadFontPropFromNode( xmlNode );
     }
 
     // 
-    //  DESC: Prepare the script class to run from factory id
+    //  DESC: Prepare the script class to run from id
     //
-    prepareScript( scriptFactoryId, forceUpdate = false )
+    prepareScript( scriptId, forceUpdate = false )
     {
-        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
+        let scriptFactory = this.scriptComponent.get( scriptId );
         if( scriptFactory )
         {
             this.scriptComponent.prepare( scriptFactory(this) );
