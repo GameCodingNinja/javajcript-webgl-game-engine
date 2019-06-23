@@ -193,7 +193,7 @@ export class UISlider extends UISubControl
 
             if( event.detail.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN )
             {
-                this.prepareControlScriptFactory( defs.ECS_SELECTED );
+                this.prepareControlScript( defs.ECS_SELECTED );
 
                 let ratio = 1.0 / settings.orthoAspectRatio.h;
 
@@ -231,7 +231,7 @@ export class UISlider extends UISubControl
         if( this.isActive() )
         {
             if( prepareOnSelect )
-                this.prepareControlScriptFactory( defs.ECS_SELECTED );
+                this.prepareControlScript( defs.ECS_SELECTED );
 
             // Send a message to blink the button
             eventManager.dispatchEvent( 

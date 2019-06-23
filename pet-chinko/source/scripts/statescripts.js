@@ -17,13 +17,7 @@ class State_PlayLoadAnim extends utilScripts.FrameExecute
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 10 );
     }
     

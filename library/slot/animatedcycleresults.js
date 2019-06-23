@@ -87,13 +87,13 @@ export class AnimatedCycleResults extends iCycleResults
                 this.paylineSprite = this.paylineSpriteSet.getSprite( pay.payLine );
 
                 if( pay.getFinalAward() >= totalBet * 5 )
-                    this.paylineSprite.prepareScript( 'hi_win' );
+                    this.paylineSprite.scriptComponent.prepareScript( 'hi_win' );
 
                 else if( pay.getFinalAward() >= totalBet * 3 )
-                    this.paylineSprite.prepareScript( 'med_win' );
+                    this.paylineSprite.scriptComponent.prepareScript( 'med_win' );
 
                 else
-                    this.paylineSprite.prepareScript( 'low_win' );
+                    this.paylineSprite.scriptComponent.prepareScript( 'low_win' );
             }
             
             let startAnim = 'no_win';
@@ -108,7 +108,7 @@ export class AnimatedCycleResults extends iCycleResults
                 {
                     let symbol = cycleResultSymbAry[i][j];
                     symbol.getSprite().scriptComponent.reset();
-                    symbol.getSprite().prepareScript( startAnim );
+                    symbol.getSprite().scriptComponent.prepareScript( startAnim );
                     symbol.deferredRender = false;
                 }
             }
@@ -122,13 +122,13 @@ export class AnimatedCycleResults extends iCycleResults
                 symbol.deferredRender = true;
                 
                 if( pay.getFinalAward() >= totalBet * 5 )
-                    symbol.getSprite().prepareScript( 'hi_win' );
+                    symbol.getSprite().scriptComponent.prepareScript( 'hi_win' );
                 
                 else if( pay.getFinalAward() >= totalBet * 3 )
-                    symbol.getSprite().prepareScript( 'med_win' );
+                    symbol.getSprite().scriptComponent.prepareScript( 'med_win' );
                 
                 else
-                    symbol.getSprite().prepareScript( 'low_win' );
+                    symbol.getSprite().scriptComponent.prepareScript( 'low_win' );
             }
 
             this.slotGroupView.setCycleResultText( true, pay );
@@ -156,7 +156,7 @@ export class AnimatedCycleResults extends iCycleResults
                 {
                     let symbol = cycleResultSymbAry[i][j];
                     symbol.getSprite().scriptComponent.reset();
-                    symbol.getSprite().prepareScript( 'reset' );
+                    symbol.getSprite().scriptComponent.prepareScript( 'reset' );
                     symbol.deferredRender = false;
                 }
             }

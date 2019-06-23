@@ -25,14 +25,6 @@ class Control_OnActive
     }
     
     // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
-        // No init required
-    }
-    
-    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -54,14 +46,6 @@ class Control_OnSelect
     constructor( control )
     {
         this.control = control;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
-        // No init required
     }
     
     // 
@@ -88,15 +72,9 @@ class Menu_TransIn extends utilScripts.FadeTo
         super();
         
         this.menu = menu;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 0, 1, 250 );
-        
+
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
     }
@@ -136,13 +114,7 @@ class Menu_TransOut extends utilScripts.FadeTo
         super();
         
         this.menu = menu;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1, 0, 250 );
         
         this.menu.setAlpha( this.current );
@@ -186,14 +158,6 @@ class Control_Disabled
     }
     
     // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
-        // No init required
-    }
-    
-    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -224,14 +188,6 @@ class Control_Inactive
     }
     
     // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
-        // No init required
-    }
-    
-    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -255,14 +211,6 @@ class Control_Hidden
     constructor( sprite )
     {
         this.sprite = sprite;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
-        // No init required
     }
     
     // 
@@ -342,13 +290,7 @@ class Control_Active extends Base_Control_Active
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.3, 0.5 );
     }
     
@@ -371,13 +313,7 @@ class Control_Solid_Active extends Base_Control_Active
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.1, 0.5 );
     }
     
@@ -469,13 +405,7 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.7, 0.6 );
     }
     
@@ -503,13 +433,7 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.7, 0.6 );
     }
     
@@ -538,13 +462,7 @@ class Control_Selected_Visible extends Base_Control_Selected
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.7, 0.6 );
     }
     
@@ -571,13 +489,7 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.5, 0.6 );
     }
     
@@ -600,13 +512,7 @@ class Control_Selected extends Base_Control_Selected
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.7, 0.6 );
     }
     
@@ -632,13 +538,7 @@ class Control_Solid_Selected extends Base_Control_Selected
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.5, 0.6 );
     }
     
@@ -664,13 +564,7 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.7, 0.6 );
     }
     
@@ -726,14 +620,6 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
         
-        this.time = 0;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -764,14 +650,6 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
     {
         super( sprite );
         
-        this.time = 0;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -803,14 +681,6 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
     {
         super( sprite );
         
-        this.time = 0;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -844,14 +714,6 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
         super( sprite );
         
         this.time = 80;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
-        this.time = 80;
         super.init( 1.7 );
     }
     
@@ -882,14 +744,6 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
         super( sprite );
         
         this.time = 80;
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
-        this.time = 80;
         super.init( 1.7 );
     }
     
@@ -918,13 +772,7 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     constructor( sprite )
     {
         super( sprite );
-    }
-    
-    // 
-    //  DESC: Init the script for use
-    //
-    init()
-    {
+
         super.init( 1.7 );
     }
     

@@ -15,7 +15,6 @@ import { VisualComponent3D } from '../3d/visualcomponent3d';
 import { NullVisualComponent } from '../common/nullvisualcomponent';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
-import { scriptManager } from '../script/scriptmanager';
 import * as defs from '../common/defs';
 
 export class Sprite extends ObjectTransform
@@ -35,9 +34,6 @@ export class Sprite extends ObjectTransform
         
         // The physics part of the sprite
         this.physicsComponent = null;
-        
-        // Script object map. Prepare scripts by name
-        this.scriptFactoryMap = new Map;
         
         // The script part of the sprite
         this.scriptComponent = new ScriptComponent;
@@ -79,49 +75,21 @@ export class Sprite extends ObjectTransform
     load( xmlNode )
     {
         this.loadTransFromNode( xmlNode );
-        this.initScriptFactoryFunctions( xmlNode );
+        this.scriptComponent.initScriptFunctionIds( xmlNode );
 
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.loadFontPropFromNode( xmlNode );
     }
-    
-    // 
-    //  DESC: Init the script factory functions and add them to the map
-    //        This function loads the attribute info reguardless of what it is
-    //
-    initScriptFactoryFunctions( xmlNode )
-    {
-        // Check for scripting
-        let scriptNode = xmlNode.getElementsByTagName( 'script' );
 
-        for( let i = 0; i < scriptNode.length; ++i )
-        {
-            let attr = scriptNode[i].attributes[0];
-            if( attr )
-                // This allocates the script to the map
-                this.scriptFactoryMap.set( attr.name, scriptManager.get(attr.value)(this) );
-        }
-    }
-    
-    // 
-    //  DESC: Create the script functions from a map
-    //
-    createScriptFunctions( spriteData )
-    {
-        for( let [ key, scriptFactory ] of spriteData.scriptFunctionMap.entries() )
-            this.scriptFactoryMap.set( key, scriptFactory(this) );
-    }
-    
     // 
     //  DESC: Prepare the script class to run from factory id
     //
     prepareScript( scriptFactoryId, forceUpdate = false )
     {
-        let script = this.scriptFactoryMap.get( scriptFactoryId );
-        if( script )
+        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
+        if( scriptFactory )
         {
-            script.init();
-            this.scriptComponent.set( script );
+            this.scriptComponent.prepare( scriptFactory(this) );
             
             if( forceUpdate )
                 this.scriptComponent.update();
@@ -130,14 +98,6 @@ export class Sprite extends ObjectTransform
         }
         
         return false;
-    }
-
-    prepareScriptFactory( scriptFactory, forceUpdate = false )
-    {
-        this.scriptComponent.set( scriptFactory(this) );
-            
-        if( forceUpdate )
-            this.scriptComponent.update();
     }
     
     // 

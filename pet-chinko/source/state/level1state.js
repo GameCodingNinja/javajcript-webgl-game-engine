@@ -67,7 +67,7 @@ export class Level1State extends CommonState
 
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
 
         // Game active flag
         this.gameActive = false;
@@ -173,7 +173,7 @@ export class Level1State extends CommonState
             if( event.detail.type === defs.EGE_MENU_GAME_STATE_CHANGE )
             {
                 if( event.detail.arg[0] === defs.ETC_BEGIN )
-                    this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
+                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
             else if( event.detail.type === defs.EGE_MENU_TRANS_OUT )
             {

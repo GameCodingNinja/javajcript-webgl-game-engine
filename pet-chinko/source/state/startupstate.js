@@ -74,7 +74,7 @@ export class StartUpState extends GameState
 
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
 
         // Preload assets for the startup screen
         this.preload();
@@ -149,9 +149,9 @@ export class StartUpState extends GameState
 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
-                    this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
+                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
                 else
-                    setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
+                    setTimeout( () => this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
                 
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();

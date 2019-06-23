@@ -42,7 +42,7 @@ export class LoadState extends GameState
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 250 ) );
+        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 250 ) );
         
         // Clear the event queue
         eventManager.clear();
@@ -147,9 +147,9 @@ export class LoadState extends GameState
                 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
-                    this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
+                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
                 else
-                    setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
+                    setTimeout( () => this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
                 
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();

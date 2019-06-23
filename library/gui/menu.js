@@ -13,7 +13,6 @@ import { eventManager } from '../managers/eventmanager';
 import { UIControlNavNode } from '../gui/uicontrolnavnode';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { ScriptComponent } from '../script/scriptcomponent';
-import { scriptManager } from '../script/scriptmanager';
 import * as UIControlFactory from './uicontrolfactory';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as defs from '../common/defs';
@@ -73,9 +72,6 @@ export class Menu extends ObjectTransform
         // The script conponent
         this.scriptComponent = new ScriptComponent;
         
-        // Script object map. Prepare scripts by name
-        this.scriptFactoryMap = new Map;
-        
         // The menu needs to default hidden
         this.setVisible(false);
     }
@@ -85,8 +81,8 @@ export class Menu extends ObjectTransform
     //
     loadFromNode( node )
     {
-        // Init the script factory functions
-        this.initScriptFactoryFunctions( node );
+        // Init the script function Ids
+        this.initScriptFunctionIds( node );
         
         // Load the scroll data from node
         this.scrollParam.loadFromNode( node.getElementsByTagName( 'scroll' ) );
@@ -141,26 +137,15 @@ export class Menu extends ObjectTransform
     }
     
     // 
-    //  DESC: Init the script factory functions and add them to the map
+    //  DESC: Init the script function Ids and add them to the map
     //        This function loads the attribute info reguardless of what it is
     //
-    initScriptFactoryFunctions( node )
+    initScriptFunctionIds( node )
     {
         // Check for scripting
         let scriptLst = node.getElementsByTagName( 'scriptLst' );
         if( scriptLst.length )
-        {
-            let scriptNode = scriptLst[0].children;
-            
-            for( let i = 0; i < scriptNode.length; ++i )
-            {
-                let attr = scriptNode[i].attributes[0];
-                
-                if( attr )
-                    // This allocates the script to the map
-                    this.scriptFactoryMap.set( attr.name, scriptManager.get(attr.value)(this) );
-            }
-        }
+            this.scriptComponent.initScriptFunctionIds( scriptLst[0] );
     }
     
     // 
@@ -178,8 +163,8 @@ export class Menu extends ObjectTransform
         // Load the transform data
         sprite.load( node );
 
-        // Init the script factory functions
-        sprite.initScriptFactoryFunctions( node );
+        // Init the script function Ids
+        sprite.scriptComponent.initScriptFunctionIds( node );
     }
 
     // 
@@ -708,12 +693,9 @@ export class Menu extends ObjectTransform
     //
     prepare( scriptFactoryId )
     {
-        let script = this.scriptFactoryMap.get( scriptFactoryId );
-        if( script )
-        {
-            script.init();
-            this.scriptComponent.set( script );
-        }
+        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
+        if( scriptFactory )
+            this.scriptComponent.prepare( scriptFactory(this) );
     }
 
     // 

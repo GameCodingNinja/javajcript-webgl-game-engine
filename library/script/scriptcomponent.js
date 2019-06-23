@@ -5,18 +5,69 @@
 //
 
 "use strict";
+import { scriptManager } from '../script/scriptmanager';
 
 export class ScriptComponent
 {
     constructor()
     {
         this.scriptAry = [];
+
+        // Script object map. Prepare scripts by name
+        this.scriptFactoryMap = null;
+    }
+
+    // 
+    //  DESC: Init the script function Ids and add them to the map
+    //        This function loads the attribute info reguardless of what it is
+    //
+    initScriptFunctionIds( xmlNode )
+    {
+        // Check for scripting
+        let scriptNode = xmlNode.getElementsByTagName( 'script' );
+
+        if( !this.scriptFactoryMap && scriptNode.length )
+            this.scriptFactoryMap = new Map;
+
+        for( let i = 0; i < scriptNode.length; ++i )
+        {
+            let attr = scriptNode[i].attributes[0];
+            if( attr )
+                // This allocates the script to the map
+                this.scriptFactoryMap.set( attr.name, attr.value );
+        }
+    }
+
+    // 
+    //  DESC: Get the script
+    //
+    get( scriptId )
+    {
+        if( this.scriptFactoryMap )
+        {
+            let scriptFactoryId = this.scriptFactoryMap.get( scriptId );
+            if( scriptFactoryId )
+                return scriptManager.get( scriptFactoryId );
+        }
+
+        null;
     }
     
     // 
+    //  DESC: Set a script Id to the map
+    //
+    set( key, scriptId)
+    {
+        if( !this.scriptFactoryMap )
+            this.scriptFactoryMap = new Map;
+
+        this.scriptFactoryMap.set( key, scriptId );
+    }
+
+    // 
     //  DESC: Add a script
     //
-    set( script )
+    prepare( script )
     {
         this.scriptAry.push( script );
     }
