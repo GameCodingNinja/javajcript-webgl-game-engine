@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <node defaultGroup="(title_screen)">
     
-    <node name="background" type="spriteNode">
-        <sprite2d objectName="background"/>
+    <node name="background">
+        <sprite objectName="background"/>
     </node>
 
 </node>

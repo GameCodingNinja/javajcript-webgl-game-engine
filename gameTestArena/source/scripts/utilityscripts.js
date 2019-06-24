@@ -18,10 +18,9 @@ import * as stateDefs from '../state/statedefs';
 //
 export class Hold
 {
-    constructor( sprite )
+    constructor()
     {
         this.time = 0;
-        this.finished = false;
     }
     
     // 
@@ -30,7 +29,6 @@ export class Hold
     init( time )
     {
         this.time = time;
-        this.finished = false;
     }
     
     // 

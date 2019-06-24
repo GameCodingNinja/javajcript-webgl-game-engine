@@ -16,10 +16,18 @@ export class SpriteNode extends iNode
     {
         super();
         
-        this.sprite = new Sprite( objectData, spriteId );
+        this.sprite = new Sprite( objectData, spriteId, this );
         
         // Node type
         this.type = defs.ENT_SPRITE;
+    }
+
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        this.sprite.handleEvent( event );
     }
     
     // 

@@ -23,8 +23,6 @@ export class ObjectNodeMultiLst extends NodeMultiLst
 
         // Node type
         this.type = defs.ENT_OBJECT;
-        
-        this.ai = null;
     }
     
     // 
@@ -32,9 +30,6 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     //
     update()
     {
-        if( this.ai )
-            this.ai.update();
-
         // Call the parent but it has to be last
         super.update();
     }
@@ -75,13 +70,5 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     setId( id )
     {
         this.object.id = id;
-    }
-    
-    // 
-    //  DESC: Set the AI.
-    //
-    setAI( ai )
-    {
-        this.ai = ai;
     }
 }

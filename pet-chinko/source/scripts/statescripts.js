@@ -31,7 +31,7 @@ class State_PlayLoadAnim extends utilScripts.FrameExecute
 }
 
 // 
-//  DESC: Load XML files
+//  DESC: Load scripts
 //
 export function loadScripts()
 {

@@ -7,7 +7,6 @@
 "use strict";
 
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
-import { signalManager } from '../managers/signalmanager';
 import { UIProgressBar } from '../gui/uiprogressbar';
 import { UIMeter } from '../gui/uimeter';
 import { SpriteNode } from '../node/spritenode';
@@ -64,10 +63,6 @@ function LoadSprite( node, nodeData )
 
     // Init the physics
     node.sprite.initPhysics();
-
-    // Broadcast the signal to create the sprite AI
-    if( nodeData.aiName !== '' )
-        signalManager.broadcast_aiCreate( nodeData.aiName, node );
 }
 
 // 

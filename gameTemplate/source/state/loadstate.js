@@ -42,7 +42,7 @@ export class LoadState extends GameState
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 250 ) );
+        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 250 ) );
         
         // Clear the event queue
         eventManager.clear();
@@ -82,9 +82,9 @@ export class LoadState extends GameState
     {
         // Position at the bottom of the screen.
         let strategy = strategyManager.activateStrategy( '_loading-screen_' );
-        strategy.get( 'loadAnim' ).getSprite().object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
-        this.loadFont = strategy.get( 'load_font' ).getSprite();
-        this.loadFont.object.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        strategy.get( 'loadAnim' ).get().setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        this.loadFont = strategy.get( 'load_font' ).get();
+        this.loadFont.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -123,9 +123,9 @@ export class LoadState extends GameState
                 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
-                    this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
+                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
                 else
-                    setTimeout( () => this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
+                    setTimeout( () => this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
 
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();

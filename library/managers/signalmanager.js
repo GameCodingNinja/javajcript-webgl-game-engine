@@ -12,7 +12,6 @@ class SignalManager
     {
         this.smartGuiControlSignal = [];
         this.smartMenuSignal = [];
-        this.aiCreateSignal = [];
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
         this.initShaderSignal = [];
@@ -32,14 +31,6 @@ class SignalManager
     connect_smartMenu( slot )
     {
         this.smartMenuSignal.push( slot );
-    }
-    
-    // 
-    //  DESC: Connect to the Ai Sprite create signal
-    //
-    connect_aiCreate( slot )
-    {
-        this.aiCreateSignal.push( slot );
     }
     
     // 
@@ -106,15 +97,6 @@ class SignalManager
     {
         for( let i = 0; i < this.smartMenuSignal.length; ++i )
             this.smartMenuSignal[i](menu);
-    }
-    
-    // 
-    //  DESC: Broadcast AI Actor create signal
-    //
-    broadcast_aiCreate( aiName, sprite )
-    {
-        for( let i = 0; i < this.aiCreateSignal.length; ++i )
-            this.aiCreateSignal[i](aiName, sprite);
     }
     
     // 

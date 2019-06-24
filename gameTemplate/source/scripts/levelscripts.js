@@ -1,41 +1,35 @@
 
-// 
-//  FILE NAME: aiball.js
-//  DESC:      Class for ball ai
+//
+//  FILE NAME: levelcripts.js
+//  DESC:      script for the level
 //
 
 "use strict";
 
-import { iaiBase } from '../../../library/common/iaibase';
+import { scriptManager } from '../../../library/script/scriptmanager';
+import { iScript } from '../../../library/script/iscript';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-export class aiBall extends iaiBase
+export class Level_BallAi extends iScript
 {
-    constructor( obj )
+    constructor( sprite )
     {
         super();
-        
-        this.sprite = obj.sprite;
-    }
-    
-    // 
-    //  DESC: Do any initalizing
-    //
-    init()
-    {
+
+        this.sprite = sprite;
         this.initPhysics();
     }
     
     // 
-    //  DESC: Do the physics
+    //  DESC: Execute this script object
     //
-    update()
+    execute()
     {
-        if( this.sprite.object.pos.y < -600 )
+        if( this.sprite.pos.y < -600 )
             this.initPhysics();
     }
-    
+
     // 
     //  DESC: Init the physics
     //
@@ -50,4 +44,13 @@ export class aiBall extends iaiBase
         // Reposition the sprite based on the new physics position and rotation
         this.sprite.physicsUpdate();
     }
+}
+
+// 
+//  DESC: Load scripts
+//
+export function loadScripts()
+{
+    scriptManager.set( 'Level_BallAi',
+        ( sprite ) => { return new Level_BallAi( sprite ); } );
 }

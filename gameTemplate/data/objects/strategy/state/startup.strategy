@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <node defaultGroup="(startup)">
     
-    <node name="logo" type="spriteNode">
+    <node name="logo">
         
-        <sprite2d objectName="logo">
+        <sprite objectName="logo">
             <scale x="1.5" y="1.5" z="1"/>
-        </sprite2d>
+        </sprite>
 
     </node>
 

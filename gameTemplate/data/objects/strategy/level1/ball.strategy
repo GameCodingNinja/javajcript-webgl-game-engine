@@ -92,41 +92,64 @@
     </node>
     -->
     
-    <node name="square_red" type="spriteNode">
+    <node name="square_red">
         
-        <sprite2d objectName="square_red">
+        <sprite objectName="square_red">
             <scale x=".9" y=".9" z="1"/>
-        </sprite2d>
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
 
     </node>
     
-    <node name="triangle_green" type="spriteNode">
+    <node name="triangle_green">
         
-        <sprite2d objectName="triangle_green"/>
+        <sprite objectName="triangle_green">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
 
     </node>
     
-    <node name="triangle_blue" type="spriteNode">
+    <node name="triangle_blue">
         
-        <sprite2d objectName="triangle_blue"/>
+        <sprite objectName="triangle_blue">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
 
     </node>
     
-    <node name="circle_green" type="spriteNode">
+    <node name="circle_green">
         
-        <sprite2d objectName="circle_green"/>
+        <sprite objectName="circle_green">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
 
     </node>
     
-    <node name="circle_blue" type="spriteNode">
+    <node name="circle_blue">
         
-        <sprite2d objectName="circle_blue"/>
+        <sprite objectName="circle_blue">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
 
     </node>
     
-    <node name="circle_red" type="spriteNode">
+    <node name="circle_red">
         
-        <sprite2d objectName="circle_red"/>
+        <sprite objectName="circle_red">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
 
     </node>
 

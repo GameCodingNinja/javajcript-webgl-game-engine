@@ -8,6 +8,7 @@
 
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
+import { iScript } from '../../../library/script/iscript';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { Color } from '../../../library/common/color';
@@ -17,10 +18,11 @@ import * as defs from '../../../library/common/defs';
 //
 //  DESC: Script for playing the active sound
 //
-class Control_OnActive
+class Control_OnActive extends iScript
 {
     constructor( control )
     {
+        super();
         this.control = control;
     }
     
@@ -41,10 +43,11 @@ class Control_OnActive
 //
 //  DESC: Script for playing the select sound
 //
-class Control_OnSelect
+class Control_OnSelect extends iScript
 {
     constructor( control )
     {
+        super();
         this.control = control;
     }
     
@@ -97,11 +100,6 @@ class Menu_TransIn extends utilScripts.FadeTo
             this.menu.setAlpha( this.current );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
@@ -140,20 +138,16 @@ class Menu_TransOut extends utilScripts.FadeTo
             this.menu.setAlpha( this.current );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for setting the look of the disabled state
 //
-class Control_Disabled
+class Control_Disabled extends iScript
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
     }
     
@@ -170,20 +164,16 @@ class Control_Disabled
         
         this.finished = true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for setting the look of the inactive state
 //
-class Control_Inactive
+class Control_Inactive extends iScript
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
     }
     
@@ -193,23 +183,18 @@ class Control_Inactive
     execute()
     {
         this.sprite.setColor( this.sprite.getDefaultColor() );
-        
         this.finished = true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for setting the look of the hidden state
 //
-class Control_Hidden
+class Control_Hidden extends iScript
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
     }
     
@@ -219,24 +204,19 @@ class Control_Hidden
     execute()
     {
         this.sprite.setVisible( false );
-        
         this.finished = true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 
 //
 //  DESC: Base script for animating the look of the active state
 //
-class Base_Control_Active
+class Base_Control_Active extends iScript
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
 
         this.hiColor = new Color;
@@ -301,11 +281,6 @@ class Control_Active extends Base_Control_Active
     {
         super.execute();
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return false; }
 }
 
 class Control_Solid_Active extends Base_Control_Active
@@ -324,11 +299,6 @@ class Control_Solid_Active extends Base_Control_Active
     {
         super.execute();
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return false; }
 }
 
 
@@ -337,10 +307,11 @@ class Control_Solid_Active extends Base_Control_Active
 //        NOTE: Start the button on the hi color, transition
 //              to the low color and then back to the hi color
 //
-class Base_Control_Selected
+class Base_Control_Selected extends iScript
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
 
         this.hiColor = new Color;
@@ -349,7 +320,6 @@ class Base_Control_Selected
         this.colorTo = new utilScripts.ColorTo;
 
         this.toggle = false;
-        this.finished = false;
     }
     
     // 
@@ -368,7 +338,6 @@ class Base_Control_Selected
         this.colorTo.init( this.hiColor, this.lowColor, 120 );
         
         this.toggle = false;
-        this.finished = false;
     }
     
     // 
@@ -421,11 +390,6 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
             eventManager.dispatchEvent( defs.EGE_MENU_SELECT_EXECUTE );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
@@ -450,11 +414,6 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
             eventManager.dispatchEvent( defs.EGE_MENU_REACTIVATE );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Selected_Visible extends Base_Control_Selected
@@ -473,11 +432,6 @@ class Control_Selected_Visible extends Base_Control_Selected
     {
         super.execute();
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 
@@ -500,11 +454,6 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
     {
         super.execute();
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Selected extends Base_Control_Selected
@@ -526,11 +475,6 @@ class Control_Selected extends Base_Control_Selected
         if( this.finished )
             this.sprite.setVisible( false );
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Solid_Selected extends Base_Control_Selected
@@ -552,11 +496,6 @@ class Control_Solid_Selected extends Base_Control_Selected
         if( this.finished )
             this.sprite.setVisible( false );
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Selected_frame_highlight extends Base_Control_Selected
@@ -578,25 +517,20 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
         if( this.finished )
             this.sprite.setRGBA( 1, 1, 1, 1 );
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 
 //
 //  DESC: Fast display of selected state
 //
-class Base_Control_Fast_Selected
+class Base_Control_Fast_Selected extends iScript
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
 
         this.hiColor = new Color;
-        this.finished = false;
     }
     
     // 
@@ -608,7 +542,6 @@ class Base_Control_Fast_Selected
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
-        this.finished = false;
         
         this.sprite.setColor( this.hiColor );
     }
@@ -637,11 +570,6 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
@@ -668,11 +596,6 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
@@ -700,11 +623,6 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Selected extends Base_Control_Fast_Selected
@@ -730,11 +648,6 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
@@ -760,11 +673,6 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_slider_btn_Selected extends Base_Control_Fast_Selected
@@ -777,13 +685,6 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     }
     
     // 
-    //  DESC: Execute this script object
-    //
-    execute()
-    {
-    }
-    
-    // 
     //  DESC: Finished access function
     //
     isFinished() { return true; }
@@ -791,7 +692,7 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
 
 
 // 
-//  DESC: Load XML files
+//  DESC: Load scripts
 //
 export function loadScripts()
 {

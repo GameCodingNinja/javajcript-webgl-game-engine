@@ -159,6 +159,7 @@ export class Level1State extends CommonState
             let node = this.ballStrategy.create( instanceNameA );
             node.get().physicsComponent.setTransform( x, y, angle, true );
             node.get().physicsComponent.applyAngularImpulse( rot );
+            node.get().prepareScript( 'ball_ai' );
 
             // Deactivate/Activate if they are different
             if( oldBallIndex !== this.ballIndex )

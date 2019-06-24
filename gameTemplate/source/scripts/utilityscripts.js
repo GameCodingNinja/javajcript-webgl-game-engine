@@ -9,6 +9,7 @@
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { shaderManager } from '../../../library/managers/shadermanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
+import { iScript } from '../../../library/script/iscript';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { Color } from '../../../library/common/color';
 import * as stateDefs from '../state/statedefs';
@@ -16,12 +17,12 @@ import * as stateDefs from '../state/statedefs';
 //
 //  DESC: Script for holding for time duration
 //
-export class Hold
+export class Hold extends iScript
 {
-    constructor( sprite )
+    constructor()
     {
+        super();
         this.time = 0;
-        this.finished = false;
     }
     
     // 
@@ -51,10 +52,11 @@ export class Hold
 //
 //  DESC: Script for playing the frames of an animation
 //
-export class PlayAnim
+export class PlayAnim extends iScript
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
         
         this.frameCount = this.sprite.getFrameCount();
@@ -62,7 +64,6 @@ export class PlayAnim
         this.fps = 0;
         this.counter = 0;
         this.loop = false;
-        this.finished = false;
     }
     
     // 
@@ -105,25 +106,69 @@ export class PlayAnim
             }
         }
     }
+}
+
+//
+//  DESC: Execute an action at a specific frame rate
+//
+export class FrameExecute extends iScript
+{
+    constructor( sprite )
+    {
+        super();
+        this.sprite = sprite;
+        
+        this.time = 0;
+        this.fps = 0;
+    }
     
     // 
-    //  DESC: Finished access function
+    //  DESC: Init the script for use
     //
-    isFinished() { return this.finished; }
+    init( fps )
+    {
+        this.fps = fps;
+        this.time = 1000.0 / this.fps;
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.time -= highResTimer.elapsedTime;
+
+        if( this.time < 0 )
+        {
+            this.time = 1000.0 / this.fps;
+            
+            this.frame();
+        }
+    }
+    
+    // 
+    //  DESC: Execute this frame
+    //
+    frame()
+    {
+        // To be overridden
+    }
 }
+
 
 //
 //  DESC: Script for fading in the menu
 //
-export class FadeTo
+export class FadeTo extends iScript
 {
     constructor()
     {
+        super();
         this.current = 0;
         this.final = 0;
         this.time = 0;
         this.inc = 0;
-        this.finished = false;
     }
     
     // 
@@ -156,10 +201,11 @@ export class FadeTo
 //
 //  DESC: Color to the final color in time
 //
-export class ColorTo
+export class ColorTo extends iScript
 {
     constructor()
     {
+        super();
         this.current = new Color;
         this.inc = new Color;
         this.final;
@@ -174,11 +220,10 @@ export class ColorTo
         this.time = time;
         this.final = final;
         this.current.copy( current );
+        this.finished = false;
         
         for( let i = 0; i < 4; ++i )
             this.inc.data[i] = (this.final.data[i] - this.current.data[i]) / this.time;
-        
-        this.finished = false;
     }
     
     // 
@@ -209,11 +254,6 @@ export class ColorTo
         else
             return this.current;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
@@ -249,11 +289,6 @@ class ScreenFade extends FadeTo
             shaderManager.setAllShaderValue4fv( 'additive', [this.current, this.current, this.current, 1] );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 // 

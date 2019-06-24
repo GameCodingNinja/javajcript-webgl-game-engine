@@ -72,10 +72,6 @@ export const MATRIX_ROTATION    = 0x80;
 // Visible bit
 export const VISIBLE            = 0x100;
 
-// Type bits
-export const SPRITE2D           = 0x200,
-             ACTOR2D            = 0x400;
-
 // EGameEvent
 // Menu events
 export const EGE_MENU_TRANS_IN             = 100,

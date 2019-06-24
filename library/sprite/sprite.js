@@ -19,15 +19,15 @@ import * as defs from '../common/defs';
 
 export class Sprite extends ObjectTransform
 {
-    constructor( objData, id = defs.DEFAULT_ID )
+    constructor( objData, id = defs.DEFAULT_ID, parentNode = null )
     {
         super( objData.is3D(), id );
 
+        // parent node of this sprite
+        this.parentNode = parentNode;
+
         // The object data
         this.objData = objData
-        
-        // AI
-        this.ai = null
         
         // The visual part of the sprite
         this.visualComponent = null
@@ -131,23 +131,19 @@ export class Sprite extends ObjectTransform
     }
     
     // 
-    //  DESC: React to what the player is doing
+    //  DESC: Handle events
     //
     handleEvent( event )
     {
-        if( this.ai )
-            this.ai.handleEvent( event );
+        this.scriptComponent.handleEvent( event );
     }
 
     // 
-    //  DESC: React to what the player is doing
+    //  DESC: Update the sprite
     //
     update()
     {
         this.scriptComponent.update();
-
-        if( this.ai )
-            this.ai.update();
     }
     
     // 
@@ -166,17 +162,6 @@ export class Sprite extends ObjectTransform
     {
         if( this.isVisible() )
             this.visualComponent.render( this, camera );
-    }
-    
-    // 
-    //  DESC: Set the AI.
-    //
-    setAI( ai )
-    {
-        this.ai = ai;
-
-        // Handle any initialization in a seperate function
-        this.ai.init();
     }
     
     // 

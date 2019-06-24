@@ -119,16 +119,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
 /* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(161);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(178);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(179);
-/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(182);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(184);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(180);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(181);
+/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(184);
+/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(186);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(22);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(120);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(186);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(188);
 
 // 
 //  FILE NAME: game.js
@@ -166,9 +166,6 @@ class Game
         
         // Set the smart gui call back
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
-        
-        // Set the ai call back
-        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_aiCreate( this.aiCreateCallBack.bind(this) );
 
         // Load the settings
         _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_15__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__["default"] ) );
@@ -244,15 +241,6 @@ class Game
     {
         if( control.faction === 'decision_btn' )
             control.smartGui = new _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__["SmartConfirmBtn"]( control );
-    }
-    
-    // 
-    //  DESC: Callback for when an ai is created
-    //
-    aiCreateCallBack( aiName, obj )
-    {
-        if( aiName === 'aiBall' )
-            obj.setAI( new _ai_aiball__WEBPACK_IMPORTED_MODULE_10__["aiBall"]( obj ) );
     }
     
     // 
@@ -370,7 +358,6 @@ class SignalManager
     {
         this.smartGuiControlSignal = [];
         this.smartMenuSignal = [];
-        this.aiCreateSignal = [];
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
         this.initShaderSignal = [];
@@ -390,14 +377,6 @@ class SignalManager
     connect_smartMenu( slot )
     {
         this.smartMenuSignal.push( slot );
-    }
-    
-    // 
-    //  DESC: Connect to the Ai Sprite create signal
-    //
-    connect_aiCreate( slot )
-    {
-        this.aiCreateSignal.push( slot );
     }
     
     // 
@@ -464,15 +443,6 @@ class SignalManager
     {
         for( let i = 0; i < this.smartMenuSignal.length; ++i )
             this.smartMenuSignal[i](menu);
-    }
-    
-    // 
-    //  DESC: Broadcast AI Actor create signal
-    //
-    broadcast_aiCreate( aiName, sprite )
-    {
-        for( let i = 0; i < this.aiCreateSignal.length; ++i )
-            this.aiCreateSignal[i](aiName, sprite);
     }
     
     // 
@@ -794,8 +764,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WAS_TRANSFORMED", function() { return WAS_TRANSFORMED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MATRIX_ROTATION", function() { return MATRIX_ROTATION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VISIBLE", function() { return VISIBLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SPRITE2D", function() { return SPRITE2D; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ACTOR2D", function() { return ACTOR2D; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_IN", function() { return EGE_MENU_TRANS_IN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_OUT", function() { return EGE_MENU_TRANS_OUT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_ESCAPE_ACTION", function() { return EGE_MENU_ESCAPE_ACTION; });
@@ -975,10 +943,6 @@ const MATRIX_ROTATION    = 0x80;
 
 // Visible bit
 const VISIBLE            = 0x100;
-
-// Type bits
-const SPRITE2D           = 0x200,
-             ACTOR2D            = 0x400;
 
 // EGameEvent
 // Menu events
@@ -3045,25 +3009,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(6);
 /* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(161);
 /* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(164);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(165);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(166);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(167);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(168);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(169);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(170);
-/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(171);
-/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(172);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(173);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(174);
-/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(175);
-/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(176);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(177);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(166);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(167);
+/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(168);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(20);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(169);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(170);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(171);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(172);
+/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(173);
+/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(174);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(175);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(176);
+/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(177);
+/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(178);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(179);
 
 //
 //  FILE NAME: startupstate.js
 //  DESC:      startup state class
 //
+
 
 
 
@@ -3112,22 +3078,23 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 {
     constructor( gameLoopCallback )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_23__["EGS_STARTUP"], _statedefs__WEBPACK_IMPORTED_MODULE_23__["EGS_TITLE_SCREEN"], gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_24__["EGS_STARTUP"], _statedefs__WEBPACK_IMPORTED_MODULE_24__["EGS_TITLE_SCREEN"], gameLoopCallback );
 
         // Load the list tables
-        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_24__["default"] ) );
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_25__["default"] ) );
-        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__["cameraManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_26__["default"] ) );
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__["soundManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_29__["default"] ) );
-        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__["physicsWorldManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_30__["default"] ) );
-        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_31__["default"] ) );
-        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__["actionManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_33__["default"] ) );
-        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadMenuActionFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_34__["default"] ) );
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_25__["default"] ) );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__["strategyManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_26__["default"] ) );
+        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__["cameraManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_27__["default"] ) );
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__["soundManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_30__["default"] ) );
+        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__["physicsWorldManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_31__["default"] ) );
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_32__["default"] ) );
+        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__["actionManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_34__["default"] ) );
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadMenuActionFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_35__["default"] ) );
 
         // Load the scripts
         _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__["loadScripts"]();
         _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__["loadScripts"]();
         _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__["loadScripts"]();
+        _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_23__["loadScripts"]();
 
         // Set the default camera
         // NOTE: Can only call this after Camera Manager has been loaded
@@ -3151,14 +3118,14 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         Promise.all([
 
             // Load the shaders
-            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_27__["default"] ) ),
+            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_28__["default"] ) ),
 
             // Load the object data
             _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadGroup( ['(startup)'] )
 
         ])
         // Create and load all the actor strategies.
-        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_28__["default"] ) ))
+        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_29__["default"] ) ))
 
         // Clean up the temporary files
         .then(() =>
@@ -3196,15 +3163,15 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
     {
         if( event instanceof CustomEvent )
         {
-            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_23__["ESE_FADE_IN_COMPLETE"] )
+            if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_24__["ESE_FADE_IN_COMPLETE"] )
             {
                 this.assetLoad();
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_23__["ESE_FADE_OUT_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_24__["ESE_FADE_OUT_COMPLETE"] )
             {
                 this.stateChange = true;
             }
-            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_23__["ESE_ASSET_LOAD_COMPLETE"] )
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_24__["ESE_ASSET_LOAD_COMPLETE"] )
             {
                 let loadTime = _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__["highResTimer"].timerStop();
 
@@ -3269,7 +3236,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
             _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__["objectDataManager"].loadGroup( groupAry ),
 
             // Load the fonts
-            _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_32__["default"] ) ),
+            _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__["stringLoadXML"]( raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_33__["default"] ) ),
 
             // Load the menu XMLs
             _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__["menuManager"].loadGroupXML( groupAry )
@@ -3295,7 +3262,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
         .then(() => {return new Promise(resolve => setTimeout(resolve, 500))})
 
         // Last thing to do is to dispatch the event that the load is complete
-        .then( () => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_23__["ESE_ASSET_LOAD_COMPLETE"] ) )
+        .then( () => _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _statedefs__WEBPACK_IMPORTED_MODULE_24__["ESE_ASSET_LOAD_COMPLETE"] ) )
     }
 
     //
@@ -28251,15 +28218,15 @@ __webpack_require__.r(__webpack_exports__);
 
 class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
 {
-    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_9__["DEFAULT_ID"] )
+    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_9__["DEFAULT_ID"], parentNode = null )
     {
         super( objData.is3D(), id );
 
+        // parent node of this sprite
+        this.parentNode = parentNode;
+
         // The object data
         this.objData = objData
-        
-        // AI
-        this.ai = null
         
         // The visual part of the sprite
         this.visualComponent = null
@@ -28363,23 +28330,19 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
     }
     
     // 
-    //  DESC: React to what the player is doing
+    //  DESC: Handle events
     //
     handleEvent( event )
     {
-        if( this.ai )
-            this.ai.handleEvent( event );
+        this.scriptComponent.handleEvent( event );
     }
 
     // 
-    //  DESC: React to what the player is doing
+    //  DESC: Update the sprite
     //
     update()
     {
         this.scriptComponent.update();
-
-        if( this.ai )
-            this.ai.update();
     }
     
     // 
@@ -28398,17 +28361,6 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
     {
         if( this.isVisible() )
             this.visualComponent.render( this, camera );
-    }
-    
-    // 
-    //  DESC: Set the AI.
-    //
-    setAI( ai )
-    {
-        this.ai = ai;
-
-        // Handle any initialization in a seperate function
-        this.ai.init();
     }
     
     // 
@@ -37778,20 +37730,18 @@ class SpriteData
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
-/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(137);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(135);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(152);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(154);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(155);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(158);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(137);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(135);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(152);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(154);
+/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(155);
+/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(158);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: nodefactory.js
 //  DESC:      Class factory for node creation
 //
-
 
 
 
@@ -37811,25 +37761,25 @@ function create( nodeData )
 {
     let node = null;
     
-    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_SPRITE"] )
+    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_SPRITE"] )
     {
         if( nodeData.hasChildrenNodes )
-            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_4__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
+            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_OBJECT"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_OBJECT"] )
     {
         // Object node is automatically a multilist node because an object node without children is pretty useless
-        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__["ObjectNodeMultiLst"]( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__["ObjectNodeMultiLst"]( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_UI_CONTROL"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_UI_CONTROL"] )
     {
         node = CreateUIControlNode( nodeData, nodeData.id );
     }
@@ -37852,10 +37802,6 @@ function LoadSprite( node, nodeData )
 
     // Init the physics
     node.sprite.initPhysics();
-
-    // Broadcast the signal to create the sprite AI
-    if( nodeData.aiName !== '' )
-        _managers_signalmanager__WEBPACK_IMPORTED_MODULE_1__["signalManager"].broadcast_aiCreate( nodeData.aiName, node );
 }
 
 // 
@@ -37865,11 +37811,11 @@ function CreateUIControlNode( nodeData )
 {
     let control = null;
     
-    if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_8__["ECT_PROGRESS_BAR"] )
-        control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__["UIProgressBar"]( nodeData.group );
+    if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_7__["ECT_PROGRESS_BAR"] )
+        control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__["UIProgressBar"]( nodeData.group );
     
-    else if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_8__["ECT_METER"] )
-        control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__["UIMeter"]( nodeData.group );
+    else if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_7__["ECT_METER"] )
+        control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__["UIMeter"]( nodeData.group );
     
     else
         throw new Error( `Node control type not defined (${nodeData.nodeName}).` );
@@ -37877,7 +37823,7 @@ function CreateUIControlNode( nodeData )
     control.loadFromNode( nodeData.xmlNode );
     control.init();
     
-    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__["UIControlNode"]( control );
+    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__["UIControlNode"]( control );
 }
 
 
@@ -37909,10 +37855,18 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
     {
         super();
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId );
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId, this );
         
         // Node type
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
+    }
+
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        this.sprite.handleEvent( event );
     }
     
     // 
@@ -38075,25 +38029,33 @@ class iNode
     }
     
     // 
-    //  DESC: Get the sprite
-    //
-    getControl()
-    {
-        return null;
-    }
-    
-    // 
     //  DESC: Get the object
     //
     get()
     {
         return null;
     }
-    
+
     // 
-    //  DESC: Set the AI.
+    //  DESC: Handle events
     //
-    setAI()
+    handleEvent()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Update the nodes
+    //
+    update()
+    {
+        // Empty by design
+    }
+
+    //
+    //  DESC: Transform the object
+    //
+    transform()
     {
         // Empty by design
     }
@@ -38104,13 +38066,6 @@ class iNode
     render()
     {
         // Empty by design
-    }
-
-    // 
-    //  DESC: Update the nodes
-    //
-    update()
-    {
     }
     
     // 
@@ -38243,8 +38198,6 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
 
         // Node type
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_OBJECT"];
-        
-        this.ai = null;
     }
     
     // 
@@ -38252,9 +38205,6 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
     //
     update()
     {
-        if( this.ai )
-            this.ai.update();
-
         // Call the parent but it has to be last
         super.update();
     }
@@ -38295,14 +38245,6 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
     setId( id )
     {
         this.object.id = id;
-    }
-    
-    // 
-    //  DESC: Set the AI.
-    //
-    setAI( ai )
-    {
-        this.ai = ai;
     }
 }
 
@@ -38694,10 +38636,18 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
     {
         super( nodeId, parentId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId );
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId, this );
         
         // Node type
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
+    }
+
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        this.sprite.handleEvent( event );
     }
     
     // 
@@ -39327,9 +39277,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
+/* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(165);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(20);
 
 //
 //  FILE NAME: utilityscripts.js
@@ -39345,15 +39296,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 //
 //  DESC: Script for holding for time duration
 //
-class Hold
+class Hold extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
 {
     constructor()
     {
+        super();
         this.time = 0;
-        this.finished = false;
     }
     
     // 
@@ -39362,7 +39314,6 @@ class Hold
     init( time )
     {
         this.time = time;
-        this.finished = false;
     }
     
     // 
@@ -39383,10 +39334,11 @@ class Hold
 //
 //  DESC: Script for playing the frames of an animation
 //
-class PlayAnim
+class PlayAnim extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
         
         this.frameCount = this.sprite.getFrameCount();
@@ -39394,7 +39346,6 @@ class PlayAnim
         this.fps = 0;
         this.counter = 0;
         this.loop = false;
-        this.finished = false;
     }
     
     // 
@@ -39406,7 +39357,6 @@ class PlayAnim
         this.time = 1000.0 / this.fps;
         this.loop = loop;
         this.counter = 0;
-        this.finished = false;
     }
     
     // 
@@ -39437,25 +39387,20 @@ class PlayAnim
             }
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Execute an action at a specific frame rate
 //
-class FrameExecute
+class FrameExecute extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
         
         this.time = 0;
         this.fps = 0;
-        this.finished = false;
     }
     
     // 
@@ -39465,7 +39410,6 @@ class FrameExecute
     {
         this.fps = fps;
         this.time = 1000.0 / this.fps;
-        this.finished = false;
     }
     
     // 
@@ -39490,26 +39434,21 @@ class FrameExecute
     {
         // To be overridden
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 
 //
 //  DESC: Script for fading in the menu
 //
-class FadeTo
+class FadeTo extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
 {
     constructor()
     {
+        super();
         this.current = 0;
         this.final = 0;
         this.time = 0;
         this.inc = 0;
-        this.finished = false;
     }
     
     // 
@@ -39542,12 +39481,13 @@ class FadeTo
 //
 //  DESC: Color to the final color in time
 //
-class ColorTo
+class ColorTo extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
 {
     constructor()
     {
-        this.current = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
-        this.inc = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
+        super();
+        this.current = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.inc = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
         this.final;
         this.time;
     }
@@ -39560,11 +39500,10 @@ class ColorTo
         this.time = time;
         this.final = final;
         this.current.copy( current );
+        this.finished = false;
         
         for( let i = 0; i < 4; ++i )
             this.inc.data[i] = (this.final.data[i] - this.current.data[i]) / this.time;
-        
-        this.finished = false;
     }
     
     // 
@@ -39595,11 +39534,6 @@ class ColorTo
         else
             return this.current;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
@@ -39626,20 +39560,15 @@ class ScreenFade extends FadeTo
             _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.final, this.final, this.final, 1] );
 
             if( this.inc > 0 )
-                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_IN_COMPLETE"] );
+                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_6__["ESE_FADE_IN_COMPLETE"] );
             else
-                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_OUT_COMPLETE"] );
+                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_6__["ESE_FADE_OUT_COMPLETE"] );
         }
         else
         {
             _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.current, this.current, this.current, 1] );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 // 
@@ -39654,6 +39583,49 @@ function loadScripts()
 
 /***/ }),
 /* 165 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iScript", function() { return iScript; });
+//
+//  FILE NAME: iscript.js
+//  DESC:      script interface class
+//
+
+
+
+class iScript
+{
+    constructor()
+    {
+        this.finished = false;
+    }
+    
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return this.finished; }
+}
+
+/***/ }),
+/* 166 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39694,7 +39666,7 @@ class State_PlayLoadAnim extends _utilityscripts__WEBPACK_IMPORTED_MODULE_1__["F
 }
 
 // 
-//  DESC: Load XML files
+//  DESC: Load scripts
 //
 function loadScripts()
 {
@@ -39704,7 +39676,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39712,11 +39684,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(141);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(164);
-/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
+/* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(165);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(141);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(164);
+/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 //
 //  FILE NAME: menuscripts.js
@@ -39733,13 +39706,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 //
 //  DESC: Script for playing the active sound
 //
-class Control_OnActive
+class Control_OnActive extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
 {
     constructor( control )
     {
+        super();
         this.control = control;
     }
     
@@ -39748,7 +39723,7 @@ class Control_OnActive
     //
     execute()
     {
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__["soundManager"].play( '(menu)', 'active' );
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_4__["soundManager"].play( '(menu)', 'active' );
     }
     
     // 
@@ -39760,10 +39735,11 @@ class Control_OnActive
 //
 //  DESC: Script for playing the select sound
 //
-class Control_OnSelect
+class Control_OnSelect extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
 {
     constructor( control )
     {
+        super();
         this.control = control;
     }
     
@@ -39772,7 +39748,7 @@ class Control_OnSelect
     //
     execute()
     {
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__["soundManager"].play( '(menu)', 'select' );
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_4__["soundManager"].play( '(menu)', 'select' );
     }
     
     // 
@@ -39784,7 +39760,7 @@ class Control_OnSelect
 //
 //  DESC: Script for fading in the menu
 //
-class Menu_TransIn extends _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["FadeTo"]
+class Menu_TransIn extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo"]
 {
     constructor( menu )
     {
@@ -39809,24 +39785,19 @@ class Menu_TransIn extends _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["FadeTo"
         {
             this.menu.setAlpha( this.final );
             
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["EGE_MENU_TRANS_IN"], _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["ETC_END"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_TRANS_IN"], _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["ETC_END"] );
         }
         else
         {
             this.menu.setAlpha( this.current );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for fading out the menu
 //
-class Menu_TransOut extends _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["FadeTo"]
+class Menu_TransOut extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo"]
 {
     constructor( menu )
     {
@@ -39852,27 +39823,23 @@ class Menu_TransOut extends _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["FadeTo
             this.menu.setAlpha( this.final );
             this.menu.setVisible( false );
             
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["EGE_MENU_TRANS_OUT"], _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["ETC_END"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_TRANS_OUT"], _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["ETC_END"] );
         }
         else
         {
             this.menu.setAlpha( this.current );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for setting the look of the disabled state
 //
-class Control_Disabled
+class Control_Disabled extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
     }
     
@@ -39881,7 +39848,7 @@ class Control_Disabled
     //
     execute()
     {
-        let color = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
+        let color = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
         color.copy( this.sprite.getDefaultColor() );
         color.transformHSV( 0, 0, 1 );
 
@@ -39889,20 +39856,16 @@ class Control_Disabled
         
         this.finished = true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for setting the look of the inactive state
 //
-class Control_Inactive
+class Control_Inactive extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
     }
     
@@ -39912,23 +39875,18 @@ class Control_Inactive
     execute()
     {
         this.sprite.setColor( this.sprite.getDefaultColor() );
-        
         this.finished = true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for setting the look of the hidden state
 //
-class Control_Hidden
+class Control_Hidden extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
     }
     
@@ -39938,29 +39896,24 @@ class Control_Hidden
     execute()
     {
         this.sprite.setVisible( false );
-        
         this.finished = true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 
 //
 //  DESC: Base script for animating the look of the active state
 //
-class Base_Control_Active
+class Base_Control_Active extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
 
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
-        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
-        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["ColorTo"];
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["ColorTo"];
 
         this.toggle = false;
     }
@@ -40020,11 +39973,6 @@ class Control_Active extends Base_Control_Active
     {
         super.execute();
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return false; }
 }
 
 class Control_Solid_Active extends Base_Control_Active
@@ -40043,11 +39991,6 @@ class Control_Solid_Active extends Base_Control_Active
     {
         super.execute();
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return false; }
 }
 
 
@@ -40056,19 +39999,19 @@ class Control_Solid_Active extends Base_Control_Active
 //        NOTE: Start the button on the hi color, transition
 //              to the low color and then back to the hi color
 //
-class Base_Control_Selected
+class Base_Control_Selected extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
 
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
-        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
 
-        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["ColorTo"];
+        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["ColorTo"];
 
         this.toggle = false;
-        this.finished = false;
     }
     
     // 
@@ -40087,7 +40030,6 @@ class Base_Control_Selected
         this.colorTo.init( this.hiColor, this.lowColor, 120 );
         
         this.toggle = false;
-        this.finished = false;
     }
     
     // 
@@ -40137,14 +40079,9 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
         
         if( this.finished )
         {
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
@@ -40165,15 +40102,10 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
         
         if( this.finished )
         {
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["EGE_MENU_SELECT_EXECUTE"] );
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["EGE_MENU_REACTIVATE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Selected_Visible extends Base_Control_Selected
@@ -40192,11 +40124,6 @@ class Control_Selected_Visible extends Base_Control_Selected
     {
         super.execute();
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 
@@ -40219,11 +40146,6 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
     {
         super.execute();
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Selected extends Base_Control_Selected
@@ -40245,11 +40167,6 @@ class Control_Selected extends Base_Control_Selected
         if( this.finished )
             this.sprite.setVisible( false );
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Solid_Selected extends Base_Control_Selected
@@ -40271,11 +40188,6 @@ class Control_Solid_Selected extends Base_Control_Selected
         if( this.finished )
             this.sprite.setVisible( false );
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Selected_frame_highlight extends Base_Control_Selected
@@ -40297,25 +40209,20 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
         if( this.finished )
             this.sprite.setRGBA( 1, 1, 1, 1 );
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 
 //
 //  DESC: Fast display of selected state
 //
-class Base_Control_Fast_Selected
+class Base_Control_Fast_Selected extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
 {
     constructor( sprite )
     {
+        super();
         this.sprite = sprite;
 
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
-        this.finished = false;
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
     }
     
     // 
@@ -40327,7 +40234,6 @@ class Base_Control_Fast_Selected
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
         this.hiColor.transformHSV( 0, 1, hiHSV );
-        this.finished = false;
         
         this.sprite.setColor( this.hiColor );
     }
@@ -40356,11 +40262,6 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
@@ -40383,15 +40284,10 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["EGE_MENU_REACTIVATE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
@@ -40414,16 +40310,11 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["EGE_MENU_SELECT_EXECUTE"] );
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_6__["EGE_MENU_REACTIVATE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_common_defs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Selected extends Base_Control_Fast_Selected
@@ -40449,11 +40340,6 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
@@ -40479,11 +40365,6 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
             this.finished = true;
         }
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 class Control_slider_btn_Selected extends Base_Control_Fast_Selected
@@ -40496,13 +40377,6 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     }
     
     // 
-    //  DESC: Execute this script object
-    //
-    execute()
-    {
-    }
-    
-    // 
     //  DESC: Finished access function
     //
     isFinished() { return true; }
@@ -40510,7 +40384,7 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
 
 
 // 
-//  DESC: Load XML files
+//  DESC: Load scripts
 //
 function loadScripts()
 {
@@ -40583,20 +40457,60 @@ function loadScripts()
 
 
 /***/ }),
-/* 167 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(startup)\">\r\n        <file path=\"data/objects/2d/objectDataList/startupDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(loadingScreen)\">\r\n        <file path=\"data/objects/2d/objectDataList/loadingScreenDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/objectDataList/menuBackgrounds.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuButtonFrames.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuMisc.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(title_screen)\">\r\n        <file path=\"data/objects/2d/objectDataList/titleScreenDataList.lst\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"(level_1)\">\r\n        <file path=\"data/objects/2d/objectDataList/level1DataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
-
-/***/ }),
 /* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_startup_\">\r\n        <file path=\"data/objects/strategy/state/startup.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_title-screen_\">\r\n        <file path=\"data/objects/strategy/state/titlescreen.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_loading-screen_\">\r\n        <file path=\"data/objects/strategy/state/loadscreen.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_level-1-stage_\">\r\n        <file path=\"data/objects/strategy/level1/stage.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-ui_\">\r\n        <file path=\"data/objects/strategy/level1/ui.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-ball_\">\r\n        <file path=\"data/objects/strategy/level1/ball.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-multiplier_\">\r\n        <file path=\"data/objects/strategy/level1/multiplier.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Level_BallAi", function() { return Level_BallAi; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(144);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(165);
+
+//
+//  FILE NAME: levelcripts.js
+//  DESC:      script for the level
+//
+
+
+
+
+
+
+
+class Level_BallAi extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+{
+    constructor( sprite )
+    {
+        super();
+
+        this.sprite = sprite;
+        this.strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].get( '_level-1-ball_' );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( this.sprite.pos.y < -600 )
+        {
+            this.strategy.destroy( this.sprite.parentNode );
+            this.finished = true;
+        }
+    }
+}
+
+// 
+//  DESC: Load scripts
+//
+function loadScripts()
+{
+    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'Level_BallAi',
+        ( node ) => { return new Level_BallAi( node ); } );
+}
+
 
 /***/ }),
 /* 169 */
@@ -40604,7 +40518,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n  \r\n</cameraLst>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(startup)\">\r\n        <file path=\"data/objects/2d/objectDataList/startupDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(loadingScreen)\">\r\n        <file path=\"data/objects/2d/objectDataList/loadingScreenDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/objectDataList/menuBackgrounds.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuButtonFrames.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuMisc.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(title_screen)\">\r\n        <file path=\"data/objects/2d/objectDataList/titleScreenDataList.lst\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"(level_1)\">\r\n        <file path=\"data/objects/2d/objectDataList/level1DataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 170 */
@@ -40612,7 +40526,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_startup_\">\r\n        <file path=\"data/objects/strategy/state/startup.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_title-screen_\">\r\n        <file path=\"data/objects/strategy/state/titlescreen.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_loading-screen_\">\r\n        <file path=\"data/objects/strategy/state/loadscreen.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_level-1-stage_\">\r\n        <file path=\"data/objects/strategy/level1/stage.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-ui_\">\r\n        <file path=\"data/objects/strategy/level1/ui.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-ball_\">\r\n        <file path=\"data/objects/strategy/level1/ball.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-multiplier_\">\r\n        <file path=\"data/objects/strategy/level1/multiplier.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 171 */
@@ -40620,7 +40534,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
 /* 172 */
@@ -40628,7 +40542,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
 /* 173 */
@@ -40636,7 +40550,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
 /* 174 */
@@ -40644,7 +40558,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 175 */
@@ -40652,7 +40566,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 176 */
@@ -40660,7 +40574,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<controllerMapping>\n\t<keyboardMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"W\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"S\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"A\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"D\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"ARROW UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"ARROW DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"ARROW LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"ARROW RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"RETURN\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Escape\" componetId=\"ESCAPE\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"LEFT SHIFT\" defaultId=\"LEFT SHIFT\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"[\" defaultId=\"[\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"]\" defaultId=\"]\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Up\" componetId=\"W\" defaultId=\"W\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Down\" componetId=\"S\" defaultId=\"S\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Left\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Right\" componetId=\"D\" defaultId=\"D\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"E\" defaultId=\"E\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</keyboardMapping>\n\t<mouseMapping>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<!-- Game specific controls -->\n\t\t\t<actionMap action=\"Shoot\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"MIDDLE MOUSE\" defaultId=\"MIDDLE MOUSE\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</mouseMapping>\n\t<gamepadMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"L STICK UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"L STICK DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"L STICK LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"L STICK RIGHT\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Back\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"START\" defaultId=\"START\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"L BUMPER\" defaultId=\"L BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"R BUMPER\" defaultId=\"R BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</gamepadMapping>\n</controllerMapping>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 177 */
@@ -40668,10 +40582,26 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<menuActionList>\r\n\r\n    <backAction>Menu Back</backAction>\r\n    <toggleAction>Menu Toggle</toggleAction>\r\n    <escapeAction>Menu Escape</escapeAction>\r\n    <selectAction>Menu Select</selectAction>\r\n    <upAction>Menu Up</upAction>\r\n    <downAction>Menu Down</downAction>\r\n    <leftAction>Menu Left</leftAction>\r\n    <rightAction>Menu Right</rightAction>\r\n    <tabLeft>Menu Tab Left</tabLeft>\r\n    <tabRight>Menu Tab Right</tabRight>\r\n    <defaultTree>pause_tree</defaultTree>\r\n\r\n</menuActionList>\r\n\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
 
 /***/ }),
 /* 178 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<controllerMapping>\n\t<keyboardMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"W\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"S\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"A\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"D\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"ARROW UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"ARROW DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"ARROW LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"ARROW RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"RETURN\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Escape\" componetId=\"ESCAPE\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"LEFT SHIFT\" defaultId=\"LEFT SHIFT\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"[\" defaultId=\"[\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"]\" defaultId=\"]\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Up\" componetId=\"W\" defaultId=\"W\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Down\" componetId=\"S\" defaultId=\"S\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Left\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Right\" componetId=\"D\" defaultId=\"D\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"E\" defaultId=\"E\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</keyboardMapping>\n\t<mouseMapping>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<!-- Game specific controls -->\n\t\t\t<actionMap action=\"Shoot\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"MIDDLE MOUSE\" defaultId=\"MIDDLE MOUSE\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</mouseMapping>\n\t<gamepadMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"L STICK UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"L STICK DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"L STICK LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"L STICK RIGHT\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Back\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"START\" defaultId=\"START\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"L BUMPER\" defaultId=\"L BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"R BUMPER\" defaultId=\"R BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</gamepadMapping>\n</controllerMapping>\n");
+
+/***/ }),
+/* 179 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<menuActionList>\r\n\r\n    <backAction>Menu Back</backAction>\r\n    <toggleAction>Menu Toggle</toggleAction>\r\n    <escapeAction>Menu Escape</escapeAction>\r\n    <selectAction>Menu Select</selectAction>\r\n    <upAction>Menu Up</upAction>\r\n    <downAction>Menu Down</downAction>\r\n    <leftAction>Menu Left</leftAction>\r\n    <rightAction>Menu Right</rightAction>\r\n    <tabLeft>Menu Tab Left</tabLeft>\r\n    <tabRight>Menu Tab Right</tabRight>\r\n    <defaultTree>pause_tree</defaultTree>\r\n\r\n</menuActionList>\r\n\r\n");
+
+/***/ }),
+/* 180 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40691,9 +40621,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(38);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
 /* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(161);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(179);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(181);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(181);
+/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(183);
 
 // 
 //  FILE NAME: loadstate.js
@@ -40947,7 +40877,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 179 */
+/* 181 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40973,7 +40903,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(180);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(182);
 
 // 
 //  FILE NAME: level1state.js
@@ -41135,6 +41065,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             let node = this.ballStrategy.create( instanceNameA );
             node.get().physicsComponent.setTransform( x, y, angle, true );
             node.get().physicsComponent.applyAngularImpulse( rot );
+            node.get().prepareScript( 'ball_ai' );
 
             // Deactivate/Activate if they are different
             if( oldBallIndex !== this.ballIndex )
@@ -41417,7 +41348,7 @@ function load()
 
 
 /***/ }),
-/* 180 */
+/* 182 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41425,7 +41356,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_level-1-stage_\" type=\"stage\"/>\r\n    <strategy name=\"_level-1-ball_\" type=\"actor\"/>\r\n    <strategy name=\"_level-1-multiplier_\" type=\"actor\"/>\r\n    \r\n    <strategy name=\"_level-ui_\" type=\"actor\">\r\n        <node name=\"uiWinMeter\" instance=\"uiWinMeter\"/>\r\n        <node name=\"uiBallMeter\" instance=\"uiBallMeter\"/>\r\n        <node name=\"uiMultiplier\" instance=\"uiMultiplier\"/>\r\n\r\n        <node name=\"ui_tennis_ball_green\" instance=\"ui_tennis_ball_green\" active=\"false\"/>\r\n        <node name=\"ui_tennis_ball_pink\" instance=\"ui_tennis_ball_pink\" active=\"false\"/>\r\n        <node name=\"ui_frisbee\" instance=\"ui_frisbee\" active=\"false\"/>\r\n        <node name=\"ui_bone_biscuit\" instance=\"ui_bone_biscuit\" active=\"false\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 181 */
+/* 183 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41433,13 +41364,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_loading-screen_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"loadAnim\" instance=\"loadAnim\">\r\n            <sprite>\r\n                <script prepare=\"animate\"/>\r\n            </sprite>\r\n        </node>\r\n        <node name=\"load_font\" instance=\"load_font\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 182 */
+/* 184 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartConfirmBtn", function() { return SmartConfirmBtn; });
-/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(183);
+/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(185);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -41492,7 +41423,7 @@ class SmartConfirmBtn extends _library_gui_ismartguibase__WEBPACK_IMPORTED_MODUL
     
 
 /***/ }),
-/* 183 */
+/* 185 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41569,13 +41500,13 @@ class SmartGuiControl extends iSmartGui
 
 
 /***/ }),
-/* 184 */
+/* 186 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(185);
+/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(187);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(144);
 
 // 
@@ -41612,7 +41543,7 @@ class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBa
 
 
 /***/ }),
-/* 185 */
+/* 187 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41667,7 +41598,7 @@ class iaiBase
 
 
 /***/ }),
-/* 186 */
+/* 188 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

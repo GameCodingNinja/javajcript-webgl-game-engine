@@ -35,9 +35,6 @@ export class Game
         
         // Set the smart gui call back
         signalManager.connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
-        
-        // Set the ai call back
-        signalManager.connect_aiCreate( this.aiCreateCallBack.bind(this) );
 
         // Load the settings
         settings.loadFromNode( genFunc.stringLoadXML( settingsCfg ) );
@@ -113,15 +110,6 @@ export class Game
     {
         if( control.faction === 'decision_btn' )
             control.smartGui = new SmartConfirmBtn( control );
-    }
-    
-    // 
-    //  DESC: Callback for when an ai is created
-    //
-    aiCreateCallBack( aiName, obj )
-    {
-        if( aiName === 'aiBall' )
-            obj.setAI( new aiBall( obj ) );
     }
     
     // 

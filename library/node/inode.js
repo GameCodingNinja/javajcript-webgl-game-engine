@@ -80,25 +80,33 @@ export class iNode
     }
     
     // 
-    //  DESC: Get the sprite
-    //
-    getControl()
-    {
-        return null;
-    }
-    
-    // 
     //  DESC: Get the object
     //
     get()
     {
         return null;
     }
-    
+
     // 
-    //  DESC: Set the AI.
+    //  DESC: Handle events
     //
-    setAI()
+    handleEvent()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Update the nodes
+    //
+    update()
+    {
+        // Empty by design
+    }
+
+    //
+    //  DESC: Transform the object
+    //
+    transform()
     {
         // Empty by design
     }
@@ -109,13 +117,6 @@ export class iNode
     render()
     {
         // Empty by design
-    }
-
-    // 
-    //  DESC: Update the nodes
-    //
-    update()
-    {
     }
     
     // 

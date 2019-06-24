@@ -11,7 +11,7 @@
         
         <sprite objectName="loadAnim">
             <scriptLst>
-                <script animate="State_PlayLoadAnim" group="(state)"/>
+                <script animate="State_PlayLoadAnim"/>
             </scriptLst>
         </sprite>
 

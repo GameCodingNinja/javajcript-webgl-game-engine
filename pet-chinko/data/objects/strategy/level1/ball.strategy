@@ -2,19 +2,35 @@
 <node defaultGroup="(level_1)" defaultAIName="aiBall">
     
     <node name="tennis_ball_green">
-        <sprite objectName="tennis_ball_green" id="1"/>
+        <sprite objectName="tennis_ball_green" id="1">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
     </node>
     
     <node name="tennis_ball_pink">
-        <sprite objectName="tennis_ball_pink" id="2"/>
+        <sprite objectName="tennis_ball_pink" id="2">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
     </node>
     
     <node name="frisbee">
-        <sprite objectName="frisbee" id="4"/>
+        <sprite objectName="frisbee" id="4">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
     </node>
     
     <node name="bone_biscuit">
-        <sprite objectName="bone_biscuit" id="5"/>
+        <sprite objectName="bone_biscuit" id="5">
+            <scriptLst>
+                <script ball_ai="Level_BallAi"/>
+            </scriptLst>
+        </sprite>
     </node>
 
 </node>

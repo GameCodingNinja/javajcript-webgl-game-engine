@@ -37,7 +37,7 @@ export class TitleScreenState extends CommonState
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.set( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
 
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
@@ -75,7 +75,7 @@ export class TitleScreenState extends CommonState
             if( event.detail.type === defs.EGE_MENU_GAME_STATE_CHANGE )
             {
                 if( event.detail.arg[0] === defs.ETC_BEGIN )
-                    this.scriptComponent.set( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
+                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
         }
     }

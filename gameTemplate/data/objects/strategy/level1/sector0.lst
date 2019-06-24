@@ -1,328 +1,328 @@
 <sector defaultGroup="(level_1)" defaultObjectName="peg" defaultId="-2">
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-800" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-640" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-480" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-320" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-160" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="0" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="160" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="320" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="480" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="640" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="800" y="-320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-720" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-560" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-400" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-240" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-80" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="80" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="240" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="400" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="560" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="720" y="-160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
 
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-800" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-640" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-480" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-320" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-160" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="0" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
     <node type="spriteNode">
-        <sprite2d>
+        <sprite>
             <position x="160" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="320" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="480" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="640" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="800" y="0"/>
-        </sprite2d>
+        </sprite>
     </node>
 
 
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-720" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-560" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-400" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-240" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-80" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="80" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="240" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="400" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="560" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="720" y="160"/>
-        </sprite2d>
+        </sprite>
     </node>
 
 
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-800" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-640" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-480" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-320" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="-160" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="0" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="160" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="320" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="480" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="640" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
-    <node type="spriteNode">
-        <sprite2d>
+    <node>
+        <sprite>
             <position x="800" y="320"/>
-        </sprite2d>
+        </sprite>
     </node>
 
 </sector>
