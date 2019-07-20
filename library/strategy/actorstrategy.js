@@ -43,7 +43,6 @@ export class ActorStrategy extends iStrategy
     {
         let defaultGroup = '';
         let defaultObjName = '';
-        let defaultAIName = '';
         let defaultId = defs.DEFAULT_ID;
 
         let attr = xmlNode.getAttribute( 'defaultGroup' );
@@ -53,10 +52,6 @@ export class ActorStrategy extends iStrategy
         attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr !== null )
             defaultObjName = attr;
-
-        attr = xmlNode.getAttribute( 'defaultAIName' );
-        if( attr !== null )
-            defaultAIName = attr;
 
         attr = xmlNode.getAttribute( 'defaultId' );
         if( attr !== null )
@@ -70,7 +65,7 @@ export class ActorStrategy extends iStrategy
                 throw new Error( `Actor strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new NodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
+            this.dataMap.set( nodeName, new NodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
         }
     }
 

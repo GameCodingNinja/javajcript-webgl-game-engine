@@ -30,7 +30,6 @@ export class Sector extends ObjectTransform
     {
         let defaultGroup = '';
         let defaultObjName = '';
-        let defaultAIName = '';
         let defaultId = -1;
         
         let attr = xmlNode.getAttribute( 'defaultGroup' );
@@ -41,10 +40,6 @@ export class Sector extends ObjectTransform
         if( attr )
             defaultObjName = attr;
         
-        attr = xmlNode.getAttribute( 'defaultAIName' );
-        if( attr )
-            defaultAIName = attr;
-        
         attr = xmlNode.getAttribute( 'defaultId' );
         if( attr )
             defaultId = Number(attr);
@@ -54,7 +49,7 @@ export class Sector extends ObjectTransform
         for( let i = 0; i < sectorNode.length; ++i )
         {
             // Allocate the node data list to load this node
-            let nodeAry = new NodeDataList( sectorNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ).dataAry;
+            let nodeAry = new NodeDataList( sectorNode[i], defaultGroup, defaultObjName, defaultId ).dataAry;
             
             // Build the node list
             let headNode = null;

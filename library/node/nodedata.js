@@ -18,10 +18,9 @@ export class NodeData extends SpriteData
         parenNodetId = defs.DEFAULT_ID,
         defGroup = '',
         defObjName = '',
-        defAIName = '',
         defId = defs.DEFAULT_ID )
     {
-        super( xmlNode.firstElementChild, defGroup, defObjName, defAIName, defId );
+        super( xmlNode.firstElementChild, defGroup, defObjName, defId );
 
         // node name
         this.nodeName = nodeName;

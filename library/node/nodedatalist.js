@@ -16,7 +16,6 @@ export class NodeDataList
         node,
         defGroup = '',
         defObjName = '',
-        defAIName = '',
         defId = defs.DEFAULT_ID )
     {
         // Array of the node data
@@ -24,7 +23,6 @@ export class NodeDataList
         
         let defaultGroup = defGroup;
         let defaultObjName = defObjName;
-        let defaultAIName = defAIName;
         let nodeName = '';
         
         let attr = node.getAttribute( 'defaultGroup' );
@@ -34,10 +32,6 @@ export class NodeDataList
         attr = node.getAttribute( 'defaultObjectName' );
         if( attr )
             defaultObjName = attr;
-        
-        attr = node.getAttribute( 'defaultAIName' );
-        if( attr !== null )
-            defaultAIName = attr;
         
         attr = node.getAttribute( 'defaultId' );
         if( attr )
@@ -49,17 +43,17 @@ export class NodeDataList
         
         this.idCounter = defs.DEFAULT_ID;
         
-        let nodeData = new NodeData( node, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, defaultAIName, defId );
+        let nodeData = new NodeData( node, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, defId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
-        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defaultAIName, defId );
+        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defId );
     }
     
     // 
     //  DESC: Load the node data recursively
     //
-    loadNode( node, nodeData, defaultGroup, defaultObjName, defaultAIName, defId )
+    loadNode( node, nodeData, defaultGroup, defaultObjName, defId )
     {
         for( let i = 0; i < node.children.length; ++i )
         {
@@ -70,11 +64,11 @@ export class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defaultAIName, defId );
+                let childNodeData = new NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
-                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defaultAIName, defId );
+                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defId );
             }
         }
     }

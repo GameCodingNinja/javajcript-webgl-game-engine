@@ -10,7 +10,7 @@ import * as defs from '../common/defs';
 
 export class SpriteData
 {
-    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = defs.DEFAULT_ID )
+    constructor( xmlNode, defGroup, defObjName, defId = defs.DEFAULT_ID )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -23,9 +23,6 @@ export class SpriteData
         
         // Object name
         this.objectName = defObjName;
-        
-        // AI name
-        this.aiName = defAIName;
         
         // Sprite Id
         this.id = defId;
@@ -44,11 +41,6 @@ export class SpriteData
         attr = xmlNode.getAttribute( 'objectName' );
         if( attr)
             this.objectName = attr;
-
-        // Get the sprite's AI name
-        attr = xmlNode.getAttribute( 'aiName' );
-        if( attr !== null )
-            this.aiName = attr;
 
         // Get the sprite's unique id number
         attr = xmlNode.getAttribute( "id" );
