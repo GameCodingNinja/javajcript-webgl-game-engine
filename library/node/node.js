@@ -12,19 +12,13 @@ export class Node extends iNode
 {
     constructor( id, parentId )
     {
-        super();
+        super( id, parentId );
         
         // Child node array
         this.nodeAry = [];
         
         // Child node index
         this.index = 0;
-        
-        // node id
-        this.id = id;
-
-        // parent node id
-        this.parentId = parentId;
     }
     
     // 
@@ -101,14 +95,6 @@ export class Node extends iNode
         }
 
         return result;
-    }
-    
-    // 
-    //  DESC: Get the parent id
-    //
-    getParentId()
-    {
-        return this.parentId;
     }
 
     // 

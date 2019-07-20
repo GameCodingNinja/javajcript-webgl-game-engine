@@ -12,9 +12,12 @@ import * as defs from '../common/defs';
 
 export class SpriteNode extends iNode
 {
-    constructor( objectData, spriteId = defs.DEFAULT_ID )
+    constructor( objectData,
+        spriteId = defs.DEFAULT_ID,
+        nodeId = defs.DEFAULT_ID,
+        parentId = defs.DEFAULT_ID )
     {
-        super();
+        super(nodeId, parentId);
         
         this.sprite = new Sprite( objectData, spriteId, this );
         

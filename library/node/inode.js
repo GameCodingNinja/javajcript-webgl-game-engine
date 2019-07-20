@@ -10,10 +10,16 @@ import * as defs from '../common/defs';
 
 export class iNode
 {
-    constructor()
+    constructor( id, parentId )
     {
         // Node type
         this.type = defs.ENT_NULL;
+
+        // node id
+        this.id = id;
+
+        // parent node id
+        this.parentId = parentId;
     }
     
     // 
@@ -21,7 +27,7 @@ export class iNode
     //
     getId()
     {
-        return defs.DEFAULT_ID;
+        return this.id;
     }
 
     // 
@@ -36,7 +42,7 @@ export class iNode
     //
     getParentId()
     {
-        return defs.DEFAULT_ID;
+        return this.parentId;
     }
     
     // 

@@ -162,9 +162,6 @@ class Game
         
         // Set the smart gui call back
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
-        
-        // Set the ai call back
-        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_aiCreate( this.aiCreateCallBack.bind(this) );
 
         // Load the settings
         _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_11__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_12__["default"] ) );
@@ -240,15 +237,6 @@ class Game
     {
         if( control.faction === 'decision_btn' )
             control.smartGui = new _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_6__["SmartConfirmBtn"]( control );
-    }
-    
-    // 
-    //  DESC: Callback for when an ai is created
-    //
-    aiCreateCallBack( aiName, obj )
-    {
-        if( aiName === 'aiBall' )
-            obj.setAI( new _ai_aiball__WEBPACK_IMPORTED_MODULE_7__["aiBall"]( obj ) );
     }
     
     // 
@@ -350,7 +338,6 @@ class SignalManager
     {
         this.smartGuiControlSignal = [];
         this.smartMenuSignal = [];
-        this.aiCreateSignal = [];
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
         this.initShaderSignal = [];
@@ -370,14 +357,6 @@ class SignalManager
     connect_smartMenu( slot )
     {
         this.smartMenuSignal.push( slot );
-    }
-    
-    // 
-    //  DESC: Connect to the Ai Sprite create signal
-    //
-    connect_aiCreate( slot )
-    {
-        this.aiCreateSignal.push( slot );
     }
     
     // 
@@ -444,15 +423,6 @@ class SignalManager
     {
         for( let i = 0; i < this.smartMenuSignal.length; ++i )
             this.smartMenuSignal[i](menu);
-    }
-    
-    // 
-    //  DESC: Broadcast AI Actor create signal
-    //
-    broadcast_aiCreate( aiName, sprite )
-    {
-        for( let i = 0; i < this.aiCreateSignal.length; ++i )
-            this.aiCreateSignal[i](aiName, sprite);
     }
     
     // 
@@ -27021,20 +26991,18 @@ class SpriteData
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(113);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(135);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(137);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(139);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(140);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(143);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(113);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(135);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(137);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(139);
+/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(140);
+/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(143);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: nodefactory.js
 //  DESC:      Class factory for node creation
 //
-
 
 
 
@@ -27054,25 +27022,25 @@ function create( nodeData )
 {
     let node = null;
     
-    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_SPRITE"] )
+    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_SPRITE"] )
     {
         if( nodeData.hasChildrenNodes )
-            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_7__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_4__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
+            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_OBJECT"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_OBJECT"] )
     {
         // Object node is automatically a multilist node because an object node without children is pretty useless
-        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_6__["ObjectNodeMultiLst"]( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__["ObjectNodeMultiLst"]( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_UI_CONTROL"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_UI_CONTROL"] )
     {
         node = CreateUIControlNode( nodeData, nodeData.id );
     }
@@ -27095,10 +27063,6 @@ function LoadSprite( node, nodeData )
 
     // Init the physics
     node.sprite.initPhysics();
-
-    // Broadcast the signal to create the sprite AI
-    if( nodeData.aiName !== '' )
-        _managers_signalmanager__WEBPACK_IMPORTED_MODULE_1__["signalManager"].broadcast_aiCreate( nodeData.aiName, node );
 }
 
 // 
@@ -27108,11 +27072,11 @@ function CreateUIControlNode( nodeData )
 {
     let control = null;
     
-    if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_8__["ECT_PROGRESS_BAR"] )
-        control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_2__["UIProgressBar"]( nodeData.group );
+    if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_7__["ECT_PROGRESS_BAR"] )
+        control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__["UIProgressBar"]( nodeData.group );
     
-    else if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_8__["ECT_METER"] )
-        control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_3__["UIMeter"]( nodeData.group );
+    else if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_7__["ECT_METER"] )
+        control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__["UIMeter"]( nodeData.group );
     
     else
         throw new Error( `Node control type not defined (${nodeData.nodeName}).` );
@@ -27120,7 +27084,7 @@ function CreateUIControlNode( nodeData )
     control.loadFromNode( nodeData.xmlNode );
     control.init();
     
-    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__["UIControlNode"]( control );
+    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__["UIControlNode"]( control );
 }
 
 
@@ -28704,9 +28668,12 @@ __webpack_require__.r(__webpack_exports__);
 
 class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
 {
-    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_9__["DEFAULT_ID"] )
+    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_9__["DEFAULT_ID"], parentNode = null )
     {
         super( objData.is3D(), id );
+
+        // parent node of this sprite
+        this.parentNode = parentNode;
 
         // The object data
         this.objData = objData
@@ -28811,9 +28778,17 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
         if( this.physicsComponent )
             this.physicsComponent.init( this );
     }
+    
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        this.scriptComponent.handleEvent( event );
+    }
 
     // 
-    //  DESC: React to what the player is doing
+    //  DESC: Update the sprite
     //
     update()
     {
@@ -32252,14 +32227,25 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 {
-    constructor( objectData, spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
+    constructor( objectData,
+        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
     {
-        super();
+        super(nodeId, parentId);
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId );
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId, this );
         
         // Node type
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
+    }
+
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        this.sprite.handleEvent( event );
     }
     
     // 
@@ -32352,13 +32338,16 @@ __webpack_require__.r(__webpack_exports__);
 
 class iNode
 {
-    constructor()
+    constructor( id, parentId )
     {
         // Node type
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENT_NULL"];
 
-        // AI
-        this.ai = null
+        // node id
+        this.id = id;
+
+        // parent node id
+        this.parentId = parentId;
     }
     
     // 
@@ -32366,7 +32355,7 @@ class iNode
     //
     getId()
     {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"];
+        return this.id;
     }
 
     // 
@@ -32381,7 +32370,7 @@ class iNode
     //
     getParentId()
     {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"];
+        return this.parentId;
     }
     
     // 
@@ -32433,12 +32422,11 @@ class iNode
     }
 
     // 
-    //  DESC: React to what the player is doing
+    //  DESC: Handle events
     //
-    handleEvent( event )
+    handleEvent()
     {
-        if( this.ai )
-            this.ai.handleEvent( event );
+        // Empty by design
     }
 
     // 
@@ -32446,8 +32434,7 @@ class iNode
     //
     update()
     {
-        if( this.ai )
-            this.ai.update();
+        // Empty by design
     }
 
     //
@@ -32455,6 +32442,7 @@ class iNode
     //
     transform()
     {
+        // Empty by design
     }
 
     //
@@ -32892,19 +32880,13 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 {
     constructor( id, parentId )
     {
-        super();
+        super( id, parentId );
         
         // Child node array
         this.nodeAry = [];
         
         // Child node index
         this.index = 0;
-        
-        // node id
-        this.id = id;
-
-        // parent node id
-        this.parentId = parentId;
     }
     
     // 
@@ -32982,14 +32964,6 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
         return result;
     }
-    
-    // 
-    //  DESC: Get the parent id
-    //
-    getParentId()
-    {
-        return this.parentId;
-    }
 
     // 
     //  DESC: Reset the index
@@ -33033,10 +33007,18 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
     {
         super( nodeId, parentId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId );
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId, this );
         
         // Node type
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
+    }
+
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        this.sprite.handleEvent( event );
     }
     
     // 
@@ -33476,10 +33458,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 class Hold
 {
-    constructor( sprite )
+    constructor()
     {
         this.time = 0;
-        this.finished = false;
     }
     
     // 
@@ -33488,7 +33469,6 @@ class Hold
     init( time )
     {
         this.time = time;
-        this.finished = false;
     }
     
     // 

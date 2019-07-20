@@ -29,7 +29,7 @@ export function create( nodeData )
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id );
+            node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadSprite( node, nodeData );
     }
