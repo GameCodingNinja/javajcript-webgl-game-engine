@@ -17,7 +17,10 @@ class Strategyloader
     }
 
     // 
-    //  DESC: Add to the load manager in specific order
+    //  DESC: Load from the XML node
+    //        NOTE: The loading of strategies has to be broken up because
+    //              they load their own XML that describes what is defined
+    //              in the strategy.
     //
     load( xmlNode )
     {
@@ -52,6 +55,9 @@ class Strategyloader
     
     // 
     //  DESC: Load the strategies
+    //        NOTE: The loading of strategies has to be broken up because
+    //              they load their own XML that describes what is defined
+    //              in the strategy.
     //
     loadStartegy( xmlNode )
     {

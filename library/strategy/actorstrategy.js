@@ -26,7 +26,7 @@ export class ActorStrategy extends iStrategy
         // Active Array of nodes
         this.nodeAry = [];
 
-        // Array of nodess to be added to the active vector
+        // Array of nodes to be added to the active vector
         this.activateAry = [];
         
         // Array of nodess to be removed to the active vector
@@ -83,6 +83,14 @@ export class ActorStrategy extends iStrategy
     //
     cleanUp()
     {
+        // See if any nodes in the map are not part of the node array and clean
+        for( let node of this.nodeMap.values() )
+        {
+            let index = this.nodeAry.findIndex( (obj) => obj === node );
+            if( index === -1 )
+                node.cleanUp();
+        }
+
         for( let i = 0; i < this.nodeAry.length; i++ )
             this.nodeAry[i].cleanUp();
     }

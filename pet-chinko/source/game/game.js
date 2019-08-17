@@ -16,7 +16,6 @@ import { TitleScreenState } from '../state/titlescreenstate';
 import { LoadState } from '../state/loadstate';
 import { Level1State } from '../state/level1state';
 import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
-import { aiBall } from '../ai/aiball';
 import { gl, device } from '../../../library/system/device';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';

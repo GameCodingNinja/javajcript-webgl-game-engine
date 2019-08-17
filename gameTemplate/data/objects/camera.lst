@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <cameraLst>
     
-    <default projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0"/>
+    <default projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0">
+        <position x="0" y="0" z="20"/>
+    </default>
 
     <camera id="cubeCamera" projectType="perspective" minZDist="5" maxZDist="1000" view_angle="45.0">
         <position x="0" y="0" z="20"/>

@@ -122,19 +122,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(180);
 /* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(181);
 /* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(184);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(186);
-/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(22);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(120);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(188);
+/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(9);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(22);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(120);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(20);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(6);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(186);
 
 // 
 //  FILE NAME: game.js
 //  DESC:      CGame class
 //
-
 
 
 
@@ -168,7 +166,7 @@ class Game
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
 
         // Load the settings
-        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_15__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_16__["default"] ) );
+        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_14__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_15__["default"] ) );
 
         // Init the game
         this.init();
@@ -180,55 +178,55 @@ class Game
     init()
     {
         // Create the projection matrixes
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["device"].createProjMatrix();
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["device"].createProjMatrix();
         
         // Do we add stencil buffer
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].createStencilBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].REPLACE);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].REPLACE);
         
         // Depth testing is off by default. Enable it?
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].DEPTH_TEST);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].DEPTH_TEST);
     
         // Init the clear color
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
         
         // Init the stencil clear mask based on the bit size of the mask
         // Stencil buffer can only be 1 or 8 bits per pixel
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 1 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ALWAYS, 1, 0x1);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilMask(0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].ALWAYS, 1, 0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilMask(0x1);
         }
         else if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 8 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ALWAYS, 1, 0xFF);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].stencilMask(0xff);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].ALWAYS, 1, 0xFF);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilMask(0xff);
         }
         
         // Cull the back face
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].CCW);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].BACK);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].CULL_FACE);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].CCW);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].BACK);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].CULL_FACE);
         
         // Enable alpha blending
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].BLEND);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].ONE_MINUS_SRC_ALPHA);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].BLEND);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].ONE_MINUS_SRC_ALPHA);
 
         // Make the zero texture the active texture
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].TEXTURE0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].TEXTURE0);
         
         // Init the clear buffer mask
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearTargetBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].COLOR_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].COLOR_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].DEPTH_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].DEPTH_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearStencilBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].STENCIL_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].STENCIL_BUFFER_BIT;
         
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].clear( this.clearBufferMask );
         
         // Create the startup state
         this.gameState = new _state_startupstate__WEBPACK_IMPORTED_MODULE_5__["StartUpState"]( this.gameLoop.bind(this) );
@@ -260,13 +258,13 @@ class Game
         {
             this.gameState.cleanUp();
             
-            if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_TITLE_SCREEN"] )
+            if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_13__["EGS_TITLE_SCREEN"] )
                 this.gameState = new _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__["TitleScreenState"]( this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_GAME_LOAD"] )
+            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_13__["EGS_GAME_LOAD"] )
                 this.gameState = new _state_loadstate__WEBPACK_IMPORTED_MODULE_7__["LoadState"]( this.gameState.stateMessage, this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_LEVEL_1"] )
+            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_13__["EGS_LEVEL_1"] )
                 this.gameState = new _state_level1state__WEBPACK_IMPORTED_MODULE_8__["Level1State"]( this.gameLoop.bind(this) );
             
             return true;
@@ -283,7 +281,7 @@ class Game
         let event = null;
         
         // Handle events on the queue
-        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_12__["eventManager"].pollEvent()) )
+        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_11__["eventManager"].pollEvent()) )
             this.handleEvent( event );
     }
     
@@ -309,7 +307,7 @@ class Game
         this.pollEvents();
         
         // Get our elapsed time
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_13__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_12__["highResTimer"].calcElapsedTime();
         
         // Handle the physics
         this.gameState.physics();
@@ -321,7 +319,7 @@ class Game
         this.gameState.transform();
 
         // Clear the back buffer
-        _library_system_device__WEBPACK_IMPORTED_MODULE_11__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].clear( this.clearBufferMask );
         
         // Do the rendering
         this.gameState.render();
@@ -35741,10 +35739,7 @@ __webpack_require__.r(__webpack_exports__);
 class CameraManager
 {
     constructor()
-    {
-        // Default camera
-        this.defaultCamera = null;
-        
+    {        
         // Camera map
         this.cameraMap = new Map;
         
@@ -35768,17 +35763,19 @@ class CameraManager
     {
         if( xmlNode )
         {
+            this.defaultCamera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__["Camera"]();
+
             // Get the default camera
             let defCamera = xmlNode.getElementsByTagName('default');
+
+            // Init the default camera
             if( defCamera.length )
             {
-                // Create camera and init
-                this.defaultCamera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__["Camera"]();
                 this.defaultCamera.initFromXml( defCamera[0] );
             }
             else
             {
-                throw new Error( `Default camera is not defined!` );
+                this.defaultCamera.setPosXYZ( 0, 0, 100 );
             }
             
             let cameraLst = xmlNode.getElementsByTagName('camera');
@@ -35807,9 +35804,6 @@ class CameraManager
     //
     getDefault()
     {
-        if( this.defaultCamera == null )
-            throw new Error( `Default camera is not defined! Need to load camera objects before using manager` );
-        
         return this.defaultCamera;
     }
     
@@ -35819,7 +35813,10 @@ class CameraManager
     get( cameraId )
     {
         if( !this.cameraMap.has( cameraId ) )
-            throw new Error( `Camera id is not defined (${cameraId})!` );
+        {
+            console.log( `Camera id is not defined (${cameraId})! Using default camera instead.` );
+            return this.defaultCamera;
+        }
         
         return this.cameraMap.get( cameraId );
     }
@@ -36887,7 +36884,10 @@ class Strategyloader
     }
 
     // 
-    //  DESC: Add to the load manager in specific order
+    //  DESC: Load from the XML node
+    //        NOTE: The loading of strategies has to be broken up because
+    //              they load their own XML that describes what is defined
+    //              in the strategy.
     //
     load( xmlNode )
     {
@@ -36922,6 +36922,9 @@ class Strategyloader
     
     // 
     //  DESC: Load the strategies
+    //        NOTE: The loading of strategies has to be broken up because
+    //              they load their own XML that describes what is defined
+    //              in the strategy.
     //
     loadStartegy( xmlNode )
     {
@@ -37066,7 +37069,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         // Active Array of nodes
         this.nodeAry = [];
 
-        // Array of nodess to be added to the active vector
+        // Array of nodes to be added to the active vector
         this.activateAry = [];
         
         // Array of nodess to be removed to the active vector
@@ -37083,7 +37086,6 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     {
         let defaultGroup = '';
         let defaultObjName = '';
-        let defaultAIName = '';
         let defaultId = _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEFAULT_ID"];
 
         let attr = xmlNode.getAttribute( 'defaultGroup' );
@@ -37093,10 +37095,6 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr !== null )
             defaultObjName = attr;
-
-        attr = xmlNode.getAttribute( 'defaultAIName' );
-        if( attr !== null )
-            defaultAIName = attr;
 
         attr = xmlNode.getAttribute( 'defaultId' );
         if( attr !== null )
@@ -37110,7 +37108,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
                 throw new Error( `Actor strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( xmlNode.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
+            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
         }
     }
 
@@ -37128,6 +37126,14 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     //
     cleanUp()
     {
+        // See if any nodes in the map are not part of the node array and clean
+        for( let node of this.nodeMap.values() )
+        {
+            let index = this.nodeAry.findIndex( (obj) => obj === node );
+            if( index === -1 )
+                node.cleanUp();
+        }
+
         for( let i = 0; i < this.nodeAry.length; i++ )
             this.nodeAry[i].cleanUp();
     }
@@ -37504,7 +37510,6 @@ class NodeDataList
         node,
         defGroup = '',
         defObjName = '',
-        defAIName = '',
         defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
     {
         // Array of the node data
@@ -37512,7 +37517,6 @@ class NodeDataList
         
         let defaultGroup = defGroup;
         let defaultObjName = defObjName;
-        let defaultAIName = defAIName;
         let nodeName = '';
         
         let attr = node.getAttribute( 'defaultGroup' );
@@ -37522,10 +37526,6 @@ class NodeDataList
         attr = node.getAttribute( 'defaultObjectName' );
         if( attr )
             defaultObjName = attr;
-        
-        attr = node.getAttribute( 'defaultAIName' );
-        if( attr !== null )
-            defaultAIName = attr;
         
         attr = node.getAttribute( 'defaultId' );
         if( attr )
@@ -37537,17 +37537,17 @@ class NodeDataList
         
         this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"];
         
-        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"], defaultGroup, defaultObjName, defaultAIName, defId );
+        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"], defaultGroup, defaultObjName, defId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
-        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defaultAIName, defId );
+        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defId );
     }
     
     // 
     //  DESC: Load the node data recursively
     //
-    loadNode( node, nodeData, defaultGroup, defaultObjName, defaultAIName, defId )
+    loadNode( node, nodeData, defaultGroup, defaultObjName, defId )
     {
         for( let i = 0; i < node.children.length; ++i )
         {
@@ -37558,11 +37558,11 @@ class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defaultAIName, defId );
+                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
-                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defaultAIName, defId );
+                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defId );
             }
         }
     }
@@ -37598,10 +37598,9 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
         parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"],
         defGroup = '',
         defObjName = '',
-        defAIName = '',
         defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
     {
-        super( xmlNode.firstElementChild, defGroup, defObjName, defAIName, defId );
+        super( xmlNode.firstElementChild, defGroup, defObjName, defId );
 
         // node name
         this.nodeName = nodeName;
@@ -37674,7 +37673,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteData
 {
-    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"] )
+    constructor( xmlNode, defGroup, defObjName, defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"] )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -37687,9 +37686,6 @@ class SpriteData
         
         // Object name
         this.objectName = defObjName;
-        
-        // AI name
-        this.aiName = defAIName;
         
         // Sprite Id
         this.id = defId;
@@ -37708,11 +37704,6 @@ class SpriteData
         attr = xmlNode.getAttribute( 'objectName' );
         if( attr)
             this.objectName = attr;
-
-        // Get the sprite's AI name
-        attr = xmlNode.getAttribute( 'aiName' );
-        if( attr !== null )
-            this.aiName = attr;
 
         // Get the sprite's unique id number
         attr = xmlNode.getAttribute( "id" );
@@ -37768,7 +37759,7 @@ function create( nodeData )
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id );
+            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadSprite( node, nodeData );
     }
@@ -37851,9 +37842,12 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 {
-    constructor( objectData, spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
+    constructor( objectData,
+        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
     {
-        super();
+        super(nodeId, parentId);
         
         this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId, this );
         
@@ -37959,10 +37953,16 @@ __webpack_require__.r(__webpack_exports__);
 
 class iNode
 {
-    constructor()
+    constructor( id, parentId )
     {
         // Node type
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENT_NULL"];
+
+        // node id
+        this.id = id;
+
+        // parent node id
+        this.parentId = parentId;
     }
     
     // 
@@ -37970,7 +37970,7 @@ class iNode
     //
     getId()
     {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"];
+        return this.id;
     }
 
     // 
@@ -37985,7 +37985,7 @@ class iNode
     //
     getParentId()
     {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"];
+        return this.parentId;
     }
     
     // 
@@ -38495,19 +38495,13 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 {
     constructor( id, parentId )
     {
-        super();
+        super( id, parentId );
         
         // Child node array
         this.nodeAry = [];
         
         // Child node index
         this.index = 0;
-        
-        // node id
-        this.id = id;
-
-        // parent node id
-        this.parentId = parentId;
     }
     
     // 
@@ -38584,14 +38578,6 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
         }
 
         return result;
-    }
-    
-    // 
-    //  DESC: Get the parent id
-    //
-    getParentId()
-    {
-        return this.parentId;
     }
 
     // 
@@ -38879,7 +38865,6 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
     {
         let defaultGroup = '';
         let defaultObjName = '';
-        let defaultAIName = '';
         let defaultId = -1;
         
         let attr = xmlNode.getAttribute( 'defaultGroup' );
@@ -38890,10 +38875,6 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
         if( attr )
             defaultObjName = attr;
         
-        attr = xmlNode.getAttribute( 'defaultAIName' );
-        if( attr )
-            defaultAIName = attr;
-        
         attr = xmlNode.getAttribute( 'defaultId' );
         if( attr )
             defaultId = Number(attr);
@@ -38903,7 +38884,7 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
         for( let i = 0; i < sectorNode.length; ++i )
         {
             // Allocate the node data list to load this node
-            let nodeAry = new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( sectorNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ).dataAry;
+            let nodeAry = new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( sectorNode[i], defaultGroup, defaultObjName, defaultId ).dataAry;
             
             // Build the node list
             let headNode = null;
@@ -39314,6 +39295,7 @@ class Hold extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript
     init( time )
     {
         this.time = time;
+        this.finished = false;
     }
     
     // 
@@ -39357,6 +39339,7 @@ class PlayAnim extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iSc
         this.time = 1000.0 / this.fps;
         this.loop = loop;
         this.counter = 0;
+        this.finished = false;
     }
     
     // 
@@ -39410,6 +39393,7 @@ class FrameExecute extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__[
     {
         this.fps = fps;
         this.time = 1000.0 / this.fps;
+        this.finished = false;
     }
     
     // 
@@ -40508,7 +40492,7 @@ class Level_BallAi extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__[
 function loadScripts()
 {
     _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'Level_BallAi',
-        ( node ) => { return new Level_BallAi( node ); } );
+        ( sprite ) => { return new Level_BallAi( sprite ); } );
 }
 
 
@@ -40534,7 +40518,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n  \r\n</cameraLst>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n    </default>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
 /* 172 */
@@ -41501,104 +41485,6 @@ class SmartGuiControl extends iSmartGui
 
 /***/ }),
 /* 186 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(187);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(144);
-
-// 
-//  FILE NAME: aiball.js
-//  DESC:      Class for ball ai
-//
-
-
-
-
-
-
-class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBase"]
-{
-    constructor( node )
-    {
-        super();
-        
-        this.node = node;
-        this.sprite = node.sprite;
-        
-        this.strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__["strategyManager"].get( '_level-1-ball_' );
-    }
-    
-    // 
-    //  DESC: Do the update
-    //
-    update()
-    {
-        if( this.sprite.pos.y < -600 )
-            this.strategy.destroy( this.node );
-    }
-}
-
-
-/***/ }),
-/* 187 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iaiBase", function() { return iaiBase; });
-
-// 
-//  FILE NAME:  iaibase.js
-//  DESC:       aiBase interface Class
-//
-
-
-
-class iaiBase
-{
-    constructor()
-    {
-    }
-    
-    // 
-    //  DESC: Do any initalizing
-    //
-    init()
-    {
-        // Empty function to be overwritten
-    }
-
-    // 
-    //  DESC: Handle player related messages
-    //
-    handleEvent( event )
-    {
-        // Empty function to be overwritten
-    }
-
-    // 
-    //  DESC: Do the physics
-    //
-    physics()
-    {
-        // Empty function to be overwritten
-    }
-
-    // 
-    //  DESC: Do the physics
-    //
-    update()
-    {
-        // Empty function to be overwritten
-    }
-}
-
-
-/***/ }),
-/* 188 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -12,10 +12,7 @@ import * as genFunc from '../utilities/genfunc';
 class CameraManager
 {
     constructor()
-    {
-        // Default camera
-        this.defaultCamera = null;
-        
+    {        
         // Camera map
         this.cameraMap = new Map;
         
@@ -39,17 +36,19 @@ class CameraManager
     {
         if( xmlNode )
         {
+            this.defaultCamera = new Camera();
+
             // Get the default camera
             let defCamera = xmlNode.getElementsByTagName('default');
+
+            // Init the default camera
             if( defCamera.length )
             {
-                // Create camera and init
-                this.defaultCamera = new Camera();
                 this.defaultCamera.initFromXml( defCamera[0] );
             }
             else
             {
-                throw new Error( `Default camera is not defined!` );
+                this.defaultCamera.setPosXYZ( 0, 0, 100 );
             }
             
             let cameraLst = xmlNode.getElementsByTagName('camera');
@@ -78,9 +77,6 @@ class CameraManager
     //
     getDefault()
     {
-        if( this.defaultCamera == null )
-            throw new Error( `Default camera is not defined! Need to load camera objects before using manager` );
-        
         return this.defaultCamera;
     }
     
@@ -90,7 +86,10 @@ class CameraManager
     get( cameraId )
     {
         if( !this.cameraMap.has( cameraId ) )
-            throw new Error( `Camera id is not defined (${cameraId})!` );
+        {
+            console.log( `Camera id is not defined (${cameraId})! Using default camera instead.` );
+            return this.defaultCamera;
+        }
         
         return this.cameraMap.get( cameraId );
     }
