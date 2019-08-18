@@ -14,6 +14,8 @@ import { highResTimer } from '../utilities/highresolutiontimer';
 import { gl } from '../system/device';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as UIControlFactory from './uicontrolfactory';
+import * as uiControlDefs from '../gui/uicontroldefs';
+import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
 const IN_VIEWABLE_AREA = 1;
@@ -25,7 +27,7 @@ export class UIScrollBox extends UISubControl
     {
         super( group );
         
-        this.type = defs.ECT_SCROLL_BOX;
+        this.type = uiControlDefs.ECT_SCROLL_BOX;
 
         // Array list of controls in scroll box
         this.scrollControlAry = [];
@@ -532,8 +534,8 @@ export class UIScrollBox extends UISubControl
         if( (scrollResult & IN_VIEWABLE_AREA) && !(scrollResult & NEW_ACTIVE_CTRL) )
         {
             eventManager.dispatchEvent(
-                defs.EGE_MENU_CONTROL_STATE_CHANGE,
-                defs.ECS_ACTIVE,
+                menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                uiControlDefs.ECS_ACTIVE,
                 this.scrollControlAry[this.activeScrollCtrl] );
         }
 
@@ -664,8 +666,8 @@ export class UIScrollBox extends UISubControl
             !this.scrollControlAry[scrollControlIndex].isDisabled() )
         {
             eventManager.dispatchEvent(
-                defs.EGE_MENU_CONTROL_STATE_CHANGE,
-                defs.ECS_ACTIVE,
+                menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                uiControlDefs.ECS_ACTIVE,
                 this.scrollControlAry[scrollControlIndex] );
 
             return true;
@@ -915,7 +917,7 @@ export class UIScrollBox extends UISubControl
         {
             for( let i = 0; i < this.scrollControlAry.length; ++i )
             {
-                if( this.scrollControlAry[i].state > defs.ECS_INACTIVE )
+                if( this.scrollControlAry[i].state > uiControlDefs.ECS_INACTIVE )
                 {
                     result = this.scrollControlAry[i].getActiveControl();
                     break;

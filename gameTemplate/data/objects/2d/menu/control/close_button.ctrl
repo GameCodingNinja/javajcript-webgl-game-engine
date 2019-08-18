@@ -5,19 +5,19 @@
 
         <sprite objectName="28x28_button_solid">
             <scriptLst>
-                <script disabled="Control_Hidden"/>
+                <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Solid_Active"/>
-                <script selected="Control_Solid_Selected"/>
+                <script select="Control_Solid_Selected"/>
             </scriptLst>
         </sprite>
     
         <sprite objectName="28x28_button_frame">
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected_Visible"/>
+                <script select="Control_Selected_Visible"/>
             </scriptLst>
         </sprite>
         
@@ -25,10 +25,10 @@
             <font fontName="dejavu_sans_reg_bold_32"/>
             <position x="-0.5" y="2" z="0"/>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected_Dispatch_Exe"/>
+                <script select="Control_Selected_Dispatch_Exe"/>
             </scriptLst>
         </sprite>
 

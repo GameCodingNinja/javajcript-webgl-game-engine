@@ -31,7 +31,10 @@
                 <string text="x"/>
             </fontStringLst>
             <action actionType="close"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- mouse-only close Button -->
@@ -42,7 +45,10 @@
                 <string text="^"/>
             </fontStringLst>
             <action actionType="back"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
     
     </mouseOnlyControls>
@@ -61,9 +67,12 @@
                 <string text="1280 x 768"/>
             </fontStringLst>
             <navigate up="settings_apply_btn" down="full_screen_check_box"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- Full Screen Check Box -->
@@ -76,7 +85,10 @@
             </fontStringLst>
             <action actionType="action"/>
             <navigate up="resolution_btn_lst" down="v-sync_check_box"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- V_Sync Check Box -->
@@ -89,7 +101,10 @@
             </fontStringLst>
             <action actionType="action"/>
             <navigate up="full_screen_check_box" down="settings_dead_zone_slider"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- slider Control -->
@@ -101,8 +116,11 @@
                 <string text="GPad Deadzone: %d%"/>
             </fontStringLst>
             <navigate up="v-sync_check_box" down="settings_apply_btn"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
             <scroll startDelay="750" scrollDelay="100" left="true" right="true"/>
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- Apply Button -->
@@ -114,18 +132,17 @@
             </fontStringLst>
             <action actionType="action"/>
             <navigate up="settings_dead_zone_slider" down="resolution_btn_lst"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
     
     </menuControls>
 
     <spriteList>
 
-        <sprite objectName="settings_menu_bg">
-            <script>
-                <transition in="Menu_TransIn" out="Menu_TransOut"/>
-            </script>
-        </sprite>
+        <sprite objectName="settings_menu_bg"/>
     
     </spriteList>
   

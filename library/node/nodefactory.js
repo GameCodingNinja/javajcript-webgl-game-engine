@@ -13,6 +13,7 @@ import { SpriteNode } from '../node/spritenode';
 import { UIControlNode } from '../node/uicontrolnode';
 import { ObjectNodeMultiLst } from '../node/objectnodemultilist';
 import { SpriteNodeMultiLst } from '../node/spritenodemultilist';
+import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
 // 
@@ -72,10 +73,10 @@ function CreateUIControlNode( nodeData )
 {
     let control = null;
     
-    if( nodeData.uiControlType == defs.ECT_PROGRESS_BAR )
+    if( nodeData.uiControlType == uiControlDefs.ECT_PROGRESS_BAR )
         control = new UIProgressBar( nodeData.group );
     
-    else if( nodeData.uiControlType == defs.ECT_METER )
+    else if( nodeData.uiControlType == uiControlDefs.ECT_METER )
         control = new UIMeter( nodeData.group );
     
     else

@@ -32,18 +32,18 @@
             </fontStringLst>
             <action actionType="action_event" executionAction="play_game"/>
             <!--<navigate up="main_menu_btn" down="help_btn"/>-->
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
     </menuControls>
 
     <spriteList>
 
-        <sprite objectName="start_game_menu_bg">
-            <script>
-                <transition in="Menu_TransIn" out="Menu_TransOut"/>
-            </script>
-        </sprite>
+        <sprite objectName="start_game_menu_bg"/>
     
     </spriteList>
   

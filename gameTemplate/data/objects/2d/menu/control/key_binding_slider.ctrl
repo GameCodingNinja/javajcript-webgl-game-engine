@@ -5,7 +5,7 @@
 
         <sprite objectName="key_binding_slider_frame">
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
             </scriptLst>

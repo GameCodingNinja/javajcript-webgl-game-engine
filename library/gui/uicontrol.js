@@ -20,6 +20,8 @@ import { eventManager } from '../managers/eventmanager';
 import { actionManager } from '../managers/actionmanager';
 import { ScriptComponent } from '../script/scriptcomponent';
 import * as parseHelper from '../utilities/xmlparsehelper';
+import * as uiControlDefs from '../gui/uicontroldefs';
+import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
 export class UIControl extends ControlBase
@@ -38,14 +40,14 @@ export class UIControl extends ControlBase
         this.defaultState;
 
         // control's current state
-        this.state = defs.ECS_NULL;
-        this.lastState = defs.ECS_NULL;
+        this.state = uiControlDefs.ECS_NULL;
+        this.lastState = uiControlDefs.ECS_NULL;
 
         // Name of the action to perform under the correct circumstances
         this.executionAction;
 
         // How the control should respond when selected
-        this.actionType = defs.ECAT_NULL;
+        this.actionType = uiControlDefs.ECAT_NULL;
 
         // This control's size
         this.size = new Size;
@@ -105,27 +107,10 @@ export class UIControl extends ControlBase
                 this.executionAction = attr;
         }
 
-        // Setup the action
-        let stateScriptNode = xmlNode.getElementsByTagName( 'stateScript' );
-        if( stateScriptNode.length )
-        {
-            // This allocates the script to the map
-            let attr = stateScriptNode[0].getAttribute( "onDisabled" );
-            if( attr )
-                this.scriptComponent.set( defs.ECS_DISABLED, attr );
-
-            attr = stateScriptNode[0].getAttribute( "onInactive" );
-            if( attr )
-                this.scriptComponent.set( defs.ECS_INACTIVE, attr );
-
-            attr = stateScriptNode[0].getAttribute( "onActive" );
-            if( attr )
-                this.scriptComponent.set( defs.ECS_ACTIVE, attr );
-
-            attr = stateScriptNode[0].getAttribute( "onSelect" );
-            if( attr )
-                this.scriptComponent.set( defs.ECS_SELECTED, attr );
-        }
+        // Check for scripting
+        let scriptLst = xmlNode.getElementsByTagName( 'scriptLst' );
+        if( scriptLst.length )
+            this.scriptComponent.initScriptIds( scriptLst[0] );
 
         // Load the scroll data from node
         let scrollParamNode = xmlNode.getElementsByTagName( 'scroll' );
@@ -293,27 +278,27 @@ export class UIControl extends ControlBase
     //
     handleEvent( event )
     {
-        if( event.detail.type === defs.EGE_MENU_CONTROL_STATE_CHANGE )
+        if( event.detail.type === menuDefs.EGE_MENU_CONTROL_STATE_CHANGE )
         {
             this.onStateChange( event );
         }
-        else if( event.detail.type === defs.EGE_MENU_SELECT_EXECUTE )
+        else if( event.detail.type === menuDefs.EGE_MENU_SELECT_EXECUTE )
         {
             this.onSelectExecute( event );
         }
-        else if( event.detail.type === defs.EGE_MENU_SET_ACTIVE_CONTROL )
+        else if( event.detail.type === menuDefs.EGE_MENU_SET_ACTIVE_CONTROL )
         {
             this.onSetActiveControl( event );
         }
-        else if( event.detail.type === defs.EGE_MENU_REACTIVATE )
+        else if( event.detail.type === menuDefs.EGE_MENU_REACTIVATE )
         {
             this.onReactivate( event );
         }
-        else if( event.detail.type === defs.EGE_MENU_TRANS_IN )
+        else if( event.detail.type === menuDefs.EGE_MENU_TRANS_IN )
         {
             this.onTransIn( event );
         }
-        else if( event.detail.type === defs.EGE_MENU_TRANS_OUT )
+        else if( event.detail.type === menuDefs.EGE_MENU_TRANS_OUT )
         {
             this.onTransOut( event );
         }
@@ -327,7 +312,7 @@ export class UIControl extends ControlBase
     //
     onTransIn( event )
     {
-        if( event.detail.arg[0] === defs.ETC_BEGIN )
+        if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
         {
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
@@ -340,7 +325,7 @@ export class UIControl extends ControlBase
     //
     onTransOut( event )
     {
-        if( event.detail.arg[0] === defs.ETC_BEGIN )
+        if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
         {
             // Reset the control
             this.reset();
@@ -372,25 +357,25 @@ export class UIControl extends ControlBase
     //
     onSelectExecute( event )
     {
-        if( this.state === defs.ECS_SELECTED )
+        if( this.state === uiControlDefs.ECS_SELECT )
         {
-            if( this.actionType === defs.ECAT_TO_TREE )
-                eventManager.dispatchEvent( defs.EGE_MENU_TO_TREE, this.executionAction );
+            if( this.actionType === uiControlDefs.ECAT_TO_TREE )
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_TO_TREE, this.executionAction );
 
-            else if( this.actionType === defs.ECAT_TO_MENU )
-                eventManager.dispatchEvent( defs.EGE_MENU_TO_MENU, this.executionAction, this );
+            else if( this.actionType === uiControlDefs.ECAT_TO_MENU )
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_TO_MENU, this.executionAction, this );
 
-            else if( this.actionType === defs.ECAT_BACK )
-                eventManager.dispatchEvent( defs.EGE_MENU_BACK_ACTION );
+            else if( this.actionType === uiControlDefs.ECAT_BACK )
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_BACK_ACTION );
 
-            else if( this.actionType === defs.ECAT_CLOSE )
-                eventManager.dispatchEvent( defs.EGE_MENU_TOGGLE_ACTION );
+            else if( this.actionType === uiControlDefs.ECAT_CLOSE )
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_TOGGLE_ACTION );
 
-            else if( this.actionType === defs.ECAT_GAME_STATE_CHANGE )
-                eventManager.dispatchEvent( defs.EGE_MENU_GAME_STATE_CHANGE, defs.ETC_BEGIN, this.executionAction );
+            else if( this.actionType === uiControlDefs.ECAT_GAME_STATE_CHANGE )
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_GAME_STATE_CHANGE, menuDefs.ETC_BEGIN, this.executionAction );
 
-            else if( this.actionType === defs.ECAT_ACTION_EVENT )
-                eventManager.dispatchEvent( defs.ECAT_ACTION_EVENT, this.executionAction, this );
+            else if( this.actionType === uiControlDefs.ECAT_ACTION_EVENT )
+                eventManager.dispatchEvent( uiControlDefs.ECAT_ACTION_EVENT, this.executionAction, this );
 
             // Smart gui execution
             this.smartExecuteAction();
@@ -408,10 +393,10 @@ export class UIControl extends ControlBase
     onSetActiveControl( event )
     {
         // Set the last active control to be active again
-        if( (event.detail.arg[0] === defs.EAC_LAST_ACTIVE_CONTROL) &&
-            (this.lastState > defs.ECS_INACTIVE))
+        if( (event.detail.arg[0] === menuDefs.EAC_LAST_ACTIVE_CONTROL) &&
+            (this.lastState > uiControlDefs.ECS_INACTIVE))
         {
-            this.lastState = this.state = defs.ECS_ACTIVE;
+            this.lastState = this.state = uiControlDefs.ECS_ACTIVE;
 
             // Don't animate the control if the mouse was used
             if( !actionManager.wasLastDeviceMouse() )
@@ -428,9 +413,9 @@ export class UIControl extends ControlBase
     onReactivate( event )
     {
         // Set the last active control to be active again
-        if( this.state > defs.ECS_INACTIVE )
+        if( this.state > uiControlDefs.ECS_INACTIVE )
         {
-            this.lastState = this.state = defs.ECS_ACTIVE;
+            this.lastState = this.state = uiControlDefs.ECS_ACTIVE;
 
             // Don't animate the control if the mouse was used
             if( !actionManager.wasLastDeviceMouse() ||
@@ -457,8 +442,8 @@ export class UIControl extends ControlBase
             if( !this.isActive() )
             {
                 eventManager.dispatchEvent(
-                    defs.EGE_MENU_CONTROL_STATE_CHANGE,
-                    defs.ECS_ACTIVE,
+                    menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                    uiControlDefs.ECS_ACTIVE,
                     this );
             }
         }
@@ -493,7 +478,7 @@ export class UIControl extends ControlBase
         // The focus has switched to this control
         if( !this.isDisabled() )
         {
-            this.lastState = this.state = defs.ECS_ACTIVE;
+            this.lastState = this.state = uiControlDefs.ECS_ACTIVE;
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -510,8 +495,8 @@ export class UIControl extends ControlBase
     deactivateControl()
     {
         // The focus has switched away from this control
-        if( (this.lastState === defs.ECS_NULL) ||
-            (this.lastState > defs.ECS_INACTIVE) )
+        if( (this.lastState === uiControlDefs.ECS_NULL) ||
+            (this.lastState > uiControlDefs.ECS_INACTIVE) )
         {
             // Reset the control
             this.reset();
@@ -528,10 +513,10 @@ export class UIControl extends ControlBase
     //
     disableControl()
     {
-        if( (this.lastState === defs.ECS_NULL) ||
-            (this.lastState > defs.ECS_DISABLED) )
+        if( (this.lastState === uiControlDefs.ECS_NULL) ||
+            (this.lastState > uiControlDefs.ECS_DISABLE) )
         {
-            this.lastState = this.state = defs.ECS_DISABLED;
+            this.lastState = this.state = uiControlDefs.ECS_DISABLE;
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -543,9 +528,9 @@ export class UIControl extends ControlBase
     //
     enableControl()
     {
-        if( this.lastState <= defs.ECS_DISABLED )
+        if( this.lastState <= uiControlDefs.ECS_DISABLE )
         {
-            this.lastState = this.state = defs.ECS_INACTIVE;
+            this.lastState = this.state = uiControlDefs.ECS_INACTIVE;
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -572,7 +557,7 @@ export class UIControl extends ControlBase
             this.spriteAry[i].init();
 
         // Call any init scripts
-        this.prepareSpriteScriptFactoryFunction( defs.ECS_INIT );
+        this.prepareSpriteScriptFactoryFunction( uiControlDefs.ECS_INIT );
     }
 
     // 
@@ -591,32 +576,32 @@ export class UIControl extends ControlBase
     //
     prepareSpriteScriptFactoryFunction( controlState )
     {
-        let scriptFactoryId;
+        let scriptFactoryId = "null";
         let forceUpdate = false;
 
         switch( controlState )
         {
-            case defs.ECS_INIT:
+            case uiControlDefs.ECS_INIT:
                 scriptFactoryId = "init";
                 forceUpdate = true;
             break;
 
-            case defs.ECS_DISABLED:
-                scriptFactoryId = "disabled";
+            case uiControlDefs.ECS_DISABLE:
+                scriptFactoryId = "disable";
                 forceUpdate = true;
             break;
 
-            case defs.ECS_INACTIVE:
+            case uiControlDefs.ECS_INACTIVE:
                 scriptFactoryId = "inactive";
                 forceUpdate = true;
             break;
 
-            case defs.ECS_ACTIVE:
+            case uiControlDefs.ECS_ACTIVE:
                 scriptFactoryId = "active";
             break;
 
-            case defs.ECS_SELECTED:
-                scriptFactoryId = "selected";
+            case uiControlDefs.ECS_SELECT:
+                scriptFactoryId = "select";
             break;
         }
 
@@ -637,7 +622,52 @@ export class UIControl extends ControlBase
     //
     prepareControlScript( controlState )
     {
-        let scriptFactory = this.scriptComponent.get( controlState );
+        let scriptFactoryId = "null";
+
+        switch( controlState )
+        {
+            case uiControlDefs.ECS_INIT:
+                scriptFactoryId = "init";
+            break;
+
+            case uiControlDefs.ECS_TRANS_IN:
+                scriptFactoryId = "transIn";
+            break;
+
+            case uiControlDefs.ECS_TRANS_OUT:
+                scriptFactoryId = "transOut";
+            break;
+
+            case uiControlDefs.ECS_DISABLE:
+                scriptFactoryId = "disable";
+            break;
+
+            case uiControlDefs.ECS_INACTIVE:
+                scriptFactoryId = "inactive";
+            break;
+
+            case uiControlDefs.ECS_ACTIVE:
+                scriptFactoryId = "active";
+            break;
+
+            case uiControlDefs.ECS_SELECT:
+                scriptFactoryId = "select";
+            break;
+
+            case uiControlDefs.ECS_CHANGE:
+                scriptFactoryId = "change";
+            break;
+
+            case uiControlDefs.ECS_EXECUTE:
+                scriptFactoryId = "execute";
+            break;
+
+            case uiControlDefs.ECS_EVENT:
+                scriptFactoryId = "event";
+            break;
+        }
+
+        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
         if( scriptFactory )
             this.scriptComponent.prepare( scriptFactory(this) );
     }
@@ -647,8 +677,8 @@ export class UIControl extends ControlBase
     //
     reset( complete = false )
     {
-        if( this.state > defs.ECS_INACTIVE )
-            this.state = defs.ECS_INACTIVE;
+        if( this.state > uiControlDefs.ECS_INACTIVE )
+            this.state = uiControlDefs.ECS_INACTIVE;
 
         if( complete )
             this.lastState = this.state;
@@ -669,16 +699,16 @@ export class UIControl extends ControlBase
     setDefaultState( value )
     {
         if( value === 'inactive' )
-            this.defaultState = defs.ECS_INACTIVE;
+            this.defaultState = uiControlDefs.ECS_INACTIVE;
 
         else if( value === 'active' )
-            this.defaultState = defs.ECS_ACTIVE;
+            this.defaultState = uiControlDefs.ECS_ACTIVE;
 
         else if( value === 'disabled' )
-            this.defaultState = defs.ECS_DISABLED;
+            this.defaultState = uiControlDefs.ECS_DISABLE;
 
         else if( value === 'selected' )
-            this.defaultState = defs.ECS_SELECTED;
+            this.defaultState = uiControlDefs.ECS_SELECT;
     }
     
     // 
@@ -733,31 +763,31 @@ export class UIControl extends ControlBase
     setActionType( value )
     {
         if( value === 'action' )
-            this.actionType = defs.ECAT_ACTION;
+            this.actionType = uiControlDefs.ECAT_ACTION;
 
         else if( value === 'to_tree' )
-            this.actionType = defs.ECAT_TO_TREE;
+            this.actionType = uiControlDefs.ECAT_TO_TREE;
 
         else if( value === 'to_menu' )
-            this.actionType = defs.ECAT_TO_MENU;
+            this.actionType = uiControlDefs.ECAT_TO_MENU;
 
         else if( value === 'back' )
-            this.actionType = defs.ECAT_BACK;
+            this.actionType = uiControlDefs.ECAT_BACK;
 
         else if( value === 'close' )
-            this.actionType = defs.ECAT_CLOSE;
+            this.actionType = uiControlDefs.ECAT_CLOSE;
 
         else if( value === 'change_focus' )
-            this.actionType = defs.ECAT_CHANGE_FOCUS;
+            this.actionType = uiControlDefs.ECAT_CHANGE_FOCUS;
 
         else if( value === 'game_state_change' )
-            this.actionType = defs.ECAT_GAME_STATE_CHANGE;
+            this.actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
 
         else if( value === 'quit_game' )
-            this.actionType = defs.ECAT_QUIT_GAME;
+            this.actionType = uiControlDefs.ECAT_QUIT_GAME;
         
         else if( value === 'action_event' )
-            this.actionType = defs.ECAT_ACTION_EVENT;
+            this.actionType = uiControlDefs.ECAT_ACTION_EVENT;
     }
 
     // 
@@ -824,8 +854,8 @@ export class UIControl extends ControlBase
             (this.isActive() && (event.detail.arg[defs.ESMA_DEVICE_TYPE] !== defs.MOUSE) && (event.detail.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN)) )
         {
             eventManager.dispatchEvent(
-                defs.EGE_MENU_CONTROL_STATE_CHANGE,
-                defs.ECS_SELECTED,
+                menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                uiControlDefs.ECS_SELECT,
                 this );
 
             return true;
@@ -846,7 +876,7 @@ export class UIControl extends ControlBase
         {
             if( !this.isDisabled() )
             {
-                this.lastState = this.state = defs.ECS_ACTIVE;
+                this.lastState = this.state = uiControlDefs.ECS_ACTIVE;
 
                 return true;
             }
@@ -898,27 +928,27 @@ export class UIControl extends ControlBase
     //
     isDisabled()
     {
-        return this.state === defs.ECS_DISABLED;
+        return this.state === uiControlDefs.ECS_DISABLE;
     }
 
     isInactive()
     {
-        return this.state === defs.ECS_INACTIVE;
+        return this.state === uiControlDefs.ECS_INACTIVE;
     }
 
     isActive()
     {
-        return (this.state === defs.ECS_ACTIVE);
+        return (this.state === uiControlDefs.ECS_ACTIVE);
     }
 
     isSelected()
     {
-        return (this.state === defs.ECS_SELECTED);
+        return (this.state === uiControlDefs.ECS_SELECT);
     }
 
     isSelectable()
     {
-        return ((this.state === defs.ECS_INACTIVE) || (this.state === defs.ECS_ACTIVE));
+        return ((this.state === uiControlDefs.ECS_INACTIVE) || (this.state === uiControlDefs.ECS_ACTIVE));
     }
 
     // 

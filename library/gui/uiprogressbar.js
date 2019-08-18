@@ -11,6 +11,7 @@ import { Size } from '../common/size';
 import { Point } from '../common/point';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { gl } from '../system/device';
+import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
 export class UIProgressBar extends UIControl
@@ -19,7 +20,7 @@ export class UIProgressBar extends UIControl
     {
         super( group );
         
-        this.type = defs.ECT_PROGRESS_BAR;
+        this.type = uiControlDefs.ECT_PROGRESS_BAR;
         
         // stencil mask sprite
         this.stencilMaskSprite;

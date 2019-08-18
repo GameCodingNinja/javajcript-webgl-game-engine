@@ -9,6 +9,8 @@ import { UIControl } from './uicontrol';
 import { UIControlNavNode } from '../gui/uicontrolnavnode';
 import { eventManager } from '../managers/eventmanager';
 import * as UIControlFactory from './uicontrolfactory';
+import * as uiControlDefs from '../gui/uicontroldefs';
+import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
 export class UISubControl extends UIControl
@@ -17,7 +19,7 @@ export class UISubControl extends UIControl
     {
         super( group );
         
-        this.type = defs.ECT_SUB_CONTROL;
+        this.type = uiControlDefs.ECT_SUB_CONTROL;
         
         // Arry of sub-controls
         this.subControlAry = [];
@@ -196,51 +198,51 @@ export class UISubControl extends UIControl
 
         if( this.isActive() && (event instanceof CustomEvent) )
         {
-            if( (event.detail.type >= defs.EGE_MENU_UP_ACTION) &&
-                (event.detail.type <= defs.EGE_MENU_RIGHT_ACTION) )
+            if( (event.detail.type >= menuDefs.EGE_MENU_UP_ACTION) &&
+                (event.detail.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
             {
-                if( event.detail.type === defs.EGE_MENU_UP_ACTION )
+                if( event.detail.type === menuDefs.EGE_MENU_UP_ACTION )
                 {
                     this.onUpAction( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_DOWN_ACTION )
+                else if( event.detail.type === menuDefs.EGE_MENU_DOWN_ACTION )
                 {
                     this.onDownAction( event );
                 }
-                if( event.detail.type === defs.EGE_MENU_LEFT_ACTION )
+                if( event.detail.type === menuDefs.EGE_MENU_LEFT_ACTION )
                 {
                     this.onLeftAction( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_RIGHT_ACTION )
+                else if( event.detail.type === menuDefs.EGE_MENU_RIGHT_ACTION )
                 {
                     this.onRightAction( event );
                 }
             }
-            else if( (event.detail.type >= defs.EGE_MENU_SCROLL_UP) &&
-                     (event.detail.type <= defs.EGE_MENU_SCROLL_RIGHT) )
+            else if( (event.detail.type >= menuDefs.EGE_MENU_SCROLL_UP) &&
+                     (event.detail.type <= menuDefs.EGE_MENU_SCROLL_RIGHT) )
             {
-                if( event.detail.type === defs.EGE_MENU_SCROLL_UP )
+                if( event.detail.type === menuDefs.EGE_MENU_SCROLL_UP )
                 {
                     this.onUpScroll( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_SCROLL_DOWN )
+                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_DOWN )
                 {
                     this.onDownScroll( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_SCROLL_LEFT )
+                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_LEFT )
                 {
                     this.onLeftScroll( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_SCROLL_RIGHT )
+                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_RIGHT )
                 {
                     this.onRightScroll( event );
                 }
             }
-            else if( event.detail.type === defs.EGE_MENU_TAB_LEFT )
+            else if( event.detail.type === menuDefs.EGE_MENU_TAB_LEFT )
             {
                 this.onTabLeft( event );
             }
-            else if( event.detail.type === defs.EGE_MENU_TAB_RIGHT )
+            else if( event.detail.type === menuDefs.EGE_MENU_TAB_RIGHT )
             {
                 this.onTabRight( event );
             }
@@ -350,8 +352,8 @@ export class UISubControl extends UIControl
                     this.activeNode = navNode;
 
                     eventManager.dispatchEvent(
-                        defs.EGE_MENU_CONTROL_STATE_CHANGE,
-                        defs.ECS_ACTIVE,
+                        menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                        uiControlDefs.ECS_ACTIVE,
                         navNode.uiControl );
 
                     break;
@@ -378,7 +380,7 @@ export class UISubControl extends UIControl
 
             // Restart the active state of the sub control if something
             // changed in the child controls or their children controls
-            if( (state === defs.ECS_ACTIVE) && (ctrl !== null) )
+            if( (state === uiControlDefs.ECS_ACTIVE) && (ctrl !== null) )
             {
                 if( ctrl.state != state )
                 {
@@ -390,7 +392,7 @@ export class UISubControl extends UIControl
                 }
             }
             // The sub control doesn't respond to selected message
-            else if( state < defs.ECS_SELECTED )
+            else if( state < uiControlDefs.ECS_SELECT )
                 super.onStateChange( event );
         }
     }
@@ -605,7 +607,7 @@ export class UISubControl extends UIControl
 
         for( let i = 0; i < this.subControlAry.length; ++i )
         {
-            if( this.subControlAry[i].getState() > defs.ECS_INACTIVE )
+            if( this.subControlAry[i].getState() > uiControlDefs.ECS_INACTIVE )
             {
                 result = this.subControlAry[i].getActiveControl();
                 break;

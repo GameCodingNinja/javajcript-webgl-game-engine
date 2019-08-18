@@ -8,7 +8,7 @@
                 <alignment horzAlign="center" vertAlign="center"/>
             </font>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
             </scriptLst>
         </sprite>

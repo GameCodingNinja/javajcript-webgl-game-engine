@@ -7,6 +7,7 @@
 "use strict";
 
 import { SpriteData } from '../sprite/spritedata';
+import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
 export class NodeData extends SpriteData
@@ -55,13 +56,13 @@ export class NodeData extends SpriteData
             else if( xmlNode.children[i].nodeName == 'uiProgressBar' )
             {
                 this.nodeType = defs.ENT_UI_CONTROL;
-                this.uiControlType = defs.ECT_PROGRESS_BAR;
+                this.uiControlType = uiControlDefs.ECT_PROGRESS_BAR;
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiMeter' )
             {
                 this.nodeType = defs.ENT_UI_CONTROL;
-                this.uiControlType = defs.ECT_METER;
+                this.uiControlType = uiControlDefs.ECT_METER;
                 break;
             }
         }

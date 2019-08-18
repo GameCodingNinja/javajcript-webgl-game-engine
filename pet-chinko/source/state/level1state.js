@@ -21,6 +21,8 @@ import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { settings } from '../../../library/utilities/settings';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
+import * as uiControlDefs from '../../../library/gui/uicontroldefs';
+import * as menuDefs from '../../../library/gui/menudefs';
 import * as defs from '../../../library/common/defs';
 import * as stateDefs from './statedefs';
 import * as genFunc from '../../../library/utilities/genfunc';
@@ -171,21 +173,21 @@ export class Level1State extends CommonState
         else if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === defs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.detail.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
             {
-                if( event.detail.arg[0] === defs.ETC_BEGIN )
+                if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
-            else if( event.detail.type === defs.EGE_MENU_TRANS_OUT )
+            else if( event.detail.type === menuDefs.EGE_MENU_TRANS_OUT )
             {
-                if( event.detail.arg[0] === defs.ETC_END )
+                if( event.detail.arg[0] === menuDefs.ETC_END )
                 {
                     let tree = menuManager.getTree( 'pause_tree' );
                     if( !tree.isDefaultMenu('pause_menu') )
                         tree.setDefaultMenu('pause_menu');
                 }
             }
-            else if( event.detail.type === defs.ECAT_ACTION_EVENT && event.detail.arg[0] === 'play_game' )
+            else if( event.detail.type === uiControlDefs.ECAT_ACTION_EVENT && event.detail.arg[0] === 'play_game' )
             {
                 menuManager.getTree( 'pause_tree' ).transitionMenu();
                 this.multiplier = 1;

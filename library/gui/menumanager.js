@@ -15,6 +15,7 @@ import { Menu } from '../gui/menu';
 import { MenuTree } from '../gui/menutree';
 import { cameraManager } from '../managers/cameramanager';
 import * as genFunc from '../utilities/genfunc';
+import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
 class MenuManager extends ManagerBase
@@ -599,7 +600,7 @@ class MenuManager extends ManagerBase
             if( event instanceof CustomEvent )
             {
                 // Are we doing menu actions? May need to do some scrolling
-                if( (event.detail.type >= defs.EGE_MENU_UP_ACTION) && (event.detail.type <= defs.EGE_MENU_RIGHT_ACTION) )
+                if( (event.detail.type >= menuDefs.EGE_MENU_UP_ACTION) && (event.detail.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
                 {
                     // Free a timer if one happens to be running
                     if( this.scrollTimerId != 0 )
@@ -624,18 +625,18 @@ class MenuManager extends ManagerBase
                     let tree = this.getActiveTree();
 
                     if( tree === null )
-                        eventManager.dispatchEvent( defs.EGE_MENU_ESCAPE_ACTION, this.defaultTree );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_ESCAPE_ACTION, this.defaultTree );
                     else
-                        eventManager.dispatchEvent( defs.EGE_MENU_ESCAPE_ACTION, tree.name );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_ESCAPE_ACTION, tree.name );
                 }
                 else if( actionManager.wasActionPress( event, this.toggleAction, defs.EAP_DOWN ) )
                 {
                     let tree = this.getActiveTree();
 
                     if( tree === null )
-                        eventManager.dispatchEvent( defs.EGE_MENU_TOGGLE_ACTION, this.defaultTree );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_TOGGLE_ACTION, this.defaultTree );
                     else
-                        eventManager.dispatchEvent( defs.EGE_MENU_TOGGLE_ACTION, tree.name );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_TOGGLE_ACTION, tree.name );
                 }
                 else if( this.active )
                 {
@@ -652,12 +653,12 @@ class MenuManager extends ManagerBase
                     {
                         if( event instanceof KeyboardEvent )
                         {
-                            eventManager.dispatchEvent( defs.EGE_MENU_SELECT_ACTION, pressType, defs.KEYBOARD );
+                            eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_ACTION, pressType, defs.KEYBOARD );
                         }
                         else if( event instanceof MouseEvent )
                         {
                             eventManager.dispatchEvent(
-                                defs.EGE_MENU_SELECT_ACTION,
+                                menuDefs.EGE_MENU_SELECT_ACTION,
                                 pressType,
                                 defs.MOUSE,
                                 event.clientX + eventManager.mouseOffsetX,
@@ -665,25 +666,25 @@ class MenuManager extends ManagerBase
                         }
                     }
                     else if( actionManager.wasActionPress( event, this.backAction, defs.EAP_DOWN ) )
-                        eventManager.dispatchEvent( defs.EGE_MENU_BACK_ACTION );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_BACK_ACTION );
 
                     else if( (pressType = actionManager.wasAction( event, this.upAction )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( defs.EGE_MENU_UP_ACTION, pressType );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_UP_ACTION, pressType );
 
                     else if( (pressType = actionManager.wasAction( event, this.downAction )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( defs.EGE_MENU_DOWN_ACTION, pressType );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_DOWN_ACTION, pressType );
 
                     else if( (pressType = actionManager.wasAction( event, this.leftAction )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( defs.EGE_MENU_LEFT_ACTION, pressType );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_LEFT_ACTION, pressType );
 
                     else if( (pressType = actionManager.wasAction( event, this.rightAction )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( defs.EGE_MENU_RIGHT_ACTION, pressType );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_RIGHT_ACTION, pressType );
 
                     else if( (pressType = actionManager.wasAction( event, this.tabLeft )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( defs.EGE_MENU_TAB_LEFT, pressType );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_TAB_LEFT, pressType );
 
                     else if( (pressType = actionManager.wasAction( event, this.tabRight )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( defs.EGE_MENU_TAB_RIGHT, pressType );
+                        eventManager.dispatchEvent( menuDefs.EGE_MENU_TAB_RIGHT, pressType );
 
                     // If none of the predefined actions have been hit, just send the message for processing
                     else

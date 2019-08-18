@@ -29,7 +29,11 @@
             </fontStringLst>
             <action actionType="game_state_change" executionAction="title_screen_state"/>
             <navigate left="yes_btn"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <control name="yes_btn" controlType="button" defaultState="inactive">
@@ -40,18 +44,18 @@
             </fontStringLst>
             <action actionType="action_event" executionAction="play_game"/>
             <navigate right="no_btn"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
     </menuControls>
 
     <spriteList>
 
-        <sprite objectName="game_over_menu_bg">
-            <script>
-                <transition in="Menu_TransIn" out="Menu_TransOut"/>
-            </script>
-        </sprite>
+        <sprite objectName="game_over_menu_bg"/>
     
     </spriteList>
   

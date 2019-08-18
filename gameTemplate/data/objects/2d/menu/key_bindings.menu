@@ -48,7 +48,11 @@
                 <string text="x"/>
             </fontStringLst>
             <action actionType="close"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- mouse-only close Button -->
@@ -59,7 +63,11 @@
                 <string text="^"/>
             </fontStringLst>
             <action actionType="back"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
     
     </mouseOnlyControls>
@@ -79,11 +87,7 @@
 
     <spriteList>
 
-        <sprite objectName="key_bindings_menu_bg">
-            <script>
-                <transition in="Menu_TransIn" out="Menu_TransOut"/>
-            </script>
-        </sprite>
+        <sprite objectName="key_bindings_menu_bg"/>
     
     </spriteList>
   

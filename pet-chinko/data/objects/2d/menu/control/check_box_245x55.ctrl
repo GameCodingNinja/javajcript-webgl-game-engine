@@ -5,20 +5,20 @@
 
         <sprite objectName="245x55_button_frame">
             <scriptLst>
-                <script disabled="Control_Hidden"/>
+                <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Solid_Active"/>
-                <script selected="Control_Solid_Selected_visible"/>
+                <script select="Control_Solid_Selected_visible"/>
             </scriptLst>
         </sprite>
     
         <sprite objectName="28x28_button_frame">
             <position x="-97" y="0" z="0"/>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Solid_Selected_visible"/>
+                <script select="Control_Solid_Selected_visible"/>
             </scriptLst>
         </sprite>
 
@@ -28,10 +28,10 @@
                 <alignment horzAlign="left" vertAlign="center"/>
             </font>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected_Dispatch_Exe_Act"/>
+                <script select="Control_Selected_Dispatch_Exe_Act"/>
             </scriptLst>
         </sprite>
 
@@ -40,10 +40,10 @@
             <font fontName="dejavu_sans_reg_bold_32"/>
             <position x="-97.5" y="2" z="0"/>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected_Visible"/>
+                <script select="Control_Selected_Visible"/>
             </scriptLst>
         </sprite>
 

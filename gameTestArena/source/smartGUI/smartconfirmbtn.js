@@ -8,7 +8,7 @@
 
 import { SmartGuiControl } from '../../../library/gui/ismartguibase';
 import { menuManager } from '../../../library/gui/menumanager';
-import * as defs from '../../../library/common/defs';
+import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 
 export class SmartConfirmBtn extends SmartGuiControl
 {
@@ -29,12 +29,12 @@ export class SmartConfirmBtn extends SmartGuiControl
         let smartGuiCtrl = null;
         let conformationMsg = '';
         let executionAction = '';
-        let actionType = defs.ECAT_BACK;
+        let actionType = uiControlDefs.ECAT_BACK;
         
         if( this.uiControl.name === 'main_menu_btn' )
         {
             conformationMsg = 'Are you sure you|want to go back to|the main menu?';
-            actionType = defs.ECAT_GAME_STATE_CHANGE;
+            actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
             executionAction = 'title_screen_state';
         }
         

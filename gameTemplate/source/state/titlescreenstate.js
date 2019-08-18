@@ -18,7 +18,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import * as genFunc from '../../../library/utilities/genfunc';
-import * as defs from '../../../library/common/defs';
+import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
@@ -72,9 +72,9 @@ export class TitleScreenState extends CommonState
         if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === defs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.detail.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
             {
-                if( event.detail.arg[0] === defs.ETC_BEGIN )
+                if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
         }

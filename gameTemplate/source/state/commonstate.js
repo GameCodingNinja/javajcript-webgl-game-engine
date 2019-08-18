@@ -8,7 +8,7 @@
 
 import { GameState } from './gamestate';
 import { menuManager } from '../../../library/gui/menumanager';
-import * as defs from '../../../library/common/defs';
+import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
 export class CommonState extends GameState
@@ -29,9 +29,9 @@ export class CommonState extends GameState
         if( event instanceof CustomEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === defs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.detail.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
             {
-                if( event.detail.arg[0] === defs.ETC_BEGIN )
+                if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
                 {
                     // Block all message processing in the menu manager
                     menuManager.allowEventHandling = false;

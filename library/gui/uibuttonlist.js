@@ -8,6 +8,8 @@
 import { UISubControl } from './uisubcontrol';
 import { BitMask } from '../utilities/bitmask';
 import { eventManager } from '../managers/eventmanager';
+import * as uiControlDefs from '../gui/uicontroldefs';
+import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
 export class UIButtonList extends UISubControl
@@ -16,7 +18,7 @@ export class UIButtonList extends UISubControl
     {
         super( group );
         
-        this.type = defs.ECT_BUTTON_LIST;
+        this.type = uiControlDefs.ECT_BUTTON_LIST;
         
         // Active index into the list
         this.activeIndex = 0;
@@ -44,25 +46,25 @@ export class UIButtonList extends UISubControl
         let attr = actionResponseNode[0].getAttribute('up');
         if( attr && (attr === 'true') )
         {
-            this.actionMask.add( defs.EAR_UP );
+            this.actionMask.add( uiControlDefs.EAR_UP );
         }
 
         attr = actionResponseNode[0].getAttribute('down');
         if( attr && (attr === 'true') )
         {
-            this.actionMask.add( defs.EAR_DOWN );
+            this.actionMask.add( uiControlDefs.EAR_DOWN );
         }
 
         attr = actionResponseNode[0].getAttribute('left');
         if( attr && (attr === 'true') )
         {
-            this.actionMask.add( defs.EAR_LEFT );
+            this.actionMask.add( uiControlDefs.EAR_LEFT );
         }
 
         attr = actionResponseNode[0].getAttribute('right');
         if( attr && (attr === 'true') )
         {
-            this.actionMask.add( defs.EAR_RIGHT );
+            this.actionMask.add( uiControlDefs.EAR_RIGHT );
         }
     }
 
@@ -102,17 +104,17 @@ export class UIButtonList extends UISubControl
     inc()
     {
         eventManager.dispatchEvent(
-            defs.EGE_MENU_CONTROL_STATE_CHANGE,
-            defs.ECS_SELECTED,
-            this.subControlAry[defs.BTN_INC] );
+            menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+            uiControlDefs.ECS_SELECT,
+            this.subControlAry[uiControlDefs.BTN_INC] );
     }
 
     dec()
     {
         eventManager.dispatchEvent(
-            defs.EGE_MENU_CONTROL_STATE_CHANGE,
-            defs.ECS_SELECTED,
-            this.subControlAry[defs.BTN_DEC] );
+            menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+            uiControlDefs.ECS_SELECT,
+            this.subControlAry[uiControlDefs.BTN_DEC] );
     }
 
     // 
@@ -120,26 +122,26 @@ export class UIButtonList extends UISubControl
     //
     onDownAction( event )
     {
-        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( defs.EAR_DOWN ) )
+        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_DOWN ) )
             this.dec();
     }
 
     onUpAction( event )
     {
-        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( defs.EAR_UP ) )
+        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_UP ) )
             this.inc();
     }
 
     onLeftAction( event )
     {
-        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( defs.EAR_LEFT ) )
+        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_LEFT ) )
             this.dec();
 
     }
 
     onRightAction( event )
     {
-        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( defs.EAR_RIGHT ) )
+        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_RIGHT ) )
             this.inc();
     }
 
@@ -148,25 +150,25 @@ export class UIButtonList extends UISubControl
     //
     onDownScroll( event )
     {
-        if( this.actionMask.isSet( defs.EAR_DOWN ) )
+        if( this.actionMask.isSet( uiControlDefs.EAR_DOWN ) )
             this.dec();
     }
 
     onUpScroll( event )
     {
-        if( this.actionMask.isSet( defs.EAR_UP ) )
+        if( this.actionMask.isSet( uiControlDefs.EAR_UP ) )
             this.inc();
     }
 
     onLeftScroll( event )
     {
-        if( this.actionMask.isSet( defs.EAR_LEFT ) )
+        if( this.actionMask.isSet( uiControlDefs.EAR_LEFT ) )
             this.dec();
     }
 
     onRightScroll( event )
     {
-        if( this.actionMask.isSet( defs.EAR_RIGHT ) )
+        if( this.actionMask.isSet( uiControlDefs.EAR_RIGHT ) )
             this.inc();
     }
 
@@ -179,9 +181,9 @@ export class UIButtonList extends UISubControl
 
         let state = event.detail.arg[0];
 
-        if( state === defs.ECS_SELECTED )
+        if( state === uiControlDefs.ECS_SELECT )
         {
-            if( this.subControlAry[defs.BTN_DEC] == event.detail.arg[1] )
+            if( this.subControlAry[uiControlDefs.BTN_DEC] == event.detail.arg[1] )
             {
                 // Dec the list
                 this.decList();
@@ -189,7 +191,7 @@ export class UIButtonList extends UISubControl
                 // Update the display
                 this.updateDisplay( this.activeIndex );
             }
-            else if( this.subControlAry[defs.BTN_INC] == event.detail.arg[1] )
+            else if( this.subControlAry[uiControlDefs.BTN_INC] == event.detail.arg[1] )
             {
                 // Inc the list
                 this.incList();

@@ -13,7 +13,7 @@ import { eventManager } from '../../../library/managers/eventmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { Color } from '../../../library/common/color';
 import * as utilScripts from './utilityscripts';
-import * as defs from '../../../library/common/defs';
+import * as menuDefs from '../../../library/gui/menudefs';
 
 //
 //  DESC: Script for playing the active sound
@@ -93,7 +93,7 @@ class Menu_TransIn extends utilScripts.FadeTo
         {
             this.menu.setAlpha( this.final );
             
-            eventManager.dispatchEvent( defs.EGE_MENU_TRANS_IN, defs.ETC_END );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_END );
         }
         else
         {
@@ -131,7 +131,7 @@ class Menu_TransOut extends utilScripts.FadeTo
             this.menu.setAlpha( this.final );
             this.menu.setVisible( false );
             
-            eventManager.dispatchEvent( defs.EGE_MENU_TRANS_OUT, defs.ETC_END );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_END );
         }
         else
         {
@@ -387,7 +387,7 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
         
         if( this.finished )
         {
-            eventManager.dispatchEvent( defs.EGE_MENU_SELECT_EXECUTE );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
         }
     }
 }
@@ -410,8 +410,8 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
         
         if( this.finished )
         {
-            eventManager.dispatchEvent( defs.EGE_MENU_SELECT_EXECUTE );
-            eventManager.dispatchEvent( defs.EGE_MENU_REACTIVATE );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
         }
     }
 }
@@ -592,7 +592,7 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            eventManager.dispatchEvent( defs.EGE_MENU_REACTIVATE );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
             this.finished = true;
         }
     }
@@ -618,8 +618,8 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            eventManager.dispatchEvent( defs.EGE_MENU_SELECT_EXECUTE );
-            eventManager.dispatchEvent( defs.EGE_MENU_REACTIVATE );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
             this.finished = true;
         }
     }

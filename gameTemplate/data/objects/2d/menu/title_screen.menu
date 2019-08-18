@@ -44,7 +44,11 @@
             </fontStringLst>
             <action actionType="game_state_change" executionAction="level_1_state"/>
             <navigate up="key_binding_btn" down="new_game_btn"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- New Game Button -->
@@ -57,7 +61,11 @@
             <!-- <action actionType="to_menu" executionAction="settings_menu"/> -->
             <action actionType="action"/>
             <navigate up="continue_btn" down="load_game_btn"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- Load Game Button -->
@@ -69,7 +77,11 @@
             </fontStringLst>
             <action actionType="to_menu" executionAction="settings_menu"/>
             <navigate up="new_game_btn" down="settings_btn"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
       
         <!-- Settings Button -->
@@ -81,7 +93,11 @@
             </fontStringLst>
             <action actionType="to_menu" executionAction="settings_menu"/>
             <navigate up="load_game_btn" down="key_binding_btn"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- Key Bindings Button -->
@@ -93,7 +109,11 @@
             </fontStringLst>
             <action actionType="to_menu" executionAction="key_bindings_menu"/>
             <navigate up="settings_btn" down="continue_btn"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
     </menuControls>

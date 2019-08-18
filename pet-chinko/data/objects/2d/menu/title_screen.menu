@@ -23,9 +23,13 @@
                 <string text="Cats &#38; Dogs"/>
             </fontStringLst>
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
         
         <!-- Level button list -->
@@ -39,9 +43,13 @@
                 <string text="Level 4"/>
             </fontStringLst>
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- Start Game Button -->
@@ -53,7 +61,11 @@
             </fontStringLst>
             <action actionType="game_state_change" executionAction="level_1_state"/>
             <!--<navigate up="key_binding_btn" down="new_game_btn"/>-->
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
         
         <!-- Help Button -->
@@ -65,7 +77,11 @@
             </fontStringLst>
             <action actionType="to_menu" executionAction="help_menu"/>
             <!--<navigate up="key_binding_btn" down="new_game_btn"/>-->
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
     </menuControls>

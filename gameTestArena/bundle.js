@@ -118,13 +118,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _state_testarenastate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
-/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(154);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(168);
-/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(9);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(132);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(103);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(170);
+/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(156);
+/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(134);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(103);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(158);
 
 // 
 //  FILE NAME: game.js
@@ -142,7 +141,7 @@ __webpack_require__.r(__webpack_exports__);
 //import { TitleScreenState } from '../state/titlescreenstate';
 //import { LoadState } from '../state/loadstate';
 //import { Level1State } from '../state/level1state';
-
+//import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
 
 
 
@@ -164,7 +163,7 @@ class Game
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
 
         // Load the settings
-        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_11__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_12__["default"] ) );
+        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_11__["default"] ) );
 
         // Init the game
         this.init();
@@ -176,55 +175,55 @@ class Game
     init()
     {
         // Create the projection matrixes
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["device"].createProjMatrix();
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["device"].createProjMatrix();
         
         // Do we add stencil buffer
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].createStencilBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].REPLACE);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].REPLACE);
         
         // Depth testing is off by default. Enable it?
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].DEPTH_TEST);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].DEPTH_TEST);
     
         // Init the clear color
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
         
         // Init the stencil clear mask based on the bit size of the mask
         // Stencil buffer can only be 1 or 8 bits per pixel
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 1 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].ALWAYS, 1, 0x1);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].stencilMask(0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ALWAYS, 1, 0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilMask(0x1);
         }
         else if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 8 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].ALWAYS, 1, 0xFF);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].stencilMask(0xff);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ALWAYS, 1, 0xFF);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilMask(0xff);
         }
         
         // Cull the back face
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].CCW);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].BACK);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].CULL_FACE);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].CCW);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].BACK);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].CULL_FACE);
         
         // Enable alpha blending
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].BLEND);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].ONE_MINUS_SRC_ALPHA);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].BLEND);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ONE_MINUS_SRC_ALPHA);
 
         // Make the zero texture the active texture
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].TEXTURE0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].TEXTURE0);
         
         // Init the clear buffer mask
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearTargetBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].COLOR_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].COLOR_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].DEPTH_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].DEPTH_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearStencilBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].STENCIL_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].STENCIL_BUFFER_BIT;
         
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].clear( this.clearBufferMask );
         
         // Create the startup state
         this.gameState = new _state_testarenastate__WEBPACK_IMPORTED_MODULE_5__["TestArenaState"]( this.gameLoop.bind(this) );
@@ -235,8 +234,8 @@ class Game
     //
     smartGuiControlCreateCallBack( control )
     {
-        if( control.faction === 'decision_btn' )
-            control.smartGui = new _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_6__["SmartConfirmBtn"]( control );
+        //if( control.faction === 'decision_btn' )
+        //    control.smartGui = new SmartConfirmBtn( control );
     }
     
     // 
@@ -263,7 +262,7 @@ class Game
         let event = null;
         
         // Handle events on the queue
-        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_9__["eventManager"].pollEvent()) )
+        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_8__["eventManager"].pollEvent()) )
             this.handleEvent( event );
     }
     
@@ -289,7 +288,7 @@ class Game
         this.pollEvents();
         
         // Get our elapsed time
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_10__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__["highResTimer"].calcElapsedTime();
         
         // Handle the physics
         this.gameState.physics();
@@ -301,7 +300,7 @@ class Game
         this.gameState.transform();
 
         // Clear the back buffer
-        _library_system_device__WEBPACK_IMPORTED_MODULE_8__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].clear( this.clearBufferMask );
         
         // Do the rendering
         this.gameState.render();
@@ -744,29 +743,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WAS_TRANSFORMED", function() { return WAS_TRANSFORMED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MATRIX_ROTATION", function() { return MATRIX_ROTATION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VISIBLE", function() { return VISIBLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_IN", function() { return EGE_MENU_TRANS_IN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_OUT", function() { return EGE_MENU_TRANS_OUT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_ESCAPE_ACTION", function() { return EGE_MENU_ESCAPE_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TOGGLE_ACTION", function() { return EGE_MENU_TOGGLE_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_BACK_ACTION", function() { return EGE_MENU_BACK_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TO_TREE", function() { return EGE_MENU_TO_TREE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TO_MENU", function() { return EGE_MENU_TO_MENU; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_GAME_STATE_CHANGE", function() { return EGE_MENU_GAME_STATE_CHANGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_UP_ACTION", function() { return EGE_MENU_UP_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_DOWN_ACTION", function() { return EGE_MENU_DOWN_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_LEFT_ACTION", function() { return EGE_MENU_LEFT_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_RIGHT_ACTION", function() { return EGE_MENU_RIGHT_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_CONTROL_STATE_CHANGE", function() { return EGE_MENU_CONTROL_STATE_CHANGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SELECT_ACTION", function() { return EGE_MENU_SELECT_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SELECT_EXECUTE", function() { return EGE_MENU_SELECT_EXECUTE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SET_ACTIVE_CONTROL", function() { return EGE_MENU_SET_ACTIVE_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_REACTIVATE", function() { return EGE_MENU_REACTIVATE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_UP", function() { return EGE_MENU_SCROLL_UP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_DOWN", function() { return EGE_MENU_SCROLL_DOWN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_LEFT", function() { return EGE_MENU_SCROLL_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_RIGHT", function() { return EGE_MENU_SCROLL_RIGHT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_LEFT", function() { return EGE_MENU_TAB_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_RIGHT", function() { return EGE_MENU_TAB_RIGHT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_NULL", function() { return ENT_NULL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_OBJECT", function() { return ENT_OBJECT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_SPRITE", function() { return ENT_SPRITE; });
@@ -777,27 +753,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESMA_MOUSE_Y", function() { return ESMA_MOUSE_Y; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMSC_STATE", function() { return EMSC_STATE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMSC_CONTROL", function() { return EMSC_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_INACTIVE", function() { return EMTS_INACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_IDLE", function() { return EMTS_IDLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_ACTIVE", function() { return EMTS_ACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_MAX_MENU_TREE_STATES", function() { return EMTS_MAX_MENU_TREE_STATES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_INACTIVE", function() { return EMS_INACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_IDLE", function() { return EMS_IDLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_ACTIVE", function() { return EMS_ACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_MAX_MENU_STATES", function() { return EMS_MAX_MENU_STATES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_NULL", function() { return EMNS_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_MOUSE", function() { return EMNS_MOUSE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_GAMEPAD_KEYBAORD", function() { return EMNS_GAMEPAD_KEYBAORD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_RESET", function() { return ETC_RESET; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_BEGIN", function() { return ETC_BEGIN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_END", function() { return ETC_END; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_NULL", function() { return EAC_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_FIRST_ACTIVE_CONTROL", function() { return EAC_FIRST_ACTIVE_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_LAST_ACTIVE_CONTROL", function() { return EAC_LAST_ACTIVE_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_UP", function() { return EAR_UP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_DOWN", function() { return EAR_DOWN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_LEFT", function() { return EAR_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_RIGHT", function() { return EAR_RIGHT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_NULL", function() { return EDO_NULL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_LEFT", function() { return EDO_LEFT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_RIGHT", function() { return EDO_RIGHT; });
@@ -812,36 +767,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_STATE_ON", function() { return TOGGLE_STATE_ON; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_STATE_OFF", function() { return TOGGLE_STATE_OFF; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NO_ACTIVE_CONTROL", function() { return NO_ACTIVE_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BTN_DEC", function() { return BTN_DEC; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BTN_INC", function() { return BTN_INC; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_NULL", function() { return ECT_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_LABEL", function() { return ECT_LABEL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_BUTTON", function() { return ECT_BUTTON; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_BUTTON_LIST", function() { return ECT_BUTTON_LIST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_CHECK_BOX", function() { return ECT_CHECK_BOX; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SLIDER", function() { return ECT_SLIDER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SCROLL_BOX", function() { return ECT_SCROLL_BOX; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SUB_CONTROL", function() { return ECT_SUB_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_METER", function() { return ECT_METER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_TAB_CONTROL", function() { return ECT_TAB_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_PROGRESS_BAR", function() { return ECT_PROGRESS_BAR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_AMOUNT_BUTTON", function() { return ECT_AMOUNT_BUTTON; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_NULL", function() { return ECS_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_INIT", function() { return ECS_INIT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_DISABLED", function() { return ECS_DISABLED; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_INACTIVE", function() { return ECS_INACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_ACTIVE", function() { return ECS_ACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_SELECTED", function() { return ECS_SELECTED; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_NULL", function() { return ECAT_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_ACTION", function() { return ECAT_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_TO_TREE", function() { return ECAT_TO_TREE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_TO_MENU", function() { return ECAT_TO_MENU; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_BACK", function() { return ECAT_BACK; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_CLOSE", function() { return ECAT_CLOSE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_CHANGE_FOCUS", function() { return ECAT_CHANGE_FOCUS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_GAME_STATE_CHANGE", function() { return ECAT_GAME_STATE_CHANGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_QUIT_GAME", function() { return ECAT_QUIT_GAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_ACTION_EVENT", function() { return ECAT_ACTION_EVENT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECSF_ON_ACTIVE", function() { return ECSF_ON_ACTIVE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECSF_ON_SELECTED", function() { return ECSF_ON_SELECTED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EO_HORIZONTAL", function() { return EO_HORIZONTAL; });
@@ -923,32 +848,6 @@ const MATRIX_ROTATION    = 0x80;
 
 // Visible bit
 const VISIBLE            = 0x100;
-
-// EGameEvent
-// Menu events
-const EGE_MENU_TRANS_IN             = 100,
-             EGE_MENU_TRANS_OUT            = 101,
-             EGE_MENU_ESCAPE_ACTION        = 102,
-             EGE_MENU_TOGGLE_ACTION        = 103,
-             EGE_MENU_BACK_ACTION          = 104,
-             EGE_MENU_TO_TREE              = 105,
-             EGE_MENU_TO_MENU              = 106,
-             EGE_MENU_GAME_STATE_CHANGE    = 107,
-             EGE_MENU_UP_ACTION            = 108,
-             EGE_MENU_DOWN_ACTION          = 109,
-             EGE_MENU_LEFT_ACTION          = 110,
-             EGE_MENU_RIGHT_ACTION         = 111,
-             EGE_MENU_CONTROL_STATE_CHANGE = 112,
-             EGE_MENU_SELECT_ACTION        = 113,
-             EGE_MENU_SELECT_EXECUTE       = 114,
-             EGE_MENU_SET_ACTIVE_CONTROL   = 115,
-             EGE_MENU_REACTIVATE           = 116,
-             EGE_MENU_SCROLL_UP            = 117,
-             EGE_MENU_SCROLL_DOWN          = 118,
-             EGE_MENU_SCROLL_LEFT          = 119,
-             EGE_MENU_SCROLL_RIGHT         = 120,
-             EGE_MENU_TAB_LEFT             = 121,
-             EGE_MENU_TAB_RIGHT            = 122;
      
 // ENodeType
 const ENT_NULL              = 0,
@@ -965,39 +864,6 @@ const ESMA_PRESS_TYPE  = 0,
 // EMenu State Change Arguments
 const EMSC_STATE   = 0,
              EMSC_CONTROL = 1;
-
-// EMenuTreeState
-const EMTS_INACTIVE             = 0,
-             EMTS_IDLE                 = 1,
-             EMTS_ACTIVE               = 2,
-             EMTS_MAX_MENU_TREE_STATES = 3;
-
-// EMenuState
-const EMS_INACTIVE        = 0,
-             EMS_IDLE            = 1,
-             EMS_ACTIVE          = 2,
-             EMS_MAX_MENU_STATES = 3;
-
-// EMenuNavigationState
-const EMNS_NULL             = 0,
-             EMNS_MOUSE            = 1,
-             EMNS_GAMEPAD_KEYBAORD = 2;
-
-// ETransCode
-const ETC_RESET = 0,
-             ETC_BEGIN = 1,
-             ETC_END   = 2;
-
-// EActiveControl
-const EAC_NULL                 = 0,
-             EAC_FIRST_ACTIVE_CONTROL = 1,
-             EAC_LAST_ACTIVE_CONTROL  = 2;
-
-// EActionResponse
-const EAR_UP    = 1,
-             EAR_DOWN  = 2,
-             EAR_LEFT  = 4,
-             EAR_RIGHT = 8;
 
 // EDynamicOffset
 const EDO_NULL        = 0,
@@ -1019,44 +885,6 @@ const TOGGLE_STATE_ON  = true,
 
 // Value for no active control
 const NO_ACTIVE_CONTROL = -1;
-
-// Increment/Decement constants
-const BTN_DEC = 0,
-             BTN_INC = 1;
-
-// EControlType
-const ECT_NULL          = 0,
-             ECT_LABEL         = 1,
-             ECT_BUTTON        = 2,
-             ECT_BUTTON_LIST   = 3,
-             ECT_CHECK_BOX     = 4,
-             ECT_SLIDER        = 5,
-             ECT_SCROLL_BOX    = 6,
-             ECT_SUB_CONTROL   = 7,
-             ECT_METER         = 8,
-             ECT_TAB_CONTROL   = 9,
-             ECT_PROGRESS_BAR  = 10,
-             ECT_AMOUNT_BUTTON = 11;
-
-// EControlState
-const ECS_NULL     = 0,
-             ECS_INIT     = 1,
-             ECS_DISABLED = 2,
-             ECS_INACTIVE = 3,
-             ECS_ACTIVE   = 4,
-             ECS_SELECTED = 5;
-
-// EControlActionType
-const ECAT_NULL              = 0,
-             ECAT_ACTION            = 1,
-             ECAT_TO_TREE           = 2,
-             ECAT_TO_MENU           = 3,
-             ECAT_BACK              = 4,
-             ECAT_CLOSE             = 5,
-             ECAT_CHANGE_FOCUS      = 6,
-             ECAT_GAME_STATE_CHANGE = 7,
-             ECAT_QUIT_GAME         = 8,
-             ECAT_ACTION_EVENT      = 9;
 
 // EControlScriptFunctions
 const ECSF_ON_ACTIVE   = 0,
@@ -2977,18 +2805,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(105);
 /* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(106);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(103);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(130);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(132);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(27);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
-/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(146);
+/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(148);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(148);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(149);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(150);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(151);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(152);
-/* harmony import */ var raw_loader_data_objects_strategy_spaceShip_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(153);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(150);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(151);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(152);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(153);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(154);
+/* harmony import */ var raw_loader_data_objects_strategy_spaceShip_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(155);
 
 //
 //  FILE NAME: testarenastate.js
@@ -24779,10 +24607,7 @@ __webpack_require__.r(__webpack_exports__);
 class CameraManager
 {
     constructor()
-    {
-        // Default camera
-        this.defaultCamera = null;
-        
+    {        
         // Camera map
         this.cameraMap = new Map;
         
@@ -24806,17 +24631,19 @@ class CameraManager
     {
         if( xmlNode )
         {
+            this.defaultCamera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__["Camera"]();
+
             // Get the default camera
             let defCamera = xmlNode.getElementsByTagName('default');
+
+            // Init the default camera
             if( defCamera.length )
             {
-                // Create camera and init
-                this.defaultCamera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__["Camera"]();
                 this.defaultCamera.initFromXml( defCamera[0] );
             }
             else
             {
-                throw new Error( `Default camera is not defined!` );
+                this.defaultCamera.setPosXYZ( 0, 0, 100 );
             }
             
             let cameraLst = xmlNode.getElementsByTagName('camera');
@@ -24845,9 +24672,6 @@ class CameraManager
     //
     getDefault()
     {
-        if( this.defaultCamera == null )
-            throw new Error( `Default camera is not defined! Need to load camera objects before using manager` );
-        
         return this.defaultCamera;
     }
     
@@ -24857,7 +24681,10 @@ class CameraManager
     get( cameraId )
     {
         if( !this.cameraMap.has( cameraId ) )
-            throw new Error( `Camera id is not defined (${cameraId})!` );
+        {
+            console.log( `Camera id is not defined (${cameraId})! Using default camera instead.` );
+            return this.defaultCamera;
+        }
         
         return this.cameraMap.get( cameraId );
     }
@@ -26128,7 +25955,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "strategyLoader", function() { return strategyLoader; });
 /* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
 /* harmony import */ var _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(107);
-/* harmony import */ var _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(144);
+/* harmony import */ var _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(146);
 
 // 
 //  FILE NAME: strategyloader.js
@@ -26148,7 +25975,10 @@ class Strategyloader
     }
 
     // 
-    //  DESC: Add to the load manager in specific order
+    //  DESC: Load from the XML node
+    //        NOTE: The loading of strategies has to be broken up because
+    //              they load their own XML that describes what is defined
+    //              in the strategy.
     //
     load( xmlNode )
     {
@@ -26183,6 +26013,9 @@ class Strategyloader
     
     // 
     //  DESC: Load the strategies
+    //        NOTE: The loading of strategies has to be broken up because
+    //              they load their own XML that describes what is defined
+    //              in the strategy.
     //
     loadStartegy( xmlNode )
     {
@@ -26297,7 +26130,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActorStrategy", function() { return ActorStrategy; });
 /* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
 /* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(109);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(112);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(113);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
 //
@@ -26327,7 +26160,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         // Active Array of nodes
         this.nodeAry = [];
 
-        // Array of nodess to be added to the active vector
+        // Array of nodes to be added to the active vector
         this.activateAry = [];
         
         // Array of nodess to be removed to the active vector
@@ -26344,7 +26177,6 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     {
         let defaultGroup = '';
         let defaultObjName = '';
-        let defaultAIName = '';
         let defaultId = _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEFAULT_ID"];
 
         let attr = xmlNode.getAttribute( 'defaultGroup' );
@@ -26354,10 +26186,6 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr !== null )
             defaultObjName = attr;
-
-        attr = xmlNode.getAttribute( 'defaultAIName' );
-        if( attr !== null )
-            defaultAIName = attr;
 
         attr = xmlNode.getAttribute( 'defaultId' );
         if( attr !== null )
@@ -26371,7 +26199,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
                 throw new Error( `Actor strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( xmlNode.children[i], defaultGroup, defaultObjName, defaultAIName, defaultId ) );
+            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
         }
     }
 
@@ -26389,6 +26217,14 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     //
     cleanUp()
     {
+        // See if any nodes in the map are not part of the node array and clean
+        for( let node of this.nodeMap.values() )
+        {
+            let index = this.nodeAry.findIndex( (obj) => obj === node );
+            if( index === -1 )
+                node.cleanUp();
+        }
+
         for( let i = 0; i < this.nodeAry.length; i++ )
             this.nodeAry[i].cleanUp();
     }
@@ -26765,7 +26601,6 @@ class NodeDataList
         node,
         defGroup = '',
         defObjName = '',
-        defAIName = '',
         defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
     {
         // Array of the node data
@@ -26773,7 +26608,6 @@ class NodeDataList
         
         let defaultGroup = defGroup;
         let defaultObjName = defObjName;
-        let defaultAIName = defAIName;
         let nodeName = '';
         
         let attr = node.getAttribute( 'defaultGroup' );
@@ -26783,10 +26617,6 @@ class NodeDataList
         attr = node.getAttribute( 'defaultObjectName' );
         if( attr )
             defaultObjName = attr;
-        
-        attr = node.getAttribute( 'defaultAIName' );
-        if( attr !== null )
-            defaultAIName = attr;
         
         attr = node.getAttribute( 'defaultId' );
         if( attr )
@@ -26798,17 +26628,17 @@ class NodeDataList
         
         this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"];
         
-        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"], defaultGroup, defaultObjName, defaultAIName, defId );
+        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"], defaultGroup, defaultObjName, defId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
-        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defaultAIName, defId );
+        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defId );
     }
     
     // 
     //  DESC: Load the node data recursively
     //
-    loadNode( node, nodeData, defaultGroup, defaultObjName, defaultAIName, defId )
+    loadNode( node, nodeData, defaultGroup, defaultObjName, defId )
     {
         for( let i = 0; i < node.children.length; ++i )
         {
@@ -26819,11 +26649,11 @@ class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defaultAIName, defId );
+                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
-                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defaultAIName, defId );
+                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defId );
             }
         }
     }
@@ -26838,7 +26668,8 @@ class NodeDataList
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeData", function() { return NodeData; });
 /* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(111);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(112);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 //
 //  FILE NAME: nodedata.js
@@ -26850,19 +26681,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteData"]
 {
     constructor(
         xmlNode,
         nodeName,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"],
-        parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"],
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
         defGroup = '',
         defObjName = '',
-        defAIName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
+        defId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
     {
-        super( xmlNode.firstElementChild, defGroup, defObjName, defAIName, defId );
+        super( xmlNode.firstElementChild, defGroup, defObjName, defId );
 
         // node name
         this.nodeName = nodeName;
@@ -26874,7 +26705,7 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
         this.parenNodetId = parenNodetId;
 
         // Node type
-        this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_NULL"];
+        this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_NULL"];
 
         // Is this a node with children nodes?
         this.hasChildrenNodes = false;
@@ -26886,30 +26717,30 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
         {
             if( xmlNode.children[i].nodeName == 'object' )
             {
-                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_OBJECT"];
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_OBJECT"];
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'sprite' )
             {
-                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_SPRITE"];
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiProgressBar' )
             {
-                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_UI_CONTROL"];
-                this.uiControlType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_PROGRESS_BAR"];
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_UI_CONTROL"];
+                this.uiControlType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__["ECT_PROGRESS_BAR"];
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiMeter' )
             {
-                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_UI_CONTROL"];
-                this.uiControlType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_METER"];
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_UI_CONTROL"];
+                this.uiControlType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__["ECT_METER"];
                 break;
             }
         }
 
         // Throw an error if a node type is not found
-        if( this.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_NULL"] )
+        if( this.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_NULL"] )
             throw new Error( `Node type not defined (${xmlNode.baseURI}).` );
     }
 }
@@ -26935,7 +26766,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteData
 {
-    constructor( xmlNode, defGroup, defObjName, defAIName = "", defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"] )
+    constructor( xmlNode, defGroup, defObjName, defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"] )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -26948,9 +26779,6 @@ class SpriteData
         
         // Object name
         this.objectName = defObjName;
-        
-        // AI name
-        this.aiName = defAIName;
         
         // Sprite Id
         this.id = defId;
@@ -26970,11 +26798,6 @@ class SpriteData
         if( attr)
             this.objectName = attr;
 
-        // Get the sprite's AI name
-        attr = xmlNode.getAttribute( 'aiName' );
-        if( attr !== null )
-            this.aiName = attr;
-
         // Get the sprite's unique id number
         attr = xmlNode.getAttribute( "id" );
         if( attr )
@@ -26989,20 +26812,124 @@ class SpriteData
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BTN_DEC", function() { return BTN_DEC; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BTN_INC", function() { return BTN_INC; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_NULL", function() { return ECT_NULL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_LABEL", function() { return ECT_LABEL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_BUTTON", function() { return ECT_BUTTON; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_BUTTON_LIST", function() { return ECT_BUTTON_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_CHECK_BOX", function() { return ECT_CHECK_BOX; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SLIDER", function() { return ECT_SLIDER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SCROLL_BOX", function() { return ECT_SCROLL_BOX; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SUB_CONTROL", function() { return ECT_SUB_CONTROL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_METER", function() { return ECT_METER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_TAB_CONTROL", function() { return ECT_TAB_CONTROL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_PROGRESS_BAR", function() { return ECT_PROGRESS_BAR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_AMOUNT_BUTTON", function() { return ECT_AMOUNT_BUTTON; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_NULL", function() { return ECS_NULL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_INIT", function() { return ECS_INIT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_TRANS_IN", function() { return ECS_TRANS_IN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_TRANS_OUT", function() { return ECS_TRANS_OUT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_DISABLE", function() { return ECS_DISABLE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_INACTIVE", function() { return ECS_INACTIVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_ACTIVE", function() { return ECS_ACTIVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_SELECT", function() { return ECS_SELECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_CHANGE", function() { return ECS_CHANGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_EXECUTE", function() { return ECS_EXECUTE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_EVENT", function() { return ECS_EVENT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_NULL", function() { return ECAT_NULL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_ACTION", function() { return ECAT_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_TO_TREE", function() { return ECAT_TO_TREE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_TO_MENU", function() { return ECAT_TO_MENU; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_BACK", function() { return ECAT_BACK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_CLOSE", function() { return ECAT_CLOSE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_CHANGE_FOCUS", function() { return ECAT_CHANGE_FOCUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_GAME_STATE_CHANGE", function() { return ECAT_GAME_STATE_CHANGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_QUIT_GAME", function() { return ECAT_QUIT_GAME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_ACTION_EVENT", function() { return ECAT_ACTION_EVENT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_UP", function() { return EAR_UP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_DOWN", function() { return EAR_DOWN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_LEFT", function() { return EAR_LEFT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_RIGHT", function() { return EAR_RIGHT; });
+// 
+//  FILE NAME: uicontroldefs.js
+//  DESC:      misc defines
+//
+
+
+
+// Increment/Decement constants
+const BTN_DEC = 0,
+             BTN_INC = 1;
+
+// EControlType
+const ECT_NULL          = 0,
+             ECT_LABEL         = 1,
+             ECT_BUTTON        = 2,
+             ECT_BUTTON_LIST   = 3,
+             ECT_CHECK_BOX     = 4,
+             ECT_SLIDER        = 5,
+             ECT_SCROLL_BOX    = 6,
+             ECT_SUB_CONTROL   = 7,
+             ECT_METER         = 8,
+             ECT_TAB_CONTROL   = 9,
+             ECT_PROGRESS_BAR  = 10,
+             ECT_AMOUNT_BUTTON = 11;
+
+// EControlState
+const ECS_NULL      = 0,
+             ECS_INIT      = 2,
+             ECS_TRANS_IN  = 3,
+             ECS_TRANS_OUT = 4,
+             ECS_DISABLE   = 5,
+             ECS_INACTIVE  = 6,
+             ECS_ACTIVE    = 7,
+             ECS_SELECT    = 8,
+             ECS_CHANGE    = 9,
+             ECS_EXECUTE   = 10,
+             ECS_EVENT     = 11;
+
+// EControlActionType
+const ECAT_NULL              = 0,
+             ECAT_ACTION            = 1,
+             ECAT_TO_TREE           = 2,
+             ECAT_TO_MENU           = 3,
+             ECAT_BACK              = 4,
+             ECAT_CLOSE             = 5,
+             ECAT_CHANGE_FOCUS      = 6,
+             ECAT_GAME_STATE_CHANGE = 7,
+             ECAT_QUIT_GAME         = 8,
+             ECAT_ACTION_EVENT      = 9;
+
+// EActionResponse
+const EAR_UP    = 1,
+             EAR_DOWN  = 2,
+             EAR_LEFT  = 4,
+             EAR_RIGHT = 8;
+
+
+/***/ }),
+/* 113 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(113);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(135);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(137);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(139);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(140);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(143);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(114);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(137);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(139);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(141);
+/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(142);
+/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(145);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(112);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: nodefactory.js
 //  DESC:      Class factory for node creation
 //
+
 
 
 
@@ -27022,7 +26949,7 @@ function create( nodeData )
 {
     let node = null;
     
-    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_SPRITE"] )
+    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_SPRITE"] )
     {
         if( nodeData.hasChildrenNodes )
             node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
@@ -27033,14 +26960,14 @@ function create( nodeData )
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_OBJECT"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_OBJECT"] )
     {
         // Object node is automatically a multilist node because an object node without children is pretty useless
         node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__["ObjectNodeMultiLst"]( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_7__["ENT_UI_CONTROL"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_UI_CONTROL"] )
     {
         node = CreateUIControlNode( nodeData, nodeData.id );
     }
@@ -27072,10 +26999,10 @@ function CreateUIControlNode( nodeData )
 {
     let control = null;
     
-    if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_7__["ECT_PROGRESS_BAR"] )
+    if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__["ECT_PROGRESS_BAR"] )
         control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__["UIProgressBar"]( nodeData.group );
     
-    else if( nodeData.uiControlType == _common_defs__WEBPACK_IMPORTED_MODULE_7__["ECT_METER"] )
+    else if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__["ECT_METER"] )
         control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__["UIMeter"]( nodeData.group );
     
     else
@@ -27089,24 +27016,26 @@ function CreateUIControlNode( nodeData )
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIProgressBar", function() { return UIProgressBar; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(114);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(115);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(112);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: uiprogressbar.js
 //  DESC:      Class for user interface progress bar
 //
+
 
 
 
@@ -27123,7 +27052,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
     {
         super( group );
         
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_6__["ECT_PROGRESS_BAR"];
+        this.type = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__["ECT_PROGRESS_BAR"];
         
         // stencil mask sprite
         this.stencilMaskSprite;
@@ -27141,10 +27070,10 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         this.spriteApplyIndex = -1;
 
         // Orentation
-        this.orentation = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EO_HORIZONTAL"];
+        this.orentation = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EO_HORIZONTAL"];
         
         // alignment of this progress bar
-        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_LEFT"];
+        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_LEFT"];
 
         // progress bar size
         this.progressBarSize = new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"];
@@ -27185,26 +27114,26 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         {
             let attr = orentNode[0].getAttribute("type");
             if( attr === 'vert' )
-                this.orentation = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EO_VERTICAL"];
+                this.orentation = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EO_VERTICAL"];
 
             attr = orentNode[0].getAttribute("alignment");
             if( attr )
             {
-                if( this.orentation === _common_defs__WEBPACK_IMPORTED_MODULE_6__["EO_HORIZONTAL"] )
+                if( this.orentation === _common_defs__WEBPACK_IMPORTED_MODULE_7__["EO_HORIZONTAL"] )
                 {
                     if( attr === 'right' )
-                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_RIGHT"];
+                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_RIGHT"];
 
                     else if( attr === 'center' )
-                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_CENTER"];
+                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_CENTER"];
                 }
                 else
                 {
                     if( attr === 'bottom' )
-                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EVA_VERT_BOTTOM"];
+                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EVA_VERT_BOTTOM"];
 
                     else if( attr === 'center' )
-                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EVA_VERT_CENTER"];
+                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EVA_VERT_CENTER"];
                 }
             }
         }
@@ -27384,16 +27313,16 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         // Calculate the new scale for the progress bar
         let scaler = (this.curValue - this.minValue) / (this.maxValue - this.minValue);
 
-        if( this.orentation == _common_defs__WEBPACK_IMPORTED_MODULE_6__["EO_HORIZONTAL"] )
+        if( this.orentation == _common_defs__WEBPACK_IMPORTED_MODULE_7__["EO_HORIZONTAL"] )
         {
             scaleX = this.progressBarScale.x * scaler;
             
             let offset = this.progressBarSize.w * scaler;
 
-            if( this.alignment == _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_LEFT"] )
+            if( this.alignment == _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_LEFT"] )
                 posX -= (this.progressBarSize.w - offset) / 2;
 
-            else if( this.alignment.horz == _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_RIGHT"] )
+            else if( this.alignment.horz == _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_RIGHT"] )
                 posX += (this.progressBarSize.w - offset) / 2;
         }
         else
@@ -27402,10 +27331,10 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
             
             let offset = this.progressBarSize.h * scaler;
 
-            if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_6__["EVA_VERT_TOP"] )
+            if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_7__["EVA_VERT_TOP"] )
                 posY += (this.progressBarSize.h - offset) / 2;
 
-            else if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_6__["EVA_VERT_BOTTOM"] )
+            else if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_7__["EVA_VERT_BOTTOM"] )
                 posY -= (this.progressBarSize.h - offset) / 2;
         }
 
@@ -27424,32 +27353,36 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControl", function() { return UIControl; });
-/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(115);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(116);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(117);
+/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(116);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(119);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
-/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(131);
+/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(133);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(10);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(22);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(132);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(133);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(130);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(134);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(135);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(132);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(31);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(5);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(112);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(118);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: uicontrol.js
 //  DESC:      class for user interface controls
 //
+
+
 
 
 
@@ -27485,14 +27418,14 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         this.defaultState;
 
         // control's current state
-        this.state = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"];
-        this.lastState = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"];
+        this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"];
+        this.lastState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"];
 
         // Name of the action to perform under the correct circumstances
         this.executionAction;
 
         // How the control should respond when selected
-        this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_NULL"];
+        this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_NULL"];
 
         // This control's size
         this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__["Size"];
@@ -27511,7 +27444,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         this.smartGui = null;
 
         // Mouse selection type
-        this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["EAP_UP"];
+        this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_16__["EAP_UP"];
 
         // Scrolling parameters
         this.scrollParam = null;
@@ -27535,7 +27468,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         // Set if mouse selection is the down message
         attr = xmlNode.getAttribute( 'mouseSelectDown' );
         if( attr && (attr === 'true') )
-            this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["EAP_DOWN"];
+            this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_16__["EAP_DOWN"];
 
         // Setup the action
         let actionNode = xmlNode.getElementsByTagName( 'action' );
@@ -27552,27 +27485,10 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
                 this.executionAction = attr;
         }
 
-        // Setup the action
-        let stateScriptNode = xmlNode.getElementsByTagName( 'stateScript' );
-        if( stateScriptNode.length )
-        {
-            // This allocates the script to the map
-            let attr = stateScriptNode[0].getAttribute( "onDisabled" );
-            if( attr )
-                this.scriptComponent.set( _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLED"], attr );
-
-            attr = stateScriptNode[0].getAttribute( "onInactive" );
-            if( attr )
-                this.scriptComponent.set( _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"], attr );
-
-            attr = stateScriptNode[0].getAttribute( "onActive" );
-            if( attr )
-                this.scriptComponent.set( _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"], attr );
-
-            attr = stateScriptNode[0].getAttribute( "onSelect" );
-            if( attr )
-                this.scriptComponent.set( _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECTED"], attr );
-        }
+        // Check for scripting
+        let scriptLst = xmlNode.getElementsByTagName( 'scriptLst' );
+        if( scriptLst.length )
+            this.scriptComponent.initScriptIds( scriptLst[0] );
 
         // Load the scroll data from node
         let scrollParamNode = xmlNode.getElementsByTagName( 'scroll' );
@@ -27740,27 +27656,27 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     handleEvent( event )
     {
-        if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_CONTROL_STATE_CHANGE"] )
+        if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_CONTROL_STATE_CHANGE"] )
         {
             this.onStateChange( event );
         }
-        else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_SELECT_EXECUTE"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_SELECT_EXECUTE"] )
         {
             this.onSelectExecute( event );
         }
-        else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_SET_ACTIVE_CONTROL"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_SET_ACTIVE_CONTROL"] )
         {
             this.onSetActiveControl( event );
         }
-        else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_REACTIVATE"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_REACTIVATE"] )
         {
             this.onReactivate( event );
         }
-        else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_TRANS_IN"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TRANS_IN"] )
         {
             this.onTransIn( event );
         }
-        else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_TRANS_OUT"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TRANS_OUT"] )
         {
             this.onTransOut( event );
         }
@@ -27774,7 +27690,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     onTransIn( event )
     {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ETC_BEGIN"] )
+        if( event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["ETC_BEGIN"] )
         {
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
@@ -27787,7 +27703,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     onTransOut( event )
     {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ETC_BEGIN"] )
+        if( event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["ETC_BEGIN"] )
         {
             // Reset the control
             this.reset();
@@ -27819,25 +27735,25 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     onSelectExecute( event )
     {
-        if( this.state === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECTED"] )
+        if( this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"] )
         {
-            if( this.actionType === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_TREE"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_TO_TREE"], this.executionAction );
+            if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_TREE"] )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TO_TREE"], this.executionAction );
 
-            else if( this.actionType === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_MENU"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_TO_MENU"], this.executionAction, this );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_MENU"] )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TO_MENU"], this.executionAction, this );
 
-            else if( this.actionType === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_BACK"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_BACK_ACTION"] );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_BACK"] )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_BACK_ACTION"] );
 
-            else if( this.actionType === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CLOSE"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_TOGGLE_ACTION"] );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CLOSE"] )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TOGGLE_ACTION"] );
 
-            else if( this.actionType === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_GAME_STATE_CHANGE"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_GAME_STATE_CHANGE"], _common_defs__WEBPACK_IMPORTED_MODULE_14__["ETC_BEGIN"], this.executionAction );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_GAME_STATE_CHANGE"] )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_GAME_STATE_CHANGE"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["ETC_BEGIN"], this.executionAction );
 
-            else if( this.actionType === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"], this.executionAction, this );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"] )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"], this.executionAction, this );
 
             // Smart gui execution
             this.smartExecuteAction();
@@ -27855,10 +27771,10 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     onSetActiveControl( event )
     {
         // Set the last active control to be active again
-        if( (event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_14__["EAC_LAST_ACTIVE_CONTROL"]) &&
-            (this.lastState > _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]))
+        if( (event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EAC_LAST_ACTIVE_CONTROL"]) &&
+            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]))
         {
-            this.lastState = this.state = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
 
             // Don't animate the control if the mouse was used
             if( !_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__["actionManager"].wasLastDeviceMouse() )
@@ -27875,9 +27791,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     onReactivate( event )
     {
         // Set the last active control to be active again
-        if( this.state > _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"] )
+        if( this.state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"] )
         {
-            this.lastState = this.state = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
 
             // Don't animate the control if the mouse was used
             if( !_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__["actionManager"].wasLastDeviceMouse() ||
@@ -27904,8 +27820,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             if( !this.isActive() )
             {
                 _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent(
-                    _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                    _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"],
+                    _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_CONTROL_STATE_CHANGE"],
+                    _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"],
                     this );
             }
         }
@@ -27940,7 +27856,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         // The focus has switched to this control
         if( !this.isDisabled() )
         {
-            this.lastState = this.state = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -27957,8 +27873,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     deactivateControl()
     {
         // The focus has switched away from this control
-        if( (this.lastState === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"]) ||
-            (this.lastState > _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]) )
+        if( (this.lastState === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"]) ||
+            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]) )
         {
             // Reset the control
             this.reset();
@@ -27975,10 +27891,10 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     disableControl()
     {
-        if( (this.lastState === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"]) ||
-            (this.lastState > _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLED"]) )
+        if( (this.lastState === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"]) ||
+            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"]) )
         {
-            this.lastState = this.state = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLED"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"];
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -27990,9 +27906,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     enableControl()
     {
-        if( this.lastState <= _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLED"] )
+        if( this.lastState <= _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"] )
         {
-            this.lastState = this.state = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -28019,7 +27935,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             this.spriteAry[i].init();
 
         // Call any init scripts
-        this.prepareSpriteScriptFactoryFunction( _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"] );
+        this.prepareSpriteScriptFactoryFunction( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"] );
     }
 
     // 
@@ -28038,32 +27954,32 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     prepareSpriteScriptFactoryFunction( controlState )
     {
-        let scriptFactoryId;
+        let scriptFactoryId = "null";
         let forceUpdate = false;
 
         switch( controlState )
         {
-            case _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"]:
                 scriptFactoryId = "init";
                 forceUpdate = true;
             break;
 
-            case _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLED"]:
-                scriptFactoryId = "disabled";
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"]:
+                scriptFactoryId = "disable";
                 forceUpdate = true;
             break;
 
-            case _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]:
                 scriptFactoryId = "inactive";
                 forceUpdate = true;
             break;
 
-            case _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]:
                 scriptFactoryId = "active";
             break;
 
-            case _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECTED"]:
-                scriptFactoryId = "selected";
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"]:
+                scriptFactoryId = "select";
             break;
         }
 
@@ -28084,7 +28000,52 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     prepareControlScript( controlState )
     {
-        let scriptFactory = this.scriptComponent.get( controlState );
+        let scriptFactoryId = "null";
+
+        switch( controlState )
+        {
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"]:
+                scriptFactoryId = "init";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_IN"]:
+                scriptFactoryId = "transIn";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_OUT"]:
+                scriptFactoryId = "transOut";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"]:
+                scriptFactoryId = "disable";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]:
+                scriptFactoryId = "inactive";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]:
+                scriptFactoryId = "active";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"]:
+                scriptFactoryId = "select";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_CHANGE"]:
+                scriptFactoryId = "change";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EXECUTE"]:
+                scriptFactoryId = "execute";
+            break;
+
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EVENT"]:
+                scriptFactoryId = "event";
+            break;
+        }
+
+        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
         if( scriptFactory )
             this.scriptComponent.prepare( scriptFactory(this) );
     }
@@ -28094,8 +28055,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     reset( complete = false )
     {
-        if( this.state > _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"] )
-            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
+        if( this.state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"] )
+            this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
 
         if( complete )
             this.lastState = this.state;
@@ -28116,16 +28077,16 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     setDefaultState( value )
     {
         if( value === 'inactive' )
-            this.defaultState = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
+            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
 
         else if( value === 'active' )
-            this.defaultState = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
 
         else if( value === 'disabled' )
-            this.defaultState = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLED"];
+            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"];
 
         else if( value === 'selected' )
-            this.defaultState = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECTED"];
+            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"];
     }
     
     // 
@@ -28180,31 +28141,31 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     setActionType( value )
     {
         if( value === 'action' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION"];
 
         else if( value === 'to_tree' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_TREE"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_TREE"];
 
         else if( value === 'to_menu' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_MENU"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_MENU"];
 
         else if( value === 'back' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_BACK"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_BACK"];
 
         else if( value === 'close' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CLOSE"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CLOSE"];
 
         else if( value === 'change_focus' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CHANGE_FOCUS"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CHANGE_FOCUS"];
 
         else if( value === 'game_state_change' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_GAME_STATE_CHANGE"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_GAME_STATE_CHANGE"];
 
         else if( value === 'quit_game' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_QUIT_GAME"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_QUIT_GAME"];
         
         else if( value === 'action_event' )
-            this.actionType = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"];
     }
 
     // 
@@ -28264,15 +28225,15 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     handleSelectAction( event )
     {
         if( (this.isSelectable() &&
-            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_14__["ESMA_DEVICE_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_14__["MOUSE"]) &&
-            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_14__["ESMA_PRESS_TYPE"]] === this.mouseSelectType) &&
-            this.isPointInControl( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_14__["ESMA_MOUSE_X"]], event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_14__["ESMA_MOUSE_Y"]] ) ) ||
+            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_DEVICE_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_16__["MOUSE"]) &&
+            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_PRESS_TYPE"]] === this.mouseSelectType) &&
+            this.isPointInControl( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_MOUSE_X"]], event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_MOUSE_Y"]] ) ) ||
 
-            (this.isActive() && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_14__["ESMA_DEVICE_TYPE"]] !== _common_defs__WEBPACK_IMPORTED_MODULE_14__["MOUSE"]) && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_14__["ESMA_PRESS_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_14__["EAP_DOWN"])) )
+            (this.isActive() && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_DEVICE_TYPE"]] !== _common_defs__WEBPACK_IMPORTED_MODULE_16__["MOUSE"]) && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_PRESS_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_16__["EAP_DOWN"])) )
         {
             _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent(
-                _common_defs__WEBPACK_IMPORTED_MODULE_14__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECTED"],
+                _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_CONTROL_STATE_CHANGE"],
+                _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"],
                 this );
 
             return true;
@@ -28293,7 +28254,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         {
             if( !this.isDisabled() )
             {
-                this.lastState = this.state = _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+                this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
 
                 return true;
             }
@@ -28345,27 +28306,27 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     isDisabled()
     {
-        return this.state === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLED"];
+        return this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"];
     }
 
     isInactive()
     {
-        return this.state === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
+        return this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
     }
 
     isActive()
     {
-        return (this.state === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]);
+        return (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]);
     }
 
     isSelected()
     {
-        return (this.state === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECTED"]);
+        return (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"]);
     }
 
     isSelectable()
     {
-        return ((this.state === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]) || (this.state === _common_defs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]));
+        return ((this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]) || (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]));
     }
 
     // 
@@ -28419,7 +28380,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28550,13 +28511,13 @@ class ControlBase extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["
 }
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScrollParam", function() { return ScrollParam; });
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
 // 
 //  FILE NAME: scrollparam.js
 //  DESC:      Class for handling scroll parameter data
@@ -28595,16 +28556,16 @@ class ScrollParam
             this.scrollDelay = Number(node[0].getAttribute( 'scrollDelay' ));
             
             if( node[0].getAttribute( 'up' ) === 'true' )
-                this.scrollTypesMap.set( _common_defs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_UP_ACTION"], _common_defs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_UP"] );
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_UP_ACTION"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_UP"] );
 
             if( node[0].getAttribute( 'down' ) === 'true' )
-                this.scrollTypesMap.set( _common_defs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_DOWN_ACTION"], _common_defs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_DOWN"] );
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_DOWN_ACTION"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_DOWN"] );
 
             if( node[0].getAttribute( 'left' ) === 'true' )
-                this.scrollTypesMap.set( _common_defs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_LEFT_ACTION"], _common_defs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_LEFT"] );
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_LEFT_ACTION"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_LEFT"] );
 
             if( node[0].getAttribute( 'right' ) === 'true' )
-                this.scrollTypesMap.set( _common_defs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_RIGHT_ACTION"], _common_defs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_RIGHT"] );
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_RIGHT_ACTION"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_RIGHT"] );
         }
     }
     
@@ -28631,21 +28592,126 @@ class ScrollParam
 }
 
 /***/ }),
-/* 117 */
+/* 118 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_INACTIVE", function() { return EMS_INACTIVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_IDLE", function() { return EMS_IDLE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_ACTIVE", function() { return EMS_ACTIVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_MAX_MENU_STATES", function() { return EMS_MAX_MENU_STATES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_NULL", function() { return EMNS_NULL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_MOUSE", function() { return EMNS_MOUSE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_GAMEPAD_KEYBAORD", function() { return EMNS_GAMEPAD_KEYBAORD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_INACTIVE", function() { return EMTS_INACTIVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_IDLE", function() { return EMTS_IDLE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_ACTIVE", function() { return EMTS_ACTIVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_MAX_MENU_TREE_STATES", function() { return EMTS_MAX_MENU_TREE_STATES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_IN", function() { return EGE_MENU_TRANS_IN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_OUT", function() { return EGE_MENU_TRANS_OUT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_ESCAPE_ACTION", function() { return EGE_MENU_ESCAPE_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TOGGLE_ACTION", function() { return EGE_MENU_TOGGLE_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_BACK_ACTION", function() { return EGE_MENU_BACK_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TO_TREE", function() { return EGE_MENU_TO_TREE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TO_MENU", function() { return EGE_MENU_TO_MENU; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_GAME_STATE_CHANGE", function() { return EGE_MENU_GAME_STATE_CHANGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_UP_ACTION", function() { return EGE_MENU_UP_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_DOWN_ACTION", function() { return EGE_MENU_DOWN_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_LEFT_ACTION", function() { return EGE_MENU_LEFT_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_RIGHT_ACTION", function() { return EGE_MENU_RIGHT_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_CONTROL_STATE_CHANGE", function() { return EGE_MENU_CONTROL_STATE_CHANGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SELECT_ACTION", function() { return EGE_MENU_SELECT_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SELECT_EXECUTE", function() { return EGE_MENU_SELECT_EXECUTE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SET_ACTIVE_CONTROL", function() { return EGE_MENU_SET_ACTIVE_CONTROL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_REACTIVATE", function() { return EGE_MENU_REACTIVATE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_UP", function() { return EGE_MENU_SCROLL_UP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_DOWN", function() { return EGE_MENU_SCROLL_DOWN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_LEFT", function() { return EGE_MENU_SCROLL_LEFT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_RIGHT", function() { return EGE_MENU_SCROLL_RIGHT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_LEFT", function() { return EGE_MENU_TAB_LEFT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_RIGHT", function() { return EGE_MENU_TAB_RIGHT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_NULL", function() { return EAC_NULL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_FIRST_ACTIVE_CONTROL", function() { return EAC_FIRST_ACTIVE_CONTROL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_LAST_ACTIVE_CONTROL", function() { return EAC_LAST_ACTIVE_CONTROL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_RESET", function() { return ETC_RESET; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_BEGIN", function() { return ETC_BEGIN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_END", function() { return ETC_END; });
+// 
+//  FILE NAME: menudefs.js
+//  DESC:      misc defines
+//
+
+
+
+// EMenuState
+const EMS_INACTIVE        = 0,
+             EMS_IDLE            = 1,
+             EMS_ACTIVE          = 2,
+             EMS_MAX_MENU_STATES = 3;
+
+// EMenuNavigationState
+const EMNS_NULL             = 0,
+             EMNS_MOUSE            = 1,
+             EMNS_GAMEPAD_KEYBAORD = 2;
+
+// EMenuTreeState
+const EMTS_INACTIVE             = 0,
+             EMTS_IDLE                 = 1,
+             EMTS_ACTIVE               = 2,
+             EMTS_MAX_MENU_TREE_STATES = 3;
+
+// EMenuEvent
+const EGE_MENU_TRANS_IN             = 100,
+             EGE_MENU_TRANS_OUT            = 101,
+             EGE_MENU_ESCAPE_ACTION        = 102,
+             EGE_MENU_TOGGLE_ACTION        = 103,
+             EGE_MENU_BACK_ACTION          = 104,
+             EGE_MENU_TO_TREE              = 105,
+             EGE_MENU_TO_MENU              = 106,
+             EGE_MENU_GAME_STATE_CHANGE    = 107,
+             EGE_MENU_UP_ACTION            = 108,
+             EGE_MENU_DOWN_ACTION          = 109,
+             EGE_MENU_LEFT_ACTION          = 110,
+             EGE_MENU_RIGHT_ACTION         = 111,
+             EGE_MENU_CONTROL_STATE_CHANGE = 112,
+             EGE_MENU_SELECT_ACTION        = 113,
+             EGE_MENU_SELECT_EXECUTE       = 114,
+             EGE_MENU_SET_ACTIVE_CONTROL   = 115,
+             EGE_MENU_REACTIVATE           = 116,
+             EGE_MENU_SCROLL_UP            = 117,
+             EGE_MENU_SCROLL_DOWN          = 118,
+             EGE_MENU_SCROLL_LEFT          = 119,
+             EGE_MENU_SCROLL_RIGHT         = 120,
+             EGE_MENU_TAB_LEFT             = 121,
+             EGE_MENU_TAB_RIGHT            = 122;
+
+// EActiveControl
+const EAC_NULL                 = 0,
+             EAC_FIRST_ACTIVE_CONTROL = 1,
+             EAC_LAST_ACTIVE_CONTROL  = 2;
+
+// ETransCode
+const ETC_RESET = 0,
+             ETC_BEGIN = 1,
+             ETC_END   = 2;
+
+/***/ }),
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sprite", function() { return Sprite; });
 /* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(118);
-/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(120);
-/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(121);
-/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(122);
-/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(127);
-/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(128);
-/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(129);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(130);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
+/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(122);
+/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(123);
+/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(124);
+/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(129);
+/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(130);
+/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(131);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(132);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -28925,13 +28991,13 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
 
 
 /***/ }),
-/* 118 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentQuad", function() { return VisualComponentQuad; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
@@ -29073,7 +29139,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 119 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29134,13 +29200,13 @@ class ivisualComponent
 
 
 /***/ }),
-/* 120 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentSpriteSheet", function() { return VisualComponentSpriteSheet; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
@@ -29251,13 +29317,13 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 121 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentScaledFrame", function() { return VisualComponentScaledFrame; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
@@ -29335,18 +29401,18 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 122 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentFont", function() { return VisualComponentFont; });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(123);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(125);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(125);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(127);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
@@ -29905,13 +29971,13 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
 
 
 /***/ }),
-/* 123 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fontManager", function() { return fontManager; });
-/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
+/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
@@ -30046,7 +30112,7 @@ var fontManager = new FontManager;
 
 
 /***/ }),
-/* 124 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30169,13 +30235,13 @@ class Font
 
 
 /***/ }),
-/* 125 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FontData", function() { return FontData; });
-/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
+/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 
 // 
@@ -30232,13 +30298,13 @@ class FontData
 
 
 /***/ }),
-/* 126 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FontProperties", function() { return FontProperties; });
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(123);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -30348,13 +30414,13 @@ class FontProperties
 
 
 /***/ }),
-/* 127 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponent3D", function() { return VisualComponent3D; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
@@ -30481,13 +30547,13 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
 
 
 /***/ }),
-/* 128 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NullVisualComponent", function() { return NullVisualComponent; });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 
 // 
 //  FILE NAME:  visualcomponentquad.js
@@ -30531,7 +30597,7 @@ class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 129 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30936,7 +31002,7 @@ class PhysicsComponent2D
 
 
 /***/ }),
-/* 130 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31052,7 +31118,7 @@ class ScriptComponent
 
 
 /***/ }),
-/* 131 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31100,7 +31166,7 @@ class Quad
 
 
 /***/ }),
-/* 132 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31249,13 +31315,13 @@ var eventManager = new EventManager;
 
 
 /***/ }),
-/* 133 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "actionManager", function() { return actionManager; });
-/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(134);
+/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 // 
@@ -31607,7 +31673,7 @@ var actionManager = new ActionManager;
 
 
 /***/ }),
-/* 134 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31656,17 +31722,17 @@ class KeyCodeAction
 
 
 /***/ }),
-/* 135 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIMeter", function() { return UIMeter; });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
 /* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(103);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(115);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(112);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(31);
 
 // 
@@ -31710,7 +31776,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
     {
         super( group );
         
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECT_METER"];
+        this.type = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__["ECT_METER"];
         
         // Current value
         this.currentValue = 0;
@@ -32100,7 +32166,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
 
 /***/ }),
-/* 136 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32204,14 +32270,14 @@ class Timer
 
 
 /***/ }),
-/* 137 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNode", function() { return SpriteNode; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -32319,7 +32385,7 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 138 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32464,13 +32530,13 @@ class iNode
 
 
 /***/ }),
-/* 139 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControlNode", function() { return UIControlNode; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -32549,14 +32615,14 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 140 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectNodeMultiLst", function() { return ObjectNodeMultiLst; });
 /* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(141);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(143);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -32634,13 +32700,13 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
 }
 
 /***/ }),
-/* 141 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeMultiLst", function() { return NodeMultiLst; });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(144);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -32859,13 +32925,13 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
 
 
 /***/ }),
-/* 142 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 
 // 
 //  FILE NAME: node.js
@@ -32976,14 +33042,14 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 
 /***/ }),
-/* 143 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNodeMultiLst", function() { return SpriteNodeMultiLst; });
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(143);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -33101,14 +33167,14 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
 
 
 /***/ }),
-/* 144 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StageStrategy", function() { return StageStrategy; });
 /* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
-/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(145);
+/* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
@@ -33209,7 +33275,7 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
 
 /***/ }),
-/* 145 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33217,7 +33283,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sector", function() { return Sector; });
 /* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
 /* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(109);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(112);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(113);
 
 // 
 //  FILE NAME: sector.js
@@ -33250,7 +33316,6 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
     {
         let defaultGroup = '';
         let defaultObjName = '';
-        let defaultAIName = '';
         let defaultId = -1;
         
         let attr = xmlNode.getAttribute( 'defaultGroup' );
@@ -33261,10 +33326,6 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
         if( attr )
             defaultObjName = attr;
         
-        attr = xmlNode.getAttribute( 'defaultAIName' );
-        if( attr )
-            defaultAIName = attr;
-        
         attr = xmlNode.getAttribute( 'defaultId' );
         if( attr )
             defaultId = Number(attr);
@@ -33274,7 +33335,7 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
         for( let i = 0; i < sectorNode.length; ++i )
         {
             // Allocate the node data list to load this node
-            let nodeAry = new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( sectorNode[i], defaultGroup, defaultObjName, defaultAIName, defaultId ).dataAry;
+            let nodeAry = new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( sectorNode[i], defaultGroup, defaultObjName, defaultId ).dataAry;
             
             // Build the node list
             let headNode = null;
@@ -33371,14 +33432,14 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
 
 
 /***/ }),
-/* 146 */
+/* 148 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
 
 //
 //  FILE NAME: statescripts.js
@@ -33422,7 +33483,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 147 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33435,7 +33496,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(132);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(134);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(32);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 
@@ -33705,7 +33766,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 148 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33713,7 +33774,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipDataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 149 */
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33721,7 +33782,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 150 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33729,7 +33790,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 151 */
+/* 153 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33737,7 +33798,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 152 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33745,7 +33806,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
-/* 153 */
+/* 155 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33753,5083 +33814,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n    \r\n    <strategy name=\"_space_ship_\" type=\"actor\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n            <node name=\"fire_tail\">\r\n                <sprite>\r\n                    <script prepare=\"fireTailAnim\"/>\r\n                </sprite>\r\n            </node>\r\n        </node>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 154 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartConfirmBtn", function() { return SmartConfirmBtn; });
-/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(155);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(156);
-/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: smartconfirmbtn.js
-//  DESC:      Class CSmartExitBtn
-//
-
-
-
-
-
-
-
-class SmartConfirmBtn extends _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__["SmartGuiControl"]
-{
-    constructor( uiControl )
-    {
-        super( uiControl );
-    }
-    
-    //
-    //  DESC: Called when the control is executed
-    //
-    execute()
-    {
-        let menu = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__["menuManager"].getMenu("confirmation_menu");
-        let yesBtn = menu.getControl("yes_btn");
-        let megLbl = menu.getControl("message_lbl");
-        
-        let smartGuiCtrl = null;
-        let conformationMsg = '';
-        let executionAction = '';
-        let actionType = _library_common_defs__WEBPACK_IMPORTED_MODULE_2__["ECAT_BACK"];
-        
-        if( this.uiControl.name === 'main_menu_btn' )
-        {
-            conformationMsg = 'Are you sure you|want to go back to|the main menu?';
-            actionType = _library_common_defs__WEBPACK_IMPORTED_MODULE_2__["ECAT_GAME_STATE_CHANGE"];
-            executionAction = 'title_screen_state';
-        }
-        
-        // Set the conformation menu
-        yesBtn.smartGui = smartGuiCtrl;
-        yesBtn.actionType = actionType;
-        yesBtn.executionAction = executionAction;
-        megLbl.createFontStr( conformationMsg );
-    }
-}
-    
-
-/***/ }),
-/* 155 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartGuiMenu", function() { return SmartGuiMenu; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartGuiControl", function() { return SmartGuiControl; });
-
-//
-//  FILE NAME: ismartguibase.js
-//  DESC:      Smart Gui interface & Base Classes
-//
-
-
-
-// 
-//  DESC: Smart GUI interface class
-//
-class iSmartGui
-{
-    constructor()
-    {
-    }
-    
-    // 
-    //  DESC: Called when the control is created
-    //
-    create()
-    {
-        // Empty function to be overwritten
-    }
-
-    // 
-    //  DESC: Called during the handle user imput
-    //
-    handleEvent( event )
-    {
-        // Empty function to be overwritten
-    }
-}
-
-// 
-//  DESC: Smart GUI Menu class
-//
-class SmartGuiMenu extends iSmartGui
-{
-    constructor( uiMenu )
-    {
-        super();
-        
-        this.uiMenu = uiMenu;
-    }
-}
-
-// 
-//  DESC: Smart GUI Control
-//
-class SmartGuiControl extends iSmartGui
-{
-    constructor( uiControl )
-    {
-        super();
-        
-        this.uiControl = uiControl;
-    }
-
-    // 
-    //  DESC: Called when the control is executed
-    //
-    execute()
-    {
-        // Empty function to be overwritten
-    }
-}
-
-
-/***/ }),
 /* 156 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "menuManager", function() { return menuManager; });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(133);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(132);
-/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
-/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(157);
-/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(167);
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(97);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: menumanager.js
-//  DESC:      menu manager class singleton
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["ManagerBase"]
-{
-    constructor()
-    {
-        super();
-        
-        // NOTE: Only simple allocation that don't 
-        //       require Settings to be loaded
-        
-        // Map map of menu trees
-        this.menuTreeMapMap = new Map;
-
-        // Map of the menus
-        this.menuMapMap = new Map;
-
-        // Array of active menu trees
-        this.activeMenuTreeAry = [];
-
-        // Array of active interface trees
-        this.activeInterTreeAry = [];
-
-        // menu manager state
-        this.active = false;
-
-        // Actions
-        this.backAction;
-        this.toggleAction;
-        this.escapeAction;
-        this.selectAction;
-        this.upAction;
-        this.downAction;
-        this.leftAction;
-        this.rightAction;
-        this.tabLeft;
-        this.tabRight;
-        this.defaultTree;
-
-        // scroll timer Id
-        this.scrollTimerId = 0;
-
-        // Allow message processing
-        this.allow = false;
-    }
-    
-    //
-    //  DESC: Set the default camera
-    //
-    setDefaultCamera()
-    {
-        // Default camera
-        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__["cameraManager"].getDefault();
-    }
-    
-    // 
-    //  DESC: Set the camera
-    //
-    setCamera( cameraId )
-    {
-        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__["cameraManager"].get( cameraId );
-    }
-    
-    // 
-    //  DESC: Load the menu group
-    //
-    loadGroupXML( groupAry )
-    {
-        let promiseAry = [];
-
-        for( let grp = 0; grp < groupAry.length; ++grp )
-        {
-            let group = groupAry[grp];
-            
-            // Make sure the group we are looking for has been defined in the list table file
-            let pathAry = this.listTableMap.get( group );
-            if( pathAry !== undefined )
-            {
-                // Load the group data if it doesn't already exist
-                if( this.menuMapMap.get( group ) === undefined )
-                {
-                    // Create a new group map inside of our maps
-                    this.menuMapMap.set( group, new Map );
-                    this.menuTreeMapMap.set( group, new Map );
-
-                    for( let i = 0; i < pathAry.length; ++i )
-                    {
-                        let filePath = pathAry[i];
-
-                        promiseAry.push( 
-                            _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath )
-                                .then(( xmlNode ) => this.loadFromNode( group, xmlNode ))
-                                .catch(( error ) => { console.error(error.stack); throw error; }));
-                    }
-                }
-                else
-                {
-                    throw new Error( `Menu group has alread been loaded (${group})!` );
-                }
-            }
-            else
-            {
-                throw new Error( `Menu Manager list group name can't be found (${group})!` );
-            }
-        }
-
-        return Promise.all( promiseAry );
-    }
-    
-    //
-    //  DESC: Load all object information from an xml node
-    //
-    loadFromNode( group, xmlNode )
-    {
-        // Load the menus from node
-        return this.loadMenuFromNode( group, xmlNode )
-
-            // Load the trees from node
-            .then(() => this.loadTreesFromNode( group, xmlNode ))
-    }
-    
-    //
-    //  DESC: preload all object information from an xml node
-    //
-    loadMenuFromNode( group, xmlNode )
-    {
-        let promiseAry = [];
-
-        // Get the menu group map
-        let groupMap = this.menuMapMap.get( group );
-        
-        let menuNode = xmlNode.getElementsByTagName('menu');
-
-        for( let i = 0; i < menuNode.length; ++i )
-        {
-            // Get the name of the menu
-            let name = menuNode[i].getAttribute( 'name' );
-
-            // Get the menu file path
-            let filePath = menuNode[i].getAttribute( 'file' );
-
-            // Check for duplicates
-            if( groupMap.get( name ) !== undefined )
-                throw new Error( `Duplicate menu name! (${name}).` );
-
-            // Allocate a new menu
-            let menu = new _gui_menu__WEBPACK_IMPORTED_MODULE_5__["Menu"]( name, group, filePath );
-
-            // Insert the menu into the group map
-            groupMap.set( name, menu );
-
-            // Load the transform from node
-            menu.loadTransFromNode( menuNode[i] );
-
-            // Load the dynamic offset from node
-            menu.loadDynamicOffsetFromNode( menuNode[i] );
-
-            // Check if this file has already been loaded
-            if( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].allowLoad( group, filePath ) )
-            {
-                // Load the menu XML file
-                promiseAry.push( 
-                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath )
-                        .then(( node ) => 
-                        {
-                            // Store the preloaded XML file
-                            _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].set( group, filePath, node );
-
-                            // Recurse back until all XML files are loaded
-                            return this.loadControlFromNode( group, node );
-                        })
-                        .catch(( error ) => { console.error(error.stack); throw error; }));
-            }
-        }
-
-        return Promise.all( promiseAry );
-    }
-    
-    //
-    //  DESC: Load the trees from node
-    //
-    loadTreesFromNode( group, node )
-    {
-        // Get the menu group map
-        let menuGroupMap = this.menuMapMap.get( group );
-        
-        // Get the tree group map
-        let treeGroupMap = this.menuTreeMapMap.get( group );
-        
-        // Get the node to the list of trees
-        let treeNode = node.getElementsByTagName('tree');
-
-        for( let i = 0; i < treeNode.length; ++i )
-        {
-            // Get the name
-            let name = treeNode[i].getAttribute( 'name' );
-
-            // Get the root menu
-            let rootMenu = treeNode[i].getAttribute( 'root' );
-
-            // Get the default menu
-            let defaultMenu = treeNode[i].getAttribute( 'default' );
-
-            // Is this menu an interface menu?
-            let interfaceMenu = (treeNode[i].getAttribute( 'interfaceMenu' ) === 'true');
-
-            // Check for duplicate names
-            if( treeGroupMap.get( name ) !== undefined )
-                throw new Error( `Duplicate tree name! (${name}).` );
-
-            // Add the tree data to the map
-            treeGroupMap.set( name, new _gui_menutree__WEBPACK_IMPORTED_MODULE_6__["MenuTree"]( name, menuGroupMap, rootMenu, defaultMenu, interfaceMenu ) );
-
-            // Check that the root menu exists
-            if( rootMenu !== '' )
-            {
-                if( menuGroupMap.get( rootMenu ) === undefined )
-                    throw new Error( `Root menu doesn't exist! (${name}).` );
-            }
-            else if( defaultMenu !== '' )
-            {
-                if( menuGroupMap.get( defaultMenu ) === undefined )
-                    throw new Error( `Default menu doesn't exist! (${name}).` );
-            }
-        }
-    }
-    
-    //
-    //  DESC: load the menu controls from menu node
-    //        NOTE: Promise using recursive function
-    //
-    loadControlFromNode( group, xmlNode )
-    {
-        let promiseAry = [];
-        let controlLst = ['staticMenuControls', 'mouseOnlyControls', 'menuControls', 'subControlList', 'scrollBoxControlList'];
-        
-        // Load the control XML files
-        for( let i = 0; i < controlLst.length; ++i )
-        {
-            let nodeLst = xmlNode.getElementsByTagName( controlLst[i] );
-            if( nodeLst.length )
-            {
-                let controlNode = nodeLst[0].getElementsByTagName( 'control' );
-
-                for( let j = 0; j < controlNode.length; ++j )
-                {
-                    let filePathNode = controlNode[j].getElementsByTagName( 'filePath' );
-                    if( filePathNode.length )
-                    {
-                        let filePath = filePathNode[0].getAttribute('file');
-                        if( filePath )
-                        {
-                            // Check if this file has already been scheduled for loading
-                            if( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].allowLoad( group, filePath ) )
-                            {
-                                promiseAry.push(
-                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath )
-                                    .then(( node ) => 
-                                    {
-                                        // Store the preloaded XML file
-                                        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].set( group, filePath, node );
-            
-                                        // Recurse back until all XML files are loaded
-                                        return this.loadControlFromNode( group, node );
-                                    })
-                                    .catch(( error ) => { console.error(error.stack); throw error; }));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return Promise.all( promiseAry );
-    }
-    
-    //
-    //  DESC: Create menu objects from loaded xml data
-    //
-    createFromData( groupAry )
-    {
-        for( let grp = 0; grp < groupAry.length; ++grp )
-        {
-            let group = groupAry[grp];
-            
-            // Get the menu group map
-            let groupMap = this.menuMapMap.get( group );
-            if( groupMap === undefined )
-                throw new Error( `Group map can't be found! (${group}).` );
-
-            for( let menu of groupMap.values() )
-            {
-                // Get the menu XML node
-                let xmlNode = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__["assetHolder"].get( group, menu.filePath );
-
-                // Have the menu load it's share
-                menu.loadFromNode( xmlNode );
-
-                // Broadcast signal to let the game handle smart menu inits
-                _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__["signalManager"].broadcast_smartMenu( menu );
-
-                // Handle any smart menu creates
-                menu.smartCreate();
-            }
-
-            this.initGroup( group );
-        }
-        
-        // Temporary assets can now be freed
-        //assetHolder.deleteGroup( groupAry );
-
-        return 0;
-    }
-
-    //
-    //  DESC: Free the menu group
-    //
-    freeGroup( groupAry )
-    {
-        for( let grp = 0; grp < groupAry.length; ++grp )
-        {
-            let group = groupAry[grp];
-            
-            // Make sure the group we are looking for exists
-            if( this.listTableMap.get( group ) === undefined )
-                throw new Error( `Object data list group name can't be found (${group})!` );
-
-            // Get the group map
-            let groupMap = this.menuTreeMapMap.get( group );
-            if( groupMap !== undefined )
-            {
-                // Remove it from the tree vectors if it is there
-                for( let menuTree of groupMap.values() )
-                {
-                    if( menuTree.interfaceMenu )
-                    {
-                        let index = this.activeInterTreeAry.indexOf( menuTree );
-
-                        if( index > -1 )
-                            this.activeInterTreeAry.splice( index, 1 );
-                    }
-                    else
-                    {
-                        let index = this.activeMenuTreeAry.indexOf( menuTree );
-
-                        if( index > -1 )
-                            this.activeMenuTreeAry.splice( index, 1 );
-                    }
-                }
-
-                // Free the menu group
-                this.menuTreeMapMap.delete( group );
-                this.menuMapMap.delete( group );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Init a menu group
-    //  NOTE: This allows certain actions to be done after the group load
-    //
-    initGroup( group )
-    {
-        let groupMap = this.menuMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            for( let menu of groupMap.values() )
-                menu.init();
-        }
-        else
-        {
-            throw new Error( `Menu group name can't be found to init (${group})!` );
-        }
-    }
-
-    // 
-    //  DESC: Clean up a menu group
-    //  NOTE: This allows certain actions to be done after the group load
-    //
-    cleanUpGroup( group )
-    {
-        let groupMap = this.menuMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            for( let menu of groupMap.values() )
-                menu.cleanUp();
-        }
-        else
-        {
-            throw new Error( `Menu group name can't be found to clean up (${group})!` );
-        }
-    }
-    
-    // 
-    //  DESC: Load the menu action list from XML
-    //
-    loadMenuAction( filePath )
-    {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', filePath,
-            ( xmlNode ) => this.loadMenuActionFromNode( xmlNode ));
-    }
-
-    // 
-    //  DESC: Load the menu action list from XML
-    //
-    loadMenuActionFromNode( node )
-    {
-        this.backAction = node.getElementsByTagName( 'backAction' )[0].childNodes[0].nodeValue;
-        this.toggleAction = node.getElementsByTagName( 'toggleAction' )[0].childNodes[0].nodeValue;
-        this.escapeAction = node.getElementsByTagName( 'escapeAction' )[0].childNodes[0].nodeValue;
-        this.selectAction = node.getElementsByTagName( 'selectAction' )[0].childNodes[0].nodeValue;
-        this.upAction = node.getElementsByTagName( 'upAction' )[0].childNodes[0].nodeValue;
-        this.downAction = node.getElementsByTagName( 'downAction' )[0].childNodes[0].nodeValue;
-        this.leftAction = node.getElementsByTagName( 'leftAction' )[0].childNodes[0].nodeValue;
-        this.rightAction = node.getElementsByTagName( 'rightAction' )[0].childNodes[0].nodeValue;
-        this.tabLeft = node.getElementsByTagName( 'tabLeft' )[0].childNodes[0].nodeValue;
-        this.tabRight = node.getElementsByTagName( 'tabRight' )[0].childNodes[0].nodeValue;
-        this.defaultTree = node.getElementsByTagName( 'defaultTree' )[0].childNodes[0].nodeValue;
-    }
-    
-    // 
-    //  DESC: Activate a tree to be used by tree name only
-    //        NOTE: Assumes unique tree names
-    //
-    activateTree( treeAry )
-    {
-        for( let tree = 0; tree < treeAry.length; ++tree )
-        {
-            let treeStr = treeAry[tree];
-            let found = false;
-            
-            for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
-            {
-                for( let key of groupMap.keys() )
-                {
-                    if( key === treeStr )
-                    {
-                        this.activateTreeGroup( groupKey, key );
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if( found )
-                    break;
-            }
-
-            // If you got this far, it's a problem
-            if( !found )
-                throw new Error( `Menu tree doesn't exist (${treeStr})!` );
-        }
-    }
-    
-    // 
-    //  DESC: Activate a tree to be used based on group
-    //
-    activateTreeGroup( group, treeStr )
-    {
-        let groupMap = this.menuTreeMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            // Find the tree in the map
-            let tree = groupMap.get( treeStr );
-            if( tree !== undefined )
-            {
-                if( tree.interfaceMenu )
-                {
-                    if( this.activeInterTreeAry.indexOf( tree ) !== -1 )
-                        throw new Error( `Menu tree already active (${group} - ${treeStr})!` );
-
-                    this.activeInterTreeAry.push( tree );
-                }
-                else
-                {
-                    if( this.activeMenuTreeAry.indexOf( tree ) !== -1 )
-                        throw new Error( `Menu tree already active (${group} - ${treeStr})!` );
-
-                    this.activeMenuTreeAry.push( tree );
-                }
-
-                // Init the tree for use
-                tree.init();
-            }
-            else
-            {
-                throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
-            }
-        }
-        else
-        {
-            throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
-        }
-
-        // See if we are active
-        this.setActiveState();
-    }
-    
-    // 
-    //  DESC: Deactivate a tree to be used by tree name only
-    //        NOTE: Assumes unique tree names
-    //
-    deactivateTree( treeStr )
-    {
-        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
-        {
-            for( let key of groupMap.keys() )
-            {
-                if( key === treeStr )
-                {
-                    this.deactivateTreeGroup( groupKey, key );
-                    return;
-                }
-            }
-        }
-
-        // If you got this far, it's a problem
-        throw new Error( `Menu tree doesn't exist (${treeStr})!` );
-    }
-
-    // 
-    //  DESC: Deactivate a tree that's in use
-    //
-    deactivateTreeGroup( group, treeStr )
-    {
-        let groupMap = this.menuTreeMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            // Find the tree in the map
-            let tree = groupMap.get( treeStr );
-            if( tree !== undefined )
-            {
-                // Remove the tree from the vector
-                if( tree.interfaceMenu )
-                {
-                    let index = this.activeInterTreeAry.indexOf( tree );
-                    if( index > -1 )
-                        this.activeInterTreeAry.splice( index, 1 );
-                }
-                else
-                {
-                    let index = this.activeMenuTreeAry.indexOf( tree );
-                    if( index > -1 )
-                        this.activeMenuTreeAry.splice( index, 1 );
-                }
-            }
-            else
-            {
-                throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
-            }
-        }
-        else
-        {
-            throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
-        }
-
-        // See if we are still active
-        this.setActiveState();
-    }
-    
-    // 
-    //  DESC: Clear the active trees
-    //
-    clearActiveTrees()
-    {
-        this.active = false;
-        
-        if( this.scrollTimerId !== 0 )
-            clearInterval( this.scrollTimerId );
-
-        this.activeMenuTreeAry = [];
-        this.activeInterTreeAry = [];
-    }
-    
-    // 
-    //  DESC: Handle input events and dispatch menu events
-    //
-    handleEvent( event )
-    {
-        if( this.allow )
-        {
-            // Convert keyboard, mouse and controller messages in action type messages
-            if( event instanceof CustomEvent )
-            {
-                // Are we doing menu actions? May need to do some scrolling
-                if( (event.detail.type >= _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_UP_ACTION"]) && (event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_RIGHT_ACTION"]) )
-                {
-                    // Free a timer if one happens to be running
-                    if( this.scrollTimerId != 0 )
-                        clearTimeout( this.scrollTimerId );
-                    
-                    this.scrollTimerId = 0;
-
-                    if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"] )
-                        this.handleEventForScrolling( event );
-                }
-                
-                this.handleEventForTrees( event );
-
-                // Set the active state
-                this.setActiveState();
-            }
-            else
-            {
-                // Only the default tree can execute an escape or toggle when none are active.
-                if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasActionPress( event, this.escapeAction, _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"] ) )
-                {
-                    let tree = this.getActiveTree();
-
-                    if( tree === null )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_ESCAPE_ACTION"], this.defaultTree );
-                    else
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_ESCAPE_ACTION"], tree.name );
-                }
-                else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasActionPress( event, this.toggleAction, _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"] ) )
-                {
-                    let tree = this.getActiveTree();
-
-                    if( tree === null )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_TOGGLE_ACTION"], this.defaultTree );
-                    else
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_TOGGLE_ACTION"], tree.name );
-                }
-                else if( this.active )
-                {
-                    let pressType;
-
-                    // common and can result in many messages which is why it's specifically defined here
-                    if( event.type === 'mousemove' )
-                    {
-                        // Allow the mouse move message to get eaten when action handling is disabled.
-                        this.handleEventForTrees( event );
-                    }
-                    // Select action based on input device
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasAction( event, this.selectAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_IDLE"] )
-                    {
-                        if( event instanceof KeyboardEvent )
-                        {
-                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_SELECT_ACTION"], pressType, _common_defs__WEBPACK_IMPORTED_MODULE_9__["KEYBOARD"] );
-                        }
-                        else if( event instanceof MouseEvent )
-                        {
-                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent(
-                                _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_SELECT_ACTION"],
-                                pressType,
-                                _common_defs__WEBPACK_IMPORTED_MODULE_9__["MOUSE"],
-                                event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].mouseOffsetX,
-                                event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].mouseOffsetY );
-                        }
-                    }
-                    else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasActionPress( event, this.backAction, _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"] ) )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_BACK_ACTION"] );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasAction( event, this.upAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_IDLE"] )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_UP_ACTION"], pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasAction( event, this.downAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_IDLE"] )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_DOWN_ACTION"], pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasAction( event, this.leftAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_IDLE"] )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_LEFT_ACTION"], pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasAction( event, this.rightAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_IDLE"] )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_RIGHT_ACTION"], pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasAction( event, this.tabLeft )) > _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_IDLE"] )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_TAB_LEFT"], pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__["actionManager"].wasAction( event, this.tabRight )) > _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_IDLE"] )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_TAB_RIGHT"], pressType );
-
-                    // If none of the predefined actions have been hit, just send the message for processing
-                    else
-                    {
-                        this.handleEventForTrees( event );
-                    }
-                }
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Handle input events depending on if this is a menu or interface tree
-    //
-    handleEventForTrees( event )
-    {
-        let menuActive = false;
-
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-        {
-            // See if there's an active tree
-            menuActive |= this.activeMenuTreeAry[i].isActive();
-
-            // Even if a menu tree is not active, it needs to receive events to become active
-            this.activeMenuTreeAry[i].handleEvent( event );
-        }
-
-        // Only allow event handling for interface menus when regular menus are not active
-        if( !menuActive )
-        {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-            {
-                if( this.activeInterTreeAry[i].isActive() )
-                    this.activeInterTreeAry[i].handleEvent( event );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Handle input events depending on if this is a menu or interface tree
-    //
-    handleEventForScrolling( event )
-    {
-        if( this.active )
-        {
-            if( !this.handleMenuScrolling( event, this.activeMenuTreeAry ) )
-            {
-                // Only allow event handling for interface menus when regular menus are not active
-                this.handleMenuScrolling( event, this.activeInterTreeAry );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Handle input events for menu scrolling
-    //
-    handleMenuScrolling( event, activeTreeAry )
-    {
-        let menuActive = false;
-
-        for( let i = 0; i < activeTreeAry.length; ++i )
-        {
-            // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
-            {
-                menuActive = true;
-
-                let scrollParam = activeTreeAry[i].getScrollParam( event.detail.type );
-
-                // If scrolling is allowed, start the timer
-                if( scrollParam.canScroll( event.detail.type ) )
-                {
-                    this.scrollTimerId = setTimeout(
-                        () =>
-                        {
-                            this.scrollTimerId = setInterval(
-                                () => _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( scrollParam.msg ),
-                                scrollParam.scrollDelay );
-                                
-                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( scrollParam.msg );
-                        }, 
-                        scrollParam.startDelay );
-                        
-                    break;
-                }
-            }
-        }
-
-        return menuActive;
-    }
-    
-    // 
-    //  DESC: Update the menu
-    //
-    update()
-    {
-        if( this.active )
-        {
-            if( !this.updateMenu( this.activeMenuTreeAry ) )
-            {
-                // Only allow Updating for interface menus when regular menus are not active
-                this.updateMenu( this.activeInterTreeAry );
-            }
-        }
-    }
-
-    // 
-    //  DESC: Update the menu
-    //
-    updateMenu( activeTreeAry )
-    {
-        let menuActive = false;
-
-        for( let i = 0; i < activeTreeAry.length; ++i )
-        {
-            // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
-            {
-                menuActive = true;
-                activeTreeAry[i].update();
-            }
-        }
-
-        return menuActive;
-    }
-    
-    // 
-    //  DESC: Transform the menu
-    //
-    transform()
-    {
-        if( this.active )
-        {
-            if( !this.transformMenu( this.activeMenuTreeAry ) )
-            {
-                // Only allow Updating for interface menus when regular menus are not active
-                this.transformMenu( this.activeInterTreeAry );
-            }
-        }
-
-    }
-
-    // 
-    //  DESC: Transform the menu
-    //
-    transformMenu( activeTreeAry )
-    {
-        let menuActive = false;
-
-        for( let i = 0; i < activeTreeAry.length; ++i )
-        {
-            // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
-            {
-                menuActive = true;
-                activeTreeAry[i].transform();
-            }
-        }
-
-        return menuActive;
-    }
-    
-    // 
-    //  DESC: Render menus
-    //
-    render()
-    {
-        if( this.active )
-        {
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-                if( this.activeMenuTreeAry[i].isActive() )
-                    this.activeMenuTreeAry[i].render( this.camera );
-        }
-    }
-
-    // 
-    //  DESC: Render interface menus
-    //
-    renderInterface( matrix )
-    {
-        if( this.active )
-        {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-                if( this.activeInterTreeAry[i].isActive() )
-                    this.activeInterTreeAry[i].render( matrix );
-        }
-    }
-    
-    // 
-    //  DESC: Is this standard menu system active?
-    //
-    isMenuActive()
-    {
-        if( this.active )
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-                if( this.activeMenuTreeAry[i].isActive() )
-                    return true;
-
-        return false;
-    }
-
-    // 
-    //  Is a menu item active
-    //
-    isMenuItemActive()
-    {
-        let result = false;
-
-        if( this.active )
-        {
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-            {
-                if( this.activeMenuTreeAry[i].isActive() )
-                {
-                    result = this.activeMenuTreeAry[i].isMenuItemActive();
-
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    // 
-    //  Is a interface item active
-    //
-    isInterfaceItemActive()
-    {
-        let result = false;
-
-        if( this.active )
-        {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-            {
-                if( this.activeInterTreeAry[i].isActive() )
-                {
-                    result = this.activeInterTreeAry[i].isMenuItemActive();
-
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    // 
-    //  Set the active state
-    //
-    setActiveState()
-    {
-        this.active = false;
-
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-        {
-            if( this.activeMenuTreeAry[i].isActive() )
-            {
-                this.active = true;
-                break;
-            }
-        }
-
-        if( !this.active )
-        {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-            {
-                if( this.activeInterTreeAry[i].isActive() )
-                {
-                    this.active = true;
-                    break;
-                }
-            }
-        }
-    }
-    
-    // 
-    //  Get the menu in question
-    //
-    getMenu( name )
-    {
-        for( let groupMap of this.menuMapMap.values() )
-        {
-            let menu = groupMap.get( name );
-            if( menu !== undefined )
-                return menu;
-        }
-
-        throw new Error( `Menu being asked for is missing (${name})!` );
-    }
-    
-    // 
-    //  Get the reference to the control in question
-    //
-    getMenuControl( name, controlName )
-    {
-        let menu = this.getMenu( name );
-        let control = menu.getControl( controlName );
-        
-        if( control === null )
-            throw new Error( `Menu control being asked for is missing (${name})!` );
-
-        return control;
-    }
-
-    // 
-    //  Get the pointer to the active control - can return null
-    //
-    getActiveControl( name )
-    {
-        let menu = this.getMenu(name);
-        return menu.GetActiveControl();
-    }
-
-    // 
-    //  Get the first active menu
-    //  NOTE: Only call this function if you are certain it will not fail
-    //
-    getActiveMenu()
-    {
-        let menu = null;
-
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-        {
-            if( this.activeMenuTreeAry[i].isActive() )
-            {
-                menu = this.activeMenuTreeAry[i].getActiveMenu();
-                break;
-            }
-        }
-
-        if( menu === null )
-            throw new Error( 'There is no active menu!' );
-
-        return menu;
-    }
-    
-    // 
-    //  Get a reference to the tree
-    //
-    getTree( treeStr )
-    {
-        for( let groupMap of this.menuTreeMapMap.values() )
-        {
-            for( let [ key, tree ] of groupMap.entries() )
-            {
-                if( key === treeStr )
-                    return tree;
-            }
-        }
-
-        // If you got this far, it's a problem
-        throw new Error( `Menu tree doesn't exist (${treeStr})!` );
-    }
-    
-    // 
-    //  Get a reference to the tree based on group
-    //
-    getTreeGroup( group, treeStr )
-    {
-        let groupMap = this.menuTreeMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            // Find the tree in the map
-            let tree = groupMap.get( treeStr );
-            if( tree !== undefined )
-                return tree;
-            
-            throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
-        }
-        
-        throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
-    }
-
-    // 
-    //  Get a reference to the active tree
-    //
-    getActiveTree()
-    {
-        let tree = null;
-
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-        {
-            if( this.activeMenuTreeAry[i].isActive() )
-            {
-                tree = this.activeMenuTreeAry[i];
-                break;
-            }
-        }
-
-        return tree;
-    }
-    
-    // 
-    //  DESC: See if the tree is in the active list
-    //
-    isTreeInActivelist( treeStr )
-    {
-        for( let groupMap of this.menuTreeMapMap.values() )
-        {
-            for( let [ key, tree ] of groupMap.entries() )
-            {
-                if( key === treeStr )
-                {
-                    if( tree.interfaceMenu )
-                    {
-                        let index = this.activeInterTreeAry.indexOf( tree );
-                        if( index > -1 )
-                            return true;
-                    }
-                    else
-                    {
-                        let index = this.activeMenuTreeAry.indexOf( tree );
-                        if( index > -1 )
-                            return true;
-                    }
-                }
-            }
-        }
-        
-        return false;
-    }
-
-    // 
-    //  Reset the transform
-    //
-    resetTransform()
-    {
-        for( let groupMap of this.menuMapMap.values() )
-            for( let menu of groupMap.values() )
-                menu.forceTransform();
-    }
-
-    // 
-    //  Reset the dynamic positions of menus
-    //
-    resetDynamicOffset()
-    {
-        for( let groupMap of this.menuMapMap.values() )
-            for( let menu of groupMap.values() )
-                menu.resetDynamicPos();
-    }
-    
-    // 
-    //  DESC: allow event handling access function
-    //
-    get allowEventHandling() { return this.allow; }
-    set allowEventHandling( value ) { this.allow = value; }
-
-}
-
-var menuManager = new MenuManager;
-
-
-/***/ }),
-/* 157 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Menu", function() { return Menu; });
-/* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(33);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(116);
-/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(117);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(132);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(158);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(22);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(130);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(159);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(31);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5);
-// 
-//  FILE NAME: menu.js
-//  DESC:      Class for user interface menu
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Menu extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
-{
-    constructor( name, group, filePath )
-    {
-        super();
-        
-        // This menu's name
-        this.name = name;
-        
-        // Group name
-        this.group = group;
-        
-        // File path
-        this.filePath = filePath;
-        
-        // Array of menu static sprites
-        this.spriteAry = [];
-
-        // Array list of static controls
-        this.staticControlAry = [];
-
-        // Array list of mouse only controls
-        this.mouseOnlyControlAry = [];
-
-        // Array list of controls
-        this.controlAry = [];
-
-        // Array list of navigation nodes
-        this.controlNodeAry = [];
-
-        // Map container of controls for easy name access
-        // NOTE: This container does not own it's pointers.
-        this.controlMap = new Map;
-
-        // Current active node
-        this.activeNode = null;
-
-        // menu state
-        this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["ECS_NULL"];
-
-        // Dynamic offset
-        this.dynamicOffset = new _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__["DynamicOffset"];
-
-        // Scrolling parameters
-        this.scrollParam = new _scrollparam__WEBPACK_IMPORTED_MODULE_2__["ScrollParam"];
-
-        // Base smart Gui control scoped pointer
-        this.smartGui = null;
-        
-        // menu alpha value
-        this.alpha = 0;
-
-        // The script conponent
-        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__["ScriptComponent"];
-        
-        // The menu needs to default hidden
-        this.setVisible(false);
-    }
-    
-    // 
-    //  DESC: Load the menu info from file
-    //
-    loadFromNode( node )
-    {
-        // Init the script Ids
-        this.initScriptIds( node );
-        
-        // Load the scroll data from node
-        this.scrollParam.loadFromNode( node.getElementsByTagName( 'scroll' ) );
-
-        // Get the static sprite
-        let nodeLst = node.getElementsByTagName( 'spriteList' );
-        if( nodeLst.length )
-        {
-            let spriteNode = nodeLst[0].children;
-            
-            for( let i = 0; i < spriteNode.length; ++i )
-                this.loadStaticSpriteFromNode( spriteNode[i] );
-        }
-
-        // Get the static menu controls node
-        nodeLst = node.getElementsByTagName( 'staticMenuControls' );
-        if( nodeLst.length )
-        {
-            let controlNode = nodeLst[0].children;
-            
-            for( let i = 0; i < controlNode.length; ++i )
-                this.loadStaticControlFromNode( controlNode[i] );
-        }
-
-        // Get the mouse only menu controls node
-        nodeLst = node.getElementsByTagName( 'mouseOnlyControls' );
-        if( nodeLst.length )
-        {
-            let controlNode = nodeLst[0].children;
-            
-            for( let i = 0; i < controlNode.length; ++i )
-                this.loadMouseOnlyControlFromNode( controlNode[i] );
-        }
-
-        // Get the menu controls
-        nodeLst = node.getElementsByTagName( 'menuControls' );
-        if( nodeLst.length )
-        {
-            let controlNode = nodeLst[0].children;
-            
-            // map to help setup the node pointers
-            let navNodeMap = new Map;
-
-            // Load the controls
-            for( let i = 0; i < controlNode.length; ++i )
-                this.loadControlFromNode( controlNode[i], navNodeMap );
-
-            // Map the controls to their respective nodes
-            for( let i = 0; i < controlNode.length; ++i )
-                this.findNodes( controlNode[i], i, navNodeMap );
-        }
-    }
-    
-    // 
-    //  DESC: Init the script Ids and add them to the map
-    //        This function loads the attribute info reguardless of what it is
-    //
-    initScriptIds( node )
-    {
-        // Check for scripting
-        let scriptLst = node.getElementsByTagName( 'scriptLst' );
-        if( scriptLst.length )
-            this.scriptComponent.initScriptIds( scriptLst[0] );
-    }
-    
-    // 
-    //  DESC: Load a static sprite from an XML node
-    //
-    loadStaticSpriteFromNode( node )
-    {
-        // Get the type of object
-        let objectName = node.getAttribute( 'objectName' );
-
-        // Allocate the static sprite and add it to the array
-        let sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__["Sprite"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__["objectDataManager"].getData( this.group, objectName ) );
-        this.spriteAry.push( sprite );
-
-        // Load the transform data
-        sprite.load( node );
-
-        // Init the script Ids
-        sprite.scriptComponent.initScriptIds( node );
-    }
-
-    // 
-    //  DESC: Load static controls from an XML node
-    //
-    loadStaticControlFromNode( node )
-    {
-        // New up the control with its respected control type
-        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__["create"]( node, this.group );
-        this.staticControlAry.push( control );
-
-        // Does this control have a name then add it to the map
-        if( control.name )
-            this.controlMap.set( control.name, control );
-    }
-
-    // 
-    //  DESC: Load mouse only controls from an XML node
-    //
-    loadMouseOnlyControlFromNode( node )
-    {
-        // New up the control with its respected control type
-        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__["create"]( node, this.group );
-        this.mouseOnlyControlAry.push( control );
-
-        // Does this control have a name then add it to the map
-        if( control.name )
-            this.controlMap.set( control.name, control );
-    }
-
-    // 
-    //  DESC: Load a control from an XML node
-    //
-    loadControlFromNode( node, navNodeMap )
-    {
-        // New up the control with its respected control type
-        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__["create"]( node, this.group );
-        this.controlAry.push( control );
-
-        // Does this control have a name then add it to the map
-        if( control.name )
-        {
-            // Check for duplicate names
-            if( this.controlMap.has( control.name ) )
-                throw new Error( `Duplicate control name! (${control.name})` );
-            
-            // Map of menu controls
-            this.controlMap.set( control.name, control );
-
-            // Add a node to the array with it's control
-            let navNode = new _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__["UIControlNavNode"]( control );
-            this.controlNodeAry.push( navNode );
-
-            // Map of menu control nodes
-            navNodeMap.set( control.name, navNode );
-        }
-    }
-    
-    // 
-    //  DESC: Load the dynamic offset data from node
-    //
-    loadDynamicOffsetFromNode( node )
-    {
-        // Load the dynamic offset
-        this.dynamicOffset = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__["loadDynamicOffset"]( node );
-
-        // Set the dynamic position
-        this.setDynamicPos();
-    }
-
-    // 
-    //  DESC: Set the dynamic position
-    //
-    setDynamicPos()
-    {
-        // Position the menu based on the dynamic offset
-        if( this.dynamicOffset )
-            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__["settings"].defaultSize_half ) );
-    } 
-
-    // 
-    //  DESC: Reset the dynamic position
-    //
-    resetDynamicPos()
-    {
-        this.setDynamicPos();
-
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].setDynamicPos();
-        
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].setDynamicPos();
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].setDynamicPos();
-    }
-
-    // 
-    //  DESC: Find the reference nodes
-    //
-    findNodes( node, nodeIndex, navNodeMap )
-    {
-        let navNode = node.getElementsByTagName( 'navigate' );
-        if( navNode.length )
-        {
-            this.setNodes( navNode, nodeIndex, 'up',    _common_defs__WEBPACK_IMPORTED_MODULE_11__["ENAV_NODE_UP"],    navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'down',  _common_defs__WEBPACK_IMPORTED_MODULE_11__["ENAV_NODE_DOWN"],  navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'left',  _common_defs__WEBPACK_IMPORTED_MODULE_11__["ENAV_NODE_LEFT"],  navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'right', _common_defs__WEBPACK_IMPORTED_MODULE_11__["ENAV_NODE_RIGHT"], navNodeMap );
-        }
-    }
-
-    // 
-    //  DESC: Find the reference nodes
-    //
-    setNodes( node, nodeIndex, attrStr, navId, navNodeMap )
-    {
-        let attr = node[0].getAttribute( attrStr );
-        if( attr )
-        {
-            let ctrlNode = navNodeMap.get( attr );
-            if( ctrlNode !== undefined )
-                this.controlNodeAry[nodeIndex].setNode( navId, ctrlNode );
-            else
-                throw new Error( `Control node doesn't exist! (${attr}, ${attrStr})` );
-        }
-    }
-    
-    // 
-    //  DESC: Init the menu controls
-    //
-    init()
-    {
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].init();
-
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].init();
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].init();
-
-    }   // Init
-
-    // 
-    //  DESC: Init the menu controls
-    //
-    cleanUp()
-    {
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].cleanUp();
-
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].cleanUp();
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].cleanUp();
-
-    }   // CleanUp
-    
-    // 
-    //  DESC: Activate this menu because it's probably a root menu
-    //
-    activateMenu()
-    {
-        this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_IDLE"];
-        this.setVisible(true);
-        this.setAlpha(1);
-        this.activateFirstInactiveControl();
-    }
-
-    // 
-    //  DESC: Update the menu
-    //
-    update()
-    {
-        this.scriptComponent.update();
-
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].update();
-            
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].update();
-            
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].update();
-            
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].update();
-        }
-    }
-
-    // 
-    //  DESC: Transform the menu
-    //
-    transform()
-    {
-        if( this.isVisible() )
-        {
-            super.transform();
-            
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].transform( this );
-            
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].transform( this );
-            
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].transform( this );
-            
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].transform( this );
-        }
-    }
-
-    // 
-    //  DESC: do the render
-    //
-    render( camera )
-    {
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].render( camera );
-            
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].render( camera );
-            
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].render( camera );
-            
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].render( camera );
-        }
-    }
-
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent( event )
-    {
-        if( event instanceof CustomEvent )
-        {
-            // Have the controls handle events
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].handleEvent( event );
-
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                    this.mouseOnlyControlAry[i].handleEvent( event );
-            
-            if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_TRANS_IN"] )
-            {
-                this.onTransIn( event );
-            }
-            else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_TRANS_OUT"] )
-            {
-                this.onTransOut( event );
-            }
-            else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_REACTIVATE"] )
-            {
-                this.onReactivate( event );
-            }
-            else if( this.state === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_IDLE"] )
-            {
-                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_SELECT_ACTION"] )
-                {
-                    this.onSelectAction( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_SET_ACTIVE_CONTROL"] )
-                {
-                    this.onSetActiveControl( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_SCROLL_UP"] )
-                {
-                    this.onUpAction( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_SCROLL_DOWN"] )
-                {
-                    this.onDownAction( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_SCROLL_LEFT"] )
-                {
-                    this.onLeftAction( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_SCROLL_RIGHT"] )
-                {
-                    this.onRightAction( event );
-                }
-                else if( (event.detail.type >= _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_UP_ACTION"]) &&
-                         (event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_RIGHT_ACTION"]) )
-                {
-                    if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EAP_DOWN"] )
-                    {
-                        if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_UP_ACTION"] )
-                        {
-                            this.onUpAction( event );
-                        }
-                        else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_DOWN_ACTION"] )
-                        {
-                            this.onDownAction( event );
-                        }
-                        if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_LEFT_ACTION"] )
-                        {
-                            this.onLeftAction( event );
-                        }
-                        else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_RIGHT_ACTION"] )
-                        {
-                            this.onRightAction( event );
-                        }
-                    }
-                }
-            }
-        }
-        else if( this.state === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_IDLE"] )
-        {
-            if( event.type === 'mousemove' )
-            {
-                this.onMouseMove( event );
-            }
-        }
-
-        // Handle any smart menu events
-        this.smartHandleEvent( event );
-    }
-
-    // 
-    //  DESC: Handle OnUpAction message
-    //
-    onUpAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_11__["ENAV_NODE_UP"] );
-    }
-
-    // 
-    //  DESC: Handle OnMenuDown message
-    //
-    onDownAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_11__["ENAV_NODE_DOWN"] );
-    }
-
-    // 
-    //  DESC: Handle OnMenuLeft message
-    //
-    onLeftAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_11__["ENAV_NODE_LEFT"] );
-    }
-
-    // 
-    //  DESC: Handle OnRightAction message
-    //
-    onRightAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_11__["ENAV_NODE_RIGHT"] );
-    }
-
-    // 
-    //  DESC: Navigate the menu. Find the next control node that isn't
-    //        disabled and make it the active control node
-    //
-    navigateMenu( navNodeAction )
-    {
-        if( this.activeNode !== null )
-        {
-            let navNode = this.activeNode;
-
-            do
-            {
-                navNode = navNode.getNode( navNodeAction );
-                
-                if( navNode === null )
-                {
-                    break;
-                }
-                else if( !navNode.uiControl.isDisabled() )
-                {
-                    this.activeNode = navNode;
-
-                    _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__["eventManager"].dispatchEvent(
-                        _common_defs__WEBPACK_IMPORTED_MODULE_11__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                        _common_defs__WEBPACK_IMPORTED_MODULE_11__["ECS_ACTIVE"],
-                        navNode.uiControl );
-
-                    break;
-                }
-            }
-            while( true );
-        }
-    }
-
-    // 
-    //  DESC: Handle OnMouseMove message
-    //
-    onMouseMove( event )
-    {
-        for( let i = 0; i < this.controlNodeAry.length; ++i )
-        {
-            if( this.controlNodeAry[i].uiControl.onMouseMove( event ) )
-                this.activeNode = this.controlNodeAry[i];
-            else
-                this.controlNodeAry[i].uiControl.deactivateControl();
-        }
-
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            if( !this.mouseOnlyControlAry[i].onMouseMove( event ) )
-                this.mouseOnlyControlAry[i].deactivateControl();
-    }
-
-    // 
-    //  DESC: Handle OnSelectAction message
-    //
-    onSelectAction( event )
-    {
-        let selectionFound = false;
-
-        if( (this.activeNode !== null) &&
-            (this.activeNode.uiControl.handleSelectAction( event )) )
-        {
-            selectionFound = true;
-
-            // Set the state to active which will block all messages until the state is reset to idle
-            if( this.activeNode.uiControl.actionType > _common_defs__WEBPACK_IMPORTED_MODULE_11__["ECAT_NULL"] )
-                this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_ACTIVE"];
-        }
-        else if( event.detail.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_11__["ESMA_DEVICE_TYPE"] ] === _common_defs__WEBPACK_IMPORTED_MODULE_11__["MOUSE"] )
-        {
-            // For mouse only controls
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            {
-                if( this.mouseOnlyControlAry[i].handleSelectAction( event ) )
-                {
-                    selectionFound = true;
-
-                    // Set the state to active which will block all messages until the state is reset to idle
-                    if( this.mouseOnlyControlAry[i].actionType > _common_defs__WEBPACK_IMPORTED_MODULE_11__["ECAT_NULL"] )
-                        this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_ACTIVE"];
-
-                    break;
-                }
-            }
-        }
-
-        // Try to handle touch presses on a non-active control
-        // The mouse just happends to be clicked over a non-active control
-        if( !selectionFound && event.detail.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_11__["ESMA_DEVICE_TYPE"] ] === _common_defs__WEBPACK_IMPORTED_MODULE_11__["MOUSE"] )
-        {
-            // Deactivate the control that should be active
-            if( (this.activeNode !== null) &&
-                (event.detail.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_11__["ESMA_PRESS_TYPE"] ] === this.activeNode.uiControl.mouseSelectType) )
-            {
-                this.activeNode.uiControl.deactivateControl();
-
-                // Go through all the controls on this menu to try to find the one clicked on
-                for( let i = 0; i < this.controlAry.length; ++i )
-                {
-                    if( this.controlAry[i].handleSelectAction( event ) )
-                    {
-                        // Set the state to active which will block all messages until the state is reset to idle
-                        if( this.activeNode.uiControl.actionType > _common_defs__WEBPACK_IMPORTED_MODULE_11__["ECAT_NULL"] )
-                            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_ACTIVE"];
-
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    // 
-    //  DESC: Handle OnSetActiveControl message
-    //
-    onSetActiveControl( event )
-    {
-        // Set the first inactive control to active
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EAC_FIRST_ACTIVE_CONTROL"] )
-            this.activateFirstInactiveControl();
-    }
-
-    // 
-    //  DESC: Handle OnReactivate message
-    //
-    onReactivate( event )
-    {
-        this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_IDLE"];
-    }
-
-    // 
-    //  DESC: Handle OnTransIn message
-    //
-    onTransIn( event )
-    {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_11__["ETC_BEGIN"] )
-        {
-            this.prepare( 'transIn' );
-
-            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_ACTIVE"];
-        }
-        else if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_11__["ETC_END"] )
-        {
-            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_IDLE"];
-        }
-    }
-
-    // 
-    //  DESC: Handle OnTransOut message
-    //
-    onTransOut( event )
-    {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_11__["ETC_BEGIN"] )
-        {
-            this.prepare( 'transOut' );
-
-            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_ACTIVE"];
-        }
-        else if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_11__["ETC_END"] )
-        {
-            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_INACTIVE"];
-        }
-    }
-
-    // 
-    //  DESC: Prepare the script function to run
-    //
-    prepare( scriptFactoryId )
-    {
-        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
-        if( scriptFactory )
-            this.scriptComponent.prepare( scriptFactory(this) );
-    }
-
-    // 
-    //  DESC: Set the first inactive control to be active
-    //
-    activateFirstInactiveControl()
-    {
-        let found = false;
-
-        // Activate the first control found and deactivate all the rest
-        for( let i = 0; i < this.controlNodeAry.length; ++i )
-        {
-            if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
-            {
-                this.activeNode = this.controlNodeAry[i];
-
-                found = true;
-            }
-            else
-            {
-                this.controlNodeAry[i].uiControl.deactivateControl();
-            }
-        }
-    }
-
-    // 
-    //  DESC: Reset all controls
-    //
-    reset()
-    {
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].reset( true );
-
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].reset( true );
-    }
-
-    // 
-    //  DESC: Get the control in question
-    //
-    getControl( name )
-    {
-        // See if the control can be found
-        let control = this.controlMap.get( name );
-
-        // Make sure control is available
-        if( control === undefined )
-            throw new Error( `Control being asked for is missing! (${name}).` );
-
-        // Pass back the control if found
-        return control;
-    }
-
-    // 
-    //  DESC: Get the pointer to the active control
-    //
-    getActiveControl()
-    {
-        let result = null;
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-        {
-            if( this.controlAry[i].state > _common_defs__WEBPACK_IMPORTED_MODULE_11__["ECS_INACTIVE"] )
-            {
-                result = this.controlAry[i].getActiveControl();
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    // 
-    //  DESC: Does this menu use dynamic offsets
-    //
-    isDynamicOffset()
-    {
-        return !this.dynamicOffset.isEmpty();
-    }
-
-    // 
-    //  DESC: Get the scroll params
-    //
-    getScrollParam( msg )
-    {
-        if( (this.activeNode != null) &&
-            this.activeNode.uiControl.canScroll(msg) )
-        {
-            return this.activeNode.uiControl.scrollParam;
-        }
-
-        return this.scrollParam;
-    }
-    
-    // 
-    //  DESC: Do any smart create
-    //
-    smartCreate()
-    {
-        if( this.smartGui )
-            this.smartGui.create();
-    }
-
-    // 
-    //  DESC: Do any smart event handling
-    //
-    smartHandleEvent( event )
-    {
-        if( this.smartGui )
-            this.smartGui.handleEvent( event );
-    }
-
-    // 
-    //  DESC: Set the alpha value of this menu
-    //
-    setAlpha( alpha )
-    {
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].setAlpha( alpha );
-
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].setAlpha( alpha );
-
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].setAlpha( alpha );
-
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].setAlpha( alpha );
-        }
-
-        this.alpha = alpha;
-    }
-    
-    // 
-    //  DESC: Get the alpha value of this menu
-    //
-    getAlpha()
-    {
-        return this.alpha;
-    }
-
-    // 
-    //  DESC: Is the menu idle
-    //
-    isIdle()
-    {
-        return (this.state === _common_defs__WEBPACK_IMPORTED_MODULE_11__["EMS_IDLE"]);
-    }
-}
-
-
-/***/ }),
-/* 158 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControlNavNode", function() { return UIControlNavNode; });
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uicontrolnavnode.js
-//  DESC:      UI Control Navigation Node
-//
-
-
-
-
-class UIControlNavNode
-{
-    constructor( uiControl = null )
-    {
-        // UI Control pointer
-        this.uiControl = uiControl;
-
-        // Navigation node pointers
-        this.upNode = null;
-        this.downNode = null;
-        this.leftNode = null;
-        this.rightNode = null;
-    }
-    
-    // 
-    //  DESC: Set/Get Right Node
-    //
-    setNode( navId, node )
-    {
-        if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_UP"] )
-            this.upNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_DOWN"] )
-            this.downNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_LEFT"] )
-            this.leftNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_RIGHT"] )
-            this.rightNode = node;
-    }
-
-    getNode( navNode )
-    {
-        if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_UP"] )
-            return this.upNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_DOWN"] )
-            return this.downNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_LEFT"] )
-            return this.leftNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENAV_NODE_RIGHT"] )
-            return this.rightNode;
-
-        return null;
-    }
-}
-
-
-/***/ }),
-/* 159 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
-/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(160);
-/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(161);
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(162);
-/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(163);
-/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(164);
-/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(165);
-/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(166);
-/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(135);
-/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(113);
-// 
-//  FILE NAME: uicontrolfactory.js
-//  DESC:      factory for control creation
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 
-//  DESC: Create the control info from XML node
-//
-function create( node, group )
-{
-    let control = null;
-
-    // Get the control type. This is required
-    let ctrlType = node.getAttribute( 'controlType' );
-
-    // New up the control with its respected control type
-    if( ctrlType === 'label' )
-        control = new _uilabel__WEBPACK_IMPORTED_MODULE_1__["UILabel"]( group );
-
-    else if( ctrlType === 'button' )
-        control = new _uibutton__WEBPACK_IMPORTED_MODULE_2__["UIButton"]( group );
-
-    else if( ctrlType === 'sub_control' )
-        control = new _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__["UISubControl"]( group );
-
-    else if( ctrlType === 'button_list' )
-        control = new _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__["UIButtonList"]( group );
-
-    else if( ctrlType === 'check_box' )
-        control = new _uicheckbox__WEBPACK_IMPORTED_MODULE_5__["UICheckBox"]( group );
-
-    else if( ctrlType === 'slider' )
-        control = new _uislider__WEBPACK_IMPORTED_MODULE_6__["UISlider"]( group );
-
-    else if( ctrlType === 'scroll_box' )
-        control = new _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__["UIScrollBox"]( group );
-
-    else if( ctrlType === 'meter' )
-        control = new _uimeter__WEBPACK_IMPORTED_MODULE_8__["UIMeter"]( group );
-
-    else if( ctrlType === 'progress_bar' )
-        control = new _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__["UIProgressBar"]( group );
-
-    else
-        throw new Error( `UI Control not defined! (${ctrlType})` );
-
-    // Have the control load it's share
-    control.loadFromNode( node );
-
-    // Broadcast signal to let the game handle smart gui inits
-    _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_smartGui( control );
-
-    // Do any smart gui Create
-    control.smartCreate();
-
-    return control;
-
-}
-
-
-/***/ }),
-/* 160 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UILabel", function() { return UILabel; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(114);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uilabel.js
-//  DESC:      Class for user interface labels
-//
-
-
-
-
-
-class UILabel extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
-{
-    constructor( group )
-    {
-        super( group );
-        
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_LABEL"];
-    }
-}
-
-
-
-/***/ }),
-/* 161 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButton", function() { return UIButton; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(114);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uibutton.js
-//  DESC:      Class for user interface buttons
-//
-
-
-
-
-
-class UIButton extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
-{
-    constructor( group )
-    {
-        super( group );
-        
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_BUTTON"];
-    }
-}
-
-
-/***/ }),
-/* 162 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISubControl", function() { return UISubControl; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(114);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(158);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(132);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(159);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uisubcontrol.js
-//  DESC:      Class for user interface controls with sub-controls
-//
-
-
-
-
-
-
-
-
-class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
-{
-    constructor( group )
-    {
-        super( group );
-        
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECT_SUB_CONTROL"];
-        
-        // Arry of sub-controls
-        this.subControlAry = [];
-
-        // Array list of navigation nodes
-        this.controlNodeAry = [];
-
-        // Current active node
-        // NOTE: This variable does not own it's pointers.
-        this.activeNode = null;
-
-        // A sub control is a container for other controls so normally
-        // it doesn't respont to select messages. There can be a case
-        // where this control needs to respond.
-        this.respondsToSelectMsg = false;
-    }
-    
-    // 
-    //  DESC: Load the control specific info from XML node
-    //
-    loadControlFromNode( node )
-    {
-        // Have the parent load it's stuff
-        super.loadControlFromNode( node );
-
-        // Get the sub-control settings
-        let subControlSettingsNode = node.getElementsByTagName( 'subControlSettings' );
-        if( subControlSettingsNode.length )
-        {
-            // Does this sub control respond to select? The default is false.
-            let attr = subControlSettingsNode[0].getAttribute( 'respondsToSelectMsg' );
-            if( attr === 'true' )
-                this.respondsToSelectMsg = true;
-        }
-
-        // Get the menu controls node
-        let controlListNode = node.getElementsByTagName( 'subControlList' );
-        if( controlListNode.length )
-        {
-            // map to help setup the node pointers
-            let navNodeMap = new Map;
-            
-            let controlNode = controlListNode[0].getElementsByTagName( 'control' );
-
-            for( let i = 0; i < controlNode.length; ++i )
-            {
-                // The reference is placed within an array for all controls
-                let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_3__["create"]( controlNode[i], this.group );
-                
-                this.subControlAry.push( control );
-
-                // Does this control have a name then create a node and add it to the map
-                if( control.name )
-                {
-                    // Add a node to the vector with it's control
-                    let navNode = new _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__["UIControlNavNode"]( control );
-                    this.controlNodeAry.push( navNode );
-
-                    // Map of menu control nodes
-                    navNodeMap.set( control.name, navNode );
-                }
-            }
-
-            // Find the reference nodes
-            if( navNodeMap.size > 0 )
-            {
-                for( let i = 0; i < controlNode.length; ++i )
-                    this.findNodes( controlNode[i], i, navNodeMap );
-            }
-        }
-    }
-
-    // 
-    //  DESC: Init the control
-    //
-    init()
-    {
-        super.init();
-
-        // Init all controls
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].init();
-    }
-
-    // 
-    //  DESC: Do some cleanup
-    //
-    cleanUp()
-    {
-        super.cleanUp();
-
-        // Init all controls
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].cleanUp();
-    }
-
-    // 
-    //  DESC: Find the reference nodes
-    //
-    findNodes( node, nodeIndex, navNodeMap )
-    {
-        let navNode = node.getElementsByTagName( 'navigate' );
-        if( navNode.length )
-        {
-            this.setNodes( navNode, nodeIndex, 'up',    _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_UP"],    navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'down',  _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_DOWN"],  navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'left',  _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_LEFT"],  navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'right', _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_RIGHT"], navNodeMap );
-        }
-    }
-
-    // 
-    //  DESC: Find the reference nodes
-    //
-    setNodes( node, nodeIndex, attrStr, navId, navNodeMap )
-    {
-        let attr = node[0].getAttribute( attrStr );
-        if( attr )
-        {
-            let ctrlNode = navNodeMap.get( attr );
-            if( ctrlNode !== undefined )
-                this.controlNodeAry[nodeIndex].setNode( navId, ctrlNode );
-            else
-                throw new Error( `Control node doesn't exist! (${name})` );
-        }
-    }
-
-    // 
-    //  DESC: Update the control
-    //
-    update()
-    {
-        // Call the parent
-        super.update();
-
-        // Update all controls
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].update();
-    }
-
-    // 
-    //  DESC: Transform the control
-    //
-    transform( object )
-    {
-        // Call the parent
-        super.transform( object );
-
-        // Update all controls
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].transform( this );
-    }
-
-    // 
-    //  DESC: Render the sub control
-    //
-    render( camera )
-    {
-        // Call the parent
-        super.render( camera );
-
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].render( camera );
-    }
-
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent( event )
-    {
-        // Call the parent
-        super.handleEvent( event );
-
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].handleEvent( event );
-
-        if( this.isActive() && (event instanceof CustomEvent) )
-        {
-            if( (event.detail.type >= _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_UP_ACTION"]) &&
-                (event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_RIGHT_ACTION"]) )
-            {
-                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_UP_ACTION"] )
-                {
-                    this.onUpAction( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_DOWN_ACTION"] )
-                {
-                    this.onDownAction( event );
-                }
-                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_LEFT_ACTION"] )
-                {
-                    this.onLeftAction( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_RIGHT_ACTION"] )
-                {
-                    this.onRightAction( event );
-                }
-            }
-            else if( (event.detail.type >= _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_UP"]) &&
-                     (event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_RIGHT"]) )
-            {
-                if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_UP"] )
-                {
-                    this.onUpScroll( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_DOWN"] )
-                {
-                    this.onDownScroll( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_LEFT"] )
-                {
-                    this.onLeftScroll( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_SCROLL_RIGHT"] )
-                {
-                    this.onRightScroll( event );
-                }
-            }
-            else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_TAB_LEFT"] )
-            {
-                this.onTabLeft( event );
-            }
-            else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_TAB_RIGHT"] )
-            {
-                this.onTabRight( event );
-            }
-        }
-    }
-
-    // 
-    //  DESC: Handle OnUpAction message
-    //
-    onUpAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_UP"] );
-    }
-
-    // 
-    //  DESC: Handle OnMenuDown message
-    //
-    onDownAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_DOWN"] );
-    }
-
-    // 
-    //  DESC: Handle OnMenuLeft message
-    //
-    onLeftAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_LEFT"] );
-    }
-
-    // 
-    //  DESC: Handle OnRightAction message
-    //
-    onRightAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_RIGHT"] );
-    }
-
-    // 
-    //  DESC: Handle OnUpScroll message
-    //
-    onUpScroll( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_UP"] );
-    }
-
-    // 
-    //  DESC: Handle OnUpScroll message
-    //
-    onDownScroll( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_DOWN"] );
-    }
-
-    // 
-    //  DESC: Handle OnRightScroll message
-    //
-    onLeftScroll( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_LEFT"] );
-    }
-
-    // 
-    //  DESC: Handle OnRightScroll message
-    //
-    onRightScroll( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ENAV_NODE_RIGHT"] );
-    }
-
-    // 
-    //  DESC: Handle OnTabLeft message
-    //
-    onTabLeft( event )
-    {
-        // Do nothing
-    }
-
-    // 
-    //  DESC: Handle OnTabRight message
-    //
-    onTabRight( event )
-    {
-        // Do nothing
-    }
-
-    // 
-    //  DESC: Navigate the menu. Find the next control node that isn't
-    //        disabled and make it the active control node
-    //
-    navigateMenu( navNode )
-    {
-        if( this.activeNode !== null )
-        {
-            let navNode = this.activeNode;
-
-            do
-            {
-                navNode = navNode.getNode( navNode );
-                
-                if( navNode === null )
-                {
-                    break;
-                }
-                else if( !navNode.uiControl.isDisabled() )
-                {
-                    this.activeNode = navNode;
-
-                    _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent(
-                        _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                        _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_ACTIVE"],
-                        navNode.uiControl );
-
-                    break;
-                }
-            }
-            while( true );
-        }
-    }
-
-    // 
-    //  DESC: Handle OnStateChange message
-    //
-    onStateChange( event )
-    {
-        if( this.respondsToSelectMsg )
-        {
-            super.onStateChange( event );
-        }
-        else
-        {
-            let state = event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["EMSC_STATE"]];
-
-            let ctrl = this.findSubControlByRef( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["EMSC_CONTROL"]] );
-
-            // Restart the active state of the sub control if something
-            // changed in the child controls or their children controls
-            if( (state === _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_ACTIVE"]) && (ctrl !== null) )
-            {
-                if( ctrl.state != state )
-                {
-                    this.setState(state, true);
-
-                    this.resetSpriteScript();
-
-                    this.setDisplayState();
-                }
-            }
-            // The sub control doesn't respond to selected message
-            else if( state < _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_SELECTED"] )
-                super.onStateChange( event );
-        }
-    }
-
-    // 
-    //  DESC: Reset and recycle the contexts
-    //
-    reset( complete )
-    {
-        super.reset( complete );
-        
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].reset( complete );
-    }
-
-    // 
-    //  DESC: Handle the mouse move
-    //
-    onMouseMove( event )
-    {
-        let result = super.onMouseMove( event );
-
-        let found = this.onSubControlMouseMove( event );
-
-        // If the sub control is not found, deactivate them
-        if( result && !found )
-            this.deactivateSubControl();
-
-        return result || found;
-    }
-
-    // 
-    //  DESC: Handle the sub control mouse move
-    //
-    onSubControlMouseMove( event )
-    {
-        let result = false;
-
-        for( let i = 0; i < this.subControlAry.length && !result; ++i )
-            result = this.subControlAry[i].onMouseMove( event );
-
-        return result;
-    }
-
-    // 
-    //  DESC: Handle the select action
-    //
-    handleSelectAction( event )
-    {
-        if( this.respondsToSelectMsg )
-        {
-            return super.handleSelectAction( event );
-        }
-        else
-        {
-            for( let i = 0; i < this.subControlAry.length; ++i )
-                if( this.subControlAry[i].handleSelectAction( event ) )
-                    return true;
-        }
-
-        return false;
-    }
-
-    // 
-    //  DESC: Get the reference to the control if found
-    //
-    findControlByName( name )
-    {
-        let ctrl = super.findControlByName( name );
-
-        if( ctrl === null )
-            ctrl = this.findSubControlByName( name );
-
-        return ctrl;
-    }
-
-    findControlByRef( control )
-    {
-        let ctrl = super.findControlByRef( control );
-
-        if( ctrl === null )
-            ctrl = this.findSubControlByRef( control );
-
-        return ctrl;
-    }
-
-    // 
-    //  DESC: Get the pointer to the subcontrol if found
-    //
-    findSubControlByName( name )
-    {
-        let ctrl = null;
-
-        for( let i = 0; i < this.subControlAry.length && !ctrl; ++i )
-            ctrl = this.subControlAry[i].findControlByName( name );
-
-        return ctrl;
-    }
-
-    findSubControlByRef( control )
-    {
-        let ctrl = null;
-
-        for( let i = 0; i < this.subControlAry.length && !ctrl; ++i )
-            ctrl = this.subControlAry[i].findControlByRef( control );
-
-        return ctrl;
-    }
-
-    // 
-    //  DESC: Set the first inactive control to be active
-    //  NOTE: This is mainly here to be virtual for sub controls
-    //
-    activateFirstInactiveControl()
-    {
-        if( super.activateFirstInactiveControl() )
-        {
-            let found = false;
-
-            for( let i = 0; i < this.controlNodeAry.length; ++i )
-            {
-                if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
-                {
-                    this.activeNode = this.controlNodeAry[i];
-
-                    found = true;
-                }
-                else
-                {
-                    this.controlNodeAry[i].uiControl.deactivateControl();
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-    
-    baseActivateFirstInactiveControl()
-    {
-        return super.activateFirstInactiveControl();
-    }
-
-    // 
-    //  DESC: Deactivate the control
-    //
-    deactivateControl()
-    {
-        super.deactivateControl();
-
-        this.deactivateSubControl();
-    }
-
-    // 
-    //  DESC: Deactivate the sub control
-    //
-    deactivateSubControl()
-    {
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].deactivateControl();
-    }
-
-    // 
-    //  DESC: Check if control is a sub control
-    //
-    isSubControl()
-    {
-        return true;
-    }
-
-    // 
-    //  DESC: Disable the control
-    //
-    disableControl()
-    {
-        super.disableControl();
-
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].disableControl();
-    }
-
-    // 
-    //  DESC: Enable the control to the inactive state
-    //
-    enableControl()
-    {
-        super.enableControl();
-
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].enableControl();
-    }
-
-    // 
-    //  DESC: Set the alpha value of this control
-    //
-    setAlpha( alpha )
-    {
-        super.setAlpha( alpha );
-
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].setAlpha( alpha );
-    }
-
-    // 
-    //  DESC: Get the pointer to the active control
-    //  NOTE: This is mostly needed for sub controls
-    //
-    getActiveControl()
-    {
-        let result = null;
-
-        for( let i = 0; i < this.subControlAry.length; ++i )
-        {
-            if( this.subControlAry[i].getState() > _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_INACTIVE"] )
-            {
-                result = this.subControlAry[i].getActiveControl();
-                break;
-            }
-        }
-        
-        return result;
-    }
-}
-
-
-/***/ }),
-/* 163 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIButtonList", function() { return UIButtonList; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(162);
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(132);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uibuttonlist.js
-//  DESC:      Class for user interface buttons
-//
-
-
-
-
-
-
-
-class UIButtonList extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"]
-{
-    constructor( group )
-    {
-        super( group );
-        
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECT_BUTTON_LIST"];
-        
-        // Active index into the list
-        this.activeIndex = 0;
-
-        // Index of the image list
-        this.imageLstIndex = -1;
-        
-        // Last font index used for the font list
-        this.lastFontSpriteIndex = 0;
-
-        // Indicates if the control responds to up, down, left or right
-        this.actionMask = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__["BitMask"];
-    }
-    
-    // 
-    //  DESC: Load the control info from XML node
-    //
-    loadFromNode( node )
-    {
-        // Call the parent
-        super.loadFromNode( node );
-
-        // See what the control will respond to
-        let actionResponseNode = node.getElementsByTagName( 'actionResponse' );
-        let attr = actionResponseNode[0].getAttribute('up');
-        if( attr && (attr === 'true') )
-        {
-            this.actionMask.add( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_UP"] );
-        }
-
-        attr = actionResponseNode[0].getAttribute('down');
-        if( attr && (attr === 'true') )
-        {
-            this.actionMask.add( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_DOWN"] );
-        }
-
-        attr = actionResponseNode[0].getAttribute('left');
-        if( attr && (attr === 'true') )
-        {
-            this.actionMask.add( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_LEFT"] );
-        }
-
-        attr = actionResponseNode[0].getAttribute('right');
-        if( attr && (attr === 'true') )
-        {
-            this.actionMask.add( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_RIGHT"] );
-        }
-    }
-
-    // 
-    //  DESC: Load the control specific info from XML node
-    //
-    loadControlFromNode( node )
-    {
-        // Call the parent
-        super.loadControlFromNode( node );
-
-        // See if there is an image list
-        for( let i = 0; i < this.spriteAry.length; ++i )
-        {
-            if( this.spriteAry[i].objData.visualData.getFrameCount() > 1 )
-            {
-                this.imageLstIndex = i;
-                break;
-            }
-        }
-        
-        // Find the last font sprite in the list
-        let fontSpriteCounter = 0;
-        for( let i = 0; i < this.spriteAry.length; ++i )
-        {
-            if( this.spriteAry[i].visualComponent.isFontSprite() )
-            {
-                this.lastFontSpriteIndex = fontSpriteCounter;
-                ++fontSpriteCounter;
-            }
-        }
-    }
-
-    // 
-    //  DESC: Inc/Dec control
-    //
-    inc()
-    {
-        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent(
-            _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_CONTROL_STATE_CHANGE"],
-            _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECS_SELECTED"],
-            this.subControlAry[_common_defs__WEBPACK_IMPORTED_MODULE_3__["BTN_INC"]] );
-    }
-
-    dec()
-    {
-        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent(
-            _common_defs__WEBPACK_IMPORTED_MODULE_3__["EGE_MENU_CONTROL_STATE_CHANGE"],
-            _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECS_SELECTED"],
-            this.subControlAry[_common_defs__WEBPACK_IMPORTED_MODULE_3__["BTN_DEC"]] );
-    }
-
-    // 
-    //  DESC: Handle Onmessage
-    //
-    onDownAction( event )
-    {
-        if( (event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_DOWN"]) && this.actionMask.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_DOWN"] ) )
-            this.dec();
-    }
-
-    onUpAction( event )
-    {
-        if( (event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_DOWN"]) && this.actionMask.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_UP"] ) )
-            this.inc();
-    }
-
-    onLeftAction( event )
-    {
-        if( (event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_DOWN"]) && this.actionMask.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_LEFT"] ) )
-            this.dec();
-
-    }
-
-    onRightAction( event )
-    {
-        if( (event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAP_DOWN"]) && this.actionMask.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_RIGHT"] ) )
-            this.inc();
-    }
-
-    // 
-    //  DESC: Handle OnLeftScroll message
-    //
-    onDownScroll( event )
-    {
-        if( this.actionMask.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_DOWN"] ) )
-            this.dec();
-    }
-
-    onUpScroll( event )
-    {
-        if( this.actionMask.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_UP"] ) )
-            this.inc();
-    }
-
-    onLeftScroll( event )
-    {
-        if( this.actionMask.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_LEFT"] ) )
-            this.dec();
-    }
-
-    onRightScroll( event )
-    {
-        if( this.actionMask.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EAR_RIGHT"] ) )
-            this.inc();
-    }
-
-    // 
-    //  DESC: Handle OnStateChange message
-    //
-    onStateChange( event )
-    {
-        super.onStateChange( event );
-
-        let state = event.detail.arg[0];
-
-        if( state === _common_defs__WEBPACK_IMPORTED_MODULE_3__["ECS_SELECTED"] )
-        {
-            if( this.subControlAry[_common_defs__WEBPACK_IMPORTED_MODULE_3__["BTN_DEC"]] == event.detail.arg[1] )
-            {
-                // Dec the list
-                this.decList();
-
-                // Update the display
-                this.updateDisplay( this.activeIndex );
-            }
-            else if( this.subControlAry[_common_defs__WEBPACK_IMPORTED_MODULE_3__["BTN_INC"]] == event.detail.arg[1] )
-            {
-                // Inc the list
-                this.incList();
-
-                // Update the display
-                this.updateDisplay( this.activeIndex );
-            }
-        }
-    }
-
-    // 
-    //  DESC: Inc the list
-    //
-    incList()
-    {
-        if( this.stringAry.length )
-            this.activeIndex = (this.activeIndex + 1) % this.stringAry.length;
-    }
-
-    decList()
-    {
-        if( this.stringAry.length )
-        {
-            if( this.activeIndex > 0 )
-                this.activeIndex = (this.activeIndex - 1) % this.stringAry.length;
-            else
-                this.activeIndex = this.stringAry.length - 1;
-        }
-    }
-
-    // 
-    //  DESC: Update the display
-    //
-    updateDisplay( index )
-    {
-        this.activeIndex = index;
-
-        this.createFontString( this.activeIndex, this.lastFontSpriteIndex );
-
-        if( this.imageLstIndex > -1 )
-            this.spriteAry[this.imageLstIndex].visualComponent.setFrame( this.activeIndex );
-    }
-    
-    // 
-    //  DESC: Get the active index
-    //
-    getIndex()
-    {
-        return this.activeIndex;
-    }
-}
-
-
-/***/ }),
-/* 164 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UICheckBox", function() { return UICheckBox; });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(114);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uicheckbox.js
-//  DESC:      Class for user interface check box buttons
-//
-
-
-
-
-
-class UICheckBox extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
-{
-    constructor( group )
-    {
-        super( group );
-        
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECT_CHECK_BOX"];
-        
-        // Select state
-        this.toggleState = false;
-    }
-    
-    // 
-    //  DESC: Handle OnSelectExecute message
-    //
-    onSelectExecute( event )
-    {
-        if( this.state === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ECS_SELECTED"] )
-            this.toggleState = !this.toggleState;
-
-        super.onSelectExecute( event );
-    }
-
-    // 
-    //  DESC: Render the control
-    //
-    render( matrix )
-    {
-        for( let i = 0; i < this.spriteAry.length-1; ++i )
-            this.spriteAry[i].render( matrix );
-
-        if( this.toggleState === _common_defs__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_STATE_ON"] )
-            this.spriteAry[this.spriteAry.length-1].render( matrix );
-    }
-}
-
-
-
-
-/***/ }),
-/* 165 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UISlider", function() { return UISlider; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(162);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
-/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(132);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uislider.js
-//  DESC:      Class for user interface slider
-//
-
-
-
-
-
-
-
-
-class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"]
-{
-    constructor( group )
-    {
-        super( group );
-        
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECT_SLIDER"];
-        
-        // Slider travel distance in pixels
-        this.travelDistPixels = 0;
-
-        // Slider Orientation
-        this.orientation = _common_defs__WEBPACK_IMPORTED_MODULE_4__["EO_HORIZONTAL"];
-
-        // Min value
-        this.minValue = 0;
-
-        // Max value
-        this.maxValue = 0;
-
-        // Current value
-        this.curValue = 0;
-
-        // inc value
-        this.incValue = 0;
-
-        // Flag to indicate to display the value as an int
-        this.displayValueAsInt = false;
-
-        // Default position of the slider button
-        this.defaultPos = new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"];
-
-        // slider button hold flag
-        this.sliderBtnHold = false;
-
-        // The current press type
-        this.pressType = _common_defs__WEBPACK_IMPORTED_MODULE_4__["EAP_IDLE"];
-    }
-    
-    // 
-    //  DESC: Load the control info from XML node
-    //
-    loadFromNode( node )
-    {
-        super.loadFromNode( node );
-
-        // Get the slider specific settings
-        let settingsNode = node.getElementsByTagName( 'settings' );
-        if( settingsNode.length )
-        {
-            let attr = settingsNode[0].getAttribute( 'orientation' );
-            if( attr && (attr === 'VERT') )
-                this.orientation = _common_defs__WEBPACK_IMPORTED_MODULE_4__["EO_VERTICAL"];
-
-            attr = settingsNode[0].getAttribute( 'minValue' );
-            if( attr )
-                this.minValue = Number(attr);
-
-            attr = settingsNode[0].getAttribute( 'maxValue' );
-            if( attr )
-                this.maxValue = Number(attr);
-
-            attr = settingsNode[0].getAttribute( 'incValue' );
-            if( attr )
-                this.incValue = Number(attr);
-
-            attr = settingsNode[0].getAttribute( 'defValue' );
-            if( attr )
-                this.curValue = Number(attr);
-
-            attr = settingsNode[0].getAttribute( 'displayValueAsInt' );
-            if( attr && (attr === 'true') )
-                this.displayValueAsInt = true;
-        }
-    }
-
-    // 
-    //  DESC: Load the control specific info from XML node
-    //
-    loadControlFromNode( node )
-    {
-        // Have the parent load it's stuff
-        super.loadControlFromNode( node );
-
-        // Get the position of the slider button as the default position
-        this.defaultPos.copy( this.subControlAry[0].pos );
-
-        // Get the slider specific settings
-        let settingsNode = node.getElementsByTagName( 'settings' );
-        if( settingsNode.length )
-        {
-            let attr = settingsNode[0].getAttribute( 'maxTravelDistPixels' );
-            if( attr )
-                this.travelDistPixels = Number(attr);
-        }
-    }
-
-    // 
-    //  DESC: Init the control
-    //
-    init()
-    {
-        super.init();
-
-        this.updateSlider();
-    }
-
-    // 
-    //  DESC: Handle OnLeftAction message
-    //
-    onLeftAction( event )
-    {
-        // Handle the slider change
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EAP_DOWN"] )
-            this.handleSliderChange( -this.incValue, true );
-    }
-
-    // 
-    //  DESC: Handle OnRightAction message
-    //
-    onRightAction( event )
-    {
-        // Handle the slider change
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EAP_DOWN"] )
-            this.handleSliderChange( this.incValue, true );
-    }
-
-    // 
-    //  DESC: Handle OnRightScroll message
-    //
-    onLeftScroll( event )
-    {
-        this.handleSliderChange( -this.incValue );
-    }
-
-    // 
-    //  DESC: Handle OnRightScroll message
-    //
-    onRightScroll( event )
-    {
-        this.handleSliderChange( this.incValue );
-    }
-
-    // 
-    //  DESC: Handle OnMouseMove message
-    //
-    onMouseMove( event )
-    {
-        let result = super.onMouseMove( event );
-
-        if( this.isActive() && (this.pressType === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EAP_DOWN"]) )
-        {
-            let oneOverAspectRatio = 1.0 / _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].orthoAspectRatio.h;
-
-            if( this.orientation === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EO_HORIZONTAL"] )
-                this.incSliderMovePos( event.movementX * oneOverAspectRatio );
-            else
-                this.incSliderMovePos( event.movementY * oneOverAspectRatio );
-
-            this.smartExecuteAction();
-        }
-
-        return result;
-    }
-
-    // 
-    //  DESC: Handle the select action
-    //
-    handleSelectAction( event )
-    {
-        let result = this.isActive() &&
-                     (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["ESMA_DEVICE_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_4__["MOUSE"]) &&
-                     this.isPointInControl( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["ESMA_MOUSE_X"]], event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["ESMA_MOUSE_Y"]] );
-             
-        if( result && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["ESMA_PRESS_TYPE"]] === this.mouseSelectType) )
-        {
-            // Get the press type to know if we need to move the slider 
-            // along with the mouse move
-            this.pressType = this.mouseSelectType;
-
-            if( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["ESMA_PRESS_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EAP_DOWN"] )
-            {
-                this.prepareControlScript( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_SELECTED"] );
-
-                let ratio = 1.0 / _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].orthoAspectRatio.h;
-
-                if( this.orientation === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EO_HORIZONTAL"] )
-                    this.incSliderMovePos( (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["ESMA_MOUSE_X"]] - this.subControlAry[0].collisionCenter.x) * ratio );
-                else
-                    this.incSliderMovePos( (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["ESMA_MOUSE_Y"]] - this.subControlAry[0].collisionCenter.y) * ratio );
-
-                this.smartExecuteAction();
-            }
-        }
-        else if( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_4__["ESMA_PRESS_TYPE"]] !== this.mouseSelectType )
-        {
-            this.pressType = _common_defs__WEBPACK_IMPORTED_MODULE_4__["EAP_IDLE"];
-        }
-
-        return result;
-    }
-
-    // 
-    //  DESC: Deactivate the control
-    //
-    deactivateControl()
-    {
-        super.deactivateControl();
-
-        this.pressType = _common_defs__WEBPACK_IMPORTED_MODULE_4__["EAP_IDLE"];
-    }
-
-    // 
-    //  DESC: Handle the slider change
-    //
-    handleSliderChange( value, prepareOnSelect = false )
-    {
-        if( this.isActive() )
-        {
-            if( prepareOnSelect )
-                this.prepareControlScript( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_SELECTED"] );
-
-            // Send a message to blink the button
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( 
-                _common_defs__WEBPACK_IMPORTED_MODULE_4__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                _common_defs__WEBPACK_IMPORTED_MODULE_4__["ECS_SELECTED"],
-                this.subControlAry[0] );
-
-            this.incSlider( value );
-
-            this.smartExecuteAction();
-        }
-    }
-
-    // 
-    //  DESC: Set the slider inc value
-    //
-    setSlider( value = 0 )
-    {
-        this.curValue = value;
-
-        // Update the slider
-        this.updateSlider();
-    }
-
-    // 
-    //  DESC: Set the slider inc value
-    //
-    incSlider( value = 0 )
-    {
-        this.curValue += value;
-
-        // Update the slider
-        this.updateSlider();
-    }
-
-    // 
-    //  DESC: Inc the slider based on mouse movement
-    //
-    incSliderMovePos( value )
-    {
-        this.curValue += value * ((this.maxValue - this.minValue) / this.travelDistPixels);
-
-        // Update the slider
-        this.updateSlider();
-    }
-
-    // 
-    //  DESC: Update the slider
-    //
-    updateSlider()
-    {
-        // Cap current value to it's range
-        this.capSliderValue();
-
-        // Set the position of the slider
-        this.setSliderPos();
-
-        // Set the slider label if there is one
-        if( this.stringAry.length )
-        {
-            // Format for display
-            let valueStr;
-
-            if( this.displayValueAsInt )
-                valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, Math.trunc(this.curValue));
-            else
-                valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this.curValue);
-
-            this.createFontStr( valueStr );
-        }
-    }
-
-    // 
-    //  DESC: Cap the slider value
-    //
-    capSliderValue()
-    {
-        // Cap current value to range
-        if( this.curValue < this.minValue )
-            this.curValue = this.minValue;
-
-        else if( this.curValue > this.maxValue )
-            this.curValue = this.maxValue;
-    }
-
-    // 
-    //  DESC: Set the position of the slider
-    //
-    setSliderPos()
-    {
-        if( Math.abs(this.maxValue) > 0.001 )
-        {
-            let startPos = -(this.travelDistPixels / 2);
-            let pixelsPerValue = this.travelDistPixels / (this.maxValue - this.minValue);
-            let pos = startPos + (pixelsPerValue * (this.curValue - this.minValue));
-
-            if( this.orientation === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EO_HORIZONTAL"] )
-                this.subControlAry[0].setPosXYZ( this.defaultPos.x + pos, this.defaultPos.y );
-            else
-                this.subControlAry[0].setPosXYZ( this.defaultPos.x, this.defaultPos.y + -pos );
-        }
-    }
-
-    // 
-    //  DESC: Is the mouse down
-    //
-    isMouseDown()
-    {
-        return (this.pressType === _common_defs__WEBPACK_IMPORTED_MODULE_4__["EAP_DOWN"]);
-    }
-}
-
-
-/***/ }),
-/* 166 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIScrollBox", function() { return UIScrollBox; });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(162);
-/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(117);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(132);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(103);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(31);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(159);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uiscrollbox.js
-//  DESC:      Class for user interface scroll boxes
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-const IN_VIEWABLE_AREA = 1;
-const NEW_ACTIVE_CTRL = 2;
-
-class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"]
-{
-    constructor( group )
-    {
-        super( group );
-        
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECT_SCROLL_BOX"];
-
-        // Array list of controls in scroll box
-        this.scrollControlAry = [];
-
-        // Initial scroll box control offset
-        this.initialOffset = new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"];
-
-        // Height to cull
-        this.cullHeight = 0;
-
-        // height of control
-        this.controlHeight = 0;
-
-        // Scroll move counter
-        this.scrollCurPos = 0;
-
-        // Number of controls visible in scroll box
-        this.visibleCount = 0;
-
-        // Visible start pos
-        this.visStartPos = 0;
-        this.visEndPos = 0;
-
-        // Max scroll amount
-        this.maxMoveAmount = 0;
-
-        // stencil mask sprite
-        this.stencilMaskSprite;
-
-        // Active scroll control index in this control
-        this.activeScrollCtrl = _common_defs__WEBPACK_IMPORTED_MODULE_9__["NO_ACTIVE_CONTROL"];
-
-        // index of first control in scroll box
-        this.firstScrollCtrlIndex = 0;
-
-        // Default offsets
-        this.defaultOffsetAry = [];
-
-        // speed members
-        this.scrollSpeed = 0.05;
-        this.pageSpeed = 0.05;
-
-        // Scroll vector to indicate the control is scrolling
-        this.scrollVector = 0;
-
-        // Flag to indicate the control is paging
-        this.paging = 0;
-
-        // Scroll counter
-        this.scrollCounter = 0;
-
-        // Scroll distance
-        this.scrollDistance = 0;
-
-        // Flag to indicate scrolling needs to stop
-        // but allows the scrolling to finish
-        this.endScroll = false;
-
-        // Flag to indicate that the scroll message has been sent
-        this.scrollMsg = false;
-
-        // Flag to allow for end scroll selection
-        this.endScrollSelection = false;
-    }
-    
-    // 
-    //  DESC: Load the control info from XML node
-    //
-    loadFromNode( node )
-    {
-        super.loadFromNode( node );
-
-        // Init the slider
-        this.subControlAry[0].maxValue = this.maxMoveAmount;
-        this.subControlAry[0].setSlider();
-
-        // Get the scrolling info
-        let scrollNode = node.getElementsByTagName( 'scroll' );
-        if( scrollNode.length )
-        {
-            let attr = scrollNode[0].getAttribute( 'scrollSpeed' );
-            if( attr )
-                this.scrollSpeed = Number( attr );
-
-            attr = scrollNode[0].getAttribute( 'pageSpeed' );
-            if( attr )
-                this.pageSpeed = Number( attr );
-        }
-
-        // Calc the start and end positions of what should
-        // be viewable in the scroll box
-        this.setStartEndPos();
-    }
-
-    // 
-    //  DESC: Load the control specific info from XML node
-    //
-    loadControlFromNode( node )
-    {
-        super.loadControlFromNode( node );
-
-        // Get the menu controls node
-        let menuControlsNode = node.getElementsByTagName( "scrollBoxControlList" );
-        if( menuControlsNode.length )
-        {
-            // Get the initial offset of the first control in the scroll box
-            this.initialOffset = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__["loadPosition"]( menuControlsNode[0] );
-
-            // Get the scroll boc info node
-            let controlInfoNode = menuControlsNode[0].getElementsByTagName( "controlInfo" );
-            this.controlHeight = Number( controlInfoNode[0].getAttribute( "height" ) );
-            this.visibleCount = Number( controlInfoNode[0].getAttribute( "visibleInScrollBox" ) );
-
-            // Get the number of controls in this scroll box
-            let scrollControlNode = menuControlsNode[0].getElementsByTagName( "control" );
-
-            // Add the scroll control from node
-            for( let i = 0; i < scrollControlNode.length; ++i )
-                this.addScrollControlFromNode( scrollControlNode[i] );
-        }
-
-        // Get the stencil mask node
-        let stencilMaskNode = node.getElementsByTagName( "stencilMask" );
-        if( stencilMaskNode.length )
-        {
-            let objectName = stencilMaskNode[0].getAttribute( "objectName" );
-
-            this.stencilMaskSprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__["Sprite"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__["objectDataManager"].getData( this.group, objectName ) );
-
-            // Get the cull height
-            this.cullHeight = (this.stencilMaskSprite.objData.size.w + this.controlHeight) / 2;
-
-            // Load the transform data
-            this.stencilMaskSprite.load( stencilMaskNode[0] );
-        }
-    }
-
-    // 
-    //  DESC: Add the scroll control from node
-    //  NOTE: This function recalculates the scroll box members because
-    //        it is also used for run-time dynamic scroll boxes
-    //
-    addScrollControlFromNode( node )
-    {
-        // The reference is placed within a array for all controls
-        let ctrl = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__["create"]( node, this.group );
-        this.scrollControlAry.push( ctrl );
-
-        // Get the position for this control
-        let posY = this.initialOffset.y - (this.controlHeight * (this.scrollControlAry.length-1));
-
-        // Record the default y offset
-        this.defaultOffsetAry.push( posY );
-
-        // Set the position
-        ctrl.setPosXYZ( this.initialOffset.x, posY, this.initialOffset.z );
-
-        // Init the control visual state
-        ctrl.deactivateControl();
-
-        // Calculate the maximum scroll amount in pixels
-        if( this.scrollControlAry.length > this.visibleCount )
-            this.maxMoveAmount = (this.scrollControlAry.length - this.visibleCount) * this.controlHeight;
-
-        return ctrl;
-    }
-
-    // 
-    //  DESC: Init the control
-    //
-    init()
-    {
-        super.init();
-
-        // Init all controls
-        for( let i = 0; i < this.scrollControlAry.length; ++i )
-            this.scrollControlAry[i].init();
-    }
-
-    // 
-    //  DESC: Do some cleanup
-    //
-    cleanUp()
-    {
-        super.cleanUp();
-
-        // Init all controls
-        for( let i = 0; i < this.scrollControlAry.length; ++i )
-            this.scrollControlAry[i].cleanUp();
-    }
-
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent( event )
-    {
-        super.handleEvent( event );
-
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].handleEvent( event );
-    }
-
-    // 
-    //  DESC: Handle OnUpAction message
-    //
-    onUpAction( event )
-    {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"] )
-            this.handleKeyboardGamepadScroll( -1 );
-
-        else if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_UP"] )
-            this.endScroll = true;
-    }
-
-    // 
-    //  DESC: Handle OnDownAction message
-    //
-    onDownAction( event )
-    {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"] )
-            this.handleKeyboardGamepadScroll( 1 );
-
-        else if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_UP"] )
-            this.endScroll = true;
-    }
-
-    // 
-    //  DESC: Handle OnUpScroll message
-    //
-    onUpScroll( event )
-    {
-        this.handleKeyboardGamepadScroll( -1 );
-        this.scrollMsg = true;
-    }
-
-    // 
-    //  DESC: Handle OnDownScroll message
-    //
-    onDownScroll( event )
-    {
-        this.handleKeyboardGamepadScroll( 1 );
-        this.scrollMsg = true;
-
-    }   // OnDownScroll
-
-    // 
-    //  DESC: Handle OnTabLeft message
-    //
-    onTabLeft( event )
-    {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"] )
-            this.handlePageScroll( -1 );
-    }
-
-    // 
-    //  DESC: Handle OnTabRight message
-    //
-    onTabRight( event )
-    {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"] )
-            this.handlePageScroll( 1 );
-    }
-
-    // 
-    //  DESC: Handle the mouse move
-    //
-    onMouseMove( event )
-    {
-        let result = super.onMouseMove( event );
-
-        // Invalidate the active control
-        this.activeScrollCtrl = _common_defs__WEBPACK_IMPORTED_MODULE_9__["NO_ACTIVE_CONTROL"];
-
-        if( this.subControlAry[0].isMouseDown() )
-        {
-            // Get the current scroll position
-            this.scrollCurPos = this.subControlAry[0].curValue;
-
-            // Set the bounds
-            this.setStartEndPos();
-
-            // Reposition the scroll controlls
-            this.repositionScrollControls();
-        }
-
-        return result;
-    }
-
-    // 
-    //  DESC: Update the control
-    //
-    update()
-    {
-        super.update();
-
-        // Update all controls
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].update();
-
-        // Handle any scrolling
-        this.handleScrollUpdate();
-    }
-
-    // 
-    //  DESC: Transform the control
-    //
-    transform( object )
-    {
-        // Call the parent
-        super.transform( object );
-
-        // Transform all controls
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].transform( this );
-
-        // Transform the mask
-        this.stencilMaskSprite.transform( this );
-    }
-
-    // 
-    //  DESC: Render the sub control
-    //
-    render( camera )
-    {
-        // Call the parent
-        super.render( camera );
-        
-
-        // Disable rendering to the color buffer
-        // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].colorMask( false, false, false, false );
-        
-        // Disable rendering to the depth mask
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].depthMask( false );
-
-        // Start using the stencil
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].enable( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].STENCIL_TEST );
-
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].ALWAYS, 0x1, 0x1 );
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].REPLACE );
-
-
-        this.stencilMaskSprite.render( camera );
-
-
-        // Re-enable color
-        // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].colorMask( true, true, true, true );
-
-        // Where a 1 was not rendered
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].EQUAL, 0x1, 0x1 );
-
-        // Keep the pixel
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP );
-
-        // Enable rendering to the depth mask
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].depthMask( true );
-
-
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].render( camera );
-
-
-        // Finished using stencil
-        _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].disable( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].STENCIL_TEST );
-    }
-
-    // 
-    //  DESC: Set the first inactive control to be active
-    //  NOTE: Don't want this functuality for the scroll box buttons and slider
-    //
-    activateFirstInactiveControl()
-    {
-        if( super.baseActivateFirstInactiveControl() )
-        {
-            for( let i = 0; i < this.scrollControlAry.length; ++i )
-            {
-                if( this.scrollControlAry[i].activateFirstInactiveControl() )
-                {
-                    this.activeScrollCtrl = i;
-                    break;
-                }
-            }
-        }
-
-        return this.activeScrollCtrl != _common_defs__WEBPACK_IMPORTED_MODULE_9__["NO_ACTIVE_CONTROL"];
-    }
-
-    // 
-    //  DESC: Handle the select action
-    //
-    handleSelectAction( event )
-    {
-        let result = super.handleSelectAction( event );
-
-        // Let the scroll controls handle any selection
-        for( let i = 0; i < this.scrollControlAry.length; ++i )
-            this.scrollControlAry[i].handleSelectAction( event );
-
-        if( (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_9__["ESMA_DEVICE_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["MOUSE"]) &&
-            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_9__["ESMA_PRESS_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EAP_DOWN"]) )
-        {
-            // Get the current scroll position
-            this.scrollCurPos = this.subControlAry[0].curValue;
-
-            // Set the bounds
-            this.setStartEndPos();
-
-            // Reposition the scroll controlls
-            this.repositionScrollControls();
-        }
-
-        return result;
-    }
-
-    // 
-    //  DESC: Handle the page scrolling
-    //
-    handlePageScroll( scrollVector )
-    {
-        if( this.scrollVector == 0 )
-        {
-            // If there's no controls to select or reposition, do the scroll
-            if( !this.selectAndRepositionCtrl( scrollVector ) )
-            {
-                const SCROLL_DOWN = (scrollVector > 0);
-                const SCROLL_UP = (scrollVector < 0);
-
-                // Make sure we have some place to page to
-                if( (SCROLL_UP && (this.firstScrollCtrlIndex > 0)) ||
-                    (SCROLL_DOWN && (this.firstScrollCtrlIndex + this.visibleCount < this.scrollControlAry.length)) )
-                {
-                    let visibleCount = this.visibleCount;
-
-                    // Cap the scroll amount to what is capable
-                    if( SCROLL_UP && (visibleCount > this.firstScrollCtrlIndex) )
-                    {
-                        visibleCount = this.firstScrollCtrlIndex;
-                    }
-                    else if( SCROLL_DOWN &&
-                           ((visibleCount + this.firstScrollCtrlIndex + this.visibleCount - 1) >= this.scrollControlAry.length) )
-                    {
-                        visibleCount = this.scrollControlAry.length - this.firstScrollCtrlIndex - this.visibleCount;
-                    }
-
-                    // Init the scroll
-                    this.initScrolling( scrollVector, this.controlHeight * visibleCount, true, true );
-
-                    // Deactivate the last control if the scrolling has been activated
-                    if( this.scrollVector )
-                    {
-                        if( this.activeScrollCtrl != _common_defs__WEBPACK_IMPORTED_MODULE_9__["NO_ACTIVE_CONTROL"] )
-                            this.scrollControlAry[this.activeScrollCtrl].deactivateControl();
-                    }
-                }
-                else
-                {
-                    this.activeScrollCtrl = this.firstScrollCtrlIndex;
-
-                    if( SCROLL_DOWN )
-                        this.activeScrollCtrl += this.visibleCount - 1;
-
-                    // If the first control can't be selected, then find one that can
-                    if( !this.activateScrollCtrl( this.activeScrollCtrl ) )
-                        this.selectNextControl( -scrollVector );
-                }
-            }
-        }
-    }
-
-    // 
-    //  DESC: Handle the keyboard/Gamepad scrolling
-    //
-    handleKeyboardGamepadScroll( scrollVector )
-    {
-        // If there's no controls to select or reposition, do the scroll
-        if( !this.selectAndRepositionCtrl( scrollVector ) )
-        {
-            // Try to select the next control
-            let scrollResult = this.selectNextControl( scrollVector );
-
-            // Scroll the contents of the scroll box if we need to activate a control
-            // that's outside of the viewable area of the scroll box.
-            if( !(scrollResult & IN_VIEWABLE_AREA) )
-            {
-                this.initScrolling( scrollVector, this.controlHeight );
-            }
-        }
-    }
-
-    // 
-    //  DESC: Select the next control
-    //
-    selectNextControl( scrollVector )
-    {
-        // Set the active control to the viewable area
-        this.setActiveCtrlToViewableArea( scrollVector );
-
-        // Scroll to the next control in the viewable area
-        let scrollResult = this.scrollToTheNextCtrlInViewableArea( scrollVector );
-
-        // If we are still in the viewable area but have no active control,
-        // try to activate the current control
-        if( (scrollResult & IN_VIEWABLE_AREA) && !(scrollResult & NEW_ACTIVE_CTRL) )
-        {
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent(
-                _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECS_ACTIVE"],
-                this.scrollControlAry[this.activeScrollCtrl] );
-        }
-
-        return scrollResult;
-    }
-
-    // 
-    //  DESC: Do we need to select and reposition the control
-    //
-    selectAndRepositionCtrl( scrollVector )
-    {
-        // If there's no selected control, don't scroll
-        // just select the first selectable control
-        if( this.setActiveCtrlToViewableArea( scrollVector ) )
-        {
-            // If the first control can't be selected, then find one that can
-            if( !this.activateScrollCtrl( this.activeScrollCtrl ) )
-                this.selectNextControl( 1 );
-
-            // Get the alignment to see if it needs to be adjusted
-            let diff = this.getControlAlignment();
-            if( diff > 0.1 )
-            {
-                let pos = this.scrollCurPos / this.controlHeight;
-
-                let nextCtrl = (this.activeScrollCtrl - this.firstScrollCtrlIndex) * this.controlHeight;
-
-                if( nextCtrl || (this.firstScrollCtrlIndex > pos) )
-                    this.initScrolling( 1, this.controlHeight - diff, false );
-                else
-                    this.initScrolling( -1, diff, false );
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    // 
-    //  DESC: Select the paged control
-    //
-    selectPagedControl( scrollVector )
-    {
-        this.activeScrollCtrl += scrollVector * this.visibleCount;
-
-        // Cap the control index
-        if( this.activeScrollCtrl <= 0 )
-        {
-            this.activeScrollCtrl = 0;
-            scrollVector = 1;
-        }
-        else if( this.activeScrollCtrl >= this.scrollControlAry.length - 1 )
-        {
-            this.activeScrollCtrl = this.scrollControlAry.size() -1;
-            scrollVector = -1;
-        }
-
-        // If the first control can't be selected, then find one that can
-        if( !this.activateScrollCtrl( this.activeScrollCtrl ) )
-            this.selectNextControl( scrollVector );
-    }
-
-    // 
-    //  DESC: Set the active control to the viewable area
-    //        This also deactivates the last known active control
-    //
-    setActiveCtrlToViewableArea( scrollVector )
-    {
-        // If the active control is not within the active area, make it so that it will be the first one selected
-        if( (this.activeScrollCtrl < this.firstScrollCtrlIndex) || (this.activeScrollCtrl >= (this.firstScrollCtrlIndex + this.visibleCount)) )
-        {
-            if( this.activeScrollCtrl != _common_defs__WEBPACK_IMPORTED_MODULE_9__["NO_ACTIVE_CONTROL"] )
-                this.scrollControlAry[this.activeScrollCtrl].deactivateControl();
-
-            this.activeScrollCtrl = this.firstScrollCtrlIndex;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    // 
-    //  DESC: Scroll to the next control in the viewable area
-    //
-    scrollToTheNextCtrlInViewableArea( scrollVector )
-    {
-        let newActiveCtrl = 0;
-        let inView = this.inView( this.activeScrollCtrl, scrollVector );
-
-        // Only scroll within the viewable area
-        if( inView )
-        {
-            // Set a temp variable to the active scroll control
-            let tmpScrollCtrl = this.activeScrollCtrl;
-
-            // Loop until we hit a selectable control
-            do
-            {
-                tmpScrollCtrl += scrollVector;
-
-                if( this.activateScrollCtrl( tmpScrollCtrl ) )
-                {
-                    newActiveCtrl = NEW_ACTIVE_CTRL;
-
-                    this.activeScrollCtrl = tmpScrollCtrl;
-                    break;
-                }
-
-                inView = this.inView( tmpScrollCtrl, scrollVector );
-            }
-            while( inView );
-        }
-
-        let result = inView | newActiveCtrl;
-
-        return result;
-    }
-
-    // 
-    //  DESC: See if we can activate this scroll control
-    //
-    activateScrollCtrl( scrollControlIndex )
-    {
-        if( (scrollControlIndex != _common_defs__WEBPACK_IMPORTED_MODULE_9__["NO_ACTIVE_CONTROL"]) &&
-            (scrollControlIndex < this.scrollControlAry.length) &&
-            !this.scrollControlAry[scrollControlIndex].isDisabled() )
-        {
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent(
-                _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECS_ACTIVE"],
-                this.scrollControlAry[scrollControlIndex] );
-
-            return true;
-        }
-
-        return false;
-    }
-
-    // 
-    //  DESC: Init the variables that scroll the contents of the scroll box
-    //
-    initScrolling( scrollVector, distance, endScrollSelection = true, paging = false )
-    {
-        if( this.scrollVector === 0 )
-        {
-            const SCROLL_DOWN = (scrollVector > 0);
-            const SCROLL_UP = (scrollVector < 0);
-
-            if( ((SCROLL_UP && (this.scrollCurPos > 0)) ||
-                (SCROLL_DOWN && (this.scrollCurPos < this.maxMoveAmount))) )
-            {
-                this.scrollVector = scrollVector;
-                this.scrollCounter = 0;
-                this.endScroll = false;
-                this.scrollMsg = false;
-                this.paging = paging;
-                this.endScrollSelection = endScrollSelection;
-                this.scrollDistance = distance;
-            }
-        }
-    }
-
-    // 
-    //  DESC: Handle the time based Scrolling of the contents of the scroll box
-    //
-    handleScrollUpdate()
-    {
-        if( this.scrollVector )
-        {
-            let dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__["highResTimer"].elapsedTime * this.scrollSpeed;
-
-            if( this.paging )
-                dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__["highResTimer"].elapsedTime * this.pageSpeed;
-
-            if( this.scrollVector > 0 )
-                this.scrollCurPos += dist;
-            else
-                this.scrollCurPos -= dist;
-
-            this.subControlAry[0].setSlider(this.scrollCurPos);
-
-            this.scrollCounter += dist;
-
-            // Set the bounds
-            this.setStartEndPos();
-
-            if( this.scrollCounter >= this.scrollDistance )
-            {
-                if( this.endScroll || !this.scrollMsg || this.paging )
-                {
-                    this.alignScrollPostion();
-
-                    if( this.endScrollSelection )
-                    {
-                        if( this.paging )
-                            this.selectPagedControl( this.scrollVector );
-                        else
-                            this.selectNextControl( this.scrollVector );
-                    }
-
-                    // This has to be last
-                    this.scrollVector = 0;
-                }
-                else
-                {
-                    this.scrollDistance += this.controlHeight;
-                }
-            }
-            // Sanity check
-            else if( (this.scrollCurPos < 0) || (this.scrollCurPos > this.maxMoveAmount) )
-            {
-                this.alignScrollPostion();
-                this.scrollVector = 0;
-            }
-
-            // Reposition the scroll controls
-            this.repositionScrollControls();
-        }
-    }
-
-    // 
-    //  DESC: Get the fractional amount the controls are off within the scroll box
-    //
-    getControlAlignment()
-    {
-        let pos = this.scrollCurPos / this.controlHeight;
-        return this.controlHeight * Math.trunc(pos);
-    }
-
-    // 
-    //  DESC: Is the scroll index in view
-    //
-    inView( scrollIndex, scrollVector )
-    {
-        return ((scrollVector < 0) && (scrollIndex > this.firstScrollCtrlIndex)) ||
-               (((scrollVector > 0)) && (scrollIndex < (this.firstScrollCtrlIndex + this.visibleCount - 1)));
-    }
-
-    // 
-    //  DESC: Get the reference to the subcontrol if found
-    //
-    findSubControlByName( name )
-    {
-        let ctrl = super.findSubControlByName( name );
-
-        for( let i = this.visStartPos; i < this.visEndPos && (ctrl === null); ++i )
-            ctrl = this.scrollControlAry[i].findControlByName( name );
-
-        return ctrl;
-    }
-
-    // 
-    //  DESC: Find the sub control via is pointer
-    //
-    findSubControlByRef( control )
-    {
-        let ctrl = super.findSubControlByRef( control );
-
-        for( let i = this.visStartPos; i < this.visEndPos && (ctrl === null); ++i )
-            if( this.scrollControlAry[i] === control )
-                ctrl = this.scrollControlAry[i];
-
-        return ctrl;
-    }
-
-    // 
-    //  DESC: Handle the sub control mouse move
-    //
-    onSubControlMouseMove( event )
-    {
-        let result = super.onSubControlMouseMove( event );
-
-        // We only care about the scroll controls if the point is within the scroll box
-        if( !result && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].mouseOffsetX, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].mouseOffsetY ) )
-        {
-            for( let i = this.visStartPos; i < this.visEndPos && !result; ++i )
-            {
-                result = this.scrollControlAry[i].onMouseMove( event );
-
-                if( result )
-                    this.activeScrollCtrl = i;
-            }
-        }
-
-        return result;
-    }
-
-    // 
-    //  DESC: Deactivate the sub control
-    //
-    deactivateSubControl()
-    {
-        super.deactivateSubControl();
-
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].deactivateControl();
-    }
-
-    // 
-    //  DESC: Set the start and end positions
-    //
-    setStartEndPos()
-    {
-        let pos = this.scrollCurPos / this.controlHeight;
-
-        // Push the ceiling so that the starting index is viewable
-        this.firstScrollCtrlIndex = Math.trunc(pos + 0.7);
-
-        this.visStartPos = Math.trunc(pos);
-        this.visEndPos = this.visStartPos + this.visibleCount + 1;
-
-        // Sanity checks
-        if( this.visStartPos < 0 )
-            this.visStartPos = 0;
-
-        if( this.visEndPos > this.scrollControlAry.length )
-            this.visEndPos = this.scrollControlAry.length;
-    }
-
-    // 
-    //  DESC: Reposition the scroll controls
-    //
-    repositionScrollControls()
-    {
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-        {
-            let pos = this.scrollControlAry[i].pos;
-            let y = this.defaultOffsetAry[i] + this.scrollCurPos;
-            this.scrollControlAry[i].setPosXYZ( pos.x, y, pos.z );
-        }
-    }
-
-    // 
-    //  DESC: Align the scroll box to it's proper stopping point
-    //        to account for floating point movement
-    //
-    alignScrollPostion()
-    {
-        // Do bounds checking just for sanity reasons
-        if( this.firstScrollCtrlIndex < 0 )
-            this.firstScrollCtrlIndex = 0;
-
-        else if( (this.firstScrollCtrlIndex + this.visibleCount) > this.scrollControlAry.length )
-            this.firstScrollCtrlIndex = this.scrollControlAry.length - this.visibleCount;
-
-        // Recalucate the scroll position which will wipe the fractional component
-        this.scrollCurPos = this.firstScrollCtrlIndex * this.controlHeight;
-    }
-
-    // 
-    //  DESC: Only deactivate sub controls
-    //
-    deactivateControl()
-    {
-        this.deactivateSubControl();
-    }
-
-    // 
-    //  DESC: Set the alpha value of this control
-    //
-    setAlpha( alpha )
-    {
-        super.setAlpha( alpha );
-
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].setAlpha( alpha );
-    }
-
-    // 
-    //  DESC: Get the pointer to the active control
-    //
-    getActiveControl()
-    {
-        let result = super.getActiveControl();
-
-        if( result === null )
-        {
-            for( let i = 0; i < this.scrollControlAry.length; ++i )
-            {
-                if( this.scrollControlAry[i].state > _common_defs__WEBPACK_IMPORTED_MODULE_9__["ECS_INACTIVE"] )
-                {
-                    result = this.scrollControlAry[i].getActiveControl();
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-}
-
-
-/***/ }),
-/* 167 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MenuTree", function() { return MenuTree; });
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(132);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-// 
-//  FILE NAME: menutree.js
-//  DESC:      Class that hold a tree of menus
-//
-
-
-
-
-
-class MenuTree
-{
-    constructor( name, menuMap, rootMenu, defaultMenu, interfaceMenu = false )
-    {
-        // Name of the tree
-        this.name = name;
-
-        // Map of the menus
-        this.menuMap = menuMap;
-
-        // root menu
-        this.rootMenu = menuMap.get( rootMenu );
-
-        // default menu
-        this.defaultMenu = menuMap.get( defaultMenu );
-
-        // Is interface menu?
-        this.interfaceMenu = interfaceMenu;
-
-        // Name of menu we are transitioning to
-        this.toMenu = '';
-
-        // Array of the path taken through the menu
-        this.menuPathAry = [];
-
-        // menu tree state
-        this.state = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EMTS_IDLE"];
-    }
-    
-    // 
-    //  DESC: Init the tree for use
-    //
-    init()
-    {
-        this.menuPathAry = [];
-
-        if( this.rootMenu !== undefined )
-        {
-            // If we have a root menu, add it to the path
-            this.menuPathAry.push( this.rootMenu );
-
-            this.rootMenu.activateMenu();
-        }
-    }
-    
-    // 
-    //  DESC: Set the default menu
-    //
-    setDefaultMenu( menuStr )
-    {
-        let menu = this.menuMap.get( menuStr );
-        if( menu !== undefined )
-            this.defaultMenu = menu;
-        else
-            throw new Error( `Menu being set is missing (${menuStr})!` );
-    }
-    
-    // 
-    //  DESC: Set the root menu
-    //
-    setRootMenu( menuStr )
-    {
-        let menu = this.menuMap.get( menuStr );
-        if( menu !== undefined )
-            this.rootMenu = menu;
-        else
-            throw new Error( `Menu being set is missing (${menuStr})!` );
-    }
-    
-    // 
-    //  DESC: Is the default menu
-    //
-    isDefaultMenu( menuStr )
-    {
-        if( this.defaultMenu && this.defaultMenu.name === menuStr )
-            return true
-        
-        return false;
-    }
-    
-    // 
-    //  DESC: Is the root menu
-    //
-    isRootMenu( menuStr )
-    {
-        if( this.rootMenu && this.rootMenu.name === menuStr )
-            return true
-        
-        return false;
-    }
-
-    // 
-    //  DESC: Update the menu tree
-    //
-    update()
-    {
-        if( this.menuPathAry.length )
-            this.menuPathAry[this.menuPathAry.length-1].update();
-    }
-    
-    // 
-    //  DESC: Transform the menu tree
-    //
-    transform()
-    {
-        if( this.menuPathAry.length )
-            this.menuPathAry[this.menuPathAry.length-1].transform();
-    }
-    
-    // 
-    //  DESC: do the render
-    //
-    render( camera )
-    {
-        if( this.menuPathAry.length )
-            this.menuPathAry[this.menuPathAry.length-1].render( camera );
-    }
-    
-    // 
-    //  DESC: Is a menu active?
-    //
-    isActive()
-    {
-        return (this.menuPathAry.length > 0);
-
-    }
-    
-    // 
-    //  DESC: Does this tee have a root menu
-    //
-    hasRootMenu()
-    {
-        return (this.rootMenu != undefined);
-    }
-    
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent( event )
-    {
-        // Trap only controller events to check for actions
-        if( !this.interfaceMenu )
-        {
-            if( this.menuPathAry.length )
-                this.menuPathAry[this.menuPathAry.length-1].handleEvent( event );
-
-            if( event instanceof CustomEvent )
-            {
-                if( this.state === _common_defs__WEBPACK_IMPORTED_MODULE_1__["EMTS_IDLE"] )
-                {
-                    if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_ESCAPE_ACTION"] )
-                    {
-                        this.onEscape( event );
-                    }
-                    else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TOGGLE_ACTION"] )
-                    {
-                        this.onToggle( event );
-                    }
-                    else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_BACK_ACTION"] )
-                    {
-                        this.onBack( event );
-                    }
-                    else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TO_TREE"] )
-                    {
-                        this.onToTree( event );
-                    }
-                    else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TO_MENU"] )
-                    {
-                        this.onToMenu( event );
-                    }
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TRANS_IN"] )
-                {
-                    this.onTransIn( event );
-                }
-                else if( event.detail.type === _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TRANS_OUT"] )
-                {
-                    this.onTransOut( event );
-                }
-            }
-        }
-        else
-        {
-            // Don't process menu specific messages for an interface menu
-            if( (event instanceof CustomEvent) && event.detail.type <= _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_GAME_STATE_CHANGE"] )
-                return;
-                
-            if( this.menuPathAry.length )
-                this.menuPathAry[this.menuPathAry.length-1].handleEvent( event );
-        }
-    }
-    
-    // 
-    //  DESC: Transition the menu
-    //
-    transitionMenu()
-    {
-        // If the path array is empty, transition to the default menu
-        if( this.menuPathAry.length === 0 )
-        {
-            // Make sure the menu exists
-            if( this.defaultMenu === undefined )
-                throw new Error( 'Default menu does not exist!' );
-
-            // Add the default menu to the path
-            this.menuPathAry.push( this.defaultMenu );
-
-            // Get the name of the menu we are transitioning to
-            // This is also used as a flag to indicate moving up the menu tree
-            this.toMenu = this.defaultMenu.name;
-
-            // Set the state as "active" so that input messages are ignored
-            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EMTS_ACTIVE"];
-
-            // Start the transition in
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TRANS_IN"], _common_defs__WEBPACK_IMPORTED_MODULE_1__["ETC_BEGIN"] );
-        }
-        else
-        {
-            // If this isn't the root menu, start the transition out
-            if( this.menuPathAry[this.menuPathAry.length-1] != this.rootMenu )
-            {
-                // Set the state as "active" so that input messages are ignored
-                this.state = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EMTS_ACTIVE"];
-
-                // Start the transition out
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TRANS_OUT"], _common_defs__WEBPACK_IMPORTED_MODULE_1__["ETC_BEGIN"] );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Handle OnEscape message
-    //
-    onEscape( event )
-    {
-        let nameStr = event.detail.arg[0];
-        if( this.menuPathAry.length || ((nameStr !== null) && (nameStr === this.name)))
-        {
-            this.transitionMenu();
-        }
-    }
-    
-    // 
-    //  DESC: Handle OnToggle message
-    //
-    onToggle( event )
-    {
-        let nameStr = event.detail.arg[0];
-        if( this.menuPathAry.length || ((nameStr !== null) && (nameStr === this.name)))
-        {
-            // Toggle "on" only works when there is no root menu
-            if( this.rootMenu === undefined )
-            {
-                this.transitionMenu();
-
-                // For toggle, clear out the path array except for the current menu
-                // The current menu will then be used for the transitions out
-                if( this.menuPathAry.length > 1 )
-                {
-                    let curMenu = this.menuPathAry[this.menuPathAry.length-1];
-                    this.menuPathAry = [];
-                    this.menuPathAry.push( curMenu );
-                }
-            }
-            else
-            {
-                if( this.menuPathAry.length > 1 )
-                    this.transitionMenu();
-
-                // For toggle, clear out the path array except for the current and root menu
-                // The current menu will then be used for the transitions out
-                if( this.menuPathAry.length > 2 )
-                {
-                    let curMenu = this.menuPathAry[this.menuPathAry.length-1];
-                    this.menuPathAry = [];
-                    this.menuPathAry.push( this.rootMenu );
-                    this.menuPathAry.push( curMenu );
-                }
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Handle OnBack message
-    //
-    onBack( event )
-    {
-        // Going back one require there to be a active menu that is not root
-        if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] != this.rootMenu) )
-        {
-            this.transitionMenu();
-        }
-    }
-    
-    // 
-    //  DESC: Handle OnToTree message
-    //
-    onToTree( event )
-    {
-        let nameStr = event.detail.arg[0];
-        if( (nameStr !== null) && (nameStr === this.name) )
-        {
-            // Only works when there is no root menu
-            if( this.rootMenu === undefined )
-                this.transitionMenu();
-        }
-    }
-    
-    // 
-    //  DESC: Handle OnToMenu message
-    //
-    onToMenu( event )
-    {
-        // Going to a menu require there to be a active menu
-        // and the calling control is on a menu on this tree
-        if( this.menuPathAry.length && 
-            (this.menuPathAry[this.menuPathAry.length-1].getActiveControl() == event.detail.arg[1]) )
-        {
-            // Set the state as "active" so that input messages are ignored
-            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EMTS_ACTIVE"];
-
-            // Get the name of the menu we are transitioning to
-            // This is also used as a flag to indicate moving deaper into the menu tree
-            this.toMenu = event.detail.arg[0];
-
-            // Do a sanity check to make sure the menu exists
-            if( this.menuMap.get(this.toMenu) === undefined )
-                throw new Error( `Menu does not exist! (${this.toMenu}).` );
-
-            // Start the transition out
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TRANS_OUT"], _common_defs__WEBPACK_IMPORTED_MODULE_1__["ETC_BEGIN"] );
-        }
-    }
-    
-    // 
-    //  DESC: Handle OnTransOut message
-    //
-    onTransOut( event )
-    {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ETC_END"] )
-        {
-            if( this.toMenu.length )
-            {
-                this.menuPathAry.push( this.menuMap.get(this.toMenu) );
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TRANS_IN"], _common_defs__WEBPACK_IMPORTED_MODULE_1__["ETC_BEGIN"] );
-            }
-            else if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] !== this.rootMenu) )
-            {
-                // Pop it off the array because this menu is done
-                let menu = this.menuPathAry.pop();
-                
-                // Do a full reset on all the controls
-                menu.reset();
-
-                if( this.menuPathAry.length )
-                    _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_TRANS_IN"], _common_defs__WEBPACK_IMPORTED_MODULE_1__["ETC_BEGIN"] );
-            }
-
-            // Normally, after one menu transitions out, the next menu transitions in
-            // Only set the idle state if this transition out is final
-            if( this.menuPathAry.length === 0 )
-                this.state = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EMTS_IDLE"];
-        }
-    }
-    
-    // 
-    //  DESC: Handle OnTransIn message
-    //
-    onTransIn( event )
-    {
-        if( event.detail.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_1__["ETC_END"] )
-        {
-            // m_toMenu is also used as a flag to indicate moving up the menu tree
-            // When moving up the menu tree, activate the first control on the menu
-            // When backing out of the menu tree, activate the last control used
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__["eventManager"].dispatchEvent( _common_defs__WEBPACK_IMPORTED_MODULE_1__["EGE_MENU_SET_ACTIVE_CONTROL"], 
-                (this.toMenu.length === 0) ? _common_defs__WEBPACK_IMPORTED_MODULE_1__["EAC_LAST_ACTIVE_CONTROL"] : _common_defs__WEBPACK_IMPORTED_MODULE_1__["EAC_FIRST_ACTIVE_CONTROL"] );
-
-            // Set to idle to allow for input messages to come through
-            this.state = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EMTS_IDLE"];
-
-            // Clear in the event we start backing out of the menu tree
-            this.toMenu = '';
-        }
-    }
-    
-    // 
-    //  DESC: Get the active menu
-    //
-    getActiveMenu()
-    {
-        if( this.menuPathAry.length === 0 )
-            throw new Error( 'There is no active menu!' );
-
-        return this.menuPathAry[this.menuPathAry.length-1];
-    }
-    
-    // 
-    //  DESC: Get the scroll param data
-    //
-    getScrollParam( msg )
-    {
-        if( this.menuPathAry.length === 0 )
-            throw new Error( 'There is no active menu!' );
-
-        return this.menuPathAry[this.menuPathAry.length-1].getScrollParam( msg );
-    }
-    
-    // 
-    //  DESC: Is a menu item active
-    //
-    isMenuItemActive()
-    {
-        if( this.isActive() )
-        {
-            if( this.getActiveMenu().getActiveControl() !== null )
-                return false;
-        }
-
-        return false;
-    }
-    
-}
-
-
-/***/ }),
-/* 168 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(169);
+/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
@@ -38888,7 +33879,7 @@ class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBa
 
 
 /***/ }),
-/* 169 */
+/* 157 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38943,7 +33934,7 @@ class iaiBase
 
 
 /***/ }),
-/* 170 */
+/* 158 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

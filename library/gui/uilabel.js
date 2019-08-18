@@ -6,7 +6,7 @@
 
 "use strict";
 import { UIControl } from './uicontrol';
-import * as defs from '../common/defs';
+import * as uiControlDefs from '../gui/uicontroldefs';
 
 export class UILabel extends UIControl
 {
@@ -14,7 +14,7 @@ export class UILabel extends UIControl
     {
         super( group );
         
-        this.type = defs.ECT_LABEL;
+        this.type = uiControlDefs.ECT_LABEL;
     }
 }
 

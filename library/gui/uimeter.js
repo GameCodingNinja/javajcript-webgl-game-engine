@@ -10,7 +10,7 @@ import { Timer } from '../utilities/timer';
 import { highResTimer } from '../utilities/highresolutiontimer';
 import { Size } from '../common/size';
 import { UIControl } from './uicontrol';
-import * as defs from '../common/defs';
+import * as uiControlDefs from '../gui/uicontroldefs';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
 // EBangType
@@ -40,7 +40,7 @@ export class UIMeter extends UIControl
     {
         super( group );
         
-        this.type = defs.ECT_METER;
+        this.type = uiControlDefs.ECT_METER;
         
         // Current value
         this.currentValue = 0;

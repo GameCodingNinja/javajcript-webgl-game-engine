@@ -15,7 +15,7 @@ import { TestArenaState } from '../state/testarenastate';
 //import { TitleScreenState } from '../state/titlescreenstate';
 //import { LoadState } from '../state/loadstate';
 //import { Level1State } from '../state/level1state';
-import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
+//import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
 import { aiBall } from '../ai/aiball';
 import { gl, device } from '../../../library/system/device';
 import { eventManager } from '../../../library/managers/eventmanager';
@@ -108,8 +108,8 @@ export class Game
     //
     smartGuiControlCreateCallBack( control )
     {
-        if( control.faction === 'decision_btn' )
-            control.smartGui = new SmartConfirmBtn( control );
+        //if( control.faction === 'decision_btn' )
+        //    control.smartGui = new SmartConfirmBtn( control );
     }
     
     // 

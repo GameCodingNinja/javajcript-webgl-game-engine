@@ -5,20 +5,20 @@
 
         <sprite objectName="250x90_slider_selection_frame">
             <scriptLst>
-                <script disabled="Control_Hidden"/>
+                <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected"/>
+                <script select="Control_Selected"/>
             </scriptLst>
         </sprite>
 
         <sprite objectName="230x10_slider_frame">
             <position x="0" y="-15" z="0"/>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected"/>
+                <script select="Control_Selected"/>
             </scriptLst>
         </sprite>
 
@@ -28,10 +28,10 @@
                 <alignment horzAlign="left" vertAlign="center"/>
             </font>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected"/>
+                <script select="Control_Selected"/>
             </scriptLst>
         </sprite>
 

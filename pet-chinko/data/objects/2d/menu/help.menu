@@ -29,7 +29,11 @@
                 <string text="x"/>
             </fontStringLst>
             <action actionType="close"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
     
     </mouseOnlyControls>
@@ -47,20 +51,20 @@
                 <string text='Press the Start Button:||Then touch the screen at the top of each of the slots to drop your Pet Items and/or Balls.||Game Over:||When you run out of Pet Items and/or Balls to drop your game is over. Hit "Play Again" to have some more fun!!!'/>
             </fontStringLst>
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
     </menuControls>
 
     <spriteList>
 
-        <sprite objectName="help_menu_bg">
-            <script>
-                <transition in="Menu_TransIn" out="Menu_TransOut"/>
-            </script>
-        </sprite>
+        <sprite objectName="help_menu_bg"/>
     
     </spriteList>
   

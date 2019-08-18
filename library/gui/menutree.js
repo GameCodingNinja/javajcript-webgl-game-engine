@@ -5,7 +5,7 @@
 
 "use strict";
 import { eventManager } from '../managers/eventmanager';
-import * as defs from '../common/defs';
+import * as menuDefs from '../gui/menudefs';
 
 export class MenuTree
 {
@@ -33,7 +33,7 @@ export class MenuTree
         this.menuPathAry = [];
 
         // menu tree state
-        this.state = defs.EMTS_IDLE;
+        this.state = menuDefs.EMTS_IDLE;
     }
     
     // 
@@ -155,34 +155,34 @@ export class MenuTree
 
             if( event instanceof CustomEvent )
             {
-                if( this.state === defs.EMTS_IDLE )
+                if( this.state === menuDefs.EMTS_IDLE )
                 {
-                    if( event.detail.type === defs.EGE_MENU_ESCAPE_ACTION )
+                    if( event.detail.type === menuDefs.EGE_MENU_ESCAPE_ACTION )
                     {
                         this.onEscape( event );
                     }
-                    else if( event.detail.type === defs.EGE_MENU_TOGGLE_ACTION )
+                    else if( event.detail.type === menuDefs.EGE_MENU_TOGGLE_ACTION )
                     {
                         this.onToggle( event );
                     }
-                    else if( event.detail.type === defs.EGE_MENU_BACK_ACTION )
+                    else if( event.detail.type === menuDefs.EGE_MENU_BACK_ACTION )
                     {
                         this.onBack( event );
                     }
-                    else if( event.detail.type === defs.EGE_MENU_TO_TREE )
+                    else if( event.detail.type === menuDefs.EGE_MENU_TO_TREE )
                     {
                         this.onToTree( event );
                     }
-                    else if( event.detail.type === defs.EGE_MENU_TO_MENU )
+                    else if( event.detail.type === menuDefs.EGE_MENU_TO_MENU )
                     {
                         this.onToMenu( event );
                     }
                 }
-                else if( event.detail.type === defs.EGE_MENU_TRANS_IN )
+                else if( event.detail.type === menuDefs.EGE_MENU_TRANS_IN )
                 {
                     this.onTransIn( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_TRANS_OUT )
+                else if( event.detail.type === menuDefs.EGE_MENU_TRANS_OUT )
                 {
                     this.onTransOut( event );
                 }
@@ -191,7 +191,7 @@ export class MenuTree
         else
         {
             // Don't process menu specific messages for an interface menu
-            if( (event instanceof CustomEvent) && event.detail.type <= defs.EGE_MENU_GAME_STATE_CHANGE )
+            if( (event instanceof CustomEvent) && event.detail.type <= menuDefs.EGE_MENU_GAME_STATE_CHANGE )
                 return;
                 
             if( this.menuPathAry.length )
@@ -219,10 +219,10 @@ export class MenuTree
             this.toMenu = this.defaultMenu.name;
 
             // Set the state as "active" so that input messages are ignored
-            this.state = defs.EMTS_ACTIVE;
+            this.state = menuDefs.EMTS_ACTIVE;
 
             // Start the transition in
-            eventManager.dispatchEvent( defs.EGE_MENU_TRANS_IN, defs.ETC_BEGIN );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
         }
         else
         {
@@ -230,10 +230,10 @@ export class MenuTree
             if( this.menuPathAry[this.menuPathAry.length-1] != this.rootMenu )
             {
                 // Set the state as "active" so that input messages are ignored
-                this.state = defs.EMTS_ACTIVE;
+                this.state = menuDefs.EMTS_ACTIVE;
 
                 // Start the transition out
-                eventManager.dispatchEvent( defs.EGE_MENU_TRANS_OUT, defs.ETC_BEGIN );
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
             }
         }
     }
@@ -327,7 +327,7 @@ export class MenuTree
             (this.menuPathAry[this.menuPathAry.length-1].getActiveControl() == event.detail.arg[1]) )
         {
             // Set the state as "active" so that input messages are ignored
-            this.state = defs.EMTS_ACTIVE;
+            this.state = menuDefs.EMTS_ACTIVE;
 
             // Get the name of the menu we are transitioning to
             // This is also used as a flag to indicate moving deaper into the menu tree
@@ -338,7 +338,7 @@ export class MenuTree
                 throw new Error( `Menu does not exist! (${this.toMenu}).` );
 
             // Start the transition out
-            eventManager.dispatchEvent( defs.EGE_MENU_TRANS_OUT, defs.ETC_BEGIN );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
         }
     }
     
@@ -347,12 +347,12 @@ export class MenuTree
     //
     onTransOut( event )
     {
-        if( event.detail.arg[0] === defs.ETC_END )
+        if( event.detail.arg[0] === menuDefs.ETC_END )
         {
             if( this.toMenu.length )
             {
                 this.menuPathAry.push( this.menuMap.get(this.toMenu) );
-                eventManager.dispatchEvent( defs.EGE_MENU_TRANS_IN, defs.ETC_BEGIN );
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
             }
             else if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] !== this.rootMenu) )
             {
@@ -363,13 +363,13 @@ export class MenuTree
                 menu.reset();
 
                 if( this.menuPathAry.length )
-                    eventManager.dispatchEvent( defs.EGE_MENU_TRANS_IN, defs.ETC_BEGIN );
+                    eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
             }
 
             // Normally, after one menu transitions out, the next menu transitions in
             // Only set the idle state if this transition out is final
             if( this.menuPathAry.length === 0 )
-                this.state = defs.EMTS_IDLE;
+                this.state = menuDefs.EMTS_IDLE;
         }
     }
     
@@ -378,16 +378,16 @@ export class MenuTree
     //
     onTransIn( event )
     {
-        if( event.detail.arg[0] === defs.ETC_END )
+        if( event.detail.arg[0] === menuDefs.ETC_END )
         {
             // m_toMenu is also used as a flag to indicate moving up the menu tree
             // When moving up the menu tree, activate the first control on the menu
             // When backing out of the menu tree, activate the last control used
-            eventManager.dispatchEvent( defs.EGE_MENU_SET_ACTIVE_CONTROL, 
-                (this.toMenu.length === 0) ? defs.EAC_LAST_ACTIVE_CONTROL : defs.EAC_FIRST_ACTIVE_CONTROL );
+            eventManager.dispatchEvent( menuDefs.EGE_MENU_SET_ACTIVE_CONTROL, 
+                (this.toMenu.length === 0) ? menuDefs.EAC_LAST_ACTIVE_CONTROL : menuDefs.EAC_FIRST_ACTIVE_CONTROL );
 
             // Set to idle to allow for input messages to come through
-            this.state = defs.EMTS_IDLE;
+            this.state = menuDefs.EMTS_IDLE;
 
             // Clear in the event we start backing out of the menu tree
             this.toMenu = '';

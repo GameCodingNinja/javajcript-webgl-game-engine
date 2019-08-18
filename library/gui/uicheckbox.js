@@ -6,6 +6,7 @@
 
 "use strict";
 import { UIControl } from './uicontrol';
+import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
 export class UICheckBox extends UIControl
@@ -14,7 +15,7 @@ export class UICheckBox extends UIControl
     {
         super( group );
         
-        this.type = defs.ECT_CHECK_BOX;
+        this.type = uiControlDefs.ECT_CHECK_BOX;
         
         // Select state
         this.toggleState = false;
@@ -25,7 +26,7 @@ export class UICheckBox extends UIControl
     //
     onSelectExecute( event )
     {
-        if( this.state === defs.ECS_SELECTED )
+        if( this.state === uiControlDefs.ECS_SELECT )
             this.toggleState = !this.toggleState;
 
         super.onSelectExecute( event );

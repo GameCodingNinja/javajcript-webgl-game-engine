@@ -5,19 +5,19 @@
 
         <sprite objectName="28x28_button_solid">
             <scriptLst>
-                <script disabled="Control_Hidden"/>
+                <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Solid_Active"/>
-                <script selected="Control_Solid_Selected"/>
+                <script select="Control_Solid_Selected"/>
             </scriptLst>
         </sprite>
     
         <sprite objectName="28x28_button_frame">
             <scriptLst>
-                <state disabled="Control_Disabled"/>
+                <state disable="Control_Disabled"/>
                 <state inactive="Control_Inactive"/>
                 <state active="Control_Active"/>
-                <state selected="Control_Selected_Visible"/>
+                <state select="Control_Selected_Visible"/>
             </scriptLst>
         </sprite>
         
@@ -26,10 +26,10 @@
             <position x="6" y="0" z="0"/>
             <rotation z="90"/>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected_Dispatch_Exe"/>
+                <script select="Control_Selected_Dispatch_Exe"/>
             </scriptLst>
         </sprite>
 

@@ -9,10 +9,10 @@
         <sprite objectName="control_font">
             <font fontName="dejavu_sans_cond_32"/>
             <scriptLst>
-                <script disabled="Control_Disabled"/>
+                <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-                <script selected="Control_Selected_Dispatch_Exe"/>
+                <script select="Control_Selected_Dispatch_Exe"/>
             </scriptLst>
         </sprite>
 
@@ -26,7 +26,11 @@
         <control controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
             <position x="-110" y="0" z="0"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
         <!-- Increment Button -->
@@ -34,7 +38,11 @@
             <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
             <position x="110" y="0" z="0"/>
             <rotation z="180"/>
-            <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptLst>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptLst>
         </control>
 
     </subControlList>

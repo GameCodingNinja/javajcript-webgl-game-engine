@@ -9,6 +9,8 @@ import { UISubControl } from './uisubcontrol';
 import { Point } from '../common/point';
 import { settings } from '../utilities/settings';
 import { eventManager } from '../managers/eventmanager';
+import * as uiControlDefs from '../gui/uicontroldefs';
+import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
 export class UISlider extends UISubControl
@@ -17,7 +19,7 @@ export class UISlider extends UISubControl
     {
         super( group );
         
-        this.type = defs.ECT_SLIDER;
+        this.type = uiControlDefs.ECT_SLIDER;
         
         // Slider travel distance in pixels
         this.travelDistPixels = 0;
@@ -193,7 +195,7 @@ export class UISlider extends UISubControl
 
             if( event.detail.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN )
             {
-                this.prepareControlScript( defs.ECS_SELECTED );
+                this.prepareControlScript( uiControlDefs.ECS_SELECT );
 
                 let ratio = 1.0 / settings.orthoAspectRatio.h;
 
@@ -231,12 +233,12 @@ export class UISlider extends UISubControl
         if( this.isActive() )
         {
             if( prepareOnSelect )
-                this.prepareControlScript( defs.ECS_SELECTED );
+                this.prepareControlScript( uiControlDefs.ECS_SELECT );
 
             // Send a message to blink the button
             eventManager.dispatchEvent( 
-                defs.EGE_MENU_CONTROL_STATE_CHANGE,
-                defs.ECS_SELECTED,
+                menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                uiControlDefs.ECS_SELECT,
                 this.subControlAry[0] );
 
             this.incSlider( value );

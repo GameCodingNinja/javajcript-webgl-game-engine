@@ -6,7 +6,7 @@
 
 "use strict";
 import { UIControl } from './uicontrol';
-import * as defs from '../common/defs';
+import * as uiControlDefs from '../gui/uicontroldefs';
 
 export class UIButton extends UIControl
 {
@@ -14,6 +14,6 @@ export class UIButton extends UIControl
     {
         super( group );
         
-        this.type = defs.ECT_BUTTON;
+        this.type = uiControlDefs.ECT_BUTTON;
     }
 }

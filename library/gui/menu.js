@@ -15,6 +15,8 @@ import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { ScriptComponent } from '../script/scriptcomponent';
 import * as UIControlFactory from './uicontrolfactory';
 import * as parseHelper from '../utilities/xmlparsehelper';
+import * as uiControlDefs from '../gui/uicontroldefs';
+import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
 export class Menu extends ObjectTransform
@@ -55,7 +57,7 @@ export class Menu extends ObjectTransform
         this.activeNode = null;
 
         // menu state
-        this.state = defs.ECS_NULL;
+        this.state = uiControlDefs.ECS_NULL;
 
         // Dynamic offset
         this.dynamicOffset = new DynamicOffset;
@@ -330,7 +332,7 @@ export class Menu extends ObjectTransform
     //
     activateMenu()
     {
-        this.state = defs.EMS_IDLE;
+        this.state = menuDefs.EMS_IDLE;
         this.setVisible(true);
         this.setAlpha(1);
         this.activateFirstInactiveControl();
@@ -417,62 +419,62 @@ export class Menu extends ObjectTransform
             for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
                     this.mouseOnlyControlAry[i].handleEvent( event );
             
-            if( event.detail.type === defs.EGE_MENU_TRANS_IN )
+            if( event.detail.type === menuDefs.EGE_MENU_TRANS_IN )
             {
                 this.onTransIn( event );
             }
-            else if( event.detail.type === defs.EGE_MENU_TRANS_OUT )
+            else if( event.detail.type === menuDefs.EGE_MENU_TRANS_OUT )
             {
                 this.onTransOut( event );
             }
-            else if( event.detail.type === defs.EGE_MENU_REACTIVATE )
+            else if( event.detail.type === menuDefs.EGE_MENU_REACTIVATE )
             {
                 this.onReactivate( event );
             }
-            else if( this.state === defs.EMS_IDLE )
+            else if( this.state === menuDefs.EMS_IDLE )
             {
-                if( event.detail.type === defs.EGE_MENU_SELECT_ACTION )
+                if( event.detail.type === menuDefs.EGE_MENU_SELECT_ACTION )
                 {
                     this.onSelectAction( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_SET_ACTIVE_CONTROL )
+                else if( event.detail.type === menuDefs.EGE_MENU_SET_ACTIVE_CONTROL )
                 {
                     this.onSetActiveControl( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_SCROLL_UP )
+                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_UP )
                 {
                     this.onUpAction( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_SCROLL_DOWN )
+                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_DOWN )
                 {
                     this.onDownAction( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_SCROLL_LEFT )
+                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_LEFT )
                 {
                     this.onLeftAction( event );
                 }
-                else if( event.detail.type === defs.EGE_MENU_SCROLL_RIGHT )
+                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_RIGHT )
                 {
                     this.onRightAction( event );
                 }
-                else if( (event.detail.type >= defs.EGE_MENU_UP_ACTION) &&
-                         (event.detail.type <= defs.EGE_MENU_RIGHT_ACTION) )
+                else if( (event.detail.type >= menuDefs.EGE_MENU_UP_ACTION) &&
+                         (event.detail.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
                 {
                     if( event.detail.arg[0] === defs.EAP_DOWN )
                     {
-                        if( event.detail.type === defs.EGE_MENU_UP_ACTION )
+                        if( event.detail.type === menuDefs.EGE_MENU_UP_ACTION )
                         {
                             this.onUpAction( event );
                         }
-                        else if( event.detail.type === defs.EGE_MENU_DOWN_ACTION )
+                        else if( event.detail.type === menuDefs.EGE_MENU_DOWN_ACTION )
                         {
                             this.onDownAction( event );
                         }
-                        if( event.detail.type === defs.EGE_MENU_LEFT_ACTION )
+                        if( event.detail.type === menuDefs.EGE_MENU_LEFT_ACTION )
                         {
                             this.onLeftAction( event );
                         }
-                        else if( event.detail.type === defs.EGE_MENU_RIGHT_ACTION )
+                        else if( event.detail.type === menuDefs.EGE_MENU_RIGHT_ACTION )
                         {
                             this.onRightAction( event );
                         }
@@ -480,7 +482,7 @@ export class Menu extends ObjectTransform
                 }
             }
         }
-        else if( this.state === defs.EMS_IDLE )
+        else if( this.state === menuDefs.EMS_IDLE )
         {
             if( event.type === 'mousemove' )
             {
@@ -547,8 +549,8 @@ export class Menu extends ObjectTransform
                     this.activeNode = navNode;
 
                     eventManager.dispatchEvent(
-                        defs.EGE_MENU_CONTROL_STATE_CHANGE,
-                        defs.ECS_ACTIVE,
+                        menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                        uiControlDefs.ECS_ACTIVE,
                         navNode.uiControl );
 
                     break;
@@ -589,8 +591,8 @@ export class Menu extends ObjectTransform
             selectionFound = true;
 
             // Set the state to active which will block all messages until the state is reset to idle
-            if( this.activeNode.uiControl.actionType > defs.ECAT_NULL )
-                this.state = defs.EMS_ACTIVE;
+            if( this.activeNode.uiControl.actionType > uiControlDefs.ECAT_NULL )
+                this.state = menuDefs.EMS_ACTIVE;
         }
         else if( event.detail.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
         {
@@ -602,8 +604,8 @@ export class Menu extends ObjectTransform
                     selectionFound = true;
 
                     // Set the state to active which will block all messages until the state is reset to idle
-                    if( this.mouseOnlyControlAry[i].actionType > defs.ECAT_NULL )
-                        this.state = defs.EMS_ACTIVE;
+                    if( this.mouseOnlyControlAry[i].actionType > uiControlDefs.ECAT_NULL )
+                        this.state = menuDefs.EMS_ACTIVE;
 
                     break;
                 }
@@ -626,8 +628,8 @@ export class Menu extends ObjectTransform
                     if( this.controlAry[i].handleSelectAction( event ) )
                     {
                         // Set the state to active which will block all messages until the state is reset to idle
-                        if( this.activeNode.uiControl.actionType > defs.ECAT_NULL )
-                            this.state = defs.EMS_ACTIVE;
+                        if( this.activeNode.uiControl.actionType > uiControlDefs.ECAT_NULL )
+                            this.state = menuDefs.EMS_ACTIVE;
 
                         break;
                     }
@@ -642,7 +644,7 @@ export class Menu extends ObjectTransform
     onSetActiveControl( event )
     {
         // Set the first inactive control to active
-        if( event.detail.arg[0] === defs.EAC_FIRST_ACTIVE_CONTROL )
+        if( event.detail.arg[0] === menuDefs.EAC_FIRST_ACTIVE_CONTROL )
             this.activateFirstInactiveControl();
     }
 
@@ -651,7 +653,7 @@ export class Menu extends ObjectTransform
     //
     onReactivate( event )
     {
-        this.state = defs.EMS_IDLE;
+        this.state = menuDefs.EMS_IDLE;
     }
 
     // 
@@ -659,15 +661,15 @@ export class Menu extends ObjectTransform
     //
     onTransIn( event )
     {
-        if( event.detail.arg[0] === defs.ETC_BEGIN )
+        if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
         {
             this.prepare( 'transIn' );
 
-            this.state = defs.EMS_ACTIVE;
+            this.state = menuDefs.EMS_ACTIVE;
         }
-        else if( event.detail.arg[0] === defs.ETC_END )
+        else if( event.detail.arg[0] === menuDefs.ETC_END )
         {
-            this.state = defs.EMS_IDLE;
+            this.state = menuDefs.EMS_IDLE;
         }
     }
 
@@ -676,15 +678,15 @@ export class Menu extends ObjectTransform
     //
     onTransOut( event )
     {
-        if( event.detail.arg[0] === defs.ETC_BEGIN )
+        if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
         {
             this.prepare( 'transOut' );
 
-            this.state = defs.EMS_ACTIVE;
+            this.state = menuDefs.EMS_ACTIVE;
         }
-        else if( event.detail.arg[0] === defs.ETC_END )
+        else if( event.detail.arg[0] === menuDefs.ETC_END )
         {
-            this.state = defs.EMS_INACTIVE;
+            this.state = menuDefs.EMS_INACTIVE;
         }
     }
 
@@ -758,7 +760,7 @@ export class Menu extends ObjectTransform
 
         for( let i = 0; i < this.controlAry.length; ++i )
         {
-            if( this.controlAry[i].state > defs.ECS_INACTIVE )
+            if( this.controlAry[i].state > uiControlDefs.ECS_INACTIVE )
             {
                 result = this.controlAry[i].getActiveControl();
                 break;
@@ -844,6 +846,6 @@ export class Menu extends ObjectTransform
     //
     isIdle()
     {
-        return (this.state === defs.EMS_IDLE);
+        return (this.state === menuDefs.EMS_IDLE);
     }
 }
