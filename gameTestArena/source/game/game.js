@@ -16,7 +16,6 @@ import { TestArenaState } from '../state/testarenastate';
 //import { LoadState } from '../state/loadstate';
 //import { Level1State } from '../state/level1state';
 //import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
-import { aiBall } from '../ai/aiball';
 import { gl, device } from '../../../library/system/device';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
@@ -32,9 +31,6 @@ export class Game
     {
         // Set the init shader callback
         signalManager.connect_initShader( this.initShaderCallBack.bind(this) );
-        
-        // Set the smart gui call back
-        signalManager.connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
 
         // Load the settings
         settings.loadFromNode( genFunc.stringLoadXML( settingsCfg ) );
@@ -101,15 +97,6 @@ export class Game
         
         // Create the startup state
         this.gameState = new TestArenaState( this.gameLoop.bind(this) );
-    }
-    
-    // 
-    //  DESC: Callback for when a smart gui control is created
-    //
-    smartGuiControlCreateCallBack( control )
-    {
-        //if( control.faction === 'decision_btn' )
-        //    control.smartGui = new SmartConfirmBtn( control );
     }
     
     // 

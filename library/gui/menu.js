@@ -64,9 +64,6 @@ export class Menu extends ObjectTransform
 
         // Scrolling parameters
         this.scrollParam = new ScrollParam;
-
-        // Base smart Gui control scoped pointer
-        this.smartGui = null;
         
         // menu alpha value
         this.alpha = 0;
@@ -489,9 +486,6 @@ export class Menu extends ObjectTransform
                 this.onMouseMove( event );
             }
         }
-
-        // Handle any smart menu events
-        this.smartHandleEvent( event );
     }
 
     // 
@@ -790,24 +784,6 @@ export class Menu extends ObjectTransform
         }
 
         return this.scrollParam;
-    }
-    
-    // 
-    //  DESC: Do any smart create
-    //
-    smartCreate()
-    {
-        if( this.smartGui )
-            this.smartGui.create();
-    }
-
-    // 
-    //  DESC: Do any smart event handling
-    //
-    smartHandleEvent( event )
-    {
-        if( this.smartGui )
-            this.smartGui.handleEvent( event );
     }
 
     // 

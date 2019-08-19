@@ -10,27 +10,9 @@ class SignalManager
 {
     constructor()
     {
-        this.smartGuiControlSignal = [];
-        this.smartMenuSignal = [];
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
         this.initShaderSignal = [];
-    }
-    
-    // 
-    //  DESC: Connect to the smart gui control signal
-    //
-    connect_smartGui( slot )
-    {
-        this.smartGuiControlSignal.push( slot );
-    }
-    
-    // 
-    //  DESC: Connect to the smart gui menu signal
-    //
-    connect_smartMenu( slot )
-    {
-        this.smartMenuSignal.push( slot );
     }
     
     // 
@@ -79,24 +61,6 @@ class SignalManager
     clear_initShader()
     {
         this.initShaderSignal = [];
-    }
-
-    // 
-    //  DESC: Broadcast smart gui control signal
-    //
-    broadcast_smartGui( control )
-    {
-        for( let i = 0; i < this.smartGuiControlSignal.length; ++i )
-            this.smartGuiControlSignal[i](control);
-    }
-    
-    // 
-    //  DESC: Broadcast smart gui control signal
-    //
-    broadcast_smartMenu( menu )
-    {
-        for( let i = 0; i < this.smartMenuSignal.length; ++i )
-            this.smartMenuSignal[i](menu);
     }
     
     // 

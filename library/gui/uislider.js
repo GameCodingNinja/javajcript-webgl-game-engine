@@ -171,8 +171,6 @@ export class UISlider extends UISubControl
                 this.incSliderMovePos( event.movementX * oneOverAspectRatio );
             else
                 this.incSliderMovePos( event.movementY * oneOverAspectRatio );
-
-            this.smartExecuteAction();
         }
 
         return result;
@@ -203,8 +201,6 @@ export class UISlider extends UISubControl
                     this.incSliderMovePos( (event.detail.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * ratio );
                 else
                     this.incSliderMovePos( (event.detail.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * ratio );
-
-                this.smartExecuteAction();
             }
         }
         else if( event.detail.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType )
@@ -242,8 +238,6 @@ export class UISlider extends UISubControl
                 this.subControlAry[0] );
 
             this.incSlider( value );
-
-            this.smartExecuteAction();
         }
     }
 

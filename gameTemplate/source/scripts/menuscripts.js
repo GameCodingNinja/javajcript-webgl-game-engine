@@ -11,9 +11,11 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { iScript } from '../../../library/script/iscript';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
+import { menuManager } from '../../../library/gui/menumanager';
 import { Color } from '../../../library/common/color';
 import * as utilScripts from './utilityscripts';
 import * as menuDefs from '../../../library/gui/menudefs';
+import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 
 //
 //  DESC: Script for playing the active sound
@@ -691,6 +693,56 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
 }
 
 
+//
+//  DESC: Execution script for a button control to change to the confirmation menu
+//
+class ConfirmBtn_execute extends iScript
+{
+    constructor( control )
+    {
+        super();
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        let menu = menuManager.getMenu("confirmation_menu");
+        let yesBtn = menu.getControl("yes_btn");
+        let megLbl = menu.getControl("message_lbl");
+        
+        let conformationMsg = '';
+        let executionAction = '';
+        let actionType = uiControlDefs.ECAT_BACK;
+        
+        if( this.control.name === 'continue_btn' )
+        {
+            conformationMsg = "Are you sure you|want to continue|on to the next state?";
+            actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
+            executionAction = "level_1_state";
+        }
+        else if( this.control.name === 'main_menu_btn' )
+        {
+            conformationMsg = 'Are you sure you|want to go back to|the main menu?';
+            actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
+            executionAction = 'title_screen_state';
+        }
+        
+        // Set the conformation menu
+        yesBtn.actionType = actionType;
+        yesBtn.executionAction = executionAction;
+        megLbl.createFontStr( conformationMsg );
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return true; }
+}
+
+
 // 
 //  DESC: Load scripts
 //
@@ -761,4 +813,7 @@ export function loadScripts()
             
     scriptManager.set( 'Control_slider_btn_Selected',
         ( sprite ) => { return new Control_slider_btn_Selected( sprite ); } );
+    
+    scriptManager.set( 'ConfirmBtn_execute',
+        ( control ) => { return new ConfirmBtn_execute( control ); } );
 }

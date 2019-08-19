@@ -42,12 +42,13 @@
             <fontStringLst>
                 <string text="Continue"/>
             </fontStringLst>
-            <action actionType="game_state_change" executionAction="level_1_state"/>
+            <action actionType="to_menu" executionAction="confirmation_menu"/>
             <navigate up="key_binding_btn" down="new_game_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptLst>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="ConfirmBtn_execute"/>
             </scriptLst>
         </control>
 

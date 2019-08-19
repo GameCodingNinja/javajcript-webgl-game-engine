@@ -121,19 +121,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(163);
 /* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(182);
 /* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(183);
-/* harmony import */ var _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(186);
-/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(9);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(22);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(121);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(20);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(188);
+/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(9);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(22);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(121);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(186);
 
 // 
 //  FILE NAME: game.js
 //  DESC:      CGame class
 //
-
 
 
 
@@ -161,12 +159,9 @@ class Game
     {
         // Set the init shader callback
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_initShader( this.initShaderCallBack.bind(this) );
-        
-        // Set the smart gui call back
-        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
 
         // Load the settings
-        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_14__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_15__["default"] ) );
+        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__["default"] ) );
 
         // Init the game
         this.init();
@@ -178,67 +173,58 @@ class Game
     init()
     {
         // Create the projection matrixes
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["device"].createProjMatrix();
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["device"].createProjMatrix();
         
         // Do we add stencil buffer
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].createStencilBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].REPLACE);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].REPLACE);
         
         // Depth testing is off by default. Enable it?
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].DEPTH_TEST);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].DEPTH_TEST);
     
         // Init the clear color
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
         
         // Init the stencil clear mask based on the bit size of the mask
         // Stencil buffer can only be 1 or 8 bits per pixel
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 1 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].ALWAYS, 1, 0x1);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilMask(0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].ALWAYS, 1, 0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].stencilMask(0x1);
         }
         else if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 8 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].ALWAYS, 1, 0xFF);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].stencilMask(0xff);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].ALWAYS, 1, 0xFF);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].stencilMask(0xff);
         }
         
         // Cull the back face
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].CCW);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].BACK);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].CULL_FACE);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].CCW);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].BACK);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].CULL_FACE);
         
         // Enable alpha blending
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].BLEND);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].ONE_MINUS_SRC_ALPHA);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].BLEND);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].ONE_MINUS_SRC_ALPHA);
 
         // Make the zero texture the active texture
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].TEXTURE0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].TEXTURE0);
         
         // Init the clear buffer mask
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearTargetBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].COLOR_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].COLOR_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].DEPTH_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].DEPTH_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearStencilBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].STENCIL_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].STENCIL_BUFFER_BIT;
         
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].clear( this.clearBufferMask );
         
         // Create the startup state
         this.gameState = new _state_startupstate__WEBPACK_IMPORTED_MODULE_5__["StartUpState"]( this.gameLoop.bind(this) );
-    }
-    
-    // 
-    //  DESC: Callback for when a smart gui control is created
-    //
-    smartGuiControlCreateCallBack( control )
-    {
-        if( control.faction === 'decision_btn' )
-            control.smartGui = new _smartGUI_smartconfirmbtn__WEBPACK_IMPORTED_MODULE_9__["SmartConfirmBtn"]( control );
     }
     
     // 
@@ -258,13 +244,13 @@ class Game
         {
             this.gameState.cleanUp();
             
-            if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_13__["EGS_TITLE_SCREEN"] )
+            if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_12__["EGS_TITLE_SCREEN"] )
                 this.gameState = new _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__["TitleScreenState"]( this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_13__["EGS_GAME_LOAD"] )
+            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_12__["EGS_GAME_LOAD"] )
                 this.gameState = new _state_loadstate__WEBPACK_IMPORTED_MODULE_7__["LoadState"]( this.gameState.stateMessage, this.gameLoop.bind(this) );
             
-            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_13__["EGS_LEVEL_1"] )
+            else if( this.gameState.nextState === _state_statedefs__WEBPACK_IMPORTED_MODULE_12__["EGS_LEVEL_1"] )
                 this.gameState = new _state_level1state__WEBPACK_IMPORTED_MODULE_8__["Level1State"]( this.gameLoop.bind(this) );
             
             return true;
@@ -281,7 +267,7 @@ class Game
         let event = null;
         
         // Handle events on the queue
-        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_11__["eventManager"].pollEvent()) )
+        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].pollEvent()) )
             this.handleEvent( event );
     }
     
@@ -307,7 +293,7 @@ class Game
         this.pollEvents();
         
         // Get our elapsed time
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_12__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__["highResTimer"].calcElapsedTime();
         
         // Handle the physics
         this.gameState.physics();
@@ -319,7 +305,7 @@ class Game
         this.gameState.transform();
 
         // Clear the back buffer
-        _library_system_device__WEBPACK_IMPORTED_MODULE_10__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_9__["gl"].clear( this.clearBufferMask );
         
         // Do the rendering
         this.gameState.render();
@@ -354,27 +340,9 @@ class SignalManager
 {
     constructor()
     {
-        this.smartGuiControlSignal = [];
-        this.smartMenuSignal = [];
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
         this.initShaderSignal = [];
-    }
-    
-    // 
-    //  DESC: Connect to the smart gui control signal
-    //
-    connect_smartGui( slot )
-    {
-        this.smartGuiControlSignal.push( slot );
-    }
-    
-    // 
-    //  DESC: Connect to the smart gui menu signal
-    //
-    connect_smartMenu( slot )
-    {
-        this.smartMenuSignal.push( slot );
     }
     
     // 
@@ -423,24 +391,6 @@ class SignalManager
     clear_initShader()
     {
         this.initShaderSignal = [];
-    }
-
-    // 
-    //  DESC: Broadcast smart gui control signal
-    //
-    broadcast_smartGui( control )
-    {
-        for( let i = 0; i < this.smartGuiControlSignal.length; ++i )
-            this.smartGuiControlSignal[i](control);
-    }
-    
-    // 
-    //  DESC: Broadcast smart gui control signal
-    //
-    broadcast_smartMenu( menu )
-    {
-        for( let i = 0; i < this.smartMenuSignal.length; ++i )
-            this.smartMenuSignal[i](menu);
     }
     
     // 
@@ -25821,19 +25771,10 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["Ma
 
                 // Have the menu load it's share
                 menu.loadFromNode( xmlNode );
-
-                // Broadcast signal to let the game handle smart menu inits
-                _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__["signalManager"].broadcast_smartMenu( menu );
-
-                // Handle any smart menu creates
-                menu.smartCreate();
             }
 
             this.initGroup( group );
         }
-        
-        // Temporary assets can now be freed
-        //assetHolder.deleteGroup( groupAry );
 
         return 0;
     }
@@ -26734,9 +26675,6 @@ class Menu extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectT
 
         // Scrolling parameters
         this.scrollParam = new _scrollparam__WEBPACK_IMPORTED_MODULE_2__["ScrollParam"];
-
-        // Base smart Gui control scoped pointer
-        this.smartGui = null;
         
         // menu alpha value
         this.alpha = 0;
@@ -27159,9 +27097,6 @@ class Menu extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectT
                 this.onMouseMove( event );
             }
         }
-
-        // Handle any smart menu events
-        this.smartHandleEvent( event );
     }
 
     // 
@@ -27460,24 +27395,6 @@ class Menu extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectT
         }
 
         return this.scrollParam;
-    }
-    
-    // 
-    //  DESC: Do any smart create
-    //
-    smartCreate()
-    {
-        if( this.smartGui )
-            this.smartGui.create();
-    }
-
-    // 
-    //  DESC: Do any smart event handling
-    //
-    smartHandleEvent( event )
-    {
-        if( this.smartGui )
-            this.smartGui.handleEvent( event );
     }
 
     // 
@@ -30832,12 +30749,6 @@ function create( node, group )
     // Have the control load it's share
     control.loadFromNode( node );
 
-    // Broadcast signal to let the game handle smart gui inits
-    _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_smartGui( control );
-
-    // Do any smart gui Create
-    control.smartCreate();
-
     return control;
 
 }
@@ -30962,17 +30873,11 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         // Collision center
         this.collisionCenter = new _common_point__WEBPACK_IMPORTED_MODULE_4__["Point"];
 
-        // Smart Gui object
-        this.smartGui = null;
-
         // Mouse selection type
         this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_16__["EAP_UP"];
 
         // Scrolling parameters
         this.scrollParam = null;
-
-        // Execution callbacks
-        this.executionActionCallback = null;
     }
     
     // 
@@ -31203,8 +31108,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             this.onTransOut( event );
         }
 
-        // Do any smart event handling
-        this.smartHandleEvent( event );
+        // Prepare script function associated with handling this game event
+        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EVENT"] );
     }
 
     // 
@@ -31217,6 +31122,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
                 this.setDisplayState();
+            
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_IN"] );
         }
     }
 
@@ -31236,6 +31144,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
                 this.setDisplayState();
+            
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_OUT"] );
         }
     }
 
@@ -31277,13 +31188,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"] )
                 _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"], this.executionAction, this );
 
-            // Smart gui execution
-            this.smartExecuteAction();
-
-            // signal execute action
-            if( this.executionActionCallback !== null )
-                for( let i = 0; i < this.executionActionCallback.length; ++i )
-                    this.executionActionCallback[i](this);
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EXECUTE"] );
         }
     }
 
@@ -31456,8 +31362,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].init();
 
-        // Call any init scripts
-        this.prepareSpriteScriptFactoryFunction( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"] );
+        // Prepare script function associated with handling this game event
+        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"] );
     }
 
     // 
@@ -31520,7 +31426,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     // 
     //  DESC: Prepare the script function to run
     //
-    prepareControlScript( controlState )
+    prepareControlScript( controlState, event )
     {
         let scriptFactoryId = "null";
 
@@ -31569,7 +31475,10 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
         let scriptFactory = this.scriptComponent.get( scriptFactoryId );
         if( scriptFactory )
-            this.scriptComponent.prepare( scriptFactory(this) );
+            if( controlState == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EVENT"] )
+                this.scriptComponent.prepare( scriptFactory(this, event) );
+            else
+                this.scriptComponent.prepare( scriptFactory(this) );
     }
 
     // 
@@ -31609,33 +31518,6 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
         else if( value === 'selected' )
             this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"];
-    }
-    
-    // 
-    //  DESC: Do any smart create
-    //
-    smartCreate()
-    {
-        if( this.smartGui )
-            this.smartGui.create();
-    }
-
-    // 
-    //  DESC: Do any smart event handling
-    //
-    smartHandleEvent( event )
-    {
-        if( this.smartGui )
-            this.smartGui.handleEvent( event );
-    }
-
-    // 
-    //  DESC: Smart execute the action
-    //
-    smartExecuteAction()
-    {
-        if( this.smartGui )
-            this.smartGui.execute();
     }
 
     // 
@@ -31857,17 +31739,6 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     isSubControl()
     {
         return false;
-    }
-
-    // 
-    //  DESC: Connect to the execution action signal
-    //
-    connect_ExecutionAction( callback )
-    {
-        if( this.executionActionCallback === null )
-            this.executionActionCallback = [];
-        
-        this.executionActionCallback.push( callback );
     }
     
     // 
@@ -33354,8 +33225,6 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"
                 this.incSliderMovePos( event.movementX * oneOverAspectRatio );
             else
                 this.incSliderMovePos( event.movementY * oneOverAspectRatio );
-
-            this.smartExecuteAction();
         }
 
         return result;
@@ -33386,8 +33255,6 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"
                     this.incSliderMovePos( (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_6__["ESMA_MOUSE_X"]] - this.subControlAry[0].collisionCenter.x) * ratio );
                 else
                     this.incSliderMovePos( (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_6__["ESMA_MOUSE_Y"]] - this.subControlAry[0].collisionCenter.y) * ratio );
-
-                this.smartExecuteAction();
             }
         }
         else if( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_6__["ESMA_PRESS_TYPE"]] !== this.mouseSelectType )
@@ -33425,8 +33292,6 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__["UISubControl"
                 this.subControlAry[0] );
 
             this.incSlider( value );
-
-            this.smartExecuteAction();
         }
     }
 
@@ -39771,14 +39636,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(167);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
 /* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(143);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(166);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(107);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(166);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(107);
+/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(130);
 
 //
 //  FILE NAME: menuscripts.js
 //  DESC:      script for the menus
 //
+
+
 
 
 
@@ -39844,7 +39713,7 @@ class Control_OnSelect extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_
 //
 //  DESC: Script for fading in the menu
 //
-class Menu_TransIn extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo"]
+class Menu_TransIn extends _utilityscripts__WEBPACK_IMPORTED_MODULE_7__["FadeTo"]
 {
     constructor( menu )
     {
@@ -39869,7 +39738,7 @@ class Menu_TransIn extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo"
         {
             this.menu.setAlpha( this.final );
             
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_TRANS_IN"], _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["ETC_END"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_TRANS_IN"], _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["ETC_END"] );
         }
         else
         {
@@ -39881,7 +39750,7 @@ class Menu_TransIn extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo"
 //
 //  DESC: Script for fading out the menu
 //
-class Menu_TransOut extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo"]
+class Menu_TransOut extends _utilityscripts__WEBPACK_IMPORTED_MODULE_7__["FadeTo"]
 {
     constructor( menu )
     {
@@ -39907,7 +39776,7 @@ class Menu_TransOut extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo
             this.menu.setAlpha( this.final );
             this.menu.setVisible( false );
             
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_TRANS_OUT"], _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["ETC_END"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_TRANS_OUT"], _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["ETC_END"] );
         }
         else
         {
@@ -39932,7 +39801,7 @@ class Control_Disabled extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_
     //
     execute()
     {
-        let color = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        let color = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
         color.copy( this.sprite.getDefaultColor() );
         color.transformHSV( 0, 0, 1 );
 
@@ -39995,9 +39864,9 @@ class Base_Control_Active extends _library_script_iscript__WEBPACK_IMPORTED_MODU
         super();
         this.sprite = sprite;
 
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
-        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
-        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["ColorTo"];
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
+        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
+        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_7__["ColorTo"];
 
         this.toggle = false;
     }
@@ -40090,10 +39959,10 @@ class Base_Control_Selected extends _library_script_iscript__WEBPACK_IMPORTED_MO
         super();
         this.sprite = sprite;
 
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
-        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
+        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
 
-        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["ColorTo"];
+        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_7__["ColorTo"];
 
         this.toggle = false;
     }
@@ -40163,7 +40032,7 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
         
         if( this.finished )
         {
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_SELECT_EXECUTE"] );
         }
     }
 }
@@ -40186,8 +40055,8 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
         
         if( this.finished )
         {
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_REACTIVATE"] );
         }
     }
 }
@@ -40306,7 +40175,7 @@ class Base_Control_Fast_Selected extends _library_script_iscript__WEBPACK_IMPORT
         super();
         this.sprite = sprite;
 
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
     }
     
     // 
@@ -40368,7 +40237,7 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_REACTIVATE"] );
             this.finished = true;
         }
     }
@@ -40394,8 +40263,8 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_REACTIVATE"] );
             this.finished = true;
         }
     }
@@ -40466,6 +40335,54 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     isFinished() { return true; }
 }
 
+//
+//  DESC: Execution script for a button control to change to the confirmation menu
+//
+class ConfirmBtn_execute extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+{
+    constructor( control )
+    {
+        super();
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        let menu = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_5__["menuManager"].getMenu("confirmation_menu");
+        let yesBtn = menu.getControl("yes_btn");
+        let megLbl = menu.getControl("message_lbl");
+        
+        let conformationMsg = '';
+        let executionAction = '';
+        let actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__["ECAT_BACK"];
+        
+        if( this.control.name === 'continue_btn' )
+        {
+            conformationMsg = "Are you sure you|want to continue|on to the next state?";
+            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__["ECAT_GAME_STATE_CHANGE"];
+            executionAction = "level_1_state";
+        }
+        else if( this.control.name === 'main_menu_btn' )
+        {
+            conformationMsg = 'Are you sure you|want to go back to|the main menu?';
+            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__["ECAT_GAME_STATE_CHANGE"];
+            executionAction = 'title_screen_state';
+        }
+        
+        // Set the conformation menu
+        yesBtn.actionType = actionType;
+        yesBtn.executionAction = executionAction;
+        megLbl.createFontStr( conformationMsg );
+    }
+    
+    // 
+    //  DESC: Finished access function
+    //
+    isFinished() { return true; }
+}
 
 // 
 //  DESC: Load scripts
@@ -40537,6 +40454,9 @@ function loadScripts()
             
     _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'Control_slider_btn_Selected',
         ( sprite ) => { return new Control_slider_btn_Selected( sprite ); } );
+
+    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'ConfirmBtn_execute',
+        ( control ) => { return new ConfirmBtn_execute( control ); } );
 }
 
 
@@ -41453,142 +41373,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 /* 186 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartConfirmBtn", function() { return SmartConfirmBtn; });
-/* harmony import */ var _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(187);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
-/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(130);
-
-// 
-//  FILE NAME: smartconfirmbtn.js
-//  DESC:      Class CSmartExitBtn
-//
-
-
-
-
-
-
-
-class SmartConfirmBtn extends _library_gui_ismartguibase__WEBPACK_IMPORTED_MODULE_0__["SmartGuiControl"]
-{
-    constructor( uiControl )
-    {
-        super( uiControl );
-    }
-    
-    //
-    //  DESC: Called when the control is executed
-    //
-    execute()
-    {
-        let menu = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__["menuManager"].getMenu("confirmation_menu");
-        let yesBtn = menu.getControl("yes_btn");
-        let megLbl = menu.getControl("message_lbl");
-        
-        let smartGuiCtrl = null;
-        let conformationMsg = '';
-        let executionAction = '';
-        let actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_2__["ECAT_BACK"];
-        
-        if( this.uiControl.name === 'main_menu_btn' )
-        {
-            conformationMsg = 'Are you sure you|want to go back to|the main menu?';
-            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_2__["ECAT_GAME_STATE_CHANGE"];
-            executionAction = 'title_screen_state';
-        }
-        
-        // Set the conformation menu
-        yesBtn.smartGui = smartGuiCtrl;
-        yesBtn.actionType = actionType;
-        yesBtn.executionAction = executionAction;
-        megLbl.createFontStr( conformationMsg );
-    }
-}
-    
-
-/***/ }),
-/* 187 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartGuiMenu", function() { return SmartGuiMenu; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmartGuiControl", function() { return SmartGuiControl; });
-
-//
-//  FILE NAME: ismartguibase.js
-//  DESC:      Smart Gui interface & Base Classes
-//
-
-
-
-// 
-//  DESC: Smart GUI interface class
-//
-class iSmartGui
-{
-    constructor()
-    {
-    }
-    
-    // 
-    //  DESC: Called when the control is created
-    //
-    create()
-    {
-        // Empty function to be overwritten
-    }
-
-    // 
-    //  DESC: Called during the handle user imput
-    //
-    handleEvent( event )
-    {
-        // Empty function to be overwritten
-    }
-}
-
-// 
-//  DESC: Smart GUI Menu class
-//
-class SmartGuiMenu extends iSmartGui
-{
-    constructor( uiMenu )
-    {
-        super();
-        
-        this.uiMenu = uiMenu;
-    }
-}
-
-// 
-//  DESC: Smart GUI Control
-//
-class SmartGuiControl extends iSmartGui
-{
-    constructor( uiControl )
-    {
-        super();
-        
-        this.uiControl = uiControl;
-    }
-
-    // 
-    //  DESC: Called when the control is executed
-    //
-    execute()
-    {
-        // Empty function to be overwritten
-    }
-}
-
-
-/***/ }),
-/* 188 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

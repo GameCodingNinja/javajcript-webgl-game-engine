@@ -313,19 +313,10 @@ class MenuManager extends ManagerBase
 
                 // Have the menu load it's share
                 menu.loadFromNode( xmlNode );
-
-                // Broadcast signal to let the game handle smart menu inits
-                signalManager.broadcast_smartMenu( menu );
-
-                // Handle any smart menu creates
-                menu.smartCreate();
             }
 
             this.initGroup( group );
         }
-        
-        // Temporary assets can now be freed
-        //assetHolder.deleteGroup( groupAry );
 
         return 0;
     }

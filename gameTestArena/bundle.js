@@ -118,12 +118,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _state_testarenastate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
-/* harmony import */ var _ai_aiball__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(156);
-/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(134);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(103);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(158);
+/* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(134);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(103);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(156);
 
 // 
 //  FILE NAME: game.js
@@ -145,7 +144,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 //import * as stateDefs from '../state/statedefs';
 
 
@@ -158,12 +156,9 @@ class Game
     {
         // Set the init shader callback
         _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_initShader( this.initShaderCallBack.bind(this) );
-        
-        // Set the smart gui call back
-        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_smartGui( this.smartGuiControlCreateCallBack.bind(this) );
 
         // Load the settings
-        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_11__["default"] ) );
+        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__["default"] ) );
 
         // Init the game
         this.init();
@@ -175,67 +170,58 @@ class Game
     init()
     {
         // Create the projection matrixes
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["device"].createProjMatrix();
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["device"].createProjMatrix();
         
         // Do we add stencil buffer
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].createStencilBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].REPLACE);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].REPLACE);
         
         // Depth testing is off by default. Enable it?
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].DEPTH_TEST);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].DEPTH_TEST);
     
         // Init the clear color
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
         
         // Init the stencil clear mask based on the bit size of the mask
         // Stencil buffer can only be 1 or 8 bits per pixel
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 1 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ALWAYS, 1, 0x1);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilMask(0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].ALWAYS, 1, 0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilMask(0x1);
         }
         else if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 8 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ALWAYS, 1, 0xFF);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].stencilMask(0xff);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].ALWAYS, 1, 0xFF);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilMask(0xff);
         }
         
         // Cull the back face
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].CCW);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].BACK);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].CULL_FACE);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].CCW);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].BACK);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].CULL_FACE);
         
         // Enable alpha blending
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].BLEND);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ONE_MINUS_SRC_ALPHA);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].BLEND);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].ONE_MINUS_SRC_ALPHA);
 
         // Make the zero texture the active texture
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].TEXTURE0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].TEXTURE0);
         
         // Init the clear buffer mask
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearTargetBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].COLOR_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].COLOR_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].DEPTH_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].DEPTH_BUFFER_BIT;
 
         if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearStencilBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].STENCIL_BUFFER_BIT;
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].STENCIL_BUFFER_BIT;
         
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].clear( this.clearBufferMask );
         
         // Create the startup state
         this.gameState = new _state_testarenastate__WEBPACK_IMPORTED_MODULE_5__["TestArenaState"]( this.gameLoop.bind(this) );
-    }
-    
-    // 
-    //  DESC: Callback for when a smart gui control is created
-    //
-    smartGuiControlCreateCallBack( control )
-    {
-        //if( control.faction === 'decision_btn' )
-        //    control.smartGui = new SmartConfirmBtn( control );
     }
     
     // 
@@ -262,7 +248,7 @@ class Game
         let event = null;
         
         // Handle events on the queue
-        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_8__["eventManager"].pollEvent()) )
+        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__["eventManager"].pollEvent()) )
             this.handleEvent( event );
     }
     
@@ -288,7 +274,7 @@ class Game
         this.pollEvents();
         
         // Get our elapsed time
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_9__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__["highResTimer"].calcElapsedTime();
         
         // Handle the physics
         this.gameState.physics();
@@ -300,7 +286,7 @@ class Game
         this.gameState.transform();
 
         // Clear the back buffer
-        _library_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].clear( this.clearBufferMask );
         
         // Do the rendering
         this.gameState.render();
@@ -335,27 +321,9 @@ class SignalManager
 {
     constructor()
     {
-        this.smartGuiControlSignal = [];
-        this.smartMenuSignal = [];
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
         this.initShaderSignal = [];
-    }
-    
-    // 
-    //  DESC: Connect to the smart gui control signal
-    //
-    connect_smartGui( slot )
-    {
-        this.smartGuiControlSignal.push( slot );
-    }
-    
-    // 
-    //  DESC: Connect to the smart gui menu signal
-    //
-    connect_smartMenu( slot )
-    {
-        this.smartMenuSignal.push( slot );
     }
     
     // 
@@ -404,24 +372,6 @@ class SignalManager
     clear_initShader()
     {
         this.initShaderSignal = [];
-    }
-
-    // 
-    //  DESC: Broadcast smart gui control signal
-    //
-    broadcast_smartGui( control )
-    {
-        for( let i = 0; i < this.smartGuiControlSignal.length; ++i )
-            this.smartGuiControlSignal[i](control);
-    }
-    
-    // 
-    //  DESC: Broadcast smart gui control signal
-    //
-    broadcast_smartMenu( menu )
-    {
-        for( let i = 0; i < this.smartMenuSignal.length; ++i )
-            this.smartMenuSignal[i](menu);
     }
     
     // 
@@ -27440,17 +27390,11 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         // Collision center
         this.collisionCenter = new _common_point__WEBPACK_IMPORTED_MODULE_4__["Point"];
 
-        // Smart Gui object
-        this.smartGui = null;
-
         // Mouse selection type
         this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_16__["EAP_UP"];
 
         // Scrolling parameters
         this.scrollParam = null;
-
-        // Execution callbacks
-        this.executionActionCallback = null;
     }
     
     // 
@@ -27681,8 +27625,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             this.onTransOut( event );
         }
 
-        // Do any smart event handling
-        this.smartHandleEvent( event );
+        // Prepare script function associated with handling this game event
+        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EVENT"] );
     }
 
     // 
@@ -27695,6 +27639,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
                 this.setDisplayState();
+            
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_IN"] );
         }
     }
 
@@ -27714,6 +27661,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
                 this.setDisplayState();
+            
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_OUT"] );
         }
     }
 
@@ -27755,13 +27705,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"] )
                 _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"], this.executionAction, this );
 
-            // Smart gui execution
-            this.smartExecuteAction();
-
-            // signal execute action
-            if( this.executionActionCallback !== null )
-                for( let i = 0; i < this.executionActionCallback.length; ++i )
-                    this.executionActionCallback[i](this);
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EXECUTE"] );
         }
     }
 
@@ -27934,8 +27879,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].init();
 
-        // Call any init scripts
-        this.prepareSpriteScriptFactoryFunction( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"] );
+        // Prepare script function associated with handling this game event
+        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"] );
     }
 
     // 
@@ -27998,7 +27943,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     // 
     //  DESC: Prepare the script function to run
     //
-    prepareControlScript( controlState )
+    prepareControlScript( controlState, event )
     {
         let scriptFactoryId = "null";
 
@@ -28047,7 +27992,10 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
         let scriptFactory = this.scriptComponent.get( scriptFactoryId );
         if( scriptFactory )
-            this.scriptComponent.prepare( scriptFactory(this) );
+            if( controlState == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EVENT"] )
+                this.scriptComponent.prepare( scriptFactory(this, event) );
+            else
+                this.scriptComponent.prepare( scriptFactory(this) );
     }
 
     // 
@@ -28087,33 +28035,6 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
         else if( value === 'selected' )
             this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"];
-    }
-    
-    // 
-    //  DESC: Do any smart create
-    //
-    smartCreate()
-    {
-        if( this.smartGui )
-            this.smartGui.create();
-    }
-
-    // 
-    //  DESC: Do any smart event handling
-    //
-    smartHandleEvent( event )
-    {
-        if( this.smartGui )
-            this.smartGui.handleEvent( event );
-    }
-
-    // 
-    //  DESC: Smart execute the action
-    //
-    smartExecuteAction()
-    {
-        if( this.smartGui )
-            this.smartGui.execute();
     }
 
     // 
@@ -28335,17 +28256,6 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     isSubControl()
     {
         return false;
-    }
-
-    // 
-    //  DESC: Connect to the execution action signal
-    //
-    connect_ExecutionAction( callback )
-    {
-        if( this.executionActionCallback === null )
-            this.executionActionCallback = [];
-        
-        this.executionActionCallback.push( callback );
     }
     
     // 
@@ -33815,126 +33725,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 /* 156 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aiBall", function() { return aiBall; });
-/* harmony import */ var _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
-/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
-
-// 
-//  FILE NAME: aiball.js
-//  DESC:      Class for ball ai
-//
-
-
-
-
-
-
-
-class aiBall extends _library_common_iaibase__WEBPACK_IMPORTED_MODULE_0__["iaiBase"]
-{
-    constructor( obj )
-    {
-        super();
-        
-        this.sprite = obj.sprite;
-    }
-    
-    // 
-    //  DESC: Do any initalizing
-    //
-    init()
-    {
-        this.initPhysics();
-    }
-    
-    // 
-    //  DESC: Do the physics
-    //
-    update()
-    {
-        if( this.sprite.object.pos.y < -600 )
-            this.initPhysics();
-    }
-    
-    // 
-    //  DESC: Init the physics
-    //
-    initPhysics()
-    {
-        this.sprite.physicsComponent.setTransform(
-            _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["randomInt"](-700,700),
-            _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["randomInt"](600,1000),
-            _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["randomInt"](0,360) * _library_common_defs__WEBPACK_IMPORTED_MODULE_1__["DEG_TO_RAD"],
-            _library_common_defs__WEBPACK_IMPORTED_MODULE_1__["RESET_VELOCITY"] );
-        
-        // Reposition the sprite based on the new physics position and rotation
-        this.sprite.physicsUpdate();
-    }
-}
-
-
-/***/ }),
-/* 157 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iaiBase", function() { return iaiBase; });
-
-// 
-//  FILE NAME:  iaibase.js
-//  DESC:       aiBase interface Class
-//
-
-
-
-class iaiBase
-{
-    constructor()
-    {
-    }
-    
-    // 
-    //  DESC: Do any initalizing
-    //
-    init()
-    {
-        // Empty function to be overwritten
-    }
-
-    // 
-    //  DESC: Handle player related messages
-    //
-    handleEvent( event )
-    {
-        // Empty function to be overwritten
-    }
-
-    // 
-    //  DESC: Do the physics
-    //
-    physics()
-    {
-        // Empty function to be overwritten
-    }
-
-    // 
-    //  DESC: Do the physics
-    //
-    update()
-    {
-        // Empty function to be overwritten
-    }
-}
-
-
-/***/ }),
-/* 158 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

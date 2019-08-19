@@ -103,6 +103,7 @@
             <scriptLst>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="ConfirmBtn_execute"/>
             </scriptLst>
         </control> 
 

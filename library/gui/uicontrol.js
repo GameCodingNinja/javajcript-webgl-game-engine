@@ -62,17 +62,11 @@ export class UIControl extends ControlBase
         // Collision center
         this.collisionCenter = new Point;
 
-        // Smart Gui object
-        this.smartGui = null;
-
         // Mouse selection type
         this.mouseSelectType = defs.EAP_UP;
 
         // Scrolling parameters
         this.scrollParam = null;
-
-        // Execution callbacks
-        this.executionActionCallback = null;
     }
     
     // 
@@ -303,8 +297,8 @@ export class UIControl extends ControlBase
             this.onTransOut( event );
         }
 
-        // Do any smart event handling
-        this.smartHandleEvent( event );
+        // Prepare script function associated with handling this game event
+        this.prepareControlScript( uiControlDefs.ECS_EVENT );
     }
 
     // 
@@ -317,6 +311,9 @@ export class UIControl extends ControlBase
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
                 this.setDisplayState();
+            
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( uiControlDefs.ECS_TRANS_IN );
         }
     }
 
@@ -336,6 +333,9 @@ export class UIControl extends ControlBase
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
                 this.setDisplayState();
+            
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( uiControlDefs.ECS_TRANS_OUT );
         }
     }
 
@@ -377,13 +377,8 @@ export class UIControl extends ControlBase
             else if( this.actionType === uiControlDefs.ECAT_ACTION_EVENT )
                 eventManager.dispatchEvent( uiControlDefs.ECAT_ACTION_EVENT, this.executionAction, this );
 
-            // Smart gui execution
-            this.smartExecuteAction();
-
-            // signal execute action
-            if( this.executionActionCallback !== null )
-                for( let i = 0; i < this.executionActionCallback.length; ++i )
-                    this.executionActionCallback[i](this);
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
         }
     }
 
@@ -556,8 +551,8 @@ export class UIControl extends ControlBase
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].init();
 
-        // Call any init scripts
-        this.prepareSpriteScriptFactoryFunction( uiControlDefs.ECS_INIT );
+        // Prepare script function associated with handling this game event
+        this.prepareControlScript( uiControlDefs.ECS_INIT );
     }
 
     // 
@@ -620,7 +615,7 @@ export class UIControl extends ControlBase
     // 
     //  DESC: Prepare the script function to run
     //
-    prepareControlScript( controlState )
+    prepareControlScript( controlState, event )
     {
         let scriptFactoryId = "null";
 
@@ -669,7 +664,10 @@ export class UIControl extends ControlBase
 
         let scriptFactory = this.scriptComponent.get( scriptFactoryId );
         if( scriptFactory )
-            this.scriptComponent.prepare( scriptFactory(this) );
+            if( controlState == uiControlDefs.ECS_EVENT )
+                this.scriptComponent.prepare( scriptFactory(this, event) );
+            else
+                this.scriptComponent.prepare( scriptFactory(this) );
     }
 
     // 
@@ -709,33 +707,6 @@ export class UIControl extends ControlBase
 
         else if( value === 'selected' )
             this.defaultState = uiControlDefs.ECS_SELECT;
-    }
-    
-    // 
-    //  DESC: Do any smart create
-    //
-    smartCreate()
-    {
-        if( this.smartGui )
-            this.smartGui.create();
-    }
-
-    // 
-    //  DESC: Do any smart event handling
-    //
-    smartHandleEvent( event )
-    {
-        if( this.smartGui )
-            this.smartGui.handleEvent( event );
-    }
-
-    // 
-    //  DESC: Smart execute the action
-    //
-    smartExecuteAction()
-    {
-        if( this.smartGui )
-            this.smartGui.execute();
     }
 
     // 
@@ -957,17 +928,6 @@ export class UIControl extends ControlBase
     isSubControl()
     {
         return false;
-    }
-
-    // 
-    //  DESC: Connect to the execution action signal
-    //
-    connect_ExecutionAction( callback )
-    {
-        if( this.executionActionCallback === null )
-            this.executionActionCallback = [];
-        
-        this.executionActionCallback.push( callback );
     }
     
     // 

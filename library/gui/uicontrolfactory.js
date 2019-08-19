@@ -59,12 +59,6 @@ export function create( node, group )
     // Have the control load it's share
     control.loadFromNode( node );
 
-    // Broadcast signal to let the game handle smart gui inits
-    signalManager.broadcast_smartGui( control );
-
-    // Do any smart gui Create
-    control.smartCreate();
-
     return control;
 
 }
