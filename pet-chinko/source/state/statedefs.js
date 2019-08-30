@@ -15,7 +15,8 @@ export const EGS_NULL         = 0,
              EGS_LEVEL_1      = 4;
     
 // EStateEvent
-export const ESE_STATE_EVENTS         = 1000,
-             ESE_FADE_IN_COMPLETE     = 1001,
-             ESE_FADE_OUT_COMPLETE    = 1002,
-             ESE_ASSET_LOAD_COMPLETE  = 1003;
+export const ESE_STATE_EVENTS        = 1000,
+             ESE_FADE_IN_COMPLETE    = 1001,
+             ESE_FADE_OUT_COMPLETE   = 1002,
+             ESE_ASSET_LOAD_COMPLETE = 1003,
+             ESE_CREATE_MULTI_HEAD   = 1004;

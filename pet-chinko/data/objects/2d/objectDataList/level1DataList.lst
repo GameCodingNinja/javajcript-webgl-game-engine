@@ -133,20 +133,180 @@
             </physics>
         </object>
         
-        <object name="dog_head">
+        <object name="dog_head_0">
             <visual>
-                <texture file="data/textures/levelArt/Dog_head100x100.png"/>
+                <texture file="data/textures/levelArt/Cat 1 Original.png"/>
             </visual>
             <physics>
                 <body type="kinematic"/>
                 <fixtureLst>
                     <fixture shape="polygon" sensor="true">
-                        <sizeMod top="-60" bottom="0" left="10" right="10"/>
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
                     </fixture>
                 </fixtureLst>
             </physics>
         </object>
-        
+
+        <object name="dog_head_1">
+            <visual>
+                <texture file="data/textures/levelArt/Cat 1 with White Stroke.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_2">
+            <visual>
+                <texture file="data/textures/levelArt/Cat 2 Original.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_3">
+            <visual>
+                <texture file="data/textures/levelArt/Cat 2 with White Stroke.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_4">
+            <visual>
+                <texture file="data/textures/levelArt/Cat 3 Original.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_5">
+            <visual>
+                <texture file="data/textures/levelArt/Cat 3 with White Stroke.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_6">
+            <visual>
+                <texture file="data/textures/levelArt/Dog 1 Original.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_7">
+            <visual>
+                <texture file="data/textures/levelArt/Dog 1 with White Stroke.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_8">
+            <visual>
+                <texture file="data/textures/levelArt/Dog 2 Original.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_9">
+            <visual>
+                <texture file="data/textures/levelArt/Dog 2 with White Stroke.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_10">
+            <visual>
+                <texture file="data/textures/levelArt/Dog 3 Original.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="dog_head_11">
+            <visual>
+                <texture file="data/textures/levelArt/Dog 3 with White Stroke.png"/>
+            </visual>
+            <physics>
+                <body type="kinematic"/>
+                <fixtureLst>
+                    <fixture shape="polygon" sensor="true">
+                        <sizeMod top="-50" bottom="0" left="10" right="10"/>
+                    </fixture>
+                </fixtureLst>
+            </physics>
+        </object>
+
+        <object name="warp">
+            <visual>
+                <texture count="21" file="data/textures/levelArt/Alien Pick warp_${NUM}.png"/>
+            </visual>
+        </object>
+
         <object name="level_font">
             <visual>
                 <mesh genType="font"/>

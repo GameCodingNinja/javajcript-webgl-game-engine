@@ -1,7 +1,15 @@
 <soundList>
 
   <soundFiles>
-    <load id="music_0" file="data/sound/92_full_joyful-pixels-the-sequel_0234_preview.mp3"/>
+    <load id="music_0" file="data/sound/92_full_joyful-pixels-the-sequel_0234.mp3"/>
+  </soundFiles>
+
+  <soundFiles>
+    <load id="cat" file="data/sound/sfx_hit_cat.wav"/>
+  </soundFiles>
+
+  <soundFiles>
+    <load id="dog" file="data/sound/sfx_hit_dog.wav"/>
   </soundFiles>
 
 </soundList>

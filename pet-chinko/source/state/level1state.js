@@ -30,11 +30,11 @@ import * as genFunc from '../../../library/utilities/genfunc';
 // Load data from bundle as string
 import level1StrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
 
-export const ASSET_COUNT = 18;
+export const ASSET_COUNT = 52;
 
 const SPRITE_PEG = -2,
-      MULTIPLIER = 0,
-      MULTI_SPRITE_OFFSET_Y = -470;
+    MULTIPLIER_SPRITE = 0,
+    MULTI_SPRITE_OFFSET_Y = -470;
 
 export class Level1State extends CommonState
 {
@@ -94,9 +94,15 @@ export class Level1State extends CommonState
 
         // Create the multiplier sprite used to colide with the balls
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
-        this.multiNode = this.multiStrategy.create('dog_head');
+        this.multiNode = this.multiStrategy.create('dog_head_0');
         this.multiIndexPos = genFunc.randomInt(0, this.multiXPosAllAry.length-1);
         this.multiNode.get().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+
+        // Node to warp animation
+        this.warpNode = null;
+
+        // temp
+        this.dogHeadCounter = 0;
 
         // Randomly pick the first ball
         this.ballIndex = genFunc.randomInt(0, 3);
@@ -116,8 +122,7 @@ export class Level1State extends CommonState
         strategyManager.update();
         
         // Start the music
-        this.index = menuManager.getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
-        soundManager.play( `(level_${this.index})`, 'music_0', true );
+        soundManager.play( `(level_1)`, 'music_0', true );
 
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -197,6 +202,21 @@ export class Level1State extends CommonState
                 this.uiWinMeter.clear();
                 this.ballStrategy.clear();
             }
+            else if( event.detail.type === stateDefs.ESE_CREATE_MULTI_HEAD )
+            {
+                // Destroy the current one
+                this.multiStrategy.destroy( this.multiNode );
+
+                // Create a new one
+                let posAry = this.multiXPosAry[this.multiIndexPos];
+                let index = genFunc.randomInt(0, posAry.length-1);
+                let offsetX = posAry[index];
+                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
+
+                this.dogHeadCounter = (this.dogHeadCounter + 1) % 12;
+                this.multiNode = this.multiStrategy.create(`dog_head_${this.dogHeadCounter}`);
+                this.multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+            }
         }
     }
 
@@ -245,21 +265,6 @@ export class Level1State extends CommonState
         if( !menuManager.active )
         {
             strategyManager.update();
-            
-            // NOTE: Can't reposition an static or kinematic. Must create a new one
-            if( !this.multiNode.get().physicsComponent.isActive() )
-            {
-                // Destroy the current one
-                this.multiStrategy.destroy( this.multiNode );
-
-                // Create a new one
-                let posAry = this.multiXPosAry[this.multiIndexPos];
-                let index = genFunc.randomInt(0, posAry.length-1);
-                let offsetX = posAry[index];
-                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
-                this.multiNode = this.multiStrategy.create('dog_head');
-                this.multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
-            }
 
             // Is the game over
             if( this.gameActive &&
@@ -313,17 +318,25 @@ export class Level1State extends CommonState
             else if( spriteB.id === SPRITE_PEG )
                 spriteB.setFrame(1);
             
-            else if( (spriteA.id === MULTIPLIER) || (spriteB.id === MULTIPLIER) )
+            else if( (spriteA.id === MULTIPLIER_SPRITE) || (spriteB.id === MULTIPLIER_SPRITE) )
             {
                 this.multiplier++;
 
                 // Disable the physics
                 this.multiNode.get().physicsComponent.setActive( false );
 
+                // Activate the warp animation
+                let warpAnim = this.multiStrategy.create('warp');
+                warpAnim.get().setPosXYZ( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+                warpAnim.get().prepareScript('animate');
+
+                // Activate the delayed destry script
+                this.multiNode.get().prepareScript('delayDestroy');
+
                 // Update the ui multiplier value
                 this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
 
-                // Add 30 more balls
+                // Add more balls
                 if( (spriteA.id === 5) || (spriteB.id === 5) )
                     this.uiBallMeter.incBangUp( 15 );
             }
@@ -366,7 +379,7 @@ export class Level1State extends CommonState
         
         physicsWorldManager.destroyWorld( "(game)" );
 
-        soundManager.freeGroup( [`(level_${this.index})`]);
+        soundManager.freeGroup( [`(level_1)`]);
     }
 }
 
@@ -376,8 +389,6 @@ export class Level1State extends CommonState
 export function load()
 {
     let groupAry = ['(level_1)'];
-
-    let sndIndex = menuManager.getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
     
     return Promise.all([
 
@@ -388,7 +399,7 @@ export function load()
         physicsWorldManager.loadWorldGroup2D( '(game)' ),
 
         // Load the Sound Manager group
-        soundManager.loadGroup( [`(level_${sndIndex})`] )
+        soundManager.loadGroup( [`(level_1)`] )
     ])
 
     // Create and load all the actor strategies.

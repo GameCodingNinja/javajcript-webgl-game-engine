@@ -3200,6 +3200,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESE_FADE_IN_COMPLETE", function() { return ESE_FADE_IN_COMPLETE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESE_FADE_OUT_COMPLETE", function() { return ESE_FADE_OUT_COMPLETE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESE_ASSET_LOAD_COMPLETE", function() { return ESE_ASSET_LOAD_COMPLETE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESE_CREATE_MULTI_HEAD", function() { return ESE_CREATE_MULTI_HEAD; });
 
 // 
 //  FILE NAME: statedefs.js
@@ -3217,10 +3218,11 @@ const EGS_NULL         = 0,
              EGS_LEVEL_1      = 4;
     
 // EStateEvent
-const ESE_STATE_EVENTS         = 1000,
-             ESE_FADE_IN_COMPLETE     = 1001,
-             ESE_FADE_OUT_COMPLETE    = 1002,
-             ESE_ASSET_LOAD_COMPLETE  = 1003;
+const ESE_STATE_EVENTS        = 1000,
+             ESE_FADE_IN_COMPLETE    = 1001,
+             ESE_FADE_OUT_COMPLETE   = 1002,
+             ESE_ASSET_LOAD_COMPLETE = 1003,
+             ESE_CREATE_MULTI_HEAD   = 1004;
 
 
 /***/ }),
@@ -40466,11 +40468,14 @@ function loadScripts()
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Level_BallAi", function() { return Level_BallAi; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(146);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
-/* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(167);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(143);
+/* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(167);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(166);
 
 //
 //  FILE NAME: levelcripts.js
@@ -40483,7 +40488,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Level_BallAi extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+
+
+
+
+class Level_BallAi extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_4__["iScript"]
 {
     constructor( sprite )
     {
@@ -40506,6 +40515,59 @@ class Level_BallAi extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__[
     }
 }
 
+//
+//  DESC: Script for playing the warp animation
+//
+class Level_PlayAnim extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["PlayAnim"]
+{
+    constructor( sprite )
+    {
+        super( sprite );
+        
+        this.init( 20 );
+    }
+
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        super.execute();
+
+        if( this.finished )
+            _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].get('_level-1-multiplier_').destroy( this.sprite.parentNode );
+    }
+}
+
+//
+//  DESC: Script for multiplier graphic to destroy itself
+//
+class Level_DelayDestroy extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["Hold"]
+{
+    constructor( sprite )
+    {
+        super();
+        
+        this.init( 600 );
+
+        if( sprite.objData.name < 'dog_head_6' )
+            _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__["soundManager"].play( '(level_1)', 'cat' );
+        else
+            _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__["soundManager"].play( '(level_1)', 'dog' );
+    }
+
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        super.execute();
+
+        if( this.finished )
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_CREATE_MULTI_HEAD"] );
+    }
+}
+
 // 
 //  DESC: Load scripts
 //
@@ -40513,6 +40575,12 @@ function loadScripts()
 {
     _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'Level_BallAi',
         ( sprite ) => { return new Level_BallAi( sprite ); } );
+
+    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'Level_PlayAnim',
+        ( sprite ) => { return new Level_PlayAnim( sprite ); } );
+    
+    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'Level_DelayDestroy',
+        ( sprite ) => { return new Level_DelayDestroy( sprite ); } );
 }
 
 
@@ -40942,11 +41010,11 @@ __webpack_require__.r(__webpack_exports__);
 // Load data from bundle as string
 
 
-const ASSET_COUNT = 18;
+const ASSET_COUNT = 52;
 
 const SPRITE_PEG = -2,
-      MULTIPLIER = 0,
-      MULTI_SPRITE_OFFSET_Y = -470;
+    MULTIPLIER_SPRITE = 0,
+    MULTI_SPRITE_OFFSET_Y = -470;
 
 class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState"]
 {
@@ -41006,9 +41074,15 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
 
         // Create the multiplier sprite used to colide with the balls
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
-        this.multiNode = this.multiStrategy.create('dog_head');
+        this.multiNode = this.multiStrategy.create('dog_head_0');
         this.multiIndexPos = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomInt"](0, this.multiXPosAllAry.length-1);
         this.multiNode.get().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+
+        // Node to warp animation
+        this.warpNode = null;
+
+        // temp
+        this.dogHeadCounter = 0;
 
         // Randomly pick the first ball
         this.ballIndex = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomInt"](0, 3);
@@ -41028,8 +41102,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].update();
         
         // Start the music
-        this.index = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].play( `(level_${this.index})`, 'music_0', true );
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].play( `(level_1)`, 'music_0', true );
 
         // Reset the elapsed time before entering the render loop
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__["highResTimer"].calcElapsedTime();
@@ -41109,6 +41182,21 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
                 this.uiWinMeter.clear();
                 this.ballStrategy.clear();
             }
+            else if( event.detail.type === _statedefs__WEBPACK_IMPORTED_MODULE_18__["ESE_CREATE_MULTI_HEAD"] )
+            {
+                // Destroy the current one
+                this.multiStrategy.destroy( this.multiNode );
+
+                // Create a new one
+                let posAry = this.multiXPosAry[this.multiIndexPos];
+                let index = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomInt"](0, posAry.length-1);
+                let offsetX = posAry[index];
+                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
+
+                this.dogHeadCounter = (this.dogHeadCounter + 1) % 12;
+                this.multiNode = this.multiStrategy.create(`dog_head_${this.dogHeadCounter}`);
+                this.multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+            }
         }
     }
 
@@ -41157,21 +41245,6 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         if( !_library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].active )
         {
             _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__["strategyManager"].update();
-            
-            // NOTE: Can't reposition an static or kinematic. Must create a new one
-            if( !this.multiNode.get().physicsComponent.isActive() )
-            {
-                // Destroy the current one
-                this.multiStrategy.destroy( this.multiNode );
-
-                // Create a new one
-                let posAry = this.multiXPosAry[this.multiIndexPos];
-                let index = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__["randomInt"](0, posAry.length-1);
-                let offsetX = posAry[index];
-                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
-                this.multiNode = this.multiStrategy.create('dog_head');
-                this.multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
-            }
 
             // Is the game over
             if( this.gameActive &&
@@ -41225,17 +41298,25 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
             else if( spriteB.id === SPRITE_PEG )
                 spriteB.setFrame(1);
             
-            else if( (spriteA.id === MULTIPLIER) || (spriteB.id === MULTIPLIER) )
+            else if( (spriteA.id === MULTIPLIER_SPRITE) || (spriteB.id === MULTIPLIER_SPRITE) )
             {
                 this.multiplier++;
 
                 // Disable the physics
                 this.multiNode.get().physicsComponent.setActive( false );
 
+                // Activate the warp animation
+                let warpAnim = this.multiStrategy.create('warp');
+                warpAnim.get().setPosXYZ( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+                warpAnim.get().prepareScript('animate');
+
+                // Activate the delayed destry script
+                this.multiNode.get().prepareScript('delayDestroy');
+
                 // Update the ui multiplier value
                 this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
 
-                // Add 30 more balls
+                // Add more balls
                 if( (spriteA.id === 5) || (spriteB.id === 5) )
                     this.uiBallMeter.incBangUp( 15 );
             }
@@ -41278,7 +41359,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
         
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].destroyWorld( "(game)" );
 
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].freeGroup( [`(level_${this.index})`]);
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].freeGroup( [`(level_1)`]);
     }
 }
 
@@ -41288,8 +41369,6 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__["CommonState
 function load()
 {
     let groupAry = ['(level_1)'];
-
-    let sndIndex = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__["menuManager"].getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
     
     return Promise.all([
 
@@ -41300,7 +41379,7 @@ function load()
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__["physicsWorldManager"].loadWorldGroup2D( '(game)' ),
 
         // Load the Sound Manager group
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].loadGroup( [`(level_${sndIndex})`] )
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__["soundManager"].loadGroup( [`(level_1)`] )
     ])
 
     // Create and load all the actor strategies.
