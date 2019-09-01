@@ -10,16 +10,13 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
-import { iScript } from '../../../library/script/iscript';
 import * as stateDefs from '../state/statedefs';
 import * as utilScripts from './utilityscripts';
 
-class Level_BallAi extends iScript
+class Level_BallAi
 {
     constructor( sprite )
     {
-        super();
-
         this.sprite = sprite;
         this.strategy = strategyManager.get( '_level-1-ball_' );
     }
@@ -32,21 +29,23 @@ class Level_BallAi extends iScript
         if( this.sprite.pos.y < -600 )
         {
             this.strategy.destroy( this.sprite.parentNode );
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
 //
 //  DESC: Script for playing the warp animation
 //
-class Level_PlayAnim extends utilScripts.PlayAnim
+class Level_PlayAnim
 {
     constructor( sprite )
     {
-        super( sprite );
-        
-        this.init( 20 );
+        this.sprite = sprite;
+        this.animate = new utilScripts.PlayAnim( sprite );
+        this.animate.init( 20 );
     }
 
     // 
@@ -54,23 +53,25 @@ class Level_PlayAnim extends utilScripts.PlayAnim
     //
     execute()
     {
-        super.execute();
-
-        if( this.finished )
+        if( this.animate.execute() )
+        {
             strategyManager.get('_level-1-multiplier_').destroy( this.sprite.parentNode );
+            return true;
+        }
+
+        return false;
     }
 }
 
 //
 //  DESC: Script for multiplier graphic to destroy itself
 //
-class Level_DelayDestroy extends utilScripts.Hold
+class Level_DelayDestroy
 {
     constructor( sprite )
     {
-        super();
-        
-        this.init( 600 );
+        this.hold = new utilScripts.Hold();
+        this.hold.init( 600 );
 
         if( sprite.objData.name < 'dog_head_6' )
             soundManager.play( '(level_1)', 'cat' );
@@ -83,10 +84,13 @@ class Level_DelayDestroy extends utilScripts.Hold
     //
     execute()
     {
-        super.execute();
-
-        if( this.finished )
+        if( this.hold.execute() )
+        {
             eventManager.dispatchEvent( stateDefs.ESE_CREATE_MULTI_HEAD );
+            return true;
+        }
+
+        return false;
     }
 }
 

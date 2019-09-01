@@ -12,21 +12,20 @@ import * as utilScripts from './utilityscripts';
 //
 //  DESC: Script for fading in the menu
 //
-class PlayerShip_FireTailAnim extends utilScripts.PlayAnim
+class PlayerShip_FireTailAnim
 {
     constructor( sprite )
     {
-        super( sprite );
-        
-        this.init();
+        this.animate = new utilScripts.PlayAnim( sprite );
+        this.animate.init( 24, true );
     }
     
     // 
-    //  DESC: Init the script for use
+    //  DESC: Execute this script object
     //
-    init()
+    execute()
     {
-        super.init( 24, true );
+        return this.animate.execute();
     }
 }
 

@@ -119,14 +119,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
 /* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(163);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(182);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(183);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(181);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(182);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(9);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(22);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(121);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(186);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(185);
 
 // 
 //  FILE NAME: game.js
@@ -2786,21 +2786,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(6);
 /* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(163);
 /* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(166);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(168);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(169);
-/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(170);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(167);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(168);
+/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(169);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(171);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(172);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(173);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(174);
-/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(175);
-/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(176);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(177);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(178);
-/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(179);
-/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(180);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(181);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(170);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(171);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(172);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(173);
+/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(174);
+/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(175);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(176);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(177);
+/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(178);
+/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(179);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(180);
 
 //
 //  FILE NAME: startupstate.js
@@ -28295,7 +28295,8 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
             this.visualComponent.setFrame( index );
 
             if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SPRITE_SHEET"] )
-                this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
+                if( index < this.objData.visualData.spriteSheet.getCount() )
+                    this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
     }
     
@@ -28465,8 +28466,11 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
     //
     setFrame( index )
     {
-        this.frameIndex = index;
-        this.texture = this.visualData.getTexture( index );
+        if( index < this.visualData.getFrameCount() )
+        {
+            this.frameIndex = index;
+            this.texture = this.visualData.getTexture( index );
+        }
     }
     
     //
@@ -30585,10 +30589,8 @@ class ScriptComponent
         // Call the active scripts
         for( let i = this.scriptAry.length - 1; i > -1; --i )
         {
-            this.scriptAry[i].execute();
-            
             // If the script is finished, remove it
-            if( this.scriptAry[i].isFinished() )
+            if( this.scriptAry[i].execute() )
                 this.scriptAry.splice( i, 1 );
         }
     }
@@ -39225,10 +39227,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
-/* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(167);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(20);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 
 //
 //  FILE NAME: utilityscripts.js
@@ -39244,16 +39245,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 //
 //  DESC: Script for holding for time duration
 //
-class Hold extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
+class Hold
 {
     constructor()
     {
-        super();
         this.time = 0;
+        this.iter = null;
     }
     
     // 
@@ -39262,20 +39262,32 @@ class Hold extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript
     init( time )
     {
         this.time = time;
-        this.finished = false;
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
+                break;
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-
-        if( this.time < 0 )
-        {
-            this.finished = true;
-        }
+        return this.iter.next().done;
     }
 }
 
@@ -39283,11 +39295,10 @@ class Hold extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript
 //
 //  DESC: Script for playing the frames of an animation
 //
-class PlayAnim extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
+class PlayAnim
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
         
         this.frameCount = this.sprite.getFrameCount();
@@ -39295,6 +39306,7 @@ class PlayAnim extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iSc
         this.fps = 0;
         this.counter = 0;
         this.loop = false;
+        this.iter = null;
     }
     
     // 
@@ -39306,84 +39318,116 @@ class PlayAnim extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iSc
         this.time = 1000.0 / this.fps;
         this.loop = loop;
         this.counter = 0;
-        this.finished = false;
+        this.iter = this.iteration();
     }
-    
-    // 
-    //  DESC: Execute this script object
-    //
-    execute()
-    {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
 
-        if( this.time < 0 )
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
         {
-            this.time = 1000.0 / this.fps;
-            this.counter++;
-            
-            if( this.counter < this.frameCount )
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
             {
-                this.sprite.setFrame( this.counter );
-            }
-            else
-            {
-                if( this.loop )
+                this.time = 1000.0 / this.fps;
+                this.counter++;
+                
+                if( this.counter < this.frameCount )
                 {
-                    this.counter = 0;
                     this.sprite.setFrame( this.counter );
                 }
                 else
-                    this.finished = true;
+                {
+                    if( this.loop )
+                    {
+                        this.counter = 0;
+                        this.sprite.setFrame( this.counter );
+                    }
+                    else
+                        break;
+                }
             }
+
+            yield;
         }
+        while(true)
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
     }
 }
 
 //
 //  DESC: Execute an action at a specific frame rate
 //
-class FrameExecute extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
+class FrameExecute
 {
-    constructor( sprite )
+    constructor()
     {
-        super();
-        this.sprite = sprite;
-        
         this.time = 0;
+        this.duration = 0;
+        this.durationTime = 0;
         this.fps = 0;
+        this.iter = null;
+        this.callback = null;
     }
     
     // 
     //  DESC: Init the script for use
     //
-    init( fps )
+    init( fps, callback, duration = 0 )
     {
         this.fps = fps;
         this.time = 1000.0 / this.fps;
-        this.finished = false;
+        this.duration = duration;
+        if( duration > 0 )
+            this.durationTime = 1000.0 / duration;
+        this.callback = callback;
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.time = 1000.0 / this.fps;
+                this.callback();
+            }
+
+            // Do we specify a count
+            if( this.duration > 0 )
+            {
+                this.durationTime -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+                if( this.durationTime < 0 )
+                    break;
+            }
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-
-        if( this.time < 0 )
-        {
-            this.time = 1000.0 / this.fps;
-            
-            this.frame();
-        }
-    }
-    
-    // 
-    //  DESC: Execute this frame
-    //
-    frame()
-    {
-        // To be overridden
+        return this.iter.next().done;
     }
 }
 
@@ -39391,134 +39435,165 @@ class FrameExecute extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__[
 //
 //  DESC: Script for fading in the menu
 //
-class FadeTo extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
+class FadeTo
 {
     constructor()
     {
-        super();
-        this.current = 0;
+        this.value = 0;
         this.final = 0;
         this.time = 0;
         this.inc = 0;
+        this.iter = null;
     }
-    
+
     // 
     //  DESC: Init the script for use
     //
-    init( current, final, time )
+    init( start, final, time )
     {
-        this.current = current;
+        this.value = start;
         this.final = final;
         this.time = time;
-        this.inc = (this.final - this.current) / this.time;
-        this.finished = false;
+        this.inc = (final - start) / time;
+        this.iter = this.iteration();
     }
-    
+
     // 
-    //  DESC: Execute this script object
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.value = this.final;
+                break;
+            }
+
+            this.value += (this.inc * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime);
+                
+            yield;
+        }
+        while( true );
+    }
+
+    // 
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-
-        if( this.time < 0 )
-            this.finished = true;
-
-        else
-            this.current += (this.inc * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime);
+        return this.iter.next().done;
     }
 }
 
 //
 //  DESC: Color to the final color in time
 //
-class ColorTo extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_3__["iScript"]
+class ColorTo
 {
     constructor()
     {
-        super();
-        this.current = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
-        this.inc = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
-        this.final;
-        this.time;
+        this.value = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
+        this.inc = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
+        this.final = null;
+        this.time = 0;
+        this.iter = null;
     }
     
     // 
     //  DESC: Init the script for use
     //
-    init( current, final, time )
+    init( start, final, time )
     {
         this.time = time;
         this.final = final;
-        this.current.copy( current );
-        this.finished = false;
+        this.value.copy( start );
         
         for( let i = 0; i < 4; ++i )
-            this.inc.data[i] = (this.final.data[i] - this.current.data[i]) / this.time;
+            this.inc.data[i] = (this.final.data[i] - this.value.data[i]) / this.time;
+
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.value.copy( this.final );
+                break;
+            }
+
+            for( let i = 0; i < 4; ++i )
+                this.value.data[i] += this.inc.data[i] * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+                
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-
-        if( this.time < 0 )
-        {
-            this.finished = true;
-        }
-        else
-        {
-            for( let i = 0; i < 4; ++i )
-                this.current.data[i] += this.inc.data[i] * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-        }
-    }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    get color()
-    {
-        if( this.finished )
-            return this.final;
-        else
-            return this.current;
+        return this.iter.next().done;
     }
 }
 
 //
 //  DESC: Script for fading the screen
 //
-class ScreenFade extends FadeTo
+class ScreenFade
 {
     constructor( current, final, time )
     {
-        super();
-        
-        this.init( current, final, time );
+        this.fadeTo = new FadeTo();
+        this.fadeTo.init( current, final, time );
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            if( this.fadeTo.execute() )
+            {
+                _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+
+                if( this.fadeTo.inc > 0 )
+                    _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_IN_COMPLETE"] );
+                else
+                    _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_OUT_COMPLETE"] );
+
+                break;
+            }
+
+            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        super.execute();
-
-        if( this.finished )
-        {
-            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.final, this.final, this.final, 1] );
-
-            if( this.inc > 0 )
-                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_6__["ESE_FADE_IN_COMPLETE"] );
-            else
-                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_6__["ESE_FADE_OUT_COMPLETE"] );
-        }
-        else
-        {
-            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.current, this.current, this.current, 1] );
-        }
+        return this.iter.next().done;
     }
 }
 
@@ -39534,49 +39609,6 @@ function loadScripts()
 
 /***/ }),
 /* 167 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iScript", function() { return iScript; });
-//
-//  FILE NAME: iscript.js
-//  DESC:      script interface class
-//
-
-
-
-class iScript
-{
-    constructor()
-    {
-        this.finished = false;
-    }
-    
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent()
-    {
-        // Empty by design
-    }
-
-    // 
-    //  DESC: Execute this script object
-    //
-    execute()
-    {
-        // Empty by design
-    }
-
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
-}
-
-/***/ }),
-/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39598,21 +39630,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //  DESC: Script for rotating the loading animation
 //
-class State_PlayLoadAnim extends _utilityscripts__WEBPACK_IMPORTED_MODULE_1__["FrameExecute"]
+class State_PlayLoadAnim
 {
     constructor( sprite )
     {
-        super( sprite );
-
-        super.init( 10 );
+        this.sprite = sprite;
+        this.frameExec = new _utilityscripts__WEBPACK_IMPORTED_MODULE_1__["FrameExecute"]();
+        this.frameExec.init( 10, this.frame.bind(this) );
     }
     
     // 
-    //  DESC: Execute this frame
+    //  DESC: Executes this frame
     //
     frame()
     {
         this.sprite.incRotXYZ( 0.0, 0.0, -30.0 );
+    }
+
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.frameExec.execute();
     }
 }
 
@@ -39627,7 +39667,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39635,14 +39675,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
-/* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(167);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(143);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(166);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(107);
-/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(130);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(143);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(102);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(166);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(107);
+/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(130);
 
 //
 //  FILE NAME: menuscripts.js
@@ -39661,140 +39700,140 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 //
 //  DESC: Script for playing the active sound
 //
-class Control_OnActive extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class Control_OnActive
 {
-    constructor( control )
-    {
-        super();
-        this.control = control;
-    }
-    
     // 
     //  DESC: Execute this script object
     //
     execute()
     {
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_4__["soundManager"].play( '(menu)', 'active' );
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__["soundManager"].play( '(menu)', 'active' );
+
+        return true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return true; }
 }
 
 //
 //  DESC: Script for playing the select sound
 //
-class Control_OnSelect extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class Control_OnSelect
 {
-    constructor( control )
-    {
-        super();
-        this.control = control;
-    }
-    
     // 
     //  DESC: Execute this script object
     //
     execute()
     {
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_4__["soundManager"].play( '(menu)', 'select' );
+        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__["soundManager"].play( '(menu)', 'select' );
+
+        return true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return true; }
 }
 
 //
 //  DESC: Script for fading in the menu
 //
-class Menu_TransIn extends _utilityscripts__WEBPACK_IMPORTED_MODULE_7__["FadeTo"]
+class Menu_TransIn
 {
     constructor( menu )
     {
-        super();
-        
+        this.fadeTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo"]();
         this.menu = menu;
-
-        super.init( 0, 1, 250 );
-
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterater the logic
+    //
+    * iteration()
+    {
+        this.fadeTo.init( 0, 1, 250 );
+
+        do
+        {
+            if( this.fadeTo.execute() )
+            {
+                this.menu.setAlpha( this.fadeTo.value );
+                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_TRANS_IN"], _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["ETC_END"] );
+
+                break;
+            }
+
+            this.menu.setAlpha( this.fadeTo.value );
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
-        {
-            this.menu.setAlpha( this.final );
-            
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_TRANS_IN"], _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["ETC_END"] );
-        }
-        else
-        {
-            this.menu.setAlpha( this.current );
-        }
+        return this.iter.next().done;
     }
 }
 
 //
 //  DESC: Script for fading out the menu
 //
-class Menu_TransOut extends _utilityscripts__WEBPACK_IMPORTED_MODULE_7__["FadeTo"]
+class Menu_TransOut
 {
     constructor( menu )
     {
-        super();
-        
+        this.fadeTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["FadeTo"]();
         this.menu = menu;
-
-        super.init( 1, 0, 250 );
-        
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterater the logic
+    //
+    * iteration()
+    {
+        this.fadeTo.init( 1, 0, 250 );
+
+        do
+        {
+            if( this.fadeTo.execute() )
+            {
+                this.menu.setAlpha( this.fadeTo.value );
+
+                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_TRANS_OUT"], _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["ETC_END"] );
+
+                break;
+            }
+
+            this.menu.setAlpha( this.fadeTo.value );
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
-        {
-            this.menu.setAlpha( this.final );
-            this.menu.setVisible( false );
-            
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_TRANS_OUT"], _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["ETC_END"] );
-        }
-        else
-        {
-            this.menu.setAlpha( this.current );
-        }
+        return this.iter.next().done;
     }
 }
 
 //
 //  DESC: Script for setting the look of the disabled state
 //
-class Control_Disabled extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class Control_Disabled
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
     }
     
@@ -39803,24 +39842,23 @@ class Control_Disabled extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_
     //
     execute()
     {
-        let color = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
+        let color = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
         color.copy( this.sprite.getDefaultColor() );
         color.transformHSV( 0, 0, 1 );
 
         this.sprite.setColor( color );
-        
-        this.finished = true;
+
+        return true;
     }
 }
 
 //
 //  DESC: Script for setting the look of the inactive state
 //
-class Control_Inactive extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class Control_Inactive
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
     }
     
@@ -39830,18 +39868,18 @@ class Control_Inactive extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_
     execute()
     {
         this.sprite.setColor( this.sprite.getDefaultColor() );
-        this.finished = true;
+
+        return true;
     }
 }
 
 //
 //  DESC: Script for setting the look of the hidden state
 //
-class Control_Hidden extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class Control_Hidden
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
     }
     
@@ -39851,7 +39889,8 @@ class Control_Hidden extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2_
     execute()
     {
         this.sprite.setVisible( false );
-        this.finished = true;
+
+        return true;
     }
 }
 
@@ -39859,16 +39898,16 @@ class Control_Hidden extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2_
 //
 //  DESC: Base script for animating the look of the active state
 //
-class Base_Control_Active extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class Base_Control_Active
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
 
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
-        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
-        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_7__["ColorTo"];
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["ColorTo"];
+        this.iter = null;
 
         this.toggle = false;
     }
@@ -39887,28 +39926,43 @@ class Base_Control_Active extends _library_script_iscript__WEBPACK_IMPORTED_MODU
         this.lowColor.transformHSV( 0, 1, lowHSV );
         
         this.colorTo.init( this.sprite.getColor(), this.hiColor, 500 );
+        this.iter = this.iteration();
         
         this.toggle = false;
     }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            if( this.colorTo.execute() )
+            {
+                this.sprite.setColor( this.colorTo.value );
+
+                if( this.toggle )
+                    this.colorTo.init( this.sprite.getColor(), this.hiColor, 500 );
+                else
+                    this.colorTo.init( this.sprite.getColor(), this.lowColor, 500 );
+                
+                this.toggle = !this.toggle;
+            }
+
+            this.sprite.setColor( this.colorTo.value );
+
+            yield;
+        }
+        while( true );
+    }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.colorTo.execute();
-        
-        this.sprite.setColor( this.colorTo.color );
-        
-        if( this.colorTo.isFinished() )
-        {
-            if( this.toggle )
-                this.colorTo.init( this.sprite.getColor(), this.hiColor, 500 );
-            else
-                this.colorTo.init( this.sprite.getColor(), this.lowColor, 500 );
-            
-            this.toggle = !this.toggle;
-        }
+        return this.iter.next().done;
     }
 }
 
@@ -39926,7 +39980,7 @@ class Control_Active extends Base_Control_Active
     //
     execute()
     {
-        super.execute();
+        return super.execute();
     }
 }
 
@@ -39944,7 +39998,7 @@ class Control_Solid_Active extends Base_Control_Active
     //
     execute()
     {
-        super.execute();
+        return super.execute();
     }
 }
 
@@ -39954,17 +40008,17 @@ class Control_Solid_Active extends Base_Control_Active
 //        NOTE: Start the button on the hi color, transition
 //              to the low color and then back to the hi color
 //
-class Base_Control_Selected extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class Base_Control_Selected
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
 
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
-        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.lowColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
 
-        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_7__["ColorTo"];
+        this.colorTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["ColorTo"];
+        this.iter = null;
 
         this.toggle = false;
     }
@@ -39983,33 +40037,46 @@ class Base_Control_Selected extends _library_script_iscript__WEBPACK_IMPORTED_MO
         this.lowColor.transformHSV( 0, 1, lowHSV );
         
         this.colorTo.init( this.hiColor, this.lowColor, 120 );
+        this.iter = this.iteration();
         
         this.toggle = false;
     }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            if( this.colorTo.execute() )
+            {
+                if( this.toggle )
+                {
+                    this.sprite.setColor( this.sprite.getDefaultColor() );
+                    break;
+                }
+                else
+                {
+                    this.colorTo.init( this.sprite.getColor(), this.hiColor, 100 );
+                    
+                    this.toggle = true;
+                }
+            }
+
+            this.sprite.setColor( this.colorTo.value );
+
+            yield;
+        }
+        while( true );
+    }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.colorTo.execute();
-        
-        this.sprite.setColor( this.colorTo.color );
-        
-        if( this.colorTo.isFinished() )
-        {
-            if( this.toggle )
-            {
-                this.sprite.setColor( this.sprite.getDefaultColor() );
-                this.finished = true;
-            }
-            else
-            {
-                this.colorTo.init( this.sprite.getColor(), this.hiColor, 100 );
-                
-                this.toggle = true;
-            }
-        }
+        return this.iter.next().done;
     }
 }
 
@@ -40030,12 +40097,13 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
         {
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -40053,13 +40121,15 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
         {
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_SELECT_EXECUTE"] );
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_REACTIVATE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
+
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -40077,7 +40147,7 @@ class Control_Selected_Visible extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
+        return super.execute();
     }
 }
 
@@ -40099,7 +40169,7 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
+        return super.execute();
     }
 }
 
@@ -40117,10 +40187,13 @@ class Control_Selected extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
+        {
             this.sprite.setVisible( false );
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -40138,10 +40211,13 @@ class Control_Solid_Selected extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
+        {
             this.sprite.setVisible( false );
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -40159,10 +40235,13 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
+        {
             this.sprite.setRGBA( 1, 1, 1, 1 );
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -40170,14 +40249,12 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
 //
 //  DESC: Fast display of selected state
 //
-class Base_Control_Fast_Selected extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
-
-        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_6__["Color"];
+        this.hiColor = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
     }
     
     // 
@@ -40214,8 +40291,10 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -40239,9 +40318,11 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_REACTIVATE"] );
-            this.finished = true;
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -40265,10 +40346,12 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_SELECT_EXECUTE"] );
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_8__["EGE_MENU_REACTIVATE"] );
-            this.finished = true;
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_SELECT_EXECUTE"] );
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__["EGE_MENU_REACTIVATE"] );
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -40292,8 +40375,10 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setVisible( false );
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -40317,8 +40402,10 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setVisible( false );
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -40332,19 +40419,22 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     }
     
     // 
-    //  DESC: Finished access function
+    //  DESC: Execute this script object
     //
-    isFinished() { return true; }
+    execute()
+    {
+        return true;
+    }
 }
+
 
 //
 //  DESC: Execution script for a button control to change to the confirmation menu
 //
-class ConfirmBtn_execute extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_2__["iScript"]
+class ConfirmBtn_execute
 {
     constructor( control )
     {
-        super();
         this.control = control;
     }
     
@@ -40353,24 +40443,24 @@ class ConfirmBtn_execute extends _library_script_iscript__WEBPACK_IMPORTED_MODUL
     //
     execute()
     {
-        let menu = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_5__["menuManager"].getMenu("confirmation_menu");
+        let menu = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__["menuManager"].getMenu("confirmation_menu");
         let yesBtn = menu.getControl("yes_btn");
         let megLbl = menu.getControl("message_lbl");
         
         let conformationMsg = '';
         let executionAction = '';
-        let actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__["ECAT_BACK"];
+        let actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__["ECAT_BACK"];
         
         if( this.control.name === 'continue_btn' )
         {
             conformationMsg = "Are you sure you|want to continue|on to the next state?";
-            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__["ECAT_GAME_STATE_CHANGE"];
+            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__["ECAT_GAME_STATE_CHANGE"];
             executionAction = "level_1_state";
         }
         else if( this.control.name === 'main_menu_btn' )
         {
             conformationMsg = 'Are you sure you|want to go back to|the main menu?';
-            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__["ECAT_GAME_STATE_CHANGE"];
+            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__["ECAT_GAME_STATE_CHANGE"];
             executionAction = 'title_screen_state';
         }
         
@@ -40378,13 +40468,11 @@ class ConfirmBtn_execute extends _library_script_iscript__WEBPACK_IMPORTED_MODUL
         yesBtn.actionType = actionType;
         yesBtn.executionAction = executionAction;
         megLbl.createFontStr( conformationMsg );
+
+        return true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return true; }
 }
+
 
 // 
 //  DESC: Load scripts
@@ -40456,14 +40544,14 @@ function loadScripts()
             
     _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'Control_slider_btn_Selected',
         ( sprite ) => { return new Control_slider_btn_Selected( sprite ); } );
-
+    
     _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__["scriptManager"].set( 'ConfirmBtn_execute',
         ( control ) => { return new ConfirmBtn_execute( control ); } );
 }
 
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40473,9 +40561,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(143);
-/* harmony import */ var _library_script_iscript__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(167);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(166);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(166);
 
 //
 //  FILE NAME: levelcripts.js
@@ -40491,13 +40578,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-class Level_BallAi extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_4__["iScript"]
+class Level_BallAi
 {
     constructor( sprite )
     {
-        super();
-
         this.sprite = sprite;
         this.strategy = _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].get( '_level-1-ball_' );
     }
@@ -40510,21 +40594,23 @@ class Level_BallAi extends _library_script_iscript__WEBPACK_IMPORTED_MODULE_4__[
         if( this.sprite.pos.y < -600 )
         {
             this.strategy.destroy( this.sprite.parentNode );
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
 //
 //  DESC: Script for playing the warp animation
 //
-class Level_PlayAnim extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["PlayAnim"]
+class Level_PlayAnim
 {
     constructor( sprite )
     {
-        super( sprite );
-        
-        this.init( 20 );
+        this.sprite = sprite;
+        this.animate = new _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["PlayAnim"]( sprite );
+        this.animate.init( 20 );
     }
 
     // 
@@ -40532,23 +40618,25 @@ class Level_PlayAnim extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["PlayA
     //
     execute()
     {
-        super.execute();
-
-        if( this.finished )
+        if( this.animate.execute() )
+        {
             _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].get('_level-1-multiplier_').destroy( this.sprite.parentNode );
+            return true;
+        }
+
+        return false;
     }
 }
 
 //
 //  DESC: Script for multiplier graphic to destroy itself
 //
-class Level_DelayDestroy extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["Hold"]
+class Level_DelayDestroy
 {
     constructor( sprite )
     {
-        super();
-        
-        this.init( 600 );
+        this.hold = new _utilityscripts__WEBPACK_IMPORTED_MODULE_5__["Hold"]();
+        this.hold.init( 600 );
 
         if( sprite.objData.name < 'dog_head_6' )
             _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__["soundManager"].play( '(level_1)', 'cat' );
@@ -40561,10 +40649,13 @@ class Level_DelayDestroy extends _utilityscripts__WEBPACK_IMPORTED_MODULE_6__["H
     //
     execute()
     {
-        super.execute();
+        if( this.hold.execute() )
+        {
+            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_4__["ESE_CREATE_MULTI_HEAD"] );
+            return true;
+        }
 
-        if( this.finished )
-            _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_CREATE_MULTI_HEAD"] );
+        return false;
     }
 }
 
@@ -40585,7 +40676,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40593,7 +40684,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(startup)\">\r\n        <file path=\"data/objects/2d/objectDataList/startupDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(loadingScreen)\">\r\n        <file path=\"data/objects/2d/objectDataList/loadingScreenDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/objectDataList/menuBackgrounds.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuButtonFrames.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuMisc.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(title_screen)\">\r\n        <file path=\"data/objects/2d/objectDataList/titleScreenDataList.lst\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"(level_1)\">\r\n        <file path=\"data/objects/2d/objectDataList/level1DataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 172 */
+/* 171 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40601,7 +40692,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_startup_\">\r\n        <file path=\"data/objects/strategy/state/startup.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_title-screen_\">\r\n        <file path=\"data/objects/strategy/state/titlescreen.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_loading-screen_\">\r\n        <file path=\"data/objects/strategy/state/loadscreen.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_level-1-stage_\">\r\n        <file path=\"data/objects/strategy/level1/stage.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-ui_\">\r\n        <file path=\"data/objects/strategy/level1/ui.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-ball_\">\r\n        <file path=\"data/objects/strategy/level1/ball.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-multiplier_\">\r\n        <file path=\"data/objects/strategy/level1/multiplier.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 173 */
+/* 172 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40609,7 +40700,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n    </default>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 174 */
+/* 173 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40617,7 +40708,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
-/* 175 */
+/* 174 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40625,7 +40716,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 176 */
+/* 175 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40633,7 +40724,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 177 */
+/* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40641,7 +40732,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 178 */
+/* 177 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40649,7 +40740,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 179 */
+/* 178 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40657,7 +40748,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
 
 /***/ }),
-/* 180 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40665,7 +40756,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<controllerMapping>\n\t<keyboardMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"W\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"S\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"A\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"D\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"ARROW UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"ARROW DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"ARROW LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"ARROW RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"RETURN\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Escape\" componetId=\"ESCAPE\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"LEFT SHIFT\" defaultId=\"LEFT SHIFT\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"[\" defaultId=\"[\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"]\" defaultId=\"]\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Up\" componetId=\"W\" defaultId=\"W\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Down\" componetId=\"S\" defaultId=\"S\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Left\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Right\" componetId=\"D\" defaultId=\"D\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"E\" defaultId=\"E\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</keyboardMapping>\n\t<mouseMapping>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<!-- Game specific controls -->\n\t\t\t<actionMap action=\"Shoot\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"MIDDLE MOUSE\" defaultId=\"MIDDLE MOUSE\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</mouseMapping>\n\t<gamepadMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"L STICK UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"L STICK DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"L STICK LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"L STICK RIGHT\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Back\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"START\" defaultId=\"START\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"L BUMPER\" defaultId=\"L BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"R BUMPER\" defaultId=\"R BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</gamepadMapping>\n</controllerMapping>\n");
 
 /***/ }),
-/* 181 */
+/* 180 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40673,7 +40764,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<menuActionList>\r\n\r\n    <backAction>Menu Back</backAction>\r\n    <toggleAction>Menu Toggle</toggleAction>\r\n    <escapeAction>Menu Escape</escapeAction>\r\n    <selectAction>Menu Select</selectAction>\r\n    <upAction>Menu Up</upAction>\r\n    <downAction>Menu Down</downAction>\r\n    <leftAction>Menu Left</leftAction>\r\n    <rightAction>Menu Right</rightAction>\r\n    <tabLeft>Menu Tab Left</tabLeft>\r\n    <tabRight>Menu Tab Right</tabRight>\r\n    <defaultTree>pause_tree</defaultTree>\r\n\r\n</menuActionList>\r\n\r\n");
 
 /***/ }),
-/* 182 */
+/* 181 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40693,9 +40784,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(38);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
 /* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(163);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(183);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(182);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(185);
+/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(184);
 
 // 
 //  FILE NAME: loadstate.js
@@ -40949,7 +41040,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
 
 
 /***/ }),
-/* 183 */
+/* 182 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40977,7 +41068,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(184);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(183);
 
 // 
 //  FILE NAME: level1state.js
@@ -41435,7 +41526,7 @@ function load()
 
 
 /***/ }),
-/* 184 */
+/* 183 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41443,7 +41534,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_level-1-stage_\" type=\"stage\"/>\r\n    <strategy name=\"_level-1-ball_\" type=\"actor\"/>\r\n    <strategy name=\"_level-1-multiplier_\" type=\"actor\"/>\r\n    \r\n    <strategy name=\"_level-ui_\" type=\"actor\">\r\n        <node name=\"uiWinMeter\" instance=\"uiWinMeter\"/>\r\n        <node name=\"uiBallMeter\" instance=\"uiBallMeter\"/>\r\n        <node name=\"uiMultiplier\" instance=\"uiMultiplier\"/>\r\n\r\n        <node name=\"ui_tennis_ball_green\" instance=\"ui_tennis_ball_green\" active=\"false\"/>\r\n        <node name=\"ui_tennis_ball_pink\" instance=\"ui_tennis_ball_pink\" active=\"false\"/>\r\n        <node name=\"ui_frisbee\" instance=\"ui_frisbee\" active=\"false\"/>\r\n        <node name=\"ui_bone_biscuit\" instance=\"ui_bone_biscuit\" active=\"false\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 185 */
+/* 184 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41451,7 +41542,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n\r\n    <strategy name=\"_loading-screen_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"loadAnim\" instance=\"loadAnim\">\r\n            <sprite>\r\n                <script prepare=\"animate\"/>\r\n            </sprite>\r\n        </node>\r\n        <node name=\"load_font\" instance=\"load_font\"/>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
-/* 186 */
+/* 185 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

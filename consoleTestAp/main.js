@@ -6,7 +6,45 @@
 
 "use strict";
 
-const foo = require("./stuff");
+
+class CGen
+{
+    constructor()
+    {
+        this.iter = this.job();
+    }
+
+    * job()
+    {
+        console.log("Execute started...");
+        yield;
+
+        console.log("1...");
+        yield;
+
+        console.log("2...");
+        yield;
+
+        console.log("3...");
+        yield;
+
+    }
+
+    execute()
+    {
+        return this.iter.next().done
+    }
+}
+
+let gen = new CGen;
+
+console.log(gen.execute());
+console.log(gen.execute());
+console.log(gen.execute());
+console.log(gen.execute());
+console.log(gen.execute());
+
+/*const foo = require("./stuff");
 
 foo.callMe(20);
 
@@ -41,4 +79,4 @@ do
 while ((test > 0) && (value < maxValue));
 
 console.timeEnd();
-console.log("Count:", counter);
+console.log("Count:", counter);*/

@@ -80,10 +80,8 @@ export class ScriptComponent
         // Call the active scripts
         for( let i = this.scriptAry.length - 1; i > -1; --i )
         {
-            this.scriptAry[i].execute();
-            
             // If the script is finished, remove it
-            if( this.scriptAry[i].isFinished() )
+            if( this.scriptAry[i].execute() )
                 this.scriptAry.splice( i, 1 );
         }
     }

@@ -8,30 +8,35 @@
 
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { iScript } from '../../../library/script/iscript';
 import * as utilScripts from './utilityscripts';
 
 //
 //  DESC: Script for fading in the menu
 //
-class State_PlayLoadAnim extends utilScripts.PlayAnim
+class State_PlayLoadAnim
 {
     constructor( sprite )
     {
-        super( sprite );
-        
-        this.init( 12, true );
+        this.animate = new utilScripts.PlayAnim( sprite );
+        this.animate.init( 12, true );
+    }
+
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        return this.animate.execute();
     }
 }
 
 //
 //  DESC: Script for fading in the menu
 //
-class State_RotateCube extends iScript
+class State_RotateCube
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
     }
     
@@ -42,8 +47,11 @@ class State_RotateCube extends iScript
     {
         let rot = highResTimer.elapsedTime * 0.04;
         this.sprite.incRotXYZ( rot, rot, 0 );
+
+        return false;
     }
 }
+
 
 // 
 //  DESC: Load XML files

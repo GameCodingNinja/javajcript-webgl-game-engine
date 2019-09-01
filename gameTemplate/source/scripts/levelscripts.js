@@ -7,16 +7,13 @@
 "use strict";
 
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { iScript } from '../../../library/script/iscript';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
-export class Level_BallAi extends iScript
+export class Level_BallAi
 {
     constructor( sprite )
     {
-        super();
-
         this.sprite = sprite;
         this.initPhysics();
     }
@@ -28,6 +25,8 @@ export class Level_BallAi extends iScript
     {
         if( this.sprite.pos.y < -600 )
             this.initPhysics();
+        
+        return false;
     }
 
     // 

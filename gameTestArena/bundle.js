@@ -28864,7 +28864,8 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
             this.visualComponent.setFrame( index );
 
             if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SPRITE_SHEET"] )
-                this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
+                if( index < this.objData.visualData.spriteSheet.getCount() )
+                    this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
     }
     
@@ -29034,8 +29035,11 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
     //
     setFrame( index )
     {
-        this.frameIndex = index;
-        this.texture = this.visualData.getTexture( index );
+        if( index < this.visualData.getFrameCount() )
+        {
+            this.frameIndex = index;
+            this.texture = this.visualData.getTexture( index );
+        }
     }
     
     //
@@ -31001,10 +31005,8 @@ class ScriptComponent
         // Call the active scripts
         for( let i = this.scriptAry.length - 1; i > -1; --i )
         {
-            this.scriptAry[i].execute();
-            
             // If the script is finished, remove it
-            if( this.scriptAry[i].isFinished() )
+            if( this.scriptAry[i].execute() )
                 this.scriptAry.splice( i, 1 );
         }
     }
@@ -33364,21 +33366,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //  DESC: Script for fading in the menu
 //
-class PlayerShip_FireTailAnim extends _utilityscripts__WEBPACK_IMPORTED_MODULE_1__["PlayAnim"]
+class PlayerShip_FireTailAnim
 {
     constructor( sprite )
     {
-        super( sprite );
-        
-        this.init();
+        this.animate = new _utilityscripts__WEBPACK_IMPORTED_MODULE_1__["PlayAnim"]( sprite );
+        this.animate.init( 24, true );
     }
     
     // 
-    //  DESC: Init the script for use
+    //  DESC: Execute this script object
     //
-    init()
+    execute()
     {
-        super.init( 24, true );
+        return this.animate.execute();
     }
 }
 
@@ -33400,6 +33401,7 @@ function loadScripts()
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Hold", function() { return Hold; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayAnim", function() { return PlayAnim; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FrameExecute", function() { return FrameExecute; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FadeTo", function() { return FadeTo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ColorTo", function() { return ColorTo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
@@ -33432,6 +33434,7 @@ class Hold
     constructor()
     {
         this.time = 0;
+        this.iter = null;
     }
     
     // 
@@ -33440,19 +33443,32 @@ class Hold
     init( time )
     {
         this.time = time;
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
+                break;
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-
-        if( this.time < 0 )
-        {
-            this.finished = true;
-        }
+        return this.iter.next().done;
     }
 }
 
@@ -33471,7 +33487,7 @@ class PlayAnim
         this.fps = 0;
         this.counter = 0;
         this.loop = false;
-        this.finished = false;
+        this.iter = null;
     }
     
     // 
@@ -33483,43 +33499,119 @@ class PlayAnim
         this.time = 1000.0 / this.fps;
         this.loop = loop;
         this.counter = 0;
-        this.finished = false;
+        this.iter = this.iteration();
     }
-    
-    // 
-    //  DESC: Execute this script object
-    //
-    execute()
-    {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
 
-        if( this.time < 0 )
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
         {
-            this.time = 1000.0 / this.fps;
-            this.counter++;
-            
-            if( this.counter < this.frameCount )
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
             {
-                this.sprite.setFrame( this.counter );
-            }
-            else
-            {
-                if( this.loop )
+                this.time = 1000.0 / this.fps;
+                this.counter++;
+                
+                if( this.counter < this.frameCount )
                 {
-                    this.counter = 0;
                     this.sprite.setFrame( this.counter );
                 }
                 else
-                    this.finished = true;
+                {
+                    if( this.loop )
+                    {
+                        this.counter = 0;
+                        this.sprite.setFrame( this.counter );
+                    }
+                    else
+                        break;
+                }
             }
+
+            yield;
         }
+        while(true)
     }
     
     // 
-    //  DESC: Finished access function
+    //  DESC: Execute the iteration
     //
-    isFinished() { return this.finished; }
+    execute()
+    {
+        return this.iter.next().done;
+    }
 }
+
+//
+//  DESC: Execute an action at a specific frame rate
+//
+class FrameExecute
+{
+    constructor()
+    {
+        this.time = 0;
+        this.duration = 0;
+        this.durationTime = 0;
+        this.fps = 0;
+        this.iter = null;
+        this.callback = null;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( fps, callback, duration = 0 )
+    {
+        this.fps = fps;
+        this.time = 1000.0 / this.fps;
+        this.duration = duration;
+        if( duration > 0 )
+            this.durationTime = 1000.0 / duration;
+        this.callback = callback;
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.time = 1000.0 / this.fps;
+                this.callback();
+            }
+
+            // Do we specify a count
+            if( this.duration > 0 )
+            {
+                this.durationTime -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+                if( this.durationTime < 0 )
+                    break;
+            }
+
+            yield;
+        }
+        while( true );
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
 
 //
 //  DESC: Script for fading in the menu
@@ -33528,37 +33620,53 @@ class FadeTo
 {
     constructor()
     {
-        this.current = 0;
+        this.value = 0;
         this.final = 0;
         this.time = 0;
         this.inc = 0;
-        this.finished = false;
+        this.iter = null;
     }
-    
+
     // 
     //  DESC: Init the script for use
     //
-    init( current, final, time )
+    init( start, final, time )
     {
-        this.current = current;
+        this.value = start;
         this.final = final;
         this.time = time;
-        this.inc = (this.final - this.current) / this.time;
-        this.finished = false;
+        this.inc = (final - start) / time;
+        this.iter = this.iteration();
     }
-    
+
     // 
-    //  DESC: Execute this script object
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.value = this.final;
+                break;
+            }
+
+            this.value += (this.inc * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime);
+                
+            yield;
+        }
+        while( true );
+    }
+
+    // 
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-
-        if( this.time < 0 )
-            this.finished = true;
-
-        else
-            this.current += (this.inc * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime);
+        return this.iter.next().done;
     }
 }
 
@@ -33569,100 +33677,105 @@ class ColorTo
 {
     constructor()
     {
-        this.current = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
+        this.value = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
         this.inc = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
-        this.final;
-        this.time;
+        this.final = null;
+        this.time = 0;
+        this.iter = null;
     }
     
     // 
     //  DESC: Init the script for use
     //
-    init( current, final, time )
+    init( start, final, time )
     {
         this.time = time;
         this.final = final;
-        this.current.copy( current );
+        this.value.copy( start );
         
         for( let i = 0; i < 4; ++i )
-            this.inc.data[i] = (this.final.data[i] - this.current.data[i]) / this.time;
-        
-        this.finished = false;
+            this.inc.data[i] = (this.final.data[i] - this.value.data[i]) / this.time;
+
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.value.copy( this.final );
+                break;
+            }
+
+            for( let i = 0; i < 4; ++i )
+                this.value.data[i] += this.inc.data[i] * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+                
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-
-        if( this.time < 0 )
-        {
-            this.finished = true;
-        }
-        else
-        {
-            for( let i = 0; i < 4; ++i )
-                this.current.data[i] += this.inc.data[i] * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
-        }
+        return this.iter.next().done;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    get color()
-    {
-        if( this.finished )
-            return this.final;
-        else
-            return this.current;
-    }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 //
 //  DESC: Script for fading the screen
 //
-class ScreenFade extends FadeTo
+class ScreenFade
 {
     constructor( current, final, time )
     {
-        super();
-        
-        this.init( current, final, time );
+        this.fadeTo = new FadeTo();
+        this.fadeTo.init( current, final, time );
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            if( this.fadeTo.execute() )
+            {
+                _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+
+                if( this.fadeTo.inc > 0 )
+                    _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_IN_COMPLETE"] );
+                else
+                    _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_OUT_COMPLETE"] );
+
+                break;
+            }
+
+            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        super.execute();
-
-        if( this.finished )
-        {
-            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.final, this.final, this.final, 1] );
-
-            if( this.inc > 0 )
-                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_IN_COMPLETE"] );
-            else
-                _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_OUT_COMPLETE"] );
-        }
-        else
-        {
-            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.current, this.current, this.current, 1] );
-        }
+        return this.iter.next().done;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return this.finished; }
 }
 
 // 

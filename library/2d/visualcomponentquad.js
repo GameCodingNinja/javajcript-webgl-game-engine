@@ -117,8 +117,11 @@ export class VisualComponentQuad extends ivisualComponent
     //
     setFrame( index )
     {
-        this.frameIndex = index;
-        this.texture = this.visualData.getTexture( index );
+        if( index < this.visualData.getFrameCount() )
+        {
+            this.frameIndex = index;
+            this.texture = this.visualData.getTexture( index );
+        }
     }
     
     //

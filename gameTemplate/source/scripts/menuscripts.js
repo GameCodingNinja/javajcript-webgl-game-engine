@@ -8,7 +8,6 @@
 
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { iScript } from '../../../library/script/iscript';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
 import { menuManager } from '../../../library/gui/menumanager';
@@ -20,136 +19,137 @@ import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 //
 //  DESC: Script for playing the active sound
 //
-class Control_OnActive extends iScript
+class Control_OnActive
 {
-    constructor( control )
-    {
-        super();
-        this.control = control;
-    }
-    
     // 
     //  DESC: Execute this script object
     //
     execute()
     {
         soundManager.play( '(menu)', 'active' );
+
+        return true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return true; }
 }
 
 //
 //  DESC: Script for playing the select sound
 //
-class Control_OnSelect extends iScript
+class Control_OnSelect
 {
-    constructor( control )
-    {
-        super();
-        this.control = control;
-    }
-    
     // 
     //  DESC: Execute this script object
     //
     execute()
     {
         soundManager.play( '(menu)', 'select' );
+
+        return true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return true; }
 }
 
 //
 //  DESC: Script for fading in the menu
 //
-class Menu_TransIn extends utilScripts.FadeTo
+class Menu_TransIn
 {
     constructor( menu )
     {
-        super();
-        
+        this.fadeTo = new utilScripts.FadeTo();
         this.menu = menu;
-
-        super.init( 0, 1, 250 );
-
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterater the logic
+    //
+    * iteration()
+    {
+        this.fadeTo.init( 0, 1, 250 );
+
+        do
+        {
+            if( this.fadeTo.execute() )
+            {
+                this.menu.setAlpha( this.fadeTo.value );
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_END );
+
+                break;
+            }
+
+            this.menu.setAlpha( this.fadeTo.value );
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
-        {
-            this.menu.setAlpha( this.final );
-            
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_END );
-        }
-        else
-        {
-            this.menu.setAlpha( this.current );
-        }
+        return this.iter.next().done;
     }
 }
 
 //
 //  DESC: Script for fading out the menu
 //
-class Menu_TransOut extends utilScripts.FadeTo
+class Menu_TransOut
 {
     constructor( menu )
     {
-        super();
-        
+        this.fadeTo = new utilScripts.FadeTo();
         this.menu = menu;
-
-        super.init( 1, 0, 250 );
-        
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterater the logic
+    //
+    * iteration()
+    {
+        this.fadeTo.init( 1, 0, 250 );
+
+        do
+        {
+            if( this.fadeTo.execute() )
+            {
+                this.menu.setAlpha( this.fadeTo.value );
+
+                eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_END );
+
+                break;
+            }
+
+            this.menu.setAlpha( this.fadeTo.value );
+
+            yield;
+        }
+        while( true );
     }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
-        {
-            this.menu.setAlpha( this.final );
-            this.menu.setVisible( false );
-            
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_END );
-        }
-        else
-        {
-            this.menu.setAlpha( this.current );
-        }
+        return this.iter.next().done;
     }
 }
 
 //
 //  DESC: Script for setting the look of the disabled state
 //
-class Control_Disabled extends iScript
+class Control_Disabled
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
     }
     
@@ -163,19 +163,18 @@ class Control_Disabled extends iScript
         color.transformHSV( 0, 0, 1 );
 
         this.sprite.setColor( color );
-        
-        this.finished = true;
+
+        return true;
     }
 }
 
 //
 //  DESC: Script for setting the look of the inactive state
 //
-class Control_Inactive extends iScript
+class Control_Inactive
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
     }
     
@@ -185,18 +184,18 @@ class Control_Inactive extends iScript
     execute()
     {
         this.sprite.setColor( this.sprite.getDefaultColor() );
-        this.finished = true;
+
+        return true;
     }
 }
 
 //
 //  DESC: Script for setting the look of the hidden state
 //
-class Control_Hidden extends iScript
+class Control_Hidden
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
     }
     
@@ -206,7 +205,8 @@ class Control_Hidden extends iScript
     execute()
     {
         this.sprite.setVisible( false );
-        this.finished = true;
+
+        return true;
     }
 }
 
@@ -214,16 +214,16 @@ class Control_Hidden extends iScript
 //
 //  DESC: Base script for animating the look of the active state
 //
-class Base_Control_Active extends iScript
+class Base_Control_Active
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
 
         this.hiColor = new Color;
         this.lowColor = new Color;
         this.colorTo = new utilScripts.ColorTo;
+        this.iter = null;
 
         this.toggle = false;
     }
@@ -242,28 +242,43 @@ class Base_Control_Active extends iScript
         this.lowColor.transformHSV( 0, 1, lowHSV );
         
         this.colorTo.init( this.sprite.getColor(), this.hiColor, 500 );
+        this.iter = this.iteration();
         
         this.toggle = false;
     }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            if( this.colorTo.execute() )
+            {
+                this.sprite.setColor( this.colorTo.value );
+
+                if( this.toggle )
+                    this.colorTo.init( this.sprite.getColor(), this.hiColor, 500 );
+                else
+                    this.colorTo.init( this.sprite.getColor(), this.lowColor, 500 );
+                
+                this.toggle = !this.toggle;
+            }
+
+            this.sprite.setColor( this.colorTo.value );
+
+            yield;
+        }
+        while( true );
+    }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.colorTo.execute();
-        
-        this.sprite.setColor( this.colorTo.color );
-        
-        if( this.colorTo.isFinished() )
-        {
-            if( this.toggle )
-                this.colorTo.init( this.sprite.getColor(), this.hiColor, 500 );
-            else
-                this.colorTo.init( this.sprite.getColor(), this.lowColor, 500 );
-            
-            this.toggle = !this.toggle;
-        }
+        return this.iter.next().done;
     }
 }
 
@@ -281,7 +296,7 @@ class Control_Active extends Base_Control_Active
     //
     execute()
     {
-        super.execute();
+        return super.execute();
     }
 }
 
@@ -299,7 +314,7 @@ class Control_Solid_Active extends Base_Control_Active
     //
     execute()
     {
-        super.execute();
+        return super.execute();
     }
 }
 
@@ -309,17 +324,17 @@ class Control_Solid_Active extends Base_Control_Active
 //        NOTE: Start the button on the hi color, transition
 //              to the low color and then back to the hi color
 //
-class Base_Control_Selected extends iScript
+class Base_Control_Selected
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
 
         this.hiColor = new Color;
         this.lowColor = new Color;
 
         this.colorTo = new utilScripts.ColorTo;
+        this.iter = null;
 
         this.toggle = false;
     }
@@ -338,33 +353,46 @@ class Base_Control_Selected extends iScript
         this.lowColor.transformHSV( 0, 1, lowHSV );
         
         this.colorTo.init( this.hiColor, this.lowColor, 120 );
+        this.iter = this.iteration();
         
         this.toggle = false;
     }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            if( this.colorTo.execute() )
+            {
+                if( this.toggle )
+                {
+                    this.sprite.setColor( this.sprite.getDefaultColor() );
+                    break;
+                }
+                else
+                {
+                    this.colorTo.init( this.sprite.getColor(), this.hiColor, 100 );
+                    
+                    this.toggle = true;
+                }
+            }
+
+            this.sprite.setColor( this.colorTo.value );
+
+            yield;
+        }
+        while( true );
+    }
     
     // 
-    //  DESC: Execute this script object
+    //  DESC: Execute the iteration
     //
     execute()
     {
-        this.colorTo.execute();
-        
-        this.sprite.setColor( this.colorTo.color );
-        
-        if( this.colorTo.isFinished() )
-        {
-            if( this.toggle )
-            {
-                this.sprite.setColor( this.sprite.getDefaultColor() );
-                this.finished = true;
-            }
-            else
-            {
-                this.colorTo.init( this.sprite.getColor(), this.hiColor, 100 );
-                
-                this.toggle = true;
-            }
-        }
+        return this.iter.next().done;
     }
 }
 
@@ -385,12 +413,13 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
         {
             eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -408,13 +437,15 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
         {
             eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
             eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
+
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -432,7 +463,7 @@ class Control_Selected_Visible extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
+        return super.execute();
     }
 }
 
@@ -454,7 +485,7 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
+        return super.execute();
     }
 }
 
@@ -472,10 +503,13 @@ class Control_Selected extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
+        {
             this.sprite.setVisible( false );
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -493,10 +527,13 @@ class Control_Solid_Selected extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
+        {
             this.sprite.setVisible( false );
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -514,10 +551,13 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
     //
     execute()
     {
-        super.execute();
-        
-        if( this.finished )
+        if( super.execute() )
+        {
             this.sprite.setRGBA( 1, 1, 1, 1 );
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -525,13 +565,11 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
 //
 //  DESC: Fast display of selected state
 //
-class Base_Control_Fast_Selected extends iScript
+class Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super();
         this.sprite = sprite;
-
         this.hiColor = new Color;
     }
     
@@ -569,8 +607,10 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -595,8 +635,10 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
         {
             this.sprite.setDefaultColor();
             eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -622,8 +664,10 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
             this.sprite.setDefaultColor();
             eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
             eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -647,8 +691,10 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setVisible( false );
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -672,8 +718,10 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setVisible( false );
-            this.finished = true;
+            return true;
         }
+
+        return false;
     }
 }
 
@@ -687,20 +735,22 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     }
     
     // 
-    //  DESC: Finished access function
+    //  DESC: Execute this script object
     //
-    isFinished() { return true; }
+    execute()
+    {
+        return true;
+    }
 }
 
 
 //
 //  DESC: Execution script for a button control to change to the confirmation menu
 //
-class ConfirmBtn_execute extends iScript
+class ConfirmBtn_execute
 {
     constructor( control )
     {
-        super();
         this.control = control;
     }
     
@@ -734,12 +784,9 @@ class ConfirmBtn_execute extends iScript
         yesBtn.actionType = actionType;
         yesBtn.executionAction = executionAction;
         megLbl.createFontStr( conformationMsg );
+
+        return true;
     }
-    
-    // 
-    //  DESC: Finished access function
-    //
-    isFinished() { return true; }
 }
 
 

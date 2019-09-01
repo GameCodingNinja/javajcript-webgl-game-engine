@@ -239,7 +239,8 @@ export class Sprite extends ObjectTransform
             this.visualComponent.setFrame( index );
 
             if( this.objData.visualData.genType === defs.EGT_SPRITE_SHEET )
-                this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
+                if( index < this.objData.visualData.spriteSheet.getCount() )
+                    this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
     }
     

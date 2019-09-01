@@ -12,21 +12,29 @@ import * as utilScripts from './utilityscripts';
 //
 //  DESC: Script for rotating the loading animation
 //
-class State_PlayLoadAnim extends utilScripts.FrameExecute
+class State_PlayLoadAnim
 {
     constructor( sprite )
     {
-        super( sprite );
-
-        super.init( 10 );
+        this.sprite = sprite;
+        this.frameExec = new utilScripts.FrameExecute();
+        this.frameExec.init( 10, this.frame.bind(this) );
     }
     
     // 
-    //  DESC: Execute this frame
+    //  DESC: Executes this frame
     //
     frame()
     {
         this.sprite.incRotXYZ( 0.0, 0.0, -30.0 );
+    }
+
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.frameExec.execute();
     }
 }
 
