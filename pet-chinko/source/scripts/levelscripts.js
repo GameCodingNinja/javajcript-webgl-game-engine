@@ -70,10 +70,11 @@ class Level_DelayDestroy
 {
     constructor( sprite )
     {
+        this.sprite = sprite
         this.hold = new utilScripts.Hold();
         this.hold.init( 600 );
 
-        if( sprite.objData.name < 'dog_head_6' )
+        if( sprite.objData.name < 'dog_head_3' )
             soundManager.play( '(level_1)', 'cat' );
         else
             soundManager.play( '(level_1)', 'dog' );
@@ -86,7 +87,7 @@ class Level_DelayDestroy
     {
         if( this.hold.execute() )
         {
-            eventManager.dispatchEvent( stateDefs.ESE_CREATE_MULTI_HEAD );
+            eventManager.dispatchEvent( stateDefs.ESE_CREATE_MULTI_HEAD, this.sprite );
             return true;
         }
 

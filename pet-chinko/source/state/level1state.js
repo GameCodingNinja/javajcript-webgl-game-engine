@@ -30,7 +30,7 @@ import * as genFunc from '../../../library/utilities/genfunc';
 // Load data from bundle as string
 import level1StrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
 
-export const ASSET_COUNT = 52;
+export const ASSET_COUNT = 46;
 
 const SPRITE_PEG = -2,
     MULTIPLIER_SPRITE = 0,
@@ -41,21 +41,27 @@ export class Level1State extends CommonState
     constructor( gameLoopCallback = null )
     {
         super( stateDefs.EGS_LEVEL_1, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
+
+        // Multiplier index
+        this.multiIndex = [0,1,2,3,4,5];
+        genFunc.shuffle( this.multiIndex );
+
+        this.posIndexAry = [];
         
         // Multiplier positions
         this.multiXPosAllAry = [-640,-480,-320,-160,0,160,320,480,640];
         
         // A multidimensional to hold the spots to randomly place the multiplier based on it's current position.
         this.multiXPosAry = [];
-        this.multiXPosAry.push( [-160,0,160,320,480,640] );
-        this.multiXPosAry.push( [0,160,320,480,640] );
-        this.multiXPosAry.push( [160,320,480,640] );
-        this.multiXPosAry.push( [-640,320,480,640] );
-        this.multiXPosAry.push( [-640,-480,480,640] );
-        this.multiXPosAry.push( [-640,-480,-320,640] );
-        this.multiXPosAry.push( [-640,-480,-320,-160] );
-        this.multiXPosAry.push( [-640,-480,-320,-160,0] );
-        this.multiXPosAry.push( [-640,-480,-320,-160,0,160] );
+        this.multiXPosAry.push( [-480,-320,-160,0,160,320,480,640] );
+        this.multiXPosAry.push( [-640,-320,-160,0,160,320,480,640] );
+        this.multiXPosAry.push( [-640,-480,-160,0,160,320,480,640] );
+        this.multiXPosAry.push( [-640,-480,-320,0,160,320,480,640] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,160,320,480,640] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,0,320,480,640] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,0,160,480,640] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,0,160,320,640] );
+        this.multiXPosAry.push( [-640,-480,-320,-160,0,160,320,480] );
         
         this.physicsWorld = physicsWorldManager.getWorld( "(game)" );
         
@@ -94,15 +100,28 @@ export class Level1State extends CommonState
 
         // Create the multiplier sprite used to colide with the balls
         // NOTE: Setting the position of a static or kinematic can only be done before it's used in the physics world.
-        this.multiNode = this.multiStrategy.create('dog_head_0');
-        this.multiIndexPos = genFunc.randomInt(0, this.multiXPosAllAry.length-1);
-        this.multiNode.get().physicsComponent.setPosition( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+        this.multiCounter = 0;
+        let artIndex = this.multiIndex[this.multiCounter];
+        let multiNode = this.multiStrategy.create(`dog_head_${artIndex}`);
+        multiNode.get().multiIndexPos = genFunc.randomInt(0, this.multiXPosAllAry.length-1);
+        multiNode.get().physicsComponent.setPosition( this.multiXPosAllAry[multiNode.get().multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+        this.posIndexAry.push(multiNode.get().multiIndexPos);
+        this.multiCounter++;
+
+        // Create a new one
+        let posAry = this.multiXPosAry[multiNode.get().multiIndexPos];
+        let index = genFunc.randomInt(0, posAry.length-1);
+        let offsetX = posAry[index];
+
+        artIndex = this.multiIndex[this.multiCounter];
+        multiNode = this.multiStrategy.create(`dog_head_${artIndex}`);
+        multiNode.get().multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
+        multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+        this.posIndexAry.push(multiNode.get().multiIndexPos);
+        this.multiCounter++;
 
         // Node to warp animation
         this.warpNode = null;
-
-        // temp
-        this.dogHeadCounter = 0;
 
         // Randomly pick the first ball
         this.ballIndex = genFunc.randomInt(0, 3);
@@ -154,9 +173,11 @@ export class Level1State extends CommonState
             // Get the random rotation
             let rot = genFunc.randomArbitrary( -3, 3 );
 
+            let ballArray = [0,1,2,3,0,1,2];
+
             // Save the old ball index and generate a new one
             let oldBallIndex = this.ballIndex;
-            this.ballIndex = genFunc.randomInt(0, 3);
+            this.ballIndex = ballArray[genFunc.randomInt(0, ballArray.length-1)];
 
             // Get the ball instance names
             let instanceNameA = this.getBallInstanceName( oldBallIndex );
@@ -204,18 +225,32 @@ export class Level1State extends CommonState
             }
             else if( event.detail.type === stateDefs.ESE_CREATE_MULTI_HEAD )
             {
+                // Remove from the position index array
+                let index = this.posIndexAry.indexOf( event.detail.arg[0].multiIndexPos );
+                if( index !== -1 )
+                    this.posIndexAry.splice( index, 1 );
+
                 // Destroy the current one
-                this.multiStrategy.destroy( this.multiNode );
+                this.multiStrategy.destroy( event.detail.arg[0].parentNode );
+
+                let multiIndexPos = genFunc.randomInt(0, this.multiXPosAllAry.length-1);
+                if( this.posIndexAry.length )
+                    multiIndexPos = this.posIndexAry[0];
 
                 // Create a new one
-                let posAry = this.multiXPosAry[this.multiIndexPos];
-                let index = genFunc.randomInt(0, posAry.length-1);
+                let posAry = this.multiXPosAry[multiIndexPos];
+                index = genFunc.randomInt(0, posAry.length-1);
                 let offsetX = posAry[index];
-                this.multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
 
-                this.dogHeadCounter = (this.dogHeadCounter + 1) % 12;
-                this.multiNode = this.multiStrategy.create(`dog_head_${this.dogHeadCounter}`);
-                this.multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+                this.multiCounter = (this.multiCounter + 1) % 6;
+                if( this.multiCounter == 0 )
+                    genFunc.shuffle( this.multiIndex );
+
+                let artIndex = this.multiIndex[this.multiCounter];
+                let multiNode = this.multiStrategy.create(`dog_head_${artIndex}`);
+                multiNode.get().multiIndexPos = this.multiXPosAllAry.indexOf(offsetX);
+                multiNode.get().physicsComponent.setPosition( offsetX, MULTI_SPRITE_OFFSET_Y );
+                this.posIndexAry.push(multiNode.get().multiIndexPos);
             }
         }
     }
@@ -322,16 +357,20 @@ export class Level1State extends CommonState
             {
                 this.multiplier++;
 
+                let sprite = spriteA;
+                if( spriteB.id === MULTIPLIER_SPRITE )
+                    sprite = spriteB;
+
                 // Disable the physics
-                this.multiNode.get().physicsComponent.setActive( false );
+                sprite.physicsComponent.setActive( false );
 
                 // Activate the warp animation
                 let warpAnim = this.multiStrategy.create('warp');
-                warpAnim.get().setPosXYZ( this.multiXPosAllAry[this.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
+                warpAnim.get().setPosXYZ( this.multiXPosAllAry[sprite.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
                 warpAnim.get().prepareScript('animate');
 
                 // Activate the delayed destry script
-                this.multiNode.get().prepareScript('delayDestroy');
+                sprite.prepareScript('delayDestroy');
 
                 // Update the ui multiplier value
                 this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );

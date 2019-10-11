@@ -49,54 +49,6 @@
         </sprite>
     </node>
 
-    <node name="dog_head_6">
-        <sprite objectName="dog_head_6" id="0">
-            <scriptLst>
-                <script delayDestroy="Level_DelayDestroy"/>
-            </scriptLst>
-        </sprite>
-    </node>
-
-    <node name="dog_head_7">
-        <sprite objectName="dog_head_7" id="0">
-            <scriptLst>
-                <script delayDestroy="Level_DelayDestroy"/>
-            </scriptLst>
-        </sprite>
-    </node>
-
-    <node name="dog_head_8">
-        <sprite objectName="dog_head_8" id="0">
-            <scriptLst>
-                <script delayDestroy="Level_DelayDestroy"/>
-            </scriptLst>
-        </sprite>
-    </node>
-
-    <node name="dog_head_9">
-        <sprite objectName="dog_head_9" id="0">
-            <scriptLst>
-                <script delayDestroy="Level_DelayDestroy"/>
-            </scriptLst>
-        </sprite>
-    </node>
-
-    <node name="dog_head_10">
-        <sprite objectName="dog_head_10" id="0">
-            <scriptLst>
-                <script delayDestroy="Level_DelayDestroy"/>
-            </scriptLst>
-        </sprite>
-    </node>
-
-    <node name="dog_head_11">
-        <sprite objectName="dog_head_11" id="0">
-            <scriptLst>
-                <script delayDestroy="Level_DelayDestroy"/>
-            </scriptLst>
-        </sprite>
-    </node>
-
     <node name="warp">
         <sprite objectName="warp">
             <scriptLst>
