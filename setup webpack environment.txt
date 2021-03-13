@@ -6,6 +6,10 @@ cd /home/pi/Development/javajcript-webgl-game-engine
 npm init -y
 npm install webpack webpack-cli --save-dev
 
+Install some packages
+npm install planck-js
+npm install raw-loader
+
 Add path to .bashrc to webpack
 PATH=$PATH:$HOME/Development/javajcript-webgl-game-engine/node_modules/.bin
 
