@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "/home/howie/Development/javajcript-webgl-game-engine/library"
+			"path": "../library"
 		}
 	],
 	"settings": {
