@@ -1,0 +1,12 @@
+Install latest node.js
+
+Install webpack in repository folder
+cd /home/pi/Development/javajcript-webgl-game-engine
+
+npm init -y
+npm install webpack webpack-cli --save-dev
+
+Add path to .bashrc to webpack
+PATH=$PATH:$HOME/Development/javajcript-webgl-game-engine/node_modules/.bin
+
+reboot
