@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<strategyLst>
+<loader>
     
     <strategy name="_cube_" camera="cubeCamera" type="actor">
         <node name="cube" instance="cube">
@@ -13,4 +13,4 @@
         <node name="background"/>
     </strategy>
   
-</strategyLst>
+</loader>

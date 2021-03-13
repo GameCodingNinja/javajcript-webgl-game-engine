@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<node defaultGroup="(loadingScreen)">
+<strategy defaultGroup="(loadingScreen)">
     
     <node name="loadAnim">
         
@@ -21,4 +21,4 @@
 
     </node>
 
-</node>
+</strategy>

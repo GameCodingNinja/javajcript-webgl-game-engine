@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<node defaultGroup="(startup)">
+<strategy defaultGroup="(startup)">
     
     <node name="logo">
         
@@ -21,4 +21,4 @@
         </uiProgressBar>
     </node>
 
-</node>
+</strategy>

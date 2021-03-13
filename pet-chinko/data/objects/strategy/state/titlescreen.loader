@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<strategyLst>
+<loader>
 
     <strategy name="_title-screen_" type="actor">
         <node name="background"/>
     </strategy>
   
-</strategyLst>
+</loader>

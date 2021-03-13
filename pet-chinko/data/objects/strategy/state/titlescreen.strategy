@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<node defaultGroup="(title_screen)">
+<strategy defaultGroup="(title_screen)">
     
     <node name="background">
         <sprite objectName="background"/>
@@ -35,4 +35,4 @@
         </uiMeter>
     </node>-->
 
-</node>
+</strategy>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<strategyLst>
+<loader>
 
     <strategy name="_level-1-stage_" type="stage"/>
     <strategy name="_level-1-ball_" type="actor">
@@ -130,4 +130,4 @@
 
     </strategy>
   
-</strategyLst>
+</loader>

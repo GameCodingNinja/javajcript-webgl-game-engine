@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<node defaultGroup="(level_1)" defaultAIName="aiBall">
+<strategy defaultGroup="(level_1)" defaultAIName="aiBall">
     
     <node name="tennis_ball_green">
         <sprite objectName="tennis_ball_green" id="1">
@@ -33,4 +33,4 @@
         </sprite>
     </node>
 
-</node>
+</strategy>

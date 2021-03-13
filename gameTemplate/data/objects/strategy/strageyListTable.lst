@@ -10,7 +10,7 @@
     </groupList>
     
     <groupList groupName="_cube_">
-        <file path="data/objects/strategy/actor/cube.lst"/>
+        <file path="data/objects/strategy/actor/cube.strategy"/>
     </groupList>
 
     <groupList groupName="_loading-screen_">

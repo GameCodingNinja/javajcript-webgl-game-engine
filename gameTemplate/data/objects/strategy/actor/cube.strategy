@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<node defaultGroup="(cube)">
+<strategy defaultGroup="(cube)">
     
     <node name="cube">
         
@@ -12,4 +12,4 @@
 
     </node>
 
-</node>
+</strategy>

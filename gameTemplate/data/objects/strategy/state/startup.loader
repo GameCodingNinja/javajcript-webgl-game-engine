@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<strategyLst>
+<loader>
     
     <strategy name="_startup_" type="actor">
         <node name="logo"/>
         <node name="UIProgressBar" instance="UIProgressBar"/>
     </strategy>
   
-</strategyLst>
+</loader>

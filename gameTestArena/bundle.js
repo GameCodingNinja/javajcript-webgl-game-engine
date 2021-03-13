@@ -1,117 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-
-// 
-//  FILE NAME: main.js
-//  DESC:      main function
-//
-
-
-
-
-
-// Create the game
-new _game_js__WEBPACK_IMPORTED_MODULE_0__["Game"];
-
-
-/***/ }),
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ([
+/* 0 */,
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Game": () => (/* binding */ Game)
+/* harmony export */ });
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
@@ -155,10 +52,10 @@ class Game
     constructor()
     {
         // Set the init shader callback
-        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].connect_initShader( this.initShaderCallBack.bind(this) );
+        _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__.signalManager.connect_initShader( this.initShaderCallBack.bind(this) );
 
         // Load the settings
-        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__["stringLoadXML"]( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__["default"] ) );
+        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.stringLoadXML( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__.default ) );
 
         // Init the game
         this.init();
@@ -170,58 +67,58 @@ class Game
     init()
     {
         // Create the projection matrixes
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["device"].createProjMatrix();
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.device.createProjMatrix();
         
         // Do we add stencil buffer
-        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].createStencilBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].REPLACE);
+        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.createStencilBuffer )
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.stencilOp(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.KEEP, _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.REPLACE);
         
         // Depth testing is off by default. Enable it?
-        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].DEPTH_TEST);
+        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.enableDepthBuffer )
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.DEPTH_TEST);
     
         // Init the clear color
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].clearColor(0.0, 0.0, 0.0, 1.0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         
         // Init the stencil clear mask based on the bit size of the mask
         // Stencil buffer can only be 1 or 8 bits per pixel
-        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 1 )
+        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.stencilBufferBitSize === 1 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].ALWAYS, 1, 0x1);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilMask(0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.ALWAYS, 1, 0x1);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.stencilMask(0x1);
         }
-        else if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].stencilBufferBitSize === 8 )
+        else if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.stencilBufferBitSize === 8 )
         {
-            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].ALWAYS, 1, 0xFF);
-            _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].stencilMask(0xff);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.stencilFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.ALWAYS, 1, 0xFF);
+            _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.stencilMask(0xff);
         }
         
         // Cull the back face
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].CCW);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].BACK);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].CULL_FACE);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.frontFace(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.CCW);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.cullFace(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.BACK);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.CULL_FACE);
         
         // Enable alpha blending
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].BLEND);
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].ONE_MINUS_SRC_ALPHA);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.enable(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.BLEND);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.blendFunc(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.SRC_ALPHA, _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.ONE_MINUS_SRC_ALPHA);
 
         // Make the zero texture the active texture
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].TEXTURE0);
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.activeTexture(_library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TEXTURE0);
         
         // Init the clear buffer mask
-        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearTargetBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].COLOR_BUFFER_BIT;
+        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.clearTargetBuffer )
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.COLOR_BUFFER_BIT;
 
-        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].enableDepthBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].DEPTH_BUFFER_BIT;
+        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.enableDepthBuffer )
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.DEPTH_BUFFER_BIT;
 
-        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].clearStencilBuffer )
-            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].STENCIL_BUFFER_BIT;
+        if( _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.clearStencilBuffer )
+            this.clearBufferMask |= _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.STENCIL_BUFFER_BIT;
         
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.clear( this.clearBufferMask );
         
         // Create the startup state
-        this.gameState = new _state_testarenastate__WEBPACK_IMPORTED_MODULE_5__["TestArenaState"]( this.gameLoop.bind(this) );
+        this.gameState = new _state_testarenastate__WEBPACK_IMPORTED_MODULE_5__.TestArenaState( this.gameLoop.bind(this) );
     }
     
     // 
@@ -229,7 +126,7 @@ class Game
     //
     initShaderCallBack( shaderId )
     {
-        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__["shaderManager"].setShaderValue4fv( shaderId, 'additive', [1,1,1,1] );
+        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__.shaderManager.setShaderValue4fv( shaderId, 'additive', [1,1,1,1] );
     }
     
     // 
@@ -248,7 +145,7 @@ class Game
         let event = null;
         
         // Handle events on the queue
-        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__["eventManager"].pollEvent()) )
+        while( (event = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__.eventManager.pollEvent()) )
             this.handleEvent( event );
     }
     
@@ -274,7 +171,7 @@ class Game
         this.pollEvents();
         
         // Get our elapsed time
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__.highResTimer.calcElapsedTime();
         
         // Handle the physics
         this.gameState.physics();
@@ -286,15 +183,15 @@ class Game
         this.gameState.transform();
 
         // Clear the back buffer
-        _library_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].clear( this.clearBufferMask );
+        _library_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.clear( this.clearBufferMask );
         
         // Do the rendering
         this.gameState.render();
         
         // Apparently it's a good practice to do this at the end of a render cycle
-        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__["shaderManager"].unbind();
-        _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].unbind();
-        _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].unbind();
+        _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__.shaderManager.unbind();
+        _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.unbind();
+        _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.unbind();
 
         // Continues the loop
         requestAnimationFrame( this.gameLoop.bind(this) );
@@ -304,11 +201,13 @@ class Game
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "signalManager", function() { return signalManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "signalManager": () => (/* binding */ signalManager)
+/* harmony export */ });
 
 // 
 //  FILE NAME: signalmanager.js
@@ -407,11 +306,13 @@ var signalManager = new SignalManager;
 
 /***/ }),
 /* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "settings", function() { return settings; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "settings": () => (/* binding */ settings)
+/* harmony export */ });
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
@@ -430,21 +331,21 @@ class Settings
 {
     constructor()
     {
-        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
-        this.size_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
-        this.nativeSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
-        this.screenAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
-        this.orthoAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
-        this.defaultSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
-        this.defaultSize_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
+        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.size_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.nativeSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.screenAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.orthoAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.defaultSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.defaultSize_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         
         this.enableDepthBuffer = false;
         this.createStencilBuffer = false;
         this.clearStencilBuffer = false;
         this.stencilBufferBitSize = 1;
         this.clearTargetBuffer = true;
-        this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EPT_PERSPECTIVE"];
-        this.viewAngle = 45.0 * _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEG_TO_RAD"];
+        this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__.EPT_PERSPECTIVE;
+        this.viewAngle = 45.0 * _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEG_TO_RAD;
         this.minZdist = 5.0;
         this.maxZdist = 1000.5;
         
@@ -458,7 +359,7 @@ class Settings
     //
     load( filePath, callback )
     {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', filePath,
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', filePath,
             ( xmlNode ) => this.loadFromNode( xmlNode ))
             .next(() => callback());
     }
@@ -497,7 +398,7 @@ class Settings
                 {
                     let attr = projection[0].getAttribute('projectType');
                     if( attr && (attr === 'orthographic') )
-                        this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__["EPT_ORTHOGRAPHIC"];
+                        this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__.EPT_ORTHOGRAPHIC;
                     
                     attr = projection[0].getAttribute('minZDist');
                     if( attr )
@@ -509,7 +410,7 @@ class Settings
                     
                     attr = projection[0].getAttribute('view_angle');
                     if( attr )
-                        this.viewAngle = Number(attr) * _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEG_TO_RAD"];
+                        this.viewAngle = Number(attr) * _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEG_TO_RAD;
                 }
                     
                 let depthStencilBuffer = device[0].getElementsByTagName('depthStencilBuffer');
@@ -569,11 +470,13 @@ var settings = new Settings;
 
 /***/ }),
 /* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Size", function() { return Size; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Size": () => (/* binding */ Size)
+/* harmony export */ });
 
 // 
 //  FILE NAME:  size.js
@@ -650,81 +553,83 @@ class Size
 
 /***/ }),
 /* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEG_TO_RAD", function() { return DEG_TO_RAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RAD_TO_DEG", function() { return RAD_TO_DEG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EPSILON", function() { return EPSILON; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGB_TO_DEC", function() { return RGB_TO_DEC; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_ID", function() { return DEFAULT_ID; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESET_VELOCITY", function() { return RESET_VELOCITY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGT_NULL", function() { return EGT_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGT_QUAD", function() { return EGT_QUAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGT_SPRITE_SHEET", function() { return EGT_SPRITE_SHEET; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGT_SCALED_FRAME", function() { return EGT_SCALED_FRAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGT_MESH_FILE", function() { return EGT_MESH_FILE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGT_FONT", function() { return EGT_FONT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EPT_NULL", function() { return EPT_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EPT_PERSPECTIVE", function() { return EPT_PERSPECTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EPT_ORTHOGRAPHIC", function() { return EPT_ORTHOGRAPHIC; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EHA_HORZ_LEFT", function() { return EHA_HORZ_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EHA_HORZ_CENTER", function() { return EHA_HORZ_CENTER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EHA_HORZ_RIGHT", function() { return EHA_HORZ_RIGHT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EVA_VERT_TOP", function() { return EVA_VERT_TOP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EVA_VERT_CENTER", function() { return EVA_VERT_CENTER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EVA_VERT_BOTTOM", function() { return EVA_VERT_BOTTOM; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHAR_CODE_SPACE", function() { return CHAR_CODE_SPACE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHAR_CODE_PIPE", function() { return CHAR_CODE_PIPE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAP_IDLE", function() { return EAP_IDLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAP_DOWN", function() { return EAP_DOWN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAP_UP", function() { return EAP_UP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEVICE_NULL", function() { return DEVICE_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KEYBOARD", function() { return KEYBOARD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MOUSE", function() { return MOUSE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAMEPAD", function() { return GAMEPAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRANSLATE", function() { return TRANSLATE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROTATE", function() { return ROTATE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SCALE", function() { return SCALE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CENTER_POINT", function() { return CENTER_POINT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CROP_OFFSET", function() { return CROP_OFFSET; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TRANSFORM", function() { return TRANSFORM; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WAS_TRANSFORMED", function() { return WAS_TRANSFORMED; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MATRIX_ROTATION", function() { return MATRIX_ROTATION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VISIBLE", function() { return VISIBLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_NULL", function() { return ENT_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_OBJECT", function() { return ENT_OBJECT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_SPRITE", function() { return ENT_SPRITE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENT_UI_CONTROL", function() { return ENT_UI_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESMA_PRESS_TYPE", function() { return ESMA_PRESS_TYPE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESMA_DEVICE_TYPE", function() { return ESMA_DEVICE_TYPE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESMA_MOUSE_X", function() { return ESMA_MOUSE_X; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESMA_MOUSE_Y", function() { return ESMA_MOUSE_Y; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMSC_STATE", function() { return EMSC_STATE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMSC_CONTROL", function() { return EMSC_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_NULL", function() { return EDO_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_LEFT", function() { return EDO_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_RIGHT", function() { return EDO_RIGHT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_HORZ_CENTER", function() { return EDO_HORZ_CENTER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_TOP", function() { return EDO_TOP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_BOTTOM", function() { return EDO_BOTTOM; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDO_VERT_CENTER", function() { return EDO_VERT_CENTER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENAV_NODE_UP", function() { return ENAV_NODE_UP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENAV_NODE_DOWN", function() { return ENAV_NODE_DOWN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENAV_NODE_LEFT", function() { return ENAV_NODE_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ENAV_NODE_RIGHT", function() { return ENAV_NODE_RIGHT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_STATE_ON", function() { return TOGGLE_STATE_ON; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_STATE_OFF", function() { return TOGGLE_STATE_OFF; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NO_ACTIVE_CONTROL", function() { return NO_ACTIVE_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECSF_ON_ACTIVE", function() { return ECSF_ON_ACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECSF_ON_SELECTED", function() { return ECSF_ON_SELECTED; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EO_HORIZONTAL", function() { return EO_HORIZONTAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EO_VERTICAL", function() { return EO_VERTICAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EM_NULL", function() { return EM_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EM_HORIZONTAL", function() { return EM_HORIZONTAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EM_VERTICAL", function() { return EM_VERTICAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EM_HORIZONTAL_VERTICAL", function() { return EM_HORIZONTAL_VERTICAL; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "DEG_TO_RAD": () => (/* binding */ DEG_TO_RAD),
+/* harmony export */   "RAD_TO_DEG": () => (/* binding */ RAD_TO_DEG),
+/* harmony export */   "EPSILON": () => (/* binding */ EPSILON),
+/* harmony export */   "RGB_TO_DEC": () => (/* binding */ RGB_TO_DEC),
+/* harmony export */   "DEFAULT_ID": () => (/* binding */ DEFAULT_ID),
+/* harmony export */   "RESET_VELOCITY": () => (/* binding */ RESET_VELOCITY),
+/* harmony export */   "EGT_NULL": () => (/* binding */ EGT_NULL),
+/* harmony export */   "EGT_QUAD": () => (/* binding */ EGT_QUAD),
+/* harmony export */   "EGT_SPRITE_SHEET": () => (/* binding */ EGT_SPRITE_SHEET),
+/* harmony export */   "EGT_SCALED_FRAME": () => (/* binding */ EGT_SCALED_FRAME),
+/* harmony export */   "EGT_MESH_FILE": () => (/* binding */ EGT_MESH_FILE),
+/* harmony export */   "EGT_FONT": () => (/* binding */ EGT_FONT),
+/* harmony export */   "EPT_NULL": () => (/* binding */ EPT_NULL),
+/* harmony export */   "EPT_PERSPECTIVE": () => (/* binding */ EPT_PERSPECTIVE),
+/* harmony export */   "EPT_ORTHOGRAPHIC": () => (/* binding */ EPT_ORTHOGRAPHIC),
+/* harmony export */   "EHA_HORZ_LEFT": () => (/* binding */ EHA_HORZ_LEFT),
+/* harmony export */   "EHA_HORZ_CENTER": () => (/* binding */ EHA_HORZ_CENTER),
+/* harmony export */   "EHA_HORZ_RIGHT": () => (/* binding */ EHA_HORZ_RIGHT),
+/* harmony export */   "EVA_VERT_TOP": () => (/* binding */ EVA_VERT_TOP),
+/* harmony export */   "EVA_VERT_CENTER": () => (/* binding */ EVA_VERT_CENTER),
+/* harmony export */   "EVA_VERT_BOTTOM": () => (/* binding */ EVA_VERT_BOTTOM),
+/* harmony export */   "CHAR_CODE_SPACE": () => (/* binding */ CHAR_CODE_SPACE),
+/* harmony export */   "CHAR_CODE_PIPE": () => (/* binding */ CHAR_CODE_PIPE),
+/* harmony export */   "EAP_IDLE": () => (/* binding */ EAP_IDLE),
+/* harmony export */   "EAP_DOWN": () => (/* binding */ EAP_DOWN),
+/* harmony export */   "EAP_UP": () => (/* binding */ EAP_UP),
+/* harmony export */   "DEVICE_NULL": () => (/* binding */ DEVICE_NULL),
+/* harmony export */   "KEYBOARD": () => (/* binding */ KEYBOARD),
+/* harmony export */   "MOUSE": () => (/* binding */ MOUSE),
+/* harmony export */   "GAMEPAD": () => (/* binding */ GAMEPAD),
+/* harmony export */   "TRANSLATE": () => (/* binding */ TRANSLATE),
+/* harmony export */   "ROTATE": () => (/* binding */ ROTATE),
+/* harmony export */   "SCALE": () => (/* binding */ SCALE),
+/* harmony export */   "CENTER_POINT": () => (/* binding */ CENTER_POINT),
+/* harmony export */   "CROP_OFFSET": () => (/* binding */ CROP_OFFSET),
+/* harmony export */   "TRANSFORM": () => (/* binding */ TRANSFORM),
+/* harmony export */   "WAS_TRANSFORMED": () => (/* binding */ WAS_TRANSFORMED),
+/* harmony export */   "MATRIX_ROTATION": () => (/* binding */ MATRIX_ROTATION),
+/* harmony export */   "VISIBLE": () => (/* binding */ VISIBLE),
+/* harmony export */   "ENT_NULL": () => (/* binding */ ENT_NULL),
+/* harmony export */   "ENT_OBJECT": () => (/* binding */ ENT_OBJECT),
+/* harmony export */   "ENT_SPRITE": () => (/* binding */ ENT_SPRITE),
+/* harmony export */   "ENT_UI_CONTROL": () => (/* binding */ ENT_UI_CONTROL),
+/* harmony export */   "ESMA_PRESS_TYPE": () => (/* binding */ ESMA_PRESS_TYPE),
+/* harmony export */   "ESMA_DEVICE_TYPE": () => (/* binding */ ESMA_DEVICE_TYPE),
+/* harmony export */   "ESMA_MOUSE_X": () => (/* binding */ ESMA_MOUSE_X),
+/* harmony export */   "ESMA_MOUSE_Y": () => (/* binding */ ESMA_MOUSE_Y),
+/* harmony export */   "EMSC_STATE": () => (/* binding */ EMSC_STATE),
+/* harmony export */   "EMSC_CONTROL": () => (/* binding */ EMSC_CONTROL),
+/* harmony export */   "EDO_NULL": () => (/* binding */ EDO_NULL),
+/* harmony export */   "EDO_LEFT": () => (/* binding */ EDO_LEFT),
+/* harmony export */   "EDO_RIGHT": () => (/* binding */ EDO_RIGHT),
+/* harmony export */   "EDO_HORZ_CENTER": () => (/* binding */ EDO_HORZ_CENTER),
+/* harmony export */   "EDO_TOP": () => (/* binding */ EDO_TOP),
+/* harmony export */   "EDO_BOTTOM": () => (/* binding */ EDO_BOTTOM),
+/* harmony export */   "EDO_VERT_CENTER": () => (/* binding */ EDO_VERT_CENTER),
+/* harmony export */   "ENAV_NODE_UP": () => (/* binding */ ENAV_NODE_UP),
+/* harmony export */   "ENAV_NODE_DOWN": () => (/* binding */ ENAV_NODE_DOWN),
+/* harmony export */   "ENAV_NODE_LEFT": () => (/* binding */ ENAV_NODE_LEFT),
+/* harmony export */   "ENAV_NODE_RIGHT": () => (/* binding */ ENAV_NODE_RIGHT),
+/* harmony export */   "TOGGLE_STATE_ON": () => (/* binding */ TOGGLE_STATE_ON),
+/* harmony export */   "TOGGLE_STATE_OFF": () => (/* binding */ TOGGLE_STATE_OFF),
+/* harmony export */   "NO_ACTIVE_CONTROL": () => (/* binding */ NO_ACTIVE_CONTROL),
+/* harmony export */   "ECSF_ON_ACTIVE": () => (/* binding */ ECSF_ON_ACTIVE),
+/* harmony export */   "ECSF_ON_SELECTED": () => (/* binding */ ECSF_ON_SELECTED),
+/* harmony export */   "EO_HORIZONTAL": () => (/* binding */ EO_HORIZONTAL),
+/* harmony export */   "EO_VERTICAL": () => (/* binding */ EO_VERTICAL),
+/* harmony export */   "EM_NULL": () => (/* binding */ EM_NULL),
+/* harmony export */   "EM_HORIZONTAL": () => (/* binding */ EM_HORIZONTAL),
+/* harmony export */   "EM_VERTICAL": () => (/* binding */ EM_VERTICAL),
+/* harmony export */   "EM_HORIZONTAL_VERTICAL": () => (/* binding */ EM_HORIZONTAL_VERTICAL)
+/* harmony export */ });
 
 // 
 //  FILE NAME: defs.js
@@ -853,17 +758,19 @@ const EM_NULL                = 0,
 
 /***/ }),
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadFile", function() { return downloadFile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "countStrOccurrence", function() { return countStrOccurrence; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "modulus", function() { return modulus; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomInt", function() { return randomInt; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomArbitrary", function() { return randomArbitrary; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shuffle", function() { return shuffle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringLoadXML", function() { return stringLoadXML; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "downloadFile": () => (/* binding */ downloadFile),
+/* harmony export */   "countStrOccurrence": () => (/* binding */ countStrOccurrence),
+/* harmony export */   "modulus": () => (/* binding */ modulus),
+/* harmony export */   "randomInt": () => (/* binding */ randomInt),
+/* harmony export */   "randomArbitrary": () => (/* binding */ randomArbitrary),
+/* harmony export */   "shuffle": () => (/* binding */ shuffle),
+/* harmony export */   "stringLoadXML": () => (/* binding */ stringLoadXML)
+/* harmony export */ });
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
 // 
@@ -926,7 +833,7 @@ function downloadFile( fileType, filePath )
                         if( (this.status >= 200 && this.status < 300) || this.status === 304 ) 
                         {
                             // This need to be called before the "resolve" is
-                            _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_loadComplete();
+                            _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__.signalManager.broadcast_loadComplete();
 
                             if( fileType === 'xml' && this.responseXML )
                                 resolve(this.responseXML.childNodes[0]);
@@ -956,7 +863,7 @@ function downloadFile( fileType, filePath )
         {
             let image = new Image();
             
-            image.onload = () => { _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__["signalManager"].broadcast_loadComplete(); resolve(image); }
+            image.onload = () => { _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__.signalManager.broadcast_loadComplete(); resolve(image); }
             image.onerror = () => reject( Error(`Error downloading file: ${filePath}`) );
 
             image.src = filePath;
@@ -1053,11 +960,13 @@ function stringLoadXML( stringData )
 
 /***/ }),
 /* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textureManager", function() { return textureManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "textureManager": () => (/* binding */ textureManager)
+/* harmony export */ });
 /* harmony import */ var _common_texture__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 
@@ -1100,18 +1009,18 @@ class TextureManager
         let texture = groupMap.get( filePath );
         if( texture === undefined || texture === -1 )
         {
-            texture = new _common_texture__WEBPACK_IMPORTED_MODULE_0__["Texture"];
-            texture.id = _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].createTexture();
+            texture = new _common_texture__WEBPACK_IMPORTED_MODULE_0__.Texture;
+            texture.id = _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.createTexture();
             texture.size.w = image.width;
             texture.size.h = image.height;
 
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].bindTexture( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, texture.id );
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_WRAP_S, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].CLAMP_TO_EDGE );
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_WRAP_T, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].CLAMP_TO_EDGE );
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_MIN_FILTER, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].LINEAR );
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_MAG_FILTER, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].LINEAR );
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].texImage2D( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, 0, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].RGBA, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].RGBA, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].UNSIGNED_BYTE, image );
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].bindTexture( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, null );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.bindTexture( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, texture.id );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_WRAP_S, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.CLAMP_TO_EDGE );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_WRAP_T, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.CLAMP_TO_EDGE );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_MIN_FILTER, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.LINEAR );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_MAG_FILTER, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.LINEAR );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.texImage2D( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, 0, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.RGBA, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.RGBA, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.UNSIGNED_BYTE, image );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.bindTexture( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, null );
 
             groupMap.set( filePath, texture );
         }
@@ -1153,7 +1062,7 @@ class TextureManager
         if( groupMap !== undefined )
         {
             for( let texture of groupMap.values() )
-                _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].deleteTexture( texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.deleteTexture( texture.id );
             
             this.textureForMapMap.delete( group );
         }
@@ -1186,7 +1095,7 @@ class TextureManager
             this.currentTexture = textureId;
 
             // Have OpenGL bind this texture now
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].bindTexture(_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, textureId);
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.bindTexture(_system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, textureId);
         }
     }
 
@@ -1196,7 +1105,7 @@ class TextureManager
     unbind()
     {
         this.currentTexture = null;
-        _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].bindTexture(_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].TEXTURE_2D, null);
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.bindTexture(_system_device__WEBPACK_IMPORTED_MODULE_1__.gl.TEXTURE_2D, null);
     }
 }
 
@@ -1205,11 +1114,13 @@ var textureManager = new TextureManager;
 
 /***/ }),
 /* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Texture", function() { return Texture; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Texture": () => (/* binding */ Texture)
+/* harmony export */ });
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 
 //
@@ -1232,19 +1143,21 @@ class Texture
         this.type = 0;
 
         // Texture size - mostly needed for 2D
-        this.size = new _size__WEBPACK_IMPORTED_MODULE_0__["Size"];
+        this.size = new _size__WEBPACK_IMPORTED_MODULE_0__.Size;
     }
 }
 
 
 /***/ }),
 /* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "device", function() { return device; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gl", function() { return gl; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "device": () => (/* binding */ device),
+/* harmony export */   "gl": () => (/* binding */ gl)
+/* harmony export */ });
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 
@@ -1262,8 +1175,8 @@ class Device
 {
     constructor()
     {
-        this.perspectiveMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
-        this.orthographicMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
+        this.perspectiveMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__.Matrix;
+        this.orthographicMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__.Matrix;
         this.canvas = null;
         this.glContext = null;
         
@@ -1294,16 +1207,16 @@ class Device
     createProjMatrix()
     {
         this.perspectiveMatrix.perspectiveFovRH(
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__["settings"].viewAngle,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__["settings"].screenAspectRatio.w,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__["settings"].minZdist,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__["settings"].maxZdist );
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.viewAngle,
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.screenAspectRatio.w,
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.minZdist,
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.maxZdist );
             
         this.orthographicMatrix.orthographicRH(
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__["settings"].defaultSize.w,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__["settings"].defaultSize.h,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__["settings"].minZdist,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__["settings"].maxZdist );
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.defaultSize.w,
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.defaultSize.h,
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.minZdist,
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.maxZdist );
     }
 }
 
@@ -1313,11 +1226,13 @@ var gl = device.glContext;
 
 /***/ }),
 /* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Matrix", function() { return Matrix; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Matrix": () => (/* binding */ Matrix)
+/* harmony export */ });
 
 // 
 //  FILE NAME:  matrix.js
@@ -1745,11 +1660,13 @@ class Matrix
 
 /***/ }),
 /* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vertexBufferManager", function() { return vertexBufferManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "vertexBufferManager": () => (/* binding */ vertexBufferManager)
+/* harmony export */ });
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
@@ -1804,10 +1721,10 @@ class VertexBufferManager
         let vboID = groupMap.get( name );
         if( vboID === undefined )
         {
-            vboID = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, vboID );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, null );
+            vboID = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, vboID );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, null );
 
             groupMap.set( name, vboID );
         }
@@ -1832,15 +1749,15 @@ class VertexBufferManager
         let iboID = groupMap.get( name );
         if( iboID === undefined )
         {
-            iboID = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer(_system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, iboID);
+            iboID = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer(_system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, iboID);
 
             if( intAs8bit )
-                _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, new Uint8Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
+                _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
             else
-                _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
+                _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
 
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, null );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, null );
 
             groupMap.set( name, iboID );
         }
@@ -1865,7 +1782,7 @@ class VertexBufferManager
         let iboID = groupMap.get( name );
         if( iboID === undefined )
         {
-            iboID = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
+            iboID = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
 
             groupMap.set( name, iboID );
         }    
@@ -1873,9 +1790,9 @@ class VertexBufferManager
         // If the new indices are greater then the current, init the IBO with the newest
         if( maxIndicies > this.currentMaxFontIndices )
         {
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer(_system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, iboID);
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, null );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer(_system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, iboID);
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, null );
 
             // Save the number of indices for later to compare and expand this size of this IBO
             this.currentMaxFontIndices = maxIndicies;
@@ -1909,10 +1826,10 @@ class VertexBufferManager
             if( meshFileVertAry !== null )
                 Array.prototype.push.apply( vertAry, meshFileVertAry );
             
-            vboID = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, vboID );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, null );
+            vboID = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, vboID );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, null );
 
             groupMap.set( name, vboID );
         }
@@ -1926,18 +1843,18 @@ class VertexBufferManager
     generateScaledFrame( vertAry, scaledFrame, textureSize, glyphSize, frameSize, spriteSheetOffset )
     {
         // Offsets to center the mesh
-        let center = new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](frameSize.w / 2, frameSize.h / 2);
-        let frameLgth = new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"]( frameSize.w - (scaledFrame.frame.w * 2.0), frameSize.h - (scaledFrame.frame.h * 2.0) );
-        let uvLgth = new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"]( glyphSize.w - (scaledFrame.frame.w * 2.0), glyphSize.h - (scaledFrame.frame.h * 2.0) );
+        let center = new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(frameSize.w / 2, frameSize.h / 2);
+        let frameLgth = new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size( frameSize.w - (scaledFrame.frame.w * 2.0), frameSize.h - (scaledFrame.frame.h * 2.0) );
+        let uvLgth = new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size( glyphSize.w - (scaledFrame.frame.w * 2.0), glyphSize.h - (scaledFrame.frame.h * 2.0) );
 
-        let quadBuf = [new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__["Quad2d"], new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__["Quad2d"], new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__["Quad2d"], new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__["Quad2d"], new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__["Quad2d"], new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__["Quad2d"], new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__["Quad2d"], new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__["Quad2d"]];
+        let quadBuf = [new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__.Quad2d, new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__.Quad2d, new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__.Quad2d, new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__.Quad2d, new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__.Quad2d, new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__.Quad2d, new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__.Quad2d, new _common_quad2d__WEBPACK_IMPORTED_MODULE_3__.Quad2d];
 
         // Left frame
         this.createQuad( 
-            new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](-center.x, center.y-scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, -frameLgth.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](0, scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, uvLgth.h),
+            new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(-center.x, center.y-scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, -frameLgth.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(0, scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, uvLgth.h),
             textureSize,
             frameSize,
             spriteSheetOffset,
@@ -1945,10 +1862,10 @@ class VertexBufferManager
 
         // top left
         this.createQuad(
-            new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](-center.x, center.y),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, -scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](0, 0),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, scaledFrame.frame.h),
+            new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(-center.x, center.y),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, -scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(0, 0),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, scaledFrame.frame.h),
             textureSize,
             frameSize,
             spriteSheetOffset,
@@ -1956,10 +1873,10 @@ class VertexBufferManager
 
         // top
         this.createQuad(
-            new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](-(center.x-scaledFrame.frame.w), center.y),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](frameLgth.w, -scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, 0),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](uvLgth.w, scaledFrame.frame.h),
+            new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(-(center.x-scaledFrame.frame.w), center.y),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(frameLgth.w, -scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, 0),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(uvLgth.w, scaledFrame.frame.h),
             textureSize,
             frameSize,
             spriteSheetOffset,
@@ -1967,10 +1884,10 @@ class VertexBufferManager
 
         // top right
         this.createQuad(
-            new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](center.x-scaledFrame.frame.w, center.y),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, -scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w + uvLgth.w, 0),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, scaledFrame.frame.h),
+            new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(center.x-scaledFrame.frame.w, center.y),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, -scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w + uvLgth.w, 0),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, scaledFrame.frame.h),
             textureSize,
             frameSize,
             spriteSheetOffset,
@@ -1978,10 +1895,10 @@ class VertexBufferManager
 
         // right frame
         this.createQuad(
-            new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](center.x-scaledFrame.frame.w, center.y-scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, -frameLgth.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w + uvLgth.w, scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, uvLgth.h),
+            new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(center.x-scaledFrame.frame.w, center.y-scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, -frameLgth.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w + uvLgth.w, scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, uvLgth.h),
             textureSize,
             frameSize,
             spriteSheetOffset,
@@ -1989,10 +1906,10 @@ class VertexBufferManager
 
         // bottom right
         this.createQuad(
-            new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](center.x-scaledFrame.frame.w, -(center.y-scaledFrame.frame.h)),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, -scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w + uvLgth.w, scaledFrame.frame.h + uvLgth.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, scaledFrame.frame.h),
+            new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(center.x-scaledFrame.frame.w, -(center.y-scaledFrame.frame.h)),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, -scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w + uvLgth.w, scaledFrame.frame.h + uvLgth.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, scaledFrame.frame.h),
             textureSize,
             frameSize,
             spriteSheetOffset,
@@ -2000,10 +1917,10 @@ class VertexBufferManager
 
         // bottom frame
         this.createQuad(
-            new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](-(center.x-scaledFrame.frame.w), -(center.y-scaledFrame.frame.h)),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](frameLgth.w, -scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, scaledFrame.frame.h + uvLgth.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](uvLgth.w, scaledFrame.frame.h),
+            new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(-(center.x-scaledFrame.frame.w), -(center.y-scaledFrame.frame.h)),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(frameLgth.w, -scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, scaledFrame.frame.h + uvLgth.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(uvLgth.w, scaledFrame.frame.h),
             textureSize,
             frameSize,
             spriteSheetOffset,
@@ -2011,10 +1928,10 @@ class VertexBufferManager
 
         // bottom left
         this.createQuad(
-            new _common_point__WEBPACK_IMPORTED_MODULE_1__["Point"](-center.x, -(center.y-scaledFrame.frame.h)),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, -scaledFrame.frame.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](0, scaledFrame.frame.h + uvLgth.h),
-            new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](scaledFrame.frame.w, scaledFrame.frame.h),
+            new _common_point__WEBPACK_IMPORTED_MODULE_1__.Point(-center.x, -(center.y-scaledFrame.frame.h)),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, -scaledFrame.frame.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(0, scaledFrame.frame.h + uvLgth.h),
+            new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(scaledFrame.frame.w, scaledFrame.frame.h),
             textureSize,
             frameSize,
             spriteSheetOffset,
@@ -2092,7 +2009,7 @@ class VertexBufferManager
         if( groupMap !== undefined )
         {
             for( let [ key, vboID ] of groupMap.entries() )
-                _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].deleteBuffer( vboID );
+                _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer( vboID );
             
             this.vertexBufMapMap.delete( group );
         }
@@ -2101,7 +2018,7 @@ class VertexBufferManager
         if( groupMap !== undefined )
         {
             for( let [ key, iboID ] of groupMap.entries() )
-                _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].deleteBuffer( iboID );
+                _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer( iboID );
             
             this.indexBufMapMap.delete( group );
         }
@@ -2136,7 +2053,7 @@ class VertexBufferManager
             this.currentVBO = vbo;
 
             // Have OpenGL bind this buffer now
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, vbo );
         }
 
         if( this.currentIBO != ibo )
@@ -2145,7 +2062,7 @@ class VertexBufferManager
             this.currentIBO = ibo;
 
             // Have OpenGL bind this buffer now
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, ibo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, ibo );
         }
     }
     
@@ -2156,8 +2073,8 @@ class VertexBufferManager
     {
         this.currentVBO = null;
         this.currentIBO = null;
-        _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, null );
-        _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, null );
+        _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, null );
+        _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, null );
     }
 }
 
@@ -2166,11 +2083,13 @@ var vertexBufferManager = new VertexBufferManager;
 
 /***/ }),
 /* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Point", function() { return Point; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Point": () => (/* binding */ Point)
+/* harmony export */ });
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 
 // 
@@ -2207,9 +2126,9 @@ class Point
     
     convertToRads()
     {
-        this.x *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
-        this.y *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
-        this.z *= _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"];
+        this.x *= _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEG_TO_RAD;
+        this.y *= _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEG_TO_RAD;
+        this.z *= _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEG_TO_RAD;
     }
     
     setXYZ( x = 0, y = 0, z = 0 )
@@ -2357,11 +2276,13 @@ class Point
 
 /***/ }),
 /* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quad2d", function() { return Quad2d; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Quad2d": () => (/* binding */ Quad2d)
+/* harmony export */ });
 /* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 
 // 
@@ -2376,18 +2297,20 @@ class Quad2d
 {
     constructor()
     {
-        this.vert = [new _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__["Vertex2d"], new _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__["Vertex2d"], new _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__["Vertex2d"], new _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__["Vertex2d"]];
+        this.vert = [new _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__.Vertex2d, new _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__.Vertex2d, new _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__.Vertex2d, new _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__.Vertex2d];
     }
 }
 
 
 /***/ }),
 /* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Vertex2d", function() { return Vertex2d; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Vertex2d": () => (/* binding */ Vertex2d)
+/* harmony export */ });
 
 // 
 //  FILE NAME:  vertex2d.js
@@ -2422,11 +2345,13 @@ class Vertex2d
 
 /***/ }),
 /* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shaderManager", function() { return shaderManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "shaderManager": () => (/* binding */ shaderManager)
+/* harmony export */ });
 /* harmony import */ var _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
@@ -2488,16 +2413,16 @@ class ShaderManager
             throw new Error( `Shader of this name already exists (${shaderId}).` );
         
         // Add an entry to the map
-        let shaderData = new _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__["ShaderData"];
+        let shaderData = new _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__.ShaderData;
         this.shaderMap.set( shaderId, shaderData );
         
         // Create the vertex shader
-        let vertPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__["downloadFile"]( 'txt', vertexNode[0].getAttribute('file') )
-            .then(( vertText ) => this.create( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].VERTEX_SHADER, shaderData, shaderId, vertText ) );
+        let vertPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'txt', vertexNode[0].getAttribute('file') )
+            .then(( vertText ) => this.create( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.VERTEX_SHADER, shaderData, shaderId, vertText ) );
 
         // Create the frag shader
-        let fragPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__["downloadFile"]( 'txt', fragmentNode[0].getAttribute('file') )
-            .then( (fragText ) => this.create( _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].FRAGMENT_SHADER, shaderData, shaderId, fragText ) );
+        let fragPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'txt', fragmentNode[0].getAttribute('file') )
+            .then( (fragText ) => this.create( _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.FRAGMENT_SHADER, shaderData, shaderId, fragText ) );
             
         return Promise.all( [vertPromise, fragPromise] )
             .then(() =>
@@ -2509,7 +2434,7 @@ class ShaderManager
                 this.locateShaderVariables( shaderData, vertexNode[0].getElementsByTagName('dataType'), fragmentNode[0].getElementsByTagName('dataType') );
 
                 // Init the shader
-                _managers_signalmanager__WEBPACK_IMPORTED_MODULE_2__["signalManager"].broadcast_initShader( shaderId );
+                _managers_signalmanager__WEBPACK_IMPORTED_MODULE_2__.signalManager.broadcast_initShader( shaderId );
             });
     }
     
@@ -2518,19 +2443,19 @@ class ShaderManager
     //
     create( shaderType, shaderData, shaderTxtId, shaderTxt )
     {
-        let id = _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].createShader(shaderType);
+        let id = _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.createShader(shaderType);
         if( id === 0 )
             throw new Error( `Error creating shader (${shaderTxtId}).` );
         
         // Load the shader text
-        _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].shaderSource(id, shaderTxt);
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.shaderSource(id, shaderTxt);
         
         // Compile the shader and check for error
-        _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].compileShader(id);
-        if( !_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getShaderParameter(id, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].COMPILE_STATUS) )
-                throw new Error( `ERROR compiling shader! (${_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getShaderInfoLog(id)}).` );
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.compileShader(id);
+        if( !_system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getShaderParameter(id, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.COMPILE_STATUS) )
+                throw new Error( `ERROR compiling shader! (${_system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getShaderInfoLog(id)}).` );
         
-        if( shaderType === _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].VERTEX_SHADER )
+        if( shaderType === _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.VERTEX_SHADER )
             shaderData.vertexId = id;
 
         else
@@ -2543,20 +2468,20 @@ class ShaderManager
     createProgram( shaderData )
     {
         // Combine the shaders into a program
-        shaderData.programId = _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].createProgram();
-        _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].attachShader( shaderData.programId, shaderData.vertexId );
-        _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].attachShader( shaderData.programId, shaderData.fragmentId );
+        shaderData.programId = _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.createProgram();
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.attachShader( shaderData.programId, shaderData.vertexId );
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.attachShader( shaderData.programId, shaderData.fragmentId );
         
         // Link the shader program
-        _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].linkProgram( shaderData.programId );
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.linkProgram( shaderData.programId );
             
-        if( !_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getProgramParameter( shaderData.programId, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].LINK_STATUS ) )
-            throw new Error( `ERROR linking program! (${_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getProgramInfoLog(shaderData.programId)}).` );
+        if( !_system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getProgramParameter( shaderData.programId, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.LINK_STATUS ) )
+            throw new Error( `ERROR linking program! (${_system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getProgramInfoLog(shaderData.programId)}).` );
 
-        _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].validateProgram( shaderData.programId );
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.validateProgram( shaderData.programId );
 
-        if( !_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getProgramParameter( shaderData.programId, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].VALIDATE_STATUS ) )
-            throw new Error( `ERROR validating program! (${_system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getProgramInfoLog(shaderData.programId)}).` );
+        if( !_system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getProgramParameter( shaderData.programId, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.VALIDATE_STATUS ) )
+            throw new Error( `ERROR validating program! (${_system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getProgramInfoLog(shaderData.programId)}).` );
     }
     
     // 
@@ -2570,19 +2495,19 @@ class ShaderManager
             
             if( vertNode[i].getAttribute('location') )
             {
-                shaderData.locationMap.set( name, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getAttribLocation(shaderData.programId, name) );
+                shaderData.locationMap.set( name, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getAttribLocation(shaderData.programId, name) );
                 ++shaderData.attributeCount;
             }
             else
             {
-                shaderData.locationMap.set( name, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getUniformLocation(shaderData.programId, name) );
+                shaderData.locationMap.set( name, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getUniformLocation(shaderData.programId, name) );
             }
         }
         
         for( let i = 0; i < fragNode.length; ++i )
         {
             let name = fragNode[i].getAttribute('name');
-            shaderData.locationMap.set( name, _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].getUniformLocation(shaderData.programId, name) );
+            shaderData.locationMap.set( name, _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.getUniformLocation(shaderData.programId, name) );
         }
     }
     
@@ -2593,7 +2518,7 @@ class ShaderManager
     {
         if( this.currentShaderData != shaderData )
         {
-            let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__["device"].glContext;
+            let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.glContext;
             
             if( this.currentShaderData === null )
             {
@@ -2632,11 +2557,11 @@ class ShaderManager
     unbind()
     {
         for( let i = 0; i < this.currentAttributeCount; ++i )
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].disableVertexAttribArray(i);
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.disableVertexAttribArray(i);
     
         this.currentShaderData = null;
         this.currentAttributeCount = 0;
-        _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].useProgram( null );
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.useProgram( null );
     }
     
     // 
@@ -2666,7 +2591,7 @@ class ShaderManager
             // Bind the shader so that we can change the value of the member
             this.bind( shaderData );
 
-            _system_device__WEBPACK_IMPORTED_MODULE_1__["gl"].uniform4fv( location, data );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.gl.uniform4fv( location, data );
 
             // Unbind now that we are done
             this.unbind();
@@ -2688,11 +2613,13 @@ var shaderManager = new ShaderManager;
 
 /***/ }),
 /* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ShaderData", function() { return ShaderData; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ShaderData": () => (/* binding */ ShaderData)
+/* harmony export */ });
 
 // 
 //  FILE NAME: shaderdata.js
@@ -2741,11 +2668,13 @@ class ShaderData
 
 /***/ }),
 /* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TestArenaState", function() { return TestArenaState; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TestArenaState": () => (/* binding */ TestArenaState)
+/* harmony export */ });
 /* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
@@ -2818,25 +2747,25 @@ __webpack_require__.r(__webpack_exports__);
 //const STARTUP_ASSET_COUNT = 80,
 //      MIN_LOAD_TIME = 1500;
 
-class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"]
+class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 {
     constructor( gameLoopCallback )
     {
-        super( _statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_STARTUP"], _statedefs__WEBPACK_IMPORTED_MODULE_14__["EGS_TITLE_SCREEN"], gameLoopCallback );
+        super( _statedefs__WEBPACK_IMPORTED_MODULE_14__.EGS_STARTUP, _statedefs__WEBPACK_IMPORTED_MODULE_14__.EGS_TITLE_SCREEN, gameLoopCallback );
 
         // Load the list tables
-        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__["objectDataManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__["default"] ) );
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__.objectDataManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__.default ) );
         //objectDataManager.loadListTableFromNode( genFunc.stringLoadXML( dataListTable3D ) );
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__["strategyManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__["default"] ) );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__.strategyManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__.default ) );
         //soundManager.loadListTableFromNode( genFunc.stringLoadXML( soundManagerListTable ) );
-        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_5__["physicsWorldManager"].loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__["default"] ) );
+        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_5__.physicsWorldManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__.default ) );
         //menuManager.loadListTableFromNode( genFunc.stringLoadXML( menuManagerListTable ) );
-        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_4__["cameraManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__["default"] ) );
+        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_4__.cameraManager.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__.default ) );
         //actionManager.loadFromNode( genFunc.stringLoadXML( actionManagerCfg ) );
         //menuManager.loadMenuActionFromNode( genFunc.stringLoadXML( menuActionLst ) );
 
         // Load the scripts
-        _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__["loadScripts"]();
+        _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__.loadScripts();
         //utilScripts.loadScripts();
         //stateScripts.loadScripts();
         //menuScripts.loadScripts();
@@ -2861,25 +2790,25 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"
         let groupAry = ['(space_ship)'];
 
         // Set the timer to see how long the load takes
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__["highResTimer"].timerStart();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__.highResTimer.timerStart();
 
         Promise.all([
 
             // Load the shaders
-            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__["default"] ) ),
+            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__.default ) ),
 
             // Load the object data
-            _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__["objectDataManager"].loadGroup( groupAry )
+            _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__.objectDataManager.loadGroup( groupAry )
 
         ])
         // Create and load all the actor strategies.
-        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_7__["strategyLoader"].load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__["stringLoadXML"]( raw_loader_data_objects_strategy_spaceShip_loader__WEBPACK_IMPORTED_MODULE_20__["default"] ) ))
+        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_7__.strategyLoader.load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_strategy_spaceShip_loader__WEBPACK_IMPORTED_MODULE_20__.default ) ))
 
         // Clean up the temporary files
         .then(() =>
         {
-            _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__["assetHolder"].deleteGroup( groupAry );
-            _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__["spriteSheetManager"].deleteGroup( groupAry );
+            _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__.assetHolder.deleteGroup( groupAry );
+            _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__.spriteSheetManager.deleteGroup( groupAry );
         })
 
         // Last thing to do is call the load complete function
@@ -2891,10 +2820,10 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"
     //
     loadComplete()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__["strategyManager"].activateStrategy('_space_ship_');
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__.strategyManager.activateStrategy('_space_ship_');
 
         // Reset the elapsed time before entering the render loop
-        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__["highResTimer"].calcElapsedTime();
+        _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__.highResTimer.calcElapsedTime();
 
         // Start the game loop
         requestAnimationFrame( this.callback );
@@ -2939,7 +2868,7 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"
     update()
     {
         //this.scriptComponent.update();
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__["strategyManager"].update();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__.strategyManager.update();
     }
     
     // 
@@ -2947,7 +2876,7 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"
     //
     transform()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__["strategyManager"].transform();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__.strategyManager.transform();
     }
 
     //
@@ -2955,7 +2884,7 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"
     //
     render()
     {
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__["strategyManager"].render();
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__.strategyManager.render();
     }
 
     //
@@ -2974,11 +2903,13 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__["GameState"
 
 /***/ }),
 /* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameState", function() { return GameState; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "GameState": () => (/* binding */ GameState)
+/* harmony export */ });
 /* harmony import */ var _statemessage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 
@@ -3002,7 +2933,7 @@ class GameState
         this.callback = callback;
         
         // Message to send to next state
-        this.stateMessage = new _statemessage__WEBPACK_IMPORTED_MODULE_0__["StateMessage"];
+        this.stateMessage = new _statemessage__WEBPACK_IMPORTED_MODULE_0__.StateMessage;
     }
     
     cleanUp()
@@ -3046,10 +2977,10 @@ class GameState
     getGameState( gameStateStr )
     {
         if( gameStateStr === 'title_screen_state' )
-            return _statedefs__WEBPACK_IMPORTED_MODULE_1__["EGS_TITLE_SCREEN"];
+            return _statedefs__WEBPACK_IMPORTED_MODULE_1__.EGS_TITLE_SCREEN;
         
         else if( gameStateStr === 'level_1_state' )
-            return _statedefs__WEBPACK_IMPORTED_MODULE_1__["EGS_LEVEL_1"];
+            return _statedefs__WEBPACK_IMPORTED_MODULE_1__.EGS_LEVEL_1;
         
         throw new Error( `State does not exist!. (${gameStateStr})` );
     }
@@ -3059,10 +2990,10 @@ class GameState
     //
     getStateStr( gameState )
     {
-        if( gameState === _statedefs__WEBPACK_IMPORTED_MODULE_1__["EGS_TITLE_SCREEN"] )
+        if( gameState === _statedefs__WEBPACK_IMPORTED_MODULE_1__.EGS_TITLE_SCREEN )
             return 'title_screen_state';
         
-        else if( gameState === _statedefs__WEBPACK_IMPORTED_MODULE_1__["EGS_LEVEL_1"] )
+        else if( gameState === _statedefs__WEBPACK_IMPORTED_MODULE_1__.EGS_LEVEL_1 )
             return 'level_1_state';
         
         throw new Error( `State does not exist!. (${gameState})` );
@@ -3072,11 +3003,13 @@ class GameState
 
 /***/ }),
 /* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StateMessage", function() { return StateMessage; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "StateMessage": () => (/* binding */ StateMessage)
+/* harmony export */ });
 
 // 
 //  FILE NAME: statemessage.js
@@ -3103,19 +3036,21 @@ class StateMessage
 
 /***/ }),
 /* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGS_NULL", function() { return EGS_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGS_STARTUP", function() { return EGS_STARTUP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGS_TITLE_SCREEN", function() { return EGS_TITLE_SCREEN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGS_GAME_LOAD", function() { return EGS_GAME_LOAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGS_LEVEL_1", function() { return EGS_LEVEL_1; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESE_STATE_EVENTS", function() { return ESE_STATE_EVENTS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESE_FADE_IN_COMPLETE", function() { return ESE_FADE_IN_COMPLETE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESE_FADE_OUT_COMPLETE", function() { return ESE_FADE_OUT_COMPLETE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ESE_ASSET_LOAD_COMPLETE", function() { return ESE_ASSET_LOAD_COMPLETE; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "EGS_NULL": () => (/* binding */ EGS_NULL),
+/* harmony export */   "EGS_STARTUP": () => (/* binding */ EGS_STARTUP),
+/* harmony export */   "EGS_TITLE_SCREEN": () => (/* binding */ EGS_TITLE_SCREEN),
+/* harmony export */   "EGS_GAME_LOAD": () => (/* binding */ EGS_GAME_LOAD),
+/* harmony export */   "EGS_LEVEL_1": () => (/* binding */ EGS_LEVEL_1),
+/* harmony export */   "ESE_STATE_EVENTS": () => (/* binding */ ESE_STATE_EVENTS),
+/* harmony export */   "ESE_FADE_IN_COMPLETE": () => (/* binding */ ESE_FADE_IN_COMPLETE),
+/* harmony export */   "ESE_FADE_OUT_COMPLETE": () => (/* binding */ ESE_FADE_OUT_COMPLETE),
+/* harmony export */   "ESE_ASSET_LOAD_COMPLETE": () => (/* binding */ ESE_ASSET_LOAD_COMPLETE)
+/* harmony export */ });
 
 // 
 //  FILE NAME: statedefs.js
@@ -3141,11 +3076,13 @@ const ESE_STATE_EVENTS         = 1000,
 
 /***/ }),
 /* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scriptManager", function() { return scriptManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "scriptManager": () => (/* binding */ scriptManager)
+/* harmony export */ });
 
 //
 //  FILE NAME: scriptmanager.js
@@ -3200,11 +3137,13 @@ var scriptManager = new ScriptManager;
 
 /***/ }),
 /* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "objectDataManager", function() { return objectDataManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "objectDataManager": () => (/* binding */ objectDataManager)
+/* harmony export */ });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(24);
@@ -3232,7 +3171,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["ManagerBase"]
+class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
 {
     constructor()
     {
@@ -3269,9 +3208,9 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
 
         let defaultData;
         if( loadType === LOAD_2D )
-            defaultData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__["ObjectData2D"];
+            defaultData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__.ObjectData2D;
         else
-            defaultData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__["ObjectData3D"];
+            defaultData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__.ObjectData3D;
 
         // Load the default data
         defaultData.loadObjData( node.getElementsByTagName('default')[0], '', '' );
@@ -3289,9 +3228,9 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
             {
                 let objData
                 if( loadType === LOAD_2D )
-                    objData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__["ObjectData2D"];
+                    objData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__.ObjectData2D;
                 else
-                    objData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__["ObjectData3D"];
+                    objData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__.ObjectData3D;
                 
                 objData.copy(defaultData);
 
@@ -3334,35 +3273,35 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
                         {
                             let filePath = filePathAry[i];
 
-                            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].allowLoad( group, filePath ) )
+                            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.allowLoad( group, filePath ) )
                             {
                                 // Load the texture file
                                 promiseAry.push( 
-                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'img', filePath )
-                                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( group, filePath, image ))
+                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'img', filePath )
+                                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image ))
                                         .catch(( error ) => { console.error(error.stack); throw error; }));
                             }
                         }
                         
                         // Load the XML mesh
                         let meshFilePath = objData.visualData.meshFilePath;
-                        if( meshFilePath && _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__["assetHolder"].allowLoad( group, meshFilePath ) )
+                        if( meshFilePath && _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__.assetHolder.allowLoad( group, meshFilePath ) )
                         {
                             // Load the mesh file
                             promiseAry.push( 
-                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', meshFilePath )
-                                    .then(( xmlNode ) => _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__["assetHolder"].set( group, meshFilePath, xmlNode ))
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'xml', meshFilePath )
+                                    .then(( xmlNode ) => _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__.assetHolder.set( group, meshFilePath, xmlNode ))
                                     .catch(( error ) => { console.error(error.stack); throw error; }));
                         }
 
                         // Load the XML sprite sheet
                         let spriteSheetfilePath = objData.visualData.spriteSheetFilePath;
-                        if( spriteSheetfilePath && _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__["spriteSheetManager"].allowLoad( group, spriteSheetfilePath ) )
+                        if( spriteSheetfilePath && _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__.spriteSheetManager.allowLoad( group, spriteSheetfilePath ) )
                         {
                             // Load the mesh file
                             promiseAry.push( 
-                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'xml', spriteSheetfilePath )
-                                    .then(( xmlNode ) => _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__["spriteSheetManager"].load( group, spriteSheetfilePath, xmlNode ))
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'xml', spriteSheetfilePath )
+                                    .then(( xmlNode ) => _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__.spriteSheetManager.load( group, spriteSheetfilePath, xmlNode ))
                                     .catch(( error ) => { console.error(error.stack); throw error; }));
                         }
                     }
@@ -3371,11 +3310,11 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
                     {
                         let filePath = objData.visualData.meshFilePath;
 
-                        if( filePath && _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__["meshManager"].allowLoad( group, filePath ) )
+                        if( filePath && _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.allowLoad( group, filePath ) )
                         {
                             // Load the mesh file
                             promiseAry.push( 
-                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'binary', filePath )
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'binary', filePath )
                                     .then(( binaryFile ) => this.loadMesh3D( group, filePath, objData, binaryFile ))
                                     .catch(( error ) => { console.error(error.stack); throw error; }));
                         }
@@ -3399,7 +3338,7 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
         let promiseAry = [];
 
         objData.visualData.meshGrp =
-            _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__["meshManager"].load( group, binaryFilePath, binaryFile );
+            _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.load( group, binaryFilePath, binaryFile );
 
         let filePathAry = objData.visualData.meshGrp.uniqueTexturePathAry;
 
@@ -3408,12 +3347,12 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
         {
             let filePath = filePathAry[i].path;
             
-            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].allowLoad( group, filePath ) )
+            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.allowLoad( group, filePath ) )
             {
                 // Load the texture file
                 promiseAry.push( 
-                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__["downloadFile"]( 'img', filePath )
-                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( group, filePath, image ))
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'img', filePath )
+                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image ))
                         .catch(( error ) => { console.error(error.stack); throw error; }));
             }
         }
@@ -3463,9 +3402,9 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
             // Get the group map
             if( this.objectDataMapMap.has( group ) )
             {
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].deleteGroup( group );
-                _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].deleteGroup( group );
-                _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__["meshManager"].deleteGroup( group );
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.deleteGroup( group );
+                _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.deleteGroup( group );
+                _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.deleteGroup( group );
 
                 this.objectDataMapMap.delete( group );
             }
@@ -3497,11 +3436,13 @@ var objectDataManager = new ObjectDataManager;
 
 /***/ }),
 /* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ManagerBase", function() { return ManagerBase; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ManagerBase": () => (/* binding */ ManagerBase)
+/* harmony export */ });
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 
 //
@@ -3525,7 +3466,7 @@ class ManagerBase
     //
     loadListTable( filePath )
     {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__["downloadFile"]( 'xml', filePath,
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__.downloadFile( 'xml', filePath,
             ( xmlNode ) => this.loadListTableFromNode( xmlNode ));
     }
     
@@ -3607,7 +3548,7 @@ class ManagerBase
             {
                 let filePath = filePathAry[i];
                 promiseAry.push( 
-                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__["downloadFile"]( 'xml', filePath )
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__.downloadFile( 'xml', filePath )
                         .then(( xmlNode ) => this.loadFromNode( group, xmlNode, filePath ))
                         .catch(( error ) => { console.error(error.stack); throw error; }));
             }
@@ -3627,11 +3568,13 @@ class ManagerBase
 
 /***/ }),
 /* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "meshManager", function() { return meshManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "meshManager": () => (/* binding */ meshManager)
+/* harmony export */ });
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
 /* harmony import */ var _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
 /* harmony import */ var _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
@@ -3678,7 +3621,7 @@ class MeshManager
         let meshGrp = groupMap.get( filePath );
         if( meshGrp === undefined || meshGrp === -1 )
         {
-            meshGrp = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__["MeshGroup"];
+            meshGrp = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__.MeshGroup;
             groupMap.set( filePath, meshGrp );
             
             this.loadData( group, filePath, binaryData, meshGrp );
@@ -3781,7 +3724,7 @@ class MeshManager
     //
     loadFileHeader( dataView, group, filePath )
     {
-        let fileHeader = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["MeshBinaryFileHeader"];
+        let fileHeader = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.MeshBinaryFileHeader;
         
         fileHeader.file_header      = dataView.getUint32( this.counter, true ); this.counter += 4;
         fileHeader.vert_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
@@ -3792,7 +3735,7 @@ class MeshManager
         fileHeader.joint_count      = dataView.getUint16( this.counter, true ); this.counter += 2;
         
         // Check to make sure we're loading in the right kind of file
-        if( fileHeader.file_header !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["MESH_FILE_HEADER"] )
+        if( fileHeader.file_header !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.MESH_FILE_HEADER )
             throw new Error( `File header mismatch! (${group}, ${filePath}).` );
         
         return fileHeader;
@@ -3805,12 +3748,12 @@ class MeshManager
     {
         for( let i = 0; i < fileHeader.text_count; ++i )
         {
-            let uniqueTextAry = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["BinaryTexture"];
+            let uniqueTextAry = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryTexture;
             meshGrp.uniqueTexturePathAry.push( uniqueTextAry );
 
             uniqueTextAry.type = dataView.getInt8( this.counter, true ); this.counter += 1;
 
-            for( let j = 0; j < _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["TEXT_PATH_SIZE"]; ++j )
+            for( let j = 0; j < _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TEXT_PATH_SIZE; ++j )
             {
                 let charCode = dataView.getInt8( this.counter, true ); this.counter += 1;
 
@@ -3820,7 +3763,7 @@ class MeshManager
                 }
                 else
                 {
-                    this.counter += _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["TEXT_PATH_SIZE"] - j - 1;
+                    this.counter += _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TEXT_PATH_SIZE - j - 1;
                     break;
                 }
             }
@@ -3885,7 +3828,7 @@ class MeshManager
     //
     buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry )
     {
-        let faceGroup = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["BinaryFaceGroup"];
+        let faceGroup = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryFaceGroup;
         
         // Read in each face group
         for( let i = 0; i < fileHeader.face_group_count; ++i )
@@ -3894,7 +3837,7 @@ class MeshManager
             this.tagCheck( dataView, true, group, filePath );
             
             // Allocate the mesh storage
-            let mesh = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__["Mesh"];
+            let mesh = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__.Mesh;
             meshGrp.meshAry.push( mesh );
             
             faceGroup.groupFaceCount = dataView.getUint16( this.counter, true ); this.counter += 2;
@@ -3913,7 +3856,7 @@ class MeshManager
             let vertBufAry = [];
             for( let j = 0; j < faceGroup.vertexBufCount; ++j )
             {
-                let binaryVertex = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["BinaryVertex"];
+                let binaryVertex = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryVertex;
                 vertBufAry.push( binaryVertex );
                 
                 binaryVertex.vert = dataView.getUint16( this.counter, true ); this.counter += 2;
@@ -3947,16 +3890,16 @@ class MeshManager
             }
             
             // Create the vbo
-            mesh.vbo = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, mesh.vbo );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, new Float32Array(vboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ARRAY_BUFFER, null );
+            mesh.vbo = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, mesh.vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, new Float32Array(vboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, null );
             
             // Create the ibo
-            mesh.ibo = _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, mesh.ibo );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, new Uint16Array(iboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].ELEMENT_ARRAY_BUFFER, null );
+            mesh.ibo = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, mesh.ibo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(iboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, null );
             
             // Save the number of indexes in the IBO buffer - Will need this for the render call
             mesh.iboCount = faceGroup.indexBufCount;
@@ -3971,7 +3914,7 @@ class MeshManager
         if( allowCheck )
         {
             let tag = dataView.getUint32( this.counter, true ); this.counter += 4;
-            if( tag !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__["TAG_CHECK"] )
+            if( tag !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TAG_CHECK )
                 throw new Error( `Tag check mismatch! (${group}, ${filePath}).` );
         }
     }
@@ -3988,8 +3931,8 @@ class MeshManager
             {
                 for( let i = 0; i < meshGrp.meshAry.length; ++i )
                 {
-                    _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].deleteBuffer( meshGrp.meshAry[i].vbo );
-                    _system_device__WEBPACK_IMPORTED_MODULE_0__["gl"].deleteBuffer( meshGrp.meshAry[i].ibo );
+                    _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer( meshGrp.meshAry[i].vbo );
+                    _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer( meshGrp.meshAry[i].ibo );
                 }
             }
 
@@ -4003,19 +3946,21 @@ var meshManager = new MeshManager;
 
 /***/ }),
 /* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MESH_FILE_HEADER", function() { return MESH_FILE_HEADER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TAG_CHECK", function() { return TAG_CHECK; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TEXT_PATH_SIZE", function() { return TEXT_PATH_SIZE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JOINT_NAME_SIZE", function() { return JOINT_NAME_SIZE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeshBinaryFileHeader", function() { return MeshBinaryFileHeader; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryTexture", function() { return BinaryTexture; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryFaceGroup", function() { return BinaryFaceGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryFace", function() { return BinaryFace; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BinaryVertex", function() { return BinaryVertex; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MESH_FILE_HEADER": () => (/* binding */ MESH_FILE_HEADER),
+/* harmony export */   "TAG_CHECK": () => (/* binding */ TAG_CHECK),
+/* harmony export */   "TEXT_PATH_SIZE": () => (/* binding */ TEXT_PATH_SIZE),
+/* harmony export */   "JOINT_NAME_SIZE": () => (/* binding */ JOINT_NAME_SIZE),
+/* harmony export */   "MeshBinaryFileHeader": () => (/* binding */ MeshBinaryFileHeader),
+/* harmony export */   "BinaryTexture": () => (/* binding */ BinaryTexture),
+/* harmony export */   "BinaryFaceGroup": () => (/* binding */ BinaryFaceGroup),
+/* harmony export */   "BinaryFace": () => (/* binding */ BinaryFace),
+/* harmony export */   "BinaryVertex": () => (/* binding */ BinaryVertex)
+/* harmony export */ });
 
 //
 //  FILE NAME: meshbinaryfileheader.js
@@ -4095,12 +4040,14 @@ class BinaryVertex
 
 /***/ }),
 /* 26 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MeshGroup", function() { return MeshGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mesh", function() { return Mesh; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MeshGroup": () => (/* binding */ MeshGroup),
+/* harmony export */   "Mesh": () => (/* binding */ Mesh)
+/* harmony export */ });
 
 //
 //  FILE NAME: mesh3d.js
@@ -4145,11 +4092,13 @@ class Mesh
 
 /***/ }),
 /* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "spriteSheetManager", function() { return spriteSheetManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "spriteSheetManager": () => (/* binding */ spriteSheetManager)
+/* harmony export */ });
 /* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
 
 //
@@ -4183,7 +4132,7 @@ class SpriteSheetManager
         let spriteSheet = groupMap.get( filePath );
         if( spriteSheet === undefined || spriteSheet === -1 )
         {
-            spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__["SpriteSheet"];
+            spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__.SpriteSheet;
             
             // Load the glyph data from XML node
             spriteSheet.loadFromNode( node );
@@ -4258,11 +4207,13 @@ var spriteSheetManager = new SpriteSheetManager;
 
 /***/ }),
 /* 28 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteSheet", function() { return SpriteSheet; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteSheet": () => (/* binding */ SpriteSheet)
+/* harmony export */ });
 /* harmony import */ var _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(29);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
@@ -4316,13 +4267,13 @@ class SpriteSheet
             for( let i = 0; i < obj.glyphAry.length; ++i )
             {
                 let glyph = obj.glyphAry[i];
-                let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"]( glyph.size.w, glyph.size.h );
-                let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_2__["Rect"]( glyph.uv.x1, glyph.uv.y1, glyph.uv.x2, glyph.uv.y2 );
+                let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( glyph.size.w, glyph.size.h );
+                let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect( glyph.uv.x1, glyph.uv.y1, glyph.uv.x2, glyph.uv.y2 );
                 let cropOffset = null;
                 if( glyph.cropOffset )
-                    cropOffset = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"]( glyph.cropOffset.w, glyph.cropOffset.h );
+                    cropOffset = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( glyph.cropOffset.w, glyph.cropOffset.h );
                 
-                this.glyphAry.push( new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__["SpriteSheetGlyph"]( size, rect, cropOffset ) );
+                this.glyphAry.push( new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, rect, cropOffset ) );
             }
         }
     }
@@ -4342,19 +4293,19 @@ class SpriteSheet
                 ++rows;
 
             // Calculate the size of the individual glyph. They are all the same size
-            let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"]( sheetSize.w / this.columns, sheetSize.h / rows );
+            let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( sheetSize.w / this.columns, sheetSize.h / rows );
 
             for( let i = 0; i < rows; ++i )
             {
                 for( let j = 0; j < this.columns; ++j )
                 {
-                    let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_2__["Rect"](
+                    let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(
                         (j * size.w) / sheetSize.w,
                         (i * size.h) / sheetSize.h,
                         size.w / sheetSize.w,
                         size.h / sheetSize.h );
                     
-                    this.glyphAry.push( new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__["SpriteSheetGlyph"]( size, rect ) );
+                    this.glyphAry.push( new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, rect ) );
 
                     // Break out after all the gylphs have been defined
                     if( this.glyphAry.length === this.glyphCount )
@@ -4371,7 +4322,7 @@ class SpriteSheet
     {
         this.glyphMap = new Map;
         
-        let sheetSize = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"];
+        let sheetSize = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size;
         let attr = node.getAttribute('width');
         if( attr )
             sheetSize.w = Number(attr);
@@ -4385,23 +4336,23 @@ class SpriteSheet
         {
             for( let i = 0; i < rectNode.length; ++i )
             {
-                let rect = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadRectFromChild"]( rectNode[i] );
+                let rect = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadRectFromChild( rectNode[i] );
 
-                let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"]( rect.x2, rect.y2 );
+                let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( rect.x2, rect.y2 );
 
-                let uv = new _common_rect__WEBPACK_IMPORTED_MODULE_2__["Rect"](
+                let uv = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(
                     rect.x1 / sheetSize.w,
                     rect.y1 / sheetSize.h,
                     rect.x2 / sheetSize.w,
                     rect.y2 / sheetSize.h );
 
-                let cropOffset = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
+                let cropOffset = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
                     Number(rectNode[i].getAttribute( 'cx' )),
                     Number(rectNode[i].getAttribute( 'cy' )) );
 
                 // Add to the map
                 let strId = rectNode[i].getAttribute( 'name' );
-                this.glyphMap.set( strId, new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__["SpriteSheetGlyph"]( size, uv, cropOffset) );
+                this.glyphMap.set( strId, new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, uv, cropOffset) );
             }
         }
     }
@@ -4505,11 +4456,13 @@ class SpriteSheet
 
 /***/ }),
 /* 29 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteSheetGlyph", function() { return SpriteSheetGlyph; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteSheetGlyph": () => (/* binding */ SpriteSheetGlyph)
+/* harmony export */ });
 
 // 
 //  FILE NAME:  spritesheetglyph.js
@@ -4536,11 +4489,13 @@ class SpriteSheetGlyph
 
 /***/ }),
 /* 30 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Rect", function() { return Rect; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Rect": () => (/* binding */ Rect)
+/* harmony export */ });
 
 // 
 //  FILE NAME:  rect.js
@@ -4580,23 +4535,25 @@ class Rect
 
 /***/ }),
 /* 31 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadVertex2d", function() { return loadVertex2d; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadPosition", function() { return loadPosition; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadRotation", function() { return loadRotation; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScale", function() { return loadScale; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadCenterPos", function() { return loadCenterPos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadXYZ", function() { return loadXYZ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadColor", function() { return loadColor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadSize", function() { return loadSize; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadRect", function() { return loadRect; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadRectFromChild", function() { return loadRectFromChild; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadHorzAlignment", function() { return loadHorzAlignment; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadVertAlignment", function() { return loadVertAlignment; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadDynamicOffset", function() { return loadDynamicOffset; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "loadVertex2d": () => (/* binding */ loadVertex2d),
+/* harmony export */   "loadPosition": () => (/* binding */ loadPosition),
+/* harmony export */   "loadRotation": () => (/* binding */ loadRotation),
+/* harmony export */   "loadScale": () => (/* binding */ loadScale),
+/* harmony export */   "loadCenterPos": () => (/* binding */ loadCenterPos),
+/* harmony export */   "loadXYZ": () => (/* binding */ loadXYZ),
+/* harmony export */   "loadColor": () => (/* binding */ loadColor),
+/* harmony export */   "loadSize": () => (/* binding */ loadSize),
+/* harmony export */   "loadRect": () => (/* binding */ loadRect),
+/* harmony export */   "loadRectFromChild": () => (/* binding */ loadRectFromChild),
+/* harmony export */   "loadHorzAlignment": () => (/* binding */ loadHorzAlignment),
+/* harmony export */   "loadVertAlignment": () => (/* binding */ loadVertAlignment),
+/* harmony export */   "loadDynamicOffset": () => (/* binding */ loadDynamicOffset)
+/* harmony export */ });
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
@@ -4627,7 +4584,7 @@ function loadVertex2d( node )
 {
     if( node )
     {
-        let vert2d = new _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__["Vertex2d"];
+        let vert2d = new _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__.Vertex2d;
         
         let attr = node.getAttribute('x');
         if( attr )
@@ -4664,7 +4621,7 @@ function loadPosition( node )
 
     if( positionNode.length )
     {
-        let point = new _common_point__WEBPACK_IMPORTED_MODULE_2__["Point"];
+        let point = new _common_point__WEBPACK_IMPORTED_MODULE_2__.Point;
         
         let attr = positionNode[0].getAttribute( 'x' );
         if( attr )
@@ -4693,7 +4650,7 @@ function loadRotation( node )
 
     if( rotationNode.length )
     {
-        let rotation = new _common_point__WEBPACK_IMPORTED_MODULE_2__["Point"];
+        let rotation = new _common_point__WEBPACK_IMPORTED_MODULE_2__.Point;
         
         let attr = rotationNode[0].getAttribute( 'x' );
         if( attr )
@@ -4722,7 +4679,7 @@ function loadScale( node )
 
     if( scaleNode.length )
     {
-        let scale = new _common_point__WEBPACK_IMPORTED_MODULE_2__["Point"];
+        let scale = new _common_point__WEBPACK_IMPORTED_MODULE_2__.Point;
         
         let attr = scaleNode[0].getAttribute( 'x' );
         if( attr )
@@ -4751,7 +4708,7 @@ function loadCenterPos( node )
 
     if( centerPosNode.length )
     {
-        let centerPos = new _common_point__WEBPACK_IMPORTED_MODULE_2__["Point"];
+        let centerPos = new _common_point__WEBPACK_IMPORTED_MODULE_2__.Point;
         
         let attr = centerPosNode[0].getAttribute( 'x' );
         if( attr )
@@ -4776,7 +4733,7 @@ function loadCenterPos( node )
 //
 function loadXYZ( node )
 {
-    let point = new _common_point__WEBPACK_IMPORTED_MODULE_2__["Point"];
+    let point = new _common_point__WEBPACK_IMPORTED_MODULE_2__.Point;
 
     let attr = node.getAttribute('x');
     if( attr )
@@ -4799,7 +4756,7 @@ function loadXYZ( node )
 //
 function loadColor( node, currentColor = null )
 {
-    let color = new _common_color__WEBPACK_IMPORTED_MODULE_0__["Color"];
+    let color = new _common_color__WEBPACK_IMPORTED_MODULE_0__.Color;
     
     if( currentColor )
         color.copy( currentColor );
@@ -4835,7 +4792,7 @@ function loadColor( node, currentColor = null )
 //
 function loadSize( node, currentSize = null )
 {
-    let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"];
+    let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size;
     
     if( currentSize )
         size.copy( currentSize );
@@ -4865,12 +4822,12 @@ function loadRect( node )
     if( rectNode.length )
         return loadRectFromChild( rectNode[0] );
 
-    return new _common_rect__WEBPACK_IMPORTED_MODULE_3__["Rect"];
+    return new _common_rect__WEBPACK_IMPORTED_MODULE_3__.Rect;
 }
 
 function loadRectFromChild( node )
 {
-    let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_3__["Rect"];
+    let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_3__.Rect;
     
     let attr = node.getAttribute('x1');
         if( attr )
@@ -4902,13 +4859,13 @@ function loadHorzAlignment( node, aHorzAlign )
     if( horzAlignAttr )
     {
         if( horzAlignAttr === 'left' )
-            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_LEFT"];
+            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EHA_HORZ_LEFT;
 
         else if( horzAlignAttr === 'center' )
-            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_CENTER"];
+            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EHA_HORZ_CENTER;
 
         else if( horzAlignAttr === 'right' )
-            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EHA_HORZ_RIGHT"];
+            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EHA_HORZ_RIGHT;
     }
 
     return horzAlign;
@@ -4925,13 +4882,13 @@ function loadVertAlignment( node, aVertAlign )
     if( vertAlignAttr )
     {
         if( vertAlignAttr === 'top' )
-            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EVA_VERT_TOP"];
+            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EVA_VERT_TOP;
 
         else if( vertAlignAttr === 'center' )
-            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EVA_VERT_CENTER"];
+            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EVA_VERT_CENTER;
 
         else if( vertAlignAttr === 'bottom' )
-            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__["EVA_VERT_BOTTOM"];
+            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EVA_VERT_BOTTOM;
     }
 
     return vertAlign;
@@ -4946,12 +4903,12 @@ function loadDynamicOffset( node )
 
     if( dynamicOffsetNode.length )
     {
-        let dynamicOffset = new _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__["DynamicOffset"];
+        let dynamicOffset = new _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__.DynamicOffset;
         
         let attr = dynamicOffsetNode[0].getAttribute('left');
         if( attr )
         {
-            dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__["EDO_LEFT"] );
+            dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_LEFT );
             dynamicOffset.setX( Number( attr ) );
         }
         else
@@ -4959,7 +4916,7 @@ function loadDynamicOffset( node )
             attr = dynamicOffsetNode[0].getAttribute('right');
             if( attr )
             {
-                dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__["EDO_RIGHT"] );
+                dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_RIGHT );
                 dynamicOffset.setX( Number( attr ) );
             }
             else
@@ -4967,7 +4924,7 @@ function loadDynamicOffset( node )
                 attr = dynamicOffsetNode[0].getAttribute('horzCenter');
                 if( attr )
                 {
-                    dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__["EDO_HORZ_CENTER"] );
+                    dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_HORZ_CENTER );
                     dynamicOffset.setX( Number( attr ) );
                 }
             }
@@ -4976,7 +4933,7 @@ function loadDynamicOffset( node )
         attr = dynamicOffsetNode[0].getAttribute('top');
         if( attr )
         {
-            dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__["EDO_TOP"] );
+            dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_TOP );
             dynamicOffset.setY( Number( attr ) );
         }
         else
@@ -4984,7 +4941,7 @@ function loadDynamicOffset( node )
             attr = dynamicOffsetNode[0].getAttribute('bottom');
             if( attr )
             {
-                dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__["EDO_BOTTOM"] );
+                dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_BOTTOM );
                 dynamicOffset.setY( Number( attr ) );
             }
             else
@@ -4992,7 +4949,7 @@ function loadDynamicOffset( node )
                 attr = dynamicOffsetNode[0].getAttribute('vertCenter');
                 if( attr )
                 {
-                    dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__["EDO_VERT_CENTER"] );
+                    dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_VERT_CENTER );
                     dynamicOffset.setX( Number( attr ) );
                 }
             }
@@ -5007,11 +4964,13 @@ function loadDynamicOffset( node )
 
 /***/ }),
 /* 32 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Color", function() { return Color; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Color": () => (/* binding */ Color)
+/* harmony export */ });
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 
 // 
@@ -5032,22 +4991,22 @@ class Color
     set( r = 1, g = 1, b = 1, a = 1 )
     {
         if( r > 1.5 )
-            this.data[0] = r * _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            this.data[0] = r * _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
         else
             this.data[0] = r;
         
         if( g > 1.5 )
-            this.data[1] = g * _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            this.data[1] = g * _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
         else
             this.data[1] = g;
         
         if( b > 1.5 )
-            this.data[2] = b * _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            this.data[2] = b * _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
         else
             this.data[2] = b;
         
         if( a > 1.5 )
-            this.data[3] = a * _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            this.data[3] = a * _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
         else
             this.data[3] = a;
     }
@@ -5063,7 +5022,7 @@ class Color
     set r(value)
     {
         if( value > 1.5 )
-            value *= _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            value *= _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
         
         this.data[0] = value;
     }
@@ -5072,7 +5031,7 @@ class Color
     set g(value)
     {
         if( value > 1.5 )
-            value *= _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            value *= _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
         
         this.data[1] = value;
     }
@@ -5081,7 +5040,7 @@ class Color
     set b(value)
     {
         if( value > 1.5 )
-            value *= _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            value *= _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
         
         this.data[2] = value;
     }
@@ -5090,7 +5049,7 @@ class Color
     set a(value)
     {
         if( value > 1.5 )
-            value *= _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            value *= _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
         
         this.data[3] = value;
     }
@@ -5103,16 +5062,16 @@ class Color
     {
         // 0.00390625f = 1 / 256;
         if( this.r > 1.5 )
-            this.r *= _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            this.r *= _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
 
         if( this.g > 1.5 )
-            this.g *= _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];;
+            this.g *= _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;;
 
         if( this.b > 1.5 )
-            this.b *= _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            this.b *= _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
 
         if( this.a > 1.5 )
-            this.a *= _defs__WEBPACK_IMPORTED_MODULE_0__["RGB_TO_DEC"];
+            this.a *= _defs__WEBPACK_IMPORTED_MODULE_0__.RGB_TO_DEC;
     }
     
     // 
@@ -5124,8 +5083,8 @@ class Color
     //
     transformHSV( hue, sat, val )
     {
-        let VSU = val * sat * Math.cos(hue * _defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"]);
-        let VSW = val * sat * Math.sin(hue * _defs__WEBPACK_IMPORTED_MODULE_0__["DEG_TO_RAD"]);
+        let VSU = val * sat * Math.cos(hue * _defs__WEBPACK_IMPORTED_MODULE_0__.DEG_TO_RAD);
+        let VSW = val * sat * Math.sin(hue * _defs__WEBPACK_IMPORTED_MODULE_0__.DEG_TO_RAD);
 
         let _r = this.data[0], _g = this.data[1], _b = this.data[2];
 
@@ -5144,11 +5103,13 @@ class Color
 
 /***/ }),
 /* 33 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicOffset", function() { return DynamicOffset; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "DynamicOffset": () => (/* binding */ DynamicOffset)
+/* harmony export */ });
 /* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
 /* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
@@ -5169,10 +5130,10 @@ class DynamicOffset
     constructor()
     {
         // bit mask parameters
-        this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__["BitMask"];
+        this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__.BitMask;
 
         // offset
-        this.point = new _point__WEBPACK_IMPORTED_MODULE_1__["Point"];
+        this.point = new _point__WEBPACK_IMPORTED_MODULE_1__.Point;
     }
     
     // 
@@ -5209,29 +5170,29 @@ class DynamicOffset
     //
     getPos( defaultHalfSize )
     {
-        let pos = new _point__WEBPACK_IMPORTED_MODULE_1__["Point"];
+        let pos = new _point__WEBPACK_IMPORTED_MODULE_1__.Point;
         
-        let halfSize = new _size__WEBPACK_IMPORTED_MODULE_2__["Size"]( defaultHalfSize.w, defaultHalfSize.h );
+        let halfSize = new _size__WEBPACK_IMPORTED_MODULE_2__.Size( defaultHalfSize.w, defaultHalfSize.h );
         
         // Strip out any fractional component for correct rendering
         halfSize.round();
 
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EDO_LEFT"] ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_LEFT ) )
             pos.x = -(halfSize.w - this.point.x);
 
-        else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EDO_RIGHT"] ) )
+        else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_RIGHT ) )
             pos.x = halfSize.w - this.point.x;
 
-        else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EDO_HORZ_CENTER"] ) )
+        else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_HORZ_CENTER ) )
             pos.x = this.point.x;
 
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EDO_TOP"] ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_TOP ) )
             pos.y = halfSize.h - this.point.y;
             
-        else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EDO_BOTTOM"] ) )
+        else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_BOTTOM ) )
             pos.y = -(halfSize.h - this.point.y);
 
-        else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__["EDO_VERT_CENTER"] ) )
+        else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_VERT_CENTER ) )
             pos.y = this.point.y;
 
         return pos;
@@ -5241,11 +5202,13 @@ class DynamicOffset
 
 /***/ }),
 /* 34 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BitMask", function() { return BitMask; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "BitMask": () => (/* binding */ BitMask)
+/* harmony export */ });
 
 // 
 //  FILE NAME: bitmask.js
@@ -5340,11 +5303,13 @@ class BitMask
 
 /***/ }),
 /* 35 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "assetHolder", function() { return assetHolder; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "assetHolder": () => (/* binding */ assetHolder)
+/* harmony export */ });
 
 // 
 //  FILE NAME: assetholder.js
@@ -5442,11 +5407,13 @@ var assetHolder = new AssetHolder;
 
 /***/ }),
 /* 36 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectData2D", function() { return ObjectData2D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectData2D": () => (/* binding */ ObjectData2D)
+/* harmony export */ });
 /* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
 /* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
 /* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(92);
@@ -5466,17 +5433,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__["iObjectData"]
+class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
 {
     constructor()
     {
         super();
 
         // Visual data of the object
-        this.visualData = new _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__["ObjectVisualData2D"];
+        this.visualData = new _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__.ObjectVisualData2D;
 
         // Physics data of the object
-        this.physicsData = new _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__["ObjectPhysicsData2D"];
+        this.physicsData = new _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__.ObjectPhysicsData2D;
 
         // The name of the object data
         this.name = null;
@@ -5485,7 +5452,7 @@ class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__["iObjectDat
         this.group = null;
 
         // The initial size of the object
-        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__["Size"];
+        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__.Size;
     }
     
     // 
@@ -5507,7 +5474,7 @@ class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__["iObjectDat
         this.group = group;
 
         // Load the size
-        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__["loadSize"]( node, this.size );
+        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__.loadSize( node, this.size );
 
         // Load the visual data
         this.visualData.loadObjData( node );
@@ -5537,11 +5504,13 @@ class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__["iObjectDat
 
 /***/ }),
 /* 37 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iObjectData", function() { return iObjectData; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "iObjectData": () => (/* binding */ iObjectData)
+/* harmony export */ });
 
 // 
 //  FILE NAME: iobjectdata.js
@@ -5576,14 +5545,15 @@ class iObjectData
 
 /***/ }),
 /* 38 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fixture", function() { return Fixture; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectPhysicsData2D", function() { return ObjectPhysicsData2D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Fixture": () => (/* binding */ Fixture),
+/* harmony export */   "ObjectPhysicsData2D": () => (/* binding */ ObjectPhysicsData2D)
+/* harmony export */ });
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_0__);
 
 // 
 //  FILE NAME:  objectphysicsdata2d.js
@@ -5657,7 +5627,7 @@ class Fixture
         for( let i = 0; i < obj.vertAry.length; ++i )
         {
             let vert = obj.vertAry[i];
-            this.vertAry.push( new planck_js__WEBPACK_IMPORTED_MODULE_0__["Vec2"]( vert.x, vert.y ) );
+            this.vertAry.push( new planck_js__WEBPACK_IMPORTED_MODULE_0__.Vec2( vert.x, vert.y ) );
         }
     }
 }
@@ -5795,7 +5765,7 @@ class ObjectPhysicsData2D
                 for( let j = 0; j < vertNode.length; ++j )
                 {
                     fixture.vertAry.push( 
-                        new planck_js__WEBPACK_IMPORTED_MODULE_0__["Vec2"](
+                        new planck_js__WEBPACK_IMPORTED_MODULE_0__.Vec2(
                             Number( vertNode[j].getAttribute('x') ),
                             Number( vertNode[j].getAttribute('y') ) ) );
                 }
@@ -5853,7 +5823,7 @@ class ObjectPhysicsData2D
 
 /***/ }),
 /* 39 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 exports.internal = {};
 
@@ -5900,60 +5870,189 @@ exports.RopeJoint = __webpack_require__(89);
 exports.WeldJoint = __webpack_require__(90);
 exports.WheelJoint = __webpack_require__(91);
 
-exports.internal.Sweep= __webpack_require__(55);
-exports.internal.stats = __webpack_require__(65);
+exports.Settings = __webpack_require__(48);
+
+exports.internal.Sweep = __webpack_require__(55);
+exports.internal.stats = __webpack_require__(65); // todo: remove this
 exports.internal.Manifold = __webpack_require__(63);
 exports.internal.Distance = __webpack_require__(64);
 exports.internal.TimeOfImpact = __webpack_require__(69);
 exports.internal.DynamicTree = __webpack_require__(50);
-exports.internal.Settings = __webpack_require__(48);
+exports.internal.Settings = exports.Settings;
 
 
 /***/ }),
 /* 40 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var World = __webpack_require__(41);
+var Body = __webpack_require__(53);
+var Joint = __webpack_require__(68);
+var Fixture = __webpack_require__(59);
+var Shape = __webpack_require__(60);
+var Vec2 = __webpack_require__(44);
+var Vec3 = __webpack_require__(66);
 
-exports.toJson = function(world) {
-  return JSON.stringify(world._serialize(), function(key, value) {
-    if (typeof value === 'object') {
-      if (value !== null) {
-        if (typeof value._serialize === 'function') {
-          value = value._serialize();
-        }
+var SID = 0;
+
+function Serializer(opts) {
+  opts = opts || {};
+
+  var rootClass = opts.rootClass || World;
+
+  var preSerialize = opts.preSerialize || function (obj) { return obj; };
+  var postSerialize = opts.postSerialize || function (data, obj) { return data; };
+
+  var preDeserialize = opts.preDeserialize || function (data) { return data; };
+  var postDeserialize = opts.postDeserialize || function (obj, data) { return obj; };
+
+  // This is used to create ref objects during serialize
+  var refTypes = {
+    'World': World,
+    'Body': Body,
+    'Joint': Joint,
+    'Fixture': Fixture,
+    'Shape': Shape,
+  };
+
+  // This is used by restore to deserialize objects and refs
+  var restoreTypes = Object.assign({
+    'Vec2': Vec2,
+    'Vec3': Vec3,
+  }, refTypes);
+
+  this.toJson = function (root) {
+    var json = [];
+
+    var queue = [root];
+    var refMap = {};
+
+    function storeRef(value, typeName) {
+      value.__sid = value.__sid || ++SID;
+      if (!refMap[value.__sid]) {
+        queue.push(value);
+        var index = json.length + queue.length;
+        var ref = {
+          refIndex: index,
+          refType: typeName
+        };
+        refMap[value.__sid] = ref;
       }
+      return refMap[value.__sid];
     }
-    return value;
-  }, '  ');
-};
 
-exports.fromJson = function(string) {
-  return World._deserialize(JSON.parse(string));
-};
+    function serialize(obj) {
+      obj = preSerialize(obj);
+      var data = obj._serialize();
+      data = postSerialize(data, obj);
+      return data;
+    }
+
+    function toJson(value, top) {
+      if (typeof value !== 'object' || value === null) {
+        return value;
+      }
+      if (typeof value._serialize === 'function') {
+        if (value !== top) {
+          for (var typeName in refTypes) {
+            if (value instanceof refTypes[typeName]) {
+              return storeRef(value, typeName);
+            }
+          }
+        }
+        value = serialize(value);
+      }
+      if (Array.isArray(value)) {
+        var newValue = [];
+        for (var key = 0; key < value.length; key++) {
+          newValue[key] = toJson(value[key]);
+        }
+        value = newValue;
+
+      } else {
+        var newValue = {};
+        for (var key in value) {
+          if (value.hasOwnProperty(key)) {
+            newValue[key] = toJson(value[key]);
+          }
+        }
+        value = newValue;
+      }
+      return value;
+    }
+
+    while (queue.length) {
+      var obj = queue.shift();
+      var str = toJson(obj, obj);
+      json.push(str);
+    }
+
+    return json;
+  };
+
+  this.fromJson = function (json) {
+    var refMap = {};
+
+    function deserialize(cls, data, ctx) {
+      data = preDeserialize(data);
+      var obj = cls._deserialize(data, ctx, restoreRef);
+      obj = postDeserialize(obj, data);
+      return obj;
+    }
+
+    function restoreRef(cls, ref, ctx) {
+      if (!ref.refIndex) {
+        return cls && cls._deserialize && deserialize(cls, ref, ctx);
+      }
+      cls = restoreTypes[ref.refType] || cls;
+      var index = ref.refIndex;
+      if (!refMap[index]) {
+        var data = json[index];
+        var obj = deserialize(cls, data, ctx);
+        refMap[index] = obj;
+      }
+      return refMap[index];
+    }
+
+    var root = rootClass._deserialize(json[0], null, restoreRef);
+
+    return root;
+  }
+}
+
+module.exports = Serializer;
+
+var serializer = new Serializer();
+module.exports.toJson = serializer.toJson;
+module.exports.fromJson = serializer.fromJson;
 
 
 /***/ }),
 /* 41 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -5967,6 +6066,7 @@ var Vec2 = __webpack_require__(44);
 var BroadPhase = __webpack_require__(47);
 var Solver = __webpack_require__(52);
 var Body = __webpack_require__(53);
+var Joint = __webpack_require__(68);
 var Contact = __webpack_require__(61);
 
 /**
@@ -5974,8 +6074,8 @@ var Contact = __webpack_require__(61);
  *
  * @prop {Vec2} [gravity = { x : 0, y : 0}]
  * @prop {boolean} [allowSleep = true]
- * @prop {boolean} [warmStarting = false]
- * @prop {boolean} [continuousPhysics = false]
+ * @prop {boolean} [warmStarting = true]
+ * @prop {boolean} [continuousPhysics = true]
  * @prop {boolean} [subStepping = false]
  * @prop {boolean} [blockSolve = true]
  * @prop {int} [velocityIterations = 8] For the velocity constraint solver.
@@ -5993,7 +6093,7 @@ var WorldDef = {
 };
 
 /**
- * @param {WordDef|Vec2} def World definition or gravity vector.
+ * @param {WorldDef|Vec2} def World definition or gravity vector.
  */
 function World(def) {
   if (!(this instanceof World)) {
@@ -6039,8 +6139,6 @@ function World(def) {
 
   this.m_t = 0;
 
-  this.m_stepCount = 0;
-
   // Broad-phase callback.
   this.addPair = this.createContact.bind(this);
 }
@@ -6053,22 +6151,37 @@ World.prototype._serialize = function() {
     bodies.push(b);
   }
 
-  // for (var j = this.getJointList(); j; j = j.getNext()) {
-  //   joints.push(j);
-  // }
+  for (var j = this.getJointList(); j; j = j.getNext()) {
+    if (typeof j._serialize === 'function') {
+      joints.push(j);
+    }
+  }
 
   return {
     gravity: this.m_gravity,
     bodies: bodies,
-    // joints: joints,
+    joints: joints,
   };
 };
 
-World._deserialize = function(data) {
+World._deserialize = function(data, context, restore) {
+  if (!data) {
+    return new World();
+  }
+
   var world = new World(data.gravity);
-  data.bodies && data.bodies.reverse().forEach(function(data) {
-    world._addBody(Body._deserialize(world, data));
-  });
+
+  if (data.bodies) {
+    for(var i = data.bodies.length - 1; i >= 0; i -= 1) {
+      world._addBody(restore(Body, data.bodies[i], world));
+    }
+  }
+
+  if (data.joints) {
+    for(var i = data.joints.length - 1; i >= 0; i--) {
+      world.createJoint(restore(Joint, data.joints[i], world));
+    }
+  }
 
   return world;
 };
@@ -6363,9 +6476,7 @@ World.prototype.shiftOrigin = function(newOrigin) {
 }
 
 /**
- * Warning: This function is locked during callbacks.
- *
- * @param {Body} body
+ * @internal Used for deserialize.
  */
 World.prototype._addBody = function(body) {
   _ASSERT && common.assert(this.isLocked() === false);
@@ -6671,6 +6782,7 @@ var s_step = new Solver.TimeStep(); // reuse
  * @param {int} positionIterations
  */
 World.prototype.step = function(timeStep, velocityIterations, positionIterations) {
+  this.publish('pre-step', timeStep);
 
   if ((velocityIterations | 0) !== velocityIterations) {
     // TODO: remove this in future
@@ -6679,9 +6791,6 @@ World.prototype.step = function(timeStep, velocityIterations, positionIterations
 
   velocityIterations = velocityIterations || this.m_velocityIterations;
   positionIterations = positionIterations || this.m_positionIterations;
-
-  // TODO: move this to testbed
-  this.m_stepCount++;
 
   // If new fixtures were added, we need to find the new contacts.
   if (this.m_newFixture) {
@@ -6732,6 +6841,8 @@ World.prototype.step = function(timeStep, velocityIterations, positionIterations
   }
 
   this.m_locked = false;
+
+  this.publish('post-step', timeStep);
 }
 
 /**
@@ -7056,40 +7167,43 @@ World.prototype.postSolve = function(contact, impulse) {
 
 /***/ }),
 /* 42 */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
-module.exports = function(to, from) {
-  if (to === null || typeof to === 'undefined') {
-    to = {};
+module.exports = function(input, defaults) {
+  if (input === null || typeof input === 'undefined') {
+    input = {};
   }
 
-  for ( var key in from) {
-    if (from.hasOwnProperty(key) && typeof to[key] === 'undefined') {
-      to[key] = from[key];
+  var output = Object.assign({}, input);
+
+  for ( var key in defaults) {
+    if (defaults.hasOwnProperty(key) && typeof input[key] === 'undefined') {
+      output[key] = defaults[key];
     }
   }
 
   if (typeof Object.getOwnPropertySymbols === 'function') {
-    var symbols = Object.getOwnPropertySymbols(from);
+    var symbols = Object.getOwnPropertySymbols(defaults);
     for (var i = 0; i < symbols.length; i++) {
       var symbol = symbols[i];
-      if (from.propertyIsEnumerable(symbol) && typeof to[key] === 'undefined') {
-        to[symbol] = from[symbol];
+      if (defaults.propertyIsEnumerable(symbol) && typeof input[key] === 'undefined') {
+        output[symbol] = defaults[symbol];
       }
     }
   }
-  return to;
+
+  return output;
 };
 
 
 /***/ }),
 /* 43 */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -7108,25 +7222,30 @@ exports.assert = function(statement, err, log) {
 
 /***/ }),
 /* 44 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -7633,25 +7752,30 @@ Vec2.translateFn = function(x, y) {
 
 /***/ }),
 /* 45 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -7748,7 +7872,7 @@ math.random = function(min, max) {
 
 /***/ }),
 /* 46 */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 if (typeof Object.create == 'function') {
   module.exports = function(proto, props) {
@@ -7770,25 +7894,30 @@ if (typeof Object.create == 'function') {
 
 /***/ }),
 /* 47 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -8008,25 +8137,30 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 /***/ }),
 /* 48 */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -8174,31 +8308,37 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 
 /***/ }),
 /* 49 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 var Settings = __webpack_require__(48);
+var common = __webpack_require__(43);
 var Math = __webpack_require__(45);
 var Vec2 = __webpack_require__(44);
 
@@ -8217,6 +8357,8 @@ function AABB(lower, upper) {
   }
   if (typeof upper === 'object') {
     this.upperBound.set(upper);
+  } else if (typeof lower === 'object') {
+    this.upperBound.set(lower);
   }
 };
 
@@ -8303,6 +8445,7 @@ AABB.prototype.contains = function(aabb) {
 
 AABB.prototype.extend = function(value) {
   AABB.extend(this, value);
+  return this;
 }
 
 AABB.extend = function(aabb, value) {
@@ -8431,27 +8574,33 @@ AABB.prototype.toString = function() {
   return JSON.stringify(this);
 }
 
+
 /***/ }),
 /* 50 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -8942,7 +9091,7 @@ DynamicTree.prototype.getAreaRatio = function() {
   var rootArea = root.aabb.getPerimeter();
 
   var totalArea = 0.0;
-  var node, it = iteratorPool.allocate().preorder();
+  var node, it = iteratorPool.allocate().preorder(this.m_root);
   while (node = it.next()) {
     if (node.height < 0) {
       // Free node in pool
@@ -8974,8 +9123,8 @@ DynamicTree.prototype.computeHeight = function(id) {
     return 0;
   }
 
-  var height1 = ComputeHeight(node.child1);
-  var height2 = ComputeHeight(node.child2);
+  var height1 = this.computeHeight(node.child1.id);
+  var height2 = this.computeHeight(node.child2.id);
   return 1 + Math.max(height1, height2);
 }
 
@@ -9026,8 +9175,8 @@ DynamicTree.prototype.validateMetrics = function(node) {
   // _ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
   // _ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
-  var height1 = this.m_nodes[child1].height;
-  var height2 = this.m_nodes[child2].height;
+  var height1 = child1.height;
+  var height2 = child2.height;
   var height = 1 + Math.max(height1, height2);
   _ASSERT && common.assert(node.height == height);
 
@@ -9042,8 +9191,8 @@ DynamicTree.prototype.validateMetrics = function(node) {
 
 // Validate this tree. For testing.
 DynamicTree.prototype.validate = function() {
-  ValidateStructure(this.m_root);
-  ValidateMetrics(this.m_root);
+  this.validateStructure(this.m_root);
+  this.validateMetrics(this.m_root);
 
   _ASSERT && common.assert(this.getHeight() == this.computeHeight());
 }
@@ -9054,7 +9203,7 @@ DynamicTree.prototype.validate = function() {
  */
 DynamicTree.prototype.getMaxBalance = function() {
   var maxBalance = 0;
-  var node, it = iteratorPool.allocate().preorder();
+  var node, it = iteratorPool.allocate().preorder(this.m_root);
   while (node = it.next()) {
     if (node.height <= 1) {
       continue;
@@ -9078,7 +9227,7 @@ DynamicTree.prototype.rebuildBottomUp = function() {
   var count = 0;
 
   // Build array of leaves. Free the rest.
-  var node, it = iteratorPool.allocate().preorder();
+  var node, it = iteratorPool.allocate().preorder(this.m_root);
   while (node = it.next()) {
     if (node.height < 0) {
       // free node in pool
@@ -9144,7 +9293,7 @@ DynamicTree.prototype.rebuildBottomUp = function() {
  */
 DynamicTree.prototype.shiftOrigin = function(newOrigin) {
   // Build array of leaves. Free the rest.
-  var node, it = iteratorPool.allocate().preorder();
+  var node, it = iteratorPool.allocate().preorder(this.m_root);
   while (node = it.next()) {
     var aabb = node.aabb;
     aabb.lowerBound.x -= newOrigin.x;
@@ -9354,7 +9503,7 @@ function Iterator() {
 
 /***/ }),
 /* 51 */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 /*
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
@@ -9447,25 +9596,30 @@ function Pool(opts) {
 
 /***/ }),
 /* 52 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -10328,25 +10482,30 @@ Solver.prototype.postSolveIsland = function() {
 
 /***/ }),
 /* 53 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -10367,7 +10526,6 @@ var Position = __webpack_require__(58);
 
 var Fixture = __webpack_require__(59);
 var Shape = __webpack_require__(60);
-var World = __webpack_require__(41);
 
 var staticBody = Body.STATIC = 'static';
 var kinematicBody = Body.KINEMATIC = 'kinematic';
@@ -10522,6 +10680,7 @@ Body.prototype._serialize = function() {
   }
   return {
     type: this.m_type,
+    bullet: this.m_bulletFlag,
     position: this.m_xf.p,
     angle: this.m_xf.q.getAngle(),
     linearVelocity: this.m_linearVelocity,
@@ -10530,14 +10689,15 @@ Body.prototype._serialize = function() {
   };
 };
 
-Body._deserialize = function(world, data) {
+Body._deserialize = function(data, world, restore) {
   var body = new Body(world, data);
 
-  data.fixtures.forEach(function(data) {
-    var fixture = Fixture._deserialize(body, data);
-    body._addFixture(fixture);
-  });
-
+  if (data.fixtures) {
+    for (var i = data.fixtures.length - 1; i >= 0; i--) {
+      var fixture = restore(Fixture, data.fixtures[i], body);
+      body._addFixture(fixture);
+    }
+  }
   return body;
 };
 
@@ -11254,6 +11414,9 @@ Body.prototype.shouldCollide = function(that) {
   return true;
 };
 
+/**
+ * @internal Used for deserialize.
+ */
 Body.prototype._addFixture = function(fixture) {
   _ASSERT && common.assert(this.isWorldLocked() == false);
 
@@ -11409,25 +11572,30 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 /***/ }),
 /* 54 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -11643,25 +11811,30 @@ Rot.mulTVec2 = function(rot, m) {
 
 /***/ }),
 /* 55 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -11780,25 +11953,30 @@ Sweep.prototype.set = function(that) {
 
 /***/ }),
 /* 56 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -12018,25 +12196,30 @@ Transform.mulTXf = function(a, b) {
 
 /***/ }),
 /* 57 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -12055,27 +12238,33 @@ function Velocity() {
   this.w = 0;
 }
 
+
 /***/ }),
 /* 58 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -12101,27 +12290,33 @@ Position.prototype.getTransform = function(xf, p) {
   return xf;
 }
 
+
 /***/ }),
 /* 59 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -12260,13 +12455,11 @@ Fixture.prototype._serialize = function() {
     filterMaskBits: this.m_filterMaskBits,
 
     shape: this.m_shape,
-
-    userData: this.m_userData,
   };
 };
 
-Fixture._deserialize = function(body, data) {
-  var shape = Shape._deserialize(data.shape);
+Fixture._deserialize = function(data, body, restore) {
+  var shape = restore(Shape, data.shape);
   var fixture = shape && new Fixture(body, shape, data);
   return fixture;
 };
@@ -12485,12 +12678,24 @@ Fixture.prototype.getFilterGroupIndex = function() {
   return this.m_filterGroupIndex;
 }
 
+Fixture.prototype.setFilterGroupIndex = function(groupIndex) {
+  return this.m_filterGroupIndex = groupIndex;
+}
+
 Fixture.prototype.getFilterCategoryBits = function() {
   return this.m_filterCategoryBits;
 }
 
+Fixture.prototype.setFilterCategoryBits = function(categoryBits) {
+  this.m_filterCategoryBits = categoryBits;
+}
+
 Fixture.prototype.getFilterMaskBits = function() {
   return this.m_filterMaskBits;
+}
+
+Fixture.prototype.setFilterMaskBits = function(maskBits) {
+  this.m_filterMaskBits = maskBits;
 }
 
 /**
@@ -12538,42 +12743,47 @@ Fixture.prototype.refilter = function() {
  * Warning: for performance reasons this is only called when the AABBs begin to
  * overlap.
  * 
- * @param {Fixture} fixtureA
- * @param {Fixture} fixtureB
+ * @param {Fixture} that
  */
 Fixture.prototype.shouldCollide = function(that) {
 
-  if (that.m_filterGroupIndex == this.m_filterGroupIndex && that.m_filterGroupIndex != 0) {
+  if (that.m_filterGroupIndex === this.m_filterGroupIndex && that.m_filterGroupIndex !== 0) {
     return that.m_filterGroupIndex > 0;
   }
 
-  var collide = (that.m_filterMaskBits & this.m_filterCategoryBits) != 0
-      && (that.m_filterCategoryBits & this.m_filterMaskBits) != 0;
+  var collideA = (that.m_filterMaskBits & this.m_filterCategoryBits) !== 0;
+  var collideB = (that.m_filterCategoryBits & this.m_filterMaskBits) !== 0;
+  var collide = collideA && collideB;
   return collide;
 }
 
 
 /***/ }),
 /* 60 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -12602,9 +12812,9 @@ Shape.prototype._serialize = function() {
 
 Shape.TYPES = {};
 
-Shape._deserialize = function(data) {
+Shape._deserialize = function(data, context, restore) {
   var clazz = Shape.TYPES[data.type];
-  return clazz && clazz._deserialize && clazz._deserialize(data);
+  return clazz && restore(clazz, data);
 };
 
 Shape.isValid = function(shape) {
@@ -12690,25 +12900,30 @@ Shape.prototype.computeDistanceProxy = function(proxy) {
 
 /***/ }),
 /* 61 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -13920,25 +14135,30 @@ Contact.destroy = function(contact, listener) {
 
 /***/ }),
 /* 62 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -14066,7 +14286,12 @@ Mat22.mul = function(mx, v) {
 
   } else if (v && 'ex' in v && 'ey' in v) { // Mat22
     _ASSERT && Mat22.assert(v);
-    return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+    // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+    var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+    var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+    var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+    var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+    return new Mat22(a, b, c, d);
   }
 
   _ASSERT && common.assert(false);
@@ -14081,7 +14306,12 @@ Mat22.mulVec2 = function(mx, v) {
 
 Mat22.mulMat22 = function(mx, v) {
   _ASSERT && Mat22.assert(v);
-  return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+  // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+  var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+  var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+  var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+  var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+  return new Mat22(a, b, c, d);
   _ASSERT && common.assert(false);
 }
 
@@ -14127,31 +14357,36 @@ Mat22.abs = function(mx) {
 Mat22.add = function(mx1, mx2) {
   _ASSERT && Mat22.assert(mx1);
   _ASSERT && Mat22.assert(mx2);
-  return new Mat22(Vec2.add(mx1.ex + mx2.ex), Vec2.add(mx1.ey + mx2.ey));
+  return new Mat22(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
 }
 
 
 /***/ }),
 /* 63 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -14324,8 +14559,10 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
       normal.set(dist);
       normal.normalize();
     }
-    points[0] = Vec2.mid(pointA, pointB);
-    separations[0] = -radiusB - radiusA;
+    var cA = pointA.clone().addMul(radiusA, normal);
+    var cB = pointB.clone().addMul(-radiusB, normal);
+    points[0] = Vec2.mid(cA, cB);
+    separations[0] = Vec2.dot(Vec2.sub(cB, cA), normal);
     points.length = 1;
     separations.length = 1;
     break;
@@ -14484,25 +14721,30 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 /***/ }),
 /* 64 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -15179,9 +15421,10 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
   return output.distance < 10.0 * Math.EPSILON;
 }
 
+
 /***/ }),
 /* 65 */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -15199,25 +15442,30 @@ exports.toString = function(newline) {
 
 /***/ }),
 /* 66 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -15378,25 +15626,30 @@ Vec3.neg = function(v) {
 
 /***/ }),
 /* 67 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -15598,34 +15851,39 @@ Mat33.add = function(a, b) {
   _ASSERT && Mat33.assert(a);
   _ASSERT && Mat33.assert(b);
   return new Mat33(
-    Vec3.add(a.ex + b.ex),
-    Vec3.add(a.ey + b.ey),
-    Vec3.add(a.ez + b.ez)
+    Vec3.add(a.ex, b.ex),
+    Vec3.add(a.ey, b.ey),
+    Vec3.add(a.ez, b.ez)
   );
 }
 
 
 /***/ }),
 /* 68 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -15702,6 +15960,13 @@ function Joint(def, bodyA, bodyB) {
 
   this.m_islandFlag = false;
   this.m_userData = def.userData;
+};
+
+Joint.TYPES = {};
+
+Joint._deserialize = function(data, context, restore) {
+  var clazz = Joint.TYPES[data.type];
+  return clazz && restore(clazz, data);
 };
 
 /**
@@ -15826,27 +16091,33 @@ Joint.prototype.solveVelocityConstraints = function(step) {
 Joint.prototype.solvePositionConstraints = function(step) {
 };
 
+
 /***/ }),
 /* 69 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -16007,7 +16278,23 @@ function TimeOfImpact(output, input) {
     var fcn = new SeparationFunction();
     fcn.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
 
-    if (false) { var f, i, x, fs, xs, dx, N; }
+    // if (false) {
+    //   // Dump the curve seen by the root finder
+    //   var N = 100;
+    //   var dx = 1.0 / N;
+    //   var xs = []; // [ N + 1 ];
+    //   var fs = []; // [ N + 1 ];
+    //   var x = 0.0;
+    //   for (var i = 0; i <= N; ++i) {
+    //     sweepA.getTransform(xfA, x);
+    //     sweepB.getTransform(xfB, x);
+    //     var f = fcn.evaluate(xfA, xfB) - target;
+    //     printf("%g %g\n", x, f);
+    //     xs[i] = x;
+    //     fs[i] = f;
+    //     x += dx;
+    //   }
+    // }
 
     // Compute the TOI on the separating axis. We do this by successively
     // resolving the deepest point. This loop is bounded by the number of
@@ -16142,6 +16429,8 @@ function SeparationFunction() {
   this.m_proxyB = new DistanceProxy();
   this.m_sweepA;// Sweep
   this.m_sweepB;// Sweep
+  this.indexA;// integer
+  this.indexB;// integer
   this.m_type;
   this.m_localPoint = Vec2.zero();
   this.m_axis = Vec2.zero();
@@ -16313,7 +16602,7 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 /***/ }),
 /* 70 */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -16329,25 +16618,30 @@ module.exports.diff = function(time) {
 
 /***/ }),
 /* 71 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -16505,25 +16799,30 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 /***/ }),
 /* 72 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -16737,25 +17036,30 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 /***/ }),
 /* 73 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -16809,16 +17113,19 @@ PolygonShape.prototype._serialize = function() {
   return {
     type: this.m_type,
 
-    centroid: this.m_centroid,
-
     vertices: this.m_vertices,
-    normals: this.m_normals,
-    count: this.m_count,
   };
 };
 
-PolygonShape._deserialize = function(data) {
-  var shape = new PolygonShape(data.vertices);
+PolygonShape._deserialize = function(data, fixture, restore) {
+  var vertices = [];
+  if (data.vertices) {
+    for (var i = 0; i < data.vertices.length; i++) {
+      vertices.push(restore(Vec2, data.vertices[i]));
+    }
+  }
+
+  var shape = new PolygonShape(vertices);
   return shape;
 };
 
@@ -16912,13 +17219,12 @@ PolygonShape.prototype._set = function(vertices) {
   var n = Math.min(vertices.length, Settings.maxPolygonVertices);
 
   // Perform welding and copy vertices into local buffer.
-  var ps = [];// [Settings.maxPolygonVertices];
-  var tempCount = 0;
+  var ps = []; // [Settings.maxPolygonVertices];
   for (var i = 0; i < n; ++i) {
     var v = vertices[i];
 
     var unique = true;
-    for (var j = 0; j < tempCount; ++j) {
+    for (var j = 0; j < ps.length; ++j) {
       if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
         unique = false;
         break;
@@ -16926,11 +17232,11 @@ PolygonShape.prototype._set = function(vertices) {
     }
 
     if (unique) {
-      ps[tempCount++] = v;
+      ps.push(v);
     }
   }
 
-  n = tempCount;
+  n = ps.length;
   if (n < 3) {
     // Polygon is degenerate.
     _ASSERT && common.assert(false);
@@ -16941,18 +17247,18 @@ PolygonShape.prototype._set = function(vertices) {
   // Create the convex hull using the Gift wrapping algorithm
   // http://en.wikipedia.org/wiki/Gift_wrapping_algorithm
 
-  // Find the right most point on the hull
+  // Find the right most point on the hull (in case of multiple points bottom most is used)
   var i0 = 0;
   var x0 = ps[0].x;
   for (var i = 1; i < n; ++i) {
     var x = ps[i].x;
-    if (x > x0 || (x == x0 && ps[i].y < ps[i0].y)) {
+    if (x > x0 || (x === x0 && ps[i].y < ps[i0].y)) {
       i0 = i;
       x0 = x;
     }
   }
 
-  var hull = [];// [Settings.maxPolygonVertices];
+  var hull = []; // [Settings.maxPolygonVertices];
   var m = 0;
   var ih = i0;
 
@@ -16961,7 +17267,7 @@ PolygonShape.prototype._set = function(vertices) {
 
     var ie = 0;
     for (var j = 1; j < n; ++j) {
-      if (ie == ih) {
+      if (ie === ih) {
         ie = j;
         continue;
       }
@@ -16969,12 +17275,13 @@ PolygonShape.prototype._set = function(vertices) {
       var r = Vec2.sub(ps[ie], ps[hull[m]]);
       var v = Vec2.sub(ps[j], ps[hull[m]]);
       var c = Vec2.cross(r, v);
+      // c < 0 means counter-clockwise wrapping, c > 0 means clockwise wrapping
       if (c < 0.0) {
         ie = j;
       }
 
       // Collinearity check
-      if (c == 0.0 && v.lengthSquared() > r.lengthSquared()) {
+      if (c === 0.0 && v.lengthSquared() > r.lengthSquared()) {
         ie = j;
       }
     }
@@ -16982,7 +17289,7 @@ PolygonShape.prototype._set = function(vertices) {
     ++m;
     ih = ie;
 
-    if (ie == i0) {
+    if (ie === i0) {
       break;
     }
   }
@@ -16997,6 +17304,7 @@ PolygonShape.prototype._set = function(vertices) {
   this.m_count = m;
 
   // Copy vertices.
+  this.m_vertices = [];
   for (var i = 0; i < m; ++i) {
     this.m_vertices[i] = ps[hull[i]];
   }
@@ -17019,15 +17327,16 @@ PolygonShape.prototype._set = function(vertices) {
  * @private
  */
 PolygonShape.prototype._setAsBox = function(hx, hy, center, angle) {
-  this.m_vertices[0] = Vec2.neo(-hx, -hy);
-  this.m_vertices[1] = Vec2.neo(hx, -hy);
-  this.m_vertices[2] = Vec2.neo(hx, hy);
-  this.m_vertices[3] = Vec2.neo(-hx, hy);
+  // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
+  this.m_vertices[0] = Vec2.neo(hx, -hy);
+  this.m_vertices[1] = Vec2.neo(hx, hy);
+  this.m_vertices[2] = Vec2.neo(-hx, hy);
+  this.m_vertices[3] = Vec2.neo(-hx, -hy);
 
-  this.m_normals[0] = Vec2.neo(0.0, -1.0);
-  this.m_normals[1] = Vec2.neo(1.0, 0.0);
-  this.m_normals[2] = Vec2.neo(0.0, 1.0);
-  this.m_normals[3] = Vec2.neo(-1.0, 0.0);
+  this.m_normals[0] = Vec2.neo(1.0, 0.0);
+  this.m_normals[1] = Vec2.neo(0.0, 1.0);
+  this.m_normals[2] = Vec2.neo(-1.0, 0.0);
+  this.m_normals[3] = Vec2.neo(0.0, -1.0);
 
   this.m_count = 4;
 
@@ -17252,27 +17561,33 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
   proxy.m_radius = this.m_radius;
 };
 
+
 /***/ }),
 /* 74 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -17303,7 +17618,7 @@ Shape.TYPES[ChainShape.TYPE] = ChainShape;
  * two-sided collision, so you can use inside and outside collision. Therefore,
  * you may use any winding order. Connectivity information is used to create
  * smooth collisions.
- * 
+ *
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
 function ChainShape(vertices, loop) {
@@ -17334,20 +17649,36 @@ function ChainShape(vertices, loop) {
 }
 
 ChainShape.prototype._serialize = function() {
-  return {
+  const data = {
     type: this.m_type,
-
     vertices: this.m_vertices,
     isLoop: this.m_isLoop,
-    prevVertex: this.m_prevVertex,
-    nextVertex: this.m_nextVertex,
     hasPrevVertex: this.m_hasPrevVertex,
     hasNextVertex: this.m_hasNextVertex,
   };
+  if (this.m_prevVertex) {
+    data.prevVertex = this.m_prevVertex;
+  }
+  if (this.m_nextVertex) {
+    data.nextVertex = this.m_nextVertex;
+  }
+  return data;
 };
 
-ChainShape._deserialize = function(data) {
-  var shape = new ChainShape(data.vertices.map(Vec2._deserialize), data.isLoop);
+ChainShape._deserialize = function(data, fixture, restore) {
+  var vertices = [];
+  if (data.vertices) {
+    for (var i = 0; i < data.vertices.length; i++) {
+      vertices.push(restore(Vec2, data.vertices[i]));
+    }
+  }
+  var shape = new ChainShape(vertices, data.isLoop);
+  if (data.prevVertex) {
+    shape.setPrevVertex(data.prevVertex);
+  }
+  if (data.nextVertex) {
+    shape.setNextVertex(data.nextVertex);
+  }
   return shape;
 };
 
@@ -17358,7 +17689,7 @@ ChainShape._deserialize = function(data) {
 
 /**
  * Create a loop. This automatically adjusts connectivity.
- * 
+ *
  * @param vertices an array of vertices, these are copied
  * @param count the vertex count
  */
@@ -17372,12 +17703,12 @@ ChainShape.prototype._createLoop = function(vertices) {
     _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
   }
 
-  this.m_vertices.length = 0;
+  this.m_vertices = [];
   this.m_count = vertices.length + 1;
   for (var i = 0; i < vertices.length; ++i) {
-    this.m_vertices[i] = vertices[i].clone();
+    this.m_vertices[i] = Vec2.clone(vertices[i]);
   }
-  this.m_vertices[vertices.length] = vertices[0].clone();
+  this.m_vertices[vertices.length] = Vec2.clone(vertices[0]);
 
   this.m_prevVertex = this.m_vertices[this.m_count - 2];
   this.m_nextVertex = this.m_vertices[1];
@@ -17388,7 +17719,7 @@ ChainShape.prototype._createLoop = function(vertices) {
 
 /**
  * Create a chain with isolated end vertices.
- * 
+ *
  * @param vertices an array of vertices, these are copied
  * @param count the vertex count
  */
@@ -17404,7 +17735,7 @@ ChainShape.prototype._createChain = function(vertices) {
 
   this.m_count = vertices.length;
   for (var i = 0; i < vertices.length; ++i) {
-    this.m_vertices[i] = vertices[i].clone();
+    this.m_vertices[i] = Vec2.clone(vertices[i]);
   }
 
   this.m_hasPrevVertex = false;
@@ -17414,11 +17745,19 @@ ChainShape.prototype._createChain = function(vertices) {
   return this;
 }
 
+ChainShape.prototype._reset = function() {
+  if (this.m_isLoop) {
+    this._createLoop(this.m_vertices);
+  } else {
+    this._createChain(this.m_vertices);
+  }
+}
+
 /**
  * Establish connectivity to a vertex that precedes the first vertex. Don't call
  * this for loops.
  */
-ChainShape.prototype._setPrevVertex = function(prevVertex) {
+ChainShape.prototype.setPrevVertex = function(prevVertex) {
   this.m_prevVertex = prevVertex;
   this.m_hasPrevVertex = true;
 }
@@ -17427,7 +17766,7 @@ ChainShape.prototype._setPrevVertex = function(prevVertex) {
  * Establish connectivity to a vertex that follows the last vertex. Don't call
  * this for loops.
  */
-ChainShape.prototype._setNextVertex = function(nextVertex) {
+ChainShape.prototype.setNextVertex = function(nextVertex) {
   this.m_nextVertex = nextVertex;
   this.m_hasNextVertex = true;
 }
@@ -17528,27 +17867,33 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
   proxy.m_radius = this.m_radius;
 };
 
+
 /***/ }),
 /* 75 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -17582,25 +17927,30 @@ function BoxShape(hx, hy, center, angle) {
 
 /***/ }),
 /* 76 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -17654,27 +18004,33 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
 
 exports.CollideCircles = CollideCircles;
 
+
 /***/ }),
 /* 77 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -17845,25 +18201,30 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 /***/ }),
 /* 78 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -18112,25 +18473,30 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 /***/ }),
 /* 79 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -18271,25 +18637,30 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 /***/ }),
 /* 80 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -18760,25 +19131,30 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 /***/ }),
 /* 81 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -18802,8 +19178,10 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 DistanceJoint.TYPE = 'distance-joint';
+Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
 
 DistanceJoint._super = Joint;
 DistanceJoint.prototype = create(DistanceJoint._super.prototype);
@@ -18822,9 +19200,9 @@ DistanceJoint.prototype = create(DistanceJoint._super.prototype);
  * @prop {float} dampingRatio The damping ratio. 0 = no damping, 1 = critical
  *       damping.
  *
- * @prop {Vec2} def.localAnchorA The local anchor point relative to bodyA's origin.
- * @prop {Vec2} def.localAnchorB The local anchor point relative to bodyB's origin.
- * @prop {number} def.length Distance length.
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {number} length Distance length.
  */
 
 var DEFAULTS = {
@@ -18862,8 +19240,8 @@ function DistanceJoint(def, bodyA, bodyB, anchorA, anchorB) {
   this.m_type = DistanceJoint.TYPE;
 
   // Solver shared
-  this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero();
+  this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero());
   this.m_length = Math.isFinite(def.length) ? def.length :
     Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
   this.m_frequencyHz = def.frequencyHz;
@@ -18899,6 +19277,61 @@ function DistanceJoint(def, bodyA, bodyB, anchorA, anchorB) {
   // K = J * invM * JT
   // = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
 };
+
+DistanceJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    frequencyHz: this.m_frequencyHz,
+    dampingRatio: this.m_dampingRatio,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    length: this.m_length,
+
+    impulse: this.m_impulse,
+    gamma: this.m_gamma,
+    bias: this.m_bias,
+  };
+};
+
+DistanceJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new DistanceJoint(data);
+  return joint;
+};
+
+/**
+ * @internal
+ */
+DistanceJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+
+  if (def.length > 0) {
+    this.m_length = +def.length;
+  } else if (def.length < 0) { // don't change length
+  } else if (def.anchorA || def.anchorA || def.anchorA || def.anchorA) {
+    this.m_length = Vec2.distance(
+        this.m_bodyA.getWorldPoint(this.m_localAnchorA),
+        this.m_bodyB.getWorldPoint(this.m_localAnchorB)
+    );
+  }
+}
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -19115,25 +19548,30 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 82 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -19158,8 +19596,10 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 FrictionJoint.TYPE = 'friction-joint';
+Joint.TYPES[FrictionJoint.TYPE] = FrictionJoint;
 
 FrictionJoint._super = Joint;
 FrictionJoint.prototype = create(FrictionJoint._super.prototype);
@@ -19202,8 +19642,8 @@ function FrictionJoint(def, bodyA, bodyB, anchor) {
 
   this.m_type = FrictionJoint.TYPE;
 
-  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
 
   // Solver shared
   this.m_linearImpulse = Vec2.zero();
@@ -19235,6 +19675,47 @@ function FrictionJoint(def, bodyA, bodyB, anchor) {
   // J = [0 0 -1 0 0 1]
   // K = invI1 + invI2
 }
+
+FrictionJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    maxForce: this.m_maxForce,
+    maxTorque: this.m_maxTorque,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+  };
+};
+
+FrictionJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new FrictionJoint(data);
+  return joint;
+};
+
+/**
+ * @internal
+ */
+FrictionJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+}
+
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -19433,25 +19914,30 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 83 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -19476,11 +19962,13 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 var RevoluteJoint = __webpack_require__(84);
 var PrismaticJoint = __webpack_require__(85);
 
 GearJoint.TYPE = 'gear-joint';
+Joint.TYPES[GearJoint.TYPE] = GearJoint;
 
 GearJoint._super = Joint;
 GearJoint.prototype = create(GearJoint._super.prototype);
@@ -19638,6 +20126,32 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
   // Cdot = dot(v + cross(w, r), ug)
   // J = [ug cross(r, ug)]
   // K = J * invM * JT = invMass + invI * cross(r, ug)^2
+};
+
+GearJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    joint1: this.m_joint1,
+    joint2: this.m_joint2,
+    ratio: this.m_ratio,
+
+    // _constant: this.m_constant,
+  };
+};
+
+GearJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  data.joint1 = restore(Joint, data.joint1, world);
+  data.joint2 = restore(Joint, data.joint2, world);
+  var joint = new GearJoint(data);
+  // if (data._constant) joint.m_constant = data._constant;
+  return joint;
 };
 
 /**
@@ -19916,25 +20430,30 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 84 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -19959,6 +20478,7 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -19966,6 +20486,7 @@ var atUpperLimit = 2;
 var equalLimits = 3;
 
 RevoluteJoint.TYPE = 'revolute-joint';
+Joint.TYPES[RevoluteJoint.TYPE] = RevoluteJoint;
 
 RevoluteJoint._super = Joint;
 RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
@@ -19978,12 +20499,12 @@ RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
  * initial configuration can violate the constraint slightly. You also need to
  * specify the initial relative angle for joint limits. This helps when saving
  * and loading a game.
- * 
+ *
  * The local anchor points are measured from the body's origin rather than the
  * center of mass because: 1. you might not know where the center of mass will
  * be. 2. if you add/remove shapes from a body and recompute the mass, the
  * joints will be broken.
- * 
+ *
  * @prop {bool} enableLimit A flag to enable joint limits.
  * @prop {bool} enableMotor A flag to enable the joint motor.
  * @prop {float} lowerAngle The lower angle for the joint limit (radians).
@@ -20032,8 +20553,8 @@ function RevoluteJoint(def, bodyA, bodyB, anchor) {
 
   this.m_type = RevoluteJoint.TYPE;
 
-  this.m_localAnchorA =  anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB =  anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_localAnchorA =  Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB =  Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
   this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
   this.m_impulse = Vec3();
@@ -20073,6 +20594,51 @@ function RevoluteJoint(def, bodyA, bodyB, anchor) {
   // Cdot = w2 - w1
   // J = [0 0 -1 0 0 1]
   // K = invI1 + invI2
+}
+
+RevoluteJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    lowerAngle: this.m_lowerAngle,
+    upperAngle: this.m_upperAngle,
+    maxMotorTorque: this.m_maxMotorTorque,
+    motorSpeed: this.m_motorSpeed,
+    enableLimit: this.m_enableLimit,
+    enableMotor: this.m_enableMotor,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    referenceAngle: this.m_referenceAngle,
+  };
+};
+
+RevoluteJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new RevoluteJoint(data);
+  return joint;
+};
+
+/**
+ * @internal
+ */
+RevoluteJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
 }
 
 /**
@@ -20160,6 +20726,10 @@ RevoluteJoint.prototype.setMaxMotorTorque = function(torque) {
   this.m_bodyA.setAwake(true);
   this.m_bodyB.setAwake(true);
   this.m_maxMotorTorque = torque;
+}
+
+RevoluteJoint.prototype.getMaxMotorTorque = function() {
+  return this.m_maxMotorTorque;
 }
 
 /**
@@ -20546,25 +21116,30 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 85 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -20589,6 +21164,7 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -20596,6 +21172,7 @@ var atUpperLimit = 2;
 var equalLimits = 3;
 
 PrismaticJoint.TYPE = 'prismatic-joint';
+Joint.TYPES[PrismaticJoint.TYPE] = PrismaticJoint;
 
 PrismaticJoint._super = Joint;
 PrismaticJoint.prototype = create(PrismaticJoint._super.prototype);
@@ -20657,9 +21234,9 @@ function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
 
   this.m_type = PrismaticJoint.TYPE;
 
-  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
-  this.m_localXAxisA = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0);
+  this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
+  this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
   this.m_localXAxisA.normalize();
   this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
   this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
@@ -20764,6 +21341,58 @@ function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
   //
   // Now compute impulse to be applied:
   // df = f2 - f1
+}
+
+PrismaticJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    lowerTranslation: this.m_lowerTranslation,
+    upperTranslation: this.m_upperTranslation,
+    maxMotorForce: this.m_maxMotorForce,
+    motorSpeed: this.m_motorSpeed,
+    enableLimit: this.m_enableLimit,
+    enableMotor: this.m_enableMotor,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    localAxisA: this.m_localXAxisA,
+    referenceAngle: this.m_referenceAngle,
+  };
+};
+
+PrismaticJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  data.localAxisA = Vec2(data.localAxisA);
+  var joint = new PrismaticJoint(data);
+  return joint;
+};
+
+/**
+ * @internal
+ */
+PrismaticJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+
+  if (def.localAxisA) {
+    this.m_localXAxisA.set(def.localAxisA);
+    this.m_localYAxisA.set(Vec2.cross(1.0, def.localAxisA));
+  }
 }
 
 /**
@@ -20910,6 +21539,10 @@ PrismaticJoint.prototype.setMaxMotorForce = function(force) {
   this.m_bodyA.setAwake(true);
   this.m_bodyB.setAwake(true);
   this.m_maxMotorForce = force;
+}
+
+PrismaticJoint.prototype.getMaxMotorForce = function() {
+  return this.m_maxMotorForce;
 }
 
 /**
@@ -21298,25 +21931,30 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 86 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -21341,8 +21979,10 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 MotorJoint.TYPE = 'motor-joint';
+Joint.TYPES[MotorJoint.TYPE] = MotorJoint;
 
 MotorJoint._super = Joint;
 MotorJoint.prototype = create(MotorJoint._super.prototype);
@@ -21387,11 +22027,8 @@ function MotorJoint(def, bodyA, bodyB) {
 
   this.m_type = MotorJoint.TYPE;
 
-  this.m_linearOffset = def.linearOffset ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
-
-  var angleA = bodyA.getAngle();
-  var angleB = bodyB.getAngle();
-  this.m_angularOffset = angleB - angleA;
+  this.m_linearOffset = Math.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
+  this.m_angularOffset = Math.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
 
   this.m_linearImpulse = Vec2.zero();
   this.m_angularImpulse = 0.0;
@@ -21425,6 +22062,47 @@ function MotorJoint(def, bodyA, bodyB) {
   // Cdot = w2 - w1
   // J = [0 0 -1 0 0 1]
   // K = invI1 + invI2
+}
+
+MotorJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    maxForce: this.m_maxForce,
+    maxTorque: this.m_maxTorque,
+    correctionFactor: this.m_correctionFactor,
+
+    linearOffset: this.m_linearOffset,
+    angularOffset: this.m_angularOffset,
+  };
+};
+
+MotorJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new MotorJoint(data);
+  return joint;
+};
+
+/**
+ * @internal
+ */
+MotorJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
 }
 
 /**
@@ -21667,25 +22345,30 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 87 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -21709,8 +22392,10 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 MouseJoint.TYPE = 'mouse-joint';
+Joint.TYPES[MouseJoint.TYPE] = MouseJoint;
 
 MouseJoint._super = Joint;
 MouseJoint.prototype = create(MouseJoint._super.prototype);
@@ -21795,6 +22480,34 @@ function MouseJoint(def, bodyA, bodyB, target) {
   // Identity used:
   // w k % (rx i + ry j) = w * (-ry i + rx j)
 }
+
+MouseJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    target: this.m_targetA,
+    maxForce: this.m_maxForce,
+    frequencyHz: this.m_frequencyHz,
+    dampingRatio: this.m_dampingRatio,
+
+    _localAnchorB: this.m_localAnchorB,
+  };
+};
+
+MouseJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  data.target = Vec2(data.target);
+  var joint = new MouseJoint(data);
+  if (data._localAnchorB) {
+    joint.m_localAnchorB = data._localAnchorB;
+  }
+  return joint;
+};
 
 /**
  * Use this to update the target point.
@@ -21973,25 +22686,30 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 88 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -22016,9 +22734,11 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
+Joint.TYPES[PulleyJoint.TYPE] = PulleyJoint;
 
 PulleyJoint._super = Joint;
 PulleyJoint.prototype = create(PulleyJoint._super.prototype);
@@ -22109,6 +22829,31 @@ function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, rati
   // = invMass1 + invI1 * cross(r1, u1)^2 + ratio^2 * (invMass2 + invI2 *
   // cross(r2, u2)^2)
 }
+
+PulleyJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    groundAnchorA: this.m_groundAnchorA,
+    groundAnchorB: this.m_groundAnchorB,
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    lengthA: this.m_lengthA,
+    lengthB: this.m_lengthB,
+    ratio: this.m_ratio,
+  };
+};
+
+PulleyJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new PulleyJoint(data);
+  return joint;
+};
 
 /**
  * Get the first ground anchor.
@@ -22358,25 +23103,30 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 89 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -22400,6 +23150,7 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -22407,6 +23158,7 @@ var atUpperLimit = 2;
 var equalLimits = 3;
 
 RopeJoint.TYPE = 'rope-joint';
+Joint.TYPES[RopeJoint.TYPE] = RopeJoint;
 
 RopeJoint._super = Joint;
 RopeJoint.prototype = create(RopeJoint._super.prototype);
@@ -22484,6 +23236,27 @@ function RopeJoint(def, bodyA, bodyB, anchor) {
   // J = [-u -cross(rA, u) u cross(rB, u)]
   // K = J * invM * JT
   // = invMassA + invIA * cross(rA, u)^2 + invMassB + invIB * cross(rB, u)^2
+};
+
+RopeJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    maxLength: this.m_maxLength,
+  };
+};
+
+RopeJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new RopeJoint(data);
+  return joint;
 };
 
 /**
@@ -22680,25 +23453,30 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 90 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -22722,8 +23500,10 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 WeldJoint.TYPE = 'weld-joint';
+Joint.TYPES[WeldJoint.TYPE] = WeldJoint;
 
 WeldJoint._super = Joint;
 WeldJoint.prototype = create(WeldJoint._super.prototype);
@@ -22770,8 +23550,8 @@ function WeldJoint(def, bodyA, bodyB, anchor) {
 
   this.m_type = WeldJoint.TYPE;
 
-  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
   this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
   this.m_frequencyHz = def.frequencyHz;
@@ -22806,6 +23586,47 @@ function WeldJoint(def, bodyA, bodyB, anchor) {
   // Cdot = w2 - w1
   // J = [0 0 -1 0 0 1]
   // K = invI1 + invI2
+}
+
+WeldJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+    
+    frequencyHz: this.m_frequencyHz,
+    dampingRatio: this.m_dampingRatio,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    referenceAngle: this.m_referenceAngle,
+  };
+};
+
+WeldJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new WeldJoint(data);
+  return joint;
+};
+
+/**
+ * @internal
+ */
+WeldJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
 }
 
 /**
@@ -23116,25 +23937,30 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 91 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -23158,8 +23984,10 @@ var Velocity = __webpack_require__(57);
 var Position = __webpack_require__(58);
 
 var Joint = __webpack_require__(68);
+var Body = __webpack_require__(53);
 
 WheelJoint.TYPE = 'wheel-joint';
+Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
 
 WheelJoint._super = Joint;
 WheelJoint.prototype = create(WheelJoint._super.prototype);
@@ -23173,7 +24001,7 @@ WheelJoint.prototype = create(WheelJoint._super.prototype);
  * joint translation is zero when the local anchor points coincide in world
  * space. Using local anchors and a local axis helps when saving and loading a
  * game.
- * 
+ *
  * @prop {boolean} enableMotor Enable/disable the joint motor.
  * @prop {float} maxMotorTorque The maximum motor torque, usually in N-m.
  * @prop {float} motorSpeed The desired motor speed in radians per second.
@@ -23215,11 +24043,9 @@ function WheelJoint(def, bodyA, bodyB, anchor, axis) {
 
   this.m_type = WheelJoint.TYPE;
 
-  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
-  this.m_localAxis = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0);
-
-  this.m_localXAxisA = this.m_localAxis;
+  this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
+  this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
   this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
 
   this.m_mass = 0.0;
@@ -23272,6 +24098,55 @@ function WheelJoint(def, bodyA, bodyB, anchor, axis) {
   // Motor rotational constraint
   // Cdot = wB - wA
   // J = [0 0 -1 0 0 1]
+}
+
+WheelJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    enableMotor: this.m_enableMotor,
+    maxMotorTorque: this.m_maxMotorTorque,
+    motorSpeed: this.m_motorSpeed,
+    frequencyHz: this.m_frequencyHz,
+    dampingRatio: this.m_dampingRatio,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    localAxisA: this.m_localXAxisA,
+  };
+};
+
+WheelJoint._deserialize = function(data, world, restore) {
+  data = Object.assign({}, data);
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new WheelJoint(data);
+  return joint;
+};
+
+/**
+ * @internal
+ */
+WheelJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+
+  if (def.localAxisA) {
+    this.m_localXAxisA.set(def.localAxisA);
+    this.m_localYAxisA.set(Vec2.cross(1.0, def.localAxisA));
+  }
 }
 
 /**
@@ -23662,11 +24537,13 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ }),
 /* 92 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectVisualData2D", function() { return ObjectVisualData2D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectVisualData2D": () => (/* binding */ ObjectVisualData2D)
+/* harmony export */ });
 /* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(93);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(30);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
@@ -23700,7 +24577,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__["iObjectVisualData"]
+class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__.iObjectVisualData
 {
     constructor()
     {
@@ -23716,13 +24593,13 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         this.ibo = null;
 
         // VBO/IBO generation type
-        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_NULL"];
+        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_NULL;
 
         // Name of the shader
         this.shaderID = null;
 
         // Initial color of the object
-        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_2__["Color"];
+        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_2__.Color;
 
         // texture file path
         this.textureFilePath = '';
@@ -23740,7 +24617,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         this.iboCount = 0;
 
         // The vertex scale of the object
-        this.vertexScale = new _common_size__WEBPACK_IMPORTED_MODULE_3__["Size"];
+        this.vertexScale = new _common_size__WEBPACK_IMPORTED_MODULE_3__.Size;
 
         // Scaled frame
         this.scaledFrame = null;
@@ -23755,7 +24632,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         this.defaultUniformScale = 1;
         
         // Mirror value
-        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_NULL"];
+        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_NULL;
     }
     
     // 
@@ -23784,13 +24661,13 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         
         if( obj.scaledFrame )
         {
-            this.scaledFrame = new _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__["ScaledFrame"];
+            this.scaledFrame = new _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__.ScaledFrame;
             this.scaledFrame.copy( obj.scaledFrame );
         }
         
         if( obj.spriteSheet )
         {
-            this.spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__["SpriteSheet"];
+            this.spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__.SpriteSheet;
             this.spriteSheet.copy( obj.spriteSheet );
         }
     }
@@ -23833,32 +24710,32 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
                 if( genTypeStr )
                 {
                     if( genTypeStr === 'quad' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_QUAD"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_QUAD;
 
                     else if( genTypeStr === 'sprite_sheet' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SPRITE_SHEET;
 
                     else if( genTypeStr === 'scaled_frame' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SCALED_FRAME"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SCALED_FRAME;
 
                     else if( genTypeStr === 'mesh_file' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_MESH_FILE"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_MESH_FILE;
 
                     else if( genTypeStr === 'font' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_FONT"];
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_FONT;
                 }
                 
                 let mirrorStr = meshNode[0].getAttribute('mirror');
                 if( mirrorStr )
                 {
                     if( mirrorStr === 'horizontal' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL"];
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL;
 
                     else if( mirrorStr === 'vertical' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_VERTICAL"];
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_VERTICAL;
 
                     else if( mirrorStr === 'horizontal_vertical' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL_VERTICAL"];
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL_VERTICAL;
                 }
                 
                 let spriteSheetNode = meshNode[0].getElementsByTagName( 'spriteSheet' );
@@ -23900,14 +24777,14 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
                     
                     // make sure this is a valid sprite sheet before allocating
                     if( (this.spriteSheet === null) && (this.glyphIDs || defaultIndex || glyphCount || columns) )
-                        this.spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__["SpriteSheet"]( defaultIndex, glyphCount, columns );
+                        this.spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__.SpriteSheet( defaultIndex, glyphCount, columns );
                 }
 
                 let scaledFrameNode = meshNode[0].getElementsByTagName( 'scaledFrame' );
                 if( scaledFrameNode.length )
                 {
                     if( this.scaledFrame === null )
-                        this.scaledFrame = new _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__["ScaledFrame"];
+                        this.scaledFrame = new _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__.ScaledFrame;
                     
                     this.scaledFrame.frame.w = Number(scaledFrameNode[0].getAttribute( 'thicknessWidth' ));
                     this.scaledFrame.frame.h = Number(scaledFrameNode[0].getAttribute( 'thicknessHeight' ));
@@ -23934,10 +24811,10 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             }
 
             // Load the color
-            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__["loadColor"]( visualNode[0], this.color );
+            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__.loadColor( visualNode[0], this.color );
 
             // Raise an exception if there's a genType but no shader
-            if( (this.genType != _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_NULL"]) && (this.shaderID === null) )
+            if( (this.genType != _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_NULL) && (this.shaderID === null) )
                 throw new Error( 'Shader effect or techique not set!' );
         }
     }
@@ -23957,18 +24834,18 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
                 {
                     let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
                     let filePath = eval('`' + this.textureFilePath + '`');
-                    this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__["textureManager"].get( group, filePath ) );
+                    this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__.textureManager.get( group, filePath ) );
                 }
             }
             else
-                this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__["textureManager"].get( group, this.textureFilePath ) );
+                this.textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__.textureManager.get( group, this.textureFilePath ) );
             
             // If the passed in size is empty, set it to the texture size
             if( size.isEmpty() )
                 size.copy( this.textureAry[0].size );
         }
         
-        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_QUAD"] )
+        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_QUAD )
         {
             this.generateQuad( group );
             
@@ -23977,7 +24854,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             size.w = Math.trunc(this.vertexScale.w);
             size.h = Math.trunc(this.vertexScale.h);
         }
-        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
+        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SPRITE_SHEET )
         {
             // Build the simple (grid) sprite sheet from XML data
             if( this.spriteSheetFilePath === null )
@@ -23989,7 +24866,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             else
             {
                 // This will return the sprite sheet if it's been loaded
-                let spriteSheet = _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__["spriteSheetManager"].get( group, this.spriteSheetFilePath );
+                let spriteSheet = _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__.spriteSheetManager.get( group, this.spriteSheetFilePath );
 
                 // Copy the needed glyph data from the manager
                 spriteSheet.copyTo( this.spriteSheet, this.glyphIDs );
@@ -24006,12 +24883,12 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             size.w = Math.trunc(this.vertexScale.w);
             size.h = Math.trunc(this.vertexScale.h);
         }
-        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SCALED_FRAME"] )
+        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SCALED_FRAME )
         {
             if( this.glyphIDs !== null )
             {
                 // This will return the sprite sheet
-                let spriteSheet = _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__["spriteSheetManager"].get( group, this.spriteSheetFilePath );
+                let spriteSheet = _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__.spriteSheetManager.get( group, this.spriteSheetFilePath );
 
                 // Get the glyph to make the frame with
                 let glyph = spriteSheet.findGlyph( this.glyphIDs[0] );
@@ -24023,11 +24900,11 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
                     this.generateScaledFrame( group, this.textureAry[0].size, glyph.size, size, glyph.uv );
             }
             else if( this.meshFilePath )
-                this.generateScaledFrameMeshFile( group, this.textureAry[0].size, this.textureAry[0].size, size, new _common_rect__WEBPACK_IMPORTED_MODULE_1__["Rect"] );
+                this.generateScaledFrameMeshFile( group, this.textureAry[0].size, this.textureAry[0].size, size, new _common_rect__WEBPACK_IMPORTED_MODULE_1__.Rect );
 
             else
                 // Generate a scaled frame
-                this.generateScaledFrame( group, this.textureAry[0].size, this.textureAry[0].size, size, new _common_rect__WEBPACK_IMPORTED_MODULE_1__["Rect"] );
+                this.generateScaledFrame( group, this.textureAry[0].size, this.textureAry[0].size, size, new _common_rect__WEBPACK_IMPORTED_MODULE_1__.Rect );
         }
     }
     
@@ -24054,7 +24931,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         let horzStr = '';
         let vertStr = '';
         
-        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL"]) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL_VERTICAL"]) )
+        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL_VERTICAL) )
         {
             horzStr = '_horz';
             
@@ -24064,7 +24941,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             vertAry[5 * 3 + 3] = 0.0;
         }
         
-        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_VERTICAL"]) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EM_HORIZONTAL_VERTICAL"]) )
+        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_VERTICAL) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL_VERTICAL) )
         {
             vertStr = '_vert';
             
@@ -24074,8 +24951,8 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             vertAry[5 * 3 + 4] = 0.0;
         }
         
-        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createVBO( group, 'guad_0011' + horzStr + vertStr, vertAry );
-        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createIBO( group, 'quad_0123', [0, 1, 2, 3], true );
+        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__.vertexBufferManager.createVBO( group, 'guad_0011' + horzStr + vertStr, vertAry );
+        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__.vertexBufferManager.createIBO( group, 'quad_0123', [0, 1, 2, 3], true );
         
         this.iboCount = 4;
     }
@@ -24090,7 +24967,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         let gSize = glyphSize;
         let vboName = 'scaled_frame_' + frameSize.w + '_' + frameSize.h + '_' + frame.w + '_' + frame.h + '_' + tSize.w + '_' + tSize.h + '_' + gSize.w + '_' + gSize.h;
 
-        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createScaledFrame(
+        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__.vertexBufferManager.createScaledFrame(
             group, vboName, this.scaledFrame, textureSize, glyphSize, frameSize, textureOffset );
 
         let iboAry = [
@@ -24105,7 +24982,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             3,7,1,     3,10,7 ];
 
         // Create the reusable IBO buffer
-        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createIBO( group, 'scaled_frame', iboAry, true );
+        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__.vertexBufferManager.createIBO( group, 'scaled_frame', iboAry, true );
 
         // Set the ibo count depending on the number of quads being rendered
         // If the center quad is not used, just adjust the ibo count because
@@ -24142,7 +25019,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             Array.prototype.push.apply( iboAry, [ 3,7,1, 3,10,7 ] );
 
         // See if it already exists before loading the mesh file
-        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].isVBO( group, name );
+        this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__.vertexBufferManager.isVBO( group, name );
         if( this.vbo === null )
         {
             // Load a mesh from XML file
@@ -24150,12 +25027,12 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             this.loadMeshFromXML( group, textureSize, frameSize, textureOffset, 16, meshFileVertAry, iboAry );
 
             // create the vbo
-            this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createScaledFrame(
+            this.vbo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__.vertexBufferManager.createScaledFrame(
                 group, name, this.scaledFrame, textureSize, glyphSize, frameSize, textureOffset, meshFileVertAry );
         }
         
         // Create the reusable IBO buffer
-        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__["vertexBufferManager"].createIBO( group, name, iboAry, true );
+        this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__.vertexBufferManager.createIBO( group, name, iboAry, true );
         this.iboCount = iboAry.length;
     }
     
@@ -24175,10 +25052,10 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             additionalOffsetY = 0.5;
 
         // This converts the data to a center aligned vertex buffer
-        let centerAlignSize = new _common_size__WEBPACK_IMPORTED_MODULE_3__["Size"](-(frameSize.w / 2), (frameSize.h / 2));
+        let centerAlignSize = new _common_size__WEBPACK_IMPORTED_MODULE_3__.Size(-(frameSize.w / 2), (frameSize.h / 2));
 
         // Open and parse the XML file:
-        let node = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__["assetHolder"].get( group, this.meshFilePath );
+        let node = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__.assetHolder.get( group, this.meshFilePath );
         let vboNode = node.getElementsByTagName( 'vbo' );
         
         if( vboNode.length )
@@ -24188,7 +25065,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             for( let i = 0; i < vertNode.length; ++i )
             {
                 // Load the 2D vert
-                let vert = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__["loadVertex2d"]( vertNode[i] );
+                let vert = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__.loadVertex2d( vertNode[i] );
                 
                 // This converts the data to a center aligned vertex buffer
                 vertAry.push( centerAlignSize.w + vert.x + additionalOffsetX );
@@ -24214,7 +25091,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
     //
     isActive()
     {
-        return (this.genType !== _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_NULL"]);
+        return (this.genType !== _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_NULL);
     }
     
     // 
@@ -24222,7 +25099,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
     //
     getFrameCount()
     {
-        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__["EGT_SPRITE_SHEET"] )
+        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SPRITE_SHEET )
             return this.spriteSheet.getCount();
 
         return this.textureAry.length;
@@ -24265,11 +25142,13 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
 
 /***/ }),
 /* 93 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iObjectVisualData", function() { return iObjectVisualData; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "iObjectVisualData": () => (/* binding */ iObjectVisualData)
+/* harmony export */ });
 
 // 
 //  FILE NAME: iobjectvisualdata.js
@@ -24304,11 +25183,13 @@ class iObjectVisualData
 
 /***/ }),
 /* 94 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScaledFrame", function() { return ScaledFrame; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ScaledFrame": () => (/* binding */ ScaledFrame)
+/* harmony export */ });
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 
 // 
@@ -24324,7 +25205,7 @@ class ScaledFrame
     constructor()
     {
         // Size of the frame
-        this.frame = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
+        this.frame = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
 
         // Is there a center quad?
         this.centerQuad = true;
@@ -24347,11 +25228,13 @@ class ScaledFrame
 
 /***/ }),
 /* 95 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectData3D", function() { return ObjectData3D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectData3D": () => (/* binding */ ObjectData3D)
+/* harmony export */ });
 /* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
 /* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(96);
 
@@ -24366,14 +25249,14 @@ __webpack_require__.r(__webpack_exports__);
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
 
 
-class ObjectData3D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__["iObjectData"]
+class ObjectData3D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
 {
     constructor()
     {
         super();
 
         // Visual data of the object
-        this.visualData = new _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__["ObjectVisualData3D"];
+        this.visualData = new _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__.ObjectVisualData3D;
 
         // Physics data of the object
         //CObjectPhysicsData2D m_physicsData;
@@ -24429,11 +25312,13 @@ class ObjectData3D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__["iObjectDat
 
 /***/ }),
 /* 96 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectVisualData3D", function() { return ObjectVisualData3D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectVisualData3D": () => (/* binding */ ObjectVisualData3D)
+/* harmony export */ });
 /* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(93);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(32);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
@@ -24451,7 +25336,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__["iObjectVisualData"]
+class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__.iObjectVisualData
 {
     constructor()
     {
@@ -24464,7 +25349,7 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         this.shaderID = null;
 
         // Initial color of the object
-        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_1__["Color"];
+        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_1__.Color;
 
         // mesh file path
         this.meshFilePath = null;
@@ -24502,7 +25387,7 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             }
 
             // Load the color
-            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadColor"]( visualNode[0], this.color );
+            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadColor( visualNode[0], this.color );
         }
     }
     
@@ -24519,7 +25404,7 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
                 
                 let textPath = this.meshGrp.uniqueTexturePathAry[textIndex].path;
                 
-                this.meshGrp.meshAry[i].textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].get( group, textPath ) );
+                this.meshGrp.meshAry[i].textureAry.push( _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.get( group, textPath ) );
             }
         }
     }
@@ -24536,11 +25421,13 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
 
 /***/ }),
 /* 97 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cameraManager", function() { return cameraManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "cameraManager": () => (/* binding */ cameraManager)
+/* harmony export */ });
 /* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(98);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 
@@ -24570,7 +25457,7 @@ class CameraManager
     //
     load( filePath )
     {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__.downloadFile( 'xml', filePath,
             ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
@@ -24581,7 +25468,7 @@ class CameraManager
     {
         if( xmlNode )
         {
-            this.defaultCamera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__["Camera"]();
+            this.defaultCamera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__.Camera();
 
             // Get the default camera
             let defCamera = xmlNode.getElementsByTagName('default');
@@ -24609,7 +25496,7 @@ class CameraManager
                     throw new Error( `Duplicate camera id (${id})!` );
 
                 // Create camera and init
-                let camera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__["Camera"]();
+                let camera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__.Camera();
                 camera.initFromXml( cameraLst[i] );
 
                 this.cameraMap.set( id, camera );
@@ -24710,11 +25597,13 @@ var cameraManager = new CameraManager;
 
 /***/ }),
 /* 98 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Camera", function() { return Camera; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Camera": () => (/* binding */ Camera)
+/* harmony export */ });
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
 /* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(99);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
@@ -24732,19 +25621,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Camera extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__["ObjectTransform"]
+class Camera extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__.ObjectTransform
 {
     constructor()
     {
         super(true);
         
-        this.projectionMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"];
-        this.finalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"];
+        this.projectionMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__.Matrix;
+        this.finalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__.Matrix;
         
-        this.projType = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].projectionType;
-        this.minZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].minZdist;
-        this.maxZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].maxZdist;
-        this.angle = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].viewAngle;
+        this.projType = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.projectionType;
+        this.minZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.minZdist;
+        this.maxZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.maxZdist;
+        this.angle = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.viewAngle;
 
         // Create the projection matrix
         this.createProjectionMatrix();
@@ -24765,9 +25654,9 @@ class Camera extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__["Objec
         if( attr )
         {
             if( attr === 'orthographic' )
-                this.projType = _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_ORTHOGRAPHIC"];
+                this.projType = _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_ORTHOGRAPHIC;
             else
-                this.projType = _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_PERSPECTIVE"];
+                this.projType = _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_PERSPECTIVE;
         }
         
         attr = xmlNode.getAttribute('minZDist');
@@ -24780,7 +25669,7 @@ class Camera extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__["Objec
 
         attr = xmlNode.getAttribute('view_angle');
         if( attr )
-            this.angle = Number(attr) * _defs__WEBPACK_IMPORTED_MODULE_3__["DEG_TO_RAD"];
+            this.angle = Number(attr) * _defs__WEBPACK_IMPORTED_MODULE_3__.DEG_TO_RAD;
         
         // Load the transforms
         this.loadTransFromNode( xmlNode );
@@ -24820,19 +25709,19 @@ class Camera extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__["Objec
     //
     createProjectionMatrix()
     {
-        if( this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__["EPT_PERSPECTIVE"] )
+        if( this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_PERSPECTIVE )
         {
             this.projectionMatrix.perspectiveFovRH(
                 this.angle,
-                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].screenAspectRatio.w,
+                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.w,
                 this.minZDist,
                 this.maxZDist );
         }
         else
         {
             this.projectionMatrix.orthographicRH(
-                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].defaultSize.w,
-                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__["settings"].defaultSize.h,
+                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize.w,
+                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize.h,
                 this.minZDist,
                 this.maxZDist );
         }
@@ -24866,7 +25755,7 @@ class Camera extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__["Objec
     //
     transform()
     {
-        let wasTransformed = this.parameters.isSet( _defs__WEBPACK_IMPORTED_MODULE_3__["TRANSFORM"] );
+        let wasTransformed = this.parameters.isSet( _defs__WEBPACK_IMPORTED_MODULE_3__.TRANSFORM );
     
         super.transform();
 
@@ -24887,11 +25776,13 @@ class Camera extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_1__["Objec
 
 /***/ }),
 /* 99 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectTransform", function() { return ObjectTransform; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectTransform": () => (/* binding */ ObjectTransform)
+/* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(100);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
@@ -24907,20 +25798,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Object"]
+class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 {
-    constructor( createRotMatrix = false, id = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
+    constructor( createRotMatrix = false, id = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
     {
         super( id );
         
         // local matrix
-        this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
+        this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__.Matrix;
 
         // Matrix for rotations only
         // Basicly used for normal calculations
         this.rotMatrix = null;
         if( createRotMatrix )
-            this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__["Matrix"];
+            this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__.Matrix;
     }
     
     //
@@ -24932,26 +25823,26 @@ class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Objec
         matrix.initilizeMatrix();
 
         // Apply the crop offset
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["CROP_OFFSET"] ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.CROP_OFFSET ) )
             matrix.translateSize( this.cropOffset );
 
         // Apply the scale
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["SCALE"] ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.SCALE ) )
             this.applyScale();
 
         // Apply the rotation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["ROTATE"] ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.ROTATE ) )
             this.applyRotation();
 
         // Apply the translation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["TRANSLATE"] ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.TRANSLATE ) )
             matrix.translate( this.pos );
 
         // Clear the check parameter
-        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_2__["TRANSFORM"] );
+        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_2__.TRANSFORM );
 
         // Indicate that translation was done
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_2__["WAS_TRANSFORMED"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_2__.WAS_TRANSFORMED );
     }
     
     //
@@ -24963,11 +25854,11 @@ class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Objec
     //
     transform( object = null )
     {
-        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_2__["WAS_TRANSFORMED"] );
+        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_2__.WAS_TRANSFORMED );
         
         if( object )
         {
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["TRANSFORM"] ) || object.wasWorldPosTranformed() )
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.TRANSFORM ) || object.wasWorldPosTranformed() )
             {
                 this.transformLocal( this.matrix );
                 this.matrix.mergeMatrix( object.matrix.matrix );
@@ -24975,7 +25866,7 @@ class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Objec
         }
         else
         {
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["TRANSFORM"] ) )
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.TRANSFORM ) )
                 this.transformLocal( this.matrix );
         }
     }
@@ -24994,14 +25885,14 @@ class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Objec
     applyRotation()
     {
         // Add in the center point prior to rotation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["CENTER_POINT"] ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.CENTER_POINT ) )
             this.matrix.translate( this.centerPos );
 
         this.matrix.rotate( this.rot );
 
         // Subtract the center point after rotation to put back in original position
         // Doing two inverts keeps us from having to new up a point that would be garbage collected
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["CENTER_POINT"] ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.CENTER_POINT ) )
         {
             this.centerPos.invert();
             this.matrix.translate( this.centerPos );
@@ -25020,7 +25911,7 @@ class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Objec
     //
     wasWorldPosTranformed()
     {
-        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__["WAS_TRANSFORMED"] );
+        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_2__.WAS_TRANSFORMED );
     }
 
     //
@@ -25028,18 +25919,20 @@ class ObjectTransform extends _common_object__WEBPACK_IMPORTED_MODULE_0__["Objec
     //
     forceTransform()
     {
-        this.parameters.Add( _common_defs__WEBPACK_IMPORTED_MODULE_2__["TRANSFORM"] );
+        this.parameters.Add( _common_defs__WEBPACK_IMPORTED_MODULE_2__.TRANSFORM );
     }
 }
 
 
 /***/ }),
 /* 100 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Object", function() { return Object; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Object": () => (/* binding */ Object)
+/* harmony export */ });
 /* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(34);
@@ -25063,26 +25956,26 @@ class Object
     constructor( id )
     {
         // Bitmask settings to record if the object needs to be transformed
-        this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__["BitMask"](_common_defs__WEBPACK_IMPORTED_MODULE_4__["VISIBLE"]);
+        this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__.BitMask(_common_defs__WEBPACK_IMPORTED_MODULE_4__.VISIBLE);
 
         // Unique Id number
         this.id = id;
     
         // Local position
-        this.pos = new _point__WEBPACK_IMPORTED_MODULE_0__["Point"];
+        this.pos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 
         // Local Rotation in radians
-        this.rot = new _point__WEBPACK_IMPORTED_MODULE_0__["Point"];
+        this.rot = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 
         // Local scale
-        this.scale = new _point__WEBPACK_IMPORTED_MODULE_0__["Point"]( 1, 1, 1 );
+        this.scale = new _point__WEBPACK_IMPORTED_MODULE_0__.Point( 1, 1, 1 );
 
         // The center point. Point of rotation
         // This is used for defining a different center point
-        this.centerPos = new _point__WEBPACK_IMPORTED_MODULE_0__["Point"];
+        this.centerPos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 
         // Offset due to a sprite sheet crop.
-        this.cropOffset = new _size__WEBPACK_IMPORTED_MODULE_1__["Size"];
+        this.cropOffset = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
     }
 
     // 
@@ -25098,28 +25991,28 @@ class Object
     //
     setPos( pos )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSLATE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.pos.set( pos );
     }
     
     setPosXYZ( x = 0, y = 0, z = 0 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSLATE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.pos.setXYZ( x, y, z );
     }
     
     incPos( pos )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSLATE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.pos.inc( pos );
     }
     
     incPosXYZ( x = 0, y = 0, z = 0 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSLATE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.pos.incXYZ( x, y, z );
     }
@@ -25129,46 +26022,46 @@ class Object
     //
     setRot( rot, convertToRadians = true )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ROTATE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
         
         if( convertToRadians )
-            this.rot.setXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"], rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"], rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"] );
+            this.rot.setXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD );
         else
             this.rot.set( rot );
     }
     
     setRotXYZ( x = 0, y = 0, z = 0, convertToRadians = true )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ROTATE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         if( convertToRadians )
-            this.rot.setXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"], y * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"], z * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"] );
+            this.rot.setXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD );
         else
             this.rot.setXYZ( x, y, z );
     }
     
     incRot( rot, convertToRadians = true )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ROTATE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         if( convertToRadians )
-            this.rot.incXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"], rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"], rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"] );
+            this.rot.incXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD );
         else
             this.rot.inc( rot );
         
-        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"] );
+        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD );
     }
     
     incRotXYZ( x = 0, y = 0, z = 0, convertToRadians = true )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ROTATE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         if( convertToRadians )
-            this.rot.incXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"], y * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"], z * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"] );
+            this.rot.incXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD );
         else
             this.rot.incXYZ( x, y, z );
         
-        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_4__["DEG_TO_RAD"] );
+        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_4__.DEG_TO_RAD );
     }
     
     //
@@ -25176,28 +26069,28 @@ class Object
     //
     setScale( scale )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["SCALE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.scale.set( scale );
     }
     
     setScaleXYZ( x = 1, y = 1, z = 1 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["SCALE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.scale.setXYZ( x, y, z );
     }
     
     incScale( scale )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["SCALE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.scale.inc( scale );
     }
     
     incScaleXYZ( x = 1, y = 1, z = 1 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["SCALE"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.scale.incXYZ( x, y, z );
     }
@@ -25207,14 +26100,14 @@ class Object
     //
     setCenterPos( pos )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["CENTER_POINT"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.centerPos = pos;
     }
     
     setCenterPosXYZ( x = 0, y = 0, z = 0 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["CENTER_POINT"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
         this.centerPos.setXYZ( x, y, z );
     }
@@ -25226,7 +26119,7 @@ class Object
     {
         if( !this.centerPos.isEmpty() || ((offset !== null) && (!offset.isEmpty())) )
         {
-            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["CROP_OFFSET"] | _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSFORM"] );
+            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.CROP_OFFSET | _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSFORM );
 
             this.cropOffset = offset;
         }
@@ -25238,9 +26131,9 @@ class Object
     setVisible( value )
     {
         if( value )
-            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__["VISIBLE"] );
+            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_4__.VISIBLE );
         else
-            this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_4__["VISIBLE"] );
+            this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_4__.VISIBLE );
     }
 
     //
@@ -25248,7 +26141,7 @@ class Object
     //
     isVisible()
     {
-        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__["VISIBLE"] );
+        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__.VISIBLE );
     }
     
     //
@@ -25256,19 +26149,19 @@ class Object
     //
     copyTransform( object )
     {
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__["TRANSLATE"] ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__.TRANSLATE ) )
             this.setPos( object.pos );
 
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__["ROTATE"] ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__.ROTATE ) )
             this.setRot( object.rot );
 
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__["SCALE"] ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__.SCALE ) )
             this.setScale( object.scale );
 
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__["CENTER_POINT"] ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__.CENTER_POINT ) )
             this.setCenterPos( object.centerPos );
 
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__["CROP_OFFSET"] ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_4__.CROP_OFFSET ) )
             this.setCropOffset( object.cropOffset );
     }
     
@@ -25277,19 +26170,19 @@ class Object
     //
     loadTransFromNode( node )
     {
-        let pos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadPosition"]( node );
+        let pos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadPosition( node );
         if( pos )
             this.setPos( pos );
 
-        let rot = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadRotation"]( node );
+        let rot = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadRotation( node );
         if( rot )
             this.setRot( rot );
 
-        let scale = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadScale"]( node );
+        let scale = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadScale( node );
         if( scale )
             this.setScale( scale );
 
-        let centerPos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadCenterPos"]( node );
+        let centerPos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadCenterPos( node );
         if( centerPos )
             this.setCenterPos( centerPos );
     }
@@ -25298,11 +26191,13 @@ class Object
 
 /***/ }),
 /* 101 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "physicsWorldManager", function() { return physicsWorldManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "physicsWorldManager": () => (/* binding */ physicsWorldManager)
+/* harmony export */ });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
 /* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
 /* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(104);
@@ -25323,7 +26218,7 @@ __webpack_require__.r(__webpack_exports__);
 const LOAD_2D = 0;
 const LOAD_3D = 1;
 
-class PhysicsWorldManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["ManagerBase"]
+class PhysicsWorldManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
 {
     constructor()
     {
@@ -25356,14 +26251,14 @@ class PhysicsWorldManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE
             {
                 // Create a new physics world inside of our map
                 if( loadType === LOAD_2D )
-                    this.worldMap.set( group, new _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__["PhysicsWorld2D"] );
+                    this.worldMap.set( group, new _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__.PhysicsWorld2D );
                 else
-                    this.worldMap.set( group, new _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__["PhysicsWorld3D"] );
+                    this.worldMap.set( group, new _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__.PhysicsWorld3D );
 
                 // There will only be one xml per physics world
                 let filePath = pathAry[0];
 
-                return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__["downloadFile"]( 'xml', filePath )
+                return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'xml', filePath )
                         .then(( xmlNode ) => this.loadFromNode( group, xmlNode, filePath ))
                         .catch(( error ) => { console.error(error.stack); throw error; });
             }
@@ -25417,15 +26312,16 @@ var physicsWorldManager = new PhysicsWorldManager;
 
 /***/ }),
 /* 102 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsWorld2D", function() { return PhysicsWorld2D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PhysicsWorld2D": () => (/* binding */ PhysicsWorld2D)
+/* harmony export */ });
 /* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_2__);
 
 // 
 //  FILE NAME: physicsworld2d.js
@@ -25443,7 +26339,7 @@ class PhysicsWorld2D
     constructor()
     {
         // Box2D world
-        this.world = planck_js__WEBPACK_IMPORTED_MODULE_2__["World"]();
+        this.world = planck_js__WEBPACK_IMPORTED_MODULE_2__.World();
         
         // All bodies that are handled by this physics world
         this.bodyAry = [];
@@ -25489,7 +26385,7 @@ class PhysicsWorld2D
         let gravityNode = node.getElementsByTagName( "gravity" );
         if( gravityNode.length )
         {
-            let gravity = planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+            let gravity = planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
                 Number( gravityNode[0].getAttribute( "x" ) ),
                 Number( gravityNode[0].getAttribute( "y" ) ) );
 
@@ -25568,11 +26464,11 @@ class PhysicsWorld2D
         if( this.active )
         {
             // Increment the timer
-            this.timer += _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+            this.timer += _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
 
             if( this.timer > this.stepTime )
             {
-                this.timer = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["modulus"]( this.timer, this.stepTime );
+                this.timer = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__.modulus( this.timer, this.stepTime );
 
                 // Begin the physics world step
                 this.world.step( this.stepTimeSec, this.velStepCount, this.posStepCount );
@@ -25590,7 +26486,7 @@ class PhysicsWorld2D
         if( this.active )
         {
             // Begin the physics world step
-            this.world.step( _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime / 1000.0, this.velStepCount, this.posStepCount );
+            this.world.step( _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime / 1000.0, this.velStepCount, this.posStepCount );
         }
     }
     
@@ -25615,11 +26511,13 @@ class PhysicsWorld2D
 
 /***/ }),
 /* 103 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "highResTimer", function() { return highResTimer; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "highResTimer": () => (/* binding */ highResTimer)
+/* harmony export */ });
 
 // 
 //  FILE NAME: highresolutiontimer.js
@@ -25694,11 +26592,13 @@ var highResTimer = new HighResTimer;
 
 /***/ }),
 /* 104 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsWorld3D", function() { return PhysicsWorld3D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PhysicsWorld3D": () => (/* binding */ PhysicsWorld3D)
+/* harmony export */ });
 
 // 
 //  FILE NAME: physicsworld3d.js
@@ -25715,11 +26615,13 @@ class PhysicsWorld3D
 
 /***/ }),
 /* 105 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "strategyManager", function() { return strategyManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "strategyManager": () => (/* binding */ strategyManager)
+/* harmony export */ });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
 
 // 
@@ -25731,7 +26633,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__["ManagerBase"]
+class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
 {
     constructor()
     {
@@ -25898,11 +26800,13 @@ var strategyManager = new StrategyManager;
 
 /***/ }),
 /* 106 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "strategyLoader", function() { return strategyLoader; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "strategyLoader": () => (/* binding */ strategyLoader)
+/* harmony export */ });
 /* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
 /* harmony import */ var _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(107);
 /* harmony import */ var _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(146);
@@ -25947,10 +26851,10 @@ class Strategyloader
                 throw new Error( `Strategy type not defined.` );
 
             if( strategyType == 'actor' )
-                promiseAry.push( _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].addStrategy( strategyName, new _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__["ActorStrategy"] ) );
+                promiseAry.push( _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__.strategyManager.addStrategy( strategyName, new _strategy_actorstrategy__WEBPACK_IMPORTED_MODULE_1__.ActorStrategy ) );
 
             else if( strategyType == 'stage' )
-                promiseAry.push( _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].addStrategy( strategyName, new _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__["StageStrategy"] ) );
+                promiseAry.push( _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__.strategyManager.addStrategy( strategyName, new _strategy_stagestrategy__WEBPACK_IMPORTED_MODULE_2__.StageStrategy ) );
 
             else
                 throw new Error( `Unknown strategy type (${strategyType})!` );
@@ -25976,7 +26880,7 @@ class Strategyloader
             let strategyName = strategyNode[i].getAttribute( 'name' );
 
             // Try to get the strategy
-            let strategy = _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__["strategyManager"].get( strategyName );
+            let strategy = _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__.strategyManager.get( strategyName );
             if( !strategy )
                 throw new Error( `Strategy name not defined (${strategyName}).` );
 
@@ -26073,11 +26977,13 @@ var strategyLoader = new Strategyloader;
 
 /***/ }),
 /* 107 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActorStrategy", function() { return ActorStrategy; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ActorStrategy": () => (/* binding */ ActorStrategy)
+/* harmony export */ });
 /* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
 /* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(109);
 /* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(113);
@@ -26095,7 +27001,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
+class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__.iStrategy
 {
     constructor()
     {
@@ -26127,7 +27033,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     {
         let defaultGroup = '';
         let defaultObjName = '';
-        let defaultId = _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEFAULT_ID"];
+        let defaultId = _common_defs__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_ID;
 
         let attr = xmlNode.getAttribute( 'defaultGroup' );
         if( attr !== null )
@@ -26149,7 +27055,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
                 throw new Error( `Actor strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
+            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__.NodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
         }
     }
 
@@ -26203,7 +27109,7 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
         let headNode = null;
         for( let i = 0; i < nodeAry.length; i++ )
         {
-            let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__["create"]( nodeAry[i] );
+            let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__.create( nodeAry[i] );
 
             if( headNode === null )
                 headNode = node;
@@ -26474,18 +27380,20 @@ class ActorStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
     setAllToDefaultId()
     {
         for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].setId( _common_defs__WEBPACK_IMPORTED_MODULE_3__["DEFAULT_ID"] );
+            this.nodeAry[i].setId( _common_defs__WEBPACK_IMPORTED_MODULE_3__.DEFAULT_ID );
     }
 }
 
 
 /***/ }),
 /* 108 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iStrategy", function() { return iStrategy; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "iStrategy": () => (/* binding */ iStrategy)
+/* harmony export */ });
 /* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(97);
 
 // 
@@ -26502,7 +27410,7 @@ class iStrategy
     constructor()
     {
         // Camera
-        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__["cameraManager"].getDefault();
+        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__.cameraManager.getDefault();
     }
     
     // 
@@ -26510,7 +27418,7 @@ class iStrategy
     //
     setCamera( cameraId )
     {
-        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__["cameraManager"].get( cameraId );
+        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_0__.cameraManager.get( cameraId );
     }
     
     //
@@ -26526,11 +27434,13 @@ class iStrategy
 
 /***/ }),
 /* 109 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeDataList", function() { return NodeDataList; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "NodeDataList": () => (/* binding */ NodeDataList)
+/* harmony export */ });
 /* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(110);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
@@ -26551,7 +27461,7 @@ class NodeDataList
         node,
         defGroup = '',
         defObjName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
+        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
     {
         // Array of the node data
         this.dataAry = [];
@@ -26576,9 +27486,9 @@ class NodeDataList
         if( attr )
             nodeName = attr;
         
-        this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"];
+        this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
         
-        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"], defaultGroup, defaultObjName, defId );
+        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, defaultGroup, defaultObjName, defId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
@@ -26599,7 +27509,7 @@ class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__["NodeData"]( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defId );
+                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
@@ -26612,11 +27522,13 @@ class NodeDataList
 
 /***/ }),
 /* 110 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeData", function() { return NodeData; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "NodeData": () => (/* binding */ NodeData)
+/* harmony export */ });
 /* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(111);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(112);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
@@ -26632,16 +27544,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteData"]
+class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteData
 {
     constructor(
         xmlNode,
         nodeName,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
-        parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
         defGroup = '',
         defObjName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
+        defId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
     {
         super( xmlNode.firstElementChild, defGroup, defObjName, defId );
 
@@ -26655,7 +27567,7 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
         this.parenNodetId = parenNodetId;
 
         // Node type
-        this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_NULL"];
+        this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_NULL;
 
         // Is this a node with children nodes?
         this.hasChildrenNodes = false;
@@ -26667,30 +27579,30 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
         {
             if( xmlNode.children[i].nodeName == 'object' )
             {
-                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_OBJECT"];
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_OBJECT;
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'sprite' )
             {
-                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiProgressBar' )
             {
-                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_UI_CONTROL"];
-                this.uiControlType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__["ECT_PROGRESS_BAR"];
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_UI_CONTROL;
+                this.uiControlType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__.ECT_PROGRESS_BAR;
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiMeter' )
             {
-                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_UI_CONTROL"];
-                this.uiControlType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__["ECT_METER"];
+                this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_UI_CONTROL;
+                this.uiControlType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__.ECT_METER;
                 break;
             }
         }
 
         // Throw an error if a node type is not found
-        if( this.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_NULL"] )
+        if( this.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_NULL )
             throw new Error( `Node type not defined (${xmlNode.baseURI}).` );
     }
 }
@@ -26698,11 +27610,13 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__["SpriteDa
 
 /***/ }),
 /* 111 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteData", function() { return SpriteData; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteData": () => (/* binding */ SpriteData)
+/* harmony export */ });
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 
 // 
@@ -26716,7 +27630,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteData
 {
-    constructor( xmlNode, defGroup, defObjName, defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__["DEFAULT_ID"] )
+    constructor( xmlNode, defGroup, defObjName, defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEFAULT_ID )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -26758,49 +27672,51 @@ class SpriteData
 
 /***/ }),
 /* 112 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BTN_DEC", function() { return BTN_DEC; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BTN_INC", function() { return BTN_INC; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_NULL", function() { return ECT_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_LABEL", function() { return ECT_LABEL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_BUTTON", function() { return ECT_BUTTON; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_BUTTON_LIST", function() { return ECT_BUTTON_LIST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_CHECK_BOX", function() { return ECT_CHECK_BOX; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SLIDER", function() { return ECT_SLIDER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SCROLL_BOX", function() { return ECT_SCROLL_BOX; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_SUB_CONTROL", function() { return ECT_SUB_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_METER", function() { return ECT_METER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_TAB_CONTROL", function() { return ECT_TAB_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_PROGRESS_BAR", function() { return ECT_PROGRESS_BAR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECT_AMOUNT_BUTTON", function() { return ECT_AMOUNT_BUTTON; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_NULL", function() { return ECS_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_INIT", function() { return ECS_INIT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_TRANS_IN", function() { return ECS_TRANS_IN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_TRANS_OUT", function() { return ECS_TRANS_OUT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_DISABLE", function() { return ECS_DISABLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_INACTIVE", function() { return ECS_INACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_ACTIVE", function() { return ECS_ACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_SELECT", function() { return ECS_SELECT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_CHANGE", function() { return ECS_CHANGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_EXECUTE", function() { return ECS_EXECUTE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECS_EVENT", function() { return ECS_EVENT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_NULL", function() { return ECAT_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_ACTION", function() { return ECAT_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_TO_TREE", function() { return ECAT_TO_TREE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_TO_MENU", function() { return ECAT_TO_MENU; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_BACK", function() { return ECAT_BACK; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_CLOSE", function() { return ECAT_CLOSE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_CHANGE_FOCUS", function() { return ECAT_CHANGE_FOCUS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_GAME_STATE_CHANGE", function() { return ECAT_GAME_STATE_CHANGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_QUIT_GAME", function() { return ECAT_QUIT_GAME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ECAT_ACTION_EVENT", function() { return ECAT_ACTION_EVENT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_UP", function() { return EAR_UP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_DOWN", function() { return EAR_DOWN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_LEFT", function() { return EAR_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAR_RIGHT", function() { return EAR_RIGHT; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "BTN_DEC": () => (/* binding */ BTN_DEC),
+/* harmony export */   "BTN_INC": () => (/* binding */ BTN_INC),
+/* harmony export */   "ECT_NULL": () => (/* binding */ ECT_NULL),
+/* harmony export */   "ECT_LABEL": () => (/* binding */ ECT_LABEL),
+/* harmony export */   "ECT_BUTTON": () => (/* binding */ ECT_BUTTON),
+/* harmony export */   "ECT_BUTTON_LIST": () => (/* binding */ ECT_BUTTON_LIST),
+/* harmony export */   "ECT_CHECK_BOX": () => (/* binding */ ECT_CHECK_BOX),
+/* harmony export */   "ECT_SLIDER": () => (/* binding */ ECT_SLIDER),
+/* harmony export */   "ECT_SCROLL_BOX": () => (/* binding */ ECT_SCROLL_BOX),
+/* harmony export */   "ECT_SUB_CONTROL": () => (/* binding */ ECT_SUB_CONTROL),
+/* harmony export */   "ECT_METER": () => (/* binding */ ECT_METER),
+/* harmony export */   "ECT_TAB_CONTROL": () => (/* binding */ ECT_TAB_CONTROL),
+/* harmony export */   "ECT_PROGRESS_BAR": () => (/* binding */ ECT_PROGRESS_BAR),
+/* harmony export */   "ECT_AMOUNT_BUTTON": () => (/* binding */ ECT_AMOUNT_BUTTON),
+/* harmony export */   "ECS_NULL": () => (/* binding */ ECS_NULL),
+/* harmony export */   "ECS_INIT": () => (/* binding */ ECS_INIT),
+/* harmony export */   "ECS_TRANS_IN": () => (/* binding */ ECS_TRANS_IN),
+/* harmony export */   "ECS_TRANS_OUT": () => (/* binding */ ECS_TRANS_OUT),
+/* harmony export */   "ECS_DISABLE": () => (/* binding */ ECS_DISABLE),
+/* harmony export */   "ECS_INACTIVE": () => (/* binding */ ECS_INACTIVE),
+/* harmony export */   "ECS_ACTIVE": () => (/* binding */ ECS_ACTIVE),
+/* harmony export */   "ECS_SELECT": () => (/* binding */ ECS_SELECT),
+/* harmony export */   "ECS_CHANGE": () => (/* binding */ ECS_CHANGE),
+/* harmony export */   "ECS_EXECUTE": () => (/* binding */ ECS_EXECUTE),
+/* harmony export */   "ECS_EVENT": () => (/* binding */ ECS_EVENT),
+/* harmony export */   "ECAT_NULL": () => (/* binding */ ECAT_NULL),
+/* harmony export */   "ECAT_ACTION": () => (/* binding */ ECAT_ACTION),
+/* harmony export */   "ECAT_TO_TREE": () => (/* binding */ ECAT_TO_TREE),
+/* harmony export */   "ECAT_TO_MENU": () => (/* binding */ ECAT_TO_MENU),
+/* harmony export */   "ECAT_BACK": () => (/* binding */ ECAT_BACK),
+/* harmony export */   "ECAT_CLOSE": () => (/* binding */ ECAT_CLOSE),
+/* harmony export */   "ECAT_CHANGE_FOCUS": () => (/* binding */ ECAT_CHANGE_FOCUS),
+/* harmony export */   "ECAT_GAME_STATE_CHANGE": () => (/* binding */ ECAT_GAME_STATE_CHANGE),
+/* harmony export */   "ECAT_QUIT_GAME": () => (/* binding */ ECAT_QUIT_GAME),
+/* harmony export */   "ECAT_ACTION_EVENT": () => (/* binding */ ECAT_ACTION_EVENT),
+/* harmony export */   "EAR_UP": () => (/* binding */ EAR_UP),
+/* harmony export */   "EAR_DOWN": () => (/* binding */ EAR_DOWN),
+/* harmony export */   "EAR_LEFT": () => (/* binding */ EAR_LEFT),
+/* harmony export */   "EAR_RIGHT": () => (/* binding */ EAR_RIGHT)
+/* harmony export */ });
 // 
 //  FILE NAME: uicontroldefs.js
 //  DESC:      misc defines
@@ -26860,11 +27776,13 @@ const EAR_UP    = 1,
 
 /***/ }),
 /* 113 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "create": () => (/* binding */ create)
+/* harmony export */ });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
 /* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(114);
 /* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(137);
@@ -26899,25 +27817,25 @@ function create( nodeData )
 {
     let node = null;
     
-    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_SPRITE"] )
+    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_SPRITE )
     {
         if( nodeData.hasChildrenNodes )
-            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__["SpriteNodeMultiLst"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__.SpriteNodeMultiLst( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__["SpriteNode"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__["objectDataManager"].getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__.SpriteNode( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_OBJECT"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_OBJECT )
     {
         // Object node is automatically a multilist node because an object node without children is pretty useless
-        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__["ObjectNodeMultiLst"]( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__.ObjectNodeMultiLst( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["ENT_UI_CONTROL"] )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_UI_CONTROL )
     {
         node = CreateUIControlNode( nodeData, nodeData.id );
     }
@@ -26949,11 +27867,11 @@ function CreateUIControlNode( nodeData )
 {
     let control = null;
     
-    if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__["ECT_PROGRESS_BAR"] )
-        control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__["UIProgressBar"]( nodeData.group );
+    if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__.ECT_PROGRESS_BAR )
+        control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__.UIProgressBar( nodeData.group );
     
-    else if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__["ECT_METER"] )
-        control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__["UIMeter"]( nodeData.group );
+    else if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__.ECT_METER )
+        control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__.UIMeter( nodeData.group );
     
     else
         throw new Error( `Node control type not defined (${nodeData.nodeName}).` );
@@ -26961,17 +27879,19 @@ function CreateUIControlNode( nodeData )
     control.loadFromNode( nodeData.xmlNode );
     control.init();
     
-    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__["UIControlNode"]( control );
+    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__.UIControlNode( control );
 }
 
 
 /***/ }),
 /* 114 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIProgressBar", function() { return UIProgressBar; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIProgressBar": () => (/* binding */ UIProgressBar)
+/* harmony export */ });
 /* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(115);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
@@ -26996,13 +27916,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
+class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 {
     constructor( group )
     {
         super( group );
         
-        this.type = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__["ECT_PROGRESS_BAR"];
+        this.type = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__.ECT_PROGRESS_BAR;
         
         // stencil mask sprite
         this.stencilMaskSprite;
@@ -27020,19 +27940,19 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         this.spriteApplyIndex = -1;
 
         // Orentation
-        this.orentation = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EO_HORIZONTAL"];
+        this.orentation = _common_defs__WEBPACK_IMPORTED_MODULE_7__.EO_HORIZONTAL;
         
         // alignment of this progress bar
-        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_LEFT"];
+        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__.EHA_HORZ_LEFT;
 
         // progress bar size
-        this.progressBarSize = new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"];
+        this.progressBarSize = new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size;
 
         // progress bar pos
-        this.progressBarPos = new _common_point__WEBPACK_IMPORTED_MODULE_3__["Point"];
+        this.progressBarPos = new _common_point__WEBPACK_IMPORTED_MODULE_3__.Point;
         
         // progress bar scale
-        this.progressBarScale = new _common_point__WEBPACK_IMPORTED_MODULE_3__["Point"];
+        this.progressBarScale = new _common_point__WEBPACK_IMPORTED_MODULE_3__.Point;
     }
     
     //
@@ -27064,26 +27984,26 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         {
             let attr = orentNode[0].getAttribute("type");
             if( attr === 'vert' )
-                this.orentation = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EO_VERTICAL"];
+                this.orentation = _common_defs__WEBPACK_IMPORTED_MODULE_7__.EO_VERTICAL;
 
             attr = orentNode[0].getAttribute("alignment");
             if( attr )
             {
-                if( this.orentation === _common_defs__WEBPACK_IMPORTED_MODULE_7__["EO_HORIZONTAL"] )
+                if( this.orentation === _common_defs__WEBPACK_IMPORTED_MODULE_7__.EO_HORIZONTAL )
                 {
                     if( attr === 'right' )
-                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_RIGHT"];
+                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__.EHA_HORZ_RIGHT;
 
                     else if( attr === 'center' )
-                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_CENTER"];
+                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__.EHA_HORZ_CENTER;
                 }
                 else
                 {
                     if( attr === 'bottom' )
-                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EVA_VERT_BOTTOM"];
+                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__.EVA_VERT_BOTTOM;
 
                     else if( attr === 'center' )
-                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__["EVA_VERT_CENTER"];
+                        this.alignment = _common_defs__WEBPACK_IMPORTED_MODULE_7__.EVA_VERT_CENTER;
                 }
             }
         }
@@ -27129,7 +28049,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         
         if( stencilMaskSprite )
         {
-            this.stencilMaskSprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__["objectDataManager"].getData( this.group, stencilMaskSprite ) );
+            this.stencilMaskSprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__.objectDataManager.getData( this.group, stencilMaskSprite ) );
             
             // Get the size
             this.progressBarSize.copy( this.stencilMaskSprite.objData.size );
@@ -27205,16 +28125,16 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
                 {
                     // Disable rendering to the color buffer
                     // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].colorMask( false, false, false, false );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.colorMask( false, false, false, false );
 
                     // Disable rendering to the depth mask
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].depthMask( false );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.depthMask( false );
 
                     // Start using the stencil
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].enable( _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].STENCIL_TEST );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.enable( _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.STENCIL_TEST );
 
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].ALWAYS, 0x1, 0x1 );
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].REPLACE );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.ALWAYS, 0x1, 0x1 );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.REPLACE, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.REPLACE );
         
 
                     this.stencilMaskSprite.render( camera );
@@ -27222,23 +28142,23 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
                     
                     // Re-enable color
                     // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].colorMask( true, true, true, true );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.colorMask( true, true, true, true );
 
                     // Where a 1 was not rendered
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].EQUAL, 0x1, 0x1 );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.stencilFunc( _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.EQUAL, 0x1, 0x1 );
 
                     // Keep the pixel
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].KEEP, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].KEEP, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].KEEP );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.stencilOp( _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.KEEP, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.KEEP, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.KEEP );
 
                     // Enable rendering to the depth mask
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].depthMask( true );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.depthMask( true );
 
 
                     this.spriteAry[i].render( this.matrix );
 
 
                     // Finished using stencil
-                    _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].disable( _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].STENCIL_TEST );
+                    _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.disable( _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.STENCIL_TEST );
                 }
                 else
                     this.spriteAry[i].render( camera );
@@ -27263,16 +28183,16 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
         // Calculate the new scale for the progress bar
         let scaler = (this.curValue - this.minValue) / (this.maxValue - this.minValue);
 
-        if( this.orentation == _common_defs__WEBPACK_IMPORTED_MODULE_7__["EO_HORIZONTAL"] )
+        if( this.orentation == _common_defs__WEBPACK_IMPORTED_MODULE_7__.EO_HORIZONTAL )
         {
             scaleX = this.progressBarScale.x * scaler;
             
             let offset = this.progressBarSize.w * scaler;
 
-            if( this.alignment == _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_LEFT"] )
+            if( this.alignment == _common_defs__WEBPACK_IMPORTED_MODULE_7__.EHA_HORZ_LEFT )
                 posX -= (this.progressBarSize.w - offset) / 2;
 
-            else if( this.alignment.horz == _common_defs__WEBPACK_IMPORTED_MODULE_7__["EHA_HORZ_RIGHT"] )
+            else if( this.alignment.horz == _common_defs__WEBPACK_IMPORTED_MODULE_7__.EHA_HORZ_RIGHT )
                 posX += (this.progressBarSize.w - offset) / 2;
         }
         else
@@ -27281,10 +28201,10 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
             
             let offset = this.progressBarSize.h * scaler;
 
-            if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_7__["EVA_VERT_TOP"] )
+            if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_7__.EVA_VERT_TOP )
                 posY += (this.progressBarSize.h - offset) / 2;
 
-            else if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_7__["EVA_VERT_BOTTOM"] )
+            else if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_7__.EVA_VERT_BOTTOM )
                 posY -= (this.progressBarSize.h - offset) / 2;
         }
 
@@ -27304,11 +28224,13 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__["UIControl"]
 
 /***/ }),
 /* 115 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControl", function() { return UIControl; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIControl": () => (/* binding */ UIControl)
+/* harmony export */ });
 /* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(116);
 /* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(119);
@@ -27352,7 +28274,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
+class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
 {
     constructor( group )
     {
@@ -27362,36 +28284,36 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         this.spriteAry = [];
 
         // Script component object
-        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__["ScriptComponent"];
+        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_12__.ScriptComponent;
 
         // control's default state
         this.defaultState;
 
         // control's current state
-        this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"];
-        this.lastState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"];
+        this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_NULL;
+        this.lastState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_NULL;
 
         // Name of the action to perform under the correct circumstances
         this.executionAction;
 
         // How the control should respond when selected
-        this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_NULL"];
+        this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_NULL;
 
         // This control's size
-        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__["Size"];
+        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__.Size;
 
         // This is the size modifier
         // when calculating the collision rect
-        this.sizeModifier = new _common_rect__WEBPACK_IMPORTED_MODULE_6__["Rect"];
+        this.sizeModifier = new _common_rect__WEBPACK_IMPORTED_MODULE_6__.Rect;
 
         // Collision rect
-        this.collisionQuad = new _common_quad__WEBPACK_IMPORTED_MODULE_5__["Quad"];
+        this.collisionQuad = new _common_quad__WEBPACK_IMPORTED_MODULE_5__.Quad;
 
         // Collision center
-        this.collisionCenter = new _common_point__WEBPACK_IMPORTED_MODULE_4__["Point"];
+        this.collisionCenter = new _common_point__WEBPACK_IMPORTED_MODULE_4__.Point;
 
         // Mouse selection type
-        this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_16__["EAP_UP"];
+        this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_16__.EAP_UP;
 
         // Scrolling parameters
         this.scrollParam = null;
@@ -27412,7 +28334,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         // Set if mouse selection is the down message
         attr = xmlNode.getAttribute( 'mouseSelectDown' );
         if( attr && (attr === 'true') )
-            this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_16__["EAP_DOWN"];
+            this.mouseSelectType = _common_defs__WEBPACK_IMPORTED_MODULE_16__.EAP_DOWN;
 
         // Setup the action
         let actionNode = xmlNode.getElementsByTagName( 'action' );
@@ -27438,12 +28360,12 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         let scrollParamNode = xmlNode.getElementsByTagName( 'scroll' );
         if( scrollParamNode.length )
         {
-            this.scrollParam = new _scrollparam__WEBPACK_IMPORTED_MODULE_1__["ScrollParam"];
+            this.scrollParam = new _scrollparam__WEBPACK_IMPORTED_MODULE_1__.ScrollParam;
             this.scrollParam.loadFromNode( scrollParamNode );
         }
 
         // Get the size modifier info
-        this.sizeModifier = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_13__["loadRect"]( xmlNode );
+        this.sizeModifier = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_13__.loadRect( xmlNode );
 
         // Init to the default state
         this.revertToDefaultState();
@@ -27477,7 +28399,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         let objectName = xmlNode.getAttribute( 'objectName' );
 
         // allocate the sprite in the array
-        let sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__["Sprite"]( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__["objectDataManager"].getData( this.group, objectName ) );
+        let sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__.Sprite( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__.objectDataManager.getData( this.group, objectName ) );
         this.spriteAry.push( sprite );
 
         // Load the sprite data
@@ -27494,7 +28416,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             }
 
             // set the color if it is different
-            sprite.visualComponent.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_13__["loadColor"]( xmlNode, sprite.visualComponent.color );
+            sprite.visualComponent.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_13__.loadColor( xmlNode, sprite.visualComponent.color );
         }
         else
         {
@@ -27545,18 +28467,18 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     {
         if( this.wasWorldPosTranformed() && !this.size.isEmpty() )
         {
-            let finalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__["Matrix"]( this.matrix );
-            finalMatrix.scaleFromValue( _utilities_settings__WEBPACK_IMPORTED_MODULE_8__["settings"].orthoAspectRatio.h );
+            let finalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__.Matrix( this.matrix );
+            finalMatrix.scaleFromValue( _utilities_settings__WEBPACK_IMPORTED_MODULE_8__.settings.orthoAspectRatio.h );
             finalMatrix.invertY();
 
             // Get half the screen size to convert to screen coordinates
-            let screenHalf = _utilities_settings__WEBPACK_IMPORTED_MODULE_8__["settings"].size_half;
+            let screenHalf = _utilities_settings__WEBPACK_IMPORTED_MODULE_8__.settings.size_half;
 
             // Create the rect of the control based on half it's size
             let halfwidth = this.size.w * 0.5;
             let halfHeight = this.size.h * 0.5;
 
-            let quad = new _common_quad__WEBPACK_IMPORTED_MODULE_5__["Quad"];
+            let quad = new _common_quad__WEBPACK_IMPORTED_MODULE_5__.Quad;
             quad.point[0].x = -halfwidth + -this.sizeModifier.x1;
             quad.point[0].y = -halfHeight + -this.sizeModifier.y1;
             quad.point[1].x = halfwidth + this.sizeModifier.x2;
@@ -27578,7 +28500,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             this.collisionQuad.point[3].x += screenHalf.w;
             this.collisionQuad.point[3].y += screenHalf.h;
 
-            finalMatrix.transformPoint( this.collisionCenter, new _common_point__WEBPACK_IMPORTED_MODULE_4__["Point"] );
+            finalMatrix.transformPoint( this.collisionCenter, new _common_point__WEBPACK_IMPORTED_MODULE_4__.Point );
 
             // Convert to screen coordinates
             this.collisionCenter.x += screenHalf.w;
@@ -27600,33 +28522,33 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     handleEvent( event )
     {
-        if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_CONTROL_STATE_CHANGE"] )
+        if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_CONTROL_STATE_CHANGE )
         {
             this.onStateChange( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_SELECT_EXECUTE"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_SELECT_EXECUTE )
         {
             this.onSelectExecute( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_SET_ACTIVE_CONTROL"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_SET_ACTIVE_CONTROL )
         {
             this.onSetActiveControl( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_REACTIVATE"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_REACTIVATE )
         {
             this.onReactivate( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TRANS_IN"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_TRANS_IN )
         {
             this.onTransIn( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TRANS_OUT"] )
+        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_TRANS_OUT )
         {
             this.onTransOut( event );
         }
 
         // Prepare script function associated with handling this game event
-        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EVENT"] );
+        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_EVENT );
     }
 
     // 
@@ -27634,14 +28556,14 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     onTransIn( event )
     {
-        if( event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["ETC_BEGIN"] )
+        if( event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.ETC_BEGIN )
         {
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
                 this.setDisplayState();
             
             // Prepare script function associated with handling this game event
-            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_IN"] );
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_TRANS_IN );
         }
     }
 
@@ -27650,7 +28572,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     onTransOut( event )
     {
-        if( event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["ETC_BEGIN"] )
+        if( event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.ETC_BEGIN )
         {
             // Reset the control
             this.reset();
@@ -27663,7 +28585,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
                 this.setDisplayState();
             
             // Prepare script function associated with handling this game event
-            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_OUT"] );
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_TRANS_OUT );
         }
     }
 
@@ -27685,28 +28607,28 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     onSelectExecute( event )
     {
-        if( this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"] )
+        if( this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_SELECT )
         {
-            if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_TREE"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TO_TREE"], this.executionAction );
+            if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_TO_TREE )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_TO_TREE, this.executionAction );
 
-            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_MENU"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TO_MENU"], this.executionAction, this );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_TO_MENU )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_TO_MENU, this.executionAction, this );
 
-            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_BACK"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_BACK_ACTION"] );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_BACK )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_BACK_ACTION );
 
-            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CLOSE"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_TOGGLE_ACTION"] );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_CLOSE )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_TOGGLE_ACTION );
 
-            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_GAME_STATE_CHANGE"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_GAME_STATE_CHANGE"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["ETC_BEGIN"], this.executionAction );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_GAME_STATE_CHANGE )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_GAME_STATE_CHANGE, _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.ETC_BEGIN, this.executionAction );
 
-            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"] )
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"], this.executionAction, this );
+            else if( this.actionType === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_ACTION_EVENT )
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_ACTION_EVENT, this.executionAction, this );
 
             // Prepare script function associated with handling this game event
-            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EXECUTE"] );
+            this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_EXECUTE );
         }
     }
 
@@ -27716,13 +28638,13 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     onSetActiveControl( event )
     {
         // Set the last active control to be active again
-        if( (event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EAC_LAST_ACTIVE_CONTROL"]) &&
-            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]))
+        if( (event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EAC_LAST_ACTIVE_CONTROL) &&
+            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE))
         {
-            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE;
 
             // Don't animate the control if the mouse was used
-            if( !_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__["actionManager"].wasLastDeviceMouse() )
+            if( !_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__.actionManager.wasLastDeviceMouse() )
             {
                 this.resetSpriteScript();
                 this.setDisplayState();
@@ -27736,13 +28658,13 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     onReactivate( event )
     {
         // Set the last active control to be active again
-        if( this.state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"] )
+        if( this.state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE )
         {
-            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE;
 
             // Don't animate the control if the mouse was used
-            if( !_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__["actionManager"].wasLastDeviceMouse() ||
-                this.isPointInControl( _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].mouseX, _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].mouseY ) )
+            if( !_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__.actionManager.wasLastDeviceMouse() ||
+                this.isPointInControl( _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseX, _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseY ) )
             {
                 this.resetSpriteScript();
                 this.setDisplayState();
@@ -27757,16 +28679,16 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     {
         let result = false;
 
-        if( !this.isDisabled() && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].mouseOffsetX, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].mouseOffsetY ) )
+        if( !this.isDisabled() && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffsetX, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffsetY ) )
         {
             result = true;
 
             // Only send the message if it's not already active
             if( !this.isActive() )
             {
-                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent(
-                    _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                    _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"],
+                _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent(
+                    _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_CONTROL_STATE_CHANGE,
+                    _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE,
                     this );
             }
         }
@@ -27801,7 +28723,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
         // The focus has switched to this control
         if( !this.isDisabled() )
         {
-            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE;
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -27818,8 +28740,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     deactivateControl()
     {
         // The focus has switched away from this control
-        if( (this.lastState === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"]) ||
-            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]) )
+        if( (this.lastState === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_NULL) ||
+            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE) )
         {
             // Reset the control
             this.reset();
@@ -27836,10 +28758,10 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     disableControl()
     {
-        if( (this.lastState === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_NULL"]) ||
-            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"]) )
+        if( (this.lastState === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_NULL) ||
+            (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_DISABLE) )
         {
-            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_DISABLE;
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -27851,9 +28773,9 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     enableControl()
     {
-        if( this.lastState <= _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"] )
+        if( this.lastState <= _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_DISABLE )
         {
-            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
+            this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE;
 
             this.resetSpriteScript();
             this.setDisplayState();
@@ -27880,7 +28802,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
             this.spriteAry[i].init();
 
         // Prepare script function associated with handling this game event
-        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"] );
+        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INIT );
     }
 
     // 
@@ -27904,26 +28826,26 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
         switch( controlState )
         {
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INIT:
                 scriptFactoryId = "init";
                 forceUpdate = true;
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_DISABLE:
                 scriptFactoryId = "disable";
                 forceUpdate = true;
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE:
                 scriptFactoryId = "inactive";
                 forceUpdate = true;
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE:
                 scriptFactoryId = "active";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_SELECT:
                 scriptFactoryId = "select";
             break;
         }
@@ -27949,50 +28871,50 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
         switch( controlState )
         {
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INIT"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INIT:
                 scriptFactoryId = "init";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_IN"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_TRANS_IN:
                 scriptFactoryId = "transIn";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_TRANS_OUT"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_TRANS_OUT:
                 scriptFactoryId = "transOut";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_DISABLE:
                 scriptFactoryId = "disable";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE:
                 scriptFactoryId = "inactive";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE:
                 scriptFactoryId = "active";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_SELECT:
                 scriptFactoryId = "select";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_CHANGE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_CHANGE:
                 scriptFactoryId = "change";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EXECUTE"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_EXECUTE:
                 scriptFactoryId = "execute";
             break;
 
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EVENT"]:
+            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_EVENT:
                 scriptFactoryId = "event";
             break;
         }
 
         let scriptFactory = this.scriptComponent.get( scriptFactoryId );
         if( scriptFactory )
-            if( controlState == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_EVENT"] )
+            if( controlState == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_EVENT )
                 this.scriptComponent.prepare( scriptFactory(this, event) );
             else
                 this.scriptComponent.prepare( scriptFactory(this) );
@@ -28003,8 +28925,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     reset( complete = false )
     {
-        if( this.state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"] )
-            this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
+        if( this.state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE )
+            this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE;
 
         if( complete )
             this.lastState = this.state;
@@ -28025,16 +28947,16 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     setDefaultState( value )
     {
         if( value === 'inactive' )
-            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
+            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE;
 
         else if( value === 'active' )
-            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE;
 
         else if( value === 'disabled' )
-            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"];
+            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_DISABLE;
 
         else if( value === 'selected' )
-            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"];
+            this.defaultState = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_SELECT;
     }
 
     // 
@@ -28062,31 +28984,31 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     setActionType( value )
     {
         if( value === 'action' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_ACTION;
 
         else if( value === 'to_tree' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_TREE"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_TO_TREE;
 
         else if( value === 'to_menu' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_TO_MENU"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_TO_MENU;
 
         else if( value === 'back' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_BACK"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_BACK;
 
         else if( value === 'close' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CLOSE"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_CLOSE;
 
         else if( value === 'change_focus' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_CHANGE_FOCUS"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_CHANGE_FOCUS;
 
         else if( value === 'game_state_change' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_GAME_STATE_CHANGE"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_GAME_STATE_CHANGE;
 
         else if( value === 'quit_game' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_QUIT_GAME"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_QUIT_GAME;
         
         else if( value === 'action_event' )
-            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECAT_ACTION_EVENT"];
+            this.actionType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECAT_ACTION_EVENT;
     }
 
     // 
@@ -28146,15 +29068,15 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     handleSelectAction( event )
     {
         if( (this.isSelectable() &&
-            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_DEVICE_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_16__["MOUSE"]) &&
-            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_PRESS_TYPE"]] === this.mouseSelectType) &&
-            this.isPointInControl( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_MOUSE_X"]], event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_MOUSE_Y"]] ) ) ||
+            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__.ESMA_DEVICE_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_16__.MOUSE) &&
+            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__.ESMA_PRESS_TYPE] === this.mouseSelectType) &&
+            this.isPointInControl( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__.ESMA_MOUSE_X], event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__.ESMA_MOUSE_Y] ) ) ||
 
-            (this.isActive() && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_DEVICE_TYPE"]] !== _common_defs__WEBPACK_IMPORTED_MODULE_16__["MOUSE"]) && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__["ESMA_PRESS_TYPE"]] === _common_defs__WEBPACK_IMPORTED_MODULE_16__["EAP_DOWN"])) )
+            (this.isActive() && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__.ESMA_DEVICE_TYPE] !== _common_defs__WEBPACK_IMPORTED_MODULE_16__.MOUSE) && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_16__.ESMA_PRESS_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_16__.EAP_DOWN)) )
         {
-            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__["eventManager"].dispatchEvent(
-                _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__["EGE_MENU_CONTROL_STATE_CHANGE"],
-                _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"],
+            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent(
+                _gui_menudefs__WEBPACK_IMPORTED_MODULE_15__.EGE_MENU_CONTROL_STATE_CHANGE,
+                _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_SELECT,
                 this );
 
             return true;
@@ -28171,11 +29093,11 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     {
         // If a mouse was used, set the control as active but don't animate it.
         // This allows us to use the keys to scroll when pressed
-        if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__["actionManager"].wasLastDeviceMouse() )
+        if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__.actionManager.wasLastDeviceMouse() )
         {
             if( !this.isDisabled() )
             {
-                this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"];
+                this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE;
 
                 return true;
             }
@@ -28227,27 +29149,27 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
     //
     isDisabled()
     {
-        return this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_DISABLE"];
+        return this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_DISABLE;
     }
 
     isInactive()
     {
-        return this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"];
+        return this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE;
     }
 
     isActive()
     {
-        return (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]);
+        return (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE);
     }
 
     isSelected()
     {
-        return (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_SELECT"]);
+        return (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_SELECT);
     }
 
     isSelectable()
     {
-        return ((this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_INACTIVE"]) || (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__["ECS_ACTIVE"]));
+        return ((this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_INACTIVE) || (this.state === _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_14__.ECS_ACTIVE));
     }
 
     // 
@@ -28291,11 +29213,13 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__["ControlBase"]
 
 /***/ }),
 /* 116 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControlBase", function() { return ControlBase; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ControlBase": () => (/* binding */ ControlBase)
+/* harmony export */ });
 /* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
@@ -28313,7 +29237,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ControlBase extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
+class ControlBase extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__.ObjectTransform
 {
     constructor( group )
     {
@@ -28380,7 +29304,7 @@ class ControlBase extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["
 
             // Load xml specific control code
             // Use the preloaded since many controls reuse xml files
-            this.loadControlFromNode( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__["assetHolder"].get( this.group, controlFilePath ) );
+            this.loadControlFromNode( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__.assetHolder.get( this.group, controlFilePath ) );
         }
         // Load from the node if we have a sprite list
         else if( xmlNode.getElementsByTagName( 'spriteLst' ).length )
@@ -28403,7 +29327,7 @@ class ControlBase extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["
     loadDynamicOffsetFromNode( xmlNode )
     {
         // Load the dynamic offset
-        this.dynamicOffset = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__["loadDynamicOffset"]( xmlNode );
+        this.dynamicOffset = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadDynamicOffset( xmlNode );
 
         // Set the dynamic position
         this.setDynamicPos();
@@ -28416,17 +29340,19 @@ class ControlBase extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["
     {
         // Position the menu based on the dynamic offset
         if( this.dynamicOffset )
-            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_1__["settings"].defaultSize_half ) );
+            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.defaultSize_half ) );
     }
 }
 
 /***/ }),
 /* 117 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScrollParam", function() { return ScrollParam; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ScrollParam": () => (/* binding */ ScrollParam)
+/* harmony export */ });
 /* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
 // 
 //  FILE NAME: scrollparam.js
@@ -28466,16 +29392,16 @@ class ScrollParam
             this.scrollDelay = Number(node[0].getAttribute( 'scrollDelay' ));
             
             if( node[0].getAttribute( 'up' ) === 'true' )
-                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_UP_ACTION"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_UP"] );
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_UP_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_UP );
 
             if( node[0].getAttribute( 'down' ) === 'true' )
-                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_DOWN_ACTION"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_DOWN"] );
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_DOWN_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_DOWN );
 
             if( node[0].getAttribute( 'left' ) === 'true' )
-                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_LEFT_ACTION"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_LEFT"] );
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_LEFT_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_LEFT );
 
             if( node[0].getAttribute( 'right' ) === 'true' )
-                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_RIGHT_ACTION"], _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__["EGE_MENU_SCROLL_RIGHT"] );
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_RIGHT_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_RIGHT );
         }
     }
     
@@ -28503,50 +29429,52 @@ class ScrollParam
 
 /***/ }),
 /* 118 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_INACTIVE", function() { return EMS_INACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_IDLE", function() { return EMS_IDLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_ACTIVE", function() { return EMS_ACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMS_MAX_MENU_STATES", function() { return EMS_MAX_MENU_STATES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_NULL", function() { return EMNS_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_MOUSE", function() { return EMNS_MOUSE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMNS_GAMEPAD_KEYBAORD", function() { return EMNS_GAMEPAD_KEYBAORD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_INACTIVE", function() { return EMTS_INACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_IDLE", function() { return EMTS_IDLE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_ACTIVE", function() { return EMTS_ACTIVE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMTS_MAX_MENU_TREE_STATES", function() { return EMTS_MAX_MENU_TREE_STATES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_IN", function() { return EGE_MENU_TRANS_IN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TRANS_OUT", function() { return EGE_MENU_TRANS_OUT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_ESCAPE_ACTION", function() { return EGE_MENU_ESCAPE_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TOGGLE_ACTION", function() { return EGE_MENU_TOGGLE_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_BACK_ACTION", function() { return EGE_MENU_BACK_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TO_TREE", function() { return EGE_MENU_TO_TREE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TO_MENU", function() { return EGE_MENU_TO_MENU; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_GAME_STATE_CHANGE", function() { return EGE_MENU_GAME_STATE_CHANGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_UP_ACTION", function() { return EGE_MENU_UP_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_DOWN_ACTION", function() { return EGE_MENU_DOWN_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_LEFT_ACTION", function() { return EGE_MENU_LEFT_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_RIGHT_ACTION", function() { return EGE_MENU_RIGHT_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_CONTROL_STATE_CHANGE", function() { return EGE_MENU_CONTROL_STATE_CHANGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SELECT_ACTION", function() { return EGE_MENU_SELECT_ACTION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SELECT_EXECUTE", function() { return EGE_MENU_SELECT_EXECUTE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SET_ACTIVE_CONTROL", function() { return EGE_MENU_SET_ACTIVE_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_REACTIVATE", function() { return EGE_MENU_REACTIVATE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_UP", function() { return EGE_MENU_SCROLL_UP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_DOWN", function() { return EGE_MENU_SCROLL_DOWN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_LEFT", function() { return EGE_MENU_SCROLL_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_SCROLL_RIGHT", function() { return EGE_MENU_SCROLL_RIGHT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_LEFT", function() { return EGE_MENU_TAB_LEFT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGE_MENU_TAB_RIGHT", function() { return EGE_MENU_TAB_RIGHT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_NULL", function() { return EAC_NULL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_FIRST_ACTIVE_CONTROL", function() { return EAC_FIRST_ACTIVE_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EAC_LAST_ACTIVE_CONTROL", function() { return EAC_LAST_ACTIVE_CONTROL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_RESET", function() { return ETC_RESET; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_BEGIN", function() { return ETC_BEGIN; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ETC_END", function() { return ETC_END; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "EMS_INACTIVE": () => (/* binding */ EMS_INACTIVE),
+/* harmony export */   "EMS_IDLE": () => (/* binding */ EMS_IDLE),
+/* harmony export */   "EMS_ACTIVE": () => (/* binding */ EMS_ACTIVE),
+/* harmony export */   "EMS_MAX_MENU_STATES": () => (/* binding */ EMS_MAX_MENU_STATES),
+/* harmony export */   "EMNS_NULL": () => (/* binding */ EMNS_NULL),
+/* harmony export */   "EMNS_MOUSE": () => (/* binding */ EMNS_MOUSE),
+/* harmony export */   "EMNS_GAMEPAD_KEYBAORD": () => (/* binding */ EMNS_GAMEPAD_KEYBAORD),
+/* harmony export */   "EMTS_INACTIVE": () => (/* binding */ EMTS_INACTIVE),
+/* harmony export */   "EMTS_IDLE": () => (/* binding */ EMTS_IDLE),
+/* harmony export */   "EMTS_ACTIVE": () => (/* binding */ EMTS_ACTIVE),
+/* harmony export */   "EMTS_MAX_MENU_TREE_STATES": () => (/* binding */ EMTS_MAX_MENU_TREE_STATES),
+/* harmony export */   "EGE_MENU_TRANS_IN": () => (/* binding */ EGE_MENU_TRANS_IN),
+/* harmony export */   "EGE_MENU_TRANS_OUT": () => (/* binding */ EGE_MENU_TRANS_OUT),
+/* harmony export */   "EGE_MENU_ESCAPE_ACTION": () => (/* binding */ EGE_MENU_ESCAPE_ACTION),
+/* harmony export */   "EGE_MENU_TOGGLE_ACTION": () => (/* binding */ EGE_MENU_TOGGLE_ACTION),
+/* harmony export */   "EGE_MENU_BACK_ACTION": () => (/* binding */ EGE_MENU_BACK_ACTION),
+/* harmony export */   "EGE_MENU_TO_TREE": () => (/* binding */ EGE_MENU_TO_TREE),
+/* harmony export */   "EGE_MENU_TO_MENU": () => (/* binding */ EGE_MENU_TO_MENU),
+/* harmony export */   "EGE_MENU_GAME_STATE_CHANGE": () => (/* binding */ EGE_MENU_GAME_STATE_CHANGE),
+/* harmony export */   "EGE_MENU_UP_ACTION": () => (/* binding */ EGE_MENU_UP_ACTION),
+/* harmony export */   "EGE_MENU_DOWN_ACTION": () => (/* binding */ EGE_MENU_DOWN_ACTION),
+/* harmony export */   "EGE_MENU_LEFT_ACTION": () => (/* binding */ EGE_MENU_LEFT_ACTION),
+/* harmony export */   "EGE_MENU_RIGHT_ACTION": () => (/* binding */ EGE_MENU_RIGHT_ACTION),
+/* harmony export */   "EGE_MENU_CONTROL_STATE_CHANGE": () => (/* binding */ EGE_MENU_CONTROL_STATE_CHANGE),
+/* harmony export */   "EGE_MENU_SELECT_ACTION": () => (/* binding */ EGE_MENU_SELECT_ACTION),
+/* harmony export */   "EGE_MENU_SELECT_EXECUTE": () => (/* binding */ EGE_MENU_SELECT_EXECUTE),
+/* harmony export */   "EGE_MENU_SET_ACTIVE_CONTROL": () => (/* binding */ EGE_MENU_SET_ACTIVE_CONTROL),
+/* harmony export */   "EGE_MENU_REACTIVATE": () => (/* binding */ EGE_MENU_REACTIVATE),
+/* harmony export */   "EGE_MENU_SCROLL_UP": () => (/* binding */ EGE_MENU_SCROLL_UP),
+/* harmony export */   "EGE_MENU_SCROLL_DOWN": () => (/* binding */ EGE_MENU_SCROLL_DOWN),
+/* harmony export */   "EGE_MENU_SCROLL_LEFT": () => (/* binding */ EGE_MENU_SCROLL_LEFT),
+/* harmony export */   "EGE_MENU_SCROLL_RIGHT": () => (/* binding */ EGE_MENU_SCROLL_RIGHT),
+/* harmony export */   "EGE_MENU_TAB_LEFT": () => (/* binding */ EGE_MENU_TAB_LEFT),
+/* harmony export */   "EGE_MENU_TAB_RIGHT": () => (/* binding */ EGE_MENU_TAB_RIGHT),
+/* harmony export */   "EAC_NULL": () => (/* binding */ EAC_NULL),
+/* harmony export */   "EAC_FIRST_ACTIVE_CONTROL": () => (/* binding */ EAC_FIRST_ACTIVE_CONTROL),
+/* harmony export */   "EAC_LAST_ACTIVE_CONTROL": () => (/* binding */ EAC_LAST_ACTIVE_CONTROL),
+/* harmony export */   "ETC_RESET": () => (/* binding */ ETC_RESET),
+/* harmony export */   "ETC_BEGIN": () => (/* binding */ ETC_BEGIN),
+/* harmony export */   "ETC_END": () => (/* binding */ ETC_END)
+/* harmony export */ });
 // 
 //  FILE NAME: menudefs.js
 //  DESC:      misc defines
@@ -28608,11 +29536,13 @@ const ETC_RESET = 0,
 
 /***/ }),
 /* 119 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sprite", function() { return Sprite; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Sprite": () => (/* binding */ Sprite)
+/* harmony export */ });
 /* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
 /* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
 /* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(122);
@@ -28642,9 +29572,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
+class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__.ObjectTransform
 {
-    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_9__["DEFAULT_ID"], parentNode = null )
+    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_9__.DEFAULT_ID, parentNode = null )
     {
         super( objData.is3D(), id );
 
@@ -28661,34 +29591,34 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
         this.physicsComponent = null;
         
         // The script part of the sprite
-        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__["ScriptComponent"];
+        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__.ScriptComponent;
         
         // Allocate the sprite specific objects
         if( objData.is2D() )
         {
-            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_QUAD"] )
-                this.visualComponent = new _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__["VisualComponentQuad"]( objData.visualData );
+            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_QUAD )
+                this.visualComponent = new _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__.VisualComponentQuad( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SPRITE_SHEET"] )
-                this.visualComponent = new _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__["VisualComponentSpriteSheet"]( objData.visualData );
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SPRITE_SHEET )
+                this.visualComponent = new _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__.VisualComponentSpriteSheet( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SCALED_FRAME"] )
-                this.visualComponent = new _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__["VisualComponentScaledFrame"]( objData.visualData );
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SCALED_FRAME )
+                this.visualComponent = new _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__.VisualComponentScaledFrame( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_FONT"] )
-                this.visualComponent = new _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__["VisualComponentFont"]( objData.visualData );
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_FONT )
+                this.visualComponent = new _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__.VisualComponentFont( objData.visualData );
             
             if( objData.physicsData.isActive() )
-                this.physicsComponent = new _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__["PhysicsComponent2D"]( objData.physicsData );
+                this.physicsComponent = new _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__.PhysicsComponent2D( objData.physicsData );
         }
         else if( objData.is3D() )
         {
-            this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__["VisualComponent3D"]( objData.visualData );
+            this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__.VisualComponent3D( objData.visualData );
         }
 
         // Allocate the null component if no visual component was created
         if( this.visualComponent === null )
-            this.visualComponent = new _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__["NullVisualComponent"]();
+            this.visualComponent = new _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__.NullVisualComponent();
         
         // If there's no visual data, set the hide flag
         this.setVisible( objData.visualData.isActive() );
@@ -28863,7 +29793,7 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
         {
             this.visualComponent.setFrame( index );
 
-            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__["EGT_SPRITE_SHEET"] )
+            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SPRITE_SHEET )
                 if( index < this.objData.visualData.spriteSheet.getCount() )
                     this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
@@ -28903,11 +29833,13 @@ class Sprite extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
 
 /***/ }),
 /* 120 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentQuad", function() { return VisualComponentQuad; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponentQuad": () => (/* binding */ VisualComponentQuad)
+/* harmony export */ });
 /* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
@@ -28936,9 +29868,9 @@ __webpack_require__.r(__webpack_exports__);
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
 // allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__["Matrix"];
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
 
-class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__["ivisualComponent"]
+class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
 {
     constructor( visualData )
     {
@@ -28957,11 +29889,11 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
         this.ibo = visualData.ibo;
         this.iboCount = visualData.iboCount;
         this.texture = visualData.getTexture();
-        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__.Color;
         
         if( visualData.isActive() )
         {
-            this.shaderData = _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].getShaderData( visualData.shaderID );
+            this.shaderData = _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.getShaderData( visualData.shaderID );
 
             // Common shader members
             this.vertexLocation = this.shaderData.getLocation( 'in_position' );
@@ -28987,26 +29919,26 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
         if( this.allowRender() )
         {
             // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
 
             // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
             
             // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
             
             if( this.texture )
             {
                 // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
 
                 // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
             }
             
             // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
             
             // Calculate the final matrix
             gFinalMatrix.initilizeMatrix();
@@ -29015,10 +29947,10 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
 
             // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
             
             // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].UNSIGNED_BYTE, 0);
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_BYTE, 0);
         }
     }
     
@@ -29027,7 +29959,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
     //
     allowRender()
     {
-        return (this.visualData.genType != _common_defs__WEBPACK_IMPORTED_MODULE_7__["EGT_NULL"]);
+        return (this.visualData.genType != _common_defs__WEBPACK_IMPORTED_MODULE_7__.EGT_NULL);
     }
     
     //
@@ -29054,11 +29986,13 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 /***/ }),
 /* 121 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ivisualComponent", function() { return ivisualComponent; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ivisualComponent": () => (/* binding */ ivisualComponent)
+/* harmony export */ });
 
 // 
 //  FILE NAME:  ivisualcomponent.js
@@ -29115,11 +30049,13 @@ class ivisualComponent
 
 /***/ }),
 /* 122 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentSpriteSheet", function() { return VisualComponentSpriteSheet; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponentSpriteSheet": () => (/* binding */ VisualComponentSpriteSheet)
+/* harmony export */ });
 /* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
@@ -29146,9 +30082,9 @@ __webpack_require__.r(__webpack_exports__);
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
 // allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__["Matrix"];
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
 
-class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
+class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
 {
     constructor( visualData )
     {
@@ -29162,7 +30098,7 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
             this.frameIndex = visualData.spriteSheet.defaultIndex;
 
             // Local vertex scale for sprite sheets that might have glyphs of different sizes
-            this.vertexScale = new _common_size__WEBPACK_IMPORTED_MODULE_5__["Size"];
+            this.vertexScale = new _common_size__WEBPACK_IMPORTED_MODULE_5__.Size;
             this.vertexScale.copy( this.visualData.vertexScale );
         }
     }
@@ -29175,26 +30111,26 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
         if( this.allowRender() )
         {
             // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
 
             // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
             
             // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
             
             if( this.texture )
             {
                 // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
 
                 // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
             }
             
             // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
             
             // Calculate the final matrix
             gFinalMatrix.initilizeMatrix();
@@ -29203,13 +30139,13 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
 
             // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
 
             // Send the glyph rect
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform4fv( this.glyphLocation, this.glyphUV.data );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.glyphLocation, this.glyphUV.data );
             
             // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].UNSIGNED_BYTE, 0);
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_BYTE, 0);
         }
     }
     
@@ -29232,11 +30168,13 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 /***/ }),
 /* 123 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentScaledFrame", function() { return VisualComponentScaledFrame; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponentScaledFrame": () => (/* binding */ VisualComponentScaledFrame)
+/* harmony export */ });
 /* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
@@ -29261,9 +30199,9 @@ __webpack_require__.r(__webpack_exports__);
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
 // allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__["Matrix"];
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
 
-class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
+class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
 {
     constructor( visualData )
     {
@@ -29278,26 +30216,26 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
         if( this.allowRender() )
         {
             // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
 
             // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
             
             // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
             
             if( this.texture )
             {
                 // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
 
                 // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+                _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
             }
             
             // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniform4fv( this.colorLocation, this.color.data );
             
             // Calculate the final matrix
             gFinalMatrix.initilizeMatrix();
@@ -29305,10 +30243,10 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
 
             // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
             
             // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_5__["gl"].UNSIGNED_BYTE, 0);
+            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_5__.gl.TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.UNSIGNED_BYTE, 0);
         }
     }
 }
@@ -29316,11 +30254,13 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 /***/ }),
 /* 124 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponentFont", function() { return VisualComponentFont; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponentFont": () => (/* binding */ VisualComponentFont)
+/* harmony export */ });
 /* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
@@ -29353,9 +30293,9 @@ __webpack_require__.r(__webpack_exports__);
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
 // allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__["Matrix"];
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__.Matrix;
 
-class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__["VisualComponentQuad"]
+class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
 {
     constructor( visualData )
     {
@@ -29367,7 +30307,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
             this.text0Location = this.shaderData.getLocation( 'text0' );
             
             // Allocate the storage for the font if this is a font sprite
-            this.fontData = new _common_fontdata__WEBPACK_IMPORTED_MODULE_5__["FontData"];
+            this.fontData = new _common_fontdata__WEBPACK_IMPORTED_MODULE_5__.FontData;
         }
     }
     
@@ -29377,9 +30317,9 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
     deleteFontVBO()
     {
         // Delete the VBO if this is a font
-        if( (this.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EGT_FONT"]) && (this.vbo !== null) )
+        if( (this.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EGT_FONT) && (this.vbo !== null) )
         {
-            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].deleteBuffer( this.vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.deleteBuffer( this.vbo );
             this.vbo = null;
         }
 
@@ -29396,26 +30336,26 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
         if( this.allowRender() )
         {
             // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].bind( this.vbo, this.ibo );
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
 
             // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].bind( this.shaderData );
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
             
             // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
             
             if( this.texture )
             {
                 // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__["textureManager"].bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
 
                 // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+                _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
             }
             
             // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniform4fv( this.colorLocation, this.color.data );
             
             // Calculate the final matrix
             gFinalMatrix.initilizeMatrix();
@@ -29423,10 +30363,10 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
 
             // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
             
             // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].drawElements(_system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].UNSIGNED_SHORT, 0);
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_7__.gl.TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.UNSIGNED_SHORT, 0);
         }
     }
     
@@ -29507,24 +30447,24 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
             this.fontData.fontStrSize.reset();
             let lastCharDif = 0;
 
-            let font = _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].getFont( this.fontData.fontProp.fontName );
+            let font = _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__.fontManager.getFont( this.fontData.fontProp.fontName );
 
             this.texture = font.texture;
 
             this.fontData.fontString = fontString;
 
             // count up the number of space characters
-            let spaceCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__["countStrOccurrence"]( this.fontData.fontString, ' ' );
+            let spaceCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.countStrOccurrence( this.fontData.fontString, ' ' );
 
             // count up the number of bar | characters
-            let barCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__["countStrOccurrence"]( this.fontData.fontString, '|' );
+            let barCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.countStrOccurrence( this.fontData.fontString, '|' );
 
             // Size of the allocation
             const charCount = this.fontData.fontString.length - spaceCharCount - barCharCount;
             this.iboCount = charCount * 6;
             
             // Set a flag to indicate if the IBO should be built
-            const BUILD_FONT_IBO = (this.iboCount > _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].currentMaxFontIndices);
+            const BUILD_FONT_IBO = (this.iboCount > _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.currentMaxFontIndices);
             
             // Allocate the vert array
             let vertAry = new Array(charCount * 4 * 5);
@@ -29557,10 +30497,10 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
             xOffset = lineWidthOffsetAry[lineCount++];
 
             // Handle the vertical alighnmenrt
-            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EVA_VERT_TOP"] )
+            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_TOP )
                 lineHeightOffset = -initialHeightOffset;
 
-            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EVA_VERT_CENTER"] )
+            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_CENTER )
             {
                 lineHeightOffset = -(initialHeightOffset - ((font.baselineOffset-lineSpace) / 2) - font.vertPadding);
 
@@ -29568,7 +30508,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
                     lineHeightOffset = ((lineHeightWrap * lineWidthOffsetAry.length) / 2) - font.baselineOffset;
             }
 
-            else if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EVA_VERT_BOTTOM"] )
+            else if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_BOTTOM )
             {
                 lineHeightOffset = -(initialHeightOffset - font.baselineOffset - font.vertPadding);
 
@@ -29585,7 +30525,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
                 let id = this.fontData.fontString.charCodeAt(i);
 
                 // Line wrap if '|' character was used
-                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_PIPE"] )
+                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
                 {
                     xOffset = lineWidthOffsetAry[lineCount];
                     width = 0;
@@ -29599,7 +30539,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
                     let charData = font.getCharData(id);
 
                     // Ignore space characters
-                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
                     {
                         let rect = charData.rect;
 
@@ -29667,7 +30607,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
                     let inc = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
 
                     // Add in any additional spacing for the space character
-                    if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                    if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
                         inc += this.fontData.fontProp.spaceCharKerning;
 
                     width += inc;
@@ -29684,7 +30624,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
                     }
 
                     // Wrap to another line
-                    if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] ) && (this.fontData.fontProp.lineWrapWidth > 0) )
+                    if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE ) && (this.fontData.fontProp.lineWrapWidth > 0) )
                     {
                         let nextWord = 0;
 
@@ -29693,14 +30633,14 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
                         {
                             id = this.fontData.fontString.charCodeAt(j);
 
-                            if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_PIPE"] )
+                            if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
                             {
                                 // See if we can find the character
                                 let anotherCharData = font.getCharData(id);
 
                                 // Break here when space is found
                                 // Don't add the space to the size of the next word
-                                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
                                     break;
 
                                 // Don't count the
@@ -29726,15 +30666,15 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
             // Save the data
             // If one doesn't exist, create the VBO and IBO for this font
             if( this.vbo === null )
-                this.vbo = _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].createBuffer();
+                this.vbo = _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.createBuffer();
 
-            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ARRAY_BUFFER, this.vbo );
-            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].bufferData( _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__["gl"].ARRAY_BUFFER, null );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, this.vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, null );
 
             // All fonts share the same IBO because it's always the same and the only difference is it's length
             // This updates the current IBO if it exceeds the current max
-            this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__["vertexBufferManager"].createDynamicFontIBO( _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__["fontManager"].groupName, 'dynamic_font_ibo', indexAry, this.iboCount );
+            this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.createDynamicFontIBO( _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__.fontManager.groupName, 'dynamic_font_ibo', indexAry, this.iboCount );
         }
         else if( (this.fontData !== null) &&
                  (fontString !== '') &&
@@ -29762,7 +30702,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
             let id = str.charCodeAt(i);
 
             // Line wrap if '|' character was used
-            if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_PIPE"] )
+            if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
             {
                 // Add the line width to the vector based on horz alignment
                 this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
@@ -29781,19 +30721,19 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
                 spaceWidth = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
 
                 // Add in any additional spacing for the space character
-                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
                     spaceWidth += this.fontData.fontProp.spaceCharKerning;
 
                 width += spaceWidth;
 
-                if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
                     lastCharOffset = charData.offset.w;
 
                 ++counter;
             }
 
             // Wrap to another line
-            if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"]) && (this.fontData.fontProp.lineWrapWidth > 0) )
+            if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE) && (this.fontData.fontProp.lineWrapWidth > 0) )
             {
                 let nextWord = 0;
 
@@ -29802,14 +30742,14 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
                 {
                     id = str.charCodeAt(j);
 
-                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_PIPE"] )
+                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
                     {
                         // See if we can find the character
                         let charData = font.getCharData(id);
 
                         // Break here when space is found
                         // Don't add the space to the size of the next word
-                        if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__["CHAR_CODE_SPACE"] )
+                        if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
                             break;
 
                         // Don't count the
@@ -29839,13 +30779,13 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
     //
     addLineWithToAry( font, lineWidthOffsetAry, hAlign, width, firstCharOffset, lastCharOffset )
     {
-        if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EHA_HORZ_LEFT"] )
+        if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_LEFT )
             lineWidthOffsetAry.push(-(firstCharOffset + font.horzPadding));
 
-        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EHA_HORZ_CENTER"] )
+        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_CENTER )
             lineWidthOffsetAry.push(-((width - font.horzPadding) / 2));
 
-        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__["EHA_HORZ_RIGHT"] )
+        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_RIGHT )
             lineWidthOffsetAry.push(-(width - lastCharOffset - font.horzPadding));
 
         // Remove any fractional component of the last index
@@ -29886,11 +30826,13 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
 
 /***/ }),
 /* 125 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fontManager", function() { return fontManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "fontManager": () => (/* binding */ fontManager)
+/* harmony export */ });
 /* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
@@ -29921,7 +30863,7 @@ class FontManager
     //
     load( filePath )
     {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', filePath,
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', filePath,
             ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
@@ -29951,19 +30893,19 @@ class FontManager
                     throw new Error( `Font name has already been loaded (${name}).` );
 
                 // Add the font to our list
-                this.fontMap.set( name, new _2d_font__WEBPACK_IMPORTED_MODULE_0__["Font"] );
+                this.fontMap.set( name, new _2d_font__WEBPACK_IMPORTED_MODULE_0__.Font );
 
                 let filePath = fontNode[i].getAttribute( 'file' );
 
                 // Load the texture file
                 let textureFilePath = filePath + '.png'
-                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'img', textureFilePath )
-                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].load( this.group, name, image ))
+                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'img', textureFilePath )
+                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( this.group, name, image ))
                         .catch(( error ) => { console.error(error.stack); throw error; }) );
 
                 // Load the xml file describing the font characteristics
                 let fontFilePath = filePath + '.fnt'
-                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', fontFilePath )
+                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', fontFilePath )
                         .then(( fontXmlNode ) => this.loadFont( name, fontXmlNode ))
                         .catch(( error ) => { console.error(error.stack); throw error; }) );
             }
@@ -29991,7 +30933,7 @@ class FontManager
     setFontTexture()
     {
         for( let [ key, font ] of this.fontMap.entries() )
-            font.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__["textureManager"].get( this.group, key );
+            font.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.get( this.group, key );
     }
     
     //
@@ -30027,12 +30969,14 @@ var fontManager = new FontManager;
 
 /***/ }),
 /* 126 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CharData", function() { return CharData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Font", function() { return Font; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CharData": () => (/* binding */ CharData),
+/* harmony export */   "Font": () => (/* binding */ Font)
+/* harmony export */ });
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(30);
 
@@ -30051,10 +30995,10 @@ class CharData
     constructor()
     {
         // Character offsets
-        this.offset = new _common_size__WEBPACK_IMPORTED_MODULE_0__["Size"];
+        this.offset = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
 
         // Character rect
-        this.rect = new _common_rect__WEBPACK_IMPORTED_MODULE_1__["Rect"];
+        this.rect = new _common_rect__WEBPACK_IMPORTED_MODULE_1__.Rect;
 
         // Amount to advance
         this.xAdvance = 0;
@@ -30150,11 +31094,13 @@ class Font
 
 /***/ }),
 /* 127 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FontData", function() { return FontData; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "FontData": () => (/* binding */ FontData)
+/* harmony export */ });
 /* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 
@@ -30175,11 +31121,11 @@ class FontData
         this.fontString = '';
 
         // Font members
-        this.fontProp = new _fontproperties__WEBPACK_IMPORTED_MODULE_0__["FontProperties"];
+        this.fontProp = new _fontproperties__WEBPACK_IMPORTED_MODULE_0__.FontProperties;
 
         // Font string size
         // Not usefull for multiline strings
-        this.fontStrSize = new _size__WEBPACK_IMPORTED_MODULE_1__["Size"];
+        this.fontStrSize = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
     }
     
     // 
@@ -30213,11 +31159,13 @@ class FontData
 
 /***/ }),
 /* 128 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FontProperties", function() { return FontProperties; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "FontProperties": () => (/* binding */ FontProperties)
+/* harmony export */ });
 /* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
@@ -30235,7 +31183,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class FontProperties
 {
-    constructor( fontName = null, hAlign = _defs__WEBPACK_IMPORTED_MODULE_2__["EHA_HORZ_CENTER"], vAlign = _defs__WEBPACK_IMPORTED_MODULE_2__["EVA_VERT_CENTER"], kerning = 0, spaceCharKerning = 0, lineWrapWidth = -1, lineWrapHeight = 0 )
+    constructor( fontName = null, hAlign = _defs__WEBPACK_IMPORTED_MODULE_2__.EHA_HORZ_CENTER, vAlign = _defs__WEBPACK_IMPORTED_MODULE_2__.EVA_VERT_CENTER, kerning = 0, spaceCharKerning = 0, lineWrapWidth = -1, lineWrapHeight = 0 )
     {
         // font to use
         this.fontName = fontName;
@@ -30260,7 +31208,7 @@ class FontProperties
         
         // Throws an error if font is not loaded
         if( this.fontName )
-            _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__["fontManager"].isFont( this.fontName );
+            _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
     }
     
     // 
@@ -30277,7 +31225,7 @@ class FontProperties
         this.lineWrapHeight = obj.lineWrapHeight;
         
         // Throws an error if font is not loaded
-        _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__["fontManager"].isFont( this.fontName );
+        _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
     }
     
     //
@@ -30291,7 +31239,7 @@ class FontProperties
             this.fontName = attr;
         
         // Throws an error if font is not loaded
-        _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__["fontManager"].isFont( this.fontName );
+        _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
 
         // Get the attributes node
         let attrNode = node.getElementsByTagName( 'attributes' );
@@ -30319,8 +31267,8 @@ class FontProperties
         if( alignmentNode.length )
         {
             // Set the default alignment
-            this.hAlign = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__["loadHorzAlignment"]( alignmentNode[0], _defs__WEBPACK_IMPORTED_MODULE_2__["EHA_HORZ_CENTER"] );
-            this.vAlign = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__["loadVertAlignment"]( alignmentNode[0], _defs__WEBPACK_IMPORTED_MODULE_2__["EVA_VERT_CENTER"] );
+            this.hAlign = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__.loadHorzAlignment( alignmentNode[0], _defs__WEBPACK_IMPORTED_MODULE_2__.EHA_HORZ_CENTER );
+            this.vAlign = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__.loadVertAlignment( alignmentNode[0], _defs__WEBPACK_IMPORTED_MODULE_2__.EVA_VERT_CENTER );
         }
     }
 }
@@ -30329,11 +31277,13 @@ class FontProperties
 
 /***/ }),
 /* 129 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VisualComponent3D", function() { return VisualComponent3D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponent3D": () => (/* binding */ VisualComponent3D)
+/* harmony export */ });
 /* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
@@ -30360,9 +31310,9 @@ __webpack_require__.r(__webpack_exports__);
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
 // allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__["Matrix"];
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
 
-class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__["ivisualComponent"]
+class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
 {
     constructor( visualData )
     {
@@ -30379,12 +31329,12 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
         this.normalMatrixLocation = null;
         this.VERTEX_BUF_SIZE = 24;
         
-        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__["Color"];
+        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__.Color;
         
         if( visualData.isActive() )
         {
             this.meshAry = visualData.meshGrp.meshAry;
-            this.shaderData = _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__["shaderManager"].getShaderData( visualData.shaderID );
+            this.shaderData = _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__.shaderManager.getShaderData( visualData.shaderID );
             
             // Common shader members
             this.vertexLocation = this.shaderData.getLocation( 'in_position' );
@@ -30415,16 +31365,16 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
             //CStatCounter::Instance().IncDisplayCounter();
 
             // Bind the VBO and IBO. NOTE: One singlton needs to manage the vertex bindings
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__["vertexBufferManager"].bind( this.meshAry[i].vbo, this.meshAry[i].ibo );
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__.vertexBufferManager.bind( this.meshAry[i].vbo, this.meshAry[i].ibo );
 
             // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__["shaderManager"].bind( this.shaderData );
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__.shaderManager.bind( this.shaderData );
 
             // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
 
             // Setup the normal attribute shade data
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.normalLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.normalLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
 
             // Enable the UV attribute shade data
             if( this.uvLocation )
@@ -30432,29 +31382,29 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
                 // Bind the texture
                 for( let j = 0; j < this.meshAry[i].textureAry.length; ++j )
                 {
-                    _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__["textureManager"].bind( this.meshAry[i].textureAry[j].id );
-                    _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform1i( this.text0Location, 0);// future implementation - this.meshAry[i].textureAry[j].type ); // 0 = TEXTURE0
+                    _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__.textureManager.bind( this.meshAry[i].textureAry[j].id );
+                    _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0);// future implementation - this.meshAry[i].textureAry[j].type ); // 0 = TEXTURE0
                 }
 
                 // Setup the uv attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].FLOAT, false, this.VERTEX_BUF_SIZE, 24 );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 24 );
             }
 
             // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniform4fv( this.colorLocation, this.color.data );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
 
             gFinalMatrix.initilizeMatrix();
             gFinalMatrix.mergeMatrix( object.matrix.matrix );
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
             
             gFinalMatrix.initilizeMatrix();
             gFinalMatrix.mergeMatrix( object.rotMatrix.matrix );
             gFinalMatrix.mergeMatrix( camera.rotMatrix.matrix );
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
 
             // Render it
-            _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].drawElements( _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].TRIANGLES, this.meshAry[i].iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__["gl"].UNSIGNED_SHORT, 0);
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements( _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLES, this.meshAry[i].iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_SHORT, 0);
         }
     }
 }
@@ -30462,11 +31412,13 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
 
 /***/ }),
 /* 130 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NullVisualComponent", function() { return NullVisualComponent; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "NullVisualComponent": () => (/* binding */ NullVisualComponent)
+/* harmony export */ });
 /* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 
 // 
@@ -30478,7 +31430,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__["ivisualComponent"]
+class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
 {
     constructor()
     {
@@ -30512,15 +31464,16 @@ class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 /***/ }),
 /* 131 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhysicsComponent2D", function() { return PhysicsComponent2D; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PhysicsComponent2D": () => (/* binding */ PhysicsComponent2D)
+/* harmony export */ });
 /* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(101);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(planck_js__WEBPACK_IMPORTED_MODULE_2__);
 
 // 
 //  FILE NAME: physicscomponent2d.js
@@ -30555,7 +31508,7 @@ class PhysicsComponent2D
         
         if( physicsData.isActive() )
         {
-            this.world = _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__["physicsWorldManager"].getWorld( physicsData.world );
+            this.world = _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__.physicsWorldManager.getWorld( physicsData.world );
 
             // MAke sure the world has been loaded
             if( this.world.pixelsPerMeter == 0 )
@@ -30592,10 +31545,10 @@ class PhysicsComponent2D
             let physicsData = this.sprite.objData.physicsData;
             let worldDef = {
                 type : physicsData.bodyType,
-                position : planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( this.sprite.pos.x * this.pixelsToMeters, -(this.sprite.pos.y * this.pixelsToMeters) ),
+                position : planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( this.sprite.pos.x * this.pixelsToMeters, -(this.sprite.pos.y * this.pixelsToMeters) ),
                 angle : -this.sprite.rot.z,
 
-                linearVelocity : planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero(),
+                linearVelocity : planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero(),
                 angularVelocity : 0.0,
 
                 linearDamping : physicsData.linearDamping,
@@ -30626,16 +31579,16 @@ class PhysicsComponent2D
         for( let i = 0; i < fixtureAry.length; ++i )
         {
             // Create the fixture
-            if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__["Circle"].TYPE )
+            if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Circle.TYPE )
                 this.createCircularShapeFixture( fixtureAry[i] );
 
-            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__["Edge"].TYPE )
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Edge.TYPE )
                 this.createEdgeShapeFixture( fixtureAry[i] );
 
-            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__["Polygon"].TYPE )
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Polygon.TYPE )
                 this.createPolygonShapeFixture( fixtureAry[i] );
 
-            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__["Chain"].TYPE )
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Chain.TYPE )
                 this.createChainShapeFixture( fixtureAry[i] );
         }
     }
@@ -30665,7 +31618,7 @@ class PhysicsComponent2D
     createCircularShapeFixture( fixture )
     {
         this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__["Circle"]( (fixture.radius * this.sprite.scale.x) * this.pixelsToMeters ),
+            planck_js__WEBPACK_IMPORTED_MODULE_2__.Circle( (fixture.radius * this.sprite.scale.x) * this.pixelsToMeters ),
             this.getFixtureDef( fixture ) );
     }
 
@@ -30681,7 +31634,7 @@ class PhysicsComponent2D
             throw new Error( `Physics object has incorrect number of points defined (${fixture.vertAry.length})!` );
 
         // Apply scale to the size and divide by 2
-        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
+        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
             this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
             this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
 
@@ -30690,7 +31643,7 @@ class PhysicsComponent2D
         this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
 
         this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__["Edge"]( Vec2Ary[0], Vec2Ary[1] ),
+            planck_js__WEBPACK_IMPORTED_MODULE_2__.Edge( Vec2Ary[0], Vec2Ary[1] ),
             this.getFixtureDef( fixture ) );
     }
 
@@ -30702,7 +31655,7 @@ class PhysicsComponent2D
         let Vec2Ary = [];
 
         // Apply scale to the size and divide by 2
-        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
+        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
             this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
             this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
 
@@ -30726,28 +31679,28 @@ class PhysicsComponent2D
             // Convert to meters
             // Box2D polygons are defined using Counter Clockwise Winding (CCW)
             Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
                     (-(size.w + leftMod)) * this.pixelsToMeters,
                     (size.h + bottomMod) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
                     (-(size.w + leftMod)) * this.pixelsToMeters,
                     (-(size.h + topMod)) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
                     (size.w + rightMod) * this.pixelsToMeters,
                     (-(size.h + topMod)) * this.pixelsToMeters ) );
 
             Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"](
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
                     (size.w + rightMod) * this.pixelsToMeters,
                     (size.h + bottomMod) * this.pixelsToMeters ) );
         }
 
         this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__["Polygon"]( Vec2Ary ),
+            planck_js__WEBPACK_IMPORTED_MODULE_2__.Polygon( Vec2Ary ),
             this.getFixtureDef( fixture ) );
     }
 
@@ -30761,7 +31714,7 @@ class PhysicsComponent2D
             throw new Error( `Physics object has incorrect number of points defined (${fixture.vertAry.length})!` );
         
         // Apply scale to the size and divide by 2
-        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__["Size"](
+        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
             this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
             this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
 
@@ -30770,7 +31723,7 @@ class PhysicsComponent2D
         this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
 
         this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__["Chain"]( Vec2Ary, fixture.chainLoop ),
+            planck_js__WEBPACK_IMPORTED_MODULE_2__.Chain( Vec2Ary, fixture.chainLoop ),
             this.getFixtureDef( fixture ) );
     }
 
@@ -30784,7 +31737,7 @@ class PhysicsComponent2D
         for( let i = 0; i < fixture.vertAry.length; ++i )
         {
             polyPointAry.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( ((fixture.vertAry[i].x * scale.x) - size.w) * this.pixelsToMeters,
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( ((fixture.vertAry[i].x * scale.x) - size.w) * this.pixelsToMeters,
                              ((fixture.vertAry[i].y * scale.y) - size.h) * this.pixelsToMeters ) );
         }
     }
@@ -30860,11 +31813,11 @@ class PhysicsComponent2D
     {
         if( this.body !== null )
         {
-            this.body.setTransform( planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ), angle );
+            this.body.setTransform( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ), angle );
 
             if( resetVelocity )
             {
-                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero() );
+                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero() );
                 this.body.setAngularVelocity( 0 );
             }
             
@@ -30881,11 +31834,11 @@ class PhysicsComponent2D
     {
         if( this.body !== null )
         {
-            this.body.setPosition( planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"]( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
+            this.body.setPosition( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
 
             if( resetVelocity )
             {
-                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__["Vec2"].zero() );
+                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero() );
                 this.body.setAngularVelocity( 0 );
             }
             
@@ -30917,11 +31870,13 @@ class PhysicsComponent2D
 
 /***/ }),
 /* 132 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScriptComponent", function() { return ScriptComponent; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ScriptComponent": () => (/* binding */ ScriptComponent)
+/* harmony export */ });
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 
 //
@@ -30972,7 +31927,7 @@ class ScriptComponent
         {
             let scriptFactoryId = this.scriptFactoryMap.get( scriptId );
             if( scriptFactoryId )
-                return _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__["scriptManager"].get( scriptFactoryId );
+                return _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptFactoryId );
         }
 
         null;
@@ -31031,11 +31986,13 @@ class ScriptComponent
 
 /***/ }),
 /* 133 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quad", function() { return Quad; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Quad": () => (/* binding */ Quad)
+/* harmony export */ });
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 
 // 
@@ -31050,7 +32007,7 @@ class Quad
 {
     constructor()
     {
-        this.point = [new _common_point__WEBPACK_IMPORTED_MODULE_0__["Point"], new _common_point__WEBPACK_IMPORTED_MODULE_0__["Point"], new _common_point__WEBPACK_IMPORTED_MODULE_0__["Point"], new _common_point__WEBPACK_IMPORTED_MODULE_0__["Point"]];
+        this.point = [new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point, new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point, new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point, new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point];
     }
     
     // 
@@ -31079,11 +32036,13 @@ class Quad
 
 /***/ }),
 /* 134 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "eventManager", function() { return eventManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "eventManager": () => (/* binding */ eventManager)
+/* harmony export */ });
 
 //
 //  FILE NAME: eventmanager.js
@@ -31228,11 +32187,13 @@ var eventManager = new EventManager;
 
 /***/ }),
 /* 135 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "actionManager", function() { return actionManager; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "actionManager": () => (/* binding */ actionManager)
+/* harmony export */ });
 /* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
@@ -31263,7 +32224,7 @@ class ActionManager
         this.allowAction = true;
         
         // Last device used
-        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEVICE_NULL"];
+        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEVICE_NULL;
         
         this.keyboardKeyCodeMap.set( '---', -1 );
         this.keyboardKeyCodeMap.set( 'RETURN', 13 );
@@ -31386,7 +32347,7 @@ class ActionManager
     //
     clearLastDeviceUsed()
     {
-        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEVICE_NULL"];
+        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEVICE_NULL;
     }
     
     // 
@@ -31394,7 +32355,7 @@ class ActionManager
     //
     load( filePath )
     {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__["downloadFile"]( 'xml', filePath,
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__.downloadFile( 'xml', filePath,
             ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
@@ -31479,7 +32440,7 @@ class ActionManager
                     else
                     {
                         // Add new action to the map
-                        actionMap.set( actionStr, new _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__["KeyCodeAction"](keyCode) );
+                        actionMap.set( actionStr, new _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__.KeyCodeAction(keyCode) );
                     }
                 }
             }
@@ -31502,39 +32463,39 @@ class ActionManager
     //
     wasAction( event, actionStr )
     {
-        let result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_IDLE"];
+        let result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_IDLE;
 
         if( this.allowAction )
         {
             // Check for keyboard event
             if( event instanceof KeyboardEvent )
             {
-                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__["KEYBOARD"];
+                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.KEYBOARD;
 
                 if( this.wasActionMap( event.keyCode, actionStr, this.keyboardActionMap ) )
                 {
-                    result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_UP"];
+                    result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_UP;
 
                     // Check for the "D" character code for keydown
                     if( event.type.charCodeAt(3) === 100 )
                     {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_DOWN"];
+                        result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_DOWN;
                     }
                 }
             }
             // Check for mouse event
             else if( event instanceof MouseEvent )
             {
-                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__["MOUSE"];
+                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.MOUSE;
 
                 if( this.wasActionMap( event.button, actionStr, this.mouseActionMap ) )
                 {
-                    result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_UP"];
+                    result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_UP;
 
                     // Check for the "D" character code for mousedown
                     if( event.type.charCodeAt(5) === 100 )
                     {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_2__["EAP_DOWN"];
+                        result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_DOWN;
                     }
                 }
             }
@@ -31567,17 +32528,17 @@ class ActionManager
     //
     wasLastDeviceGamepad()
     {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__["GAMEPAD"]);
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__.GAMEPAD);
     }
 
     wasLastDeviceKeyboard()
     {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__["KEYBOARD"]);
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__.KEYBOARD);
     }
 
     wasLastDeviceMouse()
     {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__["MOUSE"]);
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__.MOUSE);
     }
 }
 
@@ -31586,11 +32547,13 @@ var actionManager = new ActionManager;
 
 /***/ }),
 /* 136 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeyCodeAction", function() { return KeyCodeAction; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "KeyCodeAction": () => (/* binding */ KeyCodeAction)
+/* harmony export */ });
 // 
 //  FILE NAME: keycodeaction.js
 //  DESC:      Class for holding key codes to test for action events
@@ -31635,11 +32598,13 @@ class KeyCodeAction
 
 /***/ }),
 /* 137 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIMeter", function() { return UIMeter; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIMeter": () => (/* binding */ UIMeter)
+/* harmony export */ });
 /* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
 /* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(103);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
@@ -31682,13 +32647,13 @@ class BangRange
     }
 }
 
-class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
+class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
 {
     constructor( group )
     {
         super( group );
         
-        this.type = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__["ECT_METER"];
+        this.type = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__.ECT_METER;
         
         // Current value
         this.currentValue = 0;
@@ -31718,7 +32683,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
         this.bangUp = false;
 
         // spin timer
-        this.startUpTimer = new _utilities_timer__WEBPACK_IMPORTED_MODULE_0__["Timer"];
+        this.startUpTimer = new _utilities_timer__WEBPACK_IMPORTED_MODULE_0__.Timer;
 
         // Current bang range
         this.bangRange = new BangRange;
@@ -31733,7 +32698,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
         this.maxFontStrSize = null;
 
         // The amount to scale the font by to fit within the meter
-        this.bangScaleAdjustment = new _common_size__WEBPACK_IMPORTED_MODULE_2__["Size"](1, 1);
+        this.bangScaleAdjustment = new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size(1, 1);
 
         // Scale on axis or accurate
         this.scaleType = EST_AXIS;
@@ -31779,7 +32744,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
         // Get the max size of the font string to fit within this meter.
         // As the string get's bigger, it will be scaled to fit.
-        this.maxFontStrSize = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__["loadSize"]( node );
+        this.maxFontStrSize = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadSize( node );
         
         // If no meter scripts are defined, display the current value
         if( node.getElementsByTagName( 'meterScript' ).length == 0 )
@@ -31942,7 +32907,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
         if( this.bangUp )
         {
-            let elapsedTime = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__["highResTimer"].elapsedTime;
+            let elapsedTime = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
 
             // Ramp up from start to finish
             if( this.bangRange.bangType === EBT_RAMP_UP )
@@ -32079,11 +33044,13 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__["UIControl"]
 
 /***/ }),
 /* 138 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Timer", function() { return Timer; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Timer": () => (/* binding */ Timer)
+/* harmony export */ });
 
 // 
 //  FILE NAME: timer.js
@@ -32183,11 +33150,13 @@ class Timer
 
 /***/ }),
 /* 139 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNode", function() { return SpriteNode; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteNode": () => (/* binding */ SpriteNode)
+/* harmony export */ });
 /* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
@@ -32203,19 +33172,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
+class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 {
     constructor( objectData,
-        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
+        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
     {
         super(nodeId, parentId);
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId, this );
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, spriteId, this );
         
         // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
     }
 
     // 
@@ -32298,11 +33267,13 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 /***/ }),
 /* 140 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iNode", function() { return iNode; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "iNode": () => (/* binding */ iNode)
+/* harmony export */ });
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 
 // 
@@ -32319,7 +33290,7 @@ class iNode
     constructor( id, parentId )
     {
         // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__["ENT_NULL"];
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENT_NULL;
 
         // node id
         this.id = id;
@@ -32443,11 +33414,13 @@ class iNode
 
 /***/ }),
 /* 141 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UIControlNode", function() { return UIControlNode; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
+/* harmony export */ });
 /* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
@@ -32461,7 +33434,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
+class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 {
     constructor( uiControl )
     {
@@ -32470,7 +33443,7 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
         this.uiControl = uiControl;
         
         // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__["ENT_UI_CONTROL"];
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ENT_UI_CONTROL;
     }
     
     // 
@@ -32513,7 +33486,7 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
     //
     getId()
     {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"];
+        return _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
     }
     
     // 
@@ -32528,11 +33501,13 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 /***/ }),
 /* 142 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectNodeMultiLst", function() { return ObjectNodeMultiLst; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectNodeMultiLst": () => (/* binding */ ObjectNodeMultiLst)
+/* harmony export */ });
 /* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
 /* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(143);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
@@ -32548,19 +33523,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["NodeMultiLst"]
+class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__.NodeMultiLst
 {
     constructor(
-        objectId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
+        objectId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
     {
         super( nodeId, parentId );
         
-        this.object = new _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"](true, objectId);
+        this.object = new _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__.ObjectTransform(true, objectId);
 
         // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_OBJECT"];
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_OBJECT;
     }
     
     // 
@@ -32613,11 +33588,13 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__["No
 
 /***/ }),
 /* 143 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeMultiLst", function() { return NodeMultiLst; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "NodeMultiLst": () => (/* binding */ NodeMultiLst)
+/* harmony export */ });
 /* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(144);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
@@ -32631,9 +33608,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
+class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 {
-    constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"], parentId = _common_defs__WEBPACK_IMPORTED_MODULE_1__["DEFAULT_ID"] )
+    constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, parentId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
     {
         super( id, parentId )
         
@@ -32838,11 +33815,13 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__["Node"]
 
 /***/ }),
 /* 144 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Node": () => (/* binding */ Node)
+/* harmony export */ });
 /* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 
 // 
@@ -32854,7 +33833,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
+class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 {
     constructor( id, parentId )
     {
@@ -32955,11 +33934,13 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__["iNode"]
 
 /***/ }),
 /* 145 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SpriteNodeMultiLst", function() { return SpriteNodeMultiLst; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteNodeMultiLst": () => (/* binding */ SpriteNodeMultiLst)
+/* harmony export */ });
 /* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(143);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
@@ -32975,20 +33956,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["NodeMultiLst"]
+class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__.NodeMultiLst
 {
     constructor(
         objectData,
-        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"],
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__["DEFAULT_ID"] )
+        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
     {
         super( nodeId, parentId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__["Sprite"]( objectData, spriteId, this );
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, spriteId, this );
         
         // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__["ENT_SPRITE"];
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
     }
 
     // 
@@ -33080,11 +34061,13 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__["No
 
 /***/ }),
 /* 146 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StageStrategy", function() { return StageStrategy; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "StageStrategy": () => (/* binding */ StageStrategy)
+/* harmony export */ });
 /* harmony import */ var _istrategy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(108);
 /* harmony import */ var _sector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
@@ -33100,7 +34083,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
+class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__.iStrategy
 {
     constructor()
     {
@@ -33120,7 +34103,7 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
         for( let i = 0; i < sectorNode.length; ++i )
         {
-            let sector = new _sector__WEBPACK_IMPORTED_MODULE_1__["Sector"];
+            let sector = new _sector__WEBPACK_IMPORTED_MODULE_1__.Sector;
             this.sectorAry.push( sector );
             
             sector.loadTransFromNode( sectorNode[i] );
@@ -33128,7 +34111,7 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
             let sectorFilePath = sectorNode[i].getAttribute('file');
 
             promiseAry.push( 
-                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__["downloadFile"]( 'xml', sectorFilePath )
+                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', sectorFilePath )
                     .then(( xmlNode ) => sector.loadFromNode( xmlNode, sectorFilePath ))
                     .catch(( error ) => { console.error(error.stack); throw error; }));
         }
@@ -33188,11 +34171,13 @@ class StageStrategy extends _istrategy__WEBPACK_IMPORTED_MODULE_0__["iStrategy"]
 
 /***/ }),
 /* 147 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sector", function() { return Sector; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Sector": () => (/* binding */ Sector)
+/* harmony export */ });
 /* harmony import */ var _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
 /* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(109);
 /* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(113);
@@ -33208,7 +34193,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["ObjectTransform"]
+class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__.ObjectTransform
 {
     constructor()
     {
@@ -33247,13 +34232,13 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
         for( let i = 0; i < sectorNode.length; ++i )
         {
             // Allocate the node data list to load this node
-            let nodeAry = new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__["NodeDataList"]( sectorNode[i], defaultGroup, defaultObjName, defaultId ).dataAry;
+            let nodeAry = new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__.NodeDataList( sectorNode[i], defaultGroup, defaultObjName, defaultId ).dataAry;
             
             // Build the node list
             let headNode = null;
             for( let j = 0; j < nodeAry.length; j++ )
             {
-                let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__["create"]( nodeAry[j], nodeAry[j].id );
+                let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_2__.create( nodeAry[j], nodeAry[j].id );
 
                 if( headNode === null )
                     headNode = node;
@@ -33345,11 +34330,13 @@ class Sector extends _common_objecttransform__WEBPACK_IMPORTED_MODULE_0__["Objec
 
 /***/ }),
 /* 148 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
+/* harmony export */ });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 /* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
 
@@ -33370,7 +34357,7 @@ class PlayerShip_FireTailAnim
 {
     constructor( sprite )
     {
-        this.animate = new _utilityscripts__WEBPACK_IMPORTED_MODULE_1__["PlayAnim"]( sprite );
+        this.animate = new _utilityscripts__WEBPACK_IMPORTED_MODULE_1__.PlayAnim( sprite );
         this.animate.init( 24, true );
     }
     
@@ -33388,23 +34375,25 @@ class PlayerShip_FireTailAnim
 //
 function loadScripts()
 {
-    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__["scriptManager"].set( 'PlayerShip_FireTailAnim',
+    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.set( 'PlayerShip_FireTailAnim',
         ( sprite ) => { return new PlayerShip_FireTailAnim( sprite ); } );
 }
 
 
 /***/ }),
 /* 149 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Hold", function() { return Hold; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayAnim", function() { return PlayAnim; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FrameExecute", function() { return FrameExecute; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FadeTo", function() { return FadeTo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ColorTo", function() { return ColorTo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadScripts", function() { return loadScripts; });
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Hold": () => (/* binding */ Hold),
+/* harmony export */   "PlayAnim": () => (/* binding */ PlayAnim),
+/* harmony export */   "FrameExecute": () => (/* binding */ FrameExecute),
+/* harmony export */   "FadeTo": () => (/* binding */ FadeTo),
+/* harmony export */   "ColorTo": () => (/* binding */ ColorTo),
+/* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
+/* harmony export */ });
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
@@ -33453,7 +34442,7 @@ class Hold
     {
         do
         {
-            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
 
             if( this.time < 0 )
                 break;
@@ -33509,7 +34498,7 @@ class PlayAnim
     {
         do
         {
-            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
 
             if( this.time < 0 )
             {
@@ -33582,7 +34571,7 @@ class FrameExecute
     {
         do
         {
-            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
 
             if( this.time < 0 )
             {
@@ -33593,7 +34582,7 @@ class FrameExecute
             // Do we specify a count
             if( this.duration > 0 )
             {
-                this.durationTime -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+                this.durationTime -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
                 if( this.durationTime < 0 )
                     break;
             }
@@ -33646,7 +34635,7 @@ class FadeTo
     {
         do
         {
-            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
 
             if( this.time < 0 )
             {
@@ -33654,7 +34643,7 @@ class FadeTo
                 break;
             }
 
-            this.value += (this.inc * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime);
+            this.value += (this.inc * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime);
                 
             yield;
         }
@@ -33677,8 +34666,8 @@ class ColorTo
 {
     constructor()
     {
-        this.value = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
-        this.inc = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__["Color"];
+        this.value = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__.Color;
+        this.inc = new _library_common_color__WEBPACK_IMPORTED_MODULE_4__.Color;
         this.final = null;
         this.time = 0;
         this.iter = null;
@@ -33706,7 +34695,7 @@ class ColorTo
     {
         do
         {
-            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+            this.time -= _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
 
             if( this.time < 0 )
             {
@@ -33715,7 +34704,7 @@ class ColorTo
             }
 
             for( let i = 0; i < 4; ++i )
-                this.value.data[i] += this.inc.data[i] * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__["highResTimer"].elapsedTime;
+                this.value.data[i] += this.inc.data[i] * _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
                 
             yield;
         }
@@ -33752,17 +34741,17 @@ class ScreenFade
         {
             if( this.fadeTo.execute() )
             {
-                _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+                _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
 
                 if( this.fadeTo.inc > 0 )
-                    _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_IN_COMPLETE"] );
+                    _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__.eventManager.dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__.ESE_FADE_IN_COMPLETE );
                 else
-                    _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__["eventManager"].dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__["ESE_FADE_OUT_COMPLETE"] );
+                    _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__.eventManager.dispatchEvent( _state_statedefs__WEBPACK_IMPORTED_MODULE_5__.ESE_FADE_OUT_COMPLETE );
 
                 break;
             }
 
-            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__["shaderManager"].setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
 
             yield;
         }
@@ -33783,66 +34772,165 @@ class ScreenFade
 //
 function loadScripts()
 {
-    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__["scriptManager"].set( 'ScreenFade',
+    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__.scriptManager.set( 'ScreenFade',
         ( current, final, time ) => { return new ScreenFade( current, final, time ); } );
 }
 
 
 /***/ }),
 /* 150 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipDataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipDataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 151 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 152 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 153 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
 /* 154 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
 /* 155 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n    \r\n    <strategy name=\"_space_ship_\" type=\"actor\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n            <node name=\"fire_tail\">\r\n                <sprite>\r\n                    <script prepare=\"fireTailAnim\"/>\r\n                </sprite>\r\n            </node>\r\n        </node>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<strategyLst>\r\n    \r\n    <strategy name=\"_space_ship_\" type=\"actor\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n            <node name=\"fire_tail\">\r\n                <sprite>\r\n                    <script prepare=\"fireTailAnim\"/>\r\n                </sprite>\r\n            </node>\r\n        </node>\r\n    </strategy>\r\n  \r\n</strategyLst>\r\n");
 
 /***/ }),
 /* 156 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<?xml version=\"1.0\"?>\n<settings>\n\t<display>\n\t\t<resolution width=\"1280\" height=\"720\" fullscreen=\"false\"/>\n\t\t<default width=\"1920\" height=\"1080\" orientation=\"landscape\"/>\n\t</display>\n\t<device>\n\t\t<!-- Currently only supports version 2.0 to 3.2 depending on your video card -->\n\t\t<!-- Profile can be \"core\", \"compatibility\" or \"es\" -->\n\t\t<!-- <OpenGL major=\"2\" minor=\"1\" profile=\"core\"/> -->\n\t\t<OpenGL major=\"2\" minor=\"0\" profile=\"core\"/>\n\t\t<projection projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45\"/>\n\t\t<!-- options: point, linear, anisotropic_2X, anisotropic_4X, anisotropic_8X, anisotropic_16X -->\n\t\t<anisotropicFiltering level=\"anisotropic_8X\"/>\n\t\t<backbuffer tripleBuffering=\"false\" VSync=\"true\"/>\n\t\t<depthStencilBuffer enableDepthBuffer=\"false\" createStencilBuffer=\"true\" clearStencilBuffer=\"true\" stencilBufferBitSize=\"1\"/>\n\t\t<targetBuffer clear=\"true\"/>\n\t\t<shadowBuffer create=\"false\" width=\"1024\" height=\"1024\"/>\n\t\t<postProcessBuffer create=\"true\">\n\t\t\t<buffer scale=\"1.0\" format=\"backbuffer\"/>\n\t\t\t<buffer scale=\"1.0\" format=\"backbuffer\"/>\n\t\t</postProcessBuffer>\n\t\t<!-- Dead Zone values as percentage -->\n\t\t<joypad stickDeadZone=\"30\"/>\n\t\t<threads minThreadCount=\"2\" maxThreadCount=\"0\"/>\n\t</device>\n\t<!-- frequency is usually 22050 or 44100. The lower the frequency, the more latency -->\n\t<!-- sound_channels is the output ie mono, stero, quad, etc -->\n\t<!-- mix_channels is the number of channels used for mixing whixh means the \n    total number of soinds that can be played at the same time -->\n\t<!-- chunksize is the amount of memory use for mixing. The larger the memory, the more latency  -->\n\t<sound frequency=\"44100\" sound_channels=\"2\" mix_channels=\"8\" chunksize=\"1024\"/>\n\t<world sectorSize=\"1024\"/>\n</settings>\n");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\n<settings>\n\t<display>\n\t\t<resolution width=\"1280\" height=\"720\" fullscreen=\"false\"/>\n\t\t<default width=\"1920\" height=\"1080\" orientation=\"landscape\"/>\n\t</display>\n\t<device>\n\t\t<!-- Currently only supports version 2.0 to 3.2 depending on your video card -->\n\t\t<!-- Profile can be \"core\", \"compatibility\" or \"es\" -->\n\t\t<!-- <OpenGL major=\"2\" minor=\"1\" profile=\"core\"/> -->\n\t\t<OpenGL major=\"2\" minor=\"0\" profile=\"core\"/>\n\t\t<projection projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45\"/>\n\t\t<!-- options: point, linear, anisotropic_2X, anisotropic_4X, anisotropic_8X, anisotropic_16X -->\n\t\t<anisotropicFiltering level=\"anisotropic_8X\"/>\n\t\t<backbuffer tripleBuffering=\"false\" VSync=\"true\"/>\n\t\t<depthStencilBuffer enableDepthBuffer=\"false\" createStencilBuffer=\"true\" clearStencilBuffer=\"true\" stencilBufferBitSize=\"1\"/>\n\t\t<targetBuffer clear=\"true\"/>\n\t\t<shadowBuffer create=\"false\" width=\"1024\" height=\"1024\"/>\n\t\t<postProcessBuffer create=\"true\">\n\t\t\t<buffer scale=\"1.0\" format=\"backbuffer\"/>\n\t\t\t<buffer scale=\"1.0\" format=\"backbuffer\"/>\n\t\t</postProcessBuffer>\n\t\t<!-- Dead Zone values as percentage -->\n\t\t<joypad stickDeadZone=\"30\"/>\n\t\t<threads minThreadCount=\"2\" maxThreadCount=\"0\"/>\n\t</device>\n\t<!-- frequency is usually 22050 or 44100. The lower the frequency, the more latency -->\n\t<!-- sound_channels is the output ie mono, stero, quad, etc -->\n\t<!-- mix_channels is the number of channels used for mixing whixh means the \n    total number of soinds that can be played at the same time -->\n\t<!-- chunksize is the amount of memory use for mixing. The larger the memory, the more latency  -->\n\t<sound frequency=\"44100\" sound_channels=\"2\" mix_channels=\"8\" chunksize=\"1024\"/>\n\t<world sectorSize=\"1024\"/>\n</settings>\n");
 
 /***/ })
-/******/ ]);
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+
+// 
+//  FILE NAME: main.js
+//  DESC:      main function
+//
+
+
+
+
+
+// Create the game
+new _game_js__WEBPACK_IMPORTED_MODULE_0__.Game;
+
+})();
+
+/******/ })()
+;
