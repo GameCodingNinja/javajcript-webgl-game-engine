@@ -274,6 +274,20 @@ class ObjectDataManager extends ManagerBase
 
         throw new Error( `Object group not found (${group}, ${name})!` );
     }
+
+    //
+    // DESC:  Find the group an object name belongs to
+    //
+    findGroup( objectName )
+    {
+        for( let [ groupKey, groupMap ] of this.objectDataMapMap.entries() )
+        {
+            if( groupMap.get( objectName ) !== undefined )
+                return groupKey;
+        }
+
+        return undefined;
+    }
 }
 
 export var objectDataManager = new ObjectDataManager;

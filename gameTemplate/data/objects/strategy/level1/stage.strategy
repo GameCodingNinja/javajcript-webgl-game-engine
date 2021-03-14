@@ -2,7 +2,7 @@
 <strategy defaultGroup="(level_1)">
 
     <node name="peg" id="-2">
-        <sprite objectName="peg"/>
+        <sprite/>
     </node>
   
 </strategy>

@@ -10,19 +10,24 @@ import * as defs from '../common/defs';
 
 export class SpriteData
 {
-    constructor( xmlNode, defGroup, defObjName, defId = defs.DEFAULT_ID )
+    constructor( xmlNode, nodeName, defGroup, defObjName, defId = defs.DEFAULT_ID )
     {
         // XML node
         this.xmlNode = xmlNode;
 
         // Sprite name
-        this.name = null;
+        this.name = nodeName;
         
         // Group Name
         this.group = defGroup;
         
         // Object name
         this.objectName = defObjName;
+
+        // Get the object data name
+        // Init with the node name in the event the node and the object data names are the same and a default object name was not defined
+        if( !this.objectName )
+            this.objectName = nodeName;
         
         // Sprite Id
         this.id = defId;
@@ -41,6 +46,8 @@ export class SpriteData
         attr = xmlNode.getAttribute( 'objectName' );
         if( attr)
             this.objectName = attr;
+        else if( !defObjName )
+            console.log(`Node name used for object data look-up (${this.group}, ${this.objectName})`);
 
         // Get the sprite's unique id number
         attr = xmlNode.getAttribute( "id" );
