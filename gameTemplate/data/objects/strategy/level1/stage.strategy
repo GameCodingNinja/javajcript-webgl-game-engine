@@ -1,20 +1,9 @@
 <?xml version="1.0"?>
-<stage>
+<strategy defaultGroup="(level_1)">
 
-    <!-- Default position and rotation of the camera. -->
-    <cameraPosition>
-        <position x="0.0" y="-90.0" z="0.0"/>
-        <rotation x="0.0" y="0.0" z="0.0"/>
-    </cameraPosition>
-
-    <!-- The stage's sectors and their integer position in the world -->
-    <sectors>
-
-        <sector file="data/objects/strategy/level1/sector0.lst">
-            <position x="0" y="0" z="0"/>
-        </sector>
-
-    </sectors>
+    <node name="peg" id="-2">
+        <sprite objectName="peg"/>
+    </node>
   
-</stage>
+</strategy>
 

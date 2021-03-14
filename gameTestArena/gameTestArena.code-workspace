@@ -8,6 +8,7 @@
 		}
 	],
 	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "gameTestArena"
+        "liveServer.settings.multiRootWorkspaceName": "gameTestArena",
+        "liveServer.settings.port": 5501
 	}
 }

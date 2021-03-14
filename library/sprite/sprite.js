@@ -82,6 +82,21 @@ export class Sprite extends ObjectTransform
     }
 
     // 
+    //  DESC: Load from XML node
+    //
+    reload( xmlNode )
+    {
+        // Load the sprite data
+        this.load( xmlNode );
+
+        // Init
+        this.init();
+        
+        if( this.physicsComponent )
+            this.physicsComponent.setTransform(this.pos.x, this.pos.y, this.rot.z);
+    }
+
+    // 
     //  DESC: Prepare the script class to run from id
     //
     prepareScript( scriptId, forceUpdate = false )

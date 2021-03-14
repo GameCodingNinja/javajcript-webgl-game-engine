@@ -1,16 +1,6 @@
-/gameTemplate/nbproject/
 /gameTemplate/bundle.js
-/library/nbproject/
-/demo/nbproject/
 /demo/bundle.js
-/HugesWhoSlots/nbproject/
 /HugesWhoSlots/bundle.js
-/consoleTestAp/nbproject/
-/Box2D/nbproject/
-/SimpleWebServer/nbproject/
 /SimpleWebServer/bundle.js
 /node_modules/
-/JavaConsole/nbproject/private/
-/JavaConsole/dist/
-/JavaConsole/build/
-/pet-chinko/nbproject/private/
+/pet-chinko/bundle.js

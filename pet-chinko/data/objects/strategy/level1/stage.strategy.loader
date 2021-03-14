@@ -1,0 +1,398 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_level-1-stage_">
+
+        <node name="peg">
+            <sprite>
+                <position x="-800" y="380"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-640" y="380"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-480" y="380"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-320" y="380"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-160" y="380"/>
+            </sprite> 
+        </node>
+
+        <node name="peg">
+            <sprite>
+                <position x="0" y="380"/>
+            </sprite> 
+        </node>
+
+        <node name="peg">
+            <sprite>
+                <position x="160" y="380"/>
+            </sprite> 
+        </node>
+
+        <node name="peg">
+            <sprite>
+                <position x="320" y="380"/>
+            </sprite> 
+        </node>
+
+        <node name="peg">
+            <sprite>
+                <position x="480" y="380"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="640" y="380"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="800" y="380"/>
+            </sprite> 
+        </node>
+        
+        
+        
+        <node name="peg">
+            <sprite>
+                <position x="-720" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-560" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-400" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-240" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-80" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="80" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="240" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="400" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="560" y="220"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="720" y="220"/>
+            </sprite> 
+        </node>
+        
+        
+        
+        <node name="peg">
+            <sprite>
+                <position x="-800" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-640" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-480" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-320" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-160" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="0" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="160" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="320" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="480" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="640" y="60"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="800" y="60"/>
+            </sprite> 
+        </node>
+        
+        
+        
+        <node name="peg">
+            <sprite>
+                <position x="-720" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-560" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-400" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-240" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-80" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="80" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="240" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="400" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="560" y="-100"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="720" y="-100"/>
+            </sprite> 
+        </node>
+        
+        
+        
+        <node name="peg">
+            <sprite>
+                <position x="-800" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-640" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-480" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-320" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="-160" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="0" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="160" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="320" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="480" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="640" y="-260"/>
+            </sprite> 
+        </node>
+        
+        <node name="peg">
+            <sprite>
+                <position x="800" y="-260"/>
+            </sprite> 
+        </node>
+        
+        
+        
+        <!--  rails  -->
+        <node name="bar">
+            <sprite>
+                <position x="-720" y="-560"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="-560" y="-560"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="-400" y="-560"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="-240" y="-570"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="-80" y="-560"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="80" y="-560"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="240" y="-560"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="400" y="-560"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="560" y="-560"/>
+            </sprite> 
+        </node>
+        
+        <node name="bar">
+            <sprite>
+                <position x="720" y="-560"/>
+            </sprite> 
+        </node>
+
+    </strategy>
+  
+</loader>
+

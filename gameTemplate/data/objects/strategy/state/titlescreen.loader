@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <loader>
     
-    <strategy name="_cube_" camera="cubeCamera" type="actor">
+    <strategy name="_cube_" camera="cubeCamera">
         <node name="cube" instance="cube">
             <sprite>
                 <script prepare="rotate"/>
@@ -9,7 +9,7 @@
         </node>
     </strategy>
 
-    <strategy name="_title_screen_" type="actor">
+    <strategy name="_title_screen_">
         <node name="background"/>
     </strategy>
   

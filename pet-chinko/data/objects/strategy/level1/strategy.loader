@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <loader>
 
-    <strategy name="_level-1-stage_" type="stage"/>
-    <strategy name="_level-1-ball_" type="actor"/>
-    <strategy name="_level-1-multiplier_" type="actor"/>
+    <strategy name="_level-1-ball_"/>
+    <strategy name="_level-1-multiplier_"/>
     
-    <strategy name="_level-ui_" type="actor">
+    <strategy name="_level-ui_">
         <node name="uiWinMeter" instance="uiWinMeter"/>
         <node name="uiBallMeter" instance="uiBallMeter"/>
         <node name="uiMultiplier" instance="uiMultiplier"/>

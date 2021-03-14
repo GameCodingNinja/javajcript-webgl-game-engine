@@ -23,9 +23,10 @@ import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
-import level1StrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
+import ballStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/ball.strategy.loader';
+import stageStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/stage.strategy.loader';
 
-export const ASSET_COUNT = 12;
+export const ASSET_COUNT = 11;
 
 export class Level1State extends CommonState
 {
@@ -144,8 +145,11 @@ export function load()
         // Load the physics list table and group
         .then(() => physicsWorldManager.loadWorldGroup2D( '(game)' ))
 
-        // Create and load all the actor strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) ))
+        // Load stage strategy.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( stageStrategyLoader ) ))
+
+        // Load ball strategy.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( ballStrategyLoader ) ))
 
         // Clean up the temporary files
         .then(() =>

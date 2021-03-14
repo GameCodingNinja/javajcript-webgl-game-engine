@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <loader>
 
-    <strategy name="_level-1-stage_" type="stage"/>
-    <strategy name="_level-1-ball_" type="actor">
+    <strategy name="_level-1-ball_">
     
         <node name="triangle_blue">
             <sprite>

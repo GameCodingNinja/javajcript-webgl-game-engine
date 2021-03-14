@@ -7,8 +7,8 @@
 "use strict";
 
 import { strategyManager } from '../strategy/strategymanager';
-import { ActorStrategy } from '../strategy/actorstrategy';
-import { StageStrategy } from '../strategy/stagestrategy';
+import { Strategy } from '../strategy/strategy';
+import { Sprite } from '../sprite/sprite';
 
 class Strategyloader
 {
@@ -34,18 +34,7 @@ class Strategyloader
             if( !strategyName )
                 throw new Error( `Strategy name not defined.` );
 
-            let strategyType = strategyNode[i].getAttribute( 'type' );
-            if( !strategyType )
-                throw new Error( `Strategy type not defined.` );
-
-            if( strategyType == 'actor' )
-                promiseAry.push( strategyManager.addStrategy( strategyName, new ActorStrategy ) );
-
-            else if( strategyType == 'stage' )
-                promiseAry.push( strategyManager.addStrategy( strategyName, new StageStrategy ) );
-
-            else
-                throw new Error( `Unknown strategy type (${strategyType})!` );
+            promiseAry.push( strategyManager.addStrategy( strategyName, new Strategy ) );
         }
 
         // Preload the strategies
@@ -147,7 +136,10 @@ class Strategyloader
     init( xmlNode, object )
     {
         // Set any transforms
-        object.loadTransFromNode( xmlNode );
+        if( object instanceof Sprite )
+            object.reload( xmlNode );
+        else
+            object.loadTransFromNode( xmlNode );
 
         // See if there are any scripts that need to be prepared to run
         let scriptLst = xmlNode.getElementsByTagName( 'script' );

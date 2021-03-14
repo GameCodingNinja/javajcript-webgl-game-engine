@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <loader>
     
-    <strategy name="_space_ship_" type="actor">
+    <strategy name="_space_ship_">
         <node name="player_ship">
             <object>
                 <position x="500" y="-300" z="0"/>

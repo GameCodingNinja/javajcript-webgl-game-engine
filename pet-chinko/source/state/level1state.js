@@ -29,8 +29,9 @@ import * as genFunc from '../../../library/utilities/genfunc';
 
 // Load data from bundle as string
 import level1StrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
+import stageStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/stage.strategy.loader';
 
-export const ASSET_COUNT = 46;
+export const ASSET_COUNT = 45;
 
 const SPRITE_PEG = -2,
     MULTIPLIER_SPRITE = 0,
@@ -478,7 +479,10 @@ export function load()
         soundManager.loadGroup( [`(level_1)`] )
     ])
 
-    // Create and load all the actor strategies.
+    // Load stage strategy.
+    .then(() => strategyLoader.load( genFunc.stringLoadXML( stageStrategyLoader ) ))
+
+    // Load the remaining strategies.
     .then(() => strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) ))
 
     // Clean up the temporary files
@@ -487,44 +491,5 @@ export function load()
         assetHolder.deleteGroup( groupAry );
         spriteSheetManager.deleteGroup( groupAry );
     })
-    
-    
-    /*objectDataManager.loadGroup( groupAry )
 
-        // Load the physics list table and group
-        .then(() => physicsWorldManager.loadWorldGroup2D( '(game)' ))
-
-        // Create and load all the actor strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) ))
-
-        // Clean up the temporary files
-        .then(() =>
-        {
-            assetHolder.deleteGroup( groupAry );
-            spriteSheetManager.deleteGroup( groupAry );
-        })*/
-
-    // Load the xml group
-    /*loadManager.add(
-        ( callback ) => objectDataManager.loadXMLGroup2D( ['(level_1)'], callback ) );
-
-    // Load all the assets associated with this group
-    loadManager.add(
-        ( callback ) => objectDataManager.loadAssets2D( ['(level_1)'], callback ) );
-
-    // Create OpenGL objects from the loaded data
-    loadManager.add(
-        ( callback ) => objectDataManager.createFromData( ['(level_1)'], callback ) );
-
-    // Load the physics list table and group
-    loadManager.add(
-        ( callback ) => physicsWorldManager.loadWorldGroup2D( '(game)', callback ));
-
-    let index = menuManager.getMenu('title_screen_menu').getControl('level_btn_lst').getIndex() + 1;
-
-    // Load the Sound Manager group
-    loadManager.add( ( callback ) => soundManager.loadGroup( [`(level_${index})`], callback ));
-
-    // Create and load all the actor strategies. NOTE: This adds it to the load manager
-    strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) );*/
 }
