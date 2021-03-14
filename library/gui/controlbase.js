@@ -6,12 +6,12 @@
 
 "use strict";
 
-import { ObjectTransform } from '../common/objecttransform';
+import { Object} from '../common/object';
 import { settings } from '../utilities/settings';
 import { assetHolder } from '../utilities/assetholder';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
-export class ControlBase extends ObjectTransform
+export class ControlBase extends Object
 {
     constructor( group )
     {

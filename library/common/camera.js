@@ -7,11 +7,11 @@
 "use strict";
 
 import { Matrix } from '../utilities/matrix';
-import { ObjectTransform } from '../common/objecttransform';
+import { Object } from '../common/object';
 import { settings } from '../utilities/settings';
 import * as defs from './defs';
 
-export class Camera extends ObjectTransform
+export class Camera extends Object
 {
     constructor()
     {
@@ -19,6 +19,10 @@ export class Camera extends ObjectTransform
         
         this.projectionMatrix = new Matrix;
         this.finalMatrix = new Matrix;
+
+        // Matrix for rotations only
+        // Basicly used for normal calculations
+        this.rotMatrix = new Matrix;
         
         this.projType = settings.projectionType;
         this.minZDist = settings.minZdist;

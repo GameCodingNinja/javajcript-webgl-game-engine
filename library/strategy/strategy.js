@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { ObjectTransform } from '../common/objecttransform';
+import { Object } from '../common/object';
 import { NodeDataList } from '../node/nodedatalist';
 import { cameraManager } from '../managers/cameramanager';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
@@ -14,7 +14,7 @@ import * as nodeFactory from '../node/nodefactory';
 import * as defs from '../common/defs';
 import * as genFunc from '../utilities/genfunc';
 
-export class Strategy extends ObjectTransform
+export class Strategy extends Object
 {
     constructor()
     {

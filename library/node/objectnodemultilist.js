@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { ObjectTransform } from '../common/objecttransform';
+import { Object } from '../common/object';
 import { NodeMultiLst } from './nodemultilist';
 import * as defs from '../common/defs';
 
@@ -19,7 +19,7 @@ export class ObjectNodeMultiLst extends NodeMultiLst
     {
         super( nodeId, parentId );
         
-        this.object = new ObjectTransform(true, objectId);
+        this.object = new Object(true, objectId);
 
         // Node type
         this.type = defs.ENT_OBJECT;

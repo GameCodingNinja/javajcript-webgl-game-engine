@@ -4,7 +4,7 @@
 //
 
 "use strict";
-import { ObjectTransform } from '../common/objecttransform';
+import { Object } from '../common/object';
 import { DynamicOffset } from '../common/dynamicoffset';
 import { ScrollParam } from './scrollparam';
 import { settings } from '../utilities/settings';
@@ -19,7 +19,7 @@ import * as uiControlDefs from '../gui/uicontroldefs';
 import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
-export class Menu extends ObjectTransform
+export class Menu extends Object
 {
     constructor( name, group, filePath )
     {

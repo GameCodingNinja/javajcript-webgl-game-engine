@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { ObjectTransform } from '../common/objecttransform';
+import { Object } from '../common/object';
 import { VisualComponentQuad } from '../2d/visualcomponentquad';
 import { VisualComponentSpriteSheet } from '../2d/visualcomponentspritesheet';
 import { VisualComponentScaledFrame } from '../2d/visualcomponentscaledframe';
@@ -17,7 +17,7 @@ import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
 import * as defs from '../common/defs';
 
-export class Sprite extends ObjectTransform
+export class Sprite extends Object
 {
     constructor( objData, id = defs.DEFAULT_ID, parentNode = null )
     {
