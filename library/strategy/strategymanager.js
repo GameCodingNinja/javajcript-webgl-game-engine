@@ -34,7 +34,9 @@ class StrategyManager extends ManagerBase
         this.strategyMap.set( strategyId, strategy );
         
         // Load all the xml's
-        return super.load( strategyId );
+        // See if there is any files associated with the strategy id in the list table
+        // NOTE: Will return an empty strategy if a file is not defined. Will do an object data search to create a node/sprite. Assumes sprite only
+        return super.load( strategyId, false );
     }
     
     //

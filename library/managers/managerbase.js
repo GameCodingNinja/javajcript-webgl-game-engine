@@ -90,7 +90,7 @@ export class ManagerBase
     //
     //  DESC: Load the group
     //
-    load( group )
+    load( group, allowError = true )
     {
         let promiseAry = [];
 
@@ -107,7 +107,7 @@ export class ManagerBase
                         .catch(( error ) => { console.error(error.stack); throw error; }));
             }
         }
-        else
+        else if( allowError )
         {
             if( this.listTableMap.size == 0 )
                 throw new Error( `Need to load the list table (${group})!` );

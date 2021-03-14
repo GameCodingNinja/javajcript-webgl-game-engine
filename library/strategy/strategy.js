@@ -1,7 +1,7 @@
 
 //
-//  FILE NAME: actorstrategy.js
-//  DESC:      Basic sprite strategy 2d class
+//  FILE NAME: strategy.js
+//  DESC:      Basic strategy class
 //
 
 "use strict";
@@ -9,8 +9,10 @@
 import { ObjectTransform } from '../common/objecttransform';
 import { NodeDataList } from '../node/nodedatalist';
 import { cameraManager } from '../managers/cameramanager';
+import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import * as nodeFactory from '../node/nodefactory';
 import * as defs from '../common/defs';
+import * as genFunc from '../utilities/genfunc';
 
 export class Strategy extends ObjectTransform
 {
@@ -72,7 +74,7 @@ export class Strategy extends ObjectTransform
             // There must be a name associated with this node data
             let nodeName = xmlNode.children[i].getAttribute( 'name' );
             if( !nodeName )
-                throw new Error( `Actor strategy missing node name! (${filePath})` );
+                throw new Error( `Strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
             this.dataMap.set( nodeName, new NodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
@@ -108,11 +110,35 @@ export class Strategy extends ObjectTransform
     //
     //  DESC: Get the sprite data container by name
     //
-    getData( name )
+    getData( name, group = '' )
     {
+        // If the data can't be found, this could be a simple one-off sprite node 
+        // which can be generated from the group and object data name
         let data = this.dataMap.get( name );
         if( !data )
-            throw new Error( `Error finding sprite data (${name})!` );
+        {
+            // If we can't find the data and the group param is empty, see if we can find the group 
+            // in the Object Data Manager as a last attemp. 
+            if( !group )
+            {
+                group = objectDataManager.findGroup( name );
+                if( group )
+                    console.log( `Simple Strategy node sprite auto generated from group search (${group}, ${name})!` );
+            }
+            else
+                console.log( `Simple Strategy node sprite auto generated from group and object name (${group}, ${name})!` );
+
+            // If we found group that has an object of the same name, create the data and pass it along
+            if( group )
+            {
+                this.loadFromNode( 
+                    genFunc.stringLoadXML(`<strategy defaultGroup="${group}"><node name="${name}"><sprite/></node></strategy>`).getElementsByTagName( 'strategy' )[0],
+                    'Dynamic generation');
+                data = this.dataMap.get( name );
+            }
+            else
+                throw new Error( `Error finding node data (${name})!` );
+        }
 
         return data;
     }
@@ -120,10 +146,10 @@ export class Strategy extends ObjectTransform
     //
     //  DESC: create the sprite node
     //
-    create( dataName, instanceName = null, makeActive = true )
+    create( dataName, instanceName = null, makeActive = true, group = '' )
     {
         // Get the data for this data name
-        let nodeAry = this.getData( dataName ).dataAry;
+        let nodeAry = this.getData( dataName, group ).dataAry;
 
         // Build the node list
         let headNode = null;

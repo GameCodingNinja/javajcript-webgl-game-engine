@@ -76,6 +76,9 @@ class Strategyloader
     //
     populateStartegy( xmlNode, strategy )
     {
+        let defaultName = xmlNode.getAttribute( 'defaultName' );
+        let defaultGroup = xmlNode.getAttribute( 'defaultGroup' );
+
         let xmlNodeLst = xmlNode.children;
 
         for( let i = 0; i < xmlNodeLst.length; ++i )
@@ -84,6 +87,13 @@ class Strategyloader
             {
                 // Get the name of the strategy node
                 let name = xmlNodeLst[i].getAttribute( 'name' );
+                if( !name )
+                    name = defaultName
+
+                // See if a group has been specified
+                let group = xmlNodeLst[i].getAttribute( 'group' );
+                if( !group )
+                    group = defaultGroup
 
                 // Get the instance name if one is provided.
                 // Nodes with instance names are stored in a map so that a reference can be returned
@@ -91,7 +101,7 @@ class Strategyloader
 
                 // Creating a node is automaticly active unless defined as false. Default true even if not specified
                 let active = xmlNodeLst[i].getAttribute( 'active' );
-                let headNode = strategy.create( name, instance, (!active || active === 'true') );
+                let headNode = strategy.create( name, instance, (!active || active === 'true'), group );
 
                 for( let j = 0; j < xmlNodeLst[i].children.length; ++j )
                 {
