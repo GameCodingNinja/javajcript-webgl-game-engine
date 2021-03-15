@@ -15,13 +15,15 @@ export class Camera extends Object
 {
     constructor()
     {
-        super(true);
+        super();
         
+        // Custom projection matrix
         this.projectionMatrix = new Matrix;
+
+        // Custom projection matrix
         this.finalMatrix = new Matrix;
 
-        // Matrix for rotations only
-        // Basicly used for normal calculations
+        // Matrix for rotations only, used for normal calculations
         this.rotMatrix = new Matrix;
         
         this.projType = settings.projectionType;
@@ -165,5 +167,17 @@ export class Camera extends Object
         this.finalMatrix.initilizeMatrix();
         this.finalMatrix.mergeMatrix( this.matrix.matrix );
         this.finalMatrix.mergeMatrix( this.projectionMatrix.matrix );
+    }
+
+    //
+    //  DESC: Apply the rotation
+    //
+    applyRotation( matrix )
+    {
+        this.rotMatrix.initilizeMatrix();
+        this.rotMatrix.rotate( this.rot );
+
+        // Since the rotation has already been done, multiply it into the matrix
+        matrix.multiply3x3( this.rotMatrix.matrix );
     }
 }

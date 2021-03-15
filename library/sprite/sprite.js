@@ -15,13 +15,14 @@ import { VisualComponent3D } from '../3d/visualcomponent3d';
 import { NullVisualComponent } from '../common/nullvisualcomponent';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
 import { ScriptComponent } from '../script/scriptcomponent';
+import { Matrix } from '../utilities/matrix';
 import * as defs from '../common/defs';
 
 export class Sprite extends Object
 {
     constructor( objData, id = defs.DEFAULT_ID, parentNode = null )
     {
-        super( objData.is3D(), id );
+        super( id );
 
         // parent node of this sprite
         this.parentNode = parentNode;
@@ -58,6 +59,8 @@ export class Sprite extends Object
         }
         else if( objData.is3D() )
         {
+            // Matrix for rotations only, used for normal calculations
+            this.rotMatrix = new Matrix;
             this.visualComponent = new VisualComponent3D( objData.visualData );
         }
 
@@ -287,5 +290,41 @@ export class Sprite extends Object
             return true;
 
         return false;
+    }
+
+    //
+    //  DESC: Apply the rotation
+    //
+    applyRotation( matrix )
+    {
+        // 3D light calculations require a rotation matrix without scale
+        if( this.objData.is3D() )
+        {
+            // Add in the center point prior to rotation
+            if( this.parameters.isSet( defs.CENTER_POINT ) )
+                this.matrix.translate( this.centerPos );
+            
+            // Add in the rotation if this is NOT a physics transformation
+            // NOTE: Don't have a 3D physics library yet
+            //if( !this.parameters.isSet( defs.PHYSICS_TRANSFORM ) )
+            {
+                this.rotMatrix.initilizeMatrix();
+                this.rotMatrix.rotate( this.rot );
+            }
+
+            // Since the rotation has already been done, multiply it into the matrix
+            matrix.multiply3x3( this.rotMatrix.matrix );
+
+            // Subtract the center point after rotation to put back in original position
+            // Doing two inverts keeps us from having to new up a point that would be garbage collected
+            if( this.parameters.isSet( defs.CENTER_POINT ) )
+            {
+                this.centerPos.invert();
+                this.matrix.translate( this.centerPos );
+                this.centerPos.invert();
+            }
+        }
+        else
+            super.applyRotation( matrix );
     }
 }

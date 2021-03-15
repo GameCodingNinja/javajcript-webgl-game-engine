@@ -14,16 +14,10 @@ import * as defs from '../common/defs';
 
 export class Object
 {
-    constructor( createRotMatrix = false, id = defs.DEFAULT_ID )
+    constructor( id = defs.DEFAULT_ID )
     {
         // local matrix
         this.matrix = new Matrix;
-
-        // Matrix for rotations only
-        // Basicly used for normal calculations
-        this.rotMatrix = null;
-        if( createRotMatrix )
-            this.rotMatrix = new Matrix;
 
         // Bitmask settings to record if the object needs to be transformed
         this.parameters = new BitMask(defs.VISIBLE);
@@ -275,7 +269,7 @@ export class Object
 
         // Apply the rotation
         if( this.parameters.isSet( defs.ROTATE ) )
-            this.applyRotation();
+            this.applyRotation( matrix );
 
         // Apply the translation
         if( this.parameters.isSet( defs.TRANSLATE ) )
@@ -325,7 +319,7 @@ export class Object
     //
     //  DESC: Apply the scale
     //
-    applyRotation()
+    applyRotation( matrix )
     {
         // Add in the center point prior to rotation
         if( this.parameters.isSet( defs.CENTER_POINT ) )
@@ -340,12 +334,6 @@ export class Object
             this.centerPos.invert();
             this.matrix.translate( this.centerPos );
             this.centerPos.invert();
-        }
-
-        if( this.rotMatrix )
-        {
-            this.rotMatrix.initilizeMatrix();
-            this.rotMatrix.rotate( this.rot );
         }
     }
 

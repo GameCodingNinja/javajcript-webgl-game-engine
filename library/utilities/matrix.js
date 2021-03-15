@@ -420,4 +420,27 @@ export class Matrix
     {
         this.matrix[14] = -this.matrix[14];
     }
+
+    //
+    //  DESC: Inverse the Z 
+    //
+    multiply3x3( matrix )
+    {
+        this.initIdentityMatrix( gTempMergeMatrix );
+
+        for( let i = 0; i < 3; ++i )
+        {
+            for( let j = 0; j < 3; ++j )
+            { 
+                gTempMergeMatrix[(i*4)+j] = (this.matrix[i*4] * matrix[j])
+                + (this.matrix[(i*4)+1] * matrix[4+j])
+                + (this.matrix[(i*4)+2] * matrix[8+j]);
+            }
+        }
+
+        // Swap matricies so that there's no garbage collection
+        gSwap = this.matrix;
+        this.matrix = gTempMergeMatrix;
+        gTempMergeMatrix = gSwap;
+    }
 }

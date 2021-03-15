@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)">
 
-    <node name="peg" id="-2">
-        <sprite objectName="peg"/>
+    <node name="peg">
+        <sprite id="-2"/>
     </node>
 
-    <node name="bar" id="-1">
-        <sprite objectName="bar"/>
+    <node name="bar">
+        <sprite id="-1"/>
     </node>
   
 </strategy>
