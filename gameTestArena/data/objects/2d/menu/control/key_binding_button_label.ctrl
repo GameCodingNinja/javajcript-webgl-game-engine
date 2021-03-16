@@ -7,10 +7,10 @@
             <font fontName="dejavu_sans_cond_32">
                 <alignment horzAlign="center" vertAlign="center"/>
             </font>
-            <scriptLst>
+            <scriptList>
                 <script disabled="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     
     </spriteList>

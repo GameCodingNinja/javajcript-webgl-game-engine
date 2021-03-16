@@ -4,11 +4,11 @@
     <spriteList>
 
         <sprite objectName="key_binding_scroll_box_frame">
-            <scriptLst>
+            <scriptList>
                 <script disabled="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </spriteList>

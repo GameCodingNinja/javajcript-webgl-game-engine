@@ -9,6 +9,7 @@ import { Point } from './point';
 import { Size } from './size';
 import { BitMask } from '../utilities/bitmask';
 import { Matrix } from '../utilities/matrix';
+import { ScriptComponent } from '../script/scriptcomponent';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as defs from '../common/defs';
 
@@ -40,6 +41,9 @@ export class Object
 
         // Offset due to a sprite sheet crop.
         this.cropOffset = new Size;
+
+        // The script part of the sprite
+        this.scriptComponent = new ScriptComponent;
     }
 
     // 

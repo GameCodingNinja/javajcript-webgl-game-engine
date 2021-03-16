@@ -12,9 +12,9 @@
 
             <sprite objectName="fire_tail">
                 <position x="-120" y="3" z="0"/>
-                <scriptLst>
+                <scriptList>
                     <script fireTailAnim="PlayerShip_FireTailAnim"/>
-                </scriptLst>
+                </scriptList>
             </sprite>
 
         </node>
@@ -31,9 +31,9 @@
             <sprite objectName="ship_gun">
                 <centerPos x="10" y="0" z="0"/>
                 <position x="20" y="0" z="0"/>
-                <!--<scriptLst>
+                <!--<scriptList>
                     <script update="rotateGun"/>
-                </scriptLst>-->
+                </scriptList>-->
             </sprite>
 
         </node>

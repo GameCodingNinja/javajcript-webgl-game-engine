@@ -3,10 +3,10 @@
 
     <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
     
-    <scriptLst>
+    <scriptList>
         <script transIn="Menu_TransIn"/>
         <script transOut="Menu_TransOut"/>
-    </scriptLst>
+    </scriptList>
 
     <staticMenuControls>
 
@@ -32,10 +32,10 @@
             </fontStringLst>
             <action actionType="close"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
     </mouseOnlyControls>
@@ -52,10 +52,10 @@
             <action actionType="back"/>
             <navigate up="main_menu_btn" down="help_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Help Button -->
@@ -68,10 +68,10 @@
             <action actionType="to_menu" executionAction="help_menu"/>
             <navigate up="resume_btn" down="key_binding_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Key Bindings Button -->
@@ -84,10 +84,10 @@
             <action actionType="to_menu" executionAction="key_bindings_menu"/>
             <navigate up="help_btn" down="main_menu_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Main Menu Button -->
@@ -100,11 +100,11 @@
             <action actionType="to_menu" executionAction="confirmation_menu"/>
             <navigate up="key_binding_btn" down="resume_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
                 <script execute="ConfirmBtn_execute"/>
-            </scriptLst>
+            </scriptList>
         </control> 
 
     </menuControls>

@@ -4,32 +4,32 @@
     <spriteList>
 
         <sprite objectName="arrow_button_solid">
-            <scriptLst>
+            <scriptList>
                 <script init="Control_Hidden"/>
                 <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Hidden"/>
                 <script select="Control_Fast_Solid_Selected"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     
         <sprite objectName="arrow_button_frame">
-            <scriptLst>
+            <scriptList>
                 <script init="Control_Hidden"/>
                 <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Active"/>
                 <script select="Control_Fast_Selected"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
         <sprite objectName="arrow_button_face">
-            <scriptLst>
+            <scriptList>
                 <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
                 <script select="Control_Fast_Face_Selected_Act"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </spriteList>

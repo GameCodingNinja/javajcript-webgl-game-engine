@@ -4,9 +4,9 @@
     <node name="loadAnim">
         
         <sprite objectName="loadAnim">
-            <scriptLst>
+            <scriptList>
                 <script animate="State_PlayLoadAnim" group="(state)"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </node>

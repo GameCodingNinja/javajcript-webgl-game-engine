@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <menu>
     
-    <scriptLst>
+    <scriptList>
         <script transIn="Menu_TransIn"/>
         <script transOut="Menu_TransOut"/>
-    </scriptLst>
+    </scriptList>
 
     <staticMenuControls>
 
@@ -49,10 +49,10 @@
             </fontStringLst>
             <action actionType="close"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- mouse-only close Button -->
@@ -64,10 +64,10 @@
             </fontStringLst>
             <action actionType="back"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
     </mouseOnlyControls>

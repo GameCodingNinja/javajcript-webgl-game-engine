@@ -102,9 +102,9 @@
 
             <sprite2d objectName="fire_tail">
                 <position x="-120" y="-3" z="0"/>
-                <scriptLst>
+                <scriptList>
                     <script update="loopAnimation"/>
-                </scriptLst>
+                </scriptList>
             </sprite2d>
 
         </node>
@@ -121,9 +121,9 @@
             <sprite2d objectName="ship_gun">
                 <centerPos x="10" y="0" z="0"/>
                 <position x="20" y="0" z="0"/>
-                <scriptLst>
+                <scriptList>
                     <script update="rotateGun"/>
-                </scriptLst>
+                </scriptList>
             </sprite2d>
 
         </node>
@@ -134,9 +134,9 @@
 
         <sprite2d objectName="projectile">
             <position x="0" y="0" z="0"/>
-            <scriptLst>
+            <scriptList>
                 <script update="MoveProjectile"/>
-            </scriptLst>
+            </scriptList>
         </sprite2d>
 
     </node>-->
@@ -145,10 +145,10 @@
 
         <sprite2d objectName="square_red">
             <scale x=".9" y=".9" z="1"/>
-            <scriptLst>
+            <scriptList>
                 <script init="Run_Init"/>
                 <script update="Run_Update"/>
-            </scriptLst>
+            </scriptList>
         </sprite2d>
 
     </node>
@@ -156,10 +156,10 @@
     <node name="triangle_green" type="spriteNode">
 
         <sprite2d objectName="triangle_green">
-            <scriptLst>
+            <scriptList>
                 <script init="Run_Init"/>
                 <script update="Run_Update"/>
-            </scriptLst>
+            </scriptList>
         </sprite2d>
 
     </node>
@@ -167,10 +167,10 @@
     <node name="triangle_blue" type="spriteNode">
 
         <sprite2d objectName="triangle_blue">
-            <scriptLst>
+            <scriptList>
                 <script init="Run_Init"/>
                 <script update="Run_Update"/>
-            </scriptLst>
+            </scriptList>
         </sprite2d>
 
     </node>
@@ -178,10 +178,10 @@
     <node name="circle_green" type="spriteNode">
 
         <sprite2d objectName="circle_green">
-            <scriptLst>
+            <scriptList>
                 <script init="Run_Init"/>
                 <script update="Run_Update"/>
-            </scriptLst>
+            </scriptList>
         </sprite2d>
 
     </node>
@@ -189,10 +189,10 @@
     <node name="circle_blue" type="spriteNode">
 
         <sprite2d objectName="circle_blue">
-            <scriptLst>
+            <scriptList>
                 <script init="Run_Init"/>
                 <script update="Run_Update"/>
-            </scriptLst>
+            </scriptList>
         </sprite2d>
 
     </node>
@@ -200,10 +200,10 @@
     <node name="circle_red" type="spriteNode">
 
         <sprite2d objectName="circle_red">
-            <scriptLst>
+            <scriptList>
                 <script init="Run_Init"/>
                 <script update="Run_Update"/>
-            </scriptLst>
+            </scriptList>
         </sprite2d>
 
     </node>

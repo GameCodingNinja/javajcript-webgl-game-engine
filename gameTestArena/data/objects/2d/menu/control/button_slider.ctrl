@@ -4,12 +4,12 @@
     <spriteList>
     
         <sprite objectName="button_slider">
-            <scriptLst>
+            <scriptList>
                 <script disabled="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
                 <script selected="Control_slider_btn_Selected"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </spriteList>

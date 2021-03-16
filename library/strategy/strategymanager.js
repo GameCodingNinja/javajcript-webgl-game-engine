@@ -35,7 +35,8 @@ class StrategyManager extends ManagerBase
         
         // Load all the xml's
         // See if there is any files associated with the strategy id in the list table
-        // NOTE: Will return an empty strategy if a file is not defined. Will do an object data search to create a node/sprite. Assumes sprite only
+        // NOTE: Will return an empty strategy if a file is not defined. Will do an 
+        // object data search to create a node/sprite. Assumes simple node/sprite only
         return super.load( strategyId, false );
     }
     

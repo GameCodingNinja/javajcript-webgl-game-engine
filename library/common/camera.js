@@ -67,8 +67,11 @@ export class Camera extends Object
         if( attr )
             this.angle = Number(attr) * defs.DEG_TO_RAD;
         
-        // Load the transforms
+        // Load the transform data from node
         this.loadTransFromNode( xmlNode );
+
+        // Load the script functions from node
+        this.scriptComponent.initScriptIds( xmlNode );
         
         // Create the projection matrix
         this.createProjectionMatrix();

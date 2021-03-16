@@ -10,9 +10,9 @@
     <node name="loadAnim">
         
         <sprite objectName="loadAnim">
-            <scriptLst>
+            <scriptList>
                 <script animate="State_PlayLoadAnim"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </node>

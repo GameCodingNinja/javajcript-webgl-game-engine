@@ -14,7 +14,6 @@ import { VisualComponentFont } from '../2d/visualcomponentfont';
 import { VisualComponent3D } from '../3d/visualcomponent3d';
 import { NullVisualComponent } from '../common/nullvisualcomponent';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
-import { ScriptComponent } from '../script/scriptcomponent';
 import { Matrix } from '../utilities/matrix';
 import * as defs from '../common/defs';
 
@@ -35,9 +34,6 @@ export class Sprite extends Object
         
         // The physics part of the sprite
         this.physicsComponent = null;
-        
-        // The script part of the sprite
-        this.scriptComponent = new ScriptComponent;
         
         // Allocate the sprite specific objects
         if( objData.is2D() )
@@ -77,7 +73,10 @@ export class Sprite extends Object
     //
     load( xmlNode )
     {
+        // Load the transform data from node
         this.loadTransFromNode( xmlNode );
+
+        // Load the script functions from node
         this.scriptComponent.initScriptIds( xmlNode );
 
         if( this.visualComponent.isFontSprite() )

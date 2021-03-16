@@ -4,21 +4,21 @@
     <spriteList>
 
         <sprite objectName="key_binding_button_solid">
-            <scriptLst>
+            <scriptList>
                 <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Solid_Active"/>
                 <script select="Control_Solid_Selected"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     
         <sprite objectName="key_binding_button_frame">
-            <scriptLst>
+            <scriptList>
                 <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
         <sprite objectName="control_font">
@@ -26,12 +26,12 @@
                 <alignment horzAlign="left" vertAlign="center"/>
             </font>
             <position x="-435" y="0" z="0"/>
-            <scriptLst>
+            <scriptList>
                 <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected_Dispatch_Exe_Act"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </spriteList>

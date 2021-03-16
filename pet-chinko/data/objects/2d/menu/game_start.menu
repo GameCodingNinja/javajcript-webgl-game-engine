@@ -3,10 +3,10 @@
 
     <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
     
-    <scriptLst>
+    <scriptList>
         <script transIn="Menu_TransIn"/>
         <script transOut="Menu_TransOut"/>
-    </scriptLst>
+    </scriptList>
 
     <staticMenuControls>
 
@@ -33,10 +33,10 @@
             <action actionType="action_event" executionAction="play_game"/>
             <!--<navigate up="main_menu_btn" down="help_btn"/>-->
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
     </menuControls>

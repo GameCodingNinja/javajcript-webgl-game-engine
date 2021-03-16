@@ -3,33 +3,33 @@
     
     <node name="tennis_ball_green">
         <sprite objectName="tennis_ball_green" id="1">
-            <scriptLst>
+            <scriptList>
                 <script ball_ai="Level_BallAi"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     </node>
     
     <node name="tennis_ball_pink">
         <sprite objectName="tennis_ball_pink" id="2">
-            <scriptLst>
+            <scriptList>
                 <script ball_ai="Level_BallAi"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     </node>
     
     <node name="frisbee">
         <sprite objectName="frisbee" id="4">
-            <scriptLst>
+            <scriptList>
                 <script ball_ai="Level_BallAi"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     </node>
     
     <node name="bone_biscuit">
         <sprite objectName="bone_biscuit" id="5">
-            <scriptLst>
+            <scriptList>
                 <script ball_ai="Level_BallAi"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     </node>
 

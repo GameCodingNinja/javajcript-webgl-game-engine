@@ -4,33 +4,33 @@
     <spriteList>
 
         <sprite objectName="28x28_button_solid">
-            <scriptLst>
+            <scriptList>
                 <script disabled="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Solid_Active"/>
                 <script selected="Control_Solid_Selected"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     
         <sprite objectName="28x28_button_frame">
-            <scriptLst>
+            <scriptList>
                 <state disabled="Control_Disabled"/>
                 <state inactive="Control_Inactive"/>
                 <state active="Control_Active"/>
                 <state selected="Control_Selected_Visible"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
         
         <sprite objectName="control_font">
             <font fontName="dejavu_sans_reg_bold_32"/>
             <position x="6" y="0" z="0"/>
             <rotation z="90"/>
-            <scriptLst>
+            <scriptList>
                 <script disabled="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
                 <script selected="Control_Selected_Dispatch_Exe"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </spriteList>

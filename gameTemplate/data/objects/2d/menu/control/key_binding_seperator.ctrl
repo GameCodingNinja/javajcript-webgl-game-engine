@@ -8,9 +8,9 @@
                 <alignment horzAlign="left" vertAlign="center"/>
             </font>
             <position x="-420" y="0" z="0"/>
-            <scriptLst>
+            <scriptList>
                 <script disabled="Control_Disabled"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     
     </spriteList>

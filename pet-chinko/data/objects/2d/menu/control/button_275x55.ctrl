@@ -4,31 +4,31 @@
     <spriteList>
 
         <sprite objectName="275x55_button_solid">
-            <scriptLst>
+            <scriptList>
                 <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Solid_Active"/>
                 <script select="Control_Solid_Selected"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
     
         <sprite objectName="275x55_button_frame">
-            <scriptLst>
+            <scriptList>
                 <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
         <sprite objectName="control_font">
             <font fontName="dejavu_sans_reg_45"/>
-            <scriptLst>
+            <scriptList>
                 <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected_Dispatch_Exe"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </spriteList>

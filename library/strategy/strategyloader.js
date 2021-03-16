@@ -152,10 +152,10 @@ class Strategyloader
             object.loadTransFromNode( xmlNode );
 
         // See if there are any scripts that need to be prepared to run
-        let scriptLst = xmlNode.getElementsByTagName( 'script' );
-        for( let i = 0; i < scriptLst.length; ++i )
+        let scriptList = xmlNode.getElementsByTagName( 'script' );
+        for( let i = 0; i < scriptList.length; ++i )
         {
-            let attr = scriptLst[i].getAttribute( 'prepare' );
+            let attr = scriptList[i].getAttribute( 'prepare' );
             if( attr )
                 object.prepareScript( attr );
         }   

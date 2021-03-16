@@ -12,7 +12,6 @@ import { Sprite } from '../sprite/sprite';
 import { eventManager } from '../managers/eventmanager';
 import { UIControlNavNode } from '../gui/uicontrolnavnode';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
-import { ScriptComponent } from '../script/scriptcomponent';
 import * as UIControlFactory from './uicontrolfactory';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as uiControlDefs from '../gui/uicontroldefs';
@@ -67,9 +66,6 @@ export class Menu extends Object
         
         // menu alpha value
         this.alpha = 0;
-
-        // The script conponent
-        this.scriptComponent = new ScriptComponent;
         
         // The menu needs to default hidden
         this.setVisible(false);
@@ -142,9 +138,9 @@ export class Menu extends Object
     initScriptIds( node )
     {
         // Check for scripting
-        let scriptLst = node.getElementsByTagName( 'scriptLst' );
-        if( scriptLst.length )
-            this.scriptComponent.initScriptIds( scriptLst[0] );
+        let scriptList = node.getElementsByTagName( 'scriptList' );
+        if( scriptList.length )
+            this.scriptComponent.initScriptIds( scriptList[0] );
     }
     
     // 

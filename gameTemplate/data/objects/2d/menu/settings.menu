@@ -3,10 +3,10 @@
 
     <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
     
-    <scriptLst>
+    <scriptList>
         <script transIn="Menu_TransIn"/>
         <script transOut="Menu_TransOut"/>
-    </scriptLst>
+    </scriptList>
 
     <staticMenuControls>
 
@@ -31,10 +31,10 @@
                 <string text="x"/>
             </fontStringLst>
             <action actionType="close"/>
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- mouse-only close Button -->
@@ -45,10 +45,10 @@
                 <string text="^"/>
             </fontStringLst>
             <action actionType="back"/>
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
     </mouseOnlyControls>
@@ -69,10 +69,10 @@
             <navigate up="settings_apply_btn" down="full_screen_check_box"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Full Screen Check Box -->
@@ -85,10 +85,10 @@
             </fontStringLst>
             <action actionType="action"/>
             <navigate up="resolution_btn_lst" down="v-sync_check_box"/>
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- V_Sync Check Box -->
@@ -101,10 +101,10 @@
             </fontStringLst>
             <action actionType="action"/>
             <navigate up="full_screen_check_box" down="settings_dead_zone_slider"/>
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- slider Control -->
@@ -117,10 +117,10 @@
             </fontStringLst>
             <navigate up="v-sync_check_box" down="settings_apply_btn"/>
             <scroll startDelay="750" scrollDelay="100" left="true" right="true"/>
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Apply Button -->
@@ -132,10 +132,10 @@
             </fontStringLst>
             <action actionType="action"/>
             <navigate up="settings_dead_zone_slider" down="resolution_btn_lst"/>
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
     </menuControls>

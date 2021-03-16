@@ -18,7 +18,6 @@ import { settings } from '../utilities/settings';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { eventManager } from '../managers/eventmanager';
 import { actionManager } from '../managers/actionmanager';
-import { ScriptComponent } from '../script/scriptcomponent';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as uiControlDefs from '../gui/uicontroldefs';
 import * as menuDefs from '../gui/menudefs';
@@ -32,9 +31,6 @@ export class UIControl extends ControlBase
         
         // sprite array
         this.spriteAry = [];
-
-        // Script component object
-        this.scriptComponent = new ScriptComponent;
 
         // control's default state
         this.defaultState;
@@ -102,9 +98,9 @@ export class UIControl extends ControlBase
         }
 
         // Check for scripting
-        let scriptLst = xmlNode.getElementsByTagName( 'scriptLst' );
-        if( scriptLst.length )
-            this.scriptComponent.initScriptIds( scriptLst[0] );
+        let scriptList = xmlNode.getElementsByTagName( 'scriptList' );
+        if( scriptList.length )
+            this.scriptComponent.initScriptIds( scriptList[0] );
 
         // Load the scroll data from node
         let scrollParamNode = xmlNode.getElementsByTagName( 'scroll' );

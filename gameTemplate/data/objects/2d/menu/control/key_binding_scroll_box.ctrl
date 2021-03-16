@@ -4,11 +4,11 @@
     <spriteList>
 
         <sprite objectName="key_binding_scroll_box_frame">
-            <scriptLst>
+            <scriptList>
                 <script disable="Control_Disabled"/>
                 <script inactive="Control_Inactive"/>
                 <script active="Control_Active"/>
-            </scriptLst>
+            </scriptList>
         </sprite>
 
     </spriteList>
@@ -52,10 +52,10 @@
                 <string text="Menu Select"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Menu Escape Key Binding Button -->
@@ -65,10 +65,10 @@
                 <string text="Menu Escape"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Menu Back Key Binding Button -->
@@ -78,10 +78,10 @@
                 <string text="Menu Back"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Menu Toggle Key Binding Button -->
@@ -91,10 +91,10 @@
                 <string text="Menu Toggle"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
         <!-- Menu Tab Left Key Binding Button -->
@@ -104,10 +104,10 @@
                 <string text="Menu Tab Left"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
         <!-- Menu Tab Right Key Binding Button -->
@@ -117,10 +117,10 @@
                 <string text="Menu Tab Right"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Menu Seperator - Game Controls -->
@@ -138,10 +138,10 @@
                 <string text="Up"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
         <!-- Down Key Binding Button -->
@@ -151,10 +151,10 @@
                 <string text="Down"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
         <!-- Left Key Binding Button -->
@@ -164,10 +164,10 @@
                 <string text="Left"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
         <!-- Right Key Binding Button -->
@@ -177,10 +177,10 @@
                 <string text="Right"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Shoot Key Binding Button -->
@@ -190,10 +190,10 @@
                 <string text="Shoot"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
     
         <!-- Deccelerate Key Binding Button -->
@@ -203,10 +203,10 @@
                 <string text="Deccelerate"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
         <!-- Menu Seperator - Key Binding Option(s) -->
@@ -224,10 +224,10 @@
                 <string text="Reset To Default"/>
             </fontStringLst>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptLst>
+            <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptLst>
+            </scriptList>
         </control>
 
     </scrollBoxControlList>
