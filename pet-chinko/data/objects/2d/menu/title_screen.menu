@@ -17,11 +17,11 @@
         <control name="texture_btn_lst" controlType="button_list" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
             <position x="-400" y="120" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Cats"/>
                 <string text="Dogs"/>
                 <string text="Cats &#38; Dogs"/>
-            </fontStringLst>
+            </fontStringList>
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
@@ -36,12 +36,12 @@
         <control name="level_btn_lst" controlType="button_list" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
             <position x="400" y="120" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Level 1"/>
                 <string text="Level 2"/>
                 <string text="Level 3"/>
                 <string text="Level 4"/>
-            </fontStringLst>
+            </fontStringList>
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
@@ -56,9 +56,9 @@
         <control name="continue_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55_frame.ctrl"/>
             <position x="0" y="-120" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Start Game"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="game_state_change" executionAction="level_1_state"/>
             <!--<navigate up="key_binding_btn" down="new_game_btn"/>-->
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
@@ -72,9 +72,9 @@
         <control name="help_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_145x55_frame.ctrl"/>
             <position x="-800" y="-120" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Help"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="to_menu" executionAction="help_menu"/>
             <!--<navigate up="key_binding_btn" down="new_game_btn"/>-->
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->

@@ -12,28 +12,28 @@
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
             <position x="0" y="355" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Key Bindings"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
         <!-- Key Bind Controls Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_label.ctrl"/>
             <position x="-17" y="295" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Action"/>
                 <string text="Keyboard                 Mouse             Controller"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
         
         <!-- instructions Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_instructions_label.ctrl"/>
             <position x="-500" y="-340" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Select the desired action to change. Press the button of the device to bind.|Press the same device button to unbind. Press Esc to cancel."/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
     </staticMenuControls>
@@ -44,9 +44,9 @@
         <control name="close_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
             <position x="495" y="360" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="x"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="close"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
@@ -55,9 +55,9 @@
         <control name="back_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/back_button.ctrl"/>
             <position x="465" y="360" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="^"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="back"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>

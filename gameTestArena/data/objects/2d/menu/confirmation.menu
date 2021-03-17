@@ -12,9 +12,9 @@
         <control name="message_lbl" controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/confirmation_label.ctrl"/>
             <position x="0" y="40" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Test Message"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
     </staticMenuControls>
@@ -24,9 +24,9 @@
         <control name="no_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
             <position x="70" y="-70" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="No"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="back"/>
             <navigate left="yes_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
@@ -35,9 +35,9 @@
         <control name="yes_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
             <position x="-70" y="-70" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Yes"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="back"/>
             <navigate right="no_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>

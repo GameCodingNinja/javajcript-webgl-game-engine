@@ -12,9 +12,9 @@
         <control name="message_lbl" controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/game_over_label.ctrl"/>
             <position x="0" y="40" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Game Over.|Would you like to play again?"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
     </staticMenuControls>
@@ -24,9 +24,9 @@
         <control name="no_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
             <position x="70" y="-70" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="No"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="game_state_change" executionAction="title_screen_state"/>
             <navigate left="yes_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
@@ -39,9 +39,9 @@
         <control name="yes_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
             <position x="-70" y="-70" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Yes"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="action_event" executionAction="play_game"/>
             <navigate right="no_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->

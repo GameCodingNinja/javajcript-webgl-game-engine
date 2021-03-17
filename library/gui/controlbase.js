@@ -59,7 +59,7 @@ export class ControlBase extends Object
         this.loadDynamicOffsetFromNode( xmlNode );
 
         // See if we have a list of strings
-        let stringLstNode = xmlNode.getElementsByTagName( 'fontStringLst' );
+        let stringLstNode = xmlNode.getElementsByTagName( 'fontStringList' );
         if( stringLstNode.length )
         {
             let stringNode = stringLstNode[0].getElementsByTagName( 'string' );

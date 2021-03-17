@@ -14,9 +14,9 @@
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
             <position x="-15" y="180" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Settings"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
     </staticMenuControls>
@@ -27,9 +27,9 @@
         <control name="close_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
             <position x="130" y="180" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="x"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="close"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
@@ -38,9 +38,9 @@
         <control name="back_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/back_button.ctrl"/>
             <position x="100" y="180" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="^"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="back"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
@@ -53,13 +53,13 @@
         <control name="resolution_btn_lst" controlType="button_list" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
             <position x="0" y="115" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="640 x 480"/>
                 <string text="800 x 600"/>
                 <string text="1024 x 768"/>
                 <string text="1186 x 720"/>
                 <string text="1280 x 768"/>
-            </fontStringLst>
+            </fontStringList>
             <navigate up="settings_apply_btn" down="full_screen_check_box"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
@@ -70,10 +70,10 @@
         <control name="full_screen_check_box" controlType="check_box" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
             <position x="0" y="55" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Full Screen"/>
                 <string text="x"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="action"/>
             <navigate up="resolution_btn_lst" down="v-sync_check_box"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
@@ -83,10 +83,10 @@
         <control name="v-sync_check_box" controlType="check_box" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
             <position x="0" y="-5" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="V-Sync"/>
                 <string text="x"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="action"/>
             <navigate up="full_screen_check_box" down="settings_dead_zone_slider"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
@@ -97,9 +97,9 @@
             <filePath file="data/objects/2d/menu/control/deadzone_slider.ctrl"/>
             <position x="0" y="-85" z="0"/>
             <settings orientation="HORZ" minValue="0" maxValue="90" defValue="0" incValue="1" displayValueAsInt="true"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="GPad Deadzone: %d%"/>
-            </fontStringLst>
+            </fontStringList>
             <navigate up="v-sync_check_box" down="settings_apply_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
             <scroll startDelay="750" scrollDelay="100" left="true" right="true"/>
@@ -109,9 +109,9 @@
         <control name="settings_apply_btn" controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/button_145x55.ctrl"/>
             <position x="0" y="-165" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Apply"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="action"/>
             <navigate up="settings_dead_zone_slider" down="resolution_btn_lst"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>

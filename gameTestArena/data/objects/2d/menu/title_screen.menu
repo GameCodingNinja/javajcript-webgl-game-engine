@@ -39,9 +39,9 @@
         <control name="continue_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="116" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Continue"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="game_state_change" executionAction="level_1_state"/>
             <navigate up="key_binding_btn" down="new_game_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
@@ -51,9 +51,9 @@
         <control name="new_game_btn" controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/button_spin_275x55.ctrl"/>
             <position x="0" y="58" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="New Game"/>
-            </fontStringLst>
+            </fontStringList>
             <!-- <action actionType="to_menu" executionAction="settings_menu"/> -->
             <action actionType="action"/>
             <navigate up="continue_btn" down="load_game_btn"/>
@@ -64,9 +64,9 @@
         <control name="load_game_btn" controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="0" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Load Game"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="to_menu" executionAction="settings_menu"/>
             <navigate up="new_game_btn" down="settings_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
@@ -76,9 +76,9 @@
         <control name="settings_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="-58" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Settings"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="to_menu" executionAction="settings_menu"/>
             <navigate up="load_game_btn" down="key_binding_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
@@ -88,9 +88,9 @@
         <control name="key_binding_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="-116" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Key Bindings"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="to_menu" executionAction="key_bindings_menu"/>
             <navigate up="settings_btn" down="continue_btn"/>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>

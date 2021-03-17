@@ -14,9 +14,9 @@
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
             <position x="0" y="100" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Click on the screen to drop the balls."/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
     </staticMenuControls>
@@ -27,9 +27,9 @@
         <control name="start_game_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55_frame.ctrl"/>
             <position x="0" y="-150" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Start Game"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="action_event" executionAction="play_game"/>
             <!--<navigate up="main_menu_btn" down="help_btn"/>-->
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->

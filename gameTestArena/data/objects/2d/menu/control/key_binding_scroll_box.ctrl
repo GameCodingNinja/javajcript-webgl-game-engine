@@ -40,141 +40,141 @@
         <!-- Menu Seperator - Menu Navigation -->
         <control controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/key_binding_seperator.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Menu Navigation"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
         <!-- Menu Select Key Binding Button -->
         <control name="menu_select" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Menu Select"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 
         <!-- Menu Escape Key Binding Button -->
         <control name="menu_escape" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Menu Escape"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 
         <!-- Menu Back Key Binding Button -->
         <control name="menu_back" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Menu Back"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 
         <!-- Menu Toggle Key Binding Button -->
         <control name="menu_toggle" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Menu Toggle"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
     
         <!-- Menu Tab Left Key Binding Button -->
         <control name="menu_tab_left" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Menu Tab Left"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
     
         <!-- Menu Tab Right Key Binding Button -->
         <control name="menu_tab_right" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Menu Tab Right"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 
         <!-- Menu Seperator - Game Controls -->
         <control controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/key_binding_seperator.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Game Controls"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
     
         <!-- Up Key Binding Button -->
         <control name="up" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Up"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
     
         <!-- Down Key Binding Button -->
         <control name="down" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Down"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
     
         <!-- Left Key Binding Button -->
         <control name="left" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Left"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
     
         <!-- Right Key Binding Button -->
         <control name="right" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Right"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 
         <!-- Shoot Key Binding Button -->
         <control name="shoot" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Shoot"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
     
         <!-- Deccelerate Key Binding Button -->
         <control name="deccelerate" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Deccelerate"/>
-            </fontStringLst>
+            </fontStringList>
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>
 
         <!-- Menu Seperator - Key Binding Option(s) -->
         <control controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/key_binding_seperator.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Key Binding Option(s)"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
         <!-- Reset Defaults Button -->
         <control name="Key_Binding_reset_btn" faction="decision_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_reset_button.ctrl"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Reset To Default"/>
-            </fontStringLst>
+            </fontStringList>
             <!--<action actionType="to_menu" executionAction="confirmation_menu"/>-->
             <stateScript onActive="Control_OnActive" onSelect="Control_OnSelect"/>
         </control>

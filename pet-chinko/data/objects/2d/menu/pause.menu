@@ -14,9 +14,9 @@
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
             <position x="0" y="150" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Pause"/>
-            </fontStringLst>
+            </fontStringList>
         </control>
 
     </staticMenuControls>
@@ -27,9 +27,9 @@
         <control name="close_btn" controlType="button" defaultState="inactive" mouseOnlyCtrl="true">
             <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
             <position x="140" y="160" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="x"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="close"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
@@ -46,9 +46,9 @@
         <control name="resume_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="70" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Resume"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="back"/>
             <navigate up="main_menu_btn" down="help_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
@@ -62,9 +62,9 @@
         <control name="help_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="10" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Help"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="to_menu" executionAction="help_menu"/>
             <navigate up="resume_btn" down="key_binding_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
@@ -78,9 +78,9 @@
         <control name="key_binding_btn" controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="-50" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Key Bindings"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="to_menu" executionAction="key_bindings_menu"/>
             <navigate up="help_btn" down="main_menu_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
@@ -94,9 +94,9 @@
         <control name="main_menu_btn" faction="decision_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="-110" z="0"/>
-            <fontStringLst>
+            <fontStringList>
                 <string text="Main Menu"/>
-            </fontStringLst>
+            </fontStringList>
             <action actionType="to_menu" executionAction="confirmation_menu"/>
             <navigate up="key_binding_btn" down="resume_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
