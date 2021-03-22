@@ -5,19 +5,17 @@
 
         <sprite objectName="arrow_button_solid">
             <scriptList>
-                <script init="Control_Hidden"/>
-                <script disabled="Control_Hidden"/>
-                <script inactive="Control_Hidden"/>
-                <script active="Control_Hidden"/>
+                <script disabled="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
+                <script active="Control_Hidden" forceUpdate="true"/>
                 <script selected="Control_Fast_Solid_Selected"/>
             </scriptList>
         </sprite>
     
         <sprite objectName="arrow_button_frame">
             <scriptList>
-                <script init="Control_Hidden"/>
-                <script disabled="Control_Hidden"/>
-                <script inactive="Control_Hidden"/>
+                <script disabled="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script selected="Control_Fast_Selected"/>
             </scriptList>
@@ -25,8 +23,8 @@
 
         <sprite objectName="arrow_button_face">
             <scriptList>
-                <script disabled="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disabled="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script selected="Control_Fast_Face_Selected_Act"/>
             </scriptList>

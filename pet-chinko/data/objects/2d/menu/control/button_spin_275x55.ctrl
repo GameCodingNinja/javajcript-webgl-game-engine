@@ -5,8 +5,8 @@
 
         <sprite objectName="275x55_button_solid">
             <scriptList>
-                <script disable="Control_Hidden"/>
-                <script inactive="Control_Hidden"/>
+                <script disable="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
                 <script active="Control_Solid_Active"/>
                 <script select="Control_Solid_Selected"/>
             </scriptList>
@@ -14,8 +14,8 @@
     
         <sprite objectName="275x55_button_frame">
             <scriptList>
-                <script disable="Control_Hidden"/>
-                <script inactive="Control_Hidden"/>
+                <script disable="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected"/>
             </scriptList>
@@ -24,8 +24,8 @@
         <sprite objectName="control_font">
             <font fontName="dejavu_sans_reg_45"/>
             <scriptList>
-                <script disable="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected_Dispatch_Exe_Act"/>
             </scriptList>

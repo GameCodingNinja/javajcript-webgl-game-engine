@@ -547,8 +547,8 @@ export class UIControl extends ControlBase
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].init();
 
-        // Prepare script function associated with handling this game event
-        this.prepareControlScript( uiControlDefs.ECS_INIT );
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
     }
 
     // 
@@ -567,45 +567,37 @@ export class UIControl extends ControlBase
     //
     prepareSpriteScriptFactoryFunction( controlState )
     {
-        let scriptFactoryId = "null";
-        let forceUpdate = false;
+        let scriptId = "null";
 
         switch( controlState )
         {
-            case uiControlDefs.ECS_INIT:
-                scriptFactoryId = "init";
-                forceUpdate = true;
-            break;
-
             case uiControlDefs.ECS_DISABLE:
-                scriptFactoryId = "disable";
-                forceUpdate = true;
+                scriptId = "disable";
             break;
 
             case uiControlDefs.ECS_INACTIVE:
-                scriptFactoryId = "inactive";
-                forceUpdate = true;
+                scriptId = "inactive";
             break;
 
             case uiControlDefs.ECS_ACTIVE:
-                scriptFactoryId = "active";
+                scriptId = "active";
             break;
 
             case uiControlDefs.ECS_SELECT:
-                scriptFactoryId = "select";
+                scriptId = "select";
             break;
         }
 
-        this.prepareSpriteScript( scriptFactoryId, forceUpdate );
+        this.prepareSpriteScript( scriptId );
     }
 
     // 
     //  DESC: Call a script function map key for sprite
     //
-    prepareSpriteScript( scriptFactoryId, forceUpdate )
+    prepareSpriteScript( scriptId )
     {    
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].prepareScript( scriptFactoryId, forceUpdate );
+            this.spriteAry[i].scriptComponent.prepare( scriptId, this.spriteAry[i] );
     }
 
     // 
@@ -613,57 +605,51 @@ export class UIControl extends ControlBase
     //
     prepareControlScript( controlState, event )
     {
-        let scriptFactoryId = "null";
+        let scriptId = "null";
 
         switch( controlState )
         {
-            case uiControlDefs.ECS_INIT:
-                scriptFactoryId = "init";
-            break;
-
             case uiControlDefs.ECS_TRANS_IN:
-                scriptFactoryId = "transIn";
+                scriptId = "transIn";
             break;
 
             case uiControlDefs.ECS_TRANS_OUT:
-                scriptFactoryId = "transOut";
+                scriptId = "transOut";
             break;
 
             case uiControlDefs.ECS_DISABLE:
-                scriptFactoryId = "disable";
+                scriptId = "disable";
             break;
 
             case uiControlDefs.ECS_INACTIVE:
-                scriptFactoryId = "inactive";
+                scriptId = "inactive";
             break;
 
             case uiControlDefs.ECS_ACTIVE:
-                scriptFactoryId = "active";
+                scriptId = "active";
             break;
 
             case uiControlDefs.ECS_SELECT:
-                scriptFactoryId = "select";
+                scriptId = "select";
             break;
 
             case uiControlDefs.ECS_CHANGE:
-                scriptFactoryId = "change";
+                scriptId = "change";
             break;
 
             case uiControlDefs.ECS_EXECUTE:
-                scriptFactoryId = "execute";
+                scriptId = "execute";
             break;
 
             case uiControlDefs.ECS_EVENT:
-                scriptFactoryId = "event";
+                scriptId = "event";
             break;
         }
 
-        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
-        if( scriptFactory )
-            if( controlState == uiControlDefs.ECS_EVENT )
-                this.scriptComponent.prepare( scriptFactory(this, event) );
-            else
-                this.scriptComponent.prepare( scriptFactory(this) );
+        if( controlState == uiControlDefs.ECS_EVENT )
+            this.scriptComponent.prepare( scriptId, this, event );
+        else
+            this.scriptComponent.prepare( scriptId, this );
     }
 
     // 

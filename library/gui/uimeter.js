@@ -267,7 +267,7 @@ export class UIMeter extends UIControl
         this.startUpTimer.set( bangRange.slowStartTime );
 
         // Prepare the start script function if one exists
-        this.fontSprite.prepareScript( 'start' );
+        this.fontSprite.scriptComponent.prepare( 'start', this.fontSprite );
     }
 
     //
@@ -354,7 +354,7 @@ export class UIMeter extends UIControl
                     this.bangUp = false;
 
                     // Prepare the stop script function if one exists
-                    this.fontSprite.prepareScript( 'stop' );
+                    this.fontSprite.scriptComponent.prepare( 'stop', this.fontSprite );
                 }
 
                 // Display the value in the meter
@@ -415,7 +415,7 @@ export class UIMeter extends UIControl
         this.lastValue = this.currentValue = this.targetValue = 0;
         this.bangUp = false;
         
-        if( !this.fontSprite.prepareScript( 'clear' ) )
+        if( !this.fontSprite.scriptComponent.prepare( 'clear', this.fontSprite ) )
             this.fontSprite.visualComponent.createFontString( this.currentValue.toString() );
     }
     

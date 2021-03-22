@@ -174,7 +174,7 @@ export class Level1State extends CommonState
             let node = this.ballStrategy.create( instanceNameA );
             node.get().physicsComponent.setTransform( x, y, angle, true );
             node.get().physicsComponent.applyAngularImpulse( rot );
-            node.get().prepareScript( 'ball_ai' );
+            node.get().scriptComponent.prepare( 'ball_ai', node.get() );
 
             // Deactivate/Activate if they are different
             if( oldBallIndex !== this.ballIndex )
@@ -404,10 +404,10 @@ export class Level1State extends CommonState
                     // Activate the warp animation
                     let warpAnim = this.multiStrategy.create('warp');
                     warpAnim.get().setPosXYZ( this.multiXPosAry[sprite.multiIndexPos], MULTI_SPRITE_OFFSET_Y );
-                    warpAnim.get().prepareScript('animate');
+                    warpAnim.get().scriptComponent.prepare('animate', warpAnim.get());
 
                     // Activate the delayed destry script
-                    sprite.prepareScript('delayDestroy');
+                    sprite.scriptComponent.prepare('delayDestroy', sprite);
 
                     // Update the ui multiplier value
                     this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );

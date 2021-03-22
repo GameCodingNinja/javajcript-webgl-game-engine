@@ -25,16 +25,15 @@ export const ECT_NULL          = 0,
 
 // EControlState
 export const ECS_NULL      = 0,
-             ECS_INIT      = 2,
-             ECS_TRANS_IN  = 3,
-             ECS_TRANS_OUT = 4,
-             ECS_DISABLE   = 5,
-             ECS_INACTIVE  = 6,
-             ECS_ACTIVE    = 7,
-             ECS_SELECT    = 8,
-             ECS_CHANGE    = 9,
-             ECS_EXECUTE   = 10,
-             ECS_EVENT     = 11;
+             ECS_TRANS_IN  = 1,
+             ECS_TRANS_OUT = 2,
+             ECS_DISABLE   = 3,
+             ECS_INACTIVE  = 4,
+             ECS_ACTIVE    = 5,
+             ECS_SELECT    = 6,
+             ECS_CHANGE    = 7,
+             ECS_EXECUTE   = 8,
+             ECS_EVENT     = 9;
 
 // EControlActionType
 export const ECAT_NULL              = 0,

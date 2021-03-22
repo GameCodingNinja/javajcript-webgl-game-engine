@@ -5,8 +5,8 @@
 
         <sprite objectName="key_binding_scroll_box_frame">
             <scriptList>
-                <script disabled="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disabled="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
             </scriptList>
         </sprite>

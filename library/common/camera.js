@@ -101,6 +101,9 @@ export class Camera extends Object
         
         // Calculate the final matrix
         this.calcFinalMatrix();
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
     }
     
     //

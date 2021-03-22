@@ -301,6 +301,9 @@ export class Menu extends Object
 
         for( let i = 0; i < this.controlAry.length; ++i )
             this.controlAry[i].init();
+        
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
 
     }   // Init
 
@@ -653,7 +656,7 @@ export class Menu extends Object
     {
         if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
         {
-            this.prepare( 'transIn' );
+            this.scriptComponent.prepare( 'transIn', this );
 
             this.state = menuDefs.EMS_ACTIVE;
         }
@@ -670,7 +673,7 @@ export class Menu extends Object
     {
         if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
         {
-            this.prepare( 'transOut' );
+            this.scriptComponent.prepare( 'transOut', this );
 
             this.state = menuDefs.EMS_ACTIVE;
         }
@@ -678,16 +681,6 @@ export class Menu extends Object
         {
             this.state = menuDefs.EMS_INACTIVE;
         }
-    }
-
-    // 
-    //  DESC: Prepare the script function to run
-    //
-    prepare( scriptFactoryId )
-    {
-        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
-        if( scriptFactory )
-            this.scriptComponent.prepare( scriptFactory(this) );
     }
 
     // 

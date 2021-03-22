@@ -9,8 +9,8 @@
         <sprite objectName="control_font">
             <font fontName="dejavu_sans_cond_32"/>
             <scriptList>
-                <script disable="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected_Dispatch_Exe"/>
             </scriptList>

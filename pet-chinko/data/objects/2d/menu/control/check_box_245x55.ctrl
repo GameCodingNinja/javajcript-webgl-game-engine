@@ -5,8 +5,8 @@
 
         <sprite objectName="245x55_button_frame">
             <scriptList>
-                <script disable="Control_Hidden"/>
-                <script inactive="Control_Hidden"/>
+                <script disable="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
                 <script active="Control_Solid_Active"/>
                 <script select="Control_Solid_Selected_visible"/>
             </scriptList>
@@ -15,8 +15,8 @@
         <sprite objectName="28x28_button_frame">
             <position x="-97" y="0" z="0"/>
             <scriptList>
-                <script disable="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script select="Control_Solid_Selected_visible"/>
             </scriptList>
@@ -28,8 +28,8 @@
                 <alignment horzAlign="left" vertAlign="center"/>
             </font>
             <scriptList>
-                <script disable="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected_Dispatch_Exe_Act"/>
             </scriptList>
@@ -40,8 +40,8 @@
             <font fontName="dejavu_sans_reg_bold_32"/>
             <position x="-97.5" y="2" z="0"/>
             <scriptList>
-                <script disable="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script select="Control_Selected_Visible"/>
             </scriptList>

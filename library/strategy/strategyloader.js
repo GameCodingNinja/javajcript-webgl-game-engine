@@ -157,7 +157,7 @@ class Strategyloader
         {
             let attr = scriptList[i].getAttribute( 'prepare' );
             if( attr )
-                object.prepareScript( attr );
+                object.scriptComponent.prepare( attr, object );
         }   
     }
 }

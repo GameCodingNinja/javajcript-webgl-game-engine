@@ -97,25 +97,6 @@ export class Sprite extends Object
         if( this.physicsComponent )
             this.physicsComponent.setTransform(this.pos.x, this.pos.y, this.rot.z);
     }
-
-    // 
-    //  DESC: Prepare the script class to run from id
-    //
-    prepareScript( scriptId, forceUpdate = false )
-    {
-        let scriptFactory = this.scriptComponent.get( scriptId );
-        if( scriptFactory )
-        {
-            this.scriptComponent.prepare( scriptFactory(this) );
-            
-            if( forceUpdate )
-                this.scriptComponent.update();
-            
-            return true;
-        }
-        
-        return false;
-    }
     
     // 
     //  DESC: Init the sprite
@@ -124,6 +105,9 @@ export class Sprite extends Object
     {
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.createFontStringFromData();
+        
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
     }
     
     //

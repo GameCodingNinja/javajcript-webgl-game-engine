@@ -2,11 +2,7 @@
 <loader>
     
     <strategy name="_cube_" camera="cubeCamera">
-        <node name="cube" instance="cube">
-            <sprite>
-                <script prepare="rotate"/>
-            </sprite>
-        </node>
+        <node name="cube" instance="cube"/>
     </strategy>
 
     <strategy name="_title_screen_">

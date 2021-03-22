@@ -16,10 +16,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _state_testarenastate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(132);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(103);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(133);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(104);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(152);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(153);
 
 // 
 //  FILE NAME: game.js
@@ -2703,22 +2703,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
 /* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(97);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(101);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(105);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(106);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(103);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(106);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(107);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(104);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(100);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(27);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
-/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(144);
+/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(145);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(146);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(147);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(148);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(149);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(150);
-/* harmony import */ var raw_loader_data_objects_strategy_spaceShip_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(151);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(147);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(148);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(149);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(150);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(151);
+/* harmony import */ var raw_loader_data_objects_strategy_spaceShip_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(152);
 
 //
 //  FILE NAME: testarenastate.js
@@ -25748,6 +25748,9 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         
         // Calculate the final matrix
         this.calcFinalMatrix();
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
     }
     
     //
@@ -26219,11 +26222,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ScriptComponent": () => (/* binding */ ScriptComponent)
 /* harmony export */ });
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
+/* harmony import */ var _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(101);
 
 //
 //  FILE NAME: scriptcomponent.js
 //  DESC:      Class for handling game scripting
 //
+
 
 
 
@@ -26252,47 +26257,101 @@ class ScriptComponent
 
         for( let i = 0; i < scriptNode.length; ++i )
         {
-            let attr = scriptNode[i].attributes[0];
+            let prepareOnInit = false;
+            let forceUpdate = false;
+            let attr = scriptNode[i].getAttribute( 'prepareOnInit' );
+            if( attr !== null )
+                prepareOnInit = (attr === 'true')
+
+            attr = scriptNode[i].getAttribute( 'forceUpdate' );
+            if( attr !== null )
+                forceUpdate = (attr === 'true')
+
+            attr = scriptNode[i].attributes[0];
             if( attr )
                 // This allocates the script to the map
-                this.scriptFactoryMap.set( attr.name, attr.value );
+                this.scriptFactoryMap.set( attr.name, new _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_1__.CScriptPrepareFunc(attr.value, prepareOnInit, forceUpdate) );
         }
     }
 
     // 
-    //  DESC: Get the script
+    //  DESC: Prepare a script to run
+    //  NOTE: Function uses arguments object to handle multiple parameters
+    //        The last parameter will be the script Id so that it is ignored by the calling function
     //
-    get( scriptId )
+    prepare(...args)
+    {
+        if( this.scriptFactoryMap && typeof args[0] === 'string' )
+        {
+            let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
+            if( scriptPrepareFunc )
+            {
+                let script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
+                if( script )
+                {
+                    switch(args.length)
+                    {
+                        case 1:
+                            this.scriptAry.push( script() );
+                        break;
+                        case 2:
+                            this.scriptAry.push( script(args[1]) );
+                        break;
+                        case 3:
+                            this.scriptAry.push( script(args[1],args[2]) );
+                        break;
+                        case 4:
+                            this.scriptAry.push( script(args[1],args[2],args[3]) );
+                        break;
+                        case 5:
+                            this.scriptAry.push( script(args[1],args[2],args[3],args[4]) );
+                        break;
+                        case 6:
+                            this.scriptAry.push( script(args[1],args[2],args[3],args[4],args[5]) );
+                        break;
+                    }
+
+                    if( scriptPrepareFunc.forceUpdate )
+                        this.update();
+                    
+                    return true;
+                }
+            }
+        }
+        else if( typeof args[0] === 'object' )
+        {
+            this.scriptAry.push( args[0] );
+
+            if( args.length > 1 && args[1] )
+                this.update();
+        }
+
+        return false;
+    }
+
+    // 
+    //  DESC: Update the script
+    //
+    prepareOnInit( object )
     {
         if( this.scriptFactoryMap )
         {
-            let scriptFactoryId = this.scriptFactoryMap.get( scriptId );
-            if( scriptFactoryId )
-                return _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptFactoryId );
+            for( let scriptPrepareFunc of this.scriptFactoryMap.values() )
+            {
+                if( scriptPrepareFunc.prepareOnInit )
+                {
+                    let script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
+                    if( script )
+                    {
+                        this.scriptAry.push( script(object) );
+                        if( scriptPrepareFunc.forceUpdate )
+                            this.update();
+                    }
+                }
+            }
         }
-
-        null;
-    }
-    
-    // 
-    //  DESC: Set a script Id to the map
-    //
-    set( key, scriptId)
-    {
-        if( !this.scriptFactoryMap )
-            this.scriptFactoryMap = new Map;
-
-        this.scriptFactoryMap.set( key, scriptId );
     }
 
-    // 
-    //  DESC: Add a script
-    //
-    prepare( script )
-    {
-        this.scriptAry.push( script );
-    }
-    
     // 
     //  DESC: Update the script
     //
@@ -26332,11 +26391,43 @@ class ScriptComponent
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CScriptPrepareFunc": () => (/* binding */ CScriptPrepareFunc)
+/* harmony export */ });
+
+//
+//  FILE NAME: scriptpreparefunc.js
+//  DESC:      Class for holding script attributes
+//
+
+
+
+class CScriptPrepareFunc
+{
+    constructor(funcName, prepareOnInit = false, forceUpdate = false)
+    {
+        // Function Id
+        this.funcName = funcName;
+
+        // Prepare on Init flag
+        this.prepareOnInit = prepareOnInit;
+
+        // Force Update flag
+        this.forceUpdate = forceUpdate;
+    }
+}
+
+/***/ }),
+/* 102 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "physicsWorldManager": () => (/* binding */ physicsWorldManager)
 /* harmony export */ });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(23);
-/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
-/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(104);
+/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(103);
+/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(105);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
@@ -26447,7 +26538,7 @@ var physicsWorldManager = new PhysicsWorldManager;
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -26455,7 +26546,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PhysicsWorld2D": () => (/* binding */ PhysicsWorld2D)
 /* harmony export */ });
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
 
@@ -26646,7 +26737,7 @@ class PhysicsWorld2D
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -26727,7 +26818,7 @@ var highResTimer = new HighResTimer;
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -26750,7 +26841,7 @@ class PhysicsWorld3D
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -26938,7 +27029,7 @@ var strategyManager = new StrategyManager;
 
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -26946,9 +27037,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "strategyLoader": () => (/* binding */ strategyLoader)
 /* harmony export */ });
-/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
-/* harmony import */ var _strategy_strategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(107);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(118);
+/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(106);
+/* harmony import */ var _strategy_strategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(108);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(119);
 
 // 
 //  FILE NAME: strategyloader.js
@@ -27108,7 +27199,7 @@ class Strategyloader
         {
             let attr = scriptList[i].getAttribute( 'prepare' );
             if( attr )
-                object.prepareScript( attr );
+                object.scriptComponent.prepare( attr, object );
         }   
     }
 }
@@ -27117,7 +27208,7 @@ var strategyLoader = new Strategyloader;
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27126,10 +27217,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Strategy": () => (/* binding */ Strategy)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(108);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(109);
 /* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(97);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(112);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(113);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 
@@ -27576,7 +27667,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27584,7 +27675,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "NodeDataList": () => (/* binding */ NodeDataList)
 /* harmony export */ });
-/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(109);
+/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(110);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 //
@@ -27664,7 +27755,7 @@ class NodeDataList
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27672,8 +27763,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "NodeData": () => (/* binding */ NodeData)
 /* harmony export */ });
-/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(110);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(111);
+/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(111);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(112);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 //
@@ -27752,7 +27843,7 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27821,7 +27912,7 @@ class SpriteData
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27842,7 +27933,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ECT_PROGRESS_BAR": () => (/* binding */ ECT_PROGRESS_BAR),
 /* harmony export */   "ECT_AMOUNT_BUTTON": () => (/* binding */ ECT_AMOUNT_BUTTON),
 /* harmony export */   "ECS_NULL": () => (/* binding */ ECS_NULL),
-/* harmony export */   "ECS_INIT": () => (/* binding */ ECS_INIT),
 /* harmony export */   "ECS_TRANS_IN": () => (/* binding */ ECS_TRANS_IN),
 /* harmony export */   "ECS_TRANS_OUT": () => (/* binding */ ECS_TRANS_OUT),
 /* harmony export */   "ECS_DISABLE": () => (/* binding */ ECS_DISABLE),
@@ -27894,16 +27984,15 @@ const ECT_NULL          = 0,
 
 // EControlState
 const ECS_NULL      = 0,
-             ECS_INIT      = 2,
-             ECS_TRANS_IN  = 3,
-             ECS_TRANS_OUT = 4,
-             ECS_DISABLE   = 5,
-             ECS_INACTIVE  = 6,
-             ECS_ACTIVE    = 7,
-             ECS_SELECT    = 8,
-             ECS_CHANGE    = 9,
-             ECS_EXECUTE   = 10,
-             ECS_EVENT     = 11;
+             ECS_TRANS_IN  = 1,
+             ECS_TRANS_OUT = 2,
+             ECS_DISABLE   = 3,
+             ECS_INACTIVE  = 4,
+             ECS_ACTIVE    = 5,
+             ECS_SELECT    = 6,
+             ECS_CHANGE    = 7,
+             ECS_EXECUTE   = 8,
+             ECS_EVENT     = 9;
 
 // EControlActionType
 const ECAT_NULL              = 0,
@@ -27925,7 +28014,7 @@ const EAR_UP    = 1,
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27934,13 +28023,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "create": () => (/* binding */ create)
 /* harmony export */ });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(113);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(135);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(137);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(139);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(140);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(143);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(111);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(114);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(136);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(138);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(140);
+/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(141);
+/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(144);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(112);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
 
 // 
@@ -28034,7 +28123,7 @@ function CreateUIControlNode( nodeData )
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -28042,13 +28131,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIProgressBar": () => (/* binding */ UIProgressBar)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(114);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(118);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(115);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(111);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(112);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
@@ -28373,7 +28462,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -28381,21 +28470,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControl": () => (/* binding */ UIControl)
 /* harmony export */ });
-/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(115);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(116);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(118);
+/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(116);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(117);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(119);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
-/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(131);
+/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(132);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(10);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(22);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(132);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(133);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(133);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(134);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(31);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(111);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(117);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(112);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(118);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5);
 
 // 
@@ -28946,8 +29035,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].init();
 
-        // Prepare script function associated with handling this game event
-        this.prepareControlScript( _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_INIT );
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
     }
 
     // 
@@ -28966,45 +29055,37 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     prepareSpriteScriptFactoryFunction( controlState )
     {
-        let scriptFactoryId = "null";
-        let forceUpdate = false;
+        let scriptId = "null";
 
         switch( controlState )
         {
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_INIT:
-                scriptFactoryId = "init";
-                forceUpdate = true;
-            break;
-
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_DISABLE:
-                scriptFactoryId = "disable";
-                forceUpdate = true;
+                scriptId = "disable";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_INACTIVE:
-                scriptFactoryId = "inactive";
-                forceUpdate = true;
+                scriptId = "inactive";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_ACTIVE:
-                scriptFactoryId = "active";
+                scriptId = "active";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_SELECT:
-                scriptFactoryId = "select";
+                scriptId = "select";
             break;
         }
 
-        this.prepareSpriteScript( scriptFactoryId, forceUpdate );
+        this.prepareSpriteScript( scriptId );
     }
 
     // 
     //  DESC: Call a script function map key for sprite
     //
-    prepareSpriteScript( scriptFactoryId, forceUpdate )
+    prepareSpriteScript( scriptId )
     {    
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].prepareScript( scriptFactoryId, forceUpdate );
+            this.spriteAry[i].scriptComponent.prepare( scriptId, this.spriteAry[i] );
     }
 
     // 
@@ -29012,57 +29093,51 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     prepareControlScript( controlState, event )
     {
-        let scriptFactoryId = "null";
+        let scriptId = "null";
 
         switch( controlState )
         {
-            case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_INIT:
-                scriptFactoryId = "init";
-            break;
-
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_TRANS_IN:
-                scriptFactoryId = "transIn";
+                scriptId = "transIn";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_TRANS_OUT:
-                scriptFactoryId = "transOut";
+                scriptId = "transOut";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_DISABLE:
-                scriptFactoryId = "disable";
+                scriptId = "disable";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_INACTIVE:
-                scriptFactoryId = "inactive";
+                scriptId = "inactive";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_ACTIVE:
-                scriptFactoryId = "active";
+                scriptId = "active";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_SELECT:
-                scriptFactoryId = "select";
+                scriptId = "select";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_CHANGE:
-                scriptFactoryId = "change";
+                scriptId = "change";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_EXECUTE:
-                scriptFactoryId = "execute";
+                scriptId = "execute";
             break;
 
             case _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_EVENT:
-                scriptFactoryId = "event";
+                scriptId = "event";
             break;
         }
 
-        let scriptFactory = this.scriptComponent.get( scriptFactoryId );
-        if( scriptFactory )
-            if( controlState == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_EVENT )
-                this.scriptComponent.prepare( scriptFactory(this, event) );
-            else
-                this.scriptComponent.prepare( scriptFactory(this) );
+        if( controlState == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_EVENT )
+            this.scriptComponent.prepare( scriptId, this, event );
+        else
+            this.scriptComponent.prepare( scriptId, this );
     }
 
     // 
@@ -29357,7 +29432,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -29490,7 +29565,7 @@ class ControlBase extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 }
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -29498,7 +29573,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ScrollParam": () => (/* binding */ ScrollParam)
 /* harmony export */ });
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(117);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
 // 
 //  FILE NAME: scrollparam.js
 //  DESC:      Class for handling scroll parameter data
@@ -29573,7 +29648,7 @@ class ScrollParam
 }
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -29680,7 +29755,7 @@ const ETC_RESET = 0,
              ETC_END   = 2;
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -29689,13 +29764,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Sprite": () => (/* binding */ Sprite)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
-/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(121);
-/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(122);
-/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(123);
-/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(128);
-/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(129);
-/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(130);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(120);
+/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(122);
+/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(123);
+/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(124);
+/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(129);
+/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(130);
+/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(131);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(10);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
@@ -29797,25 +29872,6 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         if( this.physicsComponent )
             this.physicsComponent.setTransform(this.pos.x, this.pos.y, this.rot.z);
     }
-
-    // 
-    //  DESC: Prepare the script class to run from id
-    //
-    prepareScript( scriptId, forceUpdate = false )
-    {
-        let scriptFactory = this.scriptComponent.get( scriptId );
-        if( scriptFactory )
-        {
-            this.scriptComponent.prepare( scriptFactory(this) );
-            
-            if( forceUpdate )
-                this.scriptComponent.update();
-            
-            return true;
-        }
-        
-        return false;
-    }
     
     // 
     //  DESC: Init the sprite
@@ -29824,6 +29880,9 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     {
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.createFontStringFromData();
+        
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
     }
     
     //
@@ -30030,7 +30089,7 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -30038,7 +30097,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponentQuad": () => (/* binding */ VisualComponentQuad)
 /* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
@@ -30183,7 +30242,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -30246,7 +30305,7 @@ class ivisualComponent
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -30254,7 +30313,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponentSpriteSheet": () => (/* binding */ VisualComponentSpriteSheet)
 /* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
@@ -30365,7 +30424,7 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -30373,7 +30432,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponentScaledFrame": () => (/* binding */ VisualComponentScaledFrame)
 /* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
@@ -30451,7 +30510,7 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -30459,12 +30518,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponentFont": () => (/* binding */ VisualComponentFont)
 /* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(124);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(126);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(125);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(127);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
@@ -31023,7 +31082,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31031,7 +31090,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "fontManager": () => (/* binding */ fontManager)
 /* harmony export */ });
-/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(126);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
@@ -31166,7 +31225,7 @@ var fontManager = new FontManager;
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31291,7 +31350,7 @@ class Font
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31299,7 +31358,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "FontData": () => (/* binding */ FontData)
 /* harmony export */ });
-/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
+/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 
 // 
@@ -31356,7 +31415,7 @@ class FontData
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31364,7 +31423,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "FontProperties": () => (/* binding */ FontProperties)
 /* harmony export */ });
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -31474,7 +31533,7 @@ class FontProperties
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31482,7 +31541,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponent3D": () => (/* binding */ VisualComponent3D)
 /* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
@@ -31609,7 +31668,7 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31617,7 +31676,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "NullVisualComponent": () => (/* binding */ NullVisualComponent)
 /* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 
 // 
 //  FILE NAME:  visualcomponentquad.js
@@ -31661,7 +31720,7 @@ class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31669,7 +31728,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PhysicsComponent2D": () => (/* binding */ PhysicsComponent2D)
 /* harmony export */ });
-/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(101);
+/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
 
@@ -32067,7 +32126,7 @@ class PhysicsComponent2D
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32117,7 +32176,7 @@ class Quad
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32268,7 +32327,7 @@ var eventManager = new EventManager;
 
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32276,7 +32335,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "actionManager": () => (/* binding */ actionManager)
 /* harmony export */ });
-/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(134);
+/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 // 
@@ -32628,7 +32687,7 @@ var actionManager = new ActionManager;
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32679,7 +32738,7 @@ class KeyCodeAction
 
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32687,11 +32746,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIMeter": () => (/* binding */ UIMeter)
 /* harmony export */ });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(103);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(137);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(104);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(111);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(115);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(112);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(31);
 
 // 
@@ -32962,7 +33021,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
         this.startUpTimer.set( bangRange.slowStartTime );
 
         // Prepare the start script function if one exists
-        this.fontSprite.prepareScript( 'start' );
+        this.fontSprite.scriptComponent.prepare( 'start', this.fontSprite );
     }
 
     //
@@ -33049,7 +33108,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
                     this.bangUp = false;
 
                     // Prepare the stop script function if one exists
-                    this.fontSprite.prepareScript( 'stop' );
+                    this.fontSprite.scriptComponent.prepare( 'stop', this.fontSprite );
                 }
 
                 // Display the value in the meter
@@ -33110,7 +33169,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
         this.lastValue = this.currentValue = this.targetValue = 0;
         this.bangUp = false;
         
-        if( !this.fontSprite.prepareScript( 'clear' ) )
+        if( !this.fontSprite.scriptComponent.prepare( 'clear', this.fontSprite ) )
             this.fontSprite.visualComponent.createFontString( this.currentValue.toString() );
     }
     
@@ -33125,7 +33184,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
 
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33231,7 +33290,7 @@ class Timer
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33239,8 +33298,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteNode": () => (/* binding */ SpriteNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(118);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -33348,7 +33407,7 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33495,7 +33554,7 @@ class iNode
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33503,7 +33562,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -33582,7 +33641,7 @@ class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33591,7 +33650,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ObjectNodeMultiLst": () => (/* binding */ ObjectNodeMultiLst)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(141);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(142);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -33669,7 +33728,7 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__.Nod
 }
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33677,7 +33736,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "NodeMultiLst": () => (/* binding */ NodeMultiLst)
 /* harmony export */ });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(143);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -33896,7 +33955,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33904,7 +33963,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Node": () => (/* binding */ Node)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
 
 // 
 //  FILE NAME: node.js
@@ -34015,7 +34074,7 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34023,8 +34082,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteNodeMultiLst": () => (/* binding */ SpriteNodeMultiLst)
 /* harmony export */ });
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(118);
+/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -34142,7 +34201,7 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__.Nod
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34151,7 +34210,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(145);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(146);
 
 //
 //  FILE NAME: statescripts.js
@@ -34194,7 +34253,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34207,10 +34266,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ColorTo": () => (/* binding */ ColorTo),
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(103);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(132);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(133);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(32);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 
@@ -34591,7 +34650,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34602,7 +34661,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipDataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34613,7 +34672,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34624,7 +34683,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34635,7 +34694,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34646,7 +34705,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34657,7 +34716,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n    \r\n    <strategy name=\"_space_ship_\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n            <node name=\"fire_tail\">\r\n                <sprite>\r\n                    <script prepare=\"fireTailAnim\"/>\r\n                </sprite>\r\n            </node>\r\n        </node>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

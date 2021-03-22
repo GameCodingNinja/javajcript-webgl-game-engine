@@ -5,8 +5,8 @@
 
         <sprite objectName="key_binding_button_solid">
             <scriptList>
-                <script disabled="Control_Hidden"/>
-                <script inactive="Control_Hidden"/>
+                <script disabled="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
                 <script active="Control_Solid_Active"/>
                 <script selected="Control_Solid_Selected"/>
             </scriptList>
@@ -14,8 +14,8 @@
     
         <sprite objectName="key_binding_button_frame">
             <scriptList>
-                <script disabled="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disabled="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script selected="Control_Selected"/>
             </scriptList>
@@ -27,8 +27,8 @@
             </font>
             <position x="-435" y="0" z="0"/>
             <scriptList>
-                <script disabled="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disabled="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
                 <script selected="Control_Selected_Dispatch_Exe_Act"/>
             </scriptList>

@@ -6,6 +6,7 @@
 
 "use strict";
 import { scriptManager } from '../script/scriptmanager';
+import { CScriptPrepareFunc } from '../script/scriptpreparefunc';
 
 export class ScriptComponent
 {
@@ -31,47 +32,101 @@ export class ScriptComponent
 
         for( let i = 0; i < scriptNode.length; ++i )
         {
-            let attr = scriptNode[i].attributes[0];
+            let prepareOnInit = false;
+            let forceUpdate = false;
+            let attr = scriptNode[i].getAttribute( 'prepareOnInit' );
+            if( attr !== null )
+                prepareOnInit = (attr === 'true')
+
+            attr = scriptNode[i].getAttribute( 'forceUpdate' );
+            if( attr !== null )
+                forceUpdate = (attr === 'true')
+
+            attr = scriptNode[i].attributes[0];
             if( attr )
                 // This allocates the script to the map
-                this.scriptFactoryMap.set( attr.name, attr.value );
+                this.scriptFactoryMap.set( attr.name, new CScriptPrepareFunc(attr.value, prepareOnInit, forceUpdate) );
         }
     }
 
     // 
-    //  DESC: Get the script
+    //  DESC: Prepare a script to run
+    //  NOTE: Function uses arguments object to handle multiple parameters
+    //        The last parameter will be the script Id so that it is ignored by the calling function
     //
-    get( scriptId )
+    prepare(...args)
+    {
+        if( this.scriptFactoryMap && typeof args[0] === 'string' )
+        {
+            let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
+            if( scriptPrepareFunc )
+            {
+                let script = scriptManager.get( scriptPrepareFunc.funcName );
+                if( script )
+                {
+                    switch(args.length)
+                    {
+                        case 1:
+                            this.scriptAry.push( script() );
+                        break;
+                        case 2:
+                            this.scriptAry.push( script(args[1]) );
+                        break;
+                        case 3:
+                            this.scriptAry.push( script(args[1],args[2]) );
+                        break;
+                        case 4:
+                            this.scriptAry.push( script(args[1],args[2],args[3]) );
+                        break;
+                        case 5:
+                            this.scriptAry.push( script(args[1],args[2],args[3],args[4]) );
+                        break;
+                        case 6:
+                            this.scriptAry.push( script(args[1],args[2],args[3],args[4],args[5]) );
+                        break;
+                    }
+
+                    if( scriptPrepareFunc.forceUpdate )
+                        this.update();
+                    
+                    return true;
+                }
+            }
+        }
+        else if( typeof args[0] === 'object' )
+        {
+            this.scriptAry.push( args[0] );
+
+            if( args.length > 1 && args[1] )
+                this.update();
+        }
+
+        return false;
+    }
+
+    // 
+    //  DESC: Update the script
+    //
+    prepareOnInit( object )
     {
         if( this.scriptFactoryMap )
         {
-            let scriptFactoryId = this.scriptFactoryMap.get( scriptId );
-            if( scriptFactoryId )
-                return scriptManager.get( scriptFactoryId );
+            for( let scriptPrepareFunc of this.scriptFactoryMap.values() )
+            {
+                if( scriptPrepareFunc.prepareOnInit )
+                {
+                    let script = scriptManager.get( scriptPrepareFunc.funcName );
+                    if( script )
+                    {
+                        this.scriptAry.push( script(object) );
+                        if( scriptPrepareFunc.forceUpdate )
+                            this.update();
+                    }
+                }
+            }
         }
-
-        null;
-    }
-    
-    // 
-    //  DESC: Set a script Id to the map
-    //
-    set( key, scriptId)
-    {
-        if( !this.scriptFactoryMap )
-            this.scriptFactoryMap = new Map;
-
-        this.scriptFactoryMap.set( key, scriptId );
     }
 
-    // 
-    //  DESC: Add a script
-    //
-    prepare( script )
-    {
-        this.scriptAry.push( script );
-    }
-    
     // 
     //  DESC: Update the script
     //
