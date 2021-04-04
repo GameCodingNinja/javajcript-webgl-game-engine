@@ -2718,7 +2718,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(149);
 /* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(150);
 /* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(151);
-/* harmony import */ var raw_loader_data_objects_strategy_spaceShip_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(152);
+/* harmony import */ var raw_loader_data_objects_strategy_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(152);
 
 //
 //  FILE NAME: testarenastate.js
@@ -2810,7 +2810,7 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
     //
     load()
     {
-        let groupAry = ['(space_ship)'];
+        let groupAry = ['(space_ship)','(main)'];
 
         // Set the timer to see how long the load takes
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__.highResTimer.timerStart();
@@ -2825,7 +2825,7 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
         ])
         // Create and load all the actor strategies.
-        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_7__.strategyLoader.load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_strategy_spaceShip_loader__WEBPACK_IMPORTED_MODULE_20__.default ) ))
+        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_7__.strategyLoader.load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_strategy_strategy_loader__WEBPACK_IMPORTED_MODULE_20__.default ) ))
 
         // Clean up the temporary files
         .then(() =>
@@ -2844,6 +2844,7 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
     loadComplete()
     {
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__.strategyManager.activateStrategy('_space_ship_');
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__.strategyManager.activateStrategy('_main_');
 
         // Reset the elapsed time before entering the render loop
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__.highResTimer.calcElapsedTime();
@@ -33438,6 +33439,9 @@ class iNode
 
         // parent node id
         this.parentId = parentId;
+
+        // Node name
+        this.name = '';
     }
     
     // 
@@ -33478,29 +33482,12 @@ class iNode
     {
         return null;
     }
-    
+
     // 
-    //  DESC: Reset the indexes
+    //  DESC: Find the child
     //
-    resetIndexes()
+    findChild()
     {
-        // Empty function by design
-    }
-    
-    // 
-    //  DESC: Reset the index
-    //
-    reset()
-    {
-        // Empty function by design
-    }
-    
-    // 
-    //  DESC: Get the child node
-    //
-    getChildNode()
-    {
-        return null;
     }
     
     // 
@@ -33650,7 +33637,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ObjectNodeMultiLst": () => (/* binding */ ObjectNodeMultiLst)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(142);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(142);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -33664,7 +33651,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__.NodeMultiLst
+class ObjectNodeMultiLst extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
 {
     constructor(
         objectId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
@@ -33734,13 +33721,13 @@ class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__.Nod
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "NodeMultiLst": () => (/* binding */ NodeMultiLst)
+/* harmony export */   "RenderNode": () => (/* binding */ RenderNode)
 /* harmony export */ });
 /* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(143);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
-//  FILE NAME: nodemultilist.js
+//  FILE NAME: rendernode.js
 //  DESC:      Node multi link list class
 //
 
@@ -33749,16 +33736,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
+class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 {
     constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, parentId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
     {
         super( id, parentId )
-        
-        // List of all nodes.
-        // This is only used by the head node and even though
-        // every node will have one of these, it simplifies the code
-        this.allNodeMap = null
     }
     
     // 
@@ -33767,8 +33749,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     cleanUp()
     {
         this.cleanUpRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -33778,6 +33758,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -33804,8 +33785,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     update()
     {
         this.updateRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -33815,6 +33794,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -33841,8 +33821,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     transform()
     {
         this.transformRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -33852,6 +33830,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -33881,8 +33860,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     render( camera )
     {
         this.renderRecursive( this, camera );
-        
-        this.resetIndexes();
     }
     
     //
@@ -33892,6 +33869,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -33909,47 +33887,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
             }
             while( nextNode !== null );
         }
-    }
-    
-    // 
-    //  DESC: Get the next node
-    //
-    addNode( node, nodeName )
-    {
-        // This ensures the map is only allocated for the head node
-        if( this.allNodeMap === null )
-            this.allNodeMap = new Map;
-        
-        // If a name is not given, generate one for the map
-        let name;
-        if( nodeName )
-            name = nodeName
-        else
-            name = `blank_${this.allNodeMap.size}`;
-        
-        // Check for duplicate names
-        if( this.allNodeMap.has( name ) )
-            throw new Error( `Duplicate node name (${name})!` );
-        
-        // Add the node to the map
-        this.allNodeMap.set( name, node );
-        
-        let result = super.addNode( node );
-        
-        this.resetIndexes();
-        
-        return result;
-    }
-    
-    // 
-    //  DESC: Reset the indexes
-    //
-    resetIndexes()
-    {
-        super.reset();
-        
-        for( let node of this.allNodeMap.values() )
-            node.reset();
     }
 }
 
@@ -34043,6 +33980,7 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
             }
             else
             {
+                this.index = 0;
                 let nextNode;
 
                 do
@@ -34064,11 +34002,36 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     }
 
     // 
-    //  DESC: Reset the index
+    //  DESC: Find the child
     //
-    reset()
+    findChild( childName )
     {
-        this.index = 0;
+        let result = null;
+
+        if( childName == this.name )
+        {
+            result = this;
+        }
+        else
+        {
+            this.index = 0;
+            let nextNode;
+
+            do
+            {
+                // get the next node
+                nextNode = this.next();
+
+                if( nextNode != null )
+                {
+                    // Call a recursive function to find the parent node
+                    result = nextNode.findParent( searchNode );
+                }
+            }
+            while( nextNode != null );
+        }
+
+        return result;
     }
 }
 
@@ -34082,7 +34045,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteNodeMultiLst": () => (/* binding */ SpriteNodeMultiLst)
 /* harmony export */ });
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -34097,7 +34060,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__.NodeMultiLst
+class SpriteNodeMultiLst extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 {
     constructor(
         objectData,
@@ -34658,7 +34621,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipDataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(main)\">\r\n        <file path=\"data/objects/2d/objectDataList/mainData.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipData.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 148 */
@@ -34669,7 +34632,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_main_\">\r\n        <file path=\"data/objects/strategy/main.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 149 */
@@ -34713,7 +34676,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n    \r\n    <strategy name=\"_space_ship_\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n            <node name=\"fire_tail\">\r\n                <sprite>\r\n                    <script prepare=\"fireTailAnim\"/>\r\n                </sprite>\r\n            </node>\r\n        </node>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_main_\">\r\n        <node name=\"multiListTestNode\"/>\r\n        <node name=\"waffles\"/>\r\n    </strategy>\r\n    \r\n    <strategy name=\"_space_ship_\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"-500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n        </node>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
 /* 153 */

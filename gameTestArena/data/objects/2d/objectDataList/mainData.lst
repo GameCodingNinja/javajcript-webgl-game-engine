@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <texture count="0" file="" compressed="false"/>
+            <mesh genType="quad">
+                <spriteSheet defIndex="" glyphCount="" columns=""/>
+                <scaledFrame thicknessWidth="" thicknessHeight="" centerQuad="" frameBottom=""/>
+                <file name=""/>
+            </mesh>
+            <color r="1" g="1" b="1" a="1"/>
+            <shader id="shader_2d"/>
+        </visual>
+        <size width="0" height="0"/>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="logo">
+            <visual>
+                <pipeline id="2d_quad"/>
+                <texture file="data/textures/startup/logo.png"/>
+            </visual>
+        </object>
+
+        <object name="waffles">
+            <visual>
+                <texture file="data/textures/startup/waffles.png"/>
+            </visual>
+        </object>
+
+        <object name="circle_green">
+            <visual>
+                <texture file="data/textures/run/circle_green.png"/>
+            </visual>
+        </object>
+    
+        <object name="circle_blue">
+            <visual>
+                <texture file="data/textures/run/circle_blue.png"/>
+            </visual>
+        </object>
+        
+        <object name="circle_red">
+            <visual>
+                <texture file="data/textures/run/circle_red.png"/>
+            </visual>
+        </object>
+    
+        <object name="square_red">
+            <visual>
+                <texture file="data/textures/run/square_red.png"/>
+            </visual>
+        </object>
+        
+        <object name="square_green">
+            <visual>
+                <texture file="data/textures/run/square_green.png"/>
+            </visual>
+        </object>
+        
+        <object name="square_blue">
+            <visual>
+                <texture file="data/textures/run/square_blue.png"/>
+            </visual>
+        </object>
+        
+        <object name="triangle_red">
+            <visual>
+                <texture file="data/textures/run/triangle_red.png"/>
+            </visual>
+        </object>
+        
+        <object name="triangle_green">
+            <visual>
+                <texture file="data/textures/run/triangle_green.png"/>
+            </visual>
+        </object>
+    
+        <object name="triangle_blue">
+            <visual>
+                <texture file="data/textures/run/triangle_blue.png"/>
+            </visual>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

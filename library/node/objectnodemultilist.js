@@ -7,10 +7,10 @@
 "use strict";
 
 import { Object } from '../common/object';
-import { NodeMultiLst } from './nodemultilist';
+import { RenderNode } from './rendernode';
 import * as defs from '../common/defs';
 
-export class ObjectNodeMultiLst extends NodeMultiLst
+export class ObjectNodeMultiLst extends RenderNode
 {
     constructor(
         objectId = defs.DEFAULT_ID,

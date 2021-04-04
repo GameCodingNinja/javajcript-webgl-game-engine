@@ -6,11 +6,11 @@
 
 "use strict";
 
-import { NodeMultiLst } from './nodemultilist';
+import { RenderNode } from './rendernode';
 import { Sprite } from '../sprite/sprite';
 import * as defs from '../common/defs';
 
-export class SpriteNodeMultiLst extends NodeMultiLst
+export class SpriteNodeMultiLst extends RenderNode
 {
     constructor(
         objectData,

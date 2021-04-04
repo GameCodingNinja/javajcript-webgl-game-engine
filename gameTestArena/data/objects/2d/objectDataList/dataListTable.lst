@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 <listTable>
     
+    <groupList groupName="(main)">
+        <file path="data/objects/2d/objectDataList/mainData.lst"/>
+    </groupList>
+
     <groupList groupName="(space_ship)">
-        <file path="data/objects/2d/objectDataList/spaceShipDataList.lst"/>
+        <file path="data/objects/2d/objectDataList/spaceShipData.lst"/>
     </groupList>
   
 </listTable>

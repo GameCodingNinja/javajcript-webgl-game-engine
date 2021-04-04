@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(main)">
+
+    <node name="waffles">
+        <sprite>
+            <position x="-400" y="300" z="0"/>
+        </sprite>
+    </node>
+
+    <node name="multiListTestNode">
+
+        <object>
+            <position x="400" y="300" z="0"/>
+        </object>
+
+        <node>
+
+            <sprite objectName="logo">
+                <position x="0" y="0" z="0"/>
+            </sprite>
+
+            <node>
+
+                <sprite objectName="square_red">
+                    <position x="-150" y="-150" z="0"/>
+                </sprite>
+
+                <node>
+
+                    <sprite objectName="circle_red">
+                        <position x="0" y="-80" z="0"/>
+                    </sprite>
+
+                    <node>
+
+                        <sprite objectName="triangle_red">
+                            <position x="0" y="-70" z="0"/>
+                        </sprite>
+
+                    </node>
+
+                </node>
+
+            </node>
+
+            <node>
+
+                <sprite objectName="square_green">
+                    <position x="0" y="-150" z="0"/>
+                </sprite>
+
+                <node>
+
+                    <sprite objectName="circle_green">
+                        <position x="0" y="-80" z="0"/>
+                    </sprite>
+
+                    <node>
+
+                        <sprite objectName="triangle_green">
+                            <position x="0" y="-70" z="0"/>
+                        </sprite>
+
+                    </node>
+
+                </node>
+
+            </node>
+
+            <node>
+
+                <sprite objectName="square_blue">
+                    <position x="150" y="-150" z="0"/>
+                </sprite>
+
+                <node>
+
+                    <sprite objectName="circle_blue">
+                        <position x="0" y="-80" z="0"/>
+                    </sprite>
+
+                    <node>
+
+                        <sprite objectName="triangle_blue">
+                            <position x="0" y="-70" z="0"/>
+                        </sprite>
+
+                    </node>
+
+                </node>
+
+            </node>
+
+        </node>
+
+    </node>
+
+</strategy>

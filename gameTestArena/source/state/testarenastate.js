@@ -44,7 +44,7 @@ import cameraListTable from 'raw-loader!../../data/objects/camera.lst';
 import shaderCfg from 'raw-loader!../../data/shaders/shader.cfg';
 //import actionManagerCfg from 'raw-loader!../../data/settings/controllerMapping.cfg';
 //import menuActionLst from 'raw-loader!../../data/objects/2d/menu/menu_action.list';
-import spaceShipStrategyLoader from 'raw-loader!../../data/objects/strategy/spaceShip.loader';
+import testArenaLoader from 'raw-loader!../../data/objects/strategy/strategy.loader';
 
 //const STARTUP_ASSET_COUNT = 80,
 //      MIN_LOAD_TIME = 1500;
@@ -89,7 +89,7 @@ export class TestArenaState extends GameState
     //
     load()
     {
-        let groupAry = ['(space_ship)'];
+        let groupAry = ['(space_ship)','(main)'];
 
         // Set the timer to see how long the load takes
         highResTimer.timerStart();
@@ -104,7 +104,7 @@ export class TestArenaState extends GameState
 
         ])
         // Create and load all the actor strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( spaceShipStrategyLoader ) ))
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( testArenaLoader ) ))
 
         // Clean up the temporary files
         .then(() =>
@@ -123,6 +123,7 @@ export class TestArenaState extends GameState
     loadComplete()
     {
         strategyManager.activateStrategy('_space_ship_');
+        strategyManager.activateStrategy('_main_');
 
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();

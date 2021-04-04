@@ -77,6 +77,7 @@ export class Node extends iNode
             }
             else
             {
+                this.index = 0;
                 let nextNode;
 
                 do
@@ -98,10 +99,35 @@ export class Node extends iNode
     }
 
     // 
-    //  DESC: Reset the index
+    //  DESC: Find the child
     //
-    reset()
+    findChild( childName )
     {
-        this.index = 0;
+        let result = null;
+
+        if( childName == this.name )
+        {
+            result = this;
+        }
+        else
+        {
+            this.index = 0;
+            let nextNode;
+
+            do
+            {
+                // get the next node
+                nextNode = this.next();
+
+                if( nextNode != null )
+                {
+                    // Call a recursive function to find the parent node
+                    result = nextNode.findParent( searchNode );
+                }
+            }
+            while( nextNode != null );
+        }
+
+        return result;
     }
 }

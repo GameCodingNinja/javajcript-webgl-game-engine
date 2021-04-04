@@ -20,6 +20,9 @@ export class iNode
 
         // parent node id
         this.parentId = parentId;
+
+        // Node name
+        this.name = '';
     }
     
     // 
@@ -60,29 +63,12 @@ export class iNode
     {
         return null;
     }
-    
+
     // 
-    //  DESC: Reset the indexes
+    //  DESC: Find the child
     //
-    resetIndexes()
+    findChild()
     {
-        // Empty function by design
-    }
-    
-    // 
-    //  DESC: Reset the index
-    //
-    reset()
-    {
-        // Empty function by design
-    }
-    
-    // 
-    //  DESC: Get the child node
-    //
-    getChildNode()
-    {
-        return null;
     }
     
     // 

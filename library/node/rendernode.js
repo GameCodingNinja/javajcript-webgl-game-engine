@@ -1,6 +1,6 @@
 
 // 
-//  FILE NAME: nodemultilist.js
+//  FILE NAME: rendernode.js
 //  DESC:      Node multi link list class
 //
 
@@ -9,16 +9,11 @@
 import { Node } from './node';
 import * as defs from '../common/defs';
 
-export class NodeMultiLst extends Node
+export class RenderNode extends Node
 {
     constructor( id = defs.DEFAULT_ID, parentId = defs.DEFAULT_ID )
     {
         super( id, parentId )
-        
-        // List of all nodes.
-        // This is only used by the head node and even though
-        // every node will have one of these, it simplifies the code
-        this.allNodeMap = null
     }
     
     // 
@@ -27,8 +22,6 @@ export class NodeMultiLst extends Node
     cleanUp()
     {
         this.cleanUpRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -38,6 +31,7 @@ export class NodeMultiLst extends Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -64,8 +58,6 @@ export class NodeMultiLst extends Node
     update()
     {
         this.updateRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -75,6 +67,7 @@ export class NodeMultiLst extends Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -101,8 +94,6 @@ export class NodeMultiLst extends Node
     transform()
     {
         this.transformRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -112,6 +103,7 @@ export class NodeMultiLst extends Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -141,8 +133,6 @@ export class NodeMultiLst extends Node
     render( camera )
     {
         this.renderRecursive( this, camera );
-        
-        this.resetIndexes();
     }
     
     //
@@ -152,6 +142,7 @@ export class NodeMultiLst extends Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -169,46 +160,5 @@ export class NodeMultiLst extends Node
             }
             while( nextNode !== null );
         }
-    }
-    
-    // 
-    //  DESC: Get the next node
-    //
-    addNode( node, nodeName )
-    {
-        // This ensures the map is only allocated for the head node
-        if( this.allNodeMap === null )
-            this.allNodeMap = new Map;
-        
-        // If a name is not given, generate one for the map
-        let name;
-        if( nodeName )
-            name = nodeName
-        else
-            name = `blank_${this.allNodeMap.size}`;
-        
-        // Check for duplicate names
-        if( this.allNodeMap.has( name ) )
-            throw new Error( `Duplicate node name (${name})!` );
-        
-        // Add the node to the map
-        this.allNodeMap.set( name, node );
-        
-        let result = super.addNode( node );
-        
-        this.resetIndexes();
-        
-        return result;
-    }
-    
-    // 
-    //  DESC: Reset the indexes
-    //
-    resetIndexes()
-    {
-        super.reset();
-        
-        for( let node of this.allNodeMap.values() )
-            node.reset();
     }
 }

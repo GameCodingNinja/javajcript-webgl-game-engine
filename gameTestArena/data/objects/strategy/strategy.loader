@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_main_">
+        <node name="multiListTestNode"/>
+        <node name="waffles"/>
+    </strategy>
+    
+    <strategy name="_space_ship_">
+        <node name="player_ship">
+            <object>
+                <position x="-500" y="-300" z="0"/>
+            </object>
+        </node>
+    </strategy>
+  
+</loader>

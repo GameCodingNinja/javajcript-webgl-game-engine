@@ -4,5 +4,9 @@
     <groupList groupName="_space_ship_">
         <file path="data/objects/strategy/spaceShip.strategy"/>
     </groupList>
+
+    <groupList groupName="_main_">
+        <file path="data/objects/strategy/main.strategy"/>
+    </groupList>
   
 </listTable>

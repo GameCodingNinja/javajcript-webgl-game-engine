@@ -4,7 +4,6 @@
     <node name="player_ship">
 
         <object>
-            <position x="-400" y="200" z="0"/>
             <scale x="1.5" y="1.5" z="1.5"/>
         </object>
 
@@ -13,7 +12,7 @@
             <sprite objectName="fire_tail">
                 <position x="-120" y="3" z="0"/>
                 <scriptList>
-                    <script fireTailAnim="PlayerShip_FireTailAnim"/>
+                    <script fireTailAnim="PlayerShip_FireTailAnim" prepareOnInit="true"/>
                 </scriptList>
             </sprite>
 

@@ -14,3 +14,9 @@ Add path to .bashrc to webpack
 PATH=$PATH:$HOME/Development/javajcript-webgl-game-engine/node_modules/.bin
 
 reboot
+
+Call "webpack" from the command line to to build the bundle.js.
+
+webpack --mode development
+webpack --mode production
+webpack --mode none
