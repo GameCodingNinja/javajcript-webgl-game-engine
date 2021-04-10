@@ -19,9 +19,9 @@ import * as defs from '../common/defs';
 
 export class Sprite extends Object
 {
-    constructor( objData, id = defs.DEFAULT_ID, parentNode = null )
+    constructor( objData, parentNode = null )
     {
-        super( id );
+        super();
 
         // parent node of this sprite
         this.parentNode = parentNode;

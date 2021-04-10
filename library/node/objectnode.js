@@ -1,7 +1,7 @@
 
 // 
-//  FILE NAME: objectnodemultilist.js
-//  DESC:      Object node multi link list class
+//  FILE NAME: objectnode.js
+//  DESC:      Object node that allows for children
 //
 
 "use strict";
@@ -10,19 +10,15 @@ import { Object } from '../common/object';
 import { RenderNode } from './rendernode';
 import * as defs from '../common/defs';
 
-export class ObjectNodeMultiLst extends RenderNode
+export class ObjectNode extends RenderNode
 {
-    constructor(
-        objectId = defs.DEFAULT_ID,
-        nodeId = defs.DEFAULT_ID,
-        parentId = defs.DEFAULT_ID )
+    constructor( nodeData )
     {
-        super( nodeId, parentId );
+        super( nodeData.nodeId, nodeData.parentNodeId );
         
-        this.object = new Object(true, objectId);
-
-        // Node type
+        this.object = new Object();
         this.type = defs.ENT_OBJECT;
+        this.userId = nodeData.userId;
     }
     
     // 

@@ -10,9 +10,10 @@ import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { UIProgressBar } from '../gui/uiprogressbar';
 import { UIMeter } from '../gui/uimeter';
 import { SpriteNode } from '../node/spritenode';
+import { SpriteLeafNode } from '../node/spriteleafnode';
 import { UIControlNode } from '../node/uicontrolnode';
-import { ObjectNodeMultiLst } from '../node/objectnodemultilist';
-import { SpriteNodeMultiLst } from '../node/spritenodemultilist';
+import { UIControlLeafNode } from '../node/uicontrolleafnode';
+import { ObjectNode } from '../node/objectnode';
 import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
@@ -26,24 +27,24 @@ export function create( nodeData )
     if( nodeData.nodeType === defs.ENT_SPRITE )
     {
         if( nodeData.hasChildrenNodes )
-            node = new SpriteNodeMultiLst( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new SpriteLeafNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
         
         LoadSprite( node, nodeData );
     }
     else if( nodeData.nodeType === defs.ENT_OBJECT )
     {
         // Object node is automatically a multilist node because an object node without children is pretty useless
-        node = new ObjectNodeMultiLst( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+        node = new ObjectNode( nodeData );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
     }
     else if( nodeData.nodeType === defs.ENT_UI_CONTROL )
     {
-        node = CreateUIControlNode( nodeData, nodeData.id );
+        node = CreateUIControlNode( nodeData );
     }
     else
         throw new Error( `Node type not defined (${nodeData.nodeName}).` );
@@ -84,6 +85,9 @@ function CreateUIControlNode( nodeData )
     
     control.loadFromNode( nodeData.xmlNode );
     control.init();
-    
-    return new UIControlNode( control );
+
+    if( nodeData.hasChildrenNodes )
+        return new UIControlNode( control, nodeData );
+    else
+        return new UIControlLeafNode( control, nodeData );
 }

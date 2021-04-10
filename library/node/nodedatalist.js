@@ -16,7 +16,7 @@ export class NodeDataList
         node,
         defGroup = '',
         defObjName = '',
-        defId = defs.DEFAULT_ID )
+        userId = defs.DEFAULT_ID )
     {
         // Array of the node data
         this.dataAry = [];
@@ -35,7 +35,12 @@ export class NodeDataList
         
         attr = node.getAttribute( 'defaultId' );
         if( attr )
-            defId = Number(attr);
+            userId = Number(attr);
+        
+        // Get the sprite's unique id number
+        attr = node.getAttribute( "id" );
+        if( attr )
+            userId = Number(attr);
         
         attr = node.getAttribute( 'name' );
         if( attr )
@@ -43,17 +48,17 @@ export class NodeDataList
         
         this.idCounter = defs.DEFAULT_ID;
         
-        let nodeData = new NodeData( node, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, defId );
+        let nodeData = new NodeData( node, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, userId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
-        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defId );
+        this.loadNode( node, nodeData, defaultGroup, defaultObjName, userId );
     }
     
     // 
     //  DESC: Load the node data recursively
     //
-    loadNode( node, nodeData, defaultGroup, defaultObjName, defId )
+    loadNode( node, nodeData, defaultGroup, defaultObjName, userId )
     {
         for( let i = 0; i < node.children.length; ++i )
         {
@@ -64,11 +69,11 @@ export class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defId );
+                let childNodeData = new NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
-                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defId );
+                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, userId );
             }
         }
     }

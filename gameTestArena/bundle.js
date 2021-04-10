@@ -19,7 +19,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(133);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(104);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(153);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(154);
 
 // 
 //  FILE NAME: game.js
@@ -2711,14 +2711,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(27);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
-/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(145);
+/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(146);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(147);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(148);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(149);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(150);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(151);
-/* harmony import */ var raw_loader_data_objects_strategy_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(152);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(148);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(149);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(150);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(151);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(152);
+/* harmony import */ var raw_loader_data_objects_strategy_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(153);
 
 //
 //  FILE NAME: testarenastate.js
@@ -25869,16 +25869,13 @@ __webpack_require__.r(__webpack_exports__);
 
 class Object
 {
-    constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEFAULT_ID )
+    constructor()
     {
         // local matrix
         this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_3__.Matrix;
 
         // Bitmask settings to record if the object needs to be transformed
         this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__.BitMask(_common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE);
-
-        // Unique Id number
-        this.id = id;
     
         // Local position
         this.pos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
@@ -25898,14 +25895,6 @@ class Object
 
         // The script part of the sprite
         this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__.ScriptComponent;
-    }
-
-    // 
-    //  DESC: Get the id
-    //
-    getId()
-    {
-        return this.id;
     }
 
     //
@@ -27696,7 +27685,7 @@ class NodeDataList
         node,
         defGroup = '',
         defObjName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
+        userId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
     {
         // Array of the node data
         this.dataAry = [];
@@ -27715,7 +27704,12 @@ class NodeDataList
         
         attr = node.getAttribute( 'defaultId' );
         if( attr )
-            defId = Number(attr);
+            userId = Number(attr);
+        
+        // Get the sprite's unique id number
+        attr = node.getAttribute( "id" );
+        if( attr )
+            userId = Number(attr);
         
         attr = node.getAttribute( 'name' );
         if( attr )
@@ -27723,17 +27717,17 @@ class NodeDataList
         
         this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
         
-        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, defaultGroup, defaultObjName, defId );
+        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, defaultGroup, defaultObjName, userId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
-        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defId );
+        this.loadNode( node, nodeData, defaultGroup, defaultObjName, userId );
     }
     
     // 
     //  DESC: Load the node data recursively
     //
-    loadNode( node, nodeData, defaultGroup, defaultObjName, defId )
+    loadNode( node, nodeData, defaultGroup, defaultObjName, userId )
     {
         for( let i = 0; i < node.children.length; ++i )
         {
@@ -27744,11 +27738,11 @@ class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defId );
+                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
-                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defId );
+                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, userId );
             }
         }
     }
@@ -27785,21 +27779,24 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
         xmlNode,
         nodeName,
         nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        parentNodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
         defGroup = '',
         defObjName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
+        userId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
     {
-        super( xmlNode.firstElementChild, nodeName, defGroup, defObjName, defId );
+        super( xmlNode.firstElementChild, nodeName, defGroup, defObjName );
 
         // node name
         this.nodeName = nodeName;
+
+        // User Id
+        this.userId = userId;
 
         // Node Id
         this.nodeId = nodeId;
 
         // Parent Id
-        this.parenNodetId = parenNodetId;
+        this.parentNodeId = parentNodeId;
 
         // Node type
         this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_NULL;
@@ -27865,7 +27862,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteData
 {
-    constructor( xmlNode, nodeName, defGroup, defObjName, defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEFAULT_ID )
+    constructor( xmlNode, nodeName, defGroup, defObjName )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -27884,9 +27881,6 @@ class SpriteData
         if( !this.objectName )
             this.objectName = nodeName;
         
-        // Sprite Id
-        this.id = defId;
-        
         // Get the name of this specific sprite instance
         let attr = xmlNode.getAttribute( 'name' );
         if( attr )
@@ -27903,11 +27897,6 @@ class SpriteData
             this.objectName = attr;
         else if( !defObjName )
             console.log(`Node name used for object data look-up (${this.group}, ${this.objectName})`);
-
-        // Get the sprite's unique id number
-        attr = xmlNode.getAttribute( "id" );
-        if( attr )
-            this.id = Number(attr);
     }
 }
 
@@ -28027,16 +28016,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(114);
 /* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(136);
 /* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(138);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(140);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(141);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(144);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(112);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
+/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(142);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(143);
+/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(144);
+/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(145);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(112);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: nodefactory.js
 //  DESC:      Class factory for node creation
 //
+
 
 
 
@@ -28057,27 +28048,27 @@ function create( nodeData )
 {
     let node = null;
     
-    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_SPRITE )
+    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.ENT_SPRITE )
     {
         if( nodeData.hasChildrenNodes )
-            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__.SpriteNodeMultiLst( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__.SpriteNode( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__.SpriteNode( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__.SpriteLeafNode( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_OBJECT )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.ENT_OBJECT )
     {
         // Object node is automatically a multilist node because an object node without children is pretty useless
-        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__.ObjectNodeMultiLst( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+        node = new _node_objectnode__WEBPACK_IMPORTED_MODULE_7__.ObjectNode( nodeData );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_UI_CONTROL )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.ENT_UI_CONTROL )
     {
-        node = CreateUIControlNode( nodeData, nodeData.id );
+        node = CreateUIControlNode( nodeData );
     }
     else
         throw new Error( `Node type not defined (${nodeData.nodeName}).` );
@@ -28107,10 +28098,10 @@ function CreateUIControlNode( nodeData )
 {
     let control = null;
     
-    if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__.ECT_PROGRESS_BAR )
+    if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECT_PROGRESS_BAR )
         control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__.UIProgressBar( nodeData.group );
     
-    else if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__.ECT_METER )
+    else if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECT_METER )
         control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__.UIMeter( nodeData.group );
     
     else
@@ -28118,8 +28109,11 @@ function CreateUIControlNode( nodeData )
     
     control.loadFromNode( nodeData.xmlNode );
     control.init();
-    
-    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__.UIControlNode( control );
+
+    if( nodeData.hasChildrenNodes )
+        return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__.UIControlNode( control, nodeData );
+    else
+        return new _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__.UIControlLeafNode( control, nodeData );
 }
 
 
@@ -29795,12 +29789,9 @@ __webpack_require__.r(__webpack_exports__);
 
 class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 {
-    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_9__.DEFAULT_ID, parentNode = null )
+    constructor( objData )
     {
-        super( id );
-
-        // parent node of this sprite
-        this.parentNode = parentNode;
+        super();
 
         // The object data
         this.objData = objData
@@ -33299,13 +33290,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteNode": () => (/* binding */ SpriteNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: spritenode.js
-//  DESC:      Sprite node class for rendering just one sprite
+//  DESC:      Sprite node that allows for children
 //
 
 
@@ -33314,19 +33305,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
+class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 {
-    constructor( objectData,
-        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
+    constructor( objectData, nodeData )
     {
-        super(nodeId, parentId);
+        super( nodeData.nodeId, nodeData.parentNodeId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, spriteId, this );
-        
-        // Node type
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData );
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
+        this.userId = nodeData.userId;
     }
 
     // 
@@ -33344,17 +33331,23 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     {
         this.sprite.update();
         this.sprite.physicsUpdate();
+        
+        // Call the parent but it has to be last
+        super.update();
     }
     
     //
     //  DESC: Transform the sprite
     //
-    transform( object = null )
+    transform( object )
     {
         if( object )
             this.sprite.transform( object );
         else
             this.sprite.transform();
+        
+        // Call the parent but it has to be last
+        super.transform();
     }
     
     //
@@ -33363,6 +33356,9 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     render( camera )
     {
         this.sprite.render( camera );
+        
+        // Call the parent but it has to be last
+        super.render( camera );
     }
     
     // 
@@ -33371,22 +33367,6 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     get()
     {
         return this.sprite;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.sprite.id;
-    }
-
-    // 
-    //  DESC: Set the id
-    //
-    setId( id )
-    {
-        this.sprite.id = id;
     }
     
     // 
@@ -33414,316 +33394,9 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "iNode": () => (/* binding */ iNode)
-/* harmony export */ });
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: inode.js
-//  DESC:      Node class
-//
-
-
-
-
-
-class iNode
-{
-    constructor( id, parentId )
-    {
-        // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENT_NULL;
-
-        // node id
-        this.id = id;
-
-        // parent node id
-        this.parentId = parentId;
-
-        // Node name
-        this.name = '';
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.id;
-    }
-
-    // 
-    //  DESC: Set the id
-    //
-    setId()
-    {
-    }
-    
-    // 
-    //  DESC: Get the parent id
-    //
-    getParentId()
-    {
-        return this.parentId;
-    }
-    
-    // 
-    //  DESC: Get the next node
-    //
-    next()
-    {
-        return null;
-    }
-    
-    // 
-    //  DESC: Push back node into array
-    //
-    findParent()
-    {
-        return null;
-    }
-
-    // 
-    //  DESC: Find the child
-    //
-    findChild()
-    {
-    }
-    
-    // 
-    //  DESC: Get the object
-    //
-    get()
-    {
-        return null;
-    }
-
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent()
-    {
-        // Empty by design
-    }
-
-    // 
-    //  DESC: Update the nodes
-    //
-    update()
-    {
-        // Empty by design
-    }
-
-    //
-    //  DESC: Transform the object
-    //
-    transform()
-    {
-        // Empty by design
-    }
-
-    //
-    //  DESC: Render the sprite
-    //
-    render()
-    {
-        // Empty by design
-    }
-    
-    // 
-    //  DESC: Clean up any sprites
-    //
-    cleanUp()
-    {
-        // Empty by design
-    }
-}
-
-
-/***/ }),
-/* 140 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
-/* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uicontrolnode.js
-//  DESC:      UI Control node class for rendering a ui control
-//
-
-
-
-
-
-
-class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
-{
-    constructor( uiControl )
-    {
-        super();
-        
-        this.uiControl = uiControl;
-        
-        // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ENT_UI_CONTROL;
-    }
-    
-    // 
-    //  DESC: Update the control
-    //
-    update()
-    {
-        this.uiControl.update();
-    }
-    
-    //
-    //  DESC: Transform the control
-    //
-    transform( object = null )
-    {
-        if( object )
-            this.uiControl.transform( object );
-        else
-            this.uiControl.transform();
-    }
-    
-    //
-    //  DESC: Render the control
-    //
-    render( camera )
-    {
-        this.uiControl.render( camera );
-    }
-    
-    // 
-    //  DESC: Get the control
-    //
-    get()
-    {
-        return this.uiControl;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
-    }
-    
-    // 
-    //  DESC: Clean up any control
-    //
-    cleanUp()
-    {
-        this.uiControl.cleanUp();
-    }
-}
-
-
-/***/ }),
-/* 141 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ObjectNodeMultiLst": () => (/* binding */ ObjectNodeMultiLst)
-/* harmony export */ });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(142);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: objectnodemultilist.js
-//  DESC:      Object node multi link list class
-//
-
-
-
-
-
-
-
-class ObjectNodeMultiLst extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
-{
-    constructor(
-        objectId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
-    {
-        super( nodeId, parentId );
-        
-        this.object = new _common_object__WEBPACK_IMPORTED_MODULE_0__.Object(true, objectId);
-
-        // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_OBJECT;
-    }
-    
-    // 
-    //  DESC: Update the object
-    //
-    update()
-    {
-        // Call the parent but it has to be last
-        super.update();
-    }
-    
-    //
-    //  DESC: Transform the object
-    //
-    transform( object )
-    {
-        if( object )
-            this.object.transform( object );
-        else
-            this.object.transform();
-        
-        // Call the parent but it has to be last
-        super.transform();
-    }
-    
-    // 
-    //  DESC: Get the object
-    //
-    get()
-    {
-        return this.object;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.object.id;
-    }
-
-    // 
-    //  DESC: Set the id
-    //
-    setId( id )
-    {
-        this.object.id = id;
-    }
-}
-
-/***/ }),
-/* 142 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "RenderNode": () => (/* binding */ RenderNode)
 /* harmony export */ });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(143);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -33892,7 +33565,7 @@ class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 
 
 /***/ }),
-/* 143 */
+/* 140 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33900,7 +33573,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Node": () => (/* binding */ Node)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
 
 // 
 //  FILE NAME: node.js
@@ -33974,7 +33647,7 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
         if( searchNode != null )
         {
-            if( this.id == searchNode.getParentId() )
+            if( this.nodeId == searchNode.getParentId() )
             {
                 result = this;
             }
@@ -34037,21 +33710,159 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 144 */
+/* 141 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SpriteNodeMultiLst": () => (/* binding */ SpriteNodeMultiLst)
+/* harmony export */   "iNode": () => (/* binding */ iNode)
 /* harmony export */ });
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: inode.js
+//  DESC:      Node class
+//
+
+
+
+
+
+class iNode
+{
+    constructor( nodeId, parentId )
+    {
+        // Node type
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENT_NULL;
+
+        // user id
+        this.userId = _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEFAULT_ID;
+
+        // node id
+        this.nodeId = nodeId;
+
+        // parent node id
+        this.parentId = parentId;
+
+        // Node name
+        this.name = '';
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.userId;
+    }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.userId = id;
+    }
+    
+    // 
+    //  DESC: Get the parent id
+    //
+    getParentId()
+    {
+        return this.parentId;
+    }
+    
+    // 
+    //  DESC: Get the next node
+    //
+    next()
+    {
+        return null;
+    }
+    
+    // 
+    //  DESC: Push back node into array
+    //
+    findParent()
+    {
+        return null;
+    }
+
+    // 
+    //  DESC: Find the child
+    //
+    findChild()
+    {
+    }
+    
+    // 
+    //  DESC: Get the object
+    //
+    get()
+    {
+        return null;
+    }
+
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Update the nodes
+    //
+    update()
+    {
+        // Empty by design
+    }
+
+    //
+    //  DESC: Transform the object
+    //
+    transform()
+    {
+        // Empty by design
+    }
+
+    //
+    //  DESC: Render the sprite
+    //
+    render()
+    {
+        // Empty by design
+    }
+    
+    // 
+    //  DESC: Clean up any sprites
+    //
+    cleanUp()
+    {
+        // Empty by design
+    }
+}
+
+
+/***/ }),
+/* 142 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteLeafNode": () => (/* binding */ SpriteLeafNode)
+/* harmony export */ });
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
-//  FILE NAME: spritenodemultilist.js
-//  DESC:      Sprite node multi link list class
+//  FILE NAME: spriteleafnode.js
+//  DESC:      Sprite node class for handling a sprite with
+//             no children to keep the overhead low
 //
 
 
@@ -34060,20 +33871,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SpriteNodeMultiLst extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
+class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 {
-    constructor(
-        objectData,
-        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
+    constructor( objectData, nodeData )
     {
-        super( nodeId, parentId );
+        super( nodeData.nodeId, nodeData.parentNodeId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, spriteId, this );
-        
-        // Node type
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData );
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
+        this.userId = nodeData.userId;
     }
 
     // 
@@ -34091,23 +33897,17 @@ class SpriteNodeMultiLst extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.Render
     {
         this.sprite.update();
         this.sprite.physicsUpdate();
-        
-        // Call the parent but it has to be last
-        super.update();
     }
     
     //
     //  DESC: Transform the sprite
     //
-    transform( object )
+    transform( object = null )
     {
         if( object )
             this.sprite.transform( object );
         else
             this.sprite.transform();
-        
-        // Call the parent but it has to be last
-        super.transform();
     }
     
     //
@@ -34116,9 +33916,6 @@ class SpriteNodeMultiLst extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.Render
     render( camera )
     {
         this.sprite.render( camera );
-        
-        // Call the parent but it has to be last
-        super.render( camera );
     }
     
     // 
@@ -34164,7 +33961,272 @@ class SpriteNodeMultiLst extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.Render
 
 
 /***/ }),
+/* 143 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
+/* harmony export */ });
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: uicontrolnode.js
+//  DESC:      UI Control node that allows for children
+//
+
+
+
+
+
+
+class UIControlNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
+{
+    constructor( uiControl, nodeData )
+    {
+        super(nodeData.nodeId, nodeData.parentNodeId);
+        
+        this.uiControl = uiControl;
+        this.nodeId = nodeData.nodeId;
+        this.userId = nodeData.userId;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ENT_UI_CONTROL;
+    }
+    
+    // 
+    //  DESC: Update the control
+    //
+    update()
+    {
+        this.uiControl.update();
+
+        // Call the parent but it has to be last
+        super.update();
+    }
+    
+    //
+    //  DESC: Transform the control
+    //
+    transform( object = null )
+    {
+        if( object )
+            this.uiControl.transform( object );
+        else
+            this.uiControl.transform();
+        
+        // Call the parent but it has to be last
+        super.transform();
+    }
+    
+    //
+    //  DESC: Render the control
+    //
+    render( camera )
+    {
+        this.uiControl.render( camera );
+
+        // Call the parent but it has to be last
+        super.render( camera );
+    }
+    
+    // 
+    //  DESC: Get the control
+    //
+    get()
+    {
+        return this.uiControl;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
+    }
+    
+    // 
+    //  DESC: Clean up any control
+    //
+    cleanUp()
+    {
+        this.uiControl.cleanUp();
+    }
+}
+
+
+/***/ }),
+/* 144 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIControlLeafNode": () => (/* binding */ UIControlLeafNode)
+/* harmony export */ });
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: uicontrolnode.js
+//  DESC:      UI Control node class for rendering a ui control
+//
+
+
+
+
+
+
+class UIControlLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
+{
+    constructor( uiControl, nodeData )
+    {
+        super(nodeData.nodeId, nodeData.parentNodeId);
+        
+        this.uiControl = uiControl;
+        this.userId = nodeData.userId;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ENT_UI_CONTROL;
+    }
+    
+    // 
+    //  DESC: Update the control
+    //
+    update()
+    {
+        this.uiControl.update();
+    }
+    
+    //
+    //  DESC: Transform the control
+    //
+    transform( object = null )
+    {
+        if( object )
+            this.uiControl.transform( object );
+        else
+            this.uiControl.transform();
+    }
+    
+    //
+    //  DESC: Render the control
+    //
+    render( camera )
+    {
+        this.uiControl.render( camera );
+    }
+    
+    // 
+    //  DESC: Get the control
+    //
+    get()
+    {
+        return this.uiControl;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
+    }
+    
+    // 
+    //  DESC: Clean up any control
+    //
+    cleanUp()
+    {
+        this.uiControl.cleanUp();
+    }
+}
+
+
+/***/ }),
 /* 145 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectNode": () => (/* binding */ ObjectNode)
+/* harmony export */ });
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(139);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: objectnode.js
+//  DESC:      Object node that allows for children
+//
+
+
+
+
+
+
+
+class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
+{
+    constructor( nodeData )
+    {
+        super( nodeData.nodeId, nodeData.parentNodeId );
+        
+        this.object = new _common_object__WEBPACK_IMPORTED_MODULE_0__.Object();
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_OBJECT;
+        this.userId = nodeData.userId;
+    }
+    
+    // 
+    //  DESC: Update the object
+    //
+    update()
+    {
+        // Call the parent but it has to be last
+        super.update();
+    }
+    
+    //
+    //  DESC: Transform the object
+    //
+    transform( object )
+    {
+        if( object )
+            this.object.transform( object );
+        else
+            this.object.transform();
+        
+        // Call the parent but it has to be last
+        super.transform();
+    }
+    
+    // 
+    //  DESC: Get the object
+    //
+    get()
+    {
+        return this.object;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.object.id;
+    }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.object.id = id;
+    }
+}
+
+/***/ }),
+/* 146 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34173,7 +34235,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(146);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
 
 //
 //  FILE NAME: statescripts.js
@@ -34216,7 +34278,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34613,7 +34675,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34624,7 +34686,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(main)\">\r\n        <file path=\"data/objects/2d/objectDataList/mainData.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipData.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34635,7 +34697,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_main_\">\r\n        <file path=\"data/objects/strategy/main.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34646,7 +34708,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34657,7 +34719,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34668,7 +34730,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34679,7 +34741,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_main_\">\r\n        <node name=\"multiListTestNode\"/>\r\n        <node name=\"waffles\"/>\r\n    </strategy>\r\n    \r\n    <strategy name=\"_space_ship_\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"-500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n        </node>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

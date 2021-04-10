@@ -379,16 +379,16 @@ export class Level1State extends CommonState
         
         if( spriteA && spriteB )
         {
-            if( spriteA.id === SPRITE_PEG )
+            if( spriteA.parentNode.userId === SPRITE_PEG )
                 spriteA.setFrame(1);
 
-            else if( spriteB.id === SPRITE_PEG )
+            else if( spriteB.parentNode.userId === SPRITE_PEG )
                 spriteB.setFrame(1);
             
-            else if( (spriteA.id === MULTIPLIER_SPRITE) || (spriteB.id === MULTIPLIER_SPRITE) )
+            else if( (spriteA.parentNode.userId === MULTIPLIER_SPRITE) || (spriteB.parentNode.userId === MULTIPLIER_SPRITE) )
             {
                 let sprite = spriteA;
-                if( spriteB.id === MULTIPLIER_SPRITE )
+                if( spriteB.parentNode.userId === MULTIPLIER_SPRITE )
                     sprite = spriteB;
 
                 // Check if this sprite's delete flag is set
@@ -413,7 +413,7 @@ export class Level1State extends CommonState
                     this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
 
                     // Add more balls
-                    if( (spriteA.id === 5) || (spriteB.id === 5) )
+                    if( (spriteA.parentNode.userId === 5) || (spriteB.parentNode.userId === 5) )
                         this.uiBallMeter.incBangUp( 15 );
                 }
             }
@@ -430,17 +430,17 @@ export class Level1State extends CommonState
         
         if( spriteA && spriteB )
         {
-            if( spriteA.id === SPRITE_PEG )
+            if( spriteA.parentNode.userId === SPRITE_PEG )
                 spriteA.setFrame(0);
 
-            else if( spriteB.id === SPRITE_PEG )
+            else if( spriteB.parentNode.userId === SPRITE_PEG )
                 spriteB.setFrame(0);
         }
     }
     
     removeFixture( object )
     {
-        if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.id > defs.DEFAULT_ID) )
+        if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.parentNode.userId > defs.DEFAULT_ID) )
             this.uiWinMeter.incBangUp( this.multiplier );
     }
 

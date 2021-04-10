@@ -15,15 +15,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(160);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(178);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(179);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(161);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(179);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(180);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(9);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(22);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(122);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(183);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(184);
 
 // 
 //  FILE NAME: game.js
@@ -2736,23 +2736,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(31);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(38);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(6);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(160);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(163);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(164);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(165);
-/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(166);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(161);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(164);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(165);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(166);
+/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(167);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(167);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(168);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(169);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(170);
-/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(171);
-/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(172);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(173);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(174);
-/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(175);
-/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(176);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(177);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(168);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(169);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(170);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(171);
+/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(172);
+/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(173);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(174);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(175);
+/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(176);
+/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(177);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(178);
 
 //
 //  FILE NAME: startupstate.js
@@ -28397,16 +28397,13 @@ __webpack_require__.r(__webpack_exports__);
 
 class Object
 {
-    constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEFAULT_ID )
+    constructor()
     {
         // local matrix
         this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_3__.Matrix;
 
         // Bitmask settings to record if the object needs to be transformed
         this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__.BitMask(_common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE);
-
-        // Unique Id number
-        this.id = id;
     
         // Local position
         this.pos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
@@ -28426,14 +28423,6 @@ class Object
 
         // The script part of the sprite
         this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__.ScriptComponent;
-    }
-
-    // 
-    //  DESC: Get the id
-    //
-    getId()
-    {
-        return this.id;
     }
 
     //
@@ -29175,9 +29164,9 @@ __webpack_require__.r(__webpack_exports__);
 
 class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 {
-    constructor( objData, id = _common_defs__WEBPACK_IMPORTED_MODULE_9__.DEFAULT_ID, parentNode = null )
+    constructor( objData, parentNode = null )
     {
-        super( id );
+        super();
 
         // parent node of this sprite
         this.parentNode = parentNode;
@@ -38586,7 +38575,7 @@ class NodeDataList
         node,
         defGroup = '',
         defObjName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
+        userId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
     {
         // Array of the node data
         this.dataAry = [];
@@ -38605,7 +38594,12 @@ class NodeDataList
         
         attr = node.getAttribute( 'defaultId' );
         if( attr )
-            defId = Number(attr);
+            userId = Number(attr);
+        
+        // Get the sprite's unique id number
+        attr = node.getAttribute( "id" );
+        if( attr )
+            userId = Number(attr);
         
         attr = node.getAttribute( 'name' );
         if( attr )
@@ -38613,17 +38607,17 @@ class NodeDataList
         
         this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
         
-        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, defaultGroup, defaultObjName, defId );
+        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, defaultGroup, defaultObjName, userId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
-        this.loadNode( node, nodeData, defaultGroup, defaultObjName, defId );
+        this.loadNode( node, nodeData, defaultGroup, defaultObjName, userId );
     }
     
     // 
     //  DESC: Load the node data recursively
     //
-    loadNode( node, nodeData, defaultGroup, defaultObjName, defId )
+    loadNode( node, nodeData, defaultGroup, defaultObjName, userId )
     {
         for( let i = 0; i < node.children.length; ++i )
         {
@@ -38634,11 +38628,11 @@ class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, defId );
+                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
-                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, defId );
+                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, userId );
             }
         }
     }
@@ -38675,21 +38669,24 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
         xmlNode,
         nodeName,
         nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        parenNodetId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
+        parentNodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
         defGroup = '',
         defObjName = '',
-        defId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
+        userId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
     {
-        super( xmlNode.firstElementChild, nodeName, defGroup, defObjName, defId );
+        super( xmlNode.firstElementChild, nodeName, defGroup, defObjName );
 
         // node name
         this.nodeName = nodeName;
+
+        // User Id
+        this.userId = userId;
 
         // Node Id
         this.nodeId = nodeId;
 
         // Parent Id
-        this.parenNodetId = parenNodetId;
+        this.parentNodeId = parentNodeId;
 
         // Node type
         this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_NULL;
@@ -38755,7 +38752,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteData
 {
-    constructor( xmlNode, nodeName, defGroup, defObjName, defId = _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEFAULT_ID )
+    constructor( xmlNode, nodeName, defGroup, defObjName )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -38774,9 +38771,6 @@ class SpriteData
         if( !this.objectName )
             this.objectName = nodeName;
         
-        // Sprite Id
-        this.id = defId;
-        
         // Get the name of this specific sprite instance
         let attr = xmlNode.getAttribute( 'name' );
         if( attr )
@@ -38793,11 +38787,6 @@ class SpriteData
             this.objectName = attr;
         else if( !defObjName )
             console.log(`Node name used for object data look-up (${this.group}, ${this.objectName})`);
-
-        // Get the sprite's unique id number
-        attr = xmlNode.getAttribute( "id" );
-        if( attr )
-            this.id = Number(attr);
     }
 }
 
@@ -38815,16 +38804,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(139);
 /* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(137);
 /* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(153);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(155);
-/* harmony import */ var _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(156);
-/* harmony import */ var _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(159);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(130);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
+/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(157);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(158);
+/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(159);
+/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(160);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(130);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: nodefactory.js
 //  DESC:      Class factory for node creation
 //
+
 
 
 
@@ -38845,27 +38836,27 @@ function create( nodeData )
 {
     let node = null;
     
-    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_SPRITE )
+    if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.ENT_SPRITE )
     {
         if( nodeData.hasChildrenNodes )
-            node = new _node_spritenodemultilist__WEBPACK_IMPORTED_MODULE_6__.SpriteNodeMultiLst( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__.SpriteNode( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new _node_spritenode__WEBPACK_IMPORTED_MODULE_3__.SpriteNode( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+            node = new _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__.SpriteLeafNode( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__.objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
         
         LoadSprite( node, nodeData );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_OBJECT )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.ENT_OBJECT )
     {
         // Object node is automatically a multilist node because an object node without children is pretty useless
-        node = new _node_objectnodemultilist__WEBPACK_IMPORTED_MODULE_5__.ObjectNodeMultiLst( nodeData.id, nodeData.nodeId, nodeData.parenNodetId );
+        node = new _node_objectnode__WEBPACK_IMPORTED_MODULE_7__.ObjectNode( nodeData );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
     }
-    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.ENT_UI_CONTROL )
+    else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.ENT_UI_CONTROL )
     {
-        node = CreateUIControlNode( nodeData, nodeData.id );
+        node = CreateUIControlNode( nodeData );
     }
     else
         throw new Error( `Node type not defined (${nodeData.nodeName}).` );
@@ -38895,10 +38886,10 @@ function CreateUIControlNode( nodeData )
 {
     let control = null;
     
-    if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__.ECT_PROGRESS_BAR )
+    if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECT_PROGRESS_BAR )
         control = new _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__.UIProgressBar( nodeData.group );
     
-    else if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_7__.ECT_METER )
+    else if( nodeData.uiControlType == _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECT_METER )
         control = new _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__.UIMeter( nodeData.group );
     
     else
@@ -38906,8 +38897,11 @@ function CreateUIControlNode( nodeData )
     
     control.loadFromNode( nodeData.xmlNode );
     control.init();
-    
-    return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_4__.UIControlNode( control );
+
+    if( nodeData.hasChildrenNodes )
+        return new _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__.UIControlNode( control, nodeData );
+    else
+        return new _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__.UIControlLeafNode( control, nodeData );
 }
 
 
@@ -38920,13 +38914,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteNode": () => (/* binding */ SpriteNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(109);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
 //  FILE NAME: spritenode.js
-//  DESC:      Sprite node class for rendering just one sprite
+//  DESC:      Sprite node that allows for children
 //
 
 
@@ -38935,19 +38929,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
+class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 {
-    constructor( objectData,
-        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
+    constructor( objectData, nodeData )
     {
-        super(nodeId, parentId);
+        super( nodeData.nodeId, nodeData.parentNodeId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, spriteId, this );
-        
-        // Node type
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
+        this.userId = nodeData.userId;
     }
 
     // 
@@ -38965,17 +38955,23 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     {
         this.sprite.update();
         this.sprite.physicsUpdate();
+        
+        // Call the parent but it has to be last
+        super.update();
     }
     
     //
     //  DESC: Transform the sprite
     //
-    transform( object = null )
+    transform( object )
     {
         if( object )
             this.sprite.transform( object );
         else
             this.sprite.transform();
+        
+        // Call the parent but it has to be last
+        super.transform();
     }
     
     //
@@ -38984,6 +38980,9 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     render( camera )
     {
         this.sprite.render( camera );
+        
+        // Call the parent but it has to be last
+        super.render( camera );
     }
     
     // 
@@ -38992,30 +38991,6 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     get()
     {
         return this.sprite;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.sprite.id;
-    }
-
-    // 
-    //  DESC: Set the id
-    //
-    setId( id )
-    {
-        this.sprite.id = id;
-    }
-    
-    // 
-    //  DESC: Set the AI.
-    //
-    setAI( ai )
-    {
-        this.sprite.setAI( ai );
     }
     
     // 
@@ -39035,334 +39010,13 @@ class SpriteNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "iNode": () => (/* binding */ iNode)
+/* harmony export */   "RenderNode": () => (/* binding */ RenderNode)
 /* harmony export */ });
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: inode.js
-//  DESC:      Node class
-//
-
-
-
-
-
-class iNode
-{
-    constructor( id, parentId )
-    {
-        // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENT_NULL;
-
-        // node id
-        this.id = id;
-
-        // parent node id
-        this.parentId = parentId;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.id;
-    }
-
-    // 
-    //  DESC: Set the id
-    //
-    setId()
-    {
-    }
-    
-    // 
-    //  DESC: Get the parent id
-    //
-    getParentId()
-    {
-        return this.parentId;
-    }
-    
-    // 
-    //  DESC: Get the next node
-    //
-    next()
-    {
-        return null;
-    }
-    
-    // 
-    //  DESC: Push back node into array
-    //
-    findParent()
-    {
-        return null;
-    }
-    
-    // 
-    //  DESC: Reset the indexes
-    //
-    resetIndexes()
-    {
-        // Empty function by design
-    }
-    
-    // 
-    //  DESC: Reset the index
-    //
-    reset()
-    {
-        // Empty function by design
-    }
-    
-    // 
-    //  DESC: Get the child node
-    //
-    getChildNode()
-    {
-        return null;
-    }
-    
-    // 
-    //  DESC: Get the object
-    //
-    get()
-    {
-        return null;
-    }
-
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent()
-    {
-        // Empty by design
-    }
-
-    // 
-    //  DESC: Update the nodes
-    //
-    update()
-    {
-        // Empty by design
-    }
-
-    //
-    //  DESC: Transform the object
-    //
-    transform()
-    {
-        // Empty by design
-    }
-
-    //
-    //  DESC: Render the sprite
-    //
-    render()
-    {
-        // Empty by design
-    }
-    
-    // 
-    //  DESC: Clean up any sprites
-    //
-    cleanUp()
-    {
-        // Empty by design
-    }
-}
-
-
-/***/ }),
-/* 155 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
-/* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(155);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
-//  FILE NAME: uicontrolnode.js
-//  DESC:      UI Control node class for rendering a ui control
-//
-
-
-
-
-
-
-class UIControlNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
-{
-    constructor( uiControl )
-    {
-        super();
-        
-        this.uiControl = uiControl;
-        
-        // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ENT_UI_CONTROL;
-    }
-    
-    // 
-    //  DESC: Update the control
-    //
-    update()
-    {
-        this.uiControl.update();
-    }
-    
-    //
-    //  DESC: Transform the control
-    //
-    transform( object = null )
-    {
-        if( object )
-            this.uiControl.transform( object );
-        else
-            this.uiControl.transform();
-    }
-    
-    //
-    //  DESC: Render the control
-    //
-    render( camera )
-    {
-        this.uiControl.render( camera );
-    }
-    
-    // 
-    //  DESC: Get the control
-    //
-    get()
-    {
-        return this.uiControl;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
-    }
-    
-    // 
-    //  DESC: Clean up any control
-    //
-    cleanUp()
-    {
-        this.uiControl.cleanUp();
-    }
-}
-
-
-/***/ }),
-/* 156 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ObjectNodeMultiLst": () => (/* binding */ ObjectNodeMultiLst)
-/* harmony export */ });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(157);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: objectnodemultilist.js
-//  DESC:      Object node multi link list class
-//
-
-
-
-
-
-
-
-class ObjectNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_1__.NodeMultiLst
-{
-    constructor(
-        objectId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
-    {
-        super( nodeId, parentId );
-        
-        this.object = new _common_object__WEBPACK_IMPORTED_MODULE_0__.Object(true, objectId);
-
-        // Node type
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_OBJECT;
-    }
-    
-    // 
-    //  DESC: Update the object
-    //
-    update()
-    {
-        // Call the parent but it has to be last
-        super.update();
-    }
-    
-    //
-    //  DESC: Transform the object
-    //
-    transform( object )
-    {
-        if( object )
-            this.object.transform( object );
-        else
-            this.object.transform();
-        
-        // Call the parent but it has to be last
-        super.transform();
-    }
-    
-    // 
-    //  DESC: Get the object
-    //
-    get()
-    {
-        return this.object;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.object.id;
-    }
-
-    // 
-    //  DESC: Set the id
-    //
-    setId( id )
-    {
-        this.object.id = id;
-    }
-}
-
-/***/ }),
-/* 157 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "NodeMultiLst": () => (/* binding */ NodeMultiLst)
-/* harmony export */ });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(158);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: nodemultilist.js
+//  FILE NAME: rendernode.js
 //  DESC:      Node multi link list class
 //
 
@@ -39371,16 +39025,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
+class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 {
     constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, parentId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
     {
         super( id, parentId )
-        
-        // List of all nodes.
-        // This is only used by the head node and even though
-        // every node will have one of these, it simplifies the code
-        this.allNodeMap = null
     }
     
     // 
@@ -39389,8 +39038,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     cleanUp()
     {
         this.cleanUpRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -39400,6 +39047,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -39426,8 +39074,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     update()
     {
         this.updateRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -39437,6 +39083,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -39463,8 +39110,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     transform()
     {
         this.transformRecursive( this );
-        
-        this.resetIndexes();
     }
     
     // 
@@ -39474,6 +39119,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -39503,8 +39149,6 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     render( camera )
     {
         this.renderRecursive( this, camera );
-        
-        this.resetIndexes();
     }
     
     //
@@ -39514,6 +39158,7 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     {
         if( node !== null )
         {
+            node.index = 0;
             let nextNode;
 
             do
@@ -39532,52 +39177,11 @@ class NodeMultiLst extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
             while( nextNode !== null );
         }
     }
-    
-    // 
-    //  DESC: Get the next node
-    //
-    addNode( node, nodeName )
-    {
-        // This ensures the map is only allocated for the head node
-        if( this.allNodeMap === null )
-            this.allNodeMap = new Map;
-        
-        // If a name is not given, generate one for the map
-        let name;
-        if( nodeName )
-            name = nodeName
-        else
-            name = `blank_${this.allNodeMap.size}`;
-        
-        // Check for duplicate names
-        if( this.allNodeMap.has( name ) )
-            throw new Error( `Duplicate node name (${name})!` );
-        
-        // Add the node to the map
-        this.allNodeMap.set( name, node );
-        
-        let result = super.addNode( node );
-        
-        this.resetIndexes();
-        
-        return result;
-    }
-    
-    // 
-    //  DESC: Reset the indexes
-    //
-    resetIndexes()
-    {
-        super.reset();
-        
-        for( let node of this.allNodeMap.values() )
-            node.reset();
-    }
 }
 
 
 /***/ }),
-/* 158 */
+/* 155 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39585,7 +39189,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Node": () => (/* binding */ Node)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
 
 // 
 //  FILE NAME: node.js
@@ -39659,12 +39263,13 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
         if( searchNode != null )
         {
-            if( this.id == searchNode.getParentId() )
+            if( this.nodeId == searchNode.getParentId() )
             {
                 result = this;
             }
             else
             {
+                this.index = 0;
                 let nextNode;
 
                 do
@@ -39686,31 +39291,194 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     }
 
     // 
-    //  DESC: Reset the index
+    //  DESC: Find the child
     //
-    reset()
+    findChild( childName )
     {
-        this.index = 0;
+        let result = null;
+
+        if( childName == this.name )
+        {
+            result = this;
+        }
+        else
+        {
+            this.index = 0;
+            let nextNode;
+
+            do
+            {
+                // get the next node
+                nextNode = this.next();
+
+                if( nextNode != null )
+                {
+                    // Call a recursive function to find the parent node
+                    result = nextNode.findParent( searchNode );
+                }
+            }
+            while( nextNode != null );
+        }
+
+        return result;
     }
 }
 
 
 /***/ }),
-/* 159 */
+/* 156 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SpriteNodeMultiLst": () => (/* binding */ SpriteNodeMultiLst)
+/* harmony export */   "iNode": () => (/* binding */ iNode)
 /* harmony export */ });
-/* harmony import */ var _nodemultilist__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: inode.js
+//  DESC:      Node class
+//
+
+
+
+
+
+class iNode
+{
+    constructor( nodeId, parentId )
+    {
+        // Node type
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENT_NULL;
+
+        // user id
+        this.userId = _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEFAULT_ID;
+
+        // node id
+        this.nodeId = nodeId;
+
+        // parent node id
+        this.parentId = parentId;
+
+        // Node name
+        this.name = '';
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.userId;
+    }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.userId = id;
+    }
+    
+    // 
+    //  DESC: Get the parent id
+    //
+    getParentId()
+    {
+        return this.parentId;
+    }
+    
+    // 
+    //  DESC: Get the next node
+    //
+    next()
+    {
+        return null;
+    }
+    
+    // 
+    //  DESC: Push back node into array
+    //
+    findParent()
+    {
+        return null;
+    }
+
+    // 
+    //  DESC: Find the child
+    //
+    findChild()
+    {
+    }
+    
+    // 
+    //  DESC: Get the object
+    //
+    get()
+    {
+        return null;
+    }
+
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Update the nodes
+    //
+    update()
+    {
+        // Empty by design
+    }
+
+    //
+    //  DESC: Transform the object
+    //
+    transform()
+    {
+        // Empty by design
+    }
+
+    //
+    //  DESC: Render the sprite
+    //
+    render()
+    {
+        // Empty by design
+    }
+    
+    // 
+    //  DESC: Clean up any sprites
+    //
+    cleanUp()
+    {
+        // Empty by design
+    }
+}
+
+
+/***/ }),
+/* 157 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteLeafNode": () => (/* binding */ SpriteLeafNode)
+/* harmony export */ });
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(109);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
-//  FILE NAME: spritenodemultilist.js
-//  DESC:      Sprite node multi link list class
+//  FILE NAME: spriteleafnode.js
+//  DESC:      Sprite node class for handling a sprite with
+//             no children to keep the overhead low
 //
 
 
@@ -39719,20 +39487,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__.NodeMultiLst
+class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 {
-    constructor(
-        objectData,
-        spriteId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        nodeId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID,
-        parentId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
+    constructor( objectData, nodeData )
     {
-        super( nodeId, parentId );
+        super( nodeData.nodeId, nodeData.parentNodeId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, spriteId, this );
-        
-        // Node type
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
+        this.userId = nodeData.userId;
     }
 
     // 
@@ -39750,23 +39513,17 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__.Nod
     {
         this.sprite.update();
         this.sprite.physicsUpdate();
-        
-        // Call the parent but it has to be last
-        super.update();
     }
     
     //
     //  DESC: Transform the sprite
     //
-    transform( object )
+    transform( object = null )
     {
         if( object )
             this.sprite.transform( object );
         else
             this.sprite.transform();
-        
-        // Call the parent but it has to be last
-        super.transform();
     }
     
     //
@@ -39775,9 +39532,6 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__.Nod
     render( camera )
     {
         this.sprite.render( camera );
-        
-        // Call the parent but it has to be last
-        super.render( camera );
     }
     
     // 
@@ -39786,30 +39540,6 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__.Nod
     get()
     {
         return this.sprite;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.sprite.id;
-    }
-
-    // 
-    //  DESC: Set the id
-    //
-    setId( id )
-    {
-        this.sprite.id = id;
-    }
-    
-    // 
-    //  DESC: Set the AI.
-    //
-    setAI( ai )
-    {
-        this.sprite.setAI( ai );
     }
     
     // 
@@ -39823,7 +39553,272 @@ class SpriteNodeMultiLst extends _nodemultilist__WEBPACK_IMPORTED_MODULE_0__.Nod
 
 
 /***/ }),
+/* 158 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
+/* harmony export */ });
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: uicontrolnode.js
+//  DESC:      UI Control node that allows for children
+//
+
+
+
+
+
+
+class UIControlNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
+{
+    constructor( uiControl, nodeData )
+    {
+        super(nodeData.nodeId, nodeData.parentNodeId);
+        
+        this.uiControl = uiControl;
+        this.nodeId = nodeData.nodeId;
+        this.userId = nodeData.userId;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ENT_UI_CONTROL;
+    }
+    
+    // 
+    //  DESC: Update the control
+    //
+    update()
+    {
+        this.uiControl.update();
+
+        // Call the parent but it has to be last
+        super.update();
+    }
+    
+    //
+    //  DESC: Transform the control
+    //
+    transform( object = null )
+    {
+        if( object )
+            this.uiControl.transform( object );
+        else
+            this.uiControl.transform();
+        
+        // Call the parent but it has to be last
+        super.transform();
+    }
+    
+    //
+    //  DESC: Render the control
+    //
+    render( camera )
+    {
+        this.uiControl.render( camera );
+
+        // Call the parent but it has to be last
+        super.render( camera );
+    }
+    
+    // 
+    //  DESC: Get the control
+    //
+    get()
+    {
+        return this.uiControl;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
+    }
+    
+    // 
+    //  DESC: Clean up any control
+    //
+    cleanUp()
+    {
+        this.uiControl.cleanUp();
+    }
+}
+
+
+/***/ }),
+/* 159 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIControlLeafNode": () => (/* binding */ UIControlLeafNode)
+/* harmony export */ });
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: uicontrolnode.js
+//  DESC:      UI Control node class for rendering a ui control
+//
+
+
+
+
+
+
+class UIControlLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
+{
+    constructor( uiControl, nodeData )
+    {
+        super(nodeData.nodeId, nodeData.parentNodeId);
+        
+        this.uiControl = uiControl;
+        this.userId = nodeData.userId;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ENT_UI_CONTROL;
+    }
+    
+    // 
+    //  DESC: Update the control
+    //
+    update()
+    {
+        this.uiControl.update();
+    }
+    
+    //
+    //  DESC: Transform the control
+    //
+    transform( object = null )
+    {
+        if( object )
+            this.uiControl.transform( object );
+        else
+            this.uiControl.transform();
+    }
+    
+    //
+    //  DESC: Render the control
+    //
+    render( camera )
+    {
+        this.uiControl.render( camera );
+    }
+    
+    // 
+    //  DESC: Get the control
+    //
+    get()
+    {
+        return this.uiControl;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
+    }
+    
+    // 
+    //  DESC: Clean up any control
+    //
+    cleanUp()
+    {
+        this.uiControl.cleanUp();
+    }
+}
+
+
+/***/ }),
 /* 160 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectNode": () => (/* binding */ ObjectNode)
+/* harmony export */ });
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(104);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(154);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: objectnode.js
+//  DESC:      Object node that allows for children
+//
+
+
+
+
+
+
+
+class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
+{
+    constructor( nodeData )
+    {
+        super( nodeData.nodeId, nodeData.parentNodeId );
+        
+        this.object = new _common_object__WEBPACK_IMPORTED_MODULE_0__.Object();
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_OBJECT;
+        this.userId = nodeData.userId;
+    }
+    
+    // 
+    //  DESC: Update the object
+    //
+    update()
+    {
+        // Call the parent but it has to be last
+        super.update();
+    }
+    
+    //
+    //  DESC: Transform the object
+    //
+    transform( object )
+    {
+        if( object )
+            this.object.transform( object );
+        else
+            this.object.transform();
+        
+        // Call the parent but it has to be last
+        super.transform();
+    }
+    
+    // 
+    //  DESC: Get the object
+    //
+    get()
+    {
+        return this.object;
+    }
+    
+    // 
+    //  DESC: Get the node id
+    //
+    getId()
+    {
+        return this.object.id;
+    }
+
+    // 
+    //  DESC: Set the id
+    //
+    setId( id )
+    {
+        this.object.id = id;
+    }
+}
+
+/***/ }),
+/* 161 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39834,7 +39829,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "load": () => (/* binding */ load)
 /* harmony export */ });
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(161);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(162);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(102);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(146);
@@ -39848,7 +39843,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(108);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(162);
+/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(163);
 
 // 
 //  FILE NAME: titlescreenstate.js
@@ -39998,7 +39993,7 @@ function load()
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40084,7 +40079,7 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40095,7 +40090,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_title-screen_\" type=\"actor\">\r\n        <node name=\"background\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40492,7 +40487,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40501,7 +40496,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(163);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(164);
 
 //
 //  FILE NAME: statescripts.js
@@ -40553,7 +40548,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40567,7 +40562,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(143);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(102);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(163);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(164);
 /* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(108);
 /* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(130);
 
@@ -41439,7 +41434,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41452,7 +41447,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(143);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(163);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(164);
 
 //
 //  FILE NAME: levelcripts.js
@@ -41567,7 +41562,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41578,7 +41573,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(startup)\">\r\n        <file path=\"data/objects/2d/objectDataList/startupDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(loadingScreen)\">\r\n        <file path=\"data/objects/2d/objectDataList/loadingScreenDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/objectDataList/menuBackgrounds.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuButtonFrames.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuMisc.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(title_screen)\">\r\n        <file path=\"data/objects/2d/objectDataList/titleScreenDataList.lst\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"(level_1)\">\r\n        <file path=\"data/objects/2d/objectDataList/level1DataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41589,7 +41584,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_startup_\">\r\n        <file path=\"data/objects/strategy/state/startup.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_title-screen_\">\r\n        <file path=\"data/objects/strategy/state/titlescreen.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_loading-screen_\">\r\n        <file path=\"data/objects/strategy/state/loadscreen.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_level-1-stage_\">\r\n        <file path=\"data/objects/strategy/level1/stage.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-ui_\">\r\n        <file path=\"data/objects/strategy/level1/ui.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-ball_\">\r\n        <file path=\"data/objects/strategy/level1/ball.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-multiplier_\">\r\n        <file path=\"data/objects/strategy/level1/multiplier.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41600,7 +41595,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n    </default>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41611,7 +41606,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41622,7 +41617,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41633,7 +41628,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41644,7 +41639,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41655,7 +41650,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41666,7 +41661,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41677,7 +41672,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<controllerMapping>\n\t<keyboardMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"W\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"S\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"A\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"D\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"ARROW UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"ARROW DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"ARROW LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"ARROW RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"RETURN\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Escape\" componetId=\"ESCAPE\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"LEFT SHIFT\" defaultId=\"LEFT SHIFT\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"[\" defaultId=\"[\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"]\" defaultId=\"]\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Up\" componetId=\"W\" defaultId=\"W\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Down\" componetId=\"S\" defaultId=\"S\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Left\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Right\" componetId=\"D\" defaultId=\"D\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"E\" defaultId=\"E\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</keyboardMapping>\n\t<mouseMapping>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<!-- Game specific controls -->\n\t\t\t<actionMap action=\"Shoot\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"MIDDLE MOUSE\" defaultId=\"MIDDLE MOUSE\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</mouseMapping>\n\t<gamepadMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"L STICK UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"L STICK DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"L STICK LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"L STICK RIGHT\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Back\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"START\" defaultId=\"START\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"L BUMPER\" defaultId=\"L BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"R BUMPER\" defaultId=\"R BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</gamepadMapping>\n</controllerMapping>\n");
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41688,7 +41683,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<menuActionList>\r\n\r\n    <backAction>Menu Back</backAction>\r\n    <toggleAction>Menu Toggle</toggleAction>\r\n    <escapeAction>Menu Escape</escapeAction>\r\n    <selectAction>Menu Select</selectAction>\r\n    <upAction>Menu Up</upAction>\r\n    <downAction>Menu Down</downAction>\r\n    <leftAction>Menu Left</leftAction>\r\n    <rightAction>Menu Right</rightAction>\r\n    <tabLeft>Menu Tab Left</tabLeft>\r\n    <tabRight>Menu Tab Right</tabRight>\r\n    <defaultTree>pause_tree</defaultTree>\r\n\r\n</menuActionList>\r\n\r\n");
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41709,10 +41704,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(31);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(38);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(160);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(179);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(161);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(180);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(182);
+/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(183);
 
 // 
 //  FILE NAME: loadstate.js
@@ -41966,7 +41961,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41976,7 +41971,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Level1State": () => (/* binding */ Level1State),
 /* harmony export */   "load": () => (/* binding */ load)
 /* harmony export */ });
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(161);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(162);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(102);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(122);
@@ -41996,8 +41991,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(180);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_stage_strategy_loader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(181);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(181);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_stage_strategy_loader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(182);
 
 // 
 //  FILE NAME: level1state.js
@@ -42379,16 +42374,16 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__.CommonState
         
         if( spriteA && spriteB )
         {
-            if( spriteA.id === SPRITE_PEG )
+            if( spriteA.parentNode.userId === SPRITE_PEG )
                 spriteA.setFrame(1);
 
-            else if( spriteB.id === SPRITE_PEG )
+            else if( spriteB.parentNode.userId === SPRITE_PEG )
                 spriteB.setFrame(1);
             
-            else if( (spriteA.id === MULTIPLIER_SPRITE) || (spriteB.id === MULTIPLIER_SPRITE) )
+            else if( (spriteA.parentNode.userId === MULTIPLIER_SPRITE) || (spriteB.parentNode.userId === MULTIPLIER_SPRITE) )
             {
                 let sprite = spriteA;
-                if( spriteB.id === MULTIPLIER_SPRITE )
+                if( spriteB.parentNode.userId === MULTIPLIER_SPRITE )
                     sprite = spriteB;
 
                 // Check if this sprite's delete flag is set
@@ -42413,7 +42408,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__.CommonState
                     this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
 
                     // Add more balls
-                    if( (spriteA.id === 5) || (spriteB.id === 5) )
+                    if( (spriteA.parentNode.userId === 5) || (spriteB.parentNode.userId === 5) )
                         this.uiBallMeter.incBangUp( 15 );
                 }
             }
@@ -42430,17 +42425,17 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__.CommonState
         
         if( spriteA && spriteB )
         {
-            if( spriteA.id === SPRITE_PEG )
+            if( spriteA.parentNode.userId === SPRITE_PEG )
                 spriteA.setFrame(0);
 
-            else if( spriteB.id === SPRITE_PEG )
+            else if( spriteB.parentNode.userId === SPRITE_PEG )
                 spriteB.setFrame(0);
         }
     }
     
     removeFixture( object )
     {
-        if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.id > _library_common_defs__WEBPACK_IMPORTED_MODULE_17__.DEFAULT_ID) )
+        if( (Math.abs(object.m_userData.pos.x) < 720) && (object.m_userData.parentNode.userId > _library_common_defs__WEBPACK_IMPORTED_MODULE_17__.DEFAULT_ID) )
             this.uiWinMeter.incBangUp( this.multiplier );
     }
 
@@ -42496,7 +42491,7 @@ function load()
 
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42507,7 +42502,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_level-1-ball_\"/>\r\n    <strategy name=\"_level-1-multiplier_\"/>\r\n    \r\n    <strategy name=\"_level-ui_\">\r\n        <node name=\"uiWinMeter\" instance=\"uiWinMeter\"/>\r\n        <node name=\"uiBallMeter\" instance=\"uiBallMeter\"/>\r\n        <node name=\"uiMultiplier\" instance=\"uiMultiplier\"/>\r\n\r\n        <node name=\"ui_tennis_ball_green\" instance=\"ui_tennis_ball_green\" active=\"false\"/>\r\n        <node name=\"ui_tennis_ball_pink\" instance=\"ui_tennis_ball_pink\" active=\"false\"/>\r\n        <node name=\"ui_frisbee\" instance=\"ui_frisbee\" active=\"false\"/>\r\n        <node name=\"ui_bone_biscuit\" instance=\"ui_bone_biscuit\" active=\"false\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42518,7 +42513,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_level-1-stage_\">\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <!--  rails  -->\r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"-570\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n    </strategy>\r\n  \r\n</loader>\r\n\r\n");
 
 /***/ }),
-/* 182 */
+/* 183 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42529,7 +42524,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_loading-screen_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"loadAnim\" instance=\"loadAnim\">\r\n            <sprite>\r\n                <script prepare=\"animate\"/>\r\n            </sprite>\r\n        </node>\r\n        <node name=\"load_font\" instance=\"load_font\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 183 */
+/* 184 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

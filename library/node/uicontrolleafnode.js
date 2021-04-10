@@ -1,22 +1,21 @@
 
 // 
 //  FILE NAME: uicontrolnode.js
-//  DESC:      UI Control node that allows for children
+//  DESC:      UI Control node class for rendering a ui control
 //
 
 "use strict";
 
-import { RenderNode } from './rendernode';
+import { iNode } from './inode';
 import * as defs from '../common/defs';
 
-export class UIControlNode extends RenderNode
+export class UIControlLeafNode extends iNode
 {
     constructor( uiControl, nodeData )
     {
         super(nodeData.nodeId, nodeData.parentNodeId);
         
         this.uiControl = uiControl;
-        this.nodeId = nodeData.nodeId;
         this.userId = nodeData.userId;
         this.type = defs.ENT_UI_CONTROL;
     }
@@ -27,9 +26,6 @@ export class UIControlNode extends RenderNode
     update()
     {
         this.uiControl.update();
-
-        // Call the parent but it has to be last
-        super.update();
     }
     
     //
@@ -41,9 +37,6 @@ export class UIControlNode extends RenderNode
             this.uiControl.transform( object );
         else
             this.uiControl.transform();
-        
-        // Call the parent but it has to be last
-        super.transform();
     }
     
     //
@@ -52,9 +45,6 @@ export class UIControlNode extends RenderNode
     render( camera )
     {
         this.uiControl.render( camera );
-
-        // Call the parent but it has to be last
-        super.render( camera );
     }
     
     // 

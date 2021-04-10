@@ -16,21 +16,24 @@ export class NodeData extends SpriteData
         xmlNode,
         nodeName,
         nodeId = defs.DEFAULT_ID,
-        parenNodetId = defs.DEFAULT_ID,
+        parentNodeId = defs.DEFAULT_ID,
         defGroup = '',
         defObjName = '',
-        defId = defs.DEFAULT_ID )
+        userId = defs.DEFAULT_ID )
     {
-        super( xmlNode.firstElementChild, nodeName, defGroup, defObjName, defId );
+        super( xmlNode.firstElementChild, nodeName, defGroup, defObjName );
 
         // node name
         this.nodeName = nodeName;
+
+        // User Id
+        this.userId = userId;
 
         // Node Id
         this.nodeId = nodeId;
 
         // Parent Id
-        this.parenNodetId = parenNodetId;
+        this.parentNodeId = parentNodeId;
 
         // Node type
         this.nodeType = defs.ENT_NULL;

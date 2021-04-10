@@ -15,16 +15,13 @@ import * as defs from '../common/defs';
 
 export class Object
 {
-    constructor( id = defs.DEFAULT_ID )
+    constructor()
     {
         // local matrix
         this.matrix = new Matrix;
 
         // Bitmask settings to record if the object needs to be transformed
         this.parameters = new BitMask(defs.VISIBLE);
-
-        // Unique Id number
-        this.id = id;
     
         // Local position
         this.pos = new Point;
@@ -44,14 +41,6 @@ export class Object
 
         // The script part of the sprite
         this.scriptComponent = new ScriptComponent;
-    }
-
-    // 
-    //  DESC: Get the id
-    //
-    getId()
-    {
-        return this.id;
     }
 
     //

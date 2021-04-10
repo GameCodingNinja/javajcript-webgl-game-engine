@@ -1,16 +1,17 @@
 
 // 
-//  FILE NAME: spritenode.js
-//  DESC:      Sprite node that allows for children
+//  FILE NAME: spriteleafnode.js
+//  DESC:      Sprite node class for handling a sprite with
+//             no children to keep the overhead low
 //
 
 "use strict";
 
-import { RenderNode } from './rendernode';
+import { iNode } from './inode';
 import { Sprite } from '../sprite/sprite';
 import * as defs from '../common/defs';
 
-export class SpriteNode extends RenderNode
+export class SpriteLeafNode extends iNode
 {
     constructor( objectData, nodeData )
     {
@@ -36,23 +37,17 @@ export class SpriteNode extends RenderNode
     {
         this.sprite.update();
         this.sprite.physicsUpdate();
-        
-        // Call the parent but it has to be last
-        super.update();
     }
     
     //
     //  DESC: Transform the sprite
     //
-    transform( object )
+    transform( object = null )
     {
         if( object )
             this.sprite.transform( object );
         else
             this.sprite.transform();
-        
-        // Call the parent but it has to be last
-        super.transform();
     }
     
     //
@@ -61,9 +56,6 @@ export class SpriteNode extends RenderNode
     render( camera )
     {
         this.sprite.render( camera );
-        
-        // Call the parent but it has to be last
-        super.render( camera );
     }
     
     // 

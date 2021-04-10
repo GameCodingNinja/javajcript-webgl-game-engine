@@ -71,7 +71,7 @@ export class Node extends iNode
 
         if( searchNode != null )
         {
-            if( this.id == searchNode.getParentId() )
+            if( this.nodeId == searchNode.getParentId() )
             {
                 result = this;
             }
