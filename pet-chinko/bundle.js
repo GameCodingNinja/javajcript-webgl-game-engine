@@ -3253,11 +3253,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "eventManager": () => (/* binding */ eventManager)
 /* harmony export */ });
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 
 //
 //  FILE NAME: eventmanager.js
 //  DESC:      event manager class singleton
 //
+
 
 
 
@@ -3287,24 +3289,13 @@ class EventManager
         //this.canvas.addEventListener('keyup', this.onKeyUp.bind(this) );
         
         // Mouse move relative offset data types
-        this.lastMouseMoveX = 0;
-        this.lastMouseMoveY = 0;
+        this.mouseAbsolutePos = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
+        this.mouseRelativePos = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
         
-        this.mouseMoveRelX = 0;
-        this.mouseMoveRelY = 0;
-        
-        this.mouseMoveOffsetX = (document.documentElement.scrollLeft - this.canvas.offsetLeft);
-        this.mouseMoveOffsetY = (document.documentElement.scrollTop - this.canvas.offsetTop);
+        this.mouseOffset = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point(
+            document.documentElement.scrollLeft - this.canvas.offsetLeft,
+            document.documentElement.scrollTop - this.canvas.offsetTop );
     }
-    
-    get mouseX() { return this.lastMouseMoveX; }
-    get mouseY() { return this.lastMouseMoveY; }
-    
-    get mouseRelX() { return this.mouseMoveRelX; }
-    get mouseRelY() { return this.mouseMoveRelY; }
-    
-    get mouseOffsetX() { return this.mouseMoveOffsetX; }
-    get mouseOffsetY() { return this.mouseMoveOffsetY; }
     
     pollEvent()
     {
@@ -3330,8 +3321,9 @@ class EventManager
     
     onScroll( event )
     {
-        this.mouseMoveOffsetX = (document.documentElement.scrollLeft - this.canvas.offsetLeft);
-        this.mouseMoveOffsetY = (document.documentElement.scrollTop - this.canvas.offsetTop);
+        this.mouseOffset.setXYZ(
+            document.documentElement.scrollLeft - this.canvas.offsetLeft,
+            document.documentElement.scrollTop - this.canvas.offsetTop );
     }
     
     onMouseDown( event )
@@ -3350,15 +3342,13 @@ class EventManager
     {
         this.queue.push( event );
         
-        this.mouseMoveRelX = event.movementX;
-        this.mouseMoveRelY = event.movementY;
+        this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
+        this.mouseAbsolutePos.setXYZ( event.clientX + this.mouseOffset.x, event.clientY + this.mouseOffset.y );
         
-        this.lastMouseMoveX = event.clientX + this.mouseMoveOffsetX;
-        this.lastMouseMoveY = event.clientY + this.mouseMoveOffsetY;
-        
-        //console.log( `Mouse move - ClientX: ${event.clientX}, ClientY: ${event.clientY}, OffsetX: ${event.offsetX}, OffsetY: ${event.offsetY}, RelX: ${event.movementX}, RelY: ${event.movementY}` );
+        //console.log(`Mouse move - ClientX: ${event.clientX}, ClientY: ${event.clientY}, OffsetX: ${event.offsetX}, OffsetY: ${event.offsetY}, RelX: ${event.movementX}, RelY: ${event.movementY}`);
         //console.log(`Canvas Offset: ${this.canvas.offsetLeft} x ${this.canvas.offsetTop}`);
         //console.log(`Document Offset: ${document.documentElement.scrollLeft} x ${document.documentElement.scrollTop}`);
+        //console.log(`Move; RelX: ${this.mouseMoveRelX} RelY ${this.mouseMoveRelY}; AbsX: ${this.lastMouseMoveX} absY ${this.lastMouseMoveY}`);
     }
     
     onKeyDown( event )
@@ -27046,8 +27036,8 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
                                 _gui_menudefs__WEBPACK_IMPORTED_MODULE_9__.EGE_MENU_SELECT_ACTION,
                                 pressType,
                                 _common_defs__WEBPACK_IMPORTED_MODULE_10__.MOUSE,
-                                event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.mouseOffsetX,
-                                event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.mouseOffsetY );
+                                event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.mouseOffset.x,
+                                event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.mouseOffset.y );
                         }
                     }
                     else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.backAction, _common_defs__WEBPACK_IMPORTED_MODULE_10__.EAP_DOWN ) )
@@ -28395,6 +28385,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var gDummyPoint = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
+
 class Object
 {
     constructor()
@@ -28420,6 +28412,9 @@ class Object
 
         // Offset due to a sprite sheet crop.
         this.cropOffset = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
+
+        // Translated position
+        this.transPos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 
         // The script part of the sprite
         this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__.ScriptComponent;
@@ -28674,12 +28669,16 @@ class Object
             {
                 this.transformLocal( this.matrix );
                 this.matrix.mergeMatrix( object.matrix.matrix );
+                this.matrix.transformPoint( this.transPos, gDummyPoint );
             }
         }
         else
         {
             if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM ) )
+            {
                 this.transformLocal( this.matrix );
+                this.transPos.copy( this.pos );
+            }
         }
     }
 
@@ -32270,7 +32269,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
 
             // Don't animate the control if the mouse was used
             if( !_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__.actionManager.wasLastDeviceMouse() ||
-                this.isPointInControl( _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseX, _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseY ) )
+                this.isPointInControl( _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseAbsolutePos.x, _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseAbsolutePos.y ) )
             {
                 this.resetSpriteScript();
                 this.setDisplayState();
@@ -32285,7 +32284,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     {
         let result = false;
 
-        if( !this.isDisabled() && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffsetX, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffsetY ) )
+        if( !this.isDisabled() && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffset.x, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffset.y ) )
         {
             result = true;
 
@@ -35274,7 +35273,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
         let result = super.onSubControlMouseMove( event );
 
         // We only care about the scroll controls if the point is within the scroll box
-        if( !result && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__.eventManager.mouseOffsetX, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__.eventManager.mouseOffsetY ) )
+        if( !result && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__.eventManager.mouseOffset.x, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__.eventManager.mouseOffset.y ) )
         {
             for( let i = this.visStartPos; i < this.visEndPos && !result; ++i )
             {
@@ -42147,7 +42146,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__.CommonState
             // Get the spot on the screen they clicked
             let ratio = 1.0 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__.settings.orthoAspectRatio.h;
             let y = 600;
-            let x = (ratio * (event.clientX + _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__.eventManager.mouseOffsetX)) - _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__.settings.defaultSize_half.w;
+            let x = (ratio * (event.clientX + _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__.eventManager.mouseOffset.x)) - _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__.settings.defaultSize_half.w;
             
             // Set a random rotation
             let angle = _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.randomInt(0, 350) * _library_common_defs__WEBPACK_IMPORTED_MODULE_17__.DEG_TO_RAD;

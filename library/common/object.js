@@ -13,6 +13,8 @@ import { ScriptComponent } from '../script/scriptcomponent';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as defs from '../common/defs';
 
+var gDummyPoint = new Point;
+
 export class Object
 {
     constructor()
@@ -38,6 +40,9 @@ export class Object
 
         // Offset due to a sprite sheet crop.
         this.cropOffset = new Size;
+
+        // Translated position
+        this.transPos = new Point;
 
         // The script part of the sprite
         this.scriptComponent = new ScriptComponent;
@@ -292,12 +297,16 @@ export class Object
             {
                 this.transformLocal( this.matrix );
                 this.matrix.mergeMatrix( object.matrix.matrix );
+                this.matrix.transformPoint( this.transPos, gDummyPoint );
             }
         }
         else
         {
             if( this.parameters.isSet( defs.TRANSFORM ) )
+            {
                 this.transformLocal( this.matrix );
+                this.transPos.copy( this.pos );
+            }
         }
     }
 

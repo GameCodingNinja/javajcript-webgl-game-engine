@@ -562,6 +562,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "RAD_TO_DEG": () => (/* binding */ RAD_TO_DEG),
 /* harmony export */   "EPSILON": () => (/* binding */ EPSILON),
 /* harmony export */   "RGB_TO_DEC": () => (/* binding */ RGB_TO_DEC),
+/* harmony export */   "M_PI": () => (/* binding */ M_PI),
+/* harmony export */   "M_PI_2": () => (/* binding */ M_PI_2),
+/* harmony export */   "M_PI_4": () => (/* binding */ M_PI_4),
+/* harmony export */   "M_1_PI": () => (/* binding */ M_1_PI),
+/* harmony export */   "M_2_PI": () => (/* binding */ M_2_PI),
+/* harmony export */   "M_2_SQRTPI": () => (/* binding */ M_2_SQRTPI),
+/* harmony export */   "M_SQRT2": () => (/* binding */ M_SQRT2),
+/* harmony export */   "M_SQRT1_2": () => (/* binding */ M_SQRT1_2),
 /* harmony export */   "DEFAULT_ID": () => (/* binding */ DEFAULT_ID),
 /* harmony export */   "RESET_VELOCITY": () => (/* binding */ RESET_VELOCITY),
 /* harmony export */   "EGT_NULL": () => (/* binding */ EGT_NULL),
@@ -641,7 +649,15 @@ __webpack_require__.r(__webpack_exports__);
 const DEG_TO_RAD = 0.0174532925199432957,
              RAD_TO_DEG = 57.29577951308232,
              EPSILON    = 8.854187817e-12,
-             RGB_TO_DEC = 0.00390625;
+             RGB_TO_DEC = 0.00390625,
+             M_PI       = 3.14159265358979323846, // pi
+             M_PI_2     = 1.57079632679489661923, // pi/2
+             M_PI_4     = 0.78539816339744830962, // pi/4
+             M_1_PI     = 0.31830988618379067154, // 1/pi
+             M_2_PI     = 0.63661977236758134308, // 2/pi
+             M_2_SQRTPI = 1.12837916709551257390, // 2/sqrt(pi)
+             M_SQRT2    = 1.41421356237309504880, // sqrt(2)
+             M_SQRT1_2  = 0.70710678118654752440; // 1/sqrt(2)
      
 const DEFAULT_ID     = -1;
 
@@ -25867,6 +25883,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var gDummyPoint = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
+
 class Object
 {
     constructor()
@@ -25892,6 +25910,9 @@ class Object
 
         // Offset due to a sprite sheet crop.
         this.cropOffset = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
+
+        // Translated position
+        this.transPos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 
         // The script part of the sprite
         this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__.ScriptComponent;
@@ -26146,12 +26167,16 @@ class Object
             {
                 this.transformLocal( this.matrix );
                 this.matrix.mergeMatrix( object.matrix.matrix );
+                this.matrix.transformPoint( this.transPos, gDummyPoint );
             }
         }
         else
         {
             if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM ) )
+            {
                 this.transformLocal( this.matrix );
+                this.transPos.copy( this.pos );
+            }
         }
     }
 
@@ -28893,7 +28918,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
 
             // Don't animate the control if the mouse was used
             if( !_managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__.actionManager.wasLastDeviceMouse() ||
-                this.isPointInControl( _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseX, _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseY ) )
+                this.isPointInControl( _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseAbsolutePos.x, _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseAbsolutePos.y ) )
             {
                 this.resetSpriteScript();
                 this.setDisplayState();
@@ -28908,7 +28933,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     {
         let result = false;
 
-        if( !this.isDisabled() && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffsetX, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffsetY ) )
+        if( !this.isDisabled() && this.isPointInControl( event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffset.x, event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.mouseOffset.y ) )
         {
             result = true;
 
@@ -29789,9 +29814,12 @@ __webpack_require__.r(__webpack_exports__);
 
 class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 {
-    constructor( objData )
+    constructor( objData, parentNode = null )
     {
         super();
+
+        // parent node of this sprite
+        this.parentNode = parentNode;
 
         // The object data
         this.objData = objData
@@ -32176,11 +32204,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "eventManager": () => (/* binding */ eventManager)
 /* harmony export */ });
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 
 //
 //  FILE NAME: eventmanager.js
 //  DESC:      event manager class singleton
 //
+
 
 
 
@@ -32210,24 +32240,13 @@ class EventManager
         //this.canvas.addEventListener('keyup', this.onKeyUp.bind(this) );
         
         // Mouse move relative offset data types
-        this.lastMouseMoveX = 0;
-        this.lastMouseMoveY = 0;
+        this.mouseAbsolutePos = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
+        this.mouseRelativePos = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
         
-        this.mouseMoveRelX = 0;
-        this.mouseMoveRelY = 0;
-        
-        this.mouseMoveOffsetX = (document.documentElement.scrollLeft - this.canvas.offsetLeft);
-        this.mouseMoveOffsetY = (document.documentElement.scrollTop - this.canvas.offsetTop);
+        this.mouseOffset = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point(
+            document.documentElement.scrollLeft - this.canvas.offsetLeft,
+            document.documentElement.scrollTop - this.canvas.offsetTop );
     }
-    
-    get mouseX() { return this.lastMouseMoveX; }
-    get mouseY() { return this.lastMouseMoveY; }
-    
-    get mouseRelX() { return this.mouseMoveRelX; }
-    get mouseRelY() { return this.mouseMoveRelY; }
-    
-    get mouseOffsetX() { return this.mouseMoveOffsetX; }
-    get mouseOffsetY() { return this.mouseMoveOffsetY; }
     
     pollEvent()
     {
@@ -32253,8 +32272,9 @@ class EventManager
     
     onScroll( event )
     {
-        this.mouseMoveOffsetX = (document.documentElement.scrollLeft - this.canvas.offsetLeft);
-        this.mouseMoveOffsetY = (document.documentElement.scrollTop - this.canvas.offsetTop);
+        this.mouseOffset.setXYZ(
+            document.documentElement.scrollLeft - this.canvas.offsetLeft,
+            document.documentElement.scrollTop - this.canvas.offsetTop );
     }
     
     onMouseDown( event )
@@ -32273,15 +32293,13 @@ class EventManager
     {
         this.queue.push( event );
         
-        this.mouseMoveRelX = event.movementX;
-        this.mouseMoveRelY = event.movementY;
+        this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
+        this.mouseAbsolutePos.setXYZ( event.clientX + this.mouseOffset.x, event.clientY + this.mouseOffset.y );
         
-        this.lastMouseMoveX = event.clientX + this.mouseMoveOffsetX;
-        this.lastMouseMoveY = event.clientY + this.mouseMoveOffsetY;
-        
-        //console.log( `Mouse move - ClientX: ${event.clientX}, ClientY: ${event.clientY}, OffsetX: ${event.offsetX}, OffsetY: ${event.offsetY}, RelX: ${event.movementX}, RelY: ${event.movementY}` );
+        //console.log(`Mouse move - ClientX: ${event.clientX}, ClientY: ${event.clientY}, OffsetX: ${event.offsetX}, OffsetY: ${event.offsetY}, RelX: ${event.movementX}, RelY: ${event.movementY}`);
         //console.log(`Canvas Offset: ${this.canvas.offsetLeft} x ${this.canvas.offsetTop}`);
         //console.log(`Document Offset: ${document.documentElement.scrollLeft} x ${document.documentElement.scrollTop}`);
+        //console.log(`Move; RelX: ${this.mouseMoveRelX} RelY ${this.mouseMoveRelY}; AbsX: ${this.lastMouseMoveX} absY ${this.lastMouseMoveY}`);
     }
     
     onKeyDown( event )
@@ -33311,7 +33329,7 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
     {
         super( nodeData.nodeId, nodeData.parentNodeId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData );
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
         this.userId = nodeData.userId;
     }
@@ -33367,14 +33385,6 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
     get()
     {
         return this.sprite;
-    }
-    
-    // 
-    //  DESC: Set the AI.
-    //
-    setAI( ai )
-    {
-        this.sprite.setAI( ai );
     }
     
     // 
@@ -33877,7 +33887,7 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     {
         super( nodeData.nodeId, nodeData.parentNodeId );
         
-        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData );
+        this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
         this.userId = nodeData.userId;
     }
@@ -33924,30 +33934,6 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     get()
     {
         return this.sprite;
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.sprite.id;
-    }
-
-    // 
-    //  DESC: Set the id
-    //
-    setId( id )
-    {
-        this.sprite.id = id;
-    }
-    
-    // 
-    //  DESC: Set the AI.
-    //
-    setAI( ai )
-    {
-        this.sprite.setAI( ai );
     }
     
     // 
@@ -34234,13 +34220,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(133);
+/* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
+/* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(147);
 
 //
 //  FILE NAME: statescripts.js
 //  DESC:      script for the state
 //
+
+
+
 
 
 
@@ -34254,7 +34246,7 @@ class PlayerShip_FireTailAnim
 {
     constructor( sprite )
     {
-        this.animate = new _utilityscripts__WEBPACK_IMPORTED_MODULE_1__.PlayAnim( sprite );
+        this.animate = new _utilityscripts__WEBPACK_IMPORTED_MODULE_4__.PlayAnim( sprite );
         this.animate.init( 24, true );
     }
     
@@ -34267,13 +34259,53 @@ class PlayerShip_FireTailAnim
     }
 }
 
+class PlayerShip_RotateGun
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            let ratio = 1 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.orthoAspectRatio.h;
+            let halfSize = _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.size_half;
+
+            let spritePos = this.sprite.transPos;
+            let mousePos = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__.eventManager.mouseAbsolutePos;
+
+            let gunRotation = Math.atan2( (ratio * (halfSize.w - mousePos.x)) + spritePos.x, (ratio * (halfSize.h - mousePos.y)) - spritePos.y ) + _library_common_defs__WEBPACK_IMPORTED_MODULE_3__.M_PI_2;
+            this.sprite.setRotXYZ( 0, 0, gunRotation, false );
+
+            yield;
+        }
+        while( true );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        return this.iteration().next().done;
+    }
+}
+
 // 
 //  DESC: Load XML files
 //
 function loadScripts()
 {
-    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.set( 'PlayerShip_FireTailAnim',
+    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__.scriptManager.set( 'PlayerShip_FireTailAnim',
         ( sprite ) => { return new PlayerShip_FireTailAnim( sprite ); } );
+
+    _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__.scriptManager.set( 'PlayerShip_RotateGun',
+        ( sprite ) => { return new PlayerShip_RotateGun( sprite ); } );
 }
 
 

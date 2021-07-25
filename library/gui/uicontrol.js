@@ -410,7 +410,7 @@ export class UIControl extends ControlBase
 
             // Don't animate the control if the mouse was used
             if( !actionManager.wasLastDeviceMouse() ||
-                this.isPointInControl( eventManager.mouseX, eventManager.mouseY ) )
+                this.isPointInControl( eventManager.mouseAbsolutePos.x, eventManager.mouseAbsolutePos.y ) )
             {
                 this.resetSpriteScript();
                 this.setDisplayState();
@@ -425,7 +425,7 @@ export class UIControl extends ControlBase
     {
         let result = false;
 
-        if( !this.isDisabled() && this.isPointInControl( event.clientX + eventManager.mouseOffsetX, event.clientY + eventManager.mouseOffsetY ) )
+        if( !this.isDisabled() && this.isPointInControl( event.clientX + eventManager.mouseOffset.x, event.clientY + eventManager.mouseOffset.y ) )
         {
             result = true;
 

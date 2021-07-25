@@ -30,9 +30,9 @@
             <sprite objectName="ship_gun">
                 <centerPos x="10" y="0" z="0"/>
                 <position x="20" y="0" z="0"/>
-                <!--<scriptList>
-                    <script update="rotateGun"/>
-                </scriptList>-->
+                <scriptList>
+                    <script rotateGun="PlayerShip_RotateGun" prepareOnInit="true"/>
+                </scriptList>
             </sprite>
 
         </node>

@@ -652,8 +652,8 @@ class MenuManager extends ManagerBase
                                 menuDefs.EGE_MENU_SELECT_ACTION,
                                 pressType,
                                 defs.MOUSE,
-                                event.clientX + eventManager.mouseOffsetX,
-                                event.clientY + eventManager.mouseOffsetY );
+                                event.clientX + eventManager.mouseOffset.x,
+                                event.clientY + eventManager.mouseOffset.y );
                         }
                     }
                     else if( actionManager.wasActionPress( event, this.backAction, defs.EAP_DOWN ) )

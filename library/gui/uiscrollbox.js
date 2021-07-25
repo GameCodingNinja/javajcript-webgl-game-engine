@@ -811,7 +811,7 @@ export class UIScrollBox extends UISubControl
         let result = super.onSubControlMouseMove( event );
 
         // We only care about the scroll controls if the point is within the scroll box
-        if( !result && this.isPointInControl( event.clientX + eventManager.mouseOffsetX, event.clientY + eventManager.mouseOffsetY ) )
+        if( !result && this.isPointInControl( event.clientX + eventManager.mouseOffset.x, event.clientY + eventManager.mouseOffset.y ) )
         {
             for( let i = this.visStartPos; i < this.visEndPos && !result; ++i )
             {

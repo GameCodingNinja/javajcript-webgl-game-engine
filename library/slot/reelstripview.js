@@ -233,18 +233,18 @@ export class ReelStripView extends SlotStripView
     //
     handleEvent( event )
     {
-        if( this.isPointInStrip( eventManager.mouseX, eventManager.mouseY ) )
+        if( this.isPointInStrip( eventManager.mouseAbsolutePos.x, eventManager.mouseAbsolutePos.y ) )
         {
             if( this.spinDir < slotDefs.ESD_LEFT )
             {
-                if( eventManager.mouseY < this.collisionCenter.y )
+                if( eventManager.mouseAbsolutePos.y < this.collisionCenter.y )
                     this.gaffOffset++;
                 else
                     this.gaffOffset--;
             }
             else
             {
-                if( eventManager.mouseX < this.collisionCenter.x )
+                if( eventManager.mouseAbsolutePos.x < this.collisionCenter.x )
                     this.gaffOffset--;
                 else
                     this.gaffOffset++;

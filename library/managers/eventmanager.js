@@ -5,6 +5,7 @@
 //
 
 "use strict";
+import { Point } from '../common/point';
 
 class EventManager
 {
@@ -32,24 +33,13 @@ class EventManager
         //this.canvas.addEventListener('keyup', this.onKeyUp.bind(this) );
         
         // Mouse move relative offset data types
-        this.lastMouseMoveX = 0;
-        this.lastMouseMoveY = 0;
+        this.mouseAbsolutePos = new Point;
+        this.mouseRelativePos = new Point;
         
-        this.mouseMoveRelX = 0;
-        this.mouseMoveRelY = 0;
-        
-        this.mouseMoveOffsetX = (document.documentElement.scrollLeft - this.canvas.offsetLeft);
-        this.mouseMoveOffsetY = (document.documentElement.scrollTop - this.canvas.offsetTop);
+        this.mouseOffset = new Point(
+            document.documentElement.scrollLeft - this.canvas.offsetLeft,
+            document.documentElement.scrollTop - this.canvas.offsetTop );
     }
-    
-    get mouseX() { return this.lastMouseMoveX; }
-    get mouseY() { return this.lastMouseMoveY; }
-    
-    get mouseRelX() { return this.mouseMoveRelX; }
-    get mouseRelY() { return this.mouseMoveRelY; }
-    
-    get mouseOffsetX() { return this.mouseMoveOffsetX; }
-    get mouseOffsetY() { return this.mouseMoveOffsetY; }
     
     pollEvent()
     {
@@ -75,8 +65,9 @@ class EventManager
     
     onScroll( event )
     {
-        this.mouseMoveOffsetX = (document.documentElement.scrollLeft - this.canvas.offsetLeft);
-        this.mouseMoveOffsetY = (document.documentElement.scrollTop - this.canvas.offsetTop);
+        this.mouseOffset.setXYZ(
+            document.documentElement.scrollLeft - this.canvas.offsetLeft,
+            document.documentElement.scrollTop - this.canvas.offsetTop );
     }
     
     onMouseDown( event )
@@ -95,15 +86,13 @@ class EventManager
     {
         this.queue.push( event );
         
-        this.mouseMoveRelX = event.movementX;
-        this.mouseMoveRelY = event.movementY;
+        this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
+        this.mouseAbsolutePos.setXYZ( event.clientX + this.mouseOffset.x, event.clientY + this.mouseOffset.y );
         
-        this.lastMouseMoveX = event.clientX + this.mouseMoveOffsetX;
-        this.lastMouseMoveY = event.clientY + this.mouseMoveOffsetY;
-        
-        //console.log( `Mouse move - ClientX: ${event.clientX}, ClientY: ${event.clientY}, OffsetX: ${event.offsetX}, OffsetY: ${event.offsetY}, RelX: ${event.movementX}, RelY: ${event.movementY}` );
+        //console.log(`Mouse move - ClientX: ${event.clientX}, ClientY: ${event.clientY}, OffsetX: ${event.offsetX}, OffsetY: ${event.offsetY}, RelX: ${event.movementX}, RelY: ${event.movementY}`);
         //console.log(`Canvas Offset: ${this.canvas.offsetLeft} x ${this.canvas.offsetTop}`);
         //console.log(`Document Offset: ${document.documentElement.scrollLeft} x ${document.documentElement.scrollTop}`);
+        //console.log(`Move; RelX: ${this.mouseMoveRelX} RelY ${this.mouseMoveRelY}; AbsX: ${this.lastMouseMoveX} absY ${this.lastMouseMoveY}`);
     }
     
     onKeyDown( event )

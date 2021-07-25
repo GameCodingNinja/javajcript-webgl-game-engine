@@ -262,9 +262,9 @@ export class WheelView extends SlotStripView
     //
     handleEvent( event )
     {
-        if( this.isPointInStrip( eventManager.mouseX, eventManager.mouseY ) )
+        if( this.isPointInStrip( eventManager.mouseAbsolutePos.x, eventManager.mouseAbsolutePos.y ) )
         {
-            if( eventManager.mouseY < this.collisionCenter.y )
+            if( eventManager.mouseAbsolutePos.y < this.collisionCenter.y )
                 this.gaffOffset++;
             else
                 this.gaffOffset--;
