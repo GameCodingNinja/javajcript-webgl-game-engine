@@ -16,7 +16,7 @@ export class KeyCodeAction
     setId( id )
     {
         // Only set id's that are positive numbers
-        if( id > -1 )
+        if( !((id == -1) || (id == '---')) )
             this.idAry.push( id );
     }
     

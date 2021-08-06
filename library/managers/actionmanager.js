@@ -8,13 +8,54 @@ import { KeyCodeAction } from '../common/keycodeaction';
 import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
 
+export const CONTROLLER_BUTTON_INVALID       = -1,
+             CONTROLLER_BUTTON_A             = 0,
+             CONTROLLER_BUTTON_B             = 1,
+             CONTROLLER_BUTTON_X             = 2,
+             CONTROLLER_BUTTON_Y             = 3,
+             CONTROLLER_BUTTON_L_BUMPER      = 4,
+             CONTROLLER_BUTTON_R_BUMPER      = 5,
+             CONTROLLER_BUTTON_L_TRIGGER     = 6,
+             CONTROLLER_BUTTON_R_TRIGGER     = 7,
+             CONTROLLER_BUTTON_BACK          = 8,
+             CONTROLLER_BUTTON_START         = 9,
+             CONTROLLER_BUTTON_LEFTSTICK     = 10,
+             CONTROLLER_BUTTON_RIGHTSTICK    = 11,
+             CONTROLLER_BUTTON_DPAD_UP       = 12,
+             CONTROLLER_BUTTON_DPAD_DOWN     = 13,
+             CONTROLLER_BUTTON_DPAD_LEFT     = 14,
+             CONTROLLER_BUTTON_DPAD_RIGHT    = 15,
+             CONTROLLER_BUTTON_GUIDE         = 16,
+             // Key codes to use analog sticks as buttons
+             CONTROLLER_BUTTON_L_STICK_UP    = 21,
+             CONTROLLER_BUTTON_L_STICK_DOWN  = 22,
+             CONTROLLER_BUTTON_L_STICK_LEFT  = 23,
+             CONTROLLER_BUTTON_L_STICK_RIGHT = 24,
+             CONTROLLER_BUTTON_R_STICK_UP    = 25,
+             CONTROLLER_BUTTON_R_STICK_DOWN  = 26,
+             CONTROLLER_BUTTON_R_STICK_LEFT  = 27,
+             CONTROLLER_BUTTON_R_STICK_RIGHT = 28;
+
+export const MOUSE_BUTTON_INVALID       = -1,
+             MOUSE_BUTTON_LEFT          = 0,
+             MOUSE_BUTTON_MIDDLE        = 1,
+             MOUSE_BUTTON_RIGHT         = 2,
+             MOUSE_BUTTON_1X            = 3,
+             MOUSE_BUTTON_2X            = 4,
+             MOUSE_BUTTON_3X            = 5,
+             MOUSE_BUTTON_4X            = 6,
+             MOUSE_BUTTON_5X            = 7,
+             MOUSE_BUTTON_6X            = 8,
+             MOUSE_BUTTON_7X            = 9,
+             MOUSE_BUTTON_8X            = 10;
+
 class ActionManager
 {
     constructor()
     {
         this.keyboardKeyCodeMap = new Map;
         this.mouseKeyCodeMap = new Map;
-        //this.gamepadKeyCodeMap = new Map;
+        this.gamepadKeyCodeMap = new Map;
         
         // Action maps
         this.keyboardActionMap = new Map;
@@ -28,119 +69,158 @@ class ActionManager
         this.lastDeviceUsed = defs.DEVICE_NULL;
         
         this.keyboardKeyCodeMap.set( '---', -1 );
-        this.keyboardKeyCodeMap.set( 'RETURN', 13 );
-        this.keyboardKeyCodeMap.set( 'ESCAPE', 27 );
-        
-        this.keyboardKeyCodeMap.set( 'ARROW UP',    38 );
-        this.keyboardKeyCodeMap.set( 'ARROW DOWN',  40 );
-        this.keyboardKeyCodeMap.set( 'ARROW LEFT',  37 );
-        this.keyboardKeyCodeMap.set( 'ARROW RIGHT', 39 );
+        this.keyboardKeyCodeMap.set( 'ENTER',       'Enter' );
+        this.keyboardKeyCodeMap.set( 'ESCAPE',       'Escape' );
+        this.keyboardKeyCodeMap.set( 'ARROW UP',     'ArrowUp' );
+        this.keyboardKeyCodeMap.set( 'ARROW DOWN',   'ArrowDown' );
+        this.keyboardKeyCodeMap.set( 'ARROW LEFT',   'ArrowLeft' );
+        this.keyboardKeyCodeMap.set( 'ARROW RIGHT',  'ArrowRight' );
+        this.keyboardKeyCodeMap.set( 'A',            'KeyA' );
+        this.keyboardKeyCodeMap.set( 'B',            'KeyB' );
+        this.keyboardKeyCodeMap.set( 'C',            'KeyC' );
+        this.keyboardKeyCodeMap.set( 'D',            'KeyD' );
+        this.keyboardKeyCodeMap.set( 'E',            'KeyE' );
+        this.keyboardKeyCodeMap.set( 'F',            'KeyF' );
+        this.keyboardKeyCodeMap.set( 'G',            'KeyG' );
+        this.keyboardKeyCodeMap.set( 'H',            'KeyH' );
+        this.keyboardKeyCodeMap.set( 'I',            'KeyI' );
+        this.keyboardKeyCodeMap.set( 'J',            'KeyJ' );
+        this.keyboardKeyCodeMap.set( 'K',            'KeyK' );
+        this.keyboardKeyCodeMap.set( 'L',            'KeyL' );
+        this.keyboardKeyCodeMap.set( 'M',            'KeyM' );
+        this.keyboardKeyCodeMap.set( 'N',            'KeyN' );
+        this.keyboardKeyCodeMap.set( 'O',            'KeyO' );
+        this.keyboardKeyCodeMap.set( 'P',            'KeyP' );
+        this.keyboardKeyCodeMap.set( 'Q',            'KeyQ' );
+        this.keyboardKeyCodeMap.set( 'R',            'KeyR' );
+        this.keyboardKeyCodeMap.set( 'S',            'KeyS' );
+        this.keyboardKeyCodeMap.set( 'T',            'KeyT' );
+        this.keyboardKeyCodeMap.set( 'U',            'KeyU' );
+        this.keyboardKeyCodeMap.set( 'V',            'KeyV' );
+        this.keyboardKeyCodeMap.set( 'W',            'KeyW' );
+        this.keyboardKeyCodeMap.set( 'X',            'KeyX' );
+        this.keyboardKeyCodeMap.set( 'Y',            'KeyY' );
+        this.keyboardKeyCodeMap.set( 'Z',            'KeyZ' );
+        this.keyboardKeyCodeMap.set( '0',            'Digit0' );
+        this.keyboardKeyCodeMap.set( '1',            'Digit1' );
+        this.keyboardKeyCodeMap.set( '2',            'Digit2' );
+        this.keyboardKeyCodeMap.set( '3',            'Digit3' );
+        this.keyboardKeyCodeMap.set( '4',            'Digit4' );
+        this.keyboardKeyCodeMap.set( '5',            'Digit5' );
+        this.keyboardKeyCodeMap.set( '6',            'Digit6' );
+        this.keyboardKeyCodeMap.set( '7',            'Digit7' );
+        this.keyboardKeyCodeMap.set( '8',            'Digit8' );
+        this.keyboardKeyCodeMap.set( '9',            'Digit9' );
+        this.keyboardKeyCodeMap.set( 'F1',           'F1' );
+        this.keyboardKeyCodeMap.set( 'F2',           'F2' );
+        this.keyboardKeyCodeMap.set( 'F3',           'F3' );
+        this.keyboardKeyCodeMap.set( 'F4',           'F4' );
+        this.keyboardKeyCodeMap.set( 'F5',           'F5' );
+        this.keyboardKeyCodeMap.set( 'F6',           'F6' );
+        this.keyboardKeyCodeMap.set( 'F7',           'F7' );
+        this.keyboardKeyCodeMap.set( 'F8',           'F8' );
+        this.keyboardKeyCodeMap.set( 'F9',           'F9' );
+        this.keyboardKeyCodeMap.set( 'F10',          'F10' );
+        this.keyboardKeyCodeMap.set( 'F11',          'F11' );
+        this.keyboardKeyCodeMap.set( 'F12',          'F12' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 0',     'Numpad0' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 1',     'Numpad1' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 2',     'Numpad2' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 3',     'Numpad3' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 4',     'Numpad4' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 5',     'Numpad5' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 6',     'Numpad6' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 7',     'Numpad7' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 8',     'Numpad8' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 9',     'Numpad9' );
+        this.keyboardKeyCodeMap.set( 'NUM LOCK',     'NumLock' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD /',     'NumpadDivide' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD *',     'NumpadMultiply' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD -',     'NumpadSubtract' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD +',     'NumpadAdd' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD ENTER', 'NumpadEnter' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD .',     'NumpadDecimal' );
+        this.keyboardKeyCodeMap.set( 'CTRL LEFT',    'ControlLeft' );
+        this.keyboardKeyCodeMap.set( 'SHIFT LEFT',   'ShiftLeft' );
+        this.keyboardKeyCodeMap.set( 'ALT LEFT',     'AltLeft' );
+        this.keyboardKeyCodeMap.set( 'CTRL RIGHT',   'ControlRight' );
+        this.keyboardKeyCodeMap.set( 'SHIFT RIGHT',  'ShiftRight' );
+        this.keyboardKeyCodeMap.set( 'ALT RIGHT',    'AltRight' );
+        this.keyboardKeyCodeMap.set( 'PRINT SCREEN', 'PrintScreen' );
+        this.keyboardKeyCodeMap.set( 'SCROLL LOCK',  'ScrollLock' );
+        this.keyboardKeyCodeMap.set( 'PAUSE',        'Pause' );
+        this.keyboardKeyCodeMap.set( 'END',          'End' );
+        this.keyboardKeyCodeMap.set( 'INSERT',       'Insert' );
+        this.keyboardKeyCodeMap.set( 'DELETE',       'Delete' );
+        this.keyboardKeyCodeMap.set( 'HOME',         'Home' );
+        this.keyboardKeyCodeMap.set( 'PAGE UP',      'PageUp' );
+        this.keyboardKeyCodeMap.set( 'PAGE DOWN',    'PageDown' );
+        this.keyboardKeyCodeMap.set( 'BACKSPACE',    'Backspace' );
+        this.keyboardKeyCodeMap.set( 'TAB',          'Tab' );
+        this.keyboardKeyCodeMap.set( 'SPACE',        'Space' );
+        this.keyboardKeyCodeMap.set( ',',            'Comma' );
+        this.keyboardKeyCodeMap.set( '-',            'Minus' );
+        this.keyboardKeyCodeMap.set( '.',            'Period' );
+        this.keyboardKeyCodeMap.set( '/',            'Slash' );
+        this.keyboardKeyCodeMap.set( '=',            'Equal' );
+        this.keyboardKeyCodeMap.set( ';',            'Semicolon' );
+        this.keyboardKeyCodeMap.set( '[',            'BracketLeft' );
+        this.keyboardKeyCodeMap.set( '\\',           'Backslash' );
+        this.keyboardKeyCodeMap.set( ']',            'BracketRight' );
+        this.keyboardKeyCodeMap.set( '`',            'Backquote' );
+        this.keyboardKeyCodeMap.set( "'",            'Quote' );
+        this.keyboardKeyCodeMap.set( 'META LEFT',    'MetaLeft' );
+        this.keyboardKeyCodeMap.set( 'META RIGHT',   'MetaRight' );
+        this.keyboardKeyCodeMap.set( 'CONTEXT MENU', 'ContextMenu' );
 
-        this.keyboardKeyCodeMap.set( 'A', 'A'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'B', 'B'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'C', 'C'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'D', 'D'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'E', 'E'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'F', 'F'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'G', 'G'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'H', 'H'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'I', 'I'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'J', 'J'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'K', 'K'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'L', 'L'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'M', 'M'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'N', 'N'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'O', 'O'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'P', 'P'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'Q', 'Q'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'R', 'R'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'S', 'S'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'T', 'T'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'U', 'U'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'V', 'V'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'W', 'W'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'X', 'X'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'Y', 'Y'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'Z', 'Z'.charCodeAt(0) );
+        this.keyboardKeyCodeMap.set( 'LAUNCH MAIL',      'LaunchMail' );
+        this.keyboardKeyCodeMap.set( 'LAUNCH APP 1',     'LaunchApp1' );
+        this.keyboardKeyCodeMap.set( 'LAUNCH APP 2',     'LaunchApp2' );
+        this.keyboardKeyCodeMap.set( 'MEDIA TRACK PREV', 'MediaTrackPrevious' );
+        this.keyboardKeyCodeMap.set( 'MEDIA TRACK NEXT', 'MediaTrackNext' );
+        this.keyboardKeyCodeMap.set( 'MEDIA PLAY PAUSE', 'MediaPlayPause' );
         
-        this.keyboardKeyCodeMap.set( '0', '0'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '1', '1'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '2', '2'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '3', '3'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '4', '4'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '5', '5'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '6', '6'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '7', '7'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '8', '8'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '9', '9'.charCodeAt(0) );
-        
-        this.keyboardKeyCodeMap.set( 'F1',  112 );
-        this.keyboardKeyCodeMap.set( 'F2',  113 );
-        this.keyboardKeyCodeMap.set( 'F3',  114 );
-        this.keyboardKeyCodeMap.set( 'F4',  115 );
-        this.keyboardKeyCodeMap.set( 'F5',  116 );
-        this.keyboardKeyCodeMap.set( 'F6',  117 );
-        this.keyboardKeyCodeMap.set( 'F7',  118 );
-        this.keyboardKeyCodeMap.set( 'F8',  119 );
-        this.keyboardKeyCodeMap.set( 'F9',  120 );
-        this.keyboardKeyCodeMap.set( 'F10', 121 );
-        this.keyboardKeyCodeMap.set( 'F11', 122 );
-        this.keyboardKeyCodeMap.set( 'F12', 123 );
-        
-        this.keyboardKeyCodeMap.set( 'NUMPAD 0', 96 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 1', 97 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 2', 98 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 3', 99 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 4', 100 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 5', 101 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 6', 102 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 7', 103 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 8', 104 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 9', 105 );
-        
-        this.keyboardKeyCodeMap.set( 'NUM LOCK',     144 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD /',     111 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD *',     106 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD -',     109 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD +',     107 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD ENTER', 13 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD .',     110 );
-        
-        this.keyboardKeyCodeMap.set( 'CTRL',  17 );
-        this.keyboardKeyCodeMap.set( 'SHIFT', 16 );
-        this.keyboardKeyCodeMap.set( 'ALT',   18 );
-        
-        this.keyboardKeyCodeMap.set( 'PRINT SCREEN', 42 );
-        this.keyboardKeyCodeMap.set( 'SCROLL LOCK',  145 );
-        this.keyboardKeyCodeMap.set( 'PAUSE',        19 );
-        
-        this.keyboardKeyCodeMap.set( 'END',       35 );
-        this.keyboardKeyCodeMap.set( 'INSERT',    45 );
-        this.keyboardKeyCodeMap.set( 'DELETE',    46 );
-        this.keyboardKeyCodeMap.set( 'HOME',      36 );
-        this.keyboardKeyCodeMap.set( 'PAGE UP',   33 );
-        this.keyboardKeyCodeMap.set( 'PAGE DOWN', 34 );
-        
-        this.keyboardKeyCodeMap.set( 'BACKSPACE', 8 );
-        this.keyboardKeyCodeMap.set( 'TAB',       9 );
-        this.keyboardKeyCodeMap.set( 'SPACE',     32 );
-        this.keyboardKeyCodeMap.set( ',',         188 );
-        this.keyboardKeyCodeMap.set( '-',         173 );
-        this.keyboardKeyCodeMap.set( '.',         190 );
-        this.keyboardKeyCodeMap.set( '/',         191 );
-        this.keyboardKeyCodeMap.set( '=',         61 );
-        
-        this.keyboardKeyCodeMap.set( ';',  59 );
-        this.keyboardKeyCodeMap.set( '[',  219 );
-        this.keyboardKeyCodeMap.set( '\\', 220 );
-        this.keyboardKeyCodeMap.set( ']',  221 );
-        this.keyboardKeyCodeMap.set( '`',  192 );
-        this.keyboardKeyCodeMap.set( "'",  222 );
-        
-        this.mouseKeyCodeMap.set( '---',  -1 );
-        this.mouseKeyCodeMap.set( 'LEFT MOUSE',   0 );
-        this.mouseKeyCodeMap.set( 'MIDDLE MOUSE', 1 );
-        this.mouseKeyCodeMap.set( 'RIGHT MOUSE',  2 );
+        this.mouseKeyCodeMap.set( '---',          MOUSE_BUTTON_INVALID );
+        this.mouseKeyCodeMap.set( 'LEFT MOUSE',   MOUSE_BUTTON_LEFT );
+        this.mouseKeyCodeMap.set( 'MIDDLE MOUSE', MOUSE_BUTTON_MIDDLE );
+        this.mouseKeyCodeMap.set( 'RIGHT MOUSE',  MOUSE_BUTTON_RIGHT );
+        this.mouseKeyCodeMap.set( 'MOUSE 1X',     MOUSE_BUTTON_1X );
+        this.mouseKeyCodeMap.set( 'MOUSE 2X',     MOUSE_BUTTON_2X );
+        this.mouseKeyCodeMap.set( 'MOUSE 3X',     MOUSE_BUTTON_3X );
+        this.mouseKeyCodeMap.set( 'MOUSE 4X',     MOUSE_BUTTON_4X );
+        this.mouseKeyCodeMap.set( 'MOUSE 5X',     MOUSE_BUTTON_5X );
+        this.mouseKeyCodeMap.set( 'MOUSE 6X',     MOUSE_BUTTON_6X );
+        this.mouseKeyCodeMap.set( 'MOUSE 7X',     MOUSE_BUTTON_7X );
+        this.mouseKeyCodeMap.set( 'MOUSE 8',      MOUSE_BUTTON_8X );
+
+        this.gamepadKeyCodeMap.set( '---',           CONTROLLER_BUTTON_INVALID );
+        this.gamepadKeyCodeMap.set( 'A',             CONTROLLER_BUTTON_A );
+        this.gamepadKeyCodeMap.set( 'B',             CONTROLLER_BUTTON_B );
+        this.gamepadKeyCodeMap.set( 'X',             CONTROLLER_BUTTON_X );
+        this.gamepadKeyCodeMap.set( 'Y',             CONTROLLER_BUTTON_Y );
+        this.gamepadKeyCodeMap.set( 'L BUMPER',      CONTROLLER_BUTTON_L_BUMPER );
+        this.gamepadKeyCodeMap.set( 'R BUMPER',      CONTROLLER_BUTTON_R_BUMPER );
+        this.gamepadKeyCodeMap.set( 'L TRIGGER',     CONTROLLER_BUTTON_L_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'R TRIGGER',     CONTROLLER_BUTTON_R_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'BACK',          CONTROLLER_BUTTON_BACK );
+        this.gamepadKeyCodeMap.set( 'START',         CONTROLLER_BUTTON_START );
+        this.gamepadKeyCodeMap.set( 'L STICK',       CONTROLLER_BUTTON_LEFTSTICK );
+        this.gamepadKeyCodeMap.set( 'R STICK',       CONTROLLER_BUTTON_RIGHTSTICK );
+        this.gamepadKeyCodeMap.set( 'UP',            CONTROLLER_BUTTON_DPAD_UP );
+        this.gamepadKeyCodeMap.set( 'DOWN',          CONTROLLER_BUTTON_DPAD_DOWN );
+        this.gamepadKeyCodeMap.set( 'LEFT',          CONTROLLER_BUTTON_DPAD_LEFT );
+        this.gamepadKeyCodeMap.set( 'RIGHT',         CONTROLLER_BUTTON_DPAD_RIGHT );
+        this.gamepadKeyCodeMap.set( 'GUIDE',         CONTROLLER_BUTTON_GUIDE );
+
+        // Key codes to use analog sticks as buttons
+        this.gamepadKeyCodeMap.set( 'L STICK UP',    CONTROLLER_BUTTON_L_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'L STICK DOWN',  CONTROLLER_BUTTON_L_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'L STICK LEFT',  CONTROLLER_BUTTON_L_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'L STICK RIGHT', CONTROLLER_BUTTON_L_STICK_RIGHT );
+        this.gamepadKeyCodeMap.set( 'R STICK UP',    CONTROLLER_BUTTON_R_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'R STICK DOWN',  CONTROLLER_BUTTON_R_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'R STICK LEFT',  CONTROLLER_BUTTON_R_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'R STICK RIGHT', CONTROLLER_BUTTON_R_STICK_RIGHT );
     }
     
     // 
@@ -170,7 +250,7 @@ class ActionManager
             // Load the keyboard/mouse/gamepad mapping
             this.loadKeyboardMappingFromNode( xmlNode.getElementsByTagName('keyboardMapping') );
             this.loadMouseMappingFromNode( xmlNode.getElementsByTagName( 'mouseMapping' ) );
-            //this.loadGamepadMappingFromNode( node.getElementsByTagName( 'gamepadMapping' ) );
+            this.loadGamepadMappingFromNode( xmlNode.getElementsByTagName( 'gamepadMapping' ) );
         }
     }
     
@@ -187,7 +267,7 @@ class ActionManager
     }
 
     // 
-    //  DESC: Load the keyboard mapping from node
+    //  DESC: Load the mouse mapping from node
     //
     loadMouseMappingFromNode( node )
     {
@@ -199,16 +279,16 @@ class ActionManager
     }
 
     // 
-    //  DESC: Load the keyboard mapping from node
+    //  DESC: Load the gamepad mapping from node
     //
-    /*loadGamepadMappingFromNode( node )
+    loadGamepadMappingFromNode( node )
     {
         // Load the player hidden controls
-        LoadActionFromNode( node[0].getElementsByTagName("playerHidden"), this.gamepadKeyCodeMap, this.gamepadActionMap );
+        this.loadActionFromNode( node[0].getElementsByTagName("playerHidden"), this.gamepadKeyCodeMap, this.gamepadActionMap );
 
         // Load the player visible controls
-        LoadActionFromNode( node[0].getElementsByTagName("playerVisible"), this.gamepadKeyCodeMap, this.gamepadActionMap );
-    }*/
+        this.loadActionFromNode( node[0].getElementsByTagName("playerVisible"), this.gamepadKeyCodeMap, this.gamepadActionMap );
+    }
     
     // 
     //  DESC: Load action data from xml node
@@ -273,7 +353,7 @@ class ActionManager
             {
                 this.lastDeviceUsed = defs.KEYBOARD;
 
-                if( this.wasActionMap( event.keyCode, actionStr, this.keyboardActionMap ) )
+                if( this.wasActionMap( event.code, actionStr, this.keyboardActionMap ) )
                 {
                     result = defs.EAP_UP;
 
