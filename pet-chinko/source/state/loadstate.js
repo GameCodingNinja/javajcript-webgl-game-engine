@@ -18,6 +18,7 @@ import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { settings } from '../../../library/utilities/settings';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
+import { GenericEvent } from '../../../library/common/genericevent';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as level1State from '../state/level1state';
@@ -131,17 +132,17 @@ export class LoadState extends GameState
     //
     handleEvent( event )
     {
-        if( event instanceof CustomEvent )
+        if( event instanceof GenericEvent )
         {
-            if( event.detail.type === stateDefs.ESE_FADE_IN_COMPLETE )
+            if( event.type === stateDefs.ESE_FADE_IN_COMPLETE )
             {
                 this.assetLoad();
             }
-            else if( event.detail.type === stateDefs.ESE_FADE_OUT_COMPLETE )
+            else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
             {
                 this.stateChange = true;
             }
-            else if( event.detail.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
+            else if( event.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
             {
                 let loadTime = highResTimer.timerStop();
                 

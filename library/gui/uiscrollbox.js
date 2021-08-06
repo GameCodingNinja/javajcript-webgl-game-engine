@@ -235,10 +235,10 @@ export class UIScrollBox extends UISubControl
     //
     onUpAction( event )
     {
-        if( event.detail.arg[0] === defs.EAP_DOWN )
+        if( event.arg[0] === defs.EAP_DOWN )
             this.handleKeyboardGamepadScroll( -1 );
 
-        else if( event.detail.arg[0] === defs.EAP_UP )
+        else if( event.arg[0] === defs.EAP_UP )
             this.endScroll = true;
     }
 
@@ -247,10 +247,10 @@ export class UIScrollBox extends UISubControl
     //
     onDownAction( event )
     {
-        if( event.detail.arg[0] === defs.EAP_DOWN )
+        if( event.arg[0] === defs.EAP_DOWN )
             this.handleKeyboardGamepadScroll( 1 );
 
-        else if( event.detail.arg[0] === defs.EAP_UP )
+        else if( event.arg[0] === defs.EAP_UP )
             this.endScroll = true;
     }
 
@@ -278,7 +278,7 @@ export class UIScrollBox extends UISubControl
     //
     onTabLeft( event )
     {
-        if( event.detail.arg[0] === defs.EAP_DOWN )
+        if( event.arg[0] === defs.EAP_DOWN )
             this.handlePageScroll( -1 );
     }
 
@@ -287,7 +287,7 @@ export class UIScrollBox extends UISubControl
     //
     onTabRight( event )
     {
-        if( event.detail.arg[0] === defs.EAP_DOWN )
+        if( event.arg[0] === defs.EAP_DOWN )
             this.handlePageScroll( 1 );
     }
 
@@ -427,8 +427,8 @@ export class UIScrollBox extends UISubControl
         for( let i = 0; i < this.scrollControlAry.length; ++i )
             this.scrollControlAry[i].handleSelectAction( event );
 
-        if( (event.detail.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
-            (event.detail.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN) )
+        if( (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
+            (event.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN) )
         {
             // Get the current scroll position
             this.scrollCurPos = this.subControlAry[0].curValue;

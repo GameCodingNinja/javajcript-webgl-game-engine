@@ -8,6 +8,7 @@
 
 import { GameState } from './gamestate';
 import { menuManager } from '../../../library/gui/menumanager';
+import { GenericEvent } from '../../../library/common/genericevent';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
@@ -26,21 +27,21 @@ export class CommonState extends GameState
         // Have the menu manager handle events
         menuManager.handleEvent( event );
 
-        if( event instanceof CustomEvent )
+        if( event instanceof GenericEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
             {
-                if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
+                if( event.arg[0] === menuDefs.ETC_BEGIN )
                 {
                     // Block all message processing in the menu manager
                     menuManager.allowEventHandling = false;
 
                     // Set the message to load and unload the states
-                    this.stateMessage.setMsg( this.getLoadState(event.detail.arg[1]), this.gameState );
+                    this.stateMessage.setMsg( this.getLoadState(event.arg[1]), this.gameState );
                 }
             }
-            else if( event.detail.type === stateDefs.ESE_FADE_OUT_COMPLETE )
+            else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
             {
                 // Clear out all the trees
                 menuManager.clearActiveTrees();

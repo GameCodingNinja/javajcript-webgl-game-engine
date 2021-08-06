@@ -21,6 +21,7 @@ import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { settings } from '../../../library/utilities/settings';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
+import { GenericEvent } from '../../../library/common/genericevent';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as defs from '../../../library/common/defs';
@@ -183,24 +184,24 @@ export class Level1State extends CommonState
                 this.uiStrategy.activateNode( 'ui_' + instanceNameB );
             }
         }
-        else if( event instanceof CustomEvent )
+        else if( event instanceof GenericEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
             {
-                if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
+                if( event.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
-            else if( event.detail.type === menuDefs.EGE_MENU_TRANS_OUT )
+            else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
             {
-                if( event.detail.arg[0] === menuDefs.ETC_END )
+                if( event.arg[0] === menuDefs.ETC_END )
                 {
                     let tree = menuManager.getTree( 'pause_tree' );
                     if( !tree.isDefaultMenu('pause_menu') )
                         tree.setDefaultMenu('pause_menu');
                 }
             }
-            else if( event.detail.type === uiControlDefs.ECAT_ACTION_EVENT && event.detail.arg[0] === 'play_game' )
+            else if( event.type === uiControlDefs.ECAT_ACTION_EVENT && event.arg[0] === 'play_game' )
             {
                 menuManager.getTree( 'pause_tree' ).transitionMenu();
                 this.multiplier = 1;
@@ -210,7 +211,7 @@ export class Level1State extends CommonState
                 this.uiWinMeter.clear();
                 this.ballStrategy.clear();
             }
-            else if( event.detail.type === stateDefs.ESE_CREATE_MULTI_HEAD )
+            else if( event.type === stateDefs.ESE_CREATE_MULTI_HEAD )
             {
                 let multiIndexPosAry = [0,1,2,3,4,5,6,7,8];
 
@@ -230,7 +231,7 @@ export class Level1State extends CommonState
                     this.activePosIndexAry.pop();
 
                 // Destroy the current one
-                this.multiStrategy.destroy( event.detail.arg[0].parentNode );
+                this.multiStrategy.destroy( event.arg[0].parentNode );
 
                 this.multiArtCounter = (this.multiArtCounter + 1) % 6;
                 if( this.multiCounter == 0 )
@@ -247,11 +248,11 @@ export class Level1State extends CommonState
                 this.activePosIndexAry.push( indexPos );
 
                 // Remove the index of the multiplier to be deleted and add it to the end to be popped off next time
-                let index = this.activePosIndexAry.indexOf( event.detail.arg[0].multiIndexPos );
+                let index = this.activePosIndexAry.indexOf( event.arg[0].multiIndexPos );
                 if( index !== -1 && index != this.activePosIndexAry.length - 1 )
                 {
                     this.activePosIndexAry.splice( index, 1 );
-                    this.activePosIndexAry.push(event.detail.arg[0].multiIndexPos);
+                    this.activePosIndexAry.push(event.arg[0].multiIndexPos);
                 }
             }
         }

@@ -6,6 +6,7 @@
 
 "use strict";
 import { Point } from '../common/point';
+import { GenericEvent } from '../common/genericevent';
 
 class EventManager
 {
@@ -64,18 +65,9 @@ class EventManager
     //
     //  DESC: Add an event to the event queue
     //
-    dispatchEvent( _type, ...args )
+    dispatchEvent( type, ...args )
     {
-        let event = new CustomEvent('customEvent',
-            {
-                detail:
-                {
-                    type: _type,
-                    arg: args
-                }
-            });
-        
-        this.queue.push( event );
+        this.queue.push( new GenericEvent( type, args ) );
     }
     
     //
@@ -205,16 +197,6 @@ class EventManager
                 this.queue.push( event );*/
             });
         }
-    }
-    
-    //
-    //  DESC: Handle onCustomEvent events
-    //
-    onCustomEvent( event )
-    {
-        this.queue.push( event );
-        
-        //console.log( `Custom Event was sent. ${event.detail.type}, ${event.detail.arg[0]}, ${event.detail.arg[1]}` );
     }
     
     // 

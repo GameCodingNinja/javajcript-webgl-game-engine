@@ -19,7 +19,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(133);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(104);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(154);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(155);
 
 // 
 //  FILE NAME: game.js
@@ -2727,14 +2727,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(27);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
-/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(146);
+/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(147);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(148);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(149);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(150);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(151);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(152);
-/* harmony import */ var raw_loader_data_objects_strategy_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(153);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(149);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(150);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(151);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(152);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(153);
+/* harmony import */ var raw_loader_data_objects_strategy_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(154);
 
 //
 //  FILE NAME: testarenastate.js
@@ -2761,6 +2761,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+//import { GenericEvent } from '../../../library/common/genericevent';
 
 //import * as titleScreenState from '../state/titlescreenstate';
 //import * as utilScripts from '../scripts/utilityscripts';
@@ -2874,17 +2875,17 @@ class TestArenaState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
     //
     handleEvent( event )
     {
-        /*if( event instanceof CustomEvent )
+        /*if( event instanceof GenericEvent )
         {
-            if( event.detail.type === stateDefs.ESE_FADE_IN_COMPLETE )
+            if( event.type === stateDefs.ESE_FADE_IN_COMPLETE )
             {
                 this.assetLoad();
             }
-            else if( event.detail.type === stateDefs.ESE_FADE_OUT_COMPLETE )
+            else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
             {
                 this.stateChange = true;
             }
-            else if( event.detail.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
+            else if( event.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
             {
                 let loadTime = highResTimer.timerStop();
 
@@ -28039,12 +28040,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
 /* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(114);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(136);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(138);
-/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(142);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(143);
-/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(144);
-/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(145);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(137);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(139);
+/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(143);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(144);
+/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(145);
+/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(146);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(112);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
@@ -28501,7 +28502,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(22);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(133);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(134);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(135);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(31);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(112);
 /* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(118);
@@ -28776,27 +28777,27 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     handleEvent( event )
     {
-        if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_CONTROL_STATE_CHANGE )
+        if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_CONTROL_STATE_CHANGE )
         {
             this.onStateChange( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_SELECT_EXECUTE )
+        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_SELECT_EXECUTE )
         {
             this.onSelectExecute( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_SET_ACTIVE_CONTROL )
+        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_SET_ACTIVE_CONTROL )
         {
             this.onSetActiveControl( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_REACTIVATE )
+        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_REACTIVATE )
         {
             this.onReactivate( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_TRANS_IN )
+        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_TRANS_IN )
         {
             this.onTransIn( event );
         }
-        else if( event.detail.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_TRANS_OUT )
+        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_TRANS_OUT )
         {
             this.onTransOut( event );
         }
@@ -28810,7 +28811,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     onTransIn( event )
     {
-        if( event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.ETC_BEGIN )
+        if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.ETC_BEGIN )
         {
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
@@ -28826,7 +28827,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     onTransOut( event )
     {
-        if( event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.ETC_BEGIN )
+        if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.ETC_BEGIN )
         {
             // Reset the control
             this.reset();
@@ -28850,8 +28851,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     {
         // This control is the focus of the state change
         // The control's "this" pointer is used as a means of identification
-        if( event.detail.arg[1] === this )
-            this.changeState( event.detail.arg[0] );
+        if( event.arg[1] === this )
+            this.changeState( event.arg[0] );
         else
             this.deactivateControl();
     }
@@ -28892,7 +28893,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     onSetActiveControl( event )
     {
         // Set the last active control to be active again
-        if( (event.detail.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EAC_LAST_ACTIVE_CONTROL) &&
+        if( (event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EAC_LAST_ACTIVE_CONTROL) &&
             (this.lastState > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_INACTIVE))
         {
             this.lastState = this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__.ECS_ACTIVE;
@@ -29308,11 +29309,11 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     handleSelectAction( event )
     {
         if( (this.isSelectable() &&
-            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_DEVICE_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_15__.MOUSE) &&
-            (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_PRESS_TYPE] === this.mouseSelectType) &&
-            this.isPointInControl( event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_MOUSE_X], event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_MOUSE_Y] ) ) ||
+            (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_DEVICE_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_15__.MOUSE) &&
+            (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_PRESS_TYPE] === this.mouseSelectType) &&
+            this.isPointInControl( event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_MOUSE_X], event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_MOUSE_Y] ) ) ||
 
-            (this.isActive() && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_DEVICE_TYPE] !== _common_defs__WEBPACK_IMPORTED_MODULE_15__.MOUSE) && (event.detail.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_PRESS_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_15__.EAP_DOWN)) )
+            (this.isActive() && (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_DEVICE_TYPE] !== _common_defs__WEBPACK_IMPORTED_MODULE_15__.MOUSE) && (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_15__.ESMA_PRESS_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_15__.EAP_DOWN)) )
         {
             _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__.eventManager.dispatchEvent(
                 _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__.EGE_MENU_CONTROL_STATE_CHANGE,
@@ -32205,11 +32206,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "eventManager": () => (/* binding */ eventManager)
 /* harmony export */ });
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
 
 //
 //  FILE NAME: eventmanager.js
 //  DESC:      event manager class singleton
 //
+
 
 
 
@@ -32227,6 +32230,7 @@ class EventManager
         this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this) );
         this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this) );
         this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this) );
+        document.addEventListener('scroll', this.onScroll.bind(this) );
         
         // Using document for key listener because canvas needs the focus before
         // it will trap key events. There's no good solution for force the focus
@@ -32234,10 +32238,12 @@ class EventManager
         document.addEventListener('keydown', this.onKeyDown.bind(this) );
         document.addEventListener('keyup', this.onKeyUp.bind(this) );
         
-        document.addEventListener('scroll', this.onScroll.bind(this) );
-        
         //this.canvas.addEventListener('keydown', this.onKeyDown.bind(this) );
         //this.canvas.addEventListener('keyup', this.onKeyUp.bind(this) );
+
+        // Gamepad event handlers
+        window.addEventListener("gamepadconnected", this.onGamepadconnected.bind(this) );
+        window.addEventListener("gamepaddisconnected", this.onGamepadDisconnected.bind(this) );
         
         // Mouse move relative offset data types
         this.mouseAbsolutePos = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
@@ -32246,30 +32252,36 @@ class EventManager
         this.mouseOffset = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point(
             document.documentElement.scrollLeft - this.canvas.offsetLeft,
             document.documentElement.scrollTop - this.canvas.offsetTop );
+
+        // Dictionary for holding all the gamepads
+        this.gamePadMap = new Map;
     }
     
+    //
+    //  DESC: Poll events that have been queued up
+    //
     pollEvent()
     {
+        // Handle any gamepad inputs
+        this.handleGamepad();
+
         if( this.queue.length )
             return this.queue.shift();
         
         return null;
     }
     
-    dispatchEvent( _type, ...args )
+    //
+    //  DESC: Add an event to the event queue
+    //
+    dispatchEvent( type, ...args )
     {
-        let event = new CustomEvent('customEvent',
-            {
-                detail:
-                {
-                    type: _type,
-                    arg: args
-                }
-            });
-        
-        this.queue.push( event );
+        this.queue.push( new _common_genericevent__WEBPACK_IMPORTED_MODULE_1__.GenericEvent( type, args ) );
     }
     
+    //
+    //  DESC: Handle onScroll events
+    //
     onScroll( event )
     {
         this.mouseOffset.setXYZ(
@@ -32277,18 +32289,27 @@ class EventManager
             document.documentElement.scrollTop - this.canvas.offsetTop );
     }
     
+    //
+    //  DESC: Handle onMouseDown events
+    //
     onMouseDown( event )
     {
         this.queue.push( event );
         
-        //console.log( event.type + ', ' + event.button );
+        console.log( event.type + ', ' + event.button );
     }
     
+    //
+    //  DESC: Handle onMouseUp events
+    //
     onMouseUp( event )
     {
         this.queue.push( event );
     }
     
+    //
+    //  DESC: Handle onMouseMove events
+    //
     onMouseMove( event )
     {
         this.queue.push( event );
@@ -32302,26 +32323,89 @@ class EventManager
         //console.log(`Move; RelX: ${this.mouseMoveRelX} RelY ${this.mouseMoveRelY}; AbsX: ${this.lastMouseMoveX} absY ${this.lastMouseMoveY}`);
     }
     
+    //
+    //  DESC: Handle onKeyDown events
+    //
     onKeyDown( event )
     {
         if( event.repeat === false )
         {
             this.queue.push( event );
             
-            //console.log( event.type + ', ' + event.key + ', ' + event.keyCode );
+            console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
         }
     }
     
+    //
+    //  DESC: Handle onKeyUp events
+    //
     onKeyUp( event )
     {
         this.queue.push( event );
     }
-    
-    onCustomEvent( event )
+
+    //
+    //  DESC: Handle onGamepadconnected events
+    //
+    onGamepadconnected( event )
     {
+        this.gamePadMap.set( event.gamepad.index, event.gamepad );
+
         this.queue.push( event );
-        
-        //console.log( `Custom Event was sent. ${event.detail.type}, ${event.detail.arg[0]}, ${event.detail.arg[1]}` );
+
+        console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+    }
+
+    //
+    //  DESC: Handle onGamepadDisconnected events
+    //
+    onGamepadDisconnected( event )
+    {
+        this.gamePadMap.delete(event.gamepad.index);
+
+        this.queue.push( event );
+
+        //console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+    }
+
+    //
+    //  DESC: Handle gamepad
+    //
+    handleGamepad()
+    {
+        if( this.gamePadMap.size )
+        {
+            this.gamePadMap.forEach((lastGp, index) => 
+            {
+                let gp = navigator.getGamepads()[index];
+                if(gp)
+                {
+                    for(let i = 0; i < gp.buttons.length; i++)
+                    {
+                        if(lastGp.buttons[i].pressed && !gp.buttons[i].pressed)
+                            console.log( `Button Index Up: ${i};` );
+                        else if(gp.buttons[i].pressed)
+                            console.log( `Button Index Down: ${i};` );
+                    }
+
+                    this.gamePadMap.set(index, gp);
+                }
+
+                /*if(gp.buttons[0].pressed || gp.buttons[0].touched)
+                    console.log( `Button Pressed: ${gp.buttons[0].pressed}; Button Touched: ${gp.buttons[0].touched}` );
+                
+                    let event = new CustomEvent('gamepadButtonDown',
+                    {
+                        detail:
+                        {
+                            gamepadIndex: index,
+                            button: args
+                        }
+                    });
+                
+                this.queue.push( event );*/
+            });
+        }
     }
     
     // 
@@ -32343,9 +32427,74 @@ var eventManager = new EventManager;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "GenericEvent": () => (/* binding */ GenericEvent)
+/* harmony export */ });
+
+// 
+//  FILE NAME:  genericevent.js
+//  DESC:       class for holding a generic event
+//
+
+
+
+class GenericEvent
+{
+    constructor( _type, ...args )
+    {
+        this.type = _type;
+        this.arg = args[0];
+    }
+}
+
+
+/***/ }),
+/* 135 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CONTROLLER_BUTTON_INVALID": () => (/* binding */ CONTROLLER_BUTTON_INVALID),
+/* harmony export */   "CONTROLLER_BUTTON_A": () => (/* binding */ CONTROLLER_BUTTON_A),
+/* harmony export */   "CONTROLLER_BUTTON_B": () => (/* binding */ CONTROLLER_BUTTON_B),
+/* harmony export */   "CONTROLLER_BUTTON_X": () => (/* binding */ CONTROLLER_BUTTON_X),
+/* harmony export */   "CONTROLLER_BUTTON_Y": () => (/* binding */ CONTROLLER_BUTTON_Y),
+/* harmony export */   "CONTROLLER_BUTTON_L_BUMPER": () => (/* binding */ CONTROLLER_BUTTON_L_BUMPER),
+/* harmony export */   "CONTROLLER_BUTTON_R_BUMPER": () => (/* binding */ CONTROLLER_BUTTON_R_BUMPER),
+/* harmony export */   "CONTROLLER_BUTTON_L_TRIGGER": () => (/* binding */ CONTROLLER_BUTTON_L_TRIGGER),
+/* harmony export */   "CONTROLLER_BUTTON_R_TRIGGER": () => (/* binding */ CONTROLLER_BUTTON_R_TRIGGER),
+/* harmony export */   "CONTROLLER_BUTTON_BACK": () => (/* binding */ CONTROLLER_BUTTON_BACK),
+/* harmony export */   "CONTROLLER_BUTTON_START": () => (/* binding */ CONTROLLER_BUTTON_START),
+/* harmony export */   "CONTROLLER_BUTTON_LEFTSTICK": () => (/* binding */ CONTROLLER_BUTTON_LEFTSTICK),
+/* harmony export */   "CONTROLLER_BUTTON_RIGHTSTICK": () => (/* binding */ CONTROLLER_BUTTON_RIGHTSTICK),
+/* harmony export */   "CONTROLLER_BUTTON_DPAD_UP": () => (/* binding */ CONTROLLER_BUTTON_DPAD_UP),
+/* harmony export */   "CONTROLLER_BUTTON_DPAD_DOWN": () => (/* binding */ CONTROLLER_BUTTON_DPAD_DOWN),
+/* harmony export */   "CONTROLLER_BUTTON_DPAD_LEFT": () => (/* binding */ CONTROLLER_BUTTON_DPAD_LEFT),
+/* harmony export */   "CONTROLLER_BUTTON_DPAD_RIGHT": () => (/* binding */ CONTROLLER_BUTTON_DPAD_RIGHT),
+/* harmony export */   "CONTROLLER_BUTTON_GUIDE": () => (/* binding */ CONTROLLER_BUTTON_GUIDE),
+/* harmony export */   "CONTROLLER_BUTTON_L_STICK_UP": () => (/* binding */ CONTROLLER_BUTTON_L_STICK_UP),
+/* harmony export */   "CONTROLLER_BUTTON_L_STICK_DOWN": () => (/* binding */ CONTROLLER_BUTTON_L_STICK_DOWN),
+/* harmony export */   "CONTROLLER_BUTTON_L_STICK_LEFT": () => (/* binding */ CONTROLLER_BUTTON_L_STICK_LEFT),
+/* harmony export */   "CONTROLLER_BUTTON_L_STICK_RIGHT": () => (/* binding */ CONTROLLER_BUTTON_L_STICK_RIGHT),
+/* harmony export */   "CONTROLLER_BUTTON_R_STICK_UP": () => (/* binding */ CONTROLLER_BUTTON_R_STICK_UP),
+/* harmony export */   "CONTROLLER_BUTTON_R_STICK_DOWN": () => (/* binding */ CONTROLLER_BUTTON_R_STICK_DOWN),
+/* harmony export */   "CONTROLLER_BUTTON_R_STICK_LEFT": () => (/* binding */ CONTROLLER_BUTTON_R_STICK_LEFT),
+/* harmony export */   "CONTROLLER_BUTTON_R_STICK_RIGHT": () => (/* binding */ CONTROLLER_BUTTON_R_STICK_RIGHT),
+/* harmony export */   "MOUSE_BUTTON_INVALID": () => (/* binding */ MOUSE_BUTTON_INVALID),
+/* harmony export */   "MOUSE_BUTTON_LEFT": () => (/* binding */ MOUSE_BUTTON_LEFT),
+/* harmony export */   "MOUSE_BUTTON_MIDDLE": () => (/* binding */ MOUSE_BUTTON_MIDDLE),
+/* harmony export */   "MOUSE_BUTTON_RIGHT": () => (/* binding */ MOUSE_BUTTON_RIGHT),
+/* harmony export */   "MOUSE_BUTTON_1X": () => (/* binding */ MOUSE_BUTTON_1X),
+/* harmony export */   "MOUSE_BUTTON_2X": () => (/* binding */ MOUSE_BUTTON_2X),
+/* harmony export */   "MOUSE_BUTTON_3X": () => (/* binding */ MOUSE_BUTTON_3X),
+/* harmony export */   "MOUSE_BUTTON_4X": () => (/* binding */ MOUSE_BUTTON_4X),
+/* harmony export */   "MOUSE_BUTTON_5X": () => (/* binding */ MOUSE_BUTTON_5X),
+/* harmony export */   "MOUSE_BUTTON_6X": () => (/* binding */ MOUSE_BUTTON_6X),
+/* harmony export */   "MOUSE_BUTTON_7X": () => (/* binding */ MOUSE_BUTTON_7X),
+/* harmony export */   "MOUSE_BUTTON_8X": () => (/* binding */ MOUSE_BUTTON_8X),
 /* harmony export */   "actionManager": () => (/* binding */ actionManager)
 /* harmony export */ });
-/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
+/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 // 
@@ -32358,13 +32507,54 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const CONTROLLER_BUTTON_INVALID       = -1,
+             CONTROLLER_BUTTON_A             = 0,
+             CONTROLLER_BUTTON_B             = 1,
+             CONTROLLER_BUTTON_X             = 2,
+             CONTROLLER_BUTTON_Y             = 3,
+             CONTROLLER_BUTTON_L_BUMPER      = 4,
+             CONTROLLER_BUTTON_R_BUMPER      = 5,
+             CONTROLLER_BUTTON_L_TRIGGER     = 6,
+             CONTROLLER_BUTTON_R_TRIGGER     = 7,
+             CONTROLLER_BUTTON_BACK          = 8,
+             CONTROLLER_BUTTON_START         = 9,
+             CONTROLLER_BUTTON_LEFTSTICK     = 10,
+             CONTROLLER_BUTTON_RIGHTSTICK    = 11,
+             CONTROLLER_BUTTON_DPAD_UP       = 12,
+             CONTROLLER_BUTTON_DPAD_DOWN     = 13,
+             CONTROLLER_BUTTON_DPAD_LEFT     = 14,
+             CONTROLLER_BUTTON_DPAD_RIGHT    = 15,
+             CONTROLLER_BUTTON_GUIDE         = 16,
+             // Key codes to use analog sticks as buttons
+             CONTROLLER_BUTTON_L_STICK_UP    = 21,
+             CONTROLLER_BUTTON_L_STICK_DOWN  = 22,
+             CONTROLLER_BUTTON_L_STICK_LEFT  = 23,
+             CONTROLLER_BUTTON_L_STICK_RIGHT = 24,
+             CONTROLLER_BUTTON_R_STICK_UP    = 25,
+             CONTROLLER_BUTTON_R_STICK_DOWN  = 26,
+             CONTROLLER_BUTTON_R_STICK_LEFT  = 27,
+             CONTROLLER_BUTTON_R_STICK_RIGHT = 28;
+
+const MOUSE_BUTTON_INVALID       = -1,
+             MOUSE_BUTTON_LEFT          = 0,
+             MOUSE_BUTTON_MIDDLE        = 1,
+             MOUSE_BUTTON_RIGHT         = 2,
+             MOUSE_BUTTON_1X            = 3,
+             MOUSE_BUTTON_2X            = 4,
+             MOUSE_BUTTON_3X            = 5,
+             MOUSE_BUTTON_4X            = 6,
+             MOUSE_BUTTON_5X            = 7,
+             MOUSE_BUTTON_6X            = 8,
+             MOUSE_BUTTON_7X            = 9,
+             MOUSE_BUTTON_8X            = 10;
+
 class ActionManager
 {
     constructor()
     {
         this.keyboardKeyCodeMap = new Map;
         this.mouseKeyCodeMap = new Map;
-        //this.gamepadKeyCodeMap = new Map;
+        this.gamepadKeyCodeMap = new Map;
         
         // Action maps
         this.keyboardActionMap = new Map;
@@ -32378,119 +32568,158 @@ class ActionManager
         this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEVICE_NULL;
         
         this.keyboardKeyCodeMap.set( '---', -1 );
-        this.keyboardKeyCodeMap.set( 'RETURN', 13 );
-        this.keyboardKeyCodeMap.set( 'ESCAPE', 27 );
-        
-        this.keyboardKeyCodeMap.set( 'ARROW UP',    38 );
-        this.keyboardKeyCodeMap.set( 'ARROW DOWN',  40 );
-        this.keyboardKeyCodeMap.set( 'ARROW LEFT',  37 );
-        this.keyboardKeyCodeMap.set( 'ARROW RIGHT', 39 );
+        this.keyboardKeyCodeMap.set( 'ENTER',       'Enter' );
+        this.keyboardKeyCodeMap.set( 'ESCAPE',       'Escape' );
+        this.keyboardKeyCodeMap.set( 'ARROW UP',     'ArrowUp' );
+        this.keyboardKeyCodeMap.set( 'ARROW DOWN',   'ArrowDown' );
+        this.keyboardKeyCodeMap.set( 'ARROW LEFT',   'ArrowLeft' );
+        this.keyboardKeyCodeMap.set( 'ARROW RIGHT',  'ArrowRight' );
+        this.keyboardKeyCodeMap.set( 'A',            'KeyA' );
+        this.keyboardKeyCodeMap.set( 'B',            'KeyB' );
+        this.keyboardKeyCodeMap.set( 'C',            'KeyC' );
+        this.keyboardKeyCodeMap.set( 'D',            'KeyD' );
+        this.keyboardKeyCodeMap.set( 'E',            'KeyE' );
+        this.keyboardKeyCodeMap.set( 'F',            'KeyF' );
+        this.keyboardKeyCodeMap.set( 'G',            'KeyG' );
+        this.keyboardKeyCodeMap.set( 'H',            'KeyH' );
+        this.keyboardKeyCodeMap.set( 'I',            'KeyI' );
+        this.keyboardKeyCodeMap.set( 'J',            'KeyJ' );
+        this.keyboardKeyCodeMap.set( 'K',            'KeyK' );
+        this.keyboardKeyCodeMap.set( 'L',            'KeyL' );
+        this.keyboardKeyCodeMap.set( 'M',            'KeyM' );
+        this.keyboardKeyCodeMap.set( 'N',            'KeyN' );
+        this.keyboardKeyCodeMap.set( 'O',            'KeyO' );
+        this.keyboardKeyCodeMap.set( 'P',            'KeyP' );
+        this.keyboardKeyCodeMap.set( 'Q',            'KeyQ' );
+        this.keyboardKeyCodeMap.set( 'R',            'KeyR' );
+        this.keyboardKeyCodeMap.set( 'S',            'KeyS' );
+        this.keyboardKeyCodeMap.set( 'T',            'KeyT' );
+        this.keyboardKeyCodeMap.set( 'U',            'KeyU' );
+        this.keyboardKeyCodeMap.set( 'V',            'KeyV' );
+        this.keyboardKeyCodeMap.set( 'W',            'KeyW' );
+        this.keyboardKeyCodeMap.set( 'X',            'KeyX' );
+        this.keyboardKeyCodeMap.set( 'Y',            'KeyY' );
+        this.keyboardKeyCodeMap.set( 'Z',            'KeyZ' );
+        this.keyboardKeyCodeMap.set( '0',            'Digit0' );
+        this.keyboardKeyCodeMap.set( '1',            'Digit1' );
+        this.keyboardKeyCodeMap.set( '2',            'Digit2' );
+        this.keyboardKeyCodeMap.set( '3',            'Digit3' );
+        this.keyboardKeyCodeMap.set( '4',            'Digit4' );
+        this.keyboardKeyCodeMap.set( '5',            'Digit5' );
+        this.keyboardKeyCodeMap.set( '6',            'Digit6' );
+        this.keyboardKeyCodeMap.set( '7',            'Digit7' );
+        this.keyboardKeyCodeMap.set( '8',            'Digit8' );
+        this.keyboardKeyCodeMap.set( '9',            'Digit9' );
+        this.keyboardKeyCodeMap.set( 'F1',           'F1' );
+        this.keyboardKeyCodeMap.set( 'F2',           'F2' );
+        this.keyboardKeyCodeMap.set( 'F3',           'F3' );
+        this.keyboardKeyCodeMap.set( 'F4',           'F4' );
+        this.keyboardKeyCodeMap.set( 'F5',           'F5' );
+        this.keyboardKeyCodeMap.set( 'F6',           'F6' );
+        this.keyboardKeyCodeMap.set( 'F7',           'F7' );
+        this.keyboardKeyCodeMap.set( 'F8',           'F8' );
+        this.keyboardKeyCodeMap.set( 'F9',           'F9' );
+        this.keyboardKeyCodeMap.set( 'F10',          'F10' );
+        this.keyboardKeyCodeMap.set( 'F11',          'F11' );
+        this.keyboardKeyCodeMap.set( 'F12',          'F12' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 0',     'Numpad0' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 1',     'Numpad1' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 2',     'Numpad2' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 3',     'Numpad3' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 4',     'Numpad4' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 5',     'Numpad5' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 6',     'Numpad6' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 7',     'Numpad7' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 8',     'Numpad8' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 9',     'Numpad9' );
+        this.keyboardKeyCodeMap.set( 'NUM LOCK',     'NumLock' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD /',     'NumpadDivide' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD *',     'NumpadMultiply' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD -',     'NumpadSubtract' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD +',     'NumpadAdd' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD ENTER', 'NumpadEnter' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD .',     'NumpadDecimal' );
+        this.keyboardKeyCodeMap.set( 'CTRL LEFT',    'ControlLeft' );
+        this.keyboardKeyCodeMap.set( 'SHIFT LEFT',   'ShiftLeft' );
+        this.keyboardKeyCodeMap.set( 'ALT LEFT',     'AltLeft' );
+        this.keyboardKeyCodeMap.set( 'CTRL RIGHT',   'ControlRight' );
+        this.keyboardKeyCodeMap.set( 'SHIFT RIGHT',  'ShiftRight' );
+        this.keyboardKeyCodeMap.set( 'ALT RIGHT',    'AltRight' );
+        this.keyboardKeyCodeMap.set( 'PRINT SCREEN', 'PrintScreen' );
+        this.keyboardKeyCodeMap.set( 'SCROLL LOCK',  'ScrollLock' );
+        this.keyboardKeyCodeMap.set( 'PAUSE',        'Pause' );
+        this.keyboardKeyCodeMap.set( 'END',          'End' );
+        this.keyboardKeyCodeMap.set( 'INSERT',       'Insert' );
+        this.keyboardKeyCodeMap.set( 'DELETE',       'Delete' );
+        this.keyboardKeyCodeMap.set( 'HOME',         'Home' );
+        this.keyboardKeyCodeMap.set( 'PAGE UP',      'PageUp' );
+        this.keyboardKeyCodeMap.set( 'PAGE DOWN',    'PageDown' );
+        this.keyboardKeyCodeMap.set( 'BACKSPACE',    'Backspace' );
+        this.keyboardKeyCodeMap.set( 'TAB',          'Tab' );
+        this.keyboardKeyCodeMap.set( 'SPACE',        'Space' );
+        this.keyboardKeyCodeMap.set( ',',            'Comma' );
+        this.keyboardKeyCodeMap.set( '-',            'Minus' );
+        this.keyboardKeyCodeMap.set( '.',            'Period' );
+        this.keyboardKeyCodeMap.set( '/',            'Slash' );
+        this.keyboardKeyCodeMap.set( '=',            'Equal' );
+        this.keyboardKeyCodeMap.set( ';',            'Semicolon' );
+        this.keyboardKeyCodeMap.set( '[',            'BracketLeft' );
+        this.keyboardKeyCodeMap.set( '\\',           'Backslash' );
+        this.keyboardKeyCodeMap.set( ']',            'BracketRight' );
+        this.keyboardKeyCodeMap.set( '`',            'Backquote' );
+        this.keyboardKeyCodeMap.set( "'",            'Quote' );
+        this.keyboardKeyCodeMap.set( 'META LEFT',    'MetaLeft' );
+        this.keyboardKeyCodeMap.set( 'META RIGHT',   'MetaRight' );
+        this.keyboardKeyCodeMap.set( 'CONTEXT MENU', 'ContextMenu' );
 
-        this.keyboardKeyCodeMap.set( 'A', 'A'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'B', 'B'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'C', 'C'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'D', 'D'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'E', 'E'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'F', 'F'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'G', 'G'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'H', 'H'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'I', 'I'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'J', 'J'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'K', 'K'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'L', 'L'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'M', 'M'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'N', 'N'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'O', 'O'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'P', 'P'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'Q', 'Q'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'R', 'R'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'S', 'S'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'T', 'T'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'U', 'U'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'V', 'V'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'W', 'W'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'X', 'X'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'Y', 'Y'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( 'Z', 'Z'.charCodeAt(0) );
+        this.keyboardKeyCodeMap.set( 'LAUNCH MAIL',      'LaunchMail' );
+        this.keyboardKeyCodeMap.set( 'LAUNCH APP 1',     'LaunchApp1' );
+        this.keyboardKeyCodeMap.set( 'LAUNCH APP 2',     'LaunchApp2' );
+        this.keyboardKeyCodeMap.set( 'MEDIA TRACK PREV', 'MediaTrackPrevious' );
+        this.keyboardKeyCodeMap.set( 'MEDIA TRACK NEXT', 'MediaTrackNext' );
+        this.keyboardKeyCodeMap.set( 'MEDIA PLAY PAUSE', 'MediaPlayPause' );
         
-        this.keyboardKeyCodeMap.set( '0', '0'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '1', '1'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '2', '2'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '3', '3'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '4', '4'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '5', '5'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '6', '6'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '7', '7'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '8', '8'.charCodeAt(0) );
-        this.keyboardKeyCodeMap.set( '9', '9'.charCodeAt(0) );
-        
-        this.keyboardKeyCodeMap.set( 'F1',  112 );
-        this.keyboardKeyCodeMap.set( 'F2',  113 );
-        this.keyboardKeyCodeMap.set( 'F3',  114 );
-        this.keyboardKeyCodeMap.set( 'F4',  115 );
-        this.keyboardKeyCodeMap.set( 'F5',  116 );
-        this.keyboardKeyCodeMap.set( 'F6',  117 );
-        this.keyboardKeyCodeMap.set( 'F7',  118 );
-        this.keyboardKeyCodeMap.set( 'F8',  119 );
-        this.keyboardKeyCodeMap.set( 'F9',  120 );
-        this.keyboardKeyCodeMap.set( 'F10', 121 );
-        this.keyboardKeyCodeMap.set( 'F11', 122 );
-        this.keyboardKeyCodeMap.set( 'F12', 123 );
-        
-        this.keyboardKeyCodeMap.set( 'NUMPAD 0', 96 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 1', 97 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 2', 98 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 3', 99 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 4', 100 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 5', 101 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 6', 102 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 7', 103 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 8', 104 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 9', 105 );
-        
-        this.keyboardKeyCodeMap.set( 'NUM LOCK',     144 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD /',     111 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD *',     106 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD -',     109 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD +',     107 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD ENTER', 13 );
-        this.keyboardKeyCodeMap.set( 'NUMPAD .',     110 );
-        
-        this.keyboardKeyCodeMap.set( 'CTRL',  17 );
-        this.keyboardKeyCodeMap.set( 'SHIFT', 16 );
-        this.keyboardKeyCodeMap.set( 'ALT',   18 );
-        
-        this.keyboardKeyCodeMap.set( 'PRINT SCREEN', 42 );
-        this.keyboardKeyCodeMap.set( 'SCROLL LOCK',  145 );
-        this.keyboardKeyCodeMap.set( 'PAUSE',        19 );
-        
-        this.keyboardKeyCodeMap.set( 'END',       35 );
-        this.keyboardKeyCodeMap.set( 'INSERT',    45 );
-        this.keyboardKeyCodeMap.set( 'DELETE',    46 );
-        this.keyboardKeyCodeMap.set( 'HOME',      36 );
-        this.keyboardKeyCodeMap.set( 'PAGE UP',   33 );
-        this.keyboardKeyCodeMap.set( 'PAGE DOWN', 34 );
-        
-        this.keyboardKeyCodeMap.set( 'BACKSPACE', 8 );
-        this.keyboardKeyCodeMap.set( 'TAB',       9 );
-        this.keyboardKeyCodeMap.set( 'SPACE',     32 );
-        this.keyboardKeyCodeMap.set( ',',         188 );
-        this.keyboardKeyCodeMap.set( '-',         173 );
-        this.keyboardKeyCodeMap.set( '.',         190 );
-        this.keyboardKeyCodeMap.set( '/',         191 );
-        this.keyboardKeyCodeMap.set( '=',         61 );
-        
-        this.keyboardKeyCodeMap.set( ';',  59 );
-        this.keyboardKeyCodeMap.set( '[',  219 );
-        this.keyboardKeyCodeMap.set( '\\', 220 );
-        this.keyboardKeyCodeMap.set( ']',  221 );
-        this.keyboardKeyCodeMap.set( '`',  192 );
-        this.keyboardKeyCodeMap.set( "'",  222 );
-        
-        this.mouseKeyCodeMap.set( '---',  -1 );
-        this.mouseKeyCodeMap.set( 'LEFT MOUSE',   0 );
-        this.mouseKeyCodeMap.set( 'MIDDLE MOUSE', 1 );
-        this.mouseKeyCodeMap.set( 'RIGHT MOUSE',  2 );
+        this.mouseKeyCodeMap.set( '---',          MOUSE_BUTTON_INVALID );
+        this.mouseKeyCodeMap.set( 'LEFT MOUSE',   MOUSE_BUTTON_LEFT );
+        this.mouseKeyCodeMap.set( 'MIDDLE MOUSE', MOUSE_BUTTON_MIDDLE );
+        this.mouseKeyCodeMap.set( 'RIGHT MOUSE',  MOUSE_BUTTON_RIGHT );
+        this.mouseKeyCodeMap.set( 'MOUSE 1X',     MOUSE_BUTTON_1X );
+        this.mouseKeyCodeMap.set( 'MOUSE 2X',     MOUSE_BUTTON_2X );
+        this.mouseKeyCodeMap.set( 'MOUSE 3X',     MOUSE_BUTTON_3X );
+        this.mouseKeyCodeMap.set( 'MOUSE 4X',     MOUSE_BUTTON_4X );
+        this.mouseKeyCodeMap.set( 'MOUSE 5X',     MOUSE_BUTTON_5X );
+        this.mouseKeyCodeMap.set( 'MOUSE 6X',     MOUSE_BUTTON_6X );
+        this.mouseKeyCodeMap.set( 'MOUSE 7X',     MOUSE_BUTTON_7X );
+        this.mouseKeyCodeMap.set( 'MOUSE 8',      MOUSE_BUTTON_8X );
+
+        this.gamepadKeyCodeMap.set( '---',           CONTROLLER_BUTTON_INVALID );
+        this.gamepadKeyCodeMap.set( 'A',             CONTROLLER_BUTTON_A );
+        this.gamepadKeyCodeMap.set( 'B',             CONTROLLER_BUTTON_B );
+        this.gamepadKeyCodeMap.set( 'X',             CONTROLLER_BUTTON_X );
+        this.gamepadKeyCodeMap.set( 'Y',             CONTROLLER_BUTTON_Y );
+        this.gamepadKeyCodeMap.set( 'L BUMPER',      CONTROLLER_BUTTON_L_BUMPER );
+        this.gamepadKeyCodeMap.set( 'R BUMPER',      CONTROLLER_BUTTON_R_BUMPER );
+        this.gamepadKeyCodeMap.set( 'L TRIGGER',     CONTROLLER_BUTTON_L_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'R TRIGGER',     CONTROLLER_BUTTON_R_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'BACK',          CONTROLLER_BUTTON_BACK );
+        this.gamepadKeyCodeMap.set( 'START',         CONTROLLER_BUTTON_START );
+        this.gamepadKeyCodeMap.set( 'L STICK',       CONTROLLER_BUTTON_LEFTSTICK );
+        this.gamepadKeyCodeMap.set( 'R STICK',       CONTROLLER_BUTTON_RIGHTSTICK );
+        this.gamepadKeyCodeMap.set( 'UP',            CONTROLLER_BUTTON_DPAD_UP );
+        this.gamepadKeyCodeMap.set( 'DOWN',          CONTROLLER_BUTTON_DPAD_DOWN );
+        this.gamepadKeyCodeMap.set( 'LEFT',          CONTROLLER_BUTTON_DPAD_LEFT );
+        this.gamepadKeyCodeMap.set( 'RIGHT',         CONTROLLER_BUTTON_DPAD_RIGHT );
+        this.gamepadKeyCodeMap.set( 'GUIDE',         CONTROLLER_BUTTON_GUIDE );
+
+        // Key codes to use analog sticks as buttons
+        this.gamepadKeyCodeMap.set( 'L STICK UP',    CONTROLLER_BUTTON_L_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'L STICK DOWN',  CONTROLLER_BUTTON_L_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'L STICK LEFT',  CONTROLLER_BUTTON_L_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'L STICK RIGHT', CONTROLLER_BUTTON_L_STICK_RIGHT );
+        this.gamepadKeyCodeMap.set( 'R STICK UP',    CONTROLLER_BUTTON_R_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'R STICK DOWN',  CONTROLLER_BUTTON_R_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'R STICK LEFT',  CONTROLLER_BUTTON_R_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'R STICK RIGHT', CONTROLLER_BUTTON_R_STICK_RIGHT );
     }
     
     // 
@@ -32520,7 +32749,7 @@ class ActionManager
             // Load the keyboard/mouse/gamepad mapping
             this.loadKeyboardMappingFromNode( xmlNode.getElementsByTagName('keyboardMapping') );
             this.loadMouseMappingFromNode( xmlNode.getElementsByTagName( 'mouseMapping' ) );
-            //this.loadGamepadMappingFromNode( node.getElementsByTagName( 'gamepadMapping' ) );
+            this.loadGamepadMappingFromNode( xmlNode.getElementsByTagName( 'gamepadMapping' ) );
         }
     }
     
@@ -32537,7 +32766,7 @@ class ActionManager
     }
 
     // 
-    //  DESC: Load the keyboard mapping from node
+    //  DESC: Load the mouse mapping from node
     //
     loadMouseMappingFromNode( node )
     {
@@ -32549,16 +32778,16 @@ class ActionManager
     }
 
     // 
-    //  DESC: Load the keyboard mapping from node
+    //  DESC: Load the gamepad mapping from node
     //
-    /*loadGamepadMappingFromNode( node )
+    loadGamepadMappingFromNode( node )
     {
         // Load the player hidden controls
-        LoadActionFromNode( node[0].getElementsByTagName("playerHidden"), this.gamepadKeyCodeMap, this.gamepadActionMap );
+        this.loadActionFromNode( node[0].getElementsByTagName("playerHidden"), this.gamepadKeyCodeMap, this.gamepadActionMap );
 
         // Load the player visible controls
-        LoadActionFromNode( node[0].getElementsByTagName("playerVisible"), this.gamepadKeyCodeMap, this.gamepadActionMap );
-    }*/
+        this.loadActionFromNode( node[0].getElementsByTagName("playerVisible"), this.gamepadKeyCodeMap, this.gamepadActionMap );
+    }
     
     // 
     //  DESC: Load action data from xml node
@@ -32623,7 +32852,7 @@ class ActionManager
             {
                 this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.KEYBOARD;
 
-                if( this.wasActionMap( event.keyCode, actionStr, this.keyboardActionMap ) )
+                if( this.wasActionMap( event.code, actionStr, this.keyboardActionMap ) )
                 {
                     result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_UP;
 
@@ -32697,7 +32926,7 @@ var actionManager = new ActionManager;
 
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32723,7 +32952,7 @@ class KeyCodeAction
     setId( id )
     {
         // Only set id's that are positive numbers
-        if( id > -1 )
+        if( !((id == -1) || (id == '---')) )
             this.idAry.push( id );
     }
     
@@ -32748,7 +32977,7 @@ class KeyCodeAction
 
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32756,7 +32985,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIMeter": () => (/* binding */ UIMeter)
 /* harmony export */ });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(137);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(138);
 /* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(104);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(115);
@@ -33194,7 +33423,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33300,7 +33529,7 @@ class Timer
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33308,7 +33537,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteNode": () => (/* binding */ SpriteNode)
 /* harmony export */ });
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -33398,7 +33627,7 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33406,7 +33635,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "RenderNode": () => (/* binding */ RenderNode)
 /* harmony export */ });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -33575,7 +33804,7 @@ class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33583,7 +33812,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Node": () => (/* binding */ Node)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
 
 // 
 //  FILE NAME: node.js
@@ -33720,7 +33949,7 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33857,7 +34086,7 @@ class iNode
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33865,7 +34094,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteLeafNode": () => (/* binding */ SpriteLeafNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(119);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
@@ -33947,7 +34176,7 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33955,7 +34184,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
 /* harmony export */ });
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -34043,7 +34272,7 @@ class UIControlNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34051,7 +34280,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControlLeafNode": () => (/* binding */ UIControlLeafNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(141);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -34129,7 +34358,7 @@ class UIControlLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34138,7 +34367,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ObjectNode": () => (/* binding */ ObjectNode)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(139);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(140);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -34212,7 +34441,7 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
 }
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34224,7 +34453,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(147);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(148);
 
 //
 //  FILE NAME: statescripts.js
@@ -34310,7 +34539,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34707,7 +34936,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34718,7 +34947,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(main)\">\r\n        <file path=\"data/objects/2d/objectDataList/mainData.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipData.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34729,7 +34958,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_main_\">\r\n        <file path=\"data/objects/strategy/main.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34740,7 +34969,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34751,7 +34980,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34762,7 +34991,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34773,7 +35002,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_main_\">\r\n        <node name=\"multiListTestNode\"/>\r\n        <node name=\"waffles\"/>\r\n    </strategy>\r\n    \r\n    <strategy name=\"_space_ship_\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"-500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n        </node>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

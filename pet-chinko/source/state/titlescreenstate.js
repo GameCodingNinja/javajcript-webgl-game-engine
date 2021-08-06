@@ -17,6 +17,7 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
+import { GenericEvent } from '../../../library/common/genericevent';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as defs from '../../../library/common/defs';
@@ -69,12 +70,12 @@ export class TitleScreenState extends CommonState
     {
         super.handleEvent( event );
         
-        if( event instanceof CustomEvent )
+        if( event instanceof GenericEvent )
         {
             // Check for the "game change state" message
-            if( event.detail.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
             {
-                if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
+                if( event.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
         }

@@ -14,6 +14,7 @@ import { assetHolder } from '../utilities/assetholder';
 import { Menu } from '../gui/menu';
 import { MenuTree } from '../gui/menutree';
 import { cameraManager } from '../managers/cameramanager';
+import { GenericEvent } from '../common/genericevent';
 import * as genFunc from '../utilities/genfunc';
 import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
@@ -588,10 +589,10 @@ class MenuManager extends ManagerBase
         if( this.allow )
         {
             // Convert keyboard, mouse and controller messages in action type messages
-            if( event instanceof CustomEvent )
+            if( event instanceof GenericEvent )
             {
                 // Are we doing menu actions? May need to do some scrolling
-                if( (event.detail.type >= menuDefs.EGE_MENU_UP_ACTION) && (event.detail.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
+                if( (event.type >= menuDefs.EGE_MENU_UP_ACTION) && (event.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
                 {
                     // Free a timer if one happens to be running
                     if( this.scrollTimerId != 0 )
@@ -599,7 +600,7 @@ class MenuManager extends ManagerBase
                     
                     this.scrollTimerId = 0;
 
-                    if( event.detail.arg[0] === defs.EAP_DOWN )
+                    if( event.arg[0] === defs.EAP_DOWN )
                         this.handleEventForScrolling( event );
                 }
                 
@@ -743,10 +744,10 @@ class MenuManager extends ManagerBase
             {
                 menuActive = true;
 
-                let scrollParam = activeTreeAry[i].getScrollParam( event.detail.type );
+                let scrollParam = activeTreeAry[i].getScrollParam( event.type );
 
                 // If scrolling is allowed, start the timer
-                if( scrollParam.canScroll( event.detail.type ) )
+                if( scrollParam.canScroll( event.type ) )
                 {
                     this.scrollTimerId = setTimeout(
                         () =>

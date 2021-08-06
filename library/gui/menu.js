@@ -12,6 +12,7 @@ import { Sprite } from '../sprite/sprite';
 import { eventManager } from '../managers/eventmanager';
 import { UIControlNavNode } from '../gui/uicontrolnavnode';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
+import { GenericEvent } from '../common/genericevent';
 import * as UIControlFactory from './uicontrolfactory';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as uiControlDefs from '../gui/uicontroldefs';
@@ -406,7 +407,7 @@ export class Menu extends Object
     //
     handleEvent( event )
     {
-        if( event instanceof CustomEvent )
+        if( event instanceof GenericEvent )
         {
             // Have the controls handle events
             for( let i = 0; i < this.controlAry.length; ++i )
@@ -415,62 +416,62 @@ export class Menu extends Object
             for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
                     this.mouseOnlyControlAry[i].handleEvent( event );
             
-            if( event.detail.type === menuDefs.EGE_MENU_TRANS_IN )
+            if( event.type === menuDefs.EGE_MENU_TRANS_IN )
             {
                 this.onTransIn( event );
             }
-            else if( event.detail.type === menuDefs.EGE_MENU_TRANS_OUT )
+            else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
             {
                 this.onTransOut( event );
             }
-            else if( event.detail.type === menuDefs.EGE_MENU_REACTIVATE )
+            else if( event.type === menuDefs.EGE_MENU_REACTIVATE )
             {
                 this.onReactivate( event );
             }
             else if( this.state === menuDefs.EMS_IDLE )
             {
-                if( event.detail.type === menuDefs.EGE_MENU_SELECT_ACTION )
+                if( event.type === menuDefs.EGE_MENU_SELECT_ACTION )
                 {
                     this.onSelectAction( event );
                 }
-                else if( event.detail.type === menuDefs.EGE_MENU_SET_ACTIVE_CONTROL )
+                else if( event.type === menuDefs.EGE_MENU_SET_ACTIVE_CONTROL )
                 {
                     this.onSetActiveControl( event );
                 }
-                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_UP )
+                else if( event.type === menuDefs.EGE_MENU_SCROLL_UP )
                 {
                     this.onUpAction( event );
                 }
-                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_DOWN )
+                else if( event.type === menuDefs.EGE_MENU_SCROLL_DOWN )
                 {
                     this.onDownAction( event );
                 }
-                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_LEFT )
+                else if( event.type === menuDefs.EGE_MENU_SCROLL_LEFT )
                 {
                     this.onLeftAction( event );
                 }
-                else if( event.detail.type === menuDefs.EGE_MENU_SCROLL_RIGHT )
+                else if( event.type === menuDefs.EGE_MENU_SCROLL_RIGHT )
                 {
                     this.onRightAction( event );
                 }
-                else if( (event.detail.type >= menuDefs.EGE_MENU_UP_ACTION) &&
-                         (event.detail.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
+                else if( (event.type >= menuDefs.EGE_MENU_UP_ACTION) &&
+                         (event.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
                 {
-                    if( event.detail.arg[0] === defs.EAP_DOWN )
+                    if( event.arg[0] === defs.EAP_DOWN )
                     {
-                        if( event.detail.type === menuDefs.EGE_MENU_UP_ACTION )
+                        if( event.type === menuDefs.EGE_MENU_UP_ACTION )
                         {
                             this.onUpAction( event );
                         }
-                        else if( event.detail.type === menuDefs.EGE_MENU_DOWN_ACTION )
+                        else if( event.type === menuDefs.EGE_MENU_DOWN_ACTION )
                         {
                             this.onDownAction( event );
                         }
-                        if( event.detail.type === menuDefs.EGE_MENU_LEFT_ACTION )
+                        if( event.type === menuDefs.EGE_MENU_LEFT_ACTION )
                         {
                             this.onLeftAction( event );
                         }
-                        else if( event.detail.type === menuDefs.EGE_MENU_RIGHT_ACTION )
+                        else if( event.type === menuDefs.EGE_MENU_RIGHT_ACTION )
                         {
                             this.onRightAction( event );
                         }
@@ -587,7 +588,7 @@ export class Menu extends Object
             if( this.activeNode.uiControl.actionType > uiControlDefs.ECAT_NULL )
                 this.state = menuDefs.EMS_ACTIVE;
         }
-        else if( event.detail.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
+        else if( event.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
         {
             // For mouse only controls
             for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
@@ -607,11 +608,11 @@ export class Menu extends Object
 
         // Try to handle touch presses on a non-active control
         // The mouse just happends to be clicked over a non-active control
-        if( !selectionFound && event.detail.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
+        if( !selectionFound && event.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
         {
             // Deactivate the control that should be active
             if( (this.activeNode !== null) &&
-                (event.detail.arg[ defs.ESMA_PRESS_TYPE ] === this.activeNode.uiControl.mouseSelectType) )
+                (event.arg[ defs.ESMA_PRESS_TYPE ] === this.activeNode.uiControl.mouseSelectType) )
             {
                 this.activeNode.uiControl.deactivateControl();
 
@@ -637,7 +638,7 @@ export class Menu extends Object
     onSetActiveControl( event )
     {
         // Set the first inactive control to active
-        if( event.detail.arg[0] === menuDefs.EAC_FIRST_ACTIVE_CONTROL )
+        if( event.arg[0] === menuDefs.EAC_FIRST_ACTIVE_CONTROL )
             this.activateFirstInactiveControl();
     }
 
@@ -654,13 +655,13 @@ export class Menu extends Object
     //
     onTransIn( event )
     {
-        if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
+        if( event.arg[0] === menuDefs.ETC_BEGIN )
         {
             this.scriptComponent.prepare( 'transIn', this );
 
             this.state = menuDefs.EMS_ACTIVE;
         }
-        else if( event.detail.arg[0] === menuDefs.ETC_END )
+        else if( event.arg[0] === menuDefs.ETC_END )
         {
             this.state = menuDefs.EMS_IDLE;
         }
@@ -671,13 +672,13 @@ export class Menu extends Object
     //
     onTransOut( event )
     {
-        if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
+        if( event.arg[0] === menuDefs.ETC_BEGIN )
         {
             this.scriptComponent.prepare( 'transOut', this );
 
             this.state = menuDefs.EMS_ACTIVE;
         }
-        else if( event.detail.arg[0] === menuDefs.ETC_END )
+        else if( event.arg[0] === menuDefs.ETC_END )
         {
             this.state = menuDefs.EMS_INACTIVE;
         }

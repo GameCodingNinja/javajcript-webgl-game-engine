@@ -126,7 +126,7 @@ export class UISlider extends UISubControl
     onLeftAction( event )
     {
         // Handle the slider change
-        if( event.detail.arg[0] === defs.EAP_DOWN )
+        if( event.arg[0] === defs.EAP_DOWN )
             this.handleSliderChange( -this.incValue, true );
     }
 
@@ -136,7 +136,7 @@ export class UISlider extends UISubControl
     onRightAction( event )
     {
         // Handle the slider change
-        if( event.detail.arg[0] === defs.EAP_DOWN )
+        if( event.arg[0] === defs.EAP_DOWN )
             this.handleSliderChange( this.incValue, true );
     }
 
@@ -182,28 +182,28 @@ export class UISlider extends UISubControl
     handleSelectAction( event )
     {
         let result = this.isActive() &&
-                     (event.detail.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
-                     this.isPointInControl( event.detail.arg[defs.ESMA_MOUSE_X], event.detail.arg[defs.ESMA_MOUSE_Y] );
+                     (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
+                     this.isPointInControl( event.arg[defs.ESMA_MOUSE_X], event.arg[defs.ESMA_MOUSE_Y] );
              
-        if( result && (event.detail.arg[defs.ESMA_PRESS_TYPE] === this.mouseSelectType) )
+        if( result && (event.arg[defs.ESMA_PRESS_TYPE] === this.mouseSelectType) )
         {
             // Get the press type to know if we need to move the slider 
             // along with the mouse move
             this.pressType = this.mouseSelectType;
 
-            if( event.detail.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN )
+            if( event.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN )
             {
                 this.prepareControlScript( uiControlDefs.ECS_SELECT );
 
                 let ratio = 1.0 / settings.orthoAspectRatio.h;
 
                 if( this.orientation === defs.EO_HORIZONTAL )
-                    this.incSliderMovePos( (event.detail.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * ratio );
+                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * ratio );
                 else
-                    this.incSliderMovePos( (event.detail.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * ratio );
+                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * ratio );
             }
         }
-        else if( event.detail.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType )
+        else if( event.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType )
         {
             this.pressType = defs.EAP_IDLE;
         }

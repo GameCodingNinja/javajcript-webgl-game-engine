@@ -268,27 +268,27 @@ export class UIControl extends ControlBase
     //
     handleEvent( event )
     {
-        if( event.detail.type === menuDefs.EGE_MENU_CONTROL_STATE_CHANGE )
+        if( event.type === menuDefs.EGE_MENU_CONTROL_STATE_CHANGE )
         {
             this.onStateChange( event );
         }
-        else if( event.detail.type === menuDefs.EGE_MENU_SELECT_EXECUTE )
+        else if( event.type === menuDefs.EGE_MENU_SELECT_EXECUTE )
         {
             this.onSelectExecute( event );
         }
-        else if( event.detail.type === menuDefs.EGE_MENU_SET_ACTIVE_CONTROL )
+        else if( event.type === menuDefs.EGE_MENU_SET_ACTIVE_CONTROL )
         {
             this.onSetActiveControl( event );
         }
-        else if( event.detail.type === menuDefs.EGE_MENU_REACTIVATE )
+        else if( event.type === menuDefs.EGE_MENU_REACTIVATE )
         {
             this.onReactivate( event );
         }
-        else if( event.detail.type === menuDefs.EGE_MENU_TRANS_IN )
+        else if( event.type === menuDefs.EGE_MENU_TRANS_IN )
         {
             this.onTransIn( event );
         }
-        else if( event.detail.type === menuDefs.EGE_MENU_TRANS_OUT )
+        else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
         {
             this.onTransOut( event );
         }
@@ -302,7 +302,7 @@ export class UIControl extends ControlBase
     //
     onTransIn( event )
     {
-        if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
+        if( event.arg[0] === menuDefs.ETC_BEGIN )
         {
             // Set the script functions for the current displayed state
             if( this.lastState != this.state )
@@ -318,7 +318,7 @@ export class UIControl extends ControlBase
     //
     onTransOut( event )
     {
-        if( event.detail.arg[0] === menuDefs.ETC_BEGIN )
+        if( event.arg[0] === menuDefs.ETC_BEGIN )
         {
             // Reset the control
             this.reset();
@@ -342,8 +342,8 @@ export class UIControl extends ControlBase
     {
         // This control is the focus of the state change
         // The control's "this" pointer is used as a means of identification
-        if( event.detail.arg[1] === this )
-            this.changeState( event.detail.arg[0] );
+        if( event.arg[1] === this )
+            this.changeState( event.arg[0] );
         else
             this.deactivateControl();
     }
@@ -384,7 +384,7 @@ export class UIControl extends ControlBase
     onSetActiveControl( event )
     {
         // Set the last active control to be active again
-        if( (event.detail.arg[0] === menuDefs.EAC_LAST_ACTIVE_CONTROL) &&
+        if( (event.arg[0] === menuDefs.EAC_LAST_ACTIVE_CONTROL) &&
             (this.lastState > uiControlDefs.ECS_INACTIVE))
         {
             this.lastState = this.state = uiControlDefs.ECS_ACTIVE;
@@ -800,11 +800,11 @@ export class UIControl extends ControlBase
     handleSelectAction( event )
     {
         if( (this.isSelectable() &&
-            (event.detail.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
-            (event.detail.arg[defs.ESMA_PRESS_TYPE] === this.mouseSelectType) &&
-            this.isPointInControl( event.detail.arg[defs.ESMA_MOUSE_X], event.detail.arg[defs.ESMA_MOUSE_Y] ) ) ||
+            (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
+            (event.arg[defs.ESMA_PRESS_TYPE] === this.mouseSelectType) &&
+            this.isPointInControl( event.arg[defs.ESMA_MOUSE_X], event.arg[defs.ESMA_MOUSE_Y] ) ) ||
 
-            (this.isActive() && (event.detail.arg[defs.ESMA_DEVICE_TYPE] !== defs.MOUSE) && (event.detail.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN)) )
+            (this.isActive() && (event.arg[defs.ESMA_DEVICE_TYPE] !== defs.MOUSE) && (event.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN)) )
         {
             eventManager.dispatchEvent(
                 menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,

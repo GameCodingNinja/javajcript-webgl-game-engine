@@ -122,26 +122,26 @@ export class UIButtonList extends UISubControl
     //
     onDownAction( event )
     {
-        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_DOWN ) )
+        if( (event.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_DOWN ) )
             this.dec();
     }
 
     onUpAction( event )
     {
-        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_UP ) )
+        if( (event.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_UP ) )
             this.inc();
     }
 
     onLeftAction( event )
     {
-        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_LEFT ) )
+        if( (event.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_LEFT ) )
             this.dec();
 
     }
 
     onRightAction( event )
     {
-        if( (event.detail.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_RIGHT ) )
+        if( (event.arg[0] === defs.EAP_DOWN) && this.actionMask.isSet( uiControlDefs.EAR_RIGHT ) )
             this.inc();
     }
 
@@ -179,11 +179,11 @@ export class UIButtonList extends UISubControl
     {
         super.onStateChange( event );
 
-        let state = event.detail.arg[0];
+        let state = event.arg[0];
 
         if( state === uiControlDefs.ECS_SELECT )
         {
-            if( this.subControlAry[uiControlDefs.BTN_DEC] == event.detail.arg[1] )
+            if( this.subControlAry[uiControlDefs.BTN_DEC] == event.arg[1] )
             {
                 // Dec the list
                 this.decList();
@@ -191,7 +191,7 @@ export class UIButtonList extends UISubControl
                 // Update the display
                 this.updateDisplay( this.activeIndex );
             }
-            else if( this.subControlAry[uiControlDefs.BTN_INC] == event.detail.arg[1] )
+            else if( this.subControlAry[uiControlDefs.BTN_INC] == event.arg[1] )
             {
                 // Inc the list
                 this.incList();

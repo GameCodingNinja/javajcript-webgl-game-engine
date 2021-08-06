@@ -8,22 +8,23 @@
 
 import { GameState } from './gamestate';
 import { shaderManager } from '../../../library/managers/shadermanager';
-import { scriptManager } from '../../../library/script/scriptmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { fontManager } from '../../../library/managers/fontmanager';
-import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/managers/soundmanager';
+import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
+import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
+import { scriptManager } from '../../../library/script/scriptmanager';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
-import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
+import { GenericEvent } from '../../../library/common/genericevent';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
@@ -137,17 +138,17 @@ export class StartUpState extends GameState
     //
     handleEvent( event )
     {
-        if( event instanceof CustomEvent )
+        if( event instanceof GenericEvent )
         {
-            if( event.detail.type === stateDefs.ESE_FADE_IN_COMPLETE )
+            if( event.type === stateDefs.ESE_FADE_IN_COMPLETE )
             {
                 this.assetLoad();
             }
-            else if( event.detail.type === stateDefs.ESE_FADE_OUT_COMPLETE )
+            else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
             {
                 this.stateChange = true;
             }
-            else if( event.detail.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
+            else if( event.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
             {
                 let loadTime = highResTimer.timerStop();
 
