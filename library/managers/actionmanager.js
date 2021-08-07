@@ -5,36 +5,10 @@
 
 "use strict";
 import { KeyCodeAction } from '../common/keycodeaction';
+import { GamepadEvent } from '../common/gamepadevent';
+import * as gamepadevent from '../common/gamepadevent';
 import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
-
-export const CONTROLLER_BUTTON_INVALID       = -1,
-             CONTROLLER_BUTTON_A             = 0,
-             CONTROLLER_BUTTON_B             = 1,
-             CONTROLLER_BUTTON_X             = 2,
-             CONTROLLER_BUTTON_Y             = 3,
-             CONTROLLER_BUTTON_L_BUMPER      = 4,
-             CONTROLLER_BUTTON_R_BUMPER      = 5,
-             CONTROLLER_BUTTON_L_TRIGGER     = 6,
-             CONTROLLER_BUTTON_R_TRIGGER     = 7,
-             CONTROLLER_BUTTON_BACK          = 8,
-             CONTROLLER_BUTTON_START         = 9,
-             CONTROLLER_BUTTON_LEFTSTICK     = 10,
-             CONTROLLER_BUTTON_RIGHTSTICK    = 11,
-             CONTROLLER_BUTTON_DPAD_UP       = 12,
-             CONTROLLER_BUTTON_DPAD_DOWN     = 13,
-             CONTROLLER_BUTTON_DPAD_LEFT     = 14,
-             CONTROLLER_BUTTON_DPAD_RIGHT    = 15,
-             CONTROLLER_BUTTON_GUIDE         = 16,
-             // Key codes to use analog sticks as buttons
-             CONTROLLER_BUTTON_L_STICK_UP    = 21,
-             CONTROLLER_BUTTON_L_STICK_DOWN  = 22,
-             CONTROLLER_BUTTON_L_STICK_LEFT  = 23,
-             CONTROLLER_BUTTON_L_STICK_RIGHT = 24,
-             CONTROLLER_BUTTON_R_STICK_UP    = 25,
-             CONTROLLER_BUTTON_R_STICK_DOWN  = 26,
-             CONTROLLER_BUTTON_R_STICK_LEFT  = 27,
-             CONTROLLER_BUTTON_R_STICK_RIGHT = 28;
 
 export const MOUSE_BUTTON_INVALID       = -1,
              MOUSE_BUTTON_LEFT          = 0,
@@ -193,34 +167,34 @@ class ActionManager
         this.mouseKeyCodeMap.set( 'MOUSE 7X',     MOUSE_BUTTON_7X );
         this.mouseKeyCodeMap.set( 'MOUSE 8',      MOUSE_BUTTON_8X );
 
-        this.gamepadKeyCodeMap.set( '---',           CONTROLLER_BUTTON_INVALID );
-        this.gamepadKeyCodeMap.set( 'A',             CONTROLLER_BUTTON_A );
-        this.gamepadKeyCodeMap.set( 'B',             CONTROLLER_BUTTON_B );
-        this.gamepadKeyCodeMap.set( 'X',             CONTROLLER_BUTTON_X );
-        this.gamepadKeyCodeMap.set( 'Y',             CONTROLLER_BUTTON_Y );
-        this.gamepadKeyCodeMap.set( 'L BUMPER',      CONTROLLER_BUTTON_L_BUMPER );
-        this.gamepadKeyCodeMap.set( 'R BUMPER',      CONTROLLER_BUTTON_R_BUMPER );
-        this.gamepadKeyCodeMap.set( 'L TRIGGER',     CONTROLLER_BUTTON_L_TRIGGER );
-        this.gamepadKeyCodeMap.set( 'R TRIGGER',     CONTROLLER_BUTTON_R_TRIGGER );
-        this.gamepadKeyCodeMap.set( 'BACK',          CONTROLLER_BUTTON_BACK );
-        this.gamepadKeyCodeMap.set( 'START',         CONTROLLER_BUTTON_START );
-        this.gamepadKeyCodeMap.set( 'L STICK',       CONTROLLER_BUTTON_LEFTSTICK );
-        this.gamepadKeyCodeMap.set( 'R STICK',       CONTROLLER_BUTTON_RIGHTSTICK );
-        this.gamepadKeyCodeMap.set( 'UP',            CONTROLLER_BUTTON_DPAD_UP );
-        this.gamepadKeyCodeMap.set( 'DOWN',          CONTROLLER_BUTTON_DPAD_DOWN );
-        this.gamepadKeyCodeMap.set( 'LEFT',          CONTROLLER_BUTTON_DPAD_LEFT );
-        this.gamepadKeyCodeMap.set( 'RIGHT',         CONTROLLER_BUTTON_DPAD_RIGHT );
-        this.gamepadKeyCodeMap.set( 'GUIDE',         CONTROLLER_BUTTON_GUIDE );
+        this.gamepadKeyCodeMap.set( '---',           gamepadevent.GAMEPAD_BUTTON_INVALID );
+        this.gamepadKeyCodeMap.set( 'A',             gamepadevent.GAMEPAD_BUTTON_A );
+        this.gamepadKeyCodeMap.set( 'B',             gamepadevent.GAMEPAD_BUTTON_B );
+        this.gamepadKeyCodeMap.set( 'X',             gamepadevent.GAMEPAD_BUTTON_X );
+        this.gamepadKeyCodeMap.set( 'Y',             gamepadevent.GAMEPAD_BUTTON_Y );
+        this.gamepadKeyCodeMap.set( 'L BUMPER',      gamepadevent.GAMEPAD_BUTTON_L_BUMPER );
+        this.gamepadKeyCodeMap.set( 'R BUMPER',      gamepadevent.GAMEPAD_BUTTON_R_BUMPER );
+        this.gamepadKeyCodeMap.set( 'L TRIGGER',     gamepadevent.GAMEPAD_BUTTON_L_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'R TRIGGER',     gamepadevent.GAMEPAD_BUTTON_R_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'BACK',          gamepadevent.GAMEPAD_BUTTON_BACK );
+        this.gamepadKeyCodeMap.set( 'START',         gamepadevent.GAMEPAD_BUTTON_START );
+        this.gamepadKeyCodeMap.set( 'L STICK',       gamepadevent.GAMEPAD_BUTTON_LEFTSTICK );
+        this.gamepadKeyCodeMap.set( 'R STICK',       gamepadevent.GAMEPAD_BUTTON_RIGHTSTICK );
+        this.gamepadKeyCodeMap.set( 'UP',            gamepadevent.GAMEPAD_BUTTON_DPAD_UP );
+        this.gamepadKeyCodeMap.set( 'DOWN',          gamepadevent.GAMEPAD_BUTTON_DPAD_DOWN );
+        this.gamepadKeyCodeMap.set( 'LEFT',          gamepadevent.GAMEPAD_BUTTON_DPAD_LEFT );
+        this.gamepadKeyCodeMap.set( 'RIGHT',         gamepadevent.GAMEPAD_BUTTON_DPAD_RIGHT );
+        this.gamepadKeyCodeMap.set( 'GUIDE',         gamepadevent.GAMEPAD_BUTTON_GUIDE );
 
         // Key codes to use analog sticks as buttons
-        this.gamepadKeyCodeMap.set( 'L STICK UP',    CONTROLLER_BUTTON_L_STICK_UP );
-        this.gamepadKeyCodeMap.set( 'L STICK DOWN',  CONTROLLER_BUTTON_L_STICK_DOWN );
-        this.gamepadKeyCodeMap.set( 'L STICK LEFT',  CONTROLLER_BUTTON_L_STICK_LEFT );
-        this.gamepadKeyCodeMap.set( 'L STICK RIGHT', CONTROLLER_BUTTON_L_STICK_RIGHT );
-        this.gamepadKeyCodeMap.set( 'R STICK UP',    CONTROLLER_BUTTON_R_STICK_UP );
-        this.gamepadKeyCodeMap.set( 'R STICK DOWN',  CONTROLLER_BUTTON_R_STICK_DOWN );
-        this.gamepadKeyCodeMap.set( 'R STICK LEFT',  CONTROLLER_BUTTON_R_STICK_LEFT );
-        this.gamepadKeyCodeMap.set( 'R STICK RIGHT', CONTROLLER_BUTTON_R_STICK_RIGHT );
+        this.gamepadKeyCodeMap.set( 'L STICK UP',    gamepadevent.GAMEPAD_BUTTON_L_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'L STICK DOWN',  gamepadevent.GAMEPAD_BUTTON_L_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'L STICK LEFT',  gamepadevent.GAMEPAD_BUTTON_L_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'L STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_L_STICK_RIGHT );
+        this.gamepadKeyCodeMap.set( 'R STICK UP',    gamepadevent.GAMEPAD_BUTTON_R_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'R STICK DOWN',  gamepadevent.GAMEPAD_BUTTON_R_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'R STICK LEFT',  gamepadevent.GAMEPAD_BUTTON_R_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'R STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_R_STICK_RIGHT );
     }
     
     // 
@@ -377,6 +351,24 @@ class ActionManager
                     if( event.type.charCodeAt(5) === 100 )
                     {
                         result = defs.EAP_DOWN;
+                    }
+                }
+            }
+            // Check for gamepad event
+            else if( event instanceof GamepadEvent )
+            {
+                this.lastDeviceUsed = defs.GAMEPAD;
+
+                if( event.type === gamepadevent.GAMEPAD_BUTTON_DOWN || event.type === gamepadevent.GAMEPAD_BUTTON_UP )
+                {
+                    if( this.wasActionMap( event.buttonIndex, actionStr, this.gamepadActionMap ) )
+                    {
+                        result = defs.EAP_DOWN;
+
+                        if( event.type === gamepadevent.GAMEPAD_BUTTON_UP )
+                        {
+                            result = defs.EAP_UP;
+                        }
                     }
                 }
             }

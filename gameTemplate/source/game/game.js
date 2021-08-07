@@ -136,6 +136,9 @@ export class Game
     pollEvents()
     {
         let event = null;
+
+        // Handle any gamepad inputs
+        eventManager.handleGamepad();
         
         // Handle events on the queue
         while( (event = eventManager.pollEvent()) )

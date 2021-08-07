@@ -19,7 +19,7 @@ export const DEG_TO_RAD = 0.0174532925199432957,
              M_SQRT2    = 1.41421356237309504880, // sqrt(2)
              M_SQRT1_2  = 0.70710678118654752440; // 1/sqrt(2)
      
-export const DEFAULT_ID     = -1;
+export const DEFAULT_ID = -1;
 
 export const RESET_VELOCITY = true;
 
@@ -64,27 +64,27 @@ export const DEVICE_NULL = -1,
 // Sprite transform Bitmask
 
 // Transform parameters
-export const TRANSLATE	        = 0x01,
-             ROTATE             = 0x02,
-             SCALE              = 0x04,
-             CENTER_POINT       = 0x08,
-             CROP_OFFSET        = 0x10;
+export const TRANSLATE	  = 0x01,
+             ROTATE       = 0x02,
+             SCALE        = 0x04,
+             CENTER_POINT = 0x08,
+             CROP_OFFSET  = 0x10;
 
 // Translate parameters
-export const TRANSFORM          = 0x20,
-             WAS_TRANSFORMED    = 0x40;
+export const TRANSFORM       = 0x20,
+             WAS_TRANSFORMED = 0x40;
 
 // Matrix rotation
-export const MATRIX_ROTATION    = 0x80;
+export const MATRIX_ROTATION = 0x80;
 
 // Visible bit
-export const VISIBLE            = 0x100;
+export const VISIBLE         = 0x100;
      
 // ENodeType
-export const ENT_NULL              = 0,
-             ENT_OBJECT            = 1,
-             ENT_SPRITE            = 2,
-             ENT_UI_CONTROL        = 3;
+export const ENT_NULL       = 0,
+             ENT_OBJECT     = 1,
+             ENT_SPRITE     = 2,
+             ENT_UI_CONTROL = 3;
 
 // ESelection Message Arguments
 export const ESMA_PRESS_TYPE  = 0,

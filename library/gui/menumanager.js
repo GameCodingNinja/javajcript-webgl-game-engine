@@ -15,6 +15,7 @@ import { Menu } from '../gui/menu';
 import { MenuTree } from '../gui/menutree';
 import { cameraManager } from '../managers/cameramanager';
 import { GenericEvent } from '../common/genericevent';
+import { GamepadEvent } from '../common/gamepadevent';
 import * as genFunc from '../utilities/genfunc';
 import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
@@ -655,6 +656,10 @@ class MenuManager extends ManagerBase
                                 defs.MOUSE,
                                 event.clientX + eventManager.mouseOffset.x,
                                 event.clientY + eventManager.mouseOffset.y );
+                        }
+                        else if( event instanceof GamepadEvent )
+                        {
+                            eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_ACTION, pressType, defs.GAMEPAD );
                         }
                     }
                     else if( actionManager.wasActionPress( event, this.backAction, defs.EAP_DOWN ) )

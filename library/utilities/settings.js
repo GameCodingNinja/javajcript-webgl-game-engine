@@ -34,6 +34,9 @@ class Settings
         // the sector size
         this.sectorSize = 0;
         this.sectorSizeHalf = 0;
+
+        this.stickDeadZone = 0.3;
+        this.triggerValueEvents = false;
     }
 
     // 
@@ -107,6 +110,13 @@ class Settings
                 let targetBuffer = device[0].getElementsByTagName('targetBuffer');
                 if( targetBuffer.length )
                     this.clearTargetBuffer = (targetBuffer[0].getAttribute('clear') === 'true');
+
+                let gamepad = device[0].getElementsByTagName('gamepad');
+                if( gamepad.length )
+                {
+                    this.stickDeadZone = parseFloat(gamepad[0].getAttribute('stickDeadZone'));
+                    this.triggerValueEvents = (gamepad[0].getAttribute('triggerValueEvents') === 'true');
+                }
             }
             
             let worldNode = node.getElementsByTagName('world');

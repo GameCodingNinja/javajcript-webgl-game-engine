@@ -7,6 +7,9 @@
 "use strict";
 import { Point } from '../common/point';
 import { GenericEvent } from '../common/genericevent';
+import { settings } from '../utilities/settings';
+import { menuManager } from '../gui/menumanager';
+import * as gamepadevent from '../common/gamepadevent';
 
 class EventManager
 {
@@ -53,9 +56,6 @@ class EventManager
     //
     pollEvent()
     {
-        // Handle any gamepad inputs
-        this.handleGamepad();
-
         if( this.queue.length )
             return this.queue.shift();
         
@@ -87,7 +87,7 @@ class EventManager
     {
         this.queue.push( event );
         
-        console.log( event.type + ', ' + event.button );
+        //console.log( event.type + ', ' + event.button );
     }
     
     //
@@ -96,6 +96,8 @@ class EventManager
     onMouseUp( event )
     {
         this.queue.push( event );
+
+        //console.log( event.type + ', ' + event.button );
     }
     
     //
@@ -123,7 +125,7 @@ class EventManager
         {
             this.queue.push( event );
             
-            console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
+            //console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
         }
     }
     
@@ -133,6 +135,8 @@ class EventManager
     onKeyUp( event )
     {
         this.queue.push( event );
+
+        //console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
     }
 
     //
@@ -144,7 +148,7 @@ class EventManager
 
         this.queue.push( event );
 
-        console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+        //console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
     }
 
     //
@@ -166,35 +170,97 @@ class EventManager
     {
         if( this.gamePadMap.size )
         {
+            // Send out events for the button presses
             this.gamePadMap.forEach((lastGp, index) => 
             {
                 let gp = navigator.getGamepads()[index];
                 if(gp)
                 {
+                    // Create Up/DOWN events for the buttons
                     for(let i = 0; i < gp.buttons.length; i++)
                     {
-                        if(lastGp.buttons[i].pressed && !gp.buttons[i].pressed)
-                            console.log( `Button Index Up: ${i};` );
-                        else if(gp.buttons[i].pressed)
-                            console.log( `Button Index Down: ${i};` );
+                        // Check for button down
+                        if(!lastGp.buttons[i].pressed && gp.buttons[i].pressed)
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, i, gp) );
+                            //console.log( `Button Index Down: ${i};` );
+                        }
+                        // Check for button up
+                        else if(lastGp.buttons[i].pressed && !gp.buttons[i].pressed)
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, i, gp) );
+                            //console.log( `Button Index Up: ${i};` );
+                        }
+
+                        // Create events for the triggers if these values are needed
+                        if( settings.triggerValueEvents && (i == gamepadevent.GAMEPAD_BUTTON_L_TRIGGER || i == gamepadevent.GAMEPAD_BUTTON_R_TRIGGER) && gp.buttons[i].pressed )
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_TRIGGER_LEFT + (i - gamepadevent.GAMEPAD_BUTTON_L_TRIGGER), i, gp) );
+                            //console.log( `Button Trigger: ${i}; Value: ${gp.buttons[i].value};` );
+                        }
+                    }
+
+                    // Only check these if the menu is active
+                    if( menuManager.active )
+                    {
+                        //console.log( `Left Axes X Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        //console.log( `Left Axes Y Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+
+                        // Create UP/DOWN events for the Left analog stick
+                        if(!(lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                            (gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -gamepadevent.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_UP, gp) );
+                            //console.log( `Left Y Axes UP Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        }
+                        else if((lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                            !(gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -gamepadevent.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, gamepadevent.GAMEPAD_BUTTON_L_STICK_UP, gp) );
+                            //console.log( `Left Y Axes UP Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        }
+                        else if(!(lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                            (gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > gamepadevent.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
+                            //console.log( `Left Y Axes DOWN Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        }
+                        else if((lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                            !(gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > gamepadevent.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, gamepadevent.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
+                            //console.log( `Left Y Axes DOWN Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        }
+
+                        // Create Left/Right events for the Left analog stick
+                        else if(!(lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                            (gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
+                            //console.log( `Left X Axes LEFT Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        }
+                        else if((lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                            !(gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, gamepadevent.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
+                            //console.log( `Left X Axes LEFT Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        }
+                        else if(!(lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                            (gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > gamepadevent.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
+                            //console.log( `Left X Axes RIGHT Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        }
+                        else if((lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                            !(gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > gamepadevent.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, gamepadevent.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
+                            //console.log( `Left X Axes RIGHT Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        }
                     }
 
                     this.gamePadMap.set(index, gp);
                 }
-
-                /*if(gp.buttons[0].pressed || gp.buttons[0].touched)
-                    console.log( `Button Pressed: ${gp.buttons[0].pressed}; Button Touched: ${gp.buttons[0].touched}` );
-                
-                    let event = new CustomEvent('gamepadButtonDown',
-                    {
-                        detail:
-                        {
-                            gamepadIndex: index,
-                            button: args
-                        }
-                    });
-                
-                this.queue.push( event );*/
             });
         }
     }

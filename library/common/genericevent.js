@@ -8,9 +8,9 @@
 
 export class GenericEvent
 {
-    constructor( _type, ...args )
+    constructor( type, ...args )
     {
-        this.type = _type;
+        this.type = type;
         this.arg = args[0];
     }
 }
