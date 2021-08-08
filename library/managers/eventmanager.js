@@ -7,7 +7,7 @@
 "use strict";
 import { Point } from '../common/point';
 import { GenericEvent } from '../common/genericevent';
-import { settings } from '../utilities/settings';
+import { Gamepad } from '../common/gamepad';
 import { menuManager } from '../gui/menumanager';
 import * as gamepadevent from '../common/gamepadevent';
 
@@ -144,11 +144,11 @@ class EventManager
     //
     onGamepadconnected( event )
     {
-        this.gamePadMap.set( event.gamepad.index, event.gamepad );
+        this.gamePadMap.set( event.gamepad.index, new Gamepad( event.gamepad ) );
 
         this.queue.push( event );
 
-        //console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+        console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
     }
 
     //
@@ -156,11 +156,9 @@ class EventManager
     //
     onGamepadDisconnected( event )
     {
-        this.gamePadMap.delete(event.gamepad.index);
-
         this.queue.push( event );
 
-        //console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+        console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
     }
 
     //
@@ -171,32 +169,26 @@ class EventManager
         if( this.gamePadMap.size )
         {
             // Send out events for the button presses
-            this.gamePadMap.forEach((lastGp, index) => 
+            for ( let [index, lastGp] of this.gamePadMap )
             {
                 let gp = navigator.getGamepads()[index];
-                if(gp)
+
+                if( gp && gp.connected )
                 {
                     // Create Up/DOWN events for the buttons
                     for(let i = 0; i < gp.buttons.length; i++)
                     {
                         // Check for button down
-                        if(!lastGp.buttons[i].pressed && gp.buttons[i].pressed)
+                        if(!lastGp.pressed[i] && gp.buttons[i].pressed)
                         {
                             this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, i, gp) );
-                            //console.log( `Button Index Down: ${i};` );
+                            console.log( `Button Index Down: ${i};` );
                         }
                         // Check for button up
-                        else if(lastGp.buttons[i].pressed && !gp.buttons[i].pressed)
+                        else if(lastGp.pressed[i] && !gp.buttons[i].pressed)
                         {
                             this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, i, gp) );
-                            //console.log( `Button Index Up: ${i};` );
-                        }
-
-                        // Create events for the triggers if these values are needed
-                        if( settings.triggerValueEvents && (i == gamepadevent.GAMEPAD_BUTTON_L_TRIGGER || i == gamepadevent.GAMEPAD_BUTTON_R_TRIGGER) && gp.buttons[i].pressed )
-                        {
-                            this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_TRIGGER_LEFT + (i - gamepadevent.GAMEPAD_BUTTON_L_TRIGGER), i, gp) );
-                            //console.log( `Button Trigger: ${i}; Value: ${gp.buttons[i].value};` );
+                            console.log( `Button Index Up: ${i};` );
                         }
                     }
 
@@ -259,9 +251,10 @@ class EventManager
                         }
                     }
 
-                    this.gamePadMap.set(index, gp);
+                    // Sets the current gamepad
+                    lastGp.gamepad = gp;
                 }
-            });
+            }
         }
     }
     

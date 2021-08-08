@@ -36,7 +36,6 @@ class Settings
         this.sectorSizeHalf = 0;
 
         this.stickDeadZone = 0.3;
-        this.triggerValueEvents = false;
     }
 
     // 
@@ -113,10 +112,7 @@ class Settings
 
                 let gamepad = device[0].getElementsByTagName('gamepad');
                 if( gamepad.length )
-                {
                     this.stickDeadZone = parseFloat(gamepad[0].getAttribute('stickDeadZone'));
-                    this.triggerValueEvents = (gamepad[0].getAttribute('triggerValueEvents') === 'true');
-                }
             }
             
             let worldNode = node.getElementsByTagName('world');
