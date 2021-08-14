@@ -11,7 +11,7 @@ import { shaderManager } from '../managers/shadermanager';
 import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { Matrix } from '../utilities/matrix';
-import { gl } from '../system/device';
+import { device } from '../system/device';
 
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
@@ -32,6 +32,8 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
     {
         if( this.allowRender() )
         {
+            let gl = device.gl;
+            
             // Bind the VBO and IBO
             vertexBufferManager.bind( this.vbo, this.ibo );
 

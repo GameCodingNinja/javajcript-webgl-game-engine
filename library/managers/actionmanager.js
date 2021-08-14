@@ -6,8 +6,8 @@
 "use strict";
 import { KeyCodeAction } from '../common/keycodeaction';
 import { GamepadEvent } from '../common/gamepadevent';
+import { localStorage } from '../utilities/localstorage';
 import * as gamepadevent from '../common/gamepadevent';
-import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
 
 export const MOUSE_BUTTON_INVALID       = -1,
@@ -203,15 +203,6 @@ class ActionManager
     clearLastDeviceUsed()
     {
         this.lastDeviceUsed = defs.DEVICE_NULL;
-    }
-    
-    // 
-    //  DESC: Load data from file path
-    //
-    load( filePath )
-    {
-        return genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
     // 

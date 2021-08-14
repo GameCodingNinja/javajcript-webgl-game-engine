@@ -31,14 +31,8 @@ export class Camera extends Object
         this.maxZDist = settings.maxZdist;
         this.angle = settings.viewAngle;
 
-        // Create the projection matrix
-        this.createProjectionMatrix();
-        
-        // Do the initial transform
-        super.transform();
-        
-        // Calculate the final matrix
-        this.calcFinalMatrix();
+        // Setup the camera
+        this.setup();
     }
     
     //
@@ -73,14 +67,11 @@ export class Camera extends Object
         // Load the script functions from node
         this.scriptComponent.initScriptIds( xmlNode );
         
-        // Create the projection matrix
-        this.createProjectionMatrix();
-        
-        // Do the initial transform
-        super.transform();
-        
-        // Calculate the final matrix
-        this.calcFinalMatrix();
+        // Setup the camera
+        this.setup();
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
     }
     
     //
@@ -93,6 +84,15 @@ export class Camera extends Object
         this.maxZDist = maxZDist;
         this.angle = angle;
         
+        // Setup the camera
+        this.setup();
+    }
+
+    //
+    //  DESC: Setup the camera
+    //
+    setup()
+    {
         // Create the projection matrix
         this.createProjectionMatrix();
         
@@ -101,9 +101,6 @@ export class Camera extends Object
         
         // Calculate the final matrix
         this.calcFinalMatrix();
-
-        // Prepare any script functions that are flagged to prepareOnInit
-        this.scriptComponent.prepareOnInit( this );
     }
     
     //

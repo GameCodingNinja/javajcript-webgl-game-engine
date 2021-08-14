@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { gl } from '../system/device';
+import { device } from '../system/device';
 import * as meshFileHeader from '../common/meshbinaryfileheader';
 import * as mesh3d from '../common/mesh3d';
 
@@ -248,6 +248,7 @@ class MeshManager
     //
     buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry )
     {
+        let gl = device.gl;
         let faceGroup = new meshFileHeader.BinaryFaceGroup;
         
         // Read in each face group
@@ -347,6 +348,8 @@ class MeshManager
         let groupMap = this.meshBufMapMap.get( group );
         if( groupMap !== undefined )
         {
+            let gl = device.gl;
+            
             for( let [ key, meshGrp ] of groupMap.entries() )
             {
                 for( let i = 0; i < meshGrp.meshAry.length; ++i )

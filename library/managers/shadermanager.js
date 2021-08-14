@@ -7,7 +7,7 @@
 "use strict";
 
 import { ShaderData } from '../common/shaderdata';
-import { gl, device } from '../system/device';
+import { device } from '../system/device';
 import { signalManager } from '../managers/signalmanager';
 import * as genFunc from '../utilities/genfunc';
 
@@ -45,6 +45,7 @@ class ShaderManager
     //
     createShader( node )
     {
+        let gl = device.gl;
         let shaderId = node.getAttribute('Id');
         
         let vertexNode = node.getElementsByTagName('vertDataLst');
@@ -85,6 +86,7 @@ class ShaderManager
     //
     create( shaderType, shaderData, shaderTxtId, shaderTxt )
     {
+        let gl = device.gl;
         let id = gl.createShader(shaderType);
         if( id === 0 )
             throw new Error( `Error creating shader (${shaderTxtId}).` );
@@ -109,6 +111,8 @@ class ShaderManager
     //
     createProgram( shaderData )
     {
+        let gl = device.gl;
+
         // Combine the shaders into a program
         shaderData.programId = gl.createProgram();
         gl.attachShader( shaderData.programId, shaderData.vertexId );
@@ -131,6 +135,8 @@ class ShaderManager
     //
     locateShaderVariables( shaderData, vertNode, fragNode )
     {
+        let gl = device.gl;
+
         for( let i = 0; i < vertNode.length; ++i )
         {
             let name = vertNode[i].getAttribute('name');
@@ -160,7 +166,7 @@ class ShaderManager
     {
         if( this.currentShaderData != shaderData )
         {
-            let gl = device.glContext;
+            let gl = device.gl;
             
             if( this.currentShaderData === null )
             {
@@ -198,6 +204,8 @@ class ShaderManager
     //
     unbind()
     {
+        let gl = device.gl;
+
         for( let i = 0; i < this.currentAttributeCount; ++i )
             gl.disableVertexAttribArray(i);
     
@@ -233,7 +241,7 @@ class ShaderManager
             // Bind the shader so that we can change the value of the member
             this.bind( shaderData );
 
-            gl.uniform4fv( location, data );
+            device.gl.uniform4fv( location, data );
 
             // Unbind now that we are done
             this.unbind();

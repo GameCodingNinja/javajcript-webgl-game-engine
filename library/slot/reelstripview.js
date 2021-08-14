@@ -16,7 +16,7 @@ import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { highResTimer } from '../utilities/highresolutiontimer';
 import { soundManager } from '../managers/soundmanager';
 import { eventManager } from '../managers/eventmanager';
-import { gl } from '../system/device';
+import { device } from '../system/device';
 import * as slotDefs from './slotdefs';
 
 export class ReelStripView extends SlotStripView
@@ -577,6 +577,8 @@ export class ReelStripView extends SlotStripView
     //
     render( matrix )
     {
+        let gl = device.gl;
+        
         for( let i = 0; i < this.spriteAry.length; ++i )
             this.spriteAry[i].render( matrix );
 

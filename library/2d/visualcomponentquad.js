@@ -12,7 +12,7 @@ import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { Matrix } from '../utilities/matrix';
 import { Color } from '../common/color';
-import { gl } from '../system/device';
+import { device } from '../system/device';
 import * as defs from '../common/defs';
 
 // Global final matrix to be reused by every render call so that an object specific
@@ -68,6 +68,8 @@ export class VisualComponentQuad extends ivisualComponent
     {
         if( this.allowRender() )
         {
+            let gl = device.gl;
+            
             // Bind the VBO and IBO
             vertexBufferManager.bind( this.vbo, this.ibo );
 

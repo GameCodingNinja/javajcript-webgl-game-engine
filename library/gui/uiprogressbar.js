@@ -10,7 +10,7 @@ import { Sprite } from '../sprite/sprite';
 import { Size } from '../common/size';
 import { Point } from '../common/point';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
-import { gl } from '../system/device';
+import { device } from '../system/device';
 import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
@@ -214,7 +214,9 @@ export class UIProgressBar extends UIControl
     //  DESC: do the render
     //
     render( camera )
-    { 
+    {
+        let gl = device.gl;
+        
         if( this.stencilMaskSprite )
         {
             for( let i  = 0; i < this.spriteAry.length; ++i )

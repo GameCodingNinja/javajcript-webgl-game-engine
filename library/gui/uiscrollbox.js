@@ -11,7 +11,7 @@ import { Sprite } from '../sprite/sprite';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { eventManager } from '../managers/eventmanager';
 import { highResTimer } from '../utilities/highresolutiontimer';
-import { gl } from '../system/device';
+import { device } from '../system/device';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as UIControlFactory from './uicontrolfactory';
 import * as uiControlDefs from '../gui/uicontroldefs';
@@ -354,7 +354,9 @@ export class UIScrollBox extends UISubControl
     {
         // Call the parent
         super.render( camera );
-        
+
+
+        let gl = device.gl;
 
         // Disable rendering to the color buffer
         // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
@@ -811,7 +813,7 @@ export class UIScrollBox extends UISubControl
         let result = super.onSubControlMouseMove( event );
 
         // We only care about the scroll controls if the point is within the scroll box
-        if( !result && this.isPointInControl( event.clientX + eventManager.mouseOffset.x, event.clientY + eventManager.mouseOffset.y ) )
+        if( !result && this.isPointInControl( event.gameAdjustedX, event.gameAdjustedY ) )
         {
             for( let i = this.visStartPos; i < this.visEndPos && !result; ++i )
             {

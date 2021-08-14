@@ -1,0 +1,42 @@
+﻿{
+    "keyboardMapping": {
+        "playerHidden": [
+                { "action": "Menu Up", "componetId": "W" },
+                { "action": "Menu Down", "componetId": "S" },
+                { "action": "Menu Left", "componetId": "A" },
+                { "action": "Menu Right", "componetId": "D" },
+                { "action": "Menu Up", "componetId": "ARROW UP" },
+                { "action": "Menu Down", "componetId": "ARROW DOWN" },
+                { "action": "Menu Left", "componetId": "ARROW LEFT" },
+                { "action": "Menu Right", "componetId": "ARROW RIGHT" } ],
+
+        "playerVisible": [
+                { "action": "Menu Select", "componetId": "ENTER", "configurable": "false" },
+                { "action": "Menu Escape", "componetId": "ESCAPE", "configurable": "false" },
+                { "action": "Menu Toggle", "componetId": "LEFT SHIFT", "defaultId": "LEFT SHIFT", "configurable": "true" },
+                { "action": "Up", "componetId": "W", "defaultId": "W", "configurable": "true" },
+                { "action": "Down", "componetId": "S", "defaultId": "S", "configurable": "true" },
+                { "action": "Left", "componetId": "A", "defaultId": "A", "configurable": "true" },
+                { "action": "Right", "componetId": "D", "defaultId": "D", "configurable": "true" } ] },
+
+    "mouseMapping": {
+        "playerVisible": [
+            { "action": "Menu Select", "componetId": "LEFT MOUSE", "defaultId": "LEFT MOUSE", "configurable": "true" } ] },
+
+    "gamepadMapping": {
+        "playerHidden": [
+                { "action": "Menu Up", "componetId": "L STICK UP" },
+                { "action": "Menu Down", "componetId": "L STICK DOWN" },
+                { "action": "Menu Left", "componetId": "L STICK LEFT" },
+                { "action": "Menu Right", "componetId": "L STICK RIGHT" },
+                { "action": "Menu Up", "componetId": "UP" },
+                { "action": "Menu Down", "componetId": "DOWN" },
+                { "action": "Menu Left", "componetId": "LEFT" },
+                { "action": "Menu Right", "componetId": "RIGHT" },
+                { "action": "Menu Back", "componetId": "BACK" },
+                { "action": "Menu Toggle", "componetId": "START" } ],
+
+        "playerVisible": [
+                { "action": "Menu Select", "componetId": "A", "defaultId": "A", "configurable": "true" },
+                { "action": "Menu Back", "componetId": "B", "defaultId": "B", "configurable": "true" } ] }
+}

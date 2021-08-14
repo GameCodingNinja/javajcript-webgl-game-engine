@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { gl } from '../system/device';
+import { device } from '../system/device';
 import { Point } from '../common/point';
 import { Size } from '../common/size';
 import { Quad2d } from '../common/quad2d';
@@ -36,6 +36,8 @@ class VertexBufferManager
     //
     createVBO( group, name, vertAry )
     {
+        let gl = device.gl;
+
         // Create the group map if it doesn't already exist
         let groupMap = this.vertexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -64,6 +66,8 @@ class VertexBufferManager
     //
     createIBO( group, name, indexAry, intAs8bit )
     {
+        let gl = device.gl;
+
         // Create the group map if it doesn't already exist
         let groupMap = this.indexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -97,6 +101,8 @@ class VertexBufferManager
     //
     createDynamicFontIBO( group, name, indexAry, maxIndicies )
     {
+        let gl = device.gl;
+
         // Create the group map if it doesn't already exist
         let groupMap = this.indexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -133,6 +139,8 @@ class VertexBufferManager
     //
     createScaledFrame( group, name, scaledFrame, textureSize, glyphSize, frameSize, spriteSheetOffset, meshFileVertAry = null )
     {
+        let gl = device.gl;
+
         // Create the group map if it doesn't already exist
         let groupMap = this.vertexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -332,6 +340,8 @@ class VertexBufferManager
     //
     deleteGroup( group )
     {
+        let gl = device.gl;
+
         let groupMap = this.vertexBufMapMap.get( group );
         if( groupMap !== undefined )
         {
@@ -374,6 +384,8 @@ class VertexBufferManager
     //
     bind( vbo, ibo )
     {
+        let gl = device.gl;
+
         if( this.currentVBO != vbo )
         {
             // save the current binding
@@ -398,6 +410,8 @@ class VertexBufferManager
     //
     unbind()
     {
+        let gl = device.gl;
+        
         this.currentVBO = null;
         this.currentIBO = null;
         gl.bindBuffer( gl.ARRAY_BUFFER, null );

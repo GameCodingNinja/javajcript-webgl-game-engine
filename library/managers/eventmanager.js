@@ -9,7 +9,10 @@ import { Point } from '../common/point';
 import { GenericEvent } from '../common/genericevent';
 import { Gamepad } from '../common/gamepad';
 import { menuManager } from '../gui/menumanager';
+import { settings } from '../utilities/settings';
+import { cameraManager } from '../managers/cameramanager';
 import * as gamepadevent from '../common/gamepadevent';
+import { device } from '../system/device';
 
 class EventManager
 {
@@ -21,23 +24,28 @@ class EventManager
         // Init with the most common events
 
         // Event handlers
-        this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this) );
-        this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this) );
-        this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this) );
-        document.addEventListener('scroll', this.onScroll.bind(this) );
+        this.canvas.addEventListener( 'mousedown', this.onMouseDown.bind(this) );
+        this.canvas.addEventListener( 'mouseup', this.onMouseUp.bind(this) );
+        this.canvas.addEventListener( 'mousemove', this.onMouseMove.bind(this) );
+        document.addEventListener( 'scroll', this.onScroll.bind(this) );
         
         // Using document for key listener because canvas needs the focus before
         // it will trap key events. There's no good solution for force the focus
         // onto the canvas
-        document.addEventListener('keydown', this.onKeyDown.bind(this) );
-        document.addEventListener('keyup', this.onKeyUp.bind(this) );
+        document.addEventListener( 'keydown', this.onKeyDown.bind(this) );
+        document.addEventListener( 'keyup', this.onKeyUp.bind(this) );
         
         //this.canvas.addEventListener('keydown', this.onKeyDown.bind(this) );
         //this.canvas.addEventListener('keyup', this.onKeyUp.bind(this) );
 
         // Gamepad event handlers
-        window.addEventListener("gamepadconnected", this.onGamepadconnected.bind(this) );
-        window.addEventListener("gamepaddisconnected", this.onGamepadDisconnected.bind(this) );
+        window.addEventListener( "gamepadconnected", this.onGamepadconnected.bind(this) );
+        window.addEventListener( "gamepaddisconnected", this.onGamepadDisconnected.bind(this) );
+
+        // Resize even handler
+        //window.addEventListener( 'resize', this.onResize.bind(this) );
+
+        document.addEventListener('fullscreenchange', this.onFullScreenChange.bind(this) );
         
         // Mouse move relative offset data types
         this.mouseAbsolutePos = new Point;
@@ -49,6 +57,9 @@ class EventManager
 
         // Dictionary for holding all the gamepads
         this.gamePadMap = new Map;
+
+        // Store then initial backgroud color
+        this.backgroundColor = document.body.style.backgroundColor;
     }
     
     //
@@ -85,6 +96,10 @@ class EventManager
     //
     onMouseDown( event )
     {
+        // Filter the mouse position and add a new membe to the event
+        this.filterMousePos( event );
+
+        // Add to the event queue
         this.queue.push( event );
         
         //console.log( event.type + ', ' + event.button );
@@ -95,6 +110,10 @@ class EventManager
     //
     onMouseUp( event )
     {
+        // Filter the mouse position and add a new membe to the event
+        this.filterMousePos( event );
+
+        // Add to the event queue
         this.queue.push( event );
 
         //console.log( event.type + ', ' + event.button );
@@ -105,15 +124,37 @@ class EventManager
     //
     onMouseMove( event )
     {
+        // Filter the mouse position and add a new membe to the event
+        this.filterMousePos( event );
+
+        // Add to the event queue
         this.queue.push( event );
-        
-        this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
-        this.mouseAbsolutePos.setXYZ( event.clientX + this.mouseOffset.x, event.clientY + this.mouseOffset.y );
-        
+
         //console.log(`Mouse move - ClientX: ${event.clientX}, ClientY: ${event.clientY}, OffsetX: ${event.offsetX}, OffsetY: ${event.offsetY}, RelX: ${event.movementX}, RelY: ${event.movementY}`);
         //console.log(`Canvas Offset: ${this.canvas.offsetLeft} x ${this.canvas.offsetTop}`);
         //console.log(`Document Offset: ${document.documentElement.scrollLeft} x ${document.documentElement.scrollTop}`);
         //console.log(`Move; RelX: ${this.mouseMoveRelX} RelY ${this.mouseMoveRelY}; AbsX: ${this.lastMouseMoveX} absY ${this.lastMouseMoveY}`);
+    }
+
+    //
+    //  DESC: Handle onKeyDown events
+    //
+    onFullScreenChange( event )
+    {
+        console.log('onFullScreenChange');
+        if (document.fullscreenElement)
+        {
+            let dpr = window.devicePixelRatio;
+            let width = Math.trunc(event.target.clientWidth * dpr);
+            let height = Math.trunc(event.target.clientHeight * dpr);
+            device.handleResolutionChange( width, height );
+            document.body.style.backgroundColor = 'black';
+        }
+        else
+        {
+            device.handleResolutionChange( settings.initialSize.w, settings.initialSize.h );
+            document.body.style.backgroundColor = this.backgroundColor;
+        }
     }
     
     //
@@ -124,8 +165,16 @@ class EventManager
         if( event.repeat === false )
         {
             this.queue.push( event );
-            
-            //console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
+
+            if (event.code == 'KeyF')
+            {
+                console.log('onKeyDown');
+                if (!document.fullscreenElement)
+                    device.canvas.requestFullscreen();
+
+                else if (document.exitFullscreen)
+                    document.exitFullscreen()
+            }
         }
     }
     
@@ -140,15 +189,32 @@ class EventManager
     }
 
     //
+    //  DESC: onResizeObserver even handler
+    //
+    onResize( event )
+    {
+        if( this.allowResizeListener )
+        {
+            //console.log(`onResize`);
+            //let dpr = window.devicePixelRatio;
+            //if( dpr > 1 )
+            //    dpr *= 1.01;
+            //device.handleResolutionChange( Math.round(dpr * settings.initialSize.w), Math.round(dpr * settings.initialSize.h) );
+            //console.log( `Canvas size: ${device.canvas.clientWidth} x ${device.canvas.clientHeight}; DPR: ${dpr}` );
+        }
+    }
+
+    //
     //  DESC: Handle onGamepadconnected events
     //
     onGamepadconnected( event )
     {
-        this.gamePadMap.set( event.gamepad.index, new Gamepad( event.gamepad ) );
-
-        this.queue.push( event );
-
-        console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+        if( settings.allowGamepad )
+        {
+            this.gamePadMap.set( event.gamepad.index, new Gamepad( event.gamepad ) );
+            this.queue.push( event );
+            console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+        }
     }
 
     //
@@ -156,9 +222,34 @@ class EventManager
     //
     onGamepadDisconnected( event )
     {
-        this.queue.push( event );
+        if( settings.allowGamepad )
+        {
+            this.queue.push( event );
+            console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+        }
+    }
 
-        console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+    //
+    //  DESC: Filter the mouse position and add a new member to the event
+    //
+    filterMousePos( event )
+    {
+        let x = event.offsetX + this.mouseOffset.x;
+        let y = event.offsetY + this.mouseOffset.y;
+
+        if( document.fullscreenElement )
+        {
+            let dpr = window.devicePixelRatio;
+            x = Math.trunc(event.offsetX * dpr);
+            y = Math.trunc(event.offsetY * dpr);
+        }
+
+        // Create a new event member to hold game custom values
+        event.gameAdjustedX = x;
+        event.gameAdjustedY = y;
+
+        this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
+        this.mouseAbsolutePos.setXYZ( x, y);
     }
 
     //

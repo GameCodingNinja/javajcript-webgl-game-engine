@@ -6,7 +6,7 @@
 
 "use strict";
 import { Texture } from '../common/texture';
-import { gl } from '../system/device';
+import { device } from '../system/device';
 
 class TextureManager
 {
@@ -24,6 +24,8 @@ class TextureManager
     //
     load( group, filePath, image )
     {
+        let gl = device.gl;
+
         if( !image.complete )
             throw new Error( `Image file not completely loaded! (${group}, ${filePath}).` );
 
@@ -90,6 +92,8 @@ class TextureManager
         let groupMap = this.textureForMapMap.get( group );
         if( groupMap !== undefined )
         {
+            let gl = device.gl;
+
             for( let texture of groupMap.values() )
                 gl.deleteTexture( texture.id );
             
@@ -120,6 +124,8 @@ class TextureManager
     {
         if( this.currentTexture != textureId )
         {
+            let gl = device.gl;
+
             // save the current binding
             this.currentTexture = textureId;
 
@@ -133,6 +139,8 @@ class TextureManager
     //
     unbind()
     {
+        let gl = device.gl;
+        
         this.currentTexture = null;
         gl.bindTexture(gl.TEXTURE_2D, null);
     }

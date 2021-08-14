@@ -18,6 +18,9 @@ class CameraManager
         
         // Transform array
         this.transformAry = [];
+
+        // The default camera
+        this.defaultCamera = null;
     }
     
     // 
@@ -156,6 +159,17 @@ class CameraManager
     clearTransAry()
     {
         this.transformAry = [];
+    }
+
+    //
+    //  DESC: Rebuild all camera's projection matrixes
+    //
+    rebuild()
+    {
+        this.defaultCamera.setup();
+
+        for( let camera of this.cameraMap.values() )
+            camera.setup();
     }
 }
 

@@ -9,4 +9,5 @@
 import { Game } from './game.js';
 
 // Create the game
-new Game;
+var game = new Game;
+game.init();

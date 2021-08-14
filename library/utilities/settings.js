@@ -13,7 +13,8 @@ class Settings
 {
     constructor()
     {
-        this.size = new Size;
+        this.size = new Size(853, 480);
+        this.initialSize = new Size(this.size.w, this.size.h);
         this.size_half = new Size;
         this.nativeSize = new Size;
         this.screenAspectRatio = new Size;
@@ -36,6 +37,10 @@ class Settings
         this.sectorSizeHalf = 0;
 
         this.stickDeadZone = 0.3;
+
+        this.gameName = "Unnamed Game";
+        this.gameId = "unnamedgame";
+        this.allowGamepad = false;
     }
 
     // 
@@ -63,6 +68,7 @@ class Settings
                 {
                     this.size.w = Number(resolution[0].getAttribute('width'));
                     this.size.h = Number(resolution[0].getAttribute('height'));
+                    this.initialSize.set(this.size.w, this.size.h);
                 }
                 
                 let defaultRes = display[0].getElementsByTagName('default');
@@ -112,7 +118,17 @@ class Settings
 
                 let gamepad = device[0].getElementsByTagName('gamepad');
                 if( gamepad.length )
+                {
                     this.stickDeadZone = parseFloat(gamepad[0].getAttribute('stickDeadZone'));
+                    this.allowGamepad = (gamepad[0].getAttribute('allow') === 'true');
+                }
+            }
+
+            let game = node.getElementsByTagName('game');
+            if( game.length )
+            {
+                this.gameName = game[0].getAttribute('name');
+                this.gameId = game[0].getAttribute('id');
             }
             
             let worldNode = node.getElementsByTagName('world');

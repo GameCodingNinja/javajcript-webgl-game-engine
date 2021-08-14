@@ -13,7 +13,7 @@ import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { fontManager } from '../managers/fontmanager';
 import { FontData } from '../common/fontdata';
 import { Matrix } from '../utilities/matrix';
-import { gl } from '../system/device';
+import { device } from '../system/device';
 import * as defs from '../common/defs';
 import * as genFunc from '../utilities/genfunc';
 
@@ -46,7 +46,7 @@ export class VisualComponentFont extends VisualComponentQuad
         // Delete the VBO if this is a font
         if( (this.visualData.genType === defs.EGT_FONT) && (this.vbo !== null) )
         {
-            gl.deleteBuffer( this.vbo );
+            device.gl.deleteBuffer( this.vbo );
             this.vbo = null;
         }
 
@@ -62,6 +62,8 @@ export class VisualComponentFont extends VisualComponentQuad
     {
         if( this.allowRender() )
         {
+            let gl = device.gl;
+
             // Bind the VBO and IBO
             vertexBufferManager.bind( this.vbo, this.ibo );
 
@@ -165,6 +167,8 @@ export class VisualComponentFont extends VisualComponentQuad
     //
     createFontString( fontString )
     {
+        let gl = device.gl;
+        
         // Qualify if we want to build the font string
         if( (this.fontData !== null) &&
             (fontString !== '') &&

@@ -425,7 +425,7 @@ export class UIControl extends ControlBase
     {
         let result = false;
 
-        if( !this.isDisabled() && this.isPointInControl( event.clientX + eventManager.mouseOffset.x, event.clientY + eventManager.mouseOffset.y ) )
+        if( !this.isDisabled() && this.isPointInControl( event.gameAdjustedX, event.gameAdjustedY ) )
         {
             result = true;
 

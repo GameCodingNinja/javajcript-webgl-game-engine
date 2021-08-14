@@ -12,7 +12,7 @@ import { shaderManager } from '../managers/shadermanager';
 import { textureManager } from '../managers/texturemanager';
 import { Matrix } from '../utilities/matrix';
 import { Color } from '../common/color';
-import { gl } from '../system/device';
+import { device } from '../system/device';
 
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
@@ -66,6 +66,8 @@ export class VisualComponent3D extends ivisualComponent
     //
     render( object, camera )
     {
+        let gl = device.gl;
+        
         for( let i = 0; i < this.meshAry.length; ++i )
         {
             // Increment our stat counter to keep track of what is going on.

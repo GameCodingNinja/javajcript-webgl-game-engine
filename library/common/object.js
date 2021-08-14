@@ -352,6 +352,6 @@ export class Object
     //
     forceTransform()
     {
-        this.parameters.Add( defs.TRANSFORM );
+        this.parameters.add( defs.TRANSFORM );
     }
 }

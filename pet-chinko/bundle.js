@@ -15,15 +15,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
 /* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(162);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(180);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(181);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(165);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(183);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(184);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(9);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(22);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(123);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(58);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(185);
+/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(188);
 
 // 
 //  FILE NAME: game.js
@@ -371,6 +371,12 @@ class Settings
         // the sector size
         this.sectorSize = 0;
         this.sectorSizeHalf = 0;
+
+        this.stickDeadZone = 0.3;
+
+        this.gameName = "Unnamed Game";
+        this.gameId = "unnamedgame";
+        this.allowGamepad = false;
     }
 
     // 
@@ -444,6 +450,20 @@ class Settings
                 let targetBuffer = device[0].getElementsByTagName('targetBuffer');
                 if( targetBuffer.length )
                     this.clearTargetBuffer = (targetBuffer[0].getAttribute('clear') === 'true');
+
+                let gamepad = device[0].getElementsByTagName('gamepad');
+                if( gamepad.length )
+                {
+                    this.stickDeadZone = parseFloat(gamepad[0].getAttribute('stickDeadZone'));
+                    this.allowGamepad = (gamepad[0].getAttribute('allow') === 'true');
+                }
+            }
+
+            let game = node.getElementsByTagName('game');
+            if( game.length )
+            {
+                this.gameName = game[0].getAttribute('name');
+                this.gameId = game[0].getAttribute('id');
             }
             
             let worldNode = node.getElementsByTagName('world');
@@ -678,7 +698,7 @@ const DEG_TO_RAD = 0.0174532925199432957,
              M_SQRT2    = 1.41421356237309504880, // sqrt(2)
              M_SQRT1_2  = 0.70710678118654752440; // 1/sqrt(2)
      
-const DEFAULT_ID     = -1;
+const DEFAULT_ID = -1;
 
 const RESET_VELOCITY = true;
 
@@ -723,27 +743,27 @@ const DEVICE_NULL = -1,
 // Sprite transform Bitmask
 
 // Transform parameters
-const TRANSLATE	        = 0x01,
-             ROTATE             = 0x02,
-             SCALE              = 0x04,
-             CENTER_POINT       = 0x08,
-             CROP_OFFSET        = 0x10;
+const TRANSLATE	  = 0x01,
+             ROTATE       = 0x02,
+             SCALE        = 0x04,
+             CENTER_POINT = 0x08,
+             CROP_OFFSET  = 0x10;
 
 // Translate parameters
-const TRANSFORM          = 0x20,
-             WAS_TRANSFORMED    = 0x40;
+const TRANSFORM       = 0x20,
+             WAS_TRANSFORMED = 0x40;
 
 // Matrix rotation
-const MATRIX_ROTATION    = 0x80;
+const MATRIX_ROTATION = 0x80;
 
 // Visible bit
-const VISIBLE            = 0x100;
+const VISIBLE         = 0x100;
      
 // ENodeType
-const ENT_NULL              = 0,
-             ENT_OBJECT            = 1,
-             ENT_SPRITE            = 2,
-             ENT_UI_CONTROL        = 3;
+const ENT_NULL       = 0,
+             ENT_OBJECT     = 1,
+             ENT_SPRITE     = 2,
+             ENT_UI_CONTROL = 3;
 
 // ESelection Message Arguments
 const ESMA_PRESS_TYPE  = 0,
@@ -1210,8 +1230,8 @@ class Device
 {
     constructor()
     {
-        this.perspectiveMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__.Matrix;
-        this.orthographicMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_1__.Matrix;
+        //this.perspectiveMatrix = new Matrix;
+        //this.orthographicMatrix = new Matrix;
         this.canvas = null;
         this.glContext = null;
         
@@ -1227,7 +1247,7 @@ class Device
         let parm = {premultipliedAlpha: false, alpha: false, stencil:true, preserveDrawingBuffer: true};
         
         this.canvas = document.getElementById('game-surface');
-	this.glContext =
+	    this.glContext =
             this.canvas.getContext('webgl2', parm) ||
             this.canvas.getContext('webgl', parm) ||
             this.canvas.getContext('experimental-webgl', parm);
@@ -1239,20 +1259,20 @@ class Device
     // 
     //  DESC: Create the projection matrixes
     //
-    createProjMatrix()
+    /*createProjMatrix()
     {
         this.perspectiveMatrix.perspectiveFovRH(
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.viewAngle,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.screenAspectRatio.w,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.minZdist,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.maxZdist );
+            settings.viewAngle,
+            settings.screenAspectRatio.w,
+            settings.minZdist,
+            settings.maxZdist );
             
         this.orthographicMatrix.orthographicRH(
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.defaultSize.w,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.defaultSize.h,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.minZdist,
-            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.maxZdist );
-    }
+            settings.defaultSize.w,
+            settings.defaultSize.h,
+            settings.minZdist,
+            settings.maxZdist );
+    }*/
 }
 
 var device = new Device;
@@ -2737,39 +2757,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(24);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(27);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(101);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(103);
-/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(142);
+/* harmony import */ var _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(49);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(114);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(27);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(25);
+/* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(145);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(2);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(144);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(121);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(147);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(148);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(123);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(106);
-/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(32);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(39);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(147);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(56);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(150);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(151);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(58);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(35);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(118);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(31);
 /* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(23);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(6);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(162);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(165);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(166);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(167);
-/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(168);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(165);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(168);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(169);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(170);
+/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(171);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(169);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(170);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(171);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(172);
-/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(173);
-/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(174);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(175);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(176);
-/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(177);
-/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(178);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(179);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(172);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(173);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(174);
+/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(175);
+/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(176);
+/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(177);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(178);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(179);
+/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(180);
+/* harmony import */ var raw_loader_data_settings_controllerMapping_cfg__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(181);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(182);
 
 //
 //  FILE NAME: startupstate.js
@@ -3273,11 +3293,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 /* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(23);
+/* harmony import */ var _common_gamepad__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(24);
+/* harmony import */ var _gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(25);
+/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3);
+/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
 
 //
 //  FILE NAME: eventmanager.js
 //  DESC:      event manager class singleton
 //
+
+
+
+
 
 
 
@@ -3328,9 +3356,6 @@ class EventManager
     //
     pollEvent()
     {
-        // Handle any gamepad inputs
-        this.handleGamepad();
-
         if( this.queue.length )
             return this.queue.shift();
         
@@ -3362,7 +3387,7 @@ class EventManager
     {
         this.queue.push( event );
         
-        console.log( event.type + ', ' + event.button );
+        //console.log( event.type + ', ' + event.button );
     }
     
     //
@@ -3371,6 +3396,8 @@ class EventManager
     onMouseUp( event )
     {
         this.queue.push( event );
+
+        //console.log( event.type + ', ' + event.button );
     }
     
     //
@@ -3397,8 +3424,21 @@ class EventManager
         if( event.repeat === false )
         {
             this.queue.push( event );
+
+            if (event.code == 'KeyF')
+            {
+                if (!document.fullscreenElement)
+                    document.documentElement.requestFullscreen()
+                    .then(() => {this.canvas.width = this.canvas.clientWidth; this.canvas.height = this.canvas.clientHeight;});
+                else if (document.exitFullscreen)
+                      document.exitFullscreen()
+                      .then(() => {this.canvas.width = 1280; this.canvas.height = 720;});
+            }
+
+            console.log( `Window size: ${window.screen.width} x ${window.screen.height}` );
+            console.log( `Client size: ${this.canvas.clientWidth} x ${this.canvas.clientHeight}` );
             
-            console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
+            //console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
         }
     }
     
@@ -3408,6 +3448,8 @@ class EventManager
     onKeyUp( event )
     {
         this.queue.push( event );
+
+        //console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
     }
 
     //
@@ -3415,11 +3457,12 @@ class EventManager
     //
     onGamepadconnected( event )
     {
-        this.gamePadMap.set( event.gamepad.index, event.gamepad );
-
-        this.queue.push( event );
-
-        console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.allowGamepad )
+        {
+            this.gamePadMap.set( event.gamepad.index, new _common_gamepad__WEBPACK_IMPORTED_MODULE_2__.Gamepad( event.gamepad ) );
+            this.queue.push( event );
+            console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+        }
     }
 
     //
@@ -3427,11 +3470,11 @@ class EventManager
     //
     onGamepadDisconnected( event )
     {
-        this.gamePadMap.delete(event.gamepad.index);
-
-        this.queue.push( event );
-
-        //console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.allowGamepad )
+        {
+            this.queue.push( event );
+            console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+        }
     }
 
     //
@@ -3441,36 +3484,93 @@ class EventManager
     {
         if( this.gamePadMap.size )
         {
-            this.gamePadMap.forEach((lastGp, index) => 
+            // Send out events for the button presses
+            for ( let [index, lastGp] of this.gamePadMap )
             {
                 let gp = navigator.getGamepads()[index];
-                if(gp)
+
+                if( gp && gp.connected )
                 {
+                    // Create Up/DOWN events for the buttons
                     for(let i = 0; i < gp.buttons.length; i++)
                     {
-                        if(lastGp.buttons[i].pressed && !gp.buttons[i].pressed)
-                            console.log( `Button Index Up: ${i};` );
-                        else if(gp.buttons[i].pressed)
+                        // Check for button down
+                        if(!lastGp.pressed[i] && gp.buttons[i].pressed)
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, i, gp) );
                             console.log( `Button Index Down: ${i};` );
+                        }
+                        // Check for button up
+                        else if(lastGp.pressed[i] && !gp.buttons[i].pressed)
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, i, gp) );
+                            console.log( `Button Index Up: ${i};` );
+                        }
                     }
 
-                    this.gamePadMap.set(index, gp);
-                }
-
-                /*if(gp.buttons[0].pressed || gp.buttons[0].touched)
-                    console.log( `Button Pressed: ${gp.buttons[0].pressed}; Button Touched: ${gp.buttons[0].touched}` );
-                
-                    let event = new CustomEvent('gamepadButtonDown',
+                    // Only check these if the menu is active
+                    if( _gui_menumanager__WEBPACK_IMPORTED_MODULE_3__.menuManager.active )
                     {
-                        detail:
+                        //console.log( `Left Axes X Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        //console.log( `Left Axes Y Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+
+                        // Create UP/DOWN events for the Left analog stick
+                        if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                            (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                         {
-                            gamepadIndex: index,
-                            button: args
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, gp) );
+                            //console.log( `Left Y Axes UP Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                         }
-                    });
-                
-                this.queue.push( event );*/
-            });
+                        else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                            !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, gp) );
+                            //console.log( `Left Y Axes UP Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        }
+                        else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                            (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
+                            //console.log( `Left Y Axes DOWN Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        }
+                        else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                            !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
+                            //console.log( `Left Y Axes DOWN Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        }
+
+                        // Create Left/Right events for the Left analog stick
+                        else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                            (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
+                            //console.log( `Left X Axes LEFT Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        }
+                        else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                            !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
+                            //console.log( `Left X Axes LEFT Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        }
+                        else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                            (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
+                            //console.log( `Left X Axes RIGHT Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        }
+                        else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                            !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        {
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
+                            //console.log( `Left X Axes RIGHT Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        }
+                    }
+
+                    // Sets the current gamepad
+                    lastGp.gamepad = gp;
+                }
+            }
         }
     }
     
@@ -3505,9 +3605,9 @@ __webpack_require__.r(__webpack_exports__);
 
 class GenericEvent
 {
-    constructor( _type, ...args )
+    constructor( type, ...args )
     {
-        this.type = _type;
+        this.type = type;
         this.arg = args[0];
     }
 }
@@ -3520,140 +3620,71 @@ class GenericEvent
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "fontManager": () => (/* binding */ fontManager)
+/* harmony export */   "Gamepad": () => (/* binding */ Gamepad)
 /* harmony export */ });
-/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
+// 
+//  FILE NAME:  gamepad.js
+//  DESC:       class for holding gamepad object and a copy of it's values
+//  NOTE:       Some browsers keep the same gamepad object while others issue a new one.
+//              This is a solution that will solve the problem of remembering the button pressed state.
 //
-//  FILE NAME: fontmanager.js
-//  DESC:      font manager class singleton
-//
 
 
 
-
-
-
-class FontManager
+class Gamepad
 {
-    constructor()
+    constructor( gp )
     {
-        // map list of fonts
-        this.fontMap = new Map;
+        // The gamepad object this event was created from
+        this.gp = gp;
 
-        // Group name
-        this.group = '';
+        // List of last pressed values
+        this._pressed = [];
+
+        // List of last axes values
+        this._axes = [];
+
+        // Copy the values over
+        for( const each of gp.buttons )
+            this._pressed.push( each.pressed );
+
+        // Copy the values over
+        for( const each of gp.axes )
+            this._axes.push( each );
     }
-    
-    // 
-    //  DESC: Load the data list tables from file path
+
     //
-    load( filePath )
+    //  DESC: Set the gamepad and copy the last data
+    //
+    set gamepad( gp )
     {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ));
+        // Update the class member because the gamepad object might be different
+        this.gp = gp;
+
+        for( let i = 0; i < gp.buttons.length; i++ )
+            this._pressed[i] = gp.buttons[i].pressed;
+
+        for( let i = 0; i < gp.axes.length; i++ )
+            this._axes[i] = gp.axes[i];
     }
-    
+
     //
-    //  DESC: Load the fonts from xml node
+    //  DESC: Get the last set of buttons pressed
     //
-    loadFromNode( xmlNode )
+    get pressed()
     {
-        let promiseAry = [];
-
-        if( xmlNode )
-        {
-            // Get the group the textures will be saves as
-            let listGroupNode = xmlNode.getElementsByTagName('listGroup');
-            this.group = listGroupNode[0].getAttribute( 'name' );
-
-            // Get the list of font info
-            let fontNode = xmlNode.getElementsByTagName('font');
-
-            for( let i = 0; i < fontNode.length; ++i )
-            {
-                // Get the name of the font
-                let name = fontNode[i].getAttribute( 'name' );
-
-                // Sanity check to make sure the font has not already been added in
-                if( this.fontMap.has( name ) )
-                    throw new Error( `Font name has already been loaded (${name}).` );
-
-                // Add the font to our list
-                this.fontMap.set( name, new _2d_font__WEBPACK_IMPORTED_MODULE_0__.Font );
-
-                let filePath = fontNode[i].getAttribute( 'file' );
-
-                // Load the texture file
-                let textureFilePath = filePath + '.png'
-                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'img', textureFilePath )
-                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( this.group, name, image ))
-                        .catch(( error ) => { console.error(error.stack); throw error; }) );
-
-                // Load the xml file describing the font characteristics
-                let fontFilePath = filePath + '.fnt'
-                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', fontFilePath )
-                        .then(( fontXmlNode ) => this.loadFont( name, fontXmlNode ))
-                        .catch(( error ) => { console.error(error.stack); throw error; }) );
-            }
-        }
-
-        return Promise.all( promiseAry )
-                    .then(() => this.setFontTexture());
+        return this._pressed;
     }
     
     //
-    //  DESC: Load the font
+    //  DESC: Get the last set of axes
     //
-    loadFont( name, xmlNode )
+    get axes()
     {
-        let font = this.fontMap.get( name );
-        if( font === undefined )
-            throw new Error( `Font name has not been added to the map (${name}).` );
-        
-        font.loadFromNode( this.group, name, xmlNode );
+        return this._axes;
     }
-
-    //
-    //  DESC: Set the textures to the font object
-    //
-    setFontTexture()
-    {
-        for( let [ key, font ] of this.fontMap.entries() )
-            font.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.get( this.group, key );
-    }
-    
-    //
-    //  DESC: Get the font
-    //
-    getFont( name )
-    {
-        let font = this.fontMap.get( name );
-        if( font === undefined )
-            throw new Error( `Font name can't be found (${name}).` );
-
-        return font;
-    }
-    
-    //
-    //  DESC: Get the font
-    //
-    isFont( name )
-    {
-        let font = this.fontMap.get( name );
-        if( font === undefined )
-            throw new Error( `Font name can't be found (${name}).` );
-    }
-    
-    // 
-    //  DESC: allow event handling access function
-    //
-    get groupName() { return this.group; }
 }
-
-var fontManager = new FontManager;
 
 
 /***/ }),
@@ -3663,192 +3694,25 @@ var fontManager = new FontManager;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CharData": () => (/* binding */ CharData),
-/* harmony export */   "Font": () => (/* binding */ Font)
+/* harmony export */   "menuManager": () => (/* binding */ menuManager)
 /* harmony export */ });
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(27);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
+/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(31);
+/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(32);
+/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(144);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(145);
+/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(23);
+/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(29);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(42);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
 
 // 
-//  FILE NAME:  font.js
-//  DESC:       font class
-//
-
-
-
-
-
-
-class CharData
-{
-    constructor()
-    {
-        // Character offsets
-        this.offset = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
-
-        // Character rect
-        this.rect = new _common_rect__WEBPACK_IMPORTED_MODULE_1__.Rect;
-
-        // Amount to advance
-        this.xAdvance = 0;
-    }
-}
-
-class Font
-{
-    constructor()
-    {
-        // map list of character data
-        this.charDataMap = new Map;
-
-        // Line height
-        this.lineHeight = 0;
-
-        // base line offset
-        this.baselineOffset = 0;
-
-        // Horizontal padding
-        this.horzPadding = 0;
-
-        // Vertival padding
-        this.vertPadding = 0;
-
-        // The texture in set from font manager
-        this.texture = null;
-    }
-    
-    // 
-    //  DESC: Load from XML node
-    //
-    loadFromNode( group, name, xmlNode )
-    {
-        // Get the padding
-        let padding = xmlNode.getElementsByTagName('info')[0].getAttribute('padding');
-        this.horzPadding = Number(padding.substr(6,1));
-        this.vertPadding = Number(padding.substr(0,1));
-
-        // Get the common font info
-        let commonNode = xmlNode.getElementsByTagName( 'common' );
-
-        // get the line height
-        this.lineHeight = Number(commonNode[0].getAttribute('lineHeight'));
-
-        // get the baseline offset
-        this.baselineOffset = Number(commonNode[0].getAttribute('base'));
-
-        // Get the list of character info
-        let charNode = xmlNode.getElementsByTagName( 'char' );
-
-        // Load in the individual character data
-        for( let i = 0; i < charNode.length; ++i )
-        {
-            let charData = new CharData;
-
-            // Get the offset of the character
-            charData.offset.w = Number(charNode[i].getAttribute( 'xoffset' ));
-            charData.offset.h = Number(charNode[i].getAttribute( 'yoffset' ));
-
-            // Get the x advance of the character
-            charData.xAdvance = Number(charNode[i].getAttribute( 'xadvance' ));
-
-            // Get the rect of the character
-            charData.rect.x1 = Number(charNode[i].getAttribute( 'x' ));
-            charData.rect.y1 = Number(charNode[i].getAttribute( 'y' ));
-            charData.rect.x2 = Number(charNode[i].getAttribute( 'width' ));
-            charData.rect.y2 = Number(charNode[i].getAttribute( 'height' ));
-
-            // Get the character ID which is the ascii value of the character.
-            let id = Number(charNode[i].getAttribute( 'id' ));
-
-            // Add the character to the map
-            this.charDataMap.set( id, charData );
-        }
-    }
-    
-    // 
-    //  DESC: Get the data for this character
-    //
-    getCharData( id )
-    {
-        // See if this character is part of the map
-        let charData = this.charDataMap.get( id );
-
-        if( charData === undefined )
-            throw new Error( `Font character ID can't be found (${id}).` );
-
-        return charData;
-    }
-}
-
-
-/***/ }),
-/* 26 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Rect": () => (/* binding */ Rect)
-/* harmony export */ });
-
-// 
-//  FILE NAME:  rect.js
-//  DESC:       rect class
-//
-
-
-
-class Rect
-{
-    constructor( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
-    {
-        this.data = new Float32Array([x1,y1,x2,y2]);
-    }
-    
-    set( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
-    {
-        this.data[0] = x1;
-        this.data[1] = y1;
-        this.data[2] = x2;
-        this.data[3] = y2;
-    }
-    
-    set x1(value) { this.data[0] = value; }
-    get x1() { return this.data[0]; }
-    
-    set y1(value) { this.data[1] = value; }
-    get y1() { return this.data[1]; }
-    
-    set x2(value) { this.data[2] = value; }
-    get x2() { return this.data[2]; }
-    
-    set y2(value) { this.data[3] = value; }
-    get y2() { return this.data[3]; }
-}
-
-
-/***/ }),
-/* 27 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "objectDataManager": () => (/* binding */ objectDataManager)
-/* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
-/* harmony import */ var _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(29);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(32);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(39);
-/* harmony import */ var _objectdata2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(40);
-/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(99);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
-
-//
-//  FILE NAME: objactdatamanager.js
-//  DESC:      Singlton that holds a map of all 2D/3D object data used for later loading
+//  FILE NAME: menumanager.js
+//  DESC:      menu manager class singleton
 //
 
 
@@ -3863,197 +3727,286 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
+
+
+
+
+class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
 {
     constructor()
     {
         super();
+        
+        // NOTE: Only simple allocation that don't 
+        //       require Settings to be loaded
+        
+        // Map map of menu trees
+        this.menuTreeMapMap = new Map;
 
-        this.objectDataMapMap = new Map;
+        // Map of the menus
+        this.menuMapMap = new Map;
+
+        // Array of active menu trees
+        this.activeMenuTreeAry = [];
+
+        // Array of active interface trees
+        this.activeInterTreeAry = [];
+
+        // menu manager state
+        this.active = false;
+
+        // Actions
+        this.backAction;
+        this.toggleAction;
+        this.escapeAction;
+        this.selectAction;
+        this.upAction;
+        this.downAction;
+        this.leftAction;
+        this.rightAction;
+        this.tabLeft;
+        this.tabRight;
+        this.defaultTree;
+
+        // scroll timer Id
+        this.scrollTimerId = 0;
+
+        // Allow message processing
+        this.allow = false;
     }
-
+    
     //
-    //  DESC: Load all XML's associated with this group
+    //  DESC: Set the default camera
     //
-    loadGroup( groupAry )
+    setDefaultCamera()
     {
-        return super.loadGroupAry( 'Object data list', this.objectDataMapMap, groupAry )
-            .then(() => this.loadAssets( groupAry ))
-            .then(() => this.createFromData( groupAry ));
+        // Default camera
+        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__.cameraManager.getDefault();
     }
-
+    
+    // 
+    //  DESC: Set the camera
     //
-    //  DESC: Load all object information from an xml node
-    //
-    loadFromNode( group, node )
+    setCamera( cameraId )
     {
-        const LOAD_2D = 0;
-        const LOAD_3D = 1;
-
-        // Get the group map
-        let groupMap = this.objectDataMapMap.get( group );
-
-        // Determin the laod type
-        let loadType = LOAD_2D;
-        if( node.nodeName === 'objectDataList3D' )
-            loadType = LOAD_3D;
-
-        let defaultData;
-        if( loadType === LOAD_2D )
-            defaultData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__.ObjectData2D;
-        else
-            defaultData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__.ObjectData3D;
-
-        // Load the default data
-        defaultData.loadObjData( node.getElementsByTagName('default')[0], '', '' );
-
-        // Get the node to the list of objects
-        let objNode = node.getElementsByTagName('object');
-
-        for( let i = 0; i < objNode.length; ++i )
-        {
-            // Get the object's name
-            let name = objNode[i].getAttribute( 'name' );
-            
-            // Check that this object doesn't already exist
-            if( groupMap.get(name) === undefined )
-            {
-                let objData
-                if( loadType === LOAD_2D )
-                    objData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__.ObjectData2D;
-                else
-                    objData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__.ObjectData3D;
-                
-                objData.copy(defaultData);
-
-                // Load in the object data
-                objData.loadObjData( objNode[i], group, name );
-
-                // Save it to the map map
-                groupMap.set( name, objData );
-            }
-            else
-            {
-                throw new Error( `Group object already exists (${group}, ${name})!` );
-            }
-        }
+        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__.cameraManager.get( cameraId );
     }
-
+    
+    // 
+    //  DESC: Load the menu group
     //
-    //  DESC: Load all the assets associated with these groups
-    //
-    loadAssets( groupAry )
+    loadGroupXML( groupAry )
     {
         let promiseAry = [];
 
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
-
-            // Get the group map
-            let groupMap = this.objectDataMapMap.get( group );
-            if( groupMap !== undefined )
+            
+            // Make sure the group we are looking for has been defined in the list table file
+            let pathAry = this.listTableMap.get( group );
+            if( pathAry !== undefined )
             {
-                for( let objData of groupMap.values() )
+                // Load the group data if it doesn't already exist
+                if( this.menuMapMap.get( group ) === undefined )
                 {
-                    // Load 2D elements
-                    if( objData.is2D() )
+                    // Create a new group map inside of our maps
+                    this.menuMapMap.set( group, new Map );
+                    this.menuTreeMapMap.set( group, new Map );
+
+                    for( let i = 0; i < pathAry.length; ++i )
                     {
-                        let filePathAry = objData.visualData.getTextureFilePathAry();
+                        let filePath = pathAry[i];
 
-                        for( let i = 0; i < filePathAry.length; ++i )
-                        {
-                            let filePath = filePathAry[i];
-
-                            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.allowLoad( group, filePath ) )
-                            {
-                                // Load the texture file
-                                promiseAry.push( 
-                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'img', filePath )
-                                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image ))
-                                        .catch(( error ) => { console.error(error.stack); throw error; }));
-                            }
-                        }
-                        
-                        // Load the XML mesh
-                        let meshFilePath = objData.visualData.meshFilePath;
-                        if( meshFilePath && _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__.assetHolder.allowLoad( group, meshFilePath ) )
-                        {
-                            // Load the mesh file
-                            promiseAry.push( 
-                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'xml', meshFilePath )
-                                    .then(( xmlNode ) => _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__.assetHolder.set( group, meshFilePath, xmlNode ))
-                                    .catch(( error ) => { console.error(error.stack); throw error; }));
-                        }
-
-                        // Load the XML sprite sheet
-                        let spriteSheetfilePath = objData.visualData.spriteSheetFilePath;
-                        if( spriteSheetfilePath && _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__.spriteSheetManager.allowLoad( group, spriteSheetfilePath ) )
-                        {
-                            // Load the mesh file
-                            promiseAry.push( 
-                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'xml', spriteSheetfilePath )
-                                    .then(( xmlNode ) => _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__.spriteSheetManager.load( group, spriteSheetfilePath, xmlNode ))
-                                    .catch(( error ) => { console.error(error.stack); throw error; }));
-                        }
+                        promiseAry.push( 
+                            _utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__.downloadFile( 'xml', filePath )
+                                .then(( xmlNode ) => this.loadFromNode( group, xmlNode ))
+                                .catch(( error ) => { console.error(error.stack); throw error; }));
                     }
-                    // Load 3D elements
-                    else
-                    {
-                        let filePath = objData.visualData.meshFilePath;
-
-                        if( filePath && _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.allowLoad( group, filePath ) )
-                        {
-                            // Load the mesh file
-                            promiseAry.push( 
-                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'binary', filePath )
-                                    .then(( binaryFile ) => this.loadMesh3D( group, filePath, objData, binaryFile ))
-                                    .catch(( error ) => { console.error(error.stack); throw error; }));
-                        }
-                    }
+                }
+                else
+                {
+                    throw new Error( `Menu group has alread been loaded (${group})!` );
                 }
             }
             else
             {
-                throw new Error( `Can't download asset because object group does not exist (${group})!` );
+                throw new Error( `Menu Manager list group name can't be found (${group})!` );
             }
         }
 
         return Promise.all( promiseAry );
     }
+    
+    //
+    //  DESC: Load all object information from an xml node
+    //
+    loadFromNode( group, xmlNode )
+    {
+        // Load the menus from node
+        return this.loadMenuFromNode( group, xmlNode )
 
+            // Load the trees from node
+            .then(() => this.loadTreesFromNode( group, xmlNode ))
+    }
+    
     //
-    //  DESC: Load all the assets associated with this group
+    //  DESC: preload all object information from an xml node
     //
-    loadMesh3D( group, binaryFilePath, objData, binaryFile )
+    loadMenuFromNode( group, xmlNode )
     {
         let promiseAry = [];
 
-        objData.visualData.meshGrp =
-            _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.load( group, binaryFilePath, binaryFile );
+        // Get the menu group map
+        let groupMap = this.menuMapMap.get( group );
+        
+        let menuNode = xmlNode.getElementsByTagName('menu');
 
-        let filePathAry = objData.visualData.meshGrp.uniqueTexturePathAry;
-
-        // Load the mesh textures
-        for( let i = 0; i < filePathAry.length; ++i )
+        for( let i = 0; i < menuNode.length; ++i )
         {
-            let filePath = filePathAry[i].path;
-            
-            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.allowLoad( group, filePath ) )
+            // Get the name of the menu
+            let name = menuNode[i].getAttribute( 'name' );
+
+            // Get the menu file path
+            let filePath = menuNode[i].getAttribute( 'file' );
+
+            // Check for duplicates
+            if( groupMap.get( name ) !== undefined )
+                throw new Error( `Duplicate menu name! (${name}).` );
+
+            // Allocate a new menu
+            let menu = new _gui_menu__WEBPACK_IMPORTED_MODULE_5__.Menu( name, group, filePath );
+
+            // Insert the menu into the group map
+            groupMap.set( name, menu );
+
+            // Load the transform from node
+            menu.loadTransFromNode( menuNode[i] );
+
+            // Load the dynamic offset from node
+            menu.loadDynamicOffsetFromNode( menuNode[i] );
+
+            // Check if this file has already been loaded
+            if( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.allowLoad( group, filePath ) )
             {
-                // Load the texture file
+                // Load the menu XML file
                 promiseAry.push( 
-                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'img', filePath )
-                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image ))
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__.downloadFile( 'xml', filePath )
+                        .then(( node ) => 
+                        {
+                            // Store the preloaded XML file
+                            _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.set( group, filePath, node );
+
+                            // Recurse back until all XML files are loaded
+                            return this.loadControlFromNode( group, node );
+                        })
                         .catch(( error ) => { console.error(error.stack); throw error; }));
             }
         }
 
         return Promise.all( promiseAry );
     }
-
+    
     //
-    //  DESC: Create OpenGL objects from data
+    //  DESC: Load the trees from node
+    //
+    loadTreesFromNode( group, node )
+    {
+        // Get the menu group map
+        let menuGroupMap = this.menuMapMap.get( group );
+        
+        // Get the tree group map
+        let treeGroupMap = this.menuTreeMapMap.get( group );
+        
+        // Get the node to the list of trees
+        let treeNode = node.getElementsByTagName('tree');
+
+        for( let i = 0; i < treeNode.length; ++i )
+        {
+            // Get the name
+            let name = treeNode[i].getAttribute( 'name' );
+
+            // Get the root menu
+            let rootMenu = treeNode[i].getAttribute( 'root' );
+
+            // Get the default menu
+            let defaultMenu = treeNode[i].getAttribute( 'default' );
+
+            // Is this menu an interface menu?
+            let interfaceMenu = (treeNode[i].getAttribute( 'interfaceMenu' ) === 'true');
+
+            // Check for duplicate names
+            if( treeGroupMap.get( name ) !== undefined )
+                throw new Error( `Duplicate tree name! (${name}).` );
+
+            // Add the tree data to the map
+            treeGroupMap.set( name, new _gui_menutree__WEBPACK_IMPORTED_MODULE_6__.MenuTree( name, menuGroupMap, rootMenu, defaultMenu, interfaceMenu ) );
+
+            // Check that the root menu exists
+            if( rootMenu !== '' )
+            {
+                if( menuGroupMap.get( rootMenu ) === undefined )
+                    throw new Error( `Root menu doesn't exist! (${name}).` );
+            }
+            else if( defaultMenu !== '' )
+            {
+                if( menuGroupMap.get( defaultMenu ) === undefined )
+                    throw new Error( `Default menu doesn't exist! (${name}).` );
+            }
+        }
+    }
+    
+    //
+    //  DESC: load the menu controls from menu node
+    //        NOTE: Promise using recursive function
+    //
+    loadControlFromNode( group, xmlNode )
+    {
+        let promiseAry = [];
+        let controlLst = ['staticMenuControls', 'mouseOnlyControls', 'menuControls', 'subControlList', 'scrollBoxControlList'];
+        
+        // Load the control XML files
+        for( let i = 0; i < controlLst.length; ++i )
+        {
+            let nodeLst = xmlNode.getElementsByTagName( controlLst[i] );
+            if( nodeLst.length )
+            {
+                let controlNode = nodeLst[0].getElementsByTagName( 'control' );
+
+                for( let j = 0; j < controlNode.length; ++j )
+                {
+                    let filePathNode = controlNode[j].getElementsByTagName( 'filePath' );
+                    if( filePathNode.length )
+                    {
+                        let filePath = filePathNode[0].getAttribute('file');
+                        if( filePath )
+                        {
+                            // Check if this file has already been scheduled for loading
+                            if( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.allowLoad( group, filePath ) )
+                            {
+                                promiseAry.push(
+                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__.downloadFile( 'xml', filePath )
+                                    .then(( node ) => 
+                                    {
+                                        // Store the preloaded XML file
+                                        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.set( group, filePath, node );
+            
+                                        // Recurse back until all XML files are loaded
+                                        return this.loadControlFromNode( group, node );
+                                    })
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return Promise.all( promiseAry );
+    }
+    
+    //
+    //  DESC: Create menu objects from loaded xml data
     //
     createFromData( groupAry )
     {
@@ -4061,25 +4014,28 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
         {
             let group = groupAry[grp];
             
-            // Get the group map
-            let groupMap = this.objectDataMapMap.get( group );
-            if( groupMap !== undefined )
+            // Get the menu group map
+            let groupMap = this.menuMapMap.get( group );
+            if( groupMap === undefined )
+                throw new Error( `Group map can't be found! (${group}).` );
+
+            for( let menu of groupMap.values() )
             {
-                // Create OpenGL objects from data
-                for( let objData of groupMap.values() )
-                    objData.createFromData( group );
+                // Get the menu XML node
+                let xmlNode = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.get( group, menu.filePath );
+
+                // Have the menu load it's share
+                menu.loadFromNode( xmlNode );
             }
+
+            this.initGroup( group );
         }
 
         return 0;
-        
-        // Temporary assets can now be freed
-        //assetHolder.deleteGroup( groupAry );
-        //spriteSheetManager.deleteGroup( groupAry );
     }
-    
+
     //
-    //  DESC: Free all of the meshes materials and data of a specific group
+    //  DESC: Free the menu group
     //
     freeGroup( groupAry )
     {
@@ -4092,56 +4048,807 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
                 throw new Error( `Object data list group name can't be found (${group})!` );
 
             // Get the group map
-            if( this.objectDataMapMap.has( group ) )
+            let groupMap = this.menuTreeMapMap.get( group );
+            if( groupMap !== undefined )
             {
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.deleteGroup( group );
-                _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.deleteGroup( group );
-                _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.deleteGroup( group );
+                // Remove it from the tree vectors if it is there
+                for( let menuTree of groupMap.values() )
+                {
+                    if( menuTree.interfaceMenu )
+                    {
+                        let index = this.activeInterTreeAry.indexOf( menuTree );
 
-                this.objectDataMapMap.delete( group );
+                        if( index > -1 )
+                            this.activeInterTreeAry.splice( index, 1 );
+                    }
+                    else
+                    {
+                        let index = this.activeMenuTreeAry.indexOf( menuTree );
+
+                        if( index > -1 )
+                            this.activeMenuTreeAry.splice( index, 1 );
+                    }
+                }
+
+                // Free the menu group
+                this.menuTreeMapMap.delete( group );
+                this.menuMapMap.delete( group );
             }
         }
     }
     
+    // 
+    //  DESC: Init a menu group
+    //  NOTE: This allows certain actions to be done after the group load
     //
-    //  DESC: Get a specific object data
-    //
-    getData( group, name )
+    initGroup( group )
     {
-        // Get the group map
-        let groupMap = this.objectDataMapMap.get( group );
+        let groupMap = this.menuMapMap.get( group );
         if( groupMap !== undefined )
         {
-            let objData = groupMap.get( name );
-            if( objData )
-                return objData;
-
-            throw new Error( `Object data not found (${group}, ${name})!` );
+            for( let menu of groupMap.values() )
+                menu.init();
         }
-
-        throw new Error( `Object group not found (${group}, ${name})!` );
-    }
-
-    //
-    // DESC:  Find the group an object name belongs to
-    //
-    findGroup( objectName )
-    {
-        for( let [ groupKey, groupMap ] of this.objectDataMapMap.entries() )
+        else
         {
-            if( groupMap.get( objectName ) !== undefined )
-                return groupKey;
+            throw new Error( `Menu group name can't be found to init (${group})!` );
+        }
+    }
+
+    // 
+    //  DESC: Clean up a menu group
+    //  NOTE: This allows certain actions to be done after the group load
+    //
+    cleanUpGroup( group )
+    {
+        let groupMap = this.menuMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            for( let menu of groupMap.values() )
+                menu.cleanUp();
+        }
+        else
+        {
+            throw new Error( `Menu group name can't be found to clean up (${group})!` );
+        }
+    }
+    
+    // 
+    //  DESC: Load the menu action list from XML
+    //
+    loadMenuAction( filePath )
+    {
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__.downloadFile( 'xml', filePath,
+            ( xmlNode ) => this.loadMenuActionFromNode( xmlNode ));
+    }
+
+    // 
+    //  DESC: Load the menu action list from XML
+    //
+    loadMenuActionFromNode( node )
+    {
+        this.backAction = node.getElementsByTagName( 'backAction' )[0].childNodes[0].nodeValue;
+        this.toggleAction = node.getElementsByTagName( 'toggleAction' )[0].childNodes[0].nodeValue;
+        this.escapeAction = node.getElementsByTagName( 'escapeAction' )[0].childNodes[0].nodeValue;
+        this.selectAction = node.getElementsByTagName( 'selectAction' )[0].childNodes[0].nodeValue;
+        this.upAction = node.getElementsByTagName( 'upAction' )[0].childNodes[0].nodeValue;
+        this.downAction = node.getElementsByTagName( 'downAction' )[0].childNodes[0].nodeValue;
+        this.leftAction = node.getElementsByTagName( 'leftAction' )[0].childNodes[0].nodeValue;
+        this.rightAction = node.getElementsByTagName( 'rightAction' )[0].childNodes[0].nodeValue;
+        this.tabLeft = node.getElementsByTagName( 'tabLeft' )[0].childNodes[0].nodeValue;
+        this.tabRight = node.getElementsByTagName( 'tabRight' )[0].childNodes[0].nodeValue;
+        this.defaultTree = node.getElementsByTagName( 'defaultTree' )[0].childNodes[0].nodeValue;
+    }
+    
+    // 
+    //  DESC: Activate a tree to be used by tree name only
+    //        NOTE: Assumes unique tree names
+    //
+    activateTree( treeAry )
+    {
+        for( let tree = 0; tree < treeAry.length; ++tree )
+        {
+            let treeStr = treeAry[tree];
+            let found = false;
+            
+            for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+            {
+                for( let key of groupMap.keys() )
+                {
+                    if( key === treeStr )
+                    {
+                        this.activateTreeGroup( groupKey, key );
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if( found )
+                    break;
+            }
+
+            // If you got this far, it's a problem
+            if( !found )
+                throw new Error( `Menu tree doesn't exist (${treeStr})!` );
+        }
+    }
+    
+    // 
+    //  DESC: Activate a tree to be used based on group
+    //
+    activateTreeGroup( group, treeStr )
+    {
+        let groupMap = this.menuTreeMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            // Find the tree in the map
+            let tree = groupMap.get( treeStr );
+            if( tree !== undefined )
+            {
+                if( tree.interfaceMenu )
+                {
+                    if( this.activeInterTreeAry.indexOf( tree ) !== -1 )
+                        throw new Error( `Menu tree already active (${group} - ${treeStr})!` );
+
+                    this.activeInterTreeAry.push( tree );
+                }
+                else
+                {
+                    if( this.activeMenuTreeAry.indexOf( tree ) !== -1 )
+                        throw new Error( `Menu tree already active (${group} - ${treeStr})!` );
+
+                    this.activeMenuTreeAry.push( tree );
+                }
+
+                // Init the tree for use
+                tree.init();
+            }
+            else
+            {
+                throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
+            }
+        }
+        else
+        {
+            throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
         }
 
-        return undefined;
+        // See if we are active
+        this.setActiveState();
     }
+    
+    // 
+    //  DESC: Deactivate a tree to be used by tree name only
+    //        NOTE: Assumes unique tree names
+    //
+    deactivateTree( treeStr )
+    {
+        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        {
+            for( let key of groupMap.keys() )
+            {
+                if( key === treeStr )
+                {
+                    this.deactivateTreeGroup( groupKey, key );
+                    return;
+                }
+            }
+        }
+
+        // If you got this far, it's a problem
+        throw new Error( `Menu tree doesn't exist (${treeStr})!` );
+    }
+
+    // 
+    //  DESC: Deactivate a tree that's in use
+    //
+    deactivateTreeGroup( group, treeStr )
+    {
+        let groupMap = this.menuTreeMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            // Find the tree in the map
+            let tree = groupMap.get( treeStr );
+            if( tree !== undefined )
+            {
+                // Remove the tree from the vector
+                if( tree.interfaceMenu )
+                {
+                    let index = this.activeInterTreeAry.indexOf( tree );
+                    if( index > -1 )
+                        this.activeInterTreeAry.splice( index, 1 );
+                }
+                else
+                {
+                    let index = this.activeMenuTreeAry.indexOf( tree );
+                    if( index > -1 )
+                        this.activeMenuTreeAry.splice( index, 1 );
+                }
+            }
+            else
+            {
+                throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
+            }
+        }
+        else
+        {
+            throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
+        }
+
+        // See if we are still active
+        this.setActiveState();
+    }
+    
+    // 
+    //  DESC: Clear the active trees
+    //
+    clearActiveTrees()
+    {
+        this.active = false;
+        
+        if( this.scrollTimerId !== 0 )
+            clearInterval( this.scrollTimerId );
+
+        this.activeMenuTreeAry = [];
+        this.activeInterTreeAry = [];
+    }
+    
+    // 
+    //  DESC: Handle input events and dispatch menu events
+    //
+    handleEvent( event )
+    {
+        if( this.allow )
+        {
+            // Convert keyboard, mouse and controller messages in action type messages
+            if( event instanceof _common_genericevent__WEBPACK_IMPORTED_MODULE_8__.GenericEvent )
+            {
+                // Are we doing menu actions? May need to do some scrolling
+                if( (event.type >= _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_UP_ACTION) && (event.type <= _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_RIGHT_ACTION) )
+                {
+                    // Free a timer if one happens to be running
+                    if( this.scrollTimerId != 0 )
+                        clearTimeout( this.scrollTimerId );
+                    
+                    this.scrollTimerId = 0;
+
+                    if( event.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_DOWN )
+                        this.handleEventForScrolling( event );
+                }
+                
+                this.handleEventForTrees( event );
+
+                // Set the active state
+                this.setActiveState();
+            }
+            else
+            {
+                // Only the default tree can execute an escape or toggle when none are active.
+                if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.escapeAction, _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_DOWN ) )
+                {
+                    let tree = this.getActiveTree();
+
+                    if( tree === null )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_ESCAPE_ACTION, this.defaultTree );
+                    else
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_ESCAPE_ACTION, tree.name );
+                }
+                else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.toggleAction, _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_DOWN ) )
+                {
+                    let tree = this.getActiveTree();
+
+                    if( tree === null )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_TOGGLE_ACTION, this.defaultTree );
+                    else
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_TOGGLE_ACTION, tree.name );
+                }
+                else if( this.active )
+                {
+                    let pressType;
+
+                    // common and can result in many messages which is why it's specifically defined here
+                    if( event.type === 'mousemove' )
+                    {
+                        // Allow the mouse move message to get eaten when action handling is disabled.
+                        this.handleEventForTrees( event );
+                    }
+                    // Select action based on input device
+                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.selectAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_IDLE )
+                    {
+                        if( event instanceof KeyboardEvent )
+                        {
+                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_SELECT_ACTION, pressType, _common_defs__WEBPACK_IMPORTED_MODULE_12__.KEYBOARD );
+                        }
+                        else if( event instanceof MouseEvent )
+                        {
+                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent(
+                                _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_SELECT_ACTION,
+                                pressType,
+                                _common_defs__WEBPACK_IMPORTED_MODULE_12__.MOUSE,
+                                event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.mouseOffset.x,
+                                event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.mouseOffset.y );
+                        }
+                        else if( event instanceof _common_gamepadevent__WEBPACK_IMPORTED_MODULE_9__.GamepadEvent )
+                        {
+                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_SELECT_ACTION, pressType, _common_defs__WEBPACK_IMPORTED_MODULE_12__.GAMEPAD );
+                        }
+                    }
+                    else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.backAction, _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_DOWN ) )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_BACK_ACTION );
+
+                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.upAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_UP_ACTION, pressType );
+
+                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.downAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_DOWN_ACTION, pressType );
+
+                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.leftAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_LEFT_ACTION, pressType );
+
+                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.rightAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_RIGHT_ACTION, pressType );
+
+                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.tabLeft )) > _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_TAB_LEFT, pressType );
+
+                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.tabRight )) > _common_defs__WEBPACK_IMPORTED_MODULE_12__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_11__.EGE_MENU_TAB_RIGHT, pressType );
+
+                    // If none of the predefined actions have been hit, just send the message for processing
+                    else
+                    {
+                        this.handleEventForTrees( event );
+                    }
+                }
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Handle input events depending on if this is a menu or interface tree
+    //
+    handleEventForTrees( event )
+    {
+        let menuActive = false;
+
+        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        {
+            // See if there's an active tree
+            menuActive |= this.activeMenuTreeAry[i].isActive();
+
+            // Even if a menu tree is not active, it needs to receive events to become active
+            this.activeMenuTreeAry[i].handleEvent( event );
+        }
+
+        // Only allow event handling for interface menus when regular menus are not active
+        if( !menuActive )
+        {
+            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            {
+                if( this.activeInterTreeAry[i].isActive() )
+                    this.activeInterTreeAry[i].handleEvent( event );
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Handle input events depending on if this is a menu or interface tree
+    //
+    handleEventForScrolling( event )
+    {
+        if( this.active )
+        {
+            if( !this.handleMenuScrolling( event, this.activeMenuTreeAry ) )
+            {
+                // Only allow event handling for interface menus when regular menus are not active
+                this.handleMenuScrolling( event, this.activeInterTreeAry );
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Handle input events for menu scrolling
+    //
+    handleMenuScrolling( event, activeTreeAry )
+    {
+        let menuActive = false;
+
+        for( let i = 0; i < activeTreeAry.length; ++i )
+        {
+            // See if there's an active menu
+            if( activeTreeAry[i].isActive() )
+            {
+                menuActive = true;
+
+                let scrollParam = activeTreeAry[i].getScrollParam( event.type );
+
+                // If scrolling is allowed, start the timer
+                if( scrollParam.canScroll( event.type ) )
+                {
+                    this.scrollTimerId = setTimeout(
+                        () =>
+                        {
+                            this.scrollTimerId = setInterval(
+                                () => _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( scrollParam.msg ),
+                                scrollParam.scrollDelay );
+                                
+                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( scrollParam.msg );
+                        }, 
+                        scrollParam.startDelay );
+                        
+                    break;
+                }
+            }
+        }
+
+        return menuActive;
+    }
+    
+    // 
+    //  DESC: Update the menu
+    //
+    update()
+    {
+        if( this.active )
+        {
+            if( !this.updateMenu( this.activeMenuTreeAry ) )
+            {
+                // Only allow Updating for interface menus when regular menus are not active
+                this.updateMenu( this.activeInterTreeAry );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Update the menu
+    //
+    updateMenu( activeTreeAry )
+    {
+        let menuActive = false;
+
+        for( let i = 0; i < activeTreeAry.length; ++i )
+        {
+            // See if there's an active menu
+            if( activeTreeAry[i].isActive() )
+            {
+                menuActive = true;
+                activeTreeAry[i].update();
+            }
+        }
+
+        return menuActive;
+    }
+    
+    // 
+    //  DESC: Transform the menu
+    //
+    transform()
+    {
+        if( this.active )
+        {
+            if( !this.transformMenu( this.activeMenuTreeAry ) )
+            {
+                // Only allow Updating for interface menus when regular menus are not active
+                this.transformMenu( this.activeInterTreeAry );
+            }
+        }
+
+    }
+
+    // 
+    //  DESC: Transform the menu
+    //
+    transformMenu( activeTreeAry )
+    {
+        let menuActive = false;
+
+        for( let i = 0; i < activeTreeAry.length; ++i )
+        {
+            // See if there's an active menu
+            if( activeTreeAry[i].isActive() )
+            {
+                menuActive = true;
+                activeTreeAry[i].transform();
+            }
+        }
+
+        return menuActive;
+    }
+    
+    // 
+    //  DESC: Render menus
+    //
+    render()
+    {
+        if( this.active )
+        {
+            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+                if( this.activeMenuTreeAry[i].isActive() )
+                    this.activeMenuTreeAry[i].render( this.camera );
+        }
+    }
+
+    // 
+    //  DESC: Render interface menus
+    //
+    renderInterface( matrix )
+    {
+        if( this.active )
+        {
+            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+                if( this.activeInterTreeAry[i].isActive() )
+                    this.activeInterTreeAry[i].render( matrix );
+        }
+    }
+    
+    // 
+    //  DESC: Is this standard menu system active?
+    //
+    isMenuActive()
+    {
+        if( this.active )
+            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+                if( this.activeMenuTreeAry[i].isActive() )
+                    return true;
+
+        return false;
+    }
+
+    // 
+    //  Is a menu item active
+    //
+    isMenuItemActive()
+    {
+        let result = false;
+
+        if( this.active )
+        {
+            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+            {
+                if( this.activeMenuTreeAry[i].isActive() )
+                {
+                    result = this.activeMenuTreeAry[i].isMenuItemActive();
+
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    // 
+    //  Is a interface item active
+    //
+    isInterfaceItemActive()
+    {
+        let result = false;
+
+        if( this.active )
+        {
+            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            {
+                if( this.activeInterTreeAry[i].isActive() )
+                {
+                    result = this.activeInterTreeAry[i].isMenuItemActive();
+
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    // 
+    //  Set the active state
+    //
+    setActiveState()
+    {
+        this.active = false;
+
+        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        {
+            if( this.activeMenuTreeAry[i].isActive() )
+            {
+                this.active = true;
+                break;
+            }
+        }
+
+        if( !this.active )
+        {
+            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            {
+                if( this.activeInterTreeAry[i].isActive() )
+                {
+                    this.active = true;
+                    break;
+                }
+            }
+        }
+    }
+    
+    // 
+    //  Get the menu in question
+    //
+    getMenu( name )
+    {
+        for( let groupMap of this.menuMapMap.values() )
+        {
+            let menu = groupMap.get( name );
+            if( menu !== undefined )
+                return menu;
+        }
+
+        throw new Error( `Menu being asked for is missing (${name})!` );
+    }
+    
+    // 
+    //  Get the reference to the control in question
+    //
+    getMenuControl( name, controlName )
+    {
+        let menu = this.getMenu( name );
+        let control = menu.getControl( controlName );
+        
+        if( control === null )
+            throw new Error( `Menu control being asked for is missing (${name})!` );
+
+        return control;
+    }
+
+    // 
+    //  Get the pointer to the active control - can return null
+    //
+    getActiveControl( name )
+    {
+        let menu = this.getMenu(name);
+        return menu.GetActiveControl();
+    }
+
+    // 
+    //  Get the first active menu
+    //  NOTE: Only call this function if you are certain it will not fail
+    //
+    getActiveMenu()
+    {
+        let menu = null;
+
+        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        {
+            if( this.activeMenuTreeAry[i].isActive() )
+            {
+                menu = this.activeMenuTreeAry[i].getActiveMenu();
+                break;
+            }
+        }
+
+        if( menu === null )
+            throw new Error( 'There is no active menu!' );
+
+        return menu;
+    }
+    
+    // 
+    //  Get a reference to the tree
+    //
+    getTree( treeStr )
+    {
+        for( let groupMap of this.menuTreeMapMap.values() )
+        {
+            for( let [ key, tree ] of groupMap.entries() )
+            {
+                if( key === treeStr )
+                    return tree;
+            }
+        }
+
+        // If you got this far, it's a problem
+        throw new Error( `Menu tree doesn't exist (${treeStr})!` );
+    }
+    
+    // 
+    //  Get a reference to the tree based on group
+    //
+    getTreeGroup( group, treeStr )
+    {
+        let groupMap = this.menuTreeMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            // Find the tree in the map
+            let tree = groupMap.get( treeStr );
+            if( tree !== undefined )
+                return tree;
+            
+            throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
+        }
+        
+        throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
+    }
+
+    // 
+    //  Get a reference to the active tree
+    //
+    getActiveTree()
+    {
+        let tree = null;
+
+        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        {
+            if( this.activeMenuTreeAry[i].isActive() )
+            {
+                tree = this.activeMenuTreeAry[i];
+                break;
+            }
+        }
+
+        return tree;
+    }
+    
+    // 
+    //  DESC: See if the tree is in the active list
+    //
+    isTreeInActivelist( treeStr )
+    {
+        for( let groupMap of this.menuTreeMapMap.values() )
+        {
+            for( let [ key, tree ] of groupMap.entries() )
+            {
+                if( key === treeStr )
+                {
+                    if( tree.interfaceMenu )
+                    {
+                        let index = this.activeInterTreeAry.indexOf( tree );
+                        if( index > -1 )
+                            return true;
+                    }
+                    else
+                    {
+                        let index = this.activeMenuTreeAry.indexOf( tree );
+                        if( index > -1 )
+                            return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  Reset the transform
+    //
+    resetTransform()
+    {
+        for( let groupMap of this.menuMapMap.values() )
+            for( let menu of groupMap.values() )
+                menu.forceTransform();
+    }
+
+    // 
+    //  Reset the dynamic positions of menus
+    //
+    resetDynamicOffset()
+    {
+        for( let groupMap of this.menuMapMap.values() )
+            for( let menu of groupMap.values() )
+                menu.resetDynamicPos();
+    }
+    
+    // 
+    //  DESC: allow event handling access function
+    //
+    get allowEventHandling() { return this.allow; }
+    set allowEventHandling( value ) { this.allow = value; }
+
 }
 
-var objectDataManager = new ObjectDataManager;
+var menuManager = new MenuManager;
 
 
 /***/ }),
-/* 28 */
+/* 26 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4273,381 +4980,683 @@ class ManagerBase
 
 
 /***/ }),
+/* 27 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MOUSE_BUTTON_INVALID": () => (/* binding */ MOUSE_BUTTON_INVALID),
+/* harmony export */   "MOUSE_BUTTON_LEFT": () => (/* binding */ MOUSE_BUTTON_LEFT),
+/* harmony export */   "MOUSE_BUTTON_MIDDLE": () => (/* binding */ MOUSE_BUTTON_MIDDLE),
+/* harmony export */   "MOUSE_BUTTON_RIGHT": () => (/* binding */ MOUSE_BUTTON_RIGHT),
+/* harmony export */   "MOUSE_BUTTON_1X": () => (/* binding */ MOUSE_BUTTON_1X),
+/* harmony export */   "MOUSE_BUTTON_2X": () => (/* binding */ MOUSE_BUTTON_2X),
+/* harmony export */   "MOUSE_BUTTON_3X": () => (/* binding */ MOUSE_BUTTON_3X),
+/* harmony export */   "MOUSE_BUTTON_4X": () => (/* binding */ MOUSE_BUTTON_4X),
+/* harmony export */   "MOUSE_BUTTON_5X": () => (/* binding */ MOUSE_BUTTON_5X),
+/* harmony export */   "MOUSE_BUTTON_6X": () => (/* binding */ MOUSE_BUTTON_6X),
+/* harmony export */   "MOUSE_BUTTON_7X": () => (/* binding */ MOUSE_BUTTON_7X),
+/* harmony export */   "MOUSE_BUTTON_8X": () => (/* binding */ MOUSE_BUTTON_8X),
+/* harmony export */   "actionManager": () => (/* binding */ actionManager)
+/* harmony export */ });
+/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
+/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
+/* harmony import */ var _utilities_localstorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+// 
+//  FILE NAME: actionmanager.js
+//  DESC:      Class for handling action mapping
+//
+
+
+
+
+
+
+
+
+const MOUSE_BUTTON_INVALID       = -1,
+             MOUSE_BUTTON_LEFT          = 0,
+             MOUSE_BUTTON_MIDDLE        = 1,
+             MOUSE_BUTTON_RIGHT         = 2,
+             MOUSE_BUTTON_1X            = 3,
+             MOUSE_BUTTON_2X            = 4,
+             MOUSE_BUTTON_3X            = 5,
+             MOUSE_BUTTON_4X            = 6,
+             MOUSE_BUTTON_5X            = 7,
+             MOUSE_BUTTON_6X            = 8,
+             MOUSE_BUTTON_7X            = 9,
+             MOUSE_BUTTON_8X            = 10;
+
+class ActionManager
+{
+    constructor()
+    {
+        this.keyboardKeyCodeMap = new Map;
+        this.mouseKeyCodeMap = new Map;
+        this.gamepadKeyCodeMap = new Map;
+        
+        // Action maps
+        this.keyboardActionMap = new Map;
+        this.mouseActionMap = new Map;
+        this.gamepadActionMap = new Map;
+        
+        // Flag to allow action handling
+        this.allowAction = true;
+        
+        // Last device used
+        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__.DEVICE_NULL;
+        
+        this.keyboardKeyCodeMap.set( '---', -1 );
+        this.keyboardKeyCodeMap.set( 'ENTER',       'Enter' );
+        this.keyboardKeyCodeMap.set( 'ESCAPE',       'Escape' );
+        this.keyboardKeyCodeMap.set( 'ARROW UP',     'ArrowUp' );
+        this.keyboardKeyCodeMap.set( 'ARROW DOWN',   'ArrowDown' );
+        this.keyboardKeyCodeMap.set( 'ARROW LEFT',   'ArrowLeft' );
+        this.keyboardKeyCodeMap.set( 'ARROW RIGHT',  'ArrowRight' );
+        this.keyboardKeyCodeMap.set( 'A',            'KeyA' );
+        this.keyboardKeyCodeMap.set( 'B',            'KeyB' );
+        this.keyboardKeyCodeMap.set( 'C',            'KeyC' );
+        this.keyboardKeyCodeMap.set( 'D',            'KeyD' );
+        this.keyboardKeyCodeMap.set( 'E',            'KeyE' );
+        this.keyboardKeyCodeMap.set( 'F',            'KeyF' );
+        this.keyboardKeyCodeMap.set( 'G',            'KeyG' );
+        this.keyboardKeyCodeMap.set( 'H',            'KeyH' );
+        this.keyboardKeyCodeMap.set( 'I',            'KeyI' );
+        this.keyboardKeyCodeMap.set( 'J',            'KeyJ' );
+        this.keyboardKeyCodeMap.set( 'K',            'KeyK' );
+        this.keyboardKeyCodeMap.set( 'L',            'KeyL' );
+        this.keyboardKeyCodeMap.set( 'M',            'KeyM' );
+        this.keyboardKeyCodeMap.set( 'N',            'KeyN' );
+        this.keyboardKeyCodeMap.set( 'O',            'KeyO' );
+        this.keyboardKeyCodeMap.set( 'P',            'KeyP' );
+        this.keyboardKeyCodeMap.set( 'Q',            'KeyQ' );
+        this.keyboardKeyCodeMap.set( 'R',            'KeyR' );
+        this.keyboardKeyCodeMap.set( 'S',            'KeyS' );
+        this.keyboardKeyCodeMap.set( 'T',            'KeyT' );
+        this.keyboardKeyCodeMap.set( 'U',            'KeyU' );
+        this.keyboardKeyCodeMap.set( 'V',            'KeyV' );
+        this.keyboardKeyCodeMap.set( 'W',            'KeyW' );
+        this.keyboardKeyCodeMap.set( 'X',            'KeyX' );
+        this.keyboardKeyCodeMap.set( 'Y',            'KeyY' );
+        this.keyboardKeyCodeMap.set( 'Z',            'KeyZ' );
+        this.keyboardKeyCodeMap.set( '0',            'Digit0' );
+        this.keyboardKeyCodeMap.set( '1',            'Digit1' );
+        this.keyboardKeyCodeMap.set( '2',            'Digit2' );
+        this.keyboardKeyCodeMap.set( '3',            'Digit3' );
+        this.keyboardKeyCodeMap.set( '4',            'Digit4' );
+        this.keyboardKeyCodeMap.set( '5',            'Digit5' );
+        this.keyboardKeyCodeMap.set( '6',            'Digit6' );
+        this.keyboardKeyCodeMap.set( '7',            'Digit7' );
+        this.keyboardKeyCodeMap.set( '8',            'Digit8' );
+        this.keyboardKeyCodeMap.set( '9',            'Digit9' );
+        this.keyboardKeyCodeMap.set( 'F1',           'F1' );
+        this.keyboardKeyCodeMap.set( 'F2',           'F2' );
+        this.keyboardKeyCodeMap.set( 'F3',           'F3' );
+        this.keyboardKeyCodeMap.set( 'F4',           'F4' );
+        this.keyboardKeyCodeMap.set( 'F5',           'F5' );
+        this.keyboardKeyCodeMap.set( 'F6',           'F6' );
+        this.keyboardKeyCodeMap.set( 'F7',           'F7' );
+        this.keyboardKeyCodeMap.set( 'F8',           'F8' );
+        this.keyboardKeyCodeMap.set( 'F9',           'F9' );
+        this.keyboardKeyCodeMap.set( 'F10',          'F10' );
+        this.keyboardKeyCodeMap.set( 'F11',          'F11' );
+        this.keyboardKeyCodeMap.set( 'F12',          'F12' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 0',     'Numpad0' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 1',     'Numpad1' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 2',     'Numpad2' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 3',     'Numpad3' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 4',     'Numpad4' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 5',     'Numpad5' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 6',     'Numpad6' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 7',     'Numpad7' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 8',     'Numpad8' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD 9',     'Numpad9' );
+        this.keyboardKeyCodeMap.set( 'NUM LOCK',     'NumLock' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD /',     'NumpadDivide' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD *',     'NumpadMultiply' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD -',     'NumpadSubtract' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD +',     'NumpadAdd' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD ENTER', 'NumpadEnter' );
+        this.keyboardKeyCodeMap.set( 'NUMPAD .',     'NumpadDecimal' );
+        this.keyboardKeyCodeMap.set( 'CTRL LEFT',    'ControlLeft' );
+        this.keyboardKeyCodeMap.set( 'SHIFT LEFT',   'ShiftLeft' );
+        this.keyboardKeyCodeMap.set( 'ALT LEFT',     'AltLeft' );
+        this.keyboardKeyCodeMap.set( 'CTRL RIGHT',   'ControlRight' );
+        this.keyboardKeyCodeMap.set( 'SHIFT RIGHT',  'ShiftRight' );
+        this.keyboardKeyCodeMap.set( 'ALT RIGHT',    'AltRight' );
+        this.keyboardKeyCodeMap.set( 'PRINT SCREEN', 'PrintScreen' );
+        this.keyboardKeyCodeMap.set( 'SCROLL LOCK',  'ScrollLock' );
+        this.keyboardKeyCodeMap.set( 'PAUSE',        'Pause' );
+        this.keyboardKeyCodeMap.set( 'END',          'End' );
+        this.keyboardKeyCodeMap.set( 'INSERT',       'Insert' );
+        this.keyboardKeyCodeMap.set( 'DELETE',       'Delete' );
+        this.keyboardKeyCodeMap.set( 'HOME',         'Home' );
+        this.keyboardKeyCodeMap.set( 'PAGE UP',      'PageUp' );
+        this.keyboardKeyCodeMap.set( 'PAGE DOWN',    'PageDown' );
+        this.keyboardKeyCodeMap.set( 'BACKSPACE',    'Backspace' );
+        this.keyboardKeyCodeMap.set( 'TAB',          'Tab' );
+        this.keyboardKeyCodeMap.set( 'SPACE',        'Space' );
+        this.keyboardKeyCodeMap.set( ',',            'Comma' );
+        this.keyboardKeyCodeMap.set( '-',            'Minus' );
+        this.keyboardKeyCodeMap.set( '.',            'Period' );
+        this.keyboardKeyCodeMap.set( '/',            'Slash' );
+        this.keyboardKeyCodeMap.set( '=',            'Equal' );
+        this.keyboardKeyCodeMap.set( ';',            'Semicolon' );
+        this.keyboardKeyCodeMap.set( '[',            'BracketLeft' );
+        this.keyboardKeyCodeMap.set( '\\',           'Backslash' );
+        this.keyboardKeyCodeMap.set( ']',            'BracketRight' );
+        this.keyboardKeyCodeMap.set( '`',            'Backquote' );
+        this.keyboardKeyCodeMap.set( "'",            'Quote' );
+        this.keyboardKeyCodeMap.set( 'META LEFT',    'MetaLeft' );
+        this.keyboardKeyCodeMap.set( 'META RIGHT',   'MetaRight' );
+        this.keyboardKeyCodeMap.set( 'CONTEXT MENU', 'ContextMenu' );
+
+        this.keyboardKeyCodeMap.set( 'LAUNCH MAIL',      'LaunchMail' );
+        this.keyboardKeyCodeMap.set( 'LAUNCH APP 1',     'LaunchApp1' );
+        this.keyboardKeyCodeMap.set( 'LAUNCH APP 2',     'LaunchApp2' );
+        this.keyboardKeyCodeMap.set( 'MEDIA TRACK PREV', 'MediaTrackPrevious' );
+        this.keyboardKeyCodeMap.set( 'MEDIA TRACK NEXT', 'MediaTrackNext' );
+        this.keyboardKeyCodeMap.set( 'MEDIA PLAY PAUSE', 'MediaPlayPause' );
+        
+        this.mouseKeyCodeMap.set( '---',          MOUSE_BUTTON_INVALID );
+        this.mouseKeyCodeMap.set( 'LEFT MOUSE',   MOUSE_BUTTON_LEFT );
+        this.mouseKeyCodeMap.set( 'MIDDLE MOUSE', MOUSE_BUTTON_MIDDLE );
+        this.mouseKeyCodeMap.set( 'RIGHT MOUSE',  MOUSE_BUTTON_RIGHT );
+        this.mouseKeyCodeMap.set( 'MOUSE 1X',     MOUSE_BUTTON_1X );
+        this.mouseKeyCodeMap.set( 'MOUSE 2X',     MOUSE_BUTTON_2X );
+        this.mouseKeyCodeMap.set( 'MOUSE 3X',     MOUSE_BUTTON_3X );
+        this.mouseKeyCodeMap.set( 'MOUSE 4X',     MOUSE_BUTTON_4X );
+        this.mouseKeyCodeMap.set( 'MOUSE 5X',     MOUSE_BUTTON_5X );
+        this.mouseKeyCodeMap.set( 'MOUSE 6X',     MOUSE_BUTTON_6X );
+        this.mouseKeyCodeMap.set( 'MOUSE 7X',     MOUSE_BUTTON_7X );
+        this.mouseKeyCodeMap.set( 'MOUSE 8',      MOUSE_BUTTON_8X );
+
+        this.gamepadKeyCodeMap.set( '---',           _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_INVALID );
+        this.gamepadKeyCodeMap.set( 'A',             _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_A );
+        this.gamepadKeyCodeMap.set( 'B',             _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_B );
+        this.gamepadKeyCodeMap.set( 'X',             _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_X );
+        this.gamepadKeyCodeMap.set( 'Y',             _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_Y );
+        this.gamepadKeyCodeMap.set( 'L BUMPER',      _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_BUMPER );
+        this.gamepadKeyCodeMap.set( 'R BUMPER',      _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_BUMPER );
+        this.gamepadKeyCodeMap.set( 'L TRIGGER',     _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'R TRIGGER',     _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'BACK',          _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_BACK );
+        this.gamepadKeyCodeMap.set( 'START',         _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_START );
+        this.gamepadKeyCodeMap.set( 'L STICK',       _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_LEFTSTICK );
+        this.gamepadKeyCodeMap.set( 'R STICK',       _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_RIGHTSTICK );
+        this.gamepadKeyCodeMap.set( 'UP',            _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_DPAD_UP );
+        this.gamepadKeyCodeMap.set( 'DOWN',          _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_DPAD_DOWN );
+        this.gamepadKeyCodeMap.set( 'LEFT',          _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_DPAD_LEFT );
+        this.gamepadKeyCodeMap.set( 'RIGHT',         _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_DPAD_RIGHT );
+        this.gamepadKeyCodeMap.set( 'GUIDE',         _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_GUIDE );
+
+        // Key codes to use analog sticks as buttons
+        this.gamepadKeyCodeMap.set( 'L STICK UP',    _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'L STICK DOWN',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'L STICK LEFT',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'L STICK RIGHT', _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_STICK_RIGHT );
+        this.gamepadKeyCodeMap.set( 'R STICK UP',    _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'R STICK DOWN',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'R STICK LEFT',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'R STICK RIGHT', _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_RIGHT );
+    }
+    
+    // 
+    //  DESC: Load data from file path
+    //
+    clearLastDeviceUsed()
+    {
+        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__.DEVICE_NULL;
+    }
+    
+    // 
+    //  DESC: Load data from XML node
+    //
+    loadFromNode( xmlNode )
+    {
+        if( xmlNode )
+        {
+            // Load the keyboard/mouse/gamepad mapping
+            this.loadKeyboardMappingFromNode( xmlNode.getElementsByTagName('keyboardMapping') );
+            this.loadMouseMappingFromNode( xmlNode.getElementsByTagName( 'mouseMapping' ) );
+            this.loadGamepadMappingFromNode( xmlNode.getElementsByTagName( 'gamepadMapping' ) );
+        }
+    }
+    
+    // 
+    //  DESC: Load the keyboard mapping from node
+    //
+    loadKeyboardMappingFromNode( node )
+    {
+        // Load the player hidden controls
+        this.loadActionFromNode( node[0].getElementsByTagName('playerHidden'), this.keyboardKeyCodeMap, this.keyboardActionMap );
+
+        // Load the player visible controls
+        this.loadActionFromNode( node[0].getElementsByTagName('playerVisible'), this.keyboardKeyCodeMap, this.keyboardActionMap );
+    }
+
+    // 
+    //  DESC: Load the mouse mapping from node
+    //
+    loadMouseMappingFromNode( node )
+    {
+        // Load the player hidden controls
+        this.loadActionFromNode( node[0].getElementsByTagName('playerHidden'), this.mouseKeyCodeMap, this.mouseActionMap );
+
+        // Load the player visible controls
+        this.loadActionFromNode( node[0].getElementsByTagName('playerVisible'), this.mouseKeyCodeMap, this.mouseActionMap );
+    }
+
+    // 
+    //  DESC: Load the gamepad mapping from node
+    //
+    loadGamepadMappingFromNode( node )
+    {
+        // Load the player hidden controls
+        this.loadActionFromNode( node[0].getElementsByTagName("playerHidden"), this.gamepadKeyCodeMap, this.gamepadActionMap );
+
+        // Load the player visible controls
+        this.loadActionFromNode( node[0].getElementsByTagName("playerVisible"), this.gamepadKeyCodeMap, this.gamepadActionMap );
+    }
+    
+    // 
+    //  DESC: Load action data from xml node
+    //
+    loadActionFromNode( node, keyCodeMap, actionMap )
+    {
+        if( node.length )
+        {
+            let actionNode = node[0].getElementsByTagName('actionMap');
+
+            for( let i = 0; i < actionNode.length; ++i )
+            {
+                // See if we can find the string that represents the key code id
+                let componentIdStr = actionNode[i].getAttribute( 'componetId' );
+                let keyCode = keyCodeMap.get( componentIdStr );
+
+                // Add it in if we found it
+                if( keyCode !== undefined )
+                {
+                    let actionStr = actionNode[i].getAttribute( 'action' );
+
+                    // See if the controller action string has already been added
+                    let action = actionMap.get( actionStr );
+
+                    if( action !== undefined )
+                    {
+                        // If it's found, add another id to this map
+                        action.setId( keyCode );
+                    }
+                    else
+                    {
+                        // Add new action to the map
+                        actionMap.set( actionStr, new _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__.KeyCodeAction(keyCode) );
+                    }
+                }
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Was this an action
+    //
+    wasActionPress( event, actionStr, actionPress )
+    {
+        if( this.wasAction( event, actionStr ) === actionPress )
+            return true;
+
+        return false;
+    }
+    
+    // 
+    //  DESC: Was this an action
+    //
+    wasAction( event, actionStr )
+    {
+        let result = _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAP_IDLE;
+
+        if( this.allowAction )
+        {
+            // Check for keyboard event
+            if( event instanceof KeyboardEvent )
+            {
+                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__.KEYBOARD;
+
+                if( this.wasActionMap( event.code, actionStr, this.keyboardActionMap ) )
+                {
+                    result = _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAP_UP;
+
+                    // Check for the "D" character code for keydown
+                    if( event.type.charCodeAt(3) === 100 )
+                    {
+                        result = _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAP_DOWN;
+                    }
+                }
+            }
+            // Check for mouse event
+            else if( event instanceof MouseEvent )
+            {
+                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__.MOUSE;
+
+                if( this.wasActionMap( event.button, actionStr, this.mouseActionMap ) )
+                {
+                    result = _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAP_UP;
+
+                    // Check for the "D" character code for mousedown
+                    if( event.type.charCodeAt(5) === 100 )
+                    {
+                        result = _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAP_DOWN;
+                    }
+                }
+            }
+            // Check for gamepad event
+            else if( event instanceof _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GamepadEvent )
+            {
+                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_3__.GAMEPAD;
+
+                if( event.type === _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_DOWN || event.type === _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_UP )
+                {
+                    if( this.wasActionMap( event.buttonIndex, actionStr, this.gamepadActionMap ) )
+                    {
+                        result = _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAP_DOWN;
+
+                        if( event.type === _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_UP )
+                        {
+                            result = _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAP_UP;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+    
+    // 
+    //  DESC: Was this an action
+    //
+    wasActionMap( id, actionStr, actionMap )
+    {
+        let result = false;
+
+        // See if the action has already been added
+        let action = actionMap.get( actionStr );
+
+        // If it's found, see if this is the correct action
+        if( action !== undefined )
+        {
+            result = action.wasAction( id );
+        }
+
+        return result;
+    }
+    
+    // 
+    //  DESC: What was the last device
+    //
+    wasLastDeviceGamepad()
+    {
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_3__.GAMEPAD);
+    }
+
+    wasLastDeviceKeyboard()
+    {
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_3__.KEYBOARD);
+    }
+
+    wasLastDeviceMouse()
+    {
+        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_3__.MOUSE);
+    }
+}
+
+var actionManager = new ActionManager;
+
+
+/***/ }),
+/* 28 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "KeyCodeAction": () => (/* binding */ KeyCodeAction)
+/* harmony export */ });
+// 
+//  FILE NAME: keycodeaction.js
+//  DESC:      Class for holding key codes to test for action events
+//
+
+
+
+class KeyCodeAction
+{
+    constructor( id )
+    {
+        this.idAry = [id];
+    }
+    
+    // Set additional id's
+    setId( id )
+    {
+        // Only set id's that are positive numbers
+        if( !((id == -1) || (id == '---')) )
+            this.idAry.push( id );
+    }
+    
+    // Remove an id
+    removeId( id )
+    {
+        var index = this.idAry.indexOf( id );
+        
+        if( index > -1 )
+            this.idAry.splice( index, 1 );
+    }
+
+    // Check for action
+    wasAction( id )
+    {
+        if( this.idAry.indexOf( id ) > -1 )
+            return true;
+
+        return false;
+    }
+}
+
+
+/***/ }),
 /* 29 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "meshManager": () => (/* binding */ meshManager)
+/* harmony export */   "GAMEPAD_BUTTON_DOWN": () => (/* binding */ GAMEPAD_BUTTON_DOWN),
+/* harmony export */   "GAMEPAD_BUTTON_UP": () => (/* binding */ GAMEPAD_BUTTON_UP),
+/* harmony export */   "GAMEPAD_AXIS_LEFT": () => (/* binding */ GAMEPAD_AXIS_LEFT),
+/* harmony export */   "GAMEPAD_AXIS_RIGHT": () => (/* binding */ GAMEPAD_AXIS_RIGHT),
+/* harmony export */   "GAMEPAD_TRIGGER_LEFT": () => (/* binding */ GAMEPAD_TRIGGER_LEFT),
+/* harmony export */   "GAMEPAD_TRIGGER_RIGHT": () => (/* binding */ GAMEPAD_TRIGGER_RIGHT),
+/* harmony export */   "GAMEPAD_AXIS_LEFT_X": () => (/* binding */ GAMEPAD_AXIS_LEFT_X),
+/* harmony export */   "GAMEPAD_AXIS_LEFT_Y": () => (/* binding */ GAMEPAD_AXIS_LEFT_Y),
+/* harmony export */   "GAMEPAD_AXIS_RIGHT_X": () => (/* binding */ GAMEPAD_AXIS_RIGHT_X),
+/* harmony export */   "GAMEPAD_AXIS_RIGHT_Y": () => (/* binding */ GAMEPAD_AXIS_RIGHT_Y),
+/* harmony export */   "GAMEPAD_BUTTON_INVALID": () => (/* binding */ GAMEPAD_BUTTON_INVALID),
+/* harmony export */   "GAMEPAD_BUTTON_A": () => (/* binding */ GAMEPAD_BUTTON_A),
+/* harmony export */   "GAMEPAD_BUTTON_B": () => (/* binding */ GAMEPAD_BUTTON_B),
+/* harmony export */   "GAMEPAD_BUTTON_X": () => (/* binding */ GAMEPAD_BUTTON_X),
+/* harmony export */   "GAMEPAD_BUTTON_Y": () => (/* binding */ GAMEPAD_BUTTON_Y),
+/* harmony export */   "GAMEPAD_BUTTON_L_BUMPER": () => (/* binding */ GAMEPAD_BUTTON_L_BUMPER),
+/* harmony export */   "GAMEPAD_BUTTON_R_BUMPER": () => (/* binding */ GAMEPAD_BUTTON_R_BUMPER),
+/* harmony export */   "GAMEPAD_BUTTON_L_TRIGGER": () => (/* binding */ GAMEPAD_BUTTON_L_TRIGGER),
+/* harmony export */   "GAMEPAD_BUTTON_R_TRIGGER": () => (/* binding */ GAMEPAD_BUTTON_R_TRIGGER),
+/* harmony export */   "GAMEPAD_BUTTON_BACK": () => (/* binding */ GAMEPAD_BUTTON_BACK),
+/* harmony export */   "GAMEPAD_BUTTON_START": () => (/* binding */ GAMEPAD_BUTTON_START),
+/* harmony export */   "GAMEPAD_BUTTON_LEFTSTICK": () => (/* binding */ GAMEPAD_BUTTON_LEFTSTICK),
+/* harmony export */   "GAMEPAD_BUTTON_RIGHTSTICK": () => (/* binding */ GAMEPAD_BUTTON_RIGHTSTICK),
+/* harmony export */   "GAMEPAD_BUTTON_DPAD_UP": () => (/* binding */ GAMEPAD_BUTTON_DPAD_UP),
+/* harmony export */   "GAMEPAD_BUTTON_DPAD_DOWN": () => (/* binding */ GAMEPAD_BUTTON_DPAD_DOWN),
+/* harmony export */   "GAMEPAD_BUTTON_DPAD_LEFT": () => (/* binding */ GAMEPAD_BUTTON_DPAD_LEFT),
+/* harmony export */   "GAMEPAD_BUTTON_DPAD_RIGHT": () => (/* binding */ GAMEPAD_BUTTON_DPAD_RIGHT),
+/* harmony export */   "GAMEPAD_BUTTON_GUIDE": () => (/* binding */ GAMEPAD_BUTTON_GUIDE),
+/* harmony export */   "GAMEPAD_BUTTON_L_STICK_UP": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_UP),
+/* harmony export */   "GAMEPAD_BUTTON_L_STICK_DOWN": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_DOWN),
+/* harmony export */   "GAMEPAD_BUTTON_L_STICK_LEFT": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_LEFT),
+/* harmony export */   "GAMEPAD_BUTTON_L_STICK_RIGHT": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_RIGHT),
+/* harmony export */   "GAMEPAD_BUTTON_R_STICK_UP": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_UP),
+/* harmony export */   "GAMEPAD_BUTTON_R_STICK_DOWN": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_DOWN),
+/* harmony export */   "GAMEPAD_BUTTON_R_STICK_LEFT": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_LEFT),
+/* harmony export */   "GAMEPAD_BUTTON_R_STICK_RIGHT": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_RIGHT),
+/* harmony export */   "ANALOG_STICK_MSG_MAX": () => (/* binding */ ANALOG_STICK_MSG_MAX),
+/* harmony export */   "GamepadEvent": () => (/* binding */ GamepadEvent)
 /* harmony export */ });
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
-/* harmony import */ var _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(30);
-/* harmony import */ var _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(31);
 
-//
-//  FILE NAME: meshmanager.js
-//  DESC:      mesh manager class singleton
+// 
+//  FILE NAME:  gamepadevent.js
+//  DESC:       class for holding a generic event
 //
 
 
 
+// Gamepad event types
+const GAMEPAD_BUTTON_DOWN   = 0,
+             GAMEPAD_BUTTON_UP     = 1,
+             GAMEPAD_AXIS_LEFT     = 2,
+             GAMEPAD_AXIS_RIGHT    = 3,
+             GAMEPAD_TRIGGER_LEFT  = 4,
+             GAMEPAD_TRIGGER_RIGHT = 5;
 
+// Negative axis value: X = left, Y = up
+const GAMEPAD_AXIS_LEFT_X  = 0,
+             GAMEPAD_AXIS_LEFT_Y  = 1,
+             GAMEPAD_AXIS_RIGHT_X = 2,
+             GAMEPAD_AXIS_RIGHT_Y = 3;
 
+const GAMEPAD_BUTTON_INVALID       = -1,
+             GAMEPAD_BUTTON_A             = 0,
+             GAMEPAD_BUTTON_B             = 1,
+             GAMEPAD_BUTTON_X             = 2,
+             GAMEPAD_BUTTON_Y             = 3,
+             GAMEPAD_BUTTON_L_BUMPER      = 4,
+             GAMEPAD_BUTTON_R_BUMPER      = 5,
+             GAMEPAD_BUTTON_L_TRIGGER     = 6,
+             GAMEPAD_BUTTON_R_TRIGGER     = 7,
+             GAMEPAD_BUTTON_BACK          = 8,
+             GAMEPAD_BUTTON_START         = 9,
+             GAMEPAD_BUTTON_LEFTSTICK     = 10,
+             GAMEPAD_BUTTON_RIGHTSTICK    = 11,
+             GAMEPAD_BUTTON_DPAD_UP       = 12,
+             GAMEPAD_BUTTON_DPAD_DOWN     = 13,
+             GAMEPAD_BUTTON_DPAD_LEFT     = 14,
+             GAMEPAD_BUTTON_DPAD_RIGHT    = 15,
+             GAMEPAD_BUTTON_GUIDE         = 16,
+             // Key codes to use analog sticks as buttons
+             GAMEPAD_BUTTON_L_STICK_UP    = 30,
+             GAMEPAD_BUTTON_L_STICK_DOWN  = 31,
+             GAMEPAD_BUTTON_L_STICK_LEFT  = 32,
+             GAMEPAD_BUTTON_L_STICK_RIGHT = 33,
+             GAMEPAD_BUTTON_R_STICK_UP    = 34,
+             GAMEPAD_BUTTON_R_STICK_DOWN  = 35,
+             GAMEPAD_BUTTON_R_STICK_LEFT  = 36,
+             GAMEPAD_BUTTON_R_STICK_RIGHT = 37;
 
+const ANALOG_STICK_MSG_MAX = 0.7;
 
-class MeshManager
+class GamepadEvent
 {
-    constructor()
+    constructor( type, eventIndex, gamepad )
     {
-        // Map containing a group array of vbo, ibo and texture id's
-        this.meshBufMapMap = new Map;
+        // Event type
+        this._type = type;
 
-        // Map for collision mesh
-        //this.collisionMeshBufMapMap = new Map;
-        
-        // counter for indexing into binary data when loading
-        this.counter = 0;
-    }
-    
-    //
-    //  DESC: Load the binary mesh data
-    //  NOTE: To keep it simple, loading the textures is done seperately
-    //
-    load( group, filePath, binaryData )
-    {
-        // Create the group map if it doesn't already exist
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap === undefined )
-        {
-            groupMap = new Map;
-            this.meshBufMapMap.set( group, groupMap );
-        }
-        
-        let meshGrp = groupMap.get( filePath );
-        if( meshGrp === undefined || meshGrp === -1 )
-        {
-            meshGrp = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__.MeshGroup;
-            groupMap.set( filePath, meshGrp );
-            
-            this.loadData( group, filePath, binaryData, meshGrp );
-        }
+        // Index of the button or axis this event was created for
+        this.eventIndex = eventIndex;
 
-        return meshGrp;
+        // The gamepad object this event was created from
+        this.gamepad = gamepad;
     }
 
-    // 
-    //  DESC: Set a place holder that this data is scheduled to be loaded
     //
-    allowLoad( group, filePath )
+    //  DESC: Was this button touched?
+    //
+    get type()
     {
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap === undefined )
-        {
-            groupMap = new Map;
-            this.meshBufMapMap.set( group, groupMap );
-        }
-        
-        let meshGrp = groupMap.get( filePath );
-        if( meshGrp === undefined )
-        {
-            // Add an entry to the map as a 
-            // place holder for future checks
-            groupMap.set( filePath, -1 );
+        return this._type;
+    }
 
+    //
+    //  DESC: Was this button touched?
+    //
+    get touched()
+    {
+        return this.gamepad.buttons[this.eventIndex].touched;
+    }
+
+    //
+    //  DESC: Was this button pressed?
+    //  NOTE: This is hear for convience. The type indicates the state we car about
+    //
+    get pressed()
+    {
+        return this.gamepad.buttons[this.eventIndex].pressed;
+    }
+
+    //
+    //  DESC: Is this button a trigger?
+    //
+    get trigger()
+    {
+        if( eventIndex == CONTROLLER_BUTTON_L_TRIGGER || eventIndex == CONTROLLER_BUTTON_L_TRIGGER )
             return true;
-        }
 
         return false;
     }
 
     //
-    //  DESC: Get the 2D texture class
+    //  DESC: Return the value of this button.
+    //  NOTE: Only the triggers have a value we might care about
     //
-    get( group, filePath )
+    get buttonValue()
     {
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap === undefined )
-            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
-
-        let meshBuf = groupMap.get( filePath );
-        if( meshBuf === undefined || meshBuf === -1 )
-            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
-
-        return meshBuf;
+        return this.gamepad.buttons[this.eventIndex].value;
     }
-    
-    //
-    //  DESC: Load the binary mesh data
-    //
-    loadData( group, filePath, binaryData, meshGrp )
-    {
-        this.counter = 0;
 
-        // Load the binary data into the data view for easy access to different data types
-        let dataView = new DataView( binaryData );
-        
-        // Load the binary mesh file header
-        let fileHeader = this.loadFileHeader( dataView, group, filePath );
-        
-        
-        // Check to insure we are in the correct spot in the binary file
-        this.tagCheck( dataView, (fileHeader.text_count > 0), group, filePath );
-        
-        // Load the texture file paths
-        this.loadTexturePaths( dataView, fileHeader, meshGrp );
-        
-        
-        // Check to insure we are in the correct spot in the binary file
-        this.tagCheck( dataView, true, group, filePath );
-        
-        // Load the verts
-        let vertAry = [];
-        this.loadVerts( dataView, fileHeader, vertAry );
-        
-        
-        // Check to insure we are in the correct spot in the binary file
-        this.tagCheck( dataView, true, group, filePath );
-        
-        // Load the normals
-        let normAry = [];
-        this.loadNormals( dataView, fileHeader, normAry );
-        
-        
-        // Check to insure we are in the correct spot in the binary file
-        this.tagCheck( dataView, (fileHeader.uv_count > 0), group, filePath );
-        
-        // Load the uv's
-        let uvAry = [];
-        this.loadUVs( dataView, fileHeader, uvAry );
-        
-        // Build the meshes
-        this.buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry );
-    }
-    
     //
-    //  DESC: Load the binary mesh file header
+    //  DESC: Return the value of this button.
+    //  NOTE: Only the triggers have a value we might care about
     //
-    loadFileHeader( dataView, group, filePath )
+    get buttonIndex()
     {
-        let fileHeader = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.MeshBinaryFileHeader;
-        
-        fileHeader.file_header      = dataView.getUint32( this.counter, true ); this.counter += 4;
-        fileHeader.vert_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.uv_count         = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.vert_norm_count  = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.face_group_count = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.text_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
-        fileHeader.joint_count      = dataView.getUint16( this.counter, true ); this.counter += 2;
-        
-        // Check to make sure we're loading in the right kind of file
-        if( fileHeader.file_header !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.MESH_FILE_HEADER )
-            throw new Error( `File header mismatch! (${group}, ${filePath}).` );
-        
-        return fileHeader;
+        return this.eventIndex;
     }
-    
+
     //
-    //  DESC: Load the binary mesh file header
+    //  DESC: Return the value of the axises
     //
-    loadTexturePaths( dataView, fileHeader, meshGrp )
+    get axis()
     {
-        for( let i = 0; i < fileHeader.text_count; ++i )
+        if( this.type == GAMEPAD_AXIS_LEFT )
         {
-            let uniqueTextAry = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryTexture;
-            meshGrp.uniqueTexturePathAry.push( uniqueTextAry );
-
-            uniqueTextAry.type = dataView.getInt8( this.counter, true ); this.counter += 1;
-
-            for( let j = 0; j < _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TEXT_PATH_SIZE; ++j )
-            {
-                let charCode = dataView.getInt8( this.counter, true ); this.counter += 1;
-
-                if( charCode )
-                {
-                    uniqueTextAry.path += String.fromCharCode(charCode);
-                }
-                else
-                {
-                    this.counter += _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TEXT_PATH_SIZE - j - 1;
-                    break;
-                }
-            }
+            return {
+                'axisX' : this.gamepad.axes[GAMEPAD_AXIS_LEFT_X].toFixed(2),
+                'axisY' : this.gamepad.axes[GAMEPAD_AXIS_LEFT_Y].toFixed(2)};
         }
+
+        return {
+            'axisX' : this.gamepad.axes[GAMEPAD_AXIS_RIGHT_X].toFixed(2),
+            'axisY' : this.gamepad.axes[GAMEPAD_AXIS_RIGHT_Y].toFixed(2)};
     }
-    
-    //
-    //  DESC: Load the verts
-    //
-    loadVerts( dataView, fileHeader, vertAry )
-    {
-        // Load the verts
-        for( let i = 0; i < fileHeader.vert_count; ++i )
-        {
-            let data = [0,0,0];
-            vertAry.push( data );
-            
-            for( let j = 0; j < 3; ++j )
-            {
-                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
-            }
-        }
-    }
-    
-    //
-    //  DESC: Load the normals
-    //
-    loadNormals( dataView, fileHeader, normAry )
-    {
-        for( let i = 0; i < fileHeader.vert_norm_count; ++i )
-        {
-            let data = [0,0,0];
-            normAry.push( data );
-            
-            for( let j = 0; j < 3; ++j )
-            {
-                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
-            }
-        }
-    }
-    
-    //
-    //  DESC: Load the uv's
-    //
-    loadUVs( dataView, fileHeader, uvAry )
-    {
-        // Load the normals
-        for( let i = 0; i < fileHeader.uv_count; ++i )
-        {
-            let data = [0,0];
-            uvAry.push( data );
-            
-            for( let j = 0; j < 2; ++j )
-            {
-                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
-            }
-        }
-    }
-    
-    //
-    //  DESC: Build the meshes
-    //
-    buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry )
-    {
-        let faceGroup = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryFaceGroup;
-        
-        // Read in each face group
-        for( let i = 0; i < fileHeader.face_group_count; ++i )
-        {
-            // Check to insure we are in the correct spot in the binary file
-            this.tagCheck( dataView, true, group, filePath );
-            
-            // Allocate the mesh storage
-            let mesh = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__.Mesh;
-            meshGrp.meshAry.push( mesh );
-            
-            faceGroup.groupFaceCount = dataView.getUint16( this.counter, true ); this.counter += 2;
-            faceGroup.vertexBufCount = dataView.getUint16( this.counter, true ); this.counter += 2;
-            faceGroup.indexBufCount  = dataView.getUint16( this.counter, true ); this.counter += 2;
-            faceGroup.textureCount   = dataView.getUint16( this.counter, true ); this.counter += 2;
-            
-            // Read in the indexes that are the textures
-            for( let j = 0; j < faceGroup.textureCount; ++j )
-            {
-                mesh.textureIndexAry.push( dataView.getUint16( this.counter, true ) );
-                this.counter += 2;
-            }
 
-            // Read in the indexes used to create the VBO
-            let vertBufAry = [];
-            for( let j = 0; j < faceGroup.vertexBufCount; ++j )
-            {
-                let binaryVertex = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryVertex;
-                vertBufAry.push( binaryVertex );
-                
-                binaryVertex.vert = dataView.getUint16( this.counter, true ); this.counter += 2;
-                binaryVertex.norm = dataView.getUint16( this.counter, true ); this.counter += 2;
-                
-                if( fileHeader.uv_count )
-                {
-                    binaryVertex.uv = dataView.getUint16( this.counter, true ); this.counter += 2;
-                }
-            }
-
-            // Read in the indexes that are the IBO
-            let iboAry = [];
-            for( let j = 0; j < faceGroup.indexBufCount; ++j )
-            {
-                iboAry.push( dataView.getUint16( this.counter, true ) );
-                this.counter += 2;
-            }
-            
-            // Create a temporary array for building the VBO
-            let vboAry = [];
-
-            // Build the VBO
-            for( let j = 0; j < faceGroup.vertexBufCount; ++j )
-            {
-                Array.prototype.push.apply( vboAry, vertAry[ vertBufAry[j].vert ] );
-                Array.prototype.push.apply( vboAry, normAry[ vertBufAry[j].norm ] );
-                
-                if( fileHeader.uv_count )
-                    Array.prototype.push.apply( vboAry, uvAry[ vertBufAry[j].uv ] );
-            }
-            
-            // Create the vbo
-            mesh.vbo = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, mesh.vbo );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, new Float32Array(vboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, null );
-            
-            // Create the ibo
-            mesh.ibo = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
-            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, mesh.ibo );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(iboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, null );
-            
-            // Save the number of indexes in the IBO buffer - Will need this for the render call
-            mesh.iboCount = faceGroup.indexBufCount;
-        }
-    }
-    
     //
-    //  DESC: Load the binary mesh file header
+    //  DESC: Return the index of this gamepad
     //
-    tagCheck( dataView, allowCheck, group, filePath )
+    get gamepadIndex()
     {
-        if( allowCheck )
-        {
-            let tag = dataView.getUint32( this.counter, true ); this.counter += 4;
-            if( tag !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TAG_CHECK )
-                throw new Error( `Tag check mismatch! (${group}, ${filePath}).` );
-        }
-    }
-    
-    //
-    //  DESC: Delete the group of textures
-    //
-    deleteGroup( group )
-    {
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            for( let [ key, meshGrp ] of groupMap.entries() )
-            {
-                for( let i = 0; i < meshGrp.meshAry.length; ++i )
-                {
-                    _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer( meshGrp.meshAry[i].vbo );
-                    _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer( meshGrp.meshAry[i].ibo );
-                }
-            }
-
-            this.meshBufMapMap.delete( group );
-        }
+        return this.gamepad.index;
     }
 }
-
-var meshManager = new MeshManager;
 
 
 /***/ }),
@@ -4657,92 +5666,124 @@ var meshManager = new MeshManager;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MESH_FILE_HEADER": () => (/* binding */ MESH_FILE_HEADER),
-/* harmony export */   "TAG_CHECK": () => (/* binding */ TAG_CHECK),
-/* harmony export */   "TEXT_PATH_SIZE": () => (/* binding */ TEXT_PATH_SIZE),
-/* harmony export */   "JOINT_NAME_SIZE": () => (/* binding */ JOINT_NAME_SIZE),
-/* harmony export */   "MeshBinaryFileHeader": () => (/* binding */ MeshBinaryFileHeader),
-/* harmony export */   "BinaryTexture": () => (/* binding */ BinaryTexture),
-/* harmony export */   "BinaryFaceGroup": () => (/* binding */ BinaryFaceGroup),
-/* harmony export */   "BinaryFace": () => (/* binding */ BinaryFace),
-/* harmony export */   "BinaryVertex": () => (/* binding */ BinaryVertex)
+/* harmony export */   "localStorage": () => (/* binding */ localStorage)
 /* harmony export */ });
+/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
+// 
+//  FILE NAME: localstorage.js
+//  DESC:      local storage class
 //
-//  FILE NAME: meshbinaryfileheader.js
-//  DESC:      mesh binary file headers
-//
 
 
 
-// Hex for RSS (Rabbid Squirrel Sprite)
-const MESH_FILE_HEADER = 0x415382AE;
 
-// Hex for tag check
-const TAG_CHECK = 0x6A82Fc4d;
 
-// Max character sizes for the texture path and joint name
-const TEXT_PATH_SIZE = 128;
-const JOINT_NAME_SIZE = 20;
-
-class MeshBinaryFileHeader
+class LocalStorage
 {
     constructor()
     {
-        this.file_header      = 0; // uint32
-        this.vert_count       = 0; // uint16
-        this.uv_count         = 0; // uint16
-        this.vert_norm_count  = 0; // uint16
-        this.face_group_count = 0; // uint16
-        this.text_count       = 0; // uint16
-        this.joint_count      = 0; // uint16
+        this.storage = null;
+
+        try
+        {
+            this.storage = window.localStorage;
+
+            // Test that storage works
+            this.storage.setItem( _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.gameId, _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.gameName );
+
+            if( this.storage.getItem( _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.gameId ) === _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.gameName )
+            {
+                this.storage.removeItem( _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.gameId );
+                console.log('Local storage available.');
+            }
+            else
+            {
+                this.storage = {}; // Dummy storage if storage is not available
+                console.log('Local storage NOT available.');
+            }
+        }
+        catch (e)
+        {
+            console.log( `Local storage error: ${e}` );
+            this.storage = {}; // Dummy storage if storage is not available
+        }
+    }
+
+    // 
+    //  DESC: Set the data to the storage object
+    //
+    set( key, value )
+    {
+        try
+        {
+            if( this.storage )
+                this.storage.setItem( `${_utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.gameId}_${key}`, value );
+            else
+                this.storage['key'] = value;
+        }
+        catch (e)
+        {
+            console.log( `Local storage set error: ${e}` );
+        }
+    }
+
+    // 
+    //  DESC: Get the data from the storage object
+    //
+    get( key )
+    {
+        try
+        {
+            if( this.storage )
+                return this.storage.getItem( `${_utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.gameId}_${key}` );
+            else
+                return this.storage['key'];
+        }
+        catch (e)
+        {
+            console.log( `Local storage get error: ${e}` );
+        }
+    }
+
+    // 
+    //  DESC: Free the data from the storage object
+    //
+    free( key )
+    {
+        try
+        {
+            if( this.storage )
+                this.storage.removeItem( `${_utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.gameId}_${key}` );
+            else
+                delete this.storage['key'];
+        }
+        catch (e)
+        {
+            console.log( `Local storage free error: ${e}` );
+        }
+    }
+
+    // 
+    //  DESC: Free the data from the storage object
+    //
+    clear( key )
+    {
+        try
+        {
+            if( this.storage )
+                this.storage.clear();
+            else
+                this.storage = {};
+        }
+        catch (e)
+        {
+            console.log( `Local storage clear error: ${e}` );
+        }
     }
 }
 
-// class for reading in texture info
-class BinaryTexture
-{
-    constructor()
-    {
-        this.type = 0;       // int8
-        this.path = '';      // file path [TEXT_PATH_SIZE]
-    }
-};
-
-// Class for reading and writing the total face count within a group and the material
-// it belongs to
-class BinaryFaceGroup
-{
-    constructor()
-    {
-        this.groupFaceCount = 0; // uint16
-        this.vertexBufCount = 0; // uint16
-        this.indexBufCount  = 0; // uint16
-        this.textureCount   = 0; // uint16
-    }
-};
-
-// Class for reading and writing face information
-class BinaryFace
-{
-    constructor()
-    {
-        this.vert = [];
-        this.norm = [];
-        this.uv = [];
-    }
-};
-
-// Class for reading and writing face information
-class BinaryVertex
-{
-    constructor()
-    {
-        this.vert = 0;
-        this.norm = 0;
-        this.uv = 0;
-    }
-};
+var localStorage = new LocalStorage;
 
 /***/ }),
 /* 31 */
@@ -4751,121 +5792,58 @@ class BinaryVertex
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MeshGroup": () => (/* binding */ MeshGroup),
-/* harmony export */   "Mesh": () => (/* binding */ Mesh)
+/* harmony export */   "assetHolder": () => (/* binding */ assetHolder)
 /* harmony export */ });
 
+// 
+//  FILE NAME: assetholder.js
+//  DESC:      Class for holding loaded file data
 //
-//  FILE NAME: mesh3d.js
-//  DESC:      3D mesh class
-//
 
 
 
-class MeshGroup
+class AssetHolder
 {
     constructor()
     {
-        // Array texture paths for loading
-        this.uniqueTexturePathAry = [];
-        
-        // Array of loaded textures
-        this.meshAry = [];
-    }
-}
-
-class Mesh
-{
-    constructor()
-    {
-        // Texture indexes into the uniqueTexturePathAry
-        this.textureIndexAry = [];
-        
-        // Loaded texture data
-        this.textureAry = [];
-
-        // VBO
-        this.vbo = null;
-
-        // IBO
-        this.ibo = null;
-
-        // Number of IBOs needed for rendering
-        this.iboCount = 0;
-    }
-}
-
-
-/***/ }),
-/* 32 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "spriteSheetManager": () => (/* binding */ spriteSheetManager)
-/* harmony export */ });
-/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
-
-//
-//  FILE NAME: spritesheetmanager.js
-//  DESC:      Temporary container for loading sprite sheet data
-//             so that the same large complex xml is not reloaded.
-//
-
-
-
-
-class SpriteSheetManager
-{
-    constructor()
-    {
-        this.spriteSheetMapMap = new Map;
-    }
-    
-    //
-    //  DESC: Load the glyph data from XML node
-    //
-    load( group, filePath, node )
-    {
-        let groupMap = this.spriteSheetMapMap.get( group );
-        if( groupMap === undefined )
-        {
-            groupMap = new Map;
-            this.spriteSheetMapMap.set( group, groupMap );
-        }
-        
-        let spriteSheet = groupMap.get( filePath );
-        if( spriteSheet === undefined || spriteSheet === -1 )
-        {
-            spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__.SpriteSheet;
-            
-            // Load the glyph data from XML node
-            spriteSheet.loadFromNode( node );
-            
-            // Add a new entry to the map
-            groupMap.set( filePath, spriteSheet );
-        }
+        this.loadMapMap = new Map;
     }
 
     // 
-    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //  DESC: Set the data
     //
-    allowLoad( group, filePath )
+    set( group, name, data = null )
     {
-        let groupMap = this.spriteSheetMapMap.get( group );
+        let groupMap = this.loadMapMap.get( group );
         if( groupMap === undefined )
         {
             groupMap = new Map;
-            this.spriteSheetMapMap.set( group, groupMap );
+            this.loadMapMap.set( group, groupMap );
+        }
+
+        let asset = groupMap.get( name );
+        if( asset === undefined || asset === -1 )
+            groupMap.set( name, data );
+    }
+    
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, name )
+    {
+        let groupMap = this.loadMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.loadMapMap.set( group, groupMap );
         }
         
-        let spriteSheet = groupMap.get( filePath );
-        if( spriteSheet === undefined )
+        let asset = groupMap.get( name );
+        if( asset === undefined )
         {
             // Add an entry to the map as a 
             // place holder for future checks
-            groupMap.set( filePath, -1 );
+            groupMap.set( name, -1 );
 
             return true;
         }
@@ -4873,18 +5851,18 @@ class SpriteSheetManager
         return false;
     }
     
+    // 
+    //  DESC: Get the data
     //
-    //  DESC: Load the glyph data from XML node
-    //
-    get( group, filePath )
+    get( group, name )
     {
-        let groupMap = this.spriteSheetMapMap.get( group );
+        let groupMap = this.loadMapMap.get( group );
         if( groupMap === undefined )
-            throw new Error( `Sprite sheet group does not exist! (${group}).` );
+            throw new Error( `Group does not exist! (${group}).` );
             
-        let data = groupMap.get( filePath );
-        if( data === undefined )
-            throw new Error( `Sprite sheet mesh file missing! (${filePath}).` );
+        let data = groupMap.get( name );
+        if( data === undefined || data === -1 )
+            throw new Error( `Data does not exist! (${name}).` );
         
         return data;
     }
@@ -4895,20 +5873,862 @@ class SpriteSheetManager
     deleteGroup( groupAry )
     {
         for( let i = 0; i < groupAry.length; ++i )
-            this.spriteSheetMapMap.delete( groupAry[i] );
+            this.loadMapMap.delete( groupAry[i] );
     }
     
-    //
-    //  DESC: Clear all the sprite sheet data
+    // 
+    //  DESC: Clear the group data
     //
     clear()
     {
-        if( this.spriteSheetMapMap.size )
-            this.spriteSheetMapMap.clear();
+        if( this.loadMapMap.size )
+            this.loadMapMap.clear();
     }
 }
 
-var spriteSheetManager = new SpriteSheetManager;
+var assetHolder = new AssetHolder;
+
+
+/***/ }),
+/* 32 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Menu": () => (/* binding */ Menu)
+/* harmony export */ });
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
+/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(41);
+/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(43);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(113);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(114);
+/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(23);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(129);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(37);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(134);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(42);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(5);
+// 
+//  FILE NAME: menu.js
+//  DESC:      Class for user interface menu
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
+{
+    constructor( name, group, filePath )
+    {
+        super();
+        
+        // This menu's name
+        this.name = name;
+        
+        // Group name
+        this.group = group;
+        
+        // File path
+        this.filePath = filePath;
+        
+        // Array of menu static sprites
+        this.spriteAry = [];
+
+        // Array list of static controls
+        this.staticControlAry = [];
+
+        // Array list of mouse only controls
+        this.mouseOnlyControlAry = [];
+
+        // Array list of controls
+        this.controlAry = [];
+
+        // Array list of navigation nodes
+        this.controlNodeAry = [];
+
+        // Map container of controls for easy name access
+        // NOTE: This container does not own it's pointers.
+        this.controlMap = new Map;
+
+        // Current active node
+        this.activeNode = null;
+
+        // menu state
+        this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECS_NULL;
+
+        // Dynamic offset
+        this.dynamicOffset = new _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__.DynamicOffset;
+
+        // Scrolling parameters
+        this.scrollParam = new _scrollparam__WEBPACK_IMPORTED_MODULE_2__.ScrollParam;
+        
+        // menu alpha value
+        this.alpha = 0;
+        
+        // The menu needs to default hidden
+        this.setVisible(false);
+    }
+    
+    // 
+    //  DESC: Load the menu info from file
+    //
+    loadFromNode( node )
+    {
+        // Init the script Ids
+        this.initScriptIds( node );
+        
+        // Load the scroll data from node
+        this.scrollParam.loadFromNode( node.getElementsByTagName( 'scroll' ) );
+
+        // Get the static sprite
+        let nodeLst = node.getElementsByTagName( 'spriteList' );
+        if( nodeLst.length )
+        {
+            let spriteNode = nodeLst[0].children;
+            
+            for( let i = 0; i < spriteNode.length; ++i )
+                this.loadStaticSpriteFromNode( spriteNode[i] );
+        }
+
+        // Get the static menu controls node
+        nodeLst = node.getElementsByTagName( 'staticMenuControls' );
+        if( nodeLst.length )
+        {
+            let controlNode = nodeLst[0].children;
+            
+            for( let i = 0; i < controlNode.length; ++i )
+                this.loadStaticControlFromNode( controlNode[i] );
+        }
+
+        // Get the mouse only menu controls node
+        nodeLst = node.getElementsByTagName( 'mouseOnlyControls' );
+        if( nodeLst.length )
+        {
+            let controlNode = nodeLst[0].children;
+            
+            for( let i = 0; i < controlNode.length; ++i )
+                this.loadMouseOnlyControlFromNode( controlNode[i] );
+        }
+
+        // Get the menu controls
+        nodeLst = node.getElementsByTagName( 'menuControls' );
+        if( nodeLst.length )
+        {
+            let controlNode = nodeLst[0].children;
+            
+            // map to help setup the node pointers
+            let navNodeMap = new Map;
+
+            // Load the controls
+            for( let i = 0; i < controlNode.length; ++i )
+                this.loadControlFromNode( controlNode[i], navNodeMap );
+
+            // Map the controls to their respective nodes
+            for( let i = 0; i < controlNode.length; ++i )
+                this.findNodes( controlNode[i], i, navNodeMap );
+        }
+    }
+    
+    // 
+    //  DESC: Init the script Ids and add them to the map
+    //        This function loads the attribute info reguardless of what it is
+    //
+    initScriptIds( node )
+    {
+        // Check for scripting
+        let scriptList = node.getElementsByTagName( 'scriptList' );
+        if( scriptList.length )
+            this.scriptComponent.initScriptIds( scriptList[0] );
+    }
+    
+    // 
+    //  DESC: Load a static sprite from an XML node
+    //
+    loadStaticSpriteFromNode( node )
+    {
+        // Get the type of object
+        let objectName = node.getAttribute( 'objectName' );
+
+        // Allocate the static sprite and add it to the array
+        let sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__.Sprite( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__.objectDataManager.getData( this.group, objectName ) );
+        this.spriteAry.push( sprite );
+
+        // Load the transform data
+        sprite.load( node );
+
+        // Init the script Ids
+        sprite.scriptComponent.initScriptIds( node );
+    }
+
+    // 
+    //  DESC: Load static controls from an XML node
+    //
+    loadStaticControlFromNode( node )
+    {
+        // New up the control with its respected control type
+        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__.create( node, this.group );
+        this.staticControlAry.push( control );
+
+        // Does this control have a name then add it to the map
+        if( control.name )
+            this.controlMap.set( control.name, control );
+    }
+
+    // 
+    //  DESC: Load mouse only controls from an XML node
+    //
+    loadMouseOnlyControlFromNode( node )
+    {
+        // New up the control with its respected control type
+        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__.create( node, this.group );
+        this.mouseOnlyControlAry.push( control );
+
+        // Does this control have a name then add it to the map
+        if( control.name )
+            this.controlMap.set( control.name, control );
+    }
+
+    // 
+    //  DESC: Load a control from an XML node
+    //
+    loadControlFromNode( node, navNodeMap )
+    {
+        // New up the control with its respected control type
+        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__.create( node, this.group );
+        this.controlAry.push( control );
+
+        // Does this control have a name then add it to the map
+        if( control.name )
+        {
+            // Check for duplicate names
+            if( this.controlMap.has( control.name ) )
+                throw new Error( `Duplicate control name! (${control.name})` );
+            
+            // Map of menu controls
+            this.controlMap.set( control.name, control );
+
+            // Add a node to the array with it's control
+            let navNode = new _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__.UIControlNavNode( control );
+            this.controlNodeAry.push( navNode );
+
+            // Map of menu control nodes
+            navNodeMap.set( control.name, navNode );
+        }
+    }
+    
+    // 
+    //  DESC: Load the dynamic offset data from node
+    //
+    loadDynamicOffsetFromNode( node )
+    {
+        // Load the dynamic offset
+        this.dynamicOffset = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__.loadDynamicOffset( node );
+
+        // Set the dynamic position
+        this.setDynamicPos();
+    }
+
+    // 
+    //  DESC: Set the dynamic position
+    //
+    setDynamicPos()
+    {
+        // Position the menu based on the dynamic offset
+        if( this.dynamicOffset )
+            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half ) );
+    } 
+
+    // 
+    //  DESC: Reset the dynamic position
+    //
+    resetDynamicPos()
+    {
+        this.setDynamicPos();
+
+        for( let i = 0; i < this.staticControlAry.length; ++i )
+            this.staticControlAry[i].setDynamicPos();
+        
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].setDynamicPos();
+
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].setDynamicPos();
+    }
+
+    // 
+    //  DESC: Find the reference nodes
+    //
+    findNodes( node, nodeIndex, navNodeMap )
+    {
+        let navNode = node.getElementsByTagName( 'navigate' );
+        if( navNode.length )
+        {
+            this.setNodes( navNode, nodeIndex, 'up',    _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_UP,    navNodeMap );
+            this.setNodes( navNode, nodeIndex, 'down',  _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_DOWN,  navNodeMap );
+            this.setNodes( navNode, nodeIndex, 'left',  _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_LEFT,  navNodeMap );
+            this.setNodes( navNode, nodeIndex, 'right', _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_RIGHT, navNodeMap );
+        }
+    }
+
+    // 
+    //  DESC: Find the reference nodes
+    //
+    setNodes( node, nodeIndex, attrStr, navId, navNodeMap )
+    {
+        let attr = node[0].getAttribute( attrStr );
+        if( attr )
+        {
+            let ctrlNode = navNodeMap.get( attr );
+            if( ctrlNode !== undefined )
+                this.controlNodeAry[nodeIndex].setNode( navId, ctrlNode );
+            else
+                throw new Error( `Control node doesn't exist! (${attr}, ${attrStr})` );
+        }
+    }
+    
+    // 
+    //  DESC: Init the menu controls
+    //
+    init()
+    {
+        for( let i = 0; i < this.staticControlAry.length; ++i )
+            this.staticControlAry[i].init();
+
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].init();
+
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].init();
+        
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
+
+    }   // Init
+
+    // 
+    //  DESC: Init the menu controls
+    //
+    cleanUp()
+    {
+        for( let i = 0; i < this.staticControlAry.length; ++i )
+            this.staticControlAry[i].cleanUp();
+
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].cleanUp();
+
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].cleanUp();
+
+    }   // CleanUp
+    
+    // 
+    //  DESC: Activate this menu because it's probably a root menu
+    //
+    activateMenu()
+    {
+        this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE;
+        this.setVisible(true);
+        this.setAlpha(1);
+        this.activateFirstInactiveControl();
+    }
+
+    // 
+    //  DESC: Update the menu
+    //
+    update()
+    {
+        this.scriptComponent.update();
+
+        if( this.isVisible() )
+        {
+            for( let i = 0; i < this.spriteAry.length; ++i )
+                this.spriteAry[i].update();
+            
+            for( let i = 0; i < this.staticControlAry.length; ++i )
+                this.staticControlAry[i].update();
+            
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                this.mouseOnlyControlAry[i].update();
+            
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].update();
+        }
+    }
+
+    // 
+    //  DESC: Transform the menu
+    //
+    transform()
+    {
+        if( this.isVisible() )
+        {
+            super.transform();
+            
+            for( let i = 0; i < this.spriteAry.length; ++i )
+                this.spriteAry[i].transform( this );
+            
+            for( let i = 0; i < this.staticControlAry.length; ++i )
+                this.staticControlAry[i].transform( this );
+            
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                this.mouseOnlyControlAry[i].transform( this );
+            
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].transform( this );
+        }
+    }
+
+    // 
+    //  DESC: do the render
+    //
+    render( camera )
+    {
+        if( this.isVisible() )
+        {
+            for( let i = 0; i < this.spriteAry.length; ++i )
+                this.spriteAry[i].render( camera );
+            
+            for( let i = 0; i < this.staticControlAry.length; ++i )
+                this.staticControlAry[i].render( camera );
+            
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                this.mouseOnlyControlAry[i].render( camera );
+            
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].render( camera );
+        }
+    }
+
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        if( event instanceof _common_genericevent__WEBPACK_IMPORTED_MODULE_8__.GenericEvent )
+        {
+            // Have the controls handle events
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].handleEvent( event );
+
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                    this.mouseOnlyControlAry[i].handleEvent( event );
+            
+            if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_TRANS_IN )
+            {
+                this.onTransIn( event );
+            }
+            else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_TRANS_OUT )
+            {
+                this.onTransOut( event );
+            }
+            else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_REACTIVATE )
+            {
+                this.onReactivate( event );
+            }
+            else if( this.state === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE )
+            {
+                if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SELECT_ACTION )
+                {
+                    this.onSelectAction( event );
+                }
+                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SET_ACTIVE_CONTROL )
+                {
+                    this.onSetActiveControl( event );
+                }
+                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SCROLL_UP )
+                {
+                    this.onUpAction( event );
+                }
+                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SCROLL_DOWN )
+                {
+                    this.onDownAction( event );
+                }
+                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SCROLL_LEFT )
+                {
+                    this.onLeftAction( event );
+                }
+                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SCROLL_RIGHT )
+                {
+                    this.onRightAction( event );
+                }
+                else if( (event.type >= _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_UP_ACTION) &&
+                         (event.type <= _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_RIGHT_ACTION) )
+                {
+                    if( event.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.EAP_DOWN )
+                    {
+                        if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_UP_ACTION )
+                        {
+                            this.onUpAction( event );
+                        }
+                        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_DOWN_ACTION )
+                        {
+                            this.onDownAction( event );
+                        }
+                        if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_LEFT_ACTION )
+                        {
+                            this.onLeftAction( event );
+                        }
+                        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_RIGHT_ACTION )
+                        {
+                            this.onRightAction( event );
+                        }
+                    }
+                }
+            }
+        }
+        else if( this.state === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE )
+        {
+            if( event.type === 'mousemove' )
+            {
+                this.onMouseMove( event );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Handle OnUpAction message
+    //
+    onUpAction( event )
+    {
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_UP );
+    }
+
+    // 
+    //  DESC: Handle OnMenuDown message
+    //
+    onDownAction( event )
+    {
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_DOWN );
+    }
+
+    // 
+    //  DESC: Handle OnMenuLeft message
+    //
+    onLeftAction( event )
+    {
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_LEFT );
+    }
+
+    // 
+    //  DESC: Handle OnRightAction message
+    //
+    onRightAction( event )
+    {
+        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_RIGHT );
+    }
+
+    // 
+    //  DESC: Navigate the menu. Find the next control node that isn't
+    //        disabled and make it the active control node
+    //
+    navigateMenu( navNodeAction )
+    {
+        if( this.activeNode !== null )
+        {
+            let navNode = this.activeNode;
+
+            do
+            {
+                navNode = navNode.getNode( navNodeAction );
+                
+                if( navNode === null )
+                {
+                    break;
+                }
+                else if( !navNode.uiControl.isDisabled() )
+                {
+                    this.activeNode = navNode;
+
+                    _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__.eventManager.dispatchEvent(
+                        _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_CONTROL_STATE_CHANGE,
+                        _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECS_ACTIVE,
+                        navNode.uiControl );
+
+                    break;
+                }
+            }
+            while( true );
+        }
+    }
+
+    // 
+    //  DESC: Handle OnMouseMove message
+    //
+    onMouseMove( event )
+    {
+        for( let i = 0; i < this.controlNodeAry.length; ++i )
+        {
+            if( this.controlNodeAry[i].uiControl.onMouseMove( event ) )
+                this.activeNode = this.controlNodeAry[i];
+            else
+                this.controlNodeAry[i].uiControl.deactivateControl();
+        }
+
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            if( !this.mouseOnlyControlAry[i].onMouseMove( event ) )
+                this.mouseOnlyControlAry[i].deactivateControl();
+    }
+
+    // 
+    //  DESC: Handle OnSelectAction message
+    //
+    onSelectAction( event )
+    {
+        let selectionFound = false;
+
+        if( (this.activeNode !== null) &&
+            (this.activeNode.uiControl.handleSelectAction( event )) )
+        {
+            selectionFound = true;
+
+            // Set the state to active which will block all messages until the state is reset to idle
+            if( this.activeNode.uiControl.actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_NULL )
+                this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
+        }
+        else if( event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_DEVICE_TYPE ] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.MOUSE )
+        {
+            // For mouse only controls
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            {
+                if( this.mouseOnlyControlAry[i].handleSelectAction( event ) )
+                {
+                    selectionFound = true;
+
+                    // Set the state to active which will block all messages until the state is reset to idle
+                    if( this.mouseOnlyControlAry[i].actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_NULL )
+                        this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
+
+                    break;
+                }
+            }
+        }
+
+        // Try to handle touch presses on a non-active control
+        // The mouse just happends to be clicked over a non-active control
+        if( !selectionFound && event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_DEVICE_TYPE ] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.MOUSE )
+        {
+            // Deactivate the control that should be active
+            if( (this.activeNode !== null) &&
+                (event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_PRESS_TYPE ] === this.activeNode.uiControl.mouseSelectType) )
+            {
+                this.activeNode.uiControl.deactivateControl();
+
+                // Go through all the controls on this menu to try to find the one clicked on
+                for( let i = 0; i < this.controlAry.length; ++i )
+                {
+                    if( this.controlAry[i].handleSelectAction( event ) )
+                    {
+                        // Set the state to active which will block all messages until the state is reset to idle
+                        if( this.activeNode.uiControl.actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_NULL )
+                            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // 
+    //  DESC: Handle OnSetActiveControl message
+    //
+    onSetActiveControl( event )
+    {
+        // Set the first inactive control to active
+        if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EAC_FIRST_ACTIVE_CONTROL )
+            this.activateFirstInactiveControl();
+    }
+
+    // 
+    //  DESC: Handle OnReactivate message
+    //
+    onReactivate( event )
+    {
+        this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE;
+    }
+
+    // 
+    //  DESC: Handle OnTransIn message
+    //
+    onTransIn( event )
+    {
+        if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.ETC_BEGIN )
+        {
+            this.scriptComponent.prepare( 'transIn', this );
+
+            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
+        }
+        else if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.ETC_END )
+        {
+            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE;
+        }
+    }
+
+    // 
+    //  DESC: Handle OnTransOut message
+    //
+    onTransOut( event )
+    {
+        if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.ETC_BEGIN )
+        {
+            this.scriptComponent.prepare( 'transOut', this );
+
+            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
+        }
+        else if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.ETC_END )
+        {
+            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_INACTIVE;
+        }
+    }
+
+    // 
+    //  DESC: Set the first inactive control to be active
+    //
+    activateFirstInactiveControl()
+    {
+        let found = false;
+
+        // Activate the first control found and deactivate all the rest
+        for( let i = 0; i < this.controlNodeAry.length; ++i )
+        {
+            if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
+            {
+                this.activeNode = this.controlNodeAry[i];
+
+                found = true;
+            }
+            else
+            {
+                this.controlNodeAry[i].uiControl.deactivateControl();
+            }
+        }
+    }
+
+    // 
+    //  DESC: Reset all controls
+    //
+    reset()
+    {
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].reset( true );
+
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].reset( true );
+    }
+
+    // 
+    //  DESC: Get the control in question
+    //
+    getControl( name )
+    {
+        // See if the control can be found
+        let control = this.controlMap.get( name );
+
+        // Make sure control is available
+        if( control === undefined )
+            throw new Error( `Control being asked for is missing! (${name}).` );
+
+        // Pass back the control if found
+        return control;
+    }
+
+    // 
+    //  DESC: Get the pointer to the active control
+    //
+    getActiveControl()
+    {
+        let result = null;
+
+        for( let i = 0; i < this.controlAry.length; ++i )
+        {
+            if( this.controlAry[i].state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECS_INACTIVE )
+            {
+                result = this.controlAry[i].getActiveControl();
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    // 
+    //  DESC: Does this menu use dynamic offsets
+    //
+    isDynamicOffset()
+    {
+        return !this.dynamicOffset.isEmpty();
+    }
+
+    // 
+    //  DESC: Get the scroll params
+    //
+    getScrollParam( msg )
+    {
+        if( (this.activeNode != null) &&
+            this.activeNode.uiControl.canScroll(msg) )
+        {
+            return this.activeNode.uiControl.scrollParam;
+        }
+
+        return this.scrollParam;
+    }
+
+    // 
+    //  DESC: Set the alpha value of this menu
+    //
+    setAlpha( alpha )
+    {
+        if( this.isVisible() )
+        {
+            for( let i = 0; i < this.spriteAry.length; ++i )
+                this.spriteAry[i].setAlpha( alpha );
+
+            for( let i = 0; i < this.staticControlAry.length; ++i )
+                this.staticControlAry[i].setAlpha( alpha );
+
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                this.mouseOnlyControlAry[i].setAlpha( alpha );
+
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].setAlpha( alpha );
+        }
+
+        this.alpha = alpha;
+    }
+    
+    // 
+    //  DESC: Get the alpha value of this menu
+    //
+    getAlpha()
+    {
+        return this.alpha;
+    }
+
+    // 
+    //  DESC: Is the menu idle
+    //
+    isIdle()
+    {
+        return (this.state === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE);
+    }
+}
 
 
 /***/ }),
@@ -4918,16 +6738,19 @@ var spriteSheetManager = new SpriteSheetManager;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SpriteSheet": () => (/* binding */ SpriteSheet)
+/* harmony export */   "Object": () => (/* binding */ Object)
 /* harmony export */ });
-/* harmony import */ var _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(35);
+/* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(34);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(37);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 // 
-//  FILE NAME:  spritesheet.js
-//  DESC:       Class for holding sprite sheet data
+//  FILE NAME:  object.js
+//  DESC:       object class
 //
 
 
@@ -4936,226 +6759,349 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class SpriteSheet
+
+
+
+var gDummyPoint = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
+
+class Object
 {
-    constructor( defaultIndex = 0, glyphCount = 0, columns = 0 )
+    constructor()
     {
-        // Sprite Sheet default index
-        this.defaultIndex = defaultIndex;
+        // local matrix
+        this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_3__.Matrix;
 
-        // Sprite Sheet element count
-        this.glyphCount = glyphCount;
+        // Bitmask settings to record if the object needs to be transformed
+        this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__.BitMask(_common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE);
+    
+        // Local position
+        this.pos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 
-        // Sprite Sheet columns
-        this.columns = columns;
+        // Local Rotation in radians
+        this.rot = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
+
+        // Local scale
+        this.scale = new _point__WEBPACK_IMPORTED_MODULE_0__.Point( 1, 1, 1 );
+
+        // The center point. Point of rotation
+        // This is used for defining a different center point
+        this.centerPos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
+
+        // Offset due to a sprite sheet crop.
+        this.cropOffset = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
+
+        // Translated position
+        this.transPos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
+
+        // The script part of the sprite
+        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__.ScriptComponent;
+    }
+
+    //
+    //  DESC: Set the object's position
+    //
+    setPos( pos )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.pos.set( pos );
+    }
+    
+    setPosXYZ( x = 0, y = 0, z = 0 )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.pos.setXYZ( x, y, z );
+    }
+    
+    incPos( pos )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.pos.inc( pos );
+    }
+    
+    incPosXYZ( x = 0, y = 0, z = 0 )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.pos.incXYZ( x, y, z );
+    }
+    
+    //
+    //  DESC: Set the pre-translation matrix
+    //
+    setRot( rot, convertToRadians = true )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
         
-        // An array of all the glyphs built manually that are of the same size
-        this.glyphAry = null;
-
-        // A map of all the glyphs
-        this.glyphMap = null;
-    }
-    
-    // 
-    //  DESC: Copy the passed in data
-    //
-    copy( obj )
-    {
-        this.defaultIndex = obj.defaultIndex;
-        this.glyphCount = obj.glyphCount;
-        this.columns = obj.columns;
-        
-        if( obj.glyphAry )
-        {
-            if( this.glyphAry === null )
-                this.glyphAry = [];
-            
-            for( let i = 0; i < obj.glyphAry.length; ++i )
-            {
-                let glyph = obj.glyphAry[i];
-                let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( glyph.size.w, glyph.size.h );
-                let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect( glyph.uv.x1, glyph.uv.y1, glyph.uv.x2, glyph.uv.y2 );
-                let cropOffset = null;
-                if( glyph.cropOffset )
-                    cropOffset = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( glyph.cropOffset.w, glyph.cropOffset.h );
-                
-                this.glyphAry.push( new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, rect, cropOffset ) );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Build the simple (grid) sprite sheet data
-    //
-    build( sheetSize )
-    {
-        if( (this.glyphCount != 0) && (this.columns != 0) )
-        {
-            this.glyphAry = [];
-            
-            let rows = Math.trunc(this.glyphCount / this.columns);
-
-            if( (this.glyphCount % this.columns) > 0 )
-                ++rows;
-
-            // Calculate the size of the individual glyph. They are all the same size
-            let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( sheetSize.w / this.columns, sheetSize.h / rows );
-
-            for( let i = 0; i < rows; ++i )
-            {
-                for( let j = 0; j < this.columns; ++j )
-                {
-                    let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(
-                        (j * size.w) / sheetSize.w,
-                        (i * size.h) / sheetSize.h,
-                        size.w / sheetSize.w,
-                        size.h / sheetSize.h );
-                    
-                    this.glyphAry.push( new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, rect ) );
-
-                    // Break out after all the gylphs have been defined
-                    if( this.glyphAry.length === this.glyphCount )
-                        break;
-                }
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Load the glyph data from XML node
-    //
-    loadFromNode( node )
-    {
-        this.glyphMap = new Map;
-        
-        let sheetSize = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size;
-        let attr = node.getAttribute('width');
-        if( attr )
-            sheetSize.w = Number(attr);
-
-        attr = node.getAttribute('height');
-        if( attr )
-            sheetSize.h = Number(attr);
-
-        let rectNode = node.getElementsByTagName('rect');
-        if( rectNode.length )
-        {
-            for( let i = 0; i < rectNode.length; ++i )
-            {
-                let rect = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadRectFromChild( rectNode[i] );
-
-                let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( rect.x2, rect.y2 );
-
-                let uv = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(
-                    rect.x1 / sheetSize.w,
-                    rect.y1 / sheetSize.h,
-                    rect.x2 / sheetSize.w,
-                    rect.y2 / sheetSize.h );
-
-                let cropOffset = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
-                    Number(rectNode[i].getAttribute( 'cx' )),
-                    Number(rectNode[i].getAttribute( 'cy' )) );
-
-                // Add to the map
-                let strId = rectNode[i].getAttribute( 'name' );
-                this.glyphMap.set( strId, new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, uv, cropOffset) );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Load the glyph data from XML node
-    //
-    getGlyph( index = -1 )
-    {
-        if( index > -1 )
-            return this.glyphAry[ index ];
-
+        if( convertToRadians )
+            this.rot.setXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
         else
-            return this.glyphAry[ this.defaultIndex ];
+            this.rot.set( rot );
     }
     
-    
-    // 
-    //  DESC: Find the glyph by Id
-    //
-    findGlyph( glyphId )
+    setRotXYZ( x = 0, y = 0, z = 0, convertToRadians = true )
     {
-        let glyph = this.glyphMap.get( glyphId );
-        if( glyph === undefined )
-        {
-            throw new Error( 'Glyph name is missing (' + glyphId + ')!' );
-        }
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        if( convertToRadians )
+            this.rot.setXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+        else
+            this.rot.setXYZ( x, y, z );
+    }
+    
+    incRot( rot, convertToRadians = true )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        if( convertToRadians )
+            this.rot.incXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+        else
+            this.rot.inc( rot );
         
-        return glyph;
+        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
     }
     
-    
-    // 
-    //  DESC: Set the gylph data
-    //
-    setGlyph( spriteSheet, glyphId )
+    incRotXYZ( x = 0, y = 0, z = 0, convertToRadians = true )
     {
-        let glyph = this.glyphMap.get( glyphId );
-        if( glyph !== undefined )
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        if( convertToRadians )
+            this.rot.incXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+        else
+            this.rot.incXYZ( x, y, z );
+        
+        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+    }
+    
+    //
+    //  DESC: Set the pre-translation matrix
+    //
+    setScale( scale )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.scale.set( scale );
+    }
+    
+    setScaleXYZ( x = 1, y = 1, z = 1 )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.scale.setXYZ( x, y, z );
+    }
+    
+    incScale( scale )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.scale.inc( scale );
+    }
+    
+    incScaleXYZ( x = 1, y = 1, z = 1 )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.scale.incXYZ( x, y, z );
+    }
+    
+    //
+    //  DESC: Set the object's center position
+    //
+    setCenterPos( pos )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.centerPos = pos;
+    }
+    
+    setCenterPosXYZ( x = 0, y = 0, z = 0 )
+    {
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        this.centerPos.setXYZ( x, y, z );
+    }
+
+    //
+    //  DESC: Set the object's crop offset
+    //
+    setCropOffset( offset )
+    {
+        if( !this.centerPos.isEmpty() || ((offset !== null) && (!offset.isEmpty())) )
         {
-            if( spriteSheet.glyphAry === null )
-                spriteSheet.glyphAry = [];
-            
-            spriteSheet.glyphAry.push( glyph );
+            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+            this.cropOffset = offset;
+        }
+    }
+
+    //
+    //  DESC: Set the object visible
+    //
+    setVisible( value )
+    {
+        if( value )
+            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
+        else
+            this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
+    }
+
+    //
+    //  DESC: Is the object visible
+    //
+    isVisible()
+    {
+        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
+    }
+    
+    //
+    //  DESC: Copy the transform to the passed in object
+    //
+    copyTransform( object )
+    {
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE ) )
+            this.setPos( object.pos );
+
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE ) )
+            this.setRot( object.rot );
+
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE ) )
+            this.setScale( object.scale );
+
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
+            this.setCenterPos( object.centerPos );
+
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET ) )
+            this.setCropOffset( object.cropOffset );
+    }
+    
+    //
+    //  DESC: Load the transform data from node
+    //
+    loadTransFromNode( node )
+    {
+        let pos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadPosition( node );
+        if( pos )
+            this.setPos( pos );
+
+        let rot = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadRotation( node );
+        if( rot )
+            this.setRot( rot );
+
+        let scale = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadScale( node );
+        if( scale )
+            this.setScale( scale );
+
+        let centerPos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadCenterPos( node );
+        if( centerPos )
+            this.setCenterPos( centerPos );
+    }
+
+    //
+    //  DESC: Transform the object in local space
+    //
+    transformLocal( matrix )
+    {
+        // Reset the matrices
+        matrix.initilizeMatrix();
+
+        // Apply the crop offset
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET ) )
+            matrix.translateSize( this.cropOffset );
+
+        // Apply the scale
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE ) )
+            this.applyScale();
+
+        // Apply the rotation
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE ) )
+            this.applyRotation( matrix );
+
+        // Apply the translation
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE ) )
+            matrix.translate( this.pos );
+
+        // Clear the check parameter
+        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+
+        // Indicate that translation was done
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
+    }
+    
+    //
+    //  DESC: Transform
+    //  
+    //  NOTE: Child objects that are intermittenly transformed
+    //        will need a transform even if it's just 0, 0, 0
+    //        to force a transfor with it's parent
+    //
+    transform( object = null )
+    {
+        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
+        
+        if( object )
+        {
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM ) || object.wasWorldPosTranformed() )
+            {
+                this.transformLocal( this.matrix );
+                this.matrix.mergeMatrix( object.matrix.matrix );
+                this.matrix.transformPoint( this.transPos, gDummyPoint );
+            }
         }
         else
         {
-            throw new Error( 'Glyph name is missing (' + glyphId + ')!' );
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM ) )
+            {
+                this.transformLocal( this.matrix );
+                this.transPos.copy( this.pos );
+            }
         }
     }
-    
-    // 
-    //  DESC: Get the number of gylphs in this sprite sheet
-    //
-    getCount()
-    {
-        if( (this.glyphAry !== null) && (this.glyphAry.length) )
-            return this.glyphAry.length;
-        
-        else if( (this.glyphMap !== null) && (this.glyphMap.length) )
-            return this.glyphMap.length;
 
-        return this.glyphCount;
-    }
-    
-    // 
-    //  DESC: Copy over the gylph data
     //
-    copyTo( spriteSheet, strIdAry )
+    //  DESC: Apply the scale
+    //
+    applyScale()
     {
-        if( strIdAry.length === 0 )
+        this.matrix.setScaleFromPoint( this.scale );
+    }
+
+    //
+    //  DESC: Apply the scale
+    //
+    applyRotation( matrix )
+    {
+        // Add in the center point prior to rotation
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
+            this.matrix.translate( this.centerPos );
+
+        this.matrix.rotate( this.rot );
+
+        // Subtract the center point after rotation to put back in original position
+        // Doing two inverts keeps us from having to new up a point that would be garbage collected
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
         {
-            spriteSheet.glyphAry = this.glyphAry;
+            this.centerPos.invert();
+            this.matrix.translate( this.centerPos );
+            this.centerPos.invert();
         }
-        else if( this.glyphMap.size )
-        {
-            // Init the sprite sheet class when each glyph is defined in the object data
-            if( spriteSheet.glyphCount === 0 )
-            {
-                for( let i = 0; i < strIdAry.length; ++i )
-                    this.setGlyph( spriteSheet, strIdAry[i] );
-            }
-            // Init the sprite sheet class with an animation that is one glyph defined with a format code
-            else
-            {
-                // Should only be one entry
-                if( strIdAry.length === 1 )
-                {
-                    for( let i = 0; i < spriteSheet.glyphCount; ++i )
-                        this.setGlyph( spriteSheet, strIdAry[0] + i );
-                }
-                else
-                {
-                    throw new Error( 'Sprite Sheet Incorrect configuration!' );
-                }
-            }
-        }
+    }
+
+    //
+    //  DESC: Was the world position transformed?
+    //
+    wasWorldPosTranformed()
+    {
+        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
+    }
+
+    //
+    //  DESC: Was the world position transformed?
+    //
+    forceTransform()
+    {
+        this.parameters.Add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
     }
 }
 
@@ -5167,34 +7113,306 @@ class SpriteSheet
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SpriteSheetGlyph": () => (/* binding */ SpriteSheetGlyph)
+/* harmony export */   "BitMask": () => (/* binding */ BitMask)
 /* harmony export */ });
 
 // 
-//  FILE NAME:  spritesheetglyph.js
-//  DESC:       Class to hold sprite sheet glyph data
+//  FILE NAME: bitmask.js
+//  DESC:      Class to handle a bit mask
 //
 
 
 
-class SpriteSheetGlyph
+class BitMask
 {
-    constructor( size, uv, cropOffset = null )
+    constructor( value = 0 )
     {
-        // Size of the sprite on the sheet
-        this.size = size;
+        this.bitmask = value;
+    }
+    
+    // 
+    //  DESC: Add the parameters to the bitmask
+    //
+    add( args )
+    {
+        this.bitmask |= args;
+    }
 
-        // UV coordinates RECT
-        this.uv = uv;
+    // 
+    //  DESC: Remove the parameters from the bitmask
+    //
+    remove( args )
+    {
+        this.bitmask &= args ^ -1;
+    }
 
-        // Crop Offset
-        this.cropOffset = cropOffset;
+    // 
+    //  DESC: Remove all parameters except for the ones passed in
+    //
+    removeAllExcept( args )
+    {
+        this.bitmask &= args;
+    }
+
+    // 
+    //  DESC: Set the bitmask to zero
+    //
+    clear()
+    {
+        this.bitmask = 0;
+    }
+    
+    // 
+    //  DESC: Check if all of the parameters are set
+    //
+    isEmpty()
+    {
+        return (this.bitmask === 0);
+    }
+
+    // 
+    //  DESC: Check if one of the parameters is set
+    //
+    isSet( args )
+    {
+        return (this.bitmask & args) !== 0;
+    }
+
+    // 
+    //  DESC: Check if all of the parameters are set
+    //
+    areAllSet( args )
+    {
+        return (this.bitmask & args) === args;
+    }
+
+    // 
+    //  DESC: Get a copy of the bitmask including the parameters
+    //
+    getIncluding( args )
+    {
+        return this.bitmask | args;
+    }
+
+    // 
+    //  DESC: Get a copy of the bitmask excluding the parameters
+    //
+    getExcluding( args )
+    {
+        return this.bitmask & (args ^ -1);
+    }
+}
+    
+
+
+
+
+/***/ }),
+/* 35 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ScriptComponent": () => (/* binding */ ScriptComponent)
+/* harmony export */ });
+/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
+/* harmony import */ var _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
+
+//
+//  FILE NAME: scriptcomponent.js
+//  DESC:      Class for handling game scripting
+//
+
+
+
+
+
+class ScriptComponent
+{
+    constructor()
+    {
+        this.scriptAry = [];
+
+        // Script object map. Prepare scripts by name
+        this.scriptFactoryMap = null;
+    }
+
+    // 
+    //  DESC: Init the script Ids and add them to the map
+    //        This loads the attribute info reguardless of what it is
+    //
+    initScriptIds( xmlNode )
+    {
+        // Check for scripting
+        let scriptNode = xmlNode.getElementsByTagName( 'script' );
+
+        if( !this.scriptFactoryMap && scriptNode.length )
+            this.scriptFactoryMap = new Map;
+
+        for( let i = 0; i < scriptNode.length; ++i )
+        {
+            let prepareOnInit = false;
+            let forceUpdate = false;
+            let attr = scriptNode[i].getAttribute( 'prepareOnInit' );
+            if( attr !== null )
+                prepareOnInit = (attr === 'true')
+
+            attr = scriptNode[i].getAttribute( 'forceUpdate' );
+            if( attr !== null )
+                forceUpdate = (attr === 'true')
+
+            attr = scriptNode[i].attributes[0];
+            if( attr )
+                // This allocates the script to the map
+                this.scriptFactoryMap.set( attr.name, new _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_1__.CScriptPrepareFunc(attr.value, prepareOnInit, forceUpdate) );
+        }
+    }
+
+    // 
+    //  DESC: Prepare a script to run
+    //  NOTE: Function uses arguments object to handle multiple parameters
+    //        The last parameter will be the script Id so that it is ignored by the calling function
+    //
+    prepare(...args)
+    {
+        if( this.scriptFactoryMap && typeof args[0] === 'string' )
+        {
+            let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
+            if( scriptPrepareFunc )
+            {
+                let script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
+                if( script )
+                {
+                    switch(args.length)
+                    {
+                        case 1:
+                            this.scriptAry.push( script() );
+                        break;
+                        case 2:
+                            this.scriptAry.push( script(args[1]) );
+                        break;
+                        case 3:
+                            this.scriptAry.push( script(args[1],args[2]) );
+                        break;
+                        case 4:
+                            this.scriptAry.push( script(args[1],args[2],args[3]) );
+                        break;
+                        case 5:
+                            this.scriptAry.push( script(args[1],args[2],args[3],args[4]) );
+                        break;
+                        case 6:
+                            this.scriptAry.push( script(args[1],args[2],args[3],args[4],args[5]) );
+                        break;
+                    }
+
+                    if( scriptPrepareFunc.forceUpdate )
+                        this.update();
+                    
+                    return true;
+                }
+            }
+        }
+        else if( typeof args[0] === 'object' )
+        {
+            this.scriptAry.push( args[0] );
+
+            if( args.length > 1 && args[1] )
+                this.update();
+        }
+
+        return false;
+    }
+
+    // 
+    //  DESC: Update the script
+    //
+    prepareOnInit( object )
+    {
+        if( this.scriptFactoryMap )
+        {
+            for( let scriptPrepareFunc of this.scriptFactoryMap.values() )
+            {
+                if( scriptPrepareFunc.prepareOnInit )
+                {
+                    let script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
+                    if( script )
+                    {
+                        this.scriptAry.push( script(object) );
+                        if( scriptPrepareFunc.forceUpdate )
+                            this.update();
+                    }
+                }
+            }
+        }
+    }
+
+    // 
+    //  DESC: Update the script
+    //
+    update()
+    {
+        // Call the active scripts
+        for( let i = this.scriptAry.length - 1; i > -1; --i )
+        {
+            // If the script is finished, remove it
+            if( this.scriptAry[i].execute() )
+                this.scriptAry.splice( i, 1 );
+        }
+    }
+    
+    // 
+    //  DESC: Is this component active?
+    //
+    isActive()
+    {
+        return (this.scriptAry.length > 0);
+    }
+    
+    // 
+    //  DESC: clear out the scripts
+    //
+    reset()
+    {
+        this.scriptAry = [];
     }
 }
 
 
 /***/ }),
-/* 35 */
+/* 36 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CScriptPrepareFunc": () => (/* binding */ CScriptPrepareFunc)
+/* harmony export */ });
+
+//
+//  FILE NAME: scriptpreparefunc.js
+//  DESC:      Class for holding script attributes
+//
+
+
+
+class CScriptPrepareFunc
+{
+    constructor(funcName, prepareOnInit = false, forceUpdate = false)
+    {
+        // Function Id
+        this.funcName = funcName;
+
+        // Prepare on Init flag
+        this.prepareOnInit = prepareOnInit;
+
+        // Force Update flag
+        this.forceUpdate = forceUpdate;
+    }
+}
+
+/***/ }),
+/* 37 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5214,12 +7432,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "loadVertAlignment": () => (/* binding */ loadVertAlignment),
 /* harmony export */   "loadDynamicOffset": () => (/* binding */ loadDynamicOffset)
 /* harmony export */ });
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(38);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
 /* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
-/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(37);
+/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(40);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 // 
@@ -5623,7 +7841,7 @@ function loadDynamicOffset( node )
 
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5762,7 +7980,53 @@ class Color
 
 
 /***/ }),
-/* 37 */
+/* 39 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Rect": () => (/* binding */ Rect)
+/* harmony export */ });
+
+// 
+//  FILE NAME:  rect.js
+//  DESC:       rect class
+//
+
+
+
+class Rect
+{
+    constructor( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
+    {
+        this.data = new Float32Array([x1,y1,x2,y2]);
+    }
+    
+    set( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
+    {
+        this.data[0] = x1;
+        this.data[1] = y1;
+        this.data[2] = x2;
+        this.data[3] = y2;
+    }
+    
+    set x1(value) { this.data[0] = value; }
+    get x1() { return this.data[0]; }
+    
+    set y1(value) { this.data[1] = value; }
+    get y1() { return this.data[1]; }
+    
+    set x2(value) { this.data[2] = value; }
+    get x2() { return this.data[2]; }
+    
+    set y2(value) { this.data[3] = value; }
+    get y2() { return this.data[3]; }
+}
+
+
+/***/ }),
+/* 40 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5770,7 +8034,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "DynamicOffset": () => (/* binding */ DynamicOffset)
 /* harmony export */ });
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(38);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
 /* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
@@ -5861,347 +8125,87 @@ class DynamicOffset
 
 
 /***/ }),
-/* 38 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "BitMask": () => (/* binding */ BitMask)
-/* harmony export */ });
-
-// 
-//  FILE NAME: bitmask.js
-//  DESC:      Class to handle a bit mask
-//
-
-
-
-class BitMask
-{
-    constructor( value = 0 )
-    {
-        this.bitmask = value;
-    }
-    
-    // 
-    //  DESC: Add the parameters to the bitmask
-    //
-    add( args )
-    {
-        this.bitmask |= args;
-    }
-
-    // 
-    //  DESC: Remove the parameters from the bitmask
-    //
-    remove( args )
-    {
-        this.bitmask &= args ^ -1;
-    }
-
-    // 
-    //  DESC: Remove all parameters except for the ones passed in
-    //
-    removeAllExcept( args )
-    {
-        this.bitmask &= args;
-    }
-
-    // 
-    //  DESC: Set the bitmask to zero
-    //
-    clear()
-    {
-        this.bitmask = 0;
-    }
-    
-    // 
-    //  DESC: Check if all of the parameters are set
-    //
-    isEmpty()
-    {
-        return (this.bitmask === 0);
-    }
-
-    // 
-    //  DESC: Check if one of the parameters is set
-    //
-    isSet( args )
-    {
-        return (this.bitmask & args) !== 0;
-    }
-
-    // 
-    //  DESC: Check if all of the parameters are set
-    //
-    areAllSet( args )
-    {
-        return (this.bitmask & args) === args;
-    }
-
-    // 
-    //  DESC: Get a copy of the bitmask including the parameters
-    //
-    getIncluding( args )
-    {
-        return this.bitmask | args;
-    }
-
-    // 
-    //  DESC: Get a copy of the bitmask excluding the parameters
-    //
-    getExcluding( args )
-    {
-        return this.bitmask & (args ^ -1);
-    }
-}
-    
-
-
-
-
-/***/ }),
-/* 39 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "assetHolder": () => (/* binding */ assetHolder)
-/* harmony export */ });
-
-// 
-//  FILE NAME: assetholder.js
-//  DESC:      Class for holding loaded file data
-//
-
-
-
-class AssetHolder
-{
-    constructor()
-    {
-        this.loadMapMap = new Map;
-    }
-
-    // 
-    //  DESC: Set the data
-    //
-    set( group, name, data = null )
-    {
-        let groupMap = this.loadMapMap.get( group );
-        if( groupMap === undefined )
-        {
-            groupMap = new Map;
-            this.loadMapMap.set( group, groupMap );
-        }
-
-        let asset = groupMap.get( name );
-        if( asset === undefined || asset === -1 )
-            groupMap.set( name, data );
-    }
-    
-    // 
-    //  DESC: Set a place holder that this data is scheduled to be loaded
-    //
-    allowLoad( group, name )
-    {
-        let groupMap = this.loadMapMap.get( group );
-        if( groupMap === undefined )
-        {
-            groupMap = new Map;
-            this.loadMapMap.set( group, groupMap );
-        }
-        
-        let asset = groupMap.get( name );
-        if( asset === undefined )
-        {
-            // Add an entry to the map as a 
-            // place holder for future checks
-            groupMap.set( name, -1 );
-
-            return true;
-        }
-
-        return false;
-    }
-    
-    // 
-    //  DESC: Get the data
-    //
-    get( group, name )
-    {
-        let groupMap = this.loadMapMap.get( group );
-        if( groupMap === undefined )
-            throw new Error( `Group does not exist! (${group}).` );
-            
-        let data = groupMap.get( name );
-        if( data === undefined || data === -1 )
-            throw new Error( `Data does not exist! (${name}).` );
-        
-        return data;
-    }
-    
-    // 
-    //  DESC: Delete the group
-    //
-    deleteGroup( groupAry )
-    {
-        for( let i = 0; i < groupAry.length; ++i )
-            this.loadMapMap.delete( groupAry[i] );
-    }
-    
-    // 
-    //  DESC: Clear the group data
-    //
-    clear()
-    {
-        if( this.loadMapMap.size )
-            this.loadMapMap.clear();
-    }
-}
-
-var assetHolder = new AssetHolder;
-
-
-/***/ }),
-/* 40 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ObjectData2D": () => (/* binding */ ObjectData2D)
-/* harmony export */ });
-/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
-/* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
-/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(96);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
-
-// 
-//  FILE NAME: objectdata2d.js
-//  DESC:      Class that holds a 2D object data
-//
-
-
-
-
-
-
-
-
-
-class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
-{
-    constructor()
-    {
-        super();
-
-        // Visual data of the object
-        this.visualData = new _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__.ObjectVisualData2D;
-
-        // Physics data of the object
-        this.physicsData = new _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__.ObjectPhysicsData2D;
-
-        // The name of the object data
-        this.name = null;
-
-        // The group the object data is in
-        this.group = null;
-
-        // The initial size of the object
-        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__.Size;
-    }
-    
-    // 
-    //  DESC: Copy the passed in data
-    //
-    copy( obj )
-    {
-        this.visualData.copy( obj.visualData );
-        this.physicsData.copy( obj.physicsData );
-        this.size.copy( obj.size );
-    }
-    
-    // 
-    //  DESC: Load the object data from the passed in node
-    //
-    loadObjData( node, group, name )
-    {
-        this.name = name;
-        this.group = group;
-
-        // Load the size
-        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__.loadSize( node, this.size );
-
-        // Load the visual data
-        this.visualData.loadObjData( node );
-
-        // Load the physics data
-        this.physicsData.loadObjData( node );
-    }
-    
-    // 
-    //  DESC: Create OpenGL objects from data
-    //
-    createFromData( group )
-    {
-        // Create the visuales
-        this.visualData.createFromData( group, this.size );
-    }
-
-    // 
-    //  DESC: Is this 2D object data?
-    //
-    is2D()
-    {
-        return true;
-    }
-}
-
-
-/***/ }),
 /* 41 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "iObjectData": () => (/* binding */ iObjectData)
+/* harmony export */   "ScrollParam": () => (/* binding */ ScrollParam)
 /* harmony export */ });
-
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
 // 
-//  FILE NAME: iobjectdata.js
-//  DESC:      Object data interface class
+//  FILE NAME: scrollparam.js
+//  DESC:      Class for handling scroll parameter data
 //
 
 
 
-class iObjectData
+
+class ScrollParam
 {
     constructor()
     {
+        // Array that holds the scroll messages allows by this menu or control
+        this.scrollTypesMap = null;
+
+        // The delay of the first scroll message
+        this.startDelay = -1;
+
+        // The delay of the rest of the scroll messages
+        this.scrollDelay = -1;
+
+        // The scroll message to send from the timer
+        this.msg = -1;
     }
     
     // 
-    //  DESC: Is this 2D object data?
+    //  DESC: Load the scroll data from node
     //
-    is2D()
+    loadFromNode( node )
     {
-        return false;
-    }
+        if( node.length )
+        {
+            this.scrollTypesMap = new Map;
+            
+            this.startDelay = Number(node[0].getAttribute( 'startDelay' ));
+            this.scrollDelay = Number(node[0].getAttribute( 'scrollDelay' ));
+            
+            if( node[0].getAttribute( 'up' ) === 'true' )
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_UP_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_UP );
 
+            if( node[0].getAttribute( 'down' ) === 'true' )
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_DOWN_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_DOWN );
+
+            if( node[0].getAttribute( 'left' ) === 'true' )
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_LEFT_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_LEFT );
+
+            if( node[0].getAttribute( 'right' ) === 'true' )
+                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_RIGHT_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_RIGHT );
+        }
+    }
+    
     // 
-    //  DESC: Is this 3D object data?
+    //  DESC: Does this menu or control support scrolling this message?
     //
-    is3D()
+    canScroll( msg )
     {
+        if( this.scrollTypesMap )
+        {
+            this.msg = -1;
+
+            let result = this.scrollTypesMap.get( msg );
+
+            if( result )
+            {
+                this.msg = result;
+                return true;
+            }
+        }
+
         return false;
     }
 }
-
 
 /***/ }),
 /* 42 */
@@ -6210,348 +8214,2949 @@ class iObjectData
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Fixture": () => (/* binding */ Fixture),
-/* harmony export */   "ObjectPhysicsData2D": () => (/* binding */ ObjectPhysicsData2D)
+/* harmony export */   "EMS_INACTIVE": () => (/* binding */ EMS_INACTIVE),
+/* harmony export */   "EMS_IDLE": () => (/* binding */ EMS_IDLE),
+/* harmony export */   "EMS_ACTIVE": () => (/* binding */ EMS_ACTIVE),
+/* harmony export */   "EMS_MAX_MENU_STATES": () => (/* binding */ EMS_MAX_MENU_STATES),
+/* harmony export */   "EMNS_NULL": () => (/* binding */ EMNS_NULL),
+/* harmony export */   "EMNS_MOUSE": () => (/* binding */ EMNS_MOUSE),
+/* harmony export */   "EMNS_GAMEPAD_KEYBAORD": () => (/* binding */ EMNS_GAMEPAD_KEYBAORD),
+/* harmony export */   "EMTS_INACTIVE": () => (/* binding */ EMTS_INACTIVE),
+/* harmony export */   "EMTS_IDLE": () => (/* binding */ EMTS_IDLE),
+/* harmony export */   "EMTS_ACTIVE": () => (/* binding */ EMTS_ACTIVE),
+/* harmony export */   "EMTS_MAX_MENU_TREE_STATES": () => (/* binding */ EMTS_MAX_MENU_TREE_STATES),
+/* harmony export */   "EGE_MENU_TRANS_IN": () => (/* binding */ EGE_MENU_TRANS_IN),
+/* harmony export */   "EGE_MENU_TRANS_OUT": () => (/* binding */ EGE_MENU_TRANS_OUT),
+/* harmony export */   "EGE_MENU_ESCAPE_ACTION": () => (/* binding */ EGE_MENU_ESCAPE_ACTION),
+/* harmony export */   "EGE_MENU_TOGGLE_ACTION": () => (/* binding */ EGE_MENU_TOGGLE_ACTION),
+/* harmony export */   "EGE_MENU_BACK_ACTION": () => (/* binding */ EGE_MENU_BACK_ACTION),
+/* harmony export */   "EGE_MENU_TO_TREE": () => (/* binding */ EGE_MENU_TO_TREE),
+/* harmony export */   "EGE_MENU_TO_MENU": () => (/* binding */ EGE_MENU_TO_MENU),
+/* harmony export */   "EGE_MENU_GAME_STATE_CHANGE": () => (/* binding */ EGE_MENU_GAME_STATE_CHANGE),
+/* harmony export */   "EGE_MENU_UP_ACTION": () => (/* binding */ EGE_MENU_UP_ACTION),
+/* harmony export */   "EGE_MENU_DOWN_ACTION": () => (/* binding */ EGE_MENU_DOWN_ACTION),
+/* harmony export */   "EGE_MENU_LEFT_ACTION": () => (/* binding */ EGE_MENU_LEFT_ACTION),
+/* harmony export */   "EGE_MENU_RIGHT_ACTION": () => (/* binding */ EGE_MENU_RIGHT_ACTION),
+/* harmony export */   "EGE_MENU_CONTROL_STATE_CHANGE": () => (/* binding */ EGE_MENU_CONTROL_STATE_CHANGE),
+/* harmony export */   "EGE_MENU_SELECT_ACTION": () => (/* binding */ EGE_MENU_SELECT_ACTION),
+/* harmony export */   "EGE_MENU_SELECT_EXECUTE": () => (/* binding */ EGE_MENU_SELECT_EXECUTE),
+/* harmony export */   "EGE_MENU_SET_ACTIVE_CONTROL": () => (/* binding */ EGE_MENU_SET_ACTIVE_CONTROL),
+/* harmony export */   "EGE_MENU_REACTIVATE": () => (/* binding */ EGE_MENU_REACTIVATE),
+/* harmony export */   "EGE_MENU_SCROLL_UP": () => (/* binding */ EGE_MENU_SCROLL_UP),
+/* harmony export */   "EGE_MENU_SCROLL_DOWN": () => (/* binding */ EGE_MENU_SCROLL_DOWN),
+/* harmony export */   "EGE_MENU_SCROLL_LEFT": () => (/* binding */ EGE_MENU_SCROLL_LEFT),
+/* harmony export */   "EGE_MENU_SCROLL_RIGHT": () => (/* binding */ EGE_MENU_SCROLL_RIGHT),
+/* harmony export */   "EGE_MENU_TAB_LEFT": () => (/* binding */ EGE_MENU_TAB_LEFT),
+/* harmony export */   "EGE_MENU_TAB_RIGHT": () => (/* binding */ EGE_MENU_TAB_RIGHT),
+/* harmony export */   "EAC_NULL": () => (/* binding */ EAC_NULL),
+/* harmony export */   "EAC_FIRST_ACTIVE_CONTROL": () => (/* binding */ EAC_FIRST_ACTIVE_CONTROL),
+/* harmony export */   "EAC_LAST_ACTIVE_CONTROL": () => (/* binding */ EAC_LAST_ACTIVE_CONTROL),
+/* harmony export */   "ETC_RESET": () => (/* binding */ ETC_RESET),
+/* harmony export */   "ETC_BEGIN": () => (/* binding */ ETC_BEGIN),
+/* harmony export */   "ETC_END": () => (/* binding */ ETC_END)
 /* harmony export */ });
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(43);
+// 
+//  FILE NAME: menudefs.js
+//  DESC:      misc defines
+//
+
+
+
+// EMenuState
+const EMS_INACTIVE        = 0,
+             EMS_IDLE            = 1,
+             EMS_ACTIVE          = 2,
+             EMS_MAX_MENU_STATES = 3;
+
+// EMenuNavigationState
+const EMNS_NULL             = 0,
+             EMNS_MOUSE            = 1,
+             EMNS_GAMEPAD_KEYBAORD = 2;
+
+// EMenuTreeState
+const EMTS_INACTIVE             = 0,
+             EMTS_IDLE                 = 1,
+             EMTS_ACTIVE               = 2,
+             EMTS_MAX_MENU_TREE_STATES = 3;
+
+// EMenuEvent
+const EGE_MENU_TRANS_IN             = 100,
+             EGE_MENU_TRANS_OUT            = 101,
+             EGE_MENU_ESCAPE_ACTION        = 102,
+             EGE_MENU_TOGGLE_ACTION        = 103,
+             EGE_MENU_BACK_ACTION          = 104,
+             EGE_MENU_TO_TREE              = 105,
+             EGE_MENU_TO_MENU              = 106,
+             EGE_MENU_GAME_STATE_CHANGE    = 107,
+             EGE_MENU_UP_ACTION            = 108,
+             EGE_MENU_DOWN_ACTION          = 109,
+             EGE_MENU_LEFT_ACTION          = 110,
+             EGE_MENU_RIGHT_ACTION         = 111,
+             EGE_MENU_CONTROL_STATE_CHANGE = 112,
+             EGE_MENU_SELECT_ACTION        = 113,
+             EGE_MENU_SELECT_EXECUTE       = 114,
+             EGE_MENU_SET_ACTIVE_CONTROL   = 115,
+             EGE_MENU_REACTIVATE           = 116,
+             EGE_MENU_SCROLL_UP            = 117,
+             EGE_MENU_SCROLL_DOWN          = 118,
+             EGE_MENU_SCROLL_LEFT          = 119,
+             EGE_MENU_SCROLL_RIGHT         = 120,
+             EGE_MENU_TAB_LEFT             = 121,
+             EGE_MENU_TAB_RIGHT            = 122;
+
+// EActiveControl
+const EAC_NULL                 = 0,
+             EAC_FIRST_ACTIVE_CONTROL = 1,
+             EAC_LAST_ACTIVE_CONTROL  = 2;
+
+// ETransCode
+const ETC_RESET = 0,
+             ETC_BEGIN = 1,
+             ETC_END   = 2;
+
+/***/ }),
+/* 43 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Sprite": () => (/* binding */ Sprite)
+/* harmony export */ });
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(44);
+/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(46);
+/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(47);
+/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(48);
+/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(53);
+/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(54);
+/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(55);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(10);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
-//  FILE NAME:  objectphysicsdata2d.js
-//  DESC:       Class containing the 2D object's physics data
+//  FILE NAME:  sprite.js
+//  DESC:       Sprite class
 //
 
 
 
 
 
-class Fixture
+
+
+
+
+
+
+
+
+
+class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 {
-    constructor()
+    constructor( objData, parentNode = null )
     {
-        // Shape of the fixture
-        this.shape = null;
+        super();
 
-        // Radius if shape is a circle
-        this.radius = 0.0;
+        // parent node of this sprite
+        this.parentNode = parentNode;
 
-        // The friction is how much drag this object has on another object  
-        this.friction = 0.2;
+        // The object data
+        this.objData = objData
+        
+        // The visual part of the sprite
+        this.visualComponent = null
+        
+        // The physics part of the sprite
+        this.physicsComponent = null;
+        
+        // Allocate the sprite specific objects
+        if( objData.is2D() )
+        {
+            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_QUAD )
+                this.visualComponent = new _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__.VisualComponentQuad( objData.visualData );
+            
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SPRITE_SHEET )
+                this.visualComponent = new _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__.VisualComponentSpriteSheet( objData.visualData );
+            
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SCALED_FRAME )
+                this.visualComponent = new _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__.VisualComponentScaledFrame( objData.visualData );
+            
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_FONT )
+                this.visualComponent = new _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__.VisualComponentFont( objData.visualData );
+            
+            if( objData.physicsData.isActive() )
+                this.physicsComponent = new _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__.PhysicsComponent2D( objData.physicsData );
+        }
+        else if( objData.is3D() )
+        {
+            // Matrix for rotations only, used for normal calculations
+            this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_8__.Matrix;
+            this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__.VisualComponent3D( objData.visualData );
+        }
 
-        // The density is how much the object resists movement  
-        this.density = 0.2;
-
-        // The percetange of velocity retained upon colliding with this object
-        this.restitution = 0.2;
-
-        // Amount to adjust the top, bottom, left, and right side size of the mesh
-        this.topMod = 0;
-        this.bottomMod = 0;
-        this.leftMod = 0;
-        this.rightMod = 0;
-
-        // Flag to define if chain shape is a loop
-        this.chainLoop = false;
-
-        // Flag to indicate if fixture is a sensor. Reports collision but doesn't react to it
-        this.sensor = false;
-
-        // Collision filter
-        this.filterGroupIndex = 0;
-        this.filterCategoryBits = 1;
-        this.filterMaskBits = 65535;
-
-        // Polygon point vector
-        this.vertAry = [];
+        // Allocate the null component if no visual component was created
+        if( this.visualComponent === null )
+            this.visualComponent = new _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__.NullVisualComponent();
+        
+        // If there's no visual data, set the hide flag
+        this.setVisible( objData.visualData.isActive() );
     }
     
     // 
-    //  DESC: Copy the passed in data
+    //  DESC: Load from XML node
     //
-    copy( obj )
+    load( xmlNode )
     {
-        this.shape = obj.shape;
-        this.radius = obj.radius;  
-        this.friction = obj.friction;  
-        this.density = obj.density;
-        this.restitution = obj.restitution;
-        this.topMod = obj.topMod;
-        this.bottomMod = obj.bottomMod;
-        this.leftMod = obj.leftMod;
-        this.rightMod = obj.rightMod;
-        this.chainLoop = obj.chainLoop;
-        this.sensor = obj.sensor;
-        this.filterGroupIndex = obj.filterGroupIndex;
-        this.filterCategoryBits = obj.filterCategoryBits;
-        this.filterMaskBits = obj.filterMaskBits;
+        // Load the transform data from node
+        this.loadTransFromNode( xmlNode );
+
+        // Load the script functions from node
+        this.scriptComponent.initScriptIds( xmlNode );
+
+        if( this.visualComponent.isFontSprite() )
+            this.visualComponent.loadFontPropFromNode( xmlNode );
+    }
+
+    // 
+    //  DESC: Load from XML node
+    //
+    reload( xmlNode )
+    {
+        // Load the sprite data
+        this.load( xmlNode );
+
+        // Init
+        this.init();
         
-        for( let i = 0; i < obj.vertAry.length; ++i )
+        if( this.physicsComponent )
+            this.physicsComponent.setTransform(this.pos.x, this.pos.y, this.rot.z);
+    }
+    
+    // 
+    //  DESC: Init the sprite
+    //
+    init()
+    {
+        if( this.visualComponent.isFontSprite() )
+            this.visualComponent.createFontStringFromData();
+        
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.scriptComponent.prepareOnInit( this );
+    }
+    
+    //
+    //  DESC: Do some cleanup
+    //
+    cleanUp()
+    {
+        if( this.visualComponent.isFontSprite() )
+            this.visualComponent.deleteFontVBO();
+        
+        if( this.physicsComponent )
+            this.physicsComponent.destroyBody();
+    }
+    
+    // 
+    //  DESC: Init the physics
+    //
+    initPhysics()
+    {
+        if( this.physicsComponent )
+            this.physicsComponent.init( this );
+    }
+    
+    // 
+    //  DESC: Handle events
+    //
+    handleEvent( event )
+    {
+        this.scriptComponent.handleEvent( event );
+    }
+
+    // 
+    //  DESC: Update the sprite
+    //
+    update()
+    {
+        this.scriptComponent.update();
+    }
+    
+    // 
+    //  DESC: Update the physics
+    //
+    physicsUpdate()
+    {
+        if( this.physicsComponent )
+            this.physicsComponent.update();
+    }
+    
+    // 
+    //  DESC: do the render
+    //
+    render( camera )
+    {
+        if( this.isVisible() )
+            this.visualComponent.render( this, camera );
+    }
+    
+    // 
+    //  DESC: Set the color
+    //
+    setColor( color )
+    {
+        this.visualComponent.color.copy( color );
+    }
+
+    setRGBA( r, g, b, a )
+    {
+        // This function assumes values between 0.0 to 1.0.
+        this.visualComponent.color.set( r, g, b, a );
+    }
+    
+    // 
+    //  DESC: Set the Alpha
+    //
+    setAlpha( alpha, allowToExceed = false )
+    {
+        if( allowToExceed || (alpha < this.objData.visualData.color.a) )
+            this.visualComponent.color.a = alpha;
+        else
+            this.visualComponent.color.a = this.objData.visualData.color.a;
+    }
+    
+    // 
+    //  DESC: Get the Alpha
+    //
+    getAlpha()
+    {
+        return this.visualComponent.color.a;
+    }
+    
+    // 
+    //  DESC: Get the default Alpha
+    //
+    getDefaultAlpha()
+    {
+        return this.objData.visualData.color.a;
+    }
+    
+    // 
+    //  DESC: Set the default color
+    //
+    setDefaultColor()
+    {
+        this.visualComponent.color.copy( this.objData.visualData.color );
+    }
+
+    // 
+    //  DESC: Get the color
+    //
+    getColor()
+    {
+        return this.visualComponent.color;
+    }
+
+    // 
+    //  DESC: Get the color
+    //
+    getDefaultColor()
+    {
+        return this.objData.visualData.color;
+    }
+    
+    // 
+    //  DESC: Set the texture ID from index
+    //
+    setFrame( index = 0 )
+    {
+        if( this.visualComponent.frameIndex != index )
         {
-            let vert = obj.vertAry[i];
-            this.vertAry.push( new planck_js__WEBPACK_IMPORTED_MODULE_0__.Vec2( vert.x, vert.y ) );
+            this.visualComponent.setFrame( index );
+
+            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SPRITE_SHEET )
+                if( index < this.objData.visualData.spriteSheet.getCount() )
+                    this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
     }
-}
-
-class ObjectPhysicsData2D
-{
-    constructor()
-    {
-        // The name of the physics world
-        this.world = null;
-
-        // Type of physics body
-        this.bodyType = null;
-
-        // The constant decceleration of movement and rotation
-        this.linearDamping = 0;
-        this.angularDamping = 0;
-
-        // If we want to prevent the object from rotating due to physicss
-        this.fixedRotation = false;
-
-        // vector of fixtures
-        this.fixtureAry = [];
-    }
     
     // 
-    //  DESC: Copy the passed in data
+    //  DESC: Set the texture ID from index
     //
-    copy( obj )
+    getFrameCount()
     {
-        this.world = obj.world;
-        this.bodyType = obj.bodyType;
-        this.linearDamping = obj.linearDamping;
-        this.angularDamping = obj.angularDamping;
-        this.fixedRotation = obj.fixedRotation;
-        
-        for( let i = 0; i < obj.fixtureAry.length; ++i )
-        {
-            let fixture = new Fixture;
-            fixture.copy( obj.fixtureAry[i] );
-            this.fixtureAry.push(fixture);
-        }
+        return this.objData.visualData.getFrameCount();
     }
-    
-    // 
-    //  DESC: Load the object data
+
     //
-    loadObjData( node )
+    //  DESC: Is the physics active
+    //
+    isPhysicsActive()
     {
-        let physicsNode = node.getElementsByTagName( 'physics' );
+        if( this.physicsComponent && this.physicsComponent.isActive() )
+            return true;
 
-        // Check if the object has any physics data
-        if( physicsNode.length )
+        return false;
+    }
+
+    //
+    //  DESC: Is the physics awake
+    //
+    isPhysicsAwake()
+    {
+        if( this.isPhysicsActive() && this.physicsComponent.isAwake() )
+            return true;
+
+        return false;
+    }
+
+    //
+    //  DESC: Apply the rotation
+    //
+    applyRotation( matrix )
+    {
+        // 3D light calculations require a rotation matrix without scale
+        if( this.objData.is3D() )
         {
-            let attr = physicsNode[0].getAttribute( 'world' );
-            if( attr )
-                this.world = attr;
-
-            // The body of the physics sprite used for physics
-            let bodyNode = physicsNode[0].getElementsByTagName( 'body' );
-            if( bodyNode.length )
+            // Add in the center point prior to rotation
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_9__.CENTER_POINT ) )
+                this.matrix.translate( this.centerPos );
+            
+            // Add in the rotation if this is NOT a physics transformation
+            // NOTE: Don't have a 3D physics library yet
+            //if( !this.parameters.isSet( defs.PHYSICS_TRANSFORM ) )
             {
-                // Get the body type - default is static
-                attr = bodyNode[0].getAttribute( 'type' );
-                if( attr )
-                    this.bodyType = attr;
-
-                // The damping is the constant decceleration of movement
-                attr = bodyNode[0].getAttribute( 'linearDamping' );
-                if( attr )
-                    this.linearDamping = Number( attr );
-
-                // The angular damping is the constant decceleration of rotation
-                attr = bodyNode[0].getAttribute( 'angularDamping' );
-                if( attr )
-                    this.angularDamping = Number( attr );
-
-                // Whether the rotation due to physicss is fixed
-                attr = bodyNode[0].getAttribute( 'fixedRotation' );
-                if( attr )
-                    this.fixedRotation = (attr === 'true');
+                this.rotMatrix.initilizeMatrix();
+                this.rotMatrix.rotate( this.rot );
             }
 
-            // The body of the physics sprite used for physics
-            let fixtureNode = physicsNode[0].getElementsByTagName( 'fixture' );
+            // Since the rotation has already been done, multiply it into the matrix
+            matrix.multiply3x3( this.rotMatrix.matrix );
 
-            for( let i = 0; i < fixtureNode.length; ++i )
+            // Subtract the center point after rotation to put back in original position
+            // Doing two inverts keeps us from having to new up a point that would be garbage collected
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_9__.CENTER_POINT ) )
             {
-                let fixture = this.fixtureAry[i];
-
-                if( fixture === undefined )
-                {
-                    fixture = new Fixture;
-                    this.fixtureAry.push(fixture);
-                }
-
-                // Get the fixture shape
-                attr = fixtureNode[i].getAttribute( 'shape' );
-                if( attr )
-                    fixture.shape = attr;
-
-                // The friction is how much drag this object has on another object
-                attr = fixtureNode[i].getAttribute( 'friction' );
-                if( attr )
-                    fixture.friction = Number( attr );
-
-                // The density is how much the object resists movement
-                attr = fixtureNode[i].getAttribute( 'density' );
-                if( attr )
-                    fixture.density = Number( attr );
-
-                // The restitution is the percentage of velocity retained upon physics
-                attr = fixtureNode[i].getAttribute( 'restitution' );
-                if( attr )
-                    fixture.restitution = Number( attr );
-
-                // Radius if shape is a circle
-                attr = fixtureNode[i].getAttribute( 'radius' );
-                if( attr )
-                    fixture.radius = Number( attr );
-
-                // Is chain shape a loop?
-                attr = fixtureNode[i].getAttribute( 'chainLoop' );
-                if( attr )
-                    fixture.chainLoop = (attr === 'true');
-
-                // Is fixture a sensor?
-                attr = fixtureNode[i].getAttribute( 'sensor' );
-                if( attr )
-                    fixture.sensor = (attr === 'true');
-
-                // See if there is a vert list
-                let vertNode = fixtureNode[i].getElementsByTagName( 'vert' );
-
-                for( let j = 0; j < vertNode.length; ++j )
-                {
-                    fixture.vertAry.push( 
-                        new planck_js__WEBPACK_IMPORTED_MODULE_0__.Vec2(
-                            Number( vertNode[j].getAttribute('x') ),
-                            Number( vertNode[j].getAttribute('y') ) ) );
-                }
-
-                // See if the filter is defined
-                let filterNode = fixtureNode[i].getElementsByTagName( 'collisionFilter' );
-                if( filterNode.length )
-                {
-                    attr = filterNode[0].getAttribute('categoryBits');
-                    if( attr )
-                        fixture.filterGroupIndex = Number( attr );
-
-                    attr = filterNode[0].getAttribute('maskBits');
-                    if( attr )
-                        fixture.filterMaskBits = Number( attr );
-
-                    attr = filterNode[0].getAttribute('groupIndex');
-                    if( attr )
-                        fixture.filterGroupIndex = Number( attr );
-                }
-
-                // The size mod is how much the mesh size should be adjusted on each side
-                let sizeModNode = fixtureNode[i].getElementsByTagName( 'sizeMod' );
-                if( sizeModNode.length )
-                {
-                    attr = sizeModNode[0].getAttribute('top');
-                    if( attr )
-                        fixture.topMod = Number( attr );
-
-                    attr = sizeModNode[0].getAttribute('bottom');
-                    if( attr )
-                        fixture.bottomMod = Number( attr );
-
-                    attr = sizeModNode[0].getAttribute('left');
-                    if( attr )
-                        fixture.leftMod = Number( attr );
-
-                    attr = sizeModNode[0].getAttribute('right');
-                    if( attr )
-                        fixture.rightMod = Number( attr );
-                }
+                this.centerPos.invert();
+                this.matrix.translate( this.centerPos );
+                this.centerPos.invert();
             }
         }
-    }
-    
-    // 
-    //  DESC: Is this genType active
-    //
-    isActive()
-    {
-        return (this.bodyType !== null);
+        else
+            super.applyRotation( matrix );
     }
 }
-
-
-/***/ }),
-/* 43 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-exports.internal = {};
-
-exports.Serializer = __webpack_require__(44);
-
-exports.Math = __webpack_require__(49);
-exports.Vec2 = __webpack_require__(48);
-exports.Vec3 = __webpack_require__(70);
-exports.Mat22 = __webpack_require__(66);
-exports.Mat33 = __webpack_require__(71);
-exports.Transform = __webpack_require__(60);
-exports.Rot = __webpack_require__(58);
-
-exports.AABB = __webpack_require__(53);
-
-exports.Shape = __webpack_require__(64);
-exports.Fixture = __webpack_require__(63);
-exports.Body = __webpack_require__(57);
-exports.Contact = __webpack_require__(65);
-exports.Joint = __webpack_require__(72);
-exports.World = __webpack_require__(45);
-
-exports.Circle = __webpack_require__(75);
-exports.Edge = __webpack_require__(76);
-exports.Polygon = __webpack_require__(77);
-exports.Chain = __webpack_require__(78);
-exports.Box = __webpack_require__(79);
-
-__webpack_require__(80);
-__webpack_require__(81);
-exports.internal.CollidePolygons = __webpack_require__(82);
-__webpack_require__(83);
-__webpack_require__(84);
-
-exports.DistanceJoint = __webpack_require__(85);
-exports.FrictionJoint = __webpack_require__(86);
-exports.GearJoint = __webpack_require__(87);
-exports.MotorJoint = __webpack_require__(90);
-exports.MouseJoint = __webpack_require__(91);
-exports.PrismaticJoint = __webpack_require__(89);
-exports.PulleyJoint = __webpack_require__(92);
-exports.RevoluteJoint = __webpack_require__(88);
-exports.RopeJoint = __webpack_require__(93);
-exports.WeldJoint = __webpack_require__(94);
-exports.WheelJoint = __webpack_require__(95);
-
-exports.Settings = __webpack_require__(52);
-
-exports.internal.Sweep = __webpack_require__(59);
-exports.internal.stats = __webpack_require__(69); // todo: remove this
-exports.internal.Manifold = __webpack_require__(67);
-exports.internal.Distance = __webpack_require__(68);
-exports.internal.TimeOfImpact = __webpack_require__(73);
-exports.internal.DynamicTree = __webpack_require__(54);
-exports.internal.Settings = exports.Settings;
 
 
 /***/ }),
 /* 44 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponentQuad": () => (/* binding */ VisualComponentQuad)
+/* harmony export */ });
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(38);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
+
+// 
+//  FILE NAME:  visualcomponentquad.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+
+
+
+
+
+
+
+// Global final matrix to be reused by every render call so that an object specific
+// one doesn't have to be created each time a render call is made or a perminate one
+// allocated and heald within each class
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
+
+class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
+{
+    constructor( visualData )
+    {
+        super();
+        
+        this.visualData = visualData;
+        this.shaderData = null;
+        this.vertexLocation = null;
+        this.text0Location = null;
+        this.uvLocation = null;
+        this.matrixLocation = null;
+        this.colorLocation = null;
+        this.VERTEX_BUF_SIZE = 20;
+        this.frameIndex = 0;
+        this.vbo = visualData.vbo;
+        this.ibo = visualData.ibo;
+        this.iboCount = visualData.iboCount;
+        this.texture = visualData.getTexture();
+        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__.Color;
+        
+        if( visualData.isActive() )
+        {
+            this.shaderData = _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.getShaderData( visualData.shaderID );
+
+            // Common shader members
+            this.vertexLocation = this.shaderData.getLocation( 'in_position' );
+            this.matrixLocation = this.shaderData.getLocation( 'cameraViewProjMatrix' );
+            this.colorLocation = this.shaderData.getLocation( 'color' );
+            
+            // Do we have a texture? This could be a solid rect
+            if( this.texture !== null )
+            {
+                this.uvLocation = this.shaderData.getLocation( 'in_uv' );
+                this.text0Location = this.shaderData.getLocation( 'text0' );
+            }
+            
+            this.color.copy( this.visualData.color );
+        }
+    }
+
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+        if( this.allowRender() )
+        {
+            // Bind the VBO and IBO
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
+
+            // Bind the shader.
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
+            
+            // Setup the vertex attribute shader data
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            
+            if( this.texture )
+            {
+                // Bind the texture
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+
+                // Setup the UV attribute shade data
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            }
+            
+            // Send the color to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
+            
+            // Calculate the final matrix
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.setScaleFromSize( this.visualData.vertexScale );
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+
+            // Send the final matrix to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            
+            // Do the render
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_BYTE, 0);
+        }
+    }
+    
+    //
+    //  DESC: Is rendering allowed?
+    //
+    allowRender()
+    {
+        return (this.visualData.genType != _common_defs__WEBPACK_IMPORTED_MODULE_7__.EGT_NULL);
+    }
+    
+    //
+    //  DESC: Set the frame ID from index
+    //
+    setFrame( index )
+    {
+        if( index < this.visualData.getFrameCount() )
+        {
+            this.frameIndex = index;
+            this.texture = this.visualData.getTexture( index );
+        }
+    }
+    
+    //
+    //  DESC: Get the frame count
+    //
+    getFrameCount()
+    {
+        return this.visualData.getFrameCount();
+    }
+}
+
+
+/***/ }),
+/* 45 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ivisualComponent": () => (/* binding */ ivisualComponent)
+/* harmony export */ });
+
+// 
+//  FILE NAME:  ivisualcomponent.js
+//  DESC:       Interface class
+//
+
+
+
+class ivisualComponent
+{
+    constructor()
+    {
+    }
+    
+    //
+    //  DESC: Delete the custom VBO for this font
+    //
+    deleteFontVBO()
+    {
+    }
+    
+    //
+    //  DESC: Is this a font sprite
+    //
+    isFontSprite()
+    {
+        return false;
+    }
+    
+    //
+    //  DESC: Set the frame ID from index
+    //
+    setFrame( index )
+    {
+    }
+    
+    //
+    //  DESC: Get the frame count
+    //
+    getFrameCount()
+    {
+        return 1;
+    }
+    
+    //
+    //  DESC: Get the font size
+    //
+    getFontSize()
+    {
+        return 0;
+    }
+}
+
+
+/***/ }),
+/* 46 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponentSpriteSheet": () => (/* binding */ VisualComponentSpriteSheet)
+/* harmony export */ });
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(44);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
+/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
+
+// 
+//  FILE NAME:  visualcomponentspritesheet.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+
+
+
+
+
+
+// Global final matrix to be reused by every render call so that an object specific
+// one doesn't have to be created each time a render call is made or a perminate one
+// allocated and heald within each class
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
+
+class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
+{
+    constructor( visualData )
+    {
+        super( visualData );
+        
+        if( visualData.isActive() )
+        {
+            this.glyphLocation = this.shaderData.getLocation( 'glyphRect' );
+
+            this.glyphUV = visualData.spriteSheet.getGlyph().uv;
+            this.frameIndex = visualData.spriteSheet.defaultIndex;
+
+            // Local vertex scale for sprite sheets that might have glyphs of different sizes
+            this.vertexScale = new _common_size__WEBPACK_IMPORTED_MODULE_5__.Size;
+            this.vertexScale.copy( this.visualData.vertexScale );
+        }
+    }
+
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+        if( this.allowRender() )
+        {
+            // Bind the VBO and IBO
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
+
+            // Bind the shader.
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
+            
+            // Setup the vertex attribute shader data
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            
+            if( this.texture )
+            {
+                // Bind the texture
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+
+                // Setup the UV attribute shade data
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            }
+            
+            // Send the color to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
+            
+            // Calculate the final matrix
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.setScaleFromSize( this.vertexScale );
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+
+            // Send the final matrix to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+
+            // Send the glyph rect
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.glyphLocation, this.glyphUV.data );
+            
+            // Do the render
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_BYTE, 0);
+        }
+    }
+    
+    //
+    //  DESC: Set the frame ID from index
+    //
+    setFrame( index )
+    {
+        this.frameIndex = index;
+        
+        let glyph = this.visualData.spriteSheet.getGlyph( index );
+
+        this.vertexScale.w = glyph.size.w * this.visualData.defaultUniformScale;
+        this.vertexScale.h = glyph.size.h * this.visualData.defaultUniformScale;
+
+        this.glyphUV = glyph.uv;
+    }
+}
+
+
+/***/ }),
+/* 47 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponentScaledFrame": () => (/* binding */ VisualComponentScaledFrame)
+/* harmony export */ });
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(44);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
+
+// 
+//  FILE NAME:  visualcomponentscaledframe.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+
+
+
+
+
+// Global final matrix to be reused by every render call so that an object specific
+// one doesn't have to be created each time a render call is made or a perminate one
+// allocated and heald within each class
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
+
+class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
+{
+    constructor( visualData )
+    {
+        super( visualData );
+    }
+
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+        if( this.allowRender() )
+        {
+            // Bind the VBO and IBO
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
+
+            // Bind the shader.
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
+            
+            // Setup the vertex attribute shader data
+            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            
+            if( this.texture )
+            {
+                // Bind the texture
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+
+                // Setup the UV attribute shade data
+                _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            }
+            
+            // Send the color to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniform4fv( this.colorLocation, this.color.data );
+            
+            // Calculate the final matrix
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+
+            // Send the final matrix to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            
+            // Do the render
+            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_5__.gl.TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.UNSIGNED_BYTE, 0);
+        }
+    }
+}
+
+
+/***/ }),
+/* 48 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponentFont": () => (/* binding */ VisualComponentFont)
+/* harmony export */ });
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(44);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(49);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(51);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
+
+// 
+//  FILE NAME:  visualcomponentfont.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Global final matrix to be reused by every render call so that an object specific
+// one doesn't have to be created each time a render call is made or a perminate one
+// allocated and heald within each class
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__.Matrix;
+
+class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
+{
+    constructor( visualData )
+    {
+        super( visualData );
+        
+        if( visualData.isActive() )
+        {
+            this.uvLocation = this.shaderData.getLocation( 'in_uv' );
+            this.text0Location = this.shaderData.getLocation( 'text0' );
+            
+            // Allocate the storage for the font if this is a font sprite
+            this.fontData = new _common_fontdata__WEBPACK_IMPORTED_MODULE_5__.FontData;
+        }
+    }
+    
+    //
+    //  DESC: Delete the custom VBO for this font
+    //
+    deleteFontVBO()
+    {
+        // Delete the VBO if this is a font
+        if( (this.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EGT_FONT) && (this.vbo !== null) )
+        {
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.deleteBuffer( this.vbo );
+            this.vbo = null;
+        }
+
+        // The IBO for the font is managed by the vertex buffer manager.
+        // Font IBO are all the same with the only difference being
+        // length of the character string.
+    }
+
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+        if( this.allowRender() )
+        {
+            // Bind the VBO and IBO
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
+
+            // Bind the shader.
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
+            
+            // Setup the vertex attribute shader data
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            
+            if( this.texture )
+            {
+                // Bind the texture
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
+                _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+
+                // Setup the UV attribute shade data
+                _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            }
+            
+            // Send the color to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniform4fv( this.colorLocation, this.color.data );
+            
+            // Calculate the final matrix
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+
+            // Send the final matrix to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            
+            // Do the render
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_7__.gl.TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.UNSIGNED_SHORT, 0);
+        }
+    }
+    
+    //
+    //  DESC: Is rendering allowed?
+    //
+    allowRender()
+    {
+        return (this.fontData.fontString && this.vbo);
+    }
+    
+    //
+    //  DESC: Is this a font sprite
+    //
+    isFontSprite()
+    {
+        return true;
+    }
+    
+    //
+    //  DESC: Load the font properties from XML node
+    //
+    loadFontPropFromNode( node )
+    {
+        if( this.fontData )
+            this.fontData.loadFromNode( node );
+    }
+    
+    //
+    //  DESC: Set the font properties
+    //
+    setFontProperties( fontName, hAlign = null, vAlign = null, kerning = null, sKern = null, lineWrapWidth = null, lineWrapHeight = null )
+    {
+        if( this.fontData )
+        {
+            this.fontData.fontProp.fontName = fontName;
+            
+            if( hAlign )
+                this.fontData.fontProp.hAlign = hAlign;
+            
+            if( vAlign )
+                this.fontData.fontProp.hAlign = vAlign;
+            
+            if( kerning )
+                this.fontData.fontProp.kerning = kerning;
+            
+            if( sKern )
+                this.fontData.fontProp.spaceCharKerning = sKern;
+            
+            if( lineWrapWidth )
+                this.fontData.fontProp.lineWrapWidth = lineWrapWidth;
+            
+            if( lineWrapHeight )
+                this.fontData.fontProp.lineWrapHeight = lineWrapHeight;
+        }
+    }
+    
+    //
+    //  DESC: Create the font string from data
+    //
+    createFontStringFromData()
+    {
+        if( (this.fontData !== null) && this.fontData.fontString )
+            this.createFontString( this.fontData.fontString );
+    }
+
+    //
+    //  DESC: Create the font string
+    //
+    createFontString( fontString )
+    {
+        // Qualify if we want to build the font string
+        if( (this.fontData !== null) &&
+            (fontString !== '') &&
+            (this.fontData.fontProp.fontName !== null) &&
+            ((fontString !== this.fontData.fontString) || (this.vbo === null)) )
+        {
+            this.fontData.fontStrSize.reset();
+            let lastCharDif = 0;
+
+            let font = _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__.fontManager.getFont( this.fontData.fontProp.fontName );
+
+            this.texture = font.texture;
+
+            this.fontData.fontString = fontString;
+
+            // count up the number of space characters
+            let spaceCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.countStrOccurrence( this.fontData.fontString, ' ' );
+
+            // count up the number of bar | characters
+            let barCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.countStrOccurrence( this.fontData.fontString, '|' );
+
+            // Size of the allocation
+            const charCount = this.fontData.fontString.length - spaceCharCount - barCharCount;
+            this.iboCount = charCount * 6;
+            
+            // Set a flag to indicate if the IBO should be built
+            const BUILD_FONT_IBO = (this.iboCount > _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.currentMaxFontIndices);
+            
+            // Allocate the vert array
+            let vertAry = new Array(charCount * 4 * 5);
+
+            // Create a buffer to hold the indicies
+            let indexAry = null;
+            
+            // Should we build or rebuild the font IBO
+            if( BUILD_FONT_IBO )
+                indexAry = new Array(this.iboCount);
+
+            let xOffset = 0;
+            let width = 0;
+            let lineHeightOffset = 0;
+            let lineHeightWrap = font.lineHeight + font.vertPadding + this.fontData.fontProp.lineWrapHeight;
+            let initialHeightOffset = font.baselineOffset + font.vertPadding;
+            let lineSpace = font.lineHeight - font.baselineOffset;
+
+            let counter = 0;
+            let vertAryIndex = 0;
+            let lineCount = 0;
+
+            // Get the size of the texture
+            let textureSize = font.texture.size;
+
+            // Handle the horizontal alignment
+            let lineWidthOffsetAry = this.calcLineWidthOffset( font, this.fontData.fontString );
+
+            // Set the initial line offset
+            xOffset = lineWidthOffsetAry[lineCount++];
+
+            // Handle the vertical alighnmenrt
+            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_TOP )
+                lineHeightOffset = -initialHeightOffset;
+
+            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_CENTER )
+            {
+                lineHeightOffset = -(initialHeightOffset - ((font.baselineOffset-lineSpace) / 2) - font.vertPadding);
+
+                if( lineWidthOffsetAry.length > 1 )
+                    lineHeightOffset = ((lineHeightWrap * lineWidthOffsetAry.length) / 2) - font.baselineOffset;
+            }
+
+            else if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_BOTTOM )
+            {
+                lineHeightOffset = -(initialHeightOffset - font.baselineOffset - font.vertPadding);
+
+                if( lineWidthOffsetAry.length > 1 )
+                    lineHeightOffset += (lineHeightWrap * (lineWidthOffsetAry.length-1));
+            }
+
+            // Remove any fractional component of the line height offset
+            lineHeightOffset = Math.trunc(lineHeightOffset);
+
+            // Setup each character in the vertex buffer
+            for( let i = 0; i < this.fontData.fontString.length; ++i )
+            {
+                let id = this.fontData.fontString.charCodeAt(i);
+
+                // Line wrap if '|' character was used
+                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
+                {
+                    xOffset = lineWidthOffsetAry[lineCount];
+                    width = 0;
+
+                    lineHeightOffset += -lineHeightWrap;
+                    ++lineCount;
+                }
+                else
+                {
+                    // See if we can find the character
+                    let charData = font.getCharData(id);
+
+                    // Ignore space characters
+                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
+                    {
+                        let rect = charData.rect;
+
+                        let yOffset = (font.lineHeight - rect.y2 - charData.offset.h) + lineHeightOffset;
+
+                        // Check if the width or height is odd. If so, we offset
+                        // by 0.5 for proper orthographic rendering
+                        // speed enhancement - if( Math.trunc(rect.x2) % 2 != 0 )
+                        let additionalOffsetX = 0;
+                        if( Math.trunc(rect.x2) & 1 !== 0 )
+                            additionalOffsetX = 0.5;
+
+                        let additionalOffsetY = 0;
+                        if( Math.trunc(rect.y2) & 1 !== 0 )
+                            additionalOffsetY = 0.5;
+                        
+                        vertAry[vertAryIndex]   = xOffset + charData.offset.w + additionalOffsetX;
+                        vertAry[vertAryIndex+1] = yOffset + additionalOffsetY;
+                        vertAry[vertAryIndex+2] = 0;
+                        vertAry[vertAryIndex+3] = rect.x1 / textureSize.w;
+                        vertAry[vertAryIndex+4] = (rect.y1 + rect.y2) / textureSize.h;
+
+                        // Calculate the second vertex of the first face
+                        vertAry[vertAryIndex+5] = xOffset + rect.x2 + charData.offset.w + additionalOffsetX;
+                        vertAry[vertAryIndex+6] = yOffset + rect.y2 + additionalOffsetY;
+                        vertAry[vertAryIndex+7] = 0;
+                        vertAry[vertAryIndex+8] = (rect.x1 + rect.x2) / textureSize.w;
+                        vertAry[vertAryIndex+9] = rect.y1 / textureSize.h;
+
+                        // Calculate the third vertex of the first face
+                        vertAry[vertAryIndex+10] = vertAry[vertAryIndex];
+                        vertAry[vertAryIndex+11] = vertAry[vertAryIndex+6];
+                        vertAry[vertAryIndex+12] = 0;
+                        vertAry[vertAryIndex+13] = vertAry[vertAryIndex+3];
+                        vertAry[vertAryIndex+14] = vertAry[vertAryIndex+9];
+
+                        // Calculate the second vertex of the second face
+                        vertAry[vertAryIndex+15] = vertAry[vertAryIndex+5];
+                        vertAry[vertAryIndex+16] = vertAry[vertAryIndex+1];
+                        vertAry[vertAryIndex+17] = 0;
+                        vertAry[vertAryIndex+18] = vertAry[vertAryIndex+8];
+                        vertAry[vertAryIndex+19] = vertAry[vertAryIndex+4];
+                        
+                        vertAryIndex += 20;
+
+                        if( BUILD_FONT_IBO )
+                        {
+                            // Create the indicies into the VBO
+                            let arrayIndex = counter * 6;
+                            let vertIndex = counter * 4;
+
+                            indexAry[arrayIndex]   = vertIndex;
+                            indexAry[arrayIndex+1] = vertIndex+1;
+                            indexAry[arrayIndex+2] = vertIndex+2;
+
+                            indexAry[arrayIndex+3] = vertIndex;
+                            indexAry[arrayIndex+4] = vertIndex+3;
+                            indexAry[arrayIndex+5] = vertIndex+1;
+                        }
+
+                        ++counter;
+                    }
+
+                    // Inc the font position
+                    let inc = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+
+                    // Add in any additional spacing for the space character
+                    if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
+                        inc += this.fontData.fontProp.spaceCharKerning;
+
+                    width += inc;
+                    xOffset += inc;
+
+                    // Get the longest width of this font string
+                    if( this.fontData.fontStrSize.w < width )
+                    {
+                        this.fontData.fontStrSize.w = width;
+
+                        // This is the space between this character and the next.
+                        // Save this difference so that it can be subtracted at the end
+                        lastCharDif = inc - charData.rect.x2;
+                    }
+
+                    // Wrap to another line
+                    if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE ) && (this.fontData.fontProp.lineWrapWidth > 0) )
+                    {
+                        let nextWord = 0;
+
+                        // Get the length of the next word to see if if should wrap
+                        for( let j = i+1; j < this.fontData.fontString.length; ++j )
+                        {
+                            id = this.fontData.fontString.charCodeAt(j);
+
+                            if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
+                            {
+                                // See if we can find the character
+                                let anotherCharData = font.getCharData(id);
+
+                                // Break here when space is found
+                                // Don't add the space to the size of the next word
+                                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
+                                    break;
+
+                                // Don't count the
+                                nextWord += anotherCharData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+                            }
+                        }
+
+                        if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
+                        {
+                            xOffset = lineWidthOffsetAry[lineCount++];
+                            width = 0;
+
+                            lineHeightOffset += -lineHeightWrap;
+                        }
+                    }
+                }
+            }
+
+            // Subtract the extra space after the last character
+            this.fontData.fontStrSize.w -= lastCharDif;
+            this.fontData.fontStrSize.h = font.lineHeight;
+
+            // Save the data
+            // If one doesn't exist, create the VBO and IBO for this font
+            if( this.vbo === null )
+                this.vbo = _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.createBuffer();
+
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, this.vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, null );
+
+            // All fonts share the same IBO because it's always the same and the only difference is it's length
+            // This updates the current IBO if it exceeds the current max
+            this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.createDynamicFontIBO( _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__.fontManager.groupName, 'dynamic_font_ibo', indexAry, this.iboCount );
+        }
+        else if( (this.fontData !== null) &&
+                 (fontString !== '') &&
+                 (fontString !== this.fontData.fontString) &&
+                 (this.vbo !== null) )
+        {
+            this.fontData.fontString = '';
+        }
+    }
+
+    //
+    //  DESC: Add up all the character widths
+    //
+    calcLineWidthOffset( font, str )
+    {
+        let firstCharOffset = 0;
+        let lastCharOffset = 0;
+        let spaceWidth = 0;
+        let width = 0;
+        let counter = 0;
+        let lineWidthOffsetAry = [];
+
+        for( let i = 0; i < str.length; ++i )
+        {
+            let id = str.charCodeAt(i);
+
+            // Line wrap if '|' character was used
+            if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
+            {
+                // Add the line width to the vector based on horz alignment
+                this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
+
+                counter = 0;
+                width = 0;
+            }
+            else
+            {
+                // Get the next character
+                let charData = font.getCharData( id );
+
+                if(counter === 0)
+                    firstCharOffset = charData.offset.w;
+
+                spaceWidth = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+
+                // Add in any additional spacing for the space character
+                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
+                    spaceWidth += this.fontData.fontProp.spaceCharKerning;
+
+                width += spaceWidth;
+
+                if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
+                    lastCharOffset = charData.offset.w;
+
+                ++counter;
+            }
+
+            // Wrap to another line
+            if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE) && (this.fontData.fontProp.lineWrapWidth > 0) )
+            {
+                let nextWord = 0;
+
+                // Get the length of the next word to see if if should wrap
+                for( let j = i+1; j < str.length; ++j )
+                {
+                    id = str.charCodeAt(j);
+
+                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
+                    {
+                        // See if we can find the character
+                        let charData = font.getCharData(id);
+
+                        // Break here when space is found
+                        // Don't add the space to the size of the next word
+                        if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
+                            break;
+
+                        // Don't count the
+                        nextWord += charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+                    }
+                }
+
+                if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
+                {
+                    // Add the line width to the vector based on horz alignment
+                    this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width-spaceWidth, firstCharOffset, lastCharOffset );
+
+                    counter = 0;
+                    width = 0;
+                }
+            }
+        }
+
+        // Add the line width to the vector based on horz alignment
+        this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
+
+        return lineWidthOffsetAry;
+    }
+
+    //
+    //  DESC: Add the line width to the array based on horz alignment
+    //
+    addLineWithToAry( font, lineWidthOffsetAry, hAlign, width, firstCharOffset, lastCharOffset )
+    {
+        if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_LEFT )
+            lineWidthOffsetAry.push(-(firstCharOffset + font.horzPadding));
+
+        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_CENTER )
+            lineWidthOffsetAry.push(-((width - font.horzPadding) / 2));
+
+        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_RIGHT )
+            lineWidthOffsetAry.push(-(width - lastCharOffset - font.horzPadding));
+
+        // Remove any fractional component of the last index
+        lineWidthOffsetAry[lineWidthOffsetAry.length-1] = Math.trunc(lineWidthOffsetAry[lineWidthOffsetAry.length-1]);
+    }
+    
+    //
+    //  DESC: Get/Set the displayed font string
+    //
+    getFontString()
+    {
+        if( this.fontData === null )
+            throw new Error( `Can't ask for the font string from a sprite that is not a sprite font!` );
+
+        return this.fontData.fontString;
+    }
+
+    setFontString( fontString )
+    {
+        if( this.fontData === null )
+            throw new Error( `Can't set a font string for a sprite that is not a sprite font!` );
+        
+        this.fontData.fontString = fontString;
+    }
+    
+    //
+    //  DESC: Get the font size
+    //
+    getFontSize()
+    {
+        if( !this.fontData )
+            throw new Error( `Can't ask for the font size from a sprite that is not defined!` );
+
+        return this.fontData.fontStrSize;
+    }
+}
+
+
+/***/ }),
+/* 49 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "fontManager": () => (/* binding */ fontManager)
+/* harmony export */ });
+/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(50);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+
+//
+//  FILE NAME: fontmanager.js
+//  DESC:      font manager class singleton
+//
+
+
+
+
+
+
+class FontManager
+{
+    constructor()
+    {
+        // map list of fonts
+        this.fontMap = new Map;
+
+        // Group name
+        this.group = '';
+    }
+    
+    // 
+    //  DESC: Load the data list tables from file path
+    //
+    load( filePath )
+    {
+        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', filePath,
+            ( xmlNode ) => this.loadFromNode( xmlNode ));
+    }
+    
+    //
+    //  DESC: Load the fonts from xml node
+    //
+    loadFromNode( xmlNode )
+    {
+        let promiseAry = [];
+
+        if( xmlNode )
+        {
+            // Get the group the textures will be saves as
+            let listGroupNode = xmlNode.getElementsByTagName('listGroup');
+            this.group = listGroupNode[0].getAttribute( 'name' );
+
+            // Get the list of font info
+            let fontNode = xmlNode.getElementsByTagName('font');
+
+            for( let i = 0; i < fontNode.length; ++i )
+            {
+                // Get the name of the font
+                let name = fontNode[i].getAttribute( 'name' );
+
+                // Sanity check to make sure the font has not already been added in
+                if( this.fontMap.has( name ) )
+                    throw new Error( `Font name has already been loaded (${name}).` );
+
+                // Add the font to our list
+                this.fontMap.set( name, new _2d_font__WEBPACK_IMPORTED_MODULE_0__.Font );
+
+                let filePath = fontNode[i].getAttribute( 'file' );
+
+                // Load the texture file
+                let textureFilePath = filePath + '.png'
+                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'img', textureFilePath )
+                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( this.group, name, image ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }) );
+
+                // Load the xml file describing the font characteristics
+                let fontFilePath = filePath + '.fnt'
+                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', fontFilePath )
+                        .then(( fontXmlNode ) => this.loadFont( name, fontXmlNode ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }) );
+            }
+        }
+
+        return Promise.all( promiseAry )
+                    .then(() => this.setFontTexture());
+    }
+    
+    //
+    //  DESC: Load the font
+    //
+    loadFont( name, xmlNode )
+    {
+        let font = this.fontMap.get( name );
+        if( font === undefined )
+            throw new Error( `Font name has not been added to the map (${name}).` );
+        
+        font.loadFromNode( this.group, name, xmlNode );
+    }
+
+    //
+    //  DESC: Set the textures to the font object
+    //
+    setFontTexture()
+    {
+        for( let [ key, font ] of this.fontMap.entries() )
+            font.texture = _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.get( this.group, key );
+    }
+    
+    //
+    //  DESC: Get the font
+    //
+    getFont( name )
+    {
+        let font = this.fontMap.get( name );
+        if( font === undefined )
+            throw new Error( `Font name can't be found (${name}).` );
+
+        return font;
+    }
+    
+    //
+    //  DESC: Get the font
+    //
+    isFont( name )
+    {
+        let font = this.fontMap.get( name );
+        if( font === undefined )
+            throw new Error( `Font name can't be found (${name}).` );
+    }
+    
+    // 
+    //  DESC: allow event handling access function
+    //
+    get groupName() { return this.group; }
+}
+
+var fontManager = new FontManager;
+
+
+/***/ }),
+/* 50 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CharData": () => (/* binding */ CharData),
+/* harmony export */   "Font": () => (/* binding */ Font)
+/* harmony export */ });
+/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
+
+// 
+//  FILE NAME:  font.js
+//  DESC:       font class
+//
+
+
+
+
+
+
+class CharData
+{
+    constructor()
+    {
+        // Character offsets
+        this.offset = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+
+        // Character rect
+        this.rect = new _common_rect__WEBPACK_IMPORTED_MODULE_1__.Rect;
+
+        // Amount to advance
+        this.xAdvance = 0;
+    }
+}
+
+class Font
+{
+    constructor()
+    {
+        // map list of character data
+        this.charDataMap = new Map;
+
+        // Line height
+        this.lineHeight = 0;
+
+        // base line offset
+        this.baselineOffset = 0;
+
+        // Horizontal padding
+        this.horzPadding = 0;
+
+        // Vertival padding
+        this.vertPadding = 0;
+
+        // The texture in set from font manager
+        this.texture = null;
+    }
+    
+    // 
+    //  DESC: Load from XML node
+    //
+    loadFromNode( group, name, xmlNode )
+    {
+        // Get the padding
+        let padding = xmlNode.getElementsByTagName('info')[0].getAttribute('padding');
+        this.horzPadding = Number(padding.substr(6,1));
+        this.vertPadding = Number(padding.substr(0,1));
+
+        // Get the common font info
+        let commonNode = xmlNode.getElementsByTagName( 'common' );
+
+        // get the line height
+        this.lineHeight = Number(commonNode[0].getAttribute('lineHeight'));
+
+        // get the baseline offset
+        this.baselineOffset = Number(commonNode[0].getAttribute('base'));
+
+        // Get the list of character info
+        let charNode = xmlNode.getElementsByTagName( 'char' );
+
+        // Load in the individual character data
+        for( let i = 0; i < charNode.length; ++i )
+        {
+            let charData = new CharData;
+
+            // Get the offset of the character
+            charData.offset.w = Number(charNode[i].getAttribute( 'xoffset' ));
+            charData.offset.h = Number(charNode[i].getAttribute( 'yoffset' ));
+
+            // Get the x advance of the character
+            charData.xAdvance = Number(charNode[i].getAttribute( 'xadvance' ));
+
+            // Get the rect of the character
+            charData.rect.x1 = Number(charNode[i].getAttribute( 'x' ));
+            charData.rect.y1 = Number(charNode[i].getAttribute( 'y' ));
+            charData.rect.x2 = Number(charNode[i].getAttribute( 'width' ));
+            charData.rect.y2 = Number(charNode[i].getAttribute( 'height' ));
+
+            // Get the character ID which is the ascii value of the character.
+            let id = Number(charNode[i].getAttribute( 'id' ));
+
+            // Add the character to the map
+            this.charDataMap.set( id, charData );
+        }
+    }
+    
+    // 
+    //  DESC: Get the data for this character
+    //
+    getCharData( id )
+    {
+        // See if this character is part of the map
+        let charData = this.charDataMap.get( id );
+
+        if( charData === undefined )
+            throw new Error( `Font character ID can't be found (${id}).` );
+
+        return charData;
+    }
+}
+
+
+/***/ }),
+/* 51 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "FontData": () => (/* binding */ FontData)
+/* harmony export */ });
+/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(52);
+/* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+
+// 
+//  FILE NAME:  fontdata.js
+//  DESC:       font data class
+//
+
+
+
+
+
+class FontData
+{
+    constructor()
+    {
+        // Displayed font string
+        this.fontString = '';
+
+        // Font members
+        this.fontProp = new _fontproperties__WEBPACK_IMPORTED_MODULE_0__.FontProperties;
+
+        // Font string size
+        // Not usefull for multiline strings
+        this.fontStrSize = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
+    }
+    
+    // 
+    //  Copy the data
+    //
+    copy( obj )
+    {
+        this.fontString = obj.fontString;
+        this.fontProp.copy( obj.fontProp );
+        this.fontStrSize.copy( obj.fontStrSize );
+    }
+    
+    //
+    //  DESC: Load the font properties from XML node
+    //
+    loadFromNode( node )
+    {
+        let fontNode = node.getElementsByTagName( 'font' );
+        if( fontNode.length )
+        {
+            // See if a font string has been defined
+            let attr = fontNode[0].getAttribute( 'fontString' );
+            if( attr )
+                this.fontString = attr;
+
+            this.fontProp.loadFromNode( fontNode[0] );
+        }
+    }
+}
+
+
+/***/ }),
+/* 52 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "FontProperties": () => (/* binding */ FontProperties)
+/* harmony export */ });
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(49);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
+/* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: fontproperties.js
+//  DESC:      font properties class
+//
+
+
+
+
+
+
+
+class FontProperties
+{
+    constructor( fontName = null, hAlign = _defs__WEBPACK_IMPORTED_MODULE_2__.EHA_HORZ_CENTER, vAlign = _defs__WEBPACK_IMPORTED_MODULE_2__.EVA_VERT_CENTER, kerning = 0, spaceCharKerning = 0, lineWrapWidth = -1, lineWrapHeight = 0 )
+    {
+        // font to use
+        this.fontName = fontName;
+
+        // horzontal alignment
+        this.hAlign = hAlign;
+
+        // vertical alignment
+        this.vAlign = vAlign;
+
+        // distance between each character
+        this.kerning = kerning;
+
+        // special kerning just for the space character
+        this.spaceCharKerning = spaceCharKerning;
+
+        // width of line to force wrap
+        this.lineWrapWidth = lineWrapWidth;
+
+        // add spacing to the lines
+        this.lineWrapHeight = 0;
+        
+        // Throws an error if font is not loaded
+        if( this.fontName )
+            _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
+    }
+    
+    // 
+    //  Copy the data
+    //
+    copy( obj )
+    {
+        this.fontName = obj.fontName;
+        this.hAlign = obj.hAlign;
+        this.vAlign = obj.vAlign;
+        this.kerning = obj.kerning;
+        this.spaceCharKerning = obj.spaceCharKerning;
+        this.lineWrapWidth = obj.lineWrapWidth;
+        this.lineWrapHeight = obj.lineWrapHeight;
+        
+        // Throws an error if font is not loaded
+        _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
+    }
+    
+    //
+    //  DESC: Load the font properties from XML node
+    //
+    loadFromNode( node )
+    {
+        // Get the must have font name
+        let attr = node.getAttribute( 'fontName' );
+        if( attr )
+            this.fontName = attr;
+        
+        // Throws an error if font is not loaded
+        _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
+
+        // Get the attributes node
+        let attrNode = node.getElementsByTagName( 'attributes' );
+        if( attrNode.length )
+        {
+            attr = attrNode[0].getAttribute( 'kerning' );
+            if( attr )
+                this.kerning = Number(attr);
+
+            attr = attrNode[0].getAttribute( 'spaceCharKerning' );
+            if( attr )
+                this.spaceCharKerning = Number(attr);
+
+            attr = attrNode[0].getAttribute( 'lineWrapWidth' );
+            if( attr )
+                this.lineWrapWidth = Number(attr);
+
+            attr = attrNode[0].getAttribute( 'lineWrapHeight' );
+            if( attr )
+                this.lineWrapHeight = Number(attr);
+        }
+
+        // Get the alignment node
+        let alignmentNode = node.getElementsByTagName( 'alignment' );
+        if( alignmentNode.length )
+        {
+            // Set the default alignment
+            this.hAlign = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__.loadHorzAlignment( alignmentNode[0], _defs__WEBPACK_IMPORTED_MODULE_2__.EHA_HORZ_CENTER );
+            this.vAlign = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__.loadVertAlignment( alignmentNode[0], _defs__WEBPACK_IMPORTED_MODULE_2__.EVA_VERT_CENTER );
+        }
+    }
+}
+
+
+
+/***/ }),
+/* 53 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "VisualComponent3D": () => (/* binding */ VisualComponent3D)
+/* harmony export */ });
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(38);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
+
+// 
+//  FILE NAME:  visualcomponent3d.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+
+
+
+
+
+
+// Global final matrix to be reused by every render call so that an object specific
+// one doesn't have to be created each time a render call is made or a perminate one
+// allocated and heald within each class
+var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
+
+class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
+{
+    constructor( visualData )
+    {
+        super();
+        
+        this.visualData = visualData;
+        this.shaderData = null;
+        this.vertexLocation = null;
+        this.normalLocation = null;
+        this.uvLocation = null;
+        this.text0Location = null;
+        this.colorLocation = null;
+        this.matrixLocation = null;
+        this.normalMatrixLocation = null;
+        this.VERTEX_BUF_SIZE = 24;
+        
+        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__.Color;
+        
+        if( visualData.isActive() )
+        {
+            this.meshAry = visualData.meshGrp.meshAry;
+            this.shaderData = _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__.shaderManager.getShaderData( visualData.shaderID );
+            
+            // Common shader members
+            this.vertexLocation = this.shaderData.getLocation( 'in_position' );
+            this.normalLocation = this.shaderData.getLocation( 'in_normal' );
+            this.matrixLocation = this.shaderData.getLocation( 'cameraViewProjMatrix' );
+            this.normalMatrixLocation = this.shaderData.getLocation( 'normalMatrix' );
+            this.colorLocation = this.shaderData.getLocation( 'color' );
+            
+            if( this.meshAry[0].textureAry.length )
+            {
+                this.VERTEX_BUF_SIZE = 32;
+                this.uvLocation = this.shaderData.getLocation( 'in_uv' );
+                this.text0Location = this.shaderData.getLocation( 'text0' );
+            }
+            
+            this.color.copy( this.visualData.color );
+        }
+    }
+    
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+        for( let i = 0; i < this.meshAry.length; ++i )
+        {
+            // Increment our stat counter to keep track of what is going on.
+            //CStatCounter::Instance().IncDisplayCounter();
+
+            // Bind the VBO and IBO. NOTE: One singlton needs to manage the vertex bindings
+            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__.vertexBufferManager.bind( this.meshAry[i].vbo, this.meshAry[i].ibo );
+
+            // Bind the shader.
+            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__.shaderManager.bind( this.shaderData );
+
+            // Setup the vertex attribute shader data
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+
+            // Setup the normal attribute shade data
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.normalLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+
+            // Enable the UV attribute shade data
+            if( this.uvLocation )
+            {
+                // Bind the texture
+                for( let j = 0; j < this.meshAry[i].textureAry.length; ++j )
+                {
+                    _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__.textureManager.bind( this.meshAry[i].textureAry[j].id );
+                    _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0);// future implementation - this.meshAry[i].textureAry[j].type ); // 0 = TEXTURE0
+                }
+
+                // Setup the uv attribute shade data
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 24 );
+            }
+
+            // Send the color to the shader
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
+
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.mergeMatrix( object.matrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            
+            gFinalMatrix.initilizeMatrix();
+            gFinalMatrix.mergeMatrix( object.rotMatrix.matrix );
+            gFinalMatrix.mergeMatrix( camera.rotMatrix.matrix );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
+
+            // Render it
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements( _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLES, this.meshAry[i].iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_SHORT, 0);
+        }
+    }
+}
+
+
+/***/ }),
+/* 54 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "NullVisualComponent": () => (/* binding */ NullVisualComponent)
+/* harmony export */ });
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
+
+// 
+//  FILE NAME:  visualcomponentquad.js
+//  DESC:       Class for handling the visual part of the sprite
+//
+
+
+
+
+
+class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
+{
+    constructor()
+    {
+        super();
+    }
+
+    //
+    //  DESC: do the render
+    //
+    render( object, camera )
+    {
+    }
+    
+    //
+    //  DESC: Is rendering allowed?
+    //
+    allowRender()
+    {
+        return false;
+    }
+    
+    //
+    //  DESC: Get the frame count
+    //
+    getFrameCount()
+    {
+        return 0;
+    }
+}
+
+
+/***/ }),
+/* 55 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PhysicsComponent2D": () => (/* binding */ PhysicsComponent2D)
+/* harmony export */ });
+/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(56);
+/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
+
+// 
+//  FILE NAME: physicscomponent2d.js
+//  DESC:      Class for handling the physics part of the sprite.
+//
+
+
+
+
+
+
+
+class PhysicsComponent2D
+{
+    constructor( physicsData )
+    {
+        // Parent sprite
+        this.sprite = null;
+                
+        // Body type
+        this.bodyType = null;
+
+        // The physics body the sprite belongs to
+        this.body = null;
+
+        // Pixels to meters conversion
+        this.pixelsToMeters = 0;
+        this.metersToPixels = 0;
+
+        // Pointer to the world
+        this.world = null;
+        
+        if( physicsData.isActive() )
+        {
+            this.world = _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__.physicsWorldManager.getWorld( physicsData.world );
+
+            // MAke sure the world has been loaded
+            if( this.world.pixelsPerMeter == 0 )
+                throw new Error( `Physics world not loaded (${physicsData.world})!` );
+
+            // Re-init the constants to the values needed
+            this.metersToPixels = this.world.pixelsPerMeter;
+            this.pixelsToMeters = 1.0 / this.metersToPixels;
+        }
+    }
+    
+    // 
+    //  DESC: Init the physics by creating the body and fixture
+    //  NOTE: Function must be called externally at the right time
+    //        when the sprite has been setup with it's initial offsets
+    //
+    init( sprite )
+    {
+        if( this.world !== null )
+        {
+            this.sprite = sprite;
+            this.createBody();
+            this.createFixture();
+        }
+    }
+    
+    // 
+    //  DESC: Create the body
+    //
+    createBody()
+    {
+        if( !this.body )
+        {
+            let physicsData = this.sprite.objData.physicsData;
+            let worldDef = {
+                type : physicsData.bodyType,
+                position : planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( this.sprite.pos.x * this.pixelsToMeters, -(this.sprite.pos.y * this.pixelsToMeters) ),
+                angle : -this.sprite.rot.z,
+
+                linearVelocity : planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero(),
+                angularVelocity : 0.0,
+
+                linearDamping : physicsData.linearDamping,
+                angularDamping : physicsData.angularDamping,
+
+                fixedRotation : physicsData.fixedRotation,
+                bullet : false,
+                gravityScale : 1.0,
+
+                allowSleep : true,
+                awake : true,
+                active : true,
+
+                userData : this.sprite };
+
+            // Create the body
+            this.body = this.world.createBody( worldDef );
+        }
+    }
+
+    // 
+    //  DESC: Create the fixture
+    //
+    createFixture()
+    {
+        let fixtureAry = this.sprite.objData.physicsData.fixtureAry;
+
+        for( let i = 0; i < fixtureAry.length; ++i )
+        {
+            // Create the fixture
+            if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Circle.TYPE )
+                this.createCircularShapeFixture( fixtureAry[i] );
+
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Edge.TYPE )
+                this.createEdgeShapeFixture( fixtureAry[i] );
+
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Polygon.TYPE )
+                this.createPolygonShapeFixture( fixtureAry[i] );
+
+            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Chain.TYPE )
+                this.createChainShapeFixture( fixtureAry[i] );
+        }
+    }
+    
+    // 
+    //  DESC: Create the circular shape fixture
+    //
+    getFixtureDef( fixture )
+    {
+        let fixtureDef = {
+            userData : this.sprite,
+            friction : fixture.friction,
+            restitution : fixture.restitution,
+            density : fixture.density,
+            isSensor : fixture.sensor,
+
+            filterGroupIndex : 0,
+            filterCategoryBits : 0x0001,
+            filterMaskBits : 0xFFFF };
+        
+        return fixtureDef;
+    }
+    
+    // 
+    //  DESC: Create the circular shape fixture
+    //
+    createCircularShapeFixture( fixture )
+    {
+        this.body.createFixture(
+            planck_js__WEBPACK_IMPORTED_MODULE_2__.Circle( (fixture.radius * this.sprite.scale.x) * this.pixelsToMeters ),
+            this.getFixtureDef( fixture ) );
+    }
+
+    // 
+    //  DESC: Create the edge shape fixture
+    //  NOTE: An edge is a line segment of two points
+    //        This is no different then making a polygon from points
+    //
+    createEdgeShapeFixture( fixture )
+    {
+        // Do a sanity check because we need two points to define an edge
+        if( fixture.vertAry.length !== 2 )
+            throw new Error( `Physics object has incorrect number of points defined (${fixture.vertAry.length})!` );
+
+        // Apply scale to the size and divide by 2
+        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
+            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
+
+        // Convert the points to world location in meters
+        let Vec2Ary = [];
+        this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
+
+        this.body.createFixture(
+            planck_js__WEBPACK_IMPORTED_MODULE_2__.Edge( Vec2Ary[0], Vec2Ary[1] ),
+            this.getFixtureDef( fixture ) );
+    }
+
+    // 
+    //  DESC: Create the polygon shape fixture
+    //
+    createPolygonShapeFixture( fixture )
+    {
+        let Vec2Ary = [];
+
+        // Apply scale to the size and divide by 2
+        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
+            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
+
+        // Is this polygon shape defined by a vector of points?
+        if( fixture.vertAry.length )
+        {
+            // Convert the points to world location in meters
+            this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
+        }
+        
+        // If vector points are not supplied, build a square based on the object size
+        else
+        {
+            // Bottom and left mod have their signs flipped so that a positive mod always means
+            // expansion of the side, and a negative mod always means a contraction of the side
+            let topMod = fixture.topMod * this.sprite.scale.y;
+            let bottomMod = -fixture.bottomMod * this.sprite.scale.y;
+            let leftMod = -fixture.leftMod * this.sprite.scale.x;
+            let rightMod = fixture.rightMod * this.sprite.scale.x;
+
+            // Convert to meters
+            // Box2D polygons are defined using Counter Clockwise Winding (CCW)
+            Vec2Ary.push(
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
+                    (-(size.w + leftMod)) * this.pixelsToMeters,
+                    (size.h + bottomMod) * this.pixelsToMeters ) );
+
+            Vec2Ary.push(
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
+                    (-(size.w + leftMod)) * this.pixelsToMeters,
+                    (-(size.h + topMod)) * this.pixelsToMeters ) );
+
+            Vec2Ary.push(
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
+                    (size.w + rightMod) * this.pixelsToMeters,
+                    (-(size.h + topMod)) * this.pixelsToMeters ) );
+
+            Vec2Ary.push(
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
+                    (size.w + rightMod) * this.pixelsToMeters,
+                    (size.h + bottomMod) * this.pixelsToMeters ) );
+        }
+
+        this.body.createFixture(
+            planck_js__WEBPACK_IMPORTED_MODULE_2__.Polygon( Vec2Ary ),
+            this.getFixtureDef( fixture ) );
+    }
+
+    // 
+    //  DESC: Create the chain shape fixture
+    //
+    createChainShapeFixture( fixture )
+    {
+        // Do a sanity check because we need more then 1 point to define a chain
+        if( fixture.vertAry.length > 1 )
+            throw new Error( `Physics object has incorrect number of points defined (${fixture.vertAry.length})!` );
+        
+        // Apply scale to the size and divide by 2
+        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
+            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
+            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
+
+        // Convert the points to world location in meters
+        let Vec2Ary = [];
+        this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
+
+        this.body.createFixture(
+            planck_js__WEBPACK_IMPORTED_MODULE_2__.Chain( Vec2Ary, fixture.chainLoop ),
+            this.getFixtureDef( fixture ) );
+    }
+
+    // 
+    //  DESC: Convert the points to world location in meters
+    //
+    convertPoints( polyPointAry, fixture, size, scale )
+    {
+        // Convert to meters and world coordinates
+        // Box2D polygons are defined using Counter Clockwise Winding (CCW)
+        for( let i = 0; i < fixture.vertAry.length; ++i )
+        {
+            polyPointAry.push(
+                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( ((fixture.vertAry[i].x * scale.x) - size.w) * this.pixelsToMeters,
+                             ((fixture.vertAry[i].y * scale.y) - size.h) * this.pixelsToMeters ) );
+        }
+    }
+
+    // 
+    //  DESC: Update the physics
+    //
+    update()
+    {
+        if( this.isActive() )
+        {
+            if( !this.body.isStatic() && this.body.isAwake() )
+            {
+                //CStatCounter::Instance().IncPhysicsObjectsCounter();
+                
+                this.applyTransforms();
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Update the physics
+    //
+    applyTransforms()
+    {
+        let pos = this.body.getPosition();
+        let angle = this.body.getAngle();
+        this.sprite.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
+        this.sprite.setRotXYZ( 0, 0, -angle, false );
+    }
+    
+    // 
+    //  DESC: Set the physics to be active
+    //
+    setActive( active )
+    {
+        if( this.body )
+            this.body.setActive( active );
+    }
+    
+    // 
+    //  DESC: Is this component active?
+    //
+    isActive()
+    {
+        return (this.body && this.body.isActive());
+    }
+
+    // 
+    //  DESC: Is this component awake?
+    //
+    isAwake()
+    {
+        return (this.body && !this.body.isStatic() && this.body.isAwake() );
+    }
+
+    // 
+    //  DESC: Update the physics
+    //
+    destroyBody()
+    {
+        if( this.body !== null )
+        {
+            this.world.destroyBody( this.body );
+            this.body = null;
+        }
+    }
+
+    // 
+    //  DESC: Set the physics position and rotation
+    //
+    setTransform( x, y, angle, resetVelocity = false )
+    {
+        if( this.body !== null )
+        {
+            this.body.setTransform( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ), angle );
+
+            if( resetVelocity )
+            {
+                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero() );
+                this.body.setAngularVelocity( 0 );
+            }
+            
+            // If this body is staic, need to apply the transforms the the sprite position
+            if( this.body.isStatic() )
+                this.applyTransforms();
+        }
+    }
+
+    // 
+    //  DESC: Set the physics position and rotation
+    //
+    setPosition( x, y, resetVelocity = false )
+    {
+        if( this.body !== null )
+        {
+            this.body.setPosition( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
+
+            if( resetVelocity )
+            {
+                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero() );
+                this.body.setAngularVelocity( 0 );
+            }
+            
+            // If this body is staic, need to apply the transforms the the sprite position
+            if( this.body.isStatic() )
+                this.applyTransforms();
+        }
+    }
+    
+    // 
+    //  DESC: Set the angular velocity
+    //
+    setAngularVelocity( value )
+    {
+        if( this.body !== null )
+            this.body.setAngularVelocity( value );
+    }
+    
+    // 
+    //  DESC: Set the angular velocity
+    //
+    applyAngularImpulse( value, wake = false )
+    {
+        if( this.body !== null )
+            this.body.applyAngularImpulse( value, wake );
+    }
+}
+
+
+/***/ }),
+/* 56 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "physicsWorldManager": () => (/* binding */ physicsWorldManager)
+/* harmony export */ });
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(57);
+/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(112);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+
+// 
+//  FILE NAME: physicsworldmanager.js
+//  DESC:      Physics manager class singleton
+//
+
+
+
+
+
+
+
+
+const LOAD_2D = 0;
+const LOAD_3D = 1;
+
+class PhysicsWorldManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
+{
+    constructor()
+    {
+        super();
+        
+        this.worldMap = new Map;
+    }
+    
+    //
+    //  DESC: Load all XML's associated with this group
+    //
+    loadWorldGroup2D( group )
+    {
+        return this.loadWorldGroup( LOAD_2D, group );
+    }
+    
+    loadWorldGroup3D( group )
+    {
+        return this.loadWorldGroup( LOAD_3D, group );
+    }
+    
+    loadWorldGroup( loadType, group )
+    {
+        // Make sure the group we are looking for has been defined in the list table file
+        let pathAry = this.listTableMap.get( group );
+        if( pathAry !== undefined )
+        {
+            // Load the group data if it doesn't already exist
+            if( this.worldMap.get( group ) === undefined )
+            {
+                // Create a new physics world inside of our map
+                if( loadType === LOAD_2D )
+                    this.worldMap.set( group, new _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__.PhysicsWorld2D );
+                else
+                    this.worldMap.set( group, new _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__.PhysicsWorld3D );
+
+                // There will only be one xml per physics world
+                let filePath = pathAry[0];
+
+                return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'xml', filePath )
+                        .then(( xmlNode ) => this.loadFromNode( group, xmlNode, filePath ))
+                        .catch(( error ) => { console.error(error.stack); throw error; });
+            }
+            else
+            {
+                throw new Error( `Physics world group has alread been loaded (${group})!` );
+            }
+        }
+        else
+        {
+            throw new Error( `Physics world list group name can't be found (${group})!` );
+        }
+    }
+    
+    //
+    //  DESC: Load from an xml node
+    //
+    loadFromNode( group, xmlNode, filePath )
+    {
+        // Get the physics world
+        let world = this.worldMap.get( group );
+        if( world === undefined )
+            throw new Error( `Physics World doesn't exist (${group}, ${filePath})!` );
+        
+        world.loadFromNode( xmlNode );
+    }
+    
+    //
+    //  DESC: Get the physics world
+    //
+    getWorld( group )
+    {
+        let world = this.worldMap.get( group );
+        if( world === undefined )
+            throw new Error( `Physics World doesn't exist (${group})!` );
+
+        return world;
+    }
+    
+    //
+    //  DESC: Destroy the physics world
+    //
+    destroyWorld( group )
+    {
+        this.worldMap.delete( group );
+    }
+}
+
+var physicsWorldManager = new PhysicsWorldManager;
+
+
+/***/ }),
+/* 57 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PhysicsWorld2D": () => (/* binding */ PhysicsWorld2D)
+/* harmony export */ });
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(58);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
+
+// 
+//  FILE NAME: physicsworld2d.js
+//  DESC:      Wrapper class for Box2D's b2World
+//
+
+
+
+
+
+
+
+class PhysicsWorld2D
+{
+    constructor()
+    {
+        // Box2D world
+        this.world = planck_js__WEBPACK_IMPORTED_MODULE_2__.World();
+        
+        // All bodies that are handled by this physics world
+        this.bodyAry = [];
+
+        // If we're actively running simulations
+        this.active = false;
+
+        // If we're going to start a step this frame
+        this.beginStep = 0;
+
+        // Timer to let us know when to do another step
+        this.timer = 0;
+
+        // The ammount of time to simulate in milliseconds
+        this.stepTime = 0;
+
+        // The ammount of time to simulate in Seconds
+        this.stepTimeSec = 0;
+
+        // The number of velocity and position steps to calculate
+        this.velStepCount = 0;
+        this.posStepCount = 0;
+
+        // pixels per meter scaler
+        this.pixelsPerMeter = 0;
+    }
+    
+    //
+    //  DESC: Load the physics world from XML node
+    //
+    loadFromNode( node )
+    {
+        // Get the world's settings, if any are set
+        let settingsNode = node.getElementsByTagName( "settings" );
+        if( settingsNode.length )
+        {
+            let attr = settingsNode[0].getAttribute( 'active' );
+            if( attr )
+                this.active = (attr === 'true');
+        }
+
+        // Get the world's gravity, if any are set
+        let gravityNode = node.getElementsByTagName( "gravity" );
+        if( gravityNode.length )
+        {
+            let gravity = planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
+                Number( gravityNode[0].getAttribute( "x" ) ),
+                Number( gravityNode[0].getAttribute( "y" ) ) );
+
+            this.world.setGravity( gravity );
+        }
+
+        // Get the stepping which determins how accurate the physics are
+        let steppingNode = node.getElementsByTagName( "stepping" );
+        if( steppingNode.length )
+        {
+            this.velStepCount = Number( steppingNode[0].getAttribute( "velocity" ) );
+            this.posStepCount = Number( steppingNode[0].getAttribute( "position" ) );
+
+            let fps = Number( steppingNode[0].getAttribute( "fps" ) );
+
+            // If the number is negative, get the current refresh rate
+            /*if( fps < 0.0 )
+            {
+                SDL_DisplayMode dm;
+                SDL_GetDesktopDisplayMode(0, &dm);
+
+                if( dm.refresh_rate == 0 )
+                    fps = 60.f;
+                else
+                    fps = dm.refresh_rate;
+            }*/
+
+            this.setFPS( fps );
+        }
+
+        // Get the conversion of pixels per meter because Box2D works in meters
+        let conversionNode = node.getElementsByTagName( "conversion" );
+        if( conversionNode.length )
+            this.pixelsPerMeter = Number( conversionNode[0].getAttribute( "pixelsPerMeter" ) );
+    }
+    
+    //
+    //  DESC: Create a physics body
+    //  NOTE: Function should only be called from physics component
+    //
+    createBody( def )
+    {
+        let body = this.world.createBody( def );
+
+        if( body === null )
+            throw new Error( `Error creating physics body!` );
+
+        this.bodyAry.push( body );
+
+        return body;
+    }
+    
+    //
+    //  DESC: Destroy a physics body
+    //  NOTE: Function should only be called from physics component
+    //
+    destroyBody( body )
+    {
+        let index = this.bodyAry.indexOf( body );
+
+        if( index !== -1 )
+        {
+            // Destroy the body
+            this.world.destroyBody( body );
+
+            // Remove the body from the array
+            this.bodyAry.splice( index, 1 );
+        }
+    }
+    
+    //
+    //  DESC: Perform fixed time step physics simulation
+    //
+    fixedTimeStep()
+    {
+        if( this.active )
+        {
+            // Increment the timer
+            this.timer += _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
+
+            if( this.timer > this.stepTime )
+            {
+                this.timer = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__.modulus( this.timer, this.stepTime );
+
+                // Begin the physics world step
+                this.world.step( this.stepTimeSec, this.velStepCount, this.posStepCount );
+            }
+
+            //this.timeRatio = this.timer / this.stepTime;
+        }
+    }
+
+    //
+    //  DESC: Perform variable time step physics simulation
+    //
+    variableTimeStep()
+    {
+        if( this.active )
+        {
+            // Begin the physics world step
+            this.world.step( _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime / 1000.0, this.velStepCount, this.posStepCount );
+        }
+    }
+    
+    //
+    //  DESC: Set the fps to run the simulation at
+    //
+    setFPS( fps )
+    {
+        // Make sure we don't have a negative or zero fps
+        if( fps > 1.0 )
+        {
+            // Calculate the step paramaters
+            this.stepTimeSec = 1.0 / fps;
+            this.stepTime = this.stepTimeSec * 1000.0;
+
+            // Set the timer so that we'll begin a step next time we call Update
+            this.timer = this.stepTime;
+        }
+    }
+}
+
+
+/***/ }),
+/* 58 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "highResTimer": () => (/* binding */ highResTimer)
+/* harmony export */ });
+
+// 
+//  FILE NAME: highresolutiontimer.js
+//  DESC:      high resolution timer class
+//
+
+
+
+class HighResTimer
+{
+    constructor()
+    {
+        // Last recorded time
+        this.lastTime = performance.now();
+
+        // Timer time
+        this.timer;
+
+        // The amount of time that has elapsed between frames
+        this.elapsedTime;
+
+        // The frames per second
+        this.fps;
+    }
+    
+    //
+    //  DESC: Simple timer start
+    //
+    timerStart()
+    {
+        // Get the current performance time
+        this.timer = performance.now();
+    }
+
+    //
+    //  DESC: Simple timer duration
+    //
+    timerStop()
+    {
+        // Get the elapsed time
+        return (performance.now() - this.timer);
+    }
+    
+    //
+    //  DESC: Calc the elapsed time
+    //
+    calcElapsedTime()
+    {
+        // Get the current performance time
+        let time = performance.now();
+
+        // Set the elapsed time
+        this.elapsedTime = time - this.lastTime;
+
+        // Set the fps
+        this.fps = 1000.0 / this.elapsedTime;
+
+        // Catch any hickups - cap to about 10 fps
+        // Elapsed time is not expected to get this 
+        // high in  a game which is why it's capped
+        if( this.elapsedTime > 100.0 )
+            this.elapsedTime = 100.0;
+
+        // Reset the last time
+        this.lastTime = time;
+    }
+
+}
+
+var highResTimer = new HighResTimer;
+
+
+/***/ }),
+/* 59 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+exports.internal = {};
+
+exports.Serializer = __webpack_require__(60);
+
+exports.Math = __webpack_require__(65);
+exports.Vec2 = __webpack_require__(64);
+exports.Vec3 = __webpack_require__(86);
+exports.Mat22 = __webpack_require__(82);
+exports.Mat33 = __webpack_require__(87);
+exports.Transform = __webpack_require__(76);
+exports.Rot = __webpack_require__(74);
+
+exports.AABB = __webpack_require__(69);
+
+exports.Shape = __webpack_require__(80);
+exports.Fixture = __webpack_require__(79);
+exports.Body = __webpack_require__(73);
+exports.Contact = __webpack_require__(81);
+exports.Joint = __webpack_require__(88);
+exports.World = __webpack_require__(61);
+
+exports.Circle = __webpack_require__(91);
+exports.Edge = __webpack_require__(92);
+exports.Polygon = __webpack_require__(93);
+exports.Chain = __webpack_require__(94);
+exports.Box = __webpack_require__(95);
+
+__webpack_require__(96);
+__webpack_require__(97);
+exports.internal.CollidePolygons = __webpack_require__(98);
+__webpack_require__(99);
+__webpack_require__(100);
+
+exports.DistanceJoint = __webpack_require__(101);
+exports.FrictionJoint = __webpack_require__(102);
+exports.GearJoint = __webpack_require__(103);
+exports.MotorJoint = __webpack_require__(106);
+exports.MouseJoint = __webpack_require__(107);
+exports.PrismaticJoint = __webpack_require__(105);
+exports.PulleyJoint = __webpack_require__(108);
+exports.RevoluteJoint = __webpack_require__(104);
+exports.RopeJoint = __webpack_require__(109);
+exports.WeldJoint = __webpack_require__(110);
+exports.WheelJoint = __webpack_require__(111);
+
+exports.Settings = __webpack_require__(68);
+
+exports.internal.Sweep = __webpack_require__(75);
+exports.internal.stats = __webpack_require__(85); // todo: remove this
+exports.internal.Manifold = __webpack_require__(83);
+exports.internal.Distance = __webpack_require__(84);
+exports.internal.TimeOfImpact = __webpack_require__(89);
+exports.internal.DynamicTree = __webpack_require__(70);
+exports.internal.Settings = exports.Settings;
+
+
+/***/ }),
+/* 60 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var World = __webpack_require__(45);
-var Body = __webpack_require__(57);
-var Joint = __webpack_require__(72);
-var Fixture = __webpack_require__(63);
-var Shape = __webpack_require__(64);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
+var World = __webpack_require__(61);
+var Body = __webpack_require__(73);
+var Joint = __webpack_require__(88);
+var Fixture = __webpack_require__(79);
+var Shape = __webpack_require__(80);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
 
 var SID = 0;
 
@@ -6688,7 +11293,7 @@ module.exports.fromJson = serializer.fromJson;
 
 
 /***/ }),
-/* 45 */
+/* 61 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -6720,14 +11325,14 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = World;
 
-var options = __webpack_require__(46);
-var common = __webpack_require__(47);
-var Vec2 = __webpack_require__(48);
-var BroadPhase = __webpack_require__(51);
-var Solver = __webpack_require__(56);
-var Body = __webpack_require__(57);
-var Joint = __webpack_require__(72);
-var Contact = __webpack_require__(65);
+var options = __webpack_require__(62);
+var common = __webpack_require__(63);
+var Vec2 = __webpack_require__(64);
+var BroadPhase = __webpack_require__(67);
+var Solver = __webpack_require__(72);
+var Body = __webpack_require__(73);
+var Joint = __webpack_require__(88);
+var Contact = __webpack_require__(81);
 
 /**
  * @typedef {Object} WorldDef
@@ -7826,7 +12431,7 @@ World.prototype.postSolve = function(contact, impulse) {
 
 
 /***/ }),
-/* 46 */
+/* 62 */
 /***/ ((module) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -7862,7 +12467,7 @@ module.exports = function(input, defaults) {
 
 
 /***/ }),
-/* 47 */
+/* 63 */
 /***/ ((__unused_webpack_module, exports) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -7881,7 +12486,7 @@ exports.assert = function(statement, err, log) {
 };
 
 /***/ }),
-/* 48 */
+/* 64 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -7913,8 +12518,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Vec2;
 
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
 
 function Vec2(x, y) {
   if (!(this instanceof Vec2)) {
@@ -8411,7 +13016,7 @@ Vec2.translateFn = function(x, y) {
 
 
 /***/ }),
-/* 49 */
+/* 65 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -8441,8 +13046,8 @@ Vec2.translateFn = function(x, y) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(47);
-var create = __webpack_require__(50);
+var common = __webpack_require__(63);
+var create = __webpack_require__(66);
 var native = Math;
 var math = module.exports = create(native);
 
@@ -8531,7 +13136,7 @@ math.random = function(min, max) {
 
 
 /***/ }),
-/* 50 */
+/* 66 */
 /***/ ((module) => {
 
 if (typeof Object.create == 'function') {
@@ -8553,7 +13158,7 @@ if (typeof Object.create == 'function') {
 
 
 /***/ }),
-/* 51 */
+/* 67 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -8583,11 +13188,11 @@ if (typeof Object.create == 'function') {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(52);
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
-var AABB = __webpack_require__(53);
-var DynamicTree = __webpack_require__(54);
+var Settings = __webpack_require__(68);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
+var AABB = __webpack_require__(69);
+var DynamicTree = __webpack_require__(70);
 
 module.exports = BroadPhase;
 
@@ -8796,7 +13401,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 /***/ }),
-/* 52 */
+/* 68 */
 /***/ ((__unused_webpack_module, exports) => {
 
 /*
@@ -8967,7 +13572,7 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 
 
 /***/ }),
-/* 53 */
+/* 69 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -8997,10 +13602,10 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(52);
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
+var Settings = __webpack_require__(68);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
 
 module.exports = AABB;
 
@@ -9236,7 +13841,7 @@ AABB.prototype.toString = function() {
 
 
 /***/ }),
-/* 54 */
+/* 70 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -9266,12 +13871,12 @@ AABB.prototype.toString = function() {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(52);
-var common = __webpack_require__(47);
-var Pool = __webpack_require__(55);
-var Vec2 = __webpack_require__(48);
-var Math = __webpack_require__(49);
-var AABB = __webpack_require__(53);
+var Settings = __webpack_require__(68);
+var common = __webpack_require__(63);
+var Pool = __webpack_require__(71);
+var Vec2 = __webpack_require__(64);
+var Math = __webpack_require__(65);
+var AABB = __webpack_require__(69);
 
 module.exports = DynamicTree;
 
@@ -10162,7 +14767,7 @@ function Iterator() {
 
 
 /***/ }),
-/* 55 */
+/* 71 */
 /***/ ((module) => {
 
 /*
@@ -10255,7 +14860,7 @@ function Pool(opts) {
 }
 
 /***/ }),
-/* 56 */
+/* 72 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -10288,21 +14893,21 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 module.exports = Solver;
 module.exports.TimeStep = TimeStep;
 
-var Settings = __webpack_require__(52);
-var common = __webpack_require__(47);
+var Settings = __webpack_require__(68);
+var common = __webpack_require__(63);
 
-var Vec2 = __webpack_require__(48);
-var Math = __webpack_require__(49);
+var Vec2 = __webpack_require__(64);
+var Math = __webpack_require__(65);
 
-var Body = __webpack_require__(57);
-var Contact = __webpack_require__(65);
-var Joint = __webpack_require__(72);
+var Body = __webpack_require__(73);
+var Contact = __webpack_require__(81);
+var Joint = __webpack_require__(88);
 
-var TimeOfImpact = __webpack_require__(73);
+var TimeOfImpact = __webpack_require__(89);
 var TOIInput = TimeOfImpact.Input;
 var TOIOutput = TimeOfImpact.Output;
 
-var Distance = __webpack_require__(68);
+var Distance = __webpack_require__(84);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -11141,7 +15746,7 @@ Solver.prototype.postSolveIsland = function() {
 
 
 /***/ }),
-/* 57 */
+/* 73 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -11173,19 +15778,19 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Body;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
 
-var Vec2 = __webpack_require__(48);
-var Rot = __webpack_require__(58);
-var Math = __webpack_require__(49);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Vec2 = __webpack_require__(64);
+var Rot = __webpack_require__(74);
+var Math = __webpack_require__(65);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Fixture = __webpack_require__(63);
-var Shape = __webpack_require__(64);
+var Fixture = __webpack_require__(79);
+var Shape = __webpack_require__(80);
 
 var staticBody = Body.STATIC = 'static';
 var kinematicBody = Body.KINEMATIC = 'kinematic';
@@ -12231,7 +16836,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 /***/ }),
-/* 58 */
+/* 74 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -12263,9 +16868,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Rot;
 
-var common = __webpack_require__(47);
-var Vec2 = __webpack_require__(48);
-var Math = __webpack_require__(49);
+var common = __webpack_require__(63);
+var Vec2 = __webpack_require__(64);
+var Math = __webpack_require__(65);
 
 // TODO merge with Transform
 
@@ -12470,7 +17075,7 @@ Rot.mulTVec2 = function(rot, m) {
 
 
 /***/ }),
-/* 59 */
+/* 75 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -12502,11 +17107,11 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Sweep;
 
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Rot = __webpack_require__(58);
-var Transform = __webpack_require__(60);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Rot = __webpack_require__(74);
+var Transform = __webpack_require__(76);
 
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
@@ -12612,7 +17217,7 @@ Sweep.prototype.set = function(that) {
 
 
 /***/ }),
-/* 60 */
+/* 76 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -12644,9 +17249,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Transform;
 
-var common = __webpack_require__(47);
-var Vec2 = __webpack_require__(48);
-var Rot = __webpack_require__(58);
+var common = __webpack_require__(63);
+var Vec2 = __webpack_require__(64);
+var Rot = __webpack_require__(74);
 
 // TODO merge with Rot
 
@@ -12855,7 +17460,7 @@ Transform.mulTXf = function(a, b) {
 
 
 /***/ }),
-/* 61 */
+/* 77 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -12887,7 +17492,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Velocity;
 
-var Vec2 = __webpack_require__(48);
+var Vec2 = __webpack_require__(64);
 
 /**
  * @prop {Vec2} v linear
@@ -12900,7 +17505,7 @@ function Velocity() {
 
 
 /***/ }),
-/* 62 */
+/* 78 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -12932,8 +17537,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Position;
 
-var Vec2 = __webpack_require__(48);
-var Rot = __webpack_require__(58);
+var Vec2 = __webpack_require__(64);
+var Rot = __webpack_require__(74);
 
 /**
  * @prop {Vec2} c location
@@ -12952,7 +17557,7 @@ Position.prototype.getTransform = function(xf, p) {
 
 
 /***/ }),
-/* 63 */
+/* 79 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -12984,15 +17589,15 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Fixture;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
 
-var AABB = __webpack_require__(53);
+var AABB = __webpack_require__(69);
 
-var Shape = __webpack_require__(64);
+var Shape = __webpack_require__(80);
 
 /**
  * @typedef {Object} FixtureDef
@@ -13419,7 +18024,7 @@ Fixture.prototype.shouldCollide = function(that) {
 
 
 /***/ }),
-/* 64 */
+/* 80 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -13451,7 +18056,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Shape;
 
-var Math = __webpack_require__(49);
+var Math = __webpack_require__(65);
 
 /**
  * A shape is used for collision detection. You can create a shape however you
@@ -13559,7 +18164,7 @@ Shape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 65 */
+/* 81 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -13591,17 +18196,17 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 var DEBUG_SOLVER = false;
 
-var common = __webpack_require__(47);
+var common = __webpack_require__(63);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Transform = __webpack_require__(60);
-var Mat22 = __webpack_require__(66);
-var Rot = __webpack_require__(58);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Transform = __webpack_require__(76);
+var Mat22 = __webpack_require__(82);
+var Rot = __webpack_require__(74);
 
-var Settings = __webpack_require__(52);
-var Manifold = __webpack_require__(67);
-var Distance = __webpack_require__(68);
+var Settings = __webpack_require__(68);
+var Manifold = __webpack_require__(83);
+var Distance = __webpack_require__(84);
 
 module.exports = Contact;
 
@@ -14794,7 +19399,7 @@ Contact.destroy = function(contact, listener) {
 
 
 /***/ }),
-/* 66 */
+/* 82 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -14826,9 +19431,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Mat22;
 
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
 
 /**
  * A 2-by-2 matrix. Stored in column-major order.
@@ -15022,7 +19627,7 @@ Mat22.add = function(mx1, mx2) {
 
 
 /***/ }),
-/* 67 */
+/* 83 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -15052,12 +19657,12 @@ Mat22.add = function(mx1, mx2) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(47);
+var common = __webpack_require__(63);
 
-var Vec2 = __webpack_require__(48);
-var Transform = __webpack_require__(60);
-var Math = __webpack_require__(49);
-var Rot = __webpack_require__(58);
+var Vec2 = __webpack_require__(64);
+var Transform = __webpack_require__(76);
+var Math = __webpack_require__(65);
+var Rot = __webpack_require__(74);
 
 module.exports = Manifold;
 module.exports.clipSegmentToLine = clipSegmentToLine;
@@ -15380,7 +19985,7 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 
 /***/ }),
-/* 68 */
+/* 84 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -15417,21 +20022,21 @@ module.exports.Output = DistanceOutput;
 module.exports.Proxy = DistanceProxy;
 module.exports.Cache = SimplexCache;
 
-var Settings = __webpack_require__(52);
-var common = __webpack_require__(47);
+var Settings = __webpack_require__(68);
+var common = __webpack_require__(63);
 
-var stats = __webpack_require__(69);
+var stats = __webpack_require__(85);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -16083,7 +20688,7 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 
 
 /***/ }),
-/* 69 */
+/* 85 */
 /***/ ((__unused_webpack_module, exports) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -16101,7 +20706,7 @@ exports.toString = function(newline) {
 };
 
 /***/ }),
-/* 70 */
+/* 86 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -16133,8 +20738,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Vec3;
 
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
 
 function Vec3(x, y, z) {
   if (!(this instanceof Vec3)) {
@@ -16285,7 +20890,7 @@ Vec3.neg = function(v) {
 
 
 /***/ }),
-/* 71 */
+/* 87 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -16317,10 +20922,10 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Mat33;
 
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -16519,7 +21124,7 @@ Mat33.add = function(a, b) {
 
 
 /***/ }),
-/* 72 */
+/* 88 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -16551,7 +21156,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Joint;
 
-var common = __webpack_require__(47);
+var common = __webpack_require__(63);
 
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
@@ -16753,7 +21358,7 @@ Joint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 73 */
+/* 89 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -16787,25 +21392,25 @@ module.exports = TimeOfImpact;
 module.exports.Input = TOIInput;
 module.exports.Output = TOIOutput;
 
-var Settings = __webpack_require__(52);
+var Settings = __webpack_require__(68);
 
-var common = __webpack_require__(47);
-var Timer = __webpack_require__(74);
+var common = __webpack_require__(63);
+var Timer = __webpack_require__(90);
 
-var stats = __webpack_require__(69);
+var stats = __webpack_require__(85);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Distance = __webpack_require__(68);
+var Distance = __webpack_require__(84);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -17261,7 +21866,7 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 
 /***/ }),
-/* 74 */
+/* 90 */
 /***/ ((module) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -17277,7 +21882,7 @@ module.exports.diff = function(time) {
 
 
 /***/ }),
-/* 75 */
+/* 91 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -17309,16 +21914,16 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = CircleShape;
 
-var common = __webpack_require__(47);
-var create = __webpack_require__(50);
-var options = __webpack_require__(46);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Rot = __webpack_require__(58);
-var Vec2 = __webpack_require__(48);
-var AABB = __webpack_require__(53);
-var Settings = __webpack_require__(52);
-var Shape = __webpack_require__(64);
+var common = __webpack_require__(63);
+var create = __webpack_require__(66);
+var options = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Rot = __webpack_require__(74);
+var Vec2 = __webpack_require__(64);
+var AABB = __webpack_require__(69);
+var Settings = __webpack_require__(68);
+var Shape = __webpack_require__(80);
 
 CircleShape._super = Shape;
 CircleShape.prototype = create(CircleShape._super.prototype);
@@ -17458,7 +22063,7 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 76 */
+/* 92 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -17490,15 +22095,15 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = EdgeShape;
 
-var create = __webpack_require__(50);
-var options = __webpack_require__(46);
-var Settings = __webpack_require__(52);
-var Shape = __webpack_require__(64);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Rot = __webpack_require__(58);
-var Vec2 = __webpack_require__(48);
-var AABB = __webpack_require__(53);
+var create = __webpack_require__(66);
+var options = __webpack_require__(62);
+var Settings = __webpack_require__(68);
+var Shape = __webpack_require__(80);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Rot = __webpack_require__(74);
+var Vec2 = __webpack_require__(64);
+var AABB = __webpack_require__(69);
 
 EdgeShape._super = Shape;
 EdgeShape.prototype = create(EdgeShape._super.prototype);
@@ -17695,7 +22300,7 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 77 */
+/* 93 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -17727,16 +22332,16 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PolygonShape;
 
-var common = __webpack_require__(47);
-var create = __webpack_require__(50);
-var options = __webpack_require__(46);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Rot = __webpack_require__(58);
-var Vec2 = __webpack_require__(48);
-var AABB = __webpack_require__(53);
-var Settings = __webpack_require__(52);
-var Shape = __webpack_require__(64);
+var common = __webpack_require__(63);
+var create = __webpack_require__(66);
+var options = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Rot = __webpack_require__(74);
+var Vec2 = __webpack_require__(64);
+var AABB = __webpack_require__(69);
+var Settings = __webpack_require__(68);
+var Shape = __webpack_require__(80);
 
 PolygonShape._super = Shape;
 PolygonShape.prototype = create(PolygonShape._super.prototype);
@@ -18223,7 +22828,7 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 78 */
+/* 94 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -18255,17 +22860,17 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = ChainShape;
 
-var common = __webpack_require__(47);
-var create = __webpack_require__(50);
-var options = __webpack_require__(46);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Rot = __webpack_require__(58);
-var Vec2 = __webpack_require__(48);
-var AABB = __webpack_require__(53);
-var Settings = __webpack_require__(52);
-var Shape = __webpack_require__(64);
-var EdgeShape = __webpack_require__(76);
+var common = __webpack_require__(63);
+var create = __webpack_require__(66);
+var options = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Rot = __webpack_require__(74);
+var Vec2 = __webpack_require__(64);
+var AABB = __webpack_require__(69);
+var Settings = __webpack_require__(68);
+var Shape = __webpack_require__(80);
+var EdgeShape = __webpack_require__(92);
 
 ChainShape._super = Shape;
 ChainShape.prototype = create(ChainShape._super.prototype);
@@ -18529,7 +23134,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 
 
 /***/ }),
-/* 79 */
+/* 95 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -18561,9 +23166,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = BoxShape;
 
-var common = __webpack_require__(47);
-var create = __webpack_require__(50);
-var PolygonShape = __webpack_require__(77);
+var common = __webpack_require__(63);
+var create = __webpack_require__(66);
+var PolygonShape = __webpack_require__(93);
 
 BoxShape._super = PolygonShape;
 BoxShape.prototype = create(BoxShape._super.prototype);
@@ -18586,7 +23191,7 @@ function BoxShape(hx, hy, center, angle) {
 
 
 /***/ }),
-/* 80 */
+/* 96 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 /*
@@ -18616,16 +23221,16 @@ function BoxShape(hx, hy, center, angle) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(47);
-var create = __webpack_require__(50);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Vec2 = __webpack_require__(48);
-var Settings = __webpack_require__(52);
-var Shape = __webpack_require__(64);
-var Contact = __webpack_require__(65);
-var Manifold = __webpack_require__(67);
-var CircleShape = __webpack_require__(75);
+var common = __webpack_require__(63);
+var create = __webpack_require__(66);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Vec2 = __webpack_require__(64);
+var Settings = __webpack_require__(68);
+var Shape = __webpack_require__(80);
+var Contact = __webpack_require__(81);
+var Manifold = __webpack_require__(83);
+var CircleShape = __webpack_require__(91);
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
@@ -18666,7 +23271,7 @@ exports.CollideCircles = CollideCircles;
 
 
 /***/ }),
-/* 81 */
+/* 97 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -18696,19 +23301,19 @@ exports.CollideCircles = CollideCircles;
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(47);
-var create = __webpack_require__(50);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Vec2 = __webpack_require__(48);
-var Rot = __webpack_require__(58);
-var Settings = __webpack_require__(52);
-var Shape = __webpack_require__(64);
-var Contact = __webpack_require__(65);
-var Manifold = __webpack_require__(67);
-var EdgeShape = __webpack_require__(76);
-var ChainShape = __webpack_require__(78);
-var CircleShape = __webpack_require__(75);
+var common = __webpack_require__(63);
+var create = __webpack_require__(66);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Vec2 = __webpack_require__(64);
+var Rot = __webpack_require__(74);
+var Settings = __webpack_require__(68);
+var Shape = __webpack_require__(80);
+var Contact = __webpack_require__(81);
+var Manifold = __webpack_require__(83);
+var EdgeShape = __webpack_require__(92);
+var ChainShape = __webpack_require__(94);
+var CircleShape = __webpack_require__(91);
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
@@ -18860,7 +23465,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 82 */
+/* 98 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -18890,17 +23495,17 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Rot = __webpack_require__(58);
-var Vec2 = __webpack_require__(48);
-var AABB = __webpack_require__(53);
-var Settings = __webpack_require__(52);
-var Manifold = __webpack_require__(67);
-var Contact = __webpack_require__(65);
-var Shape = __webpack_require__(64);
-var PolygonShape = __webpack_require__(77);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Rot = __webpack_require__(74);
+var Vec2 = __webpack_require__(64);
+var AABB = __webpack_require__(69);
+var Settings = __webpack_require__(68);
+var Manifold = __webpack_require__(83);
+var Contact = __webpack_require__(81);
+var Shape = __webpack_require__(80);
+var PolygonShape = __webpack_require__(93);
 
 module.exports = CollidePolygons;
 
@@ -19132,7 +23737,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 /***/ }),
-/* 83 */
+/* 99 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -19162,18 +23767,18 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(47);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Rot = __webpack_require__(58);
-var Vec2 = __webpack_require__(48);
-var AABB = __webpack_require__(53);
-var Settings = __webpack_require__(52);
-var Manifold = __webpack_require__(67);
-var Contact = __webpack_require__(65);
-var Shape = __webpack_require__(64);
-var CircleShape = __webpack_require__(75);
-var PolygonShape = __webpack_require__(77);
+var common = __webpack_require__(63);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Rot = __webpack_require__(74);
+var Vec2 = __webpack_require__(64);
+var AABB = __webpack_require__(69);
+var Settings = __webpack_require__(68);
+var Manifold = __webpack_require__(83);
+var Contact = __webpack_require__(81);
+var Shape = __webpack_require__(80);
+var CircleShape = __webpack_require__(91);
+var PolygonShape = __webpack_require__(93);
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
@@ -19296,7 +23901,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 84 */
+/* 100 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -19326,19 +23931,19 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(47);
-var create = __webpack_require__(50);
-var Math = __webpack_require__(49);
-var Transform = __webpack_require__(60);
-var Vec2 = __webpack_require__(48);
-var Rot = __webpack_require__(58);
-var Settings = __webpack_require__(52);
-var Shape = __webpack_require__(64);
-var Contact = __webpack_require__(65);
-var Manifold = __webpack_require__(67);
-var EdgeShape = __webpack_require__(76);
-var ChainShape = __webpack_require__(78);
-var PolygonShape = __webpack_require__(77);
+var common = __webpack_require__(63);
+var create = __webpack_require__(66);
+var Math = __webpack_require__(65);
+var Transform = __webpack_require__(76);
+var Vec2 = __webpack_require__(64);
+var Rot = __webpack_require__(74);
+var Settings = __webpack_require__(68);
+var Shape = __webpack_require__(80);
+var Contact = __webpack_require__(81);
+var Manifold = __webpack_require__(83);
+var EdgeShape = __webpack_require__(92);
+var ChainShape = __webpack_require__(94);
+var PolygonShape = __webpack_require__(93);
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
@@ -19790,7 +24395,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 /***/ }),
-/* 85 */
+/* 101 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -19822,23 +24427,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = DistanceJoint;
 
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 DistanceJoint.TYPE = 'distance-joint';
 Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
@@ -20207,7 +24812,7 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 86 */
+/* 102 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -20239,24 +24844,24 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = FrictionJoint;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 FrictionJoint.TYPE = 'friction-joint';
 Joint.TYPES[FrictionJoint.TYPE] = FrictionJoint;
@@ -20573,7 +25178,7 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 87 */
+/* 103 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -20605,27 +25210,27 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = GearJoint;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
-var RevoluteJoint = __webpack_require__(88);
-var PrismaticJoint = __webpack_require__(89);
+var RevoluteJoint = __webpack_require__(104);
+var PrismaticJoint = __webpack_require__(105);
 
 GearJoint.TYPE = 'gear-joint';
 Joint.TYPES[GearJoint.TYPE] = GearJoint;
@@ -21089,7 +25694,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 88 */
+/* 104 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -21121,24 +25726,24 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = RevoluteJoint;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -21775,7 +26380,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 89 */
+/* 105 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -21807,24 +26412,24 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PrismaticJoint;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -22590,7 +27195,7 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 90 */
+/* 106 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -22622,24 +27227,24 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = MotorJoint;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 MotorJoint.TYPE = 'motor-joint';
 Joint.TYPES[MotorJoint.TYPE] = MotorJoint;
@@ -23004,7 +27609,7 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 91 */
+/* 107 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -23036,23 +27641,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = MouseJoint;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 MouseJoint.TYPE = 'mouse-joint';
 Joint.TYPES[MouseJoint.TYPE] = MouseJoint;
@@ -23345,7 +27950,7 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 92 */
+/* 108 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -23377,24 +27982,24 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PulleyJoint;
 
-var common = __webpack_require__(47);
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var common = __webpack_require__(63);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
@@ -23762,7 +28367,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 93 */
+/* 109 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -23794,23 +28399,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = RopeJoint;
 
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -24112,7 +28717,7 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 94 */
+/* 110 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -24144,23 +28749,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = WeldJoint;
 
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 WeldJoint.TYPE = 'weld-joint';
 Joint.TYPES[WeldJoint.TYPE] = WeldJoint;
@@ -24596,7 +29201,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 95 */
+/* 111 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -24628,23 +29233,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = WheelJoint;
 
-var options = __webpack_require__(46);
-var create = __webpack_require__(50);
-var Settings = __webpack_require__(52);
+var options = __webpack_require__(62);
+var create = __webpack_require__(66);
+var Settings = __webpack_require__(68);
 
-var Math = __webpack_require__(49);
-var Vec2 = __webpack_require__(48);
-var Vec3 = __webpack_require__(70);
-var Mat22 = __webpack_require__(66);
-var Mat33 = __webpack_require__(71);
-var Rot = __webpack_require__(58);
-var Sweep = __webpack_require__(59);
-var Transform = __webpack_require__(60);
-var Velocity = __webpack_require__(61);
-var Position = __webpack_require__(62);
+var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(64);
+var Vec3 = __webpack_require__(86);
+var Mat22 = __webpack_require__(82);
+var Mat33 = __webpack_require__(87);
+var Rot = __webpack_require__(74);
+var Sweep = __webpack_require__(75);
+var Transform = __webpack_require__(76);
+var Velocity = __webpack_require__(77);
+var Position = __webpack_require__(78);
 
-var Joint = __webpack_require__(72);
-var Body = __webpack_require__(57);
+var Joint = __webpack_require__(88);
+var Body = __webpack_require__(73);
 
 WheelJoint.TYPE = 'wheel-joint';
 Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
@@ -25196,7 +29801,1744 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 96 */
+/* 112 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PhysicsWorld3D": () => (/* binding */ PhysicsWorld3D)
+/* harmony export */ });
+
+// 
+//  FILE NAME: physicsworld3d.js
+//  DESC:      Wrapper class for Bullet physics
+//
+
+class PhysicsWorld3D
+{
+    constructor()
+    {
+    }
+}
+
+
+/***/ }),
+/* 113 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "UIControlNavNode": () => (/* binding */ UIControlNavNode)
+/* harmony export */ });
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+
+// 
+//  FILE NAME: uicontrolnavnode.js
+//  DESC:      UI Control Navigation Node
+//
+
+
+
+
+class UIControlNavNode
+{
+    constructor( uiControl = null )
+    {
+        // UI Control pointer
+        this.uiControl = uiControl;
+
+        // Navigation node pointers
+        this.upNode = null;
+        this.downNode = null;
+        this.leftNode = null;
+        this.rightNode = null;
+    }
+    
+    // 
+    //  DESC: Set/Get Right Node
+    //
+    setNode( navId, node )
+    {
+        if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_UP )
+            this.upNode = node;
+        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_DOWN )
+            this.downNode = node;
+        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_LEFT )
+            this.leftNode = node;
+        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_RIGHT )
+            this.rightNode = node;
+    }
+
+    getNode( navNode )
+    {
+        if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_UP )
+            return this.upNode;
+        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_DOWN )
+            return this.downNode;
+        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_LEFT )
+            return this.leftNode;
+        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_RIGHT )
+            return this.rightNode;
+
+        return null;
+    }
+}
+
+
+/***/ }),
+/* 114 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "objectDataManager": () => (/* binding */ objectDataManager)
+/* harmony export */ });
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+/* harmony import */ var _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(115);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(118);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(31);
+/* harmony import */ var _objectdata2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(121);
+/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(127);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
+
+//
+//  FILE NAME: objactdatamanager.js
+//  DESC:      Singlton that holds a map of all 2D/3D object data used for later loading
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
+{
+    constructor()
+    {
+        super();
+
+        this.objectDataMapMap = new Map;
+    }
+
+    //
+    //  DESC: Load all XML's associated with this group
+    //
+    loadGroup( groupAry )
+    {
+        return super.loadGroupAry( 'Object data list', this.objectDataMapMap, groupAry )
+            .then(() => this.loadAssets( groupAry ))
+            .then(() => this.createFromData( groupAry ));
+    }
+
+    //
+    //  DESC: Load all object information from an xml node
+    //
+    loadFromNode( group, node )
+    {
+        const LOAD_2D = 0;
+        const LOAD_3D = 1;
+
+        // Get the group map
+        let groupMap = this.objectDataMapMap.get( group );
+
+        // Determin the laod type
+        let loadType = LOAD_2D;
+        if( node.nodeName === 'objectDataList3D' )
+            loadType = LOAD_3D;
+
+        let defaultData;
+        if( loadType === LOAD_2D )
+            defaultData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__.ObjectData2D;
+        else
+            defaultData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__.ObjectData3D;
+
+        // Load the default data
+        defaultData.loadObjData( node.getElementsByTagName('default')[0], '', '' );
+
+        // Get the node to the list of objects
+        let objNode = node.getElementsByTagName('object');
+
+        for( let i = 0; i < objNode.length; ++i )
+        {
+            // Get the object's name
+            let name = objNode[i].getAttribute( 'name' );
+            
+            // Check that this object doesn't already exist
+            if( groupMap.get(name) === undefined )
+            {
+                let objData
+                if( loadType === LOAD_2D )
+                    objData = new _objectdata2d__WEBPACK_IMPORTED_MODULE_6__.ObjectData2D;
+                else
+                    objData = new _objectdata3d__WEBPACK_IMPORTED_MODULE_7__.ObjectData3D;
+                
+                objData.copy(defaultData);
+
+                // Load in the object data
+                objData.loadObjData( objNode[i], group, name );
+
+                // Save it to the map map
+                groupMap.set( name, objData );
+            }
+            else
+            {
+                throw new Error( `Group object already exists (${group}, ${name})!` );
+            }
+        }
+    }
+
+    //
+    //  DESC: Load all the assets associated with these groups
+    //
+    loadAssets( groupAry )
+    {
+        let promiseAry = [];
+
+        for( let grp = 0; grp < groupAry.length; ++grp )
+        {
+            let group = groupAry[grp];
+
+            // Get the group map
+            let groupMap = this.objectDataMapMap.get( group );
+            if( groupMap !== undefined )
+            {
+                for( let objData of groupMap.values() )
+                {
+                    // Load 2D elements
+                    if( objData.is2D() )
+                    {
+                        let filePathAry = objData.visualData.getTextureFilePathAry();
+
+                        for( let i = 0; i < filePathAry.length; ++i )
+                        {
+                            let filePath = filePathAry[i];
+
+                            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.allowLoad( group, filePath ) )
+                            {
+                                // Load the texture file
+                                promiseAry.push( 
+                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'img', filePath )
+                                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image ))
+                                        .catch(( error ) => { console.error(error.stack); throw error; }));
+                            }
+                        }
+                        
+                        // Load the XML mesh
+                        let meshFilePath = objData.visualData.meshFilePath;
+                        if( meshFilePath && _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__.assetHolder.allowLoad( group, meshFilePath ) )
+                        {
+                            // Load the mesh file
+                            promiseAry.push( 
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'xml', meshFilePath )
+                                    .then(( xmlNode ) => _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__.assetHolder.set( group, meshFilePath, xmlNode ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
+                        }
+
+                        // Load the XML sprite sheet
+                        let spriteSheetfilePath = objData.visualData.spriteSheetFilePath;
+                        if( spriteSheetfilePath && _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__.spriteSheetManager.allowLoad( group, spriteSheetfilePath ) )
+                        {
+                            // Load the mesh file
+                            promiseAry.push( 
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'xml', spriteSheetfilePath )
+                                    .then(( xmlNode ) => _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__.spriteSheetManager.load( group, spriteSheetfilePath, xmlNode ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
+                        }
+                    }
+                    // Load 3D elements
+                    else
+                    {
+                        let filePath = objData.visualData.meshFilePath;
+
+                        if( filePath && _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.allowLoad( group, filePath ) )
+                        {
+                            // Load the mesh file
+                            promiseAry.push( 
+                                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'binary', filePath )
+                                    .then(( binaryFile ) => this.loadMesh3D( group, filePath, objData, binaryFile ))
+                                    .catch(( error ) => { console.error(error.stack); throw error; }));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Error( `Can't download asset because object group does not exist (${group})!` );
+            }
+        }
+
+        return Promise.all( promiseAry );
+    }
+
+    //
+    //  DESC: Load all the assets associated with this group
+    //
+    loadMesh3D( group, binaryFilePath, objData, binaryFile )
+    {
+        let promiseAry = [];
+
+        objData.visualData.meshGrp =
+            _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.load( group, binaryFilePath, binaryFile );
+
+        let filePathAry = objData.visualData.meshGrp.uniqueTexturePathAry;
+
+        // Load the mesh textures
+        for( let i = 0; i < filePathAry.length; ++i )
+        {
+            let filePath = filePathAry[i].path;
+            
+            if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.allowLoad( group, filePath ) )
+            {
+                // Load the texture file
+                promiseAry.push( 
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'img', filePath )
+                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }));
+            }
+        }
+
+        return Promise.all( promiseAry );
+    }
+
+    //
+    //  DESC: Create OpenGL objects from data
+    //
+    createFromData( groupAry )
+    {
+        for( let grp = 0; grp < groupAry.length; ++grp )
+        {
+            let group = groupAry[grp];
+            
+            // Get the group map
+            let groupMap = this.objectDataMapMap.get( group );
+            if( groupMap !== undefined )
+            {
+                // Create OpenGL objects from data
+                for( let objData of groupMap.values() )
+                    objData.createFromData( group );
+            }
+        }
+
+        return 0;
+        
+        // Temporary assets can now be freed
+        //assetHolder.deleteGroup( groupAry );
+        //spriteSheetManager.deleteGroup( groupAry );
+    }
+    
+    //
+    //  DESC: Free all of the meshes materials and data of a specific group
+    //
+    freeGroup( groupAry )
+    {
+        for( let grp = 0; grp < groupAry.length; ++grp )
+        {
+            let group = groupAry[grp];
+            
+            // Make sure the group we are looking for exists
+            if( this.listTableMap.get( group ) === undefined )
+                throw new Error( `Object data list group name can't be found (${group})!` );
+
+            // Get the group map
+            if( this.objectDataMapMap.has( group ) )
+            {
+                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.deleteGroup( group );
+                _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.deleteGroup( group );
+                _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__.meshManager.deleteGroup( group );
+
+                this.objectDataMapMap.delete( group );
+            }
+        }
+    }
+    
+    //
+    //  DESC: Get a specific object data
+    //
+    getData( group, name )
+    {
+        // Get the group map
+        let groupMap = this.objectDataMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            let objData = groupMap.get( name );
+            if( objData )
+                return objData;
+
+            throw new Error( `Object data not found (${group}, ${name})!` );
+        }
+
+        throw new Error( `Object group not found (${group}, ${name})!` );
+    }
+
+    //
+    // DESC:  Find the group an object name belongs to
+    //
+    findGroup( objectName )
+    {
+        for( let [ groupKey, groupMap ] of this.objectDataMapMap.entries() )
+        {
+            if( groupMap.get( objectName ) !== undefined )
+                return groupKey;
+        }
+
+        return undefined;
+    }
+}
+
+var objectDataManager = new ObjectDataManager;
+
+
+/***/ }),
+/* 115 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "meshManager": () => (/* binding */ meshManager)
+/* harmony export */ });
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
+/* harmony import */ var _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(116);
+/* harmony import */ var _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(117);
+
+//
+//  FILE NAME: meshmanager.js
+//  DESC:      mesh manager class singleton
+//
+
+
+
+
+
+
+
+class MeshManager
+{
+    constructor()
+    {
+        // Map containing a group array of vbo, ibo and texture id's
+        this.meshBufMapMap = new Map;
+
+        // Map for collision mesh
+        //this.collisionMeshBufMapMap = new Map;
+        
+        // counter for indexing into binary data when loading
+        this.counter = 0;
+    }
+    
+    //
+    //  DESC: Load the binary mesh data
+    //  NOTE: To keep it simple, loading the textures is done seperately
+    //
+    load( group, filePath, binaryData )
+    {
+        // Create the group map if it doesn't already exist
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.meshBufMapMap.set( group, groupMap );
+        }
+        
+        let meshGrp = groupMap.get( filePath );
+        if( meshGrp === undefined || meshGrp === -1 )
+        {
+            meshGrp = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__.MeshGroup;
+            groupMap.set( filePath, meshGrp );
+            
+            this.loadData( group, filePath, binaryData, meshGrp );
+        }
+
+        return meshGrp;
+    }
+
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, filePath )
+    {
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.meshBufMapMap.set( group, groupMap );
+        }
+        
+        let meshGrp = groupMap.get( filePath );
+        if( meshGrp === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( filePath, -1 );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    //
+    //  DESC: Get the 2D texture class
+    //
+    get( group, filePath )
+    {
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap === undefined )
+            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
+
+        let meshBuf = groupMap.get( filePath );
+        if( meshBuf === undefined || meshBuf === -1 )
+            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
+
+        return meshBuf;
+    }
+    
+    //
+    //  DESC: Load the binary mesh data
+    //
+    loadData( group, filePath, binaryData, meshGrp )
+    {
+        this.counter = 0;
+
+        // Load the binary data into the data view for easy access to different data types
+        let dataView = new DataView( binaryData );
+        
+        // Load the binary mesh file header
+        let fileHeader = this.loadFileHeader( dataView, group, filePath );
+        
+        
+        // Check to insure we are in the correct spot in the binary file
+        this.tagCheck( dataView, (fileHeader.text_count > 0), group, filePath );
+        
+        // Load the texture file paths
+        this.loadTexturePaths( dataView, fileHeader, meshGrp );
+        
+        
+        // Check to insure we are in the correct spot in the binary file
+        this.tagCheck( dataView, true, group, filePath );
+        
+        // Load the verts
+        let vertAry = [];
+        this.loadVerts( dataView, fileHeader, vertAry );
+        
+        
+        // Check to insure we are in the correct spot in the binary file
+        this.tagCheck( dataView, true, group, filePath );
+        
+        // Load the normals
+        let normAry = [];
+        this.loadNormals( dataView, fileHeader, normAry );
+        
+        
+        // Check to insure we are in the correct spot in the binary file
+        this.tagCheck( dataView, (fileHeader.uv_count > 0), group, filePath );
+        
+        // Load the uv's
+        let uvAry = [];
+        this.loadUVs( dataView, fileHeader, uvAry );
+        
+        // Build the meshes
+        this.buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry );
+    }
+    
+    //
+    //  DESC: Load the binary mesh file header
+    //
+    loadFileHeader( dataView, group, filePath )
+    {
+        let fileHeader = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.MeshBinaryFileHeader;
+        
+        fileHeader.file_header      = dataView.getUint32( this.counter, true ); this.counter += 4;
+        fileHeader.vert_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.uv_count         = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.vert_norm_count  = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.face_group_count = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.text_count       = dataView.getUint16( this.counter, true ); this.counter += 2;
+        fileHeader.joint_count      = dataView.getUint16( this.counter, true ); this.counter += 2;
+        
+        // Check to make sure we're loading in the right kind of file
+        if( fileHeader.file_header !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.MESH_FILE_HEADER )
+            throw new Error( `File header mismatch! (${group}, ${filePath}).` );
+        
+        return fileHeader;
+    }
+    
+    //
+    //  DESC: Load the binary mesh file header
+    //
+    loadTexturePaths( dataView, fileHeader, meshGrp )
+    {
+        for( let i = 0; i < fileHeader.text_count; ++i )
+        {
+            let uniqueTextAry = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryTexture;
+            meshGrp.uniqueTexturePathAry.push( uniqueTextAry );
+
+            uniqueTextAry.type = dataView.getInt8( this.counter, true ); this.counter += 1;
+
+            for( let j = 0; j < _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TEXT_PATH_SIZE; ++j )
+            {
+                let charCode = dataView.getInt8( this.counter, true ); this.counter += 1;
+
+                if( charCode )
+                {
+                    uniqueTextAry.path += String.fromCharCode(charCode);
+                }
+                else
+                {
+                    this.counter += _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TEXT_PATH_SIZE - j - 1;
+                    break;
+                }
+            }
+        }
+    }
+    
+    //
+    //  DESC: Load the verts
+    //
+    loadVerts( dataView, fileHeader, vertAry )
+    {
+        // Load the verts
+        for( let i = 0; i < fileHeader.vert_count; ++i )
+        {
+            let data = [0,0,0];
+            vertAry.push( data );
+            
+            for( let j = 0; j < 3; ++j )
+            {
+                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
+            }
+        }
+    }
+    
+    //
+    //  DESC: Load the normals
+    //
+    loadNormals( dataView, fileHeader, normAry )
+    {
+        for( let i = 0; i < fileHeader.vert_norm_count; ++i )
+        {
+            let data = [0,0,0];
+            normAry.push( data );
+            
+            for( let j = 0; j < 3; ++j )
+            {
+                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
+            }
+        }
+    }
+    
+    //
+    //  DESC: Load the uv's
+    //
+    loadUVs( dataView, fileHeader, uvAry )
+    {
+        // Load the normals
+        for( let i = 0; i < fileHeader.uv_count; ++i )
+        {
+            let data = [0,0];
+            uvAry.push( data );
+            
+            for( let j = 0; j < 2; ++j )
+            {
+                data[j] = dataView.getFloat32( this.counter, true ); this.counter += 4;
+            }
+        }
+    }
+    
+    //
+    //  DESC: Build the meshes
+    //
+    buildMeshes( dataView, group, filePath, fileHeader, meshGrp, vertAry, normAry, uvAry )
+    {
+        let faceGroup = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryFaceGroup;
+        
+        // Read in each face group
+        for( let i = 0; i < fileHeader.face_group_count; ++i )
+        {
+            // Check to insure we are in the correct spot in the binary file
+            this.tagCheck( dataView, true, group, filePath );
+            
+            // Allocate the mesh storage
+            let mesh = new _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__.Mesh;
+            meshGrp.meshAry.push( mesh );
+            
+            faceGroup.groupFaceCount = dataView.getUint16( this.counter, true ); this.counter += 2;
+            faceGroup.vertexBufCount = dataView.getUint16( this.counter, true ); this.counter += 2;
+            faceGroup.indexBufCount  = dataView.getUint16( this.counter, true ); this.counter += 2;
+            faceGroup.textureCount   = dataView.getUint16( this.counter, true ); this.counter += 2;
+            
+            // Read in the indexes that are the textures
+            for( let j = 0; j < faceGroup.textureCount; ++j )
+            {
+                mesh.textureIndexAry.push( dataView.getUint16( this.counter, true ) );
+                this.counter += 2;
+            }
+
+            // Read in the indexes used to create the VBO
+            let vertBufAry = [];
+            for( let j = 0; j < faceGroup.vertexBufCount; ++j )
+            {
+                let binaryVertex = new _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.BinaryVertex;
+                vertBufAry.push( binaryVertex );
+                
+                binaryVertex.vert = dataView.getUint16( this.counter, true ); this.counter += 2;
+                binaryVertex.norm = dataView.getUint16( this.counter, true ); this.counter += 2;
+                
+                if( fileHeader.uv_count )
+                {
+                    binaryVertex.uv = dataView.getUint16( this.counter, true ); this.counter += 2;
+                }
+            }
+
+            // Read in the indexes that are the IBO
+            let iboAry = [];
+            for( let j = 0; j < faceGroup.indexBufCount; ++j )
+            {
+                iboAry.push( dataView.getUint16( this.counter, true ) );
+                this.counter += 2;
+            }
+            
+            // Create a temporary array for building the VBO
+            let vboAry = [];
+
+            // Build the VBO
+            for( let j = 0; j < faceGroup.vertexBufCount; ++j )
+            {
+                Array.prototype.push.apply( vboAry, vertAry[ vertBufAry[j].vert ] );
+                Array.prototype.push.apply( vboAry, normAry[ vertBufAry[j].norm ] );
+                
+                if( fileHeader.uv_count )
+                    Array.prototype.push.apply( vboAry, uvAry[ vertBufAry[j].uv ] );
+            }
+            
+            // Create the vbo
+            mesh.vbo = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, mesh.vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, new Float32Array(vboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ARRAY_BUFFER, null );
+            
+            // Create the ibo
+            mesh.ibo = _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, mesh.ibo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(iboAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.ELEMENT_ARRAY_BUFFER, null );
+            
+            // Save the number of indexes in the IBO buffer - Will need this for the render call
+            mesh.iboCount = faceGroup.indexBufCount;
+        }
+    }
+    
+    //
+    //  DESC: Load the binary mesh file header
+    //
+    tagCheck( dataView, allowCheck, group, filePath )
+    {
+        if( allowCheck )
+        {
+            let tag = dataView.getUint32( this.counter, true ); this.counter += 4;
+            if( tag !== _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__.TAG_CHECK )
+                throw new Error( `Tag check mismatch! (${group}, ${filePath}).` );
+        }
+    }
+    
+    //
+    //  DESC: Delete the group of textures
+    //
+    deleteGroup( group )
+    {
+        let groupMap = this.meshBufMapMap.get( group );
+        if( groupMap !== undefined )
+        {
+            for( let [ key, meshGrp ] of groupMap.entries() )
+            {
+                for( let i = 0; i < meshGrp.meshAry.length; ++i )
+                {
+                    _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer( meshGrp.meshAry[i].vbo );
+                    _system_device__WEBPACK_IMPORTED_MODULE_0__.gl.deleteBuffer( meshGrp.meshAry[i].ibo );
+                }
+            }
+
+            this.meshBufMapMap.delete( group );
+        }
+    }
+}
+
+var meshManager = new MeshManager;
+
+
+/***/ }),
+/* 116 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MESH_FILE_HEADER": () => (/* binding */ MESH_FILE_HEADER),
+/* harmony export */   "TAG_CHECK": () => (/* binding */ TAG_CHECK),
+/* harmony export */   "TEXT_PATH_SIZE": () => (/* binding */ TEXT_PATH_SIZE),
+/* harmony export */   "JOINT_NAME_SIZE": () => (/* binding */ JOINT_NAME_SIZE),
+/* harmony export */   "MeshBinaryFileHeader": () => (/* binding */ MeshBinaryFileHeader),
+/* harmony export */   "BinaryTexture": () => (/* binding */ BinaryTexture),
+/* harmony export */   "BinaryFaceGroup": () => (/* binding */ BinaryFaceGroup),
+/* harmony export */   "BinaryFace": () => (/* binding */ BinaryFace),
+/* harmony export */   "BinaryVertex": () => (/* binding */ BinaryVertex)
+/* harmony export */ });
+
+//
+//  FILE NAME: meshbinaryfileheader.js
+//  DESC:      mesh binary file headers
+//
+
+
+
+// Hex for RSS (Rabbid Squirrel Sprite)
+const MESH_FILE_HEADER = 0x415382AE;
+
+// Hex for tag check
+const TAG_CHECK = 0x6A82Fc4d;
+
+// Max character sizes for the texture path and joint name
+const TEXT_PATH_SIZE = 128;
+const JOINT_NAME_SIZE = 20;
+
+class MeshBinaryFileHeader
+{
+    constructor()
+    {
+        this.file_header      = 0; // uint32
+        this.vert_count       = 0; // uint16
+        this.uv_count         = 0; // uint16
+        this.vert_norm_count  = 0; // uint16
+        this.face_group_count = 0; // uint16
+        this.text_count       = 0; // uint16
+        this.joint_count      = 0; // uint16
+    }
+}
+
+// class for reading in texture info
+class BinaryTexture
+{
+    constructor()
+    {
+        this.type = 0;       // int8
+        this.path = '';      // file path [TEXT_PATH_SIZE]
+    }
+};
+
+// Class for reading and writing the total face count within a group and the material
+// it belongs to
+class BinaryFaceGroup
+{
+    constructor()
+    {
+        this.groupFaceCount = 0; // uint16
+        this.vertexBufCount = 0; // uint16
+        this.indexBufCount  = 0; // uint16
+        this.textureCount   = 0; // uint16
+    }
+};
+
+// Class for reading and writing face information
+class BinaryFace
+{
+    constructor()
+    {
+        this.vert = [];
+        this.norm = [];
+        this.uv = [];
+    }
+};
+
+// Class for reading and writing face information
+class BinaryVertex
+{
+    constructor()
+    {
+        this.vert = 0;
+        this.norm = 0;
+        this.uv = 0;
+    }
+};
+
+/***/ }),
+/* 117 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MeshGroup": () => (/* binding */ MeshGroup),
+/* harmony export */   "Mesh": () => (/* binding */ Mesh)
+/* harmony export */ });
+
+//
+//  FILE NAME: mesh3d.js
+//  DESC:      3D mesh class
+//
+
+
+
+class MeshGroup
+{
+    constructor()
+    {
+        // Array texture paths for loading
+        this.uniqueTexturePathAry = [];
+        
+        // Array of loaded textures
+        this.meshAry = [];
+    }
+}
+
+class Mesh
+{
+    constructor()
+    {
+        // Texture indexes into the uniqueTexturePathAry
+        this.textureIndexAry = [];
+        
+        // Loaded texture data
+        this.textureAry = [];
+
+        // VBO
+        this.vbo = null;
+
+        // IBO
+        this.ibo = null;
+
+        // Number of IBOs needed for rendering
+        this.iboCount = 0;
+    }
+}
+
+
+/***/ }),
+/* 118 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "spriteSheetManager": () => (/* binding */ spriteSheetManager)
+/* harmony export */ });
+/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+
+//
+//  FILE NAME: spritesheetmanager.js
+//  DESC:      Temporary container for loading sprite sheet data
+//             so that the same large complex xml is not reloaded.
+//
+
+
+
+
+class SpriteSheetManager
+{
+    constructor()
+    {
+        this.spriteSheetMapMap = new Map;
+    }
+    
+    //
+    //  DESC: Load the glyph data from XML node
+    //
+    load( group, filePath, node )
+    {
+        let groupMap = this.spriteSheetMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.spriteSheetMapMap.set( group, groupMap );
+        }
+        
+        let spriteSheet = groupMap.get( filePath );
+        if( spriteSheet === undefined || spriteSheet === -1 )
+        {
+            spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__.SpriteSheet;
+            
+            // Load the glyph data from XML node
+            spriteSheet.loadFromNode( node );
+            
+            // Add a new entry to the map
+            groupMap.set( filePath, spriteSheet );
+        }
+    }
+
+    // 
+    //  DESC: Set a place holder that this data is scheduled to be loaded
+    //
+    allowLoad( group, filePath )
+    {
+        let groupMap = this.spriteSheetMapMap.get( group );
+        if( groupMap === undefined )
+        {
+            groupMap = new Map;
+            this.spriteSheetMapMap.set( group, groupMap );
+        }
+        
+        let spriteSheet = groupMap.get( filePath );
+        if( spriteSheet === undefined )
+        {
+            // Add an entry to the map as a 
+            // place holder for future checks
+            groupMap.set( filePath, -1 );
+
+            return true;
+        }
+
+        return false;
+    }
+    
+    //
+    //  DESC: Load the glyph data from XML node
+    //
+    get( group, filePath )
+    {
+        let groupMap = this.spriteSheetMapMap.get( group );
+        if( groupMap === undefined )
+            throw new Error( `Sprite sheet group does not exist! (${group}).` );
+            
+        let data = groupMap.get( filePath );
+        if( data === undefined )
+            throw new Error( `Sprite sheet mesh file missing! (${filePath}).` );
+        
+        return data;
+    }
+    
+    // 
+    //  DESC: Delete the group
+    //
+    deleteGroup( groupAry )
+    {
+        for( let i = 0; i < groupAry.length; ++i )
+            this.spriteSheetMapMap.delete( groupAry[i] );
+    }
+    
+    //
+    //  DESC: Clear all the sprite sheet data
+    //
+    clear()
+    {
+        if( this.spriteSheetMapMap.size )
+            this.spriteSheetMapMap.clear();
+    }
+}
+
+var spriteSheetManager = new SpriteSheetManager;
+
+
+/***/ }),
+/* 119 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteSheet": () => (/* binding */ SpriteSheet)
+/* harmony export */ });
+/* harmony import */ var _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
+/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(37);
+
+// 
+//  FILE NAME:  spritesheet.js
+//  DESC:       Class for holding sprite sheet data
+//
+
+
+
+
+
+
+
+class SpriteSheet
+{
+    constructor( defaultIndex = 0, glyphCount = 0, columns = 0 )
+    {
+        // Sprite Sheet default index
+        this.defaultIndex = defaultIndex;
+
+        // Sprite Sheet element count
+        this.glyphCount = glyphCount;
+
+        // Sprite Sheet columns
+        this.columns = columns;
+        
+        // An array of all the glyphs built manually that are of the same size
+        this.glyphAry = null;
+
+        // A map of all the glyphs
+        this.glyphMap = null;
+    }
+    
+    // 
+    //  DESC: Copy the passed in data
+    //
+    copy( obj )
+    {
+        this.defaultIndex = obj.defaultIndex;
+        this.glyphCount = obj.glyphCount;
+        this.columns = obj.columns;
+        
+        if( obj.glyphAry )
+        {
+            if( this.glyphAry === null )
+                this.glyphAry = [];
+            
+            for( let i = 0; i < obj.glyphAry.length; ++i )
+            {
+                let glyph = obj.glyphAry[i];
+                let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( glyph.size.w, glyph.size.h );
+                let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect( glyph.uv.x1, glyph.uv.y1, glyph.uv.x2, glyph.uv.y2 );
+                let cropOffset = null;
+                if( glyph.cropOffset )
+                    cropOffset = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( glyph.cropOffset.w, glyph.cropOffset.h );
+                
+                this.glyphAry.push( new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, rect, cropOffset ) );
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Build the simple (grid) sprite sheet data
+    //
+    build( sheetSize )
+    {
+        if( (this.glyphCount != 0) && (this.columns != 0) )
+        {
+            this.glyphAry = [];
+            
+            let rows = Math.trunc(this.glyphCount / this.columns);
+
+            if( (this.glyphCount % this.columns) > 0 )
+                ++rows;
+
+            // Calculate the size of the individual glyph. They are all the same size
+            let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( sheetSize.w / this.columns, sheetSize.h / rows );
+
+            for( let i = 0; i < rows; ++i )
+            {
+                for( let j = 0; j < this.columns; ++j )
+                {
+                    let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(
+                        (j * size.w) / sheetSize.w,
+                        (i * size.h) / sheetSize.h,
+                        size.w / sheetSize.w,
+                        size.h / sheetSize.h );
+                    
+                    this.glyphAry.push( new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, rect ) );
+
+                    // Break out after all the gylphs have been defined
+                    if( this.glyphAry.length === this.glyphCount )
+                        break;
+                }
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Load the glyph data from XML node
+    //
+    loadFromNode( node )
+    {
+        this.glyphMap = new Map;
+        
+        let sheetSize = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size;
+        let attr = node.getAttribute('width');
+        if( attr )
+            sheetSize.w = Number(attr);
+
+        attr = node.getAttribute('height');
+        if( attr )
+            sheetSize.h = Number(attr);
+
+        let rectNode = node.getElementsByTagName('rect');
+        if( rectNode.length )
+        {
+            for( let i = 0; i < rectNode.length; ++i )
+            {
+                let rect = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadRectFromChild( rectNode[i] );
+
+                let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size( rect.x2, rect.y2 );
+
+                let uv = new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(
+                    rect.x1 / sheetSize.w,
+                    rect.y1 / sheetSize.h,
+                    rect.x2 / sheetSize.w,
+                    rect.y2 / sheetSize.h );
+
+                let cropOffset = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
+                    Number(rectNode[i].getAttribute( 'cx' )),
+                    Number(rectNode[i].getAttribute( 'cy' )) );
+
+                // Add to the map
+                let strId = rectNode[i].getAttribute( 'name' );
+                this.glyphMap.set( strId, new _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__.SpriteSheetGlyph( size, uv, cropOffset) );
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Load the glyph data from XML node
+    //
+    getGlyph( index = -1 )
+    {
+        if( index > -1 )
+            return this.glyphAry[ index ];
+
+        else
+            return this.glyphAry[ this.defaultIndex ];
+    }
+    
+    
+    // 
+    //  DESC: Find the glyph by Id
+    //
+    findGlyph( glyphId )
+    {
+        let glyph = this.glyphMap.get( glyphId );
+        if( glyph === undefined )
+        {
+            throw new Error( 'Glyph name is missing (' + glyphId + ')!' );
+        }
+        
+        return glyph;
+    }
+    
+    
+    // 
+    //  DESC: Set the gylph data
+    //
+    setGlyph( spriteSheet, glyphId )
+    {
+        let glyph = this.glyphMap.get( glyphId );
+        if( glyph !== undefined )
+        {
+            if( spriteSheet.glyphAry === null )
+                spriteSheet.glyphAry = [];
+            
+            spriteSheet.glyphAry.push( glyph );
+        }
+        else
+        {
+            throw new Error( 'Glyph name is missing (' + glyphId + ')!' );
+        }
+    }
+    
+    // 
+    //  DESC: Get the number of gylphs in this sprite sheet
+    //
+    getCount()
+    {
+        if( (this.glyphAry !== null) && (this.glyphAry.length) )
+            return this.glyphAry.length;
+        
+        else if( (this.glyphMap !== null) && (this.glyphMap.length) )
+            return this.glyphMap.length;
+
+        return this.glyphCount;
+    }
+    
+    // 
+    //  DESC: Copy over the gylph data
+    //
+    copyTo( spriteSheet, strIdAry )
+    {
+        if( strIdAry.length === 0 )
+        {
+            spriteSheet.glyphAry = this.glyphAry;
+        }
+        else if( this.glyphMap.size )
+        {
+            // Init the sprite sheet class when each glyph is defined in the object data
+            if( spriteSheet.glyphCount === 0 )
+            {
+                for( let i = 0; i < strIdAry.length; ++i )
+                    this.setGlyph( spriteSheet, strIdAry[i] );
+            }
+            // Init the sprite sheet class with an animation that is one glyph defined with a format code
+            else
+            {
+                // Should only be one entry
+                if( strIdAry.length === 1 )
+                {
+                    for( let i = 0; i < spriteSheet.glyphCount; ++i )
+                        this.setGlyph( spriteSheet, strIdAry[0] + i );
+                }
+                else
+                {
+                    throw new Error( 'Sprite Sheet Incorrect configuration!' );
+                }
+            }
+        }
+    }
+}
+
+
+/***/ }),
+/* 120 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SpriteSheetGlyph": () => (/* binding */ SpriteSheetGlyph)
+/* harmony export */ });
+
+// 
+//  FILE NAME:  spritesheetglyph.js
+//  DESC:       Class to hold sprite sheet glyph data
+//
+
+
+
+class SpriteSheetGlyph
+{
+    constructor( size, uv, cropOffset = null )
+    {
+        // Size of the sprite on the sheet
+        this.size = size;
+
+        // UV coordinates RECT
+        this.uv = uv;
+
+        // Crop Offset
+        this.cropOffset = cropOffset;
+    }
+}
+
+
+/***/ }),
+/* 121 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectData2D": () => (/* binding */ ObjectData2D)
+/* harmony export */ });
+/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(122);
+/* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(123);
+/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(124);
+/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(37);
+
+// 
+//  FILE NAME: objectdata2d.js
+//  DESC:      Class that holds a 2D object data
+//
+
+
+
+
+
+
+
+
+
+class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
+{
+    constructor()
+    {
+        super();
+
+        // Visual data of the object
+        this.visualData = new _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__.ObjectVisualData2D;
+
+        // Physics data of the object
+        this.physicsData = new _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__.ObjectPhysicsData2D;
+
+        // The name of the object data
+        this.name = null;
+
+        // The group the object data is in
+        this.group = null;
+
+        // The initial size of the object
+        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__.Size;
+    }
+    
+    // 
+    //  DESC: Copy the passed in data
+    //
+    copy( obj )
+    {
+        this.visualData.copy( obj.visualData );
+        this.physicsData.copy( obj.physicsData );
+        this.size.copy( obj.size );
+    }
+    
+    // 
+    //  DESC: Load the object data from the passed in node
+    //
+    loadObjData( node, group, name )
+    {
+        this.name = name;
+        this.group = group;
+
+        // Load the size
+        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__.loadSize( node, this.size );
+
+        // Load the visual data
+        this.visualData.loadObjData( node );
+
+        // Load the physics data
+        this.physicsData.loadObjData( node );
+    }
+    
+    // 
+    //  DESC: Create OpenGL objects from data
+    //
+    createFromData( group )
+    {
+        // Create the visuales
+        this.visualData.createFromData( group, this.size );
+    }
+
+    // 
+    //  DESC: Is this 2D object data?
+    //
+    is2D()
+    {
+        return true;
+    }
+}
+
+
+/***/ }),
+/* 122 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "iObjectData": () => (/* binding */ iObjectData)
+/* harmony export */ });
+
+// 
+//  FILE NAME: iobjectdata.js
+//  DESC:      Object data interface class
+//
+
+
+
+class iObjectData
+{
+    constructor()
+    {
+    }
+    
+    // 
+    //  DESC: Is this 2D object data?
+    //
+    is2D()
+    {
+        return false;
+    }
+
+    // 
+    //  DESC: Is this 3D object data?
+    //
+    is3D()
+    {
+        return false;
+    }
+}
+
+
+/***/ }),
+/* 123 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Fixture": () => (/* binding */ Fixture),
+/* harmony export */   "ObjectPhysicsData2D": () => (/* binding */ ObjectPhysicsData2D)
+/* harmony export */ });
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
+
+// 
+//  FILE NAME:  objectphysicsdata2d.js
+//  DESC:       Class containing the 2D object's physics data
+//
+
+
+
+
+
+class Fixture
+{
+    constructor()
+    {
+        // Shape of the fixture
+        this.shape = null;
+
+        // Radius if shape is a circle
+        this.radius = 0.0;
+
+        // The friction is how much drag this object has on another object  
+        this.friction = 0.2;
+
+        // The density is how much the object resists movement  
+        this.density = 0.2;
+
+        // The percetange of velocity retained upon colliding with this object
+        this.restitution = 0.2;
+
+        // Amount to adjust the top, bottom, left, and right side size of the mesh
+        this.topMod = 0;
+        this.bottomMod = 0;
+        this.leftMod = 0;
+        this.rightMod = 0;
+
+        // Flag to define if chain shape is a loop
+        this.chainLoop = false;
+
+        // Flag to indicate if fixture is a sensor. Reports collision but doesn't react to it
+        this.sensor = false;
+
+        // Collision filter
+        this.filterGroupIndex = 0;
+        this.filterCategoryBits = 1;
+        this.filterMaskBits = 65535;
+
+        // Polygon point vector
+        this.vertAry = [];
+    }
+    
+    // 
+    //  DESC: Copy the passed in data
+    //
+    copy( obj )
+    {
+        this.shape = obj.shape;
+        this.radius = obj.radius;  
+        this.friction = obj.friction;  
+        this.density = obj.density;
+        this.restitution = obj.restitution;
+        this.topMod = obj.topMod;
+        this.bottomMod = obj.bottomMod;
+        this.leftMod = obj.leftMod;
+        this.rightMod = obj.rightMod;
+        this.chainLoop = obj.chainLoop;
+        this.sensor = obj.sensor;
+        this.filterGroupIndex = obj.filterGroupIndex;
+        this.filterCategoryBits = obj.filterCategoryBits;
+        this.filterMaskBits = obj.filterMaskBits;
+        
+        for( let i = 0; i < obj.vertAry.length; ++i )
+        {
+            let vert = obj.vertAry[i];
+            this.vertAry.push( new planck_js__WEBPACK_IMPORTED_MODULE_0__.Vec2( vert.x, vert.y ) );
+        }
+    }
+}
+
+class ObjectPhysicsData2D
+{
+    constructor()
+    {
+        // The name of the physics world
+        this.world = null;
+
+        // Type of physics body
+        this.bodyType = null;
+
+        // The constant decceleration of movement and rotation
+        this.linearDamping = 0;
+        this.angularDamping = 0;
+
+        // If we want to prevent the object from rotating due to physicss
+        this.fixedRotation = false;
+
+        // vector of fixtures
+        this.fixtureAry = [];
+    }
+    
+    // 
+    //  DESC: Copy the passed in data
+    //
+    copy( obj )
+    {
+        this.world = obj.world;
+        this.bodyType = obj.bodyType;
+        this.linearDamping = obj.linearDamping;
+        this.angularDamping = obj.angularDamping;
+        this.fixedRotation = obj.fixedRotation;
+        
+        for( let i = 0; i < obj.fixtureAry.length; ++i )
+        {
+            let fixture = new Fixture;
+            fixture.copy( obj.fixtureAry[i] );
+            this.fixtureAry.push(fixture);
+        }
+    }
+    
+    // 
+    //  DESC: Load the object data
+    //
+    loadObjData( node )
+    {
+        let physicsNode = node.getElementsByTagName( 'physics' );
+
+        // Check if the object has any physics data
+        if( physicsNode.length )
+        {
+            let attr = physicsNode[0].getAttribute( 'world' );
+            if( attr )
+                this.world = attr;
+
+            // The body of the physics sprite used for physics
+            let bodyNode = physicsNode[0].getElementsByTagName( 'body' );
+            if( bodyNode.length )
+            {
+                // Get the body type - default is static
+                attr = bodyNode[0].getAttribute( 'type' );
+                if( attr )
+                    this.bodyType = attr;
+
+                // The damping is the constant decceleration of movement
+                attr = bodyNode[0].getAttribute( 'linearDamping' );
+                if( attr )
+                    this.linearDamping = Number( attr );
+
+                // The angular damping is the constant decceleration of rotation
+                attr = bodyNode[0].getAttribute( 'angularDamping' );
+                if( attr )
+                    this.angularDamping = Number( attr );
+
+                // Whether the rotation due to physicss is fixed
+                attr = bodyNode[0].getAttribute( 'fixedRotation' );
+                if( attr )
+                    this.fixedRotation = (attr === 'true');
+            }
+
+            // The body of the physics sprite used for physics
+            let fixtureNode = physicsNode[0].getElementsByTagName( 'fixture' );
+
+            for( let i = 0; i < fixtureNode.length; ++i )
+            {
+                let fixture = this.fixtureAry[i];
+
+                if( fixture === undefined )
+                {
+                    fixture = new Fixture;
+                    this.fixtureAry.push(fixture);
+                }
+
+                // Get the fixture shape
+                attr = fixtureNode[i].getAttribute( 'shape' );
+                if( attr )
+                    fixture.shape = attr;
+
+                // The friction is how much drag this object has on another object
+                attr = fixtureNode[i].getAttribute( 'friction' );
+                if( attr )
+                    fixture.friction = Number( attr );
+
+                // The density is how much the object resists movement
+                attr = fixtureNode[i].getAttribute( 'density' );
+                if( attr )
+                    fixture.density = Number( attr );
+
+                // The restitution is the percentage of velocity retained upon physics
+                attr = fixtureNode[i].getAttribute( 'restitution' );
+                if( attr )
+                    fixture.restitution = Number( attr );
+
+                // Radius if shape is a circle
+                attr = fixtureNode[i].getAttribute( 'radius' );
+                if( attr )
+                    fixture.radius = Number( attr );
+
+                // Is chain shape a loop?
+                attr = fixtureNode[i].getAttribute( 'chainLoop' );
+                if( attr )
+                    fixture.chainLoop = (attr === 'true');
+
+                // Is fixture a sensor?
+                attr = fixtureNode[i].getAttribute( 'sensor' );
+                if( attr )
+                    fixture.sensor = (attr === 'true');
+
+                // See if there is a vert list
+                let vertNode = fixtureNode[i].getElementsByTagName( 'vert' );
+
+                for( let j = 0; j < vertNode.length; ++j )
+                {
+                    fixture.vertAry.push( 
+                        new planck_js__WEBPACK_IMPORTED_MODULE_0__.Vec2(
+                            Number( vertNode[j].getAttribute('x') ),
+                            Number( vertNode[j].getAttribute('y') ) ) );
+                }
+
+                // See if the filter is defined
+                let filterNode = fixtureNode[i].getElementsByTagName( 'collisionFilter' );
+                if( filterNode.length )
+                {
+                    attr = filterNode[0].getAttribute('categoryBits');
+                    if( attr )
+                        fixture.filterGroupIndex = Number( attr );
+
+                    attr = filterNode[0].getAttribute('maskBits');
+                    if( attr )
+                        fixture.filterMaskBits = Number( attr );
+
+                    attr = filterNode[0].getAttribute('groupIndex');
+                    if( attr )
+                        fixture.filterGroupIndex = Number( attr );
+                }
+
+                // The size mod is how much the mesh size should be adjusted on each side
+                let sizeModNode = fixtureNode[i].getElementsByTagName( 'sizeMod' );
+                if( sizeModNode.length )
+                {
+                    attr = sizeModNode[0].getAttribute('top');
+                    if( attr )
+                        fixture.topMod = Number( attr );
+
+                    attr = sizeModNode[0].getAttribute('bottom');
+                    if( attr )
+                        fixture.bottomMod = Number( attr );
+
+                    attr = sizeModNode[0].getAttribute('left');
+                    if( attr )
+                        fixture.leftMod = Number( attr );
+
+                    attr = sizeModNode[0].getAttribute('right');
+                    if( attr )
+                        fixture.rightMod = Number( attr );
+                }
+            }
+        }
+    }
+    
+    // 
+    //  DESC: Is this genType active
+    //
+    isActive()
+    {
+        return (this.bodyType !== null);
+    }
+}
+
+
+/***/ }),
+/* 124 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -25204,18 +31546,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ObjectVisualData2D": () => (/* binding */ ObjectVisualData2D)
 /* harmony export */ });
-/* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(97);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(36);
+/* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(98);
-/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(33);
+/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(126);
+/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(119);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(11);
-/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(32);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(39);
+/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(118);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(31);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(5);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(37);
 
 // 
 //  FILE NAME: ojectvisualdata2d.js
@@ -25801,7 +32143,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
 
 
 /***/ }),
-/* 97 */
+/* 125 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -25842,7 +32184,7 @@ class iObjectVisualData
 
 
 /***/ }),
-/* 98 */
+/* 126 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -25887,7 +32229,7 @@ class ScaledFrame
 
 
 /***/ }),
-/* 99 */
+/* 127 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -25895,8 +32237,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ObjectData3D": () => (/* binding */ ObjectData3D)
 /* harmony export */ });
-/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
-/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(100);
+/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(122);
+/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(128);
 
 // 
 //  FILE NAME: objectdata3d.js
@@ -25971,7 +32313,7 @@ class ObjectData3D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
 
 
 /***/ }),
-/* 100 */
+/* 128 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -25979,10 +32321,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ObjectVisualData3D": () => (/* binding */ ObjectVisualData3D)
 /* harmony export */ });
-/* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(97);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
+/* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(35);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(37);
 
 // 
 //  FILE NAME: ojectvisualdata3d.js
@@ -26080,5892 +32422,7 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
 
 
 /***/ }),
-/* 101 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CONTROLLER_BUTTON_INVALID": () => (/* binding */ CONTROLLER_BUTTON_INVALID),
-/* harmony export */   "CONTROLLER_BUTTON_A": () => (/* binding */ CONTROLLER_BUTTON_A),
-/* harmony export */   "CONTROLLER_BUTTON_B": () => (/* binding */ CONTROLLER_BUTTON_B),
-/* harmony export */   "CONTROLLER_BUTTON_X": () => (/* binding */ CONTROLLER_BUTTON_X),
-/* harmony export */   "CONTROLLER_BUTTON_Y": () => (/* binding */ CONTROLLER_BUTTON_Y),
-/* harmony export */   "CONTROLLER_BUTTON_L_BUMPER": () => (/* binding */ CONTROLLER_BUTTON_L_BUMPER),
-/* harmony export */   "CONTROLLER_BUTTON_R_BUMPER": () => (/* binding */ CONTROLLER_BUTTON_R_BUMPER),
-/* harmony export */   "CONTROLLER_BUTTON_L_TRIGGER": () => (/* binding */ CONTROLLER_BUTTON_L_TRIGGER),
-/* harmony export */   "CONTROLLER_BUTTON_R_TRIGGER": () => (/* binding */ CONTROLLER_BUTTON_R_TRIGGER),
-/* harmony export */   "CONTROLLER_BUTTON_BACK": () => (/* binding */ CONTROLLER_BUTTON_BACK),
-/* harmony export */   "CONTROLLER_BUTTON_START": () => (/* binding */ CONTROLLER_BUTTON_START),
-/* harmony export */   "CONTROLLER_BUTTON_LEFTSTICK": () => (/* binding */ CONTROLLER_BUTTON_LEFTSTICK),
-/* harmony export */   "CONTROLLER_BUTTON_RIGHTSTICK": () => (/* binding */ CONTROLLER_BUTTON_RIGHTSTICK),
-/* harmony export */   "CONTROLLER_BUTTON_DPAD_UP": () => (/* binding */ CONTROLLER_BUTTON_DPAD_UP),
-/* harmony export */   "CONTROLLER_BUTTON_DPAD_DOWN": () => (/* binding */ CONTROLLER_BUTTON_DPAD_DOWN),
-/* harmony export */   "CONTROLLER_BUTTON_DPAD_LEFT": () => (/* binding */ CONTROLLER_BUTTON_DPAD_LEFT),
-/* harmony export */   "CONTROLLER_BUTTON_DPAD_RIGHT": () => (/* binding */ CONTROLLER_BUTTON_DPAD_RIGHT),
-/* harmony export */   "CONTROLLER_BUTTON_GUIDE": () => (/* binding */ CONTROLLER_BUTTON_GUIDE),
-/* harmony export */   "CONTROLLER_BUTTON_L_STICK_UP": () => (/* binding */ CONTROLLER_BUTTON_L_STICK_UP),
-/* harmony export */   "CONTROLLER_BUTTON_L_STICK_DOWN": () => (/* binding */ CONTROLLER_BUTTON_L_STICK_DOWN),
-/* harmony export */   "CONTROLLER_BUTTON_L_STICK_LEFT": () => (/* binding */ CONTROLLER_BUTTON_L_STICK_LEFT),
-/* harmony export */   "CONTROLLER_BUTTON_L_STICK_RIGHT": () => (/* binding */ CONTROLLER_BUTTON_L_STICK_RIGHT),
-/* harmony export */   "CONTROLLER_BUTTON_R_STICK_UP": () => (/* binding */ CONTROLLER_BUTTON_R_STICK_UP),
-/* harmony export */   "CONTROLLER_BUTTON_R_STICK_DOWN": () => (/* binding */ CONTROLLER_BUTTON_R_STICK_DOWN),
-/* harmony export */   "CONTROLLER_BUTTON_R_STICK_LEFT": () => (/* binding */ CONTROLLER_BUTTON_R_STICK_LEFT),
-/* harmony export */   "CONTROLLER_BUTTON_R_STICK_RIGHT": () => (/* binding */ CONTROLLER_BUTTON_R_STICK_RIGHT),
-/* harmony export */   "MOUSE_BUTTON_INVALID": () => (/* binding */ MOUSE_BUTTON_INVALID),
-/* harmony export */   "MOUSE_BUTTON_LEFT": () => (/* binding */ MOUSE_BUTTON_LEFT),
-/* harmony export */   "MOUSE_BUTTON_MIDDLE": () => (/* binding */ MOUSE_BUTTON_MIDDLE),
-/* harmony export */   "MOUSE_BUTTON_RIGHT": () => (/* binding */ MOUSE_BUTTON_RIGHT),
-/* harmony export */   "MOUSE_BUTTON_1X": () => (/* binding */ MOUSE_BUTTON_1X),
-/* harmony export */   "MOUSE_BUTTON_2X": () => (/* binding */ MOUSE_BUTTON_2X),
-/* harmony export */   "MOUSE_BUTTON_3X": () => (/* binding */ MOUSE_BUTTON_3X),
-/* harmony export */   "MOUSE_BUTTON_4X": () => (/* binding */ MOUSE_BUTTON_4X),
-/* harmony export */   "MOUSE_BUTTON_5X": () => (/* binding */ MOUSE_BUTTON_5X),
-/* harmony export */   "MOUSE_BUTTON_6X": () => (/* binding */ MOUSE_BUTTON_6X),
-/* harmony export */   "MOUSE_BUTTON_7X": () => (/* binding */ MOUSE_BUTTON_7X),
-/* harmony export */   "MOUSE_BUTTON_8X": () => (/* binding */ MOUSE_BUTTON_8X),
-/* harmony export */   "actionManager": () => (/* binding */ actionManager)
-/* harmony export */ });
-/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(102);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-// 
-//  FILE NAME: actionmanager.js
-//  DESC:      Class for handling action mapping
-//
-
-
-
-
-
-
-const CONTROLLER_BUTTON_INVALID       = -1,
-             CONTROLLER_BUTTON_A             = 0,
-             CONTROLLER_BUTTON_B             = 1,
-             CONTROLLER_BUTTON_X             = 2,
-             CONTROLLER_BUTTON_Y             = 3,
-             CONTROLLER_BUTTON_L_BUMPER      = 4,
-             CONTROLLER_BUTTON_R_BUMPER      = 5,
-             CONTROLLER_BUTTON_L_TRIGGER     = 6,
-             CONTROLLER_BUTTON_R_TRIGGER     = 7,
-             CONTROLLER_BUTTON_BACK          = 8,
-             CONTROLLER_BUTTON_START         = 9,
-             CONTROLLER_BUTTON_LEFTSTICK     = 10,
-             CONTROLLER_BUTTON_RIGHTSTICK    = 11,
-             CONTROLLER_BUTTON_DPAD_UP       = 12,
-             CONTROLLER_BUTTON_DPAD_DOWN     = 13,
-             CONTROLLER_BUTTON_DPAD_LEFT     = 14,
-             CONTROLLER_BUTTON_DPAD_RIGHT    = 15,
-             CONTROLLER_BUTTON_GUIDE         = 16,
-             // Key codes to use analog sticks as buttons
-             CONTROLLER_BUTTON_L_STICK_UP    = 21,
-             CONTROLLER_BUTTON_L_STICK_DOWN  = 22,
-             CONTROLLER_BUTTON_L_STICK_LEFT  = 23,
-             CONTROLLER_BUTTON_L_STICK_RIGHT = 24,
-             CONTROLLER_BUTTON_R_STICK_UP    = 25,
-             CONTROLLER_BUTTON_R_STICK_DOWN  = 26,
-             CONTROLLER_BUTTON_R_STICK_LEFT  = 27,
-             CONTROLLER_BUTTON_R_STICK_RIGHT = 28;
-
-const MOUSE_BUTTON_INVALID       = -1,
-             MOUSE_BUTTON_LEFT          = 0,
-             MOUSE_BUTTON_MIDDLE        = 1,
-             MOUSE_BUTTON_RIGHT         = 2,
-             MOUSE_BUTTON_1X            = 3,
-             MOUSE_BUTTON_2X            = 4,
-             MOUSE_BUTTON_3X            = 5,
-             MOUSE_BUTTON_4X            = 6,
-             MOUSE_BUTTON_5X            = 7,
-             MOUSE_BUTTON_6X            = 8,
-             MOUSE_BUTTON_7X            = 9,
-             MOUSE_BUTTON_8X            = 10;
-
-class ActionManager
-{
-    constructor()
-    {
-        this.keyboardKeyCodeMap = new Map;
-        this.mouseKeyCodeMap = new Map;
-        this.gamepadKeyCodeMap = new Map;
-        
-        // Action maps
-        this.keyboardActionMap = new Map;
-        this.mouseActionMap = new Map;
-        this.gamepadActionMap = new Map;
-        
-        // Flag to allow action handling
-        this.allowAction = true;
-        
-        // Last device used
-        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEVICE_NULL;
-        
-        this.keyboardKeyCodeMap.set( '---', -1 );
-        this.keyboardKeyCodeMap.set( 'ENTER',       'Enter' );
-        this.keyboardKeyCodeMap.set( 'ESCAPE',       'Escape' );
-        this.keyboardKeyCodeMap.set( 'ARROW UP',     'ArrowUp' );
-        this.keyboardKeyCodeMap.set( 'ARROW DOWN',   'ArrowDown' );
-        this.keyboardKeyCodeMap.set( 'ARROW LEFT',   'ArrowLeft' );
-        this.keyboardKeyCodeMap.set( 'ARROW RIGHT',  'ArrowRight' );
-        this.keyboardKeyCodeMap.set( 'A',            'KeyA' );
-        this.keyboardKeyCodeMap.set( 'B',            'KeyB' );
-        this.keyboardKeyCodeMap.set( 'C',            'KeyC' );
-        this.keyboardKeyCodeMap.set( 'D',            'KeyD' );
-        this.keyboardKeyCodeMap.set( 'E',            'KeyE' );
-        this.keyboardKeyCodeMap.set( 'F',            'KeyF' );
-        this.keyboardKeyCodeMap.set( 'G',            'KeyG' );
-        this.keyboardKeyCodeMap.set( 'H',            'KeyH' );
-        this.keyboardKeyCodeMap.set( 'I',            'KeyI' );
-        this.keyboardKeyCodeMap.set( 'J',            'KeyJ' );
-        this.keyboardKeyCodeMap.set( 'K',            'KeyK' );
-        this.keyboardKeyCodeMap.set( 'L',            'KeyL' );
-        this.keyboardKeyCodeMap.set( 'M',            'KeyM' );
-        this.keyboardKeyCodeMap.set( 'N',            'KeyN' );
-        this.keyboardKeyCodeMap.set( 'O',            'KeyO' );
-        this.keyboardKeyCodeMap.set( 'P',            'KeyP' );
-        this.keyboardKeyCodeMap.set( 'Q',            'KeyQ' );
-        this.keyboardKeyCodeMap.set( 'R',            'KeyR' );
-        this.keyboardKeyCodeMap.set( 'S',            'KeyS' );
-        this.keyboardKeyCodeMap.set( 'T',            'KeyT' );
-        this.keyboardKeyCodeMap.set( 'U',            'KeyU' );
-        this.keyboardKeyCodeMap.set( 'V',            'KeyV' );
-        this.keyboardKeyCodeMap.set( 'W',            'KeyW' );
-        this.keyboardKeyCodeMap.set( 'X',            'KeyX' );
-        this.keyboardKeyCodeMap.set( 'Y',            'KeyY' );
-        this.keyboardKeyCodeMap.set( 'Z',            'KeyZ' );
-        this.keyboardKeyCodeMap.set( '0',            'Digit0' );
-        this.keyboardKeyCodeMap.set( '1',            'Digit1' );
-        this.keyboardKeyCodeMap.set( '2',            'Digit2' );
-        this.keyboardKeyCodeMap.set( '3',            'Digit3' );
-        this.keyboardKeyCodeMap.set( '4',            'Digit4' );
-        this.keyboardKeyCodeMap.set( '5',            'Digit5' );
-        this.keyboardKeyCodeMap.set( '6',            'Digit6' );
-        this.keyboardKeyCodeMap.set( '7',            'Digit7' );
-        this.keyboardKeyCodeMap.set( '8',            'Digit8' );
-        this.keyboardKeyCodeMap.set( '9',            'Digit9' );
-        this.keyboardKeyCodeMap.set( 'F1',           'F1' );
-        this.keyboardKeyCodeMap.set( 'F2',           'F2' );
-        this.keyboardKeyCodeMap.set( 'F3',           'F3' );
-        this.keyboardKeyCodeMap.set( 'F4',           'F4' );
-        this.keyboardKeyCodeMap.set( 'F5',           'F5' );
-        this.keyboardKeyCodeMap.set( 'F6',           'F6' );
-        this.keyboardKeyCodeMap.set( 'F7',           'F7' );
-        this.keyboardKeyCodeMap.set( 'F8',           'F8' );
-        this.keyboardKeyCodeMap.set( 'F9',           'F9' );
-        this.keyboardKeyCodeMap.set( 'F10',          'F10' );
-        this.keyboardKeyCodeMap.set( 'F11',          'F11' );
-        this.keyboardKeyCodeMap.set( 'F12',          'F12' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 0',     'Numpad0' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 1',     'Numpad1' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 2',     'Numpad2' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 3',     'Numpad3' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 4',     'Numpad4' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 5',     'Numpad5' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 6',     'Numpad6' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 7',     'Numpad7' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 8',     'Numpad8' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD 9',     'Numpad9' );
-        this.keyboardKeyCodeMap.set( 'NUM LOCK',     'NumLock' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD /',     'NumpadDivide' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD *',     'NumpadMultiply' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD -',     'NumpadSubtract' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD +',     'NumpadAdd' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD ENTER', 'NumpadEnter' );
-        this.keyboardKeyCodeMap.set( 'NUMPAD .',     'NumpadDecimal' );
-        this.keyboardKeyCodeMap.set( 'CTRL LEFT',    'ControlLeft' );
-        this.keyboardKeyCodeMap.set( 'SHIFT LEFT',   'ShiftLeft' );
-        this.keyboardKeyCodeMap.set( 'ALT LEFT',     'AltLeft' );
-        this.keyboardKeyCodeMap.set( 'CTRL RIGHT',   'ControlRight' );
-        this.keyboardKeyCodeMap.set( 'SHIFT RIGHT',  'ShiftRight' );
-        this.keyboardKeyCodeMap.set( 'ALT RIGHT',    'AltRight' );
-        this.keyboardKeyCodeMap.set( 'PRINT SCREEN', 'PrintScreen' );
-        this.keyboardKeyCodeMap.set( 'SCROLL LOCK',  'ScrollLock' );
-        this.keyboardKeyCodeMap.set( 'PAUSE',        'Pause' );
-        this.keyboardKeyCodeMap.set( 'END',          'End' );
-        this.keyboardKeyCodeMap.set( 'INSERT',       'Insert' );
-        this.keyboardKeyCodeMap.set( 'DELETE',       'Delete' );
-        this.keyboardKeyCodeMap.set( 'HOME',         'Home' );
-        this.keyboardKeyCodeMap.set( 'PAGE UP',      'PageUp' );
-        this.keyboardKeyCodeMap.set( 'PAGE DOWN',    'PageDown' );
-        this.keyboardKeyCodeMap.set( 'BACKSPACE',    'Backspace' );
-        this.keyboardKeyCodeMap.set( 'TAB',          'Tab' );
-        this.keyboardKeyCodeMap.set( 'SPACE',        'Space' );
-        this.keyboardKeyCodeMap.set( ',',            'Comma' );
-        this.keyboardKeyCodeMap.set( '-',            'Minus' );
-        this.keyboardKeyCodeMap.set( '.',            'Period' );
-        this.keyboardKeyCodeMap.set( '/',            'Slash' );
-        this.keyboardKeyCodeMap.set( '=',            'Equal' );
-        this.keyboardKeyCodeMap.set( ';',            'Semicolon' );
-        this.keyboardKeyCodeMap.set( '[',            'BracketLeft' );
-        this.keyboardKeyCodeMap.set( '\\',           'Backslash' );
-        this.keyboardKeyCodeMap.set( ']',            'BracketRight' );
-        this.keyboardKeyCodeMap.set( '`',            'Backquote' );
-        this.keyboardKeyCodeMap.set( "'",            'Quote' );
-        this.keyboardKeyCodeMap.set( 'META LEFT',    'MetaLeft' );
-        this.keyboardKeyCodeMap.set( 'META RIGHT',   'MetaRight' );
-        this.keyboardKeyCodeMap.set( 'CONTEXT MENU', 'ContextMenu' );
-
-        this.keyboardKeyCodeMap.set( 'LAUNCH MAIL',      'LaunchMail' );
-        this.keyboardKeyCodeMap.set( 'LAUNCH APP 1',     'LaunchApp1' );
-        this.keyboardKeyCodeMap.set( 'LAUNCH APP 2',     'LaunchApp2' );
-        this.keyboardKeyCodeMap.set( 'MEDIA TRACK PREV', 'MediaTrackPrevious' );
-        this.keyboardKeyCodeMap.set( 'MEDIA TRACK NEXT', 'MediaTrackNext' );
-        this.keyboardKeyCodeMap.set( 'MEDIA PLAY PAUSE', 'MediaPlayPause' );
-        
-        this.mouseKeyCodeMap.set( '---',          MOUSE_BUTTON_INVALID );
-        this.mouseKeyCodeMap.set( 'LEFT MOUSE',   MOUSE_BUTTON_LEFT );
-        this.mouseKeyCodeMap.set( 'MIDDLE MOUSE', MOUSE_BUTTON_MIDDLE );
-        this.mouseKeyCodeMap.set( 'RIGHT MOUSE',  MOUSE_BUTTON_RIGHT );
-        this.mouseKeyCodeMap.set( 'MOUSE 1X',     MOUSE_BUTTON_1X );
-        this.mouseKeyCodeMap.set( 'MOUSE 2X',     MOUSE_BUTTON_2X );
-        this.mouseKeyCodeMap.set( 'MOUSE 3X',     MOUSE_BUTTON_3X );
-        this.mouseKeyCodeMap.set( 'MOUSE 4X',     MOUSE_BUTTON_4X );
-        this.mouseKeyCodeMap.set( 'MOUSE 5X',     MOUSE_BUTTON_5X );
-        this.mouseKeyCodeMap.set( 'MOUSE 6X',     MOUSE_BUTTON_6X );
-        this.mouseKeyCodeMap.set( 'MOUSE 7X',     MOUSE_BUTTON_7X );
-        this.mouseKeyCodeMap.set( 'MOUSE 8',      MOUSE_BUTTON_8X );
-
-        this.gamepadKeyCodeMap.set( '---',           CONTROLLER_BUTTON_INVALID );
-        this.gamepadKeyCodeMap.set( 'A',             CONTROLLER_BUTTON_A );
-        this.gamepadKeyCodeMap.set( 'B',             CONTROLLER_BUTTON_B );
-        this.gamepadKeyCodeMap.set( 'X',             CONTROLLER_BUTTON_X );
-        this.gamepadKeyCodeMap.set( 'Y',             CONTROLLER_BUTTON_Y );
-        this.gamepadKeyCodeMap.set( 'L BUMPER',      CONTROLLER_BUTTON_L_BUMPER );
-        this.gamepadKeyCodeMap.set( 'R BUMPER',      CONTROLLER_BUTTON_R_BUMPER );
-        this.gamepadKeyCodeMap.set( 'L TRIGGER',     CONTROLLER_BUTTON_L_TRIGGER );
-        this.gamepadKeyCodeMap.set( 'R TRIGGER',     CONTROLLER_BUTTON_R_TRIGGER );
-        this.gamepadKeyCodeMap.set( 'BACK',          CONTROLLER_BUTTON_BACK );
-        this.gamepadKeyCodeMap.set( 'START',         CONTROLLER_BUTTON_START );
-        this.gamepadKeyCodeMap.set( 'L STICK',       CONTROLLER_BUTTON_LEFTSTICK );
-        this.gamepadKeyCodeMap.set( 'R STICK',       CONTROLLER_BUTTON_RIGHTSTICK );
-        this.gamepadKeyCodeMap.set( 'UP',            CONTROLLER_BUTTON_DPAD_UP );
-        this.gamepadKeyCodeMap.set( 'DOWN',          CONTROLLER_BUTTON_DPAD_DOWN );
-        this.gamepadKeyCodeMap.set( 'LEFT',          CONTROLLER_BUTTON_DPAD_LEFT );
-        this.gamepadKeyCodeMap.set( 'RIGHT',         CONTROLLER_BUTTON_DPAD_RIGHT );
-        this.gamepadKeyCodeMap.set( 'GUIDE',         CONTROLLER_BUTTON_GUIDE );
-
-        // Key codes to use analog sticks as buttons
-        this.gamepadKeyCodeMap.set( 'L STICK UP',    CONTROLLER_BUTTON_L_STICK_UP );
-        this.gamepadKeyCodeMap.set( 'L STICK DOWN',  CONTROLLER_BUTTON_L_STICK_DOWN );
-        this.gamepadKeyCodeMap.set( 'L STICK LEFT',  CONTROLLER_BUTTON_L_STICK_LEFT );
-        this.gamepadKeyCodeMap.set( 'L STICK RIGHT', CONTROLLER_BUTTON_L_STICK_RIGHT );
-        this.gamepadKeyCodeMap.set( 'R STICK UP',    CONTROLLER_BUTTON_R_STICK_UP );
-        this.gamepadKeyCodeMap.set( 'R STICK DOWN',  CONTROLLER_BUTTON_R_STICK_DOWN );
-        this.gamepadKeyCodeMap.set( 'R STICK LEFT',  CONTROLLER_BUTTON_R_STICK_LEFT );
-        this.gamepadKeyCodeMap.set( 'R STICK RIGHT', CONTROLLER_BUTTON_R_STICK_RIGHT );
-    }
-    
-    // 
-    //  DESC: Load data from file path
-    //
-    clearLastDeviceUsed()
-    {
-        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEVICE_NULL;
-    }
-    
-    // 
-    //  DESC: Load data from file path
-    //
-    load( filePath )
-    {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ));
-    }
-    
-    // 
-    //  DESC: Load data from XML node
-    //
-    loadFromNode( xmlNode )
-    {
-        if( xmlNode )
-        {
-            // Load the keyboard/mouse/gamepad mapping
-            this.loadKeyboardMappingFromNode( xmlNode.getElementsByTagName('keyboardMapping') );
-            this.loadMouseMappingFromNode( xmlNode.getElementsByTagName( 'mouseMapping' ) );
-            this.loadGamepadMappingFromNode( xmlNode.getElementsByTagName( 'gamepadMapping' ) );
-        }
-    }
-    
-    // 
-    //  DESC: Load the keyboard mapping from node
-    //
-    loadKeyboardMappingFromNode( node )
-    {
-        // Load the player hidden controls
-        this.loadActionFromNode( node[0].getElementsByTagName('playerHidden'), this.keyboardKeyCodeMap, this.keyboardActionMap );
-
-        // Load the player visible controls
-        this.loadActionFromNode( node[0].getElementsByTagName('playerVisible'), this.keyboardKeyCodeMap, this.keyboardActionMap );
-    }
-
-    // 
-    //  DESC: Load the mouse mapping from node
-    //
-    loadMouseMappingFromNode( node )
-    {
-        // Load the player hidden controls
-        this.loadActionFromNode( node[0].getElementsByTagName('playerHidden'), this.mouseKeyCodeMap, this.mouseActionMap );
-
-        // Load the player visible controls
-        this.loadActionFromNode( node[0].getElementsByTagName('playerVisible'), this.mouseKeyCodeMap, this.mouseActionMap );
-    }
-
-    // 
-    //  DESC: Load the gamepad mapping from node
-    //
-    loadGamepadMappingFromNode( node )
-    {
-        // Load the player hidden controls
-        this.loadActionFromNode( node[0].getElementsByTagName("playerHidden"), this.gamepadKeyCodeMap, this.gamepadActionMap );
-
-        // Load the player visible controls
-        this.loadActionFromNode( node[0].getElementsByTagName("playerVisible"), this.gamepadKeyCodeMap, this.gamepadActionMap );
-    }
-    
-    // 
-    //  DESC: Load action data from xml node
-    //
-    loadActionFromNode( node, keyCodeMap, actionMap )
-    {
-        if( node.length )
-        {
-            let actionNode = node[0].getElementsByTagName('actionMap');
-
-            for( let i = 0; i < actionNode.length; ++i )
-            {
-                // See if we can find the string that represents the key code id
-                let componentIdStr = actionNode[i].getAttribute( 'componetId' );
-                let keyCode = keyCodeMap.get( componentIdStr );
-
-                // Add it in if we found it
-                if( keyCode !== undefined )
-                {
-                    let actionStr = actionNode[i].getAttribute( 'action' );
-
-                    // See if the controller action string has already been added
-                    let action = actionMap.get( actionStr );
-
-                    if( action !== undefined )
-                    {
-                        // If it's found, add another id to this map
-                        action.setId( keyCode );
-                    }
-                    else
-                    {
-                        // Add new action to the map
-                        actionMap.set( actionStr, new _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__.KeyCodeAction(keyCode) );
-                    }
-                }
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Was this an action
-    //
-    wasActionPress( event, actionStr, actionPress )
-    {
-        if( this.wasAction( event, actionStr ) === actionPress )
-            return true;
-
-        return false;
-    }
-    
-    // 
-    //  DESC: Was this an action
-    //
-    wasAction( event, actionStr )
-    {
-        let result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_IDLE;
-
-        if( this.allowAction )
-        {
-            // Check for keyboard event
-            if( event instanceof KeyboardEvent )
-            {
-                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.KEYBOARD;
-
-                if( this.wasActionMap( event.code, actionStr, this.keyboardActionMap ) )
-                {
-                    result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_UP;
-
-                    // Check for the "D" character code for keydown
-                    if( event.type.charCodeAt(3) === 100 )
-                    {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_DOWN;
-                    }
-                }
-            }
-            // Check for mouse event
-            else if( event instanceof MouseEvent )
-            {
-                this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_2__.MOUSE;
-
-                if( this.wasActionMap( event.button, actionStr, this.mouseActionMap ) )
-                {
-                    result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_UP;
-
-                    // Check for the "D" character code for mousedown
-                    if( event.type.charCodeAt(5) === 100 )
-                    {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_2__.EAP_DOWN;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-    
-    // 
-    //  DESC: Was this an action
-    //
-    wasActionMap( id, actionStr, actionMap )
-    {
-        let result = false;
-
-        // See if the action has already been added
-        let action = actionMap.get( actionStr );
-
-        // If it's found, see if this is the correct action
-        if( action !== undefined )
-        {
-            result = action.wasAction( id );
-        }
-
-        return result;
-    }
-    
-    // 
-    //  DESC: What was the last device
-    //
-    wasLastDeviceGamepad()
-    {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__.GAMEPAD);
-    }
-
-    wasLastDeviceKeyboard()
-    {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__.KEYBOARD);
-    }
-
-    wasLastDeviceMouse()
-    {
-        return (this.lastDeviceUsed === _common_defs__WEBPACK_IMPORTED_MODULE_2__.MOUSE);
-    }
-}
-
-var actionManager = new ActionManager;
-
-
-/***/ }),
-/* 102 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "KeyCodeAction": () => (/* binding */ KeyCodeAction)
-/* harmony export */ });
-// 
-//  FILE NAME: keycodeaction.js
-//  DESC:      Class for holding key codes to test for action events
-//
-
-
-
-class KeyCodeAction
-{
-    constructor( id )
-    {
-        this.idAry = [id];
-    }
-    
-    // Set additional id's
-    setId( id )
-    {
-        // Only set id's that are positive numbers
-        if( !((id == -1) || (id == '---')) )
-            this.idAry.push( id );
-    }
-    
-    // Remove an id
-    removeId( id )
-    {
-        var index = this.idAry.indexOf( id );
-        
-        if( index > -1 )
-            this.idAry.splice( index, 1 );
-    }
-
-    // Check for action
-    wasAction( id )
-    {
-        if( this.idAry.indexOf( id ) > -1 )
-            return true;
-
-        return false;
-    }
-}
-
-
-/***/ }),
-/* 103 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "menuManager": () => (/* binding */ menuManager)
-/* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(101);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(39);
-/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(104);
-/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(141);
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(142);
-/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(23);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(109);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: menumanager.js
-//  DESC:      menu manager class singleton
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
-{
-    constructor()
-    {
-        super();
-        
-        // NOTE: Only simple allocation that don't 
-        //       require Settings to be loaded
-        
-        // Map map of menu trees
-        this.menuTreeMapMap = new Map;
-
-        // Map of the menus
-        this.menuMapMap = new Map;
-
-        // Array of active menu trees
-        this.activeMenuTreeAry = [];
-
-        // Array of active interface trees
-        this.activeInterTreeAry = [];
-
-        // menu manager state
-        this.active = false;
-
-        // Actions
-        this.backAction;
-        this.toggleAction;
-        this.escapeAction;
-        this.selectAction;
-        this.upAction;
-        this.downAction;
-        this.leftAction;
-        this.rightAction;
-        this.tabLeft;
-        this.tabRight;
-        this.defaultTree;
-
-        // scroll timer Id
-        this.scrollTimerId = 0;
-
-        // Allow message processing
-        this.allow = false;
-    }
-    
-    //
-    //  DESC: Set the default camera
-    //
-    setDefaultCamera()
-    {
-        // Default camera
-        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__.cameraManager.getDefault();
-    }
-    
-    // 
-    //  DESC: Set the camera
-    //
-    setCamera( cameraId )
-    {
-        this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_7__.cameraManager.get( cameraId );
-    }
-    
-    // 
-    //  DESC: Load the menu group
-    //
-    loadGroupXML( groupAry )
-    {
-        let promiseAry = [];
-
-        for( let grp = 0; grp < groupAry.length; ++grp )
-        {
-            let group = groupAry[grp];
-            
-            // Make sure the group we are looking for has been defined in the list table file
-            let pathAry = this.listTableMap.get( group );
-            if( pathAry !== undefined )
-            {
-                // Load the group data if it doesn't already exist
-                if( this.menuMapMap.get( group ) === undefined )
-                {
-                    // Create a new group map inside of our maps
-                    this.menuMapMap.set( group, new Map );
-                    this.menuTreeMapMap.set( group, new Map );
-
-                    for( let i = 0; i < pathAry.length; ++i )
-                    {
-                        let filePath = pathAry[i];
-
-                        promiseAry.push( 
-                            _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.downloadFile( 'xml', filePath )
-                                .then(( xmlNode ) => this.loadFromNode( group, xmlNode ))
-                                .catch(( error ) => { console.error(error.stack); throw error; }));
-                    }
-                }
-                else
-                {
-                    throw new Error( `Menu group has alread been loaded (${group})!` );
-                }
-            }
-            else
-            {
-                throw new Error( `Menu Manager list group name can't be found (${group})!` );
-            }
-        }
-
-        return Promise.all( promiseAry );
-    }
-    
-    //
-    //  DESC: Load all object information from an xml node
-    //
-    loadFromNode( group, xmlNode )
-    {
-        // Load the menus from node
-        return this.loadMenuFromNode( group, xmlNode )
-
-            // Load the trees from node
-            .then(() => this.loadTreesFromNode( group, xmlNode ))
-    }
-    
-    //
-    //  DESC: preload all object information from an xml node
-    //
-    loadMenuFromNode( group, xmlNode )
-    {
-        let promiseAry = [];
-
-        // Get the menu group map
-        let groupMap = this.menuMapMap.get( group );
-        
-        let menuNode = xmlNode.getElementsByTagName('menu');
-
-        for( let i = 0; i < menuNode.length; ++i )
-        {
-            // Get the name of the menu
-            let name = menuNode[i].getAttribute( 'name' );
-
-            // Get the menu file path
-            let filePath = menuNode[i].getAttribute( 'file' );
-
-            // Check for duplicates
-            if( groupMap.get( name ) !== undefined )
-                throw new Error( `Duplicate menu name! (${name}).` );
-
-            // Allocate a new menu
-            let menu = new _gui_menu__WEBPACK_IMPORTED_MODULE_5__.Menu( name, group, filePath );
-
-            // Insert the menu into the group map
-            groupMap.set( name, menu );
-
-            // Load the transform from node
-            menu.loadTransFromNode( menuNode[i] );
-
-            // Load the dynamic offset from node
-            menu.loadDynamicOffsetFromNode( menuNode[i] );
-
-            // Check if this file has already been loaded
-            if( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.allowLoad( group, filePath ) )
-            {
-                // Load the menu XML file
-                promiseAry.push( 
-                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.downloadFile( 'xml', filePath )
-                        .then(( node ) => 
-                        {
-                            // Store the preloaded XML file
-                            _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.set( group, filePath, node );
-
-                            // Recurse back until all XML files are loaded
-                            return this.loadControlFromNode( group, node );
-                        })
-                        .catch(( error ) => { console.error(error.stack); throw error; }));
-            }
-        }
-
-        return Promise.all( promiseAry );
-    }
-    
-    //
-    //  DESC: Load the trees from node
-    //
-    loadTreesFromNode( group, node )
-    {
-        // Get the menu group map
-        let menuGroupMap = this.menuMapMap.get( group );
-        
-        // Get the tree group map
-        let treeGroupMap = this.menuTreeMapMap.get( group );
-        
-        // Get the node to the list of trees
-        let treeNode = node.getElementsByTagName('tree');
-
-        for( let i = 0; i < treeNode.length; ++i )
-        {
-            // Get the name
-            let name = treeNode[i].getAttribute( 'name' );
-
-            // Get the root menu
-            let rootMenu = treeNode[i].getAttribute( 'root' );
-
-            // Get the default menu
-            let defaultMenu = treeNode[i].getAttribute( 'default' );
-
-            // Is this menu an interface menu?
-            let interfaceMenu = (treeNode[i].getAttribute( 'interfaceMenu' ) === 'true');
-
-            // Check for duplicate names
-            if( treeGroupMap.get( name ) !== undefined )
-                throw new Error( `Duplicate tree name! (${name}).` );
-
-            // Add the tree data to the map
-            treeGroupMap.set( name, new _gui_menutree__WEBPACK_IMPORTED_MODULE_6__.MenuTree( name, menuGroupMap, rootMenu, defaultMenu, interfaceMenu ) );
-
-            // Check that the root menu exists
-            if( rootMenu !== '' )
-            {
-                if( menuGroupMap.get( rootMenu ) === undefined )
-                    throw new Error( `Root menu doesn't exist! (${name}).` );
-            }
-            else if( defaultMenu !== '' )
-            {
-                if( menuGroupMap.get( defaultMenu ) === undefined )
-                    throw new Error( `Default menu doesn't exist! (${name}).` );
-            }
-        }
-    }
-    
-    //
-    //  DESC: load the menu controls from menu node
-    //        NOTE: Promise using recursive function
-    //
-    loadControlFromNode( group, xmlNode )
-    {
-        let promiseAry = [];
-        let controlLst = ['staticMenuControls', 'mouseOnlyControls', 'menuControls', 'subControlList', 'scrollBoxControlList'];
-        
-        // Load the control XML files
-        for( let i = 0; i < controlLst.length; ++i )
-        {
-            let nodeLst = xmlNode.getElementsByTagName( controlLst[i] );
-            if( nodeLst.length )
-            {
-                let controlNode = nodeLst[0].getElementsByTagName( 'control' );
-
-                for( let j = 0; j < controlNode.length; ++j )
-                {
-                    let filePathNode = controlNode[j].getElementsByTagName( 'filePath' );
-                    if( filePathNode.length )
-                    {
-                        let filePath = filePathNode[0].getAttribute('file');
-                        if( filePath )
-                        {
-                            // Check if this file has already been scheduled for loading
-                            if( _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.allowLoad( group, filePath ) )
-                            {
-                                promiseAry.push(
-                                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.downloadFile( 'xml', filePath )
-                                    .then(( node ) => 
-                                    {
-                                        // Store the preloaded XML file
-                                        _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.set( group, filePath, node );
-            
-                                        // Recurse back until all XML files are loaded
-                                        return this.loadControlFromNode( group, node );
-                                    })
-                                    .catch(( error ) => { console.error(error.stack); throw error; }));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return Promise.all( promiseAry );
-    }
-    
-    //
-    //  DESC: Create menu objects from loaded xml data
-    //
-    createFromData( groupAry )
-    {
-        for( let grp = 0; grp < groupAry.length; ++grp )
-        {
-            let group = groupAry[grp];
-            
-            // Get the menu group map
-            let groupMap = this.menuMapMap.get( group );
-            if( groupMap === undefined )
-                throw new Error( `Group map can't be found! (${group}).` );
-
-            for( let menu of groupMap.values() )
-            {
-                // Get the menu XML node
-                let xmlNode = _utilities_assetholder__WEBPACK_IMPORTED_MODULE_4__.assetHolder.get( group, menu.filePath );
-
-                // Have the menu load it's share
-                menu.loadFromNode( xmlNode );
-            }
-
-            this.initGroup( group );
-        }
-
-        return 0;
-    }
-
-    //
-    //  DESC: Free the menu group
-    //
-    freeGroup( groupAry )
-    {
-        for( let grp = 0; grp < groupAry.length; ++grp )
-        {
-            let group = groupAry[grp];
-            
-            // Make sure the group we are looking for exists
-            if( this.listTableMap.get( group ) === undefined )
-                throw new Error( `Object data list group name can't be found (${group})!` );
-
-            // Get the group map
-            let groupMap = this.menuTreeMapMap.get( group );
-            if( groupMap !== undefined )
-            {
-                // Remove it from the tree vectors if it is there
-                for( let menuTree of groupMap.values() )
-                {
-                    if( menuTree.interfaceMenu )
-                    {
-                        let index = this.activeInterTreeAry.indexOf( menuTree );
-
-                        if( index > -1 )
-                            this.activeInterTreeAry.splice( index, 1 );
-                    }
-                    else
-                    {
-                        let index = this.activeMenuTreeAry.indexOf( menuTree );
-
-                        if( index > -1 )
-                            this.activeMenuTreeAry.splice( index, 1 );
-                    }
-                }
-
-                // Free the menu group
-                this.menuTreeMapMap.delete( group );
-                this.menuMapMap.delete( group );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Init a menu group
-    //  NOTE: This allows certain actions to be done after the group load
-    //
-    initGroup( group )
-    {
-        let groupMap = this.menuMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            for( let menu of groupMap.values() )
-                menu.init();
-        }
-        else
-        {
-            throw new Error( `Menu group name can't be found to init (${group})!` );
-        }
-    }
-
-    // 
-    //  DESC: Clean up a menu group
-    //  NOTE: This allows certain actions to be done after the group load
-    //
-    cleanUpGroup( group )
-    {
-        let groupMap = this.menuMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            for( let menu of groupMap.values() )
-                menu.cleanUp();
-        }
-        else
-        {
-            throw new Error( `Menu group name can't be found to clean up (${group})!` );
-        }
-    }
-    
-    // 
-    //  DESC: Load the menu action list from XML
-    //
-    loadMenuAction( filePath )
-    {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadMenuActionFromNode( xmlNode ));
-    }
-
-    // 
-    //  DESC: Load the menu action list from XML
-    //
-    loadMenuActionFromNode( node )
-    {
-        this.backAction = node.getElementsByTagName( 'backAction' )[0].childNodes[0].nodeValue;
-        this.toggleAction = node.getElementsByTagName( 'toggleAction' )[0].childNodes[0].nodeValue;
-        this.escapeAction = node.getElementsByTagName( 'escapeAction' )[0].childNodes[0].nodeValue;
-        this.selectAction = node.getElementsByTagName( 'selectAction' )[0].childNodes[0].nodeValue;
-        this.upAction = node.getElementsByTagName( 'upAction' )[0].childNodes[0].nodeValue;
-        this.downAction = node.getElementsByTagName( 'downAction' )[0].childNodes[0].nodeValue;
-        this.leftAction = node.getElementsByTagName( 'leftAction' )[0].childNodes[0].nodeValue;
-        this.rightAction = node.getElementsByTagName( 'rightAction' )[0].childNodes[0].nodeValue;
-        this.tabLeft = node.getElementsByTagName( 'tabLeft' )[0].childNodes[0].nodeValue;
-        this.tabRight = node.getElementsByTagName( 'tabRight' )[0].childNodes[0].nodeValue;
-        this.defaultTree = node.getElementsByTagName( 'defaultTree' )[0].childNodes[0].nodeValue;
-    }
-    
-    // 
-    //  DESC: Activate a tree to be used by tree name only
-    //        NOTE: Assumes unique tree names
-    //
-    activateTree( treeAry )
-    {
-        for( let tree = 0; tree < treeAry.length; ++tree )
-        {
-            let treeStr = treeAry[tree];
-            let found = false;
-            
-            for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
-            {
-                for( let key of groupMap.keys() )
-                {
-                    if( key === treeStr )
-                    {
-                        this.activateTreeGroup( groupKey, key );
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if( found )
-                    break;
-            }
-
-            // If you got this far, it's a problem
-            if( !found )
-                throw new Error( `Menu tree doesn't exist (${treeStr})!` );
-        }
-    }
-    
-    // 
-    //  DESC: Activate a tree to be used based on group
-    //
-    activateTreeGroup( group, treeStr )
-    {
-        let groupMap = this.menuTreeMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            // Find the tree in the map
-            let tree = groupMap.get( treeStr );
-            if( tree !== undefined )
-            {
-                if( tree.interfaceMenu )
-                {
-                    if( this.activeInterTreeAry.indexOf( tree ) !== -1 )
-                        throw new Error( `Menu tree already active (${group} - ${treeStr})!` );
-
-                    this.activeInterTreeAry.push( tree );
-                }
-                else
-                {
-                    if( this.activeMenuTreeAry.indexOf( tree ) !== -1 )
-                        throw new Error( `Menu tree already active (${group} - ${treeStr})!` );
-
-                    this.activeMenuTreeAry.push( tree );
-                }
-
-                // Init the tree for use
-                tree.init();
-            }
-            else
-            {
-                throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
-            }
-        }
-        else
-        {
-            throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
-        }
-
-        // See if we are active
-        this.setActiveState();
-    }
-    
-    // 
-    //  DESC: Deactivate a tree to be used by tree name only
-    //        NOTE: Assumes unique tree names
-    //
-    deactivateTree( treeStr )
-    {
-        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
-        {
-            for( let key of groupMap.keys() )
-            {
-                if( key === treeStr )
-                {
-                    this.deactivateTreeGroup( groupKey, key );
-                    return;
-                }
-            }
-        }
-
-        // If you got this far, it's a problem
-        throw new Error( `Menu tree doesn't exist (${treeStr})!` );
-    }
-
-    // 
-    //  DESC: Deactivate a tree that's in use
-    //
-    deactivateTreeGroup( group, treeStr )
-    {
-        let groupMap = this.menuTreeMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            // Find the tree in the map
-            let tree = groupMap.get( treeStr );
-            if( tree !== undefined )
-            {
-                // Remove the tree from the vector
-                if( tree.interfaceMenu )
-                {
-                    let index = this.activeInterTreeAry.indexOf( tree );
-                    if( index > -1 )
-                        this.activeInterTreeAry.splice( index, 1 );
-                }
-                else
-                {
-                    let index = this.activeMenuTreeAry.indexOf( tree );
-                    if( index > -1 )
-                        this.activeMenuTreeAry.splice( index, 1 );
-                }
-            }
-            else
-            {
-                throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
-            }
-        }
-        else
-        {
-            throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
-        }
-
-        // See if we are still active
-        this.setActiveState();
-    }
-    
-    // 
-    //  DESC: Clear the active trees
-    //
-    clearActiveTrees()
-    {
-        this.active = false;
-        
-        if( this.scrollTimerId !== 0 )
-            clearInterval( this.scrollTimerId );
-
-        this.activeMenuTreeAry = [];
-        this.activeInterTreeAry = [];
-    }
-    
-    // 
-    //  DESC: Handle input events and dispatch menu events
-    //
-    handleEvent( event )
-    {
-        if( this.allow )
-        {
-            // Convert keyboard, mouse and controller messages in action type messages
-            if( event instanceof _common_genericevent__WEBPACK_IMPORTED_MODULE_8__.GenericEvent )
-            {
-                // Are we doing menu actions? May need to do some scrolling
-                if( (event.type >= _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_UP_ACTION) && (event.type <= _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_RIGHT_ACTION) )
-                {
-                    // Free a timer if one happens to be running
-                    if( this.scrollTimerId != 0 )
-                        clearTimeout( this.scrollTimerId );
-                    
-                    this.scrollTimerId = 0;
-
-                    if( event.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_DOWN )
-                        this.handleEventForScrolling( event );
-                }
-                
-                this.handleEventForTrees( event );
-
-                // Set the active state
-                this.setActiveState();
-            }
-            else
-            {
-                // Only the default tree can execute an escape or toggle when none are active.
-                if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.escapeAction, _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_DOWN ) )
-                {
-                    let tree = this.getActiveTree();
-
-                    if( tree === null )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_ESCAPE_ACTION, this.defaultTree );
-                    else
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_ESCAPE_ACTION, tree.name );
-                }
-                else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.toggleAction, _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_DOWN ) )
-                {
-                    let tree = this.getActiveTree();
-
-                    if( tree === null )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_TOGGLE_ACTION, this.defaultTree );
-                    else
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_TOGGLE_ACTION, tree.name );
-                }
-                else if( this.active )
-                {
-                    let pressType;
-
-                    // common and can result in many messages which is why it's specifically defined here
-                    if( event.type === 'mousemove' )
-                    {
-                        // Allow the mouse move message to get eaten when action handling is disabled.
-                        this.handleEventForTrees( event );
-                    }
-                    // Select action based on input device
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.selectAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                    {
-                        if( event instanceof KeyboardEvent )
-                        {
-                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_SELECT_ACTION, pressType, _common_defs__WEBPACK_IMPORTED_MODULE_11__.KEYBOARD );
-                        }
-                        else if( event instanceof MouseEvent )
-                        {
-                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent(
-                                _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_SELECT_ACTION,
-                                pressType,
-                                _common_defs__WEBPACK_IMPORTED_MODULE_11__.MOUSE,
-                                event.clientX + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.mouseOffset.x,
-                                event.clientY + _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.mouseOffset.y );
-                        }
-                    }
-                    else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.backAction, _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_DOWN ) )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_BACK_ACTION );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.upAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_UP_ACTION, pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.downAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_DOWN_ACTION, pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.leftAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_LEFT_ACTION, pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.rightAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_RIGHT_ACTION, pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.tabLeft )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_TAB_LEFT, pressType );
-
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.tabRight )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EGE_MENU_TAB_RIGHT, pressType );
-
-                    // If none of the predefined actions have been hit, just send the message for processing
-                    else
-                    {
-                        this.handleEventForTrees( event );
-                    }
-                }
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Handle input events depending on if this is a menu or interface tree
-    //
-    handleEventForTrees( event )
-    {
-        let menuActive = false;
-
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-        {
-            // See if there's an active tree
-            menuActive |= this.activeMenuTreeAry[i].isActive();
-
-            // Even if a menu tree is not active, it needs to receive events to become active
-            this.activeMenuTreeAry[i].handleEvent( event );
-        }
-
-        // Only allow event handling for interface menus when regular menus are not active
-        if( !menuActive )
-        {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-            {
-                if( this.activeInterTreeAry[i].isActive() )
-                    this.activeInterTreeAry[i].handleEvent( event );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Handle input events depending on if this is a menu or interface tree
-    //
-    handleEventForScrolling( event )
-    {
-        if( this.active )
-        {
-            if( !this.handleMenuScrolling( event, this.activeMenuTreeAry ) )
-            {
-                // Only allow event handling for interface menus when regular menus are not active
-                this.handleMenuScrolling( event, this.activeInterTreeAry );
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Handle input events for menu scrolling
-    //
-    handleMenuScrolling( event, activeTreeAry )
-    {
-        let menuActive = false;
-
-        for( let i = 0; i < activeTreeAry.length; ++i )
-        {
-            // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
-            {
-                menuActive = true;
-
-                let scrollParam = activeTreeAry[i].getScrollParam( event.type );
-
-                // If scrolling is allowed, start the timer
-                if( scrollParam.canScroll( event.type ) )
-                {
-                    this.scrollTimerId = setTimeout(
-                        () =>
-                        {
-                            this.scrollTimerId = setInterval(
-                                () => _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( scrollParam.msg ),
-                                scrollParam.scrollDelay );
-                                
-                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( scrollParam.msg );
-                        }, 
-                        scrollParam.startDelay );
-                        
-                    break;
-                }
-            }
-        }
-
-        return menuActive;
-    }
-    
-    // 
-    //  DESC: Update the menu
-    //
-    update()
-    {
-        if( this.active )
-        {
-            if( !this.updateMenu( this.activeMenuTreeAry ) )
-            {
-                // Only allow Updating for interface menus when regular menus are not active
-                this.updateMenu( this.activeInterTreeAry );
-            }
-        }
-    }
-
-    // 
-    //  DESC: Update the menu
-    //
-    updateMenu( activeTreeAry )
-    {
-        let menuActive = false;
-
-        for( let i = 0; i < activeTreeAry.length; ++i )
-        {
-            // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
-            {
-                menuActive = true;
-                activeTreeAry[i].update();
-            }
-        }
-
-        return menuActive;
-    }
-    
-    // 
-    //  DESC: Transform the menu
-    //
-    transform()
-    {
-        if( this.active )
-        {
-            if( !this.transformMenu( this.activeMenuTreeAry ) )
-            {
-                // Only allow Updating for interface menus when regular menus are not active
-                this.transformMenu( this.activeInterTreeAry );
-            }
-        }
-
-    }
-
-    // 
-    //  DESC: Transform the menu
-    //
-    transformMenu( activeTreeAry )
-    {
-        let menuActive = false;
-
-        for( let i = 0; i < activeTreeAry.length; ++i )
-        {
-            // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
-            {
-                menuActive = true;
-                activeTreeAry[i].transform();
-            }
-        }
-
-        return menuActive;
-    }
-    
-    // 
-    //  DESC: Render menus
-    //
-    render()
-    {
-        if( this.active )
-        {
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-                if( this.activeMenuTreeAry[i].isActive() )
-                    this.activeMenuTreeAry[i].render( this.camera );
-        }
-    }
-
-    // 
-    //  DESC: Render interface menus
-    //
-    renderInterface( matrix )
-    {
-        if( this.active )
-        {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-                if( this.activeInterTreeAry[i].isActive() )
-                    this.activeInterTreeAry[i].render( matrix );
-        }
-    }
-    
-    // 
-    //  DESC: Is this standard menu system active?
-    //
-    isMenuActive()
-    {
-        if( this.active )
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-                if( this.activeMenuTreeAry[i].isActive() )
-                    return true;
-
-        return false;
-    }
-
-    // 
-    //  Is a menu item active
-    //
-    isMenuItemActive()
-    {
-        let result = false;
-
-        if( this.active )
-        {
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-            {
-                if( this.activeMenuTreeAry[i].isActive() )
-                {
-                    result = this.activeMenuTreeAry[i].isMenuItemActive();
-
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    // 
-    //  Is a interface item active
-    //
-    isInterfaceItemActive()
-    {
-        let result = false;
-
-        if( this.active )
-        {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-            {
-                if( this.activeInterTreeAry[i].isActive() )
-                {
-                    result = this.activeInterTreeAry[i].isMenuItemActive();
-
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    // 
-    //  Set the active state
-    //
-    setActiveState()
-    {
-        this.active = false;
-
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-        {
-            if( this.activeMenuTreeAry[i].isActive() )
-            {
-                this.active = true;
-                break;
-            }
-        }
-
-        if( !this.active )
-        {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-            {
-                if( this.activeInterTreeAry[i].isActive() )
-                {
-                    this.active = true;
-                    break;
-                }
-            }
-        }
-    }
-    
-    // 
-    //  Get the menu in question
-    //
-    getMenu( name )
-    {
-        for( let groupMap of this.menuMapMap.values() )
-        {
-            let menu = groupMap.get( name );
-            if( menu !== undefined )
-                return menu;
-        }
-
-        throw new Error( `Menu being asked for is missing (${name})!` );
-    }
-    
-    // 
-    //  Get the reference to the control in question
-    //
-    getMenuControl( name, controlName )
-    {
-        let menu = this.getMenu( name );
-        let control = menu.getControl( controlName );
-        
-        if( control === null )
-            throw new Error( `Menu control being asked for is missing (${name})!` );
-
-        return control;
-    }
-
-    // 
-    //  Get the pointer to the active control - can return null
-    //
-    getActiveControl( name )
-    {
-        let menu = this.getMenu(name);
-        return menu.GetActiveControl();
-    }
-
-    // 
-    //  Get the first active menu
-    //  NOTE: Only call this function if you are certain it will not fail
-    //
-    getActiveMenu()
-    {
-        let menu = null;
-
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-        {
-            if( this.activeMenuTreeAry[i].isActive() )
-            {
-                menu = this.activeMenuTreeAry[i].getActiveMenu();
-                break;
-            }
-        }
-
-        if( menu === null )
-            throw new Error( 'There is no active menu!' );
-
-        return menu;
-    }
-    
-    // 
-    //  Get a reference to the tree
-    //
-    getTree( treeStr )
-    {
-        for( let groupMap of this.menuTreeMapMap.values() )
-        {
-            for( let [ key, tree ] of groupMap.entries() )
-            {
-                if( key === treeStr )
-                    return tree;
-            }
-        }
-
-        // If you got this far, it's a problem
-        throw new Error( `Menu tree doesn't exist (${treeStr})!` );
-    }
-    
-    // 
-    //  Get a reference to the tree based on group
-    //
-    getTreeGroup( group, treeStr )
-    {
-        let groupMap = this.menuTreeMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            // Find the tree in the map
-            let tree = groupMap.get( treeStr );
-            if( tree !== undefined )
-                return tree;
-            
-            throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
-        }
-        
-        throw new Error( `Menu tree group doesn't exist (${group} - ${treeStr})!` );
-    }
-
-    // 
-    //  Get a reference to the active tree
-    //
-    getActiveTree()
-    {
-        let tree = null;
-
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-        {
-            if( this.activeMenuTreeAry[i].isActive() )
-            {
-                tree = this.activeMenuTreeAry[i];
-                break;
-            }
-        }
-
-        return tree;
-    }
-    
-    // 
-    //  DESC: See if the tree is in the active list
-    //
-    isTreeInActivelist( treeStr )
-    {
-        for( let groupMap of this.menuTreeMapMap.values() )
-        {
-            for( let [ key, tree ] of groupMap.entries() )
-            {
-                if( key === treeStr )
-                {
-                    if( tree.interfaceMenu )
-                    {
-                        let index = this.activeInterTreeAry.indexOf( tree );
-                        if( index > -1 )
-                            return true;
-                    }
-                    else
-                    {
-                        let index = this.activeMenuTreeAry.indexOf( tree );
-                        if( index > -1 )
-                            return true;
-                    }
-                }
-            }
-        }
-        
-        return false;
-    }
-
-    // 
-    //  Reset the transform
-    //
-    resetTransform()
-    {
-        for( let groupMap of this.menuMapMap.values() )
-            for( let menu of groupMap.values() )
-                menu.forceTransform();
-    }
-
-    // 
-    //  Reset the dynamic positions of menus
-    //
-    resetDynamicOffset()
-    {
-        for( let groupMap of this.menuMapMap.values() )
-            for( let menu of groupMap.values() )
-                menu.resetDynamicPos();
-    }
-    
-    // 
-    //  DESC: allow event handling access function
-    //
-    get allowEventHandling() { return this.allow; }
-    set allowEventHandling( value ) { this.allow = value; }
-
-}
-
-var menuManager = new MenuManager;
-
-
-/***/ }),
-/* 104 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Menu": () => (/* binding */ Menu)
-/* harmony export */ });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
-/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(108);
-/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(110);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(125);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(27);
-/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(23);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(126);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(35);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(131);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(109);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(5);
-// 
-//  FILE NAME: menu.js
-//  DESC:      Class for user interface menu
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
-{
-    constructor( name, group, filePath )
-    {
-        super();
-        
-        // This menu's name
-        this.name = name;
-        
-        // Group name
-        this.group = group;
-        
-        // File path
-        this.filePath = filePath;
-        
-        // Array of menu static sprites
-        this.spriteAry = [];
-
-        // Array list of static controls
-        this.staticControlAry = [];
-
-        // Array list of mouse only controls
-        this.mouseOnlyControlAry = [];
-
-        // Array list of controls
-        this.controlAry = [];
-
-        // Array list of navigation nodes
-        this.controlNodeAry = [];
-
-        // Map container of controls for easy name access
-        // NOTE: This container does not own it's pointers.
-        this.controlMap = new Map;
-
-        // Current active node
-        this.activeNode = null;
-
-        // menu state
-        this.state = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECS_NULL;
-
-        // Dynamic offset
-        this.dynamicOffset = new _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__.DynamicOffset;
-
-        // Scrolling parameters
-        this.scrollParam = new _scrollparam__WEBPACK_IMPORTED_MODULE_2__.ScrollParam;
-        
-        // menu alpha value
-        this.alpha = 0;
-        
-        // The menu needs to default hidden
-        this.setVisible(false);
-    }
-    
-    // 
-    //  DESC: Load the menu info from file
-    //
-    loadFromNode( node )
-    {
-        // Init the script Ids
-        this.initScriptIds( node );
-        
-        // Load the scroll data from node
-        this.scrollParam.loadFromNode( node.getElementsByTagName( 'scroll' ) );
-
-        // Get the static sprite
-        let nodeLst = node.getElementsByTagName( 'spriteList' );
-        if( nodeLst.length )
-        {
-            let spriteNode = nodeLst[0].children;
-            
-            for( let i = 0; i < spriteNode.length; ++i )
-                this.loadStaticSpriteFromNode( spriteNode[i] );
-        }
-
-        // Get the static menu controls node
-        nodeLst = node.getElementsByTagName( 'staticMenuControls' );
-        if( nodeLst.length )
-        {
-            let controlNode = nodeLst[0].children;
-            
-            for( let i = 0; i < controlNode.length; ++i )
-                this.loadStaticControlFromNode( controlNode[i] );
-        }
-
-        // Get the mouse only menu controls node
-        nodeLst = node.getElementsByTagName( 'mouseOnlyControls' );
-        if( nodeLst.length )
-        {
-            let controlNode = nodeLst[0].children;
-            
-            for( let i = 0; i < controlNode.length; ++i )
-                this.loadMouseOnlyControlFromNode( controlNode[i] );
-        }
-
-        // Get the menu controls
-        nodeLst = node.getElementsByTagName( 'menuControls' );
-        if( nodeLst.length )
-        {
-            let controlNode = nodeLst[0].children;
-            
-            // map to help setup the node pointers
-            let navNodeMap = new Map;
-
-            // Load the controls
-            for( let i = 0; i < controlNode.length; ++i )
-                this.loadControlFromNode( controlNode[i], navNodeMap );
-
-            // Map the controls to their respective nodes
-            for( let i = 0; i < controlNode.length; ++i )
-                this.findNodes( controlNode[i], i, navNodeMap );
-        }
-    }
-    
-    // 
-    //  DESC: Init the script Ids and add them to the map
-    //        This function loads the attribute info reguardless of what it is
-    //
-    initScriptIds( node )
-    {
-        // Check for scripting
-        let scriptList = node.getElementsByTagName( 'scriptList' );
-        if( scriptList.length )
-            this.scriptComponent.initScriptIds( scriptList[0] );
-    }
-    
-    // 
-    //  DESC: Load a static sprite from an XML node
-    //
-    loadStaticSpriteFromNode( node )
-    {
-        // Get the type of object
-        let objectName = node.getAttribute( 'objectName' );
-
-        // Allocate the static sprite and add it to the array
-        let sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__.Sprite( _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__.objectDataManager.getData( this.group, objectName ) );
-        this.spriteAry.push( sprite );
-
-        // Load the transform data
-        sprite.load( node );
-
-        // Init the script Ids
-        sprite.scriptComponent.initScriptIds( node );
-    }
-
-    // 
-    //  DESC: Load static controls from an XML node
-    //
-    loadStaticControlFromNode( node )
-    {
-        // New up the control with its respected control type
-        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__.create( node, this.group );
-        this.staticControlAry.push( control );
-
-        // Does this control have a name then add it to the map
-        if( control.name )
-            this.controlMap.set( control.name, control );
-    }
-
-    // 
-    //  DESC: Load mouse only controls from an XML node
-    //
-    loadMouseOnlyControlFromNode( node )
-    {
-        // New up the control with its respected control type
-        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__.create( node, this.group );
-        this.mouseOnlyControlAry.push( control );
-
-        // Does this control have a name then add it to the map
-        if( control.name )
-            this.controlMap.set( control.name, control );
-    }
-
-    // 
-    //  DESC: Load a control from an XML node
-    //
-    loadControlFromNode( node, navNodeMap )
-    {
-        // New up the control with its respected control type
-        let control = _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__.create( node, this.group );
-        this.controlAry.push( control );
-
-        // Does this control have a name then add it to the map
-        if( control.name )
-        {
-            // Check for duplicate names
-            if( this.controlMap.has( control.name ) )
-                throw new Error( `Duplicate control name! (${control.name})` );
-            
-            // Map of menu controls
-            this.controlMap.set( control.name, control );
-
-            // Add a node to the array with it's control
-            let navNode = new _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__.UIControlNavNode( control );
-            this.controlNodeAry.push( navNode );
-
-            // Map of menu control nodes
-            navNodeMap.set( control.name, navNode );
-        }
-    }
-    
-    // 
-    //  DESC: Load the dynamic offset data from node
-    //
-    loadDynamicOffsetFromNode( node )
-    {
-        // Load the dynamic offset
-        this.dynamicOffset = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__.loadDynamicOffset( node );
-
-        // Set the dynamic position
-        this.setDynamicPos();
-    }
-
-    // 
-    //  DESC: Set the dynamic position
-    //
-    setDynamicPos()
-    {
-        // Position the menu based on the dynamic offset
-        if( this.dynamicOffset )
-            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half ) );
-    } 
-
-    // 
-    //  DESC: Reset the dynamic position
-    //
-    resetDynamicPos()
-    {
-        this.setDynamicPos();
-
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].setDynamicPos();
-        
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].setDynamicPos();
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].setDynamicPos();
-    }
-
-    // 
-    //  DESC: Find the reference nodes
-    //
-    findNodes( node, nodeIndex, navNodeMap )
-    {
-        let navNode = node.getElementsByTagName( 'navigate' );
-        if( navNode.length )
-        {
-            this.setNodes( navNode, nodeIndex, 'up',    _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_UP,    navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'down',  _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_DOWN,  navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'left',  _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_LEFT,  navNodeMap );
-            this.setNodes( navNode, nodeIndex, 'right', _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_RIGHT, navNodeMap );
-        }
-    }
-
-    // 
-    //  DESC: Find the reference nodes
-    //
-    setNodes( node, nodeIndex, attrStr, navId, navNodeMap )
-    {
-        let attr = node[0].getAttribute( attrStr );
-        if( attr )
-        {
-            let ctrlNode = navNodeMap.get( attr );
-            if( ctrlNode !== undefined )
-                this.controlNodeAry[nodeIndex].setNode( navId, ctrlNode );
-            else
-                throw new Error( `Control node doesn't exist! (${attr}, ${attrStr})` );
-        }
-    }
-    
-    // 
-    //  DESC: Init the menu controls
-    //
-    init()
-    {
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].init();
-
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].init();
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].init();
-        
-        // Prepare any script functions that are flagged to prepareOnInit
-        this.scriptComponent.prepareOnInit( this );
-
-    }   // Init
-
-    // 
-    //  DESC: Init the menu controls
-    //
-    cleanUp()
-    {
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].cleanUp();
-
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].cleanUp();
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].cleanUp();
-
-    }   // CleanUp
-    
-    // 
-    //  DESC: Activate this menu because it's probably a root menu
-    //
-    activateMenu()
-    {
-        this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE;
-        this.setVisible(true);
-        this.setAlpha(1);
-        this.activateFirstInactiveControl();
-    }
-
-    // 
-    //  DESC: Update the menu
-    //
-    update()
-    {
-        this.scriptComponent.update();
-
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].update();
-            
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].update();
-            
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].update();
-            
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].update();
-        }
-    }
-
-    // 
-    //  DESC: Transform the menu
-    //
-    transform()
-    {
-        if( this.isVisible() )
-        {
-            super.transform();
-            
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].transform( this );
-            
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].transform( this );
-            
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].transform( this );
-            
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].transform( this );
-        }
-    }
-
-    // 
-    //  DESC: do the render
-    //
-    render( camera )
-    {
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].render( camera );
-            
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].render( camera );
-            
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].render( camera );
-            
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].render( camera );
-        }
-    }
-
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent( event )
-    {
-        if( event instanceof _common_genericevent__WEBPACK_IMPORTED_MODULE_8__.GenericEvent )
-        {
-            // Have the controls handle events
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].handleEvent( event );
-
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                    this.mouseOnlyControlAry[i].handleEvent( event );
-            
-            if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_TRANS_IN )
-            {
-                this.onTransIn( event );
-            }
-            else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_TRANS_OUT )
-            {
-                this.onTransOut( event );
-            }
-            else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_REACTIVATE )
-            {
-                this.onReactivate( event );
-            }
-            else if( this.state === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE )
-            {
-                if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SELECT_ACTION )
-                {
-                    this.onSelectAction( event );
-                }
-                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SET_ACTIVE_CONTROL )
-                {
-                    this.onSetActiveControl( event );
-                }
-                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SCROLL_UP )
-                {
-                    this.onUpAction( event );
-                }
-                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SCROLL_DOWN )
-                {
-                    this.onDownAction( event );
-                }
-                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SCROLL_LEFT )
-                {
-                    this.onLeftAction( event );
-                }
-                else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_SCROLL_RIGHT )
-                {
-                    this.onRightAction( event );
-                }
-                else if( (event.type >= _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_UP_ACTION) &&
-                         (event.type <= _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_RIGHT_ACTION) )
-                {
-                    if( event.arg[0] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.EAP_DOWN )
-                    {
-                        if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_UP_ACTION )
-                        {
-                            this.onUpAction( event );
-                        }
-                        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_DOWN_ACTION )
-                        {
-                            this.onDownAction( event );
-                        }
-                        if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_LEFT_ACTION )
-                        {
-                            this.onLeftAction( event );
-                        }
-                        else if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_RIGHT_ACTION )
-                        {
-                            this.onRightAction( event );
-                        }
-                    }
-                }
-            }
-        }
-        else if( this.state === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE )
-        {
-            if( event.type === 'mousemove' )
-            {
-                this.onMouseMove( event );
-            }
-        }
-    }
-
-    // 
-    //  DESC: Handle OnUpAction message
-    //
-    onUpAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_UP );
-    }
-
-    // 
-    //  DESC: Handle OnMenuDown message
-    //
-    onDownAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_DOWN );
-    }
-
-    // 
-    //  DESC: Handle OnMenuLeft message
-    //
-    onLeftAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_LEFT );
-    }
-
-    // 
-    //  DESC: Handle OnRightAction message
-    //
-    onRightAction( event )
-    {
-        this.navigateMenu( _common_defs__WEBPACK_IMPORTED_MODULE_13__.ENAV_NODE_RIGHT );
-    }
-
-    // 
-    //  DESC: Navigate the menu. Find the next control node that isn't
-    //        disabled and make it the active control node
-    //
-    navigateMenu( navNodeAction )
-    {
-        if( this.activeNode !== null )
-        {
-            let navNode = this.activeNode;
-
-            do
-            {
-                navNode = navNode.getNode( navNodeAction );
-                
-                if( navNode === null )
-                {
-                    break;
-                }
-                else if( !navNode.uiControl.isDisabled() )
-                {
-                    this.activeNode = navNode;
-
-                    _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__.eventManager.dispatchEvent(
-                        _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EGE_MENU_CONTROL_STATE_CHANGE,
-                        _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECS_ACTIVE,
-                        navNode.uiControl );
-
-                    break;
-                }
-            }
-            while( true );
-        }
-    }
-
-    // 
-    //  DESC: Handle OnMouseMove message
-    //
-    onMouseMove( event )
-    {
-        for( let i = 0; i < this.controlNodeAry.length; ++i )
-        {
-            if( this.controlNodeAry[i].uiControl.onMouseMove( event ) )
-                this.activeNode = this.controlNodeAry[i];
-            else
-                this.controlNodeAry[i].uiControl.deactivateControl();
-        }
-
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            if( !this.mouseOnlyControlAry[i].onMouseMove( event ) )
-                this.mouseOnlyControlAry[i].deactivateControl();
-    }
-
-    // 
-    //  DESC: Handle OnSelectAction message
-    //
-    onSelectAction( event )
-    {
-        let selectionFound = false;
-
-        if( (this.activeNode !== null) &&
-            (this.activeNode.uiControl.handleSelectAction( event )) )
-        {
-            selectionFound = true;
-
-            // Set the state to active which will block all messages until the state is reset to idle
-            if( this.activeNode.uiControl.actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_NULL )
-                this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
-        }
-        else if( event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_DEVICE_TYPE ] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.MOUSE )
-        {
-            // For mouse only controls
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            {
-                if( this.mouseOnlyControlAry[i].handleSelectAction( event ) )
-                {
-                    selectionFound = true;
-
-                    // Set the state to active which will block all messages until the state is reset to idle
-                    if( this.mouseOnlyControlAry[i].actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_NULL )
-                        this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
-
-                    break;
-                }
-            }
-        }
-
-        // Try to handle touch presses on a non-active control
-        // The mouse just happends to be clicked over a non-active control
-        if( !selectionFound && event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_DEVICE_TYPE ] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.MOUSE )
-        {
-            // Deactivate the control that should be active
-            if( (this.activeNode !== null) &&
-                (event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_PRESS_TYPE ] === this.activeNode.uiControl.mouseSelectType) )
-            {
-                this.activeNode.uiControl.deactivateControl();
-
-                // Go through all the controls on this menu to try to find the one clicked on
-                for( let i = 0; i < this.controlAry.length; ++i )
-                {
-                    if( this.controlAry[i].handleSelectAction( event ) )
-                    {
-                        // Set the state to active which will block all messages until the state is reset to idle
-                        if( this.activeNode.uiControl.actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_NULL )
-                            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
-
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    // 
-    //  DESC: Handle OnSetActiveControl message
-    //
-    onSetActiveControl( event )
-    {
-        // Set the first inactive control to active
-        if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EAC_FIRST_ACTIVE_CONTROL )
-            this.activateFirstInactiveControl();
-    }
-
-    // 
-    //  DESC: Handle OnReactivate message
-    //
-    onReactivate( event )
-    {
-        this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE;
-    }
-
-    // 
-    //  DESC: Handle OnTransIn message
-    //
-    onTransIn( event )
-    {
-        if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.ETC_BEGIN )
-        {
-            this.scriptComponent.prepare( 'transIn', this );
-
-            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
-        }
-        else if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.ETC_END )
-        {
-            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE;
-        }
-    }
-
-    // 
-    //  DESC: Handle OnTransOut message
-    //
-    onTransOut( event )
-    {
-        if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.ETC_BEGIN )
-        {
-            this.scriptComponent.prepare( 'transOut', this );
-
-            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
-        }
-        else if( event.arg[0] === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.ETC_END )
-        {
-            this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_INACTIVE;
-        }
-    }
-
-    // 
-    //  DESC: Set the first inactive control to be active
-    //
-    activateFirstInactiveControl()
-    {
-        let found = false;
-
-        // Activate the first control found and deactivate all the rest
-        for( let i = 0; i < this.controlNodeAry.length; ++i )
-        {
-            if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
-            {
-                this.activeNode = this.controlNodeAry[i];
-
-                found = true;
-            }
-            else
-            {
-                this.controlNodeAry[i].uiControl.deactivateControl();
-            }
-        }
-    }
-
-    // 
-    //  DESC: Reset all controls
-    //
-    reset()
-    {
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].reset( true );
-
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].reset( true );
-    }
-
-    // 
-    //  DESC: Get the control in question
-    //
-    getControl( name )
-    {
-        // See if the control can be found
-        let control = this.controlMap.get( name );
-
-        // Make sure control is available
-        if( control === undefined )
-            throw new Error( `Control being asked for is missing! (${name}).` );
-
-        // Pass back the control if found
-        return control;
-    }
-
-    // 
-    //  DESC: Get the pointer to the active control
-    //
-    getActiveControl()
-    {
-        let result = null;
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-        {
-            if( this.controlAry[i].state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECS_INACTIVE )
-            {
-                result = this.controlAry[i].getActiveControl();
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    // 
-    //  DESC: Does this menu use dynamic offsets
-    //
-    isDynamicOffset()
-    {
-        return !this.dynamicOffset.isEmpty();
-    }
-
-    // 
-    //  DESC: Get the scroll params
-    //
-    getScrollParam( msg )
-    {
-        if( (this.activeNode != null) &&
-            this.activeNode.uiControl.canScroll(msg) )
-        {
-            return this.activeNode.uiControl.scrollParam;
-        }
-
-        return this.scrollParam;
-    }
-
-    // 
-    //  DESC: Set the alpha value of this menu
-    //
-    setAlpha( alpha )
-    {
-        if( this.isVisible() )
-        {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].setAlpha( alpha );
-
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].setAlpha( alpha );
-
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].setAlpha( alpha );
-
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].setAlpha( alpha );
-        }
-
-        this.alpha = alpha;
-    }
-    
-    // 
-    //  DESC: Get the alpha value of this menu
-    //
-    getAlpha()
-    {
-        return this.alpha;
-    }
-
-    // 
-    //  DESC: Is the menu idle
-    //
-    isIdle()
-    {
-        return (this.state === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE);
-    }
-}
-
-
-/***/ }),
-/* 105 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Object": () => (/* binding */ Object)
-/* harmony export */ });
-/* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(106);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
-
-// 
-//  FILE NAME:  object.js
-//  DESC:       object class
-//
-
-
-
-
-
-
-
-
-
-
-var gDummyPoint = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
-
-class Object
-{
-    constructor()
-    {
-        // local matrix
-        this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_3__.Matrix;
-
-        // Bitmask settings to record if the object needs to be transformed
-        this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__.BitMask(_common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE);
-    
-        // Local position
-        this.pos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
-
-        // Local Rotation in radians
-        this.rot = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
-
-        // Local scale
-        this.scale = new _point__WEBPACK_IMPORTED_MODULE_0__.Point( 1, 1, 1 );
-
-        // The center point. Point of rotation
-        // This is used for defining a different center point
-        this.centerPos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
-
-        // Offset due to a sprite sheet crop.
-        this.cropOffset = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
-
-        // Translated position
-        this.transPos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
-
-        // The script part of the sprite
-        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__.ScriptComponent;
-    }
-
-    //
-    //  DESC: Set the object's position
-    //
-    setPos( pos )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.pos.set( pos );
-    }
-    
-    setPosXYZ( x = 0, y = 0, z = 0 )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.pos.setXYZ( x, y, z );
-    }
-    
-    incPos( pos )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.pos.inc( pos );
-    }
-    
-    incPosXYZ( x = 0, y = 0, z = 0 )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.pos.incXYZ( x, y, z );
-    }
-    
-    //
-    //  DESC: Set the pre-translation matrix
-    //
-    setRot( rot, convertToRadians = true )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-        
-        if( convertToRadians )
-            this.rot.setXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
-        else
-            this.rot.set( rot );
-    }
-    
-    setRotXYZ( x = 0, y = 0, z = 0, convertToRadians = true )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        if( convertToRadians )
-            this.rot.setXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
-        else
-            this.rot.setXYZ( x, y, z );
-    }
-    
-    incRot( rot, convertToRadians = true )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        if( convertToRadians )
-            this.rot.incXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
-        else
-            this.rot.inc( rot );
-        
-        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
-    }
-    
-    incRotXYZ( x = 0, y = 0, z = 0, convertToRadians = true )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        if( convertToRadians )
-            this.rot.incXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
-        else
-            this.rot.incXYZ( x, y, z );
-        
-        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
-    }
-    
-    //
-    //  DESC: Set the pre-translation matrix
-    //
-    setScale( scale )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.scale.set( scale );
-    }
-    
-    setScaleXYZ( x = 1, y = 1, z = 1 )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.scale.setXYZ( x, y, z );
-    }
-    
-    incScale( scale )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.scale.inc( scale );
-    }
-    
-    incScaleXYZ( x = 1, y = 1, z = 1 )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.scale.incXYZ( x, y, z );
-    }
-    
-    //
-    //  DESC: Set the object's center position
-    //
-    setCenterPos( pos )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.centerPos = pos;
-    }
-    
-    setCenterPosXYZ( x = 0, y = 0, z = 0 )
-    {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        this.centerPos.setXYZ( x, y, z );
-    }
-
-    //
-    //  DESC: Set the object's crop offset
-    //
-    setCropOffset( offset )
-    {
-        if( !this.centerPos.isEmpty() || ((offset !== null) && (!offset.isEmpty())) )
-        {
-            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-            this.cropOffset = offset;
-        }
-    }
-
-    //
-    //  DESC: Set the object visible
-    //
-    setVisible( value )
-    {
-        if( value )
-            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
-        else
-            this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
-    }
-
-    //
-    //  DESC: Is the object visible
-    //
-    isVisible()
-    {
-        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
-    }
-    
-    //
-    //  DESC: Copy the transform to the passed in object
-    //
-    copyTransform( object )
-    {
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE ) )
-            this.setPos( object.pos );
-
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE ) )
-            this.setRot( object.rot );
-
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE ) )
-            this.setScale( object.scale );
-
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
-            this.setCenterPos( object.centerPos );
-
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET ) )
-            this.setCropOffset( object.cropOffset );
-    }
-    
-    //
-    //  DESC: Load the transform data from node
-    //
-    loadTransFromNode( node )
-    {
-        let pos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadPosition( node );
-        if( pos )
-            this.setPos( pos );
-
-        let rot = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadRotation( node );
-        if( rot )
-            this.setRot( rot );
-
-        let scale = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadScale( node );
-        if( scale )
-            this.setScale( scale );
-
-        let centerPos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadCenterPos( node );
-        if( centerPos )
-            this.setCenterPos( centerPos );
-    }
-
-    //
-    //  DESC: Transform the object in local space
-    //
-    transformLocal( matrix )
-    {
-        // Reset the matrices
-        matrix.initilizeMatrix();
-
-        // Apply the crop offset
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET ) )
-            matrix.translateSize( this.cropOffset );
-
-        // Apply the scale
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE ) )
-            this.applyScale();
-
-        // Apply the rotation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE ) )
-            this.applyRotation( matrix );
-
-        // Apply the translation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE ) )
-            matrix.translate( this.pos );
-
-        // Clear the check parameter
-        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-
-        // Indicate that translation was done
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
-    }
-    
-    //
-    //  DESC: Transform
-    //  
-    //  NOTE: Child objects that are intermittenly transformed
-    //        will need a transform even if it's just 0, 0, 0
-    //        to force a transfor with it's parent
-    //
-    transform( object = null )
-    {
-        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
-        
-        if( object )
-        {
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM ) || object.wasWorldPosTranformed() )
-            {
-                this.transformLocal( this.matrix );
-                this.matrix.mergeMatrix( object.matrix.matrix );
-                this.matrix.transformPoint( this.transPos, gDummyPoint );
-            }
-        }
-        else
-        {
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM ) )
-            {
-                this.transformLocal( this.matrix );
-                this.transPos.copy( this.pos );
-            }
-        }
-    }
-
-    //
-    //  DESC: Apply the scale
-    //
-    applyScale()
-    {
-        this.matrix.setScaleFromPoint( this.scale );
-    }
-
-    //
-    //  DESC: Apply the scale
-    //
-    applyRotation( matrix )
-    {
-        // Add in the center point prior to rotation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
-            this.matrix.translate( this.centerPos );
-
-        this.matrix.rotate( this.rot );
-
-        // Subtract the center point after rotation to put back in original position
-        // Doing two inverts keeps us from having to new up a point that would be garbage collected
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
-        {
-            this.centerPos.invert();
-            this.matrix.translate( this.centerPos );
-            this.centerPos.invert();
-        }
-    }
-
-    //
-    //  DESC: Was the world position transformed?
-    //
-    wasWorldPosTranformed()
-    {
-        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
-    }
-
-    //
-    //  DESC: Was the world position transformed?
-    //
-    forceTransform()
-    {
-        this.parameters.Add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
-    }
-}
-
-
-/***/ }),
-/* 106 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ScriptComponent": () => (/* binding */ ScriptComponent)
-/* harmony export */ });
-/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(107);
-
-//
-//  FILE NAME: scriptcomponent.js
-//  DESC:      Class for handling game scripting
-//
-
-
-
-
-
-class ScriptComponent
-{
-    constructor()
-    {
-        this.scriptAry = [];
-
-        // Script object map. Prepare scripts by name
-        this.scriptFactoryMap = null;
-    }
-
-    // 
-    //  DESC: Init the script Ids and add them to the map
-    //        This loads the attribute info reguardless of what it is
-    //
-    initScriptIds( xmlNode )
-    {
-        // Check for scripting
-        let scriptNode = xmlNode.getElementsByTagName( 'script' );
-
-        if( !this.scriptFactoryMap && scriptNode.length )
-            this.scriptFactoryMap = new Map;
-
-        for( let i = 0; i < scriptNode.length; ++i )
-        {
-            let prepareOnInit = false;
-            let forceUpdate = false;
-            let attr = scriptNode[i].getAttribute( 'prepareOnInit' );
-            if( attr !== null )
-                prepareOnInit = (attr === 'true')
-
-            attr = scriptNode[i].getAttribute( 'forceUpdate' );
-            if( attr !== null )
-                forceUpdate = (attr === 'true')
-
-            attr = scriptNode[i].attributes[0];
-            if( attr )
-                // This allocates the script to the map
-                this.scriptFactoryMap.set( attr.name, new _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_1__.CScriptPrepareFunc(attr.value, prepareOnInit, forceUpdate) );
-        }
-    }
-
-    // 
-    //  DESC: Prepare a script to run
-    //  NOTE: Function uses arguments object to handle multiple parameters
-    //        The last parameter will be the script Id so that it is ignored by the calling function
-    //
-    prepare(...args)
-    {
-        if( this.scriptFactoryMap && typeof args[0] === 'string' )
-        {
-            let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
-            if( scriptPrepareFunc )
-            {
-                let script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
-                if( script )
-                {
-                    switch(args.length)
-                    {
-                        case 1:
-                            this.scriptAry.push( script() );
-                        break;
-                        case 2:
-                            this.scriptAry.push( script(args[1]) );
-                        break;
-                        case 3:
-                            this.scriptAry.push( script(args[1],args[2]) );
-                        break;
-                        case 4:
-                            this.scriptAry.push( script(args[1],args[2],args[3]) );
-                        break;
-                        case 5:
-                            this.scriptAry.push( script(args[1],args[2],args[3],args[4]) );
-                        break;
-                        case 6:
-                            this.scriptAry.push( script(args[1],args[2],args[3],args[4],args[5]) );
-                        break;
-                    }
-
-                    if( scriptPrepareFunc.forceUpdate )
-                        this.update();
-                    
-                    return true;
-                }
-            }
-        }
-        else if( typeof args[0] === 'object' )
-        {
-            this.scriptAry.push( args[0] );
-
-            if( args.length > 1 && args[1] )
-                this.update();
-        }
-
-        return false;
-    }
-
-    // 
-    //  DESC: Update the script
-    //
-    prepareOnInit( object )
-    {
-        if( this.scriptFactoryMap )
-        {
-            for( let scriptPrepareFunc of this.scriptFactoryMap.values() )
-            {
-                if( scriptPrepareFunc.prepareOnInit )
-                {
-                    let script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
-                    if( script )
-                    {
-                        this.scriptAry.push( script(object) );
-                        if( scriptPrepareFunc.forceUpdate )
-                            this.update();
-                    }
-                }
-            }
-        }
-    }
-
-    // 
-    //  DESC: Update the script
-    //
-    update()
-    {
-        // Call the active scripts
-        for( let i = this.scriptAry.length - 1; i > -1; --i )
-        {
-            // If the script is finished, remove it
-            if( this.scriptAry[i].execute() )
-                this.scriptAry.splice( i, 1 );
-        }
-    }
-    
-    // 
-    //  DESC: Is this component active?
-    //
-    isActive()
-    {
-        return (this.scriptAry.length > 0);
-    }
-    
-    // 
-    //  DESC: clear out the scripts
-    //
-    reset()
-    {
-        this.scriptAry = [];
-    }
-}
-
-
-/***/ }),
-/* 107 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CScriptPrepareFunc": () => (/* binding */ CScriptPrepareFunc)
-/* harmony export */ });
-
-//
-//  FILE NAME: scriptpreparefunc.js
-//  DESC:      Class for holding script attributes
-//
-
-
-
-class CScriptPrepareFunc
-{
-    constructor(funcName, prepareOnInit = false, forceUpdate = false)
-    {
-        // Function Id
-        this.funcName = funcName;
-
-        // Prepare on Init flag
-        this.prepareOnInit = prepareOnInit;
-
-        // Force Update flag
-        this.forceUpdate = forceUpdate;
-    }
-}
-
-/***/ }),
-/* 108 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ScrollParam": () => (/* binding */ ScrollParam)
-/* harmony export */ });
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(109);
-// 
-//  FILE NAME: scrollparam.js
-//  DESC:      Class for handling scroll parameter data
-//
-
-
-
-
-class ScrollParam
-{
-    constructor()
-    {
-        // Array that holds the scroll messages allows by this menu or control
-        this.scrollTypesMap = null;
-
-        // The delay of the first scroll message
-        this.startDelay = -1;
-
-        // The delay of the rest of the scroll messages
-        this.scrollDelay = -1;
-
-        // The scroll message to send from the timer
-        this.msg = -1;
-    }
-    
-    // 
-    //  DESC: Load the scroll data from node
-    //
-    loadFromNode( node )
-    {
-        if( node.length )
-        {
-            this.scrollTypesMap = new Map;
-            
-            this.startDelay = Number(node[0].getAttribute( 'startDelay' ));
-            this.scrollDelay = Number(node[0].getAttribute( 'scrollDelay' ));
-            
-            if( node[0].getAttribute( 'up' ) === 'true' )
-                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_UP_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_UP );
-
-            if( node[0].getAttribute( 'down' ) === 'true' )
-                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_DOWN_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_DOWN );
-
-            if( node[0].getAttribute( 'left' ) === 'true' )
-                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_LEFT_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_LEFT );
-
-            if( node[0].getAttribute( 'right' ) === 'true' )
-                this.scrollTypesMap.set( _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_RIGHT_ACTION, _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__.EGE_MENU_SCROLL_RIGHT );
-        }
-    }
-    
-    // 
-    //  DESC: Does this menu or control support scrolling this message?
-    //
-    canScroll( msg )
-    {
-        if( this.scrollTypesMap )
-        {
-            this.msg = -1;
-
-            let result = this.scrollTypesMap.get( msg );
-
-            if( result )
-            {
-                this.msg = result;
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
-
-/***/ }),
-/* 109 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EMS_INACTIVE": () => (/* binding */ EMS_INACTIVE),
-/* harmony export */   "EMS_IDLE": () => (/* binding */ EMS_IDLE),
-/* harmony export */   "EMS_ACTIVE": () => (/* binding */ EMS_ACTIVE),
-/* harmony export */   "EMS_MAX_MENU_STATES": () => (/* binding */ EMS_MAX_MENU_STATES),
-/* harmony export */   "EMNS_NULL": () => (/* binding */ EMNS_NULL),
-/* harmony export */   "EMNS_MOUSE": () => (/* binding */ EMNS_MOUSE),
-/* harmony export */   "EMNS_GAMEPAD_KEYBAORD": () => (/* binding */ EMNS_GAMEPAD_KEYBAORD),
-/* harmony export */   "EMTS_INACTIVE": () => (/* binding */ EMTS_INACTIVE),
-/* harmony export */   "EMTS_IDLE": () => (/* binding */ EMTS_IDLE),
-/* harmony export */   "EMTS_ACTIVE": () => (/* binding */ EMTS_ACTIVE),
-/* harmony export */   "EMTS_MAX_MENU_TREE_STATES": () => (/* binding */ EMTS_MAX_MENU_TREE_STATES),
-/* harmony export */   "EGE_MENU_TRANS_IN": () => (/* binding */ EGE_MENU_TRANS_IN),
-/* harmony export */   "EGE_MENU_TRANS_OUT": () => (/* binding */ EGE_MENU_TRANS_OUT),
-/* harmony export */   "EGE_MENU_ESCAPE_ACTION": () => (/* binding */ EGE_MENU_ESCAPE_ACTION),
-/* harmony export */   "EGE_MENU_TOGGLE_ACTION": () => (/* binding */ EGE_MENU_TOGGLE_ACTION),
-/* harmony export */   "EGE_MENU_BACK_ACTION": () => (/* binding */ EGE_MENU_BACK_ACTION),
-/* harmony export */   "EGE_MENU_TO_TREE": () => (/* binding */ EGE_MENU_TO_TREE),
-/* harmony export */   "EGE_MENU_TO_MENU": () => (/* binding */ EGE_MENU_TO_MENU),
-/* harmony export */   "EGE_MENU_GAME_STATE_CHANGE": () => (/* binding */ EGE_MENU_GAME_STATE_CHANGE),
-/* harmony export */   "EGE_MENU_UP_ACTION": () => (/* binding */ EGE_MENU_UP_ACTION),
-/* harmony export */   "EGE_MENU_DOWN_ACTION": () => (/* binding */ EGE_MENU_DOWN_ACTION),
-/* harmony export */   "EGE_MENU_LEFT_ACTION": () => (/* binding */ EGE_MENU_LEFT_ACTION),
-/* harmony export */   "EGE_MENU_RIGHT_ACTION": () => (/* binding */ EGE_MENU_RIGHT_ACTION),
-/* harmony export */   "EGE_MENU_CONTROL_STATE_CHANGE": () => (/* binding */ EGE_MENU_CONTROL_STATE_CHANGE),
-/* harmony export */   "EGE_MENU_SELECT_ACTION": () => (/* binding */ EGE_MENU_SELECT_ACTION),
-/* harmony export */   "EGE_MENU_SELECT_EXECUTE": () => (/* binding */ EGE_MENU_SELECT_EXECUTE),
-/* harmony export */   "EGE_MENU_SET_ACTIVE_CONTROL": () => (/* binding */ EGE_MENU_SET_ACTIVE_CONTROL),
-/* harmony export */   "EGE_MENU_REACTIVATE": () => (/* binding */ EGE_MENU_REACTIVATE),
-/* harmony export */   "EGE_MENU_SCROLL_UP": () => (/* binding */ EGE_MENU_SCROLL_UP),
-/* harmony export */   "EGE_MENU_SCROLL_DOWN": () => (/* binding */ EGE_MENU_SCROLL_DOWN),
-/* harmony export */   "EGE_MENU_SCROLL_LEFT": () => (/* binding */ EGE_MENU_SCROLL_LEFT),
-/* harmony export */   "EGE_MENU_SCROLL_RIGHT": () => (/* binding */ EGE_MENU_SCROLL_RIGHT),
-/* harmony export */   "EGE_MENU_TAB_LEFT": () => (/* binding */ EGE_MENU_TAB_LEFT),
-/* harmony export */   "EGE_MENU_TAB_RIGHT": () => (/* binding */ EGE_MENU_TAB_RIGHT),
-/* harmony export */   "EAC_NULL": () => (/* binding */ EAC_NULL),
-/* harmony export */   "EAC_FIRST_ACTIVE_CONTROL": () => (/* binding */ EAC_FIRST_ACTIVE_CONTROL),
-/* harmony export */   "EAC_LAST_ACTIVE_CONTROL": () => (/* binding */ EAC_LAST_ACTIVE_CONTROL),
-/* harmony export */   "ETC_RESET": () => (/* binding */ ETC_RESET),
-/* harmony export */   "ETC_BEGIN": () => (/* binding */ ETC_BEGIN),
-/* harmony export */   "ETC_END": () => (/* binding */ ETC_END)
-/* harmony export */ });
-// 
-//  FILE NAME: menudefs.js
-//  DESC:      misc defines
-//
-
-
-
-// EMenuState
-const EMS_INACTIVE        = 0,
-             EMS_IDLE            = 1,
-             EMS_ACTIVE          = 2,
-             EMS_MAX_MENU_STATES = 3;
-
-// EMenuNavigationState
-const EMNS_NULL             = 0,
-             EMNS_MOUSE            = 1,
-             EMNS_GAMEPAD_KEYBAORD = 2;
-
-// EMenuTreeState
-const EMTS_INACTIVE             = 0,
-             EMTS_IDLE                 = 1,
-             EMTS_ACTIVE               = 2,
-             EMTS_MAX_MENU_TREE_STATES = 3;
-
-// EMenuEvent
-const EGE_MENU_TRANS_IN             = 100,
-             EGE_MENU_TRANS_OUT            = 101,
-             EGE_MENU_ESCAPE_ACTION        = 102,
-             EGE_MENU_TOGGLE_ACTION        = 103,
-             EGE_MENU_BACK_ACTION          = 104,
-             EGE_MENU_TO_TREE              = 105,
-             EGE_MENU_TO_MENU              = 106,
-             EGE_MENU_GAME_STATE_CHANGE    = 107,
-             EGE_MENU_UP_ACTION            = 108,
-             EGE_MENU_DOWN_ACTION          = 109,
-             EGE_MENU_LEFT_ACTION          = 110,
-             EGE_MENU_RIGHT_ACTION         = 111,
-             EGE_MENU_CONTROL_STATE_CHANGE = 112,
-             EGE_MENU_SELECT_ACTION        = 113,
-             EGE_MENU_SELECT_EXECUTE       = 114,
-             EGE_MENU_SET_ACTIVE_CONTROL   = 115,
-             EGE_MENU_REACTIVATE           = 116,
-             EGE_MENU_SCROLL_UP            = 117,
-             EGE_MENU_SCROLL_DOWN          = 118,
-             EGE_MENU_SCROLL_LEFT          = 119,
-             EGE_MENU_SCROLL_RIGHT         = 120,
-             EGE_MENU_TAB_LEFT             = 121,
-             EGE_MENU_TAB_RIGHT            = 122;
-
-// EActiveControl
-const EAC_NULL                 = 0,
-             EAC_FIRST_ACTIVE_CONTROL = 1,
-             EAC_LAST_ACTIVE_CONTROL  = 2;
-
-// ETransCode
-const ETC_RESET = 0,
-             ETC_BEGIN = 1,
-             ETC_END   = 2;
-
-/***/ }),
-/* 110 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Sprite": () => (/* binding */ Sprite)
-/* harmony export */ });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(111);
-/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(113);
-/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
-/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(115);
-/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(118);
-/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(119);
-/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(120);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(10);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
-
-// 
-//  FILE NAME:  sprite.js
-//  DESC:       Sprite class
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
-{
-    constructor( objData, parentNode = null )
-    {
-        super();
-
-        // parent node of this sprite
-        this.parentNode = parentNode;
-
-        // The object data
-        this.objData = objData
-        
-        // The visual part of the sprite
-        this.visualComponent = null
-        
-        // The physics part of the sprite
-        this.physicsComponent = null;
-        
-        // Allocate the sprite specific objects
-        if( objData.is2D() )
-        {
-            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_QUAD )
-                this.visualComponent = new _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__.VisualComponentQuad( objData.visualData );
-            
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SPRITE_SHEET )
-                this.visualComponent = new _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__.VisualComponentSpriteSheet( objData.visualData );
-            
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SCALED_FRAME )
-                this.visualComponent = new _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__.VisualComponentScaledFrame( objData.visualData );
-            
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_FONT )
-                this.visualComponent = new _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__.VisualComponentFont( objData.visualData );
-            
-            if( objData.physicsData.isActive() )
-                this.physicsComponent = new _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__.PhysicsComponent2D( objData.physicsData );
-        }
-        else if( objData.is3D() )
-        {
-            // Matrix for rotations only, used for normal calculations
-            this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_8__.Matrix;
-            this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__.VisualComponent3D( objData.visualData );
-        }
-
-        // Allocate the null component if no visual component was created
-        if( this.visualComponent === null )
-            this.visualComponent = new _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__.NullVisualComponent();
-        
-        // If there's no visual data, set the hide flag
-        this.setVisible( objData.visualData.isActive() );
-    }
-    
-    // 
-    //  DESC: Load from XML node
-    //
-    load( xmlNode )
-    {
-        // Load the transform data from node
-        this.loadTransFromNode( xmlNode );
-
-        // Load the script functions from node
-        this.scriptComponent.initScriptIds( xmlNode );
-
-        if( this.visualComponent.isFontSprite() )
-            this.visualComponent.loadFontPropFromNode( xmlNode );
-    }
-
-    // 
-    //  DESC: Load from XML node
-    //
-    reload( xmlNode )
-    {
-        // Load the sprite data
-        this.load( xmlNode );
-
-        // Init
-        this.init();
-        
-        if( this.physicsComponent )
-            this.physicsComponent.setTransform(this.pos.x, this.pos.y, this.rot.z);
-    }
-    
-    // 
-    //  DESC: Init the sprite
-    //
-    init()
-    {
-        if( this.visualComponent.isFontSprite() )
-            this.visualComponent.createFontStringFromData();
-        
-        // Prepare any script functions that are flagged to prepareOnInit
-        this.scriptComponent.prepareOnInit( this );
-    }
-    
-    //
-    //  DESC: Do some cleanup
-    //
-    cleanUp()
-    {
-        if( this.visualComponent.isFontSprite() )
-            this.visualComponent.deleteFontVBO();
-        
-        if( this.physicsComponent )
-            this.physicsComponent.destroyBody();
-    }
-    
-    // 
-    //  DESC: Init the physics
-    //
-    initPhysics()
-    {
-        if( this.physicsComponent )
-            this.physicsComponent.init( this );
-    }
-    
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent( event )
-    {
-        this.scriptComponent.handleEvent( event );
-    }
-
-    // 
-    //  DESC: Update the sprite
-    //
-    update()
-    {
-        this.scriptComponent.update();
-    }
-    
-    // 
-    //  DESC: Update the physics
-    //
-    physicsUpdate()
-    {
-        if( this.physicsComponent )
-            this.physicsComponent.update();
-    }
-    
-    // 
-    //  DESC: do the render
-    //
-    render( camera )
-    {
-        if( this.isVisible() )
-            this.visualComponent.render( this, camera );
-    }
-    
-    // 
-    //  DESC: Set the color
-    //
-    setColor( color )
-    {
-        this.visualComponent.color.copy( color );
-    }
-
-    setRGBA( r, g, b, a )
-    {
-        // This function assumes values between 0.0 to 1.0.
-        this.visualComponent.color.set( r, g, b, a );
-    }
-    
-    // 
-    //  DESC: Set the Alpha
-    //
-    setAlpha( alpha, allowToExceed = false )
-    {
-        if( allowToExceed || (alpha < this.objData.visualData.color.a) )
-            this.visualComponent.color.a = alpha;
-        else
-            this.visualComponent.color.a = this.objData.visualData.color.a;
-    }
-    
-    // 
-    //  DESC: Get the Alpha
-    //
-    getAlpha()
-    {
-        return this.visualComponent.color.a;
-    }
-    
-    // 
-    //  DESC: Get the default Alpha
-    //
-    getDefaultAlpha()
-    {
-        return this.objData.visualData.color.a;
-    }
-    
-    // 
-    //  DESC: Set the default color
-    //
-    setDefaultColor()
-    {
-        this.visualComponent.color.copy( this.objData.visualData.color );
-    }
-
-    // 
-    //  DESC: Get the color
-    //
-    getColor()
-    {
-        return this.visualComponent.color;
-    }
-
-    // 
-    //  DESC: Get the color
-    //
-    getDefaultColor()
-    {
-        return this.objData.visualData.color;
-    }
-    
-    // 
-    //  DESC: Set the texture ID from index
-    //
-    setFrame( index = 0 )
-    {
-        if( this.visualComponent.frameIndex != index )
-        {
-            this.visualComponent.setFrame( index );
-
-            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SPRITE_SHEET )
-                if( index < this.objData.visualData.spriteSheet.getCount() )
-                    this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
-        }
-    }
-    
-    // 
-    //  DESC: Set the texture ID from index
-    //
-    getFrameCount()
-    {
-        return this.objData.visualData.getFrameCount();
-    }
-
-    //
-    //  DESC: Is the physics active
-    //
-    isPhysicsActive()
-    {
-        if( this.physicsComponent && this.physicsComponent.isActive() )
-            return true;
-
-        return false;
-    }
-
-    //
-    //  DESC: Is the physics awake
-    //
-    isPhysicsAwake()
-    {
-        if( this.isPhysicsActive() && this.physicsComponent.isAwake() )
-            return true;
-
-        return false;
-    }
-
-    //
-    //  DESC: Apply the rotation
-    //
-    applyRotation( matrix )
-    {
-        // 3D light calculations require a rotation matrix without scale
-        if( this.objData.is3D() )
-        {
-            // Add in the center point prior to rotation
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_9__.CENTER_POINT ) )
-                this.matrix.translate( this.centerPos );
-            
-            // Add in the rotation if this is NOT a physics transformation
-            // NOTE: Don't have a 3D physics library yet
-            //if( !this.parameters.isSet( defs.PHYSICS_TRANSFORM ) )
-            {
-                this.rotMatrix.initilizeMatrix();
-                this.rotMatrix.rotate( this.rot );
-            }
-
-            // Since the rotation has already been done, multiply it into the matrix
-            matrix.multiply3x3( this.rotMatrix.matrix );
-
-            // Subtract the center point after rotation to put back in original position
-            // Doing two inverts keeps us from having to new up a point that would be garbage collected
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_9__.CENTER_POINT ) )
-            {
-                this.centerPos.invert();
-                this.matrix.translate( this.centerPos );
-                this.centerPos.invert();
-            }
-        }
-        else
-            super.applyRotation( matrix );
-    }
-}
-
-
-/***/ }),
-/* 111 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "VisualComponentQuad": () => (/* binding */ VisualComponentQuad)
-/* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(112);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
-
-// 
-//  FILE NAME:  visualcomponentquad.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-
-
-
-
-
-
-
-// Global final matrix to be reused by every render call so that an object specific
-// one doesn't have to be created each time a render call is made or a perminate one
-// allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
-
-class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
-{
-    constructor( visualData )
-    {
-        super();
-        
-        this.visualData = visualData;
-        this.shaderData = null;
-        this.vertexLocation = null;
-        this.text0Location = null;
-        this.uvLocation = null;
-        this.matrixLocation = null;
-        this.colorLocation = null;
-        this.VERTEX_BUF_SIZE = 20;
-        this.frameIndex = 0;
-        this.vbo = visualData.vbo;
-        this.ibo = visualData.ibo;
-        this.iboCount = visualData.iboCount;
-        this.texture = visualData.getTexture();
-        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__.Color;
-        
-        if( visualData.isActive() )
-        {
-            this.shaderData = _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.getShaderData( visualData.shaderID );
-
-            // Common shader members
-            this.vertexLocation = this.shaderData.getLocation( 'in_position' );
-            this.matrixLocation = this.shaderData.getLocation( 'cameraViewProjMatrix' );
-            this.colorLocation = this.shaderData.getLocation( 'color' );
-            
-            // Do we have a texture? This could be a solid rect
-            if( this.texture !== null )
-            {
-                this.uvLocation = this.shaderData.getLocation( 'in_uv' );
-                this.text0Location = this.shaderData.getLocation( 'text0' );
-            }
-            
-            this.color.copy( this.visualData.color );
-        }
-    }
-
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-        if( this.allowRender() )
-        {
-            // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
-
-            // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
-            
-            // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
-            
-            if( this.texture )
-            {
-                // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
-
-                // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
-            }
-            
-            // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
-            
-            // Calculate the final matrix
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.setScaleFromSize( this.visualData.vertexScale );
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-
-            // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-            
-            // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_BYTE, 0);
-        }
-    }
-    
-    //
-    //  DESC: Is rendering allowed?
-    //
-    allowRender()
-    {
-        return (this.visualData.genType != _common_defs__WEBPACK_IMPORTED_MODULE_7__.EGT_NULL);
-    }
-    
-    //
-    //  DESC: Set the frame ID from index
-    //
-    setFrame( index )
-    {
-        if( index < this.visualData.getFrameCount() )
-        {
-            this.frameIndex = index;
-            this.texture = this.visualData.getTexture( index );
-        }
-    }
-    
-    //
-    //  DESC: Get the frame count
-    //
-    getFrameCount()
-    {
-        return this.visualData.getFrameCount();
-    }
-}
-
-
-/***/ }),
-/* 112 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ivisualComponent": () => (/* binding */ ivisualComponent)
-/* harmony export */ });
-
-// 
-//  FILE NAME:  ivisualcomponent.js
-//  DESC:       Interface class
-//
-
-
-
-class ivisualComponent
-{
-    constructor()
-    {
-    }
-    
-    //
-    //  DESC: Delete the custom VBO for this font
-    //
-    deleteFontVBO()
-    {
-    }
-    
-    //
-    //  DESC: Is this a font sprite
-    //
-    isFontSprite()
-    {
-        return false;
-    }
-    
-    //
-    //  DESC: Set the frame ID from index
-    //
-    setFrame( index )
-    {
-    }
-    
-    //
-    //  DESC: Get the frame count
-    //
-    getFrameCount()
-    {
-        return 1;
-    }
-    
-    //
-    //  DESC: Get the font size
-    //
-    getFontSize()
-    {
-        return 0;
-    }
-}
-
-
-/***/ }),
-/* 113 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "VisualComponentSpriteSheet": () => (/* binding */ VisualComponentSpriteSheet)
-/* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(111);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-
-// 
-//  FILE NAME:  visualcomponentspritesheet.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-
-
-
-
-
-
-// Global final matrix to be reused by every render call so that an object specific
-// one doesn't have to be created each time a render call is made or a perminate one
-// allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
-
-class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
-{
-    constructor( visualData )
-    {
-        super( visualData );
-        
-        if( visualData.isActive() )
-        {
-            this.glyphLocation = this.shaderData.getLocation( 'glyphRect' );
-
-            this.glyphUV = visualData.spriteSheet.getGlyph().uv;
-            this.frameIndex = visualData.spriteSheet.defaultIndex;
-
-            // Local vertex scale for sprite sheets that might have glyphs of different sizes
-            this.vertexScale = new _common_size__WEBPACK_IMPORTED_MODULE_5__.Size;
-            this.vertexScale.copy( this.visualData.vertexScale );
-        }
-    }
-
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-        if( this.allowRender() )
-        {
-            // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
-
-            // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
-            
-            // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
-            
-            if( this.texture )
-            {
-                // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
-
-                // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
-            }
-            
-            // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
-            
-            // Calculate the final matrix
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.setScaleFromSize( this.vertexScale );
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-
-            // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-
-            // Send the glyph rect
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.glyphLocation, this.glyphUV.data );
-            
-            // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLE_FAN, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_BYTE, 0);
-        }
-    }
-    
-    //
-    //  DESC: Set the frame ID from index
-    //
-    setFrame( index )
-    {
-        this.frameIndex = index;
-        
-        let glyph = this.visualData.spriteSheet.getGlyph( index );
-
-        this.vertexScale.w = glyph.size.w * this.visualData.defaultUniformScale;
-        this.vertexScale.h = glyph.size.h * this.visualData.defaultUniformScale;
-
-        this.glyphUV = glyph.uv;
-    }
-}
-
-
-/***/ }),
-/* 114 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "VisualComponentScaledFrame": () => (/* binding */ VisualComponentScaledFrame)
-/* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(111);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
-
-// 
-//  FILE NAME:  visualcomponentscaledframe.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-
-
-
-
-
-// Global final matrix to be reused by every render call so that an object specific
-// one doesn't have to be created each time a render call is made or a perminate one
-// allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
-
-class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
-{
-    constructor( visualData )
-    {
-        super( visualData );
-    }
-
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-        if( this.allowRender() )
-        {
-            // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
-
-            // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
-            
-            // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
-            
-            if( this.texture )
-            {
-                // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
-
-                // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
-            }
-            
-            // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniform4fv( this.colorLocation, this.color.data );
-            
-            // Calculate the final matrix
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-
-            // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-            
-            // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_5__.gl.TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_5__.gl.UNSIGNED_BYTE, 0);
-        }
-    }
-}
-
-
-/***/ }),
-/* 115 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "VisualComponentFont": () => (/* binding */ VisualComponentFont)
-/* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(111);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(24);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(116);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
-
-// 
-//  FILE NAME:  visualcomponentfont.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Global final matrix to be reused by every render call so that an object specific
-// one doesn't have to be created each time a render call is made or a perminate one
-// allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__.Matrix;
-
-class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__.VisualComponentQuad
-{
-    constructor( visualData )
-    {
-        super( visualData );
-        
-        if( visualData.isActive() )
-        {
-            this.uvLocation = this.shaderData.getLocation( 'in_uv' );
-            this.text0Location = this.shaderData.getLocation( 'text0' );
-            
-            // Allocate the storage for the font if this is a font sprite
-            this.fontData = new _common_fontdata__WEBPACK_IMPORTED_MODULE_5__.FontData;
-        }
-    }
-    
-    //
-    //  DESC: Delete the custom VBO for this font
-    //
-    deleteFontVBO()
-    {
-        // Delete the VBO if this is a font
-        if( (this.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EGT_FONT) && (this.vbo !== null) )
-        {
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.deleteBuffer( this.vbo );
-            this.vbo = null;
-        }
-
-        // The IBO for the font is managed by the vertex buffer manager.
-        // Font IBO are all the same with the only difference being
-        // length of the character string.
-    }
-
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-        if( this.allowRender() )
-        {
-            // Bind the VBO and IBO
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.bind( this.vbo, this.ibo );
-
-            // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.bind( this.shaderData );
-            
-            // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
-            
-            if( this.texture )
-            {
-                // Bind the texture
-                _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__.textureManager.bind( this.texture.id );
-                _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
-
-                // Setup the UV attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
-            }
-            
-            // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniform4fv( this.colorLocation, this.color.data );
-            
-            // Calculate the final matrix
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-
-            // Send the final matrix to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-            
-            // Do the render
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.drawElements(_system_device__WEBPACK_IMPORTED_MODULE_7__.gl.TRIANGLES, this.iboCount, _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.UNSIGNED_SHORT, 0);
-        }
-    }
-    
-    //
-    //  DESC: Is rendering allowed?
-    //
-    allowRender()
-    {
-        return (this.fontData.fontString && this.vbo);
-    }
-    
-    //
-    //  DESC: Is this a font sprite
-    //
-    isFontSprite()
-    {
-        return true;
-    }
-    
-    //
-    //  DESC: Load the font properties from XML node
-    //
-    loadFontPropFromNode( node )
-    {
-        if( this.fontData )
-            this.fontData.loadFromNode( node );
-    }
-    
-    //
-    //  DESC: Set the font properties
-    //
-    setFontProperties( fontName, hAlign = null, vAlign = null, kerning = null, sKern = null, lineWrapWidth = null, lineWrapHeight = null )
-    {
-        if( this.fontData )
-        {
-            this.fontData.fontProp.fontName = fontName;
-            
-            if( hAlign )
-                this.fontData.fontProp.hAlign = hAlign;
-            
-            if( vAlign )
-                this.fontData.fontProp.hAlign = vAlign;
-            
-            if( kerning )
-                this.fontData.fontProp.kerning = kerning;
-            
-            if( sKern )
-                this.fontData.fontProp.spaceCharKerning = sKern;
-            
-            if( lineWrapWidth )
-                this.fontData.fontProp.lineWrapWidth = lineWrapWidth;
-            
-            if( lineWrapHeight )
-                this.fontData.fontProp.lineWrapHeight = lineWrapHeight;
-        }
-    }
-    
-    //
-    //  DESC: Create the font string from data
-    //
-    createFontStringFromData()
-    {
-        if( (this.fontData !== null) && this.fontData.fontString )
-            this.createFontString( this.fontData.fontString );
-    }
-
-    //
-    //  DESC: Create the font string
-    //
-    createFontString( fontString )
-    {
-        // Qualify if we want to build the font string
-        if( (this.fontData !== null) &&
-            (fontString !== '') &&
-            (this.fontData.fontProp.fontName !== null) &&
-            ((fontString !== this.fontData.fontString) || (this.vbo === null)) )
-        {
-            this.fontData.fontStrSize.reset();
-            let lastCharDif = 0;
-
-            let font = _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__.fontManager.getFont( this.fontData.fontProp.fontName );
-
-            this.texture = font.texture;
-
-            this.fontData.fontString = fontString;
-
-            // count up the number of space characters
-            let spaceCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.countStrOccurrence( this.fontData.fontString, ' ' );
-
-            // count up the number of bar | characters
-            let barCharCount = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__.countStrOccurrence( this.fontData.fontString, '|' );
-
-            // Size of the allocation
-            const charCount = this.fontData.fontString.length - spaceCharCount - barCharCount;
-            this.iboCount = charCount * 6;
-            
-            // Set a flag to indicate if the IBO should be built
-            const BUILD_FONT_IBO = (this.iboCount > _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.currentMaxFontIndices);
-            
-            // Allocate the vert array
-            let vertAry = new Array(charCount * 4 * 5);
-
-            // Create a buffer to hold the indicies
-            let indexAry = null;
-            
-            // Should we build or rebuild the font IBO
-            if( BUILD_FONT_IBO )
-                indexAry = new Array(this.iboCount);
-
-            let xOffset = 0;
-            let width = 0;
-            let lineHeightOffset = 0;
-            let lineHeightWrap = font.lineHeight + font.vertPadding + this.fontData.fontProp.lineWrapHeight;
-            let initialHeightOffset = font.baselineOffset + font.vertPadding;
-            let lineSpace = font.lineHeight - font.baselineOffset;
-
-            let counter = 0;
-            let vertAryIndex = 0;
-            let lineCount = 0;
-
-            // Get the size of the texture
-            let textureSize = font.texture.size;
-
-            // Handle the horizontal alignment
-            let lineWidthOffsetAry = this.calcLineWidthOffset( font, this.fontData.fontString );
-
-            // Set the initial line offset
-            xOffset = lineWidthOffsetAry[lineCount++];
-
-            // Handle the vertical alighnmenrt
-            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_TOP )
-                lineHeightOffset = -initialHeightOffset;
-
-            if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_CENTER )
-            {
-                lineHeightOffset = -(initialHeightOffset - ((font.baselineOffset-lineSpace) / 2) - font.vertPadding);
-
-                if( lineWidthOffsetAry.length > 1 )
-                    lineHeightOffset = ((lineHeightWrap * lineWidthOffsetAry.length) / 2) - font.baselineOffset;
-            }
-
-            else if( this.fontData.fontProp.vAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_BOTTOM )
-            {
-                lineHeightOffset = -(initialHeightOffset - font.baselineOffset - font.vertPadding);
-
-                if( lineWidthOffsetAry.length > 1 )
-                    lineHeightOffset += (lineHeightWrap * (lineWidthOffsetAry.length-1));
-            }
-
-            // Remove any fractional component of the line height offset
-            lineHeightOffset = Math.trunc(lineHeightOffset);
-
-            // Setup each character in the vertex buffer
-            for( let i = 0; i < this.fontData.fontString.length; ++i )
-            {
-                let id = this.fontData.fontString.charCodeAt(i);
-
-                // Line wrap if '|' character was used
-                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
-                {
-                    xOffset = lineWidthOffsetAry[lineCount];
-                    width = 0;
-
-                    lineHeightOffset += -lineHeightWrap;
-                    ++lineCount;
-                }
-                else
-                {
-                    // See if we can find the character
-                    let charData = font.getCharData(id);
-
-                    // Ignore space characters
-                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
-                    {
-                        let rect = charData.rect;
-
-                        let yOffset = (font.lineHeight - rect.y2 - charData.offset.h) + lineHeightOffset;
-
-                        // Check if the width or height is odd. If so, we offset
-                        // by 0.5 for proper orthographic rendering
-                        // speed enhancement - if( Math.trunc(rect.x2) % 2 != 0 )
-                        let additionalOffsetX = 0;
-                        if( Math.trunc(rect.x2) & 1 !== 0 )
-                            additionalOffsetX = 0.5;
-
-                        let additionalOffsetY = 0;
-                        if( Math.trunc(rect.y2) & 1 !== 0 )
-                            additionalOffsetY = 0.5;
-                        
-                        vertAry[vertAryIndex]   = xOffset + charData.offset.w + additionalOffsetX;
-                        vertAry[vertAryIndex+1] = yOffset + additionalOffsetY;
-                        vertAry[vertAryIndex+2] = 0;
-                        vertAry[vertAryIndex+3] = rect.x1 / textureSize.w;
-                        vertAry[vertAryIndex+4] = (rect.y1 + rect.y2) / textureSize.h;
-
-                        // Calculate the second vertex of the first face
-                        vertAry[vertAryIndex+5] = xOffset + rect.x2 + charData.offset.w + additionalOffsetX;
-                        vertAry[vertAryIndex+6] = yOffset + rect.y2 + additionalOffsetY;
-                        vertAry[vertAryIndex+7] = 0;
-                        vertAry[vertAryIndex+8] = (rect.x1 + rect.x2) / textureSize.w;
-                        vertAry[vertAryIndex+9] = rect.y1 / textureSize.h;
-
-                        // Calculate the third vertex of the first face
-                        vertAry[vertAryIndex+10] = vertAry[vertAryIndex];
-                        vertAry[vertAryIndex+11] = vertAry[vertAryIndex+6];
-                        vertAry[vertAryIndex+12] = 0;
-                        vertAry[vertAryIndex+13] = vertAry[vertAryIndex+3];
-                        vertAry[vertAryIndex+14] = vertAry[vertAryIndex+9];
-
-                        // Calculate the second vertex of the second face
-                        vertAry[vertAryIndex+15] = vertAry[vertAryIndex+5];
-                        vertAry[vertAryIndex+16] = vertAry[vertAryIndex+1];
-                        vertAry[vertAryIndex+17] = 0;
-                        vertAry[vertAryIndex+18] = vertAry[vertAryIndex+8];
-                        vertAry[vertAryIndex+19] = vertAry[vertAryIndex+4];
-                        
-                        vertAryIndex += 20;
-
-                        if( BUILD_FONT_IBO )
-                        {
-                            // Create the indicies into the VBO
-                            let arrayIndex = counter * 6;
-                            let vertIndex = counter * 4;
-
-                            indexAry[arrayIndex]   = vertIndex;
-                            indexAry[arrayIndex+1] = vertIndex+1;
-                            indexAry[arrayIndex+2] = vertIndex+2;
-
-                            indexAry[arrayIndex+3] = vertIndex;
-                            indexAry[arrayIndex+4] = vertIndex+3;
-                            indexAry[arrayIndex+5] = vertIndex+1;
-                        }
-
-                        ++counter;
-                    }
-
-                    // Inc the font position
-                    let inc = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
-
-                    // Add in any additional spacing for the space character
-                    if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
-                        inc += this.fontData.fontProp.spaceCharKerning;
-
-                    width += inc;
-                    xOffset += inc;
-
-                    // Get the longest width of this font string
-                    if( this.fontData.fontStrSize.w < width )
-                    {
-                        this.fontData.fontStrSize.w = width;
-
-                        // This is the space between this character and the next.
-                        // Save this difference so that it can be subtracted at the end
-                        lastCharDif = inc - charData.rect.x2;
-                    }
-
-                    // Wrap to another line
-                    if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE ) && (this.fontData.fontProp.lineWrapWidth > 0) )
-                    {
-                        let nextWord = 0;
-
-                        // Get the length of the next word to see if if should wrap
-                        for( let j = i+1; j < this.fontData.fontString.length; ++j )
-                        {
-                            id = this.fontData.fontString.charCodeAt(j);
-
-                            if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
-                            {
-                                // See if we can find the character
-                                let anotherCharData = font.getCharData(id);
-
-                                // Break here when space is found
-                                // Don't add the space to the size of the next word
-                                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
-                                    break;
-
-                                // Don't count the
-                                nextWord += anotherCharData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
-                            }
-                        }
-
-                        if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
-                        {
-                            xOffset = lineWidthOffsetAry[lineCount++];
-                            width = 0;
-
-                            lineHeightOffset += -lineHeightWrap;
-                        }
-                    }
-                }
-            }
-
-            // Subtract the extra space after the last character
-            this.fontData.fontStrSize.w -= lastCharDif;
-            this.fontData.fontStrSize.h = font.lineHeight;
-
-            // Save the data
-            // If one doesn't exist, create the VBO and IBO for this font
-            if( this.vbo === null )
-                this.vbo = _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.createBuffer();
-
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, this.vbo );
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.STATIC_DRAW );
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_7__.gl.ARRAY_BUFFER, null );
-
-            // All fonts share the same IBO because it's always the same and the only difference is it's length
-            // This updates the current IBO if it exceeds the current max
-            this.ibo = _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__.vertexBufferManager.createDynamicFontIBO( _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__.fontManager.groupName, 'dynamic_font_ibo', indexAry, this.iboCount );
-        }
-        else if( (this.fontData !== null) &&
-                 (fontString !== '') &&
-                 (fontString !== this.fontData.fontString) &&
-                 (this.vbo !== null) )
-        {
-            this.fontData.fontString = '';
-        }
-    }
-
-    //
-    //  DESC: Add up all the character widths
-    //
-    calcLineWidthOffset( font, str )
-    {
-        let firstCharOffset = 0;
-        let lastCharOffset = 0;
-        let spaceWidth = 0;
-        let width = 0;
-        let counter = 0;
-        let lineWidthOffsetAry = [];
-
-        for( let i = 0; i < str.length; ++i )
-        {
-            let id = str.charCodeAt(i);
-
-            // Line wrap if '|' character was used
-            if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
-            {
-                // Add the line width to the vector based on horz alignment
-                this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
-
-                counter = 0;
-                width = 0;
-            }
-            else
-            {
-                // Get the next character
-                let charData = font.getCharData( id );
-
-                if(counter === 0)
-                    firstCharOffset = charData.offset.w;
-
-                spaceWidth = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
-
-                // Add in any additional spacing for the space character
-                if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
-                    spaceWidth += this.fontData.fontProp.spaceCharKerning;
-
-                width += spaceWidth;
-
-                if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
-                    lastCharOffset = charData.offset.w;
-
-                ++counter;
-            }
-
-            // Wrap to another line
-            if( (id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE) && (this.fontData.fontProp.lineWrapWidth > 0) )
-            {
-                let nextWord = 0;
-
-                // Get the length of the next word to see if if should wrap
-                for( let j = i+1; j < str.length; ++j )
-                {
-                    id = str.charCodeAt(j);
-
-                    if( id != _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_PIPE )
-                    {
-                        // See if we can find the character
-                        let charData = font.getCharData(id);
-
-                        // Break here when space is found
-                        // Don't add the space to the size of the next word
-                        if( id === _common_defs__WEBPACK_IMPORTED_MODULE_8__.CHAR_CODE_SPACE )
-                            break;
-
-                        // Don't count the
-                        nextWord += charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
-                    }
-                }
-
-                if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
-                {
-                    // Add the line width to the vector based on horz alignment
-                    this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width-spaceWidth, firstCharOffset, lastCharOffset );
-
-                    counter = 0;
-                    width = 0;
-                }
-            }
-        }
-
-        // Add the line width to the vector based on horz alignment
-        this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
-
-        return lineWidthOffsetAry;
-    }
-
-    //
-    //  DESC: Add the line width to the array based on horz alignment
-    //
-    addLineWithToAry( font, lineWidthOffsetAry, hAlign, width, firstCharOffset, lastCharOffset )
-    {
-        if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_LEFT )
-            lineWidthOffsetAry.push(-(firstCharOffset + font.horzPadding));
-
-        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_CENTER )
-            lineWidthOffsetAry.push(-((width - font.horzPadding) / 2));
-
-        else if( hAlign === _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_RIGHT )
-            lineWidthOffsetAry.push(-(width - lastCharOffset - font.horzPadding));
-
-        // Remove any fractional component of the last index
-        lineWidthOffsetAry[lineWidthOffsetAry.length-1] = Math.trunc(lineWidthOffsetAry[lineWidthOffsetAry.length-1]);
-    }
-    
-    //
-    //  DESC: Get/Set the displayed font string
-    //
-    getFontString()
-    {
-        if( this.fontData === null )
-            throw new Error( `Can't ask for the font string from a sprite that is not a sprite font!` );
-
-        return this.fontData.fontString;
-    }
-
-    setFontString( fontString )
-    {
-        if( this.fontData === null )
-            throw new Error( `Can't set a font string for a sprite that is not a sprite font!` );
-        
-        this.fontData.fontString = fontString;
-    }
-    
-    //
-    //  DESC: Get the font size
-    //
-    getFontSize()
-    {
-        if( !this.fontData )
-            throw new Error( `Can't ask for the font size from a sprite that is not defined!` );
-
-        return this.fontData.fontStrSize;
-    }
-}
-
-
-/***/ }),
-/* 116 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FontData": () => (/* binding */ FontData)
-/* harmony export */ });
-/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(117);
-/* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-
-// 
-//  FILE NAME:  fontdata.js
-//  DESC:       font data class
-//
-
-
-
-
-
-class FontData
-{
-    constructor()
-    {
-        // Displayed font string
-        this.fontString = '';
-
-        // Font members
-        this.fontProp = new _fontproperties__WEBPACK_IMPORTED_MODULE_0__.FontProperties;
-
-        // Font string size
-        // Not usefull for multiline strings
-        this.fontStrSize = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
-    }
-    
-    // 
-    //  Copy the data
-    //
-    copy( obj )
-    {
-        this.fontString = obj.fontString;
-        this.fontProp.copy( obj.fontProp );
-        this.fontStrSize.copy( obj.fontStrSize );
-    }
-    
-    //
-    //  DESC: Load the font properties from XML node
-    //
-    loadFromNode( node )
-    {
-        let fontNode = node.getElementsByTagName( 'font' );
-        if( fontNode.length )
-        {
-            // See if a font string has been defined
-            let attr = fontNode[0].getAttribute( 'fontString' );
-            if( attr )
-                this.fontString = attr;
-
-            this.fontProp.loadFromNode( fontNode[0] );
-        }
-    }
-}
-
-
-/***/ }),
-/* 117 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FontProperties": () => (/* binding */ FontProperties)
-/* harmony export */ });
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
-/* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: fontproperties.js
-//  DESC:      font properties class
-//
-
-
-
-
-
-
-
-class FontProperties
-{
-    constructor( fontName = null, hAlign = _defs__WEBPACK_IMPORTED_MODULE_2__.EHA_HORZ_CENTER, vAlign = _defs__WEBPACK_IMPORTED_MODULE_2__.EVA_VERT_CENTER, kerning = 0, spaceCharKerning = 0, lineWrapWidth = -1, lineWrapHeight = 0 )
-    {
-        // font to use
-        this.fontName = fontName;
-
-        // horzontal alignment
-        this.hAlign = hAlign;
-
-        // vertical alignment
-        this.vAlign = vAlign;
-
-        // distance between each character
-        this.kerning = kerning;
-
-        // special kerning just for the space character
-        this.spaceCharKerning = spaceCharKerning;
-
-        // width of line to force wrap
-        this.lineWrapWidth = lineWrapWidth;
-
-        // add spacing to the lines
-        this.lineWrapHeight = 0;
-        
-        // Throws an error if font is not loaded
-        if( this.fontName )
-            _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
-    }
-    
-    // 
-    //  Copy the data
-    //
-    copy( obj )
-    {
-        this.fontName = obj.fontName;
-        this.hAlign = obj.hAlign;
-        this.vAlign = obj.vAlign;
-        this.kerning = obj.kerning;
-        this.spaceCharKerning = obj.spaceCharKerning;
-        this.lineWrapWidth = obj.lineWrapWidth;
-        this.lineWrapHeight = obj.lineWrapHeight;
-        
-        // Throws an error if font is not loaded
-        _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
-    }
-    
-    //
-    //  DESC: Load the font properties from XML node
-    //
-    loadFromNode( node )
-    {
-        // Get the must have font name
-        let attr = node.getAttribute( 'fontName' );
-        if( attr )
-            this.fontName = attr;
-        
-        // Throws an error if font is not loaded
-        _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__.fontManager.isFont( this.fontName );
-
-        // Get the attributes node
-        let attrNode = node.getElementsByTagName( 'attributes' );
-        if( attrNode.length )
-        {
-            attr = attrNode[0].getAttribute( 'kerning' );
-            if( attr )
-                this.kerning = Number(attr);
-
-            attr = attrNode[0].getAttribute( 'spaceCharKerning' );
-            if( attr )
-                this.spaceCharKerning = Number(attr);
-
-            attr = attrNode[0].getAttribute( 'lineWrapWidth' );
-            if( attr )
-                this.lineWrapWidth = Number(attr);
-
-            attr = attrNode[0].getAttribute( 'lineWrapHeight' );
-            if( attr )
-                this.lineWrapHeight = Number(attr);
-        }
-
-        // Get the alignment node
-        let alignmentNode = node.getElementsByTagName( 'alignment' );
-        if( alignmentNode.length )
-        {
-            // Set the default alignment
-            this.hAlign = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__.loadHorzAlignment( alignmentNode[0], _defs__WEBPACK_IMPORTED_MODULE_2__.EHA_HORZ_CENTER );
-            this.vAlign = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__.loadVertAlignment( alignmentNode[0], _defs__WEBPACK_IMPORTED_MODULE_2__.EVA_VERT_CENTER );
-        }
-    }
-}
-
-
-
-/***/ }),
-/* 118 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "VisualComponent3D": () => (/* binding */ VisualComponent3D)
-/* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(112);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
-/* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-
-// 
-//  FILE NAME:  visualcomponent3d.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-
-
-
-
-
-
-// Global final matrix to be reused by every render call so that an object specific
-// one doesn't have to be created each time a render call is made or a perminate one
-// allocated and heald within each class
-var gFinalMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
-
-class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
-{
-    constructor( visualData )
-    {
-        super();
-        
-        this.visualData = visualData;
-        this.shaderData = null;
-        this.vertexLocation = null;
-        this.normalLocation = null;
-        this.uvLocation = null;
-        this.text0Location = null;
-        this.colorLocation = null;
-        this.matrixLocation = null;
-        this.normalMatrixLocation = null;
-        this.VERTEX_BUF_SIZE = 24;
-        
-        this.color = new _common_color__WEBPACK_IMPORTED_MODULE_5__.Color;
-        
-        if( visualData.isActive() )
-        {
-            this.meshAry = visualData.meshGrp.meshAry;
-            this.shaderData = _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__.shaderManager.getShaderData( visualData.shaderID );
-            
-            // Common shader members
-            this.vertexLocation = this.shaderData.getLocation( 'in_position' );
-            this.normalLocation = this.shaderData.getLocation( 'in_normal' );
-            this.matrixLocation = this.shaderData.getLocation( 'cameraViewProjMatrix' );
-            this.normalMatrixLocation = this.shaderData.getLocation( 'normalMatrix' );
-            this.colorLocation = this.shaderData.getLocation( 'color' );
-            
-            if( this.meshAry[0].textureAry.length )
-            {
-                this.VERTEX_BUF_SIZE = 32;
-                this.uvLocation = this.shaderData.getLocation( 'in_uv' );
-                this.text0Location = this.shaderData.getLocation( 'text0' );
-            }
-            
-            this.color.copy( this.visualData.color );
-        }
-    }
-    
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-        for( let i = 0; i < this.meshAry.length; ++i )
-        {
-            // Increment our stat counter to keep track of what is going on.
-            //CStatCounter::Instance().IncDisplayCounter();
-
-            // Bind the VBO and IBO. NOTE: One singlton needs to manage the vertex bindings
-            _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__.vertexBufferManager.bind( this.meshAry[i].vbo, this.meshAry[i].ibo );
-
-            // Bind the shader.
-            _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__.shaderManager.bind( this.shaderData );
-
-            // Setup the vertex attribute shader data
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.vertexLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
-
-            // Setup the normal attribute shade data
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.normalLocation, 3, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
-
-            // Enable the UV attribute shade data
-            if( this.uvLocation )
-            {
-                // Bind the texture
-                for( let j = 0; j < this.meshAry[i].textureAry.length; ++j )
-                {
-                    _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__.textureManager.bind( this.meshAry[i].textureAry[j].id );
-                    _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform1i( this.text0Location, 0);// future implementation - this.meshAry[i].textureAry[j].type ); // 0 = TEXTURE0
-                }
-
-                // Setup the uv attribute shade data
-                _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.vertexAttribPointer( this.uvLocation, 2, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 24 );
-            }
-
-            // Send the color to the shader
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniform4fv( this.colorLocation, this.color.data );
-
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-            
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( object.rotMatrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.rotMatrix.matrix );
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
-
-            // Render it
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.drawElements( _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.TRIANGLES, this.meshAry[i].iboCount, _system_device__WEBPACK_IMPORTED_MODULE_6__.gl.UNSIGNED_SHORT, 0);
-        }
-    }
-}
-
-
-/***/ }),
-/* 119 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "NullVisualComponent": () => (/* binding */ NullVisualComponent)
-/* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(112);
-
-// 
-//  FILE NAME:  visualcomponentquad.js
-//  DESC:       Class for handling the visual part of the sprite
-//
-
-
-
-
-
-class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__.ivisualComponent
-{
-    constructor()
-    {
-        super();
-    }
-
-    //
-    //  DESC: do the render
-    //
-    render( object, camera )
-    {
-    }
-    
-    //
-    //  DESC: Is rendering allowed?
-    //
-    allowRender()
-    {
-        return false;
-    }
-    
-    //
-    //  DESC: Get the frame count
-    //
-    getFrameCount()
-    {
-        return 0;
-    }
-}
-
-
-/***/ }),
-/* 120 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PhysicsComponent2D": () => (/* binding */ PhysicsComponent2D)
-/* harmony export */ });
-/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
-
-// 
-//  FILE NAME: physicscomponent2d.js
-//  DESC:      Class for handling the physics part of the sprite.
-//
-
-
-
-
-
-
-
-class PhysicsComponent2D
-{
-    constructor( physicsData )
-    {
-        // Parent sprite
-        this.sprite = null;
-                
-        // Body type
-        this.bodyType = null;
-
-        // The physics body the sprite belongs to
-        this.body = null;
-
-        // Pixels to meters conversion
-        this.pixelsToMeters = 0;
-        this.metersToPixels = 0;
-
-        // Pointer to the world
-        this.world = null;
-        
-        if( physicsData.isActive() )
-        {
-            this.world = _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__.physicsWorldManager.getWorld( physicsData.world );
-
-            // MAke sure the world has been loaded
-            if( this.world.pixelsPerMeter == 0 )
-                throw new Error( `Physics world not loaded (${physicsData.world})!` );
-
-            // Re-init the constants to the values needed
-            this.metersToPixels = this.world.pixelsPerMeter;
-            this.pixelsToMeters = 1.0 / this.metersToPixels;
-        }
-    }
-    
-    // 
-    //  DESC: Init the physics by creating the body and fixture
-    //  NOTE: Function must be called externally at the right time
-    //        when the sprite has been setup with it's initial offsets
-    //
-    init( sprite )
-    {
-        if( this.world !== null )
-        {
-            this.sprite = sprite;
-            this.createBody();
-            this.createFixture();
-        }
-    }
-    
-    // 
-    //  DESC: Create the body
-    //
-    createBody()
-    {
-        if( !this.body )
-        {
-            let physicsData = this.sprite.objData.physicsData;
-            let worldDef = {
-                type : physicsData.bodyType,
-                position : planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( this.sprite.pos.x * this.pixelsToMeters, -(this.sprite.pos.y * this.pixelsToMeters) ),
-                angle : -this.sprite.rot.z,
-
-                linearVelocity : planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero(),
-                angularVelocity : 0.0,
-
-                linearDamping : physicsData.linearDamping,
-                angularDamping : physicsData.angularDamping,
-
-                fixedRotation : physicsData.fixedRotation,
-                bullet : false,
-                gravityScale : 1.0,
-
-                allowSleep : true,
-                awake : true,
-                active : true,
-
-                userData : this.sprite };
-
-            // Create the body
-            this.body = this.world.createBody( worldDef );
-        }
-    }
-
-    // 
-    //  DESC: Create the fixture
-    //
-    createFixture()
-    {
-        let fixtureAry = this.sprite.objData.physicsData.fixtureAry;
-
-        for( let i = 0; i < fixtureAry.length; ++i )
-        {
-            // Create the fixture
-            if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Circle.TYPE )
-                this.createCircularShapeFixture( fixtureAry[i] );
-
-            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Edge.TYPE )
-                this.createEdgeShapeFixture( fixtureAry[i] );
-
-            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Polygon.TYPE )
-                this.createPolygonShapeFixture( fixtureAry[i] );
-
-            else if( fixtureAry[i].shape === planck_js__WEBPACK_IMPORTED_MODULE_2__.Chain.TYPE )
-                this.createChainShapeFixture( fixtureAry[i] );
-        }
-    }
-    
-    // 
-    //  DESC: Create the circular shape fixture
-    //
-    getFixtureDef( fixture )
-    {
-        let fixtureDef = {
-            userData : this.sprite,
-            friction : fixture.friction,
-            restitution : fixture.restitution,
-            density : fixture.density,
-            isSensor : fixture.sensor,
-
-            filterGroupIndex : 0,
-            filterCategoryBits : 0x0001,
-            filterMaskBits : 0xFFFF };
-        
-        return fixtureDef;
-    }
-    
-    // 
-    //  DESC: Create the circular shape fixture
-    //
-    createCircularShapeFixture( fixture )
-    {
-        this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__.Circle( (fixture.radius * this.sprite.scale.x) * this.pixelsToMeters ),
-            this.getFixtureDef( fixture ) );
-    }
-
-    // 
-    //  DESC: Create the edge shape fixture
-    //  NOTE: An edge is a line segment of two points
-    //        This is no different then making a polygon from points
-    //
-    createEdgeShapeFixture( fixture )
-    {
-        // Do a sanity check because we need two points to define an edge
-        if( fixture.vertAry.length !== 2 )
-            throw new Error( `Physics object has incorrect number of points defined (${fixture.vertAry.length})!` );
-
-        // Apply scale to the size and divide by 2
-        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
-            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
-            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
-
-        // Convert the points to world location in meters
-        let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
-
-        this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__.Edge( Vec2Ary[0], Vec2Ary[1] ),
-            this.getFixtureDef( fixture ) );
-    }
-
-    // 
-    //  DESC: Create the polygon shape fixture
-    //
-    createPolygonShapeFixture( fixture )
-    {
-        let Vec2Ary = [];
-
-        // Apply scale to the size and divide by 2
-        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
-            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
-            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
-
-        // Is this polygon shape defined by a vector of points?
-        if( fixture.vertAry.length )
-        {
-            // Convert the points to world location in meters
-            this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
-        }
-        
-        // If vector points are not supplied, build a square based on the object size
-        else
-        {
-            // Bottom and left mod have their signs flipped so that a positive mod always means
-            // expansion of the side, and a negative mod always means a contraction of the side
-            let topMod = fixture.topMod * this.sprite.scale.y;
-            let bottomMod = -fixture.bottomMod * this.sprite.scale.y;
-            let leftMod = -fixture.leftMod * this.sprite.scale.x;
-            let rightMod = fixture.rightMod * this.sprite.scale.x;
-
-            // Convert to meters
-            // Box2D polygons are defined using Counter Clockwise Winding (CCW)
-            Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
-                    (-(size.w + leftMod)) * this.pixelsToMeters,
-                    (size.h + bottomMod) * this.pixelsToMeters ) );
-
-            Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
-                    (-(size.w + leftMod)) * this.pixelsToMeters,
-                    (-(size.h + topMod)) * this.pixelsToMeters ) );
-
-            Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
-                    (size.w + rightMod) * this.pixelsToMeters,
-                    (-(size.h + topMod)) * this.pixelsToMeters ) );
-
-            Vec2Ary.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
-                    (size.w + rightMod) * this.pixelsToMeters,
-                    (size.h + bottomMod) * this.pixelsToMeters ) );
-        }
-
-        this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__.Polygon( Vec2Ary ),
-            this.getFixtureDef( fixture ) );
-    }
-
-    // 
-    //  DESC: Create the chain shape fixture
-    //
-    createChainShapeFixture( fixture )
-    {
-        // Do a sanity check because we need more then 1 point to define a chain
-        if( fixture.vertAry.length > 1 )
-            throw new Error( `Physics object has incorrect number of points defined (${fixture.vertAry.length})!` );
-        
-        // Apply scale to the size and divide by 2
-        let size = new _common_size__WEBPACK_IMPORTED_MODULE_1__.Size(
-            this.sprite.objData.size.w * this.sprite.scale.x * 0.5,
-            this.sprite.objData.size.h * this.sprite.scale.y * 0.5 );
-
-        // Convert the points to world location in meters
-        let Vec2Ary = [];
-        this.convertPoints( Vec2Ary, fixture, size, this.sprite.scale );
-
-        this.body.createFixture(
-            planck_js__WEBPACK_IMPORTED_MODULE_2__.Chain( Vec2Ary, fixture.chainLoop ),
-            this.getFixtureDef( fixture ) );
-    }
-
-    // 
-    //  DESC: Convert the points to world location in meters
-    //
-    convertPoints( polyPointAry, fixture, size, scale )
-    {
-        // Convert to meters and world coordinates
-        // Box2D polygons are defined using Counter Clockwise Winding (CCW)
-        for( let i = 0; i < fixture.vertAry.length; ++i )
-        {
-            polyPointAry.push(
-                planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( ((fixture.vertAry[i].x * scale.x) - size.w) * this.pixelsToMeters,
-                             ((fixture.vertAry[i].y * scale.y) - size.h) * this.pixelsToMeters ) );
-        }
-    }
-
-    // 
-    //  DESC: Update the physics
-    //
-    update()
-    {
-        if( this.isActive() )
-        {
-            if( !this.body.isStatic() && this.body.isAwake() )
-            {
-                //CStatCounter::Instance().IncPhysicsObjectsCounter();
-                
-                this.applyTransforms();
-            }
-        }
-    }
-    
-    // 
-    //  DESC: Update the physics
-    //
-    applyTransforms()
-    {
-        let pos = this.body.getPosition();
-        let angle = this.body.getAngle();
-        this.sprite.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
-        this.sprite.setRotXYZ( 0, 0, -angle, false );
-    }
-    
-    // 
-    //  DESC: Set the physics to be active
-    //
-    setActive( active )
-    {
-        if( this.body )
-            this.body.setActive( active );
-    }
-    
-    // 
-    //  DESC: Is this component active?
-    //
-    isActive()
-    {
-        return (this.body && this.body.isActive());
-    }
-
-    // 
-    //  DESC: Is this component awake?
-    //
-    isAwake()
-    {
-        return (this.body && !this.body.isStatic() && this.body.isAwake() );
-    }
-
-    // 
-    //  DESC: Update the physics
-    //
-    destroyBody()
-    {
-        if( this.body !== null )
-        {
-            this.world.destroyBody( this.body );
-            this.body = null;
-        }
-    }
-
-    // 
-    //  DESC: Set the physics position and rotation
-    //
-    setTransform( x, y, angle, resetVelocity = false )
-    {
-        if( this.body !== null )
-        {
-            this.body.setTransform( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ), angle );
-
-            if( resetVelocity )
-            {
-                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero() );
-                this.body.setAngularVelocity( 0 );
-            }
-            
-            // If this body is staic, need to apply the transforms the the sprite position
-            if( this.body.isStatic() )
-                this.applyTransforms();
-        }
-    }
-
-    // 
-    //  DESC: Set the physics position and rotation
-    //
-    setPosition( x, y, resetVelocity = false )
-    {
-        if( this.body !== null )
-        {
-            this.body.setPosition( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2( x * this.pixelsToMeters, -(y * this.pixelsToMeters) ) );
-
-            if( resetVelocity )
-            {
-                this.body.setLinearVelocity( planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2.zero() );
-                this.body.setAngularVelocity( 0 );
-            }
-            
-            // If this body is staic, need to apply the transforms the the sprite position
-            if( this.body.isStatic() )
-                this.applyTransforms();
-        }
-    }
-    
-    // 
-    //  DESC: Set the angular velocity
-    //
-    setAngularVelocity( value )
-    {
-        if( this.body !== null )
-            this.body.setAngularVelocity( value );
-    }
-    
-    // 
-    //  DESC: Set the angular velocity
-    //
-    applyAngularImpulse( value, wake = false )
-    {
-        if( this.body !== null )
-            this.body.applyAngularImpulse( value, wake );
-    }
-}
-
-
-/***/ }),
-/* 121 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "physicsWorldManager": () => (/* binding */ physicsWorldManager)
-/* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
-/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(122);
-/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(124);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-
-// 
-//  FILE NAME: physicsworldmanager.js
-//  DESC:      Physics manager class singleton
-//
-
-
-
-
-
-
-
-
-const LOAD_2D = 0;
-const LOAD_3D = 1;
-
-class PhysicsWorldManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
-{
-    constructor()
-    {
-        super();
-        
-        this.worldMap = new Map;
-    }
-    
-    //
-    //  DESC: Load all XML's associated with this group
-    //
-    loadWorldGroup2D( group )
-    {
-        return this.loadWorldGroup( LOAD_2D, group );
-    }
-    
-    loadWorldGroup3D( group )
-    {
-        return this.loadWorldGroup( LOAD_3D, group );
-    }
-    
-    loadWorldGroup( loadType, group )
-    {
-        // Make sure the group we are looking for has been defined in the list table file
-        let pathAry = this.listTableMap.get( group );
-        if( pathAry !== undefined )
-        {
-            // Load the group data if it doesn't already exist
-            if( this.worldMap.get( group ) === undefined )
-            {
-                // Create a new physics world inside of our map
-                if( loadType === LOAD_2D )
-                    this.worldMap.set( group, new _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__.PhysicsWorld2D );
-                else
-                    this.worldMap.set( group, new _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__.PhysicsWorld3D );
-
-                // There will only be one xml per physics world
-                let filePath = pathAry[0];
-
-                return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'xml', filePath )
-                        .then(( xmlNode ) => this.loadFromNode( group, xmlNode, filePath ))
-                        .catch(( error ) => { console.error(error.stack); throw error; });
-            }
-            else
-            {
-                throw new Error( `Physics world group has alread been loaded (${group})!` );
-            }
-        }
-        else
-        {
-            throw new Error( `Physics world list group name can't be found (${group})!` );
-        }
-    }
-    
-    //
-    //  DESC: Load from an xml node
-    //
-    loadFromNode( group, xmlNode, filePath )
-    {
-        // Get the physics world
-        let world = this.worldMap.get( group );
-        if( world === undefined )
-            throw new Error( `Physics World doesn't exist (${group}, ${filePath})!` );
-        
-        world.loadFromNode( xmlNode );
-    }
-    
-    //
-    //  DESC: Get the physics world
-    //
-    getWorld( group )
-    {
-        let world = this.worldMap.get( group );
-        if( world === undefined )
-            throw new Error( `Physics World doesn't exist (${group})!` );
-
-        return world;
-    }
-    
-    //
-    //  DESC: Destroy the physics world
-    //
-    destroyWorld( group )
-    {
-        this.worldMap.delete( group );
-    }
-}
-
-var physicsWorldManager = new PhysicsWorldManager;
-
-
-/***/ }),
-/* 122 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PhysicsWorld2D": () => (/* binding */ PhysicsWorld2D)
-/* harmony export */ });
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(123);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
-
-// 
-//  FILE NAME: physicsworld2d.js
-//  DESC:      Wrapper class for Box2D's b2World
-//
-
-
-
-
-
-
-
-class PhysicsWorld2D
-{
-    constructor()
-    {
-        // Box2D world
-        this.world = planck_js__WEBPACK_IMPORTED_MODULE_2__.World();
-        
-        // All bodies that are handled by this physics world
-        this.bodyAry = [];
-
-        // If we're actively running simulations
-        this.active = false;
-
-        // If we're going to start a step this frame
-        this.beginStep = 0;
-
-        // Timer to let us know when to do another step
-        this.timer = 0;
-
-        // The ammount of time to simulate in milliseconds
-        this.stepTime = 0;
-
-        // The ammount of time to simulate in Seconds
-        this.stepTimeSec = 0;
-
-        // The number of velocity and position steps to calculate
-        this.velStepCount = 0;
-        this.posStepCount = 0;
-
-        // pixels per meter scaler
-        this.pixelsPerMeter = 0;
-    }
-    
-    //
-    //  DESC: Load the physics world from XML node
-    //
-    loadFromNode( node )
-    {
-        // Get the world's settings, if any are set
-        let settingsNode = node.getElementsByTagName( "settings" );
-        if( settingsNode.length )
-        {
-            let attr = settingsNode[0].getAttribute( 'active' );
-            if( attr )
-                this.active = (attr === 'true');
-        }
-
-        // Get the world's gravity, if any are set
-        let gravityNode = node.getElementsByTagName( "gravity" );
-        if( gravityNode.length )
-        {
-            let gravity = planck_js__WEBPACK_IMPORTED_MODULE_2__.Vec2(
-                Number( gravityNode[0].getAttribute( "x" ) ),
-                Number( gravityNode[0].getAttribute( "y" ) ) );
-
-            this.world.setGravity( gravity );
-        }
-
-        // Get the stepping which determins how accurate the physics are
-        let steppingNode = node.getElementsByTagName( "stepping" );
-        if( steppingNode.length )
-        {
-            this.velStepCount = Number( steppingNode[0].getAttribute( "velocity" ) );
-            this.posStepCount = Number( steppingNode[0].getAttribute( "position" ) );
-
-            let fps = Number( steppingNode[0].getAttribute( "fps" ) );
-
-            // If the number is negative, get the current refresh rate
-            /*if( fps < 0.0 )
-            {
-                SDL_DisplayMode dm;
-                SDL_GetDesktopDisplayMode(0, &dm);
-
-                if( dm.refresh_rate == 0 )
-                    fps = 60.f;
-                else
-                    fps = dm.refresh_rate;
-            }*/
-
-            this.setFPS( fps );
-        }
-
-        // Get the conversion of pixels per meter because Box2D works in meters
-        let conversionNode = node.getElementsByTagName( "conversion" );
-        if( conversionNode.length )
-            this.pixelsPerMeter = Number( conversionNode[0].getAttribute( "pixelsPerMeter" ) );
-    }
-    
-    //
-    //  DESC: Create a physics body
-    //  NOTE: Function should only be called from physics component
-    //
-    createBody( def )
-    {
-        let body = this.world.createBody( def );
-
-        if( body === null )
-            throw new Error( `Error creating physics body!` );
-
-        this.bodyAry.push( body );
-
-        return body;
-    }
-    
-    //
-    //  DESC: Destroy a physics body
-    //  NOTE: Function should only be called from physics component
-    //
-    destroyBody( body )
-    {
-        let index = this.bodyAry.indexOf( body );
-
-        if( index !== -1 )
-        {
-            // Destroy the body
-            this.world.destroyBody( body );
-
-            // Remove the body from the array
-            this.bodyAry.splice( index, 1 );
-        }
-    }
-    
-    //
-    //  DESC: Perform fixed time step physics simulation
-    //
-    fixedTimeStep()
-    {
-        if( this.active )
-        {
-            // Increment the timer
-            this.timer += _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime;
-
-            if( this.timer > this.stepTime )
-            {
-                this.timer = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__.modulus( this.timer, this.stepTime );
-
-                // Begin the physics world step
-                this.world.step( this.stepTimeSec, this.velStepCount, this.posStepCount );
-            }
-
-            //this.timeRatio = this.timer / this.stepTime;
-        }
-    }
-
-    //
-    //  DESC: Perform variable time step physics simulation
-    //
-    variableTimeStep()
-    {
-        if( this.active )
-        {
-            // Begin the physics world step
-            this.world.step( _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.elapsedTime / 1000.0, this.velStepCount, this.posStepCount );
-        }
-    }
-    
-    //
-    //  DESC: Set the fps to run the simulation at
-    //
-    setFPS( fps )
-    {
-        // Make sure we don't have a negative or zero fps
-        if( fps > 1.0 )
-        {
-            // Calculate the step paramaters
-            this.stepTimeSec = 1.0 / fps;
-            this.stepTime = this.stepTimeSec * 1000.0;
-
-            // Set the timer so that we'll begin a step next time we call Update
-            this.timer = this.stepTime;
-        }
-    }
-}
-
-
-/***/ }),
-/* 123 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "highResTimer": () => (/* binding */ highResTimer)
-/* harmony export */ });
-
-// 
-//  FILE NAME: highresolutiontimer.js
-//  DESC:      high resolution timer class
-//
-
-
-
-class HighResTimer
-{
-    constructor()
-    {
-        // Last recorded time
-        this.lastTime = performance.now();
-
-        // Timer time
-        this.timer;
-
-        // The amount of time that has elapsed between frames
-        this.elapsedTime;
-
-        // The frames per second
-        this.fps;
-    }
-    
-    //
-    //  DESC: Simple timer start
-    //
-    timerStart()
-    {
-        // Get the current performance time
-        this.timer = performance.now();
-    }
-
-    //
-    //  DESC: Simple timer duration
-    //
-    timerStop()
-    {
-        // Get the elapsed time
-        return (performance.now() - this.timer);
-    }
-    
-    //
-    //  DESC: Calc the elapsed time
-    //
-    calcElapsedTime()
-    {
-        // Get the current performance time
-        let time = performance.now();
-
-        // Set the elapsed time
-        this.elapsedTime = time - this.lastTime;
-
-        // Set the fps
-        this.fps = 1000.0 / this.elapsedTime;
-
-        // Catch any hickups - cap to about 10 fps
-        // Elapsed time is not expected to get this 
-        // high in  a game which is why it's capped
-        if( this.elapsedTime > 100.0 )
-            this.elapsedTime = 100.0;
-
-        // Reset the last time
-        this.lastTime = time;
-    }
-
-}
-
-var highResTimer = new HighResTimer;
-
-
-/***/ }),
-/* 124 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "PhysicsWorld3D": () => (/* binding */ PhysicsWorld3D)
-/* harmony export */ });
-
-// 
-//  FILE NAME: physicsworld3d.js
-//  DESC:      Wrapper class for Bullet physics
-//
-
-class PhysicsWorld3D
-{
-    constructor()
-    {
-    }
-}
-
-
-/***/ }),
-/* 125 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "UIControlNavNode": () => (/* binding */ UIControlNavNode)
-/* harmony export */ });
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-
-// 
-//  FILE NAME: uicontrolnavnode.js
-//  DESC:      UI Control Navigation Node
-//
-
-
-
-
-class UIControlNavNode
-{
-    constructor( uiControl = null )
-    {
-        // UI Control pointer
-        this.uiControl = uiControl;
-
-        // Navigation node pointers
-        this.upNode = null;
-        this.downNode = null;
-        this.leftNode = null;
-        this.rightNode = null;
-    }
-    
-    // 
-    //  DESC: Set/Get Right Node
-    //
-    setNode( navId, node )
-    {
-        if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_UP )
-            this.upNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_DOWN )
-            this.downNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_LEFT )
-            this.leftNode = node;
-        else if( navId === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_RIGHT )
-            this.rightNode = node;
-    }
-
-    getNode( navNode )
-    {
-        if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_UP )
-            return this.upNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_DOWN )
-            return this.downNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_LEFT )
-            return this.leftNode;
-        else if( navNode === _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENAV_NODE_RIGHT )
-            return this.rightNode;
-
-        return null;
-    }
-}
-
-
-/***/ }),
-/* 126 */
+/* 129 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31974,15 +32431,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "create": () => (/* binding */ create)
 /* harmony export */ });
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(127);
-/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(132);
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(133);
-/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(134);
-/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(135);
-/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(136);
-/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(137);
-/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(138);
-/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(140);
+/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(130);
+/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(135);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(136);
+/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(137);
+/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(138);
+/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(139);
+/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(140);
+/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(141);
+/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(143);
 // 
 //  FILE NAME: uicontrolfactory.js
 //  DESC:      factory for control creation
@@ -32050,7 +32507,7 @@ function create( node, group )
 
 
 /***/ }),
-/* 127 */
+/* 130 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32058,8 +32515,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UILabel": () => (/* binding */ UILabel)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(131);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
 
 // 
 //  FILE NAME: uilabel.js
@@ -32083,7 +32540,7 @@ class UILabel extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 128 */
+/* 131 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32091,21 +32548,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControl": () => (/* binding */ UIControl)
 /* harmony export */ });
-/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(129);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(108);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(110);
+/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(132);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(41);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
-/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(130);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(26);
+/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(133);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(39);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(10);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(27);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(114);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(22);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(101);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(35);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(131);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(109);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(27);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(37);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(134);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(42);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5);
 
 // 
@@ -33053,7 +33510,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
 
 
 /***/ }),
-/* 129 */
+/* 132 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33061,10 +33518,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ControlBase": () => (/* binding */ ControlBase)
 /* harmony export */ });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(35);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(31);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(37);
 
 // 
 //  FILE NAME: controlbase.js
@@ -33186,7 +33643,7 @@ class ControlBase extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 }
 
 /***/ }),
-/* 130 */
+/* 133 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33236,7 +33693,7 @@ class Quad
 
 
 /***/ }),
-/* 131 */
+/* 134 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33338,7 +33795,7 @@ const EAR_UP    = 1,
 
 
 /***/ }),
-/* 132 */
+/* 135 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33346,8 +33803,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIButton": () => (/* binding */ UIButton)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(131);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
 
 // 
 //  FILE NAME: uibutton.js
@@ -33370,7 +33827,7 @@ class UIButton extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 133 */
+/* 136 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33378,13 +33835,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UISubControl": () => (/* binding */ UISubControl)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(125);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(113);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(23);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(126);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(131);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(109);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(129);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(134);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(42);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
@@ -34009,7 +34466,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 134 */
+/* 137 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34017,11 +34474,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIButtonList": () => (/* binding */ UIButtonList)
 /* harmony export */ });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(133);
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(131);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(109);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(134);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(42);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
 
 // 
@@ -34271,7 +34728,7 @@ class UIButtonList extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContr
 
 
 /***/ }),
-/* 135 */
+/* 138 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34279,8 +34736,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UICheckBox": () => (/* binding */ UICheckBox)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(131);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -34333,7 +34790,7 @@ class UICheckBox extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 136 */
+/* 139 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34341,12 +34798,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UISlider": () => (/* binding */ UISlider)
 /* harmony export */ });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(133);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(131);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(109);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(134);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(42);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 // 
@@ -34692,7 +35149,7 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
 
 
 /***/ }),
-/* 137 */
+/* 140 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34700,17 +35157,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIScrollBox": () => (/* binding */ UIScrollBox)
 /* harmony export */ });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(133);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(110);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(27);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(123);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(58);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(35);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(126);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(131);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(109);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(37);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(129);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(134);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(42);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5);
 
 // 
@@ -35645,7 +36102,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
 
 
 /***/ }),
-/* 138 */
+/* 141 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -35653,12 +36110,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIMeter": () => (/* binding */ UIMeter)
 /* harmony export */ });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(139);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(123);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(58);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(128);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(131);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(131);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(134);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(37);
 
 // 
 //  FILE NAME: uimeter.js
@@ -36091,7 +36548,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
 
 
 /***/ }),
-/* 139 */
+/* 142 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -36197,7 +36654,7 @@ class Timer
 
 
 /***/ }),
-/* 140 */
+/* 143 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -36205,13 +36662,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIProgressBar": () => (/* binding */ UIProgressBar)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(128);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(110);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(43);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(114);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(131);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(134);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
 // 
@@ -36536,7 +36993,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 141 */
+/* 144 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -36546,7 +37003,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
 /* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(23);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(109);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
 // 
 //  FILE NAME: menutree.js
 //  DESC:      Class that hold a tree of menus
@@ -36984,7 +37441,7 @@ class MenuTree
 
 
 /***/ }),
-/* 142 */
+/* 145 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -36992,7 +37449,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "cameraManager": () => (/* binding */ cameraManager)
 /* harmony export */ });
-/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(143);
+/* harmony import */ var _common_camera__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(146);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 
 // 
@@ -37160,7 +37617,7 @@ var cameraManager = new CameraManager;
 
 
 /***/ }),
-/* 143 */
+/* 146 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37169,7 +37626,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Camera": () => (/* binding */ Camera)
 /* harmony export */ });
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(105);
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(33);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 
@@ -37363,7 +37820,7 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
 }
 
 /***/ }),
-/* 144 */
+/* 147 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37371,9 +37828,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "soundManager": () => (/* binding */ soundManager)
 /* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
-/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(145);
-/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(146);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(148);
+/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(149);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
@@ -37636,7 +38093,7 @@ var soundManager = new SoundManager;
 
 
 /***/ }),
-/* 145 */
+/* 148 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37811,7 +38268,7 @@ class Sound
 
 
 /***/ }),
-/* 146 */
+/* 149 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37974,7 +38431,7 @@ class PlayList
 
 
 /***/ }),
-/* 147 */
+/* 150 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37982,7 +38439,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "strategyManager": () => (/* binding */ strategyManager)
 /* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
 
 // 
 //  FILE NAME: strategymanager.js
@@ -38162,7 +38619,7 @@ var strategyManager = new StrategyManager;
 
 
 /***/ }),
-/* 148 */
+/* 151 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38170,9 +38627,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "strategyLoader": () => (/* binding */ strategyLoader)
 /* harmony export */ });
-/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(147);
-/* harmony import */ var _strategy_strategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(110);
+/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(150);
+/* harmony import */ var _strategy_strategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(152);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
 
 // 
 //  FILE NAME: strategyloader.js
@@ -38341,7 +38798,7 @@ var strategyLoader = new Strategyloader;
 
 
 /***/ }),
-/* 149 */
+/* 152 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38349,11 +38806,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Strategy": () => (/* binding */ Strategy)
 /* harmony export */ });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(150);
-/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(142);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(27);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(153);
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
+/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(153);
+/* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(145);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(156);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 
@@ -38800,7 +39257,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
 
 /***/ }),
-/* 150 */
+/* 153 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38808,7 +39265,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "NodeDataList": () => (/* binding */ NodeDataList)
 /* harmony export */ });
-/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(151);
+/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(154);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 //
@@ -38893,7 +39350,7 @@ class NodeDataList
 
 
 /***/ }),
-/* 151 */
+/* 154 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38901,8 +39358,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "NodeData": () => (/* binding */ NodeData)
 /* harmony export */ });
-/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(152);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(131);
+/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(155);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 //
@@ -38984,7 +39441,7 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
 
 
 /***/ }),
-/* 152 */
+/* 155 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39045,7 +39502,7 @@ class SpriteData
 
 
 /***/ }),
-/* 153 */
+/* 156 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39053,15 +39510,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "create": () => (/* binding */ create)
 /* harmony export */ });
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(140);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(138);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(154);
-/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(158);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(159);
-/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(160);
-/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(161);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(131);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(114);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(143);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(141);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(157);
+/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(161);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(162);
+/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(163);
+/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(164);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(134);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5);
 
 // 
@@ -39159,7 +39616,7 @@ function CreateUIControlNode( nodeData )
 
 
 /***/ }),
-/* 154 */
+/* 157 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39167,8 +39624,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteNode": () => (/* binding */ SpriteNode)
 /* harmony export */ });
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(155);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(110);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(158);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(43);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -39257,7 +39714,7 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 
 
 /***/ }),
-/* 155 */
+/* 158 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39265,7 +39722,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "RenderNode": () => (/* binding */ RenderNode)
 /* harmony export */ });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(159);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -39434,7 +39891,7 @@ class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 
 
 /***/ }),
-/* 156 */
+/* 159 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39442,7 +39899,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Node": () => (/* binding */ Node)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(160);
 
 // 
 //  FILE NAME: node.js
@@ -39579,7 +40036,7 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 157 */
+/* 160 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39716,7 +40173,7 @@ class iNode
 
 
 /***/ }),
-/* 158 */
+/* 161 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39724,8 +40181,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteLeafNode": () => (/* binding */ SpriteLeafNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(110);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(160);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(43);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -39806,7 +40263,7 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 159 */
+/* 162 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39814,7 +40271,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
 /* harmony export */ });
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(155);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(158);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -39902,7 +40359,7 @@ class UIControlNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 
 
 /***/ }),
-/* 160 */
+/* 163 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39910,7 +40367,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControlLeafNode": () => (/* binding */ UIControlLeafNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(157);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(160);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 // 
@@ -39988,7 +40445,7 @@ class UIControlLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 161 */
+/* 164 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39996,8 +40453,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ObjectNode": () => (/* binding */ ObjectNode)
 /* harmony export */ });
-/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(105);
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(155);
+/* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(158);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 // 
@@ -40071,7 +40528,7 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
 }
 
 /***/ }),
-/* 162 */
+/* 165 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40082,22 +40539,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "load": () => (/* binding */ load)
 /* harmony export */ });
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(163);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(27);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(103);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(147);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(148);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(106);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(123);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(166);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(114);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(25);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(150);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(151);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(58);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(21);
-/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(32);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(39);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(118);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(31);
 /* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(23);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(109);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(42);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(164);
+/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(167);
 
 // 
 //  FILE NAME: titlescreenstate.js
@@ -40248,7 +40705,7 @@ function load()
 
 
 /***/ }),
-/* 163 */
+/* 166 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40257,9 +40714,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "CommonState": () => (/* binding */ CommonState)
 /* harmony export */ });
 /* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(103);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
 /* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(23);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(109);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
 
 // 
@@ -40336,7 +40793,7 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
 
 /***/ }),
-/* 164 */
+/* 167 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40347,7 +40804,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_title-screen_\" type=\"actor\">\r\n        <node name=\"background\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 165 */
+/* 168 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40360,11 +40817,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ColorTo": () => (/* binding */ ColorTo),
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(123);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(58);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(38);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 
 //
@@ -40744,7 +41201,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 166 */
+/* 169 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40753,7 +41210,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(165);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(168);
 
 //
 //  FILE NAME: statescripts.js
@@ -40805,7 +41262,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 167 */
+/* 170 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40813,15 +41270,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(123);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(58);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(144);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(103);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(165);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(109);
-/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(131);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(147);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(25);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(38);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(168);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(42);
+/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(134);
 
 //
 //  FILE NAME: menuscripts.js
@@ -41691,7 +42148,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 168 */
+/* 171 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41699,12 +42156,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(147);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(150);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(144);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(147);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(165);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(168);
 
 //
 //  FILE NAME: levelcripts.js
@@ -41819,7 +42276,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 169 */
+/* 172 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41830,7 +42287,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(startup)\">\r\n        <file path=\"data/objects/2d/objectDataList/startupDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(loadingScreen)\">\r\n        <file path=\"data/objects/2d/objectDataList/loadingScreenDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/objectDataList/menuBackgrounds.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuButtonFrames.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuMisc.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(title_screen)\">\r\n        <file path=\"data/objects/2d/objectDataList/titleScreenDataList.lst\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"(level_1)\">\r\n        <file path=\"data/objects/2d/objectDataList/level1DataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 170 */
+/* 173 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41841,7 +42298,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_startup_\">\r\n        <file path=\"data/objects/strategy/state/startup.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_title-screen_\">\r\n        <file path=\"data/objects/strategy/state/titlescreen.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_loading-screen_\">\r\n        <file path=\"data/objects/strategy/state/loadscreen.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_level-1-stage_\">\r\n        <file path=\"data/objects/strategy/level1/stage.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-ui_\">\r\n        <file path=\"data/objects/strategy/level1/ui.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-ball_\">\r\n        <file path=\"data/objects/strategy/level1/ball.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-multiplier_\">\r\n        <file path=\"data/objects/strategy/level1/multiplier.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 171 */
+/* 174 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41852,7 +42309,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n    </default>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 172 */
+/* 175 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41863,7 +42320,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
 
 /***/ }),
-/* 173 */
+/* 176 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41874,7 +42331,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 174 */
+/* 177 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41885,7 +42342,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 175 */
+/* 178 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41896,7 +42353,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 176 */
+/* 179 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41907,7 +42364,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 177 */
+/* 180 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41918,7 +42375,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
 
 /***/ }),
-/* 178 */
+/* 181 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41929,7 +42386,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<controllerMapping>\n\t<keyboardMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"W\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"S\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"A\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"D\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"ARROW UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"ARROW DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"ARROW LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"ARROW RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"ENTER\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Escape\" componetId=\"ESCAPE\" configurable=\"false\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"LEFT SHIFT\" defaultId=\"LEFT SHIFT\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"[\" defaultId=\"[\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"]\" defaultId=\"]\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Up\" componetId=\"W\" defaultId=\"W\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Down\" componetId=\"S\" defaultId=\"S\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Left\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Right\" componetId=\"D\" defaultId=\"D\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"E\" defaultId=\"E\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</keyboardMapping>\n\t<mouseMapping>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<!-- Game specific controls -->\n\t\t\t<actionMap action=\"Shoot\" componetId=\"LEFT MOUSE\" defaultId=\"LEFT MOUSE\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"MIDDLE MOUSE\" defaultId=\"MIDDLE MOUSE\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</mouseMapping>\n\t<gamepadMapping>\n\t\t<!-- Key binding controls not displayed in the settings -->\n\t\t<playerHidden>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"L STICK UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"L STICK DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"L STICK LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"L STICK RIGHT\"/>\n\t\t\t<actionMap action=\"Menu Up\" componetId=\"UP\"/>\n\t\t\t<actionMap action=\"Menu Down\" componetId=\"DOWN\"/>\n\t\t\t<actionMap action=\"Menu Left\" componetId=\"LEFT\"/>\n\t\t\t<actionMap action=\"Menu Right\" componetId=\"RIGHT\"/>\n\t\t</playerHidden>\n\t\t<!-- Key binding controls displayed in the settings -->\n\t\t<playerVisible>\n\t\t\t<actionMap action=\"Menu Select\" componetId=\"A\" defaultId=\"A\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Back\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Toggle\" componetId=\"START\" defaultId=\"START\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Left\" componetId=\"L BUMPER\" defaultId=\"L BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Menu Tab Right\" componetId=\"R BUMPER\" defaultId=\"R BUMPER\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Shoot\" componetId=\"B\" defaultId=\"B\" configurable=\"true\"/>\n\t\t\t<actionMap action=\"Deccelerate\" componetId=\"X\" defaultId=\"X\" configurable=\"true\"/>\n\t\t</playerVisible>\n\t</gamepadMapping>\n</controllerMapping>\n");
 
 /***/ }),
-/* 179 */
+/* 182 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41940,7 +42397,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<menuActionList>\r\n\r\n    <backAction>Menu Back</backAction>\r\n    <toggleAction>Menu Toggle</toggleAction>\r\n    <escapeAction>Menu Escape</escapeAction>\r\n    <selectAction>Menu Select</selectAction>\r\n    <upAction>Menu Up</upAction>\r\n    <downAction>Menu Down</downAction>\r\n    <leftAction>Menu Left</leftAction>\r\n    <rightAction>Menu Right</rightAction>\r\n    <tabLeft>Menu Tab Left</tabLeft>\r\n    <tabRight>Menu Tab Right</tabRight>\r\n    <defaultTree>pause_tree</defaultTree>\r\n\r\n</menuActionList>\r\n\r\n");
 
 /***/ }),
-/* 180 */
+/* 183 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41951,21 +42408,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(27);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(147);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(148);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(123);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(106);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(150);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(151);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(58);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(35);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(3);
-/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(32);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(39);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(118);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(31);
 /* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(23);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(162);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(181);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(165);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(184);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(20);
-/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(184);
+/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(187);
 
 // 
 //  FILE NAME: loadstate.js
@@ -42220,7 +42677,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
 
 /***/ }),
-/* 181 */
+/* 184 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42230,29 +42687,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Level1State": () => (/* binding */ Level1State),
 /* harmony export */   "load": () => (/* binding */ load)
 /* harmony export */ });
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(163);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(166);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(103);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(123);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(106);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(25);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(58);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(121);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(27);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(144);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(147);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(101);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(148);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(56);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(114);
+/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(147);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(150);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(27);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(151);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(3);
-/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(32);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(39);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(118);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(31);
 /* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(23);
-/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(131);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(109);
+/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(134);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(42);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(5);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(20);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(182);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_stage_strategy_loader__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(183);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(185);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_stage_strategy_loader__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(186);
 
 // 
 //  FILE NAME: level1state.js
@@ -42752,7 +43209,7 @@ function load()
 
 
 /***/ }),
-/* 182 */
+/* 185 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42763,7 +43220,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_level-1-ball_\"/>\r\n    <strategy name=\"_level-1-multiplier_\"/>\r\n    \r\n    <strategy name=\"_level-ui_\">\r\n        <node name=\"uiWinMeter\" instance=\"uiWinMeter\"/>\r\n        <node name=\"uiBallMeter\" instance=\"uiBallMeter\"/>\r\n        <node name=\"uiMultiplier\" instance=\"uiMultiplier\"/>\r\n\r\n        <node name=\"ui_tennis_ball_green\" instance=\"ui_tennis_ball_green\" active=\"false\"/>\r\n        <node name=\"ui_tennis_ball_pink\" instance=\"ui_tennis_ball_pink\" active=\"false\"/>\r\n        <node name=\"ui_frisbee\" instance=\"ui_frisbee\" active=\"false\"/>\r\n        <node name=\"ui_bone_biscuit\" instance=\"ui_bone_biscuit\" active=\"false\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 183 */
+/* 186 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42774,7 +43231,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_level-1-stage_\">\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <!--  rails  -->\r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"-570\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n    </strategy>\r\n  \r\n</loader>\r\n\r\n");
 
 /***/ }),
-/* 184 */
+/* 187 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42785,7 +43242,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_loading-screen_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"loadAnim\" instance=\"loadAnim\">\r\n            <sprite>\r\n                <script prepare=\"animate\"/>\r\n            </sprite>\r\n        </node>\r\n        <node name=\"load_font\" instance=\"load_font\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 185 */
+/* 188 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
