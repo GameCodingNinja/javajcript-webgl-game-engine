@@ -22,7 +22,7 @@
         </sprite>
 
         <sprite objectName="control_font">
-            <font fontName="dejavu_sans_cond_32">
+            <font fontName="dejavu_sans_cond_28">
                 <alignment horzAlign="left" vertAlign="center"/>
             </font>
             <position x="-435" y="0" z="0"/>

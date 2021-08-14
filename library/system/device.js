@@ -52,10 +52,10 @@ class Device
         menuManager.resetTransform();
         menuManager.resetDynamicOffset();
         cameraManager.rebuild();
-        this._canvas.width = settings.size.w;
-        this._canvas.height = settings.size.h;
-        this._glContext.viewport(0, 0, settings.size.w, settings.size.h);
-        console.log( `Canvas size: ${settings.size.w} x ${settings.size.h}; DPR: ${window.devicePixelRatio}` );
+        this._canvas.width = width
+        this._canvas.height = height;
+        this._glContext.viewport(0, 0, width, height);
+        //console.log( `Canvas size: ${width} x ${height}; DPR: ${window.devicePixelRatio}` );
     }
 
     // 

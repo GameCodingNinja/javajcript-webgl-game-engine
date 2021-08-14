@@ -41,9 +41,6 @@ export class Game
         // Create the OpenGL context
         let gl = device.create();
 
-        // Init some event objects
-        //eventManager.init();
-
         // Set the init shader callback
         signalManager.connect_initShader( this.initShaderCallBack.bind(this) );
 

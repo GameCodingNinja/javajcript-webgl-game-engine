@@ -96,25 +96,12 @@
                 <script select="Control_OnSelect"/>
             </scriptList>
         </control>
-    
-        <!-- Menu Tab Left Key Binding Button -->
-        <control name="menu_tab_left" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
+
+        <!-- Menu Toggle Key Binding Button -->
+        <control name="fullscreen_toggle" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
             <fontStringList>
-                <string text="Menu Tab Left"/>
-            </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptList>
-                <script active="Control_OnActive"/>
-                <script select="Control_OnSelect"/>
-            </scriptList>
-        </control>
-    
-        <!-- Menu Tab Right Key Binding Button -->
-        <control name="menu_tab_right" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
-            <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringList>
-                <string text="Menu Tab Right"/>
+                <string text="Fullscreen Toggle"/>
             </fontStringList>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
@@ -188,19 +175,6 @@
             <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
             <fontStringList>
                 <string text="Shoot"/>
-            </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptList>
-                <script active="Control_OnActive"/>
-                <script select="Control_OnSelect"/>
-            </scriptList>
-        </control>
-    
-        <!-- Deccelerate Key Binding Button -->
-        <control name="deccelerate" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
-            <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringList>
-                <string text="Deccelerate"/>
             </fontStringList>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>

@@ -16,7 +16,7 @@ import { TestArenaState } from '../state/testarenastate';
 //import { LoadState } from '../state/loadstate';
 //import { Level1State } from '../state/level1state';
 //import { SmartConfirmBtn } from '../smartGUI/smartconfirmbtn';
-import { gl, device } from '../../../library/system/device';
+import { device } from '../../../library/system/device';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 //import * as stateDefs from '../state/statedefs';
@@ -29,14 +29,6 @@ export class Game
 {
     constructor()
     {
-        // Set the init shader callback
-        signalManager.connect_initShader( this.initShaderCallBack.bind(this) );
-
-        // Load the settings
-        settings.loadFromNode( genFunc.stringLoadXML( settingsCfg ) );
-
-        // Init the game
-        this.init();
     }
     
     // 
@@ -44,8 +36,14 @@ export class Game
     //
     init()
     {
-        // Create the projection matrixes
-        device.createProjMatrix();
+        // Load the settings
+        settings.loadFromNode( genFunc.stringLoadXML( settingsCfg ) );
+
+        // Create the OpenGL context
+        let gl = device.create();
+
+        // Set the init shader callback
+        signalManager.connect_initShader( this.initShaderCallBack.bind(this) );
         
         // Do we add stencil buffer
         if( settings.createStencilBuffer )
@@ -161,7 +159,7 @@ export class Game
         this.gameState.transform();
 
         // Clear the back buffer
-        gl.clear( this.clearBufferMask );
+        device.gl.clear( this.clearBufferMask );
         
         // Do the rendering
         this.gameState.render();

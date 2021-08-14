@@ -47,7 +47,7 @@ import actionManagerCfg from 'raw-loader!../../data/settings/controllerMapping.c
 import menuActionLst from 'raw-loader!../../data/objects/2d/menu/menu_action.list';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
-const STARTUP_ASSET_COUNT = 79,
+const STARTUP_ASSET_COUNT = 81,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState

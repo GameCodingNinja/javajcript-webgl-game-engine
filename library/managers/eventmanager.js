@@ -9,8 +9,8 @@ import { Point } from '../common/point';
 import { GenericEvent } from '../common/genericevent';
 import { Gamepad } from '../common/gamepad';
 import { menuManager } from '../gui/menumanager';
+import { actionManager } from '../managers/actionmanager';
 import { settings } from '../utilities/settings';
-import { cameraManager } from '../managers/cameramanager';
 import * as gamepadevent from '../common/gamepadevent';
 import { device } from '../system/device';
 
@@ -166,15 +166,7 @@ class EventManager
         {
             this.queue.push( event );
 
-            if (event.code == 'KeyF')
-            {
-                console.log('onKeyDown');
-                if (!document.fullscreenElement)
-                    device.canvas.requestFullscreen();
-
-                else if (document.exitFullscreen)
-                    document.exitFullscreen()
-            }
+            //console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
         }
     }
     
@@ -185,6 +177,17 @@ class EventManager
     {
         this.queue.push( event );
 
+        // Check for fullscreen toggle
+        if( actionManager.wasAction( event, 'Fullscreen Toggle' ) )
+        {
+            console.log('onKeyDown');
+                if (!document.fullscreenElement)
+                    device.canvas.requestFullscreen();
+
+                else if (document.exitFullscreen)
+                    document.exitFullscreen();
+        }
+
         //console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
     }
 
@@ -193,15 +196,6 @@ class EventManager
     //
     onResize( event )
     {
-        if( this.allowResizeListener )
-        {
-            //console.log(`onResize`);
-            //let dpr = window.devicePixelRatio;
-            //if( dpr > 1 )
-            //    dpr *= 1.01;
-            //device.handleResolutionChange( Math.round(dpr * settings.initialSize.w), Math.round(dpr * settings.initialSize.h) );
-            //console.log( `Canvas size: ${device.canvas.clientWidth} x ${device.canvas.clientHeight}; DPR: ${dpr}` );
-        }
     }
 
     //
