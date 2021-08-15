@@ -37,6 +37,7 @@ class PlayerShip_RotateGun
     constructor( sprite )
     {
         this.sprite = sprite;
+        this.iter = this.iteration();
     }
 
     // 
@@ -65,7 +66,7 @@ class PlayerShip_RotateGun
     //
     execute()
     {
-        return this.iteration().next().done;
+        return this.iter.next().done;
     }
 }
 

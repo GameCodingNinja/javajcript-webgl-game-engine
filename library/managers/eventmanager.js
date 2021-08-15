@@ -27,7 +27,7 @@ class EventManager
         this.canvas.addEventListener( 'mousedown', this.onMouseDown.bind(this) );
         this.canvas.addEventListener( 'mouseup', this.onMouseUp.bind(this) );
         this.canvas.addEventListener( 'mousemove', this.onMouseMove.bind(this) );
-        document.addEventListener( 'scroll', this.onScroll.bind(this) );
+        //document.addEventListener( 'scroll', this.onScroll.bind(this) );
         
         // Using document for key listener because canvas needs the focus before
         // it will trap key events. There's no good solution for force the focus
@@ -51,9 +51,7 @@ class EventManager
         this.mouseAbsolutePos = new Point;
         this.mouseRelativePos = new Point;
         
-        this.mouseOffset = new Point(
-            document.documentElement.scrollLeft - this.canvas.offsetLeft,
-            document.documentElement.scrollTop - this.canvas.offsetTop );
+        //this.mouseOffset = new Point();
 
         // Dictionary for holding all the gamepads
         this.gamePadMap = new Map;
@@ -84,12 +82,12 @@ class EventManager
     //
     //  DESC: Handle onScroll events
     //
-    onScroll( event )
+    /*onScroll( event )
     {
         this.mouseOffset.setXYZ(
             document.documentElement.scrollLeft - this.canvas.offsetLeft,
             document.documentElement.scrollTop - this.canvas.offsetTop );
-    }
+    }*/
     
     //
     //  DESC: Handle onMouseDown events
@@ -194,9 +192,9 @@ class EventManager
     //
     //  DESC: onResizeObserver even handler
     //
-    onResize( event )
+    /*onResize( event )
     {
-    }
+    }*/
 
     //
     //  DESC: Handle onGamepadconnected events
@@ -228,19 +226,23 @@ class EventManager
     //
     filterMousePos( event )
     {
-        let x = event.offsetX + this.mouseOffset.x;
-        let y = event.offsetY + this.mouseOffset.y;
+        let x = event.offsetX;
+        let y = event.offsetY;
+        let pixelRatio = window.devicePixelRatio;
 
         if( document.fullscreenElement )
         {
-            let dpr = window.devicePixelRatio;
-            x = Math.trunc(event.offsetX * dpr);
-            y = Math.trunc(event.offsetY * dpr);
+            x = Math.trunc(event.offsetX * pixelRatio);
+            y = Math.trunc(event.offsetY * pixelRatio);
+
+            // Since it's needed for fullscreen, nullify it for anyone else using it
+            pixelRatio = 1.0; 
         }
 
         // Create a new event member to hold game custom values
         event.gameAdjustedX = x;
         event.gameAdjustedY = y;
+        event.gameAdjustedPixelRatio = pixelRatio;
 
         this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
         this.mouseAbsolutePos.setXYZ( x, y);

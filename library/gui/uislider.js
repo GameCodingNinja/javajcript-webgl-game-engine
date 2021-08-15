@@ -168,9 +168,9 @@ export class UISlider extends UISubControl
             let oneOverAspectRatio = 1.0 / settings.orthoAspectRatio.h;
 
             if( this.orientation === defs.EO_HORIZONTAL )
-                this.incSliderMovePos( event.movementX * oneOverAspectRatio );
+                this.incSliderMovePos( event.movementX * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) );
             else
-                this.incSliderMovePos( event.movementY * oneOverAspectRatio );
+                this.incSliderMovePos( event.movementY * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) );
         }
 
         return result;
