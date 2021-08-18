@@ -51,10 +51,13 @@
             <fontStringList>
                 <string text="Menu Select"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
 
@@ -64,8 +67,9 @@
             <fontStringList>
                 <string text="Menu Escape"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
@@ -77,8 +81,9 @@
             <fontStringList>
                 <string text="Menu Back"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
@@ -90,8 +95,9 @@
             <fontStringList>
                 <string text="Menu Toggle"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
@@ -103,8 +109,9 @@
             <fontStringList>
                 <string text="Fullscreen Toggle"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
@@ -124,8 +131,9 @@
             <fontStringList>
                 <string text="Up"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
@@ -137,8 +145,9 @@
             <fontStringList>
                 <string text="Down"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
@@ -150,8 +159,9 @@
             <fontStringList>
                 <string text="Left"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
@@ -163,21 +173,9 @@
             <fontStringList>
                 <string text="Right"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
-                <script active="Control_OnActive"/>
-                <script select="Control_OnSelect"/>
-            </scriptList>
-        </control>
-
-        <!-- Shoot Key Binding Button -->
-        <control name="shoot" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
-            <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
-            <fontStringList>
-                <string text="Shoot"/>
-            </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
@@ -197,7 +195,7 @@
             <fontStringList>
                 <string text="Reset To Default"/>
             </fontStringList>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>

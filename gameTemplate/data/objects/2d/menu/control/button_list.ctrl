@@ -32,7 +32,7 @@
         <control controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
             <position x="-110" y="0" z="0"/>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
@@ -44,7 +44,7 @@
             <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
             <position x="110" y="0" z="0"/>
             <rotation z="180"/>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>

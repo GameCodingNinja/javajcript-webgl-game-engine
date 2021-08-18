@@ -606,9 +606,12 @@ export class UISubControl extends UIControl
     {
         let result = null;
 
+        if( this.respondsToSelectMsg )
+            result = this;
+
         for( let i = 0; i < this.subControlAry.length; ++i )
         {
-            if( this.subControlAry[i].getState() > uiControlDefs.ECS_INACTIVE )
+            if( this.subControlAry[i].state > uiControlDefs.ECS_INACTIVE )
             {
                 result = this.subControlAry[i].getActiveControl();
                 break;

@@ -5,8 +5,8 @@
 
         <sprite objectName="key_binding_button_solid">
             <scriptList>
-                <script disable="Control_Hidden"/>
-                <script inactive="Control_Hidden"/>
+                <script disable="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
                 <script active="Control_Solid_Active"/>
                 <script select="Control_Solid_Selected"/>
             </scriptList>
@@ -14,10 +14,10 @@
     
         <sprite objectName="key_binding_button_frame">
             <scriptList>
-                <script disable="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
-                <script select="Control_Selected"/>
+                <script select="Control_Selected_frame_highlight"/>
             </scriptList>
         </sprite>
 
@@ -27,10 +27,10 @@
             </font>
             <position x="-435" y="0" z="0"/>
             <scriptList>
-                <script disable="Control_Disabled"/>
-                <script inactive="Control_Inactive"/>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
                 <script active="Control_Active"/>
-                <script select="Control_Selected_Dispatch_Exe_Act"/>
+                <script select="Control_Selected_Dispatch_Exe"/>
             </scriptList>
         </sprite>
 
@@ -43,19 +43,19 @@
         <!-- These controls must always be listed in this order to match the device enum list in defs.h -->
 
         <!-- Keyboard binding -->
-        <control controlType="label" defaultState="inactive">
+        <control name="keyboard" controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button_label.ctrl"/>
             <position x="-85" y="0" z="0"/>
         </control>
 
         <!-- Mouse binding -->
-        <control controlType="label" defaultState="inactive">
+        <control name="mouse" controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button_label.ctrl"/>
             <position x="157" y="0" z="0"/>
         </control>
 
         <!-- Gamepad binding -->
-        <control controlType="label" defaultState="inactive">
+        <control name="gamepad" controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_button_label.ctrl"/>
             <position x="370" y="0" z="0"/>
         </control>

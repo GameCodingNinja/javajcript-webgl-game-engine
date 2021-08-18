@@ -36,7 +36,8 @@ export const ECS_NULL      = 0,
              ECS_EVENT     = 9;
 
 // EControlActionType
-export const ECAT_NULL              = 0,
+export const ECAT_IDLE              = -1,
+             ECAT_NULL              = 0,
              ECAT_ACTION            = 1,
              ECAT_TO_TREE           = 2,
              ECAT_TO_MENU           = 3,

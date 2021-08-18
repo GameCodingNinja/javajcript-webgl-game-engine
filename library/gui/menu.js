@@ -407,15 +407,15 @@ export class Menu extends Object
     //
     handleEvent( event )
     {
+        // Have the controls handle events
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].handleEvent( event );
+
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].handleEvent( event );
+
         if( event instanceof GenericEvent )
         {
-            // Have the controls handle events
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].handleEvent( event );
-
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                    this.mouseOnlyControlAry[i].handleEvent( event );
-            
             if( event.type === menuDefs.EGE_MENU_TRANS_IN )
             {
                 this.onTransIn( event );
@@ -585,7 +585,8 @@ export class Menu extends Object
             selectionFound = true;
 
             // Set the state to active which will block all messages until the state is reset to idle
-            if( this.activeNode.uiControl.actionType > uiControlDefs.ECAT_NULL )
+            let ctrl = this.activeNode.uiControl.getActiveControl();
+            if( ctrl && ctrl.actionType > uiControlDefs.ECAT_IDLE )
                 this.state = menuDefs.EMS_ACTIVE;
         }
         else if( event.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
@@ -598,7 +599,7 @@ export class Menu extends Object
                     selectionFound = true;
 
                     // Set the state to active which will block all messages until the state is reset to idle
-                    if( this.mouseOnlyControlAry[i].actionType > uiControlDefs.ECAT_NULL )
+                    if( this.mouseOnlyControlAry[i].actionType > uiControlDefs.ECAT_IDLE )
                         this.state = menuDefs.EMS_ACTIVE;
 
                     break;
@@ -622,7 +623,8 @@ export class Menu extends Object
                     if( this.controlAry[i].handleSelectAction( event ) )
                     {
                         // Set the state to active which will block all messages until the state is reset to idle
-                        if( this.activeNode.uiControl.actionType > uiControlDefs.ECAT_NULL )
+                        let ctrl = this.activeNode.uiControl.getActiveControl();
+                        if( ctrl && ctrl.actionType > uiControlDefs.ECAT_IDLE )
                             this.state = menuDefs.EMS_ACTIVE;
 
                         break;

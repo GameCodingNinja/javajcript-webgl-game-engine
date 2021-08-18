@@ -294,7 +294,7 @@ export class UIControl extends ControlBase
         }
 
         // Prepare script function associated with handling this game event
-        this.prepareControlScript( uiControlDefs.ECS_EVENT );
+        this.prepareControlScript( uiControlDefs.ECS_EVENT, event );
     }
 
     // 
@@ -715,8 +715,8 @@ export class UIControl extends ControlBase
     //
     setActionType( value )
     {
-        if( value === 'action' )
-            this.actionType = uiControlDefs.ECAT_ACTION;
+        if( value === 'to_idle' )
+            this.actionType = uiControlDefs.ECAT_IDLE;
 
         else if( value === 'to_tree' )
             this.actionType = uiControlDefs.ECAT_TO_TREE;
@@ -746,8 +746,12 @@ export class UIControl extends ControlBase
     // 
     //  DESC: Create the font string
     //
-    createFontStr( fontString, spriteIndex = 0 )
+    createFontString( fontStringOrIndex, spriteIndex = 0 )
     {
+        let fontString = fontStringOrIndex;
+        if( typeof fontStringOrIndex !== 'string' )
+            fontString = this.stringAry[fontStringOrIndex]
+
         let fontSpriteCounter = 0;
 
         for( let i = 0; i < this.spriteAry.length; ++i )
@@ -763,12 +767,6 @@ export class UIControl extends ControlBase
                 ++fontSpriteCounter;
             }
         }
-    }
-
-    createFontString( stringIndex = 0, spriteIndex = 0 )
-    {
-        if( this.stringAry.length )
-            this.createFontStr( this.stringAry[stringIndex], spriteIndex );
     }
 
     // 

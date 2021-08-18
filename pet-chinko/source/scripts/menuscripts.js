@@ -783,7 +783,7 @@ class ConfirmBtn_execute
         // Set the conformation menu
         yesBtn.actionType = actionType;
         yesBtn.executionAction = executionAction;
-        megLbl.createFontStr( conformationMsg );
+        megLbl.createFontString( conformationMsg );
 
         return true;
     }

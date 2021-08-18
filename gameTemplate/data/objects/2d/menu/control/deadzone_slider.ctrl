@@ -44,6 +44,7 @@
         <control controlType="button" defaultState="inactive" mouseSelectDown="true">
             <filePath file="data/objects/2d/menu/control/button_slider.ctrl"/>
             <position x="0" y="-15" z="0"/>
+            <action actionType="to_idle"/>
         </control>
 
     </subControlList>

@@ -20,6 +20,7 @@
         <control controlType="button" defaultState="inactive" mouseSelectDown="true">
             <filePath file="data/objects/2d/menu/control/button_slider.ctrl"/>
             <rotation z="90"/>
+            <action actionType="to_idle"/>
         </control>
 
     </subControlList>

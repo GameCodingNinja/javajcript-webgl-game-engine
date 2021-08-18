@@ -296,7 +296,7 @@ export class UISlider extends UISubControl
             else
                 valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this.curValue);
 
-            this.createFontStr( valueStr );
+            this.createFontString( valueStr );
         }
     }
 

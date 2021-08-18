@@ -5524,6 +5524,34 @@ class ActionManager
 
         return result;
     }
+
+
+
+    // 
+    //  DESC: Get the action/component strings for the give device id
+    //
+    /*getDeviceActionStr( deviceId, actionNameStr, configurable )
+{
+    std::string mappingName("keyboardMapping");
+
+    if( deviceId == EDeviceId::MOUSE )
+    {
+        mappingName = "mouseMapping";
+    }
+    else if( deviceId == EDeviceId::GAMEPAD )
+    {
+        mappingName = "gamepadMapping";
+    }
+
+    std::string componetIdStr;
+    XMLNode playerVisibleNode = m_mainNode.getChildNode( mappingName.c_str() ).getChildNode( "playerVisible" );
+    getActionStr( playerVisibleNode, actionNameStr, componetIdStr, configurable );
+
+    return componetIdStr;
+}*/
+
+
+
     
     // 
     //  DESC: What was the last device
@@ -5963,7 +5991,7 @@ class EventManager
         this.canvas.addEventListener( 'mousedown', this.onMouseDown.bind(this) );
         this.canvas.addEventListener( 'mouseup', this.onMouseUp.bind(this) );
         this.canvas.addEventListener( 'mousemove', this.onMouseMove.bind(this) );
-        document.addEventListener( 'scroll', this.onScroll.bind(this) );
+        //document.addEventListener( 'scroll', this.onScroll.bind(this) );
         
         // Using document for key listener because canvas needs the focus before
         // it will trap key events. There's no good solution for force the focus
@@ -5987,9 +6015,7 @@ class EventManager
         this.mouseAbsolutePos = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
         this.mouseRelativePos = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
         
-        this.mouseOffset = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point(
-            document.documentElement.scrollLeft - this.canvas.offsetLeft,
-            document.documentElement.scrollTop - this.canvas.offsetTop );
+        //this.mouseOffset = new Point();
 
         // Dictionary for holding all the gamepads
         this.gamePadMap = new Map;
@@ -6020,12 +6046,12 @@ class EventManager
     //
     //  DESC: Handle onScroll events
     //
-    onScroll( event )
+    /*onScroll( event )
     {
         this.mouseOffset.setXYZ(
             document.documentElement.scrollLeft - this.canvas.offsetLeft,
             document.documentElement.scrollTop - this.canvas.offsetTop );
-    }
+    }*/
     
     //
     //  DESC: Handle onMouseDown events
@@ -6130,9 +6156,9 @@ class EventManager
     //
     //  DESC: onResizeObserver even handler
     //
-    onResize( event )
+    /*onResize( event )
     {
-    }
+    }*/
 
     //
     //  DESC: Handle onGamepadconnected events
@@ -6164,19 +6190,23 @@ class EventManager
     //
     filterMousePos( event )
     {
-        let x = event.offsetX + this.mouseOffset.x;
-        let y = event.offsetY + this.mouseOffset.y;
+        let x = event.offsetX;
+        let y = event.offsetY;
+        let pixelRatio = window.devicePixelRatio;
 
         if( document.fullscreenElement )
         {
-            let dpr = window.devicePixelRatio;
-            x = Math.trunc(event.offsetX * dpr);
-            y = Math.trunc(event.offsetY * dpr);
+            x = Math.trunc(event.offsetX * pixelRatio);
+            y = Math.trunc(event.offsetY * pixelRatio);
+
+            // Since it's needed for fullscreen, nullify it for anyone else using it
+            pixelRatio = 1.0; 
         }
 
         // Create a new event member to hold game custom values
         event.gameAdjustedX = x;
         event.gameAdjustedY = y;
+        event.gameAdjustedPixelRatio = pixelRatio;
 
         this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
         this.mouseAbsolutePos.setXYZ( x, y);
@@ -33337,8 +33367,12 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     // 
     //  DESC: Create the font string
     //
-    createFontStr( fontString, spriteIndex = 0 )
+    createFontString( fontStringOrIndex, spriteIndex = 0 )
     {
+        let fontString = fontStringOrIndex;
+        if( typeof fontStringOrIndex !== 'string' )
+            fontString = this.stringAry[fontStringOrIndex]
+
         let fontSpriteCounter = 0;
 
         for( let i = 0; i < this.spriteAry.length; ++i )
@@ -33354,12 +33388,6 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
                 ++fontSpriteCounter;
             }
         }
-    }
-
-    createFontString( stringIndex = 0, spriteIndex = 0 )
-    {
-        if( this.stringAry.length )
-            this.createFontStr( this.stringAry[stringIndex], spriteIndex );
     }
 
     // 
@@ -35000,9 +35028,9 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
             let oneOverAspectRatio = 1.0 / _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.orthoAspectRatio.h;
 
             if( this.orientation === _common_defs__WEBPACK_IMPORTED_MODULE_6__.EO_HORIZONTAL )
-                this.incSliderMovePos( event.movementX * oneOverAspectRatio );
+                this.incSliderMovePos( event.movementX * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) );
             else
-                this.incSliderMovePos( event.movementY * oneOverAspectRatio );
+                this.incSliderMovePos( event.movementY * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) );
         }
 
         return result;
@@ -35128,7 +35156,7 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
             else
                 valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this.curValue);
 
-            this.createFontStr( valueStr );
+            this.createFontString( valueStr );
         }
     }
 
@@ -40029,6 +40057,7 @@ class PlayerShip_RotateGun
     constructor( sprite )
     {
         this.sprite = sprite;
+        this.iter = this.iteration();
     }
 
     // 
@@ -40057,7 +40086,7 @@ class PlayerShip_RotateGun
     //
     execute()
     {
-        return this.iteration().next().done;
+        return this.iter.next().done;
     }
 }
 

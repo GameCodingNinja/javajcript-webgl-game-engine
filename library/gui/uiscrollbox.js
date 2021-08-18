@@ -426,10 +426,20 @@ export class UIScrollBox extends UISubControl
         let result = super.handleSelectAction( event );
 
         // Let the scroll controls handle any selection
-        for( let i = 0; i < this.scrollControlAry.length; ++i )
-            this.scrollControlAry[i].handleSelectAction( event );
+        for( let i = 0; i < this.scrollControlAry.length && !result; ++i )
+        {
+            result = this.scrollControlAry[i].handleSelectAction( event );
+            if( result )
+            {
+                // Set the active scroll control to the one the mouse clicked
+                if( event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE )
+                    this.activeScrollCtrl = i;
+                    
+                break;
+            }
+        }
 
-        if( (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
+        if( result && (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
             (event.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN) )
         {
             // Get the current scroll position

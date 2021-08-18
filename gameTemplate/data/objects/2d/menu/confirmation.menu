@@ -29,7 +29,7 @@
             </fontStringList>
             <action actionType="back"/>
             <navigate left="yes_btn"/>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
@@ -44,7 +44,7 @@
             </fontStringList>
             <action actionType="back"/>
             <navigate right="no_btn"/>
-            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>

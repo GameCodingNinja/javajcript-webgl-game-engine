@@ -45,6 +45,9 @@ class EventManager
         // Resize even handler
         //window.addEventListener( 'resize', this.onResize.bind(this) );
 
+        // Wheel even handler
+        window.addEventListener( 'wheel', this.onWheel.bind(this) );
+
         document.addEventListener('fullscreenchange', this.onFullScreenChange.bind(this) );
         
         // Mouse move relative offset data types
@@ -176,7 +179,7 @@ class EventManager
         this.queue.push( event );
 
         // Check for fullscreen toggle
-        if( actionManager.wasAction( event, 'Fullscreen Toggle' ) )
+        if( actionManager.wasAction( event, 'fullscreen_toggle' ) )
         {
             console.log('onKeyDown');
                 if (!document.fullscreenElement)
@@ -187,6 +190,15 @@ class EventManager
         }
 
         //console.log( event.type + ', ' + event.key + ', ' + event.keyCode + ', ' + event.code );
+    }
+
+    //
+    //  DESC: onWheel even handler
+    //
+    onWheel( event )
+    {
+        // Add to the event queue
+        this.queue.push( event );
     }
 
     //
@@ -269,13 +281,13 @@ class EventManager
                         if(!lastGp.pressed[i] && gp.buttons[i].pressed)
                         {
                             this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, i, gp) );
-                            console.log( `Button Index Down: ${i};` );
+                            //console.log( `Button Index Down: ${i};` );
                         }
                         // Check for button up
                         else if(lastGp.pressed[i] && !gp.buttons[i].pressed)
                         {
                             this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, i, gp) );
-                            console.log( `Button Index Up: ${i};` );
+                            //console.log( `Button Index Up: ${i};` );
                         }
                     }
 

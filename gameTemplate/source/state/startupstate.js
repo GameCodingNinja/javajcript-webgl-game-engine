@@ -31,6 +31,7 @@ import * as utilScripts from '../scripts/utilityscripts';
 import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as levelScripts from '../scripts/levelscripts';
+import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
@@ -72,6 +73,7 @@ export class StartUpState extends GameState
         stateScripts.loadScripts();
         menuScripts.loadScripts();
         levelScripts.loadScripts();
+        keybindMenuScripts.loadScripts();
                 
         // Set the default camera
         // NOTE: Can only call this after Camera Manager has been loaded

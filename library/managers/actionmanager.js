@@ -8,6 +8,7 @@ import { KeyCodeAction } from '../common/keycodeaction';
 import { GamepadEvent } from '../common/gamepadevent';
 import { localStorage } from '../utilities/localstorage';
 import * as gamepadevent from '../common/gamepadevent';
+import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
 export const MOUSE_BUTTON_INVALID       = -1,
@@ -41,6 +42,9 @@ class ActionManager
         
         // Last device used
         this.lastDeviceUsed = defs.DEVICE_NULL;
+
+        // xml node
+        this.mainNode = null;
         
         this.keyboardKeyCodeMap.set( '---', -1 );
         this.keyboardKeyCodeMap.set( 'ENTER',       'Enter' );
@@ -212,6 +216,8 @@ class ActionManager
     {
         if( xmlNode )
         {
+            this.mainNode = xmlNode;
+
             // Load the keyboard/mouse/gamepad mapping
             this.loadKeyboardMappingFromNode( xmlNode.getElementsByTagName('keyboardMapping') );
             this.loadMouseMappingFromNode( xmlNode.getElementsByTagName( 'mouseMapping' ) );
@@ -386,7 +392,57 @@ class ActionManager
 
         return result;
     }
-    
+
+    // 
+    //  DESC: Get the action/component strings for the give device id
+    //
+    getDeviceActionStr( deviceId, actionNameStr )
+    {
+        let mappingName = 'keyboardMapping';
+
+        if( deviceId === defs.MOUSE )
+        {
+            mappingName = 'mouseMapping';
+        }
+        else if( deviceId === defs.GAMEPAD )
+        {
+            mappingName = 'gamepadMapping';
+        }
+
+        let node = this.mainNode.getElementsByTagName(mappingName)[0].getElementsByTagName('playerVisible');
+
+        return this.getComponentStr( node, actionNameStr );
+    }
+
+    // 
+    //  DESC: Get the component string for the device id
+    //
+    getComponentStr( node, actionNameStr )
+    {
+        if( node.length )
+        {
+            let actionNode = node[0].getElementsByTagName('actionMap');
+
+            for( let each of actionNode )
+            {
+                if( actionNameStr == each.getAttribute( 'action' ) )
+                {
+                    let componetIdStr = each.getAttribute( 'componetId' );
+
+                    let configurable = false;
+
+                    let attr = each.getAttribute( 'configurable' );
+                    if( attr )
+                        configurable = (attr === 'true');
+
+                    return [componetIdStr, configurable];
+                }
+            }
+        }
+
+        return ['', false];
+    }
+
     // 
     //  DESC: What was the last device
     //
@@ -404,6 +460,12 @@ class ActionManager
     {
         return (this.lastDeviceUsed === defs.MOUSE);
     }
+
+    // 
+    //  DESC: allow event handling access function
+    //
+    get allowActionHandling() { return this.allowAction; }
+    set allowActionHandling( value ) { this.allowAction = value; }
 }
 
 export var actionManager = new ActionManager;

@@ -17,13 +17,15 @@ class LocalStorage
         try
         {
             this.storage = window.localStorage;
+            const key = 'storage_test';
+            const value = 'This is a test.';
 
             // Test that storage works
-            this.storage.setItem( settings.gameId, settings.gameName );
+            this.storage.setItem( key, value );
 
-            if( this.storage.getItem( settings.gameId ) === settings.gameName )
+            if( this.storage.getItem( key ) === value )
             {
-                this.storage.removeItem( settings.gameId );
+                this.storage.removeItem( key );
                 console.log('Local storage available.');
             }
             else
@@ -96,7 +98,7 @@ class LocalStorage
     // 
     //  DESC: Free the data from the storage object
     //
-    clear( key )
+    clear()
     {
         try
         {
