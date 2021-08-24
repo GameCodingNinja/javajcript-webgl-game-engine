@@ -43,7 +43,7 @@ import soundManagerListTable from 'raw-loader!../../data/sound/soundListTable.ls
 import physicsManagerListTable from 'raw-loader!../../data/objects/2d/physics/physicsListTable.lst';
 import menuManagerListTable from 'raw-loader!../../data/objects/2d/menu/menuListTable.lst';
 import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst';
-import actionManagerCfg from 'raw-loader!../../data/settings/controllerMapping.cfg';
+import actionManagerJson from '../../data/settings/controllerMapping.json';
 import menuActionLst from 'raw-loader!../../data/objects/2d/menu/menu_action.list';
 
 const STARTUP_ASSET_COUNT = 54,
@@ -62,7 +62,7 @@ export class StartUpState extends GameState
         soundManager.loadListTableFromNode( genFunc.stringLoadXML( soundManagerListTable ) );
         physicsWorldManager.loadListTableFromNode( genFunc.stringLoadXML( physicsManagerListTable ) );
         menuManager.loadListTableFromNode( genFunc.stringLoadXML( menuManagerListTable ) );
-        actionManager.loadFromNode( genFunc.stringLoadXML( actionManagerCfg ) );
+        actionManager.load( actionManagerJson );
         menuManager.loadMenuActionFromNode( genFunc.stringLoadXML( menuActionLst ) );
 
         // Load the scripts

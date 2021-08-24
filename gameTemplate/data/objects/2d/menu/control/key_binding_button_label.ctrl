@@ -10,6 +10,7 @@
             <scriptList>
                 <script disable="Control_Disabled" forceUpdate="true"/>
                 <script inactive="Control_Inactive" forceUpdate="true"/>
+                <script changed="Control_Selected_Visible"/>
             </scriptList>
         </sprite>
     

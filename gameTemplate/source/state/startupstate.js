@@ -44,7 +44,7 @@ import menuManagerListTable from 'raw-loader!../../data/objects/2d/menu/menuList
 import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst';
 import cameraListTable from 'raw-loader!../../data/objects/camera.lst';
 import shaderCfg from 'raw-loader!../../data/shaders/shader.cfg';
-import actionManagerCfg from 'raw-loader!../../data/settings/controllerMapping.cfg';
+import actionManagerJson from '../../data/settings/controllerMapping.json';
 import menuActionLst from 'raw-loader!../../data/objects/2d/menu/menu_action.list';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
@@ -65,7 +65,7 @@ export class StartUpState extends GameState
         physicsWorldManager.loadListTableFromNode( genFunc.stringLoadXML( physicsManagerListTable ) );
         menuManager.loadListTableFromNode( genFunc.stringLoadXML( menuManagerListTable ) );
         cameraManager.loadFromNode( genFunc.stringLoadXML( cameraListTable ) );
-        actionManager.loadFromNode( genFunc.stringLoadXML( actionManagerCfg ) );
+        actionManager.load( actionManagerJson );
         menuManager.loadMenuActionFromNode( genFunc.stringLoadXML( menuActionLst ) );
 
         // Load the scripts

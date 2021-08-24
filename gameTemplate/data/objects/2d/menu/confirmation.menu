@@ -48,6 +48,7 @@
             <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script keybindReset="Control_OnKeybindReset"/>
             </scriptList>
         </control>
 

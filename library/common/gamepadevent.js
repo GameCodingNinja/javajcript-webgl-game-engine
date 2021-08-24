@@ -20,8 +20,7 @@ export const GAMEPAD_AXIS_LEFT_X  = 0,
              GAMEPAD_AXIS_RIGHT_X = 2,
              GAMEPAD_AXIS_RIGHT_Y = 3;
 
-export const GAMEPAD_BUTTON_INVALID       = -1,
-             GAMEPAD_BUTTON_A             = 0,
+export const GAMEPAD_BUTTON_A             = 0,
              GAMEPAD_BUTTON_B             = 1,
              GAMEPAD_BUTTON_X             = 2,
              GAMEPAD_BUTTON_Y             = 3,

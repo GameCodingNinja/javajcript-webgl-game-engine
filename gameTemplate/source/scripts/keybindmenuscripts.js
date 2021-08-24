@@ -9,9 +9,12 @@
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { GamepadEvent } from '../../../library/common/gamepadevent';
+import { eventManager } from '../../../library/managers/eventmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
+import * as gamepadevent from '../../../library/common/gamepadevent';
 import * as defs from '../../../library/common/defs';
+import * as menuDefs from '../../../library/gui/menudefs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
 //
@@ -71,7 +74,7 @@ export class KeyBindBtn_execute
         // Disable all action checking so that most buttons
         // can be key mapped without being acted on
         actionManager.allowActionHandling = false;
-        //menuManager.allowEventHandling = false;
+
         return true;
     }
 }
@@ -88,6 +91,45 @@ export class KeyBindBtn_event
     }
 
     // 
+    //  DESC: Bind the button press
+    //
+    bindButtonPress( deviceId, keyCode )
+    {
+        let labelStr = "keyboard";
+        if( deviceId == defs.MOUSE )
+            labelStr = "mouse";
+        else if( deviceId == defs.GAMEPAD )
+            labelStr = "gamepad";
+
+        // Check for escape/enter to disable key mapping process
+        if( !(keyCode === 'Enter' || keyCode === 'Escape') )
+        {
+            console.log(`${labelStr} mapped: ${keyCode}`);
+            let [componetIdStr, configurable] = actionManager.resetAction( deviceId, this.control.name, keyCode );
+
+            if( configurable )
+            {
+                // Reset the string Id
+                let labelCrtl = this.control.findControlByName( labelStr );
+                if( labelCrtl )
+                {
+                    labelCrtl.createFontString( componetIdStr );
+                    labelCrtl.prepareSpriteScript( 'changed' );
+
+                    // Save the key binding changes to file
+                    actionManager.saveKeybinding();
+                }
+            }
+        }
+
+        // Re-enable action checking
+        actionManager.allowActionHandling = true;
+
+        // Dispatch a message to clear the selected control and put it back into active state
+        eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
+    }
+
+    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -96,21 +138,24 @@ export class KeyBindBtn_event
         {
             if( this.event instanceof KeyboardEvent )
             {
-                if( this.event.type == 'keyup' )
+                if( this.event.type === 'keyup' )
                 {
-                    console.log('KeyboardEvent trapped.');
+                    this.bindButtonPress( defs.KEYBOARD, this.event.code );
                 }
             }
             else if( this.event instanceof MouseEvent )
             {
-                if( this.event.type == 'mouseup' )
+                if( this.event.type === 'mouseup' )
                 {
-                    console.log('MouseEvent trapped.');
+                    this.bindButtonPress( defs.MOUSE, this.event.button );
                 }
             }
             else if( this.event instanceof GamepadEvent )
             {
-                console.log('GamepadEvent trapped.');
+                if( this.event.type === gamepadevent.GAMEPAD_BUTTON_UP )
+                {
+                    this.bindButtonPress( defs.GAMEPAD, this.event.buttonIndex );
+                }
             }
         }
 
@@ -118,42 +163,39 @@ export class KeyBindBtn_event
     }
 }
 
-
-
 //
-//  Handle event
+//  DESC: Script for playing the active sound
 //
-/*void KeyBindBtn_event( uiControl & control, uint type, int code )
+class Control_OnKeybindReset
 {
-    if( !ActionMgr.isAction() && control.isSelected() )
+    constructor( control )
     {
-        uint eventType = 0;
-        int eventCode = 0;
-        int data = 0;
-        uint index = 0;
-        while( (index = ActionMgr.enumerateButtonEvents( eventType, eventCode, data, index )) > 0 )
-        {
-            if( eventType == NEvents::SDL_KEYUP )
-            {
-                Print("Type: KEYBOARD, code: "+eventCode+", data: "+data+", index: "+index);
-                KeyBindBtn_bindButtonPress( control, type, NDeviceId::KEYBOARD, eventCode );
-                break;
-            }
-            else if( eventType == NEvents::SDL_MOUSEBUTTONUP )
-            {
-                Print("Type: MOUSE, code: "+eventCode+", data: "+data+", index: "+index);
-                KeyBindBtn_bindButtonPress( control, type, NDeviceId::MOUSE, eventCode );
-                break;
-            }
-            else if( eventType == NEvents::SDL_CONTROLLERBUTTONUP )
-            {
-                Print("Type: GAMEPAD, code: "+eventCode+", data: "+data+", index: "+index);
-                KeyBindBtn_bindButtonPress( control, type, NDeviceId::GAMEPAD, eventCode );
-                break;
-            }
-        }
     }
-}*/
+
+    // 
+    //  DESC: Handle resettings of key bind buttons
+    //
+    execute()
+    {
+        // Reset the key bindings for all controls and save
+        actionManager.resetKeybinding();
+
+        // Since the above reset all the keybinding to the default value,
+        // Need to do the below to reload the data into the scroll box
+        let scrollBoxCtrl = menuManager.getMenu('key_bindings_menu').getControl( "key_binding_scroll_box" );
+
+        // Get each control and call it's init script
+        for( let each of scrollBoxCtrl.scrollControlAry )
+        {
+            if( each.faction == "key_binding_btn" )
+                each.scriptComponent.prepare( 'init', each );
+        }
+
+        eventManager.dispatchEvent( menuDefs.EGE_MENU_BACK_ACTION );
+
+        return true;
+    }
+}
 
 // 
 //  DESC: Load scripts
@@ -168,4 +210,7 @@ export function loadScripts()
 
     scriptManager.set( 'KeyBindBtn_event',
         ( control, event ) => { return new KeyBindBtn_event( control, event ); } );
+
+    scriptManager.set( 'Control_OnKeybindReset',
+        ( control ) => { return new Control_OnKeybindReset( control ); } );
 }

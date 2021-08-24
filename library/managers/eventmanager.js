@@ -252,8 +252,8 @@ class EventManager
         }
 
         // Create a new event member to hold game custom values
-        event.gameAdjustedX = x;
-        event.gameAdjustedY = y;
+        event.gameAdjustedMouseX = x;
+        event.gameAdjustedMouseY = y;
         event.gameAdjustedPixelRatio = pixelRatio;
 
         this.mouseRelativePos.setXYZ( event.movementX, event.movementY );

@@ -183,3 +183,17 @@ export function stringLoadXML( stringData )
     let parser = new DOMParser();
     return parser.parseFromString( stringData, "application/xml" );
 }
+
+// 
+//  DESC: Find a key based on map value
+//
+export function getKey(map, searchValue)
+{
+    for (let [key, value] of map.entries())
+    {
+        if( value === searchValue )
+            return key;
+    }
+
+    return undefined;
+}

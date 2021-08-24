@@ -72,6 +72,8 @@
                 <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
 
@@ -86,6 +88,8 @@
                 <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
 
@@ -100,6 +104,8 @@
                 <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
 
@@ -114,6 +120,8 @@
                 <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
 
@@ -136,6 +144,8 @@
                 <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
     
@@ -150,6 +160,8 @@
                 <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
     
@@ -164,6 +176,8 @@
                 <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
     
@@ -178,6 +192,8 @@
                 <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
             </scriptList>
         </control>
 
@@ -195,10 +211,12 @@
             <fontStringList>
                 <string text="Reset To Default"/>
             </fontStringList>
+            <action actionType="to_menu" executionAction="confirmation_menu"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
+                <script execute="ConfirmBtn_execute"/>
             </scriptList>
         </control>
 

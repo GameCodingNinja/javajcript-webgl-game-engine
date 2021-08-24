@@ -654,8 +654,8 @@ class MenuManager extends ManagerBase
                                 menuDefs.EGE_MENU_SELECT_ACTION,
                                 pressType,
                                 defs.MOUSE,
-                                event.gameAdjustedX,
-                                event.gameAdjustedY );
+                                event.gameAdjustedMouseX,
+                                event.gameAdjustedMouseY );
                         }
                         else if( event instanceof GamepadEvent )
                         {

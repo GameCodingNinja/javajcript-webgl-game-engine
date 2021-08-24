@@ -50,7 +50,6 @@ export class Menu extends Object
         this.controlNodeAry = [];
 
         // Map container of controls for easy name access
-        // NOTE: This container does not own it's pointers.
         this.controlMap = new Map;
 
         // Current active node
@@ -815,5 +814,13 @@ export class Menu extends Object
     isIdle()
     {
         return (this.state === menuDefs.EMS_IDLE);
+    }
+
+    // 
+    //  DESC: Get the number of controls in this subcontrol
+    //
+    get length()
+    {
+        return this.subControlAry.length;
     }
 }

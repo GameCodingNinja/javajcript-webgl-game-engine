@@ -373,6 +373,9 @@ export class UIControl extends ControlBase
             else if( this.actionType === uiControlDefs.ECAT_ACTION_EVENT )
                 eventManager.dispatchEvent( uiControlDefs.ECAT_ACTION_EVENT, this.executionAction, this );
 
+            else if( this.actionType === uiControlDefs.ECAT_SCRIPT_EXECUTE )
+                this.scriptComponent.prepare( this.executionAction, this );
+
             // Prepare script function associated with handling this game event
             this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
         }
@@ -425,7 +428,7 @@ export class UIControl extends ControlBase
     {
         let result = false;
 
-        if( !this.isDisabled() && this.isPointInControl( event.gameAdjustedX, event.gameAdjustedY ) )
+        if( !this.isDisabled() && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
         {
             result = true;
 
@@ -937,5 +940,13 @@ export class UIControl extends ControlBase
             return true;
         
         return false;
+    }
+
+    // 
+    //  DESC: Get the number of controls in this subcontrol
+    //
+    get length()
+    {
+        return 1;
     }
 }

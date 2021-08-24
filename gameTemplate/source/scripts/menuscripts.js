@@ -743,7 +743,6 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     }
 }
 
-
 //
 //  DESC: Execution script for a button control to change to the confirmation menu
 //
@@ -779,6 +778,12 @@ class ConfirmBtn_execute
             actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
             executionAction = 'title_screen_state';
         }
+        else if( this.control.name === 'Key_Binding_reset_btn' )
+        {
+            conformationMsg = 'Are you sure you want|to reset keybinding back|to the default settings?';
+            actionType = uiControlDefs.ECAT_SCRIPT_EXECUTE;
+            executionAction = 'keybindReset';
+        }
         
         // Set the conformation menu
         yesBtn.actionType = actionType;
@@ -788,7 +793,6 @@ class ConfirmBtn_execute
         return true;
     }
 }
-
 
 // 
 //  DESC: Load scripts

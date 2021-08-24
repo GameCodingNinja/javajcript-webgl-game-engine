@@ -46,7 +46,8 @@ export const ECAT_IDLE              = -1,
              ECAT_CHANGE_FOCUS      = 6,
              ECAT_GAME_STATE_CHANGE = 7,
              ECAT_QUIT_GAME         = 8,
-             ECAT_ACTION_EVENT      = 9;
+             ECAT_ACTION_EVENT      = 9,
+             ECAT_SCRIPT_EXECUTE    = 10;
 
 // EActionResponse
 export const EAR_UP    = 1,
