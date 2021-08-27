@@ -317,6 +317,33 @@ export class UIScrollBox extends UISubControl
     }
 
     // 
+    //  DESC: Handle the wheel events. This control handles wheel events
+    //
+    onWheel( event )
+    {
+        let scrollCurPos = this.scrollCurPos + (event.deltaY * 0.5);
+
+        // Handle bounds checking
+        if( scrollCurPos < 0 )
+            scrollCurPos = 0;
+
+        else if( scrollCurPos > this.maxMoveAmount )
+            scrollCurPos = this.maxMoveAmount;
+        
+        // Set the current scroll position
+        this.scrollCurPos = scrollCurPos;
+
+        // Move the slider
+        this.subControlAry[0].setSlider(this.scrollCurPos);
+
+        // Set the bounds
+        this.setStartEndPos();
+
+        // Reposition the scroll controlls
+        this.repositionScrollControls();
+    }
+
+    // 
     //  DESC: Update the control
     //
     update()

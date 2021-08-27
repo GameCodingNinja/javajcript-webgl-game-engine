@@ -116,4 +116,11 @@ export class ControlBase extends Object
         if( this.dynamicOffset )
             this.setPos( this.dynamicOffset.getPos( settings.defaultSize_half ) );
     }
+
+    // 
+    //  DESC: Handle the wheel events. Most controls don't deal with wheen events so it's a catchall here
+    //
+    onWheel( event )
+    {
+    }
 }

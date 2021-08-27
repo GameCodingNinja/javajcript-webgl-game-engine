@@ -636,7 +636,7 @@ class MenuManager extends ManagerBase
                     let pressType;
 
                     // common and can result in many messages which is why it's specifically defined here
-                    if( event.type === 'mousemove' )
+                    if( event.type === 'mousemove' || event.type === 'wheel' )
                     {
                         // Allow the mouse move message to get eaten when action handling is disabled.
                         this.handleEventForTrees( event );

@@ -484,6 +484,10 @@ export class Menu extends Object
             {
                 this.onMouseMove( event );
             }
+            else if( event.type === 'wheel' )
+            {
+                this.onWheel( event );
+            }
         }
     }
 
@@ -558,17 +562,29 @@ export class Menu extends Object
     //
     onMouseMove( event )
     {
-        for( let i = 0; i < this.controlNodeAry.length; ++i )
+        for( let each of this.controlNodeAry )
         {
-            if( this.controlNodeAry[i].uiControl.onMouseMove( event ) )
-                this.activeNode = this.controlNodeAry[i];
+            if( each.uiControl.onMouseMove( event ) )
+                this.activeNode = each;
             else
-                this.controlNodeAry[i].uiControl.deactivateControl();
+                each.uiControl.deactivateControl();
         }
 
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            if( !this.mouseOnlyControlAry[i].onMouseMove( event ) )
-                this.mouseOnlyControlAry[i].deactivateControl();
+        for( let each of this.mouseOnlyControlAry )
+            if( !each.onMouseMove( event ) )
+                each.deactivateControl();
+    }
+
+    // 
+    //  DESC: Handle OnWheel message
+    //
+    onWheel( event )
+    {
+        for( let each of this.mouseOnlyControlAry )
+            each.onWheel( event );
+
+        for( let each of this.controlAry )
+            each.onWheel( event );
     }
 
     // 
