@@ -16,10 +16,10 @@ class Settings
         this.size = new Size(853, 480);
         this.initialSize = new Size(this.size.w, this.size.h);
         this.size_half = new Size;
-        this.nativeSize = new Size;
+        this.nativeSize = new Size(1280, 720);
         this.screenAspectRatio = new Size;
         this.orthoAspectRatio = new Size;
-        this.defaultSize = new Size;
+        this.defaultSize = new Size(0, this.nativeSize.h);
         this.defaultSize_half = new Size;
         
         this.enableDepthBuffer = false;
@@ -27,118 +27,108 @@ class Settings
         this.clearStencilBuffer = false;
         this.stencilBufferBitSize = 1;
         this.clearTargetBuffer = true;
-        this.projectionType = defs.EPT_PERSPECTIVE;
+        this.projectionType = defs.EPT_ORTHOGRAPHIC;
         this.viewAngle = 45.0 * defs.DEG_TO_RAD;
         this.minZdist = 5.0;
         this.maxZdist = 1000.5;
-        
-        // the sector size
-        this.sectorSize = 0;
-        this.sectorSizeHalf = 0;
 
+        this.allowGamepad = false;
         this.stickDeadZone = 0.3;
 
         this.gameName = "Unnamed Game";
         this.gameId = "unnamedgame";
-        this.allowGamepad = false;
+
+        // Calculate the ratios
+        this.calcRatio();
     }
 
     // 
-    //  DESC: Load the data list tables from file path
+    //  DESC: Load the JSON created dictionary
     //
-    load( filePath, callback )
+    load( settingsDict )
     {
-        return genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ))
-            .next(() => callback());
-    }
-    
-    // 
-    //  DESC: Load data from XML node
-    //
-    loadFromNode( node )
-    {
-        if( node )
+        let display = settingsDict['display'];
+        if( display )
         {
-            let display = node.getElementsByTagName('display');
-            if( display.length )
+            let resolution = display['resolution'];
+            if( resolution )
             {
-                let resolution = display[0].getElementsByTagName('resolution');
-                if( resolution.length )
-                {
-                    this.size.w = Number(resolution[0].getAttribute('width'));
-                    this.size.h = Number(resolution[0].getAttribute('height'));
-                    this.initialSize.set(this.size.w, this.size.h);
-                }
-                
-                let defaultRes = display[0].getElementsByTagName('default');
-                if( defaultRes.length )
-                {
-                    this.nativeSize.w = Number(defaultRes[0].getAttribute('width'));
-                    this.nativeSize.h = Number(defaultRes[0].getAttribute('height'));
-                    this.defaultSize.h = this.nativeSize.h;
-                }
-            }
-            
-            let device = node.getElementsByTagName('device');
-            if( device.length )
-            {
-                let projection = device[0].getElementsByTagName('projection');
-                if( projection.length )
-                {
-                    let attr = projection[0].getAttribute('projectType');
-                    if( attr && (attr === 'orthographic') )
-                        this.projectionType = defs.EPT_ORTHOGRAPHIC;
-                    
-                    attr = projection[0].getAttribute('minZDist');
-                    if( attr )
-                        this.minZdist = Number(attr);
-                    
-                    attr = projection[0].getAttribute('maxZDist');
-                    if( attr )
-                        this.maxZdist = Number(attr);
-                    
-                    attr = projection[0].getAttribute('view_angle');
-                    if( attr )
-                        this.viewAngle = Number(attr) * defs.DEG_TO_RAD;
-                }
-                    
-                let depthStencilBuffer = device[0].getElementsByTagName('depthStencilBuffer');
-                if( depthStencilBuffer.length )
-                {
-                    this.enableDepthBuffer = (depthStencilBuffer[0].getAttribute('enableDepthBuffer') === 'true');
-                    this.createStencilBuffer = (depthStencilBuffer[0].getAttribute('createStencilBuffer') === 'true');
-                    this.clearStencilBuffer = (depthStencilBuffer[0].getAttribute('clearStencilBuffer') === 'true');
-                    this.stencilBufferBitSize = Number(depthStencilBuffer[0].getAttribute('stencilBufferBitSize'));
-                }
-                
-                let targetBuffer = device[0].getElementsByTagName('targetBuffer');
-                if( targetBuffer.length )
-                    this.clearTargetBuffer = (targetBuffer[0].getAttribute('clear') === 'true');
-
-                let gamepad = device[0].getElementsByTagName('gamepad');
-                if( gamepad.length )
-                {
-                    this.stickDeadZone = parseFloat(gamepad[0].getAttribute('stickDeadZone'));
-                    this.allowGamepad = (gamepad[0].getAttribute('allow') === 'true');
-                }
+                this.size.set( resolution['width'], resolution['height'] );
+                this.initialSize.set( this.size.w, this.size.h );
             }
 
-            let game = node.getElementsByTagName('game');
-            if( game.length )
+            let defaultRes = display['default'];
+            if( defaultRes )
             {
-                this.gameName = game[0].getAttribute('name');
-                this.gameId = game[0].getAttribute('id');
-            }
-            
-            let worldNode = node.getElementsByTagName('world');
-            if( worldNode.length )
-            {
-                this.sectorSize = Number(worldNode[0].getAttribute('sectorSize'));
-                this.sectorSizeHalf = Math.trunc(this.sectorSize / 2);
+                this.nativeSize.set( defaultRes['width'], defaultRes['height'] );
+                this.defaultSize.h = this.nativeSize.h;
             }
         }
-        
+
+        let device = settingsDict['device'];
+        if( device )
+        {
+            let projection = device['projection'];
+            if( projection )
+            {
+                if( projection['projectType'] === 'perspective' )
+                    this.projectionType = defs.EPT_PERSPECTIVE;
+
+                if( projection['minZDist'] )
+                    this.minZdist = projection['minZDist'];
+
+                if( projection['maxZDist'] )
+                    this.maxZdist = projection['maxZDist'];
+
+                if( projection['viewAngle'] )
+                    this.viewAngle = projection['viewAngle'] * defs.DEG_TO_RAD;
+            }
+
+            let depthStencilBuffer = device['depthStencilBuffer'];
+            if( depthStencilBuffer )
+            {
+                if( depthStencilBuffer['enableDepthBuffer'] )
+                    this.enableDepthBuffer = (depthStencilBuffer['enableDepthBuffer'] === 'true');
+
+                if( depthStencilBuffer['createStencilBuffer'] )
+                    this.createStencilBuffer = (depthStencilBuffer['createStencilBuffer'] === 'true');
+
+                if( depthStencilBuffer['clearStencilBuffer'] )
+                    this.clearStencilBuffer = (depthStencilBuffer['clearStencilBuffer'] === 'true');
+
+                if( depthStencilBuffer['stencilBufferBitSize'] )
+                    this.stencilBufferBitSize = depthStencilBuffer['stencilBufferBitSize'];
+            }
+
+            let targetBuffer = device['targetBuffer'];
+            if( targetBuffer )
+            {
+                if( targetBuffer['clear'] )
+                    this.clearTargetBuffer = (targetBuffer['clear'] === 'true');
+            }
+
+            let gamepad = device['gamepad'];
+            if( gamepad )
+            {
+                if( gamepad['allow'] )
+                    this.allowGamepad = (gamepad['allow'] === 'true');
+
+                if( gamepad['stickDeadZone'] )
+                    this.stickDeadZone = gamepad['stickDeadZone'];
+            }
+        }
+
+        let game = settingsDict['game'];
+        if( game )
+        {
+            if( game['name'] )
+                this.gameName = game['name'];
+            
+            if( game['id'] )
+                this.gameId = game['id'];
+        }
+
+        // Calculate the ratios
         this.calcRatio();
     }
     

@@ -33,7 +33,7 @@ class ActionManager
     {
         this.keyboardKeyCodeMap = new Map;
         this.mouseKeyCodeMap = new Map;
-        this.gamepadKeyCodeMap = null;
+        this.gamepadKeyCodeMap = new Map;
         
         // Action maps
         this.keyboardActionMap = new Map;
@@ -176,6 +176,61 @@ class ActionManager
         this.mouseKeyCodeMap.set( 'MOUSE 6X',     MOUSE_BUTTON_6X );
         this.mouseKeyCodeMap.set( 'MOUSE 7X',     MOUSE_BUTTON_7X );
         this.mouseKeyCodeMap.set( 'MOUSE 8',      MOUSE_BUTTON_8X );
+
+        this.gamepadKeyCodeMap.set( UNBOUND_KEYCODE_STR_ID,     UNBOUND_KEYCODE_ID );
+        this.gamepadKeyCodeMap.set( 'A',             gamepadevent.GAMEPAD_BUTTON_A );
+        this.gamepadKeyCodeMap.set( 'B',             gamepadevent.GAMEPAD_BUTTON_B );
+        this.gamepadKeyCodeMap.set( 'X',             gamepadevent.GAMEPAD_BUTTON_X );
+        this.gamepadKeyCodeMap.set( 'Y',             gamepadevent.GAMEPAD_BUTTON_Y );
+        this.gamepadKeyCodeMap.set( 'L BUMPER',      gamepadevent.GAMEPAD_BUTTON_L_BUMPER );
+        this.gamepadKeyCodeMap.set( 'R BUMPER',      gamepadevent.GAMEPAD_BUTTON_R_BUMPER );
+        this.gamepadKeyCodeMap.set( 'L TRIGGER',     gamepadevent.GAMEPAD_BUTTON_L_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'R TRIGGER',     gamepadevent.GAMEPAD_BUTTON_R_TRIGGER );
+        this.gamepadKeyCodeMap.set( 'BACK',          gamepadevent.GAMEPAD_BUTTON_BACK );
+        this.gamepadKeyCodeMap.set( 'START',         gamepadevent.GAMEPAD_BUTTON_START );
+        this.gamepadKeyCodeMap.set( 'L STICK',       gamepadevent.GAMEPAD_BUTTON_LEFTSTICK );
+        this.gamepadKeyCodeMap.set( 'R STICK',       gamepadevent.GAMEPAD_BUTTON_RIGHTSTICK );
+        this.gamepadKeyCodeMap.set( 'UP',            gamepadevent.GAMEPAD_BUTTON_DPAD_UP );
+        this.gamepadKeyCodeMap.set( 'DOWN',          gamepadevent.GAMEPAD_BUTTON_DPAD_DOWN );
+        this.gamepadKeyCodeMap.set( 'LEFT',          gamepadevent.GAMEPAD_BUTTON_DPAD_LEFT );
+        this.gamepadKeyCodeMap.set( 'RIGHT',         gamepadevent.GAMEPAD_BUTTON_DPAD_RIGHT );
+        this.gamepadKeyCodeMap.set( 'GUIDE',         gamepadevent.GAMEPAD_BUTTON_GUIDE );
+
+        // Key codes to use analog sticks as buttons
+        this.gamepadKeyCodeMap.set( 'L STICK UP',    gamepadevent.GAMEPAD_BUTTON_L_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'L STICK DOWN',  gamepadevent.GAMEPAD_BUTTON_L_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'L STICK LEFT',  gamepadevent.GAMEPAD_BUTTON_L_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'L STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_L_STICK_RIGHT );
+        this.gamepadKeyCodeMap.set( 'R STICK UP',    gamepadevent.GAMEPAD_BUTTON_R_STICK_UP );
+        this.gamepadKeyCodeMap.set( 'R STICK DOWN',  gamepadevent.GAMEPAD_BUTTON_R_STICK_DOWN );
+        this.gamepadKeyCodeMap.set( 'R STICK LEFT',  gamepadevent.GAMEPAD_BUTTON_R_STICK_LEFT );
+        this.gamepadKeyCodeMap.set( 'R STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_R_STICK_RIGHT );
+    }
+
+    // 
+    //  DESC: Load data from action dictionary
+    //
+    load( actionDict )
+    {
+        if( actionDict )
+        {
+            this.actionDict = actionDict;
+            let savedActionDict = localStorage.get( 'keybinding' );
+            if( savedActionDict )
+                this.actionDict = JSON.parse( savedActionDict );
+
+            // Load the keyboard mapping
+            this.loadAction( this.actionDict['keyboardMapping']['playerHidden'], this.keyboardKeyCodeMap, this.keyboardActionMap );
+            this.loadAction( this.actionDict['keyboardMapping']['playerVisible'], this.keyboardKeyCodeMap, this.keyboardActionMap );
+
+            // Load the mouse mapping
+            this.loadAction( this.actionDict['mouseMapping']['playerHidden'], this.mouseKeyCodeMap, this.mouseActionMap );
+            this.loadAction( this.actionDict['mouseMapping']['playerVisible'], this.mouseKeyCodeMap, this.mouseActionMap );
+
+            // Load the gamepad mapping
+            this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+        }
     }
 
     // 
@@ -183,41 +238,12 @@ class ActionManager
     //
     initGamepadMapping( mapping )
     {
-        this.gamepadKeyCodeMap = new Map;
-
-        if( mapping === 'standard' )
+        // Remap for non-standard mapping
+        if( mapping === '' )
         {
-            this.gamepadKeyCodeMap.set( UNBOUND_KEYCODE_STR_ID,     UNBOUND_KEYCODE_ID );
-            this.gamepadKeyCodeMap.set( 'A',             gamepadevent.GAMEPAD_BUTTON_A );
-            this.gamepadKeyCodeMap.set( 'B',             gamepadevent.GAMEPAD_BUTTON_B );
-            this.gamepadKeyCodeMap.set( 'X',             gamepadevent.GAMEPAD_BUTTON_X );
-            this.gamepadKeyCodeMap.set( 'Y',             gamepadevent.GAMEPAD_BUTTON_Y );
-            this.gamepadKeyCodeMap.set( 'L BUMPER',      gamepadevent.GAMEPAD_BUTTON_L_BUMPER );
-            this.gamepadKeyCodeMap.set( 'R BUMPER',      gamepadevent.GAMEPAD_BUTTON_R_BUMPER );
-            this.gamepadKeyCodeMap.set( 'L TRIGGER',     gamepadevent.GAMEPAD_BUTTON_L_TRIGGER );
-            this.gamepadKeyCodeMap.set( 'R TRIGGER',     gamepadevent.GAMEPAD_BUTTON_R_TRIGGER );
-            this.gamepadKeyCodeMap.set( 'BACK',          gamepadevent.GAMEPAD_BUTTON_BACK );
-            this.gamepadKeyCodeMap.set( 'START',         gamepadevent.GAMEPAD_BUTTON_START );
-            this.gamepadKeyCodeMap.set( 'L STICK',       gamepadevent.GAMEPAD_BUTTON_LEFTSTICK );
-            this.gamepadKeyCodeMap.set( 'R STICK',       gamepadevent.GAMEPAD_BUTTON_RIGHTSTICK );
-            this.gamepadKeyCodeMap.set( 'UP',            gamepadevent.GAMEPAD_BUTTON_DPAD_UP );
-            this.gamepadKeyCodeMap.set( 'DOWN',          gamepadevent.GAMEPAD_BUTTON_DPAD_DOWN );
-            this.gamepadKeyCodeMap.set( 'LEFT',          gamepadevent.GAMEPAD_BUTTON_DPAD_LEFT );
-            this.gamepadKeyCodeMap.set( 'RIGHT',         gamepadevent.GAMEPAD_BUTTON_DPAD_RIGHT );
-            this.gamepadKeyCodeMap.set( 'GUIDE',         gamepadevent.GAMEPAD_BUTTON_GUIDE );
+            this.gamepadKeyCodeMap = new Map;
+            this.gamepadActionMap = new Map;
 
-            // Key codes to use analog sticks as buttons
-            this.gamepadKeyCodeMap.set( 'L STICK UP',    gamepadevent.GAMEPAD_BUTTON_L_STICK_UP );
-            this.gamepadKeyCodeMap.set( 'L STICK DOWN',  gamepadevent.GAMEPAD_BUTTON_L_STICK_DOWN );
-            this.gamepadKeyCodeMap.set( 'L STICK LEFT',  gamepadevent.GAMEPAD_BUTTON_L_STICK_LEFT );
-            this.gamepadKeyCodeMap.set( 'L STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_L_STICK_RIGHT );
-            this.gamepadKeyCodeMap.set( 'R STICK UP',    gamepadevent.GAMEPAD_BUTTON_R_STICK_UP );
-            this.gamepadKeyCodeMap.set( 'R STICK DOWN',  gamepadevent.GAMEPAD_BUTTON_R_STICK_DOWN );
-            this.gamepadKeyCodeMap.set( 'R STICK LEFT',  gamepadevent.GAMEPAD_BUTTON_R_STICK_LEFT );
-            this.gamepadKeyCodeMap.set( 'R STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_R_STICK_RIGHT );
-        }
-        else
-        {
             this.gamepadKeyCodeMap.set( UNBOUND_KEYCODE_STR_ID,     UNBOUND_KEYCODE_ID );
             this.gamepadKeyCodeMap.set( 'A',             gamepadevent.GAMEPAD_BUTTON_A );
             this.gamepadKeyCodeMap.set( 'B',             gamepadevent.GAMEPAD_BUTTON_B );
@@ -240,11 +266,11 @@ class ActionManager
             this.gamepadKeyCodeMap.set( 'R STICK DOWN',  gamepadevent.GAMEPAD_BUTTON_R_STICK_DOWN );
             this.gamepadKeyCodeMap.set( 'R STICK LEFT',  gamepadevent.GAMEPAD_BUTTON_R_STICK_LEFT );
             this.gamepadKeyCodeMap.set( 'R STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_R_STICK_RIGHT );
-        }
 
-        // Load the gamepad mapping
-        this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
-        this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+            // Load the gamepad mapping
+            this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+        }
     }
     
     // 
@@ -253,28 +279,6 @@ class ActionManager
     clearLastDeviceUsed()
     {
         this.lastDeviceUsed = defs.DEVICE_NULL;
-    }
-
-    // 
-    //  DESC: Load data from action dictionary
-    //
-    load( actionDict )
-    {
-        if( actionDict )
-        {
-            this.actionDict = actionDict;
-            let savedActionDict = localStorage.get( 'keybinding' );
-            if( savedActionDict )
-                this.actionDict = JSON.parse( savedActionDict );
-
-            // Load the keyboard mapping
-            this.loadAction( this.actionDict['keyboardMapping']['playerHidden'], this.keyboardKeyCodeMap, this.keyboardActionMap );
-            this.loadAction( this.actionDict['keyboardMapping']['playerVisible'], this.keyboardKeyCodeMap, this.keyboardActionMap );
-
-            // Load the mouse mapping
-            this.loadAction( this.actionDict['mouseMapping']['playerHidden'], this.mouseKeyCodeMap, this.mouseActionMap );
-            this.loadAction( this.actionDict['mouseMapping']['playerVisible'], this.mouseKeyCodeMap, this.mouseActionMap );
-        }
     }
 
     // 

@@ -22,8 +22,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(31);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(57);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(146);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6);
-/* harmony import */ var raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(188);
+/* harmony import */ var _data_settings_settings_json__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(188);
 
 // 
 //  FILE NAME: game.js
@@ -46,8 +45,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-// Load data from bundle as string
+// Load data from bundle
 
 
 class Game
@@ -62,7 +60,7 @@ class Game
     init()
     {
         // Load the settings
-        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__.stringLoadXML( raw_loader_data_settings_settings_cfg__WEBPACK_IMPORTED_MODULE_14__.default ) );
+        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.load( _data_settings_settings_json__WEBPACK_IMPORTED_MODULE_13__ );
 
         // Create the OpenGL context
         let gl = _library_system_device__WEBPACK_IMPORTED_MODULE_9__.device.create();
@@ -351,10 +349,10 @@ class Settings
         this.size = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(853, 480);
         this.initialSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(this.size.w, this.size.h);
         this.size_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
-        this.nativeSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.nativeSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(1280, 720);
         this.screenAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.orthoAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
-        this.defaultSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.defaultSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(0, this.nativeSize.h);
         this.defaultSize_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         
         this.enableDepthBuffer = false;
@@ -362,118 +360,108 @@ class Settings
         this.clearStencilBuffer = false;
         this.stencilBufferBitSize = 1;
         this.clearTargetBuffer = true;
-        this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__.EPT_PERSPECTIVE;
+        this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__.EPT_ORTHOGRAPHIC;
         this.viewAngle = 45.0 * _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEG_TO_RAD;
         this.minZdist = 5.0;
         this.maxZdist = 1000.5;
-        
-        // the sector size
-        this.sectorSize = 0;
-        this.sectorSizeHalf = 0;
 
+        this.allowGamepad = false;
         this.stickDeadZone = 0.3;
 
         this.gameName = "Unnamed Game";
         this.gameId = "unnamedgame";
-        this.allowGamepad = false;
+
+        // Calculate the ratios
+        this.calcRatio();
     }
 
     // 
-    //  DESC: Load the data list tables from file path
+    //  DESC: Load the JSON created dictionary
     //
-    load( filePath, callback )
+    load( settingsDict )
     {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ))
-            .next(() => callback());
-    }
-    
-    // 
-    //  DESC: Load data from XML node
-    //
-    loadFromNode( node )
-    {
-        if( node )
+        let display = settingsDict['display'];
+        if( display )
         {
-            let display = node.getElementsByTagName('display');
-            if( display.length )
+            let resolution = display['resolution'];
+            if( resolution )
             {
-                let resolution = display[0].getElementsByTagName('resolution');
-                if( resolution.length )
-                {
-                    this.size.w = Number(resolution[0].getAttribute('width'));
-                    this.size.h = Number(resolution[0].getAttribute('height'));
-                    this.initialSize.set(this.size.w, this.size.h);
-                }
-                
-                let defaultRes = display[0].getElementsByTagName('default');
-                if( defaultRes.length )
-                {
-                    this.nativeSize.w = Number(defaultRes[0].getAttribute('width'));
-                    this.nativeSize.h = Number(defaultRes[0].getAttribute('height'));
-                    this.defaultSize.h = this.nativeSize.h;
-                }
-            }
-            
-            let device = node.getElementsByTagName('device');
-            if( device.length )
-            {
-                let projection = device[0].getElementsByTagName('projection');
-                if( projection.length )
-                {
-                    let attr = projection[0].getAttribute('projectType');
-                    if( attr && (attr === 'orthographic') )
-                        this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__.EPT_ORTHOGRAPHIC;
-                    
-                    attr = projection[0].getAttribute('minZDist');
-                    if( attr )
-                        this.minZdist = Number(attr);
-                    
-                    attr = projection[0].getAttribute('maxZDist');
-                    if( attr )
-                        this.maxZdist = Number(attr);
-                    
-                    attr = projection[0].getAttribute('view_angle');
-                    if( attr )
-                        this.viewAngle = Number(attr) * _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEG_TO_RAD;
-                }
-                    
-                let depthStencilBuffer = device[0].getElementsByTagName('depthStencilBuffer');
-                if( depthStencilBuffer.length )
-                {
-                    this.enableDepthBuffer = (depthStencilBuffer[0].getAttribute('enableDepthBuffer') === 'true');
-                    this.createStencilBuffer = (depthStencilBuffer[0].getAttribute('createStencilBuffer') === 'true');
-                    this.clearStencilBuffer = (depthStencilBuffer[0].getAttribute('clearStencilBuffer') === 'true');
-                    this.stencilBufferBitSize = Number(depthStencilBuffer[0].getAttribute('stencilBufferBitSize'));
-                }
-                
-                let targetBuffer = device[0].getElementsByTagName('targetBuffer');
-                if( targetBuffer.length )
-                    this.clearTargetBuffer = (targetBuffer[0].getAttribute('clear') === 'true');
-
-                let gamepad = device[0].getElementsByTagName('gamepad');
-                if( gamepad.length )
-                {
-                    this.stickDeadZone = parseFloat(gamepad[0].getAttribute('stickDeadZone'));
-                    this.allowGamepad = (gamepad[0].getAttribute('allow') === 'true');
-                }
+                this.size.set( resolution['width'], resolution['height'] );
+                this.initialSize.set( this.size.w, this.size.h );
             }
 
-            let game = node.getElementsByTagName('game');
-            if( game.length )
+            let defaultRes = display['default'];
+            if( defaultRes )
             {
-                this.gameName = game[0].getAttribute('name');
-                this.gameId = game[0].getAttribute('id');
-            }
-            
-            let worldNode = node.getElementsByTagName('world');
-            if( worldNode.length )
-            {
-                this.sectorSize = Number(worldNode[0].getAttribute('sectorSize'));
-                this.sectorSizeHalf = Math.trunc(this.sectorSize / 2);
+                this.nativeSize.set( defaultRes['width'], defaultRes['height'] );
+                this.defaultSize.h = this.nativeSize.h;
             }
         }
-        
+
+        let device = settingsDict['device'];
+        if( device )
+        {
+            let projection = device['projection'];
+            if( projection )
+            {
+                if( projection['projectType'] === 'perspective' )
+                    this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__.EPT_PERSPECTIVE;
+
+                if( projection['minZDist'] )
+                    this.minZdist = projection['minZDist'];
+
+                if( projection['maxZDist'] )
+                    this.maxZdist = projection['maxZDist'];
+
+                if( projection['viewAngle'] )
+                    this.viewAngle = projection['viewAngle'] * _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEG_TO_RAD;
+            }
+
+            let depthStencilBuffer = device['depthStencilBuffer'];
+            if( depthStencilBuffer )
+            {
+                if( depthStencilBuffer['enableDepthBuffer'] )
+                    this.enableDepthBuffer = (depthStencilBuffer['enableDepthBuffer'] === 'true');
+
+                if( depthStencilBuffer['createStencilBuffer'] )
+                    this.createStencilBuffer = (depthStencilBuffer['createStencilBuffer'] === 'true');
+
+                if( depthStencilBuffer['clearStencilBuffer'] )
+                    this.clearStencilBuffer = (depthStencilBuffer['clearStencilBuffer'] === 'true');
+
+                if( depthStencilBuffer['stencilBufferBitSize'] )
+                    this.stencilBufferBitSize = depthStencilBuffer['stencilBufferBitSize'];
+            }
+
+            let targetBuffer = device['targetBuffer'];
+            if( targetBuffer )
+            {
+                if( targetBuffer['clear'] )
+                    this.clearTargetBuffer = (targetBuffer['clear'] === 'true');
+            }
+
+            let gamepad = device['gamepad'];
+            if( gamepad )
+            {
+                if( gamepad['allow'] )
+                    this.allowGamepad = (gamepad['allow'] === 'true');
+
+                if( gamepad['stickDeadZone'] )
+                    this.stickDeadZone = gamepad['stickDeadZone'];
+            }
+        }
+
+        let game = settingsDict['game'];
+        if( game )
+        {
+            if( game['name'] )
+                this.gameName = game['name'];
+            
+            if( game['id'] )
+                this.gameId = game['id'];
+        }
+
+        // Calculate the ratios
         this.calcRatio();
     }
     
@@ -1352,15 +1340,6 @@ class CameraManager
 
         // The default camera
         this.defaultCamera = null;
-    }
-    
-    // 
-    //  DESC: Load the camera list
-    //
-    load( filePath )
-    {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ));
     }
     
     // 
@@ -4291,6 +4270,24 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     // 
     //  DESC: Load the menu action list from XML
     //
+    loadMenuAction( actionDict )
+    {
+        this.backAction = actionDict['backAction'];
+        this.toggleAction = actionDict['toggleAction'];
+        this.escapeAction = actionDict['escapeAction'];
+        this.selectAction = actionDict['selectAction'];
+        this.upAction = actionDict['upAction'];
+        this.downAction = actionDict['downAction'];
+        this.leftAction = actionDict['leftAction'];
+        this.rightAction = actionDict['rightAction'];
+        this.tabLeft = actionDict['tabLeft'];
+        this.tabRight = actionDict['tabRight'];
+        this.defaultTree = actionDict['defaultTree'];
+    }
+
+    // 
+    //  DESC: Load the menu action list from XML
+    //
     loadMenuActionFromNode( node )
     {
         this.backAction = node.getElementsByTagName( 'backAction' )[0].childNodes[0].nodeValue;
@@ -4513,7 +4510,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
                     let pressType;
 
                     // common and can result in many messages which is why it's specifically defined here
-                    if( event.type === 'mousemove' )
+                    if( event.type === 'mousemove' || event.type === 'wheel' )
                     {
                         // Allow the mouse move message to get eaten when action handling is disabled.
                         this.handleEventForTrees( event );
@@ -5381,14 +5378,6 @@ class ActionManager
         this.gamepadKeyCodeMap.set( 'R STICK LEFT',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_LEFT );
         this.gamepadKeyCodeMap.set( 'R STICK RIGHT', _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_RIGHT );
     }
-    
-    // 
-    //  DESC: Load data from file path
-    //
-    clearLastDeviceUsed()
-    {
-        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_5__.DEVICE_NULL;
-    }
 
     // 
     //  DESC: Load data from action dictionary
@@ -5414,6 +5403,54 @@ class ActionManager
             this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
             this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
         }
+    }
+
+    // 
+    //  DESC: Setup the gamepad mapping based on controller mapping mode
+    //
+    initGamepadMapping( mapping )
+    {
+        // Remap for non-standard mapping
+        if( mapping === '' )
+        {
+            this.gamepadKeyCodeMap = new Map;
+            this.gamepadActionMap = new Map;
+
+            this.gamepadKeyCodeMap.set( UNBOUND_KEYCODE_STR_ID,     UNBOUND_KEYCODE_ID );
+            this.gamepadKeyCodeMap.set( 'A',             _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_A );
+            this.gamepadKeyCodeMap.set( 'B',             _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_B );
+            this.gamepadKeyCodeMap.set( 'X',             _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_X );
+            this.gamepadKeyCodeMap.set( 'Y',             _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_Y );
+            this.gamepadKeyCodeMap.set( 'L BUMPER',      _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_BUMPER );
+            this.gamepadKeyCodeMap.set( 'R BUMPER',      _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_BUMPER );
+            this.gamepadKeyCodeMap.set( 'BACK',          _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.ALT_GAMEPAD_BUTTON_BACK );
+            this.gamepadKeyCodeMap.set( 'START',         _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.ALT_GAMEPAD_BUTTON_START );
+            this.gamepadKeyCodeMap.set( 'GUIDE',         _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.ALT_GAMEPAD_BUTTON_GUIDE );
+            this.gamepadKeyCodeMap.set( 'L STICK',       _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.ALT_GAMEPAD_BUTTON_LEFTSTICK );
+            this.gamepadKeyCodeMap.set( 'R STICK',       _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.ALT_GAMEPAD_BUTTON_RIGHTSTICK );
+
+            // Key codes to use analog sticks as buttons
+            this.gamepadKeyCodeMap.set( 'L STICK UP',    _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_STICK_UP );
+            this.gamepadKeyCodeMap.set( 'L STICK DOWN',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_STICK_DOWN );
+            this.gamepadKeyCodeMap.set( 'L STICK LEFT',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_STICK_LEFT );
+            this.gamepadKeyCodeMap.set( 'L STICK RIGHT', _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_L_STICK_RIGHT );
+            this.gamepadKeyCodeMap.set( 'R STICK UP',    _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_UP );
+            this.gamepadKeyCodeMap.set( 'R STICK DOWN',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_DOWN );
+            this.gamepadKeyCodeMap.set( 'R STICK LEFT',  _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_LEFT );
+            this.gamepadKeyCodeMap.set( 'R STICK RIGHT', _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_RIGHT );
+
+            // Load the gamepad mapping
+            this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+        }
+    }
+    
+    // 
+    //  DESC: Load data from file path
+    //
+    clearLastDeviceUsed()
+    {
+        this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_5__.DEVICE_NULL;
     }
 
     // 
@@ -5823,6 +5860,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "GAMEPAD_BUTTON_DPAD_LEFT": () => (/* binding */ GAMEPAD_BUTTON_DPAD_LEFT),
 /* harmony export */   "GAMEPAD_BUTTON_DPAD_RIGHT": () => (/* binding */ GAMEPAD_BUTTON_DPAD_RIGHT),
 /* harmony export */   "GAMEPAD_BUTTON_GUIDE": () => (/* binding */ GAMEPAD_BUTTON_GUIDE),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_BACK": () => (/* binding */ ALT_GAMEPAD_BUTTON_BACK),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_START": () => (/* binding */ ALT_GAMEPAD_BUTTON_START),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_GUIDE": () => (/* binding */ ALT_GAMEPAD_BUTTON_GUIDE),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_LEFTSTICK": () => (/* binding */ ALT_GAMEPAD_BUTTON_LEFTSTICK),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_RIGHTSTICK": () => (/* binding */ ALT_GAMEPAD_BUTTON_RIGHTSTICK),
 /* harmony export */   "GAMEPAD_BUTTON_L_STICK_UP": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_UP),
 /* harmony export */   "GAMEPAD_BUTTON_L_STICK_DOWN": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_DOWN),
 /* harmony export */   "GAMEPAD_BUTTON_L_STICK_LEFT": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_LEFT),
@@ -5873,6 +5915,14 @@ const GAMEPAD_BUTTON_A             = 0,
              GAMEPAD_BUTTON_DPAD_LEFT     = 14,
              GAMEPAD_BUTTON_DPAD_RIGHT    = 15,
              GAMEPAD_BUTTON_GUIDE         = 16,
+
+             // Alternative key mappings
+             ALT_GAMEPAD_BUTTON_BACK       = 6,
+             ALT_GAMEPAD_BUTTON_START      = 7,
+             ALT_GAMEPAD_BUTTON_GUIDE      = 8,
+             ALT_GAMEPAD_BUTTON_LEFTSTICK  = 9,
+             ALT_GAMEPAD_BUTTON_RIGHTSTICK = 10,
+
              // Key codes to use analog sticks as buttons
              GAMEPAD_BUTTON_L_STICK_UP    = 30,
              GAMEPAD_BUTTON_L_STICK_DOWN  = 31,
@@ -6448,6 +6498,7 @@ class EventManager
     {
         if( _utilities_settings__WEBPACK_IMPORTED_MODULE_5__.settings.allowGamepad )
         {
+            _managers_actionmanager__WEBPACK_IMPORTED_MODULE_4__.actionManager.initGamepadMapping( event.gamepad.mapping );
             this.gamePadMap.set( event.gamepad.index, new _common_gamepad__WEBPACK_IMPORTED_MODULE_2__.Gamepad( event.gamepad ) );
             this.queue.push( event );
             console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
@@ -6514,7 +6565,7 @@ class EventManager
                         if(!lastGp.pressed[i] && gp.buttons[i].pressed)
                         {
                             this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_DOWN, i, gp) );
-                            //console.log( `Button Index Down: ${i};` );
+                            console.log( `Button Index Down: ${i};` );
                         }
                         // Check for button up
                         else if(lastGp.pressed[i] && !gp.buttons[i].pressed)
@@ -7316,6 +7367,10 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
             {
                 this.onMouseMove( event );
             }
+            else if( event.type === 'wheel' )
+            {
+                this.onWheel( event );
+            }
         }
     }
 
@@ -7390,17 +7445,29 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     onMouseMove( event )
     {
-        for( let i = 0; i < this.controlNodeAry.length; ++i )
+        for( let each of this.controlNodeAry )
         {
-            if( this.controlNodeAry[i].uiControl.onMouseMove( event ) )
-                this.activeNode = this.controlNodeAry[i];
+            if( each.uiControl.onMouseMove( event ) )
+                this.activeNode = each;
             else
-                this.controlNodeAry[i].uiControl.deactivateControl();
+                each.uiControl.deactivateControl();
         }
 
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            if( !this.mouseOnlyControlAry[i].onMouseMove( event ) )
-                this.mouseOnlyControlAry[i].deactivateControl();
+        for( let each of this.mouseOnlyControlAry )
+            if( !each.onMouseMove( event ) )
+                each.deactivateControl();
+    }
+
+    // 
+    //  DESC: Handle OnWheel message
+    //
+    onWheel( event )
+    {
+        for( let each of this.mouseOnlyControlAry )
+            each.onWheel( event );
+
+        for( let each of this.controlAry )
+            each.onWheel( event );
     }
 
     // 
@@ -33994,6 +34061,13 @@ class ControlBase extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         if( this.dynamicOffset )
             this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.defaultSize_half ) );
     }
+
+    // 
+    //  DESC: Handle the wheel events. Most controls don't deal with wheen events so it's a catchall here
+    //
+    onWheel( event )
+    {
+    }
 }
 
 /***/ }),
@@ -35740,6 +35814,33 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
         }
 
         return result;
+    }
+
+    // 
+    //  DESC: Handle the wheel events. This control handles wheel events
+    //
+    onWheel( event )
+    {
+        let scrollCurPos = this.scrollCurPos + (event.deltaY * 0.5);
+
+        // Handle bounds checking
+        if( scrollCurPos < 0 )
+            scrollCurPos = 0;
+
+        else if( scrollCurPos > this.maxMoveAmount )
+            scrollCurPos = this.maxMoveAmount;
+        
+        // Set the current scroll position
+        this.scrollCurPos = scrollCurPos;
+
+        // Move the slider
+        this.subControlAry[0].setSlider(this.scrollCurPos);
+
+        // Set the bounds
+        this.setStartEndPos();
+
+        // Reposition the scroll controlls
+        this.repositionScrollControls();
     }
 
     // 
@@ -37754,7 +37855,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(179);
 /* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(180);
 /* harmony import */ var _data_settings_controllerMapping_json__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(181);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(182);
+/* harmony import */ var _data_objects_2d_menu_menu_action_json__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(182);
 
 //
 //  FILE NAME: startupstate.js
@@ -37820,7 +37921,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__.physicsWorldManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__.default ) );
         _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__.default ) );
         _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__.actionManager.load( _data_settings_controllerMapping_json__WEBPACK_IMPORTED_MODULE_35__ );
-        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadMenuActionFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_menu_menu_action_list__WEBPACK_IMPORTED_MODULE_36__.default ) );
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadMenuAction( _data_objects_2d_menu_menu_action_json__WEBPACK_IMPORTED_MODULE_36__ );
 
         // Load the scripts
         _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_21__.loadScripts();
@@ -42750,14 +42851,10 @@ module.exports = JSON.parse('{"keyboardMapping":{"playerHidden":[{"action":"menu
 
 /***/ }),
 /* 182 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<menuActionList>\r\n\r\n    <backAction>menu_back</backAction>\r\n    <toggleAction>menu_toggle</toggleAction>\r\n    <escapeAction>menu_escape</escapeAction>\r\n    <selectAction>menu_select</selectAction>\r\n    <upAction>menu_up</upAction>\r\n    <downAction>menu_down</downAction>\r\n    <leftAction>menu_left</leftAction>\r\n    <rightAction>menu_right</rightAction>\r\n    <tabLeft>menu_tab_left</tabLeft>\r\n    <tabRight>menu_tab_right</tabRight>\r\n    <defaultTree>pause_tree</defaultTree>\r\n\r\n</menuActionList>\r\n\r\n");
+module.exports = JSON.parse('{"backAction":"menu_back","toggleAction":"menu_toggle","escapeAction":"menu_escape","selectAction":"menu_select","upAction":"menu_up","downAction":"menu_down","leftAction":"menu_left","rightAction":"menu_right","tabLeft":"menu_tab_left","tabRight":"menu_tab_right","defaultTree":"pause_tree"}');
 
 /***/ }),
 /* 183 */
@@ -43606,14 +43703,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 /* 188 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<settings>\n\t<display>\n\t\t<resolution width=\"1280\" height=\"720\" fullscreen=\"false\"/>\n\t\t<default width=\"1920\" height=\"1080\" orientation=\"landscape\"/>\n\t</display>\n\t<device>\n\t\t<!-- Currently only supports version 2.0 to 3.2 depending on your video card -->\n\t\t<!-- Profile can be \"core\", \"compatibility\" or \"es\" -->\n\t\t<!-- <OpenGL major=\"2\" minor=\"1\" profile=\"core\"/> -->\n\t\t<OpenGL major=\"2\" minor=\"0\" profile=\"core\"/>\n\t\t<projection projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45\"/>\n\t\t<!-- options: point, linear, anisotropic_2X, anisotropic_4X, anisotropic_8X, anisotropic_16X -->\n\t\t<anisotropicFiltering level=\"anisotropic_8X\"/>\n\t\t<backbuffer tripleBuffering=\"false\" VSync=\"true\"/>\n\t\t<depthStencilBuffer enableDepthBuffer=\"false\" createStencilBuffer=\"true\" clearStencilBuffer=\"true\" stencilBufferBitSize=\"1\"/>\n\t\t<targetBuffer clear=\"true\"/>\n\t\t<shadowBuffer create=\"false\" width=\"1024\" height=\"1024\"/>\n\t\t<postProcessBuffer create=\"true\">\n\t\t\t<buffer scale=\"1.0\" format=\"backbuffer\"/>\n\t\t\t<buffer scale=\"1.0\" format=\"backbuffer\"/>\n\t\t</postProcessBuffer>\n\t\t<!-- Dead Zone values as percentage -->\n\t\t<joypad stickDeadZone=\"30\"/>\n\t\t<threads minThreadCount=\"2\" maxThreadCount=\"0\"/>\n\t</device>\n\t<!-- frequency is usually 22050 or 44100. The lower the frequency, the more latency -->\n\t<!-- sound_channels is the output ie mono, stero, quad, etc -->\n\t<!-- mix_channels is the number of channels used for mixing whixh means the \n    total number of soinds that can be played at the same time -->\n\t<!-- chunksize is the amount of memory use for mixing. The larger the memory, the more latency  -->\n\t<sound frequency=\"44100\" sound_channels=\"2\" mix_channels=\"8\" chunksize=\"1024\"/>\n\t<world sectorSize=\"1024\"/>\n</settings>\n");
+module.exports = JSON.parse('{"display":{"resolution":{"width":1280,"height":720},"default":{"width":1920,"height":1080}},"device":{"projection":{"projectType":"orthographic","minZDist":5,"maxZDist":1000,"viewAngle":45},"depthStencilBuffer":{"enableDepthBuffer":"false","createStencilBuffer":"true","clearStencilBuffer":"true","stencilBufferBitSize":1},"targetBuffer":{"clear":"true"},"gamepad":{"allow":"true","stickDeadZone":0.3}},"game":{"name":"Game Template","id":"gametemplate"}}');
 
 /***/ })
 /******/ 	]);

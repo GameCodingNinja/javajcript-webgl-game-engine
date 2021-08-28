@@ -44,7 +44,7 @@ import physicsManagerListTable from 'raw-loader!../../data/objects/2d/physics/ph
 import menuManagerListTable from 'raw-loader!../../data/objects/2d/menu/menuListTable.lst';
 import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst';
 import actionManagerJson from '../../data/settings/controllerMapping.json';
-import menuActionLst from 'raw-loader!../../data/objects/2d/menu/menu_action.list';
+import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 
 const STARTUP_ASSET_COUNT = 54,
       MIN_LOAD_TIME = 1500;
@@ -63,7 +63,7 @@ export class StartUpState extends GameState
         physicsWorldManager.loadListTableFromNode( genFunc.stringLoadXML( physicsManagerListTable ) );
         menuManager.loadListTableFromNode( genFunc.stringLoadXML( menuManagerListTable ) );
         actionManager.load( actionManagerJson );
-        menuManager.loadMenuActionFromNode( genFunc.stringLoadXML( menuActionLst ) );
+        menuManager.loadMenuAction( menuActionJSON );
 
         // Load the scripts
         utilScripts.loadScripts();

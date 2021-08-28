@@ -20,10 +20,10 @@ import { device } from '../../../library/system/device';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 //import * as stateDefs from '../state/statedefs';
-import * as genFunc from '../../../library/utilities/genfunc';
+//import * as genFunc from '../../../library/utilities/genfunc';
 
-// Load data from bundle as string
-import settingsCfg from 'raw-loader!../../data/settings/settings.cfg';
+// Load data from bundle
+import settingsJSON from '../../data/settings/settings.json';
 
 export class Game
 {
@@ -37,7 +37,7 @@ export class Game
     init()
     {
         // Load the settings
-        settings.loadFromNode( genFunc.stringLoadXML( settingsCfg ) );
+        settings.load( settingsJSON );
 
         // Create the OpenGL context
         let gl = device.create();

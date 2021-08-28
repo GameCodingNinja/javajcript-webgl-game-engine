@@ -45,7 +45,7 @@ import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst'
 import cameraListTable from 'raw-loader!../../data/objects/camera.lst';
 import shaderCfg from 'raw-loader!../../data/shaders/shader.cfg';
 import actionManagerJson from '../../data/settings/controllerMapping.json';
-import menuActionLst from 'raw-loader!../../data/objects/2d/menu/menu_action.list';
+import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
 const STARTUP_ASSET_COUNT = 81,
@@ -66,7 +66,7 @@ export class StartUpState extends GameState
         menuManager.loadListTableFromNode( genFunc.stringLoadXML( menuManagerListTable ) );
         cameraManager.loadFromNode( genFunc.stringLoadXML( cameraListTable ) );
         actionManager.load( actionManagerJson );
-        menuManager.loadMenuActionFromNode( genFunc.stringLoadXML( menuActionLst ) );
+        menuManager.loadMenuAction( menuActionJSON );
 
         // Load the scripts
         utilScripts.loadScripts();

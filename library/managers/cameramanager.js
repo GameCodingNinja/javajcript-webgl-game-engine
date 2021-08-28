@@ -24,15 +24,6 @@ class CameraManager
     }
     
     // 
-    //  DESC: Load the camera list
-    //
-    load( filePath )
-    {
-        return genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ));
-    }
-    
-    // 
     //  DESC: Load the camera data from node
     //
     loadFromNode( xmlNode )

@@ -412,21 +412,21 @@ class MenuManager extends ManagerBase
     }
 
     // 
-    //  DESC: Load the menu action list from XML
+    //  DESC: Load the menu action list from JSON
     //
-    loadMenuActionFromNode( node )
+    loadMenuAction( actionDict )
     {
-        this.backAction = node.getElementsByTagName( 'backAction' )[0].childNodes[0].nodeValue;
-        this.toggleAction = node.getElementsByTagName( 'toggleAction' )[0].childNodes[0].nodeValue;
-        this.escapeAction = node.getElementsByTagName( 'escapeAction' )[0].childNodes[0].nodeValue;
-        this.selectAction = node.getElementsByTagName( 'selectAction' )[0].childNodes[0].nodeValue;
-        this.upAction = node.getElementsByTagName( 'upAction' )[0].childNodes[0].nodeValue;
-        this.downAction = node.getElementsByTagName( 'downAction' )[0].childNodes[0].nodeValue;
-        this.leftAction = node.getElementsByTagName( 'leftAction' )[0].childNodes[0].nodeValue;
-        this.rightAction = node.getElementsByTagName( 'rightAction' )[0].childNodes[0].nodeValue;
-        this.tabLeft = node.getElementsByTagName( 'tabLeft' )[0].childNodes[0].nodeValue;
-        this.tabRight = node.getElementsByTagName( 'tabRight' )[0].childNodes[0].nodeValue;
-        this.defaultTree = node.getElementsByTagName( 'defaultTree' )[0].childNodes[0].nodeValue;
+        this.backAction = actionDict['backAction'];
+        this.toggleAction = actionDict['toggleAction'];
+        this.escapeAction = actionDict['escapeAction'];
+        this.selectAction = actionDict['selectAction'];
+        this.upAction = actionDict['upAction'];
+        this.downAction = actionDict['downAction'];
+        this.leftAction = actionDict['leftAction'];
+        this.rightAction = actionDict['rightAction'];
+        this.tabLeft = actionDict['tabLeft'];
+        this.tabRight = actionDict['tabRight'];
+        this.defaultTree = actionDict['defaultTree'];
     }
     
     // 
