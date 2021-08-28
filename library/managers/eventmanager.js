@@ -215,6 +215,7 @@ class EventManager
     {
         if( settings.allowGamepad )
         {
+            actionManager.initGamepadMapping( event.gamepad.mapping );
             this.gamePadMap.set( event.gamepad.index, new Gamepad( event.gamepad ) );
             this.queue.push( event );
             console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
@@ -281,7 +282,7 @@ class EventManager
                         if(!lastGp.pressed[i] && gp.buttons[i].pressed)
                         {
                             this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, i, gp) );
-                            //console.log( `Button Index Down: ${i};` );
+                            console.log( `Button Index Down: ${i};` );
                         }
                         // Check for button up
                         else if(lastGp.pressed[i] && !gp.buttons[i].pressed)

@@ -37,6 +37,14 @@ export const GAMEPAD_BUTTON_A             = 0,
              GAMEPAD_BUTTON_DPAD_LEFT     = 14,
              GAMEPAD_BUTTON_DPAD_RIGHT    = 15,
              GAMEPAD_BUTTON_GUIDE         = 16,
+
+             // Alternative key mappings
+             ALT_GAMEPAD_BUTTON_BACK       = 6,
+             ALT_GAMEPAD_BUTTON_START      = 7,
+             ALT_GAMEPAD_BUTTON_GUIDE      = 8,
+             ALT_GAMEPAD_BUTTON_LEFTSTICK  = 9,
+             ALT_GAMEPAD_BUTTON_RIGHTSTICK = 10,
+
              // Key codes to use analog sticks as buttons
              GAMEPAD_BUTTON_L_STICK_UP    = 30,
              GAMEPAD_BUTTON_L_STICK_DOWN  = 31,
