@@ -1,0 +1,16 @@
+{
+    "_startup_": [
+        "data/objects/strategy/state/startup.strategy"],
+    
+    "_cube_": [
+        "data/objects/strategy/actor/cube.strategy"],
+    
+    "_loading-screen_": [
+        "data/objects/strategy/state/loadscreen.strategy"],
+    
+    "_level-1-stage_": [
+        "data/objects/strategy/level1/stage.strategy"],
+    
+    "_level-1-ball_": [
+        "data/objects/strategy/level1/ball.strategy"]
+}

@@ -37,14 +37,14 @@ import * as stateDefs from './statedefs';
 import dataListTable from 'raw-loader!../../data/objects/2d/objectDataList/dataListTable.lst';
 import strategyListTable from 'raw-loader!../../data/objects/strategy/strageyListTable.lst';
 import cameraListTable from 'raw-loader!../../data/objects/camera.lst';
-import shaderCfg from 'raw-loader!../../data/shaders/shader.cfg';
+import shaderObj from '../../data/shaders/shader.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 import soundManagerListTable from 'raw-loader!../../data/sound/soundListTable.lst';
 import physicsManagerListTable from 'raw-loader!../../data/objects/2d/physics/physicsListTable.lst';
 import menuManagerListTable from 'raw-loader!../../data/objects/2d/menu/menuListTable.lst';
 import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst';
-import actionManagerJson from '../../data/settings/controllerMapping.json';
-import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
+import actionManagerObj from '../../data/settings/controllerMapping.json';
+import menuActionObj from '../../data/objects/2d/menu/menu_action.json';
 
 const STARTUP_ASSET_COUNT = 54,
       MIN_LOAD_TIME = 1500;
@@ -62,8 +62,8 @@ export class StartUpState extends GameState
         soundManager.loadListTableFromNode( genFunc.stringLoadXML( soundManagerListTable ) );
         physicsWorldManager.loadListTableFromNode( genFunc.stringLoadXML( physicsManagerListTable ) );
         menuManager.loadListTableFromNode( genFunc.stringLoadXML( menuManagerListTable ) );
-        actionManager.load( actionManagerJson );
-        menuManager.loadMenuAction( menuActionJSON );
+        actionManager.loadFromObj( actionManagerObj );
+        menuManager.loadMenuActionFromObj( menuActionObj );
 
         // Load the scripts
         utilScripts.loadScripts();
@@ -93,7 +93,7 @@ export class StartUpState extends GameState
         Promise.all([
 
             // Load the shaders
-            shaderManager.loadFromNode( genFunc.stringLoadXML( shaderCfg ) ),
+            shaderManager.loadFromObj( shaderObj ),
 
             // Load the object data
             objectDataManager.loadGroup( ['(startup)'] )

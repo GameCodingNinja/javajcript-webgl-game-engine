@@ -210,7 +210,7 @@ class ActionManager
     // 
     //  DESC: Load data from action dictionary
     //
-    load( actionDict )
+    loadFromObj( actionDict )
     {
         if( actionDict )
         {
@@ -220,16 +220,16 @@ class ActionManager
                 this.actionDict = JSON.parse( savedActionDict );
 
             // Load the keyboard mapping
-            this.loadAction( this.actionDict['keyboardMapping']['playerHidden'], this.keyboardKeyCodeMap, this.keyboardActionMap );
-            this.loadAction( this.actionDict['keyboardMapping']['playerVisible'], this.keyboardKeyCodeMap, this.keyboardActionMap );
+            this.loadAction( this.actionDict.keyboardMapping.playerHidden, this.keyboardKeyCodeMap, this.keyboardActionMap );
+            this.loadAction( this.actionDict.keyboardMapping.playerVisible, this.keyboardKeyCodeMap, this.keyboardActionMap );
 
             // Load the mouse mapping
-            this.loadAction( this.actionDict['mouseMapping']['playerHidden'], this.mouseKeyCodeMap, this.mouseActionMap );
-            this.loadAction( this.actionDict['mouseMapping']['playerVisible'], this.mouseKeyCodeMap, this.mouseActionMap );
+            this.loadAction( this.actionDict.mouseMapping.playerHidden, this.mouseKeyCodeMap, this.mouseActionMap );
+            this.loadAction( this.actionDict.mouseMapping.playerVisible, this.mouseKeyCodeMap, this.mouseActionMap );
 
             // Load the gamepad mapping
-            this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
-            this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict.gamepadMapping.playerHidden, this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict.gamepadMapping.playerVisible, this.gamepadKeyCodeMap, this.gamepadActionMap );
         }
     }
 
@@ -268,8 +268,8 @@ class ActionManager
             this.gamepadKeyCodeMap.set( 'R STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_R_STICK_RIGHT );
 
             // Load the gamepad mapping
-            this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
-            this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict.gamepadMapping.playerHidden, this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict.gamepadMapping.playerVisible, this.gamepadKeyCodeMap, this.gamepadActionMap );
         }
     }
     
@@ -291,14 +291,14 @@ class ActionManager
             for( let each of actionDict )
             {
                 // See if we can find the string that represents the key code id
-                let keyCode = keyCodeMap.get( each['componetId'] );
+                let keyCode = keyCodeMap.get( each.componetId );
 
                 // Add it in if we found it
                 if( keyCode !== undefined )
                 {
                     // See if the controller action string has already been added
-                    let actionStr = each['action'];
-                    let action = actionMap.get( each['action'] );
+                    let actionStr = each.action;
+                    let action = actionMap.get( each.action );
 
                     if( action !== undefined )
                     {
@@ -423,7 +423,7 @@ class ActionManager
             mappingName = 'gamepadMapping';
         }
 
-        return this.getComponentStr( this.actionDict[mappingName]['playerVisible'], actionNameStr );
+        return this.getComponentStr( this.actionDict[mappingName].playerVisible, actionNameStr );
     }
 
     // 
@@ -500,7 +500,7 @@ class ActionManager
         }
         
         // If this action ID can be found and is configurable, reset it
-        let [oldComponetIdStr, configurable] = this.getComponentStr( this.actionDict[mappingName]['playerVisible'], actionNameStr );
+        let [oldComponetIdStr, configurable] = this.getComponentStr( this.actionDict[mappingName].playerVisible, actionNameStr );
 
         if( oldComponetIdStr && configurable )
         {
@@ -528,7 +528,7 @@ class ActionManager
                         keyCodeAction.setId( newKeyCode );
 
                         // Update the action dictionary with the change
-                        if( this.changeComponentStr( this.actionDict[mappingName]['playerVisible'], actionNameStr, newComponetIdStr ) )
+                        if( this.changeComponentStr( this.actionDict[mappingName].playerVisible, actionNameStr, newComponetIdStr ) )
                             return [newComponetIdStr, true];
                     }
                 }
@@ -555,12 +555,12 @@ class ActionManager
         this.mouseActionMap = new Map;
         this.gamepadActionMap = new Map;
 
-        this.resetKeybindingToDefaults( this.actionDict['keyboardMapping']['playerVisible'] );
-        this.resetKeybindingToDefaults( this.actionDict['mouseMapping']['playerVisible'] );
-        this.resetKeybindingToDefaults( this.actionDict['gamepadMapping']['playerVisible'] );
+        this.resetKeybindingToDefaults( this.actionDict.keyboardMapping.playerVisible );
+        this.resetKeybindingToDefaults( this.actionDict.mouseMapping.playerVisible );
+        this.resetKeybindingToDefaults( this.actionDict.gamepadMapping.playerVisible );
 
         localStorage.free( 'keybinding' );
-        this.load( this.actionDict );
+        this.loadFromObj( this.actionDict );
     }
 
     // 
@@ -570,8 +570,8 @@ class ActionManager
     {
         for( let each of actionDict )
         {
-            if( each['defaultId'] )
-                each['componetId'] = each['defaultId'];
+            if( each.defaultId )
+                each.componetId = each.defaultId;
         }
     }
 

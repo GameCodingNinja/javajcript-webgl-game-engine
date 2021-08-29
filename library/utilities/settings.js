@@ -43,89 +43,80 @@ class Settings
     }
 
     // 
-    //  DESC: Load the JSON created dictionary
+    //  DESC: Load the Obj data
     //
-    load( settingsDict )
+    loadFromObj( obj )
     {
-        let display = settingsDict['display'];
-        if( display )
+        if( obj.display )
         {
-            let resolution = display['resolution'];
-            if( resolution )
+            if( obj.display.resolution )
             {
-                this.size.set( resolution['width'], resolution['height'] );
+                this.size.set( obj.display.resolution.width, obj.display.resolution.height );
                 this.initialSize.set( this.size.w, this.size.h );
             }
 
-            let defaultRes = display['default'];
-            if( defaultRes )
+            if( obj.display.default )
             {
-                this.nativeSize.set( defaultRes['width'], defaultRes['height'] );
+                this.nativeSize.set( obj.display.default.width, obj.display.default.height );
                 this.defaultSize.h = this.nativeSize.h;
             }
         }
 
-        let device = settingsDict['device'];
-        if( device )
+        if( obj.device )
         {
-            let projection = device['projection'];
-            if( projection )
+            if( obj.device.projection )
             {
-                if( projection['projectType'] === 'perspective' )
+                if( obj.device.projection.projectType === 'perspective' )
                     this.projectionType = defs.EPT_PERSPECTIVE;
 
-                if( projection['minZDist'] )
-                    this.minZdist = projection['minZDist'];
+                if( obj.device.projection.minZDist )
+                    this.minZdist = obj.device.projection.minZDist;
 
-                if( projection['maxZDist'] )
-                    this.maxZdist = projection['maxZDist'];
+                if( obj.device.projection.maxZDist )
+                    this.maxZdist = obj.device.projection.maxZDist;
 
-                if( projection['viewAngle'] )
-                    this.viewAngle = projection['viewAngle'] * defs.DEG_TO_RAD;
+                if( obj.device.projection.viewAngle )
+                    this.viewAngle = obj.device.projection.viewAngle * defs.DEG_TO_RAD;
             }
 
-            let depthStencilBuffer = device['depthStencilBuffer'];
-            if( depthStencilBuffer )
+            if( obj.device.depthStencilBuffer )
             {
-                if( depthStencilBuffer['enableDepthBuffer'] )
-                    this.enableDepthBuffer = (depthStencilBuffer['enableDepthBuffer'] === 'true');
+                if( obj.device.depthStencilBuffer.enableDepthBuffer )
+                    this.enableDepthBuffer = (obj.device.depthStencilBuffer.enableDepthBuffer === 'true');
 
-                if( depthStencilBuffer['createStencilBuffer'] )
-                    this.createStencilBuffer = (depthStencilBuffer['createStencilBuffer'] === 'true');
+                if( obj.device.depthStencilBuffer.createStencilBuffer )
+                    this.createStencilBuffer = (obj.device.depthStencilBuffer.createStencilBuffer === 'true');
 
-                if( depthStencilBuffer['clearStencilBuffer'] )
-                    this.clearStencilBuffer = (depthStencilBuffer['clearStencilBuffer'] === 'true');
+                if( obj.device.depthStencilBuffer.clearStencilBuffer )
+                    this.clearStencilBuffer = (obj.device.depthStencilBuffer.clearStencilBuffer === 'true');
 
-                if( depthStencilBuffer['stencilBufferBitSize'] )
-                    this.stencilBufferBitSize = depthStencilBuffer['stencilBufferBitSize'];
+                if( obj.device.depthStencilBuffer.stencilBufferBitSize )
+                    this.stencilBufferBitSize = obj.device.depthStencilBuffer.stencilBufferBitSize;
             }
 
-            let targetBuffer = device['targetBuffer'];
-            if( targetBuffer )
+            if( obj.device.targetBuffer )
             {
-                if( targetBuffer['clear'] )
-                    this.clearTargetBuffer = (targetBuffer['clear'] === 'true');
+                if( obj.device.targetBuffer.clear )
+                    this.clearTargetBuffer = (obj.device.targetBuffer.clear === 'true');
             }
 
-            let gamepad = device['gamepad'];
-            if( gamepad )
+            if( obj.device.gamepad )
             {
-                if( gamepad['allow'] )
-                    this.allowGamepad = (gamepad['allow'] === 'true');
+                if( obj.device.gamepad.allow )
+                    this.allowGamepad = (obj.device.gamepadallow === 'true');
 
-                if( gamepad['stickDeadZone'] )
-                    this.stickDeadZone = gamepad['stickDeadZone'];
+                if( obj.device.gamepad.stickDeadZone )
+                    this.stickDeadZone = obj.device.gamepad.stickDeadZone;
             }
         }
 
-        let game = settingsDict['game'];
-        if( game )
+        if( obj.game )
         {
-            if( game['name'] )
-                this.gameName = game['name'];
+            if( obj.game.name )
+                this.gameName = obj.game.name;
             
-            if( game['id'] )
-                this.gameId = game['id'];
+            if( obj.game.id )
+                this.gameId = obj.game.id;
         }
 
         // Calculate the ratios

@@ -414,19 +414,19 @@ class MenuManager extends ManagerBase
     // 
     //  DESC: Load the menu action list from JSON
     //
-    loadMenuAction( actionDict )
+    loadMenuActionFromObj( obj )
     {
-        this.backAction = actionDict['backAction'];
-        this.toggleAction = actionDict['toggleAction'];
-        this.escapeAction = actionDict['escapeAction'];
-        this.selectAction = actionDict['selectAction'];
-        this.upAction = actionDict['upAction'];
-        this.downAction = actionDict['downAction'];
-        this.leftAction = actionDict['leftAction'];
-        this.rightAction = actionDict['rightAction'];
-        this.tabLeft = actionDict['tabLeft'];
-        this.tabRight = actionDict['tabRight'];
-        this.defaultTree = actionDict['defaultTree'];
+        this.backAction = obj.backAction;
+        this.toggleAction = obj.toggleAction;
+        this.escapeAction = obj.escapeAction;
+        this.selectAction = obj.selectAction;
+        this.upAction = obj.upAction;
+        this.downAction = obj.downAction;
+        this.leftAction = obj.leftAction;
+        this.rightAction = obj.rightAction;
+        this.tabLeft = obj.tabLeft;
+        this.tabRight = obj.tabRight;
+        this.defaultTree = obj.defaultTree;
     }
     
     // 

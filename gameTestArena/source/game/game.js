@@ -23,7 +23,7 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 //import * as genFunc from '../../../library/utilities/genfunc';
 
 // Load data from bundle
-import settingsJSON from '../../data/settings/settings.json';
+import settingsObj from '../../data/settings/settings.json';
 
 export class Game
 {
@@ -37,7 +37,7 @@ export class Game
     init()
     {
         // Load the settings
-        settings.load( settingsJSON );
+        settings.loadFromObj( settingsObj );
 
         // Create the OpenGL context
         let gl = device.create();

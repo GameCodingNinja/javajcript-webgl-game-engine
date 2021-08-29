@@ -19,54 +19,43 @@ class ShaderManager
         this.currentShaderData = null;
         this.currentAttributeCount = 0;
     }
-    
+
     // 
-    //  DESC: Load the shader from xml node
+    //  DESC: Load the shader from object
     //
-    loadFromNode( xmlNode )
+    loadFromObj( obj )
     {
         let promiseAry = [];
 
-        if( xmlNode )
-        {
-            let shader = xmlNode.getElementsByTagName('shader');
-            if( shader )
-            {
-                for( let i = 0; i < shader.length; ++i )
-                    promiseAry.push( this.createShader( shader[i] ) );
-            }
-        }
+        for( const [key, value] of Object.entries(obj) )
+            this.createShader( key, value );
 
         return Promise.all( promiseAry );
     }
-    
+
     // 
     //  DESC: Setup the load request to load the shader files from the server
     //
-    createShader( node )
+    createShader( name, data )
     {
         let gl = device.gl;
-        let shaderId = node.getAttribute('Id');
-        
-        let vertexNode = node.getElementsByTagName('vertDataLst');
-        let fragmentNode = node.getElementsByTagName('fragDataLst');
-        
+
         // Check for duplicate
-        if( this.shaderMap.has(shaderId) )
-            throw new Error( `Shader of this name already exists (${shaderId}).` );
-        
+        if( this.shaderMap.has(name) )
+            throw new Error( `Shader of this name already exists (${name}).` );
+
         // Add an entry to the map
-        let shaderData = new ShaderData;
-        this.shaderMap.set( shaderId, shaderData );
-        
+        let shaderData = new ShaderData(name);
+        this.shaderMap.set( name, shaderData );
+
         // Create the vertex shader
-        let vertPromise = genFunc.downloadFile( 'txt', vertexNode[0].getAttribute('file') )
-            .then(( vertText ) => this.create( gl.VERTEX_SHADER, shaderData, shaderId, vertText ) );
+        let vertPromise = genFunc.downloadFile( 'txt', data.vert.file )
+            .then(( vertText ) => this.create( gl.VERTEX_SHADER, shaderData, name, vertText ) );
 
         // Create the frag shader
-        let fragPromise = genFunc.downloadFile( 'txt', fragmentNode[0].getAttribute('file') )
-            .then( (fragText ) => this.create( gl.FRAGMENT_SHADER, shaderData, shaderId, fragText ) );
-            
+        let fragPromise = genFunc.downloadFile( 'txt', data.frag.file )
+            .then( (fragText ) => this.create( gl.FRAGMENT_SHADER, shaderData, name, fragText ) );
+        
         return Promise.all( [vertPromise, fragPromise] )
             .then(() =>
             {
@@ -74,10 +63,10 @@ class ShaderManager
                 this.createProgram( shaderData );
                 
                 // Find the location of the custom shader variables
-                this.locateShaderVariables( shaderData, vertexNode[0].getElementsByTagName('dataType'), fragmentNode[0].getElementsByTagName('dataType') );
+                this.locateShaderVariables( shaderData, data.vert.dataType, data.frag.dataType );
 
                 // Init the shader
-                signalManager.broadcast_initShader( shaderId );
+                signalManager.broadcast_initShader( name );
             });
     }
     
@@ -122,41 +111,36 @@ class ShaderManager
         gl.linkProgram( shaderData.programId );
             
         if( !gl.getProgramParameter( shaderData.programId, gl.LINK_STATUS ) )
-            throw new Error( `ERROR linking program! (${gl.getProgramInfoLog(shaderData.programId)}).` );
+            throw new Error( `ERROR linking program! (${shaderData.name}, ${gl.getProgramInfoLog(shaderData.programId)}).` );
 
         gl.validateProgram( shaderData.programId );
 
         if( !gl.getProgramParameter( shaderData.programId, gl.VALIDATE_STATUS ) )
-            throw new Error( `ERROR validating program! (${gl.getProgramInfoLog(shaderData.programId)}).` );
+            throw new Error( `ERROR validating program! (${shaderData.name}, ${gl.getProgramInfoLog(shaderData.programId)}).` );
     }
-    
+
     // 
     //  DESC: Locate the indexes of the shader variables
     //
-    locateShaderVariables( shaderData, vertNode, fragNode )
+    locateShaderVariables( shaderData, vertObj, fragObj )
     {
         let gl = device.gl;
 
-        for( let i = 0; i < vertNode.length; ++i )
+        for( const each of vertObj )
         {
-            let name = vertNode[i].getAttribute('name');
-            
-            if( vertNode[i].getAttribute('location') )
+            if( each.location !== undefined )
             {
-                shaderData.locationMap.set( name, gl.getAttribLocation(shaderData.programId, name) );
+                shaderData.locationMap.set( each.name, gl.getAttribLocation(shaderData.programId, each.name) );
                 ++shaderData.attributeCount;
             }
             else
             {
-                shaderData.locationMap.set( name, gl.getUniformLocation(shaderData.programId, name) );
+                shaderData.locationMap.set( each.name, gl.getUniformLocation(shaderData.programId, each.name) );
             }
         }
         
-        for( let i = 0; i < fragNode.length; ++i )
-        {
-            let name = fragNode[i].getAttribute('name');
-            shaderData.locationMap.set( name, gl.getUniformLocation(shaderData.programId, name) );
-        }
+        for( const each of fragObj )
+            shaderData.locationMap.set( each.name, gl.getUniformLocation(shaderData.programId, each.name) );
     }
     
     // 

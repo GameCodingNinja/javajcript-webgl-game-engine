@@ -8,8 +8,10 @@
 
 export class ShaderData
 {
-    constructor()
+    constructor( name )
     {
+        this.name = name;
+
         // OpenGL ID's
         this.programId = 0;
         this.vertexId = 0;

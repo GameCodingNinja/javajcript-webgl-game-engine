@@ -42,7 +42,7 @@ import physicsManagerListTable from 'raw-loader!../../data/objects/2d/physics/ph
 //import menuManagerListTable from 'raw-loader!../../data/objects/2d/menu/menuListTable.lst';
 //import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst';
 import cameraListTable from 'raw-loader!../../data/objects/camera.lst';
-import shaderCfg from 'raw-loader!../../data/shaders/shader.cfg';
+import shaderObj from '../../data/shaders/shader.json';
 //import actionManagerJson from '../../data/settings/controllerMapping.json';
 //import menuActionLst from 'raw-loader!../../data/objects/2d/menu/menu_action.list';
 import testArenaLoader from 'raw-loader!../../data/objects/strategy/strategy.loader';
@@ -98,7 +98,7 @@ export class TestArenaState extends GameState
         Promise.all([
 
             // Load the shaders
-            shaderManager.loadFromNode( genFunc.stringLoadXML( shaderCfg ) ),
+            shaderManager.loadFromObj( shaderObj ),
 
             // Load the object data
             objectDataManager.loadGroup( groupAry )

@@ -1,0 +1,87 @@
+{
+    "shader_2d": {
+        "vert": {
+            "file": "data/shaders/shader_v100.vert",
+
+            "dataType": [
+                { "name": "in_position", "location": 0 },
+                { "name": "in_uv", "location": 1 },
+                { "name": "cameraViewProjMatrix" } ] },
+
+        "frag": {
+            "file": "data/shaders/shader_v100.frag",
+
+            "dataType": [
+                { "name": "text0" },
+                { "name": "color" },
+                { "name": "additive" } ] } },
+
+    "shader_2d_spriteSheet": {
+        "vert": {
+            "file": "data/shaders/shader_spriteSheet_v100.vert",
+
+            "dataType": [
+                { "name": "in_position", "location": 0 },
+                { "name": "in_uv", "location": 1 },
+                { "name": "cameraViewProjMatrix" },
+                { "name": "glyphRect" } ] },
+
+        "frag": {
+            "file": "data/shaders/shader_v100.frag",
+
+            "dataType": [
+                { "name": "text0" },
+                { "name": "color" },
+                { "name": "additive" } ] } },
+
+    "shader_solid_2d": {
+        "vert": {
+            "file": "data/shaders/shader_solid_v100.vert",
+
+            "dataType": [
+                { "name": "in_position", "location": 0 },
+                { "name": "cameraViewProjMatrix" } ] },
+
+        "frag": {
+            "file": "data/shaders/shader_soild_v100.frag",
+
+            "dataType": [
+                { "name": "color" },
+                { "name": "additive" } ] } },
+
+    "shader_3d": {
+        "vert": {
+            "file": "data/shaders/shader_mesh_v100.vert",
+
+            "dataType": [
+                { "name": "in_position", "location": 0 },
+                { "name": "in_normal", "location": 1 },
+                { "name": "in_uv", "location": 2 },
+                { "name": "cameraViewProjMatrix" },
+                { "name": "normalMatrix" } ] },
+
+        "frag": {
+            "file": "data/shaders/shader_mesh_v100.frag",
+
+            "dataType": [
+                { "name": "text0" },
+                { "name": "color" },
+                { "name": "additive" } ] } },
+
+    "shader_3d_no_txt": {
+        "vert": {
+            "file": "data/shaders/shader_mesh_no_txt_v100.vert",
+
+            "dataType": [
+                { "name": "in_position", "location": 0 },
+                { "name": "in_normal", "location": 1 },
+                { "name": "cameraViewProjMatrix" },
+                { "name": "normalMatrix" } ] },
+
+        "frag": {
+            "file": "data/shaders/shader_mesh_no_txt_v100.frag",
+
+            "dataType": [
+                { "name": "color" },
+                { "name": "additive" } ] } }
+}

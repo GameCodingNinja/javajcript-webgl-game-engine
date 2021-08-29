@@ -60,7 +60,7 @@ class Game
     init()
     {
         // Load the settings
-        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.load( _data_settings_settings_json__WEBPACK_IMPORTED_MODULE_13__ );
+        _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.loadFromObj( _data_settings_settings_json__WEBPACK_IMPORTED_MODULE_13__ );
 
         // Create the OpenGL context
         let gl = _library_system_device__WEBPACK_IMPORTED_MODULE_9__.device.create();
@@ -376,89 +376,80 @@ class Settings
     }
 
     // 
-    //  DESC: Load the JSON created dictionary
+    //  DESC: Load the Obj data
     //
-    load( settingsDict )
+    loadFromObj( obj )
     {
-        let display = settingsDict['display'];
-        if( display )
+        if( obj.display )
         {
-            let resolution = display['resolution'];
-            if( resolution )
+            if( obj.display.resolution )
             {
-                this.size.set( resolution['width'], resolution['height'] );
+                this.size.set( obj.display.resolution.width, obj.display.resolution.height );
                 this.initialSize.set( this.size.w, this.size.h );
             }
 
-            let defaultRes = display['default'];
-            if( defaultRes )
+            if( obj.display.default )
             {
-                this.nativeSize.set( defaultRes['width'], defaultRes['height'] );
+                this.nativeSize.set( obj.display.default.width, obj.display.default.height );
                 this.defaultSize.h = this.nativeSize.h;
             }
         }
 
-        let device = settingsDict['device'];
-        if( device )
+        if( obj.device )
         {
-            let projection = device['projection'];
-            if( projection )
+            if( obj.device.projection )
             {
-                if( projection['projectType'] === 'perspective' )
+                if( obj.device.projection.projectType === 'perspective' )
                     this.projectionType = _common_defs__WEBPACK_IMPORTED_MODULE_1__.EPT_PERSPECTIVE;
 
-                if( projection['minZDist'] )
-                    this.minZdist = projection['minZDist'];
+                if( obj.device.projection.minZDist )
+                    this.minZdist = obj.device.projection.minZDist;
 
-                if( projection['maxZDist'] )
-                    this.maxZdist = projection['maxZDist'];
+                if( obj.device.projection.maxZDist )
+                    this.maxZdist = obj.device.projection.maxZDist;
 
-                if( projection['viewAngle'] )
-                    this.viewAngle = projection['viewAngle'] * _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEG_TO_RAD;
+                if( obj.device.projection.viewAngle )
+                    this.viewAngle = obj.device.projection.viewAngle * _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEG_TO_RAD;
             }
 
-            let depthStencilBuffer = device['depthStencilBuffer'];
-            if( depthStencilBuffer )
+            if( obj.device.depthStencilBuffer )
             {
-                if( depthStencilBuffer['enableDepthBuffer'] )
-                    this.enableDepthBuffer = (depthStencilBuffer['enableDepthBuffer'] === 'true');
+                if( obj.device.depthStencilBuffer.enableDepthBuffer )
+                    this.enableDepthBuffer = (obj.device.depthStencilBuffer.enableDepthBuffer === 'true');
 
-                if( depthStencilBuffer['createStencilBuffer'] )
-                    this.createStencilBuffer = (depthStencilBuffer['createStencilBuffer'] === 'true');
+                if( obj.device.depthStencilBuffer.createStencilBuffer )
+                    this.createStencilBuffer = (obj.device.depthStencilBuffer.createStencilBuffer === 'true');
 
-                if( depthStencilBuffer['clearStencilBuffer'] )
-                    this.clearStencilBuffer = (depthStencilBuffer['clearStencilBuffer'] === 'true');
+                if( obj.device.depthStencilBuffer.clearStencilBuffer )
+                    this.clearStencilBuffer = (obj.device.depthStencilBuffer.clearStencilBuffer === 'true');
 
-                if( depthStencilBuffer['stencilBufferBitSize'] )
-                    this.stencilBufferBitSize = depthStencilBuffer['stencilBufferBitSize'];
+                if( obj.device.depthStencilBuffer.stencilBufferBitSize )
+                    this.stencilBufferBitSize = obj.device.depthStencilBuffer.stencilBufferBitSize;
             }
 
-            let targetBuffer = device['targetBuffer'];
-            if( targetBuffer )
+            if( obj.device.targetBuffer )
             {
-                if( targetBuffer['clear'] )
-                    this.clearTargetBuffer = (targetBuffer['clear'] === 'true');
+                if( obj.device.targetBuffer.clear )
+                    this.clearTargetBuffer = (obj.device.targetBuffer.clear === 'true');
             }
 
-            let gamepad = device['gamepad'];
-            if( gamepad )
+            if( obj.device.gamepad )
             {
-                if( gamepad['allow'] )
-                    this.allowGamepad = (gamepad['allow'] === 'true');
+                if( obj.device.gamepad.allow )
+                    this.allowGamepad = (obj.device.gamepadallow === 'true');
 
-                if( gamepad['stickDeadZone'] )
-                    this.stickDeadZone = gamepad['stickDeadZone'];
+                if( obj.device.gamepad.stickDeadZone )
+                    this.stickDeadZone = obj.device.gamepad.stickDeadZone;
             }
         }
 
-        let game = settingsDict['game'];
-        if( game )
+        if( obj.game )
         {
-            if( game['name'] )
-                this.gameName = game['name'];
+            if( obj.game.name )
+                this.gameName = obj.game.name;
             
-            if( game['id'] )
-                this.gameId = game['id'];
+            if( obj.game.id )
+                this.gameId = obj.game.id;
         }
 
         // Calculate the ratios
@@ -4268,39 +4259,21 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     }
 
     // 
-    //  DESC: Load the menu action list from XML
+    //  DESC: Load the menu action list from JSON
     //
-    loadMenuAction( actionDict )
+    loadMenuActionFromObj( obj )
     {
-        this.backAction = actionDict['backAction'];
-        this.toggleAction = actionDict['toggleAction'];
-        this.escapeAction = actionDict['escapeAction'];
-        this.selectAction = actionDict['selectAction'];
-        this.upAction = actionDict['upAction'];
-        this.downAction = actionDict['downAction'];
-        this.leftAction = actionDict['leftAction'];
-        this.rightAction = actionDict['rightAction'];
-        this.tabLeft = actionDict['tabLeft'];
-        this.tabRight = actionDict['tabRight'];
-        this.defaultTree = actionDict['defaultTree'];
-    }
-
-    // 
-    //  DESC: Load the menu action list from XML
-    //
-    loadMenuActionFromNode( node )
-    {
-        this.backAction = node.getElementsByTagName( 'backAction' )[0].childNodes[0].nodeValue;
-        this.toggleAction = node.getElementsByTagName( 'toggleAction' )[0].childNodes[0].nodeValue;
-        this.escapeAction = node.getElementsByTagName( 'escapeAction' )[0].childNodes[0].nodeValue;
-        this.selectAction = node.getElementsByTagName( 'selectAction' )[0].childNodes[0].nodeValue;
-        this.upAction = node.getElementsByTagName( 'upAction' )[0].childNodes[0].nodeValue;
-        this.downAction = node.getElementsByTagName( 'downAction' )[0].childNodes[0].nodeValue;
-        this.leftAction = node.getElementsByTagName( 'leftAction' )[0].childNodes[0].nodeValue;
-        this.rightAction = node.getElementsByTagName( 'rightAction' )[0].childNodes[0].nodeValue;
-        this.tabLeft = node.getElementsByTagName( 'tabLeft' )[0].childNodes[0].nodeValue;
-        this.tabRight = node.getElementsByTagName( 'tabRight' )[0].childNodes[0].nodeValue;
-        this.defaultTree = node.getElementsByTagName( 'defaultTree' )[0].childNodes[0].nodeValue;
+        this.backAction = obj.backAction;
+        this.toggleAction = obj.toggleAction;
+        this.escapeAction = obj.escapeAction;
+        this.selectAction = obj.selectAction;
+        this.upAction = obj.upAction;
+        this.downAction = obj.downAction;
+        this.leftAction = obj.leftAction;
+        this.rightAction = obj.rightAction;
+        this.tabLeft = obj.tabLeft;
+        this.tabRight = obj.tabRight;
+        this.defaultTree = obj.defaultTree;
     }
     
     // 
@@ -5045,6 +5018,15 @@ class ManagerBase
         return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__.downloadFile( 'xml', filePath,
             ( xmlNode ) => this.loadListTableFromNode( xmlNode ));
     }
+
+    // 
+    //  DESC: Load the data list tables from obj
+    //
+    loadListTableFromObj( obj )
+    {
+        for( const [ key, value ] of Object.entries(obj) )
+            this.listTableMap.set( key, value );
+    }
     
     // 
     //  DESC: Load the data list tables from node
@@ -5382,7 +5364,7 @@ class ActionManager
     // 
     //  DESC: Load data from action dictionary
     //
-    load( actionDict )
+    loadFromObj( actionDict )
     {
         if( actionDict )
         {
@@ -5392,16 +5374,16 @@ class ActionManager
                 this.actionDict = JSON.parse( savedActionDict );
 
             // Load the keyboard mapping
-            this.loadAction( this.actionDict['keyboardMapping']['playerHidden'], this.keyboardKeyCodeMap, this.keyboardActionMap );
-            this.loadAction( this.actionDict['keyboardMapping']['playerVisible'], this.keyboardKeyCodeMap, this.keyboardActionMap );
+            this.loadAction( this.actionDict.keyboardMapping.playerHidden, this.keyboardKeyCodeMap, this.keyboardActionMap );
+            this.loadAction( this.actionDict.keyboardMapping.playerVisible, this.keyboardKeyCodeMap, this.keyboardActionMap );
 
             // Load the mouse mapping
-            this.loadAction( this.actionDict['mouseMapping']['playerHidden'], this.mouseKeyCodeMap, this.mouseActionMap );
-            this.loadAction( this.actionDict['mouseMapping']['playerVisible'], this.mouseKeyCodeMap, this.mouseActionMap );
+            this.loadAction( this.actionDict.mouseMapping.playerHidden, this.mouseKeyCodeMap, this.mouseActionMap );
+            this.loadAction( this.actionDict.mouseMapping.playerVisible, this.mouseKeyCodeMap, this.mouseActionMap );
 
             // Load the gamepad mapping
-            this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
-            this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict.gamepadMapping.playerHidden, this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict.gamepadMapping.playerVisible, this.gamepadKeyCodeMap, this.gamepadActionMap );
         }
     }
 
@@ -5440,8 +5422,8 @@ class ActionManager
             this.gamepadKeyCodeMap.set( 'R STICK RIGHT', _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_R_STICK_RIGHT );
 
             // Load the gamepad mapping
-            this.loadAction( this.actionDict['gamepadMapping']['playerHidden'], this.gamepadKeyCodeMap, this.gamepadActionMap );
-            this.loadAction( this.actionDict['gamepadMapping']['playerVisible'], this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict.gamepadMapping.playerHidden, this.gamepadKeyCodeMap, this.gamepadActionMap );
+            this.loadAction( this.actionDict.gamepadMapping.playerVisible, this.gamepadKeyCodeMap, this.gamepadActionMap );
         }
     }
     
@@ -5463,14 +5445,14 @@ class ActionManager
             for( let each of actionDict )
             {
                 // See if we can find the string that represents the key code id
-                let keyCode = keyCodeMap.get( each['componetId'] );
+                let keyCode = keyCodeMap.get( each.componetId );
 
                 // Add it in if we found it
                 if( keyCode !== undefined )
                 {
                     // See if the controller action string has already been added
-                    let actionStr = each['action'];
-                    let action = actionMap.get( each['action'] );
+                    let actionStr = each.action;
+                    let action = actionMap.get( each.action );
 
                     if( action !== undefined )
                     {
@@ -5595,7 +5577,7 @@ class ActionManager
             mappingName = 'gamepadMapping';
         }
 
-        return this.getComponentStr( this.actionDict[mappingName]['playerVisible'], actionNameStr );
+        return this.getComponentStr( this.actionDict[mappingName].playerVisible, actionNameStr );
     }
 
     // 
@@ -5672,7 +5654,7 @@ class ActionManager
         }
         
         // If this action ID can be found and is configurable, reset it
-        let [oldComponetIdStr, configurable] = this.getComponentStr( this.actionDict[mappingName]['playerVisible'], actionNameStr );
+        let [oldComponetIdStr, configurable] = this.getComponentStr( this.actionDict[mappingName].playerVisible, actionNameStr );
 
         if( oldComponetIdStr && configurable )
         {
@@ -5700,7 +5682,7 @@ class ActionManager
                         keyCodeAction.setId( newKeyCode );
 
                         // Update the action dictionary with the change
-                        if( this.changeComponentStr( this.actionDict[mappingName]['playerVisible'], actionNameStr, newComponetIdStr ) )
+                        if( this.changeComponentStr( this.actionDict[mappingName].playerVisible, actionNameStr, newComponetIdStr ) )
                             return [newComponetIdStr, true];
                     }
                 }
@@ -5727,12 +5709,12 @@ class ActionManager
         this.mouseActionMap = new Map;
         this.gamepadActionMap = new Map;
 
-        this.resetKeybindingToDefaults( this.actionDict['keyboardMapping']['playerVisible'] );
-        this.resetKeybindingToDefaults( this.actionDict['mouseMapping']['playerVisible'] );
-        this.resetKeybindingToDefaults( this.actionDict['gamepadMapping']['playerVisible'] );
+        this.resetKeybindingToDefaults( this.actionDict.keyboardMapping.playerVisible );
+        this.resetKeybindingToDefaults( this.actionDict.mouseMapping.playerVisible );
+        this.resetKeybindingToDefaults( this.actionDict.gamepadMapping.playerVisible );
 
         _utilities_localstorage__WEBPACK_IMPORTED_MODULE_2__.localStorage.free( 'keybinding' );
-        this.load( this.actionDict );
+        this.loadFromObj( this.actionDict );
     }
 
     // 
@@ -5742,8 +5724,8 @@ class ActionManager
     {
         for( let each of actionDict )
         {
-            if( each['defaultId'] )
-                each['componetId'] = each['defaultId'];
+            if( each.defaultId )
+                each.componetId = each.defaultId;
         }
     }
 
@@ -8501,54 +8483,43 @@ class ShaderManager
         this.currentShaderData = null;
         this.currentAttributeCount = 0;
     }
-    
+
     // 
-    //  DESC: Load the shader from xml node
+    //  DESC: Load the shader from object
     //
-    loadFromNode( xmlNode )
+    loadFromObj( obj )
     {
         let promiseAry = [];
 
-        if( xmlNode )
-        {
-            let shader = xmlNode.getElementsByTagName('shader');
-            if( shader )
-            {
-                for( let i = 0; i < shader.length; ++i )
-                    promiseAry.push( this.createShader( shader[i] ) );
-            }
-        }
+        for( const [key, value] of Object.entries(obj) )
+            this.createShader( key, value );
 
         return Promise.all( promiseAry );
     }
-    
+
     // 
     //  DESC: Setup the load request to load the shader files from the server
     //
-    createShader( node )
+    createShader( name, data )
     {
         let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl;
-        let shaderId = node.getAttribute('Id');
-        
-        let vertexNode = node.getElementsByTagName('vertDataLst');
-        let fragmentNode = node.getElementsByTagName('fragDataLst');
-        
+
         // Check for duplicate
-        if( this.shaderMap.has(shaderId) )
-            throw new Error( `Shader of this name already exists (${shaderId}).` );
-        
+        if( this.shaderMap.has(name) )
+            throw new Error( `Shader of this name already exists (${name}).` );
+
         // Add an entry to the map
-        let shaderData = new _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__.ShaderData;
-        this.shaderMap.set( shaderId, shaderData );
-        
+        let shaderData = new _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__.ShaderData(name);
+        this.shaderMap.set( name, shaderData );
+
         // Create the vertex shader
-        let vertPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'txt', vertexNode[0].getAttribute('file') )
-            .then(( vertText ) => this.create( gl.VERTEX_SHADER, shaderData, shaderId, vertText ) );
+        let vertPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'txt', data.vert.file )
+            .then(( vertText ) => this.create( gl.VERTEX_SHADER, shaderData, name, vertText ) );
 
         // Create the frag shader
-        let fragPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'txt', fragmentNode[0].getAttribute('file') )
-            .then( (fragText ) => this.create( gl.FRAGMENT_SHADER, shaderData, shaderId, fragText ) );
-            
+        let fragPromise = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'txt', data.frag.file )
+            .then( (fragText ) => this.create( gl.FRAGMENT_SHADER, shaderData, name, fragText ) );
+        
         return Promise.all( [vertPromise, fragPromise] )
             .then(() =>
             {
@@ -8556,10 +8527,10 @@ class ShaderManager
                 this.createProgram( shaderData );
                 
                 // Find the location of the custom shader variables
-                this.locateShaderVariables( shaderData, vertexNode[0].getElementsByTagName('dataType'), fragmentNode[0].getElementsByTagName('dataType') );
+                this.locateShaderVariables( shaderData, data.vert.dataType, data.frag.dataType );
 
                 // Init the shader
-                _managers_signalmanager__WEBPACK_IMPORTED_MODULE_2__.signalManager.broadcast_initShader( shaderId );
+                _managers_signalmanager__WEBPACK_IMPORTED_MODULE_2__.signalManager.broadcast_initShader( name );
             });
     }
     
@@ -8604,41 +8575,36 @@ class ShaderManager
         gl.linkProgram( shaderData.programId );
             
         if( !gl.getProgramParameter( shaderData.programId, gl.LINK_STATUS ) )
-            throw new Error( `ERROR linking program! (${gl.getProgramInfoLog(shaderData.programId)}).` );
+            throw new Error( `ERROR linking program! (${shaderData.name}, ${gl.getProgramInfoLog(shaderData.programId)}).` );
 
         gl.validateProgram( shaderData.programId );
 
         if( !gl.getProgramParameter( shaderData.programId, gl.VALIDATE_STATUS ) )
-            throw new Error( `ERROR validating program! (${gl.getProgramInfoLog(shaderData.programId)}).` );
+            throw new Error( `ERROR validating program! (${shaderData.name}, ${gl.getProgramInfoLog(shaderData.programId)}).` );
     }
-    
+
     // 
     //  DESC: Locate the indexes of the shader variables
     //
-    locateShaderVariables( shaderData, vertNode, fragNode )
+    locateShaderVariables( shaderData, vertObj, fragObj )
     {
         let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl;
 
-        for( let i = 0; i < vertNode.length; ++i )
+        for( const each of vertObj )
         {
-            let name = vertNode[i].getAttribute('name');
-            
-            if( vertNode[i].getAttribute('location') )
+            if( each.location !== undefined )
             {
-                shaderData.locationMap.set( name, gl.getAttribLocation(shaderData.programId, name) );
+                shaderData.locationMap.set( each.name, gl.getAttribLocation(shaderData.programId, each.name) );
                 ++shaderData.attributeCount;
             }
             else
             {
-                shaderData.locationMap.set( name, gl.getUniformLocation(shaderData.programId, name) );
+                shaderData.locationMap.set( each.name, gl.getUniformLocation(shaderData.programId, each.name) );
             }
         }
         
-        for( let i = 0; i < fragNode.length; ++i )
-        {
-            let name = fragNode[i].getAttribute('name');
-            shaderData.locationMap.set( name, gl.getUniformLocation(shaderData.programId, name) );
-        }
+        for( const each of fragObj )
+            shaderData.locationMap.set( each.name, gl.getUniformLocation(shaderData.programId, each.name) );
     }
     
     // 
@@ -8762,8 +8728,10 @@ __webpack_require__.r(__webpack_exports__);
 
 class ShaderData
 {
-    constructor()
+    constructor( name )
     {
+        this.name = name;
+
         // OpenGL ID's
         this.programId = 0;
         this.vertexId = 0;
@@ -10079,18 +10047,46 @@ class FontManager
         this.fontMap = new Map;
 
         // Group name
-        this.group = '';
+        this.group = '(font)';
     }
     
-    // 
-    //  DESC: Load the data list tables from file path
     //
-    load( filePath )
+    //  DESC: Load the fonts from xml node
+    //
+    loadFromObj( obj )
     {
-        return _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ));
+        let promiseAry = [];
+
+        for( const each of obj )
+        {
+            // Sanity check to make sure the font has not already been added in
+            if( this.fontMap.has( each.name ) )
+                throw new Error( `Font name has already been loaded (${each.name}).` );
+
+            // Sanity check to make sure the font has not already been added in
+            if( this.fontMap.has( each.name ) )
+                throw new Error( `Font name has already been loaded (${each.name}).` );
+            
+            // Add the font to our list
+            this.fontMap.set( each.name, new _2d_font__WEBPACK_IMPORTED_MODULE_0__.Font );
+
+            // Load the texture file
+            let textureFilePath = each.file + '.png'
+            promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'img', textureFilePath )
+                    .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( this.group, each.name, image ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }) );
+
+            // Load the xml file describing the font characteristics
+            let fontFilePath = each.file + '.fnt'
+            promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', fontFilePath )
+                    .then(( fontXmlNode ) => this.loadFont( each.name, fontXmlNode ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }) );
+        }
+
+        return Promise.all( promiseAry )
+            .then(() => this.setFontTexture());
     }
-    
+
     //
     //  DESC: Load the fonts from xml node
     //
@@ -10100,10 +10096,6 @@ class FontManager
 
         if( xmlNode )
         {
-            // Get the group the textures will be saves as
-            let listGroupNode = xmlNode.getElementsByTagName('listGroup');
-            this.group = listGroupNode[0].getAttribute( 'name' );
-
             // Get the list of font info
             let fontNode = xmlNode.getElementsByTagName('font');
 
@@ -10181,11 +10173,6 @@ class FontManager
         if( font === undefined )
             throw new Error( `Font name can't be found (${name}).` );
     }
-    
-    // 
-    //  DESC: allow event handling access function
-    //
-    get groupName() { return this.group; }
 }
 
 var fontManager = new FontManager;
@@ -37848,7 +37835,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(172);
 /* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(173);
 /* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(174);
-/* harmony import */ var raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(175);
+/* harmony import */ var _data_shaders_shader_json__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(175);
 /* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(176);
 /* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(177);
 /* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(178);
@@ -37920,8 +37907,8 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
         _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__.soundManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__.default ) );
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__.physicsWorldManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__.default ) );
         _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__.default ) );
-        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__.actionManager.load( _data_settings_controllerMapping_json__WEBPACK_IMPORTED_MODULE_35__ );
-        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadMenuAction( _data_objects_2d_menu_menu_action_json__WEBPACK_IMPORTED_MODULE_36__ );
+        _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__.actionManager.loadFromObj( _data_settings_controllerMapping_json__WEBPACK_IMPORTED_MODULE_35__ );
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadMenuActionFromObj( _data_objects_2d_menu_menu_action_json__WEBPACK_IMPORTED_MODULE_36__ );
 
         // Load the scripts
         _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_21__.loadScripts();
@@ -37951,7 +37938,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
         Promise.all([
 
             // Load the shaders
-            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_shaders_shader_cfg__WEBPACK_IMPORTED_MODULE_29__.default ) ),
+            _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__.shaderManager.loadFromObj( _data_shaders_shader_json__WEBPACK_IMPORTED_MODULE_29__ ),
 
             // Load the object data
             _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__.objectDataManager.loadGroup( ['(startup)'] )
@@ -42778,14 +42765,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 /* 175 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<shaderLst>\r\n\r\n    <shader Id=\"shader_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_2d_spriteSheet\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_spriteSheet_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_uv\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"glyphRect\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n    <shader Id=\"shader_solid_2d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_solid_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_soild_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"in_uv\" location=\"2\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_v100.frag\">\r\n            <dataType name=\"text0\"/>\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n  \r\n    <shader Id=\"shader_3d_no_txt\">\r\n\r\n        <vertDataLst file=\"data/shaders/shader_mesh_no_txt_v100.vert\">\r\n            <dataType name=\"in_position\" location=\"0\"/>\r\n            <dataType name=\"in_normal\" location=\"1\"/>\r\n            <dataType name=\"cameraViewProjMatrix\"/>\r\n            <dataType name=\"normalMatrix\"/>\r\n        </vertDataLst>\r\n\r\n        <fragDataLst file=\"data/shaders/shader_mesh_no_txt_v100.frag\">\r\n            <dataType name=\"color\"/>\r\n            <dataType name=\"additive\"/>\r\n        </fragDataLst>\r\n\r\n    </shader>\r\n\r\n</shaderLst>\r\n\r\n");
+module.exports = JSON.parse('{"shader_2d":{"vert":{"file":"data/shaders/shader_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_uv","location":1},{"name":"cameraViewProjMatrix"}]},"frag":{"file":"data/shaders/shader_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_2d_spriteSheet":{"vert":{"file":"data/shaders/shader_spriteSheet_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_uv","location":1},{"name":"cameraViewProjMatrix"},{"name":"glyphRect"}]},"frag":{"file":"data/shaders/shader_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_solid_2d":{"vert":{"file":"data/shaders/shader_solid_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"cameraViewProjMatrix"}]},"frag":{"file":"data/shaders/shader_soild_v100.frag","dataType":[{"name":"color"},{"name":"additive"}]}},"shader_3d":{"vert":{"file":"data/shaders/shader_mesh_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_normal","location":1},{"name":"in_uv","location":2},{"name":"cameraViewProjMatrix"},{"name":"normalMatrix"}]},"frag":{"file":"data/shaders/shader_mesh_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_3d_no_txt":{"vert":{"file":"data/shaders/shader_mesh_no_txt_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_normal","location":1},{"name":"cameraViewProjMatrix"},{"name":"normalMatrix"}]},"frag":{"file":"data/shaders/shader_mesh_no_txt_v100.frag","dataType":[{"name":"color"},{"name":"additive"}]}}}');
 
 /***/ }),
 /* 176 */

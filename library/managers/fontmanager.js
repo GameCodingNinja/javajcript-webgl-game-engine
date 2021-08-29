@@ -17,18 +17,46 @@ class FontManager
         this.fontMap = new Map;
 
         // Group name
-        this.group = '';
+        this.group = '(font)';
     }
     
-    // 
-    //  DESC: Load the data list tables from file path
     //
-    load( filePath )
+    //  DESC: Load the fonts from xml node
+    //
+    loadFromObj( obj )
     {
-        return genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadFromNode( xmlNode ));
+        let promiseAry = [];
+
+        for( const each of obj )
+        {
+            // Sanity check to make sure the font has not already been added in
+            if( this.fontMap.has( each.name ) )
+                throw new Error( `Font name has already been loaded (${each.name}).` );
+
+            // Sanity check to make sure the font has not already been added in
+            if( this.fontMap.has( each.name ) )
+                throw new Error( `Font name has already been loaded (${each.name}).` );
+            
+            // Add the font to our list
+            this.fontMap.set( each.name, new Font );
+
+            // Load the texture file
+            let textureFilePath = each.file + '.png'
+            promiseAry.push( genFunc.downloadFile( 'img', textureFilePath )
+                    .then(( image ) => textureManager.load( this.group, each.name, image ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }) );
+
+            // Load the xml file describing the font characteristics
+            let fontFilePath = each.file + '.fnt'
+            promiseAry.push( genFunc.downloadFile( 'xml', fontFilePath )
+                    .then(( fontXmlNode ) => this.loadFont( each.name, fontXmlNode ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }) );
+        }
+
+        return Promise.all( promiseAry )
+            .then(() => this.setFontTexture());
     }
-    
+
     //
     //  DESC: Load the fonts from xml node
     //
@@ -38,10 +66,6 @@ class FontManager
 
         if( xmlNode )
         {
-            // Get the group the textures will be saves as
-            let listGroupNode = xmlNode.getElementsByTagName('listGroup');
-            this.group = listGroupNode[0].getAttribute( 'name' );
-
             // Get the list of font info
             let fontNode = xmlNode.getElementsByTagName('font');
 
@@ -119,11 +143,6 @@ class FontManager
         if( font === undefined )
             throw new Error( `Font name can't be found (${name}).` );
     }
-    
-    // 
-    //  DESC: allow event handling access function
-    //
-    get groupName() { return this.group; }
 }
 
 export var fontManager = new FontManager;

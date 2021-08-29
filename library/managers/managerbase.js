@@ -23,6 +23,15 @@ export class ManagerBase
         return genFunc.downloadFile( 'xml', filePath,
             ( xmlNode ) => this.loadListTableFromNode( xmlNode ));
     }
+
+    // 
+    //  DESC: Load the data list tables from obj
+    //
+    loadListTableFromObj( obj )
+    {
+        for( const [ key, value ] of Object.entries(obj) )
+            this.listTableMap.set( key, value );
+    }
     
     // 
     //  DESC: Load the data list tables from node

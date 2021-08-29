@@ -35,15 +35,15 @@ import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
-import dataListTable2D from 'raw-loader!../../data/objects/2d/objectDataList/dataListTable.lst';
-import dataListTable3D from 'raw-loader!../../data/objects/3d/objectDataList/dataListTable.lst';
-import strategyListTable from 'raw-loader!../../data/objects/strategy/strageyListTable.lst';
-import soundManagerListTable from 'raw-loader!../../data/sound/soundListTable.lst';
-import physicsManagerListTable from 'raw-loader!../../data/objects/2d/physics/physicsListTable.lst';
-import menuManagerListTable from 'raw-loader!../../data/objects/2d/menu/menuListTable.lst';
-import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst';
+import dataListTable2D from '../../data/objects/2d/objectDataList/dataListTable.json';
+import dataListTable3D from '../../data/objects/3d/objectDataList/dataListTable.json';
+import strategyListTable from '../../data/objects/strategy/strageyListTable.json';
+import soundManagerListTable from '../../data/sound/soundListTable.json';
+import physicsManagerListTable from '../../data/objects/2d/physics/physicsListTable.json';
+import menuManagerListTable from '../../data/objects/2d/menu/menuListTable.json';
+import fontManagerListTable from '../../data/textures/fonts/fontList.json';
 import cameraListTable from 'raw-loader!../../data/objects/camera.lst';
-import shaderCfg from 'raw-loader!../../data/shaders/shader.cfg';
+import shaderObj from '../../data/shaders/shader.json';
 import actionManagerJson from '../../data/settings/controllerMapping.json';
 import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
@@ -58,15 +58,15 @@ export class StartUpState extends GameState
         super( stateDefs.EGS_STARTUP, stateDefs.EGS_TITLE_SCREEN, gameLoopCallback );
 
         // Load the list tables
-        objectDataManager.loadListTableFromNode( genFunc.stringLoadXML( dataListTable2D ) );
-        objectDataManager.loadListTableFromNode( genFunc.stringLoadXML( dataListTable3D ) );
-        strategyManager.loadListTableFromNode( genFunc.stringLoadXML( strategyListTable ) );
-        soundManager.loadListTableFromNode( genFunc.stringLoadXML( soundManagerListTable ) );
-        physicsWorldManager.loadListTableFromNode( genFunc.stringLoadXML( physicsManagerListTable ) );
-        menuManager.loadListTableFromNode( genFunc.stringLoadXML( menuManagerListTable ) );
+        objectDataManager.loadListTableFromObj( dataListTable2D );
+        objectDataManager.loadListTableFromObj( dataListTable3D );
+        strategyManager.loadListTableFromObj( strategyListTable );
+        soundManager.loadListTableFromObj( soundManagerListTable );
+        physicsWorldManager.loadListTableFromObj( physicsManagerListTable );
+        menuManager.loadListTableFromObj( menuManagerListTable );
         cameraManager.loadFromNode( genFunc.stringLoadXML( cameraListTable ) );
-        actionManager.load( actionManagerJson );
-        menuManager.loadMenuAction( menuActionJSON );
+        actionManager.loadFromObj( actionManagerJson );
+        menuManager.loadMenuActionFromObj( menuActionJSON );
 
         // Load the scripts
         utilScripts.loadScripts();
@@ -97,7 +97,7 @@ export class StartUpState extends GameState
         Promise.all([
 
             // Load the shaders
-            shaderManager.loadFromNode( genFunc.stringLoadXML( shaderCfg ) ),
+            shaderManager.loadFromObj( shaderObj ),
 
             // Load the object data
             objectDataManager.loadGroup( ['(startup)'] )
@@ -215,7 +215,7 @@ export class StartUpState extends GameState
             objectDataManager.loadGroup( groupAry ),
 
             // Load the fonts
-            fontManager.loadFromNode( genFunc.stringLoadXML( fontManagerListTable ) ),
+            fontManager.loadFromObj( fontManagerListTable ),
 
             // Load the menu XMLs
             menuManager.loadGroupXML( groupAry )
