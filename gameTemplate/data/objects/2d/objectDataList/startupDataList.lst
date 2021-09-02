@@ -21,8 +21,7 @@
 
         <object name="logo">
           <visual>
-            <!--<texture file="data/textures/startup/HugesWhoLogo_720.png"/>-->
-            <texture file="data/textures/startup/waffles.png"/>
+            <texture file="data/textures/startup/logo.png"/>
           </visual>
         </object>
         
@@ -34,7 +33,7 @@
                 </mesh>
                 <color r="48" g="97" b="153" a="1"/>
             </visual>
-            <size width="700" height="20"/>
+            <size width="800" height="20"/>
         </object>
         
         <object name="progress_solid">
@@ -42,7 +41,7 @@
                 <shader id="shader_solid_2d"/>
                 <color r="25" g="54" b="84" a="0.8"/>
             </visual>
-            <size width="694" height="14"/>
+            <size width="794" height="14"/>
         </object>
         
         <!--<object name="loadTest">

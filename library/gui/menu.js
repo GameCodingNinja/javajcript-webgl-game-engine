@@ -236,8 +236,15 @@ export class Menu extends Object
     setDynamicPos()
     {
         // Position the menu based on the dynamic offset
+        // Don't have it exceed the boundries of the art
         if( this.dynamicOffset )
-            this.setPos( this.dynamicOffset.getPos( settings.defaultSize_half ) );
+        {
+            let size = settings.defaultSize_half;
+            if( settings.defaultSize_half > settings.nativeSize_half )
+                size = settings.nativeSize_half;
+
+            this.setPos( this.dynamicOffset.getPos( size ) );
+        }
     } 
 
     // 

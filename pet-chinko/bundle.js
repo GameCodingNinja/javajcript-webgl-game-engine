@@ -350,6 +350,7 @@ class Settings
         this.initialSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(this.size.w, this.size.h);
         this.size_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.nativeSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(1280, 720);
+        this.nativeSize_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.screenAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.orthoAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.defaultSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(0, this.nativeSize.h);
@@ -391,6 +392,8 @@ class Settings
             if( obj.display.default )
             {
                 this.nativeSize.set( obj.display.default.width, obj.display.default.height );
+                this.nativeSize_half.w = this.nativeSize.w / 2;
+                this.nativeSize_half.h = this.nativeSize.h / 2;
                 this.defaultSize.h = this.nativeSize.h;
             }
         }
@@ -556,6 +559,14 @@ class Size
     {
         this.w = Math.round(this.w);
         this.h = Math.round(this.h);
+    }
+
+    // 
+    //  DESC: Return a value for this class that can be compared
+    //
+    valueOf()
+    {
+        return Number(`${Math.trunc(this.w)}${Math.trunc(this.h)}`);
     }
     
     // 
@@ -7101,8 +7112,15 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     setDynamicPos()
     {
         // Position the menu based on the dynamic offset
+        // Don't have it exceed the boundries of the art
         if( this.dynamicOffset )
-            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half ) );
+        {
+            let size = _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half;
+            if( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half > _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.nativeSize_half )
+                size = _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.nativeSize_half;
+
+            this.setPos( this.dynamicOffset.getPos( size ) );
+        }
     } 
 
     // 
@@ -37816,7 +37834,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(24);
 /* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(10);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(2);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(147);
+/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(147);
 /* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(55);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(150);
 /* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(151);
@@ -37904,7 +37922,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
         _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__.objectDataManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_26__.default ) );
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__.strategyManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_27__.default ) );
         _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__.cameraManager.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_28__.default ) );
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__.soundManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__.default ) );
+        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_10__.soundManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__.default ) );
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__.physicsWorldManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__.default ) );
         _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__.default ) );
         _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__.actionManager.loadFromObj( _data_settings_controllerMapping_json__WEBPACK_IMPORTED_MODULE_35__ );
@@ -38050,7 +38068,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
         Promise.all([
 
             // Load the Sound Manager group
-            _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_10__.soundManager.loadGroup( groupAry ),
+            _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_10__.soundManager.loadGroup( groupAry ),
 
             // Load the Object Manager group
             _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__.objectDataManager.loadGroup( groupAry ),
@@ -38284,8 +38302,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "soundManager": () => (/* binding */ soundManager)
 /* harmony export */ });
 /* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
-/* harmony import */ var _common_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(148);
-/* harmony import */ var _common_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(149);
+/* harmony import */ var _sound_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(148);
+/* harmony import */ var _sound_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(149);
 /* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
@@ -38356,7 +38374,7 @@ class SoundManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Ma
             if( groupMap.has(id) )
                 throw new Error( `Duplicate sound group id (${id}, ${group}, ${filePath})!` );
             
-            let snd = new _common_sound__WEBPACK_IMPORTED_MODULE_1__.Sound;
+            let snd = new _sound_sound__WEBPACK_IMPORTED_MODULE_1__.Sound;
             groupMap.set( id, snd );
             
             // Load from node
@@ -38386,7 +38404,7 @@ class SoundManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Ma
                     throw new Error( `Duplicate playlist group id (${id}, ${group}, ${filePath})!` );
                 
                 // Add the playlist data to the map
-                let playLst = new _common_playlist__WEBPACK_IMPORTED_MODULE_2__.PlayList;
+                let playLst = new _sound_playlist__WEBPACK_IMPORTED_MODULE_2__.PlayList;
                 groupMap.set( id, playLst );
                 
                 // Load the playlist from node
@@ -41728,7 +41746,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(57);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(31);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(147);
+/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(147);
 /* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(24);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 /* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(168);
@@ -41762,7 +41780,7 @@ class Control_OnActive
     //
     execute()
     {
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__.soundManager.play( '(menu)', 'active' );
+        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__.soundManager.play( '(menu)', 'active' );
 
         return true;
     }
@@ -41778,7 +41796,7 @@ class Control_OnSelect
     //
     execute()
     {
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__.soundManager.play( '(menu)', 'select' );
+        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__.soundManager.play( '(menu)', 'select' );
 
         return true;
     }
@@ -42614,7 +42632,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(150);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(31);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(147);
+/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(147);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(146);
 /* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(168);
 
@@ -42694,9 +42712,9 @@ class Level_DelayDestroy
         this.hold.init( 600 );
 
         if( sprite.objData.name < 'dog_head_3' )
-            _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__.soundManager.play( '(level_1)', 'cat' );
+            _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__.soundManager.play( '(level_1)', 'cat' );
         else
-            _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_3__.soundManager.play( '(level_1)', 'dog' );
+            _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__.soundManager.play( '(level_1)', 'dog' );
     }
 
     // 
@@ -43138,7 +43156,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
 /* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(55);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(113);
-/* harmony import */ var _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(147);
+/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(147);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(150);
 /* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(26);
 /* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(151);
@@ -43284,7 +43302,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__.CommonState
         _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__.strategyManager.update();
         
         // Start the music
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__.soundManager.play( `(level_1)`, 'music_0', true );
+        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_8__.soundManager.play( `(level_1)`, 'music_0', true );
 
         // Reset the elapsed time before entering the render loop
         _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__.highResTimer.calcElapsedTime();
@@ -43612,7 +43630,7 @@ class Level1State extends _commonstate__WEBPACK_IMPORTED_MODULE_0__.CommonState
         
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__.physicsWorldManager.destroyWorld( "(game)" );
 
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__.soundManager.freeGroup( [`(level_1)`]);
+        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_8__.soundManager.freeGroup( [`(level_1)`]);
     }
 }
 
@@ -43632,7 +43650,7 @@ function load()
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__.physicsWorldManager.loadWorldGroup2D( '(game)' ),
 
         // Load the Sound Manager group
-        _library_managers_soundmanager__WEBPACK_IMPORTED_MODULE_8__.soundManager.loadGroup( [`(level_1)`] )
+        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_8__.soundManager.loadGroup( [`(level_1)`] )
     ])
 
     // Load stage strategy.

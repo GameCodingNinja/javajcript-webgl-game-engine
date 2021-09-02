@@ -332,6 +332,7 @@ class Settings
         this.initialSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(this.size.w, this.size.h);
         this.size_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.nativeSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(1280, 720);
+        this.nativeSize_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.screenAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.orthoAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.defaultSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(0, this.nativeSize.h);
@@ -373,6 +374,8 @@ class Settings
             if( obj.display.default )
             {
                 this.nativeSize.set( obj.display.default.width, obj.display.default.height );
+                this.nativeSize_half.w = this.nativeSize.w / 2;
+                this.nativeSize_half.h = this.nativeSize.h / 2;
                 this.defaultSize.h = this.nativeSize.h;
             }
         }
@@ -538,6 +541,14 @@ class Size
     {
         this.w = Math.round(this.w);
         this.h = Math.round(this.h);
+    }
+
+    // 
+    //  DESC: Return a value for this class that can be compared
+    //
+    valueOf()
+    {
+        return Number(`${Math.trunc(this.w)}${Math.trunc(this.h)}`);
     }
     
     // 
@@ -7083,8 +7094,15 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     setDynamicPos()
     {
         // Position the menu based on the dynamic offset
+        // Don't have it exceed the boundries of the art
         if( this.dynamicOffset )
-            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half ) );
+        {
+            let size = _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half;
+            if( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half > _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.nativeSize_half )
+                size = _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.nativeSize_half;
+
+            this.setPos( this.dynamicOffset.getPos( size ) );
+        }
     } 
 
     // 
@@ -37827,7 +37845,7 @@ __webpack_require__.r(__webpack_exports__);
 //import { menuManager } from '../../../library/gui/menumanager';
 
 //import { signalManager } from '../../../library/managers/signalmanager';
-//import { soundManager } from '../../../library/managers/soundmanager';
+//import { soundManager } from '../../../library/sound/soundmanager';
 
 
 

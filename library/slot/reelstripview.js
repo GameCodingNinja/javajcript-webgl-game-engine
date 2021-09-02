@@ -14,7 +14,7 @@ import { Sprite2D } from '../2d/sprite2d';
 import { Point } from '../common/point';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { highResTimer } from '../utilities/highresolutiontimer';
-import { soundManager } from '../managers/soundmanager';
+import { soundManager } from '../sound/soundmanager';
 import { eventManager } from '../managers/eventmanager';
 import { device } from '../system/device';
 import * as slotDefs from './slotdefs';

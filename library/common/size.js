@@ -60,6 +60,14 @@ export class Size
         this.w = Math.round(this.w);
         this.h = Math.round(this.h);
     }
+
+    // 
+    //  DESC: Return a value for this class that can be compared
+    //
+    valueOf()
+    {
+        return Number(`${Math.trunc(this.w)}${Math.trunc(this.h)}`);
+    }
     
     // 
     //  DESC: Access members as UV data

@@ -17,6 +17,7 @@ class Settings
         this.initialSize = new Size(this.size.w, this.size.h);
         this.size_half = new Size;
         this.nativeSize = new Size(1280, 720);
+        this.nativeSize_half = new Size;
         this.screenAspectRatio = new Size;
         this.orthoAspectRatio = new Size;
         this.defaultSize = new Size(0, this.nativeSize.h);
@@ -58,6 +59,8 @@ class Settings
             if( obj.display.default )
             {
                 this.nativeSize.set( obj.display.default.width, obj.display.default.height );
+                this.nativeSize_half.w = this.nativeSize.w / 2;
+                this.nativeSize_half.h = this.nativeSize.h / 2;
                 this.defaultSize.h = this.nativeSize.h;
             }
         }

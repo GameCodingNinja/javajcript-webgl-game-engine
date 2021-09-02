@@ -9,7 +9,7 @@
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
-import { soundManager } from '../../../library/managers/soundmanager';
+import { soundManager } from '../../../library/sound/soundmanager';
 import * as stateDefs from '../state/statedefs';
 import * as utilScripts from './utilityscripts';
 

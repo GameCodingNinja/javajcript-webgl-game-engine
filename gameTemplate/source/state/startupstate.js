@@ -14,7 +14,7 @@ import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { signalManager } from '../../../library/managers/signalmanager';
-import { soundManager } from '../../../library/managers/soundmanager';
+import { soundManager } from '../../../library/sound/soundmanager';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';

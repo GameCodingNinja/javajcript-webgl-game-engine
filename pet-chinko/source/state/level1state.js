@@ -14,7 +14,7 @@ import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
-import { soundManager } from '../../../library/managers/soundmanager';
+import { soundManager } from '../../../library/sound/soundmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';

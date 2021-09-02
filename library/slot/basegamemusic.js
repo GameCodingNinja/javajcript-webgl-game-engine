@@ -8,7 +8,7 @@
 
 import { iGameMusic } from './igamemusic';
 import { Timer } from '../utilities/timer';
-import { soundManager } from '../managers/soundmanager';
+import { soundManager } from '../sound/soundmanager';
 import { highResTimer } from '../utilities/highresolutiontimer';
 
 export class BaseGameMusic extends iGameMusic

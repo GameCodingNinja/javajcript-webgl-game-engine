@@ -7,8 +7,8 @@
 "use strict";
 
 import { ManagerBase } from '../managers/managerbase';
-import { Sound } from '../common/sound';
-import { PlayList } from '../common/playlist';
+import { Sound } from '../sound/sound';
+import { PlayList } from '../sound/playlist';
 import * as genFunc from '../utilities/genfunc';
 
 class SoundManager extends ManagerBase

@@ -9,7 +9,7 @@
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
-import { soundManager } from '../../../library/managers/soundmanager';
+import { soundManager } from '../../../library/sound/soundmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { Color } from '../../../library/common/color';
 import * as utilScripts from './utilityscripts';
