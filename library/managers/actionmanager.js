@@ -8,7 +8,6 @@ import { KeyCodeAction } from '../common/keycodeaction';
 import { GamepadEvent } from '../common/gamepadevent';
 import { localStorage } from '../utilities/localstorage';
 import * as gamepadevent from '../common/gamepadevent';
-import * as uiControlDefs from '../gui/uicontroldefs';
 import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
 
@@ -210,11 +209,11 @@ class ActionManager
     // 
     //  DESC: Load data from action dictionary
     //
-    loadFromObj( actionDict )
+    loadFromObj( obj )
     {
-        if( actionDict )
+        if( obj )
         {
-            this.actionDict = actionDict;
+            this.actionDict = obj;
             let savedActionDict = localStorage.get( 'keybinding' );
             if( savedActionDict )
                 this.actionDict = JSON.parse( savedActionDict );

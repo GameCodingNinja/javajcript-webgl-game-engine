@@ -253,7 +253,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnUpAction message
     //
-    onUpAction( event )
+    onUpAction( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_UP );
     }
@@ -261,7 +261,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnMenuDown message
     //
-    onDownAction( event )
+    onDownAction( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_DOWN );
     }
@@ -269,7 +269,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnMenuLeft message
     //
-    onLeftAction( event )
+    onLeftAction( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_LEFT );
     }
@@ -277,7 +277,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnRightAction message
     //
-    onRightAction( event )
+    onRightAction( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_RIGHT );
     }
@@ -285,7 +285,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnUpScroll message
     //
-    onUpScroll( event )
+    onUpScroll( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_UP );
     }
@@ -293,7 +293,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnUpScroll message
     //
-    onDownScroll( event )
+    onDownScroll( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_DOWN );
     }
@@ -301,7 +301,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnRightScroll message
     //
-    onLeftScroll( event )
+    onLeftScroll( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_LEFT );
     }
@@ -309,7 +309,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnRightScroll message
     //
-    onRightScroll( event )
+    onRightScroll( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_RIGHT );
     }
@@ -317,7 +317,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnTabLeft message
     //
-    onTabLeft( event )
+    onTabLeft( /*event*/ )
     {
         // Do nothing
     }
@@ -325,7 +325,7 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnTabRight message
     //
-    onTabRight( event )
+    onTabRight( /*event*/ )
     {
         // Do nothing
     }
@@ -334,7 +334,7 @@ export class UISubControl extends UIControl
     //  DESC: Navigate the menu. Find the next control node that isn't
     //        disabled and make it the active control node
     //
-    navigateMenu( navNode )
+    navigateMenu( /*navNode*/ )
     {
         if( this.activeNode !== null )
         {
@@ -360,7 +360,7 @@ export class UISubControl extends UIControl
                     break;
                 }
             }
-            while( true );
+            while( navNode );
         }
     }
 

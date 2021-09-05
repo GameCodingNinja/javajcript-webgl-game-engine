@@ -22,9 +22,6 @@ class SoundManager extends ManagerBase
         if( typeof AudioContext !== 'undefined' )
             this.context = new AudioContext();
         
-        else if( typeof webkitAudioContext !== 'undefined' ) 
-            this.context = new webkitAudioContext();
-        
         else
             throw new Error('AudioContext not supported.');
         

@@ -101,7 +101,7 @@ export class GamepadEvent
     //
     get trigger()
     {
-        if( eventIndex == CONTROLLER_BUTTON_L_TRIGGER || eventIndex == CONTROLLER_BUTTON_L_TRIGGER )
+        if( this.eventIndex == GAMEPAD_BUTTON_L_TRIGGER || this.eventIndex == GAMEPAD_BUTTON_R_TRIGGER )
             return true;
 
         return false;

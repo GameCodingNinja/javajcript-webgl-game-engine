@@ -122,7 +122,7 @@ export class Node extends iNode
                 if( nextNode != null )
                 {
                     // Call a recursive function to find the parent node
-                    result = nextNode.findParent( searchNode );
+                    result = nextNode.findChild( childName );
                 }
             }
             while( nextNode != null );

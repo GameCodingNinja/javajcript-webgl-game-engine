@@ -294,7 +294,7 @@ export class MenuTree
     // 
     //  DESC: Handle OnBack message
     //
-    onBack( event )
+    onBack( /*event*/ )
     {
         // Going back one require there to be a active menu that is not root
         if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] != this.rootMenu) )

@@ -90,7 +90,7 @@ export class ControlBase extends Object
     // 
     //  DESC: Load the control specific info from XML node
     //
-    loadControlFromNode( xmlNode )
+    loadControlFromNode( /*xmlNode*/ )
     {
         // Empty function to be overwritten
     }
@@ -120,7 +120,7 @@ export class ControlBase extends Object
     // 
     //  DESC: Handle the wheel events. Most controls don't deal with wheen events so it's a catchall here
     //
-    onWheel( event )
+    onWheel( /*event*/ )
     {
     }
 }

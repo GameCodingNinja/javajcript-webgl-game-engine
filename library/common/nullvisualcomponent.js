@@ -18,7 +18,7 @@ export class NullVisualComponent extends ivisualComponent
     //
     //  DESC: do the render
     //
-    render( object, camera )
+    render( /*object, camera*/ )
     {
     }
     

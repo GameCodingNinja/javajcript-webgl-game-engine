@@ -91,7 +91,7 @@ export class Color
             this.r *= defs.RGB_TO_DEC;
 
         if( this.g > 1.5 )
-            this.g *= defs.RGB_TO_DEC;;
+            this.g *= defs.RGB_TO_DEC;
 
         if( this.b > 1.5 )
             this.b *= defs.RGB_TO_DEC;

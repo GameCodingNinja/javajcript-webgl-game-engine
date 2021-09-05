@@ -65,8 +65,6 @@ export class SetStrategy extends iSpriteStrategy
             return objData;
         else
             throw new Error( `Set id can't be found (${id})!` );
-        
-        return null;
     }
 
     //
@@ -74,8 +72,8 @@ export class SetStrategy extends iSpriteStrategy
     //
     init()
     {
-        for( let [ key, symbolSetView ] of this.setDataMap.entries() )
-            symbolSetView.init();
+        for( let each of this.setDataMap.values() )
+            each.init();
     }
 
     //
@@ -83,7 +81,7 @@ export class SetStrategy extends iSpriteStrategy
     //
     cleanUp()
     {
-        for( let [ key, symbolSetView ] of this.setDataMap.entries() )
-            symbolSetView.cleanUp();
+        for( let each of this.setDataMap.values() )
+            each.cleanUp();
     }
 }

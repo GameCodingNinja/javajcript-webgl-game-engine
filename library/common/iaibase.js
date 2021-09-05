@@ -23,7 +23,7 @@ export class iaiBase
     // 
     //  DESC: Handle player related messages
     //
-    handleEvent( event )
+    handleEvent( /*event*/ )
     {
         // Empty function to be overwritten
     }

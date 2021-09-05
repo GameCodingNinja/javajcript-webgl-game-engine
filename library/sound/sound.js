@@ -6,6 +6,8 @@
 
 "use strict";
 
+import { settings } from '../utilities/settings';
+
 export class Sound
 {
     constructor()
@@ -62,17 +64,20 @@ export class Sound
     play( loop = false, offset = 0 )
     {
         this.stop();
-        
-        this.source = this.context.createBufferSource();
-        this.source.buffer = this.buffer;
 
-        this.source.loop = loop;
-        
-        this.source.connect(this.gainNode);
-        this.gainNode.connect(this.context.destination);
-        
-        this.source.start(0, offset % this.buffer.duration);
-        this.startTime = this.context.currentTime - offset;
+        if( settings.user.soundEnabled )
+        {
+            this.source = this.context.createBufferSource();
+            this.source.buffer = this.buffer;
+
+            this.source.loop = loop;
+            
+            this.source.connect(this.gainNode);
+            this.gainNode.connect(this.context.destination);
+            
+            this.source.start(0, offset % this.buffer.duration);
+            this.startTime = this.context.currentTime - offset;
+        }
     }
     
     //
@@ -108,7 +113,7 @@ export class Sound
     //
     resume()
     {
-        if( this.paused )
+        if( this.paused && settings.user.soundEnabled )
         {
             this.paused = false;
             this.play(this.source.loop, this.startTime);

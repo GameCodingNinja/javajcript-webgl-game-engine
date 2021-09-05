@@ -141,8 +141,8 @@ class StrategyManager extends ManagerBase
     //
     cleanUp()
     {
-        for( let [ key, strategy ] of this.strategyMap.entries() )
-            strategy.cleanUp();
+        for( let each of this.strategyMap.values() )
+            each.cleanUp();
     }
 
     //

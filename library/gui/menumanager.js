@@ -9,7 +9,6 @@
 import { ManagerBase } from '../managers/managerbase';
 import { actionManager } from '../managers/actionmanager';
 import { eventManager } from '../managers/eventmanager';
-import { signalManager } from '../managers/signalmanager';
 import { assetHolder } from '../utilities/assetholder';
 import { Menu } from '../gui/menu';
 import { MenuTree } from '../gui/menutree';

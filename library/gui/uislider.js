@@ -42,6 +42,9 @@ export class UISlider extends UISubControl
         // Flag to indicate to display the value as an int
         this.displayValueAsInt = false;
 
+        // Amount of decimal places
+        this.displayValueDecimalPlaces = 2;
+
         // Default position of the slider button
         this.defaultPos = new Point;
 
@@ -86,6 +89,10 @@ export class UISlider extends UISubControl
             attr = settingsNode[0].getAttribute( 'displayValueAsInt' );
             if( attr && (attr === 'true') )
                 this.displayValueAsInt = true;
+
+            attr = settingsNode[0].getAttribute( 'displayValueDecimalPlaces' );
+            if( attr )
+                this.displayValueDecimalPlaces = Number(attr);
         }
     }
 
@@ -121,13 +128,54 @@ export class UISlider extends UISubControl
     }
 
     // 
+    //  DESC: Handle OnUpAction message
+    //
+    onUpAction( event )
+    {
+        if( this.orientation == defs.EO_VERTICAL )
+        {
+            // Handle the slider change
+            if( event.arg[0] === defs.EAP_DOWN )
+                this.handleSliderChange( -this.incValue, true );
+                
+            else if( event.arg[0] === defs.EAP_UP )
+                // Prepare script function associated with handling this game event
+                this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
+        }
+    }
+
+    // 
+    //  DESC: Handle OnDownAction message
+    //
+    onDownAction( event )
+    {
+        if( this.orientation == defs.EO_VERTICAL )
+        {
+            // Handle the slider change
+            if( event.arg[0] === defs.EAP_DOWN )
+                this.handleSliderChange( this.incValue, true );
+
+            else if( event.arg[0] === defs.EAP_UP )
+                // Prepare script function associated with handling this game event
+                this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
+        }
+    }
+
+    // 
     //  DESC: Handle OnLeftAction message
     //
     onLeftAction( event )
     {
-        // Handle the slider change
-        if( event.arg[0] === defs.EAP_DOWN )
-            this.handleSliderChange( -this.incValue, true );
+        if( this.orientation == defs.EO_HORIZONTAL )
+        {
+            // Handle the slider change
+            if( event.arg[0] === defs.EAP_DOWN )
+                this.handleSliderChange( -this.incValue, true );
+
+            else if( event.arg[0] === defs.EAP_UP )
+                // Prepare script function associated with handling this game event
+                this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
+        }
     }
 
     // 
@@ -135,15 +183,38 @@ export class UISlider extends UISubControl
     //
     onRightAction( event )
     {
-        // Handle the slider change
-        if( event.arg[0] === defs.EAP_DOWN )
-            this.handleSliderChange( this.incValue, true );
+        if( this.orientation == defs.EO_HORIZONTAL )
+        {
+            // Handle the slider change
+            if( event.arg[0] === defs.EAP_DOWN )
+                this.handleSliderChange( this.incValue, true );
+
+            else if( event.arg[0] === defs.EAP_UP )
+                // Prepare script function associated with handling this game event
+                this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
+        }
+    }
+
+    // 
+    //  DESC: Handle OnUpScroll message
+    //
+    onUpScroll( /*event*/ )
+    {
+        this.handleSliderChange( -this.incValue );
+    }
+
+    // 
+    //  DESC: Handle OnDownScroll message
+    //
+    onDownScroll( /*event*/ )
+    {
+        this.handleSliderChange( this.incValue );
     }
 
     // 
     //  DESC: Handle OnRightScroll message
     //
-    onLeftScroll( event )
+    onLeftScroll( /*event*/ )
     {
         this.handleSliderChange( -this.incValue );
     }
@@ -151,7 +222,7 @@ export class UISlider extends UISubControl
     // 
     //  DESC: Handle OnRightScroll message
     //
-    onRightScroll( event )
+    onRightScroll( /*event*/ )
     {
         this.handleSliderChange( this.incValue );
     }
@@ -205,6 +276,9 @@ export class UISlider extends UISubControl
         }
         else if( event.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType )
         {
+            // Prepare script function associated with handling this game event
+            this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
+            
             this.pressType = defs.EAP_IDLE;
         }
 
@@ -294,7 +368,7 @@ export class UISlider extends UISubControl
             if( this.displayValueAsInt )
                 valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, Math.trunc(this.curValue));
             else
-                valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this.curValue);
+                valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this.curValue.toFixed(this.displayValueDecimalPlaces));
 
             this.createFontString( valueStr );
         }

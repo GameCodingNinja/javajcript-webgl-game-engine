@@ -27,7 +27,7 @@ export class GameState
         // Empty function to be overwritten
     }
     
-    handleEvent( event )
+    handleEvent( /*event*/ )
     {
         // Empty function to be overwritten
     }

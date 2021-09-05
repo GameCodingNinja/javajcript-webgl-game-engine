@@ -31,7 +31,7 @@ class Device
         this._canvas.width = settings.size.w;
         this._canvas.height = settings.size.h;
 
-	    this._glContext =
+        this._glContext =
             this._canvas.getContext('webgl2', parm) ||
             this._canvas.getContext('webgl', parm) ||
             this._canvas.getContext('experimental-webgl', parm);

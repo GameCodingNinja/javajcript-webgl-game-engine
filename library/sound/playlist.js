@@ -89,7 +89,7 @@ export class PlayList
             genFunc.shuffle( this.soundAry );
 
         this.current = this.counter;
-        this.soundAry[tihs.current].play( channel, loopCount );
+        this.soundAry[this.current].play( channel, loopCount );
         this.counter = (this.counter + 1) % this.soundAry.length;
     }
 

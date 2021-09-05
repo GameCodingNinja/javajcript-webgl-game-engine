@@ -33,7 +33,7 @@ export class FontProperties
         this.lineWrapWidth = lineWrapWidth;
 
         // add spacing to the lines
-        this.lineWrapHeight = 0;
+        this.lineWrapHeight = lineWrapHeight;
         
         // Throws an error if font is not loaded
         if( this.fontName )

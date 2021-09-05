@@ -7,7 +7,6 @@
 "use strict";
 
 import { Camera } from '../common/camera';
-import * as genFunc from '../utilities/genfunc';
 
 class CameraManager
 {

@@ -345,7 +345,7 @@ class VertexBufferManager
         let groupMap = this.vertexBufMapMap.get( group );
         if( groupMap !== undefined )
         {
-            for( let [ key, vboID ] of groupMap.entries() )
+            for( let vboID of groupMap.values() )
                 gl.deleteBuffer( vboID );
             
             this.vertexBufMapMap.delete( group );
@@ -354,7 +354,7 @@ class VertexBufferManager
         groupMap = this.indexBufMapMap.get( group );
         if( groupMap !== undefined )
         {
-            for( let [ key, iboID ] of groupMap.entries() )
+            for( let iboID of groupMap.values() )
                 gl.deleteBuffer( iboID );
             
             this.indexBufMapMap.delete( group );

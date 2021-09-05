@@ -321,7 +321,7 @@ export class Object
     //
     //  DESC: Apply the scale
     //
-    applyRotation( matrix )
+    applyRotation( /*matrix*/ )
     {
         // Add in the center point prior to rotation
         if( this.parameters.isSet( defs.CENTER_POINT ) )

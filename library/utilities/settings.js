@@ -6,8 +6,8 @@
 
 "use strict";
 import { Size } from '../common/size';
+import { localStorage } from '../utilities/localstorage';
 import * as defs from '../common/defs';
-import * as genFunc from '../utilities/genfunc';
 
 class Settings
 {
@@ -34,13 +34,30 @@ class Settings
         this.maxZdist = 1000.5;
 
         this.allowGamepad = false;
-        this.stickDeadZone = 0.3;
 
         this.gameName = "Unnamed Game";
         this.gameId = "unnamedgame";
 
+        this.user = {
+            "stickDeadZone": 0.1,
+            "soundEnabled": 1 };
+
         // Calculate the ratios
         this.calcRatio();
+    }
+
+    // 
+    //  DESC: Load the Obj data
+    //
+    loadUserSettingsFromObj( obj )
+    {
+        if( obj )
+        {
+            this.user = obj;
+            let savedUserSettings = localStorage.get( 'userSettings' );
+            if( savedUserSettings )
+                this.user = JSON.parse( savedUserSettings );
+        }
     }
 
     // 
@@ -106,7 +123,7 @@ class Settings
             if( obj.device.gamepad )
             {
                 if( obj.device.gamepad.allow )
-                    this.allowGamepad = (obj.device.gamepadallow === 'true');
+                    this.allowGamepad = (obj.device.gamepad.allow === 'true');
 
                 if( obj.device.gamepad.stickDeadZone )
                     this.stickDeadZone = obj.device.gamepad.stickDeadZone;

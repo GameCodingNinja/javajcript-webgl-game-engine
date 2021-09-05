@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<menu>
+
+    <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
+    
+    <scriptList>
+        <script transIn="Menu_TransIn"/>
+        <script transOut="Menu_TransOut"/>
+    </scriptList>
+
+    <staticMenuControls>
+
+        <!-- Settings Label -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
+            <position x="-15" y="180" z="0"/>
+            <fontStringList>
+                <string text="Settings"/>
+            </fontStringList>
+        </control>
+
+    </staticMenuControls>
+
+    <mouseOnlyControls>
+
+        <!-- mouse-only close Button -->
+        <control name="close_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
+            <position x="130" y="180" z="0"/>
+            <fontStringList>
+                <string text="x"/>
+            </fontStringList>
+            <action actionType="close"/>
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+
+        <!-- mouse-only close Button -->
+        <control name="back_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/back_button.ctrl"/>
+            <position x="100" y="180" z="0"/>
+            <fontStringList>
+                <string text="^"/>
+            </fontStringList>
+            <action actionType="back"/>
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+    
+    </mouseOnlyControls>
+  
+    <menuControls>
+
+        <!-- Resolution button list -->
+        <control name="resolution_btn_lst" controlType="button_list" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
+            <position x="0" y="115" z="0"/>
+            <fontStringList>
+                <string text="640 x 480"/>
+                <string text="800 x 600"/>
+                <string text="1024 x 768"/>
+                <string text="1186 x 720"/>
+                <string text="1280 x 768"/>
+            </fontStringList>
+            <navigate up="settings_apply_btn" down="full_screen_check_box"/>
+            <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
+            <actionResponse left="true" right="true"/>
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+
+        <!-- Full Screen Check Box -->
+        <control name="full_screen_check_box" controlType="check_box" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
+            <position x="0" y="55" z="0"/>
+            <fontStringList>
+                <string text="Full Screen"/>
+                <string text="x"/>
+            </fontStringList>
+            <navigate up="resolution_btn_lst" down="v-sync_check_box"/>
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+
+        <!-- V_Sync Check Box -->
+        <control name="v-sync_check_box" controlType="check_box" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
+            <position x="0" y="-5" z="0"/>
+            <fontStringList>
+                <string text="V-Sync"/>
+                <string text="x"/>
+            </fontStringList>
+            <navigate up="full_screen_check_box" down="settings_dead_zone_slider"/>
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+
+        <!-- slider Control -->
+        <control name="settings_dead_zone_slider" controlType="slider" defaultState="inactive" mouseSelectDown="true">
+            <filePath file="data/objects/2d/menu/control/deadzone_slider.ctrl"/>
+            <position x="0" y="-85" z="0"/>
+            <settings orientation="HORZ" minValue="0" maxValue="90" defValue="0" incValue="1" displayValueAsInt="true"/>
+            <fontStringList>
+                <string text="GPad Deadzone: %d%"/>
+            </fontStringList>
+            <navigate up="v-sync_check_box" down="settings_apply_btn"/>
+            <scroll startDelay="750" scrollDelay="100" left="true" right="true"/>
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+
+        <!-- Apply Button -->
+        <control name="settings_apply_btn" controlType="button" defaultState="disabled">
+            <filePath file="data/objects/2d/menu/control/button_145x55.ctrl"/>
+            <position x="0" y="-165" z="0"/>
+            <fontStringList>
+                <string text="Apply"/>
+            </fontStringList>
+            <navigate up="settings_dead_zone_slider" down="resolution_btn_lst"/>
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+    
+    </menuControls>
+
+    <spriteList>
+
+        <sprite objectName="settings_menu_bg"/>
+    
+    </spriteList>
+  
+</menu>
+

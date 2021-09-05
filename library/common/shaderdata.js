@@ -32,8 +32,6 @@ export class ShaderData
             return loc;
         else
             throw new Error( 'ERROR Shader variable location does not exist! (' + id + ').' );
-        
-        return null;
     }
     
     //

@@ -30,7 +30,7 @@ export class ivisualComponent
     //
     //  DESC: Set the frame ID from index
     //
-    setFrame( index )
+    setFrame( /*index*/ )
     {
     }
     

@@ -148,25 +148,25 @@ export class UIButtonList extends UISubControl
     // 
     //  DESC: Handle OnLeftScroll message
     //
-    onDownScroll( event )
+    onDownScroll( /*event*/ )
     {
         if( this.actionMask.isSet( uiControlDefs.EAR_DOWN ) )
             this.dec();
     }
 
-    onUpScroll( event )
+    onUpScroll( /*event*/ )
     {
         if( this.actionMask.isSet( uiControlDefs.EAR_UP ) )
             this.inc();
     }
 
-    onLeftScroll( event )
+    onLeftScroll( /*event*/ )
     {
         if( this.actionMask.isSet( uiControlDefs.EAR_LEFT ) )
             this.dec();
     }
 
-    onRightScroll( event )
+    onRightScroll( /*event*/ )
     {
         if( this.actionMask.isSet( uiControlDefs.EAR_RIGHT ) )
             this.inc();

@@ -351,7 +351,7 @@ export class UIControl extends ControlBase
     // 
     //  DESC: Handle OnSelectExecute message
     //
-    onSelectExecute( event )
+    onSelectExecute( /*event*/ )
     {
         if( this.state === uiControlDefs.ECS_SELECT )
         {
@@ -404,7 +404,7 @@ export class UIControl extends ControlBase
     // 
     //  DESC: Handle OnReactivate message
     //
-    onReactivate( event )
+    onReactivate( /*event*/ )
     {
         // Set the last active control to be active again
         if( this.state > uiControlDefs.ECS_INACTIVE )

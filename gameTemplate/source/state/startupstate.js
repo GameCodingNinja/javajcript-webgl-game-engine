@@ -32,6 +32,7 @@ import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as levelScripts from '../scripts/levelscripts';
 import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
+import * as settingsMenuScripts from '../scripts/settingsmenuscripts';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
@@ -48,7 +49,7 @@ import actionManagerJson from '../../data/settings/controllerMapping.json';
 import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
-const STARTUP_ASSET_COUNT = 81,
+const STARTUP_ASSET_COUNT = 78,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState
@@ -74,6 +75,7 @@ export class StartUpState extends GameState
         menuScripts.loadScripts();
         levelScripts.loadScripts();
         keybindMenuScripts.loadScripts();
+        settingsMenuScripts.loadScripts();
                 
         // Set the default camera
         // NOTE: Can only call this after Camera Manager has been loaded

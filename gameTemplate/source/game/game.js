@@ -19,16 +19,15 @@ import { device } from '../../../library/system/device';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as stateDefs from '../state/statedefs';
-import * as genFunc from '../../../library/utilities/genfunc';
 
 // Load data from bundle
 import settingsObj from '../../data/settings/settings.json';
+import userSettingsObj from '../../data/settings/usersettings.json';
 
 export class Game
 {
     constructor()
-    {
-    }
+    { }
     
     // 
     //  DESC: Init the game
@@ -37,6 +36,7 @@ export class Game
     {
         // Load the settings
         settings.loadFromObj( settingsObj );
+        settings.loadUserSettingsFromObj( userSettingsObj );
 
         // Create the OpenGL context
         let gl = device.create();

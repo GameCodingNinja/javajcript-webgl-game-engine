@@ -15,7 +15,6 @@ import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 import * as gamepadevent from '../../../library/common/gamepadevent';
 import * as defs from '../../../library/common/defs';
 import * as menuDefs from '../../../library/gui/menudefs';
-import * as genFunc from '../../../library/utilities/genfunc';
 
 //
 //  Handle init
@@ -37,8 +36,6 @@ export class KeyBindBtn_init
             this.control.findSubControlByName('mouse'),
             this.control.findSubControlByName('gamepad') ];
 
-        let btnDisabled = true;
-
         for( let i = 0; i < deviceAry.length; i++ )
         {
             const [actionStr, configurable] = actionManager.getDeviceActionStr( i, this.control.name );
@@ -50,8 +47,6 @@ export class KeyBindBtn_init
 
             if( !configurable )
                 deviceAry[i].changeState( uiControlDefs.ECS_DISABLE );
-            else
-                btnDisabled = false;
         }
 
         return true;
@@ -63,7 +58,7 @@ export class KeyBindBtn_init
 //
 export class KeyBindBtn_execute
 {
-    constructor( control )
+    constructor( /*control*/ )
     {}
 
     // 
@@ -168,7 +163,7 @@ export class KeyBindBtn_event
 //
 class Control_OnKeybindReset
 {
-    constructor( control )
+    constructor( /*control*/ )
     {
     }
 

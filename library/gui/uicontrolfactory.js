@@ -4,7 +4,6 @@
 //
 
 "use strict";
-import { signalManager } from '../managers/signalmanager';
 import { UILabel } from './uilabel';
 import { UIButton } from './uibutton';
 import { UISubControl } from './uisubcontrol';

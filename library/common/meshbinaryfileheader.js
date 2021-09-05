@@ -38,7 +38,7 @@ export class BinaryTexture
         this.type = 0;       // int8
         this.path = '';      // file path [TEXT_PATH_SIZE]
     }
-};
+}
 
 // Class for reading and writing the total face count within a group and the material
 // it belongs to
@@ -51,7 +51,7 @@ export class BinaryFaceGroup
         this.indexBufCount  = 0; // uint16
         this.textureCount   = 0; // uint16
     }
-};
+}
 
 // Class for reading and writing face information
 export class BinaryFace
@@ -62,7 +62,7 @@ export class BinaryFace
         this.norm = [];
         this.uv = [];
     }
-};
+}
 
 // Class for reading and writing face information
 export class BinaryVertex
@@ -73,4 +73,4 @@ export class BinaryVertex
         this.norm = 0;
         this.uv = 0;
     }
-};
+}

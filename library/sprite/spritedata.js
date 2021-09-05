@@ -6,8 +6,6 @@
 
 "use strict";
 
-import * as defs from '../common/defs';
-
 export class SpriteData
 {
     constructor( xmlNode, nodeName, defGroup, defObjName )

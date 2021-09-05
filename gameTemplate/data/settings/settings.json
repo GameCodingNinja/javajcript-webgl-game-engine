@@ -7,7 +7,7 @@
         "projection": { "projectType": "orthographic", "minZDist": 5, "maxZDist": 1000, "viewAngle": 45 },
         "depthStencilBuffer": { "enableDepthBuffer": "false", "createStencilBuffer": "true", "clearStencilBuffer": "true", "stencilBufferBitSize": 1 },
         "targetBuffer": { "clear": "true" },
-        "gamepad": { "allow": "true", "stickDeadZone": 0.3 } },
+        "gamepad": { "allow": "true" } },
 
     "game": { "name": "Game Template", "id": "gametemplate" }
 }

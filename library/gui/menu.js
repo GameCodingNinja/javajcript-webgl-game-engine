@@ -501,7 +501,7 @@ export class Menu extends Object
     // 
     //  DESC: Handle OnUpAction message
     //
-    onUpAction( event )
+    onUpAction( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_UP );
     }
@@ -509,7 +509,7 @@ export class Menu extends Object
     // 
     //  DESC: Handle OnMenuDown message
     //
-    onDownAction( event )
+    onDownAction( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_DOWN );
     }
@@ -517,7 +517,7 @@ export class Menu extends Object
     // 
     //  DESC: Handle OnMenuLeft message
     //
-    onLeftAction( event )
+    onLeftAction( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_LEFT );
     }
@@ -525,7 +525,7 @@ export class Menu extends Object
     // 
     //  DESC: Handle OnRightAction message
     //
-    onRightAction( event )
+    onRightAction( /*event*/ )
     {
         this.navigateMenu( defs.ENAV_NODE_RIGHT );
     }
@@ -560,7 +560,7 @@ export class Menu extends Object
                     break;
                 }
             }
-            while( true );
+            while( navNode );
         }
     }
 
@@ -669,7 +669,7 @@ export class Menu extends Object
     // 
     //  DESC: Handle OnReactivate message
     //
-    onReactivate( event )
+    onReactivate( /*event*/ )
     {
         this.state = menuDefs.EMS_IDLE;
     }
