@@ -766,15 +766,15 @@ class ConfirmBtn_execute
         let executionAction = '';
         let actionType = uiControlDefs.ECAT_BACK;
         
-        if( this.control.name === 'continue_btn' )
+        if( this.control.name === 'play_game_btn' )
         {
-            conformationMsg = "Are you sure you|want to continue|on to the next state?";
+            conformationMsg = "Are you sure you|want to play the game?";
             actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
             executionAction = "level_1_state";
         }
-        else if( this.control.name === 'main_menu_btn' )
+        else if( this.control.name === 'title_screen_btn' )
         {
-            conformationMsg = 'Are you sure you|want to go back to|the main menu?';
+            conformationMsg = 'Are you sure you|want to go back to|the Title Screen?';
             actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
             executionAction = 'title_screen_state';
         }

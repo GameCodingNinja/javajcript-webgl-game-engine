@@ -35,15 +35,15 @@
     </staticMenuControls>
 
     <menuControls>
-        <!-- Continue Button -->
-        <control name="continue_btn" controlType="button" defaultState="inactive">
+        <!-- Play Game Button -->
+        <control name="play_game_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="116" z="0"/>
+            <position x="0" y="60" z="0"/>
             <fontStringList>
-                <string text="Continue"/>
+                <string text="Play Game"/>
             </fontStringList>
             <action actionType="to_menu" executionAction="confirmation_menu"/>
-            <navigate up="key_binding_btn" down="new_game_btn"/>
+            <navigate up="key_binding_btn" down="settings_btn"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
@@ -51,47 +51,16 @@
                 <script execute="ConfirmBtn_execute"/>
             </scriptList>
         </control>
-
-        <!-- New Game Button -->
-        <control name="new_game_btn" controlType="button" defaultState="disabled">
-            <filePath file="data/objects/2d/menu/control/button_spin_275x55.ctrl"/>
-            <position x="0" y="58" z="0"/>
-            <fontStringList>
-                <string text="New Game"/>
-            </fontStringList>
-            <navigate up="continue_btn" down="load_game_btn"/>
-            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptList>
-                <script active="Control_OnActive"/>
-                <script select="Control_OnSelect"/>
-            </scriptList>
-        </control>
-
-        <!-- Load Game Button -->
-        <control name="load_game_btn" controlType="button" defaultState="disabled">
-            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="0" z="0"/>
-            <fontStringList>
-                <string text="Load Game"/>
-            </fontStringList>
-            <action actionType="to_menu" executionAction="settings_menu"/>
-            <navigate up="new_game_btn" down="settings_btn"/>
-            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptList>
-                <script active="Control_OnActive"/>
-                <script select="Control_OnSelect"/>
-            </scriptList>
-        </control>
       
         <!-- Settings Button -->
         <control name="settings_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="-58" z="0"/>
+            <position x="0" y="0" z="0"/>
             <fontStringList>
                 <string text="Settings"/>
             </fontStringList>
             <action actionType="to_menu" executionAction="settings_menu"/>
-            <navigate up="load_game_btn" down="key_binding_btn"/>
+            <navigate up="play_game_btn" down="key_binding_btn"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
@@ -102,12 +71,12 @@
         <!-- Key Bindings Button -->
         <control name="key_binding_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="-116" z="0"/>
+            <position x="0" y="-60" z="0"/>
             <fontStringList>
                 <string text="Key Bindings"/>
             </fontStringList>
             <action actionType="to_menu" executionAction="key_bindings_menu"/>
-            <navigate up="settings_btn" down="continue_btn"/>
+            <navigate up="settings_btn" down="play_game_btn"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>

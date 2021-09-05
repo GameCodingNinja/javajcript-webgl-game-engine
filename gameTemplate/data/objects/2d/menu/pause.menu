@@ -50,7 +50,7 @@
                 <string text="Resume"/>
             </fontStringList>
             <action actionType="back"/>
-            <navigate up="main_menu_btn" down="settings_btn"/>
+            <navigate up="title_screen_btn" down="settings_btn"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
@@ -82,7 +82,7 @@
                 <string text="Key Bindings"/>
             </fontStringList>
             <action actionType="to_menu" executionAction="key_bindings_menu"/>
-            <navigate up="settings_btn" down="main_menu_btn"/>
+            <navigate up="settings_btn" down="title_screen_btn"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
@@ -90,12 +90,12 @@
             </scriptList>
         </control>
 
-        <!-- Main Menu Button -->
-        <control name="main_menu_btn" faction="decision_btn" controlType="button" defaultState="inactive">
+        <!-- Title Screen Menu Button -->
+        <control name="title_screen_btn" faction="decision_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
             <position x="0" y="-110" z="0"/>
             <fontStringList>
-                <string text="Main Menu"/>
+                <string text="Title Screen"/>
             </fontStringList>
             <action actionType="to_menu" executionAction="confirmation_menu"/>
             <navigate up="key_binding_btn" down="resume_btn"/>
