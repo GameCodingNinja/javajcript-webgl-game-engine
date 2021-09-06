@@ -350,9 +350,9 @@ class MeshManager
         {
             let gl = device.gl;
             
-            for( let each of groupMap.values() )
+            for( const each of groupMap.values() )
             {
-                for( let mesh of each.meshAry )
+                for( const mesh of each.meshAry )
                 {
                     gl.deleteBuffer( mesh.vbo );
                     gl.deleteBuffer( mesh.ibo );
