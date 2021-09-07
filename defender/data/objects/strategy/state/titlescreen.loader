@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<loader>
+    
+    <strategy name="_cube_" camera="cubeCamera">
+        <node name="cube" instance="cube"/>
+    </strategy>
+
+    <strategy name="_title_screen_">
+        <node name="background"/>
+    </strategy>
+  
+</loader>

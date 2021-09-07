@@ -9,8 +9,6 @@ npm install webpack webpack-cli --save-dev
 Install some packages
 npm install planck-js
 npm install raw-loader
-npm install xml2js
-npm install @types/xml2js
 
 Add path to .bashrc to webpack
 PATH=$PATH:$HOME/Development/javajcript-webgl-game-engine/node_modules/.bin

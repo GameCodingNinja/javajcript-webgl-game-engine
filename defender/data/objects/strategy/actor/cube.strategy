@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(cube)">
+    
+    <node name="cube">
+        
+        <sprite objectName="cube">
+            <scale x="3" y="3" z="3"/>
+            <scriptList>
+                <script rotate="State_RotateCube" group="(state)" prepareOnInit="true"/>
+            </scriptList>
+        </sprite>
+
+    </node>
+
+</strategy>

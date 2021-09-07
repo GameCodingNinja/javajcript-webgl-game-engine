@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_level-1-ball_">
+    
+        <node name="triangle_blue">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="triangle_green">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_blue">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_green">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_red">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="square_red">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+
+        <node name="triangle_blue">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="triangle_green">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_blue">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_green">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_red">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="square_red">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+
+        <node name="triangle_blue">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="triangle_green">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_blue">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_green">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_red">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="square_red">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+
+        <node name="triangle_blue">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="triangle_green">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_blue">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_green">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="circle_red">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+        <node name="square_red">
+            <sprite>
+                <script prepare="ball_ai"/>
+            </sprite>
+        </node>
+
+    </strategy>
+  
+</loader>
