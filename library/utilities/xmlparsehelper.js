@@ -17,29 +17,29 @@ import * as defs from '../common/defs';
 // 
 //  DESC: Load the 2d vertex
 //
-export function loadVertex2d( node )
+export function loadVertex2d( xmlNode )
 {
-    if( node )
+    if( xmlNode )
     {
         let vert2d = new Vertex2d;
         
-        let attr = node.getAttribute('x');
+        let attr = xmlNode.getAttribute('x');
         if( attr )
             vert2d.x = Number( attr );
 
-        attr = node.getAttribute('y');
+        attr = xmlNode.getAttribute('y');
         if( attr )
             vert2d.y = Number( attr );
 
-        attr = node.getAttribute('z');
+        attr = xmlNode.getAttribute('z');
         if( attr )
             vert2d.z = Number( attr );
 
-        attr = node.getAttribute('u');
+        attr = xmlNode.getAttribute('u');
         if( attr )
             vert2d.u = Number( attr );
 
-        attr = node.getAttribute('v');
+        attr = xmlNode.getAttribute('v');
         if( attr )
             vert2d.v = Number( attr );
         
@@ -52,9 +52,9 @@ export function loadVertex2d( node )
 // 
 //  DESC: Load the position
 //
-export function loadPosition( node )
+export function loadPosition( xmlNode )
 {
-    let positionNode = node.getElementsByTagName( 'position' );
+    let positionNode = xmlNode.getElementsByTagName( 'position' );
 
     if( positionNode.length )
     {
@@ -81,9 +81,9 @@ export function loadPosition( node )
 // 
 //  DESC: Load the position
 //
-export function loadRotation( node )
+export function loadRotation( xmlNode )
 {
-    let rotationNode = node.getElementsByTagName( 'rotation' );
+    let rotationNode = xmlNode.getElementsByTagName( 'rotation' );
 
     if( rotationNode.length )
     {
@@ -110,9 +110,9 @@ export function loadRotation( node )
 // 
 //  DESC: Load the scale
 //
-export function loadScale( node )
+export function loadScale( xmlNode )
 {
-    let scaleNode = node.getElementsByTagName( 'scale' );
+    let scaleNode = xmlNode.getElementsByTagName( 'scale' );
 
     if( scaleNode.length )
     {
@@ -139,9 +139,9 @@ export function loadScale( node )
 // 
 //  DESC: Load the center position
 //
-export function loadCenterPos( node )
+export function loadCenterPos( xmlNode )
 {
-    let centerPosNode = node.getElementsByTagName( 'centerPos' );
+    let centerPosNode = xmlNode.getElementsByTagName( 'centerPos' );
 
     if( centerPosNode.length )
     {
@@ -168,19 +168,19 @@ export function loadCenterPos( node )
 // 
 //  DESC: Load the generic x, y, z values
 //
-export function loadXYZ( node )
+export function loadXYZ( xmlNode )
 {
     let point = new Point;
 
-    let attr = node.getAttribute('x');
+    let attr = xmlNode.getAttribute('x');
     if( attr )
         point.x = Number( attr );
 
-    attr = node.getAttribute('y');
+    attr = xmlNode.getAttribute('y');
     if( attr )
         point.y = Number( attr );
 
-    attr = node.getAttribute('z');
+    attr = xmlNode.getAttribute('z');
     if( attr )
         point.z = Number( attr );
 
@@ -191,14 +191,14 @@ export function loadXYZ( node )
 // 
 //  DESC: Load the color
 //
-export function loadColor( node, currentColor = null )
+export function loadColor( xmlNode, currentColor = null )
 {
     let color = new Color;
     
     if( currentColor )
         color.copy( currentColor );
 
-    let colorNode = node.getElementsByTagName( 'color' );
+    let colorNode = xmlNode.getElementsByTagName( 'color' );
     if( colorNode.length )
     {
         let attr = colorNode[0].getAttribute('r');
@@ -227,14 +227,14 @@ export function loadColor( node, currentColor = null )
 // 
 //  DESC: Load the size
 //
-export function loadSize( node, currentSize = null )
+export function loadSize( xmlNode, currentSize = null )
 {
     let size = new Size;
     
     if( currentSize )
         size.copy( currentSize );
 
-    let sizeNode = node.getElementsByTagName( 'size' );
+    let sizeNode = xmlNode.getElementsByTagName( 'size' );
     if( sizeNode.length )
     {
         let attr = sizeNode[0].getAttribute('width');
@@ -252,9 +252,9 @@ export function loadSize( node, currentSize = null )
 // 
 //  DESC: Load the rect
 //
-export function loadRect( node )
+export function loadRect( xmlNode )
 {
-    let rectNode = node.getElementsByTagName( 'rect' );
+    let rectNode = xmlNode.getElementsByTagName( 'rect' );
     
     if( rectNode.length )
         return loadRectFromChild( rectNode[0] );
@@ -262,23 +262,23 @@ export function loadRect( node )
     return new Rect;
 }
 
-export function loadRectFromChild( node )
+export function loadRectFromChild( xmlNode )
 {
     let rect = new Rect;
     
-    let attr = node.getAttribute('x1');
+    let attr = xmlNode.getAttribute('x1');
         if( attr )
             rect.x1 = Number(attr);
         
-    attr = node.getAttribute('y1');
+    attr = xmlNode.getAttribute('y1');
         if( attr )
             rect.y1 = Number(attr);
         
-    attr = node.getAttribute('x2');
+    attr = xmlNode.getAttribute('x2');
         if( attr )
             rect.x2 = Number(attr);
 
-    attr = node.getAttribute('y2');
+    attr = xmlNode.getAttribute('y2');
         if( attr )
             rect.y2 = Number(attr);
 
@@ -288,11 +288,11 @@ export function loadRectFromChild( node )
 // 
 //  DESC: Load the horizontal alignment
 //
-export function loadHorzAlignment( node, aHorzAlign )
+export function loadHorzAlignment( xmlNode, aHorzAlign )
 {
     let horzAlign = aHorzAlign;
 
-    let horzAlignAttr = node.getAttribute( 'horzAlign' );
+    let horzAlignAttr = xmlNode.getAttribute( 'horzAlign' );
     if( horzAlignAttr )
     {
         if( horzAlignAttr === 'left' )
@@ -311,11 +311,11 @@ export function loadHorzAlignment( node, aHorzAlign )
 // 
 //  DESC: Load the vertical alignment
 //
-export function loadVertAlignment( node, aVertAlign )
+export function loadVertAlignment( xmlNode, aVertAlign )
 {
     let vertAlign = aVertAlign;
 
-    let vertAlignAttr = node.getAttribute( 'vertAlign' );
+    let vertAlignAttr = xmlNode.getAttribute( 'vertAlign' );
     if( vertAlignAttr )
     {
         if( vertAlignAttr === 'top' )
@@ -334,9 +334,9 @@ export function loadVertAlignment( node, aVertAlign )
 // 
 //  DESC: Load the dynamic offset
 //
-export function loadDynamicOffset( node )
+export function loadDynamicOffset( xmlNode )
 {
-    let dynamicOffsetNode = node.getElementsByTagName( 'dynamicOffset' );
+    let dynamicOffsetNode = xmlNode.getElementsByTagName( 'dynamicOffset' );
 
     if( dynamicOffsetNode.length )
     {

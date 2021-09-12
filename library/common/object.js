@@ -228,23 +228,28 @@ export class Object
     }
     
     //
-    //  DESC: Load the transform data from node
+    //  DESC: Load the transform data from xmlNode
     //
-    loadTransFromNode( node )
+    loadTransFromNode( xmlNode )
     {
-        let pos = parseHelper.loadPosition( node );
+        // Set if the sprite is visible
+        let attr = xmlNode.getAttribute( 'visible' );
+        if( attr )
+            this.setVisible( attr === 'true' );
+
+        let pos = parseHelper.loadPosition( xmlNode );
         if( pos )
             this.setPos( pos );
 
-        let rot = parseHelper.loadRotation( node );
+        let rot = parseHelper.loadRotation( xmlNode );
         if( rot )
             this.setRot( rot );
 
-        let scale = parseHelper.loadScale( node );
+        let scale = parseHelper.loadScale( xmlNode );
         if( scale )
             this.setScale( scale );
 
-        let centerPos = parseHelper.loadCenterPos( node );
+        let centerPos = parseHelper.loadCenterPos( xmlNode );
         if( centerPos )
             this.setCenterPos( centerPos );
     }

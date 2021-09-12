@@ -22,7 +22,7 @@ export class SpriteData
         // Object name
         this.objectName = defObjName;
 
-        // Is this sprite visible?
+        // Sprite is visible by default
         this.visible = true;
 
         // Get the object data name

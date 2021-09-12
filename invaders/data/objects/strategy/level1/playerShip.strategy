@@ -9,7 +9,7 @@
 
         <node name="fire_tail">
 
-            <sprite objectName="fire_tail">
+            <sprite objectName="fire_tail" visible="false">
                 <position x="-120" y="3" z="0"/>
                 <scriptList>
                     <script fireTailAnim="PlayerShip_FireTailAnim"/>
