@@ -22,6 +22,9 @@ export class SpriteData
         // Object name
         this.objectName = defObjName;
 
+        // Is this sprite visible?
+        this.visible = true;
+
         // Get the object data name
         // Init with the node name in the event the node and the object data names are the same and a default object name was not defined
         if( !this.objectName )

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(level_1)" defaultCamera="levelCamera">
+
+    <node name="player_ship">
+
+        <object>
+            <scale x="1.0" y="1.0" z="1.0"/>
+        </object>
+
+        <node name="fire_tail">
+
+            <sprite objectName="fire_tail">
+                <position x="-120" y="3" z="0"/>
+                <scriptList>
+                    <script fireTailAnim="PlayerShip_FireTailAnim"/>
+                </scriptList>
+            </sprite>
+
+        </node>
+
+        <node name="ship_body">
+
+            <sprite objectName="player_ship"/>
+
+        </node>
+
+    </node>
+
+</strategy>

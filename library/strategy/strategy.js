@@ -69,6 +69,10 @@ export class Strategy extends Object
         if( attr !== null )
             defaultId = Number(attr);
 
+        attr = xmlNode.getAttribute( 'defaultCamera' );
+        if( attr !== null )
+            this.setCamera( attr )
+
         for( let i = 0; i < xmlNode.children.length; ++i )
         {
             // There must be a name associated with this node data

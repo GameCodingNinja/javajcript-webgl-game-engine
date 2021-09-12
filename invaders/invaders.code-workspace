@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../library"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "invaders"
+	}
+}

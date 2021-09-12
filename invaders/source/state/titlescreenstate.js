@@ -34,7 +34,6 @@ export class TitleScreenState extends CommonState
         super( stateDefs.EGS_TITLE_SCREEN, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
         strategyManager.activateStrategy('_title_screen_');
-        strategyManager.activateStrategy('_cube_');
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -55,15 +54,15 @@ export class TitleScreenState extends CommonState
     }
     
     // 
-    //  DESC: Called when deleting this state
+    //  DESC: Clean up after the startup state
     //
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_title_screen_','_cube_'] );
+        strategyManager.deleteStrategy( ['_title_screen_'] );
         
         // Free the object data
-        objectDataManager.freeGroup( ['(title_screen)','(cube)'] );
+        objectDataManager.freeGroup( ['(title_screen)'] );
     }
     
     // 
@@ -120,12 +119,9 @@ export class TitleScreenState extends CommonState
 // 
 //  DESC: Load files
 //
-//  Use when you have nothing to load
-//  return Promise.resolve();
-//
 export function load()
 {
-    let groupAry = ['(title_screen)','(cube)'];
+    let groupAry = ['(title_screen)'];
 
     return objectDataManager.loadGroup( groupAry )
 

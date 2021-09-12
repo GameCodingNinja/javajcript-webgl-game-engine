@@ -1,0 +1,13 @@
+{
+    "_startup_": [
+        "data/objects/strategy/state/startup.strategy"],
+    
+    "_loading-screen_": [
+        "data/objects/strategy/state/loadscreen.strategy"],
+    
+    "_level-1-stage_": [
+        "data/objects/strategy/level1/stage.strategy"],
+
+    "_player_ship_": [
+        "data/objects/strategy/level1/playerShip.strategy"]
+}

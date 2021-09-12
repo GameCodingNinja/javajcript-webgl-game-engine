@@ -1,20 +1,21 @@
 
 // 
-//  FILE NAME: titlescreenstate.js
-//  DESC:      titles screen state class
+//  FILE NAME: level1state.js
+//  DESC:      Level1State Class State
 //
 
 "use strict";
 
 import { eventManager } from '../../../library/managers/eventmanager';
-import { CommonState } from './commonstate';
-import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { menuManager } from '../../../library/gui/menumanager';
+import { highResTimer } from '../../../library/utilities/highresolutiontimer';
+import { ScriptComponent } from '../../../library/script/scriptcomponent';
+import { scriptManager } from '../../../library/script/scriptmanager';
+import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
+import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
-import { ScriptComponent } from '../../../library/script/scriptcomponent';
-import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { scriptManager } from '../../../library/script/scriptmanager';
+import { CommonState } from './commonstate';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
@@ -23,47 +24,38 @@ import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
-import titleScreenStrategyLoader from 'raw-loader!../../data/objects/strategy/state/titlescreen.loader';
+//import ballStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/ball.strategy.loader';
+import levelStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
 
 export const ASSET_COUNT = 11;
 
-export class TitleScreenState extends CommonState
+export class Level1State extends CommonState
 {
-    constructor( gameLoopCallback )
+    constructor( gameLoopCallback = null )
     {
-        super( stateDefs.EGS_TITLE_SCREEN, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
+        super( stateDefs.EGS_LEVEL_1, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
         
-        strategyManager.activateStrategy('_title_screen_');
-        strategyManager.activateStrategy('_cube_');
-        
+        //this.physicsWorld = physicsWorldManager.getWorld( "(game)" );
+
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
-
+        
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
-        menuManager.activateTree( ['title_screen_tree'] );
+        menuManager.activateTree( ['pause_tree'] );
         
         // Clear the event queue
         eventManager.clear();
         
+        // Prepare the strategies to run
+        strategyManager.activateStrategy('_level-1-stage_');
+        strategyManager.activateStrategy('_player_ship_');
+        
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
         
-        // Start the game loop
         requestAnimationFrame( this.callback );
-    }
-    
-    // 
-    //  DESC: Called when deleting this state
-    //
-    cleanUp()
-    {
-        // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_title_screen_','_cube_'] );
-        
-        // Free the object data
-        objectDataManager.freeGroup( ['(title_screen)','(cube)'] );
     }
     
     // 
@@ -85,6 +77,28 @@ export class TitleScreenState extends CommonState
     }
     
     // 
+    //  DESC: Clean up after the startup state
+    //
+    cleanUp()
+    {
+        // Only delete the strategy(s) used in this state. Don't use clear().
+        strategyManager.deleteStrategy( ['_level-1-stage_','_player_ship_'] );
+        
+        objectDataManager.freeGroup( ['(level_1)'] );
+        
+        //physicsWorldManager.destroyWorld( "(game)" );
+    }
+    
+    // 
+    //  DESC: Handle the physics
+    //
+    physics()
+    {
+        //if( !menuManager.active )
+        //    this.physicsWorld.variableTimeStep();
+    }
+    
+    // 
     //  DESC: Update objects that require them
     //
     update()
@@ -92,7 +106,9 @@ export class TitleScreenState extends CommonState
         super.update();
         
         this.scriptComponent.update();
-        strategyManager.update();
+        
+        if( !menuManager.active )
+            strategyManager.update();
     }
     
     // 
@@ -101,6 +117,7 @@ export class TitleScreenState extends CommonState
     transform()
     {
         super.transform();
+        
         strategyManager.transform();
     }
     
@@ -125,12 +142,18 @@ export class TitleScreenState extends CommonState
 //
 export function load()
 {
-    let groupAry = ['(title_screen)','(cube)'];
-
+    let groupAry = ['(level_1)'];
+    
     return objectDataManager.loadGroup( groupAry )
 
-        // Create and load all the actor strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( titleScreenStrategyLoader ) ))
+        // Load the physics list table and group
+        //.then(() => physicsWorldManager.loadWorldGroup2D( '(game)' ))
+
+        // Load stage strategy.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( levelStrategyLoader ) ))
+
+        // Load ball strategy.
+        //.then(() => strategyLoader.load( genFunc.stringLoadXML( ballStrategyLoader ) ))
 
         // Clean up the temporary files
         .then(() =>
