@@ -19,11 +19,13 @@
                 { "action": "up", "componetId": "W", "defaultId": "W", "configurable": "true" },
                 { "action": "down", "componetId": "S", "defaultId": "S", "configurable": "true" },
                 { "action": "left", "componetId": "A", "defaultId": "A", "configurable": "true" },
-                { "action": "right", "componetId": "D", "defaultId": "D", "configurable": "true" } ] },
+                { "action": "right", "componetId": "D", "defaultId": "D", "configurable": "true" },
+                { "action": "shoot", "componetId": "SPACE", "defaultId": "SPACE", "configurable": "true" } ] },
 
     "mouseMapping": {
         "playerVisible": [
-            { "action": "menu_select", "componetId": "LEFT MOUSE", "defaultId": "LEFT MOUSE", "configurable": "true" } ] },
+            { "action": "menu_select", "componetId": "LEFT MOUSE", "defaultId": "LEFT MOUSE", "configurable": "true" },
+            { "action": "shoot", "componetId": "LEFT MOUSE", "defaultId": "LEFT MOUSE", "configurable": "true" } ] },
 
     "gamepadMapping": {
         "playerHidden": [
@@ -36,9 +38,14 @@
                 { "action": "menu_left", "componetId": "LEFT" },
                 { "action": "menu_right", "componetId": "RIGHT" },
                 { "action": "menu_back", "componetId": "BACK" },
-                { "action": "menu_toggle", "componetId": "START" } ],
+                { "action": "menu_toggle", "componetId": "START" },
+                { "action": "up", "componetId": "L STICK UP" },
+                { "action": "down", "componetId": "L STICK DOWN" },
+                { "action": "left", "componetId": "L STICK LEFT" },
+                { "action": "right", "componetId": "L STICK RIGHT" } ],
 
         "playerVisible": [
                 { "action": "menu_select", "componetId": "A", "defaultId": "A", "configurable": "true" },
-                { "action": "menu_back", "componetId": "B", "defaultId": "B", "configurable": "true" } ] }
+                { "action": "menu_back", "componetId": "B", "defaultId": "B", "configurable": "true" },
+                { "action": "shoot", "componetId": "A", "defaultId": "A", "configurable": "true" } ] }
 }

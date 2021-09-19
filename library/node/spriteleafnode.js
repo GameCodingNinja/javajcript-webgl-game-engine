@@ -17,6 +17,7 @@ export class SpriteLeafNode extends iNode
     {
         super( nodeData.nodeId, nodeData.parentNodeId );
         
+        this.name = nodeData.nodeName;
         this.sprite = new Sprite( objectData, this );
         this.type = defs.ENT_SPRITE;
         this.userId = nodeData.userId;

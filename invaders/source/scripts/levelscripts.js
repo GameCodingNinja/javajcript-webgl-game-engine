@@ -7,15 +7,18 @@
 "use strict";
 
 import { scriptManager } from '../../../library/script/scriptmanager';
-import * as defs from '../../../library/common/defs';
-import * as genFunc from '../../../library/utilities/genfunc';
+import * as utilScripts from './utilityscripts';
 
-export class Level_BallAi
+//
+//  DESC: Script for animating fire tale
+//
+class PlayerShip_FireTailAnim
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
-        this.initPhysics();
+        this.animate = new utilScripts.PlayAnim( sprite );
+        this.animate.init( 24, true );
+        this.pause = true;
     }
     
     // 
@@ -23,33 +26,19 @@ export class Level_BallAi
     //
     execute()
     {
-        if( this.sprite.pos.y < -600 )
-            this.initPhysics();
+        if( !this.pause )
+            return this.animate.execute();
         
         return false;
     }
-
-    // 
-    //  DESC: Init the physics
-    //
-    initPhysics()
-    {
-        this.sprite.physicsComponent.setTransform(
-            genFunc.randomInt(-700,700),
-            genFunc.randomInt(600,1000),
-            genFunc.randomInt(0,360) * defs.DEG_TO_RAD,
-            defs.RESET_VELOCITY );
-        
-        // Reposition the sprite based on the new physics position and rotation
-        this.sprite.physicsUpdate();
-    }
 }
+
 
 // 
 //  DESC: Load scripts
 //
 export function loadScripts()
 {
-    scriptManager.set( 'Level_BallAi',
-        ( sprite ) => { return new Level_BallAi( sprite ); } );
+    scriptManager.set( 'PlayerShip_FireTailAnim',
+        ( sprite ) => { return new PlayerShip_FireTailAnim( sprite ); } );
 }

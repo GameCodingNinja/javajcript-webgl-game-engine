@@ -7,11 +7,12 @@
 "use strict";
 
 import { eventManager } from '../../../library/managers/eventmanager';
+import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
+//import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
@@ -19,15 +20,19 @@ import { CommonState } from './commonstate';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
+import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
-//import ballStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/ball.strategy.loader';
 import levelStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
 
 export const ASSET_COUNT = 11;
+const MOVE_LEFT = 0,
+      MOVE_RIGHT = 1,
+      MOVE_UP = 2,
+      MOVE_DOWN = 3;
 
 export class Level1State extends CommonState
 {
@@ -50,10 +55,17 @@ export class Level1State extends CommonState
         
         // Prepare the strategies to run
         strategyManager.activateStrategy('_level-1-stage_');
-        strategyManager.activateStrategy('_player_ship_');
+
+        // Get the nodes and sprites we need to call
+        let playerShipNode = strategyManager.activateStrategy('_player_ship_').get('player_ship');
+        this.playerShipObj = playerShipNode.object;
+        this.playerFireTailSprite = playerShipNode.findChild('fire_tail').sprite;
+        this.playerFireTailScript = this.playerFireTailSprite.scriptComponent.prepare( 'fireTailAnim', this.playerFireTailSprite );
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
+
+        this.moveActionAry = ['left','right','up','down'];
         
         requestAnimationFrame( this.callback );
     }
@@ -72,6 +84,76 @@ export class Level1State extends CommonState
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
+            }
+        }
+
+        if( !menuManager.active )
+        {
+            // Handle the ship movement
+            this.handleShipMovement( event );
+        }
+    }
+
+    // 
+    //  DESC: Handle the ship movement
+    //
+    handleShipMovement( event )
+    {
+        for( let i = 0; i < this.moveActionAry.length; i++ )
+        {
+            let actionResult = actionManager.wasAction( event, this.moveActionAry[i] );
+            if( actionResult != defs.EAP_IDLE )
+            {
+                if( i === MOVE_LEFT )
+                {
+                    if( actionResult == defs.EAP_DOWN )
+                    {
+                        this.playerFireTailSprite.setVisible( true );
+                        this.playerFireTailScript.pause = false;
+                    }
+                    else
+                    {
+                        this.playerFireTailSprite.setVisible( false );
+                        this.playerFireTailScript.pause = true;
+                    }
+                }
+                else if( i === MOVE_RIGHT )
+                {
+                    if( actionResult == defs.EAP_DOWN )
+                    {
+                        this.playerFireTailSprite.setVisible( true );
+                        this.playerFireTailScript.pause = false;
+                    }
+                    else
+                    {
+                        this.playerFireTailSprite.setVisible( false );
+                        this.playerFireTailScript.pause = true;
+                    }
+                }
+                else if( i === MOVE_UP )
+                {
+                    if( actionResult == defs.EAP_DOWN )
+                    {
+                        console.log('Up Down');
+                    }
+                    else
+                    {
+                        console.log('Up Up');
+                    }
+                }
+                else if( i === MOVE_DOWN )
+                {
+                    if( actionResult == defs.EAP_DOWN )
+                    {
+                        console.log('Down Down');
+                    }
+                    else
+                    {
+                        console.log('Down Up');
+                    }
+                }
+
+                break;
             }
         }
     }

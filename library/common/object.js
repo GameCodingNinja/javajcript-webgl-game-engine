@@ -232,7 +232,7 @@ export class Object
     //
     loadTransFromNode( xmlNode )
     {
-        // Set if the sprite is visible
+        // Set if visible. Is visible by default
         let attr = xmlNode.getAttribute( 'visible' );
         if( attr )
             this.setVisible( attr === 'true' );

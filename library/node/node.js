@@ -63,7 +63,7 @@ export class Node extends iNode
     }
     
     // 
-    //  DESC: Push back node into array
+    //  DESC: Find the parent
     //
     findParent( searchNode )
     {
@@ -71,14 +71,14 @@ export class Node extends iNode
 
         if( searchNode != null )
         {
-            if( this.nodeId == searchNode.getParentId() )
+            if( this.nodeId == searchNode.parentId )
             {
                 result = this;
             }
             else
             {
                 this.index = 0;
-                let nextNode;
+                let nextNode = null;
 
                 do
                 {
@@ -91,7 +91,7 @@ export class Node extends iNode
                         result = nextNode.findParent( searchNode );
                     }
                 }
-                while( nextNode != null );
+                while( nextNode !== null && result === null );
             }
         }
 
@@ -112,7 +112,7 @@ export class Node extends iNode
         else
         {
             this.index = 0;
-            let nextNode;
+            let nextNode = null;
 
             do
             {
@@ -125,7 +125,7 @@ export class Node extends iNode
                     result = nextNode.findChild( childName );
                 }
             }
-            while( nextNode != null );
+            while( nextNode !== null && result === null );
         }
 
         return result;

@@ -15,8 +15,8 @@ export class UIControlNode extends RenderNode
     {
         super(nodeData.nodeId, nodeData.parentNodeId);
         
+        this.name = nodeData.nodeName;
         this.uiControl = uiControl;
-        this.nodeId = nodeData.nodeId;
         this.userId = nodeData.userId;
         this.type = defs.ENT_UI_CONTROL;
     }

@@ -45,14 +45,6 @@ export class iNode
     }
     
     // 
-    //  DESC: Get the parent id
-    //
-    getParentId()
-    {
-        return this.parentId;
-    }
-    
-    // 
     //  DESC: Get the next node
     //
     next()
@@ -61,9 +53,9 @@ export class iNode
     }
     
     // 
-    //  DESC: Push back node into array
+    //  DESC: Find the parent
     //
-    findParent()
+    findParent( /*searchNode*/ )
     {
         return null;
     }
@@ -71,8 +63,12 @@ export class iNode
     // 
     //  DESC: Find the child
     //
-    findChild()
+    findChild( childName )
     {
+        if( childName == this.name )
+            return this;
+
+        return null;
     }
     
     // 

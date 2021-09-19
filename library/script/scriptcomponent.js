@@ -56,6 +56,8 @@ export class ScriptComponent
     //
     prepare(...args)
     {
+        let activeScript = null;
+
         if( this.scriptFactoryMap && typeof args[0] === 'string' )
         {
             let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
@@ -67,41 +69,56 @@ export class ScriptComponent
                     switch(args.length)
                     {
                         case 1:
-                            this.scriptAry.push( script() );
+                            activeScript = script();
                         break;
                         case 2:
-                            this.scriptAry.push( script(args[1]) );
+                            activeScript = script(args[1]);
                         break;
                         case 3:
-                            this.scriptAry.push( script(args[1],args[2]) );
+                            activeScript = script(args[1],args[2]);
                         break;
                         case 4:
-                            this.scriptAry.push( script(args[1],args[2],args[3]) );
+                            activeScript = script(args[1],args[2],args[3])
                         break;
                         case 5:
-                            this.scriptAry.push( script(args[1],args[2],args[3],args[4]) );
+                            activeScript = script(args[1],args[2],args[3],args[4]);
                         break;
                         case 6:
-                            this.scriptAry.push( script(args[1],args[2],args[3],args[4],args[5]) );
+                            activeScript = script(args[1],args[2],args[3],args[4],args[5]);
                         break;
                     }
 
-                    if( scriptPrepareFunc.forceUpdate )
-                        this.update();
-                    
-                    return true;
+                    if( activeScript )
+                    {
+                        if( scriptPrepareFunc.forceUpdate )
+                        {
+                            if( !activeScript.execute() )
+                                this.scriptAry.push( activeScript );
+                        }
+                        else
+                        {
+                            this.scriptAry.push( activeScript );
+                        }
+                    }
                 }
             }
         }
         else if( typeof args[0] === 'object' )
         {
-            this.scriptAry.push( args[0] );
+            activeScript = args[0];
 
             if( args.length > 1 && args[1] )
-                this.update();
+            {
+                if( !activeScript.execute() )
+                    this.scriptAry.push( activeScript );
+            }
+            else
+            {
+                this.scriptAry.push( activeScript );
+            }
         }
 
-        return false;
+        return activeScript;
     }
 
     // 

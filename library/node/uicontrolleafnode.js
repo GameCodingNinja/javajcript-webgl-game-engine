@@ -15,6 +15,7 @@ export class UIControlLeafNode extends iNode
     {
         super(nodeData.nodeId, nodeData.parentNodeId);
         
+        this.name = nodeData.nodeName;
         this.uiControl = uiControl;
         this.userId = nodeData.userId;
         this.type = defs.ENT_UI_CONTROL;

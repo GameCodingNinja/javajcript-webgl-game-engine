@@ -16,6 +16,7 @@ export class ObjectNode extends RenderNode
     {
         super( nodeData.nodeId, nodeData.parentNodeId );
         
+        this.name = nodeData.nodeName;
         this.object = new Object();
         this.type = defs.ENT_OBJECT;
         this.userId = nodeData.userId;

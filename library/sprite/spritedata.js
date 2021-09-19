@@ -12,9 +12,6 @@ export class SpriteData
     {
         // XML node
         this.xmlNode = xmlNode;
-
-        // Sprite name
-        this.name = nodeName;
         
         // Group Name
         this.group = defGroup;
@@ -30,13 +27,8 @@ export class SpriteData
         if( !this.objectName )
             this.objectName = nodeName;
         
-        // Get the name of this specific sprite instance
-        let attr = xmlNode.getAttribute( 'name' );
-        if( attr )
-            this.name = attr;
-        
         // Get the group this sprite belongs to
-        attr = xmlNode.getAttribute( 'group' );
+        let attr = xmlNode.getAttribute( 'group' );
         if( attr )
             this.group = attr;
         

@@ -24,7 +24,7 @@
     </strategy>
 
     <strategy name="_player_ship_">
-        <node name="player_ship">
+        <node name="player_ship" instance="player_ship">
             <object>
                 <position x="0" y="0"/>
             </object>
