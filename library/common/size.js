@@ -62,6 +62,22 @@ export class Size
     }
 
     // 
+    //  DESC: Get the squared length of the size from the origin
+    //
+    getLengthSquared()
+    {
+        return ( this.w * this.w ) +  ( this.h * this.h );
+    }
+
+    // 
+    //  DESC: Get the length of the size from the origin
+    //
+    getLength()
+    {
+        return Math.sqrt( this.getLengthSquared() );
+    }
+
+    // 
     //  DESC: Return a value for this class that can be compared
     //
     valueOf()

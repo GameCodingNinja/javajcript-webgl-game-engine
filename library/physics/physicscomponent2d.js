@@ -8,6 +8,7 @@
 
 import { physicsWorldManager } from './physicsworldmanager';
 import { Size } from '../common/size';
+import { statCounter } from '../utilities/statcounter';
 import * as planck from 'planck-js';
 
 export class PhysicsComponent2D
@@ -275,7 +276,8 @@ export class PhysicsComponent2D
         {
             if( !this.body.isStatic() && this.body.isAwake() )
             {
-                //CStatCounter::Instance().IncPhysicsObjectsCounter();
+                // Increment our stat counter to keep track of what is going on.
+                statCounter.physicsObjCounter++;
                 
                 this.applyTransforms();
             }

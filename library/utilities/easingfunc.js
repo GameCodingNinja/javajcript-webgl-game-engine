@@ -216,6 +216,7 @@ export class valueTo
     
     // 
     //  DESC: Init the script for use
+    //  NOTE: totalTime in seconds
     //
     init( start, end, totalTime, easingFunc )
     {
@@ -223,7 +224,7 @@ export class valueTo
         this.end = end;
         this.current = 0.0;
         this.time = 0.0;
-        this.totalTime = totalTime;
+        this.totalTime = totalTime * 1000;
         this.dif = end - start;
         this.finished = false;
         this.easingFunc = easingFunc;

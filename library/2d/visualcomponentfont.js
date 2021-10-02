@@ -14,6 +14,7 @@ import { fontManager } from '../managers/fontmanager';
 import { FontData } from '../common/fontdata';
 import { Matrix } from '../utilities/matrix';
 import { device } from '../system/device';
+import { statCounter } from '../utilities/statcounter';
 import * as defs from '../common/defs';
 import * as genFunc from '../utilities/genfunc';
 
@@ -72,6 +73,9 @@ export class VisualComponentFont extends VisualComponentQuad
             
             // Setup the vertex attribute shader data
             gl.vertexAttribPointer( this.vertexLocation, 3, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+
+            // Increment our stat counter to keep track of what is going on.
+            statCounter.vObjCounter++;
             
             if( this.texture )
             {
@@ -545,7 +549,7 @@ export class VisualComponentFont extends VisualComponentQuad
     //
     //  DESC: Get the font size
     //
-    getFontSize()
+    getSize()
     {
         if( !this.fontData )
             throw new Error( `Can't ask for the font size from a sprite that is not defined!` );

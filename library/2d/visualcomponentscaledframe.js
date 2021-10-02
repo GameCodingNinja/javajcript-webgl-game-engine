@@ -12,6 +12,7 @@ import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { Matrix } from '../utilities/matrix';
 import { device } from '../system/device';
+import { statCounter } from '../utilities/statcounter';
 
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
@@ -42,6 +43,9 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
             
             // Setup the vertex attribute shader data
             gl.vertexAttribPointer( this.vertexLocation, 3, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+
+            // Increment our stat counter to keep track of what is going on.
+            statCounter.vObjCounter++;
             
             if( this.texture )
             {
@@ -67,5 +71,13 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
             // Do the render
             gl.drawElements(gl.TRIANGLES, this.iboCount, gl.UNSIGNED_BYTE, 0);
         }
+    }
+
+    //
+    //  DESC: Get the size of the texture
+    //
+    getSize()
+    {
+        return this.visualData.size;
     }
 }

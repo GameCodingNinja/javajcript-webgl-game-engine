@@ -26,22 +26,9 @@ export class iNode
 
         // Node name
         this.name = '';
-    }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.userId;
-    }
 
-    // 
-    //  DESC: Set the id
-    //
-    setId( id )
-    {
-        this.userId = id;
+        // Radius for simple view frustum culling and simple collision detection
+        this.radius = 0;
     }
     
     // 
@@ -117,5 +104,30 @@ export class iNode
     cleanUp()
     {
         // Empty by design
+    }
+
+    // 
+    //  DESC: Calculate the radius
+    //
+    calcRadius( /*size*/ )
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Adjust the size based on the object
+    //
+    calcSize( size )
+    {
+        let obj = this.get();
+        if( obj )
+        {
+            let vSize = obj.getSize();
+            if( vSize.w > size.w )
+                size.w = vSize.w;
+
+            if( vSize.h > size.h )
+                size.h = vSize.h;
+        }
     }
 }

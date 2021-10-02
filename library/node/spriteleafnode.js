@@ -74,4 +74,12 @@ export class SpriteLeafNode extends iNode
     {
         this.sprite.cleanUp();
     }
+
+    // 
+    //  DESC: Calculate the radius
+    //
+    calcRadius( /*size*/ )
+    {
+        this.radius = this.sprite.getSize().getLength() / 2;
+    }
 }

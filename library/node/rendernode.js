@@ -161,4 +161,39 @@ export class RenderNode extends Node
             while( nextNode !== null );
         }
     }
+
+    // 
+    //  DESC: Calculate the head node radius
+    //
+    calcRadius( size )
+    {
+        this.calcRadiusRecursive( this, size );
+    }
+
+    // 
+    //  DESC: Calculate the head node radius
+    //
+    calcRadiusRecursive( node, size )
+    {
+        if( node !== null )
+        {
+            node.index = 0;
+            let nextNode;
+
+            do
+            {
+                // get the next node
+                nextNode = node.next();
+
+                if( nextNode != null )
+                {
+                    nextNode.calcRadius( size );
+
+                    // Call a recursive function again
+                    this.calcRadiusRecursive( nextNode, size );
+                }
+            }
+            while( nextNode !== null );
+        }
+    }
 }

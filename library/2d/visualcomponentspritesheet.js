@@ -13,6 +13,7 @@ import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { Matrix } from '../utilities/matrix';
 import { Size } from '../common/size';
 import { device } from '../system/device';
+import { statCounter } from '../utilities/statcounter';
 
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
@@ -29,7 +30,7 @@ export class VisualComponentSpriteSheet extends VisualComponentQuad
         {
             this.glyphLocation = this.shaderData.getLocation( 'glyphRect' );
 
-            this.glyphUV = visualData.spriteSheet.getGlyph().uv;
+            this.glyph = visualData.spriteSheet.getGlyph();
             this.frameIndex = visualData.spriteSheet.defaultIndex;
 
             // Local vertex scale for sprite sheets that might have glyphs of different sizes
@@ -55,6 +56,9 @@ export class VisualComponentSpriteSheet extends VisualComponentQuad
             
             // Setup the vertex attribute shader data
             gl.vertexAttribPointer( this.vertexLocation, 3, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+
+            // Increment our stat counter to keep track of what is going on.
+            statCounter.vObjCounter++;
             
             if( this.texture )
             {
@@ -79,7 +83,7 @@ export class VisualComponentSpriteSheet extends VisualComponentQuad
             gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
 
             // Send the glyph rect
-            gl.uniform4fv( this.glyphLocation, this.glyphUV.data );
+            gl.uniform4fv( this.glyphLocation, this.glyph.uv.data );
             
             // Do the render
             gl.drawElements(gl.TRIANGLE_FAN, this.iboCount, gl.UNSIGNED_BYTE, 0);
@@ -93,11 +97,19 @@ export class VisualComponentSpriteSheet extends VisualComponentQuad
     {
         this.frameIndex = index;
         
-        let glyph = this.visualData.spriteSheet.getGlyph( index );
+        this.glyph = this.visualData.spriteSheet.getGlyph( index );
 
-        this.vertexScale.w = glyph.size.w * this.visualData.defaultUniformScale;
-        this.vertexScale.h = glyph.size.h * this.visualData.defaultUniformScale;
+        this.vertexScale.w = this.glyph.size.w * this.visualData.defaultUniformScale;
+        this.vertexScale.h = this.glyph.size.h * this.visualData.defaultUniformScale;
 
-        this.glyphUV = glyph.uv;
+        this.glyphUV = this.glyph.uv;
+    }
+
+    //
+    //  DESC: Get the size of the texture
+    //
+    getTextureSize()
+    {
+        return this.glyph.size;
     }
 }

@@ -41,11 +41,11 @@ export class ivisualComponent
     {
         return 1;
     }
-    
+
     //
-    //  DESC: Get the font size
+    //  DESC: Get the size of the texture
     //
-    getFontSize()
+    getSize()
     {
         return 0;
     }

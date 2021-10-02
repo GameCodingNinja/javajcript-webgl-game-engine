@@ -8,6 +8,7 @@
 
 import { RenderNode } from './rendernode';
 import { Sprite } from '../sprite/sprite';
+import { Size } from '../common/size';
 import * as defs from '../common/defs';
 
 export class SpriteNode extends RenderNode
@@ -81,5 +82,30 @@ export class SpriteNode extends RenderNode
     cleanUp()
     {
         this.sprite.cleanUp();
+
+        // Call the parent but it has to be last
+        super.cleanUp();
+    }
+
+    // 
+    //  DESC: Calculate the radius
+    //
+    calcRadius( size )
+    {
+        let headNode = false;
+        if( !size )
+        {
+            size = new Size;
+            headNode = true;
+        }
+
+        this.calcSize( size );
+        super.calcRadius( size );
+
+        // The head node gets the accumulated size of all the sprites
+        if( headNode )
+            this.radius = size.getLength() / 2;
+        else
+            this.radius = this.sprite.getSize().getLength() / 2;
     }
 }

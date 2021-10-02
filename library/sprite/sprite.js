@@ -310,4 +310,18 @@ export class Sprite extends Object
         else
             super.applyRotation( matrix );
     }
+
+    //
+    //  DESC: Get the size of this sprite from orgin 0,0
+    //
+    getSize()
+    {
+        let vSize = this.visualComponent.getSize();
+        let size = super.getSize();
+
+        size.w = (vSize.w + Math.abs(this.pos.x)) * this.scale.x;
+        size.h = (vSize.h + Math.abs(this.pos.y)) * this.scale.y;
+
+        return size;
+    }
 }

@@ -57,14 +57,13 @@ class HighResTimer
 
         // Catch any hickups - cap to about 10 fps
         // Elapsed time is not expected to get this 
-        // high in  a game which is why it's capped
+        // high in a game which is why it's capped
         if( this.elapsedTime > 100.0 )
             this.elapsedTime = 100.0;
 
         // Reset the last time
         this.lastTime = time;
     }
-
 }
 
 export var highResTimer = new HighResTimer;

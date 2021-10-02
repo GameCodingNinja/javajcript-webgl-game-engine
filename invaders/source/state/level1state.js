@@ -12,6 +12,7 @@ import { menuManager } from '../../../library/gui/menumanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { scriptManager } from '../../../library/script/scriptmanager';
+import { cameraManager } from '../../../library/managers/cameramanager';
 //import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
@@ -20,7 +21,9 @@ import { CommonState } from './commonstate';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
+import { Point } from '../../../library/common/point';
 import * as defs from '../../../library/common/defs';
+import * as easing from '../../../library/utilities/easingfunc';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
@@ -56,11 +59,20 @@ export class Level1State extends CommonState
         // Prepare the strategies to run
         strategyManager.activateStrategy('_level-1-stage_');
 
-        // Get the nodes and sprites we need to call
-        let playerShipNode = strategyManager.activateStrategy('_player_ship_').get('player_ship');
-        this.playerShipObj = playerShipNode.object;
-        this.playerFireTailSprite = playerShipNode.findChild('fire_tail').sprite;
-        this.playerFireTailScript = this.playerFireTailSprite.scriptComponent.prepare( 'fireTailAnim', this.playerFireTailSprite );
+        // Get the camera
+        this.camera = cameraManager.get('levelCamera');
+
+        // Enable frustrum culling
+        this.camera.cull = true;
+
+        // Get the nodes and sprites we need to call and tuck them under the node for easy access
+        this.playerShipNode = strategyManager.activateStrategy('_player_ship_').get('player_ship');
+        this.playerShipNode.fireTailSprite = this.playerShipNode.findChild('fire_tail').sprite;
+        this.playerShipNode.fireTailScript = this.playerShipNode.fireTailSprite.scriptComponent.prepare( 'fireTailAnim', this.playerShipNode.fireTailSprite );
+
+        // Player movement
+        this.easingX = new easing.valueTo;
+        this.easingY = new easing.valueTo;
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -106,28 +118,38 @@ export class Level1State extends CommonState
             {
                 if( i === MOVE_LEFT )
                 {
+                    // Flip the ship facing left
+                    this.playerShipNode.object.setRotXYZ( 0, 180 );
+
                     if( actionResult == defs.EAP_DOWN )
                     {
-                        this.playerFireTailSprite.setVisible( true );
-                        this.playerFireTailScript.pause = false;
+                        this.playerShipNode.fireTailSprite.setVisible( true );
+                        this.playerShipNode.fireTailScript.pause = false;
+                        this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
                     }
                     else
                     {
-                        this.playerFireTailSprite.setVisible( false );
-                        this.playerFireTailScript.pause = true;
+                        this.playerShipNode.fireTailSprite.setVisible( false );
+                        this.playerShipNode.fireTailScript.pause = true;
+                        this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
                     }
                 }
                 else if( i === MOVE_RIGHT )
                 {
+                    // Flip the ship facing right (default orientation)
+                    this.playerShipNode.object.setRotXYZ();
+
                     if( actionResult == defs.EAP_DOWN )
                     {
-                        this.playerFireTailSprite.setVisible( true );
-                        this.playerFireTailScript.pause = false;
+                        this.playerShipNode.fireTailSprite.setVisible( true );
+                        this.playerShipNode.fireTailScript.pause = false;
+                        this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
                     }
                     else
                     {
-                        this.playerFireTailSprite.setVisible( false );
-                        this.playerFireTailScript.pause = true;
+                        this.playerShipNode.fireTailSprite.setVisible( false );
+                        this.playerShipNode.fireTailScript.pause = true;
+                        this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
                     }
                 }
                 else if( i === MOVE_UP )
@@ -190,7 +212,13 @@ export class Level1State extends CommonState
         this.scriptComponent.update();
         
         if( !menuManager.active )
+        {
+            this.easingX.execute();
+            this.camera.incPosXYZ( this.easingX.getValue() );
+            this.playerShipNode.object.incPosXYZ( this.easingX.getValue() );
+            
             strategyManager.update();
+        }
     }
     
     // 
@@ -200,6 +228,7 @@ export class Level1State extends CommonState
     {
         super.transform();
         
+        this.camera.transform();
         strategyManager.transform();
     }
     

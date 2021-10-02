@@ -8,6 +8,7 @@
 
 import { Object } from '../common/object';
 import { RenderNode } from './rendernode';
+import { Size } from '../common/size';
 import * as defs from '../common/defs';
 
 export class ObjectNode extends RenderNode
@@ -52,20 +53,26 @@ export class ObjectNode extends RenderNode
     {
         return this.object;
     }
-    
-    // 
-    //  DESC: Get the node id
-    //
-    getId()
-    {
-        return this.object.id;
-    }
 
     // 
-    //  DESC: Set the id
+    //  DESC: Calculate the radius
     //
-    setId( id )
+    calcRadius( size )
     {
-        this.object.id = id;
+        let headNode = false;
+        if( !size )
+        {
+            size = new Size;
+            headNode = true;
+        }
+
+        this.calcSize( size );
+        super.calcRadius( size );
+
+        // The head node gets the accumulated size of all the sprites
+        if( headNode )
+            this.radius = size.getLength() / 2;
+        else
+            this.radius = this.object.getSize().getLength() / 2;
     }
 }

@@ -10,6 +10,7 @@ import { ivisualComponent } from '../common/ivisualcomponent';
 import { shaderManager } from '../managers/shadermanager';
 import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
+import { statCounter } from '../utilities/statcounter';
 import { Matrix } from '../utilities/matrix';
 import { Color } from '../common/color';
 import { device } from '../system/device';
@@ -78,6 +79,9 @@ export class VisualComponentQuad extends ivisualComponent
             
             // Setup the vertex attribute shader data
             gl.vertexAttribPointer( this.vertexLocation, 3, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+
+            // Increment our stat counter to keep track of what is going on.
+            statCounter.vObjCounter++;
             
             if( this.texture )
             {
@@ -132,5 +136,13 @@ export class VisualComponentQuad extends ivisualComponent
     getFrameCount()
     {
         return this.visualData.getFrameCount();
+    }
+
+    //
+    //  DESC: Get the size of the texture
+    //
+    getSize()
+    {
+        return this.texture.size;
     }
 }

@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: strategy.js
-//  DESC:      Basic strategy class
+//  DESC:      Strategy class
 //
 
 "use strict";
@@ -168,6 +168,9 @@ export class Strategy extends Object
                 throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
         }
 
+        // Final step is to calculate the radius
+        headNode.calcRadius();
+
         // Add the node to the array for adding to the active list
         if( !instanceName || makeActive )
             this.activateAry.push( headNode );
@@ -303,7 +306,7 @@ export class Strategy extends Object
         }
         else
         {
-            let index = this.nodeAry.findIndex( (node) => node.getId() === id );
+            let index = this.nodeAry.findIndex( (node) => node.userId === id );
             if( index !== -1 )
                 node = this.nodeAry[index];
             else
@@ -347,8 +350,20 @@ export class Strategy extends Object
     //
     render()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].render( this.camera );
+        // Cull frustrum on the head node
+        if( this.camera.cull )
+        {
+            for( let i = 0; i < this.nodeAry.length; i++ )
+            {
+                if( this.camera.inView( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                    this.nodeAry[i].render( this.camera );
+            }
+        }
+        else
+        {
+            for( let i = 0; i < this.nodeAry.length; i++ )
+                this.nodeAry[i].render( this.camera );
+        }
     }
 
     //
@@ -432,7 +447,7 @@ export class Strategy extends Object
     setAllToDefaultId()
     {
         for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].setId( defs.DEFAULT_ID );
+            this.nodeAry[i].userId = defs.DEFAULT_ID;
     }
 
     // 

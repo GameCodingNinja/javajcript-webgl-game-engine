@@ -372,7 +372,7 @@ export class UIMeter extends UIControl
         this.fontSprite.visualComponent.createFontString( Math.trunc(this.currentValue).toString() );
 
         // Get the font size
-        let size = this.fontSprite.visualComponent.getFontSize();
+        let size = this.fontSprite.visualComponent.getSize();
 
         // Check if the font string size is greater then what is allowed
         if( (size.w > this.maxFontStrSize.w) || (size.h > this.maxFontStrSize.h) )

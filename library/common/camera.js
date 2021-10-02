@@ -31,6 +31,9 @@ export class Camera extends Object
         this.maxZDist = settings.maxZdist;
         this.angle = settings.viewAngle;
 
+        // cull flag
+        this.cull = false;
+
         // Setup the camera
         this.setup();
     }
@@ -182,5 +185,34 @@ export class Camera extends Object
 
         // Since the rotation has already been done, multiply it into the matrix
         matrix.multiply3x3( this.rotMatrix.matrix );
+    }
+
+    //
+    //  DESC: Check if the raduis is in the view frustrum
+    //
+    inView( transPos, radius )
+    {
+        if(this.projType == defs.EPT_ORTHOGRAPHIC)
+        {
+            // Check the right and left sides of the screen
+            if( Math.abs(-this.transPos.x - transPos.x) > (settings.defaultSize_half.w + radius) )
+                return false;
+
+            // Check the top and bottom sides of the screen
+            if( Math.abs(-this.transPos.y - transPos.y) > (settings.defaultSize.h_half + radius) )
+                return false;
+        }
+        else
+        {
+            // Check the right and left sides of the screen
+            if( Math.abs(-this.transPos.x - transPos.x) > ((Math.abs(transPos.z) * settings.screenAspectRatio.w) + radius) )
+                return false;
+
+            // Check the top and bottom sides of the screen
+            if( Math.abs(-this.transPos.y - transPos.y) > ((Math.abs(transPos.z) * settings.screenAspectRatio.h) + radius) )
+                return false;
+        }
+
+        return true;
     }
 }

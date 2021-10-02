@@ -13,6 +13,7 @@ import { textureManager } from '../managers/texturemanager';
 import { Matrix } from '../utilities/matrix';
 import { Color } from '../common/color';
 import { device } from '../system/device';
+import { statCounter } from '../utilities/statcounter';
 
 // Global final matrix to be reused by every render call so that an object specific
 // one doesn't have to be created each time a render call is made or a perminate one
@@ -70,9 +71,6 @@ export class VisualComponent3D extends ivisualComponent
         
         for( let i = 0; i < this.meshAry.length; ++i )
         {
-            // Increment our stat counter to keep track of what is going on.
-            //CStatCounter::Instance().IncDisplayCounter();
-
             // Bind the VBO and IBO. NOTE: One singlton needs to manage the vertex bindings
             vertexBufferManager.bind( this.meshAry[i].vbo, this.meshAry[i].ibo );
 
@@ -84,6 +82,9 @@ export class VisualComponent3D extends ivisualComponent
 
             // Setup the normal attribute shade data
             gl.vertexAttribPointer( this.normalLocation, 3, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+
+            // Increment our stat counter to keep track of what is going on.
+            statCounter.vObjCounter++;
 
             // Enable the UV attribute shade data
             if( this.uvLocation )

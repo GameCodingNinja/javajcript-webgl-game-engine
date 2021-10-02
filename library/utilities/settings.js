@@ -33,6 +33,10 @@ class Settings
         this.minZdist = 5.0;
         this.maxZdist = 1000.5;
 
+        this.cullEnable = true;
+        this.cullFrontFace = "CCW";
+        this.cullFace = "BACK";
+
         this.allowGamepad = false;
 
         this.gameName = "Unnamed Game";
@@ -97,6 +101,18 @@ class Settings
 
                 if( obj.device.projection.viewAngle )
                     this.viewAngle = obj.device.projection.viewAngle * defs.DEG_TO_RAD;
+            }
+
+            if( obj.device.cull )
+            {
+                if( obj.device.cull.enable )
+                    this.cullEnable = (obj.device.cull.enable === 'true');
+
+                if( obj.device.cull.frontFace )
+                    this.cullFrontFace = obj.device.cull.frontFace;
+
+                if( obj.device.cull.cullFace )
+                    this.cullFace = obj.device.cull.cullFace;
             }
 
             if( obj.device.depthStencilBuffer )

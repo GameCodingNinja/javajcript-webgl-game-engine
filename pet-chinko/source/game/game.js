@@ -67,10 +67,23 @@ export class Game
             gl.stencilMask(0xff);
         }
         
-        // Cull the back face
-        gl.frontFace(gl.CCW);
-        gl.cullFace(gl.BACK);
-        gl.enable(gl.CULL_FACE);
+        // Identify the front face winding orientation 
+        if( settings.cullFrontFace === 'CCW' )
+            gl.frontFace(gl.CCW);
+        else if( settings.cullFrontFace === 'CW' )
+            gl.frontFace(gl.CW);
+
+        // Specify whether or not front- and/or back-facing polygons can be culled
+        if( settings.cullFace === 'BACK' )
+            gl.cullFace(gl.BACK);
+        else if( settings.cullFace === 'FRONT' )
+            gl.cullFace(gl.FRONT);
+        else if( settings.cullFace === 'FRONT_AND_BACK' )
+            gl.cullFace(gl.FRONT_AND_BACK);
+
+        // Enable culling. Disabled by default
+        if( settings.cullEnable )
+            gl.enable(gl.CULL_FACE);
         
         // Enable alpha blending
         gl.enable(gl.BLEND);

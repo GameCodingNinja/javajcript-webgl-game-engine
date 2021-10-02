@@ -14,6 +14,7 @@ import * as parseHelper from '../utilities/xmlparsehelper';
 import * as defs from '../common/defs';
 
 var gDummyPoint = new Point;
+var gSize = new Size;
 
 export class Object
 {
@@ -225,6 +226,8 @@ export class Object
 
         if( object.parameters.isSet( defs.CROP_OFFSET ) )
             this.setCropOffset( object.cropOffset );
+
+        this.transPos.copy( this.pos );
     }
     
     //
@@ -252,6 +255,8 @@ export class Object
         let centerPos = parseHelper.loadCenterPos( xmlNode );
         if( centerPos )
             this.setCenterPos( centerPos );
+        
+        this.transPos.copy( this.pos );
     }
 
     //
@@ -358,5 +363,13 @@ export class Object
     forceTransform()
     {
         this.parameters.add( defs.TRANSFORM );
+    }
+
+    //
+    //  DESC: Was the world position transformed?
+    //
+    getSize()
+    {
+        return gSize;
     }
 }
