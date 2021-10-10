@@ -128,7 +128,9 @@ export class Level1State extends CommonState
                         this.playerShipNode.fireTailSprite.setVisible( true );
                         this.playerShipNode.fireTailScript.pause = false;
                         this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
-                        this.cameraEasingX.init( this.cameraEasingX.getValue(), -10, 2, easing.getLinear() );
+
+                        // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), -11, 2, easing.getLinear() );
                     }
                     else
                     {
@@ -150,7 +152,9 @@ export class Level1State extends CommonState
                         this.playerShipNode.fireTailSprite.setVisible( true );
                         this.playerShipNode.fireTailScript.pause = false;
                         this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
-                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 10, 2, easing.getLinear() );
+
+                        // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 11, 2, easing.getLinear() );
                     }
                     else
                     {
