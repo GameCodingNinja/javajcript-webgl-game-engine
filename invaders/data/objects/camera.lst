@@ -5,8 +5,8 @@
         <position x="0" y="0" z="20"/>
     </default>
 
-    <camera id="levelCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0">
-        <position x="0" y="0" z="20"/>
+    <camera id="levelCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="true">
+        <position x="600" y="0" z="20"/>
     </camera>
   
 </cameraLst>

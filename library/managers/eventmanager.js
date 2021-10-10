@@ -8,7 +8,6 @@
 import { Point } from '../common/point';
 import { GenericEvent } from '../common/genericevent';
 import { Gamepad } from '../common/gamepad';
-import { menuManager } from '../gui/menumanager';
 import { actionManager } from '../managers/actionmanager';
 import { settings } from '../utilities/settings';
 import * as gamepadevent from '../common/gamepadevent';
@@ -282,7 +281,7 @@ class EventManager
                         if(!lastGp.pressed[i] && gp.buttons[i].pressed)
                         {
                             this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, i, gp) );
-                            console.log( `Button Index Down: ${i};` );
+                            //console.log( `Button Index Down: ${i};` );
                         }
                         // Check for button up
                         else if(lastGp.pressed[i] && !gp.buttons[i].pressed)
@@ -322,7 +321,7 @@ class EventManager
                     }
 
                     // Create Left/Right events for the Left analog stick
-                    else if(!(lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
+                    if(!(lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
                         (gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX))
                     {
                         this.queue.push( new gamepadevent.GamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );

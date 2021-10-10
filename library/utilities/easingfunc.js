@@ -206,8 +206,8 @@ export class valueTo
     {
         this.start = 0;
         this.end = 0;
-        this.current = 0;
-        this.time = 0;
+        this.current = 0.0;
+        this.time = 0.0;
         this.totalTime = 0;
         this.dif = 0;
         this.finished = false;
@@ -218,11 +218,13 @@ export class valueTo
     //  DESC: Init the script for use
     //  NOTE: totalTime in seconds
     //
-    init( start, end, totalTime, easingFunc )
+    init( start, end, totalTime, easingFunc, resetCurrent = false )
     {
+        if(resetCurrent)
+            this.current = 0.0;
+
         this.start = start;
         this.end = end;
-        this.current = 0.0;
         this.time = 0.0;
         this.totalTime = totalTime * 1000;
         this.dif = end - start;

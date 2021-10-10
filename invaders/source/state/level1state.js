@@ -21,7 +21,7 @@ import { CommonState } from './commonstate';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
-import { Point } from '../../../library/common/point';
+import { settings } from '../../../library/utilities/settings';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as genFunc from '../../../library/utilities/genfunc';
@@ -31,11 +31,13 @@ import * as stateDefs from './statedefs';
 // Load data from bundle as string
 import levelStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
 
-export const ASSET_COUNT = 11;
-const MOVE_LEFT = 0,
+export const ASSET_COUNT = 17;
+const MOVE_NULL = -1,
+      MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
       MOVE_UP = 2,
-      MOVE_DOWN = 3;
+      MOVE_DOWN = 3,
+      SHIP_CAMERA_EXTRA = 150;
 
 export class Level1State extends CommonState
 {
@@ -59,25 +61,25 @@ export class Level1State extends CommonState
         // Prepare the strategies to run
         strategyManager.activateStrategy('_level-1-stage_');
 
-        // Get the camera
+        // Get the camera and reinit
         this.camera = cameraManager.get('levelCamera');
-
-        // Enable frustrum culling
-        this.camera.cull = true;
+        this.camera.initFromXml();
 
         // Get the nodes and sprites we need to call and tuck them under the node for easy access
         this.playerShipNode = strategyManager.activateStrategy('_player_ship_').get('player_ship');
         this.playerShipNode.fireTailSprite = this.playerShipNode.findChild('fire_tail').sprite;
         this.playerShipNode.fireTailScript = this.playerShipNode.fireTailSprite.scriptComponent.prepare( 'fireTailAnim', this.playerShipNode.fireTailSprite );
 
-        // Player movement
+        // Player/camera movement
         this.easingX = new easing.valueTo;
         this.easingY = new easing.valueTo;
+        this.cameraEasingX = new easing.valueTo;
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
 
         this.moveActionAry = ['left','right','up','down'];
+        this.moveDir = MOVE_NULL;
         
         requestAnimationFrame( this.callback );
     }
@@ -126,13 +128,17 @@ export class Level1State extends CommonState
                         this.playerShipNode.fireTailSprite.setVisible( true );
                         this.playerShipNode.fireTailScript.pause = false;
                         this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), -10, 2, easing.getLinear() );
                     }
                     else
                     {
                         this.playerShipNode.fireTailSprite.setVisible( false );
                         this.playerShipNode.fireTailScript.pause = true;
                         this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                     }
+
+                    this.moveDir = MOVE_LEFT;
                 }
                 else if( i === MOVE_RIGHT )
                 {
@@ -144,34 +150,38 @@ export class Level1State extends CommonState
                         this.playerShipNode.fireTailSprite.setVisible( true );
                         this.playerShipNode.fireTailScript.pause = false;
                         this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 10, 2, easing.getLinear() );
                     }
                     else
                     {
                         this.playerShipNode.fireTailSprite.setVisible( false );
                         this.playerShipNode.fireTailScript.pause = true;
                         this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                     }
+
+                    this.moveDir = MOVE_RIGHT;
                 }
                 else if( i === MOVE_UP )
                 {
                     if( actionResult == defs.EAP_DOWN )
                     {
-                        console.log('Up Down');
+                        this.easingY.init( this.easingY.getValue(), 7, 1, easing.getLinear() );
                     }
                     else
                     {
-                        console.log('Up Up');
+                        this.easingY.init( this.easingY.getValue(), 0, 0.5, easing.getLinear() );
                     }
                 }
                 else if( i === MOVE_DOWN )
                 {
                     if( actionResult == defs.EAP_DOWN )
                     {
-                        console.log('Down Down');
+                        this.easingY.init( this.easingY.getValue(), -7, 1, easing.getLinear() );
                     }
                     else
                     {
-                        console.log('Down Up');
+                        this.easingY.init( this.easingY.getValue(), 0, 0.5, easing.getLinear() );
                     }
                 }
 
@@ -214,9 +224,33 @@ export class Level1State extends CommonState
         if( !menuManager.active )
         {
             this.easingX.execute();
-            this.camera.incPosXYZ( this.easingX.getValue() );
-            this.playerShipNode.object.incPosXYZ( this.easingX.getValue() );
-            
+            this.easingY.execute();
+            this.cameraEasingX.execute();
+            this.camera.incPosXYZ( this.easingX.getValue() + this.cameraEasingX.getValue() );
+
+            let incY = this.easingY.getValue();
+            let playerPos = this.playerShipNode.object.transPos;
+
+            if( (playerPos.y < 0 && incY < 0 && playerPos.y < -settings.defaultSize_half.h) ||
+                (playerPos.y > 0 && incY > 0 && playerPos.y > settings.defaultSize_half.h) )
+            {
+                incY = 0;
+                this.easingY.init( 0, 0, 0, easing.getLinear() );
+            }
+
+            let dir = -this.camera.transPos.x - playerPos.x;
+            let radius = settings.defaultSize_half.w - this.playerShipNode.radius - SHIP_CAMERA_EXTRA;
+            let offset = Math.abs(dir);
+
+            if( (this.moveDir === MOVE_RIGHT && dir > 0 && offset > radius) ||
+                (this.moveDir === MOVE_LEFT && dir < 0 && offset > radius) )
+            {
+                this.moveDir = MOVE_NULL;
+                this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+            }
+
+            this.playerShipNode.object.incPosXYZ( this.easingX.getValue(), incY );
+
             strategyManager.update();
         }
     }

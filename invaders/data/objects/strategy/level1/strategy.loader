@@ -5,6 +5,84 @@
 
         <node name="ground">
             <sprite>
+                <position x="-14336" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-13312" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-12288" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-11264" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-10240" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-9216" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-8192" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-7168" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-6144" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-5120" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-4096" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-3072" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
+                <position x="-2048" y="-451"/>
+            </sprite>
+        </node>
+
+        <node name="ground">
+            <sprite>
                 <position x="-1024" y="-451"/>
             </sprite>
         </node>

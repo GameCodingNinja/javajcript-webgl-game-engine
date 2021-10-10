@@ -36,6 +36,9 @@ export class Camera extends Object
 
         // Setup the camera
         this.setup();
+
+        // XML node for camera init
+        this.xmlNode = null;
     }
     
     //
@@ -43,6 +46,13 @@ export class Camera extends Object
     //
     initFromXml( xmlNode )
     {
+        if( xmlNode )
+            this.xmlNode = xmlNode;
+        else if( !xmlNode && this.xmlNode )
+            xmlNode = this.xmlNode;
+        else
+            throw new Error( 'Camera XML is NULL!' );
+
         let attr = xmlNode.getAttribute('projectType');
         if( attr )
         {
@@ -63,6 +73,10 @@ export class Camera extends Object
         attr = xmlNode.getAttribute('view_angle');
         if( attr )
             this.angle = Number(attr) * defs.DEG_TO_RAD;
+
+        attr = xmlNode.getAttribute('cull');
+        if( attr )
+            this.cull = (attr === 'true');
         
         // Load the transform data from node
         this.loadTransFromNode( xmlNode );
@@ -199,7 +213,7 @@ export class Camera extends Object
                 return false;
 
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > (settings.defaultSize.h_half + radius) )
+            if( Math.abs(-this.transPos.y - transPos.y) > (settings.defaultSize_half.h + radius) )
                 return false;
         }
         else

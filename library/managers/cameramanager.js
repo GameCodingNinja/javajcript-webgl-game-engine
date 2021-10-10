@@ -59,7 +59,6 @@ class CameraManager
                 // Create camera and init
                 let camera = new Camera();
                 camera.initFromXml( cameraLst[i] );
-
                 this.cameraMap.set( id, camera );
             }
         }

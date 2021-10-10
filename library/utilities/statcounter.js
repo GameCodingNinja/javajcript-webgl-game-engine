@@ -57,7 +57,7 @@ class StatCounter
         // update the stats every 1 seconds. True = reset on expire
         if( this.statsDisplayTimer.expired(true) )
         {
-            this.formatStatString();
+            //this.formatStatString();
 
             // Now that the stats are displayed, we can reset out counters.
             this.resetCounters();
