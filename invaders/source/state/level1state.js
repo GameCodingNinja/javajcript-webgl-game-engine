@@ -79,7 +79,8 @@ export class Level1State extends CommonState
         highResTimer.calcElapsedTime();
 
         this.moveActionAry = ['left','right','up','down'];
-        this.moveDir = MOVE_NULL;
+        this.moveDirX = MOVE_NULL;
+        this.moveDirY = MOVE_NULL;
         
         requestAnimationFrame( this.callback );
     }
@@ -140,7 +141,7 @@ export class Level1State extends CommonState
                         this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                     }
 
-                    this.moveDir = MOVE_LEFT;
+                    this.moveDirX = MOVE_LEFT;
                 }
                 else if( i === MOVE_RIGHT )
                 {
@@ -164,29 +165,33 @@ export class Level1State extends CommonState
                         this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                     }
 
-                    this.moveDir = MOVE_RIGHT;
+                    this.moveDirX = MOVE_RIGHT;
                 }
                 else if( i === MOVE_UP )
                 {
                     if( actionResult == defs.EAP_DOWN )
                     {
-                        this.easingY.init( this.easingY.getValue(), 7, 1, easing.getLinear() );
+                        this.easingY.init( this.easingY.getValue(), 7, 0.5, easing.getLinear() );
                     }
                     else
                     {
-                        this.easingY.init( this.easingY.getValue(), 0, 0.5, easing.getLinear() );
+                        this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
                     }
+
+                    this.moveDirY = MOVE_UP;
                 }
                 else if( i === MOVE_DOWN )
                 {
                     if( actionResult == defs.EAP_DOWN )
                     {
-                        this.easingY.init( this.easingY.getValue(), -7, 1, easing.getLinear() );
+                        this.easingY.init( this.easingY.getValue(), -7, 0.5, easing.getLinear() );
                     }
                     else
                     {
-                        this.easingY.init( this.easingY.getValue(), 0, 0.5, easing.getLinear() );
+                        this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
                     }
+
+                    this.moveDirY = MOVE_DOWN;
                 }
 
                 break;
@@ -235,9 +240,11 @@ export class Level1State extends CommonState
             let incY = this.easingY.getValue();
             let playerPos = this.playerShipNode.object.transPos;
 
-            if( (playerPos.y < 0 && incY < 0 && playerPos.y < -settings.defaultSize_half.h) ||
-                (playerPos.y > 0 && incY > 0 && playerPos.y > settings.defaultSize_half.h) )
+            // Stop the up/down movement
+            if( (this.moveDirY === MOVE_DOWN && playerPos.y < -settings.defaultSize_half.h) ||
+                (this.moveDirY === MOVE_UP && playerPos.y > settings.defaultSize_half.h) )
             {
+                this.moveDirY = MOVE_NULL;
                 incY = 0;
                 this.easingY.init( 0, 0, 0, easing.getLinear() );
             }
@@ -246,10 +253,11 @@ export class Level1State extends CommonState
             let radius = settings.defaultSize_half.w - this.playerShipNode.radius - SHIP_CAMERA_EXTRA;
             let offset = Math.abs(dir);
 
-            if( (this.moveDir === MOVE_RIGHT && dir > 0 && offset > radius) ||
-                (this.moveDir === MOVE_LEFT && dir < 0 && offset > radius) )
+            // Slow the camera movement
+            if( (this.moveDirX === MOVE_RIGHT && dir > 0 && offset > radius) ||
+                (this.moveDirX === MOVE_LEFT && dir < 0 && offset > radius) )
             {
-                this.moveDir = MOVE_NULL;
+                this.moveDirX = MOVE_NULL;
                 this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
             }
 

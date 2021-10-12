@@ -25,7 +25,7 @@ import * as stateDefs from './statedefs';
 // Load data from bundle as string
 import titleScreenStrategyLoader from 'raw-loader!../../data/objects/strategy/state/titlescreen.loader';
 
-export const ASSET_COUNT = 11;
+export const ASSET_COUNT = 2;
 
 export class TitleScreenState extends CommonState
 {

@@ -9,7 +9,11 @@
                 { "action": "menu_up", "componetId": "ARROW UP" },
                 { "action": "menu_down", "componetId": "ARROW DOWN" },
                 { "action": "menu_left", "componetId": "ARROW LEFT" },
-                { "action": "menu_right", "componetId": "ARROW RIGHT" } ],
+                { "action": "menu_right", "componetId": "ARROW RIGHT" },
+                { "action": "up", "componetId": "ARROW UP" },
+                { "action": "down", "componetId": "ARROW DOWN" },
+                { "action": "left", "componetId": "ARROW LEFT" },
+                { "action": "right", "componetId": "ARROW RIGHT" } ],
 
         "playerVisible": [
                 { "action": "menu_select", "componetId": "ENTER", "configurable": "false" },
