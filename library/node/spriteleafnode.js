@@ -82,4 +82,12 @@ export class SpriteLeafNode extends iNode
     {
         this.radius = this.sprite.getSize().getLength() / 2;
     }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInit()
+    {
+        this.sprite.prepareScriptOnInit();
+    }
 }

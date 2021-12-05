@@ -24,6 +24,9 @@ export class Point
     set z(value) { this.data[2] = value; }
     get z() { return this.data[2]; }
     
+    // 
+    //  DESC: Copy from another point
+    //
     copy( obj )
     {
         this.data[0] = obj.data[0];
@@ -31,6 +34,9 @@ export class Point
         this.data[2] = obj.data[2];
     }
     
+    // 
+    //  DESC: Covert rotation data to radians
+    //
     convertToRads()
     {
         this.x *= defs.DEG_TO_RAD;
@@ -38,6 +44,9 @@ export class Point
         this.z *= defs.DEG_TO_RAD;
     }
     
+    // 
+    //  DESC: Set point via individual components
+    //
     setXYZ( x = 0, y = 0, z = 0 )
     {
         this.data[0] = x;
@@ -45,6 +54,9 @@ export class Point
         this.data[2] = z;
     }
     
+    // 
+    //  DESC: Set point via point. Same as copy
+    //
     set( point )
     {
         this.data[0] = point.data[0];
@@ -52,6 +64,9 @@ export class Point
         this.data[2] = point.data[2];
     }
     
+    // 
+    //  DESC: Inc point via individual components
+    //
     incXYZ( x = 0, y = 0, z = 0 )
     {
         this.data[0] += x;
@@ -59,6 +74,9 @@ export class Point
         this.data[2] += z;
     }
     
+    // 
+    //  DESC: Inc point via point.
+    //
     inc( point )
     {
         this.data[0] += point.data[0];
@@ -66,6 +84,9 @@ export class Point
         this.data[2] += point.data[2];
     }
 
+    // 
+    //  DESC: Cap the value
+    //
     cap( value )
     {
         if( value > 0 )
@@ -128,11 +149,17 @@ export class Point
         }
     }
     
+    // 
+    //  DESC: Invert a copy of this point and return it
+    //
     getInvert()
     {
         return new Point(-this.data[0], -this.data[1], -this.data[2]);
     }
     
+    // 
+    //  DESC: Invert the values of this point
+    //
     invert()
     {
         this.data[0] = -this.data[0];
@@ -140,6 +167,9 @@ export class Point
         this.data[2] = -this.data[2];
     }
     
+    // 
+    //  DESC: Does this point not have any data?
+    //
     isEmpty()
     {
         if( (this.x == 0) && (this.y == 0) && (this.z == 0) )
@@ -163,6 +193,9 @@ export class Point
         return (0 === this.z);
     }
     
+    // 
+    //  DESC: Is this point equil
+    //
     isEquilXYZ( x, y, z )
     {
         if( this.data[0] === x )
@@ -177,5 +210,44 @@ export class Point
         }
         
         return false;
+    }
+
+    // 
+    //  DESC: Get the squared length of the point from the origin
+    //
+    getLengthSquared()
+    {
+        return ( this.data[0] * this.data[0] ) +  ( this.data[1] * this.data[1] ) + ( this.data[2] * this.data[2] );
+    }
+
+    getLengthSquared2D()
+    {
+        return ( this.data[0] * this.data[0] ) +  ( this.data[1] * this.data[1] );
+    }
+
+    // 
+    //  DESC: Get the length of the point from the origin
+    //
+    getLength()
+    {
+        return Math.sqrt( this.getLengthSquared() );
+    }
+
+    getLength2D()
+    {
+        return Math.sqrt( this.getLengthSquared2D() );
+    }
+
+    // 
+    //  DESC: Get the dot product
+    //
+    getDotProduct( point )
+    {
+        return ( this.data[0] * point.data[0] ) +  ( this.data[1] * point.data[1] ) + ( this.data[2] * point.data[2] );
+    }
+
+    getDotProduct2D( point )
+    {
+        return ( this.data[0] * point.data[0] ) +  ( this.data[1] * point.data[1] );
     }
 }

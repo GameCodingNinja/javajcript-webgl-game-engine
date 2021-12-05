@@ -30,6 +30,12 @@
             </visual>
         </object>
 
+        <object name="lazer_blast">
+            <visual>
+                <texture count="4" file="data/textures/playerShip/laser_blast_${NUM}.png"/>
+            </visual>
+        </object>
+
     </objectList>
 
 </objectDataList2D>

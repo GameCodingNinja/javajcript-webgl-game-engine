@@ -196,4 +196,39 @@ export class RenderNode extends Node
             while( nextNode !== null );
         }
     }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInit()
+    {
+        this.prepareScriptOnInitRecursive( this );
+    }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInitRecursive( node )
+    {
+        if( node !== null )
+        {
+            node.index = 0;
+            let nextNode;
+
+            do
+            {
+                // get the next node
+                nextNode = node.next();
+
+                if( nextNode != null )
+                {
+                    nextNode.prepareScriptOnInit();
+
+                    // Call a recursive function again
+                    this.calcRadiusRecursive( nextNode );
+                }
+            }
+            while( nextNode !== null );
+        }
+    }
 }

@@ -350,7 +350,7 @@ class ActionManager
                 }
             }
             // Check for mouse event
-            else if( event instanceof MouseEvent )
+            else if( event instanceof MouseEvent && event.type != 'mousemove' )
             {
                 this.lastDeviceUsed = defs.MOUSE;
 

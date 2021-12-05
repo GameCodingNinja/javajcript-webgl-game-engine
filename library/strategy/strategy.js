@@ -171,6 +171,9 @@ export class Strategy extends Object
         // Final step is to calculate the radius
         headNode.calcRadius();
 
+        // Prepare any script functions that are flagged to prepareOnInit
+        headNode.prepareScriptOnInit();
+
         // Add the node to the array for adding to the active list
         if( !instanceName || makeActive )
             this.activateAry.push( headNode );

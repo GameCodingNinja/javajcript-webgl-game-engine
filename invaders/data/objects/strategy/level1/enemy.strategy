@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(level_1)" defaultCamera="levelCamera">
+
+    <node name="lazer_blast">
+
+        <sprite>
+            <scriptList>
+                <script shoot="PlayerShip_ShootLazer" prepareOnInit="false"/>
+            </scriptList>
+        </sprite>
+
+    </node>
+
+</strategy>

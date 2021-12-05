@@ -130,4 +130,12 @@ export class iNode
                 size.h = vSize.h;
         }
     }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInit()
+    {
+        // Empty by design
+    }
 }

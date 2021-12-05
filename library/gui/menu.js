@@ -157,9 +157,6 @@ export class Menu extends Object
 
         // Load the transform data
         sprite.load( node );
-
-        // Init the script Ids
-        sprite.scriptComponent.initScriptIds( node );
     }
 
     // 
@@ -300,6 +297,14 @@ export class Menu extends Object
     //
     init()
     {
+        for( let i = 0; i < this.spriteAry.length; ++i )
+        {
+            this.spriteAry[i].init();
+
+            // Prepare any script functions that are flagged to prepareOnInit
+            this.spriteAry[i].prepareScriptOnInit();
+        }
+
         for( let i = 0; i < this.staticControlAry.length; ++i )
             this.staticControlAry[i].init();
 
@@ -311,14 +316,16 @@ export class Menu extends Object
         
         // Prepare any script functions that are flagged to prepareOnInit
         this.scriptComponent.prepareOnInit( this );
-
-    }   // Init
+    }
 
     // 
     //  DESC: Init the menu controls
     //
     cleanUp()
     {
+        for( let i = 0; i < this.spriteAry.length; ++i )
+            this.spriteAry[i].cleanUp();
+
         for( let i = 0; i < this.staticControlAry.length; ++i )
             this.staticControlAry[i].cleanUp();
 
@@ -327,8 +334,7 @@ export class Menu extends Object
 
         for( let i = 0; i < this.controlAry.length; ++i )
             this.controlAry[i].cleanUp();
-
-    }   // CleanUp
+    }
     
     // 
     //  DESC: Activate this menu because it's probably a root menu

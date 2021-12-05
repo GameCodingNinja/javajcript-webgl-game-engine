@@ -179,12 +179,10 @@
 
     </strategy>
 
+    <strategy name="_enemy_"/>
+
     <strategy name="_player_ship_">
-        <node name="player_ship" instance="player_ship">
-            <object>
-                <position x="0" y="0"/>
-            </object>
-        </node>
+        <node name="player_ship" instance="player_ship"/>
     </strategy>
   
 </loader>

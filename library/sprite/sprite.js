@@ -81,6 +81,11 @@ export class Sprite extends Object
 
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.loadFontPropFromNode( xmlNode );
+
+        // Set the frame of the animation
+        let attr = xmlNode.getAttribute( 'frameIndex' );
+        if( attr )
+            this.setFrame( Number(attr) );
     }
 
     // 
@@ -105,8 +110,13 @@ export class Sprite extends Object
     {
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.createFontStringFromData();
-        
-        // Prepare any script functions that are flagged to prepareOnInit
+    }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInit()
+    {
         this.scriptComponent.prepareOnInit( this );
     }
     

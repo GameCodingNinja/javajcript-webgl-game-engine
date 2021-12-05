@@ -9,5 +9,8 @@
         "data/objects/strategy/level1/stage.strategy"],
 
     "_player_ship_": [
-        "data/objects/strategy/level1/playerShip.strategy"]
+        "data/objects/strategy/level1/playerShip.strategy"],
+
+    "_enemy_": [
+        "data/objects/strategy/level1/enemy.strategy"]
 }

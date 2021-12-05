@@ -548,7 +548,10 @@ export class UIControl extends ControlBase
         // Create any font strings
         // This allows for delayed VBO create so that the fonts can be allocated during a load screen
         for( let i = 0; i < this.spriteAry.length; ++i )
+        {
             this.spriteAry[i].init();
+            this.spriteAry[i].prepareScriptOnInit();
+        }
 
         // Prepare any script functions that are flagged to prepareOnInit
         this.scriptComponent.prepareOnInit( this );
