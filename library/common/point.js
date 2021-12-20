@@ -33,6 +33,16 @@ export class Point
         this.data[1] = obj.data[1];
         this.data[2] = obj.data[2];
     }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.data[0] = 0;
+        this.data[1] = 0;
+        this.data[2] = 0;
+    }
     
     // 
     //  DESC: Covert rotation data to radians

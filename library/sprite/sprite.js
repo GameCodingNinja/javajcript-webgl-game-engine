@@ -334,4 +334,23 @@ export class Sprite extends Object
 
         return size;
     }
+
+    //
+    //  DESC: Get the rect of this sprite from orgin 0,0
+    //
+    getRect()
+    {
+        let vSize = this.visualComponent.getSize();
+        let rect = super.getRect();
+
+        let halfX = vSize.w / 2;
+        let halfY = vSize.h / 2;
+
+        rect.x1 = (-halfX + this.pos.x) * this.scale.x;
+        rect.y1 = (halfY + this.pos.y) * this.scale.y;
+        rect.x2 = (halfX + this.pos.x) * this.scale.x;
+        rect.y2 = (-halfY + this.pos.y) * this.scale.y;
+
+        return rect;
+    }
 }

@@ -3,9 +3,27 @@
 
     <node name="lazer_blast">
 
+        <AABB enable="true">
+            <rect x1="180" y1="4" x2="200" y2="-4"/>
+        </AABB>
+
         <sprite>
             <scriptList>
                 <script shoot="PlayerShip_ShootLazer" prepareOnInit="false"/>
+            </scriptList>
+        </sprite>
+
+    </node>
+
+    <node name="enemy_ship">
+
+        <AABB enable="true">
+            <rect x1="-70" y1="50" x2="70" y2="-50"/>
+        </AABB>
+
+        <sprite>
+            <scriptList>
+                <script enemy="EnemyShip_ai" prepareOnInit="false"/>
             </scriptList>
         </sprite>
 

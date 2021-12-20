@@ -35,9 +35,12 @@ export const ASSET_COUNT = 17;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
+      MOVE_LEFT_RIGHT = 2,
       MOVE_UP = 2,
       MOVE_DOWN = 3,
-      SHIP_CAMERA_EXTRA = 150;
+      CAMERA_EASING_SPEED = 11,
+      CAMERA_EASING_DIVISOR = 3,
+      CAMERA_EASING_OFFSET = 350;
 
 export class Level1State extends CommonState
 {
@@ -85,6 +88,7 @@ export class Level1State extends CommonState
         this.moveActionAry = ['left','right','up','down'];
         this.moveDirX = MOVE_NULL;
         this.moveDirY = MOVE_NULL;
+        this.lastMoveDirX = MOVE_NULL;
         
         requestAnimationFrame( this.callback );
     }
@@ -129,79 +133,91 @@ export class Level1State extends CommonState
             let actionResult = actionManager.wasAction( event, this.moveActionAry[i] );
             if( actionResult != defs.EAP_IDLE )
             {
-                if( i === MOVE_LEFT )
+                if( i < MOVE_LEFT_RIGHT )
                 {
-                    // Flip the ship facing left
-                    this.playerShipNode.object.setRotXYZ( 0, 180 );
+                    // Only act on action press for the last button down
+                    if( actionResult === defs.EAP_UP && i !== this.lastMoveDirX )
+                        continue;
 
-                    if( actionResult == defs.EAP_DOWN )
+                    if( i === MOVE_LEFT )
                     {
-                        this.playerShipNode.fireTailSprite.setVisible( true );
-                        this.playerShipNode.fireTailScript.pause = false;
-                        this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
+                        // Flip the ship facing left
+                        this.playerShipNode.object.setRotXYZ( 0, 180 );
 
-                        // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
-                        this.cameraEasingX.init( this.cameraEasingX.getValue(), -11, 2, easing.getLinear() );
+                        if( actionResult === defs.EAP_DOWN )
+                        {
+                            this.playerShipNode.fireTailSprite.setVisible( true );
+                            this.playerShipNode.fireTailScript.pause = false;
+                            this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
+
+                            // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
+                            this.cameraEasingX.init( this.cameraEasingX.getValue(), -CAMERA_EASING_SPEED, 2, easing.getLinear() );
+                        }
+                        else
+                        {
+                            this.playerShipNode.fireTailSprite.setVisible( false );
+                            this.playerShipNode.fireTailScript.pause = true;
+                            this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+                            this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+                        }
+
+                        this.moveDirX = MOVE_LEFT;
                     }
-                    else
+                    else if( i === MOVE_RIGHT )
                     {
-                        this.playerShipNode.fireTailSprite.setVisible( false );
-                        this.playerShipNode.fireTailScript.pause = true;
-                        this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
-                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+                        // Flip the ship facing right (default orientation)
+                        this.playerShipNode.object.setRotXYZ();
+
+                        if( actionResult === defs.EAP_DOWN )
+                        {
+                            this.playerShipNode.fireTailSprite.setVisible( true );
+                            this.playerShipNode.fireTailScript.pause = false;
+                            this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
+
+                            // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
+                            this.cameraEasingX.init( this.cameraEasingX.getValue(), CAMERA_EASING_SPEED, 2, easing.getLinear() );
+                        }
+                        else
+                        {
+                            this.playerShipNode.fireTailSprite.setVisible( false );
+                            this.playerShipNode.fireTailScript.pause = true;
+                            this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+                            this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+                        }
+
+                        this.moveDirX = MOVE_RIGHT;
                     }
 
-                    this.moveDirX = MOVE_LEFT;
+                    this.lastMoveDirX = this.moveDirX;
                 }
-                else if( i === MOVE_RIGHT )
+                else
                 {
-                    // Flip the ship facing right (default orientation)
-                    this.playerShipNode.object.setRotXYZ();
+                    if( i === MOVE_UP )
+                    {
+                        if( actionResult === defs.EAP_DOWN )
+                        {
+                            this.easingY.init( this.easingY.getValue(), 7, 0.5, easing.getLinear() );
+                        }
+                        else
+                        {
+                            this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
+                        }
 
-                    if( actionResult == defs.EAP_DOWN )
+                        this.moveDirY = MOVE_UP;
+                    }
+                    else if( i === MOVE_DOWN )
                     {
-                        this.playerShipNode.fireTailSprite.setVisible( true );
-                        this.playerShipNode.fireTailScript.pause = false;
-                        this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
+                        if( actionResult === defs.EAP_DOWN )
+                        {
+                            this.easingY.init( this.easingY.getValue(), -7, 0.5, easing.getLinear() );
+                        }
+                        else
+                        {
+                            this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
+                        }
 
-                        // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
-                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 11, 2, easing.getLinear() );
+                        this.moveDirY = MOVE_DOWN;
                     }
-                    else
-                    {
-                        this.playerShipNode.fireTailSprite.setVisible( false );
-                        this.playerShipNode.fireTailScript.pause = true;
-                        this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
-                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
-                    }
-
-                    this.moveDirX = MOVE_RIGHT;
-                }
-                else if( i === MOVE_UP )
-                {
-                    if( actionResult == defs.EAP_DOWN )
-                    {
-                        this.easingY.init( this.easingY.getValue(), 7, 0.5, easing.getLinear() );
-                    }
-                    else
-                    {
-                        this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
-                    }
-
-                    this.moveDirY = MOVE_UP;
-                }
-                else if( i === MOVE_DOWN )
-                {
-                    if( actionResult == defs.EAP_DOWN )
-                    {
-                        this.easingY.init( this.easingY.getValue(), -7, 0.5, easing.getLinear() );
-                    }
-                    else
-                    {
-                        this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
-                    }
-
-                    this.moveDirY = MOVE_DOWN;
                 }
 
                 break;
@@ -260,15 +276,19 @@ export class Level1State extends CommonState
             }
 
             let dir = -this.camera.transPos.x - playerPos.x;
-            let radius = settings.defaultSize_half.w - this.playerShipNode.radius - SHIP_CAMERA_EXTRA;
+            let radius = settings.defaultSize_half.w - CAMERA_EASING_OFFSET;
             let offset = Math.abs(dir);
 
-            // Slow the camera movement
+            // Slow the camera movement to a stop
             if( (this.moveDirX === MOVE_RIGHT && dir > 0 && offset > radius) ||
                 (this.moveDirX === MOVE_LEFT && dir < 0 && offset > radius) )
             {
                 this.moveDirX = MOVE_NULL;
-                this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+                let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
+                if( time < CAMERA_EASING_DIVISOR )
+                    this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, time, easing.getLinear() );
+                else
+                    this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0, easing.getLinear() );
             }
 
             this.playerShipNode.object.incPosXYZ( this.easingX.getValue(), incY );

@@ -7,6 +7,7 @@
 "use strict";
 import { Point } from './point';
 import { Size } from './size';
+import { Rect } from './rect';
 import { BitMask } from '../utilities/bitmask';
 import { Matrix } from '../utilities/matrix';
 import { ScriptComponent } from '../script/scriptcomponent';
@@ -15,6 +16,7 @@ import * as defs from '../common/defs';
 
 var gDummyPoint = new Point;
 var gSize = new Size;
+var gRect = new Rect;
 
 export class Object
 {
@@ -366,10 +368,19 @@ export class Object
     }
 
     //
-    //  DESC: Was the world position transformed?
+    //  DESC: Get the global resuable size scratch buffer
     //
     getSize()
     {
         return gSize;
+    }
+
+    //
+    //  DESC: Get the global resuable rect scratch buffer
+    //
+    getRect()
+    {
+        gRect.clear();
+        return gRect;
     }
 }

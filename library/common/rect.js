@@ -20,6 +20,39 @@ export class Rect
         this.data[2] = x2;
         this.data[3] = y2;
     }
+
+    // 
+    //  DESC: Copy from another rect
+    //
+    copy( obj )
+    {
+        this.data[0] = obj.data[0];
+        this.data[1] = obj.data[1];
+        this.data[2] = obj.data[2];
+        this.data[3] = obj.data[3];
+    }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.data[0] = 0;
+        this.data[1] = 0;
+        this.data[2] = 0;
+        this.data[3] = 0;
+    }
+
+    // 
+    //  DESC: Does this rect not have any data?
+    //
+    isEmpty()
+    {
+        if( (this.data[2] == 0) && (this.data[3] == 0) )
+            return true;
+        
+        return false;
+    }
     
     set x1(value) { this.data[0] = value; }
     get x1() { return this.data[0]; }

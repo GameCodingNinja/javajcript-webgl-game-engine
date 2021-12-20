@@ -22,6 +22,15 @@ export class Size
         this.w = obj.w;
         this.h = obj.h;
     }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.w = 0;
+        this.h = 0;
+    }
     
     // 
     //  Set the size data

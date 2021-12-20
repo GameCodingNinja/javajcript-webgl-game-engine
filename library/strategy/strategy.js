@@ -168,11 +168,8 @@ export class Strategy extends Object
                 throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
         }
 
-        // Final step is to calculate the radius
-        headNode.calcRadius();
-
-        // Prepare any script functions that are flagged to prepareOnInit
-        headNode.prepareScriptOnInit();
+        // Init the head node
+        headNode.init();
 
         // Add the node to the array for adding to the active list
         if( !instanceName || makeActive )

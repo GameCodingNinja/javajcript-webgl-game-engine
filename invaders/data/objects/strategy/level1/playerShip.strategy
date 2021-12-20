@@ -3,6 +3,10 @@
 
     <node name="player_ship">
 
+        <AABB enable="true">
+            <rect x1="-35" y1="30" x2="30" y2="-35"/>
+        </AABB>
+
         <object>
             <rotation x="0" y="0" z="0"/>
         </object>

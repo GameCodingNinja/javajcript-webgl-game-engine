@@ -21,6 +21,9 @@ export class ObjectNode extends RenderNode
         this.object = new Object();
         this.type = defs.ENT_OBJECT;
         this.userId = nodeData.userId;
+
+        // Init the AABB if one is defined
+        this.initAABB( nodeData.baseXmlNode );
     }
     
     // 
@@ -41,6 +44,10 @@ export class ObjectNode extends RenderNode
             this.object.transform( object );
         else
             this.object.transform();
+
+        // Transform the AABB
+        if( this.AABBrect && this.enableAABB )
+            this.object.matrix.transformRect( this.AABBtrans, this.AABBrect );
         
         // Call the parent but it has to be last
         super.transform();

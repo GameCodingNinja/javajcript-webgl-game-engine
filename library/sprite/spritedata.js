@@ -8,7 +8,25 @@
 
 export class SpriteData
 {
-    constructor( xmlNode, nodeName, defGroup, defObjName )
+    constructor()
+    {
+        // XML node
+        this.xmlNode = null;
+        
+        // Group Name
+        this.group = null;
+        
+        // Object name
+        this.objectName = null;
+
+        // Sprite is visible by default
+        this.visible = true;
+    }
+
+    // 
+    //  DESC: Init the sprite data
+    //
+    init( xmlNode, nodeName, defGroup, defObjName )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -18,9 +36,6 @@ export class SpriteData
         
         // Object name
         this.objectName = defObjName;
-
-        // Sprite is visible by default
-        this.visible = true;
 
         // Get the object data name
         // Init with the node name in the event the node and the object data names are the same and a default object name was not defined

@@ -21,7 +21,7 @@ export class NodeData extends SpriteData
         defObjName = '',
         userId = defs.DEFAULT_ID )
     {
-        super( xmlNode.firstElementChild, nodeName, defGroup, defObjName );
+        super();
 
         // node name
         this.nodeName = nodeName;
@@ -38,6 +38,9 @@ export class NodeData extends SpriteData
         // Node type
         this.nodeType = defs.ENT_NULL;
 
+        // Node level xml
+        this.baseXmlNode = xmlNode;
+
         // Is this a node with children nodes?
         this.hasChildrenNodes = false;
         for( let i = 0; i < xmlNode.children.length; ++i )
@@ -48,24 +51,32 @@ export class NodeData extends SpriteData
         {
             if( xmlNode.children[i].nodeName == 'object' )
             {
+                this.init( xmlNode.children[i], nodeName, defGroup, defObjName );
                 this.nodeType = defs.ENT_OBJECT;
+
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'sprite' )
             {
+                this.init( xmlNode.children[i], nodeName, defGroup, defObjName );
                 this.nodeType = defs.ENT_SPRITE;
+
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiProgressBar' )
             {
+                this.init( xmlNode.children[i], nodeName, defGroup, defObjName );
                 this.nodeType = defs.ENT_UI_CONTROL;
                 this.uiControlType = uiControlDefs.ECT_PROGRESS_BAR;
+
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiMeter' )
             {
+                this.init( xmlNode.children[i], nodeName, defGroup, defObjName );
                 this.nodeType = defs.ENT_UI_CONTROL;
                 this.uiControlType = uiControlDefs.ECT_METER;
+
                 break;
             }
         }

@@ -21,6 +21,9 @@ export class SpriteLeafNode extends iNode
         this.sprite = new Sprite( objectData, this );
         this.type = defs.ENT_SPRITE;
         this.userId = nodeData.userId;
+
+        // Init the AABB if one is defined
+        this.initAABB( nodeData.baseXmlNode );
     }
 
     // 
@@ -49,6 +52,10 @@ export class SpriteLeafNode extends iNode
             this.sprite.transform( object );
         else
             this.sprite.transform();
+
+        // Transform the AABB
+        if( this.AABBrect && this.enableAABB )
+            this.sprite.matrix.transformRect( this.AABBtrans, this.AABBrect );
     }
     
     //
@@ -77,9 +84,13 @@ export class SpriteLeafNode extends iNode
 
     // 
     //  DESC: Calculate the radius
+    //  NOTE: The head node does not have a size
     //
-    calcRadius( /*size*/ )
+    calcRadius( size )
     {
+        if( size )
+            this.calcSize( size );
+            
         this.radius = this.sprite.getSize().getLength() / 2;
     }
 

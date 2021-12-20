@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 <loader>
 
+    <strategy name="_player_ship_">
+        <node name="player_ship" instance="player_ship"/>
+    </strategy>
+
+    <strategy name="_enemy_">
+        <node name="enemy_ship" instance="enemy_ship">
+            <sprite>
+                <position x="1000" y="0"/>
+            </sprite>
+        </node>
+    </strategy>
+
     <strategy name="_level-1-stage_">
 
         <node name="ground">
@@ -177,12 +189,6 @@
             </sprite>
         </node>
 
-    </strategy>
-
-    <strategy name="_enemy_"/>
-
-    <strategy name="_player_ship_">
-        <node name="player_ship" instance="player_ship"/>
     </strategy>
   
 </loader>

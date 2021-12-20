@@ -225,7 +225,7 @@ export class RenderNode extends Node
                     nextNode.prepareScriptOnInit();
 
                     // Call a recursive function again
-                    this.calcRadiusRecursive( nextNode );
+                    this.prepareScriptOnInitRecursive( nextNode );
                 }
             }
             while( nextNode !== null );

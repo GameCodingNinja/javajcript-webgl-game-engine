@@ -36,6 +36,12 @@
             </visual>
         </object>
 
+        <object name="enemy_ship">
+            <visual>
+                <texture file="data/textures/enemyShip/enemy.png"/>
+            </visual>
+        </object>
+
     </objectList>
 
 </objectDataList2D>
