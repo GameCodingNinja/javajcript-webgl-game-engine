@@ -21,10 +21,7 @@ export class Sprite extends Object
 {
     constructor( objData, parentNode = null )
     {
-        super();
-
-        // parent node of this sprite
-        this.parentNode = parentNode;
+        super( parentNode );
 
         // The object data
         this.objData = objData
@@ -111,14 +108,6 @@ export class Sprite extends Object
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.createFontStringFromData();
     }
-
-    // 
-    //  DESC: Prepare any script functions that are flagged to prepareOnInit
-    //
-    prepareScriptOnInit()
-    {
-        this.scriptComponent.prepareOnInit( this );
-    }
     
     //
     //  DESC: Do some cleanup
@@ -147,14 +136,6 @@ export class Sprite extends Object
     handleEvent( event )
     {
         this.scriptComponent.handleEvent( event );
-    }
-
-    // 
-    //  DESC: Update the sprite
-    //
-    update()
-    {
-        this.scriptComponent.update();
     }
     
     // 

@@ -8,7 +8,8 @@
         "cull": { "enable": "false", "frontFace": "CCW", "cullFace": "BACK" },
         "depthStencilBuffer": { "enableDepthBuffer": "false", "createStencilBuffer": "true", "clearStencilBuffer": "true", "stencilBufferBitSize": 1 },
         "targetBuffer": { "clear": "true" },
-        "gamepad": { "allow": "true" } },
+        "gamepad": { "allow": "true", "stickDeadZone": 0.3 },
+        "stats": { "allow": "false" } },
 
     "game": { "name": "invaders", "id": "invaders" }
 }

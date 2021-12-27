@@ -18,12 +18,9 @@ export class ObjectNode extends RenderNode
         super( nodeData.nodeId, nodeData.parentNodeId );
         
         this.name = nodeData.nodeName;
-        this.object = new Object();
+        this.object = new Object( this );
         this.type = defs.ENT_OBJECT;
         this.userId = nodeData.userId;
-
-        // Init the AABB if one is defined
-        this.initAABB( nodeData.baseXmlNode );
     }
     
     // 
@@ -31,6 +28,8 @@ export class ObjectNode extends RenderNode
     //
     update()
     {
+        this.object.update();
+
         // Call the parent but it has to be last
         super.update();
     }
@@ -44,10 +43,6 @@ export class ObjectNode extends RenderNode
             this.object.transform( object );
         else
             this.object.transform();
-
-        // Transform the AABB
-        if( this.AABBrect && this.enableAABB )
-            this.object.matrix.transformRect( this.AABBtrans, this.AABBrect );
         
         // Call the parent but it has to be last
         super.transform();
@@ -63,6 +58,7 @@ export class ObjectNode extends RenderNode
 
     // 
     //  DESC: Calculate the radius
+    //  NOTE: The head node does not have a size
     //
     calcRadius( size )
     {
@@ -79,7 +75,5 @@ export class ObjectNode extends RenderNode
         // The head node gets the accumulated size of all the sprites
         if( headNode )
             this.radius = size.getLength() / 2;
-        else
-            this.radius = this.object.getSize().getLength() / 2;
     }
 }

@@ -8,7 +8,8 @@
         "cull": { "enable": "true", "frontFace": "CCW", "cullFace": "BACK" },
         "depthStencilBuffer": { "enableDepthBuffer": "false", "createStencilBuffer": "true", "clearStencilBuffer": "true", "stencilBufferBitSize": 1 },
         "targetBuffer": { "clear": "true" },
-        "gamepad": { "allow": "true", "stickDeadZone": 0.3 } },
+        "gamepad": { "allow": "true", "stickDeadZone": 0.3 },
+        "stats": { "allow": "true" } },
 
     "game": { "name": "Game Template", "id": "gametemplate" }
 }

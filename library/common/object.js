@@ -20,8 +20,11 @@ var gRect = new Rect;
 
 export class Object
 {
-    constructor()
+    constructor( parentNode = null )
     {
+        // parent node of this object
+        this.parentNode = parentNode;
+
         // local matrix
         this.matrix = new Matrix;
 
@@ -49,6 +52,22 @@ export class Object
 
         // The script part of the sprite
         this.scriptComponent = new ScriptComponent;
+    }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInit()
+    {
+        this.scriptComponent.prepareOnInit( this );
+    }
+
+    // 
+    //  DESC: Update the sprite
+    //
+    update()
+    {
+        this.scriptComponent.update();
     }
 
     //

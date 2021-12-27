@@ -117,7 +117,7 @@ export class Level1State extends CommonState
 
             if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
             {
-                let laserBlast = this.enemyStratagy.create('lazer_blast').sprite;
+                let laserBlast = this.enemyStratagy.create('player_lazer').get();
                 laserBlast.scriptComponent.prepare( 'shoot', laserBlast, this.easingX.getValue() );
             }
         }

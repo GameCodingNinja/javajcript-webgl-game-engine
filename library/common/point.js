@@ -236,6 +236,26 @@ export class Point
     }
 
     // 
+    //  DESC: Calculate squared length from 2 points
+    //
+    calcLengthSquared( point )
+    {
+        let dx = this.data[0] - point.data[0];
+        let dy = this.data[1] - point.data[1];
+        let dz = this.data[2] - point.data[2];
+
+        return ( dx * dx ) +  ( dy * dy ) +  ( dz * dz );
+    }
+
+    calcLengthSquared2D( point )
+    {
+        let dx = this.data[0] - point.data[0];
+        let dy = this.data[1] - point.data[1];
+
+        return ( dx * dx ) +  ( dy * dy );
+    }
+
+    // 
     //  DESC: Get the length of the point from the origin
     //
     getLength()
@@ -246,6 +266,19 @@ export class Point
     getLength2D()
     {
         return Math.sqrt( this.getLengthSquared2D() );
+    }
+
+    // 
+    //  DESC: Calc length from 2 points
+    //
+    calcLength( point )
+    {
+        return Math.sqrt( this.calcLengthSquared( point ) );
+    }
+
+    calcLength2D( point )
+    {
+        return Math.sqrt( this.calcLengthSquared2D( point ) );
     }
 
     // 

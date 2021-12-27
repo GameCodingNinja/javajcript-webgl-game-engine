@@ -21,9 +21,18 @@ export class SpriteLeafNode extends iNode
         this.sprite = new Sprite( objectData, this );
         this.type = defs.ENT_SPRITE;
         this.userId = nodeData.userId;
+    }
 
-        // Init the AABB if one is defined
-        this.initAABB( nodeData.baseXmlNode );
+    // 
+    //  DESC: Only called after node creation
+    //
+    init()
+    {
+        // Calculate the radius and rect for funtrum culling and collision detection
+        this.calcRadius();
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.sprite.prepareScriptOnInit();
     }
 
     // 
@@ -52,10 +61,6 @@ export class SpriteLeafNode extends iNode
             this.sprite.transform( object );
         else
             this.sprite.transform();
-
-        // Transform the AABB
-        if( this.AABBrect && this.enableAABB )
-            this.sprite.matrix.transformRect( this.AABBtrans, this.AABBrect );
     }
     
     //
@@ -83,6 +88,22 @@ export class SpriteLeafNode extends iNode
     }
 
     // 
+    //  DESC: Adjust the size based on the object
+    //
+    calcSize( size )
+    {
+        let vSize = this.sprite.getSize();
+        if( vSize )
+        {
+            if( vSize.w > size.w )
+                size.w = vSize.w;
+
+            if( vSize.h > size.h )
+                size.h = vSize.h;
+        }
+    }
+
+    // 
     //  DESC: Calculate the radius
     //  NOTE: The head node does not have a size
     //
@@ -90,15 +111,7 @@ export class SpriteLeafNode extends iNode
     {
         if( size )
             this.calcSize( size );
-            
-        this.radius = this.sprite.getSize().getLength() / 2;
-    }
-
-    // 
-    //  DESC: Prepare any script functions that are flagged to prepareOnInit
-    //
-    prepareScriptOnInit()
-    {
-        this.sprite.prepareScriptOnInit();
+        else
+            this.radius = this.sprite.getSize().getLength() / 2;
     }
 }

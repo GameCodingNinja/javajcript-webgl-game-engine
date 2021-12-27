@@ -40,16 +40,17 @@ class PlayerShip_FireTailAnim
 //
 class PlayerShip_ShootLazer
 {
-    constructor( sprite, shipVelocity )
+    constructor( obj, shipVelocity )
     {
-        this.sprite = sprite;
-        this.radius = this.sprite.parentNode.radius;
+        this.obj = obj;
+        this.radius = obj.parentNode.radius;
+        this.laserSprite = obj.parentNode.findChild('lazer_blast').sprite;
 
         // Speed of the projectile
         this.PROJECTILE_SPEED = 2.5;
 
         // Laser blast offset
-        this.LASER_OFFSET = 150;
+        this.LASER_OFFSET = 10;
 
         // The velocity of the ship when this script is activated
         this.shipVelocity = shipVelocity;
@@ -66,7 +67,7 @@ class PlayerShip_ShootLazer
         this.rot = this.playerShipSprite.rot.y;
 
         // Is the position flipped?
-        this.offsetX = -this.LASER_OFFSET;
+        this.offsetX = this.LASER_OFFSET;
         this.flipped = false;
         if( this.rot )
         {
@@ -76,17 +77,17 @@ class PlayerShip_ShootLazer
         }
 
         // Set the rotation
-        this.sprite.setRot( this.playerShipSprite.rot, false );
+        this.obj.setRot( this.playerShipSprite.rot, false );
 
         // Set the initial position
-        this.sprite.setPos( this.playerShipSprite.pos );
+        this.obj.setPos( this.playerShipSprite.pos );
 
         // Set the initial offset
-        this.sprite.incPosXYZ( this.offsetX );
+        this.obj.incPosXYZ( this.offsetX );
 
         // Will have to do a preemptive transform so that the transPos data is available
         // for camera.inView because that doesn't happen until later in the pipeline.
-        this.sprite.transform();
+        this.obj.transform();
         
         // Record the ship x
         this.playerShipX = this.playerShipSprite.pos.x;
@@ -97,30 +98,30 @@ class PlayerShip_ShootLazer
     //
     execute()
     {
-        if( this.camera.inView( this.sprite.transPos, this.radius ) )
+        if( this.camera.inView( this.obj.transPos, this.radius ) )
         {
-            this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
-            let dist = Math.abs(this.sprite.pos.x - this.playerShipX - this.offsetX);
+            this.obj.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
+            let dist = Math.abs(this.obj.pos.x - this.playerShipX - this.offsetX);
 
             //console.log(dist);
 
             if( dist > 1240 )
-                this.sprite.setFrame( 1 );
+                this.laserSprite.setFrame( 1 );
             else if( dist > 1100 )
-                this.sprite.setFrame( 2 );
+                this.laserSprite.setFrame( 2 );
 
             else if( dist > 370 )
-                this.sprite.setFrame( 3 );
+                this.laserSprite.setFrame( 3 );
             else if( dist > 230 )
-                this.sprite.setFrame( 2 );
+                this.laserSprite.setFrame( 2 );
             else if( dist > 95 )
-                this.sprite.setFrame( 1 );
+                this.laserSprite.setFrame( 1 );
 
             return false;
         }
 
-        // We are done with this sprite queue it up to be deleted
-        this.enemyStratagy.destroy(this.sprite.parentNode);
+        // We are done with this object, queue it up to be deleted
+        this.enemyStratagy.destroy(this.obj.parentNode);
 
         return true;
     }
@@ -136,5 +137,5 @@ export function loadScripts()
         ( sprite ) => { return new PlayerShip_FireTailAnim( sprite ); } );
 
     scriptManager.set( 'PlayerShip_ShootLazer',
-        ( sprite, shipVelocity ) => { return new PlayerShip_ShootLazer( sprite, shipVelocity ); } );
+        ( obj, shipVelocity ) => { return new PlayerShip_ShootLazer( obj, shipVelocity ); } );
 }

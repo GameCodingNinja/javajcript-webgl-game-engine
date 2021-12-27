@@ -18,7 +18,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(45);
-/* harmony import */ var _data_settings_settings_json__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(171);
+/* harmony import */ var _data_settings_settings_json__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(172);
 
 // 
 //  FILE NAME: game.js
@@ -370,6 +370,8 @@ class Settings
         this.gameName = "Unnamed Game";
         this.gameId = "unnamedgame";
 
+        this.stats = false;
+
         this.user = {
             "stickDeadZone": 0.1,
             "soundEnabled": 1 };
@@ -472,6 +474,12 @@ class Settings
                 if( obj.device.gamepad.stickDeadZone )
                     this.stickDeadZone = obj.device.gamepad.stickDeadZone;
             }
+
+            if( obj.device.stats )
+            {
+                if( obj.device.stats.allow )
+                    this.stats = (obj.device.stats.allow === 'true');
+            }
         }
 
         if( obj.game )
@@ -549,6 +557,15 @@ class Size
     {
         this.w = obj.w;
         this.h = obj.h;
+    }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.w = 0;
+        this.h = 0;
     }
     
     // 
@@ -1334,7 +1351,6 @@ class CameraManager
                 // Create camera and init
                 let camera = new _common_camera__WEBPACK_IMPORTED_MODULE_0__.Camera();
                 camera.initFromXml( cameraLst[i] );
-
                 this.cameraMap.set( id, camera );
             }
         }
@@ -1489,10 +1505,13 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         this.angle = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.viewAngle;
 
         // cull flag
-        this.cull = true;
+        this.cull = false;
 
         // Setup the camera
         this.setup();
+
+        // XML node for camera init
+        this.xmlNode = null;
     }
     
     //
@@ -1500,6 +1519,13 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
     //
     initFromXml( xmlNode )
     {
+        if( xmlNode )
+            this.xmlNode = xmlNode;
+        else if( !xmlNode && this.xmlNode )
+            xmlNode = this.xmlNode;
+        else
+            throw new Error( 'Camera XML is NULL!' );
+
         let attr = xmlNode.getAttribute('projectType');
         if( attr )
         {
@@ -1520,6 +1546,10 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         attr = xmlNode.getAttribute('view_angle');
         if( attr )
             this.angle = Number(attr) * _defs__WEBPACK_IMPORTED_MODULE_3__.DEG_TO_RAD;
+
+        attr = xmlNode.getAttribute('cull');
+        if( attr )
+            this.cull = (attr === 'true');
         
         // Load the transform data from node
         this.loadTransFromNode( xmlNode );
@@ -1652,21 +1682,21 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         if(this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_ORTHOGRAPHIC)
         {
             // Check the right and left sides of the screen
-            if( Math.abs(transPos.x) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize_half.w + radius) )
+            if( Math.abs(-this.transPos.x - transPos.x) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize_half.w + radius) )
                 return false;
 
             // Check the top and bottom sides of the screen
-            if( Math.abs(transPos.y) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize_half.h + radius) )
+            if( Math.abs(-this.transPos.y - transPos.y) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize_half.h + radius) )
                 return false;
         }
         else
         {
             // Check the right and left sides of the screen
-            if( Math.abs(transPos.x) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.w) + radius) )
+            if( Math.abs(-this.transPos.x - transPos.x) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.w) + radius) )
                 return false;
 
             // Check the top and bottom sides of the screen
-            if( Math.abs(transPos.y) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.h) + radius) )
+            if( Math.abs(-this.transPos.y - transPos.y) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.h) + radius) )
                 return false;
         }
 
@@ -2143,11 +2173,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
-/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(16);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(19);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
+/* harmony import */ var _rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
+/* harmony import */ var _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(20);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6);
 
 // 
 //  FILE NAME:  object.js
@@ -2163,18 +2194,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var gDummyPoint = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 var gSize = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
+var gRect = new _rect__WEBPACK_IMPORTED_MODULE_2__.Rect;
 
 class Object
 {
-    constructor()
+    constructor( parentNode = null )
     {
+        // parent node of this object
+        this.parentNode = parentNode;
+
         // local matrix
-        this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_3__.Matrix;
+        this.matrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__.Matrix;
 
         // Bitmask settings to record if the object needs to be transformed
-        this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_2__.BitMask(_common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE);
+        this.parameters = new _utilities_bitmask__WEBPACK_IMPORTED_MODULE_3__.BitMask(_common_defs__WEBPACK_IMPORTED_MODULE_7__.VISIBLE);
     
         // Local position
         this.pos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
@@ -2196,7 +2232,23 @@ class Object
         this.transPos = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 
         // The script part of the sprite
-        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__.ScriptComponent;
+        this.scriptComponent = new _script_scriptcomponent__WEBPACK_IMPORTED_MODULE_5__.ScriptComponent;
+    }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInit()
+    {
+        this.scriptComponent.prepareOnInit( this );
+    }
+
+    // 
+    //  DESC: Update the sprite
+    //
+    update()
+    {
+        this.scriptComponent.update();
     }
 
     //
@@ -2204,28 +2256,28 @@ class Object
     //
     setPos( pos )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.pos.set( pos );
     }
     
     setPosXYZ( x = 0, y = 0, z = 0 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.pos.setXYZ( x, y, z );
     }
     
     incPos( pos )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.pos.inc( pos );
     }
     
     incPosXYZ( x = 0, y = 0, z = 0 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSLATE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.pos.incXYZ( x, y, z );
     }
@@ -2235,46 +2287,46 @@ class Object
     //
     setRot( rot, convertToRadians = true )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
         
         if( convertToRadians )
-            this.rot.setXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+            this.rot.setXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD );
         else
             this.rot.set( rot );
     }
     
     setRotXYZ( x = 0, y = 0, z = 0, convertToRadians = true )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         if( convertToRadians )
-            this.rot.setXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+            this.rot.setXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD );
         else
             this.rot.setXYZ( x, y, z );
     }
     
     incRot( rot, convertToRadians = true )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         if( convertToRadians )
-            this.rot.incXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+            this.rot.incXYZ( rot.x * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD, rot.y * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD, rot.z * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD );
         else
             this.rot.inc( rot );
         
-        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD );
     }
     
     incRotXYZ( x = 0, y = 0, z = 0, convertToRadians = true )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.ROTATE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         if( convertToRadians )
-            this.rot.incXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+            this.rot.incXYZ( x * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD, y * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD, z * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD );
         else
             this.rot.incXYZ( x, y, z );
         
-        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_6__.DEG_TO_RAD );
+        this.rot.cap( 360 * _common_defs__WEBPACK_IMPORTED_MODULE_7__.DEG_TO_RAD );
     }
     
     //
@@ -2282,28 +2334,28 @@ class Object
     //
     setScale( scale )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.scale.set( scale );
     }
     
     setScaleXYZ( x = 1, y = 1, z = 1 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.scale.setXYZ( x, y, z );
     }
     
     incScale( scale )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.scale.inc( scale );
     }
     
     incScaleXYZ( x = 1, y = 1, z = 1 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.SCALE | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.scale.incXYZ( x, y, z );
     }
@@ -2313,14 +2365,14 @@ class Object
     //
     setCenterPos( pos )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.centerPos = pos;
     }
     
     setCenterPosXYZ( x = 0, y = 0, z = 0 )
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.CENTER_POINT | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         this.centerPos.setXYZ( x, y, z );
     }
@@ -2332,7 +2384,7 @@ class Object
     {
         if( !this.centerPos.isEmpty() || ((offset !== null) && (!offset.isEmpty())) )
         {
-            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET | _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.CROP_OFFSET | _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
             this.cropOffset = offset;
         }
@@ -2344,9 +2396,9 @@ class Object
     setVisible( value )
     {
         if( value )
-            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
+            this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.VISIBLE );
         else
-            this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
+            this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_7__.VISIBLE );
     }
 
     //
@@ -2354,7 +2406,7 @@ class Object
     //
     isVisible()
     {
-        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.VISIBLE );
+        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.VISIBLE );
     }
     
     //
@@ -2362,20 +2414,22 @@ class Object
     //
     copyTransform( object )
     {
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSLATE ) )
             this.setPos( object.pos );
 
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.ROTATE ) )
             this.setRot( object.rot );
 
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.SCALE ) )
             this.setScale( object.scale );
 
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.CENTER_POINT ) )
             this.setCenterPos( object.centerPos );
 
-        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET ) )
+        if( object.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.CROP_OFFSET ) )
             this.setCropOffset( object.cropOffset );
+
+        this.transPos.copy( this.pos );
     }
     
     //
@@ -2388,21 +2442,23 @@ class Object
         if( attr )
             this.setVisible( attr === 'true' );
 
-        let pos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadPosition( xmlNode );
+        let pos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_6__.loadPosition( xmlNode );
         if( pos )
             this.setPos( pos );
 
-        let rot = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadRotation( xmlNode );
+        let rot = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_6__.loadRotation( xmlNode );
         if( rot )
             this.setRot( rot );
 
-        let scale = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadScale( xmlNode );
+        let scale = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_6__.loadScale( xmlNode );
         if( scale )
             this.setScale( scale );
 
-        let centerPos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadCenterPos( xmlNode );
+        let centerPos = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_6__.loadCenterPos( xmlNode );
         if( centerPos )
             this.setCenterPos( centerPos );
+        
+        this.transPos.copy( this.pos );
     }
 
     //
@@ -2414,26 +2470,26 @@ class Object
         matrix.initilizeMatrix();
 
         // Apply the crop offset
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CROP_OFFSET ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.CROP_OFFSET ) )
             matrix.translateSize( this.cropOffset );
 
         // Apply the scale
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.SCALE ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.SCALE ) )
             this.applyScale();
 
         // Apply the rotation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.ROTATE ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.ROTATE ) )
             this.applyRotation( matrix );
 
         // Apply the translation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSLATE ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSLATE ) )
             matrix.translate( this.pos );
 
         // Clear the check parameter
-        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
 
         // Indicate that translation was done
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.WAS_TRANSFORMED );
     }
     
     //
@@ -2445,11 +2501,11 @@ class Object
     //
     transform( object = null )
     {
-        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
+        this.parameters.remove( _common_defs__WEBPACK_IMPORTED_MODULE_7__.WAS_TRANSFORMED );
         
         if( object )
         {
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM ) || object.wasWorldPosTranformed() )
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM ) || object.wasWorldPosTranformed() )
             {
                 this.transformLocal( this.matrix );
                 this.matrix.mergeMatrix( object.matrix.matrix );
@@ -2458,7 +2514,7 @@ class Object
         }
         else
         {
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM ) )
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM ) )
             {
                 this.transformLocal( this.matrix );
                 this.transPos.copy( this.pos );
@@ -2480,14 +2536,14 @@ class Object
     applyRotation( /*matrix*/ )
     {
         // Add in the center point prior to rotation
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.CENTER_POINT ) )
             this.matrix.translate( this.centerPos );
 
         this.matrix.rotate( this.rot );
 
         // Subtract the center point after rotation to put back in original position
         // Doing two inverts keeps us from having to new up a point that would be garbage collected
-        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.CENTER_POINT ) )
+        if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.CENTER_POINT ) )
         {
             this.centerPos.invert();
             this.matrix.translate( this.centerPos );
@@ -2500,7 +2556,7 @@ class Object
     //
     wasWorldPosTranformed()
     {
-        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_6__.WAS_TRANSFORMED );
+        return this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_7__.WAS_TRANSFORMED );
     }
 
     //
@@ -2508,15 +2564,24 @@ class Object
     //
     forceTransform()
     {
-        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.TRANSFORM );
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_7__.TRANSFORM );
     }
 
     //
-    //  DESC: Was the world position transformed?
+    //  DESC: Get the global resuable size scratch buffer
     //
     getSize()
     {
         return gSize;
+    }
+
+    //
+    //  DESC: Get the global resuable rect scratch buffer
+    //
+    getRect()
+    {
+        gRect.clear();
+        return gRect;
     }
 }
 
@@ -2557,13 +2622,29 @@ class Point
     set z(value) { this.data[2] = value; }
     get z() { return this.data[2]; }
     
+    // 
+    //  DESC: Copy from another point
+    //
     copy( obj )
     {
         this.data[0] = obj.data[0];
         this.data[1] = obj.data[1];
         this.data[2] = obj.data[2];
     }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.data[0] = 0;
+        this.data[1] = 0;
+        this.data[2] = 0;
+    }
     
+    // 
+    //  DESC: Covert rotation data to radians
+    //
     convertToRads()
     {
         this.x *= _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEG_TO_RAD;
@@ -2571,6 +2652,9 @@ class Point
         this.z *= _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEG_TO_RAD;
     }
     
+    // 
+    //  DESC: Set point via individual components
+    //
     setXYZ( x = 0, y = 0, z = 0 )
     {
         this.data[0] = x;
@@ -2578,6 +2662,9 @@ class Point
         this.data[2] = z;
     }
     
+    // 
+    //  DESC: Set point via point. Same as copy
+    //
     set( point )
     {
         this.data[0] = point.data[0];
@@ -2585,6 +2672,9 @@ class Point
         this.data[2] = point.data[2];
     }
     
+    // 
+    //  DESC: Inc point via individual components
+    //
     incXYZ( x = 0, y = 0, z = 0 )
     {
         this.data[0] += x;
@@ -2592,6 +2682,9 @@ class Point
         this.data[2] += z;
     }
     
+    // 
+    //  DESC: Inc point via point.
+    //
     inc( point )
     {
         this.data[0] += point.data[0];
@@ -2599,6 +2692,9 @@ class Point
         this.data[2] += point.data[2];
     }
 
+    // 
+    //  DESC: Cap the value
+    //
     cap( value )
     {
         if( value > 0 )
@@ -2661,11 +2757,17 @@ class Point
         }
     }
     
+    // 
+    //  DESC: Invert a copy of this point and return it
+    //
     getInvert()
     {
         return new Point(-this.data[0], -this.data[1], -this.data[2]);
     }
     
+    // 
+    //  DESC: Invert the values of this point
+    //
     invert()
     {
         this.data[0] = -this.data[0];
@@ -2673,6 +2775,9 @@ class Point
         this.data[2] = -this.data[2];
     }
     
+    // 
+    //  DESC: Does this point not have any data?
+    //
     isEmpty()
     {
         if( (this.x == 0) && (this.y == 0) && (this.z == 0) )
@@ -2696,6 +2801,9 @@ class Point
         return (0 === this.z);
     }
     
+    // 
+    //  DESC: Is this point equil
+    //
     isEquilXYZ( x, y, z )
     {
         if( this.data[0] === x )
@@ -2711,11 +2819,162 @@ class Point
         
         return false;
     }
+
+    // 
+    //  DESC: Get the squared length of the point from the origin
+    //
+    getLengthSquared()
+    {
+        return ( this.data[0] * this.data[0] ) +  ( this.data[1] * this.data[1] ) + ( this.data[2] * this.data[2] );
+    }
+
+    getLengthSquared2D()
+    {
+        return ( this.data[0] * this.data[0] ) +  ( this.data[1] * this.data[1] );
+    }
+
+    // 
+    //  DESC: Calculate squared length from 2 points
+    //
+    calcLengthSquared( point )
+    {
+        let dx = this.data[0] - point.data[0];
+        let dy = this.data[1] - point.data[1];
+        let dz = this.data[2] - point.data[2];
+
+        return ( dx * dx ) +  ( dy * dy ) +  ( dz * dz );
+    }
+
+    calcLengthSquared2D( point )
+    {
+        let dx = this.data[0] - point.data[0];
+        let dy = this.data[1] - point.data[1];
+
+        return ( dx * dx ) +  ( dy * dy );
+    }
+
+    // 
+    //  DESC: Get the length of the point from the origin
+    //
+    getLength()
+    {
+        return Math.sqrt( this.getLengthSquared() );
+    }
+
+    getLength2D()
+    {
+        return Math.sqrt( this.getLengthSquared2D() );
+    }
+
+    // 
+    //  DESC: Calc length from 2 points
+    //
+    calcLength( point )
+    {
+        return Math.sqrt( this.calcLengthSquared( point ) );
+    }
+
+    calcLength2D( point )
+    {
+        return Math.sqrt( this.calcLengthSquared2D( point ) );
+    }
+
+    // 
+    //  DESC: Get the dot product
+    //
+    getDotProduct( point )
+    {
+        return ( this.data[0] * point.data[0] ) +  ( this.data[1] * point.data[1] ) + ( this.data[2] * point.data[2] );
+    }
+
+    getDotProduct2D( point )
+    {
+        return ( this.data[0] * point.data[0] ) +  ( this.data[1] * point.data[1] );
+    }
 }
 
 
 /***/ }),
 /* 15 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Rect": () => (/* binding */ Rect)
+/* harmony export */ });
+
+// 
+//  FILE NAME:  rect.js
+//  DESC:       rect class
+//
+
+
+
+class Rect
+{
+    constructor( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
+    {
+        this.data = new Float32Array([x1,y1,x2,y2]);
+    }
+    
+    set( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
+    {
+        this.data[0] = x1;
+        this.data[1] = y1;
+        this.data[2] = x2;
+        this.data[3] = y2;
+    }
+
+    // 
+    //  DESC: Copy from another rect
+    //
+    copy( obj )
+    {
+        this.data[0] = obj.data[0];
+        this.data[1] = obj.data[1];
+        this.data[2] = obj.data[2];
+        this.data[3] = obj.data[3];
+    }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.data[0] = 0;
+        this.data[1] = 0;
+        this.data[2] = 0;
+        this.data[3] = 0;
+    }
+
+    // 
+    //  DESC: Does this rect not have any data?
+    //
+    isEmpty()
+    {
+        if( (this.data[2] == 0) && (this.data[3] == 0) )
+            return true;
+        
+        return false;
+    }
+    
+    set x1(value) { this.data[0] = value; }
+    get x1() { return this.data[0]; }
+    
+    set y1(value) { this.data[1] = value; }
+    get y1() { return this.data[1]; }
+    
+    set x2(value) { this.data[2] = value; }
+    get x2() { return this.data[2]; }
+    
+    set y2(value) { this.data[3] = value; }
+    get y2() { return this.data[3]; }
+}
+
+
+/***/ }),
+/* 16 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2816,7 +3075,7 @@ class BitMask
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2824,8 +3083,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ScriptComponent": () => (/* binding */ ScriptComponent)
 /* harmony export */ });
-/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
-/* harmony import */ var _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+/* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 
 //
 //  FILE NAME: scriptcomponent.js
@@ -3005,7 +3264,7 @@ class ScriptComponent
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3066,7 +3325,7 @@ var scriptManager = new ScriptManager;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3098,7 +3357,7 @@ class CScriptPrepareFunc
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3118,10 +3377,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "loadVertAlignment": () => (/* binding */ loadVertAlignment),
 /* harmony export */   "loadDynamicOffset": () => (/* binding */ loadDynamicOffset)
 /* harmony export */ });
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(21);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 /* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
 /* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(23);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
@@ -3527,7 +3786,7 @@ function loadDynamicOffset( xmlNode )
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3666,52 +3925,6 @@ class Color
 
 
 /***/ }),
-/* 21 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Rect": () => (/* binding */ Rect)
-/* harmony export */ });
-
-// 
-//  FILE NAME:  rect.js
-//  DESC:       rect class
-//
-
-
-
-class Rect
-{
-    constructor( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
-    {
-        this.data = new Float32Array([x1,y1,x2,y2]);
-    }
-    
-    set( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
-    {
-        this.data[0] = x1;
-        this.data[1] = y1;
-        this.data[2] = x2;
-        this.data[3] = y2;
-    }
-    
-    set x1(value) { this.data[0] = value; }
-    get x1() { return this.data[0]; }
-    
-    set y1(value) { this.data[1] = value; }
-    get y1() { return this.data[1]; }
-    
-    set x2(value) { this.data[2] = value; }
-    get x2() { return this.data[2]; }
-    
-    set y2(value) { this.data[3] = value; }
-    get y2() { return this.data[3]; }
-}
-
-
-/***/ }),
 /* 22 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -3761,7 +3974,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "DynamicOffset": () => (/* binding */ DynamicOffset)
 /* harmony export */ });
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
 /* harmony import */ var _point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
@@ -5746,7 +5959,7 @@ class ActionManager
                 }
             }
             // Check for mouse event
-            else if( event instanceof MouseEvent )
+            else if( event instanceof MouseEvent && event.type != 'mousemove' )
             {
                 this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_4__.MOUSE;
 
@@ -6156,7 +6369,7 @@ const GAMEPAD_BUTTON_A             = 0,
              GAMEPAD_BUTTON_R_STICK_LEFT  = 36,
              GAMEPAD_BUTTON_R_STICK_RIGHT = 37;
 
-const ANALOG_STICK_MSG_MAX = 0.7;
+const ANALOG_STICK_MSG_MAX = 0.5;
 
 class GamepadEvent
 {
@@ -6265,17 +6478,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 /* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
 /* harmony import */ var _common_gamepad__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
-/* harmony import */ var _gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(24);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(27);
-/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3);
-/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
-/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(27);
+/* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3);
+/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 
 //
 //  FILE NAME: eventmanager.js
 //  DESC:      event manager class singleton
 //
-
 
 
 
@@ -6420,12 +6631,12 @@ class EventManager
             let dpr = window.devicePixelRatio;
             let width = Math.trunc(event.target.clientWidth * dpr);
             let height = Math.trunc(event.target.clientHeight * dpr);
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.device.handleResolutionChange( width, height );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.device.handleResolutionChange( width, height );
             document.body.style.backgroundColor = 'black';
         }
         else
         {
-            _system_device__WEBPACK_IMPORTED_MODULE_7__.device.handleResolutionChange( _utilities_settings__WEBPACK_IMPORTED_MODULE_5__.settings.initialSize.w, _utilities_settings__WEBPACK_IMPORTED_MODULE_5__.settings.initialSize.h );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.device.handleResolutionChange( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.initialSize.w, _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.initialSize.h );
             document.body.style.backgroundColor = this.backgroundColor;
         }
     }
@@ -6451,11 +6662,11 @@ class EventManager
         this.queue.push( event );
 
         // Check for fullscreen toggle
-        if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_4__.actionManager.wasAction( event, 'fullscreen_toggle' ) )
+        if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_3__.actionManager.wasAction( event, 'fullscreen_toggle' ) )
         {
             //console.log('onKeyDown');
             if (!document.fullscreenElement)
-                _system_device__WEBPACK_IMPORTED_MODULE_7__.device.canvas.requestFullscreen();
+                _system_device__WEBPACK_IMPORTED_MODULE_6__.device.canvas.requestFullscreen();
 
             else if (document.exitFullscreen)
                 document.exitFullscreen();
@@ -6485,9 +6696,9 @@ class EventManager
     //
     onGamepadconnected( event )
     {
-        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_5__.settings.allowGamepad )
+        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.allowGamepad )
         {
-            _managers_actionmanager__WEBPACK_IMPORTED_MODULE_4__.actionManager.initGamepadMapping( event.gamepad.mapping );
+            _managers_actionmanager__WEBPACK_IMPORTED_MODULE_3__.actionManager.initGamepadMapping( event.gamepad.mapping );
             this.gamePadMap.set( event.gamepad.index, new _common_gamepad__WEBPACK_IMPORTED_MODULE_2__.Gamepad( event.gamepad ) );
             this.queue.push( event );
             console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
@@ -6499,7 +6710,7 @@ class EventManager
     //
     onGamepadDisconnected( event )
     {
-        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_5__.settings.allowGamepad )
+        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.allowGamepad )
         {
             this.queue.push( event );
             console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
@@ -6553,13 +6764,13 @@ class EventManager
                         // Check for button down
                         if(!lastGp.pressed[i] && gp.buttons[i].pressed)
                         {
-                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_DOWN, i, gp) );
-                            console.log( `Button Index Down: ${i};` );
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, i, gp) );
+                            //console.log( `Button Index Down: ${i};` );
                         }
                         // Check for button up
                         else if(lastGp.pressed[i] && !gp.buttons[i].pressed)
                         {
-                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_UP, i, gp) );
+                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, i, gp) );
                             //console.log( `Button Index Up: ${i};` );
                         }
                     }
@@ -6568,54 +6779,54 @@ class EventManager
                     //console.log( `Left Axes Y Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
 
                     // Create UP/DOWN events for the Left analog stick
-                    if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX) && 
-                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX))
+                    if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_L_STICK_UP, gp) );
+                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, gp) );
                         //console.log( `Left Y Axes UP Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX) && 
-                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX))
+                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_L_STICK_UP, gp) );
+                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, gp) );
                         //console.log( `Left Y Axes UP Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX) && 
-                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX))
+                    else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
+                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
                         //console.log( `Left Y Axes DOWN Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX) && 
-                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX))
+                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
+                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
                         //console.log( `Left Y Axes DOWN Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
 
                     // Create Left/Right events for the Left analog stick
-                    else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX) && 
-                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX))
+                    if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
+                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
                         //console.log( `Left X Axes LEFT Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX) && 
-                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX))
+                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
+                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
                         //console.log( `Left X Axes LEFT Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX) && 
-                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX))
+                    else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
+                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
                         //console.log( `Left X Axes RIGHT Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX) && 
-                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.ANALOG_STICK_MSG_MAX))
+                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_6__.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
+                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
                         //console.log( `Left X Axes RIGHT Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
 
@@ -6862,7 +7073,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(114);
 /* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(31);
 /* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(129);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(20);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(134);
 /* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(36);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6);
@@ -7025,9 +7236,6 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
         // Load the transform data
         sprite.load( node );
-
-        // Init the script Ids
-        sprite.scriptComponent.initScriptIds( node );
     }
 
     // 
@@ -7168,6 +7376,14 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     init()
     {
+        for( let i = 0; i < this.spriteAry.length; ++i )
+        {
+            this.spriteAry[i].init();
+
+            // Prepare any script functions that are flagged to prepareOnInit
+            this.spriteAry[i].prepareScriptOnInit();
+        }
+
         for( let i = 0; i < this.staticControlAry.length; ++i )
             this.staticControlAry[i].init();
 
@@ -7179,14 +7395,16 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         
         // Prepare any script functions that are flagged to prepareOnInit
         this.scriptComponent.prepareOnInit( this );
-
-    }   // Init
+    }
 
     // 
     //  DESC: Init the menu controls
     //
     cleanUp()
     {
+        for( let i = 0; i < this.spriteAry.length; ++i )
+            this.spriteAry[i].cleanUp();
+
         for( let i = 0; i < this.staticControlAry.length; ++i )
             this.staticControlAry[i].cleanUp();
 
@@ -7195,8 +7413,7 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
         for( let i = 0; i < this.controlAry.length; ++i )
             this.controlAry[i].cleanUp();
-
-    }   // CleanUp
+    }
     
     // 
     //  DESC: Activate this menu because it's probably a root menu
@@ -7949,10 +8166,7 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 {
     constructor( objData, parentNode = null )
     {
-        super();
-
-        // parent node of this sprite
-        this.parentNode = parentNode;
+        super( parentNode );
 
         // The object data
         this.objData = objData
@@ -8009,6 +8223,11 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.loadFontPropFromNode( xmlNode );
+
+        // Set the frame of the animation
+        let attr = xmlNode.getAttribute( 'frameIndex' );
+        if( attr )
+            this.setFrame( Number(attr) );
     }
 
     // 
@@ -8033,9 +8252,6 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     {
         if( this.visualComponent.isFontSprite() )
             this.visualComponent.createFontStringFromData();
-        
-        // Prepare any script functions that are flagged to prepareOnInit
-        this.scriptComponent.prepareOnInit( this );
     }
     
     //
@@ -8065,14 +8281,6 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     handleEvent( event )
     {
         this.scriptComponent.handleEvent( event );
-    }
-
-    // 
-    //  DESC: Update the sprite
-    //
-    update()
-    {
-        this.scriptComponent.update();
     }
     
     // 
@@ -8252,6 +8460,25 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
         return size;
     }
+
+    //
+    //  DESC: Get the rect of this sprite from orgin 0,0
+    //
+    getRect()
+    {
+        let vSize = this.visualComponent.getSize();
+        let rect = super.getRect();
+
+        let halfX = vSize.w / 2;
+        let halfY = vSize.h / 2;
+
+        rect.x1 = (-halfX + this.pos.x) * this.scale.x;
+        rect.y1 = (halfY + this.pos.y) * this.scale.y;
+        rect.x2 = (halfX + this.pos.x) * this.scale.x;
+        rect.y2 = (-halfY + this.pos.y) * this.scale.y;
+
+        return rect;
+    }
 }
 
 
@@ -8270,7 +8497,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
 /* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(44);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(12);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(20);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(21);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
 
@@ -9276,12 +9503,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "statCounter": () => (/* binding */ statCounter)
 /* harmony export */ });
 /* harmony import */ var _highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
-/* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(46);
+/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(46);
 
 // 
 //  FILE NAME: statcounter.js
 //  DESC:      high resolution timer class
 //
+
 
 
 
@@ -9307,7 +9536,7 @@ class StatCounter
         this.cycleCounter = 0;
 
         // Stats display timer
-        this.statsDisplayTimer = new _timer__WEBPACK_IMPORTED_MODULE_1__.Timer(1000);
+        this.statsDisplayTimer = new _timer__WEBPACK_IMPORTED_MODULE_2__.Timer(1000);
     }
     
     //
@@ -9326,20 +9555,23 @@ class StatCounter
     //
     incCycle()
     {
-        // These counters are incremeented each game loop cycle so they can
-        // be placed here in this function because this function is also called
-        // each game loop cycle
-        this.elapsedFPSCounter += _highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.fps;
-
-        ++this.cycleCounter;
-
-        // update the stats every 1 seconds. True = reset on expire
-        if( this.statsDisplayTimer.expired(true) )
+        if( _settings__WEBPACK_IMPORTED_MODULE_1__.settings.stats )
         {
-            this.formatStatString();
+            // These counters are incremeented each game loop cycle so they can
+            // be placed here in this function because this function is also called
+            // each game loop cycle
+            this.elapsedFPSCounter += _highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__.highResTimer.fps;
 
-            // Now that the stats are displayed, we can reset out counters.
-            this.resetCounters();
+            ++this.cycleCounter;
+
+            // update the stats every 1 seconds. True = reset on expire
+            if( this.statsDisplayTimer.expired(true) )
+            {
+                this.formatStatString();
+
+                // Now that the stats are displayed, we can reset out counters.
+                this.resetCounters();
+            }
         }
     }
 
@@ -9647,7 +9879,7 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
             gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
 
             // Send the glyph rect
-            gl.uniform4fv( this.glyphLocation, this.glyph.UV.data );
+            gl.uniform4fv( this.glyphLocation, this.glyph.uv.data );
             
             // Do the render
             gl.drawElements(gl.TRIANGLE_FAN, this.iboCount, gl.UNSIGNED_BYTE, 0);
@@ -10534,7 +10766,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Font": () => (/* binding */ Font)
 /* harmony export */ });
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 
 // 
 //  FILE NAME:  font.js
@@ -10723,7 +10955,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "FontProperties": () => (/* binding */ FontProperties)
 /* harmony export */ });
 /* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(50);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
@@ -10845,7 +11077,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(40);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(44);
 
@@ -31518,8 +31750,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(19);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
 
 // 
 //  FILE NAME:  spritesheet.js
@@ -31802,7 +32034,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(123);
 /* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(124);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: objectdata2d.js
@@ -32215,8 +32447,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ObjectVisualData2D": () => (/* binding */ ObjectVisualData2D)
 /* harmony export */ });
 /* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(20);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(126);
 /* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(119);
@@ -32225,7 +32457,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(118);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(33);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: ojectvisualdata2d.js
@@ -32990,9 +33222,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ObjectVisualData3D": () => (/* binding */ ObjectVisualData3D)
 /* harmony export */ });
 /* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
-/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
+/* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: ojectvisualdata3d.js
@@ -33220,13 +33452,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
 /* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(133);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(21);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(15);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(12);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(114);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(30);
 /* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(27);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(134);
 /* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(36);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(6);
@@ -33780,7 +34012,10 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
         // Create any font strings
         // This allows for delayed VBO create so that the fonts can be allocated during a load screen
         for( let i = 0; i < this.spriteAry.length; ++i )
+        {
             this.spriteAry[i].init();
+            this.spriteAry[i].prepareScriptOnInit();
+        }
 
         // Prepare any script functions that are flagged to prepareOnInit
         this.scriptComponent.prepareOnInit( this );
@@ -34196,7 +34431,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(33);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: controlbase.js
@@ -35171,7 +35406,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "UIButtonList": () => (/* binding */ UIButtonList)
 /* harmony export */ });
 /* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
-/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(134);
 /* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
@@ -35934,7 +36169,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(30);
 /* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(45);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(20);
 /* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(129);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(134);
 /* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(36);
@@ -36924,7 +37159,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(131);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(134);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(19);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: uimeter.js
@@ -38156,25 +38391,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(145);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
 /* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
 /* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
 /* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(57);
 /* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(148);
 /* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(149);
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(45);
-/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(16);
+/* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(17);
 /* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(118);
 /* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(33);
 /* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(26);
-/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(163);
+/* harmony import */ var _scripts_spaceshipscripts__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(164);
 /* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(147);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(165);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(166);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(167);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(168);
-/* harmony import */ var _data_shaders_shader_json__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(169);
-/* harmony import */ var raw_loader_data_objects_strategy_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(170);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(166);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(167);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(168);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(169);
+/* harmony import */ var _data_shaders_shader_json__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(170);
+/* harmony import */ var raw_loader_data_objects_strategy_strategy_loader__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(171);
 
 //
 //  FILE NAME: testarenastate.js
@@ -39108,8 +39343,8 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
                 throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
         }
 
-        // Final step is to calculate the radius
-        headNode.calcRadius();
+        // Init the head node
+        headNode.init();
 
         // Add the node to the array for adding to the active list
         if( !instanceName || makeActive )
@@ -39290,8 +39525,20 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     render()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].render( this.camera );
+        // Cull frustrum on the head node
+        if( this.camera.cull )
+        {
+            for( let i = 0; i < this.nodeAry.length; i++ )
+            {
+                if( this.camera.inView( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                    this.nodeAry[i].render( this.camera );
+            }
+        }
+        else
+        {
+            for( let i = 0; i < this.nodeAry.length; i++ )
+                this.nodeAry[i].render( this.camera );
+        }
     }
 
     //
@@ -39516,7 +39763,7 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
         defObjName = '',
         userId = _common_defs__WEBPACK_IMPORTED_MODULE_2__.DEFAULT_ID )
     {
-        super( xmlNode.firstElementChild, nodeName, defGroup, defObjName );
+        super();
 
         // node name
         this.nodeName = nodeName;
@@ -39533,6 +39780,9 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
         // Node type
         this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_NULL;
 
+        // Node level xml
+        this.baseXmlNode = xmlNode;
+
         // Is this a node with children nodes?
         this.hasChildrenNodes = false;
         for( let i = 0; i < xmlNode.children.length; ++i )
@@ -39543,24 +39793,32 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
         {
             if( xmlNode.children[i].nodeName == 'object' )
             {
+                this.init( xmlNode.children[i], nodeName, defGroup, defObjName );
                 this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_OBJECT;
+
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'sprite' )
             {
+                this.init( xmlNode.children[i], nodeName, defGroup, defObjName );
                 this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
+
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiProgressBar' )
             {
+                this.init( xmlNode.children[i], nodeName, defGroup, defObjName );
                 this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_UI_CONTROL;
                 this.uiControlType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__.ECT_PROGRESS_BAR;
+
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'uiMeter' )
             {
+                this.init( xmlNode.children[i], nodeName, defGroup, defObjName );
                 this.nodeType = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_UI_CONTROL;
                 this.uiControlType = _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__.ECT_METER;
+
                 break;
             }
         }
@@ -39591,7 +39849,25 @@ __webpack_require__.r(__webpack_exports__);
 
 class SpriteData
 {
-    constructor( xmlNode, nodeName, defGroup, defObjName )
+    constructor()
+    {
+        // XML node
+        this.xmlNode = null;
+        
+        // Group Name
+        this.group = null;
+        
+        // Object name
+        this.objectName = null;
+
+        // Sprite is visible by default
+        this.visible = true;
+    }
+
+    // 
+    //  DESC: Init the sprite data
+    //
+    init( xmlNode, nodeName, defGroup, defObjName )
     {
         // XML node
         this.xmlNode = xmlNode;
@@ -39601,9 +39877,6 @@ class SpriteData
         
         // Object name
         this.objectName = defObjName;
-
-        // Sprite is visible by default
-        this.visible = true;
 
         // Get the object data name
         // Init with the node name in the event the node and the object data names are the same and a default object name was not defined
@@ -39638,10 +39911,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(142);
 /* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(141);
 /* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(155);
-/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(159);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(160);
-/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(161);
-/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(162);
+/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(160);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(161);
+/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(162);
+/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(163);
 /* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(134);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
 
@@ -39687,6 +39960,9 @@ function create( nodeData )
         node = new _node_objectnode__WEBPACK_IMPORTED_MODULE_7__.ObjectNode( nodeData );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
+
+        // Load the script functions from node
+        node.object.scriptComponent.initScriptIds( nodeData.xmlNode );
     }
     else if( nodeData.nodeType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.ENT_UI_CONTROL )
     {
@@ -39751,12 +40027,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+/* harmony import */ var _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(159);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: spritenode.js
 //  DESC:      Sprite node that allows for children
 //
+
 
 
 
@@ -39773,8 +40051,17 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
         
         this.name = nodeData.nodeName;
         this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__.ENT_SPRITE;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ENT_SPRITE;
         this.userId = nodeData.userId;
+        this.baseXmlNode = nodeData.baseXmlNode;
+        this.radius = -1;
+
+        // Allocate the collision component if collision is defined
+        if( _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__.isCollision( nodeData.baseXmlNode ) )
+        {
+            this.collisionComponent = new _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__.CollisionComponent( nodeData.baseXmlNode, this );
+            this.collisionComponent.init();
+        }
     }
 
     // 
@@ -39806,6 +40093,10 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
             this.sprite.transform( object );
         else
             this.sprite.transform();
+
+        // Transform the AABB
+        //if( this.AABBrect && this.enableAABB )
+        //    this.sprite.matrix.transformRect( this.AABBtrans, this.AABBrect );
         
         // Call the parent but it has to be last
         super.transform();
@@ -39843,6 +40134,7 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 
     // 
     //  DESC: Calculate the radius
+    //  NOTE: The head node does not have a size
     //
     calcRadius( size )
     {
@@ -39859,8 +40151,6 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
         // The head node gets the accumulated size of all the sprites
         if( headNode )
             this.radius = size.getLength() / 2;
-        else
-            this.radius = this.sprite.getSize().getLength() / 2;
     }
 }
 
@@ -39892,6 +40182,34 @@ class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, parentId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
     {
         super( id, parentId )
+    }
+
+    // 
+    //  DESC: Only called after node creation
+    //
+    init()
+    {
+        // Calculate the radius and rect for funtrum culling and collision detection
+        this.calcRadius();
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.get().prepareScriptOnInit();
+    }
+
+    // 
+    //  DESC: Adjust the size based on the object
+    //
+    calcSize( size )
+    {
+        let vSize = this.get().getSize();
+        if( vSize )
+        {
+            if( vSize.w > size.w )
+                size.w = vSize.w;
+
+            if( vSize.h > size.h )
+                size.h = vSize.h;
+        }
     }
     
     // 
@@ -40010,8 +40328,7 @@ class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
     //
     render( camera )
     {
-        if( !camera.cull || camera.inView( this.get().transPos, this.radius ) )
-            this.renderRecursive( this, camera );
+        this.renderRecursive( this, camera );
     }
     
     //
@@ -40070,6 +40387,41 @@ class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 
                     // Call a recursive function again
                     this.calcRadiusRecursive( nextNode, size );
+                }
+            }
+            while( nextNode !== null );
+        }
+    }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInit()
+    {
+        this.prepareScriptOnInitRecursive( this );
+    }
+
+    // 
+    //  DESC: Prepare any script functions that are flagged to prepareOnInit
+    //
+    prepareScriptOnInitRecursive( node )
+    {
+        if( node !== null )
+        {
+            node.index = 0;
+            let nextNode;
+
+            do
+            {
+                // get the next node
+                nextNode = node.next();
+
+                if( nextNode != null )
+                {
+                    nextNode.prepareScriptOnInit();
+
+                    // Call a recursive function again
+                    this.prepareScriptOnInitRecursive( nextNode );
                 }
             }
             while( nextNode !== null );
@@ -40261,9 +40613,14 @@ class iNode
 
         // Node name
         this.name = '';
+    }
 
-        // Radius for simple view frustum culling and simple collision detection
-        this.radius = 0;
+    // 
+    //  DESC: Only called after node creation
+    //
+    init()
+    {
+        // Empty by design
     }
     
     // 
@@ -40300,71 +40657,6 @@ class iNode
     {
         return null;
     }
-
-    // 
-    //  DESC: Handle events
-    //
-    handleEvent()
-    {
-        // Empty by design
-    }
-
-    // 
-    //  DESC: Update the nodes
-    //
-    update()
-    {
-        // Empty by design
-    }
-
-    //
-    //  DESC: Transform the object
-    //
-    transform()
-    {
-        // Empty by design
-    }
-
-    //
-    //  DESC: Render the sprite
-    //
-    render()
-    {
-        // Empty by design
-    }
-    
-    // 
-    //  DESC: Clean up any sprites
-    //
-    cleanUp()
-    {
-        // Empty by design
-    }
-
-    // 
-    //  DESC: Calculate the radius
-    //
-    calcRadius( /*size*/ )
-    {
-        // Empty by design
-    }
-
-    // 
-    //  DESC: Adjust the size based on the object
-    //
-    calcSize( size )
-    {
-        let obj = this.get();
-        if( obj )
-        {
-            let vSize = obj.getSize();
-            if( vSize.w > size.w )
-                size.w = vSize.w;
-
-            if( vSize.h > size.h )
-                size.h = vSize.h;
-        }
-    }
 }
 
 
@@ -40375,17 +40667,170 @@ class iNode
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "COL_NULL": () => (/* binding */ COL_NULL),
+/* harmony export */   "COL_RECT": () => (/* binding */ COL_RECT),
+/* harmony export */   "COL_TRY": () => (/* binding */ COL_TRY),
+/* harmony export */   "COL_POINT": () => (/* binding */ COL_POINT),
+/* harmony export */   "CollisionComponent": () => (/* binding */ CollisionComponent),
+/* harmony export */   "isCollision": () => (/* binding */ isCollision)
+/* harmony export */ });
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
+//
+//  FILE NAME: collisioncomponent.js
+//  DESC:      Class for handling collision data
+//
+
+
+
+
+
+
+const COL_NULL  = 0,
+             COL_RECT  = 1,
+             COL_TRY   = 2,
+             COL_POINT = 3;
+
+class CollisionComponent
+{
+    constructor( xmlNode, node )
+    {
+        // xmlNode from the base node level
+        this.xmlNode = xmlNode;
+
+        // Object to use for matrix and size
+        this.node = node;
+
+        // Object to use for matrix and size
+        this.obj = node.get();
+
+        // Matrix to do the transformation with
+        this.matrix = node.get().matrix;
+
+        // Data type
+        this.type = COL_NULL;
+
+        // Enable flag
+        this.enable = false;
+
+        // Collision data
+        this.data = null;
+
+        // Translated collision data
+        this.trans = null;
+
+        // Callback function for when a collision is detected
+        this.callbackFunc = null;
+    }
+
+    // 
+    //  DESC: Init the collision
+    //
+    init()
+    {
+        for( let i = 0; i < this.xmlNode.children.length; ++i )
+        {
+            if( this.xmlNode.children[i].nodeName == 'AABB' )
+            {
+                this.type = COL_RECT;
+                this.data = [];
+                this.trans = [];
+
+                let attr = this.xmlNode.children[i].getAttribute( 'enable' );
+                if( attr )
+                {
+                    this.enable = (attr === 'true');
+                }
+
+                attr = this.xmlNode.children[i].getAttribute( 'radius' );
+                if( attr )
+                {
+                    this.radius = Number(attr);
+                }
+
+                let nodeAry = this.xmlNode.children[i].getElementsByTagName( 'rect' );
+
+                for( let j = 0; j < nodeAry.length; ++j )
+                {
+                    this.data.push( _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__.loadRectFromChild( nodeAry[j] ) );
+                    this.trans.push( new _common_rect__WEBPACK_IMPORTED_MODULE_0__.Rect );
+                    this.trans[j].copy( this.data[j] );
+                }
+
+                break;
+            }
+        }
+    }
+
+    // 
+    //  DESC: Transform the rects for collision
+    //
+    transform()
+    {
+        if( this.enable )
+        {
+            if( this.type == COL_RECT )
+            {
+                for( let i = 0; i < this.data.length; ++i )
+                    this.matrix.transformRect( this.trans[i], this.data[i] );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Check for collision
+    //
+    checkForCollision( node )
+    {
+        if( this.enable && node.collisionComponent && node.collisionComponent.enable )
+        {
+            // Do the broad phase check
+            let obj = node.collisionComponent.obj;
+            if( this.obj.transPos.calcLength2D( obj.transPos ) <= (this.node.radius + node.radius) )
+            {
+            }
+        }
+    }
+}
+
+// 
+//  DESC: Function to check collision detection has been defined
+//
+function isCollision( xmlNode )
+{
+    for( let i = 0; i < xmlNode.children.length; ++i )
+    {
+        if( xmlNode.children[i].nodeName == 'AABB' )
+        {
+            if( xmlNode.children[i].getElementsByTagName( 'rect' ) )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
+/***/ }),
+/* 160 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteLeafNode": () => (/* binding */ SpriteLeafNode)
 /* harmony export */ });
 /* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(158);
 /* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(159);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: spriteleafnode.js
 //  DESC:      Sprite node class for handling a sprite with
 //             no children to keep the overhead low
 //
+
 
 
 
@@ -40401,8 +40846,27 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
         
         this.name = nodeData.nodeName;
         this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__.ENT_SPRITE;
         this.userId = nodeData.userId;
+
+        // Allocate the collision component if collision is defined
+        if( _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_2__.isCollision( nodeData.baseXmlNode ) )
+        {
+            this.collisionComponent = new _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_2__.CollisionComponent( nodeData.baseXmlNode, this );
+            this.collisionComponent.init();
+        }
+    }
+
+    // 
+    //  DESC: Only called after node creation
+    //
+    init()
+    {
+        // Calculate the radius and rect for funtrum culling and collision detection
+        this.calcRadius();
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.sprite.prepareScriptOnInit();
     }
 
     // 
@@ -40431,6 +40895,10 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
             this.sprite.transform( object );
         else
             this.sprite.transform();
+
+        // Transform the AABB
+        //if( this.AABBrect && this.enableAABB )
+        //    this.sprite.matrix.transformRect( this.AABBtrans, this.AABBrect );
     }
     
     //
@@ -40458,17 +40926,37 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     }
 
     // 
-    //  DESC: Calculate the radius
+    //  DESC: Adjust the size based on the object
     //
-    calcRadius( /*size*/ )
+    calcSize( size )
     {
-        this.radius = this.sprite.getSize().getLength() / 2;
+        let vSize = this.sprite.getSize();
+        if( vSize )
+        {
+            if( vSize.w > size.w )
+                size.w = vSize.w;
+
+            if( vSize.h > size.h )
+                size.h = vSize.h;
+        }
+    }
+
+    // 
+    //  DESC: Calculate the radius
+    //  NOTE: The head node does not have a size
+    //
+    calcRadius( size )
+    {
+        if( size )
+            this.calcSize( size );
+        else
+            this.radius = this.sprite.getSize().getLength() / 2;
     }
 }
 
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40564,7 +41052,7 @@ class UIControlNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40651,7 +41139,7 @@ class UIControlLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40662,12 +41150,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(156);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+/* harmony import */ var _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(159);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: objectnode.js
 //  DESC:      Object node that allows for children
 //
+
 
 
 
@@ -40683,9 +41173,16 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
         super( nodeData.nodeId, nodeData.parentNodeId );
         
         this.name = nodeData.nodeName;
-        this.object = new _common_object__WEBPACK_IMPORTED_MODULE_0__.Object();
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__.ENT_OBJECT;
+        this.object = new _common_object__WEBPACK_IMPORTED_MODULE_0__.Object( this );
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ENT_OBJECT;
         this.userId = nodeData.userId;
+
+        // Allocate the collision component if collision is defined
+        if( _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__.isCollision( nodeData.baseXmlNode ) )
+        {
+            this.collisionComponent = new _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__.CollisionComponent( nodeData.baseXmlNode, this );
+            this.collisionComponent.init();
+        }
     }
     
     // 
@@ -40693,6 +41190,8 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
     //
     update()
     {
+        this.object.update();
+
         // Call the parent but it has to be last
         super.update();
     }
@@ -40706,6 +41205,10 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
             this.object.transform( object );
         else
             this.object.transform();
+
+        // Transform the AABB
+        //if( this.AABBrect && this.enableAABB )
+        //    this.object.matrix.transformRect( this.AABBtrans, this.AABBrect );
         
         // Call the parent but it has to be last
         super.transform();
@@ -40721,6 +41224,7 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
 
     // 
     //  DESC: Calculate the radius
+    //  NOTE: The head node does not have a size
     //
     calcRadius( size )
     {
@@ -40737,13 +41241,11 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
         // The head node gets the accumulated size of all the sprites
         if( headNode )
             this.radius = size.getLength() / 2;
-        else
-            this.radius = this.object.getSize().getLength() / 2;
     }
 }
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40753,9 +41255,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(164);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(165);
 
 //
 //  FILE NAME: statescripts.js
@@ -40842,7 +41344,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40857,9 +41359,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
 /* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
-/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17);
+/* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
 /* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
-/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
+/* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(21);
 /* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(147);
 
 //
@@ -41239,7 +41741,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41250,7 +41752,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(main)\">\r\n        <file path=\"data/objects/2d/objectDataList/mainData.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(space_ship)\">\r\n        <file path=\"data/objects/2d/objectDataList/spaceShipData.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41261,7 +41763,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_space_ship_\">\r\n        <file path=\"data/objects/strategy/spaceShip.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_main_\">\r\n        <file path=\"data/objects/strategy/main.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41272,7 +41774,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41283,14 +41785,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\"/>\r\n\r\n    <camera id=\"cubeCamera\" projectType=\"perspective\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n        <rotation x=\"10\" y=\"0\" z=\"0\"/>\r\n    </camera>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = JSON.parse('{"shader_2d":{"vert":{"file":"data/shaders/shader_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_uv","location":1},{"name":"cameraViewProjMatrix"}]},"frag":{"file":"data/shaders/shader_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_2d_spriteSheet":{"vert":{"file":"data/shaders/shader_spriteSheet_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_uv","location":1},{"name":"cameraViewProjMatrix"},{"name":"glyphRect"}]},"frag":{"file":"data/shaders/shader_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_solid_2d":{"vert":{"file":"data/shaders/shader_solid_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"cameraViewProjMatrix"}]},"frag":{"file":"data/shaders/shader_soild_v100.frag","dataType":[{"name":"color"},{"name":"additive"}]}},"shader_3d":{"vert":{"file":"data/shaders/shader_mesh_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_normal","location":1},{"name":"in_uv","location":2},{"name":"cameraViewProjMatrix"},{"name":"normalMatrix"}]},"frag":{"file":"data/shaders/shader_mesh_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_3d_no_txt":{"vert":{"file":"data/shaders/shader_mesh_no_txt_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_normal","location":1},{"name":"cameraViewProjMatrix"},{"name":"normalMatrix"}]},"frag":{"file":"data/shaders/shader_mesh_no_txt_v100.frag","dataType":[{"name":"color"},{"name":"additive"}]}}}');
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41301,11 +41803,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_main_\">\r\n        <node name=\"multiListTestNode\"/>\r\n        <node name=\"waffles\"/>\r\n    </strategy>\r\n    \r\n    <strategy name=\"_space_ship_\">\r\n        <node name=\"player_ship\">\r\n            <object>\r\n                <position x=\"-500\" y=\"-300\" z=\"0\"/>\r\n            </object>\r\n        </node>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"display":{"resolution":{"width":1280,"height":720},"default":{"width":1920,"height":1080}},"device":{"projection":{"projectType":"orthographic","minZDist":5,"maxZDist":1000,"viewAngle":45},"cull":{"enable":"true","frontFace":"CCW","cullFace":"BACK"},"depthStencilBuffer":{"enableDepthBuffer":"false","createStencilBuffer":"true","clearStencilBuffer":"true","stencilBufferBitSize":1},"targetBuffer":{"clear":"true"},"gamepad":{"allow":"true","stickDeadZone":0.3}},"game":{"name":"Game Template","id":"gametemplate"}}');
+module.exports = JSON.parse('{"display":{"resolution":{"width":1280,"height":720},"default":{"width":1920,"height":1080}},"device":{"projection":{"projectType":"orthographic","minZDist":5,"maxZDist":1000,"viewAngle":45},"cull":{"enable":"true","frontFace":"CCW","cullFace":"BACK"},"depthStencilBuffer":{"enableDepthBuffer":"false","createStencilBuffer":"true","clearStencilBuffer":"true","stencilBufferBitSize":1},"targetBuffer":{"clear":"true"},"gamepad":{"allow":"true","stickDeadZone":0.3},"stats":{"allow":"true"}},"game":{"name":"Game Template","id":"gametemplate"}}');
 
 /***/ })
 /******/ 	]);

@@ -41,6 +41,9 @@ export function create( nodeData )
         node = new ObjectNode( nodeData );
         
         node.object.loadTransFromNode( nodeData.xmlNode );
+
+        // Load the script functions from node
+        node.object.scriptComponent.initScriptIds( nodeData.xmlNode );
     }
     else if( nodeData.nodeType === defs.ENT_UI_CONTROL )
     {

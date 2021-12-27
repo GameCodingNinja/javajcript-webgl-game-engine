@@ -21,10 +21,6 @@ export class SpriteNode extends RenderNode
         this.sprite = new Sprite( objectData, this );
         this.type = defs.ENT_SPRITE;
         this.userId = nodeData.userId;
-        this.baseXmlNode = nodeData.baseXmlNode;
-
-        // Init the AABB if one is defined
-        this.initAABB( nodeData.baseXmlNode );
     }
 
     // 
@@ -58,8 +54,8 @@ export class SpriteNode extends RenderNode
             this.sprite.transform();
 
         // Transform the AABB
-        if( this.AABBrect && this.enableAABB )
-            this.sprite.matrix.transformRect( this.AABBtrans, this.AABBrect );
+        //if( this.AABBrect && this.enableAABB )
+        //    this.sprite.matrix.transformRect( this.AABBtrans, this.AABBrect );
         
         // Call the parent but it has to be last
         super.transform();
@@ -114,7 +110,5 @@ export class SpriteNode extends RenderNode
         // The head node gets the accumulated size of all the sprites
         if( headNode )
             this.radius = size.getLength() / 2;
-        else
-            this.radius = this.sprite.getSize().getLength() / 2;
     }
 }

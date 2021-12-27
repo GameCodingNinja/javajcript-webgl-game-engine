@@ -15,6 +15,34 @@ export class RenderNode extends Node
     {
         super( id, parentId )
     }
+
+    // 
+    //  DESC: Only called after node creation
+    //
+    init()
+    {
+        // Calculate the radius and rect for funtrum culling and collision detection
+        this.calcRadius();
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.get().prepareScriptOnInit();
+    }
+
+    // 
+    //  DESC: Adjust the size based on the object
+    //
+    calcSize( size )
+    {
+        let vSize = this.get().getSize();
+        if( vSize )
+        {
+            if( vSize.w > size.w )
+                size.w = vSize.w;
+
+            if( vSize.h > size.h )
+                size.h = vSize.h;
+        }
+    }
     
     // 
     //  DESC: Do some cleanup

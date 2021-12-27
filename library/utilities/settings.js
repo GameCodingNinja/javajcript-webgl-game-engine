@@ -42,6 +42,8 @@ class Settings
         this.gameName = "Unnamed Game";
         this.gameId = "unnamedgame";
 
+        this.stats = false;
+
         this.user = {
             "stickDeadZone": 0.1,
             "soundEnabled": 1 };
@@ -143,6 +145,12 @@ class Settings
 
                 if( obj.device.gamepad.stickDeadZone )
                     this.stickDeadZone = obj.device.gamepad.stickDeadZone;
+            }
+
+            if( obj.device.stats )
+            {
+                if( obj.device.stats.allow )
+                    this.stats = (obj.device.stats.allow === 'true');
             }
         }
 

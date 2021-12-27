@@ -6,6 +6,7 @@
 
 "use strict";
 import { highResTimer } from './highresolutiontimer';
+import { settings } from './settings';
 import { Timer } from './timer';
 
 class StatCounter
@@ -47,20 +48,23 @@ class StatCounter
     //
     incCycle()
     {
-        // These counters are incremeented each game loop cycle so they can
-        // be placed here in this function because this function is also called
-        // each game loop cycle
-        this.elapsedFPSCounter += highResTimer.fps;
-
-        ++this.cycleCounter;
-
-        // update the stats every 1 seconds. True = reset on expire
-        if( this.statsDisplayTimer.expired(true) )
+        if( settings.stats )
         {
-            //this.formatStatString();
+            // These counters are incremeented each game loop cycle so they can
+            // be placed here in this function because this function is also called
+            // each game loop cycle
+            this.elapsedFPSCounter += highResTimer.fps;
 
-            // Now that the stats are displayed, we can reset out counters.
-            this.resetCounters();
+            ++this.cycleCounter;
+
+            // update the stats every 1 seconds. True = reset on expire
+            if( this.statsDisplayTimer.expired(true) )
+            {
+                this.formatStatString();
+
+                // Now that the stats are displayed, we can reset out counters.
+                this.resetCounters();
+            }
         }
     }
 
