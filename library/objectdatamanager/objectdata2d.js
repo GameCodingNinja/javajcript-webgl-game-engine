@@ -9,6 +9,7 @@
 import { iObjectData } from './iobjectdata';
 import { ObjectPhysicsData2D } from './objectphysicsdata2d';
 import { ObjectVisualData2D } from './objectvisualdata2d';
+import { ObjectCollisionData } from './objectcollision';
 import { Size } from '../common/size';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
@@ -23,6 +24,9 @@ export class ObjectData2D extends iObjectData
 
         // Physics data of the object
         this.physicsData = new ObjectPhysicsData2D;
+
+        // Collision data of the object
+        this.collisionData = new ObjectCollisionData;
 
         // The name of the object data
         this.name = null;
@@ -41,6 +45,7 @@ export class ObjectData2D extends iObjectData
     {
         this.visualData.copy( obj.visualData );
         this.physicsData.copy( obj.physicsData );
+        this.collisionData.copy( obj.collisionData );
         this.size.copy( obj.size );
     }
     
@@ -60,6 +65,9 @@ export class ObjectData2D extends iObjectData
 
         // Load the physics data
         this.physicsData.loadObjData( node );
+
+        // Load the collision data
+        this.collisionData.loadObjData( node );
     }
     
     // 

@@ -12,7 +12,10 @@ export class Point
 {
     constructor( x = 0, y = 0, z = 0 )
     {
-        this.data = new Float32Array([x,y,z]);
+        if(x instanceof Point)
+            this.data = new Float32Array([x.data[0], x.data[1], x.data[2]]);
+        else
+            this.data = new Float32Array([x, y, z]);
     }
     
     set x(value) { this.data[0] = value; }

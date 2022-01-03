@@ -294,6 +294,12 @@ export class Matrix
         for( let i = 0; i < 4; ++i )
             this.transformPoint( dest.point[i], source.point[i] );
     }
+
+    transformPolygon( dest, source )
+    {
+        for( let i = 0; i < source.pointAry.length; ++i )
+            this.transformPoint( dest.pointAry[i], source.pointAry[i] );
+    }
     
     //
     //  DESC: Set the scale to the master matrix

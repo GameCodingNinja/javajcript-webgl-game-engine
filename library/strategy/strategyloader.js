@@ -127,12 +127,12 @@ class Strategyloader
                             }
                             else
                             {
-                                console.log(`Strategy Loader Warning: Child node defined for ${name} but can not be found.`);
+                                console.warn(`Strategy Loader Warning: Child node defined for ${name} but can not be found.`);
                             }
                         }
                         else
                         {
-                            console.log(`Strategy Loader Warning: Child node defined for ${name} but child node name not defined. Can't initialize.`);
+                            console.warn(`Strategy Loader Warning: Child node defined for ${name} but child node name not defined. Can't initialize.`);
                         }
                     }
                 }

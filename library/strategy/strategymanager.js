@@ -62,7 +62,7 @@ class StrategyManager extends ManagerBase
             if( index === -1 )
                 this.strategyAry.push( strategy );
             else
-                console.log( `Strategy is already active (${strategyId})!` );
+                console.warn( `Strategy is already active (${strategyId})!` );
         }
         else
             throw new Error( `Strategy id can't be found (${strategyId})!` );
@@ -82,10 +82,10 @@ class StrategyManager extends ManagerBase
             if( index !== -1 )
                 this.strategyAry.splice( index, 1 );
             else
-                console.log( `Strategy is not active (${strategyId})!` );
+                console.warn( `Strategy is not active (${strategyId})!` );
         }
         else
-            console.log( `Strategy id can't be found to deactivate (${strategyId})!` );
+            console.warn( `Strategy id can't be found to deactivate (${strategyId})!` );
         
         return strategy;
     }
@@ -108,7 +108,7 @@ class StrategyManager extends ManagerBase
                 this.strategyMap.delete( strategyGrp[i] );
             }
             else
-                console.log( `Strategy id can't be found to clean up (${strategyGrp[i]})!` );
+                console.warn( `Strategy id can't be found to clean up (${strategyGrp[i]})!` );
         }
     }
     

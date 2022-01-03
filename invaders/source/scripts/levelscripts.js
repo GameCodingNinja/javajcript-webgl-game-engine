@@ -40,14 +40,14 @@ class PlayerShip_FireTailAnim
 //
 class PlayerShip_ShootLazer
 {
-    constructor( obj, shipVelocity )
+    constructor( sprite, shipVelocity )
     {
-        this.obj = obj;
-        this.radius = obj.parentNode.radius;
-        this.laserSprite = obj.parentNode.findChild('lazer_blast').sprite;
+        this.sprite = sprite;
+        this.radius = sprite.parentNode.radius;
+        this.laserSprite = sprite.parentNode.findChild('lazer_blast').sprite;
 
         // Speed of the projectile
-        this.PROJECTILE_SPEED = 2.5;
+        this.PROJECTILE_SPEED = 0.05;
 
         // Laser blast offset
         this.LASER_OFFSET = 10;
@@ -77,17 +77,17 @@ class PlayerShip_ShootLazer
         }
 
         // Set the rotation
-        this.obj.setRot( this.playerShipSprite.rot, false );
+        this.sprite.setRot( this.playerShipSprite.rot, false );
 
         // Set the initial position
-        this.obj.setPos( this.playerShipSprite.pos );
+        this.sprite.setPos( this.playerShipSprite.pos );
 
         // Set the initial offset
-        this.obj.incPosXYZ( this.offsetX );
+        this.sprite.incPosXYZ( this.offsetX );
 
         // Will have to do a preemptive transform so that the transPos data is available
         // for camera.inView because that doesn't happen until later in the pipeline.
-        this.obj.transform();
+        this.sprite.transform();
         
         // Record the ship x
         this.playerShipX = this.playerShipSprite.pos.x;
@@ -98,10 +98,13 @@ class PlayerShip_ShootLazer
     //
     execute()
     {
-        if( this.camera.inView( this.obj.transPos, this.radius ) )
+        if( this.camera.inView( this.sprite.transPos, this.radius ) )
         {
-            this.obj.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
-            let dist = Math.abs(this.obj.pos.x - this.playerShipX - this.offsetX);
+            this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
+            let dist = Math.abs(this.sprite.pos.x - this.playerShipX - this.offsetX);
+
+            if( this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry ) )
+                console.log("hit");
 
             //console.log(dist);
 
@@ -110,18 +113,18 @@ class PlayerShip_ShootLazer
             else if( dist > 1100 )
                 this.laserSprite.setFrame( 2 );
 
-            else if( dist > 370 )
+            else if( dist > 420 )
                 this.laserSprite.setFrame( 3 );
-            else if( dist > 230 )
+            else if( dist > 270 )
                 this.laserSprite.setFrame( 2 );
-            else if( dist > 95 )
+            else if( dist > 135 )
                 this.laserSprite.setFrame( 1 );
 
             return false;
         }
 
-        // We are done with this object, queue it up to be deleted
-        this.enemyStratagy.destroy(this.obj.parentNode);
+        // We are done with this sprite, queue it up to be deleted
+        this.playerShipStratagy.destroy(this.sprite.parentNode);
 
         return true;
     }

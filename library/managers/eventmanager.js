@@ -141,7 +141,7 @@ class EventManager
     //
     onFullScreenChange( event )
     {
-        console.log('onFullScreenChange');
+        //console.log('onFullScreenChange');
         if (document.fullscreenElement)
         {
             let dpr = window.devicePixelRatio;
@@ -217,7 +217,7 @@ class EventManager
             actionManager.initGamepadMapping( event.gamepad.mapping );
             this.gamePadMap.set( event.gamepad.index, new Gamepad( event.gamepad ) );
             this.queue.push( event );
-            console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+            console.debug(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
         }
     }
 
@@ -229,7 +229,7 @@ class EventManager
         if( settings.allowGamepad )
         {
             this.queue.push( event );
-            console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+            console.debug(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
         }
     }
 

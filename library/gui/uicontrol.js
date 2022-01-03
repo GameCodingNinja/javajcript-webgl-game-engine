@@ -23,6 +23,8 @@ import * as uiControlDefs from '../gui/uicontroldefs';
 import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
+var gDummyPoint = new Point;
+
 export class UIControl extends ControlBase
 {
     constructor( group )
@@ -246,7 +248,7 @@ export class UIControl extends ControlBase
             this.collisionQuad.point[3].x += screenHalf.w;
             this.collisionQuad.point[3].y += screenHalf.h;
 
-            finalMatrix.transformPoint( this.collisionCenter, new Point );
+            finalMatrix.transformPoint( this.collisionCenter, gDummyPoint );
 
             // Convert to screen coordinates
             this.collisionCenter.x += screenHalf.w;

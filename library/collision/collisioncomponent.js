@@ -1,100 +1,175 @@
 //
 //  FILE NAME: collisioncomponent.js
 //  DESC:      Class for handling collision data
+//             NOTE: Works in squared space
+//             The more complex checks were lifted from: http://jeffreythompson.org/collision-detection/
 //
 
 "use strict";
 
+import { Point } from '../common/point';
 import { Rect } from '../common/rect';
-import * as parseHelper from '../utilities/xmlparsehelper';
-
-export const COL_NULL  = 0,
-             COL_RECT  = 1,
-             COL_TRY   = 2,
-             COL_POINT = 3;
+import { Polygon } from '../common/polygon';
+import * as defs from '../common/defs';
 
 export class CollisionComponent
 {
-    constructor( xmlNode, node )
+    constructor( objectData, sprite )
     {
-        // xmlNode from the base node level
-        this.xmlNode = xmlNode;
-
-        // Object to use for matrix and size
-        this.node = node;
-
-        // Object to use for matrix and size
-        this.obj = node.get();
+        // Sprite parent to this component
+        this.sprite = sprite;
 
         // Matrix to do the transformation with
-        this.matrix = node.get().matrix;
-
-        // Data type
-        this.type = COL_NULL;
+        this.matrix = sprite.matrix;
 
         // Enable flag
         this.enable = false;
 
-        // Collision data
-        this.data = null;
-
-        // Translated collision data
-        this.trans = null;
+        // Filter to determine who we should collide with
+        this.filterCategoryBits = 0x0;
+        this.filterMaskBits = 0x0;
 
         // Callback function for when a collision is detected
         this.callbackFunc = null;
+
+        if( objectData.collisionData.isActive() )
+        {
+            this.type = objectData.collisionData.type;
+            this.enable = true;
+            this.filterCategoryBits = objectData.collisionData.filterCategoryBits;
+            this.filterMaskBits = objectData.collisionData.filterMaskBits;
+
+            // Load the radius data
+            this.loadRadiusData( objectData );
+
+            if( objectData.collisionData.type === defs.ECT_RECT )
+                this.loadRectData( objectData );
+
+            else if( objectData.collisionData.type === defs.ECT_POLYGON )
+                this.loadPolygonData( objectData );
+        }
     }
 
     // 
-    //  DESC: Init the collision
+    //  DESC: Load radius data
     //
-    init()
+    loadRadiusData( objectData )
     {
-        for( let i = 0; i < this.xmlNode.children.length; ++i )
+        this.radius = objectData.collisionData.radius;
+
+        // Create the radius from visual size
+        if( objectData.collisionData.radiusFromVisual )
+            this.radius = objectData.size.getLengthSquared() / 2;
+
+        // Adjust the radius based on the modifier
+        this.radius += objectData.collisionData.radiusModifier;
+    }
+
+    // 
+    //  DESC: Load rect data
+    //
+    loadRectData( objectData )
+    {
+        this.rectAry = [];
+        this.transRectAry = [];
+
+        let halfW = objectData.size.w / 2;
+        let halfH = objectData.size.h / 2;
+
+        // Create rect from visual size
+        if( objectData.collisionData.rectFromVisual )
         {
-            if( this.xmlNode.children[i].nodeName == 'AABB' )
+            if( objectData.collisionData.rectAsSizeModifier )
             {
-                this.type = COL_RECT;
-                this.data = [];
-                this.trans = [];
-
-                let attr = this.xmlNode.children[i].getAttribute( 'enable' );
-                if( attr )
+                for( let i = 0; i < objectData.collisionData.rectAry.length; ++i )
                 {
-                    this.enable = (attr === 'true');
+                    let r = objectData.collisionData.rectAry[i];
+                    this.rectAry.push( new Rect(-(halfW + r.x1), halfH + r.y1, halfW + r.x2, -(halfH + r.y2)) );
                 }
-
-                attr = this.xmlNode.children[i].getAttribute( 'radius' );
-                if( attr )
-                {
-                    this.radius = Number(attr);
-                }
-
-                let nodeAry = this.xmlNode.children[i].getElementsByTagName( 'rect' );
-
-                for( let j = 0; j < nodeAry.length; ++j )
-                {
-                    this.data.push( parseHelper.loadRectFromChild( nodeAry[j] ) );
-                    this.trans.push( new Rect );
-                    this.trans[j].copy( this.data[j] );
-                }
-
-                break;
+            }
+            else
+            {
+                this.rectAry.push( new Rect(-halfW, halfH, halfW, -halfH) );
+            }
+            
+            for( let i = 0; i < this.rectAry.length; ++i )
+                this.transRectAry.push( new Rect(this.rectAry[i]) );
+        }
+        // Convert the rect to model offsets
+        else if( objectData.collisionData.rectToModelView )
+        {
+            for( let i = 0; i < objectData.collisionData.rectAry.length; ++i )
+            {
+                let r = objectData.collisionData.rectAry[i];
+                this.rectAry.push( new Rect(r.x1 - halfW, halfH - r.y1, r.x2 - halfW, halfH - r.y2) );
+                this.transRectAry.push( new Rect(this.rectAry[i]) );
+            }
+        }
+        // Load the rect data as is
+        else
+        {
+            for( let i = 0; i < objectData.collisionData.rectAry.length; ++i )
+            {
+                this.rectAry.push( new Rect(objectData.collisionData.rectAry[i]) );
+                this.transRectAry.push( new Rect(this.rectAry[i]) );
             }
         }
     }
 
     // 
-    //  DESC: Transform the rects for collision
+    //  DESC: Load polygon data
+    //
+    loadPolygonData( objectData )
+    {
+        let halfW = objectData.size.w / 2;
+        let halfH = objectData.size.h / 2;
+
+        this.polygonAry = [];
+        this.transPolygonAry = [];
+
+        // Convert the polygon points to model view offsets
+        if( objectData.collisionData.polyPointsToModelView )
+        {
+            for( let i = 0; i < objectData.collisionData.polygonAry.length; ++i )
+            {
+                this.polygonAry.push( new Polygon );
+
+                for( let j = 0; j < objectData.collisionData.polygonAry[i].pointAry.length; ++j )
+                {
+                    let p = objectData.collisionData.polygonAry[i].pointAry[j];
+                    this.polygonAry[i].pointAry.push( new Point( p.x - halfW, halfH - p.y, p.z) );
+                }
+
+                this.transPolygonAry.push( new Polygon( this.polygonAry[i] ) );
+            }
+        }
+        // Load the polygon data as is
+        else
+        {
+            for( let i = 0; i < objectData.collisionData.polygonAry.length; ++i )
+            {
+                this.polygonAry.push( new Polygon( objectData.collisionData.polygonAry[i] ) );
+                this.transPolygonAry.push( new Polygon( this.polygonAry[i] ) );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Transform the data for collision
     //
     transform()
     {
         if( this.enable )
         {
-            if( this.type == COL_RECT )
+            if( this.type === defs.ECT_RECT )
             {
-                for( let i = 0; i < this.data.length; ++i )
-                    this.matrix.transformRect( this.trans[i], this.data[i] );
+                for( let i = 0; i < this.rectAry.length; ++i )
+                    this.matrix.transformRect( this.transRectAry[i], this.rectAry[i] );
+            }
+            else if( this.type === defs.ECT_POLYGON )
+            {
+                for( let i = 0; i < this.polygonAry.length; ++i )
+                    this.matrix.transformPolygon( this.transPolygonAry[i], this.polygonAry[i] );
             }
         }
     }
@@ -102,32 +177,285 @@ export class CollisionComponent
     // 
     //  DESC: Check for collision
     //
-    checkForCollision( node )
+    checkForCollision( nodeAry )
     {
-        if( this.enable && node.collisionComponent && node.collisionComponent.enable )
+        for( let node = 0; node < nodeAry.length; ++node )
         {
-            // Do the broad phase check
-            let obj = node.collisionComponent.obj;
-            if( this.obj.transPos.calcLength2D( obj.transPos ) <= (this.node.radius + node.radius) )
+            let sprite = nodeAry[node].sprite;
+
+            if( this.enable && sprite.collisionComponent && sprite.collisionComponent.enable && (this.filterMaskBits & sprite.collisionComponent.filterCategoryBits) )
             {
+                if( this.type === defs.ECT_RECT && sprite.collisionComponent.type === defs.ECT_RECT )
+                {
+                    if( this.rectToRectCollision( sprite ) )
+                        return sprite;
+                }
+                else if( this.type === defs.ECT_CIRCLE && sprite.collisionComponent.type === defs.ECT_RECT )
+                {
+                    if( this.circleToRectCollision( sprite ) )
+                        return sprite;
+                }
+                else if( this.type === defs.ECT_POINT && sprite.collisionComponent.type === defs.ECT_RECT )
+                {
+                    if( this.pointToRectCollision( sprite ) )
+                        return sprite;
+                }
+                else if( this.type === defs.ECT_POINT && sprite.collisionComponent.type === defs.ECT_POLYGON )
+                {
+                    if( this.pointToPolygonCollision( sprite ) )
+                        return sprite;
+                }
+                else if( this.type === defs.ECT_CIRCLE && sprite.collisionComponent.type === defs.ECT_POLYGON )
+                {
+                    if( this.circleToPolygonCollision( sprite ) )
+                        return sprite;
+                }
             }
         }
-    }
-}
 
-// 
-//  DESC: Function to check collision detection has been defined
-//
-export function isCollision( xmlNode )
-{
-    for( let i = 0; i < xmlNode.children.length; ++i )
+        return null;
+    }
+
+    // 
+    //  DESC: Check for rect to rect collision
+    //
+    rectToRectCollision( sprite )
     {
-        if( xmlNode.children[i].nodeName == 'AABB' )
+        // Do the broad phase check
+        if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this.radius + sprite.collisionComponent.radius) )
         {
-            if( xmlNode.children[i].getElementsByTagName( 'rect' ) )
+            let transRectAry = sprite.collisionComponent.transRectAry;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transRectAry.length; ++i )
+            {
+                for( let j = 0; j < this.transRectAry.length; ++j )
+                {
+                    if( this.transRectAry[j].x1 < transRectAry[i].x2 &&
+                        this.transRectAry[j].x2 > transRectAry[i].x1 &&
+                        this.transRectAry[j].y1 > transRectAry[i].y2 &&
+                        this.transRectAry[j].y2 < transRectAry[i].y1 )
+                    {
+                        if( this.callbackFunc )
+                            this.callbackFunc(this.sprite, sprite);
+
+                        if( sprite.collisionComponent.callbackFunc )
+                            sprite.collisionComponent.callbackFunc(sprite, this.sprite);
+
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // 
+    //  DESC: Check for circle to rect collision
+    //
+    circleToRectCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this.radius + sprite.collisionComponent.radius) )
+        {
+            let transRectAry = sprite.collisionComponent.transRectAry;
+            let transPos = this.sprite.transPos;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transRectAry.length; ++i )
+            {
+                // Find the edge the point is out side of
+                let edgeX = transPos.x;
+                let edgeY = transPos.y;
+
+                if( transPos.x < transRectAry[i].x1 )
+                    edgeX = transRectAry[i].x1;
+                else if( transPos.x > transRectAry[i].x2 )
+                    edgeX = transRectAry[i].x2;
+
+                if( transPos.y < transRectAry[i].y2 )
+                    edgeY = transRectAry[i].y2;
+                else if( transPos.y > transRectAry[i].y1 )
+                    edgeY = transRectAry[i].y1;
+                
+                // Get distance from closest edges
+                let distX = transPos.x - edgeX;
+                let distY = transPos.y - edgeY;
+                let distance = (distX * distX) + (distY * distY);
+
+                if( distance <= this.radius )
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    // 
+    //  DESC: Check for point to rect collision
+    //
+    pointToRectCollision( sprite )
+    {
+        let transPos = this.sprite.transPos;
+        let transRectAry = sprite.collisionComponent.transRectAry;
+
+        // Just do the narrow phase check
+        for( let i = 0; i < transRectAry.length; ++i )
+        {
+            if( !(transPos.x < transRectAry[i].x1 || transPos.x > transRectAry[i].x2 ||
+                transPos.y > transRectAry[i].y1 || transPos.y < transRectAry[i].y2) )
                 return true;
         }
+        
+        return false;
     }
 
-    return false;
+    // 
+    //  DESC: Check for point to polygon collision
+    //
+    pointToPolygonCollision( sprite )
+    {
+        let collision = false;
+        let transPos = this.sprite.transPos;
+        let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+
+        // Do the broad phase check
+        if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this.radius + sprite.collisionComponent.radius) )
+        {
+            // Do the narrow phase check
+            for( let i = 0; i < transPolygonAry.length && !collision; ++i )
+            {
+                for( let j = 0; j < transPolygonAry[i].pointAry.length; ++j )
+                {
+                    // Get next vertex in list. If we've hit the end, wrap around to 0
+                    let next = j + 1;
+                    if( next == transPolygonAry[i].pointAry.length )
+                        next = 0;
+
+                    // Ge the current and next point
+                    let vc = transPolygonAry[i].pointAry[j];
+                    let vn = transPolygonAry[i].pointAry[next];
+                    let px = transPos.x;
+                    let py = transPos.y;
+
+                    // compare position, flip 'collision' variable back and forth
+                    if( ((vc.y >= py && vn.y < py) || (vc.y < py && vn.y >= py)) &&
+                        (px < (vn.x-vc.x)*(py-vc.y) / (vn.y-vc.y)+vc.x) )
+                    {
+                        collision = !collision;
+                    }
+                }
+            }
+        }
+        
+        return collision;
+    }
+
+    // 
+    //  DESC: Check for circle to polygon collision
+    //
+    circleToPolygonCollision( sprite )
+    {
+        let collision = false;
+        let transPos = this.sprite.transPos;
+        let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+
+        // Do the broad phase check
+        if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this.radius + sprite.collisionComponent.radius) )
+        {
+            // Do the narrow phase check
+            for( let i = 0; i < transPolygonAry.length && !collision; ++i )
+            {
+                for( let j = 0; j < transPolygonAry[i].pointAry.length; ++j )
+                {
+                    // Get next vertex in list. If we've hit the end, wrap around to 0
+                    let next = j + 1;
+                    if( next == transPolygonAry[i].pointAry.length )
+                        next = 0;
+
+                    // check for collision between the circle and a line formed between the two vertices
+                    collision = this.lineToCircleCheck(transPolygonAry[i].pointAry[j], transPolygonAry[i].pointAry[next], transPos, this.radius);
+                }
+            }
+        }
+        
+        return collision;
+    }
+
+    // 
+    //  DESC: Line to circle test
+    //
+    lineToCircleCheck( pointPos1, pointPos2, circlePos, radius )
+    {
+        // Is either end INSIDE the circle? if so, return true immediately
+        if( this.pointToCircleCheck( pointPos1, circlePos, radius ) ||
+            this.pointToCircleCheck( pointPos2, circlePos, radius ) )
+            return true;
+      
+        // get length of the line
+        let distX = pointPos1.x - pointPos2.x;
+        let distY = pointPos1.y - pointPos2.y;
+        let len = (distX * distX) + (distY * distY);
+      
+        // get dot product of the line and circle
+        let dot = ( ((circlePos.x-pointPos1.x)*(pointPos2.x-pointPos1.x)) + ((circlePos.y-pointPos1.y)*(pointPos2.y-pointPos1.y)) ) / len;
+      
+        // find the closest point on the line
+        let closest = new Point(pointPos1.x + (dot * (pointPos2.x-pointPos1.x)),
+                                pointPos1.y + (dot * (pointPos2.y-pointPos1.y)));
+      
+        // Is this point actually on the line segment?
+        // If so keep going, but if not, return false
+        if( !this.lineToPointCheck( pointPos1, pointPos2, closest ) )
+            return false;
+      
+        // Is the circle on the line?
+        if( this.pointToCircleCheck( closest, circlePos, radius ) )
+          return true;
+
+        return false;
+      }
+
+    // 
+    //  DESC: Point to circle test
+    //  NOTE: Function works in square space
+    //
+    pointToCircleCheck( pointPos, circlePos, radius )
+    {
+        // Get distance between the point and circle's center using the Pythagorean Theorem
+        let distX = pointPos.x - circlePos.x;
+        let distY = pointPos.y - circlePos.y;
+        let distance = (distX * distX) + (distY * distY);
+
+        // If the distance is less than the circle's radius the point is inside!
+        if( distance <= radius ) 
+            return true;
+
+        return false;
+    }
+
+    // lineToPointCheck(float x1, float y1, float x2, float y2, float px, float py)
+    lineToPointCheck( pointPos1, pointPos2, pos )
+    {
+        // Get distance from the point to the two ends of the line
+        let d1 = pos.calcLengthSquared( pointPos1 );
+        let d2 = pos.calcLengthSquared( pointPos2 );
+      
+        // Get the length of the line
+        let lineLen = pointPos1.calcLengthSquared( pointPos2 );
+      
+        // since floats are so minutely accurate, add
+        // a little buffer zone that will give collision
+        let buffer = 0.1;    // higher # = less accurate
+      
+        // if the two distances are equal to the line's
+        // length, the point is on the line!
+        // note we use the buffer here to give a range, rather
+        // than one #
+        if (d1+d2 >= lineLen-buffer && d1+d2 <= lineLen+buffer)
+            return true;
+
+        return false;
+    }
 }

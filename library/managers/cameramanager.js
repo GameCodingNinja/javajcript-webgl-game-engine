@@ -79,7 +79,7 @@ class CameraManager
     {
         if( !this.cameraMap.has( cameraId ) )
         {
-            console.log( `Camera id is not defined (${cameraId})! Using default camera instead.` );
+            console.debug( `Camera id is not defined (${cameraId})! Using default camera instead.` );
             return this.defaultCamera;
         }
         
@@ -96,7 +96,7 @@ class CameraManager
         {
             let index = this.transformAry.findIndex( (obj) => obj === camera );
             if( index !== -1 )
-                console.log( `Camera is already being transformed (${cameraId})!` );
+                console.warn( `Camera is already being transformed (${cameraId})!` );
             else
                 this.transformAry.push( camera );
         }
@@ -114,7 +114,7 @@ class CameraManager
         {
             let index = this.transformAry.findIndex( (obj) => obj === camera );
             if( index === -1 )
-                console.log( `Camera is not being transformed (${cameraId})!` );
+                console.warn( `Camera is not being transformed (${cameraId})!` );
             else
                 this.transformAry.splice(index, 1);
         }

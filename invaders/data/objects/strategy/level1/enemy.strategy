@@ -1,33 +1,7 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)" defaultCamera="levelCamera">
 
-    <node name="player_lazer">
-
-        <AABB enable="true" radius="10">
-            <rect x1="180" y1="4" x2="200" y2="-4"/>
-        </AABB>
-
-        <object>
-            <scriptList>
-                <script shoot="PlayerShip_ShootLazer" prepareOnInit="false"/>
-            </scriptList>
-        </object>
-
-        <node name="lazer_blast">
-
-            <sprite>
-                <position x="-190" y="0" z="0"/>
-            </sprite>
-
-        </node>
-
-    </node>
-
     <node name="enemy_ship">
-
-        <AABB enable="true" radiusFromSprite="true">
-            <rect x1="-70" y1="50" x2="70" y2="-50"/>
-        </AABB>
 
         <sprite>
             <scriptList>

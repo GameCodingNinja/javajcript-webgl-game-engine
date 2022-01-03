@@ -10,7 +10,10 @@ export class Rect
 {
     constructor( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
     {
-        this.data = new Float32Array([x1,y1,x2,y2]);
+        if(x1 instanceof Rect)
+            this.data = new Float32Array([x1.data[0], x1.data[1], x1.data[2], x1.data[3]]);
+        else
+            this.data = new Float32Array([x1, y1, x2, y2]);
     }
     
     set( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )

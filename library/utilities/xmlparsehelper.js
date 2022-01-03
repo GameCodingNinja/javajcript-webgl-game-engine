@@ -10,6 +10,7 @@ import { Color } from '../common/color';
 import { Size } from '../common/size';
 import { Point } from '../common/point';
 import { Rect } from '../common/rect';
+import { Polygon } from '../common/polygon';
 import { Vertex2d } from '../common/vertex2d';
 import { DynamicOffset } from '../common/dynamicoffset';
 import * as defs from '../common/defs';
@@ -168,7 +169,21 @@ export function loadCenterPos( xmlNode )
 // 
 //  DESC: Load the generic x, y, z values
 //
-export function loadXYZ( xmlNode )
+export function loadPolygon( xmlNode )
+{
+    let polygon = new Polygon;
+
+    let pointNode = xmlNode.getElementsByTagName( 'point' );
+    for( let i = 0; i < pointNode.length; ++i )
+        polygon.pointAry.push( loadPoint( pointNode[i] ) );
+
+    return polygon;
+}
+
+// 
+//  DESC: Load the generic x, y, z values
+//
+export function loadPoint( xmlNode )
 {
     let point = new Point;
 
@@ -185,8 +200,7 @@ export function loadXYZ( xmlNode )
         point.z = Number( attr );
 
     return point;
-
-}   // LoadScale
+}
 
 // 
 //  DESC: Load the color

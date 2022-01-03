@@ -127,10 +127,10 @@ export class Strategy extends Object
             {
                 group = objectDataManager.findGroup( name );
                 if( group )
-                    console.log( `Simple Strategy node sprite auto generated from group search (${group}, ${name})!` );
+                    console.debug( `Simple Strategy node sprite auto generated from group search (${group}, ${name})!` );
             }
             else
-                console.log( `Simple Strategy node sprite auto generated from group and object name (${group}, ${name})!` );
+                console.debug( `Simple Strategy node sprite auto generated from group and object name (${group}, ${name})!` );
 
             // If we found group that has an object of the same name, create the data and pass it along
             if( group )
@@ -240,7 +240,7 @@ export class Strategy extends Object
         {
             let index = this.nodeAry.findIndex( (obj) => obj === node );
             if( index !== -1 )
-                console.log( `Node is already active (${instanceName})!` );
+                console.warn( `Node is already active (${instanceName})!` );
             else
                 this.activateAry.push( node );
         }
@@ -262,10 +262,10 @@ export class Strategy extends Object
             if( index !== -1 )
                 this.deactivateAry.push( this.nodeAry[index] );
             else
-                console.log( `Node is not active (${instanceName})!` );
+                console.warn( `Node is not active (${instanceName})!` );
         }
         else
-            console.log( `Node can't be found (%s) (${instanceName})!` );
+            console.error( `Node can't be found (%s) (${instanceName})!` );
     }
 
     //
@@ -279,7 +279,7 @@ export class Strategy extends Object
             if( index !== -1 )
                 this.deactivateAry.push( this.nodeAry[index] );
             else
-                console.log( `Node is not active (${key})!` );
+                console.warn( `Node is not active (${key})!` );
         }
     }
 

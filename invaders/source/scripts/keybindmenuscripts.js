@@ -99,7 +99,7 @@ export class KeyBindBtn_event
         // Check for escape/enter to disable key mapping process
         if( !(keyCode === 'Enter' || keyCode === 'Escape') )
         {
-            console.log(`${labelStr} mapped: ${keyCode}`);
+            console.debug(`${labelStr} mapped: ${keyCode}`);
             let [componetIdStr, configurable] = actionManager.resetAction( deviceId, this.control.name, keyCode );
 
             if( configurable )

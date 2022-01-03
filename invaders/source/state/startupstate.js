@@ -163,7 +163,7 @@ export class StartUpState extends GameState
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();
 
-                console.log('StartUp State load complete!: ' + this.progressBar.curValue);
+                console.debug('StartUp State load complete!: ' + this.progressBar.curValue);
             }
         }
     }

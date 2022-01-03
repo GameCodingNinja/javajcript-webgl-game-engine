@@ -51,7 +51,8 @@ export class SpriteData
         attr = xmlNode.getAttribute( 'objectName' );
         if( attr)
             this.objectName = attr;
-        else if( !defObjName )
-            console.log(`Node name used for object data look-up (${this.group}, ${this.objectName})`);
+        // Indicate we are going to try to use the node name to lookup the sprite object name
+        else if( !defObjName && xmlNode.nodeName === "sprite" )
+            console.debug(`Node name used for object data look-up (${this.group}, ${this.objectName})`);
     }
 }

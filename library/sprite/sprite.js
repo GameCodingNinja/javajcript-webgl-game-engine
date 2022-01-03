@@ -14,6 +14,7 @@ import { VisualComponentFont } from '../2d/visualcomponentfont';
 import { VisualComponent3D } from '../3d/visualcomponent3d';
 import { NullVisualComponent } from '../common/nullvisualcomponent';
 import { PhysicsComponent2D } from '../physics/physicscomponent2d';
+import { CollisionComponent } from '../collision/collisioncomponent';
 import { Matrix } from '../utilities/matrix';
 import * as defs from '../common/defs';
 
@@ -31,6 +32,9 @@ export class Sprite extends Object
         
         // The physics part of the sprite
         this.physicsComponent = null;
+
+        // Collision part of the sprite.
+        this.collisionComponent = null;
         
         // Allocate the sprite specific objects
         if( objData.is2D() )
@@ -56,6 +60,9 @@ export class Sprite extends Object
             this.rotMatrix = new Matrix;
             this.visualComponent = new VisualComponent3D( objData.visualData );
         }
+
+        if( objData.collisionData.isActive() )
+            this.collisionComponent = new CollisionComponent( objData, this );
 
         // Allocate the null component if no visual component was created
         if( this.visualComponent === null )
@@ -145,6 +152,17 @@ export class Sprite extends Object
     {
         if( this.physicsComponent )
             this.physicsComponent.update();
+    }
+
+    //
+    //  DESC: Transform
+    //
+    transform( object = null )
+    {
+        super.transform( object );
+
+        if( this.collisionComponent )
+            this.collisionComponent.transform();
     }
     
     // 

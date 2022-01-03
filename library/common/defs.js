@@ -31,6 +31,13 @@ export const EGT_NULL         = 0,
              EGT_MESH_FILE    = 4,
              EGT_FONT         = 5;
 
+// ECollisionType
+export const ECT_NULL     = 0,
+             ECT_RECT     = 1,
+             ECT_CIRCLE   = 2,
+             ECT_POLYGON  = 3,
+             ECT_POINT    = 4;
+
 // EProjectionType
 export const EPT_NULL         = 0,
              EPT_PERSPECTIVE  = 1,

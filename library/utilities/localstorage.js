@@ -26,17 +26,17 @@ class LocalStorage
             if( this.storage.getItem( key ) === value )
             {
                 this.storage.removeItem( key );
-                console.log('Local storage available.');
+                console.debug('Local storage available.');
             }
             else
             {
                 this.storage = {}; // Dummy storage if storage is not available
-                console.log('Local storage NOT available.');
+                console.warn('Local storage NOT available.');
             }
         }
         catch (e)
         {
-            console.log( `Local storage error: ${e}` );
+            console.error( `Local storage error: ${e}` );
             this.storage = {}; // Dummy storage if storage is not available
         }
     }
@@ -55,7 +55,7 @@ class LocalStorage
         }
         catch (e)
         {
-            console.log( `Local storage set error: ${e}` );
+            console.error( `Local storage set error: ${e}` );
         }
     }
 
@@ -73,7 +73,7 @@ class LocalStorage
         }
         catch (e)
         {
-            console.log( `Local storage get error: ${e}` );
+            console.error( `Local storage get error: ${e}` );
         }
     }
 
@@ -91,7 +91,7 @@ class LocalStorage
         }
         catch (e)
         {
-            console.log( `Local storage free error: ${e}` );
+            console.error( `Local storage free error: ${e}` );
         }
     }
 
@@ -109,7 +109,7 @@ class LocalStorage
         }
         catch (e)
         {
-            console.log( `Local storage clear error: ${e}` );
+            console.error( `Local storage clear error: ${e}` );
         }
     }
 }

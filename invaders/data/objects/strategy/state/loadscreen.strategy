@@ -3,7 +3,7 @@
     
     <node name="loadAnim">
         
-        <sprite objectName="loadAnim">
+        <sprite>
             <scriptList>
                 <script animate="State_PlayLoadAnim" group="(state)"/>
             </scriptList>
@@ -13,7 +13,7 @@
     
     <node name="load_font">
         
-        <sprite objectName="load_font">
+        <sprite>
             <font fontName="dejavu_sans_cond_24" fontString="0%">
                 <attributes kerning="-1"/>
             </font>

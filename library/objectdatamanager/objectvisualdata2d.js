@@ -151,7 +151,10 @@ export class ObjectVisualData2D extends iObjectVisualData
                 let genTypeStr = meshNode[0].getAttribute('genType');
                 if( genTypeStr )
                 {
-                    if( genTypeStr === 'quad' )
+                    if( genTypeStr === 'null' )
+                        this.genType = defs.EGT_NULL;
+
+                    else if( genTypeStr === 'quad' )
                         this.genType = defs.EGT_QUAD;
 
                     else if( genTypeStr === 'sprite_sheet' )

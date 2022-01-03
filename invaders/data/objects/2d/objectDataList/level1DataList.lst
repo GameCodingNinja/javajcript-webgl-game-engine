@@ -2,7 +2,7 @@
 <objectDataList2D>
 
     <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
-    <default  name="">
+    <default name="">
         <visual>
             <mesh genType="quad"/>
             <shader id="shader_2d"/>
@@ -18,13 +18,13 @@
             </visual>
         </object>
 
-        <object name="player_ship">
+        <object name="player_ship_body">
             <visual>
                 <texture file="data/textures/playerShip/skyship.png"/>
             </visual>
         </object>
 
-        <object name="fire_tail">
+        <object name="player_fire_tail">
             <visual>
                 <texture count="12" file="data/textures/playerShip/firetail${NUM}.png"/>
             </visual>
@@ -40,6 +40,34 @@
             <visual>
                 <texture file="data/textures/enemyShip/enemy.png"/>
             </visual>
+            <collision filterCategoryBits="0x00000001" filterMaskBits="0xFFFFFFFF">
+                <!--<AABB radiusFromVisual="true" rectToModelView="true">
+                    <rect x1="9" y1="12" x2="47" y2="120"/>
+                    <rect x1="45" y1="17" x2="111" y2="102"/>
+                    <rect x1="112" y1="12" x2="150" y2="120"/>
+                </AABB>-->
+                <polygonList radiusFromVisual="true" polyPointsToModelView="true">
+                    <polygon>
+                        <point x="78" y="0"/>
+                        <point x="45" y="60"/>
+                        <point x="65" y="99"/>
+                        <point x="90" y="99"/>
+                        <point x="111" y="60"/>
+                    </polygon>
+                </polygonList>
+            </collision>
+        </object>
+
+        <object name="null_lazer_sprite">
+            <visual>
+                <mesh genType="null"/>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0xFFFFFFFF">
+                <circle radiusFromVisual="true"/>
+                <!--<AABB radiusFromVisual="true" rectFromVisual="true"/>
+                <point radiusFromVisual="true"/>-->
+            </collision>
+            <size width="16" height="7"/>
         </object>
 
     </objectList>

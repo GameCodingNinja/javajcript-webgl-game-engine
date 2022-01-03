@@ -74,7 +74,7 @@ export class Level1State extends CommonState
         // Get the nodes and sprites we need to call and tuck them under the node for easy access
         this.playerShipStratagy = strategyManager.activateStrategy('_player_ship_');
         this.playerShipNode = this.playerShipStratagy.get('player_ship');
-        this.playerShipNode.fireTailSprite = this.playerShipNode.findChild('fire_tail').sprite;
+        this.playerShipNode.fireTailSprite = this.playerShipNode.findChild('player_fire_tail').sprite;
         this.playerShipNode.fireTailScript = this.playerShipNode.fireTailSprite.scriptComponent.prepare( 'fireTailAnim', this.playerShipNode.fireTailSprite );
 
         // Player/camera movement
@@ -117,7 +117,7 @@ export class Level1State extends CommonState
 
             if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
             {
-                let laserBlast = this.enemyStratagy.create('player_lazer').get();
+                let laserBlast = this.playerShipStratagy.create('player_lazer').get();
                 laserBlast.scriptComponent.prepare( 'shoot', laserBlast, this.easingX.getValue() );
             }
         }
