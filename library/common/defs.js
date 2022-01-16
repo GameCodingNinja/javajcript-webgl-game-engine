@@ -33,10 +33,12 @@ export const EGT_NULL         = 0,
 
 // ECollisionType
 export const ECT_NULL     = 0,
-             ECT_RECT     = 1,
+             ECT_POINT    = 1,
              ECT_CIRCLE   = 2,
-             ECT_POLYGON  = 3,
-             ECT_POINT    = 4;
+             ECT_LINE     = 3,
+             ECT_RECT     = 4,
+             ECT_POLYGON  = 5;
+             
 
 // EProjectionType
 export const EPT_NULL         = 0,

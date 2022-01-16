@@ -1,7 +1,7 @@
 
 // 
 //  FILE NAME:  polygon.js
-//  DESC:       polygon class
+//  DESC:       Polygon class
 //
 
 "use strict";

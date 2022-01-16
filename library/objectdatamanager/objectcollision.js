@@ -7,6 +7,7 @@
 "use strict";
 
 import * as parseHelper from '../utilities/xmlparsehelper';
+import { Line } from '../common/line';
 import { Rect } from '../common/rect';
 import { Polygon } from '../common/polygon';
 import * as defs from '../common/defs';
@@ -30,7 +31,15 @@ export class ObjectCollisionData
         this.radiusFromVisual = obj.radiusFromVisual;
         this.radiusModifier = obj.radiusModifier;
         
-        if( obj.type === defs.ECT_RECT )
+        if( obj.type === defs.ECT_LINE )
+        {
+            this.pointsToModelView = obj.pointsToModelView;
+            this.lineAry = [];
+
+            for( let i = 0; i < obj.lineAry.length; ++i )
+                this.lineAry.push( new Line( obj.lineAry[i] ) )
+        }
+        else if( obj.type === defs.ECT_RECT )
         {
             this.rectToModelView = obj.rectToModelView;
 
@@ -39,7 +48,8 @@ export class ObjectCollisionData
         }
         else if( obj.type === defs.ECT_POLYGON )
         {
-            this.polyPointsToModelView = obj.polyPointsToModelView;
+            this.pointsToModelView = obj.pointsToModelView;
+            this.optionalPointCheck = obj.optionalPointCheck;
             this.polygonAry = [];
 
             for( let i = 0; i < obj.polygonAry.length; ++i )
@@ -75,7 +85,10 @@ export class ObjectCollisionData
             // Load the radius data
             this.loadRadiusData( collisionNode[0].children[0] );
 
-            if( collisionNode[0].children[0].nodeName == 'AABB' )
+            if( collisionNode[0].children[0].nodeName == 'lineList' )
+                this.loadLineData( collisionNode[0].children[0] );
+
+            else if( collisionNode[0].children[0].nodeName == 'rect' )
                 this.loadRectData( collisionNode[0].children[0] );
 
             else if( collisionNode[0].children[0].nodeName == 'circle' )
@@ -116,6 +129,25 @@ export class ObjectCollisionData
             // Modifer is calculated in square space
             this.radiusModifier = Number(attr) * Number(attr);
         }
+    }
+
+    // 
+    //  DESC: Load the line data
+    //
+    loadLineData( xmlNode )
+    {
+        this.type = defs.ECT_LINE;
+        this.lineAry = [];
+
+        let attr = xmlNode.getAttribute( 'pointsToModelView' );
+        if( attr )
+        {
+            this.pointsToModelView = (attr === 'true');
+        }
+
+        let lineNodeAry = xmlNode.getElementsByTagName( 'line' );
+        for( let i = 0; i < lineNodeAry.length; ++i )
+            this.lineAry.push( parseHelper.loadLine( lineNodeAry[i] ) );
     }
 
     // 
@@ -161,10 +193,16 @@ export class ObjectCollisionData
         this.type = defs.ECT_POLYGON;
         this.polygonAry = [];
 
-        let attr = xmlNode.getAttribute( 'polyPointsToModelView' );
+        let attr = xmlNode.getAttribute( 'pointsToModelView' );
         if( attr )
         {
-            this.polyPointsToModelView = (attr === 'true');
+            this.pointsToModelView = (attr === 'true');
+        }
+
+        attr = xmlNode.getAttribute( 'optionalPointCheck' );
+        if( attr )
+        {
+            this.optionalPointCheck = (attr === 'true');
         }
 
         let polygonNodeAry = xmlNode.getElementsByTagName( 'polygon' );

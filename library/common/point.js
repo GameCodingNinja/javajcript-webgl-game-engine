@@ -230,12 +230,12 @@ export class Point
     //
     getLengthSquared()
     {
-        return ( this.data[0] * this.data[0] ) +  ( this.data[1] * this.data[1] ) + ( this.data[2] * this.data[2] );
+        return ( this.data[0] * this.data[0] ) + ( this.data[1] * this.data[1] ) + ( this.data[2] * this.data[2] );
     }
 
     getLengthSquared2D()
     {
-        return ( this.data[0] * this.data[0] ) +  ( this.data[1] * this.data[1] );
+        return ( this.data[0] * this.data[0] ) + ( this.data[1] * this.data[1] );
     }
 
     // 
@@ -247,7 +247,7 @@ export class Point
         let dy = this.data[1] - point.data[1];
         let dz = this.data[2] - point.data[2];
 
-        return ( dx * dx ) +  ( dy * dy ) +  ( dz * dz );
+        return ( dx * dx ) + ( dy * dy ) + ( dz * dz );
     }
 
     calcLengthSquared2D( point )
@@ -255,7 +255,7 @@ export class Point
         let dx = this.data[0] - point.data[0];
         let dy = this.data[1] - point.data[1];
 
-        return ( dx * dx ) +  ( dy * dy );
+        return ( dx * dx ) + ( dy * dy );
     }
 
     // 
@@ -289,11 +289,11 @@ export class Point
     //
     getDotProduct( point )
     {
-        return ( this.data[0] * point.data[0] ) +  ( this.data[1] * point.data[1] ) + ( this.data[2] * point.data[2] );
+        return ( this.data[0] * point.data[0] ) + ( this.data[1] * point.data[1] ) + ( this.data[2] * point.data[2] );
     }
 
     getDotProduct2D( point )
     {
-        return ( this.data[0] * point.data[0] ) +  ( this.data[1] * point.data[1] );
+        return ( this.data[0] * point.data[0] ) + ( this.data[1] * point.data[1] );
     }
 }

@@ -14,6 +14,7 @@ import { ScriptComponent } from '../script/scriptcomponent';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as defs from '../common/defs';
 
+// Reusable global objects so as to avoid exessive allocations and cleanup
 var gDummyPoint = new Point;
 var gSize = new Size;
 var gRect = new Rect;

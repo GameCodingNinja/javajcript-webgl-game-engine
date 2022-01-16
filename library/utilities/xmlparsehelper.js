@@ -9,6 +9,7 @@
 import { Color } from '../common/color';
 import { Size } from '../common/size';
 import { Point } from '../common/point';
+import { Line } from '../common/line';
 import { Rect } from '../common/rect';
 import { Polygon } from '../common/polygon';
 import { Vertex2d } from '../common/vertex2d';
@@ -164,6 +165,20 @@ export function loadCenterPos( xmlNode )
     }
 
     return null;
+}
+
+// 
+//  DESC: Load the generic x, y, z values
+//
+export function loadLine( xmlNode )
+{
+    let line = new Line;
+
+    let pointNode = xmlNode.getElementsByTagName( 'point' );
+    line.head = loadPoint( pointNode[0] );
+    line.tail = loadPoint( pointNode[1] );
+
+    return line;
 }
 
 // 
