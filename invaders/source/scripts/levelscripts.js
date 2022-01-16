@@ -47,7 +47,7 @@ class PlayerShip_ShootLazer
         this.laserSprite = sprite.parentNode.findChild('lazer_blast').sprite;
 
         // Speed of the projectile
-        this.PROJECTILE_SPEED = 0.05;
+        this.PROJECTILE_SPEED = 2.5;
 
         // Laser blast offset
         this.LASER_OFFSET = 10;
