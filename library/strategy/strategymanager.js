@@ -169,7 +169,32 @@ class StrategyManager extends ManagerBase
     render()
     {
         for( let i = 0; i < this.strategyAry.length; i++ )
-            this.strategyAry[i].render();
+            if( this.strategyAry[i].isVisible() )
+                this.strategyAry[i].render();
+    }
+
+    //
+    //  DESC: Sort the stratagies based on sort function
+    //
+    sort( sortFunc = null )
+    {
+        if( sortFunc )
+            this.strategyAry.sort( sortFunc );
+
+        // If sort function is not provided, sort on z order
+        // For this to render as expected, sort in desending order. 
+        else
+            this.strategyAry.sort( 
+                (a, b) =>
+                {
+                    if(a.transPos.z > b.transPos.z)
+                        return -1;
+
+                    else if(a.transPos.z < b.transPos.z)
+                        return 1;
+
+                    return 0;
+                });
     }
 }
 

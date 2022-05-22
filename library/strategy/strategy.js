@@ -49,7 +49,7 @@ export class Strategy extends Object
     }
 
     //
-    //  DESC: Load the node data from xml
+    //  DESC: Load the stratagy node data from xml
     //
     loadFromNode( xmlNode, filePath )
     {
@@ -317,7 +317,7 @@ export class Strategy extends Object
     }
 
     //
-    //  DESC: Update the sprites
+    //  DESC: Update the nodes
     //
     update()
     {
@@ -335,7 +335,7 @@ export class Strategy extends Object
     }
 
     //
-    //  DESC: Transform the sprite
+    //  DESC: Transform the nodes
     //
     transform()
     {
@@ -346,7 +346,7 @@ export class Strategy extends Object
     }
 
     //
-    //  DESC: Render the sprites
+    //  DESC: Render the nodes
     //
     render()
     {
@@ -456,5 +456,53 @@ export class Strategy extends Object
     setCamera( cameraId )
     {
         this.camera = cameraManager.get( cameraId );
+    }
+
+    //
+    //  DESC: Sort the active nodes based on sort function
+    //
+    sortActive( sortFunc = null )
+    {
+        if( sortFunc )
+            this.nodeAry.sort( sortFunc );
+
+        // If sort function is not provided, sort on z order
+        // For this to render as expected, sort in desending order. 
+        else
+            this.nodeAry.sort( 
+                (a, b) =>
+                {
+                    if(a.get().transPos.z > b.get().transPos.z)
+                        return -1;
+
+                    else if(a.get().transPos.z < b.get().transPos.z)
+                        return 1;
+
+                    return 0;
+                });
+    }
+
+    //
+    //  DESC: Sort the active nodes based on sort function
+    //
+    sortPending( sortFunc = null )
+    {
+        if( sortFunc )
+            this.activateAry.sort( sortFunc );
+
+        // If sort function is not provided, sort on z order
+        // For this to render as expected, sort in desending order. 
+        else
+            this.activateAry.sort( 
+                (a, b) =>
+                {
+                    if(a.get().transPos.z > b.get().transPos.z)
+                        return -1;
+
+                    else if(a.get().transPos.z < b.get().transPos.z)
+                        return 1;
+
+                    return 0;
+                });
     }
 }

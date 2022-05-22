@@ -45,15 +45,13 @@ class PlayerShip_ShootLazer
         this.sprite = sprite;
         this.radius = sprite.parentNode.radius;
         this.laserSprite = sprite.parentNode.findChild('lazer_blast').sprite;
+        this.shipVelocity = shipVelocity
 
         // Speed of the projectile
         this.PROJECTILE_SPEED = 2.5;
 
         // Laser blast offset
         this.LASER_OFFSET = 10;
-
-        // The velocity of the ship when this script is activated
-        this.shipVelocity = shipVelocity;
 
         // Player ship
         this.playerShipStratagy = strategyManager.get('_player_ship_');
@@ -64,33 +62,30 @@ class PlayerShip_ShootLazer
         this.enemyStratagy = strategyManager.get('_enemy_');
 
         // Y Rotation
-        this.rot = this.playerShipSprite.rot.y;
+        let rot = this.playerShipSprite.rot;
 
         // Is the position flipped?
         this.offsetX = this.LASER_OFFSET;
         this.flipped = false;
-        if( this.rot )
+        if( rot.y )
         {
-            this.offsetX = this.LASER_OFFSET;
+            this.offsetX = -this.offsetX;
             this.PROJECTILE_SPEED = -this.PROJECTILE_SPEED;
             this.flipped = true;
         }
 
         // Set the rotation
-        this.sprite.setRot( this.playerShipSprite.rot, false );
+        this.sprite.setRot( rot, false );
 
         // Set the initial position
         this.sprite.setPos( this.playerShipSprite.pos );
 
         // Set the initial offset
-        this.sprite.incPosXYZ( this.offsetX );
+        this.sprite.incPosXYZ( this.offsetX);
 
         // Will have to do a preemptive transform so that the transPos data is available
         // for camera.inView because that doesn't happen until later in the pipeline.
         this.sprite.transform();
-        
-        // Record the ship x
-        this.playerShipX = this.playerShipSprite.pos.x;
     }
     
     // 
@@ -101,7 +96,7 @@ class PlayerShip_ShootLazer
         if( this.camera.inView( this.sprite.transPos, this.radius ) )
         {
             this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
-            let dist = Math.abs(this.sprite.pos.x - this.playerShipX - this.offsetX);
+            let dist = Math.abs(this.sprite.pos.x - this.playerShipSprite.pos.x - this.offsetX);
 
             if( this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry ) )
                 console.log("hit");

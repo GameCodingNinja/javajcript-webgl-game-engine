@@ -137,6 +137,10 @@ class Strategyloader
                     }
                 }
             }
+            else if( xmlNodeLst[i].nodeName === 'object' )
+            {
+                strategy.loadTransFromNode( xmlNodeLst[i] );
+            }
         }
     }
 

@@ -13,7 +13,6 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
-//import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
@@ -47,8 +46,6 @@ export class Level1State extends CommonState
     constructor( gameLoopCallback = null )
     {
         super( stateDefs.EGS_LEVEL_1, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
-        
-        //this.physicsWorld = physicsWorldManager.getWorld( "(game)" );
 
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -234,17 +231,6 @@ export class Level1State extends CommonState
         strategyManager.deleteStrategy( ['_level-1-stage_','_player_ship_'] );
         
         objectDataManager.freeGroup( ['(level_1)'] );
-        
-        //physicsWorldManager.destroyWorld( "(game)" );
-    }
-    
-    // 
-    //  DESC: Handle the physics
-    //
-    physics()
-    {
-        //if( !menuManager.active )
-        //    this.physicsWorld.variableTimeStep();
     }
     
     // 
@@ -333,14 +319,8 @@ export function load()
     
     return objectDataManager.loadGroup( groupAry )
 
-        // Load the physics list table and group
-        //.then(() => physicsWorldManager.loadWorldGroup2D( '(game)' ))
-
         // Load stage strategy.
         .then(() => strategyLoader.load( genFunc.stringLoadXML( levelStrategyLoader ) ))
-
-        // Load ball strategy.
-        //.then(() => strategyLoader.load( genFunc.stringLoadXML( ballStrategyLoader ) ))
 
         // Clean up the temporary files
         .then(() =>
