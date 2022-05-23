@@ -11,6 +11,7 @@ import { Point } from '../common/point';
 import { Line } from '../common/line';
 import { Rect } from '../common/rect';
 import { Polygon } from '../common/polygon';
+import { signalManager } from '../managers/signalmanager';
 import * as defs from '../common/defs';
 
 // Reusable global objects so as to avoid exessive allocations and cleanup
@@ -38,9 +39,7 @@ export class CollisionComponent
         // Filter to determine who we should collide with
         this.filterCategoryBits = 0x0;
         this.filterMaskBits = 0x0;
-
-        // Callback function for when a collision is detected
-        this.callbackFunc = null;
+        this.collisionSignal = false;
 
         if( objectData.collisionData.isActive() )
         {
@@ -48,6 +47,7 @@ export class CollisionComponent
             this.enable = true;
             this.filterCategoryBits = objectData.collisionData.filterCategoryBits;
             this.filterMaskBits = objectData.collisionData.filterMaskBits;
+            this.collisionSignal = objectData.collisionData.collisionSignal;
 
             // Load the radius data
             this.loadRadiusData( objectData );
@@ -357,11 +357,9 @@ export class CollisionComponent
 
                     if( result )
                     {
-                        if( this.callbackFunc )
-                                this.callbackFunc(this.sprite, sprite);
-
-                        if( sprite.collisionComponent.callbackFunc )
-                            sprite.collisionComponent.callbackFunc(sprite, this.sprite);
+                        // The sprite doing the collision checks should always be the first parameter
+                        if( this.collisionSignal )
+                            signalManager.broadcast_collisionSignal( this.sprite, sprite );
                         
                         return sprite;
                     }

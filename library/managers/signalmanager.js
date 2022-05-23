@@ -13,6 +13,7 @@ class SignalManager
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
         this.initShaderSignal = [];
+        this.collisionSignal = [];
     }
     
     // 
@@ -40,6 +41,14 @@ class SignalManager
     }
 
     // 
+    //  DESC: Connect to the collision signal
+    //
+    connect_collisionSignal( slot )
+    {
+        this.collisionSignal.push( slot );
+    }
+
+    // 
     //  DESC: Disconnect all to the load signal
     //
     clear_loadComplete()
@@ -62,7 +71,15 @@ class SignalManager
     {
         this.initShaderSignal = [];
     }
-    
+
+    // 
+    //  DESC: Disconnect all to collision signal
+    //
+    clear_collisionSignal()
+    {
+        this.collisionSignal = [];
+    }
+
     // 
     //  DESC: Broadcast the load signal
     //
@@ -88,6 +105,15 @@ class SignalManager
     {
         for( let i = 0; i < this.initShaderSignal.length; ++i )
             this.initShaderSignal[i](shaderId);
+    }
+
+    // 
+    //  DESC: Broadcast the collision signal
+    //
+    broadcast_collisionSignal( spriteA, spriteB )
+    {
+        for( let i = 0; i < this.collisionSignal.length; ++i )
+            this.collisionSignal[i](spriteA, spriteB);
     }
 }
 

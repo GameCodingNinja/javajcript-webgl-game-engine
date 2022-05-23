@@ -69,6 +69,7 @@ export class ObjectCollisionData
         {
             this.filterCategoryBits = 0x00000001;
             this.filterMaskBits = 0xFFFFFFFF;
+            this.collisionSignal = false;
 
             let attr = collisionNode[0].getAttribute( 'filterCategoryBits' );
             if( attr )
@@ -80,6 +81,12 @@ export class ObjectCollisionData
             if( attr )
             {
                 this.filterMaskBits = Number(attr);
+            }
+
+            attr = collisionNode[0].getAttribute( 'collisionSignal' );
+            if( attr )
+            {
+                this.collisionSignal = (attr === 'true');
             }
 
             // Load the radius data

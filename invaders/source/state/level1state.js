@@ -6,6 +6,7 @@
 
 "use strict";
 
+import { signalManager } from '../../../library/managers/signalmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
@@ -46,6 +47,9 @@ export class Level1State extends CommonState
     constructor( gameLoopCallback = null )
     {
         super( stateDefs.EGS_LEVEL_1, stateDefs.EGS_GAME_LOAD, gameLoopCallback );
+
+        // Set the collision callback signal
+        signalManager.connect_collisionSignal( this.collisionCallBack.bind(this) );
 
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
@@ -88,6 +92,20 @@ export class Level1State extends CommonState
         this.lastMoveDirX = MOVE_NULL;
         
         requestAnimationFrame( this.callback );
+    }
+
+    // 
+    //  DESC: handle collisions
+    //
+    collisionCallBack( spriteA, spriteB )
+    {
+        // Stop any more collision detection
+        spriteA.collisionComponent.enable = false;
+        spriteB.collisionComponent.enable = false;
+
+        // Schedule these sprite to be destroyed
+        this.playerShipStratagy.destroy(spriteA.parentNode);
+        this.enemyStratagy.destroy(spriteB.parentNode);
     }
     
     // 
@@ -223,7 +241,7 @@ export class Level1State extends CommonState
     }
     
     // 
-    //  DESC: Clean up after the startup state
+    //  DESC: Clean up after this state ends
     //
     cleanUp()
     {
@@ -231,6 +249,9 @@ export class Level1State extends CommonState
         strategyManager.deleteStrategy( ['_level-1-stage_','_player_ship_'] );
         
         objectDataManager.freeGroup( ['(level_1)'] );
+
+        // Disconnect to the collision signal
+        signalManager.clear_collisionSignal();
     }
     
     // 

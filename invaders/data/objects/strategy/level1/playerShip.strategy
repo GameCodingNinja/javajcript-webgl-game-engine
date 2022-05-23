@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)" defaultCamera="levelCamera">
 
-    <node name="player_lazer">
+    <node name="player_lazer" id="1">
 
         <sprite objectName="null_lazer_sprite">
             <scriptList>
@@ -19,7 +19,7 @@
 
     </node>
 
-    <node name="player_ship">
+    <node name="player_ship" id="0">
 
         <object/>
 

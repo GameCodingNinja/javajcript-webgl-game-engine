@@ -98,11 +98,8 @@ class PlayerShip_ShootLazer
             this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
             let dist = Math.abs(this.sprite.pos.x - this.playerShipSprite.pos.x - this.offsetX);
 
-            if( this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry ) )
-                console.log("hit");
-
-            //console.log(dist);
-
+            this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
+                
             if( dist > 1240 )
                 this.laserSprite.setFrame( 1 );
             else if( dist > 1100 )

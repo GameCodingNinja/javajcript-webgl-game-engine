@@ -71,7 +71,7 @@
             <visual>
                 <mesh genType="null"/>
             </visual>
-            <collision filterCategoryBits="0x00000002" filterMaskBits="0xFFFFFFFF">
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0xFFFFFFFF" collisionSignal="true">
                 <circle radiusFromVisual="true"/>
                 <!--<rect radiusFromVisual="true" rectFromVisual="true"/>
                 <point radiusFromVisual="true"/>
