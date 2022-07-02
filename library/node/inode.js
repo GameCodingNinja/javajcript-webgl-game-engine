@@ -70,4 +70,12 @@ export class iNode
     {
         return null;
     }
+
+    // 
+    //  DESC: Calculate the head node radius
+    //
+    calcRadius()
+    {
+        // Empty by design
+    }
 }

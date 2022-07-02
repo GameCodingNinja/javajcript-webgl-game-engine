@@ -1,7 +1,7 @@
 {
     "display": {
         "resolution": { "width": 1280, "height": 720 },
-        "default": { "width": 1920, "height": 1080 } },
+        "default": { "width": 1280, "height": 720 } },
 
     "device": {
         "projection": { "projectType": "orthographic", "minZDist": 5, "maxZDist": 1000, "viewAngle": 45 },

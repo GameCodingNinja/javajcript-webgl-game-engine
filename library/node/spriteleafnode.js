@@ -9,7 +9,10 @@
 
 import { iNode } from './inode';
 import { Sprite } from '../sprite/sprite';
+import { Point } from '../common/point';
 import * as defs from '../common/defs';
+
+var gPoint = new Point;
 
 export class SpriteLeafNode extends iNode
 {
@@ -107,11 +110,22 @@ export class SpriteLeafNode extends iNode
     //  DESC: Calculate the radius
     //  NOTE: The head node does not have a size
     //
-    calcRadius( size )
+    calcRadius( size = null )
     {
-        if( size )
+        if( size !== null )
+        {
             this.calcSize( size );
+        }
         else
+        {
+            // Reset the position to zero for radius calculation
+            gPoint.copy(this.sprite.pos);
+            this.sprite.setPosXYZ();
+
             this.radius = this.sprite.getSize().getLength() / 2;
+
+            // Reset it back
+            this.sprite.setPos(gPoint);
+        }
     }
 }

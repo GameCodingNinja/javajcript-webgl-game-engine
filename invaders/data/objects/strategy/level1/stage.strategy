@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)" defaultCamera="levelCamera">
 
-    <node name="ground">
-        <sprite/>
+    <node name="daytime_buildingsback">
+        <sprite>
+            <scale x="4" y="4"/>
+        </sprite>
     </node>
   
 </strategy>

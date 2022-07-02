@@ -113,6 +113,8 @@ class ObjectDataManager extends ManagerBase
                     if( objData.is2D() )
                     {
                         let filePathAry = objData.visualData.getTextureFilePathAry();
+                        let textureWrap = objData.visualData.textureWrap;
+                        let textureFilter = objData.visualData.textureFilter;
 
                         for( let i = 0; i < filePathAry.length; ++i )
                         {
@@ -123,7 +125,7 @@ class ObjectDataManager extends ManagerBase
                                 // Load the texture file
                                 promiseAry.push( 
                                     genFunc.downloadFile( 'img', filePath )
-                                        .then(( image ) => textureManager.load( group, filePath, image ))
+                                        .then(( image ) => textureManager.load( group, filePath, image, textureWrap, textureFilter ))
                                         .catch(( error ) => { console.error(error.stack); throw error; }));
                             }
                         }

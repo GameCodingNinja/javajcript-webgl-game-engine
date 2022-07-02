@@ -9,7 +9,10 @@
 import { Object } from '../common/object';
 import { RenderNode } from './rendernode';
 import { Size } from '../common/size';
+import { Point } from '../common/point';
 import * as defs from '../common/defs';
+
+var gPoint = new Point;
 
 export class ObjectNode extends RenderNode
 {
@@ -60,20 +63,28 @@ export class ObjectNode extends RenderNode
     //  DESC: Calculate the radius
     //  NOTE: The head node does not have a size
     //
-    calcRadius( size )
+    calcRadius( size = null )
     {
-        let headNode = false;
-        if( !size )
+        let headNode = (size === null);
+        if( headNode )
         {
             size = new Size;
-            headNode = true;
+
+            // Reset the position to zero for radius calculation
+            gPoint.copy(this.object.pos);
+            this.object.setPosXYZ();
         }
 
         this.calcSize( size );
         super.calcRadius( size );
 
-        // The head node gets the accumulated size of all the sprites
+        // The head node gets the accumulated size of all the objects/sprites
         if( headNode )
+        {
             this.radius = size.getLength() / 2;
+
+            // Reset it back
+            this.object.setPos(gPoint);
+        }
     }
 }

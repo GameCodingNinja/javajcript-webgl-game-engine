@@ -16,6 +16,7 @@ import { textureManager } from '../managers/texturemanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { spriteSheetManager } from '../managers/spritesheetmanager';
 import { assetHolder } from '../utilities/assetholder';
+import { device } from '../system/device';
 import * as defs from '../common/defs';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
@@ -45,6 +46,10 @@ export class ObjectVisualData2D extends iObjectVisualData
 
         // texture file path
         this.textureFilePath = '';
+
+        // Texture parameters
+        this.textureWrap = device.gl.CLAMP_TO_EDGE;
+        this.textureFilter = device.gl.LINEAR;
         
         // Texture Sequence count
         this.textureSequenceCount = 0;
@@ -85,6 +90,8 @@ export class ObjectVisualData2D extends iObjectVisualData
         this.genType = obj.genType;
         this.shaderID = obj.shaderID;
         this.textureFilePath = obj.textureFilePath;
+        this.textureWrap = obj.textureWrap;
+        this.textureFilter = obj.textureFilter;
         this.textureSequenceCount = obj.textureSequenceCount;
         this.meshFilePath = obj.meshFilePath;
         this.spriteSheetFilePath = obj.spriteSheetFilePath;
@@ -131,7 +138,6 @@ export class ObjectVisualData2D extends iObjectVisualData
             if( textureNode.length )
             {
                 let attr = textureNode[0].getAttribute( 'file' );
-                // Check for null because might want to replace with an empty string
                 if( attr !== null )
                 {
                     this.textureFilePath = attr;
@@ -139,9 +145,22 @@ export class ObjectVisualData2D extends iObjectVisualData
                 }
                 
                 attr = textureNode[0].getAttribute( 'count' );
-                // Check for null because might want to replace with an empty string
                 if( attr !== null )
                     this.textureSequenceCount = Number(attr);
+
+                attr = textureNode[0].getAttribute( 'wrap' );
+                if( attr === 'REPEAT' )
+                    this.textureWrap = device.gl.REPEAT;
+                else if( attr === 'CLAMP_TO_EDGE' )
+                    this.textureWrap = device.gl.CLAMP_TO_EDGE;
+                else if( attr === 'MIRRORED_REPEAT' )
+                    this.textureWrap = device.gl.MIRRORED_REPEAT;
+
+                attr = textureNode[0].getAttribute( 'filter' );
+                if( attr === 'LINEAR' )
+                    this.textureFilter = device.gl.LINEAR;
+                else if( attr === 'NEAREST' )
+                    this.textureFilter = device.gl.NEAREST;
             }
 
             // Get the mesh node

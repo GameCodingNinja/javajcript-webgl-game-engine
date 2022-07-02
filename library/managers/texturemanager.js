@@ -22,7 +22,7 @@ class TextureManager
     //
     //  DESC: Load the image file as a texture
     //
-    load( group, filePath, image )
+    load( group, filePath, image, wrap = device.gl.CLAMP_TO_EDGE, filter = device.gl.LINEAR )
     {
         let gl = device.gl;
 
@@ -46,10 +46,10 @@ class TextureManager
             texture.size.h = image.height;
 
             gl.bindTexture( gl.TEXTURE_2D, texture.id );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR );
+            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap );
+            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap );
+            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
+            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter );
             gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image );
             gl.bindTexture( gl.TEXTURE_2D, null );
 

@@ -81,7 +81,7 @@ class Strategyloader
 
         let xmlNodeLst = xmlNode.children;
 
-        for( let i = 0; i < xmlNodeLst.length; ++i )
+        for( let i = 0; i < xmlNodeLst.length; i++ )
         {
             if( xmlNodeLst[i].nodeName === 'node' )
             {
@@ -102,8 +102,9 @@ class Strategyloader
                 // Creating a node is automaticly active unless defined as false. Default true even if not specified
                 let active = xmlNodeLst[i].getAttribute( 'active' );
                 let headNode = strategy.create( name, instance, (!active || active === 'true'), group );
+                let recalcRadius = false;
 
-                for( let j = 0; j < xmlNodeLst[i].children.length; ++j )
+                for( let j = 0; j < xmlNodeLst[i].children.length; j++ )
                 {
                     let xmlChildNode = xmlNodeLst[i].children[j];
 
@@ -111,6 +112,18 @@ class Strategyloader
                     if( xmlChildNode.nodeName === 'object' || xmlChildNode.nodeName === 'sprite' )
                     {
                         this.init( xmlChildNode, headNode.get() );
+
+                        let xmlObjLst = xmlChildNode.children;
+
+                        // Check if scale has been defined because we'll need to recalculate the radius
+                        for( let w = 0; w < xmlObjLst.length; w++ )
+                        {
+                            if( xmlObjLst[w].nodeName === 'scale')
+                            {
+                                recalcRadius = true;
+                                break;
+                            }
+                        }
                     }
 
                     // If the head node specified a child node to init
@@ -136,6 +149,10 @@ class Strategyloader
                         }
                     }
                 }
+
+                // If scale is defined anywhere, recalculate the radius
+                if( recalcRadius )
+                    headNode.calcRadius();
             }
             else if( xmlNodeLst[i].nodeName === 'object' )
             {
