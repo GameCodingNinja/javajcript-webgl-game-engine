@@ -9,6 +9,7 @@
 import { iObjectVisualData } from './iobjectvisualdata';
 import { Color } from '../common/color';
 import { textureManager } from '../managers/texturemanager';
+import { device } from '../system/device';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
 export class ObjectVisualData3D extends iObjectVisualData
@@ -28,6 +29,10 @@ export class ObjectVisualData3D extends iObjectVisualData
 
         // mesh file path
         this.meshFilePath = null;
+
+        // Texture parameters
+        this.textureWrap = device.gl.CLAMP_TO_EDGE;
+        this.textureFilter = device.gl.LINEAR;
     }
     
     // 
@@ -39,6 +44,8 @@ export class ObjectVisualData3D extends iObjectVisualData
         this.meshFilePath = obj.meshFilePath;
         this.color.copy( obj.color );
         this.meshGrp = obj.meshGrp;
+        this.textureWrap = obj.textureWrap;
+        this.textureFilter = obj.textureFilter;
     }
     
     // 
@@ -63,6 +70,20 @@ export class ObjectVisualData3D extends iObjectVisualData
 
             // Load the color
             this.color = parseHelper.loadColor( visualNode[0], this.color );
+
+            attr = visualNode[0].getAttribute( 'filter' );
+            if( attr === 'LINEAR' )
+                this.textureFilter = device.gl.LINEAR;
+            else if( attr === 'NEAREST' )
+                this.textureFilter = device.gl.NEAREST;
+
+            attr = visualNode[0].getAttribute( 'wrap' );
+            if( attr === 'REPEAT' )
+                this.textureWrap = device.gl.REPEAT;
+            else if( attr === 'CLAMP_TO_EDGE' )
+                this.textureWrap = device.gl.CLAMP_TO_EDGE;
+            else if( attr === 'MIRRORED_REPEAT' )
+                this.textureWrap = device.gl.MIRRORED_REPEAT;
         }
     }
     

@@ -7,6 +7,7 @@
 "use strict";
 import { Font } from '../2d/font';
 import { textureManager } from '../managers/texturemanager';
+import { device } from '../system/device';
 import * as genFunc from '../utilities/genfunc';
 
 class FontManager
@@ -40,10 +41,20 @@ class FontManager
             // Add the font to our list
             this.fontMap.set( each.name, new Font );
 
+            // Check texture filtering
+            let textureFilter = device.gl.LINEAR;
+            if( each.filter )
+            {
+                if( each.filter  === 'LINEAR' )
+                    textureFilter = device.gl.LINEAR;
+                else if( each.filter  === 'NEAREST' )
+                    textureFilter = device.gl.NEAREST;
+            }
+
             // Load the texture file
             let textureFilePath = each.file + '.png'
             promiseAry.push( genFunc.downloadFile( 'img', textureFilePath )
-                    .then(( image ) => textureManager.load( this.group, each.name, image ))
+                    .then(( image ) => textureManager.load( this.group, each.name, image, textureFilter ))
                     .catch(( error ) => { console.error(error.stack); throw error; }) );
 
             // Load the xml file describing the font characteristics

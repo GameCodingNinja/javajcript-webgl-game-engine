@@ -22,7 +22,7 @@ class TextureManager
     //
     //  DESC: Load the image file as a texture
     //
-    load( group, filePath, image, wrap = device.gl.CLAMP_TO_EDGE, filter = device.gl.LINEAR )
+    load( group, filePath, image, filter = device.gl.LINEAR, wrap = device.gl.CLAMP_TO_EDGE )
     {
         let gl = device.gl;
 

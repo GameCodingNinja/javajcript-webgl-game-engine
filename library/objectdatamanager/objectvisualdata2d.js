@@ -143,10 +143,16 @@ export class ObjectVisualData2D extends iObjectVisualData
                     this.textureFilePath = attr;
                     this.textureSequenceCount = 1;
                 }
-                
+
                 attr = textureNode[0].getAttribute( 'count' );
                 if( attr !== null )
                     this.textureSequenceCount = Number(attr);
+
+                attr = textureNode[0].getAttribute( 'filter' );
+                if( attr === 'LINEAR' )
+                    this.textureFilter = device.gl.LINEAR;
+                else if( attr === 'NEAREST' )
+                    this.textureFilter = device.gl.NEAREST;
 
                 attr = textureNode[0].getAttribute( 'wrap' );
                 if( attr === 'REPEAT' )
@@ -155,12 +161,6 @@ export class ObjectVisualData2D extends iObjectVisualData
                     this.textureWrap = device.gl.CLAMP_TO_EDGE;
                 else if( attr === 'MIRRORED_REPEAT' )
                     this.textureWrap = device.gl.MIRRORED_REPEAT;
-
-                attr = textureNode[0].getAttribute( 'filter' );
-                if( attr === 'LINEAR' )
-                    this.textureFilter = device.gl.LINEAR;
-                else if( attr === 'NEAREST' )
-                    this.textureFilter = device.gl.NEAREST;
             }
 
             // Get the mesh node

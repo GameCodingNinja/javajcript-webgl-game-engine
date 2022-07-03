@@ -9,6 +9,7 @@
 import { iObjectData } from './iobjectdata';
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
 import { ObjectVisualData3D } from './objectvisualdata3d';
+import { ObjectCollisionData3D } from './objectcollision3d';
 
 export class ObjectData3D extends iObjectData
 {
@@ -18,6 +19,9 @@ export class ObjectData3D extends iObjectData
 
         // Visual data of the object
         this.visualData = new ObjectVisualData3D;
+
+        // Collision data of the object
+        this.collisionData = new ObjectCollisionData3D;
 
         // Physics data of the object
         //CObjectPhysicsData2D m_physicsData;

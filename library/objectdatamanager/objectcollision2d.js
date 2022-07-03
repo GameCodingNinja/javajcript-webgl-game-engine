@@ -1,6 +1,6 @@
 
 // 
-//  FILE NAME:  objectcollision.js
+//  FILE NAME:  objectcollision2d.js
 //  DESC:       Class containing the object's collision data
 //
 
@@ -12,7 +12,7 @@ import { Rect } from '../common/rect';
 import { Polygon } from '../common/polygon';
 import * as defs from '../common/defs';
 
-export class ObjectCollisionData
+export class ObjectCollisionData2D
 {
     constructor()
     {

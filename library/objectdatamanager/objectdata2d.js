@@ -9,7 +9,7 @@
 import { iObjectData } from './iobjectdata';
 import { ObjectPhysicsData2D } from './objectphysicsdata2d';
 import { ObjectVisualData2D } from './objectvisualdata2d';
-import { ObjectCollisionData } from './objectcollision';
+import { ObjectCollisionData2D } from './objectcollision2d';
 import { Size } from '../common/size';
 import * as parseHelper from '../utilities/xmlparsehelper';
 
@@ -26,7 +26,7 @@ export class ObjectData2D extends iObjectData
         this.physicsData = new ObjectPhysicsData2D;
 
         // Collision data of the object
-        this.collisionData = new ObjectCollisionData;
+        this.collisionData = new ObjectCollisionData2D;
 
         // The name of the object data
         this.name = null;
