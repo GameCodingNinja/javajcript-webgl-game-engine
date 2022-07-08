@@ -238,10 +238,11 @@ export class UISlider extends UISubControl
         {
             let oneOverAspectRatio = 1.0 / settings.orthoAspectRatio.h;
 
+            // (1.0 / this.matrix.matrix[]) handles the scaling of the control
             if( this.orientation === defs.EO_HORIZONTAL )
-                this.incSliderMovePos( event.movementX * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) );
+                this.incSliderMovePos( event.movementX * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[0]) );
             else
-                this.incSliderMovePos( event.movementY * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) );
+                this.incSliderMovePos( event.movementY * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[5]) );
         }
 
         return result;
@@ -268,10 +269,11 @@ export class UISlider extends UISubControl
 
                 let ratio = 1.0 / settings.orthoAspectRatio.h;
 
+                // (1.0 / this.matrix.matrix[]) handles the scaling of the control
                 if( this.orientation === defs.EO_HORIZONTAL )
-                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * ratio );
+                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * ratio * (1.0 / this.matrix.matrix[0]) );
                 else
-                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * ratio );
+                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * ratio * (1.0 / this.matrix.matrix[5]) );
             }
         }
         else if( event.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType )
