@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_buildings_">
+
+        <!-- Start of wrap around -->
+        <node name="building04">
+            <sprite>
+                <position x="-3400" y="-258"/>
+            </sprite>
+        </node>
+
+        <node name="building06">
+            <sprite>
+                <position x="-3200" y="-298"/>
+            </sprite>
+        </node>
+
+        <node name="building05">
+            <sprite>
+                <position x="-3000" y="-262"/>
+            </sprite>
+        </node>
+        <!-- Start of wrap around -->
+
+
+        <node name="building01">
+            <sprite>
+                <position x="-2800" y="-298"/>
+            </sprite>
+        </node>
+
+        <node name="building04">
+            <sprite>
+                <position x="-2600" y="-258"/>
+            </sprite>
+        </node>
+        
+        <node name="building07">
+            <sprite>
+                <position x="-2400" y="-310"/>
+            </sprite>
+        </node>
+        
+        <node name="building02">
+            <sprite>
+                <position x="-2200" y="-260"/>
+            </sprite>
+        </node>
+        
+        <node name="building03">
+            <sprite>
+                <position x="-2000" y="-314"/>
+            </sprite>
+        </node>
+
+        <node name="building08">
+            <sprite>
+                <position x="-1800" y="-258"/>
+            </sprite>
+        </node>
+
+        <node name="building01">
+            <sprite>
+                <position x="-1600" y="-280"/>
+            </sprite>
+        </node>
+
+        <node name="building05">
+            <sprite>
+                <position x="-1400" y="-258"/>
+            </sprite>
+        </node>
+
+        <node name="building03">
+            <sprite>
+                <position x="-1200" y="-314"/>
+            </sprite>
+        </node>
+
+        <node name="building02">
+            <sprite>
+                <position x="-1000" y="-260"/>
+            </sprite>
+        </node>
+
+        <node name="building07">
+            <sprite>
+                <position x="-800" y="-310"/>
+            </sprite>
+        </node>
+
+        <node name="building04">
+            <sprite>
+                <position x="-600" y="-258"/>
+            </sprite>
+        </node>
+
+        <node name="building06">
+            <sprite>
+                <position x="-400" y="-298"/>
+            </sprite>
+        </node>
+
+        <node name="building05">
+            <sprite>
+                <position x="-200" y="-262"/>
+            </sprite>
+        </node>
+
+        <node name="building01">
+            <sprite>
+                <position x="0" y="-298"/>
+            </sprite>
+        </node>
+
+        <node name="building04">
+            <sprite>
+                <position x="200" y="-258"/>
+            </sprite>
+        </node>
+        
+        <node name="building07">
+            <sprite>
+                <position x="400" y="-310"/>
+            </sprite>
+        </node>
+        
+        <node name="building02">
+            <sprite>
+                <position x="600" y="-260"/>
+            </sprite>
+        </node>
+        
+        <node name="building03">
+            <sprite>
+                <position x="800" y="-314"/>
+            </sprite>
+        </node>
+
+        <node name="building08">
+            <sprite>
+                <position x="1000" y="-258"/>
+            </sprite>
+        </node>
+
+        <node name="building01">
+            <sprite>
+                <position x="1200" y="-280"/>
+            </sprite>
+        </node>
+
+        <node name="building05">
+            <sprite>
+                <position x="1400" y="-258"/>
+            </sprite>
+        </node>
+
+        <node name="building03">
+            <sprite>
+                <position x="1600" y="-314"/>
+            </sprite>
+        </node>
+
+        <node name="building02">
+            <sprite>
+                <position x="1800" y="-260"/>
+            </sprite>
+        </node>
+
+        <node name="building07">
+            <sprite>
+                <position x="2000" y="-310"/>
+            </sprite>
+        </node>
+
+        <node name="building04">
+            <sprite>
+                <position x="2200" y="-258"/>
+            </sprite>
+        </node>
+
+        <node name="building06">
+            <sprite>
+                <position x="2400" y="-298"/>
+            </sprite>
+        </node>
+
+        <node name="building05">
+            <sprite>
+                <position x="2600" y="-262"/>
+            </sprite>
+        </node>
+
+
+        <!-- Start of wrap around -->
+        <node name="building01">
+            <sprite>
+                <position x="2800" y="-298"/>
+            </sprite>
+        </node>
+
+        <node name="building04">
+            <sprite>
+                <position x="3000" y="-258"/>
+            </sprite>
+        </node>
+        
+        <node name="building07">
+            <sprite>
+                <position x="3200" y="-310"/>
+            </sprite>
+        </node>
+        
+        <node name="building02">
+            <sprite>
+                <position x="3400" y="-260"/>
+            </sprite>
+        </node>
+        <!-- Start of wrap around -->
+
+    </strategy>
+  
+</loader>

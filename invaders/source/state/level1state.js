@@ -29,9 +29,14 @@ import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
-import levelStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/strategy.loader';
+import shipStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/ship.strategy.loader';
+import buildingsbackStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/buildingsback.strategy.loader';
+import buildingsfrontStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/buildingsfront.strategy.loader';
+import buildingsStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/buildings.strategy.loader';
+import backgroundStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/background.strategy.loader';
+import forgroundStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/forground.strategy.loader';
 
-export const ASSET_COUNT = 17;
+export const ASSET_COUNT = 36;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
@@ -40,7 +45,8 @@ const MOVE_NULL = -1,
       MOVE_DOWN = 3,
       CAMERA_EASING_SPEED = 11,
       CAMERA_EASING_DIVISOR = 3,
-      CAMERA_EASING_OFFSET = 350;
+      CAMERA_EASING_OFFSET = 350,
+      MAX_CLOUDS = 8;
 
 export class Level1State extends CommonState
 {
@@ -63,10 +69,38 @@ export class Level1State extends CommonState
         eventManager.clear();
         
         // Prepare the strategies to run
-        strategyManager.activateStrategy('_level-1-stage_');
+        this.bkgStratagy = strategyManager.activateStrategy('_background_');
+        strategyManager.activateStrategy('_buildingsback_');
+        strategyManager.activateStrategy('_buildingsfront_');
+        strategyManager.activateStrategy('_buildings_');
+        strategyManager.activateStrategy('_forground_');
+
+        // Randomly distrabute the clouds
+        this.cloudAry = [];
+        for( let i = 0; i < MAX_CLOUDS; i++ )
+        {
+            let node = this.bkgStratagy.get(`cloud_${i}`);
+            let cloud = new Object();
+            cloud.speed = genFunc.randomArbitrary(0.001, 0.02);
+            cloud.sprite = node.get();
+            cloud.sprite.setPosXYZ(genFunc.randomInt(-640, 640), genFunc.randomInt(-100, 350));
+            cloud.sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
+            // Flip the sprite?
+            if(genFunc.randomInt(0, 1))
+                cloud.sprite.setRotXYZ(0, 180);
+
+            this.cloudAry.push(cloud);
+        }
 
         // Get the camera and reinit
+        this.buildingsbackCamera = cameraManager.get('buildingsbackCamera');
+        this.buildingsfrontCamera = cameraManager.get('buildingsfrontCamera');
+        this.buildingsCamera = cameraManager.get('buildingsCamera');
+        this.forgroundCamera = cameraManager.get('forgroundCamera');
         this.camera = cameraManager.get('levelCamera');
+        this.buildingsbackCamera.initFromXml();
+        this.buildingsfrontCamera.initFromXml();
+        this.buildingsCamera.initFromXml();
         this.camera.initFromXml();
 
         // The enemy strategy needs to be activated before the player ship strategy
@@ -246,7 +280,7 @@ export class Level1State extends CommonState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_level-1-stage_','_player_ship_'] );
+        strategyManager.deleteStrategy( ['_forground_','_background_','_buildingsfront_','_buildingsback_','_buildings_','_player_ship_','_enemy_'] );
         
         objectDataManager.freeGroup( ['(level_1)'] );
 
@@ -268,7 +302,34 @@ export class Level1State extends CommonState
             this.easingX.execute();
             this.easingY.execute();
             this.cameraEasingX.execute();
-            this.camera.incPosXYZ( this.easingX.getValue() + this.cameraEasingX.getValue() );
+
+            let easingVal = this.easingX.getValue() + this.cameraEasingX.getValue();
+            this.camera.incPosXYZ( easingVal );
+            this.forgroundCamera.incPosXYZ( easingVal );
+            this.buildingsCamera.incPosXYZ( easingVal );
+            this.buildingsbackCamera.incPosXYZ( easingVal * 0.25 );
+            this.buildingsfrontCamera.incPosXYZ( easingVal * 0.5 );
+
+            // Loop the static backgrounds
+            if( this.buildingsbackCamera.pos.x < -1280 )
+                this.buildingsbackCamera.incPosXYZ( -1280 );
+            else if( this.buildingsbackCamera.pos.x > 1280 )
+                this.buildingsbackCamera.incPosXYZ( 1280 );
+
+            if( this.buildingsfrontCamera.pos.x < -1280 )
+                this.buildingsfrontCamera.incPosXYZ( -1280 );
+            else if( this.buildingsfrontCamera.pos.x > 1280 )
+                this.buildingsfrontCamera.incPosXYZ( 1280 );
+
+            if( this.forgroundCamera.pos.x < -1280 )
+                this.forgroundCamera.incPosXYZ( -1280 );
+            else if( this.forgroundCamera.pos.x > 1280 )
+                this.forgroundCamera.incPosXYZ( 1280 );
+
+            if( this.buildingsCamera.pos.x < -2800 )
+                this.buildingsCamera.incPosXYZ( -2800 );
+            else if( this.buildingsCamera.pos.x > 2800)
+                this.buildingsCamera.incPosXYZ( 2800 );
 
             let incY = this.easingY.getValue();
             let playerPos = this.playerShipNode.object.transPos;
@@ -300,6 +361,24 @@ export class Level1State extends CommonState
 
             this.playerShipNode.object.incPosXYZ( this.easingX.getValue(), incY );
 
+            
+            for( let i = 0; i < MAX_CLOUDS; i++ )
+            {
+                this.cloudAry[i].sprite.incPosXYZ(highResTimer.elapsedTime * this.cloudAry[i].speed);
+
+                if(this.cloudAry[i].sprite.pos.x - (this.cloudAry[i].sprite.getSize().w / 2) > settings.size_half.w)
+                {
+                    this.cloudAry[i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
+                    this.cloudAry[i].speed = genFunc.randomArbitrary(0.001, 0.02);
+                    this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.size_half.w), genFunc.randomInt(-100, 350));
+
+                    // Flip the sprite?
+                    this.cloudAry[i].sprite.setRotXYZ(0, 0);
+                    if(genFunc.randomInt(0, 1))
+                        this.cloudAry[i].sprite.setRotXYZ(0, 180);
+                }
+            }
+
             strategyManager.update();
         }
     }
@@ -311,6 +390,10 @@ export class Level1State extends CommonState
     {
         super.transform();
         
+        this.buildingsbackCamera.transform();
+        this.buildingsfrontCamera.transform();
+        this.buildingsCamera.transform();
+        this.forgroundCamera.transform();
         this.camera.transform();
         strategyManager.transform();
     }
@@ -340,8 +423,23 @@ export function load()
     
     return objectDataManager.loadGroup( groupAry )
 
-        // Load stage strategy.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( levelStrategyLoader ) ))
+        // Load ship strategies.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( shipStrategyLoader ) ))
+
+        // Load buildings back strategies.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( buildingsbackStrategyLoader ) ))
+
+        // Load buildings front strategies.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( buildingsfrontStrategyLoader ) ))
+
+        // Load buildings strategy.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( buildingsStrategyLoader ) ))
+
+        // Load background strategy.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( backgroundStrategyLoader ) ))
+
+        // Load trees strategy.
+        .then(() => strategyLoader.load( genFunc.stringLoadXML( forgroundStrategyLoader ) ))
 
         // Clean up the temporary files
         .then(() =>

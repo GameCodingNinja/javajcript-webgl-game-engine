@@ -5,8 +5,20 @@
     "_loading-screen_": [
         "data/objects/strategy/state/loadscreen.strategy"],
     
-    "_level-1-stage_": [
-        "data/objects/strategy/level1/stage.strategy"],
+    "_background_": [
+        "data/objects/strategy/level1/background.strategy"],
+    
+    "_buildingsback_": [
+        "data/objects/strategy/level1/buildingsback.strategy"],
+
+    "_buildingsfront_": [
+        "data/objects/strategy/level1/buildingsfront.strategy"],
+
+    "_forground_": [
+        "data/objects/strategy/level1/forground.strategy"],
+
+    "_buildings_": [
+        "data/objects/strategy/level1/buildings.strategy"],
 
     "_player_ship_": [
         "data/objects/strategy/level1/playerShip.strategy"],

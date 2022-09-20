@@ -21,19 +21,19 @@
 
         <object name="logo">
           <visual>
-            <texture file="data/textures/startup/logo.png"/>
+            <texture file="data/textures/startup/logo-720.png"/>
           </visual>
         </object>
         
         <object name="progress_frame">
             <visual>
-                <texture file="data/textures/startup/16x16_3_pixel_frame.png"/>
+                <texture file="data/textures/startup/16x16_2_pixel_frame.png"/>
                 <mesh genType="scaled_frame">
                     <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
                 </mesh>
                 <color r="48" g="97" b="153" a="1"/>
             </visual>
-            <size width="800" height="20"/>
+            <size width="800" height="14"/>
         </object>
         
         <object name="progress_solid">
@@ -41,7 +41,7 @@
                 <shader id="shader_solid_2d"/>
                 <color r="25" g="54" b="84" a="0.8"/>
             </visual>
-            <size width="794" height="14"/>
+            <size width="794" height="8"/>
         </object>
 
     </objectList>

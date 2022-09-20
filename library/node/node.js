@@ -20,6 +20,17 @@ export class Node extends iNode
         // Child node index
         this.index = 0;
     }
+
+    // 
+    //  DESC: Is this a Parent node
+    //
+    isParent()
+    {
+        if(this.nodeAry.length)
+            return true;
+
+        return false;
+    }
     
     // 
     //  DESC: Get the next node

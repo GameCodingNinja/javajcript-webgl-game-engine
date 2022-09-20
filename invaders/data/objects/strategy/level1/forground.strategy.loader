@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_forground_">
+
+        <node name="traintracks">
+            <sprite>
+                <position x="-1920" y="-332"/>
+            </sprite>
+        </node>
+
+        <node name="trees">
+            <sprite>
+                <position x="-1920" y="-342"/>
+            </sprite>
+        </node>
+
+
+        <node name="traintracks">
+            <sprite>
+                <position x="-1280" y="-332"/>
+            </sprite>
+        </node>
+
+        <node name="trees">
+            <sprite>
+                <position x="-1280" y="-342"/>
+            </sprite>
+        </node>
+
+
+        <node name="traintracks">
+            <sprite>
+                <position x="-640" y="-332"/>
+            </sprite>
+        </node>
+
+        <node name="trees">
+            <sprite>
+                <position x="-640" y="-342"/>
+            </sprite>
+        </node>
+
+
+        <node name="traintracks">
+            <sprite>
+                <position x="-0" y="-332"/>
+            </sprite>
+        </node>
+
+        <node name="trees">
+            <sprite>
+                <position x="0" y="-342"/>
+            </sprite>
+        </node>
+
+        <!--<node name="train">
+            <sprite>
+                <position x="-0" y="-299"/>
+            </sprite>
+        </node>-->
+
+
+        <node name="traintracks">
+            <sprite>
+                <position x="640" y="-332"/>
+            </sprite>
+        </node>
+
+        <node name="trees">
+            <sprite>
+                <position x="640" y="-342"/>
+            </sprite>
+        </node>
+
+
+        <node name="traintracks">
+            <sprite>
+                <position x="1280" y="-332"/>
+            </sprite>
+        </node>
+
+        <node name="trees">
+            <sprite>
+                <position x="1280" y="-342"/>
+            </sprite>
+        </node>
+
+
+        <node name="traintracks">
+            <sprite>
+                <position x="1920" y="-332"/>
+            </sprite>
+        </node>
+
+        <node name="trees">
+            <sprite>
+                <position x="1920" y="-342"/>
+            </sprite>
+        </node>
+
+    </strategy>
+  
+</loader>

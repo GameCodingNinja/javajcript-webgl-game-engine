@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_buildingsback_">
+
+        <node name="buildingsback">
+            <sprite>
+                <position x="-1920" y="-276"/>
+            </sprite>
+        </node>
+
+        <node name="buildingsback">
+            <sprite>
+                <position x="-1280" y="-276"/>
+            </sprite>
+        </node>
+
+        <node name="buildingsback">
+            <sprite>
+                <position x="-640" y="-276"/>
+            </sprite>
+        </node>
+
+        <node name="buildingsback">
+            <sprite>
+                <position x="0" y="-276"/>
+            </sprite>
+        </node>
+
+        <node name="buildingsback">
+            <sprite>
+                <position x="640" y="-276"/>
+            </sprite>
+        </node>
+
+        <node name="buildingsback">
+            <sprite>
+                <position x="1280" y="-276"/>
+            </sprite>
+        </node>
+
+        <node name="buildingsback">
+            <sprite>
+                <position x="1920" y="-276"/>
+            </sprite>
+        </node>
+
+    </strategy>
+  
+</loader>

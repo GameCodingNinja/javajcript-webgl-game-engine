@@ -9,10 +9,7 @@
 import { Object } from '../common/object';
 import { RenderNode } from './rendernode';
 import { Size } from '../common/size';
-import { Point } from '../common/point';
 import * as defs from '../common/defs';
-
-var gPoint = new Point;
 
 export class ObjectNode extends RenderNode
 {
@@ -69,10 +66,6 @@ export class ObjectNode extends RenderNode
         if( headNode )
         {
             size = new Size;
-
-            // Reset the position to zero for radius calculation
-            gPoint.copy(this.object.pos);
-            this.object.setPosXYZ();
         }
 
         this.calcSize( size );
@@ -82,9 +75,6 @@ export class ObjectNode extends RenderNode
         if( headNode )
         {
             this.radius = size.getLength() / 2;
-
-            // Reset it back
-            this.object.setPos(gPoint);
         }
     }
 }

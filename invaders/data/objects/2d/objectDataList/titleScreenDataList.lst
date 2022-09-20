@@ -14,7 +14,7 @@
 
         <object name="background">
             <visual>
-                <texture file="data/textures/titleScreen/title_background.jpg"/>
+                <texture file="data/textures/titleScreen/title_background-720.jpg"/>
             </visual>
         </object>
 

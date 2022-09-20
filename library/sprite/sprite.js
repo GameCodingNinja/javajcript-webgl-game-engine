@@ -328,9 +328,19 @@ export class Sprite extends Object
         let vSize = this.visualComponent.getSize();
         let size = super.getSize();
 
-        size.w = (vSize.w + Math.abs(this.pos.x)) * this.scale.x;
-        size.h = (vSize.h + Math.abs(this.pos.y)) * this.scale.y;
-
+        // If this sprite has a parent node, take the position into account
+        // because it might add to the radius
+        if(this.parentNode && this.parentNode.isChild())
+        {
+            size.w = (vSize.w + Math.abs(this.pos.x)) * this.scale.x;
+            size.h = (vSize.h + Math.abs(this.pos.y)) * this.scale.y;
+        }
+        else
+        {
+            size.w = vSize.w * this.scale.x;
+            size.h = vSize.h * this.scale.y;
+        }
+        
         return size;
     }
 

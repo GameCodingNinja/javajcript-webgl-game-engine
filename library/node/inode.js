@@ -62,7 +62,26 @@ export class iNode
 
         return null;
     }
-    
+
+    // 
+    //  DESC: Is this a child node
+    //
+    isChild()
+    {
+        if(this.parentId == defs.DEFAULT_ID)
+            return false;
+
+        return true;
+    }
+
+    // 
+    //  DESC: Is this a Parent node
+    //
+    isParent()
+    {
+        return false;
+    }
+
     // 
     //  DESC: Get the object
     //

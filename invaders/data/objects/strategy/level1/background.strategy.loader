@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_background_">
+
+        <node name="background"/>
+
+        <node name="cloud_0" instance="cloud_0"/>
+        <node name="cloud_1" instance="cloud_1"/>
+        <node name="cloud_2" instance="cloud_2"/>
+        <node name="cloud_3" instance="cloud_3"/>
+        <node name="cloud_4" instance="cloud_4"/>
+        <node name="cloud_5" instance="cloud_5"/>
+        <node name="cloud_6" instance="cloud_6"/>
+        <node name="cloud_7" instance="cloud_7"/>
+
+    </strategy>
+  
+</loader>

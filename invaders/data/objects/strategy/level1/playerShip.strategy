@@ -26,7 +26,8 @@
         <node name="player_fire_tail">
 
             <sprite visible="false">
-                <position x="-120" y="3" z="0"/>
+                <position x="-120" y="0" z="0"/>
+                <scale x="2" y="2"/>
                 <scriptList>
                     <script fireTailAnim="PlayerShip_FireTailAnim"/>
                 </scriptList>
@@ -36,7 +37,9 @@
 
         <node name="player_ship_body">
 
-            <sprite />
+            <sprite>
+                <scale x="2" y="2"/>
+            </sprite>
 
         </node>
 

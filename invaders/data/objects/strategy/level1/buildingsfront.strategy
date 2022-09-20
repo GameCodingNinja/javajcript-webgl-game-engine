@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(level_1)" defaultCamera="buildingsfrontCamera">
+
+    <node name="buildingsfront">
+        <sprite>
+            <scale x="2" y="2"/>
+        </sprite>
+    </node>
+  
+</strategy>
