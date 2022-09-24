@@ -12,6 +12,9 @@ export class iNode
 {
     constructor( nodeId, parentId )
     {
+        // Parent node
+        this.parentNode = null;
+        
         // Node type
         this.type = defs.ENT_NULL;
 
@@ -88,13 +91,5 @@ export class iNode
     get()
     {
         return null;
-    }
-
-    // 
-    //  DESC: Calculate the head node radius
-    //
-    calcRadius()
-    {
-        // Empty by design
     }
 }

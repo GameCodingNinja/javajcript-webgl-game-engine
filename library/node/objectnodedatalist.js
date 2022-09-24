@@ -1,19 +1,19 @@
 
 //
-//  FILE NAME: nodedatalist.js
+//  FILE NAME: objectnodedatalist.js
 //  DESC:      Based on how the XML is written, creates a node
 //             list so that the Parent/child nodes can be created
 //
 
 "use strict";
 
-import { NodeData } from './nodedata';
+import { ObjectNodeData } from './objectnodedata';
 import * as defs from '../common/defs';
 
-export class NodeDataList
+export class ObjectNodeDataList
 {
     constructor(
-        node,
+        xmlNode,
         defGroup = '',
         defObjName = '',
         userId = defs.DEFAULT_ID )
@@ -25,55 +25,55 @@ export class NodeDataList
         let defaultObjName = defObjName;
         let nodeName = '';
         
-        let attr = node.getAttribute( 'defaultGroup' );
+        let attr = xmlNode.getAttribute( 'defaultGroup' );
         if( attr )
             defaultGroup = attr;
         
-        attr = node.getAttribute( 'defaultObjectName' );
+        attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr )
             defaultObjName = attr;
         
-        attr = node.getAttribute( 'defaultId' );
+        attr = xmlNode.getAttribute( 'defaultId' );
         if( attr )
             userId = Number(attr);
         
         // Get the sprite's unique id number
-        attr = node.getAttribute( "id" );
+        attr = xmlNode.getAttribute( "id" );
         if( attr )
             userId = Number(attr);
         
-        attr = node.getAttribute( 'name' );
+        attr = xmlNode.getAttribute( 'name' );
         if( attr )
             nodeName = attr;
         
         this.idCounter = defs.DEFAULT_ID;
         
-        let nodeData = new NodeData( node, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, userId );
+        let nodeData = new ObjectNodeData( xmlNode, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, userId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
-        this.loadNode( node, nodeData, defaultGroup, defaultObjName, userId );
+        this.loadNode( xmlNode, nodeData, defaultGroup, defaultObjName, userId );
     }
     
     // 
     //  DESC: Load the node data recursively
     //
-    loadNode( node, nodeData, defaultGroup, defaultObjName, userId )
+    loadNode( xmlNode, nodeData, defaultGroup, defaultObjName, userId )
     {
-        for( let i = 0; i < node.children.length; ++i )
+        for( let i = 0; i < xmlNode.children.length; ++i )
         {
-            if( node.children[i].nodeName == 'node' )
+            if( xmlNode.children[i].nodeName == 'node' )
             {
                 let nodeName = '';
-                let attr = node.children[i].getAttribute( 'name' );
+                let attr = xmlNode.children[i].getAttribute( 'name' );
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
+                let childNodeData = new ObjectNodeData( xmlNode.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
-                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, userId );
+                this.loadNode( xmlNode.children[i], childNodeData, defaultGroup, defaultObjName, userId );
             }
         }
     }

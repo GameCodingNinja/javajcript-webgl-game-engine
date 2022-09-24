@@ -36,7 +36,7 @@ import buildingsStrategyLoader from 'raw-loader!../../data/objects/strategy/leve
 import backgroundStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/background.strategy.loader';
 import forgroundStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/forground.strategy.loader';
 
-export const ASSET_COUNT = 36;
+export const ASSET_COUNT = 48;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,

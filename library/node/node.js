@@ -56,13 +56,18 @@ export class Node extends iNode
         // Call a recursive function to find the parent node
         let parentNode = this.findParent( node );
 
-        // Add the node
         if( parentNode != null )
-            parentNode.pushNode( node );
-        else
-            return false;
+        {
+            // Set the parent node
+            node.parentNode = parentNode;
 
-        return true;
+            // Add the node
+            parentNode.pushNode( node );
+
+            return true;
+        }
+
+        return false;
     }
     
     // 

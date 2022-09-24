@@ -71,4 +71,12 @@ export class UIControlLeafNode extends iNode
     {
         this.uiControl.cleanUp();
     }
+
+    // 
+    //  DESC: Calculate the head node radius
+    //
+    calcRadius()
+    {
+        // Empty by design
+    }
 }
