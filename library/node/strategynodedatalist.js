@@ -1,16 +1,16 @@
 
 //
-//  FILE NAME: nodedatalist.js
+//  FILE NAME: strategynodedatalist.js
 //  DESC:      Based on how the XML is written, creates a node
 //             list so that the Parent/child nodes can be created
 //
 
 "use strict";
 
-import { NodeData } from './nodedata';
+import { StrategyNodeData } from './strategynodedata';
 import * as defs from '../common/defs';
 
-export class NodeDataList
+export class StrategyNodeDataList
 {
     constructor(
         xmlNode,
@@ -48,7 +48,7 @@ export class NodeDataList
         
         this.idCounter = defs.DEFAULT_ID;
         
-        let nodeData = new NodeData( xmlNode, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, userId );
+        let nodeData = new StrategyNodeData( xmlNode, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, userId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
@@ -69,7 +69,7 @@ export class NodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new NodeData( xmlNode.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
+                let childNodeData = new StrategyNodeData( xmlNode.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children

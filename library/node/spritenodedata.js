@@ -1,12 +1,12 @@
 
 // 
-//  FILE NAME: spritedata.js
+//  FILE NAME: spritenodedata.js
 //  DESC:      Sprite data class
 //
 
 "use strict";
 
-export class SpriteData
+export class SpriteNodeData
 {
     constructor()
     {

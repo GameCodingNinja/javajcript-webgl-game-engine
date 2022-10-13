@@ -6,8 +6,8 @@
 
 "use strict";
 
-import { AINodeDataList } from '../ai/ainodedatalist';
-import { ManagerBase } from '../managers/managerbase';
+import { AINodeDataList } from '../node/ainodedatalist';
+import { ManagerBase } from './managerbase';
 
 class AIManager extends ManagerBase
 {
