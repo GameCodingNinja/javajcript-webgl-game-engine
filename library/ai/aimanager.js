@@ -24,7 +24,7 @@ class AIManager extends ManagerBase
     //
     loadGroup( groupAry )
     {
-        return super.loadGroupAry( 'AI Manager', this.aiMap, groupAry );
+        return super.loadGroupAry( 'AI Manager', null, groupAry );
     }
 
     //
@@ -32,9 +32,6 @@ class AIManager extends ManagerBase
     //
     loadFromNode( group, xmlNode, filePath )
     {
-        // Get the group map
-        let groupMap = this.aiMap.get( group );
-
         for( let i = 0; i < xmlNode.children.length; ++i )
         {
             // There must be a name associated with this node data
@@ -42,8 +39,12 @@ class AIManager extends ManagerBase
             if( !nodeName )
                 throw new Error( `AI missing node name! (${group}, ${filePath})` );
 
+            // Check for duplicate AI names
+            if( this.aiMap.has( nodeName ) )
+                throw new Error( `Duplicate AI name (${nodeName}, ${group}, ${filePath})!` );
+
             // Allocate the node data list and add it to the map
-            groupMap.set( nodeName, new AINodeDataList( xmlNode.children[i] ) );
+            this.aiMap.set( nodeName, new AINodeDataList( xmlNode.children[i] ) );
         }
 
         // Nothing else to do here. Return an empty promise
@@ -51,21 +52,28 @@ class AIManager extends ManagerBase
     }
 
     //
-    //  DESC: Delete the group of textures
+    //  DESC: Delete all the AI
     //
-    deleteGroup( group )
+    clear()
     {
-        let groupMap = this.textureForMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            let gl = device.gl;
-
-            for( let texture of groupMap.values() )
-                gl.deleteTexture( texture.id );
-            
-            this.textureForMapMap.delete( group );
-        }
+        this.aiMap.clear();
     }
+
+    //
+    //  DESC: Delete ai by name
+    //
+    deleteAI( aiName )
+    {
+        // Check for the AI name
+        let ai = this.aiMap.get( aiName );
+        if( ai )
+        {
+            this.aiMap.delete( aiName );
+        }
+        else
+            console.warn( `AI can't be found to delete (${aiName})!` );
+    }
+    
 }
 
 export var aiManager = new AIManager;

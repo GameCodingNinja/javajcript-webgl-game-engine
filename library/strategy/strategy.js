@@ -7,7 +7,7 @@
 "use strict";
 
 import { Object } from '../common/object';
-import { ObjectNodeDataList } from '../node/objectnodedatalist';
+import { NodeDataList } from '../node/nodedatalist';
 import { cameraManager } from '../managers/cameramanager';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import * as nodeFactory from '../node/nodefactory';
@@ -81,7 +81,7 @@ export class Strategy extends Object
                 throw new Error( `Strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new ObjectNodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
+            this.dataMap.set( nodeName, new NodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
         }
     }
 

@@ -1,16 +1,16 @@
 
 //
-//  FILE NAME: objectnodedatalist.js
+//  FILE NAME: nodedatalist.js
 //  DESC:      Based on how the XML is written, creates a node
 //             list so that the Parent/child nodes can be created
 //
 
 "use strict";
 
-import { ObjectNodeData } from './objectnodedata';
+import { NodeData } from './nodedata';
 import * as defs from '../common/defs';
 
-export class ObjectNodeDataList
+export class NodeDataList
 {
     constructor(
         xmlNode,
@@ -48,7 +48,7 @@ export class ObjectNodeDataList
         
         this.idCounter = defs.DEFAULT_ID;
         
-        let nodeData = new ObjectNodeData( xmlNode, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, userId );
+        let nodeData = new NodeData( xmlNode, nodeName, this.idCounter++, defs.DEFAULT_ID, defaultGroup, defaultObjName, userId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
@@ -69,7 +69,7 @@ export class ObjectNodeDataList
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new ObjectNodeData( xmlNode.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
+                let childNodeData = new NodeData( xmlNode.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children

@@ -1,13 +1,9 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)" defaultCamera="levelCamera">
 
-    <node name="enemy_ship" id="-2">
+    <node name="enemy_ship" ai="AI_Enemy" id="-2">
 
-        <sprite>
-            <scriptList>
-                <script enemy="EnemyShip_ai" prepareOnInit="false"/>
-            </scriptList>
-        </sprite>
+        <sprite/>
 
     </node>
 

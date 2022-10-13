@@ -1,7 +1,7 @@
 
 //
-//  FILE NAME: objectnodedata.js
-//  DESC:      Object node data class
+//  FILE NAME: nodedata.js
+//  DESC:      Node data class
 //
 
 "use strict";
@@ -10,7 +10,7 @@ import { SpriteData } from '../sprite/spritedata';
 import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
-export class ObjectNodeData extends SpriteData
+export class NodeData extends SpriteData
 {
     constructor(
         xmlNode,
