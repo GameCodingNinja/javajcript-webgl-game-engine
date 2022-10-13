@@ -481,10 +481,10 @@ export function load()
     ])
 
     // Load stage strategy.
-    .then(() => strategyLoader.load( genFunc.stringLoadXML( stageStrategyLoader ) ))
+    .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( stageStrategyLoader ) ))
 
     // Load the remaining strategies.
-    .then(() => strategyLoader.load( genFunc.stringLoadXML( level1StrategyLoader ) ))
+    .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( level1StrategyLoader ) ))
 
     // Clean up the temporary files
     .then(() =>

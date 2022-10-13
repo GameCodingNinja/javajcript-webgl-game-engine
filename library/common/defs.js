@@ -90,10 +90,15 @@ export const MATRIX_ROTATION = 0x80;
 export const VISIBLE         = 0x100;
      
 // ENodeType
-export const ENT_NULL       = 0,
-             ENT_OBJECT     = 1,
-             ENT_SPRITE     = 2,
-             ENT_UI_CONTROL = 3;
+export const ENT_NULL         = 0,
+             ENT_OBJECT       = 1,
+             ENT_SPRITE       = 2,
+             ENT_UI_CONTROL   = 3,
+             ENT_AI_HEAD      = 4,
+             ENT_AI_SELECTOR  = 5,
+             ENT_AI_DECORATOR = 6,
+             ENT_AI_SEQUENCE  = 7,
+             ENT_AI_ACTION    = 8;
 
 // ESelection Message Arguments
 export const ESMA_PRESS_TYPE  = 0,

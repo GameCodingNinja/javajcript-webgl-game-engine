@@ -8,7 +8,7 @@
     <strategy name="_enemy_">
         <node name="enemy_ship" instance="enemy_ship">
             <sprite>
-                <position x="1000" y="0"/>
+                <position x="700" y="0"/>
                 <rotation z="90"/>
             </sprite>
         </node>

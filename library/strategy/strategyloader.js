@@ -6,14 +6,33 @@
 
 "use strict";
 
+import { ManagerBase } from '../managers/managerbase';
 import { strategyManager } from '../strategy/strategymanager';
 import { Strategy } from '../strategy/strategy';
 import { Sprite } from '../sprite/sprite';
 
-class Strategyloader
+class Strategyloader extends ManagerBase
 {
     constructor()
     {
+        super();
+    }
+
+    //
+    //  DESC: Load all XML's associated with this group
+    //
+    loadGroup( groupAry )
+    {
+        return super.loadGroupAry( 'Strategy Loader', null, groupAry );
+    }
+
+    //
+    //  DESC: Load strategy loader data from an xml node
+    //  Note: This is called from managerbase.js
+    //
+    loadFromNode( group, xmlNode /*, filePath */ )
+    {
+        return this.loadFromXml( xmlNode );
     }
 
     // 
@@ -22,7 +41,7 @@ class Strategyloader
     //              they load their own XML that describes what is defined
     //              in the strategy.
     //
-    load( xmlNode )
+    loadFromXml( xmlNode )
     {
         let promiseAry = [];
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );

@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: keybindmenucripts.js
-//  DESC:      script for keybinding
+//  DESC:      scripts for keybinding
 //
 
 "use strict";

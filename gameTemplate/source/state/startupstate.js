@@ -106,7 +106,7 @@ export class StartUpState extends GameState
 
         ])
         // Create and load all the actor strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( startUpStrategyLoader ) ))
+        .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( startUpStrategyLoader ) ))
 
         // Clean up the temporary files
         .then(() =>

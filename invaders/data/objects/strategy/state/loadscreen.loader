@@ -2,11 +2,7 @@
 <loader>
 
     <strategy name="_loading-screen_">
-        <node name="loadAnim" instance="loadAnim">
-            <sprite>
-                <script prepare="animate"/>
-            </sprite>
-        </node>
+        <node name="loadAnim" instance="loadAnim"/>
         <node name="load_font" instance="load_font"/>
     </strategy>
   

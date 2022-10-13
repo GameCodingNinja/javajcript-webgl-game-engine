@@ -63,7 +63,7 @@ export class LoadState extends GameState
         objectDataManager.loadGroup( groupAry )
 
             // Create and load all the actor strategies.
-            .then(() => strategyLoader.load( genFunc.stringLoadXML( loadScreenStrategyLoader ) ))
+            .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( loadScreenStrategyLoader ) ))
 
             // Clean up the temporary files
             .then(() =>

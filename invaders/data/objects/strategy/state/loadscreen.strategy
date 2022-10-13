@@ -5,7 +5,7 @@
         
         <sprite>
             <scriptList>
-                <script animate="State_PlayLoadAnim" group="(state)"/>
+                <script animate="State_PlayLoadAnim" group="(state)" prepareOnInit="true"/>
             </scriptList>
         </sprite>
 

@@ -12,17 +12,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _library_managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
-/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(40);
-/* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(144);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(167);
-/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(185);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(186);
+/* harmony import */ var _library_managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
+/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(42);
+/* harmony import */ var _state_startupstate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(148);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(170);
+/* harmony import */ var _state_loadstate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(188);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(189);
 /* harmony import */ var _library_system_device__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(9);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(30);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(45);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(147);
-/* harmony import */ var _data_settings_settings_json__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(190);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(32);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(47);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(151);
+/* harmony import */ var _data_settings_settings_json__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(193);
 
 // 
 //  FILE NAME: game.js
@@ -251,6 +251,7 @@ class SignalManager
         this.loadCompleteSignal = [];
         this.resolutionChangeSignal = [];
         this.initShaderSignal = [];
+        this.collisionSignal = [];
     }
     
     // 
@@ -278,6 +279,14 @@ class SignalManager
     }
 
     // 
+    //  DESC: Connect to the collision signal
+    //
+    connect_collisionSignal( slot )
+    {
+        this.collisionSignal.push( slot );
+    }
+
+    // 
     //  DESC: Disconnect all to the load signal
     //
     clear_loadComplete()
@@ -300,7 +309,15 @@ class SignalManager
     {
         this.initShaderSignal = [];
     }
-    
+
+    // 
+    //  DESC: Disconnect all to collision signal
+    //
+    clear_collisionSignal()
+    {
+        this.collisionSignal = [];
+    }
+
     // 
     //  DESC: Broadcast the load signal
     //
@@ -326,6 +343,15 @@ class SignalManager
     {
         for( let i = 0; i < this.initShaderSignal.length; ++i )
             this.initShaderSignal[i](shaderId);
+    }
+
+    // 
+    //  DESC: Broadcast the collision signal
+    //
+    broadcast_collisionSignal( spriteA, spriteB )
+    {
+        for( let i = 0; i < this.collisionSignal.length; ++i )
+            this.collisionSignal[i](spriteA, spriteB);
     }
 }
 
@@ -564,8 +590,16 @@ class Size
 {
     constructor( w = 0, h = 0 )
     {
-        this.w = w;
-        this.h = h;
+        if(w instanceof Size)
+        {
+            this.w = w.w;
+            this.h = w.h;
+        }
+        else
+        {
+            this.w = w;
+            this.h = h;
+        }
     }
     
     // 
@@ -697,17 +731,17 @@ class LocalStorage
             if( this.storage.getItem( key ) === value )
             {
                 this.storage.removeItem( key );
-                console.log('Local storage available.');
+                console.debug('Local storage available.');
             }
             else
             {
                 this.storage = {}; // Dummy storage if storage is not available
-                console.log('Local storage NOT available.');
+                console.warn('Local storage NOT available.');
             }
         }
         catch (e)
         {
-            console.log( `Local storage error: ${e}` );
+            console.error( `Local storage error: ${e}` );
             this.storage = {}; // Dummy storage if storage is not available
         }
     }
@@ -726,7 +760,7 @@ class LocalStorage
         }
         catch (e)
         {
-            console.log( `Local storage set error: ${e}` );
+            console.error( `Local storage set error: ${e}` );
         }
     }
 
@@ -744,7 +778,7 @@ class LocalStorage
         }
         catch (e)
         {
-            console.log( `Local storage get error: ${e}` );
+            console.error( `Local storage get error: ${e}` );
         }
     }
 
@@ -762,7 +796,7 @@ class LocalStorage
         }
         catch (e)
         {
-            console.log( `Local storage free error: ${e}` );
+            console.error( `Local storage free error: ${e}` );
         }
     }
 
@@ -780,7 +814,7 @@ class LocalStorage
         }
         catch (e)
         {
-            console.log( `Local storage clear error: ${e}` );
+            console.error( `Local storage clear error: ${e}` );
         }
     }
 }
@@ -794,85 +828,96 @@ var localStorage = new LocalStorage;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "DEG_TO_RAD": () => (/* binding */ DEG_TO_RAD),
-/* harmony export */   "RAD_TO_DEG": () => (/* binding */ RAD_TO_DEG),
-/* harmony export */   "EPSILON": () => (/* binding */ EPSILON),
-/* harmony export */   "RGB_TO_DEC": () => (/* binding */ RGB_TO_DEC),
-/* harmony export */   "M_PI": () => (/* binding */ M_PI),
-/* harmony export */   "M_PI_2": () => (/* binding */ M_PI_2),
-/* harmony export */   "M_PI_4": () => (/* binding */ M_PI_4),
-/* harmony export */   "M_1_PI": () => (/* binding */ M_1_PI),
-/* harmony export */   "M_2_PI": () => (/* binding */ M_2_PI),
-/* harmony export */   "M_2_SQRTPI": () => (/* binding */ M_2_SQRTPI),
-/* harmony export */   "M_SQRT2": () => (/* binding */ M_SQRT2),
-/* harmony export */   "M_SQRT1_2": () => (/* binding */ M_SQRT1_2),
+/* harmony export */   "CENTER_POINT": () => (/* binding */ CENTER_POINT),
+/* harmony export */   "CHAR_CODE_PIPE": () => (/* binding */ CHAR_CODE_PIPE),
+/* harmony export */   "CHAR_CODE_SPACE": () => (/* binding */ CHAR_CODE_SPACE),
+/* harmony export */   "CROP_OFFSET": () => (/* binding */ CROP_OFFSET),
 /* harmony export */   "DEFAULT_ID": () => (/* binding */ DEFAULT_ID),
-/* harmony export */   "RESET_VELOCITY": () => (/* binding */ RESET_VELOCITY),
+/* harmony export */   "DEG_TO_RAD": () => (/* binding */ DEG_TO_RAD),
+/* harmony export */   "DEVICE_NULL": () => (/* binding */ DEVICE_NULL),
+/* harmony export */   "EAP_DOWN": () => (/* binding */ EAP_DOWN),
+/* harmony export */   "EAP_IDLE": () => (/* binding */ EAP_IDLE),
+/* harmony export */   "EAP_UP": () => (/* binding */ EAP_UP),
+/* harmony export */   "ECSF_ON_ACTIVE": () => (/* binding */ ECSF_ON_ACTIVE),
+/* harmony export */   "ECSF_ON_SELECTED": () => (/* binding */ ECSF_ON_SELECTED),
+/* harmony export */   "ECT_CIRCLE": () => (/* binding */ ECT_CIRCLE),
+/* harmony export */   "ECT_LINE": () => (/* binding */ ECT_LINE),
+/* harmony export */   "ECT_NULL": () => (/* binding */ ECT_NULL),
+/* harmony export */   "ECT_POINT": () => (/* binding */ ECT_POINT),
+/* harmony export */   "ECT_POLYGON": () => (/* binding */ ECT_POLYGON),
+/* harmony export */   "ECT_RECT": () => (/* binding */ ECT_RECT),
+/* harmony export */   "EDO_BOTTOM": () => (/* binding */ EDO_BOTTOM),
+/* harmony export */   "EDO_HORZ_CENTER": () => (/* binding */ EDO_HORZ_CENTER),
+/* harmony export */   "EDO_LEFT": () => (/* binding */ EDO_LEFT),
+/* harmony export */   "EDO_NULL": () => (/* binding */ EDO_NULL),
+/* harmony export */   "EDO_RIGHT": () => (/* binding */ EDO_RIGHT),
+/* harmony export */   "EDO_TOP": () => (/* binding */ EDO_TOP),
+/* harmony export */   "EDO_VERT_CENTER": () => (/* binding */ EDO_VERT_CENTER),
+/* harmony export */   "EGT_FONT": () => (/* binding */ EGT_FONT),
+/* harmony export */   "EGT_MESH_FILE": () => (/* binding */ EGT_MESH_FILE),
 /* harmony export */   "EGT_NULL": () => (/* binding */ EGT_NULL),
 /* harmony export */   "EGT_QUAD": () => (/* binding */ EGT_QUAD),
-/* harmony export */   "EGT_SPRITE_SHEET": () => (/* binding */ EGT_SPRITE_SHEET),
 /* harmony export */   "EGT_SCALED_FRAME": () => (/* binding */ EGT_SCALED_FRAME),
-/* harmony export */   "EGT_MESH_FILE": () => (/* binding */ EGT_MESH_FILE),
-/* harmony export */   "EGT_FONT": () => (/* binding */ EGT_FONT),
-/* harmony export */   "EPT_NULL": () => (/* binding */ EPT_NULL),
-/* harmony export */   "EPT_PERSPECTIVE": () => (/* binding */ EPT_PERSPECTIVE),
-/* harmony export */   "EPT_ORTHOGRAPHIC": () => (/* binding */ EPT_ORTHOGRAPHIC),
-/* harmony export */   "EHA_HORZ_LEFT": () => (/* binding */ EHA_HORZ_LEFT),
+/* harmony export */   "EGT_SPRITE_SHEET": () => (/* binding */ EGT_SPRITE_SHEET),
 /* harmony export */   "EHA_HORZ_CENTER": () => (/* binding */ EHA_HORZ_CENTER),
+/* harmony export */   "EHA_HORZ_LEFT": () => (/* binding */ EHA_HORZ_LEFT),
 /* harmony export */   "EHA_HORZ_RIGHT": () => (/* binding */ EHA_HORZ_RIGHT),
-/* harmony export */   "EVA_VERT_TOP": () => (/* binding */ EVA_VERT_TOP),
-/* harmony export */   "EVA_VERT_CENTER": () => (/* binding */ EVA_VERT_CENTER),
-/* harmony export */   "EVA_VERT_BOTTOM": () => (/* binding */ EVA_VERT_BOTTOM),
-/* harmony export */   "CHAR_CODE_SPACE": () => (/* binding */ CHAR_CODE_SPACE),
-/* harmony export */   "CHAR_CODE_PIPE": () => (/* binding */ CHAR_CODE_PIPE),
-/* harmony export */   "EAP_IDLE": () => (/* binding */ EAP_IDLE),
-/* harmony export */   "EAP_DOWN": () => (/* binding */ EAP_DOWN),
-/* harmony export */   "EAP_UP": () => (/* binding */ EAP_UP),
-/* harmony export */   "DEVICE_NULL": () => (/* binding */ DEVICE_NULL),
-/* harmony export */   "KEYBOARD": () => (/* binding */ KEYBOARD),
-/* harmony export */   "MOUSE": () => (/* binding */ MOUSE),
-/* harmony export */   "GAMEPAD": () => (/* binding */ GAMEPAD),
-/* harmony export */   "TRANSLATE": () => (/* binding */ TRANSLATE),
-/* harmony export */   "ROTATE": () => (/* binding */ ROTATE),
-/* harmony export */   "SCALE": () => (/* binding */ SCALE),
-/* harmony export */   "CENTER_POINT": () => (/* binding */ CENTER_POINT),
-/* harmony export */   "CROP_OFFSET": () => (/* binding */ CROP_OFFSET),
-/* harmony export */   "TRANSFORM": () => (/* binding */ TRANSFORM),
-/* harmony export */   "WAS_TRANSFORMED": () => (/* binding */ WAS_TRANSFORMED),
-/* harmony export */   "MATRIX_ROTATION": () => (/* binding */ MATRIX_ROTATION),
-/* harmony export */   "VISIBLE": () => (/* binding */ VISIBLE),
+/* harmony export */   "EMSC_CONTROL": () => (/* binding */ EMSC_CONTROL),
+/* harmony export */   "EMSC_STATE": () => (/* binding */ EMSC_STATE),
+/* harmony export */   "EM_HORIZONTAL": () => (/* binding */ EM_HORIZONTAL),
+/* harmony export */   "EM_HORIZONTAL_VERTICAL": () => (/* binding */ EM_HORIZONTAL_VERTICAL),
+/* harmony export */   "EM_NULL": () => (/* binding */ EM_NULL),
+/* harmony export */   "EM_VERTICAL": () => (/* binding */ EM_VERTICAL),
+/* harmony export */   "ENAV_NODE_DOWN": () => (/* binding */ ENAV_NODE_DOWN),
+/* harmony export */   "ENAV_NODE_LEFT": () => (/* binding */ ENAV_NODE_LEFT),
+/* harmony export */   "ENAV_NODE_RIGHT": () => (/* binding */ ENAV_NODE_RIGHT),
+/* harmony export */   "ENAV_NODE_UP": () => (/* binding */ ENAV_NODE_UP),
+/* harmony export */   "ENT_AI_ACTION": () => (/* binding */ ENT_AI_ACTION),
+/* harmony export */   "ENT_AI_DECORATOR": () => (/* binding */ ENT_AI_DECORATOR),
+/* harmony export */   "ENT_AI_HEAD": () => (/* binding */ ENT_AI_HEAD),
+/* harmony export */   "ENT_AI_SELECTOR": () => (/* binding */ ENT_AI_SELECTOR),
+/* harmony export */   "ENT_AI_SEQUENCE": () => (/* binding */ ENT_AI_SEQUENCE),
 /* harmony export */   "ENT_NULL": () => (/* binding */ ENT_NULL),
 /* harmony export */   "ENT_OBJECT": () => (/* binding */ ENT_OBJECT),
 /* harmony export */   "ENT_SPRITE": () => (/* binding */ ENT_SPRITE),
 /* harmony export */   "ENT_UI_CONTROL": () => (/* binding */ ENT_UI_CONTROL),
-/* harmony export */   "ESMA_PRESS_TYPE": () => (/* binding */ ESMA_PRESS_TYPE),
+/* harmony export */   "EO_HORIZONTAL": () => (/* binding */ EO_HORIZONTAL),
+/* harmony export */   "EO_VERTICAL": () => (/* binding */ EO_VERTICAL),
+/* harmony export */   "EPSILON": () => (/* binding */ EPSILON),
+/* harmony export */   "EPT_NULL": () => (/* binding */ EPT_NULL),
+/* harmony export */   "EPT_ORTHOGRAPHIC": () => (/* binding */ EPT_ORTHOGRAPHIC),
+/* harmony export */   "EPT_PERSPECTIVE": () => (/* binding */ EPT_PERSPECTIVE),
 /* harmony export */   "ESMA_DEVICE_TYPE": () => (/* binding */ ESMA_DEVICE_TYPE),
 /* harmony export */   "ESMA_MOUSE_X": () => (/* binding */ ESMA_MOUSE_X),
 /* harmony export */   "ESMA_MOUSE_Y": () => (/* binding */ ESMA_MOUSE_Y),
-/* harmony export */   "EMSC_STATE": () => (/* binding */ EMSC_STATE),
-/* harmony export */   "EMSC_CONTROL": () => (/* binding */ EMSC_CONTROL),
-/* harmony export */   "EDO_NULL": () => (/* binding */ EDO_NULL),
-/* harmony export */   "EDO_LEFT": () => (/* binding */ EDO_LEFT),
-/* harmony export */   "EDO_RIGHT": () => (/* binding */ EDO_RIGHT),
-/* harmony export */   "EDO_HORZ_CENTER": () => (/* binding */ EDO_HORZ_CENTER),
-/* harmony export */   "EDO_TOP": () => (/* binding */ EDO_TOP),
-/* harmony export */   "EDO_BOTTOM": () => (/* binding */ EDO_BOTTOM),
-/* harmony export */   "EDO_VERT_CENTER": () => (/* binding */ EDO_VERT_CENTER),
-/* harmony export */   "ENAV_NODE_UP": () => (/* binding */ ENAV_NODE_UP),
-/* harmony export */   "ENAV_NODE_DOWN": () => (/* binding */ ENAV_NODE_DOWN),
-/* harmony export */   "ENAV_NODE_LEFT": () => (/* binding */ ENAV_NODE_LEFT),
-/* harmony export */   "ENAV_NODE_RIGHT": () => (/* binding */ ENAV_NODE_RIGHT),
-/* harmony export */   "TOGGLE_STATE_ON": () => (/* binding */ TOGGLE_STATE_ON),
-/* harmony export */   "TOGGLE_STATE_OFF": () => (/* binding */ TOGGLE_STATE_OFF),
+/* harmony export */   "ESMA_PRESS_TYPE": () => (/* binding */ ESMA_PRESS_TYPE),
+/* harmony export */   "EVA_VERT_BOTTOM": () => (/* binding */ EVA_VERT_BOTTOM),
+/* harmony export */   "EVA_VERT_CENTER": () => (/* binding */ EVA_VERT_CENTER),
+/* harmony export */   "EVA_VERT_TOP": () => (/* binding */ EVA_VERT_TOP),
+/* harmony export */   "GAMEPAD": () => (/* binding */ GAMEPAD),
+/* harmony export */   "KEYBOARD": () => (/* binding */ KEYBOARD),
+/* harmony export */   "MATRIX_ROTATION": () => (/* binding */ MATRIX_ROTATION),
+/* harmony export */   "MOUSE": () => (/* binding */ MOUSE),
+/* harmony export */   "M_1_PI": () => (/* binding */ M_1_PI),
+/* harmony export */   "M_2_PI": () => (/* binding */ M_2_PI),
+/* harmony export */   "M_2_SQRTPI": () => (/* binding */ M_2_SQRTPI),
+/* harmony export */   "M_PI": () => (/* binding */ M_PI),
+/* harmony export */   "M_PI_2": () => (/* binding */ M_PI_2),
+/* harmony export */   "M_PI_4": () => (/* binding */ M_PI_4),
+/* harmony export */   "M_SQRT1_2": () => (/* binding */ M_SQRT1_2),
+/* harmony export */   "M_SQRT2": () => (/* binding */ M_SQRT2),
 /* harmony export */   "NO_ACTIVE_CONTROL": () => (/* binding */ NO_ACTIVE_CONTROL),
-/* harmony export */   "ECSF_ON_ACTIVE": () => (/* binding */ ECSF_ON_ACTIVE),
-/* harmony export */   "ECSF_ON_SELECTED": () => (/* binding */ ECSF_ON_SELECTED),
-/* harmony export */   "EO_HORIZONTAL": () => (/* binding */ EO_HORIZONTAL),
-/* harmony export */   "EO_VERTICAL": () => (/* binding */ EO_VERTICAL),
-/* harmony export */   "EM_NULL": () => (/* binding */ EM_NULL),
-/* harmony export */   "EM_HORIZONTAL": () => (/* binding */ EM_HORIZONTAL),
-/* harmony export */   "EM_VERTICAL": () => (/* binding */ EM_VERTICAL),
-/* harmony export */   "EM_HORIZONTAL_VERTICAL": () => (/* binding */ EM_HORIZONTAL_VERTICAL)
+/* harmony export */   "RAD_TO_DEG": () => (/* binding */ RAD_TO_DEG),
+/* harmony export */   "RESET_VELOCITY": () => (/* binding */ RESET_VELOCITY),
+/* harmony export */   "RGB_TO_DEC": () => (/* binding */ RGB_TO_DEC),
+/* harmony export */   "ROTATE": () => (/* binding */ ROTATE),
+/* harmony export */   "SCALE": () => (/* binding */ SCALE),
+/* harmony export */   "TOGGLE_STATE_OFF": () => (/* binding */ TOGGLE_STATE_OFF),
+/* harmony export */   "TOGGLE_STATE_ON": () => (/* binding */ TOGGLE_STATE_ON),
+/* harmony export */   "TRANSFORM": () => (/* binding */ TRANSFORM),
+/* harmony export */   "TRANSLATE": () => (/* binding */ TRANSLATE),
+/* harmony export */   "VISIBLE": () => (/* binding */ VISIBLE),
+/* harmony export */   "WAS_TRANSFORMED": () => (/* binding */ WAS_TRANSFORMED)
 /* harmony export */ });
 
 // 
@@ -906,6 +951,15 @@ const EGT_NULL         = 0,
              EGT_SCALED_FRAME = 3,
              EGT_MESH_FILE    = 4,
              EGT_FONT         = 5;
+
+// ECollisionType
+const ECT_NULL     = 0,
+             ECT_POINT    = 1,
+             ECT_CIRCLE   = 2,
+             ECT_LINE     = 3,
+             ECT_RECT     = 4,
+             ECT_POLYGON  = 5;
+             
 
 // EProjectionType
 const EPT_NULL         = 0,
@@ -957,10 +1011,15 @@ const MATRIX_ROTATION = 0x80;
 const VISIBLE         = 0x100;
      
 // ENodeType
-const ENT_NULL       = 0,
-             ENT_OBJECT     = 1,
-             ENT_SPRITE     = 2,
-             ENT_UI_CONTROL = 3;
+const ENT_NULL         = 0,
+             ENT_OBJECT       = 1,
+             ENT_SPRITE       = 2,
+             ENT_UI_CONTROL   = 3,
+             ENT_AI_HEAD      = 4,
+             ENT_AI_SELECTOR  = 5,
+             ENT_AI_DECORATOR = 6,
+             ENT_AI_SEQUENCE  = 7,
+             ENT_AI_ACTION    = 8;
 
 // ESelection Message Arguments
 const ESMA_PRESS_TYPE  = 0,
@@ -1043,7 +1102,7 @@ class TextureManager
     //
     //  DESC: Load the image file as a texture
     //
-    load( group, filePath, image )
+    load( group, filePath, image, filter = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.LINEAR, wrap = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.CLAMP_TO_EDGE )
     {
         let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl;
 
@@ -1067,10 +1126,10 @@ class TextureManager
             texture.size.h = image.height;
 
             gl.bindTexture( gl.TEXTURE_2D, texture.id );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR );
+            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap );
+            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap );
+            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
+            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter );
             gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image );
             gl.bindTexture( gl.TEXTURE_2D, null );
 
@@ -1217,7 +1276,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 /* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
-/* harmony import */ var _gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(24);
+/* harmony import */ var _gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
 
 // 
 //  FILE NAME: device.js
@@ -1389,7 +1448,7 @@ class CameraManager
     {
         if( !this.cameraMap.has( cameraId ) )
         {
-            console.log( `Camera id is not defined (${cameraId})! Using default camera instead.` );
+            console.debug( `Camera id is not defined (${cameraId})! Using default camera instead.` );
             return this.defaultCamera;
         }
         
@@ -1406,7 +1465,7 @@ class CameraManager
         {
             let index = this.transformAry.findIndex( (obj) => obj === camera );
             if( index !== -1 )
-                console.log( `Camera is already being transformed (${cameraId})!` );
+                console.warn( `Camera is already being transformed (${cameraId})!` );
             else
                 this.transformAry.push( camera );
         }
@@ -1424,7 +1483,7 @@ class CameraManager
         {
             let index = this.transformAry.findIndex( (obj) => obj === camera );
             if( index === -1 )
-                console.log( `Camera is not being transformed (${cameraId})!` );
+                console.warn( `Camera is not being transformed (${cameraId})!` );
             else
                 this.transformAry.splice(index, 1);
         }
@@ -2028,6 +2087,18 @@ class Matrix
         for( let i = 0; i < 4; ++i )
             this.transformPoint( dest.point[i], source.point[i] );
     }
+
+    transformPolygon( dest, source )
+    {
+        for( let i = 0; i < source.pointAry.length; ++i )
+            this.transformPoint( dest.pointAry[i], source.pointAry[i] );
+    }
+
+    transformLine( dest, source )
+    {
+        this.transformPoint( dest.head, source.head );
+        this.transformPoint( dest.tail, source.tail );
+    }
     
     //
     //  DESC: Set the scale to the master matrix
@@ -2213,6 +2284,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// Reusable global objects so as to avoid exessive allocations and cleanup
 var gDummyPoint = new _point__WEBPACK_IMPORTED_MODULE_0__.Point;
 var gSize = new _size__WEBPACK_IMPORTED_MODULE_1__.Size;
 var gRect = new _rect__WEBPACK_IMPORTED_MODULE_2__.Rect;
@@ -2628,7 +2700,10 @@ class Point
 {
     constructor( x = 0, y = 0, z = 0 )
     {
-        this.data = new Float32Array([x,y,z]);
+        if(x instanceof Point)
+            this.data = new Float32Array([x.data[0], x.data[1], x.data[2]]);
+        else
+            this.data = new Float32Array([x, y, z]);
     }
     
     set x(value) { this.data[0] = value; }
@@ -2843,12 +2918,12 @@ class Point
     //
     getLengthSquared()
     {
-        return ( this.data[0] * this.data[0] ) +  ( this.data[1] * this.data[1] ) + ( this.data[2] * this.data[2] );
+        return ( this.data[0] * this.data[0] ) + ( this.data[1] * this.data[1] ) + ( this.data[2] * this.data[2] );
     }
 
     getLengthSquared2D()
     {
-        return ( this.data[0] * this.data[0] ) +  ( this.data[1] * this.data[1] );
+        return ( this.data[0] * this.data[0] ) + ( this.data[1] * this.data[1] );
     }
 
     // 
@@ -2860,7 +2935,7 @@ class Point
         let dy = this.data[1] - point.data[1];
         let dz = this.data[2] - point.data[2];
 
-        return ( dx * dx ) +  ( dy * dy ) +  ( dz * dz );
+        return ( dx * dx ) + ( dy * dy ) + ( dz * dz );
     }
 
     calcLengthSquared2D( point )
@@ -2868,7 +2943,7 @@ class Point
         let dx = this.data[0] - point.data[0];
         let dy = this.data[1] - point.data[1];
 
-        return ( dx * dx ) +  ( dy * dy );
+        return ( dx * dx ) + ( dy * dy );
     }
 
     // 
@@ -2902,12 +2977,12 @@ class Point
     //
     getDotProduct( point )
     {
-        return ( this.data[0] * point.data[0] ) +  ( this.data[1] * point.data[1] ) + ( this.data[2] * point.data[2] );
+        return ( this.data[0] * point.data[0] ) + ( this.data[1] * point.data[1] ) + ( this.data[2] * point.data[2] );
     }
 
     getDotProduct2D( point )
     {
-        return ( this.data[0] * point.data[0] ) +  ( this.data[1] * point.data[1] );
+        return ( this.data[0] * point.data[0] ) + ( this.data[1] * point.data[1] );
     }
 }
 
@@ -2933,7 +3008,10 @@ class Rect
 {
     constructor( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
     {
-        this.data = new Float32Array([x1,y1,x2,y2]);
+        if(x1 instanceof Rect)
+            this.data = new Float32Array([x1.data[0], x1.data[1], x1.data[2], x1.data[3]]);
+        else
+            this.data = new Float32Array([x1, y1, x2, y2]);
     }
     
     set( x1 = 0, y1 = 0, x2 = 0, y2 = 0 )
@@ -3381,33 +3459,39 @@ class CScriptPrepareFunc
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "loadVertex2d": () => (/* binding */ loadVertex2d),
-/* harmony export */   "loadPosition": () => (/* binding */ loadPosition),
-/* harmony export */   "loadRotation": () => (/* binding */ loadRotation),
-/* harmony export */   "loadScale": () => (/* binding */ loadScale),
 /* harmony export */   "loadCenterPos": () => (/* binding */ loadCenterPos),
-/* harmony export */   "loadXYZ": () => (/* binding */ loadXYZ),
 /* harmony export */   "loadColor": () => (/* binding */ loadColor),
-/* harmony export */   "loadSize": () => (/* binding */ loadSize),
+/* harmony export */   "loadDynamicOffset": () => (/* binding */ loadDynamicOffset),
+/* harmony export */   "loadHorzAlignment": () => (/* binding */ loadHorzAlignment),
+/* harmony export */   "loadLine": () => (/* binding */ loadLine),
+/* harmony export */   "loadPoint": () => (/* binding */ loadPoint),
+/* harmony export */   "loadPolygon": () => (/* binding */ loadPolygon),
+/* harmony export */   "loadPosition": () => (/* binding */ loadPosition),
 /* harmony export */   "loadRect": () => (/* binding */ loadRect),
 /* harmony export */   "loadRectFromChild": () => (/* binding */ loadRectFromChild),
-/* harmony export */   "loadHorzAlignment": () => (/* binding */ loadHorzAlignment),
+/* harmony export */   "loadRotation": () => (/* binding */ loadRotation),
+/* harmony export */   "loadScale": () => (/* binding */ loadScale),
+/* harmony export */   "loadSize": () => (/* binding */ loadSize),
 /* harmony export */   "loadVertAlignment": () => (/* binding */ loadVertAlignment),
-/* harmony export */   "loadDynamicOffset": () => (/* binding */ loadDynamicOffset)
+/* harmony export */   "loadVertex2d": () => (/* binding */ loadVertex2d)
 /* harmony export */ });
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
-/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(23);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
+/* harmony import */ var _common_line__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
+/* harmony import */ var _common_polygon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(23);
+/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(24);
+/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(25);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: xmlparsehelper.js
 //  DESC:      General xml parse helper functions
 //             NOTE: Nonexistant attributes return null
 //
+
+
 
 
 
@@ -3425,7 +3509,7 @@ function loadVertex2d( xmlNode )
 {
     if( xmlNode )
     {
-        let vert2d = new _common_vertex2d__WEBPACK_IMPORTED_MODULE_4__.Vertex2d;
+        let vert2d = new _common_vertex2d__WEBPACK_IMPORTED_MODULE_6__.Vertex2d;
         
         let attr = xmlNode.getAttribute('x');
         if( attr )
@@ -3572,7 +3656,35 @@ function loadCenterPos( xmlNode )
 // 
 //  DESC: Load the generic x, y, z values
 //
-function loadXYZ( xmlNode )
+function loadLine( xmlNode )
+{
+    let line = new _common_line__WEBPACK_IMPORTED_MODULE_3__.Line;
+
+    let pointNode = xmlNode.getElementsByTagName( 'point' );
+    line.head = loadPoint( pointNode[0] );
+    line.tail = loadPoint( pointNode[1] );
+
+    return line;
+}
+
+// 
+//  DESC: Load the generic x, y, z values
+//
+function loadPolygon( xmlNode )
+{
+    let polygon = new _common_polygon__WEBPACK_IMPORTED_MODULE_5__.Polygon;
+
+    let pointNode = xmlNode.getElementsByTagName( 'point' );
+    for( let i = 0; i < pointNode.length; ++i )
+        polygon.pointAry.push( loadPoint( pointNode[i] ) );
+
+    return polygon;
+}
+
+// 
+//  DESC: Load the generic x, y, z values
+//
+function loadPoint( xmlNode )
 {
     let point = new _common_point__WEBPACK_IMPORTED_MODULE_2__.Point;
 
@@ -3589,8 +3701,7 @@ function loadXYZ( xmlNode )
         point.z = Number( attr );
 
     return point;
-
-}   // LoadScale
+}
 
 // 
 //  DESC: Load the color
@@ -3663,12 +3774,12 @@ function loadRect( xmlNode )
     if( rectNode.length )
         return loadRectFromChild( rectNode[0] );
 
-    return new _common_rect__WEBPACK_IMPORTED_MODULE_3__.Rect;
+    return new _common_rect__WEBPACK_IMPORTED_MODULE_4__.Rect;
 }
 
 function loadRectFromChild( xmlNode )
 {
-    let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_3__.Rect;
+    let rect = new _common_rect__WEBPACK_IMPORTED_MODULE_4__.Rect;
     
     let attr = xmlNode.getAttribute('x1');
         if( attr )
@@ -3700,13 +3811,13 @@ function loadHorzAlignment( xmlNode, aHorzAlign )
     if( horzAlignAttr )
     {
         if( horzAlignAttr === 'left' )
-            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EHA_HORZ_LEFT;
+            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_LEFT;
 
         else if( horzAlignAttr === 'center' )
-            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EHA_HORZ_CENTER;
+            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_CENTER;
 
         else if( horzAlignAttr === 'right' )
-            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EHA_HORZ_RIGHT;
+            horzAlign = _common_defs__WEBPACK_IMPORTED_MODULE_8__.EHA_HORZ_RIGHT;
     }
 
     return horzAlign;
@@ -3723,13 +3834,13 @@ function loadVertAlignment( xmlNode, aVertAlign )
     if( vertAlignAttr )
     {
         if( vertAlignAttr === 'top' )
-            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EVA_VERT_TOP;
+            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_TOP;
 
         else if( vertAlignAttr === 'center' )
-            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EVA_VERT_CENTER;
+            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_CENTER;
 
         else if( vertAlignAttr === 'bottom' )
-            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_6__.EVA_VERT_BOTTOM;
+            vertAlign = _common_defs__WEBPACK_IMPORTED_MODULE_8__.EVA_VERT_BOTTOM;
     }
 
     return vertAlign;
@@ -3744,12 +3855,12 @@ function loadDynamicOffset( xmlNode )
 
     if( dynamicOffsetNode.length )
     {
-        let dynamicOffset = new _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_5__.DynamicOffset;
+        let dynamicOffset = new _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_7__.DynamicOffset;
         
         let attr = dynamicOffsetNode[0].getAttribute('left');
         if( attr )
         {
-            dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_LEFT );
+            dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_8__.EDO_LEFT );
             dynamicOffset.setX( Number( attr ) );
         }
         else
@@ -3757,7 +3868,7 @@ function loadDynamicOffset( xmlNode )
             attr = dynamicOffsetNode[0].getAttribute('right');
             if( attr )
             {
-                dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_RIGHT );
+                dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_8__.EDO_RIGHT );
                 dynamicOffset.setX( Number( attr ) );
             }
             else
@@ -3765,7 +3876,7 @@ function loadDynamicOffset( xmlNode )
                 attr = dynamicOffsetNode[0].getAttribute('horzCenter');
                 if( attr )
                 {
-                    dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_HORZ_CENTER );
+                    dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_8__.EDO_HORZ_CENTER );
                     dynamicOffset.setX( Number( attr ) );
                 }
             }
@@ -3774,7 +3885,7 @@ function loadDynamicOffset( xmlNode )
         attr = dynamicOffsetNode[0].getAttribute('top');
         if( attr )
         {
-            dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_TOP );
+            dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_8__.EDO_TOP );
             dynamicOffset.setY( Number( attr ) );
         }
         else
@@ -3782,7 +3893,7 @@ function loadDynamicOffset( xmlNode )
             attr = dynamicOffsetNode[0].getAttribute('bottom');
             if( attr )
             {
-                dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_BOTTOM );
+                dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_8__.EDO_BOTTOM );
                 dynamicOffset.setY( Number( attr ) );
             }
             else
@@ -3790,7 +3901,7 @@ function loadDynamicOffset( xmlNode )
                 attr = dynamicOffsetNode[0].getAttribute('vertCenter');
                 if( attr )
                 {
-                    dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_6__.EDO_VERT_CENTER );
+                    dynamicOffset.add( _common_defs__WEBPACK_IMPORTED_MODULE_8__.EDO_VERT_CENTER );
                     dynamicOffset.setX( Number( attr ) );
                 }
             }
@@ -3949,6 +4060,90 @@ class Color
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Line": () => (/* binding */ Line)
+/* harmony export */ });
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+
+// 
+//  FILE NAME:  line.js
+//  DESC:       Line class
+//
+
+
+
+
+class Line
+{
+    constructor( obj = null )
+    {
+        this.head = null;
+        this.tail = null;
+
+        if(obj)
+            this.copy( obj );
+    }
+
+    // 
+    //  DESC: Copy from another line
+    //
+    copy( obj )
+    {
+        this.head = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point( obj.head );
+        this.tail = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point( obj.tail );
+    }
+}
+
+
+/***/ }),
+/* 23 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Polygon": () => (/* binding */ Polygon)
+/* harmony export */ });
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+
+// 
+//  FILE NAME:  polygon.js
+//  DESC:       Polygon class
+//
+
+
+
+
+class Polygon
+{
+    constructor( obj = null )
+    {
+        this.pointAry = [];
+
+        if(obj)
+            this.copy( obj );
+    }
+
+    // 
+    //  DESC: Copy from another polygon
+    //
+    copy( obj )
+    {
+        if( this.pointAry.length )
+            this.pointAry = [];
+
+        for( let i = 0; i < obj.pointAry.length; ++i )
+            this.pointAry.push( new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point( obj.pointAry[i] ) );
+    }
+}
+
+
+/***/ }),
+/* 24 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Vertex2d": () => (/* binding */ Vertex2d)
 /* harmony export */ });
 
@@ -3984,7 +4179,7 @@ class Vertex2d
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4083,7 +4278,7 @@ class DynamicOffset
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4091,17 +4286,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "menuManager": () => (/* binding */ menuManager)
 /* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(27);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(33);
-/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(34);
-/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(143);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(35);
+/* harmony import */ var _gui_menu__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
+/* harmony import */ var _gui_menutree__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(147);
 /* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
-/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(31);
-/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(29);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(26);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(36);
+/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(33);
+/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(31);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(28);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(38);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(6);
 
 // 
@@ -5241,7 +5436,7 @@ var menuManager = new MenuManager;
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5249,7 +5444,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ManagerBase": () => (/* binding */ ManagerBase)
 /* harmony export */ });
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
 
 //
 //  FILE NAME: managerbase.js
@@ -5326,17 +5521,25 @@ class ManagerBase
             let pathAry = this.listTableMap.get( group );
             if( pathAry !== undefined )
             {
-                // Load the group data if it doesn't already exist
-                if( groupMapMap.get( group ) === undefined )
+                if( groupMapMap )
                 {
-                    // Create a new group map inside of our map
-                    groupMapMap.set( group, new Map );
+                    // Load the group data if it doesn't already exist
+                    if( groupMapMap.get( group ) === undefined )
+                    {
+                        // Create a new group map inside of our map
+                        groupMapMap.set( group, new Map );
 
-                    promiseAry.push( this.load( group ) );
+                        promiseAry.push( this.load( group ) );
+                    }
+                    else
+                    {
+                        throw new Error( `${groupNameStr} group has alread been loaded (${group})!` );
+                    }
                 }
                 else
                 {
-                    throw new Error( `${groupNameStr} group has alread been loaded (${group})!` );
+                    // Just load if group map is not defined
+                    promiseAry.push( this.load( group ) );
                 }
             }
             else
@@ -5382,20 +5585,20 @@ class ManagerBase
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "downloadFile": () => (/* binding */ downloadFile),
 /* harmony export */   "countStrOccurrence": () => (/* binding */ countStrOccurrence),
+/* harmony export */   "downloadFile": () => (/* binding */ downloadFile),
+/* harmony export */   "getKey": () => (/* binding */ getKey),
 /* harmony export */   "modulus": () => (/* binding */ modulus),
-/* harmony export */   "randomInt": () => (/* binding */ randomInt),
 /* harmony export */   "randomArbitrary": () => (/* binding */ randomArbitrary),
+/* harmony export */   "randomInt": () => (/* binding */ randomInt),
 /* harmony export */   "shuffle": () => (/* binding */ shuffle),
-/* harmony export */   "stringLoadXML": () => (/* binding */ stringLoadXML),
-/* harmony export */   "getKey": () => (/* binding */ getKey)
+/* harmony export */   "stringLoadXML": () => (/* binding */ stringLoadXML)
 /* harmony export */ });
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
@@ -5434,6 +5637,12 @@ function downloadFile( fileType, filePath )
             request.responseType = 'text';
             request.overrideMimeType('text/plain');
         }
+        else if( fileType === 'json' )
+        {
+            //console.log(`Load Text: ${filePath}`);
+            request.responseType = 'text';
+            request.overrideMimeType('text/plain');
+        }
         else if( fileType === 'binary' )
         {
             //console.log(`Load Binary: ${filePath}`);
@@ -5463,6 +5672,9 @@ function downloadFile( fileType, filePath )
 
                             if( fileType === 'xml' && this.responseXML )
                                 resolve(this.responseXML.childNodes[0]);
+
+                            else if( fileType === 'json' && this.responseText )
+                                resolve(JSON.parse(this.responseText));
 
                             else if( fileType === 'txt' && this.responseText )
                                 resolve(this.responseText);
@@ -5532,12 +5744,13 @@ function randomInt( min, max )
 {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 function randomArbitrary( min, max )
 {
-    return Math.floor(Math.random() * (max - min)) + min;
+    return Math.random() * (max - min) + min;
 }
 
 // 
@@ -5599,17 +5812,12 @@ function getKey(map, searchValue)
 }
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "UNBOUND_KEYCODE_STR_ID": () => (/* binding */ UNBOUND_KEYCODE_STR_ID),
-/* harmony export */   "UNBOUND_KEYCODE_ID": () => (/* binding */ UNBOUND_KEYCODE_ID),
-/* harmony export */   "MOUSE_BUTTON_LEFT": () => (/* binding */ MOUSE_BUTTON_LEFT),
-/* harmony export */   "MOUSE_BUTTON_MIDDLE": () => (/* binding */ MOUSE_BUTTON_MIDDLE),
-/* harmony export */   "MOUSE_BUTTON_RIGHT": () => (/* binding */ MOUSE_BUTTON_RIGHT),
 /* harmony export */   "MOUSE_BUTTON_1X": () => (/* binding */ MOUSE_BUTTON_1X),
 /* harmony export */   "MOUSE_BUTTON_2X": () => (/* binding */ MOUSE_BUTTON_2X),
 /* harmony export */   "MOUSE_BUTTON_3X": () => (/* binding */ MOUSE_BUTTON_3X),
@@ -5618,12 +5826,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "MOUSE_BUTTON_6X": () => (/* binding */ MOUSE_BUTTON_6X),
 /* harmony export */   "MOUSE_BUTTON_7X": () => (/* binding */ MOUSE_BUTTON_7X),
 /* harmony export */   "MOUSE_BUTTON_8X": () => (/* binding */ MOUSE_BUTTON_8X),
+/* harmony export */   "MOUSE_BUTTON_LEFT": () => (/* binding */ MOUSE_BUTTON_LEFT),
+/* harmony export */   "MOUSE_BUTTON_MIDDLE": () => (/* binding */ MOUSE_BUTTON_MIDDLE),
+/* harmony export */   "MOUSE_BUTTON_RIGHT": () => (/* binding */ MOUSE_BUTTON_RIGHT),
+/* harmony export */   "UNBOUND_KEYCODE_ID": () => (/* binding */ UNBOUND_KEYCODE_ID),
+/* harmony export */   "UNBOUND_KEYCODE_STR_ID": () => (/* binding */ UNBOUND_KEYCODE_STR_ID),
 /* harmony export */   "actionManager": () => (/* binding */ actionManager)
 /* harmony export */ });
-/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
-/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
+/* harmony import */ var _common_keycodeaction__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
+/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
 /* harmony import */ var _utilities_localstorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
 // 
 //  FILE NAME: actionmanager.js
@@ -6230,7 +6443,7 @@ var actionManager = new ActionManager;
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6281,53 +6494,53 @@ class KeyCodeAction
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GAMEPAD_BUTTON_DOWN": () => (/* binding */ GAMEPAD_BUTTON_DOWN),
-/* harmony export */   "GAMEPAD_BUTTON_UP": () => (/* binding */ GAMEPAD_BUTTON_UP),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_BACK": () => (/* binding */ ALT_GAMEPAD_BUTTON_BACK),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_GUIDE": () => (/* binding */ ALT_GAMEPAD_BUTTON_GUIDE),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_LEFTSTICK": () => (/* binding */ ALT_GAMEPAD_BUTTON_LEFTSTICK),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_RIGHTSTICK": () => (/* binding */ ALT_GAMEPAD_BUTTON_RIGHTSTICK),
+/* harmony export */   "ALT_GAMEPAD_BUTTON_START": () => (/* binding */ ALT_GAMEPAD_BUTTON_START),
+/* harmony export */   "ANALOG_STICK_MSG_MAX": () => (/* binding */ ANALOG_STICK_MSG_MAX),
 /* harmony export */   "GAMEPAD_AXIS_LEFT": () => (/* binding */ GAMEPAD_AXIS_LEFT),
-/* harmony export */   "GAMEPAD_AXIS_RIGHT": () => (/* binding */ GAMEPAD_AXIS_RIGHT),
-/* harmony export */   "GAMEPAD_TRIGGER_LEFT": () => (/* binding */ GAMEPAD_TRIGGER_LEFT),
-/* harmony export */   "GAMEPAD_TRIGGER_RIGHT": () => (/* binding */ GAMEPAD_TRIGGER_RIGHT),
 /* harmony export */   "GAMEPAD_AXIS_LEFT_X": () => (/* binding */ GAMEPAD_AXIS_LEFT_X),
 /* harmony export */   "GAMEPAD_AXIS_LEFT_Y": () => (/* binding */ GAMEPAD_AXIS_LEFT_Y),
+/* harmony export */   "GAMEPAD_AXIS_RIGHT": () => (/* binding */ GAMEPAD_AXIS_RIGHT),
 /* harmony export */   "GAMEPAD_AXIS_RIGHT_X": () => (/* binding */ GAMEPAD_AXIS_RIGHT_X),
 /* harmony export */   "GAMEPAD_AXIS_RIGHT_Y": () => (/* binding */ GAMEPAD_AXIS_RIGHT_Y),
 /* harmony export */   "GAMEPAD_BUTTON_A": () => (/* binding */ GAMEPAD_BUTTON_A),
 /* harmony export */   "GAMEPAD_BUTTON_B": () => (/* binding */ GAMEPAD_BUTTON_B),
-/* harmony export */   "GAMEPAD_BUTTON_X": () => (/* binding */ GAMEPAD_BUTTON_X),
-/* harmony export */   "GAMEPAD_BUTTON_Y": () => (/* binding */ GAMEPAD_BUTTON_Y),
-/* harmony export */   "GAMEPAD_BUTTON_L_BUMPER": () => (/* binding */ GAMEPAD_BUTTON_L_BUMPER),
-/* harmony export */   "GAMEPAD_BUTTON_R_BUMPER": () => (/* binding */ GAMEPAD_BUTTON_R_BUMPER),
-/* harmony export */   "GAMEPAD_BUTTON_L_TRIGGER": () => (/* binding */ GAMEPAD_BUTTON_L_TRIGGER),
-/* harmony export */   "GAMEPAD_BUTTON_R_TRIGGER": () => (/* binding */ GAMEPAD_BUTTON_R_TRIGGER),
 /* harmony export */   "GAMEPAD_BUTTON_BACK": () => (/* binding */ GAMEPAD_BUTTON_BACK),
-/* harmony export */   "GAMEPAD_BUTTON_START": () => (/* binding */ GAMEPAD_BUTTON_START),
-/* harmony export */   "GAMEPAD_BUTTON_LEFTSTICK": () => (/* binding */ GAMEPAD_BUTTON_LEFTSTICK),
-/* harmony export */   "GAMEPAD_BUTTON_RIGHTSTICK": () => (/* binding */ GAMEPAD_BUTTON_RIGHTSTICK),
-/* harmony export */   "GAMEPAD_BUTTON_DPAD_UP": () => (/* binding */ GAMEPAD_BUTTON_DPAD_UP),
+/* harmony export */   "GAMEPAD_BUTTON_DOWN": () => (/* binding */ GAMEPAD_BUTTON_DOWN),
 /* harmony export */   "GAMEPAD_BUTTON_DPAD_DOWN": () => (/* binding */ GAMEPAD_BUTTON_DPAD_DOWN),
 /* harmony export */   "GAMEPAD_BUTTON_DPAD_LEFT": () => (/* binding */ GAMEPAD_BUTTON_DPAD_LEFT),
 /* harmony export */   "GAMEPAD_BUTTON_DPAD_RIGHT": () => (/* binding */ GAMEPAD_BUTTON_DPAD_RIGHT),
+/* harmony export */   "GAMEPAD_BUTTON_DPAD_UP": () => (/* binding */ GAMEPAD_BUTTON_DPAD_UP),
 /* harmony export */   "GAMEPAD_BUTTON_GUIDE": () => (/* binding */ GAMEPAD_BUTTON_GUIDE),
-/* harmony export */   "ALT_GAMEPAD_BUTTON_BACK": () => (/* binding */ ALT_GAMEPAD_BUTTON_BACK),
-/* harmony export */   "ALT_GAMEPAD_BUTTON_START": () => (/* binding */ ALT_GAMEPAD_BUTTON_START),
-/* harmony export */   "ALT_GAMEPAD_BUTTON_GUIDE": () => (/* binding */ ALT_GAMEPAD_BUTTON_GUIDE),
-/* harmony export */   "ALT_GAMEPAD_BUTTON_LEFTSTICK": () => (/* binding */ ALT_GAMEPAD_BUTTON_LEFTSTICK),
-/* harmony export */   "ALT_GAMEPAD_BUTTON_RIGHTSTICK": () => (/* binding */ ALT_GAMEPAD_BUTTON_RIGHTSTICK),
-/* harmony export */   "GAMEPAD_BUTTON_L_STICK_UP": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_UP),
+/* harmony export */   "GAMEPAD_BUTTON_LEFTSTICK": () => (/* binding */ GAMEPAD_BUTTON_LEFTSTICK),
+/* harmony export */   "GAMEPAD_BUTTON_L_BUMPER": () => (/* binding */ GAMEPAD_BUTTON_L_BUMPER),
 /* harmony export */   "GAMEPAD_BUTTON_L_STICK_DOWN": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_DOWN),
 /* harmony export */   "GAMEPAD_BUTTON_L_STICK_LEFT": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_LEFT),
 /* harmony export */   "GAMEPAD_BUTTON_L_STICK_RIGHT": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_RIGHT),
-/* harmony export */   "GAMEPAD_BUTTON_R_STICK_UP": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_UP),
+/* harmony export */   "GAMEPAD_BUTTON_L_STICK_UP": () => (/* binding */ GAMEPAD_BUTTON_L_STICK_UP),
+/* harmony export */   "GAMEPAD_BUTTON_L_TRIGGER": () => (/* binding */ GAMEPAD_BUTTON_L_TRIGGER),
+/* harmony export */   "GAMEPAD_BUTTON_RIGHTSTICK": () => (/* binding */ GAMEPAD_BUTTON_RIGHTSTICK),
+/* harmony export */   "GAMEPAD_BUTTON_R_BUMPER": () => (/* binding */ GAMEPAD_BUTTON_R_BUMPER),
 /* harmony export */   "GAMEPAD_BUTTON_R_STICK_DOWN": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_DOWN),
 /* harmony export */   "GAMEPAD_BUTTON_R_STICK_LEFT": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_LEFT),
 /* harmony export */   "GAMEPAD_BUTTON_R_STICK_RIGHT": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_RIGHT),
-/* harmony export */   "ANALOG_STICK_MSG_MAX": () => (/* binding */ ANALOG_STICK_MSG_MAX),
+/* harmony export */   "GAMEPAD_BUTTON_R_STICK_UP": () => (/* binding */ GAMEPAD_BUTTON_R_STICK_UP),
+/* harmony export */   "GAMEPAD_BUTTON_R_TRIGGER": () => (/* binding */ GAMEPAD_BUTTON_R_TRIGGER),
+/* harmony export */   "GAMEPAD_BUTTON_START": () => (/* binding */ GAMEPAD_BUTTON_START),
+/* harmony export */   "GAMEPAD_BUTTON_UP": () => (/* binding */ GAMEPAD_BUTTON_UP),
+/* harmony export */   "GAMEPAD_BUTTON_X": () => (/* binding */ GAMEPAD_BUTTON_X),
+/* harmony export */   "GAMEPAD_BUTTON_Y": () => (/* binding */ GAMEPAD_BUTTON_Y),
+/* harmony export */   "GAMEPAD_TRIGGER_LEFT": () => (/* binding */ GAMEPAD_TRIGGER_LEFT),
+/* harmony export */   "GAMEPAD_TRIGGER_RIGHT": () => (/* binding */ GAMEPAD_TRIGGER_RIGHT),
 /* harmony export */   "GamepadEvent": () => (/* binding */ GamepadEvent)
 /* harmony export */ });
 
@@ -6485,7 +6698,7 @@ class GamepadEvent
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6494,11 +6707,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "eventManager": () => (/* binding */ eventManager)
 /* harmony export */ });
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
-/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
-/* harmony import */ var _common_gamepad__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(27);
+/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(33);
+/* harmony import */ var _common_gamepad__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(34);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(29);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3);
-/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
+/* harmony import */ var _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(31);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 
 //
@@ -6643,7 +6856,7 @@ class EventManager
     //
     onFullScreenChange( event )
     {
-        console.log('onFullScreenChange');
+        //console.log('onFullScreenChange');
         if (document.fullscreenElement)
         {
             let dpr = window.devicePixelRatio;
@@ -6719,7 +6932,7 @@ class EventManager
             _managers_actionmanager__WEBPACK_IMPORTED_MODULE_3__.actionManager.initGamepadMapping( event.gamepad.mapping );
             this.gamePadMap.set( event.gamepad.index, new _common_gamepad__WEBPACK_IMPORTED_MODULE_2__.Gamepad( event.gamepad ) );
             this.queue.push( event );
-            console.log(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
+            console.debug(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
         }
     }
 
@@ -6731,7 +6944,7 @@ class EventManager
         if( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.allowGamepad )
         {
             this.queue.push( event );
-            console.log(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+            console.debug(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
         }
     }
 
@@ -6868,7 +7081,7 @@ var eventManager = new EventManager;
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6895,7 +7108,7 @@ class GenericEvent
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -6969,7 +7182,7 @@ class Gamepad
 
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -7073,7 +7286,7 @@ var assetHolder = new AssetHolder;
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -7082,18 +7295,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Menu": () => (/* binding */ Menu)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(23);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
+/* harmony import */ var _common_dynamicoffset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(37);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(30);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(113);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(114);
-/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(31);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(129);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(39);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(32);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(115);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(116);
+/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(33);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(133);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(20);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(134);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(36);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(138);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(38);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6);
 // 
 //  FILE NAME: menu.js
@@ -7953,7 +8166,7 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -7961,7 +8174,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ScrollParam": () => (/* binding */ ScrollParam)
 /* harmony export */ });
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(38);
 // 
 //  FILE NAME: scrollparam.js
 //  DESC:      Class for handling scroll parameter data
@@ -8036,52 +8249,52 @@ class ScrollParam
 }
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EMS_INACTIVE": () => (/* binding */ EMS_INACTIVE),
-/* harmony export */   "EMS_IDLE": () => (/* binding */ EMS_IDLE),
-/* harmony export */   "EMS_ACTIVE": () => (/* binding */ EMS_ACTIVE),
-/* harmony export */   "EMS_MAX_MENU_STATES": () => (/* binding */ EMS_MAX_MENU_STATES),
-/* harmony export */   "EMNS_NULL": () => (/* binding */ EMNS_NULL),
-/* harmony export */   "EMNS_MOUSE": () => (/* binding */ EMNS_MOUSE),
-/* harmony export */   "EMNS_GAMEPAD_KEYBAORD": () => (/* binding */ EMNS_GAMEPAD_KEYBAORD),
-/* harmony export */   "EMTS_INACTIVE": () => (/* binding */ EMTS_INACTIVE),
-/* harmony export */   "EMTS_IDLE": () => (/* binding */ EMTS_IDLE),
-/* harmony export */   "EMTS_ACTIVE": () => (/* binding */ EMTS_ACTIVE),
-/* harmony export */   "EMTS_MAX_MENU_TREE_STATES": () => (/* binding */ EMTS_MAX_MENU_TREE_STATES),
-/* harmony export */   "EGE_MENU_TRANS_IN": () => (/* binding */ EGE_MENU_TRANS_IN),
-/* harmony export */   "EGE_MENU_TRANS_OUT": () => (/* binding */ EGE_MENU_TRANS_OUT),
-/* harmony export */   "EGE_MENU_ESCAPE_ACTION": () => (/* binding */ EGE_MENU_ESCAPE_ACTION),
-/* harmony export */   "EGE_MENU_TOGGLE_ACTION": () => (/* binding */ EGE_MENU_TOGGLE_ACTION),
+/* harmony export */   "EAC_FIRST_ACTIVE_CONTROL": () => (/* binding */ EAC_FIRST_ACTIVE_CONTROL),
+/* harmony export */   "EAC_LAST_ACTIVE_CONTROL": () => (/* binding */ EAC_LAST_ACTIVE_CONTROL),
+/* harmony export */   "EAC_NULL": () => (/* binding */ EAC_NULL),
 /* harmony export */   "EGE_MENU_BACK_ACTION": () => (/* binding */ EGE_MENU_BACK_ACTION),
-/* harmony export */   "EGE_MENU_TO_TREE": () => (/* binding */ EGE_MENU_TO_TREE),
-/* harmony export */   "EGE_MENU_TO_MENU": () => (/* binding */ EGE_MENU_TO_MENU),
-/* harmony export */   "EGE_MENU_GAME_STATE_CHANGE": () => (/* binding */ EGE_MENU_GAME_STATE_CHANGE),
-/* harmony export */   "EGE_MENU_UP_ACTION": () => (/* binding */ EGE_MENU_UP_ACTION),
-/* harmony export */   "EGE_MENU_DOWN_ACTION": () => (/* binding */ EGE_MENU_DOWN_ACTION),
-/* harmony export */   "EGE_MENU_LEFT_ACTION": () => (/* binding */ EGE_MENU_LEFT_ACTION),
-/* harmony export */   "EGE_MENU_RIGHT_ACTION": () => (/* binding */ EGE_MENU_RIGHT_ACTION),
 /* harmony export */   "EGE_MENU_CONTROL_STATE_CHANGE": () => (/* binding */ EGE_MENU_CONTROL_STATE_CHANGE),
-/* harmony export */   "EGE_MENU_SELECT_ACTION": () => (/* binding */ EGE_MENU_SELECT_ACTION),
-/* harmony export */   "EGE_MENU_SELECT_EXECUTE": () => (/* binding */ EGE_MENU_SELECT_EXECUTE),
-/* harmony export */   "EGE_MENU_SET_ACTIVE_CONTROL": () => (/* binding */ EGE_MENU_SET_ACTIVE_CONTROL),
+/* harmony export */   "EGE_MENU_DOWN_ACTION": () => (/* binding */ EGE_MENU_DOWN_ACTION),
+/* harmony export */   "EGE_MENU_ESCAPE_ACTION": () => (/* binding */ EGE_MENU_ESCAPE_ACTION),
+/* harmony export */   "EGE_MENU_GAME_STATE_CHANGE": () => (/* binding */ EGE_MENU_GAME_STATE_CHANGE),
+/* harmony export */   "EGE_MENU_LEFT_ACTION": () => (/* binding */ EGE_MENU_LEFT_ACTION),
 /* harmony export */   "EGE_MENU_REACTIVATE": () => (/* binding */ EGE_MENU_REACTIVATE),
-/* harmony export */   "EGE_MENU_SCROLL_UP": () => (/* binding */ EGE_MENU_SCROLL_UP),
+/* harmony export */   "EGE_MENU_RIGHT_ACTION": () => (/* binding */ EGE_MENU_RIGHT_ACTION),
 /* harmony export */   "EGE_MENU_SCROLL_DOWN": () => (/* binding */ EGE_MENU_SCROLL_DOWN),
 /* harmony export */   "EGE_MENU_SCROLL_LEFT": () => (/* binding */ EGE_MENU_SCROLL_LEFT),
 /* harmony export */   "EGE_MENU_SCROLL_RIGHT": () => (/* binding */ EGE_MENU_SCROLL_RIGHT),
+/* harmony export */   "EGE_MENU_SCROLL_UP": () => (/* binding */ EGE_MENU_SCROLL_UP),
+/* harmony export */   "EGE_MENU_SELECT_ACTION": () => (/* binding */ EGE_MENU_SELECT_ACTION),
+/* harmony export */   "EGE_MENU_SELECT_EXECUTE": () => (/* binding */ EGE_MENU_SELECT_EXECUTE),
+/* harmony export */   "EGE_MENU_SET_ACTIVE_CONTROL": () => (/* binding */ EGE_MENU_SET_ACTIVE_CONTROL),
 /* harmony export */   "EGE_MENU_TAB_LEFT": () => (/* binding */ EGE_MENU_TAB_LEFT),
 /* harmony export */   "EGE_MENU_TAB_RIGHT": () => (/* binding */ EGE_MENU_TAB_RIGHT),
-/* harmony export */   "EAC_NULL": () => (/* binding */ EAC_NULL),
-/* harmony export */   "EAC_FIRST_ACTIVE_CONTROL": () => (/* binding */ EAC_FIRST_ACTIVE_CONTROL),
-/* harmony export */   "EAC_LAST_ACTIVE_CONTROL": () => (/* binding */ EAC_LAST_ACTIVE_CONTROL),
-/* harmony export */   "ETC_RESET": () => (/* binding */ ETC_RESET),
+/* harmony export */   "EGE_MENU_TOGGLE_ACTION": () => (/* binding */ EGE_MENU_TOGGLE_ACTION),
+/* harmony export */   "EGE_MENU_TO_MENU": () => (/* binding */ EGE_MENU_TO_MENU),
+/* harmony export */   "EGE_MENU_TO_TREE": () => (/* binding */ EGE_MENU_TO_TREE),
+/* harmony export */   "EGE_MENU_TRANS_IN": () => (/* binding */ EGE_MENU_TRANS_IN),
+/* harmony export */   "EGE_MENU_TRANS_OUT": () => (/* binding */ EGE_MENU_TRANS_OUT),
+/* harmony export */   "EGE_MENU_UP_ACTION": () => (/* binding */ EGE_MENU_UP_ACTION),
+/* harmony export */   "EMNS_GAMEPAD_KEYBAORD": () => (/* binding */ EMNS_GAMEPAD_KEYBAORD),
+/* harmony export */   "EMNS_MOUSE": () => (/* binding */ EMNS_MOUSE),
+/* harmony export */   "EMNS_NULL": () => (/* binding */ EMNS_NULL),
+/* harmony export */   "EMS_ACTIVE": () => (/* binding */ EMS_ACTIVE),
+/* harmony export */   "EMS_IDLE": () => (/* binding */ EMS_IDLE),
+/* harmony export */   "EMS_INACTIVE": () => (/* binding */ EMS_INACTIVE),
+/* harmony export */   "EMS_MAX_MENU_STATES": () => (/* binding */ EMS_MAX_MENU_STATES),
+/* harmony export */   "EMTS_ACTIVE": () => (/* binding */ EMTS_ACTIVE),
+/* harmony export */   "EMTS_IDLE": () => (/* binding */ EMTS_IDLE),
+/* harmony export */   "EMTS_INACTIVE": () => (/* binding */ EMTS_INACTIVE),
+/* harmony export */   "EMTS_MAX_MENU_TREE_STATES": () => (/* binding */ EMTS_MAX_MENU_TREE_STATES),
 /* harmony export */   "ETC_BEGIN": () => (/* binding */ ETC_BEGIN),
-/* harmony export */   "ETC_END": () => (/* binding */ ETC_END)
+/* harmony export */   "ETC_END": () => (/* binding */ ETC_END),
+/* harmony export */   "ETC_RESET": () => (/* binding */ ETC_RESET)
 /* harmony export */ });
 // 
 //  FILE NAME: menudefs.js
@@ -8143,7 +8356,7 @@ const ETC_RESET = 0,
              ETC_END   = 2;
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8152,20 +8365,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Sprite": () => (/* binding */ Sprite)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
-/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(47);
-/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(48);
-/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(49);
-/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(54);
-/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(55);
-/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(56);
-/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(12);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
+/* harmony import */ var _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(49);
+/* harmony import */ var _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(50);
+/* harmony import */ var _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(51);
+/* harmony import */ var _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(56);
+/* harmony import */ var _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(57);
+/* harmony import */ var _physics_physicscomponent2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(58);
+/* harmony import */ var _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(114);
+/* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(12);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6);
 
 // 
 //  FILE NAME:  sprite.js
 //  DESC:       Sprite class
 //
+
 
 
 
@@ -8194,20 +8409,23 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         
         // The physics part of the sprite
         this.physicsComponent = null;
+
+        // Collision part of the sprite.
+        this.collisionComponent = null;
         
         // Allocate the sprite specific objects
         if( objData.is2D() )
         {
-            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_QUAD )
+            if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_QUAD )
                 this.visualComponent = new _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_1__.VisualComponentQuad( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SPRITE_SHEET )
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SPRITE_SHEET )
                 this.visualComponent = new _2d_visualcomponentspritesheet__WEBPACK_IMPORTED_MODULE_2__.VisualComponentSpriteSheet( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SCALED_FRAME )
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SCALED_FRAME )
                 this.visualComponent = new _2d_visualcomponentscaledframe__WEBPACK_IMPORTED_MODULE_3__.VisualComponentScaledFrame( objData.visualData );
             
-            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_FONT )
+            else if( objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_FONT )
                 this.visualComponent = new _2d_visualcomponentfont__WEBPACK_IMPORTED_MODULE_4__.VisualComponentFont( objData.visualData );
             
             if( objData.physicsData.isActive() )
@@ -8216,9 +8434,12 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         else if( objData.is3D() )
         {
             // Matrix for rotations only, used for normal calculations
-            this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_8__.Matrix;
+            this.rotMatrix = new _utilities_matrix__WEBPACK_IMPORTED_MODULE_9__.Matrix;
             this.visualComponent = new _3d_visualcomponent3d__WEBPACK_IMPORTED_MODULE_5__.VisualComponent3D( objData.visualData );
         }
+
+        if( objData.collisionData.isActive() )
+            this.collisionComponent = new _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_8__.CollisionComponent( objData, this );
 
         // Allocate the null component if no visual component was created
         if( this.visualComponent === null )
@@ -8309,6 +8530,17 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         if( this.physicsComponent )
             this.physicsComponent.update();
     }
+
+    //
+    //  DESC: Transform
+    //
+    transform( object = null )
+    {
+        super.transform( object );
+
+        if( this.collisionComponent )
+            this.collisionComponent.transform();
+    }
     
     // 
     //  DESC: do the render
@@ -8393,7 +8625,7 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         {
             this.visualComponent.setFrame( index );
 
-            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_9__.EGT_SPRITE_SHEET )
+            if( this.objData.visualData.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SPRITE_SHEET )
                 if( index < this.objData.visualData.spriteSheet.getCount() )
                     this.setCropOffset( this.objData.visualData.spriteSheet.getGlyph(index).cropOffset );
         }
@@ -8438,7 +8670,7 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         if( this.objData.is3D() )
         {
             // Add in the center point prior to rotation
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_9__.CENTER_POINT ) )
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_10__.CENTER_POINT ) )
                 this.matrix.translate( this.centerPos );
             
             // Add in the rotation if this is NOT a physics transformation
@@ -8454,7 +8686,7 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
             // Subtract the center point after rotation to put back in original position
             // Doing two inverts keeps us from having to new up a point that would be garbage collected
-            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_9__.CENTER_POINT ) )
+            if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_10__.CENTER_POINT ) )
             {
                 this.centerPos.invert();
                 this.matrix.translate( this.centerPos );
@@ -8473,9 +8705,19 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         let vSize = this.visualComponent.getSize();
         let size = super.getSize();
 
-        size.w = (vSize.w + Math.abs(this.pos.x)) * this.scale.x;
-        size.h = (vSize.h + Math.abs(this.pos.y)) * this.scale.y;
-
+        // If this sprite has a parent node, take the position into account
+        // because it might add to the radius
+        if(this.parentNode && this.parentNode.isChild())
+        {
+            size.w = (vSize.w + Math.abs(this.pos.x)) * this.scale.x;
+            size.h = (vSize.h + Math.abs(this.pos.y)) * this.scale.y;
+        }
+        else
+        {
+            size.w = vSize.w * this.scale.x;
+            size.h = vSize.h * this.scale.y;
+        }
+        
         return size;
     }
 
@@ -8501,7 +8743,7 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8509,11 +8751,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponentQuad": () => (/* binding */ VisualComponentQuad)
 /* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
-/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(44);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
+/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(46);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(12);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(21);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
@@ -8669,7 +8911,7 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8732,7 +8974,7 @@ class ivisualComponent
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -8740,10 +8982,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "shaderManager": () => (/* binding */ shaderManager)
 /* harmony export */ });
-/* harmony import */ var _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
+/* harmony import */ var _common_shaderdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(43);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
 /* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
 
 // 
 //  FILE NAME: shadermanager.js
@@ -8992,7 +9234,7 @@ var shaderManager = new ShaderManager;
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9047,7 +9289,7 @@ class ShaderData
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9058,7 +9300,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_quad2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(43);
+/* harmony import */ var _common_quad2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(45);
 
 //
 //  FILE NAME: vertexbuffermanager.js
@@ -9484,7 +9726,7 @@ var vertexBufferManager = new VertexBufferManager;
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9492,7 +9734,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Quad2d": () => (/* binding */ Quad2d)
 /* harmony export */ });
-/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
+/* harmony import */ var _common_vertex2d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
 
 // 
 //  FILE NAME:  quad2d.js
@@ -9512,7 +9754,7 @@ class Quad2d
 
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9520,9 +9762,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "statCounter": () => (/* binding */ statCounter)
 /* harmony export */ });
-/* harmony import */ var _highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
+/* harmony import */ var _highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(47);
 /* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(46);
+/* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(48);
 
 // 
 //  FILE NAME: statcounter.js
@@ -9610,7 +9852,7 @@ var statCounter = new StatCounter;
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9690,7 +9932,7 @@ var highResTimer = new HighResTimer;
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9796,7 +10038,7 @@ class Timer
 
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9804,14 +10046,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponentSpriteSheet": () => (/* binding */ VisualComponentSpriteSheet)
 /* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(38);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(44);
+/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(46);
 
 // 
 //  FILE NAME:  visualcomponentspritesheet.js
@@ -9930,7 +10172,7 @@ class VisualComponentSpriteSheet extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9938,13 +10180,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponentScaledFrame": () => (/* binding */ VisualComponentScaledFrame)
 /* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(38);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
-/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(44);
+/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(46);
 
 // 
 //  FILE NAME:  visualcomponentscaledframe.js
@@ -10031,7 +10273,7 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -10039,17 +10281,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponentFont": () => (/* binding */ VisualComponentFont)
 /* harmony export */ });
-/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(38);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
+/* harmony import */ var _2d_visualcomponentquad__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(50);
-/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(52);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(52);
+/* harmony import */ var _common_fontdata__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(54);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(12);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
-/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(44);
+/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(46);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(26);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(28);
 
 // 
 //  FILE NAME:  visualcomponentfont.js
@@ -10612,7 +10854,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -10620,14 +10862,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "fontManager": () => (/* binding */ fontManager)
 /* harmony export */ });
-/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(51);
+/* harmony import */ var _2d_font__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(53);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
 
 //
 //  FILE NAME: fontmanager.js
 //  DESC:      font manager class singleton
 //
+
 
 
 
@@ -10665,15 +10909,25 @@ class FontManager
             // Add the font to our list
             this.fontMap.set( each.name, new _2d_font__WEBPACK_IMPORTED_MODULE_0__.Font );
 
+            // Check texture filtering
+            let textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_2__.device.gl.LINEAR;
+            if( each.filter )
+            {
+                if( each.filter  === 'LINEAR' )
+                    textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_2__.device.gl.LINEAR;
+                else if( each.filter  === 'NEAREST' )
+                    textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_2__.device.gl.NEAREST;
+            }
+
             // Load the texture file
             let textureFilePath = each.file + '.png'
-            promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'img', textureFilePath )
-                    .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( this.group, each.name, image ))
+            promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'img', textureFilePath )
+                    .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( this.group, each.name, image, textureFilter ))
                     .catch(( error ) => { console.error(error.stack); throw error; }) );
 
             // Load the xml file describing the font characteristics
             let fontFilePath = each.file + '.fnt'
-            promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', fontFilePath )
+            promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'xml', fontFilePath )
                     .then(( fontXmlNode ) => this.loadFont( each.name, fontXmlNode ))
                     .catch(( error ) => { console.error(error.stack); throw error; }) );
         }
@@ -10710,13 +10964,13 @@ class FontManager
 
                 // Load the texture file
                 let textureFilePath = filePath + '.png'
-                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'img', textureFilePath )
+                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'img', textureFilePath )
                         .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( this.group, name, image ))
                         .catch(( error ) => { console.error(error.stack); throw error; }) );
 
                 // Load the xml file describing the font characteristics
                 let fontFilePath = filePath + '.fnt'
-                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_2__.downloadFile( 'xml', fontFilePath )
+                promiseAry.push( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.downloadFile( 'xml', fontFilePath )
                         .then(( fontXmlNode ) => this.loadFont( name, fontXmlNode ))
                         .catch(( error ) => { console.error(error.stack); throw error; }) );
             }
@@ -10774,7 +11028,7 @@ var fontManager = new FontManager;
 
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -10899,7 +11153,7 @@ class Font
 
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -10907,7 +11161,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "FontData": () => (/* binding */ FontData)
 /* harmony export */ });
-/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(53);
+/* harmony import */ var _fontproperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(55);
 /* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 
 // 
@@ -10964,7 +11218,7 @@ class FontData
 
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -10972,7 +11226,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "FontProperties": () => (/* binding */ FontProperties)
 /* harmony export */ });
-/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(50);
+/* harmony import */ var _managers_fontmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(52);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 /* harmony import */ var _defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
@@ -11082,7 +11336,7 @@ class FontProperties
 
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -11090,14 +11344,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VisualComponent3D": () => (/* binding */ VisualComponent3D)
 /* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
-/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(40);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(44);
+/* harmony import */ var _managers_shadermanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
-/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(44);
+/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(46);
 
 // 
 //  FILE NAME:  visualcomponent3d.js
@@ -11221,7 +11475,7 @@ class VisualComponent3D extends _common_ivisualcomponent__WEBPACK_IMPORTED_MODUL
 
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -11229,7 +11483,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "NullVisualComponent": () => (/* binding */ NullVisualComponent)
 /* harmony export */ });
-/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
+/* harmony import */ var _common_ivisualcomponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
 
 // 
 //  FILE NAME:  visualcomponentquad.js
@@ -11273,7 +11527,7 @@ class NullVisualComponent extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
 
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -11281,10 +11535,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PhysicsComponent2D": () => (/* binding */ PhysicsComponent2D)
 /* harmony export */ });
-/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(57);
+/* harmony import */ var _physicsworldmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(44);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(59);
+/* harmony import */ var _utilities_statcounter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(46);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(61);
 
 // 
 //  FILE NAME: physicscomponent2d.js
@@ -11682,7 +11936,7 @@ class PhysicsComponent2D
 
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -11690,10 +11944,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "physicsWorldManager": () => (/* binding */ physicsWorldManager)
 /* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
-/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(58);
-/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(112);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var _physicsworld2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(60);
+/* harmony import */ var _physicsworld3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(113);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
 
 // 
 //  FILE NAME: physicsworldmanager.js
@@ -11803,7 +12057,7 @@ var physicsWorldManager = new PhysicsWorldManager;
 
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -11811,9 +12065,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PhysicsWorld2D": () => (/* binding */ PhysicsWorld2D)
 /* harmony export */ });
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(59);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(47);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(28);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(61);
 
 // 
 //  FILE NAME: physicsworld2d.js
@@ -12002,76 +12256,76 @@ class PhysicsWorld2D
 
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 exports.internal = {};
 
-exports.Serializer = __webpack_require__(60);
+exports.Serializer = __webpack_require__(62);
 
-exports.Math = __webpack_require__(65);
-exports.Vec2 = __webpack_require__(64);
-exports.Vec3 = __webpack_require__(86);
-exports.Mat22 = __webpack_require__(82);
-exports.Mat33 = __webpack_require__(87);
-exports.Transform = __webpack_require__(76);
-exports.Rot = __webpack_require__(74);
+exports.Math = __webpack_require__(67);
+exports.Vec2 = __webpack_require__(66);
+exports.Vec3 = __webpack_require__(87);
+exports.Mat22 = __webpack_require__(83);
+exports.Mat33 = __webpack_require__(88);
+exports.Transform = __webpack_require__(77);
+exports.Rot = __webpack_require__(75);
 
-exports.AABB = __webpack_require__(69);
+exports.AABB = __webpack_require__(70);
 
-exports.Shape = __webpack_require__(80);
-exports.Fixture = __webpack_require__(79);
-exports.Body = __webpack_require__(73);
-exports.Contact = __webpack_require__(81);
-exports.Joint = __webpack_require__(88);
-exports.World = __webpack_require__(61);
+exports.Shape = __webpack_require__(81);
+exports.Fixture = __webpack_require__(80);
+exports.Body = __webpack_require__(74);
+exports.Contact = __webpack_require__(82);
+exports.Joint = __webpack_require__(89);
+exports.World = __webpack_require__(63);
 
-exports.Circle = __webpack_require__(91);
-exports.Edge = __webpack_require__(92);
-exports.Polygon = __webpack_require__(93);
-exports.Chain = __webpack_require__(94);
-exports.Box = __webpack_require__(95);
+exports.Circle = __webpack_require__(92);
+exports.Edge = __webpack_require__(93);
+exports.Polygon = __webpack_require__(94);
+exports.Chain = __webpack_require__(95);
+exports.Box = __webpack_require__(96);
 
-__webpack_require__(96);
 __webpack_require__(97);
-exports.internal.CollidePolygons = __webpack_require__(98);
-__webpack_require__(99);
+__webpack_require__(98);
+exports.internal.CollidePolygons = __webpack_require__(99);
 __webpack_require__(100);
+__webpack_require__(101);
 
-exports.DistanceJoint = __webpack_require__(101);
-exports.FrictionJoint = __webpack_require__(102);
-exports.GearJoint = __webpack_require__(103);
-exports.MotorJoint = __webpack_require__(106);
-exports.MouseJoint = __webpack_require__(107);
-exports.PrismaticJoint = __webpack_require__(105);
-exports.PulleyJoint = __webpack_require__(108);
-exports.RevoluteJoint = __webpack_require__(104);
-exports.RopeJoint = __webpack_require__(109);
-exports.WeldJoint = __webpack_require__(110);
-exports.WheelJoint = __webpack_require__(111);
+exports.DistanceJoint = __webpack_require__(102);
+exports.FrictionJoint = __webpack_require__(103);
+exports.GearJoint = __webpack_require__(104);
+exports.MotorJoint = __webpack_require__(107);
+exports.MouseJoint = __webpack_require__(108);
+exports.PrismaticJoint = __webpack_require__(106);
+exports.PulleyJoint = __webpack_require__(109);
+exports.RevoluteJoint = __webpack_require__(105);
+exports.RopeJoint = __webpack_require__(110);
+exports.WeldJoint = __webpack_require__(111);
+exports.WheelJoint = __webpack_require__(112);
 
-exports.Settings = __webpack_require__(68);
+exports.Settings = __webpack_require__(69);
 
-exports.internal.Sweep = __webpack_require__(75);
-exports.internal.stats = __webpack_require__(85); // todo: remove this
-exports.internal.Manifold = __webpack_require__(83);
-exports.internal.Distance = __webpack_require__(84);
-exports.internal.TimeOfImpact = __webpack_require__(89);
-exports.internal.DynamicTree = __webpack_require__(70);
+exports.internal.Sweep = __webpack_require__(76);
+exports.internal.stats = __webpack_require__(86); // todo: remove this
+exports.internal.Manifold = __webpack_require__(84);
+exports.internal.Distance = __webpack_require__(85);
+exports.internal.TimeOfImpact = __webpack_require__(90);
+exports.internal.DynamicTree = __webpack_require__(71);
 exports.internal.Settings = exports.Settings;
 
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var World = __webpack_require__(61);
-var Body = __webpack_require__(73);
-var Joint = __webpack_require__(88);
-var Fixture = __webpack_require__(79);
-var Shape = __webpack_require__(80);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
+var World = __webpack_require__(63);
+var Body = __webpack_require__(74);
+var Joint = __webpack_require__(89);
+var Fixture = __webpack_require__(80);
+var Shape = __webpack_require__(81);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
 
 var SID = 0;
 
@@ -12208,7 +12462,7 @@ module.exports.fromJson = serializer.fromJson;
 
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -12240,14 +12494,14 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = World;
 
-var options = __webpack_require__(62);
-var common = __webpack_require__(63);
-var Vec2 = __webpack_require__(64);
-var BroadPhase = __webpack_require__(67);
-var Solver = __webpack_require__(72);
-var Body = __webpack_require__(73);
-var Joint = __webpack_require__(88);
-var Contact = __webpack_require__(81);
+var options = __webpack_require__(64);
+var common = __webpack_require__(65);
+var Vec2 = __webpack_require__(66);
+var BroadPhase = __webpack_require__(68);
+var Solver = __webpack_require__(73);
+var Body = __webpack_require__(74);
+var Joint = __webpack_require__(89);
+var Contact = __webpack_require__(82);
 
 /**
  * @typedef {Object} WorldDef
@@ -13346,7 +13600,7 @@ World.prototype.postSolve = function(contact, impulse) {
 
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ ((module) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -13382,7 +13636,7 @@ module.exports = function(input, defaults) {
 
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ ((__unused_webpack_module, exports) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -13401,7 +13655,7 @@ exports.assert = function(statement, err, log) {
 };
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -13433,8 +13687,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Vec2;
 
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
 
 function Vec2(x, y) {
   if (!(this instanceof Vec2)) {
@@ -13931,7 +14185,7 @@ Vec2.translateFn = function(x, y) {
 
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -13961,10 +14215,9 @@ Vec2.translateFn = function(x, y) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(63);
-var create = __webpack_require__(66);
+var common = __webpack_require__(65);
 var native = Math;
-var math = module.exports = create(native);
+var math = module.exports = Object.create(native);
 
 math.EPSILON = 1e-9; // TODO
 
@@ -14051,29 +14304,7 @@ math.random = function(min, max) {
 
 
 /***/ }),
-/* 66 */
-/***/ ((module) => {
-
-if (typeof Object.create == 'function') {
-  module.exports = function(proto, props) {
-    return Object.create.call(Object, proto, props);
-  };
-} else {
-  module.exports = function(proto, props) {
-    if (props)
-      throw Error('Second argument is not supported!');
-    if (typeof proto !== 'object' || proto === null)
-      throw Error('Invalid prototype!');
-    noop.prototype = proto;
-    return new noop;
-  };
-  function noop() {
-  }
-}
-
-
-/***/ }),
-/* 67 */
+/* 68 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -14103,11 +14334,11 @@ if (typeof Object.create == 'function') {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(68);
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
-var AABB = __webpack_require__(69);
-var DynamicTree = __webpack_require__(70);
+var Settings = __webpack_require__(69);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var AABB = __webpack_require__(70);
+var DynamicTree = __webpack_require__(71);
 
 module.exports = BroadPhase;
 
@@ -14316,7 +14547,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ ((__unused_webpack_module, exports) => {
 
 /*
@@ -14487,7 +14718,7 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -14517,10 +14748,10 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(68);
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
+var Settings = __webpack_require__(69);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
 
 module.exports = AABB;
 
@@ -14756,7 +14987,7 @@ AABB.prototype.toString = function() {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -14786,12 +15017,12 @@ AABB.prototype.toString = function() {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var Settings = __webpack_require__(68);
-var common = __webpack_require__(63);
-var Pool = __webpack_require__(71);
-var Vec2 = __webpack_require__(64);
-var Math = __webpack_require__(65);
-var AABB = __webpack_require__(69);
+var Settings = __webpack_require__(69);
+var common = __webpack_require__(65);
+var Pool = __webpack_require__(72);
+var Vec2 = __webpack_require__(66);
+var Math = __webpack_require__(67);
+var AABB = __webpack_require__(70);
 
 module.exports = DynamicTree;
 
@@ -15682,7 +15913,7 @@ function Iterator() {
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ ((module) => {
 
 /*
@@ -15775,7 +16006,7 @@ function Pool(opts) {
 }
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -15808,21 +16039,21 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 module.exports = Solver;
 module.exports.TimeStep = TimeStep;
 
-var Settings = __webpack_require__(68);
-var common = __webpack_require__(63);
+var Settings = __webpack_require__(69);
+var common = __webpack_require__(65);
 
-var Vec2 = __webpack_require__(64);
-var Math = __webpack_require__(65);
+var Vec2 = __webpack_require__(66);
+var Math = __webpack_require__(67);
 
-var Body = __webpack_require__(73);
-var Contact = __webpack_require__(81);
-var Joint = __webpack_require__(88);
+var Body = __webpack_require__(74);
+var Contact = __webpack_require__(82);
+var Joint = __webpack_require__(89);
 
-var TimeOfImpact = __webpack_require__(89);
+var TimeOfImpact = __webpack_require__(90);
 var TOIInput = TimeOfImpact.Input;
 var TOIOutput = TimeOfImpact.Output;
 
-var Distance = __webpack_require__(84);
+var Distance = __webpack_require__(85);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -16661,7 +16892,7 @@ Solver.prototype.postSolveIsland = function() {
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -16693,19 +16924,19 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Body;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
 
-var Vec2 = __webpack_require__(64);
-var Rot = __webpack_require__(74);
-var Math = __webpack_require__(65);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Vec2 = __webpack_require__(66);
+var Rot = __webpack_require__(75);
+var Math = __webpack_require__(67);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Fixture = __webpack_require__(79);
-var Shape = __webpack_require__(80);
+var Fixture = __webpack_require__(80);
+var Shape = __webpack_require__(81);
 
 var staticBody = Body.STATIC = 'static';
 var kinematicBody = Body.KINEMATIC = 'kinematic';
@@ -17751,7 +17982,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -17783,9 +18014,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Rot;
 
-var common = __webpack_require__(63);
-var Vec2 = __webpack_require__(64);
-var Math = __webpack_require__(65);
+var common = __webpack_require__(65);
+var Vec2 = __webpack_require__(66);
+var Math = __webpack_require__(67);
 
 // TODO merge with Transform
 
@@ -17990,7 +18221,7 @@ Rot.mulTVec2 = function(rot, m) {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -18022,11 +18253,11 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Sweep;
 
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Rot = __webpack_require__(74);
-var Transform = __webpack_require__(76);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Rot = __webpack_require__(75);
+var Transform = __webpack_require__(77);
 
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
@@ -18132,7 +18363,7 @@ Sweep.prototype.set = function(that) {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -18164,9 +18395,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Transform;
 
-var common = __webpack_require__(63);
-var Vec2 = __webpack_require__(64);
-var Rot = __webpack_require__(74);
+var common = __webpack_require__(65);
+var Vec2 = __webpack_require__(66);
+var Rot = __webpack_require__(75);
 
 // TODO merge with Rot
 
@@ -18375,7 +18606,7 @@ Transform.mulTXf = function(a, b) {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -18407,7 +18638,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Velocity;
 
-var Vec2 = __webpack_require__(64);
+var Vec2 = __webpack_require__(66);
 
 /**
  * @prop {Vec2} v linear
@@ -18416,58 +18647,6 @@ var Vec2 = __webpack_require__(64);
 function Velocity() {
   this.v = Vec2.zero();
   this.w = 0;
-}
-
-
-/***/ }),
-/* 78 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-/*
- * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
-module.exports = Position;
-
-var Vec2 = __webpack_require__(64);
-var Rot = __webpack_require__(74);
-
-/**
- * @prop {Vec2} c location
- * @prop {float} a angle
- */
-function Position() {
-  this.c = Vec2.zero();
-  this.a = 0;
-}
-
-Position.prototype.getTransform = function(xf, p) {
-  xf.q.set(this.a);
-  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
-  return xf;
 }
 
 
@@ -18502,17 +18681,69 @@ Position.prototype.getTransform = function(xf, p) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
+module.exports = Position;
+
+var Vec2 = __webpack_require__(66);
+var Rot = __webpack_require__(75);
+
+/**
+ * @prop {Vec2} c location
+ * @prop {float} a angle
+ */
+function Position() {
+  this.c = Vec2.zero();
+  this.a = 0;
+}
+
+Position.prototype.getTransform = function(xf, p) {
+  xf.q.set(this.a);
+  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+  return xf;
+}
+
+
+/***/ }),
+/* 80 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/*
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 module.exports = Fixture;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
 
-var AABB = __webpack_require__(69);
+var AABB = __webpack_require__(70);
 
-var Shape = __webpack_require__(80);
+var Shape = __webpack_require__(81);
 
 /**
  * @typedef {Object} FixtureDef
@@ -18939,7 +19170,7 @@ Fixture.prototype.shouldCollide = function(that) {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -18971,7 +19202,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Shape;
 
-var Math = __webpack_require__(65);
+var Math = __webpack_require__(67);
 
 /**
  * A shape is used for collision detection. You can create a shape however you
@@ -19079,7 +19310,7 @@ Shape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -19111,17 +19342,17 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 var DEBUG_SOLVER = false;
 
-var common = __webpack_require__(63);
+var common = __webpack_require__(65);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Transform = __webpack_require__(76);
-var Mat22 = __webpack_require__(82);
-var Rot = __webpack_require__(74);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Transform = __webpack_require__(77);
+var Mat22 = __webpack_require__(83);
+var Rot = __webpack_require__(75);
 
-var Settings = __webpack_require__(68);
-var Manifold = __webpack_require__(83);
-var Distance = __webpack_require__(84);
+var Settings = __webpack_require__(69);
+var Manifold = __webpack_require__(84);
+var Distance = __webpack_require__(85);
 
 module.exports = Contact;
 
@@ -20314,7 +20545,7 @@ Contact.destroy = function(contact, listener) {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -20346,9 +20577,9 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Mat22;
 
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
 
 /**
  * A 2-by-2 matrix. Stored in column-major order.
@@ -20542,7 +20773,7 @@ Mat22.add = function(mx1, mx2) {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -20572,12 +20803,12 @@ Mat22.add = function(mx1, mx2) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(63);
+var common = __webpack_require__(65);
 
-var Vec2 = __webpack_require__(64);
-var Transform = __webpack_require__(76);
-var Math = __webpack_require__(65);
-var Rot = __webpack_require__(74);
+var Vec2 = __webpack_require__(66);
+var Transform = __webpack_require__(77);
+var Math = __webpack_require__(67);
+var Rot = __webpack_require__(75);
 
 module.exports = Manifold;
 module.exports.clipSegmentToLine = clipSegmentToLine;
@@ -20900,7 +21131,7 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -20937,21 +21168,21 @@ module.exports.Output = DistanceOutput;
 module.exports.Proxy = DistanceProxy;
 module.exports.Cache = SimplexCache;
 
-var Settings = __webpack_require__(68);
-var common = __webpack_require__(63);
+var Settings = __webpack_require__(69);
+var common = __webpack_require__(65);
 
-var stats = __webpack_require__(85);
+var stats = __webpack_require__(86);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -21603,7 +21834,7 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ ((__unused_webpack_module, exports) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -21621,7 +21852,7 @@ exports.toString = function(newline) {
 };
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -21653,8 +21884,8 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Vec3;
 
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
 
 function Vec3(x, y, z) {
   if (!(this instanceof Vec3)) {
@@ -21805,7 +22036,7 @@ Vec3.neg = function(v) {
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -21837,10 +22068,10 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Mat33;
 
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -22039,7 +22270,7 @@ Mat33.add = function(a, b) {
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -22071,7 +22302,7 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = Joint;
 
-var common = __webpack_require__(63);
+var common = __webpack_require__(65);
 
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
@@ -22273,7 +22504,7 @@ Joint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -22307,25 +22538,25 @@ module.exports = TimeOfImpact;
 module.exports.Input = TOIInput;
 module.exports.Output = TOIOutput;
 
-var Settings = __webpack_require__(68);
+var Settings = __webpack_require__(69);
 
-var common = __webpack_require__(63);
-var Timer = __webpack_require__(90);
+var common = __webpack_require__(65);
+var Timer = __webpack_require__(91);
 
-var stats = __webpack_require__(85);
+var stats = __webpack_require__(86);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Distance = __webpack_require__(84);
+var Distance = __webpack_require__(85);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -22781,7 +23012,7 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ ((module) => {
 
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -22797,7 +23028,7 @@ module.exports.diff = function(time) {
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -22829,19 +23060,18 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = CircleShape;
 
-var common = __webpack_require__(63);
-var create = __webpack_require__(66);
-var options = __webpack_require__(62);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Rot = __webpack_require__(74);
-var Vec2 = __webpack_require__(64);
-var AABB = __webpack_require__(69);
-var Settings = __webpack_require__(68);
-var Shape = __webpack_require__(80);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Rot = __webpack_require__(75);
+var Vec2 = __webpack_require__(66);
+var AABB = __webpack_require__(70);
+var Settings = __webpack_require__(69);
+var Shape = __webpack_require__(81);
 
 CircleShape._super = Shape;
-CircleShape.prototype = create(CircleShape._super.prototype);
+CircleShape.prototype = Object.create(CircleShape._super.prototype);
 
 CircleShape.TYPE = 'circle';
 Shape.TYPES[CircleShape.TYPE] = CircleShape;
@@ -22978,7 +23208,7 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -23010,18 +23240,17 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = EdgeShape;
 
-var create = __webpack_require__(66);
-var options = __webpack_require__(62);
-var Settings = __webpack_require__(68);
-var Shape = __webpack_require__(80);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Rot = __webpack_require__(74);
-var Vec2 = __webpack_require__(64);
-var AABB = __webpack_require__(69);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
+var Shape = __webpack_require__(81);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Rot = __webpack_require__(75);
+var Vec2 = __webpack_require__(66);
+var AABB = __webpack_require__(70);
 
 EdgeShape._super = Shape;
-EdgeShape.prototype = create(EdgeShape._super.prototype);
+EdgeShape.prototype = Object.create(EdgeShape._super.prototype);
 
 EdgeShape.TYPE = 'edge';
 Shape.TYPES[EdgeShape.TYPE] = EdgeShape;
@@ -23215,7 +23444,7 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -23247,19 +23476,18 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PolygonShape;
 
-var common = __webpack_require__(63);
-var create = __webpack_require__(66);
-var options = __webpack_require__(62);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Rot = __webpack_require__(74);
-var Vec2 = __webpack_require__(64);
-var AABB = __webpack_require__(69);
-var Settings = __webpack_require__(68);
-var Shape = __webpack_require__(80);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Rot = __webpack_require__(75);
+var Vec2 = __webpack_require__(66);
+var AABB = __webpack_require__(70);
+var Settings = __webpack_require__(69);
+var Shape = __webpack_require__(81);
 
 PolygonShape._super = Shape;
-PolygonShape.prototype = create(PolygonShape._super.prototype);
+PolygonShape.prototype = Object.create(PolygonShape._super.prototype);
 
 PolygonShape.TYPE = 'polygon';
 Shape.TYPES[PolygonShape.TYPE] = PolygonShape;
@@ -23743,7 +23971,7 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -23775,20 +24003,19 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = ChainShape;
 
-var common = __webpack_require__(63);
-var create = __webpack_require__(66);
-var options = __webpack_require__(62);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Rot = __webpack_require__(74);
-var Vec2 = __webpack_require__(64);
-var AABB = __webpack_require__(69);
-var Settings = __webpack_require__(68);
-var Shape = __webpack_require__(80);
-var EdgeShape = __webpack_require__(92);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Rot = __webpack_require__(75);
+var Vec2 = __webpack_require__(66);
+var AABB = __webpack_require__(70);
+var Settings = __webpack_require__(69);
+var Shape = __webpack_require__(81);
+var EdgeShape = __webpack_require__(93);
 
 ChainShape._super = Shape;
-ChainShape.prototype = create(ChainShape._super.prototype);
+ChainShape.prototype = Object.create(ChainShape._super.prototype);
 
 ChainShape.TYPE = 'chain';
 Shape.TYPES[ChainShape.TYPE] = ChainShape;
@@ -24049,7 +24276,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -24081,12 +24308,11 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = BoxShape;
 
-var common = __webpack_require__(63);
-var create = __webpack_require__(66);
-var PolygonShape = __webpack_require__(93);
+var common = __webpack_require__(65);
+var PolygonShape = __webpack_require__(94);
 
 BoxShape._super = PolygonShape;
-BoxShape.prototype = create(BoxShape._super.prototype);
+BoxShape.prototype = Object.create(BoxShape._super.prototype);
 
 BoxShape.TYPE = 'polygon';
 
@@ -24106,7 +24332,7 @@ function BoxShape(hx, hy, center, angle) {
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 /*
@@ -24136,16 +24362,15 @@ function BoxShape(hx, hy, center, angle) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(63);
-var create = __webpack_require__(66);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Vec2 = __webpack_require__(64);
-var Settings = __webpack_require__(68);
-var Shape = __webpack_require__(80);
-var Contact = __webpack_require__(81);
-var Manifold = __webpack_require__(83);
-var CircleShape = __webpack_require__(91);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Vec2 = __webpack_require__(66);
+var Settings = __webpack_require__(69);
+var Shape = __webpack_require__(81);
+var Contact = __webpack_require__(82);
+var Manifold = __webpack_require__(84);
+var CircleShape = __webpack_require__(92);
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
@@ -24186,7 +24411,7 @@ exports.CollideCircles = CollideCircles;
 
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -24216,19 +24441,18 @@ exports.CollideCircles = CollideCircles;
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(63);
-var create = __webpack_require__(66);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Vec2 = __webpack_require__(64);
-var Rot = __webpack_require__(74);
-var Settings = __webpack_require__(68);
-var Shape = __webpack_require__(80);
-var Contact = __webpack_require__(81);
-var Manifold = __webpack_require__(83);
-var EdgeShape = __webpack_require__(92);
-var ChainShape = __webpack_require__(94);
-var CircleShape = __webpack_require__(91);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Vec2 = __webpack_require__(66);
+var Rot = __webpack_require__(75);
+var Settings = __webpack_require__(69);
+var Shape = __webpack_require__(81);
+var Contact = __webpack_require__(82);
+var Manifold = __webpack_require__(84);
+var EdgeShape = __webpack_require__(93);
+var ChainShape = __webpack_require__(95);
+var CircleShape = __webpack_require__(92);
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
@@ -24380,7 +24604,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -24410,17 +24634,17 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Rot = __webpack_require__(74);
-var Vec2 = __webpack_require__(64);
-var AABB = __webpack_require__(69);
-var Settings = __webpack_require__(68);
-var Manifold = __webpack_require__(83);
-var Contact = __webpack_require__(81);
-var Shape = __webpack_require__(80);
-var PolygonShape = __webpack_require__(93);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Rot = __webpack_require__(75);
+var Vec2 = __webpack_require__(66);
+var AABB = __webpack_require__(70);
+var Settings = __webpack_require__(69);
+var Manifold = __webpack_require__(84);
+var Contact = __webpack_require__(82);
+var Shape = __webpack_require__(81);
+var PolygonShape = __webpack_require__(94);
 
 module.exports = CollidePolygons;
 
@@ -24652,7 +24876,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -24682,18 +24906,18 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(63);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Rot = __webpack_require__(74);
-var Vec2 = __webpack_require__(64);
-var AABB = __webpack_require__(69);
-var Settings = __webpack_require__(68);
-var Manifold = __webpack_require__(83);
-var Contact = __webpack_require__(81);
-var Shape = __webpack_require__(80);
-var CircleShape = __webpack_require__(91);
-var PolygonShape = __webpack_require__(93);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Rot = __webpack_require__(75);
+var Vec2 = __webpack_require__(66);
+var AABB = __webpack_require__(70);
+var Settings = __webpack_require__(69);
+var Manifold = __webpack_require__(84);
+var Contact = __webpack_require__(82);
+var Shape = __webpack_require__(81);
+var CircleShape = __webpack_require__(92);
+var PolygonShape = __webpack_require__(94);
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
@@ -24816,7 +25040,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -24846,19 +25070,18 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-var common = __webpack_require__(63);
-var create = __webpack_require__(66);
-var Math = __webpack_require__(65);
-var Transform = __webpack_require__(76);
-var Vec2 = __webpack_require__(64);
-var Rot = __webpack_require__(74);
-var Settings = __webpack_require__(68);
-var Shape = __webpack_require__(80);
-var Contact = __webpack_require__(81);
-var Manifold = __webpack_require__(83);
-var EdgeShape = __webpack_require__(92);
-var ChainShape = __webpack_require__(94);
-var PolygonShape = __webpack_require__(93);
+var common = __webpack_require__(65);
+var Math = __webpack_require__(67);
+var Transform = __webpack_require__(77);
+var Vec2 = __webpack_require__(66);
+var Rot = __webpack_require__(75);
+var Settings = __webpack_require__(69);
+var Shape = __webpack_require__(81);
+var Contact = __webpack_require__(82);
+var Manifold = __webpack_require__(84);
+var EdgeShape = __webpack_require__(93);
+var ChainShape = __webpack_require__(95);
+var PolygonShape = __webpack_require__(94);
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
@@ -25310,7 +25533,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -25342,29 +25565,28 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = DistanceJoint;
 
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 DistanceJoint.TYPE = 'distance-joint';
 Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
 
 DistanceJoint._super = Joint;
-DistanceJoint.prototype = create(DistanceJoint._super.prototype);
+DistanceJoint.prototype = Object.create(DistanceJoint._super.prototype);
 
 /**
  * @typedef {Object} DistanceJointDef
@@ -25727,7 +25949,7 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -25759,30 +25981,29 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = FrictionJoint;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 FrictionJoint.TYPE = 'friction-joint';
 Joint.TYPES[FrictionJoint.TYPE] = FrictionJoint;
 
 FrictionJoint._super = Joint;
-FrictionJoint.prototype = create(FrictionJoint._super.prototype);
+FrictionJoint.prototype = Object.create(FrictionJoint._super.prototype);
 
 /**
  * @typedef {Object} FrictionJointDef
@@ -26093,7 +26314,7 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -26125,33 +26346,32 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = GearJoint;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
-var RevoluteJoint = __webpack_require__(104);
-var PrismaticJoint = __webpack_require__(105);
+var RevoluteJoint = __webpack_require__(105);
+var PrismaticJoint = __webpack_require__(106);
 
 GearJoint.TYPE = 'gear-joint';
 Joint.TYPES[GearJoint.TYPE] = GearJoint;
 
 GearJoint._super = Joint;
-GearJoint.prototype = create(GearJoint._super.prototype);
+GearJoint.prototype = Object.create(GearJoint._super.prototype);
 
 /**
  * @typedef {Object} GearJointDef
@@ -26609,7 +26829,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -26641,24 +26861,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = RevoluteJoint;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -26669,7 +26888,7 @@ RevoluteJoint.TYPE = 'revolute-joint';
 Joint.TYPES[RevoluteJoint.TYPE] = RevoluteJoint;
 
 RevoluteJoint._super = Joint;
-RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
+RevoluteJoint.prototype = Object.create(RevoluteJoint._super.prototype);
 
 /**
  * @typedef {Object} RevoluteJointDef
@@ -27295,7 +27514,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -27327,24 +27546,23 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PrismaticJoint;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -27355,7 +27573,7 @@ PrismaticJoint.TYPE = 'prismatic-joint';
 Joint.TYPES[PrismaticJoint.TYPE] = PrismaticJoint;
 
 PrismaticJoint._super = Joint;
-PrismaticJoint.prototype = create(PrismaticJoint._super.prototype);
+PrismaticJoint.prototype = Object.create(PrismaticJoint._super.prototype);
 
 /**
  * @typedef {Object} PrismaticJointDef
@@ -28110,7 +28328,7 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -28142,30 +28360,29 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = MotorJoint;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 MotorJoint.TYPE = 'motor-joint';
 Joint.TYPES[MotorJoint.TYPE] = MotorJoint;
 
 MotorJoint._super = Joint;
-MotorJoint.prototype = create(MotorJoint._super.prototype);
+MotorJoint.prototype = Object.create(MotorJoint._super.prototype);
 
 /**
  * @typedef {Object} MotorJointDef
@@ -28524,7 +28741,7 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -28556,29 +28773,28 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = MouseJoint;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 MouseJoint.TYPE = 'mouse-joint';
 Joint.TYPES[MouseJoint.TYPE] = MouseJoint;
 
 MouseJoint._super = Joint;
-MouseJoint.prototype = create(MouseJoint._super.prototype);
+MouseJoint.prototype = Object.create(MouseJoint._super.prototype);
 
 /**
  * @typedef {Object} MouseJointDef
@@ -28865,7 +29081,7 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -28897,31 +29113,30 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = PulleyJoint;
 
-var common = __webpack_require__(63);
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var common = __webpack_require__(65);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
 Joint.TYPES[PulleyJoint.TYPE] = PulleyJoint;
 
 PulleyJoint._super = Joint;
-PulleyJoint.prototype = create(PulleyJoint._super.prototype);
+PulleyJoint.prototype = Object.create(PulleyJoint._super.prototype);
 
 /**
  * @typedef {Object} PulleyJointDef
@@ -29282,7 +29497,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -29314,23 +29529,22 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = RopeJoint;
 
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -29341,7 +29555,7 @@ RopeJoint.TYPE = 'rope-joint';
 Joint.TYPES[RopeJoint.TYPE] = RopeJoint;
 
 RopeJoint._super = Joint;
-RopeJoint.prototype = create(RopeJoint._super.prototype);
+RopeJoint.prototype = Object.create(RopeJoint._super.prototype);
 
 /**
  * @typedef {Object} RopeJointDef
@@ -29632,7 +29846,7 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -29664,29 +29878,28 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = WeldJoint;
 
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 WeldJoint.TYPE = 'weld-joint';
 Joint.TYPES[WeldJoint.TYPE] = WeldJoint;
 
 WeldJoint._super = Joint;
-WeldJoint.prototype = create(WeldJoint._super.prototype);
+WeldJoint.prototype = Object.create(WeldJoint._super.prototype);
 
 /**
  * @typedef {Object} WeldJointDef
@@ -30116,7 +30329,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /*
@@ -30148,29 +30361,28 @@ var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 module.exports = WheelJoint;
 
-var options = __webpack_require__(62);
-var create = __webpack_require__(66);
-var Settings = __webpack_require__(68);
+var options = __webpack_require__(64);
+var Settings = __webpack_require__(69);
 
-var Math = __webpack_require__(65);
-var Vec2 = __webpack_require__(64);
-var Vec3 = __webpack_require__(86);
-var Mat22 = __webpack_require__(82);
-var Mat33 = __webpack_require__(87);
-var Rot = __webpack_require__(74);
-var Sweep = __webpack_require__(75);
-var Transform = __webpack_require__(76);
-var Velocity = __webpack_require__(77);
-var Position = __webpack_require__(78);
+var Math = __webpack_require__(67);
+var Vec2 = __webpack_require__(66);
+var Vec3 = __webpack_require__(87);
+var Mat22 = __webpack_require__(83);
+var Mat33 = __webpack_require__(88);
+var Rot = __webpack_require__(75);
+var Sweep = __webpack_require__(76);
+var Transform = __webpack_require__(77);
+var Velocity = __webpack_require__(78);
+var Position = __webpack_require__(79);
 
-var Joint = __webpack_require__(88);
-var Body = __webpack_require__(73);
+var Joint = __webpack_require__(89);
+var Body = __webpack_require__(74);
 
 WheelJoint.TYPE = 'wheel-joint';
 Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
 
 WheelJoint._super = Joint;
-WheelJoint.prototype = create(WheelJoint._super.prototype);
+WheelJoint.prototype = Object.create(WheelJoint._super.prototype);
 
 /**
  * @typedef {Object} WheelJointDef
@@ -30716,7 +30928,7 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -30739,7 +30951,976 @@ class PhysicsWorld3D
 
 
 /***/ }),
-/* 113 */
+/* 114 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CollisionComponent": () => (/* binding */ CollisionComponent)
+/* harmony export */ });
+/* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var _common_line__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
+/* harmony import */ var _common_polygon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(23);
+/* harmony import */ var _managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
+//
+//  FILE NAME: collisioncomponent.js
+//  DESC:      Class for handling collision data
+//             NOTE: Works in squared space
+//             The more complex checks were lifted from: http://jeffreythompson.org/collision-detection/
+//
+
+
+
+
+
+
+
+
+
+
+// Reusable global objects so as to avoid exessive allocations and cleanup
+var gPoint = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
+var gLine1 = new _common_line__WEBPACK_IMPORTED_MODULE_1__.Line;
+gLine1.head = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
+gLine1.tail = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
+var gLine2 = new _common_line__WEBPACK_IMPORTED_MODULE_1__.Line;
+gLine2.head = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
+gLine2.tail = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point;
+
+class CollisionComponent
+{
+    constructor( objectData, sprite )
+    {
+        // Sprite parent to this component
+        this.sprite = sprite;
+
+        // Matrix to do the transformation with
+        this.matrix = sprite.matrix;
+
+        // Enable flag
+        this.enable = false;
+
+        // Filter to determine who we should collide with
+        this.filterCategoryBits = 0x0;
+        this.filterMaskBits = 0x0;
+        this.collisionSignal = false;
+
+        if( objectData.collisionData.isActive() )
+        {
+            this.type = objectData.collisionData.type;
+            this.enable = true;
+            this.filterCategoryBits = objectData.collisionData.filterCategoryBits;
+            this.filterMaskBits = objectData.collisionData.filterMaskBits;
+            this.collisionSignal = objectData.collisionData.collisionSignal;
+
+            // Load the radius data
+            this.loadRadiusData( objectData );
+
+            if( objectData.collisionData.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_LINE )
+                this.loadLineData( objectData );
+
+            if( objectData.collisionData.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_RECT )
+                this.loadRectData( objectData );
+
+            else if( objectData.collisionData.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POLYGON )
+                this.loadPolygonData( objectData );
+        }
+    }
+
+    // 
+    //  DESC: Load radius data
+    //
+    loadRadiusData( objectData )
+    {
+        this.radius = objectData.collisionData.radius;
+
+        // Create the radius from visual size
+        if( objectData.collisionData.radiusFromVisual )
+            this.radius = objectData.size.getLengthSquared() / 2;
+
+        // Adjust the radius based on the modifier
+        this.radius += objectData.collisionData.radiusModifier;
+
+        if( this.radius == -1 )
+            console.warn( `Radius has not been defined (${objectData.group}, ${objectData.name})!` );
+    }
+
+    // 
+    //  DESC: Load line data
+    //
+    loadLineData( objectData )
+    {
+        let halfW = objectData.size.w / 2;
+        let halfH = objectData.size.h / 2;
+
+        this.lineAry = [];
+        this.transLineAry = [];
+
+        // Convert the line points to model view offsets
+        if( objectData.collisionData.pointsToModelView )
+        {
+            for( let i = 0; i < objectData.collisionData.lineAry.length; ++i )
+            {
+                this.lineAry.push( new _common_line__WEBPACK_IMPORTED_MODULE_1__.Line );
+
+                let head = objectData.collisionData.lineAry[i].head;
+                let tail = objectData.collisionData.lineAry[i].tail;
+
+                this.lineAry[i].head = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point( head.x - halfW, halfH - head.y, head.z);
+                this.lineAry[i].tail = new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point( tail.x - halfW, halfH - tail.y, tail.z);
+
+                this.transLineAry.push( new _common_line__WEBPACK_IMPORTED_MODULE_1__.Line( this.lineAry[i] ) );
+            }
+        }
+        // Load the line data as is
+        else
+        {
+            for( let i = 0; i < objectData.collisionData.lineAry.length; ++i )
+            {
+                this.lineAry.push( new _common_line__WEBPACK_IMPORTED_MODULE_1__.Line( objectData.collisionData.lineAry[i] ) );
+                this.transLineAry.push( new _common_line__WEBPACK_IMPORTED_MODULE_1__.Line( this.lineAry[i] ) );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Load rect data
+    //
+    loadRectData( objectData )
+    {
+        this.rectAry = [];
+        this.transRectAry = [];
+
+        let halfW = objectData.size.w / 2;
+        let halfH = objectData.size.h / 2;
+
+        // Create rect from visual size
+        if( objectData.collisionData.rectFromVisual )
+        {
+            if( objectData.collisionData.rectAsSizeModifier )
+            {
+                for( let i = 0; i < objectData.collisionData.rectAry.length; ++i )
+                {
+                    let r = objectData.collisionData.rectAry[i];
+                    this.rectAry.push( new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(-(halfW + r.x1), halfH + r.y1, halfW + r.x2, -(halfH + r.y2)) );
+                }
+            }
+            else
+            {
+                this.rectAry.push( new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(-halfW, halfH, halfW, -halfH) );
+            }
+            
+            for( let i = 0; i < this.rectAry.length; ++i )
+                this.transRectAry.push( new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(this.rectAry[i]) );
+        }
+        // Convert the rect to model offsets
+        else if( objectData.collisionData.rectToModelView )
+        {
+            for( let i = 0; i < objectData.collisionData.rectAry.length; ++i )
+            {
+                let r = objectData.collisionData.rectAry[i];
+                this.rectAry.push( new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(r.x1 - halfW, halfH - r.y1, r.x2 - halfW, halfH - r.y2) );
+                this.transRectAry.push( new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(this.rectAry[i]) );
+            }
+        }
+        // Load the rect data as is
+        else
+        {
+            for( let i = 0; i < objectData.collisionData.rectAry.length; ++i )
+            {
+                this.rectAry.push( new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(objectData.collisionData.rectAry[i]) );
+                this.transRectAry.push( new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(this.rectAry[i]) );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Load polygon data
+    //
+    loadPolygonData( objectData )
+    {
+        let halfW = objectData.size.w / 2;
+        let halfH = objectData.size.h / 2;
+
+        this.polygonAry = [];
+        this.transPolygonAry = [];
+
+        // Flag for optional point check
+        this.optionalPointCheck = objectData.collisionData.optionalPointCheck;
+
+        // Convert the polygon points to model view offsets
+        if( objectData.collisionData.pointsToModelView )
+        {
+            for( let i = 0; i < objectData.collisionData.polygonAry.length; ++i )
+            {
+                this.polygonAry.push( new _common_polygon__WEBPACK_IMPORTED_MODULE_3__.Polygon );
+
+                for( let j = 0; j < objectData.collisionData.polygonAry[i].pointAry.length; ++j )
+                {
+                    let p = objectData.collisionData.polygonAry[i].pointAry[j];
+                    this.polygonAry[i].pointAry.push( new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point( p.x - halfW, halfH - p.y, p.z) );
+                }
+
+                this.transPolygonAry.push( new _common_polygon__WEBPACK_IMPORTED_MODULE_3__.Polygon( this.polygonAry[i] ) );
+            }
+        }
+        // Load the polygon data as is
+        else
+        {
+            for( let i = 0; i < objectData.collisionData.polygonAry.length; ++i )
+            {
+                this.polygonAry.push( new _common_polygon__WEBPACK_IMPORTED_MODULE_3__.Polygon( objectData.collisionData.polygonAry[i] ) );
+                this.transPolygonAry.push( new _common_polygon__WEBPACK_IMPORTED_MODULE_3__.Polygon( this.polygonAry[i] ) );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Transform the data for collision
+    //
+    transform()
+    {
+        if( this.enable )
+        {
+            if( this.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_RECT )
+            {
+                for( let i = 0; i < this.rectAry.length; ++i )
+                    this.matrix.transformRect( this.transRectAry[i], this.rectAry[i] );
+            }
+            else if( this.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POLYGON )
+            {
+                for( let i = 0; i < this.polygonAry.length; ++i )
+                    this.matrix.transformPolygon( this.transPolygonAry[i], this.polygonAry[i] );
+            }
+            else if( this.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_LINE )
+            {
+                for( let i = 0; i < this.lineAry.length; ++i )
+                    this.matrix.transformLine( this.transLineAry[i], this.lineAry[i] );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Check for collision
+    //
+    checkForCollision( nodeAry )
+    {
+        if( this.enable )
+        {
+            let result = false;
+            
+            for( let node = 0; node < nodeAry.length; ++node )
+            {
+                let sprite = nodeAry[node].sprite;
+
+                if( sprite && sprite.collisionComponent && sprite.collisionComponent.enable && (this.filterMaskBits & sprite.collisionComponent.filterCategoryBits) )
+                {
+                    if( this.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POINT )
+                    {
+                        if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_CIRCLE )
+                        {
+                            result = this.pointToCircleCollision( sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_RECT )
+                        {
+                            result = this.pointToRectCollision( sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POLYGON )
+                        {
+                            result = this.pointToPolygonCollision( sprite );
+                        }
+                    }
+                    else if( this.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_CIRCLE )
+                    {
+                        if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POINT )
+                        {
+                            result = sprite.collisionComponent.pointToCircleCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_CIRCLE )
+                        {
+                            result = this.circleToCircleCheck( sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_RECT )
+                        {
+                            result = this.circleToRectCollision( sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POLYGON )
+                        {
+                            result = this.circleToPolygonCollision( sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_LINE )
+                        {
+                            result = this.circleToLineCollision( sprite );
+                        }
+                    }
+                    else if( this.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_LINE )
+                    {
+                        if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_CIRCLE )
+                        {
+                            result = sprite.collisionComponent.circleToLineCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_LINE )
+                        {
+                            result = this.lineToLineCollision( sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_RECT )
+                        {
+                            result = this.lineToRectCollision( sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POLYGON )
+                        {
+                            result = this.lineToPolygonCollision( sprite );
+                        }
+                    }
+                    else if( this.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_RECT )
+                    {
+                        if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POINT )
+                        {
+                            result = sprite.collisionComponent.pointToRectCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_CIRCLE )
+                        {
+                            result = sprite.collisionComponent.circleToRectCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_RECT )
+                        {
+                            result = this.rectToRectCollision( sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_LINE )
+                        {
+                            result = sprite.collisionComponent.lineToRectCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POLYGON )
+                        {
+                            result = this.rectToPolygonCollision( sprite );
+                        }
+                    }
+                    else if( this.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POLYGON )
+                    {
+                        if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POINT )
+                        {
+                            result = sprite.collisionComponent.pointToPolygonCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_CIRCLE )
+                        {
+                            result = sprite.collisionComponent.circleToPolygonCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_RECT )
+                        {
+                            result = sprite.collisionComponent.rectToPolygonCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_LINE )
+                        {
+                            result = sprite.collisionComponent.lineToPolygonCollision( this.sprite );
+                        }
+                        else if( sprite.collisionComponent.type === _common_defs__WEBPACK_IMPORTED_MODULE_5__.ECT_POLYGON )
+                        {
+                            result = this.polygonToPolygonCollision( sprite );
+                        }
+                    }
+
+                    if( result )
+                    {
+                        // The sprite doing the collision checks should always be the first parameter
+                        if( this.collisionSignal )
+                            _managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__.signalManager.broadcast_collisionSignal( this.sprite, sprite );
+                            console.log('hit');
+                        
+                        return sprite;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    // 
+    //  DESC: Check for point to circle collision
+    //
+    pointToCircleCollision( sprite )
+    {
+        return this.pointToCircleCheck( this.sprite.transPos, sprite.transPos, sprite.collisionComponent.radius );
+    }
+
+    // 
+    //  DESC: Check for rect to rect collision
+    //
+    rectToRectCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transRectAry = sprite.collisionComponent.transRectAry;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transRectAry.length; ++i )
+            {
+                for( let j = 0; j < this.transRectAry.length; ++j )
+                {
+                    if( this.transRectAry[j].x1 < transRectAry[i].x2 &&
+                        this.transRectAry[j].x2 > transRectAry[i].x1 &&
+                        this.transRectAry[j].y1 > transRectAry[i].y2 &&
+                        this.transRectAry[j].y2 < transRectAry[i].y1 )
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // 
+    //  DESC: Check for circle to rect collision
+    //
+    circleToRectCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transRectAry = sprite.collisionComponent.transRectAry;
+            let transPos = this.sprite.transPos;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transRectAry.length; ++i )
+            {
+                // Find the edge the point is out side of
+                let edgeX = transPos.x;
+                let edgeY = transPos.y;
+
+                if( transPos.x < transRectAry[i].x1 )
+                    edgeX = transRectAry[i].x1;
+                else if( transPos.x > transRectAry[i].x2 )
+                    edgeX = transRectAry[i].x2;
+
+                if( transPos.y < transRectAry[i].y2 )
+                    edgeY = transRectAry[i].y2;
+                else if( transPos.y > transRectAry[i].y1 )
+                    edgeY = transRectAry[i].y1;
+                
+                // Get distance from closest edges
+                let distX = transPos.x - edgeX;
+                let distY = transPos.y - edgeY;
+                let distance = (distX * distX) + (distY * distY);
+
+                if( distance <= this.radius )
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    // 
+    //  DESC: Check for point to rect collision
+    //
+    pointToRectCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transPos = this.sprite.transPos;
+            let transRectAry = sprite.collisionComponent.transRectAry;
+
+            // Just do the narrow phase check
+            for( let i = 0; i < transRectAry.length; ++i )
+            {
+                if( !(transPos.x < transRectAry[i].x1 || transPos.x > transRectAry[i].x2 ||
+                    transPos.y > transRectAry[i].y1 || transPos.y < transRectAry[i].y2) )
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for point to polygon collision
+    //
+    pointToPolygonCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transPolygonAry.length; ++i )
+                return this.pointToPolygonCheck( this.sprite.transPos, transPolygonAry[i] );
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for circle to polygon collision
+    //
+    circleToPolygonCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transPos = this.sprite.transPos;
+            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transPolygonAry.length; ++i )
+            {
+                for( let j = 0; j < transPolygonAry[i].pointAry.length; ++j )
+                {
+                    // Get next vertex in list. If we've hit the end, wrap around to 0
+                    let next = j + 1;
+                    if( next == transPolygonAry[i].pointAry.length )
+                        next = 0;
+
+                    // check for collision between the circle and a line formed between the two vertices
+                    if( this.lineToCircleCheck(transPolygonAry[i].pointAry[j], transPolygonAry[i].pointAry[next], transPos, this.radius) )
+                        return true;
+                }
+
+                // Optional: Test if the point is INSIDE the polygon note that this iterates all
+                // sides of the polygon again, so only use this if you need to
+                if( sprite.collisionComponent.optionalPointCheck )
+                {
+                    if( this.pointToPolygonCheck( transPos, transPolygonAry[i] ) )
+                        return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for line to circle collision
+    //
+    circleToLineCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transPos = this.sprite.transPos;
+            let transLineAry = sprite.collisionComponent.transLineAry;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transLineAry.length; ++i )
+            {
+                // Check for collision between the circle and a line formed between the two vertices
+                if( this.lineToCircleCheck(transLineAry[i].head, transLineAry[i].tail, transPos, this.radius) )
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for line to circle collision
+    //
+    lineToLineCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transLineAry = sprite.collisionComponent.transLineAry;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transLineAry.length; ++i )
+            {
+                for( let j = 0; j < this.transLineAry.length; ++j )
+                {
+                    // Check for collision between the circle and a line formed between the two vertices
+                    if( this.lineToLineCheck( this.transLineAry[j], transLineAry[i] ) )
+                        return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for line to rect collision
+    //
+    lineToRectCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transRectAry = sprite.collisionComponent.transRectAry;
+
+            // Do the narrow phase check
+            for( let i = 0; i < transRectAry.length; ++i )
+            {
+                for( let j = 0; j < this.transLineAry.length; ++j )
+                {
+                    if( this.lineToRectCheck( this.transLineAry[j], transRectAry[i] ) )
+                        return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for line to polygon collision
+    //
+    lineToPolygonCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+
+            // Do the narrow phase check
+            for( let line = 0; line < this.transLineAry.length; ++line )
+            {
+                for( let i = 0; i < transPolygonAry.length; ++i )
+                {
+                    for( let j = 0; j < transPolygonAry[i].pointAry.length; ++j )
+                    {
+                        // Get next vertex in list. If we've hit the end, wrap around to 0
+                        let next = j + 1;
+                        if( next == transPolygonAry[i].pointAry.length )
+                            next = 0;
+
+                        gLine1.head.setXYZ( transPolygonAry[i].pointAry[j].x, transPolygonAry[i].pointAry[j].y );
+                        gLine1.tail.setXYZ( transPolygonAry[i].pointAry[next].x, transPolygonAry[i].pointAry[next].y );
+                            
+                        // check for collision between the line and a polygon line formed between the two vertices
+                        if( this.lineToLineCheck( gLine1, this.transLineAry[line] ) )
+                            return true;
+                    }
+
+                    // Optional: Test if the point is INSIDE the polygon note that this iterates all
+                    // sides of the polygon again, so only use this if you need to
+                    if( sprite.collisionComponent.optionalPointCheck )
+                    {
+                        if( this.pointToPolygonCheck( this.transLineAry[line].head, transPolygonAry[i] ) )
+                            return true;
+                        
+                        if( this.pointToPolygonCheck( this.transLineAry[line].tail, transPolygonAry[i] ) )
+                            return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for rect to polygon collision
+    //
+    rectToPolygonCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+
+            // Do the narrow phase check
+            for( let rect = 0; rect < this.transRectAry.length; ++rect )
+            {
+                for( let i = 0; i < transPolygonAry.length; ++i )
+                {
+                    for( let j = 0; j < transPolygonAry[i].pointAry.length; ++j )
+                    {
+                        // Get next vertex in list. If we've hit the end, wrap around to 0
+                        let next = j + 1;
+                        if( next == transPolygonAry[i].pointAry.length )
+                            next = 0;
+
+                        gLine1.head.setXYZ( transPolygonAry[i].pointAry[j].x, transPolygonAry[i].pointAry[j].y );
+                        gLine1.tail.setXYZ( transPolygonAry[i].pointAry[next].x, transPolygonAry[i].pointAry[next].y );
+                            
+                        // check for collision between the rect and a polygon line formed between the two vertices
+                        if( this.lineToRectCheck( gLine1, this.transRectAry[rect] ) )
+                            return true;
+                    }
+
+                    // Optional: Test if the point is INSIDE the polygon note that this iterates all
+                    // sides of the polygon again, so only use this if you need to
+                    if( sprite.collisionComponent.optionalPointCheck )
+                    {
+                        gPoint.setXYZ( this.transRectAry[rect].x1, this.transRectAry[rect].y1 );
+                        if( this.pointToPolygonCheck( gPoint, transPolygonAry[i] ) )
+                            return true;
+                        
+                        gPoint.setXYZ( this.transRectAry[rect].x2, this.transRectAry[rect].y1 );
+                        if( this.pointToPolygonCheck( gPoint, transPolygonAry[i] ) )
+                            return true;
+
+                        gPoint.setXYZ( this.transRectAry[rect].x2, this.transRectAry[rect].y2 );
+                        if( this.pointToPolygonCheck( gPoint, transPolygonAry[i] ) )
+                            return true;
+
+                        gPoint.setXYZ( this.transRectAry[rect].x1, this.transRectAry[rect].y2 );
+                        if( this.pointToPolygonCheck( gPoint, transPolygonAry[i] ) )
+                            return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for polygon to polygon collision
+    //
+    polygonToPolygonCollision( sprite )
+    {
+        // Do the broad phase check
+        if( this.circleToCircleCheck( sprite ) )
+        {
+            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+
+            // Do the narrow phase check
+            for( let poly1 = 0; poly1 < this.transPolygonAry.length; ++poly1 )
+            {
+                for( let point1 = 0; point1 < this.transPolygonAry[poly1].pointAry.length; ++point1 )
+                {
+                    // Get next vertex in list. If we've hit the end, wrap around to 0
+                    let next1 = point1 + 1;
+                    if( next1 == this.transPolygonAry[poly1].pointAry.length )
+                        next1 = 0;
+
+                    gLine1.head.setXYZ( this.transPolygonAry[poly1].pointAry[point1].x, this.transPolygonAry[poly1].pointAry[point1].y );
+                    gLine1.tail.setXYZ( this.transPolygonAry[poly1].pointAry[next1].x, this.transPolygonAry[poly1].pointAry[next1].y );
+
+                    for( let poly2 = 0; poly2 < transPolygonAry.length; ++poly2 )
+                    {
+                        for( let point2 = 0; point2 < transPolygonAry[poly2].pointAry.length; ++point2 )
+                        {
+                            // Get next vertex in list. If we've hit the end, wrap around to 0
+                            let next2 = point2 + 1;
+                            if( next2 == transPolygonAry[poly2].pointAry.length )
+                                next2 = 0;
+
+                            gLine2.head.setXYZ( transPolygonAry[poly2].pointAry[point2].x, transPolygonAry[poly2].pointAry[point2].y );
+                            gLine2.tail.setXYZ( transPolygonAry[poly2].pointAry[next2].x, transPolygonAry[poly2].pointAry[next2].y );
+                                
+                            // check for collision between the rect and a polygon line formed between the two vertices
+                            if( this.lineToLineCheck( gLine1, gLine2 ) )
+                                return true;
+
+                            // Optional: Test if the point is INSIDE the polygon note that this iterates all
+                            // sides of the polygon again, so only use this if you need to
+                            if( this.optionalPointCheck )
+                            {
+                                if( this.pointToPolygonCheck( gLine2.head, this.transPolygonAry[poly1] ) )
+                                    return true;
+                                
+                                if( this.pointToPolygonCheck( gLine2.tail, this.transPolygonAry[poly1] ) )
+                                    return true;
+                            }
+                        }
+
+                        // Optional: Test if the point is INSIDE the polygon note that this iterates all
+                        // sides of the polygon again, so only use this if you need to
+                        if( sprite.collisionComponent.optionalPointCheck )
+                        {
+                            if( this.pointToPolygonCheck( gLine1.head, transPolygonAry[poly2] ) )
+                                return true;
+                            
+                            if( this.pointToPolygonCheck( gLine1.tail, transPolygonAry[poly2] ) )
+                                return true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for circle to circle check
+    //
+    circleToCircleCheck( sprite )
+    {
+        if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this.radius + sprite.collisionComponent.radius) )
+            return true;
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Check for point to polygon collision
+    //
+    pointToPolygonCheck( point, polygon )
+    {
+        let collision = false;
+
+        for( let i = 0; i < polygon.pointAry.length; ++i )
+        {
+            // Get next vertex in list. If we've hit the end, wrap around to 0
+            let next = i + 1;
+            if( next == polygon.pointAry.length )
+                next = 0;
+
+            // Ge the current and next point
+            let vc = polygon.pointAry[i];
+            let vn = polygon.pointAry[next];
+            let px = point.x;
+            let py = point.y;
+
+            // compare position, flip 'collision' variable back and forth
+            if( ((vc.y >= py && vn.y < py) || (vc.y < py && vn.y >= py)) &&
+                (px < (vn.x-vc.x)*(py-vc.y) / (vn.y-vc.y)+vc.x) )
+            {
+                collision = !collision;
+            }
+        }
+
+        return collision;
+    }
+
+    // 
+    //  DESC: Line to circle test
+    //
+    lineToCircleCheck( pointPos1, pointPos2, circlePos, radius )
+    {
+        // Is either end INSIDE the circle? if so, return true immediately
+        if( this.pointToCircleCheck( pointPos1, circlePos, radius ) ||
+            this.pointToCircleCheck( pointPos2, circlePos, radius ) )
+            return true;
+      
+        // Get length of the line
+        let distance = pointPos1.calcLengthSquared2D( pointPos2 );
+      
+        // Get dot product of the line and circle
+        let dot = ( ((circlePos.x-pointPos1.x)*(pointPos2.x-pointPos1.x)) + ((circlePos.y-pointPos1.y)*(pointPos2.y-pointPos1.y)) ) / distance;
+      
+        // Find the closest point on the line
+        gPoint.setXYZ(
+            pointPos1.x + (dot * (pointPos2.x-pointPos1.x)),
+            pointPos1.y + (dot * (pointPos2.y-pointPos1.y)) );
+
+        // !! Commented out because it's too precise to trigger and keeps the below from catching any collision
+        // Is this point actually on the line segment?
+        // If so keep going, but if not, return false
+        //if( !this.lineToPointCheck( pointPos1, pointPos2, closest ) )
+        //    return false;
+
+        // Is the circle on the line?
+        if( this.pointToCircleCheck( gPoint, circlePos, radius ) )
+          return true;
+
+        return false;
+      }
+
+    // 
+    //  DESC: Point to circle test
+    //  NOTE: Function works in square space
+    //
+    pointToCircleCheck( pointPos, circlePos, radius )
+    {
+        // If the distance is less than the circle's radius the point is inside!
+        if( pointPos.calcLengthSquared2D( circlePos ) <= radius ) 
+            return true;
+
+        return false;
+    }
+
+    // 
+    //  DESC: Line to line test
+    //
+    lineToLineCheck( line1, line2 )
+    {
+        let x1 = line1.head.x;
+        let y1 = line1.head.y;
+        let x2 = line1.tail.x;
+        let y2 = line1.tail.y;
+        
+        let x3 = line2.head.x;
+        let y3 = line2.head.y;
+        let x4 = line2.tail.x;
+        let y4 = line2.tail.y;
+
+        // calculate the distance to intersection point
+        let uA = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1));
+        let uB = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1));
+      
+        // if uA and uB are between 0-1, lines are colliding
+        if( uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1 )
+          return true;
+
+        return false;
+    }
+
+    // 
+    //  DESC: Line to line test
+    //
+    lineToRectCheck( line, rect )
+    {
+        gLine2.head.setXYZ( rect.x1, rect.y1 );
+        gLine2.tail.setXYZ( rect.x2, rect.y1 );
+
+        // Check for collision between the circle and a line formed between the two vertices
+        if( this.lineToLineCheck( line, gLine2 ) )
+            return true;
+
+        gLine2.head.setXYZ( rect.x2, rect.y1 );
+        gLine2.tail.setXYZ( rect.x2, rect.y2 );
+
+        // Check for collision between the circle and a line formed between the two vertices
+        if( this.lineToLineCheck( line, gLine2 ) )
+            return true;
+
+        gLine2.head.setXYZ( rect.x2, rect.y2 );
+        gLine2.tail.setXYZ( rect.x1, rect.y2 );
+
+        // Check for collision between the circle and a line formed between the two vertices
+        if( this.lineToLineCheck( line, gLine2 ) )
+            return true;
+
+        gLine2.head.setXYZ( rect.x1, rect.y2 );
+        gLine2.tail.setXYZ( rect.x1, rect.y1 );
+
+        // Check for collision between the circle and a line formed between the two vertices
+        if( this.lineToLineCheck( line, gLine2 ) )
+            return true;
+
+        return false;
+    }
+
+    // 
+    //  DESC: Line to Point test
+    //
+    /*lineToPointCheck( pointPos1, pointPos2, pos )
+    {
+        // Get distance from the point to the two ends of the line
+        let d1 = pos.calcLengthSquared( pointPos1 );
+        let d2 = pos.calcLengthSquared( pointPos2 );
+      
+        // Get the length of the line
+        let lineLen = pointPos1.calcLengthSquared( pointPos2 );
+      
+        // since floats are so minutely accurate, add
+        // a little buffer zone that will give collision
+        let buffer = 0.2;    // higher # = less accurate
+      
+        // if the two distances are equal to the line's
+        // length, the point is on the line!
+        // note we use the buffer here to give a range, rather
+        // than one #
+        if (d1+d2 >= lineLen-buffer && d1+d2 <= lineLen+buffer)
+            return true;
+
+        return false;
+    }*/
+}
+
+/***/ }),
+/* 115 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -30803,7 +31984,7 @@ class UIControlNavNode
 
 
 /***/ }),
-/* 114 */
+/* 116 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -30811,15 +31992,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "objectDataManager": () => (/* binding */ objectDataManager)
 /* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
-/* harmony import */ var _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(115);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
-/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(118);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(33);
-/* harmony import */ var _objectdata2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(121);
-/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(127);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(26);
+/* harmony import */ var _managers_meshmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(117);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
+/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(120);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
+/* harmony import */ var _objectdata2d__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(123);
+/* harmony import */ var _objectdata3d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(130);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(28);
 
 //
 //  FILE NAME: objactdatamanager.js
@@ -30935,6 +32116,8 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
                     if( objData.is2D() )
                     {
                         let filePathAry = objData.visualData.getTextureFilePathAry();
+                        let textureFilter = objData.visualData.textureFilter;
+                        let textureWrap = objData.visualData.textureWrap;
 
                         for( let i = 0; i < filePathAry.length; ++i )
                         {
@@ -30945,7 +32128,7 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
                                 // Load the texture file
                                 promiseAry.push( 
                                     _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'img', filePath )
-                                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image ))
+                                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image, textureFilter, textureWrap ))
                                         .catch(( error ) => { console.error(error.stack); throw error; }));
                             }
                         }
@@ -31016,10 +32199,13 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
             
             if( filePath && _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.allowLoad( group, filePath ) )
             {
+                let textureFilter = objData.visualData.textureFilter;
+                let textureWrap = objData.visualData.textureWrap;
+
                 // Load the texture file
                 promiseAry.push( 
                     _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.downloadFile( 'img', filePath )
-                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image ))
+                        .then(( image ) => _managers_texturemanager__WEBPACK_IMPORTED_MODULE_1__.textureManager.load( group, filePath, image, textureFilter, textureWrap ))
                         .catch(( error ) => { console.error(error.stack); throw error; }));
             }
         }
@@ -31116,7 +32302,7 @@ var objectDataManager = new ObjectDataManager;
 
 
 /***/ }),
-/* 115 */
+/* 117 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31125,8 +32311,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "meshManager": () => (/* binding */ meshManager)
 /* harmony export */ });
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
-/* harmony import */ var _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(116);
-/* harmony import */ var _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(117);
+/* harmony import */ var _common_meshbinaryfileheader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(118);
+/* harmony import */ var _common_mesh3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(119);
 
 //
 //  FILE NAME: meshmanager.js
@@ -31497,21 +32683,21 @@ var meshManager = new MeshManager;
 
 
 /***/ }),
-/* 116 */
+/* 118 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MESH_FILE_HEADER": () => (/* binding */ MESH_FILE_HEADER),
-/* harmony export */   "TAG_CHECK": () => (/* binding */ TAG_CHECK),
-/* harmony export */   "TEXT_PATH_SIZE": () => (/* binding */ TEXT_PATH_SIZE),
-/* harmony export */   "JOINT_NAME_SIZE": () => (/* binding */ JOINT_NAME_SIZE),
-/* harmony export */   "MeshBinaryFileHeader": () => (/* binding */ MeshBinaryFileHeader),
-/* harmony export */   "BinaryTexture": () => (/* binding */ BinaryTexture),
-/* harmony export */   "BinaryFaceGroup": () => (/* binding */ BinaryFaceGroup),
 /* harmony export */   "BinaryFace": () => (/* binding */ BinaryFace),
-/* harmony export */   "BinaryVertex": () => (/* binding */ BinaryVertex)
+/* harmony export */   "BinaryFaceGroup": () => (/* binding */ BinaryFaceGroup),
+/* harmony export */   "BinaryTexture": () => (/* binding */ BinaryTexture),
+/* harmony export */   "BinaryVertex": () => (/* binding */ BinaryVertex),
+/* harmony export */   "JOINT_NAME_SIZE": () => (/* binding */ JOINT_NAME_SIZE),
+/* harmony export */   "MESH_FILE_HEADER": () => (/* binding */ MESH_FILE_HEADER),
+/* harmony export */   "MeshBinaryFileHeader": () => (/* binding */ MeshBinaryFileHeader),
+/* harmony export */   "TAG_CHECK": () => (/* binding */ TAG_CHECK),
+/* harmony export */   "TEXT_PATH_SIZE": () => (/* binding */ TEXT_PATH_SIZE)
 /* harmony export */ });
 
 //
@@ -31591,14 +32777,14 @@ class BinaryVertex
 }
 
 /***/ }),
-/* 117 */
+/* 119 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MeshGroup": () => (/* binding */ MeshGroup),
-/* harmony export */   "Mesh": () => (/* binding */ Mesh)
+/* harmony export */   "Mesh": () => (/* binding */ Mesh),
+/* harmony export */   "MeshGroup": () => (/* binding */ MeshGroup)
 /* harmony export */ });
 
 //
@@ -31643,7 +32829,7 @@ class Mesh
 
 
 /***/ }),
-/* 118 */
+/* 120 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31651,7 +32837,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "spriteSheetManager": () => (/* binding */ spriteSheetManager)
 /* harmony export */ });
-/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
+/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 
 //
 //  FILE NAME: spritesheetmanager.js
@@ -31672,7 +32858,7 @@ class SpriteSheetManager
     //
     //  DESC: Load the glyph data from XML node
     //
-    load( group, filePath, node )
+    load( group, filePath, xmlNode )
     {
         let groupMap = this.spriteSheetMapMap.get( group );
         if( groupMap === undefined )
@@ -31687,7 +32873,7 @@ class SpriteSheetManager
             spriteSheet = new _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_0__.SpriteSheet;
             
             // Load the glyph data from XML node
-            spriteSheet.loadFromNode( node );
+            spriteSheet.loadFromNode( xmlNode );
             
             // Add a new entry to the map
             groupMap.set( filePath, spriteSheet );
@@ -31758,7 +32944,7 @@ var spriteSheetManager = new SpriteSheetManager;
 
 
 /***/ }),
-/* 119 */
+/* 121 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31766,7 +32952,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteSheet": () => (/* binding */ SpriteSheet)
 /* harmony export */ });
-/* harmony import */ var _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
+/* harmony import */ var _spritesheetglyph__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(122);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
@@ -32007,7 +33193,7 @@ class SpriteSheet
 
 
 /***/ }),
-/* 120 */
+/* 122 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32040,7 +33226,7 @@ class SpriteSheetGlyph
 
 
 /***/ }),
-/* 121 */
+/* 123 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32048,16 +33234,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ObjectData2D": () => (/* binding */ ObjectData2D)
 /* harmony export */ });
-/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(122);
-/* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(123);
-/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(124);
-/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
+/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
+/* harmony import */ var _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(125);
+/* harmony import */ var _objectvisualdata2d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(126);
+/* harmony import */ var _objectcollision2d__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(129);
+/* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: objectdata2d.js
 //  DESC:      Class that holds a 2D object data
 //
+
 
 
 
@@ -32079,6 +33267,9 @@ class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
         // Physics data of the object
         this.physicsData = new _objectphysicsdata2d__WEBPACK_IMPORTED_MODULE_1__.ObjectPhysicsData2D;
 
+        // Collision data of the object
+        this.collisionData = new _objectcollision2d__WEBPACK_IMPORTED_MODULE_3__.ObjectCollisionData2D;
+
         // The name of the object data
         this.name = null;
 
@@ -32086,7 +33277,7 @@ class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
         this.group = null;
 
         // The initial size of the object
-        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_3__.Size;
+        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_4__.Size;
     }
     
     // 
@@ -32096,6 +33287,7 @@ class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
     {
         this.visualData.copy( obj.visualData );
         this.physicsData.copy( obj.physicsData );
+        this.collisionData.copy( obj.collisionData );
         this.size.copy( obj.size );
     }
     
@@ -32108,13 +33300,16 @@ class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
         this.group = group;
 
         // Load the size
-        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__.loadSize( node, this.size );
+        this.size = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__.loadSize( node, this.size );
 
         // Load the visual data
         this.visualData.loadObjData( node );
 
         // Load the physics data
         this.physicsData.loadObjData( node );
+
+        // Load the collision data
+        this.collisionData.loadObjData( node );
     }
     
     // 
@@ -32137,7 +33332,7 @@ class ObjectData2D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
 
 
 /***/ }),
-/* 122 */
+/* 124 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32178,7 +33373,7 @@ class iObjectData
 
 
 /***/ }),
-/* 123 */
+/* 125 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32187,7 +33382,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Fixture": () => (/* binding */ Fixture),
 /* harmony export */   "ObjectPhysicsData2D": () => (/* binding */ ObjectPhysicsData2D)
 /* harmony export */ });
-/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
+/* harmony import */ var planck_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(61);
 
 // 
 //  FILE NAME:  objectphysicsdata2d.js
@@ -32456,7 +33651,7 @@ class ObjectPhysicsData2D
 
 
 /***/ }),
-/* 124 */
+/* 126 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -32464,23 +33659,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ObjectVisualData2D": () => (/* binding */ ObjectVisualData2D)
 /* harmony export */ });
-/* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(126);
-/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(119);
+/* harmony import */ var _common_scaledframe__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(128);
+/* harmony import */ var _sprite_spritesheet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(121);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7);
-/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(42);
-/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(118);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(33);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(20);
+/* harmony import */ var _managers_vertexbuffermanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(44);
+/* harmony import */ var _managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(120);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(35);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(9);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(6);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: ojectvisualdata2d.js
 //  DESC:      Class containing the 2D object's visual data
 //
+
 
 
 
@@ -32513,7 +33710,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         this.ibo = null;
 
         // VBO/IBO generation type
-        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_NULL;
+        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_NULL;
 
         // Name of the shader
         this.shaderID = null;
@@ -32523,6 +33720,10 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
 
         // texture file path
         this.textureFilePath = '';
+
+        // Texture parameters
+        this.textureWrap = _system_device__WEBPACK_IMPORTED_MODULE_10__.device.gl.CLAMP_TO_EDGE;
+        this.textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_10__.device.gl.LINEAR;
         
         // Texture Sequence count
         this.textureSequenceCount = 0;
@@ -32552,7 +33753,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         this.defaultUniformScale = 1;
         
         // Mirror value
-        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_NULL;
+        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EM_NULL;
     }
     
     // 
@@ -32563,6 +33764,8 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         this.genType = obj.genType;
         this.shaderID = obj.shaderID;
         this.textureFilePath = obj.textureFilePath;
+        this.textureWrap = obj.textureWrap;
+        this.textureFilter = obj.textureFilter;
         this.textureSequenceCount = obj.textureSequenceCount;
         this.meshFilePath = obj.meshFilePath;
         this.spriteSheetFilePath = obj.spriteSheetFilePath;
@@ -32609,17 +33812,29 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             if( textureNode.length )
             {
                 let attr = textureNode[0].getAttribute( 'file' );
-                // Check for null because might want to replace with an empty string
                 if( attr !== null )
                 {
                     this.textureFilePath = attr;
                     this.textureSequenceCount = 1;
                 }
-                
+
                 attr = textureNode[0].getAttribute( 'count' );
-                // Check for null because might want to replace with an empty string
                 if( attr !== null )
                     this.textureSequenceCount = Number(attr);
+
+                attr = textureNode[0].getAttribute( 'filter' );
+                if( attr === 'LINEAR' )
+                    this.textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_10__.device.gl.LINEAR;
+                else if( attr === 'NEAREST' )
+                    this.textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_10__.device.gl.NEAREST;
+
+                attr = textureNode[0].getAttribute( 'wrap' );
+                if( attr === 'REPEAT' )
+                    this.textureWrap = _system_device__WEBPACK_IMPORTED_MODULE_10__.device.gl.REPEAT;
+                else if( attr === 'CLAMP_TO_EDGE' )
+                    this.textureWrap = _system_device__WEBPACK_IMPORTED_MODULE_10__.device.gl.CLAMP_TO_EDGE;
+                else if( attr === 'MIRRORED_REPEAT' )
+                    this.textureWrap = _system_device__WEBPACK_IMPORTED_MODULE_10__.device.gl.MIRRORED_REPEAT;
             }
 
             // Get the mesh node
@@ -32629,33 +33844,36 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
                 let genTypeStr = meshNode[0].getAttribute('genType');
                 if( genTypeStr )
                 {
-                    if( genTypeStr === 'quad' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_QUAD;
+                    if( genTypeStr === 'null' )
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_NULL;
+
+                    else if( genTypeStr === 'quad' )
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_QUAD;
 
                     else if( genTypeStr === 'sprite_sheet' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SPRITE_SHEET;
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_SPRITE_SHEET;
 
                     else if( genTypeStr === 'scaled_frame' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SCALED_FRAME;
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_SCALED_FRAME;
 
                     else if( genTypeStr === 'mesh_file' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_MESH_FILE;
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_MESH_FILE;
 
                     else if( genTypeStr === 'font' )
-                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_FONT;
+                        this.genType = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_FONT;
                 }
                 
                 let mirrorStr = meshNode[0].getAttribute('mirror');
                 if( mirrorStr )
                 {
                     if( mirrorStr === 'horizontal' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL;
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EM_HORIZONTAL;
 
                     else if( mirrorStr === 'vertical' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_VERTICAL;
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EM_VERTICAL;
 
                     else if( mirrorStr === 'horizontal_vertical' )
-                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL_VERTICAL;
+                        this.mirror = _common_defs__WEBPACK_IMPORTED_MODULE_11__.EM_HORIZONTAL_VERTICAL;
                 }
                 
                 let spriteSheetNode = meshNode[0].getElementsByTagName( 'spriteSheet' );
@@ -32731,10 +33949,10 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             }
 
             // Load the color
-            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__.loadColor( visualNode[0], this.color );
+            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__.loadColor( visualNode[0], this.color );
 
             // Raise an exception if there's a genType but no shader
-            if( (this.genType != _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_NULL) && (this.shaderID === null) )
+            if( (this.genType != _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_NULL) && (this.shaderID === null) )
                 throw new Error( 'Shader effect or techique not set!' );
         }
     }
@@ -32765,7 +33983,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
                 size.copy( this.textureAry[0].size );
         }
         
-        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_QUAD )
+        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_QUAD )
         {
             this.generateQuad( group );
             
@@ -32774,7 +33992,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             size.w = Math.trunc(this.vertexScale.w);
             size.h = Math.trunc(this.vertexScale.h);
         }
-        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SPRITE_SHEET )
+        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_SPRITE_SHEET )
         {
             // Build the simple (grid) sprite sheet from XML data
             if( this.spriteSheetFilePath === null )
@@ -32803,7 +34021,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             size.w = Math.trunc(this.vertexScale.w);
             size.h = Math.trunc(this.vertexScale.h);
         }
-        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SCALED_FRAME )
+        else if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_SCALED_FRAME )
         {
             if( this.glyphIDs !== null )
             {
@@ -32851,7 +34069,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         let horzStr = '';
         let vertStr = '';
         
-        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL_VERTICAL) )
+        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EM_HORIZONTAL) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EM_HORIZONTAL_VERTICAL) )
         {
             horzStr = '_horz';
             
@@ -32861,7 +34079,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             vertAry[5 * 3 + 3] = 0.0;
         }
         
-        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_VERTICAL) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EM_HORIZONTAL_VERTICAL) )
+        if( (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EM_VERTICAL) || (this.mirror === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EM_HORIZONTAL_VERTICAL) )
         {
             vertStr = '_vert';
             
@@ -32985,7 +34203,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             for( let i = 0; i < vertNode.length; ++i )
             {
                 // Load the 2D vert
-                let vert = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_11__.loadVertex2d( vertNode[i] );
+                let vert = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__.loadVertex2d( vertNode[i] );
                 
                 // This converts the data to a center aligned vertex buffer
                 vertAry.push( centerAlignSize.w + vert.x + additionalOffsetX );
@@ -33011,7 +34229,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
     //
     isActive()
     {
-        return (this.genType !== _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_NULL);
+        return (this.genType !== _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_NULL);
     }
     
     // 
@@ -33019,7 +34237,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
     //
     getFrameCount()
     {
-        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_10__.EGT_SPRITE_SHEET )
+        if( this.genType === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EGT_SPRITE_SHEET )
             return this.spriteSheet.getCount();
 
         return this.textureAry.length;
@@ -33061,7 +34279,7 @@ class ObjectVisualData2D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
 
 
 /***/ }),
-/* 125 */
+/* 127 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33102,7 +34320,7 @@ class iObjectVisualData
 
 
 /***/ }),
-/* 126 */
+/* 128 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33147,7 +34365,250 @@ class ScaledFrame
 
 
 /***/ }),
-/* 127 */
+/* 129 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectCollisionData2D": () => (/* binding */ ObjectCollisionData2D)
+/* harmony export */ });
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
+/* harmony import */ var _common_line__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
+/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
+/* harmony import */ var _common_polygon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(23);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+
+// 
+//  FILE NAME:  objectcollision2d.js
+//  DESC:       Class containing the object's collision data
+//
+
+
+
+
+
+
+
+
+
+class ObjectCollisionData2D
+{
+    constructor()
+    {
+        // Data type
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_NULL;
+    }
+    
+    // 
+    //  DESC: Copy the passed in data
+    //
+    copy( obj )
+    {
+        this.type = obj.type;
+
+        this.radius = obj.radius;
+        this.radiusFromVisual = obj.radiusFromVisual;
+        this.radiusModifier = obj.radiusModifier;
+        
+        if( obj.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_LINE )
+        {
+            this.pointsToModelView = obj.pointsToModelView;
+            this.lineAry = [];
+
+            for( let i = 0; i < obj.lineAry.length; ++i )
+                this.lineAry.push( new _common_line__WEBPACK_IMPORTED_MODULE_1__.Line( obj.lineAry[i] ) )
+        }
+        else if( obj.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_RECT )
+        {
+            this.rectToModelView = obj.rectToModelView;
+
+            for( let i = 0; i < obj.rectAry.length; ++i )
+                this.rectAry.push( new _common_rect__WEBPACK_IMPORTED_MODULE_2__.Rect(obj.rectAry[i]) );
+        }
+        else if( obj.type === _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_POLYGON )
+        {
+            this.pointsToModelView = obj.pointsToModelView;
+            this.optionalPointCheck = obj.optionalPointCheck;
+            this.polygonAry = [];
+
+            for( let i = 0; i < obj.polygonAry.length; ++i )
+                this.polygonAry.push( new _common_polygon__WEBPACK_IMPORTED_MODULE_3__.Polygon( obj.polygonAry[i] ) )
+        }
+    }
+    
+    // 
+    //  DESC: Load the object data
+    //
+    loadObjData( xmlNode )
+    {
+        let collisionNode = xmlNode.getElementsByTagName( 'collision' );
+
+        // Check if the object has any collision data
+        if( collisionNode.length )
+        {
+            this.filterCategoryBits = 0x00000001;
+            this.filterMaskBits = 0xFFFFFFFF;
+            this.collisionSignal = false;
+
+            let attr = collisionNode[0].getAttribute( 'filterCategoryBits' );
+            if( attr )
+            {
+                this.filterCategoryBits = Number(attr);
+            }
+
+            attr = collisionNode[0].getAttribute( 'filterMaskBits' );
+            if( attr )
+            {
+                this.filterMaskBits = Number(attr);
+            }
+
+            attr = collisionNode[0].getAttribute( 'collisionSignal' );
+            if( attr )
+            {
+                this.collisionSignal = (attr === 'true');
+            }
+
+            // Load the radius data
+            this.loadRadiusData( collisionNode[0].children[0] );
+
+            if( collisionNode[0].children[0].nodeName == 'lineList' )
+                this.loadLineData( collisionNode[0].children[0] );
+
+            else if( collisionNode[0].children[0].nodeName == 'rect' )
+                this.loadRectData( collisionNode[0].children[0] );
+
+            else if( collisionNode[0].children[0].nodeName == 'circle' )
+                this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_CIRCLE;
+
+            else if( collisionNode[0].children[0].nodeName == 'point' )
+                this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_POINT;
+
+            else if( collisionNode[0].children[0].nodeName == 'polygonList' )
+                this.loadPolygonData( collisionNode[0].children[0] );
+        }
+    }
+
+    // 
+    //  DESC: Load the radius data
+    //
+    loadRadiusData( xmlNode )
+    {
+        this.radius = -1;
+        let attr = xmlNode.getAttribute( 'radius' );
+        if( attr )
+        {
+            // Radius is calculated in square space
+            this.radius = Number(attr) * Number(attr);
+        }
+
+        this.radiusFromVisual = false;
+        attr = xmlNode.getAttribute( 'radiusFromVisual' );
+        if( attr )
+        {
+            this.radiusFromVisual = (attr === 'true');
+        }
+
+        this.radiusModifier = 0;
+        attr = xmlNode.getAttribute( 'radiusModifier' );
+        if( attr )
+        {
+            // Modifer is calculated in square space
+            this.radiusModifier = Number(attr) * Number(attr);
+        }
+    }
+
+    // 
+    //  DESC: Load the line data
+    //
+    loadLineData( xmlNode )
+    {
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_LINE;
+        this.lineAry = [];
+
+        let attr = xmlNode.getAttribute( 'pointsToModelView' );
+        if( attr )
+        {
+            this.pointsToModelView = (attr === 'true');
+        }
+
+        let lineNodeAry = xmlNode.getElementsByTagName( 'line' );
+        for( let i = 0; i < lineNodeAry.length; ++i )
+            this.lineAry.push( _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_0__.loadLine( lineNodeAry[i] ) );
+    }
+
+    // 
+    //  DESC: Load the AABB data
+    //
+    loadRectData( xmlNode )
+    {
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_RECT;
+
+        this.rectFromVisual = false;
+        let attr = xmlNode.getAttribute( 'rectFromVisual' );
+        if( attr )
+        {
+            this.rectFromVisual = (attr === 'true');
+        }
+
+        this.rectAsSizeModifier = false;
+        attr = xmlNode.getAttribute( 'rectAsSizeModifier' );
+        if( attr )
+        {
+            this.rectAsSizeModifier = (attr === 'true');
+        }
+
+        this.rectToModelView = false;
+        attr = xmlNode.getAttribute( 'rectToModelView' );
+        if( attr )
+        {
+            this.rectToModelView = (attr === 'true');
+        }
+
+        // Load any rects
+        this.rectAry = [];
+        let nodeAry = xmlNode.getElementsByTagName( 'rect' );
+        for( let i = 0; i < nodeAry.length; ++i )
+            this.rectAry.push( _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_0__.loadRectFromChild( nodeAry[i] ) );
+    }
+
+    // 
+    //  DESC: Load the polygon data
+    //
+    loadPolygonData( xmlNode )
+    {
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_POLYGON;
+        this.polygonAry = [];
+
+        let attr = xmlNode.getAttribute( 'pointsToModelView' );
+        if( attr )
+        {
+            this.pointsToModelView = (attr === 'true');
+        }
+
+        attr = xmlNode.getAttribute( 'optionalPointCheck' );
+        if( attr )
+        {
+            this.optionalPointCheck = (attr === 'true');
+        }
+
+        let polygonNodeAry = xmlNode.getElementsByTagName( 'polygon' );
+        for( let i = 0; i < polygonNodeAry.length; ++i )
+            this.polygonAry.push( _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_0__.loadPolygon( polygonNodeAry[i] ) );
+    }
+    
+    // 
+    //  DESC: Is this collision active
+    //
+    isActive()
+    {
+        return (this.type !== _common_defs__WEBPACK_IMPORTED_MODULE_4__.ECT_NULL);
+    }
+}
+
+
+/***/ }),
+/* 130 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33155,8 +34616,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ObjectData3D": () => (/* binding */ ObjectData3D)
 /* harmony export */ });
-/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(122);
-/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(128);
+/* harmony import */ var _iobjectdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(124);
+/* harmony import */ var _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(131);
+/* harmony import */ var _objectcollision3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(132);
 
 // 
 //  FILE NAME: objectdata3d.js
@@ -33169,6 +34631,7 @@ __webpack_require__.r(__webpack_exports__);
 //import { ObjectPhysicsData3D } from '../objectdatamanager/objectphysicsdata3d';
 
 
+
 class ObjectData3D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
 {
     constructor()
@@ -33177,6 +34640,9 @@ class ObjectData3D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
 
         // Visual data of the object
         this.visualData = new _objectvisualdata3d__WEBPACK_IMPORTED_MODULE_1__.ObjectVisualData3D;
+
+        // Collision data of the object
+        this.collisionData = new _objectcollision3d__WEBPACK_IMPORTED_MODULE_2__.ObjectCollisionData3D;
 
         // Physics data of the object
         //CObjectPhysicsData2D m_physicsData;
@@ -33231,7 +34697,7 @@ class ObjectData3D extends _iobjectdata__WEBPACK_IMPORTED_MODULE_0__.iObjectData
 
 
 /***/ }),
-/* 128 */
+/* 131 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33239,15 +34705,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ObjectVisualData3D": () => (/* binding */ ObjectVisualData3D)
 /* harmony export */ });
-/* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(125);
+/* harmony import */ var _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(127);
 /* harmony import */ var _common_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 /* harmony import */ var _managers_texturemanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
+/* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
+/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
 
 // 
 //  FILE NAME: ojectvisualdata3d.js
 //  DESC:      Class containing the 3D object's visual data
 //
+
 
 
 
@@ -33273,6 +34741,10 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
 
         // mesh file path
         this.meshFilePath = null;
+
+        // Texture parameters
+        this.textureWrap = _system_device__WEBPACK_IMPORTED_MODULE_3__.device.gl.CLAMP_TO_EDGE;
+        this.textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_3__.device.gl.LINEAR;
     }
     
     // 
@@ -33284,6 +34756,8 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
         this.meshFilePath = obj.meshFilePath;
         this.color.copy( obj.color );
         this.meshGrp = obj.meshGrp;
+        this.textureWrap = obj.textureWrap;
+        this.textureFilter = obj.textureFilter;
     }
     
     // 
@@ -33307,7 +34781,21 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
             }
 
             // Load the color
-            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__.loadColor( visualNode[0], this.color );
+            this.color = _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_4__.loadColor( visualNode[0], this.color );
+
+            attr = visualNode[0].getAttribute( 'filter' );
+            if( attr === 'LINEAR' )
+                this.textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_3__.device.gl.LINEAR;
+            else if( attr === 'NEAREST' )
+                this.textureFilter = _system_device__WEBPACK_IMPORTED_MODULE_3__.device.gl.NEAREST;
+
+            attr = visualNode[0].getAttribute( 'wrap' );
+            if( attr === 'REPEAT' )
+                this.textureWrap = _system_device__WEBPACK_IMPORTED_MODULE_3__.device.gl.REPEAT;
+            else if( attr === 'CLAMP_TO_EDGE' )
+                this.textureWrap = _system_device__WEBPACK_IMPORTED_MODULE_3__.device.gl.CLAMP_TO_EDGE;
+            else if( attr === 'MIRRORED_REPEAT' )
+                this.textureWrap = _system_device__WEBPACK_IMPORTED_MODULE_3__.device.gl.MIRRORED_REPEAT;
         }
     }
     
@@ -33340,7 +34828,60 @@ class ObjectVisualData3D extends _iobjectvisualdata__WEBPACK_IMPORTED_MODULE_0__
 
 
 /***/ }),
-/* 129 */
+/* 132 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ObjectCollisionData3D": () => (/* binding */ ObjectCollisionData3D)
+/* harmony export */ });
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+
+// 
+//  FILE NAME:  objectcollision3d.js
+//  DESC:       Class containing the object's collision data
+//
+
+
+
+
+
+class ObjectCollisionData3D
+{
+    constructor()
+    {
+        // Data type
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__.ECT_NULL;
+    }
+    
+    // 
+    //  DESC: Copy the passed in data
+    //
+    copy( /*obj*/ )
+    {
+
+    }
+    
+    // 
+    //  DESC: Load the object data
+    //
+    loadObjData( /*xmlNode*/ )
+    {
+    }
+
+    // 
+    //  DESC: Is this collision active
+    //
+    isActive()
+    {
+        return (this.type !== _common_defs__WEBPACK_IMPORTED_MODULE_0__.ECT_NULL);
+    }
+}
+
+
+/***/ }),
+/* 133 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33348,15 +34889,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "create": () => (/* binding */ create)
 /* harmony export */ });
-/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(130);
-/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(135);
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(136);
-/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(137);
-/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(138);
-/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(139);
-/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(140);
-/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(141);
-/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(142);
+/* harmony import */ var _uilabel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(134);
+/* harmony import */ var _uibutton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(139);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(140);
+/* harmony import */ var _uibuttonlist__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(141);
+/* harmony import */ var _uicheckbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(142);
+/* harmony import */ var _uislider__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(143);
+/* harmony import */ var _uiscrollbox__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(144);
+/* harmony import */ var _uimeter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(145);
+/* harmony import */ var _uiprogressbar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(146);
 // 
 //  FILE NAME: uicontrolfactory.js
 //  DESC:      factory for control creation
@@ -33423,7 +34964,7 @@ function create( node, group )
 
 
 /***/ }),
-/* 130 */
+/* 134 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33431,8 +34972,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UILabel": () => (/* binding */ UILabel)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(138);
 
 // 
 //  FILE NAME: uilabel.js
@@ -33456,7 +34997,7 @@ class UILabel extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 131 */
+/* 135 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -33464,21 +35005,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControl": () => (/* binding */ UIControl)
 /* harmony export */ });
-/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(132);
-/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
+/* harmony import */ var _controlbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
+/* harmony import */ var _scrollparam__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
-/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(133);
+/* harmony import */ var _common_quad__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(137);
 /* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(15);
 /* harmony import */ var _utilities_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(12);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(114);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(30);
-/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(27);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(116);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(32);
+/* harmony import */ var _managers_actionmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(29);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(20);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(134);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(36);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(138);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(38);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(6);
 
 // 
@@ -33504,6 +35045,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+var gDummyPoint = new _common_point__WEBPACK_IMPORTED_MODULE_4__.Point;
 
 class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
 {
@@ -33728,7 +35271,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
             this.collisionQuad.point[3].x += screenHalf.w;
             this.collisionQuad.point[3].y += screenHalf.h;
 
-            finalMatrix.transformPoint( this.collisionCenter, new _common_point__WEBPACK_IMPORTED_MODULE_4__.Point );
+            finalMatrix.transformPoint( this.collisionCenter, gDummyPoint );
 
             // Convert to screen coordinates
             this.collisionCenter.x += screenHalf.w;
@@ -34438,7 +35981,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
 
 
 /***/ }),
-/* 132 */
+/* 136 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34448,7 +35991,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(33);
+/* harmony import */ var _utilities_assetholder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
 
 // 
@@ -34585,7 +36128,7 @@ class ControlBase extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 }
 
 /***/ }),
-/* 133 */
+/* 137 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34635,7 +36178,7 @@ class Quad
 
 
 /***/ }),
-/* 134 */
+/* 138 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34643,44 +36186,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "BTN_DEC": () => (/* binding */ BTN_DEC),
 /* harmony export */   "BTN_INC": () => (/* binding */ BTN_INC),
-/* harmony export */   "ECT_NULL": () => (/* binding */ ECT_NULL),
-/* harmony export */   "ECT_LABEL": () => (/* binding */ ECT_LABEL),
+/* harmony export */   "EAR_DOWN": () => (/* binding */ EAR_DOWN),
+/* harmony export */   "EAR_LEFT": () => (/* binding */ EAR_LEFT),
+/* harmony export */   "EAR_RIGHT": () => (/* binding */ EAR_RIGHT),
+/* harmony export */   "EAR_UP": () => (/* binding */ EAR_UP),
+/* harmony export */   "ECAT_ACTION": () => (/* binding */ ECAT_ACTION),
+/* harmony export */   "ECAT_ACTION_EVENT": () => (/* binding */ ECAT_ACTION_EVENT),
+/* harmony export */   "ECAT_BACK": () => (/* binding */ ECAT_BACK),
+/* harmony export */   "ECAT_CHANGE_FOCUS": () => (/* binding */ ECAT_CHANGE_FOCUS),
+/* harmony export */   "ECAT_CLOSE": () => (/* binding */ ECAT_CLOSE),
+/* harmony export */   "ECAT_GAME_STATE_CHANGE": () => (/* binding */ ECAT_GAME_STATE_CHANGE),
+/* harmony export */   "ECAT_IDLE": () => (/* binding */ ECAT_IDLE),
+/* harmony export */   "ECAT_NULL": () => (/* binding */ ECAT_NULL),
+/* harmony export */   "ECAT_QUIT_GAME": () => (/* binding */ ECAT_QUIT_GAME),
+/* harmony export */   "ECAT_SCRIPT_EXECUTE": () => (/* binding */ ECAT_SCRIPT_EXECUTE),
+/* harmony export */   "ECAT_TO_MENU": () => (/* binding */ ECAT_TO_MENU),
+/* harmony export */   "ECAT_TO_TREE": () => (/* binding */ ECAT_TO_TREE),
+/* harmony export */   "ECS_ACTIVE": () => (/* binding */ ECS_ACTIVE),
+/* harmony export */   "ECS_CHANGE": () => (/* binding */ ECS_CHANGE),
+/* harmony export */   "ECS_DISABLE": () => (/* binding */ ECS_DISABLE),
+/* harmony export */   "ECS_EVENT": () => (/* binding */ ECS_EVENT),
+/* harmony export */   "ECS_EXECUTE": () => (/* binding */ ECS_EXECUTE),
+/* harmony export */   "ECS_INACTIVE": () => (/* binding */ ECS_INACTIVE),
+/* harmony export */   "ECS_NULL": () => (/* binding */ ECS_NULL),
+/* harmony export */   "ECS_SELECT": () => (/* binding */ ECS_SELECT),
+/* harmony export */   "ECS_TRANS_IN": () => (/* binding */ ECS_TRANS_IN),
+/* harmony export */   "ECS_TRANS_OUT": () => (/* binding */ ECS_TRANS_OUT),
+/* harmony export */   "ECT_AMOUNT_BUTTON": () => (/* binding */ ECT_AMOUNT_BUTTON),
 /* harmony export */   "ECT_BUTTON": () => (/* binding */ ECT_BUTTON),
 /* harmony export */   "ECT_BUTTON_LIST": () => (/* binding */ ECT_BUTTON_LIST),
 /* harmony export */   "ECT_CHECK_BOX": () => (/* binding */ ECT_CHECK_BOX),
-/* harmony export */   "ECT_SLIDER": () => (/* binding */ ECT_SLIDER),
-/* harmony export */   "ECT_SCROLL_BOX": () => (/* binding */ ECT_SCROLL_BOX),
-/* harmony export */   "ECT_SUB_CONTROL": () => (/* binding */ ECT_SUB_CONTROL),
+/* harmony export */   "ECT_LABEL": () => (/* binding */ ECT_LABEL),
 /* harmony export */   "ECT_METER": () => (/* binding */ ECT_METER),
-/* harmony export */   "ECT_TAB_CONTROL": () => (/* binding */ ECT_TAB_CONTROL),
+/* harmony export */   "ECT_NULL": () => (/* binding */ ECT_NULL),
 /* harmony export */   "ECT_PROGRESS_BAR": () => (/* binding */ ECT_PROGRESS_BAR),
-/* harmony export */   "ECT_AMOUNT_BUTTON": () => (/* binding */ ECT_AMOUNT_BUTTON),
-/* harmony export */   "ECS_NULL": () => (/* binding */ ECS_NULL),
-/* harmony export */   "ECS_TRANS_IN": () => (/* binding */ ECS_TRANS_IN),
-/* harmony export */   "ECS_TRANS_OUT": () => (/* binding */ ECS_TRANS_OUT),
-/* harmony export */   "ECS_DISABLE": () => (/* binding */ ECS_DISABLE),
-/* harmony export */   "ECS_INACTIVE": () => (/* binding */ ECS_INACTIVE),
-/* harmony export */   "ECS_ACTIVE": () => (/* binding */ ECS_ACTIVE),
-/* harmony export */   "ECS_SELECT": () => (/* binding */ ECS_SELECT),
-/* harmony export */   "ECS_CHANGE": () => (/* binding */ ECS_CHANGE),
-/* harmony export */   "ECS_EXECUTE": () => (/* binding */ ECS_EXECUTE),
-/* harmony export */   "ECS_EVENT": () => (/* binding */ ECS_EVENT),
-/* harmony export */   "ECAT_IDLE": () => (/* binding */ ECAT_IDLE),
-/* harmony export */   "ECAT_NULL": () => (/* binding */ ECAT_NULL),
-/* harmony export */   "ECAT_ACTION": () => (/* binding */ ECAT_ACTION),
-/* harmony export */   "ECAT_TO_TREE": () => (/* binding */ ECAT_TO_TREE),
-/* harmony export */   "ECAT_TO_MENU": () => (/* binding */ ECAT_TO_MENU),
-/* harmony export */   "ECAT_BACK": () => (/* binding */ ECAT_BACK),
-/* harmony export */   "ECAT_CLOSE": () => (/* binding */ ECAT_CLOSE),
-/* harmony export */   "ECAT_CHANGE_FOCUS": () => (/* binding */ ECAT_CHANGE_FOCUS),
-/* harmony export */   "ECAT_GAME_STATE_CHANGE": () => (/* binding */ ECAT_GAME_STATE_CHANGE),
-/* harmony export */   "ECAT_QUIT_GAME": () => (/* binding */ ECAT_QUIT_GAME),
-/* harmony export */   "ECAT_ACTION_EVENT": () => (/* binding */ ECAT_ACTION_EVENT),
-/* harmony export */   "ECAT_SCRIPT_EXECUTE": () => (/* binding */ ECAT_SCRIPT_EXECUTE),
-/* harmony export */   "EAR_UP": () => (/* binding */ EAR_UP),
-/* harmony export */   "EAR_DOWN": () => (/* binding */ EAR_DOWN),
-/* harmony export */   "EAR_LEFT": () => (/* binding */ EAR_LEFT),
-/* harmony export */   "EAR_RIGHT": () => (/* binding */ EAR_RIGHT)
+/* harmony export */   "ECT_SCROLL_BOX": () => (/* binding */ ECT_SCROLL_BOX),
+/* harmony export */   "ECT_SLIDER": () => (/* binding */ ECT_SLIDER),
+/* harmony export */   "ECT_SUB_CONTROL": () => (/* binding */ ECT_SUB_CONTROL),
+/* harmony export */   "ECT_TAB_CONTROL": () => (/* binding */ ECT_TAB_CONTROL)
 /* harmony export */ });
 // 
 //  FILE NAME: uicontroldefs.js
@@ -34741,7 +36284,7 @@ const EAR_UP    = 1,
 
 
 /***/ }),
-/* 135 */
+/* 139 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34749,8 +36292,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIButton": () => (/* binding */ UIButton)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(138);
 
 // 
 //  FILE NAME: uibutton.js
@@ -34773,7 +36316,7 @@ class UIButton extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 136 */
+/* 140 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34781,13 +36324,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UISubControl": () => (/* binding */ UISubControl)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
-/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(113);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
-/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(31);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(129);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(134);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(36);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
+/* harmony import */ var _gui_uicontrolnavnode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(115);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(33);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(133);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(138);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(38);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6);
 
 // 
@@ -35415,7 +36958,7 @@ class UISubControl extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 137 */
+/* 141 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -35423,11 +36966,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIButtonList": () => (/* binding */ UIButtonList)
 /* harmony export */ });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _utilities_bitmask__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(134);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(138);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(38);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
 
 // 
@@ -35677,7 +37220,7 @@ class UIButtonList extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContr
 
 
 /***/ }),
-/* 138 */
+/* 142 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -35685,8 +37228,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UICheckBox": () => (/* binding */ UICheckBox)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(138);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
@@ -35739,7 +37282,7 @@ class UICheckBox extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 139 */
+/* 143 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -35747,12 +37290,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UISlider": () => (/* binding */ UISlider)
 /* harmony export */ });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(134);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(32);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(138);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(38);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 
 // 
@@ -35994,10 +37537,11 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
         {
             let oneOverAspectRatio = 1.0 / _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.orthoAspectRatio.h;
 
+            // (1.0 / this.matrix.matrix[]) handles the scaling of the control
             if( this.orientation === _common_defs__WEBPACK_IMPORTED_MODULE_6__.EO_HORIZONTAL )
-                this.incSliderMovePos( event.movementX * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) );
+                this.incSliderMovePos( event.movementX * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[0]) );
             else
-                this.incSliderMovePos( event.movementY * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) );
+                this.incSliderMovePos( event.movementY * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[5]) );
         }
 
         return result;
@@ -36024,10 +37568,11 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
 
                 let ratio = 1.0 / _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.orthoAspectRatio.h;
 
+                // (1.0 / this.matrix.matrix[]) handles the scaling of the control
                 if( this.orientation === _common_defs__WEBPACK_IMPORTED_MODULE_6__.EO_HORIZONTAL )
-                    this.incSliderMovePos( (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_6__.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * ratio );
+                    this.incSliderMovePos( (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_6__.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * ratio * (1.0 / this.matrix.matrix[0]) );
                 else
-                    this.incSliderMovePos( (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_6__.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * ratio );
+                    this.incSliderMovePos( (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_6__.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * ratio * (1.0 / this.matrix.matrix[5]) );
             }
         }
         else if( event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_6__.ESMA_PRESS_TYPE] !== this.mouseSelectType )
@@ -36172,7 +37717,7 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
 
 
 /***/ }),
-/* 140 */
+/* 144 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -36180,17 +37725,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIScrollBox": () => (/* binding */ UIScrollBox)
 /* harmony export */ });
-/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(136);
+/* harmony import */ var _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(140);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(30);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(45);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(116);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(32);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(47);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(20);
-/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(129);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(134);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(36);
+/* harmony import */ var _uicontrolfactory__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(133);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(138);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(38);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(6);
 
 // 
@@ -37164,7 +38709,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
 
 
 /***/ }),
-/* 141 */
+/* 145 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37172,11 +38717,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIMeter": () => (/* binding */ UIMeter)
 /* harmony export */ });
-/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(46);
-/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(45);
+/* harmony import */ var _utilities_timer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(48);
+/* harmony import */ var _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(47);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(131);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(134);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(135);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(138);
 /* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
 
 // 
@@ -37610,7 +39155,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
 
 
 /***/ }),
-/* 142 */
+/* 146 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37618,13 +39163,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIProgressBar": () => (/* binding */ UIProgressBar)
 /* harmony export */ });
-/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(131);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
+/* harmony import */ var _uicontrol__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(135);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _common_point__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(14);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(114);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(116);
 /* harmony import */ var _system_device__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(134);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(138);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6);
 
 // 
@@ -37951,7 +39496,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
 
 
 /***/ }),
-/* 143 */
+/* 147 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37959,9 +39504,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "MenuTree": () => (/* binding */ MenuTree)
 /* harmony export */ });
-/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
-/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
-/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(36);
+/* harmony import */ var _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
+/* harmony import */ var _common_genericevent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(33);
+/* harmony import */ var _gui_menudefs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
 // 
 //  FILE NAME: menutree.js
 //  DESC:      Class that hold a tree of menus
@@ -38399,7 +39944,7 @@ class MenuTree
 
 
 /***/ }),
-/* 144 */
+/* 148 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38407,43 +39952,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "StartUpState": () => (/* binding */ StartUpState)
 /* harmony export */ });
-/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(145);
-/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
+/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(149);
+/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
-/* harmony import */ var _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(50);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(114);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(27);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(24);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(32);
+/* harmony import */ var _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(52);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(116);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(26);
 /* harmony import */ var _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(10);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(2);
-/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(148);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(57);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(151);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(152);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(45);
+/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(152);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(59);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(155);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(156);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(47);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(17);
-/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(118);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(33);
-/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(31);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(26);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(167);
-/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(170);
-/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(171);
-/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(172);
-/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(173);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(147);
-/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(174);
-/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(175);
-/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(176);
-/* harmony import */ var _data_shaders_shader_json__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(177);
-/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(178);
-/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(179);
-/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(180);
-/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(181);
-/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(182);
-/* harmony import */ var _data_settings_controllerMapping_json__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(183);
-/* harmony import */ var _data_objects_2d_menu_menu_action_json__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(184);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(120);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(35);
+/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(33);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(28);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(170);
+/* harmony import */ var _scripts_utilityscripts__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(173);
+/* harmony import */ var _scripts_statescripts__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(174);
+/* harmony import */ var _scripts_menuscripts__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(175);
+/* harmony import */ var _scripts_levelscripts__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(176);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(151);
+/* harmony import */ var raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(177);
+/* harmony import */ var raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(178);
+/* harmony import */ var raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(179);
+/* harmony import */ var _data_shaders_shader_json__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(180);
+/* harmony import */ var raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(181);
+/* harmony import */ var raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(182);
+/* harmony import */ var raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(183);
+/* harmony import */ var raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(184);
+/* harmony import */ var raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(185);
+/* harmony import */ var _data_settings_controllerMapping_json__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(186);
+/* harmony import */ var _data_objects_2d_menu_menu_action_json__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(187);
 
 //
 //  FILE NAME: startupstate.js
@@ -38502,12 +40047,12 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
         super( _statedefs__WEBPACK_IMPORTED_MODULE_25__.EGS_STARTUP, _statedefs__WEBPACK_IMPORTED_MODULE_25__.EGS_TITLE_SCREEN, gameLoopCallback );
 
         // Load the list tables
-        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__.objectDataManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_26__.default ) );
-        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__.strategyManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_27__.default ) );
-        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__.cameraManager.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_28__.default ) );
-        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_10__.soundManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__.default ) );
-        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__.physicsWorldManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__.default ) );
-        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__.default ) );
+        _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__.objectDataManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_objectDataList_dataListTable_lst__WEBPACK_IMPORTED_MODULE_26__["default"] ) );
+        _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_12__.strategyManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_strategy_strageyListTable_lst__WEBPACK_IMPORTED_MODULE_27__["default"] ) );
+        _library_managers_cameramanager__WEBPACK_IMPORTED_MODULE_8__.cameraManager.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_camera_lst__WEBPACK_IMPORTED_MODULE_28__["default"] ) );
+        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_10__.soundManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_sound_soundListTable_lst__WEBPACK_IMPORTED_MODULE_31__["default"] ) );
+        _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_11__.physicsWorldManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_physics_physicsListTable_lst__WEBPACK_IMPORTED_MODULE_32__["default"] ) );
+        _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadListTableFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_2d_menu_menuListTable_lst__WEBPACK_IMPORTED_MODULE_33__["default"] ) );
         _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_6__.actionManager.loadFromObj( _data_settings_controllerMapping_json__WEBPACK_IMPORTED_MODULE_35__ );
         _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadMenuActionFromObj( _data_objects_2d_menu_menu_action_json__WEBPACK_IMPORTED_MODULE_36__ );
 
@@ -38546,7 +40091,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
         ])
         // Create and load all the actor strategies.
-        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__.strategyLoader.load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_30__.default ) ))
+        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_13__.strategyLoader.loadFromXml( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_objects_strategy_state_startup_loader__WEBPACK_IMPORTED_MODULE_30__["default"] ) ))
 
         // Clean up the temporary files
         .then(() =>
@@ -38657,7 +40202,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
             _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_5__.objectDataManager.loadGroup( groupAry ),
 
             // Load the fonts
-            _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__.fontManager.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_34__.default ) ),
+            _library_managers_fontmanager__WEBPACK_IMPORTED_MODULE_4__.fontManager.loadFromNode( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_19__.stringLoadXML( raw_loader_data_textures_fonts_font_lst__WEBPACK_IMPORTED_MODULE_34__["default"] ) ),
 
             // Load the menu XMLs
             _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_7__.menuManager.loadGroupXML( groupAry )
@@ -38701,7 +40246,7 @@ class StartUpState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
 
 /***/ }),
-/* 145 */
+/* 149 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38709,8 +40254,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "GameState": () => (/* binding */ GameState)
 /* harmony export */ });
-/* harmony import */ var _statemessage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(146);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(147);
+/* harmony import */ var _statemessage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(150);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(151);
 
 // 
 //  FILE NAME: gamestate.js
@@ -38801,7 +40346,7 @@ class GameState
 
 
 /***/ }),
-/* 146 */
+/* 150 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38834,22 +40379,22 @@ class StateMessage
 
 
 /***/ }),
-/* 147 */
+/* 151 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "EGS_GAME_LOAD": () => (/* binding */ EGS_GAME_LOAD),
+/* harmony export */   "EGS_LEVEL_1": () => (/* binding */ EGS_LEVEL_1),
 /* harmony export */   "EGS_NULL": () => (/* binding */ EGS_NULL),
 /* harmony export */   "EGS_STARTUP": () => (/* binding */ EGS_STARTUP),
 /* harmony export */   "EGS_TITLE_SCREEN": () => (/* binding */ EGS_TITLE_SCREEN),
-/* harmony export */   "EGS_GAME_LOAD": () => (/* binding */ EGS_GAME_LOAD),
-/* harmony export */   "EGS_LEVEL_1": () => (/* binding */ EGS_LEVEL_1),
-/* harmony export */   "ESE_STATE_EVENTS": () => (/* binding */ ESE_STATE_EVENTS),
+/* harmony export */   "ESE_ASSET_LOAD_COMPLETE": () => (/* binding */ ESE_ASSET_LOAD_COMPLETE),
+/* harmony export */   "ESE_CREATE_MULTI_HEAD": () => (/* binding */ ESE_CREATE_MULTI_HEAD),
 /* harmony export */   "ESE_FADE_IN_COMPLETE": () => (/* binding */ ESE_FADE_IN_COMPLETE),
 /* harmony export */   "ESE_FADE_OUT_COMPLETE": () => (/* binding */ ESE_FADE_OUT_COMPLETE),
-/* harmony export */   "ESE_ASSET_LOAD_COMPLETE": () => (/* binding */ ESE_ASSET_LOAD_COMPLETE),
-/* harmony export */   "ESE_CREATE_MULTI_HEAD": () => (/* binding */ ESE_CREATE_MULTI_HEAD)
+/* harmony export */   "ESE_STATE_EVENTS": () => (/* binding */ ESE_STATE_EVENTS)
 /* harmony export */ });
 
 // 
@@ -38876,7 +40421,7 @@ const ESE_STATE_EVENTS        = 1000,
 
 
 /***/ }),
-/* 148 */
+/* 152 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -38884,10 +40429,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "soundManager": () => (/* binding */ soundManager)
 /* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
-/* harmony import */ var _sound_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(149);
-/* harmony import */ var _sound_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(150);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var _sound_sound__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(153);
+/* harmony import */ var _sound_playlist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(154);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
 
 // 
 //  FILE NAME: soundmanager.js
@@ -39146,7 +40691,7 @@ var soundManager = new SoundManager;
 
 
 /***/ }),
-/* 149 */
+/* 153 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39327,7 +40872,7 @@ class Sound
 
 
 /***/ }),
-/* 150 */
+/* 154 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39338,7 +40883,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "EST_SEQUENTIAL": () => (/* binding */ EST_SEQUENTIAL),
 /* harmony export */   "PlayList": () => (/* binding */ PlayList)
 /* harmony export */ });
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
 
 // 
 //  FILE NAME: playlist.js
@@ -39490,7 +41035,7 @@ class PlayList
 
 
 /***/ }),
-/* 151 */
+/* 155 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39498,7 +41043,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "strategyManager": () => (/* binding */ strategyManager)
 /* harmony export */ });
-/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
 
 // 
 //  FILE NAME: strategymanager.js
@@ -39544,11 +41089,11 @@ class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__
     //
     //  DESC: Load strategy data from an xml node
     //
-    loadFromNode( strategyId, node, filePath )
+    loadFromNode( strategyId, xmlNode, filePath )
     {
         let strategy = this.strategyMap.get( strategyId );
         
-        strategy.loadFromNode( node, filePath );
+        strategy.loadFromNode( xmlNode, filePath );
     }
     
     //
@@ -39563,7 +41108,7 @@ class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__
             if( index === -1 )
                 this.strategyAry.push( strategy );
             else
-                console.log( `Strategy is already active (${strategyId})!` );
+                console.warn( `Strategy is already active (${strategyId})!` );
         }
         else
             throw new Error( `Strategy id can't be found (${strategyId})!` );
@@ -39583,10 +41128,10 @@ class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__
             if( index !== -1 )
                 this.strategyAry.splice( index, 1 );
             else
-                console.log( `Strategy is not active (${strategyId})!` );
+                console.warn( `Strategy is not active (${strategyId})!` );
         }
         else
-            console.log( `Strategy id can't be found to deactivate (${strategyId})!` );
+            console.warn( `Strategy id can't be found to deactivate (${strategyId})!` );
         
         return strategy;
     }
@@ -39609,7 +41154,7 @@ class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__
                 this.strategyMap.delete( strategyGrp[i] );
             }
             else
-                console.log( `Strategy id can't be found to clean up (${strategyGrp[i]})!` );
+                console.warn( `Strategy id can't be found to clean up (${strategyGrp[i]})!` );
         }
     }
     
@@ -39670,7 +41215,32 @@ class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__
     render()
     {
         for( let i = 0; i < this.strategyAry.length; i++ )
-            this.strategyAry[i].render();
+            if( this.strategyAry[i].isVisible() )
+                this.strategyAry[i].render();
+    }
+
+    //
+    //  DESC: Sort the stratagies based on sort function
+    //
+    sort( sortFunc = null )
+    {
+        if( sortFunc )
+            this.strategyAry.sort( sortFunc );
+
+        // If sort function is not provided, sort on z order
+        // For this to render as expected, sort in desending order. 
+        else
+            this.strategyAry.sort( 
+                (a, b) =>
+                {
+                    if(a.transPos.z > b.transPos.z)
+                        return -1;
+
+                    else if(a.transPos.z < b.transPos.z)
+                        return 1;
+
+                    return 0;
+                });
     }
 }
 
@@ -39678,7 +41248,7 @@ var strategyManager = new StrategyManager;
 
 
 /***/ }),
-/* 152 */
+/* 156 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39686,9 +41256,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "strategyLoader": () => (/* binding */ strategyLoader)
 /* harmony export */ });
-/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(151);
-/* harmony import */ var _strategy_strategy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(153);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
+/* harmony import */ var _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(155);
+/* harmony import */ var _strategy_strategy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(157);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
 
 // 
 //  FILE NAME: strategyloader.js
@@ -39701,10 +41272,28 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class Strategyloader
+
+class Strategyloader extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.ManagerBase
 {
     constructor()
     {
+        super();
+    }
+
+    //
+    //  DESC: Load all XML's associated with this group
+    //
+    loadGroup( groupAry )
+    {
+        return super.loadGroupAry( 'Loader', null, groupAry );
+    }
+
+    //
+    //  DESC: Load strategy loader data from an xml node
+    //
+    loadFromNode( group, xmlNode /*, filePath */ )
+    {
+        return this.loadFromXml( xmlNode );
     }
 
     // 
@@ -39713,7 +41302,7 @@ class Strategyloader
     //              they load their own XML that describes what is defined
     //              in the strategy.
     //
-    load( xmlNode )
+    loadFromXml( xmlNode )
     {
         let promiseAry = [];
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
@@ -39725,7 +41314,7 @@ class Strategyloader
             if( !strategyName )
                 throw new Error( `Strategy name not defined.` );
 
-            promiseAry.push( _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__.strategyManager.addStrategy( strategyName, new _strategy_strategy__WEBPACK_IMPORTED_MODULE_1__.Strategy ) );
+            promiseAry.push( _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__.strategyManager.addStrategy( strategyName, new _strategy_strategy__WEBPACK_IMPORTED_MODULE_2__.Strategy ) );
         }
 
         // Preload the strategies
@@ -39748,7 +41337,7 @@ class Strategyloader
             let strategyName = strategyNode[i].getAttribute( 'name' );
 
             // Try to get the strategy
-            let strategy = _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__.strategyManager.get( strategyName );
+            let strategy = _strategy_strategymanager__WEBPACK_IMPORTED_MODULE_1__.strategyManager.get( strategyName );
             if( !strategy )
                 throw new Error( `Strategy name not defined (${strategyName}).` );
 
@@ -39772,7 +41361,7 @@ class Strategyloader
 
         let xmlNodeLst = xmlNode.children;
 
-        for( let i = 0; i < xmlNodeLst.length; ++i )
+        for( let i = 0; i < xmlNodeLst.length; i++ )
         {
             if( xmlNodeLst[i].nodeName === 'node' )
             {
@@ -39793,8 +41382,9 @@ class Strategyloader
                 // Creating a node is automaticly active unless defined as false. Default true even if not specified
                 let active = xmlNodeLst[i].getAttribute( 'active' );
                 let headNode = strategy.create( name, instance, (!active || active === 'true'), group );
+                let recalcRadius = false;
 
-                for( let j = 0; j < xmlNodeLst[i].children.length; ++j )
+                for( let j = 0; j < xmlNodeLst[i].children.length; j++ )
                 {
                     let xmlChildNode = xmlNodeLst[i].children[j];
 
@@ -39802,6 +41392,18 @@ class Strategyloader
                     if( xmlChildNode.nodeName === 'object' || xmlChildNode.nodeName === 'sprite' )
                     {
                         this.init( xmlChildNode, headNode.get() );
+
+                        let xmlObjLst = xmlChildNode.children;
+
+                        // Check if scale has been defined because we'll need to recalculate the radius
+                        for( let w = 0; w < xmlObjLst.length; w++ )
+                        {
+                            if( xmlObjLst[w].nodeName === 'scale')
+                            {
+                                recalcRadius = true;
+                                break;
+                            }
+                        }
                     }
 
                     // If the head node specified a child node to init
@@ -39818,15 +41420,23 @@ class Strategyloader
                             }
                             else
                             {
-                                console.log(`Strategy Loader Warning: Child node defined for ${name} but can not be found.`);
+                                console.warn(`Strategy Loader Warning: Child node defined for ${name} but can not be found.`);
                             }
                         }
                         else
                         {
-                            console.log(`Strategy Loader Warning: Child node defined for ${name} but child node name not defined. Can't initialize.`);
+                            console.warn(`Strategy Loader Warning: Child node defined for ${name} but child node name not defined. Can't initialize.`);
                         }
                     }
                 }
+
+                // If scale is defined anywhere, recalculate the radius
+                if( recalcRadius )
+                    headNode.calcRadius();
+            }
+            else if( xmlNodeLst[i].nodeName === 'object' )
+            {
+                strategy.loadTransFromNode( xmlNodeLst[i] );
             }
         }
     }
@@ -39837,7 +41447,7 @@ class Strategyloader
     init( xmlNode, object )
     {
         // Set any transforms
-        if( object instanceof _sprite_sprite__WEBPACK_IMPORTED_MODULE_2__.Sprite )
+        if( object instanceof _sprite_sprite__WEBPACK_IMPORTED_MODULE_3__.Sprite )
             object.reload( xmlNode );
         else
             object.loadTransFromNode( xmlNode );
@@ -39857,7 +41467,7 @@ var strategyLoader = new Strategyloader;
 
 
 /***/ }),
-/* 153 */
+/* 157 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -39866,12 +41476,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Strategy": () => (/* binding */ Strategy)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(154);
+/* harmony import */ var _node_objectnodedatalist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(158);
 /* harmony import */ var _managers_cameramanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(10);
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
-/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(157);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(116);
+/* harmony import */ var _node_nodefactory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(161);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
-/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(26);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
 
 //
 //  FILE NAME: strategy.js
@@ -39923,7 +41533,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     }
 
     //
-    //  DESC: Load the node data from xml
+    //  DESC: Load the stratagy node data from xml
     //
     loadFromNode( xmlNode, filePath )
     {
@@ -39955,7 +41565,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
                 throw new Error( `Strategy missing node name! (${filePath})` );
 
             // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new _node_nodedatalist__WEBPACK_IMPORTED_MODULE_1__.NodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
+            this.dataMap.set( nodeName, new _node_objectnodedatalist__WEBPACK_IMPORTED_MODULE_1__.ObjectNodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
         }
     }
 
@@ -40001,10 +41611,10 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
             {
                 group = _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__.objectDataManager.findGroup( name );
                 if( group )
-                    console.log( `Simple Strategy node sprite auto generated from group search (${group}, ${name})!` );
+                    console.debug( `Simple Strategy node sprite auto generated from group search (${group}, ${name})!` );
             }
             else
-                console.log( `Simple Strategy node sprite auto generated from group and object name (${group}, ${name})!` );
+                console.debug( `Simple Strategy node sprite auto generated from group and object name (${group}, ${name})!` );
 
             // If we found group that has an object of the same name, create the data and pass it along
             if( group )
@@ -40114,7 +41724,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         {
             let index = this.nodeAry.findIndex( (obj) => obj === node );
             if( index !== -1 )
-                console.log( `Node is already active (${instanceName})!` );
+                console.warn( `Node is already active (${instanceName})!` );
             else
                 this.activateAry.push( node );
         }
@@ -40136,10 +41746,10 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
             if( index !== -1 )
                 this.deactivateAry.push( this.nodeAry[index] );
             else
-                console.log( `Node is not active (${instanceName})!` );
+                console.warn( `Node is not active (${instanceName})!` );
         }
         else
-            console.log( `Node can't be found (%s) (${instanceName})!` );
+            console.error( `Node can't be found (%s) (${instanceName})!` );
     }
 
     //
@@ -40153,7 +41763,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
             if( index !== -1 )
                 this.deactivateAry.push( this.nodeAry[index] );
             else
-                console.log( `Node is not active (${key})!` );
+                console.warn( `Node is not active (${key})!` );
         }
     }
 
@@ -40191,7 +41801,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     }
 
     //
-    //  DESC: Update the sprites
+    //  DESC: Update the nodes
     //
     update()
     {
@@ -40209,7 +41819,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     }
 
     //
-    //  DESC: Transform the sprite
+    //  DESC: Transform the nodes
     //
     transform()
     {
@@ -40220,7 +41830,7 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     }
 
     //
-    //  DESC: Render the sprites
+    //  DESC: Render the nodes
     //
     render()
     {
@@ -40331,23 +41941,71 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     {
         this.camera = _managers_cameramanager__WEBPACK_IMPORTED_MODULE_2__.cameraManager.get( cameraId );
     }
+
+    //
+    //  DESC: Sort the active nodes based on sort function
+    //
+    sortActive( sortFunc = null )
+    {
+        if( sortFunc )
+            this.nodeAry.sort( sortFunc );
+
+        // If sort function is not provided, sort on z order
+        // For this to render as expected, sort in desending order. 
+        else
+            this.nodeAry.sort( 
+                (a, b) =>
+                {
+                    if(a.get().transPos.z > b.get().transPos.z)
+                        return -1;
+
+                    else if(a.get().transPos.z < b.get().transPos.z)
+                        return 1;
+
+                    return 0;
+                });
+    }
+
+    //
+    //  DESC: Sort the active nodes based on sort function
+    //
+    sortPending( sortFunc = null )
+    {
+        if( sortFunc )
+            this.activateAry.sort( sortFunc );
+
+        // If sort function is not provided, sort on z order
+        // For this to render as expected, sort in desending order. 
+        else
+            this.activateAry.sort( 
+                (a, b) =>
+                {
+                    if(a.get().transPos.z > b.get().transPos.z)
+                        return -1;
+
+                    else if(a.get().transPos.z < b.get().transPos.z)
+                        return 1;
+
+                    return 0;
+                });
+    }
 }
 
 
 /***/ }),
-/* 154 */
+/* 158 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "NodeDataList": () => (/* binding */ NodeDataList)
+/* harmony export */   "ObjectNodeDataList": () => (/* binding */ ObjectNodeDataList)
 /* harmony export */ });
-/* harmony import */ var _nodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(155);
+/* harmony import */ var _objectnodedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(159);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 
 //
-//  FILE NAME: nodedatalist.js
+//  FILE NAME: objectnodedatalist.js
 //  DESC:      Based on how the XML is written, creates a node
 //             list so that the Parent/child nodes can be created
 //
@@ -40357,10 +42015,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class NodeDataList
+class ObjectNodeDataList
 {
     constructor(
-        node,
+        xmlNode,
         defGroup = '',
         defObjName = '',
         userId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
@@ -40372,55 +42030,55 @@ class NodeDataList
         let defaultObjName = defObjName;
         let nodeName = '';
         
-        let attr = node.getAttribute( 'defaultGroup' );
+        let attr = xmlNode.getAttribute( 'defaultGroup' );
         if( attr )
             defaultGroup = attr;
         
-        attr = node.getAttribute( 'defaultObjectName' );
+        attr = xmlNode.getAttribute( 'defaultObjectName' );
         if( attr )
             defaultObjName = attr;
         
-        attr = node.getAttribute( 'defaultId' );
+        attr = xmlNode.getAttribute( 'defaultId' );
         if( attr )
             userId = Number(attr);
         
         // Get the sprite's unique id number
-        attr = node.getAttribute( "id" );
+        attr = xmlNode.getAttribute( "id" );
         if( attr )
             userId = Number(attr);
         
-        attr = node.getAttribute( 'name' );
+        attr = xmlNode.getAttribute( 'name' );
         if( attr )
             nodeName = attr;
         
         this.idCounter = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID;
         
-        let nodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, defaultGroup, defaultObjName, userId );
+        let nodeData = new _objectnodedata__WEBPACK_IMPORTED_MODULE_0__.ObjectNodeData( xmlNode, nodeName, this.idCounter++, _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, defaultGroup, defaultObjName, userId );
         this.dataAry.push( nodeData );
         
         // Call the recursive function to load the children
-        this.loadNode( node, nodeData, defaultGroup, defaultObjName, userId );
+        this.loadNode( xmlNode, nodeData, defaultGroup, defaultObjName, userId );
     }
     
     // 
     //  DESC: Load the node data recursively
     //
-    loadNode( node, nodeData, defaultGroup, defaultObjName, userId )
+    loadNode( xmlNode, nodeData, defaultGroup, defaultObjName, userId )
     {
-        for( let i = 0; i < node.children.length; ++i )
+        for( let i = 0; i < xmlNode.children.length; ++i )
         {
-            if( node.children[i].nodeName == 'node' )
+            if( xmlNode.children[i].nodeName == 'node' )
             {
                 let nodeName = '';
-                let attr = node.children[i].getAttribute( 'name' );
+                let attr = xmlNode.children[i].getAttribute( 'name' );
                 if( attr )
                     nodeName = attr;
 
-                let childNodeData = new _nodedata__WEBPACK_IMPORTED_MODULE_0__.NodeData( node.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
+                let childNodeData = new _objectnodedata__WEBPACK_IMPORTED_MODULE_0__.ObjectNodeData( xmlNode.children[i], nodeName, this.idCounter++, nodeData.nodeId, defaultGroup, defaultObjName, userId );
                 this.dataAry.push( childNodeData );
 
                 // Try to recursively load more children
-                this.loadNode( node.children[i], childNodeData, defaultGroup, defaultObjName, userId );
+                this.loadNode( xmlNode.children[i], childNodeData, defaultGroup, defaultObjName, userId );
             }
         }
     }
@@ -40428,21 +42086,21 @@ class NodeDataList
 
 
 /***/ }),
-/* 155 */
+/* 159 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "NodeData": () => (/* binding */ NodeData)
+/* harmony export */   "ObjectNodeData": () => (/* binding */ ObjectNodeData)
 /* harmony export */ });
-/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(156);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
+/* harmony import */ var _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(160);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(138);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 //
-//  FILE NAME: nodedata.js
-//  DESC:      Node data class
+//  FILE NAME: objectnodedata.js
+//  DESC:      Object node data class
 //
 
 
@@ -40451,7 +42109,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteData
+class ObjectNodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteData
 {
     constructor(
         xmlNode,
@@ -40485,8 +42143,13 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
         // Is this a node with children nodes?
         this.hasChildrenNodes = false;
         for( let i = 0; i < xmlNode.children.length; ++i )
+        {
             if( xmlNode.children[i].nodeName == 'node' )
+            {
                 this.hasChildrenNodes = true;
+                break;
+            }
+        }
 
         for( let i = 0; i < xmlNode.children.length; ++i )
         {
@@ -40530,7 +42193,7 @@ class NodeData extends _sprite_spritedata__WEBPACK_IMPORTED_MODULE_0__.SpriteDat
 
 
 /***/ }),
-/* 156 */
+/* 160 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40591,14 +42254,15 @@ class SpriteData
         attr = xmlNode.getAttribute( 'objectName' );
         if( attr)
             this.objectName = attr;
-        else if( !defObjName )
-            console.log(`Node name used for object data look-up (${this.group}, ${this.objectName})`);
+        // Indicate we are going to try to use the node name to lookup the sprite object name
+        else if( !defObjName && xmlNode.nodeName === "sprite" )
+            console.debug(`Node name used for object data look-up (${this.group}, ${this.objectName})`);
     }
 }
 
 
 /***/ }),
-/* 157 */
+/* 161 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40606,15 +42270,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "create": () => (/* binding */ create)
 /* harmony export */ });
-/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(114);
-/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(142);
-/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(141);
-/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(158);
-/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(163);
-/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(164);
-/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(165);
-/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(166);
-/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(134);
+/* harmony import */ var _objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(116);
+/* harmony import */ var _gui_uiprogressbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(146);
+/* harmony import */ var _gui_uimeter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(145);
+/* harmony import */ var _node_spritenode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(162);
+/* harmony import */ var _node_spriteleafnode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(166);
+/* harmony import */ var _node_uicontrolnode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(167);
+/* harmony import */ var _node_uicontrolleafnode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(168);
+/* harmony import */ var _node_objectnode__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(169);
+/* harmony import */ var _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(138);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6);
 
 // 
@@ -40715,7 +42379,7 @@ function CreateUIControlNode( nodeData )
 
 
 /***/ }),
-/* 158 */
+/* 162 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40723,11 +42387,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteNode": () => (/* binding */ SpriteNode)
 /* harmony export */ });
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(159);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(163);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(162);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: spritenode.js
@@ -40741,26 +42404,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 {
     constructor( objectData, nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
         
         this.name = nodeData.nodeName;
         this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ENT_SPRITE;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__.ENT_SPRITE;
         this.userId = nodeData.userId;
-        this.baseXmlNode = nodeData.baseXmlNode;
-        this.radius = -1;
-
-        // Allocate the collision component if collision is defined
-        if( _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__.isCollision( nodeData.baseXmlNode ) )
-        {
-            this.collisionComponent = new _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__.CollisionComponent( nodeData.baseXmlNode, this );
-            this.collisionComponent.init();
-        }
     }
 
     // 
@@ -40835,13 +42488,12 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
     //  DESC: Calculate the radius
     //  NOTE: The head node does not have a size
     //
-    calcRadius( size )
+    calcRadius( size = null )
     {
-        let headNode = false;
-        if( !size )
+        let headNode = (size === null);
+        if( headNode )
         {
             size = new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size;
-            headNode = true;
         }
 
         this.calcSize( size );
@@ -40849,13 +42501,15 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 
         // The head node gets the accumulated size of all the sprites
         if( headNode )
+        {
             this.radius = size.getLength() / 2;
+        }
     }
 }
 
 
 /***/ }),
-/* 159 */
+/* 163 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -40863,8 +42517,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "RenderNode": () => (/* binding */ RenderNode)
 /* harmony export */ });
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(160);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(164);
 
 // 
 //  FILE NAME: rendernode.js
@@ -40875,12 +42528,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 {
-    constructor( id = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID, parentId = _common_defs__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_ID )
+    constructor( nodeData)
     {
-        super( id, parentId )
+        super( nodeData )
     }
 
     // 
@@ -41130,7 +42782,7 @@ class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 
 
 /***/ }),
-/* 160 */
+/* 164 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41138,7 +42790,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Node": () => (/* binding */ Node)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(161);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(165);
 
 // 
 //  FILE NAME: node.js
@@ -41151,15 +42803,26 @@ __webpack_require__.r(__webpack_exports__);
 
 class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 {
-    constructor( id, parentId )
+    constructor( nodeData )
     {
-        super( id, parentId );
+        super( nodeData );
         
         // Child node array
         this.nodeAry = [];
         
         // Child node index
         this.index = 0;
+    }
+
+    // 
+    //  DESC: Is this a Parent node
+    //
+    isParent()
+    {
+        if(this.nodeAry.length)
+            return true;
+
+        return false;
     }
     
     // 
@@ -41186,13 +42849,18 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
         // Call a recursive function to find the parent node
         let parentNode = this.findParent( node );
 
-        // Add the node
         if( parentNode != null )
-            parentNode.pushNode( node );
-        else
-            return false;
+        {
+            // Set the parent node
+            node.parentNode = parentNode;
 
-        return true;
+            // Add the node
+            parentNode.pushNode( node );
+
+            return true;
+        }
+
+        return false;
     }
     
     // 
@@ -41275,7 +42943,7 @@ class Node extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
 
 /***/ }),
-/* 161 */
+/* 165 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41296,8 +42964,11 @@ __webpack_require__.r(__webpack_exports__);
 
 class iNode
 {
-    constructor( nodeId, parentId )
+    constructor( nodeData )
     {
+        // Parent node
+        this.parentNode = null;
+        
         // Node type
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_0__.ENT_NULL;
 
@@ -41305,10 +42976,10 @@ class iNode
         this.userId = _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEFAULT_ID;
 
         // node id
-        this.nodeId = nodeId;
+        this.nodeId = nodeData.nodeId;
 
         // parent node id
-        this.parentId = parentId;
+        this.parentId = nodeData.parentNodeId;
 
         // Node name
         this.name = '';
@@ -41348,7 +43019,26 @@ class iNode
 
         return null;
     }
-    
+
+    // 
+    //  DESC: Is this a child node
+    //
+    isChild()
+    {
+        if(this.parentId == _common_defs__WEBPACK_IMPORTED_MODULE_0__.DEFAULT_ID)
+            return false;
+
+        return true;
+    }
+
+    // 
+    //  DESC: Is this a Parent node
+    //
+    isParent()
+    {
+        return false;
+    }
+
     // 
     //  DESC: Get the object
     //
@@ -41360,158 +43050,7 @@ class iNode
 
 
 /***/ }),
-/* 162 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "COL_NULL": () => (/* binding */ COL_NULL),
-/* harmony export */   "COL_RECT": () => (/* binding */ COL_RECT),
-/* harmony export */   "COL_TRY": () => (/* binding */ COL_TRY),
-/* harmony export */   "COL_POINT": () => (/* binding */ COL_POINT),
-/* harmony export */   "CollisionComponent": () => (/* binding */ CollisionComponent),
-/* harmony export */   "isCollision": () => (/* binding */ isCollision)
-/* harmony export */ });
-/* harmony import */ var _common_rect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
-/* harmony import */ var _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
-//
-//  FILE NAME: collisioncomponent.js
-//  DESC:      Class for handling collision data
-//
-
-
-
-
-
-
-const COL_NULL  = 0,
-             COL_RECT  = 1,
-             COL_TRY   = 2,
-             COL_POINT = 3;
-
-class CollisionComponent
-{
-    constructor( xmlNode, node )
-    {
-        // xmlNode from the base node level
-        this.xmlNode = xmlNode;
-
-        // Object to use for matrix and size
-        this.node = node;
-
-        // Object to use for matrix and size
-        this.obj = node.get();
-
-        // Matrix to do the transformation with
-        this.matrix = node.get().matrix;
-
-        // Data type
-        this.type = COL_NULL;
-
-        // Enable flag
-        this.enable = false;
-
-        // Collision data
-        this.data = null;
-
-        // Translated collision data
-        this.trans = null;
-
-        // Callback function for when a collision is detected
-        this.callbackFunc = null;
-    }
-
-    // 
-    //  DESC: Init the collision
-    //
-    init()
-    {
-        for( let i = 0; i < this.xmlNode.children.length; ++i )
-        {
-            if( this.xmlNode.children[i].nodeName == 'AABB' )
-            {
-                this.type = COL_RECT;
-                this.data = [];
-                this.trans = [];
-
-                let attr = this.xmlNode.children[i].getAttribute( 'enable' );
-                if( attr )
-                {
-                    this.enable = (attr === 'true');
-                }
-
-                attr = this.xmlNode.children[i].getAttribute( 'radius' );
-                if( attr )
-                {
-                    this.radius = Number(attr);
-                }
-
-                let nodeAry = this.xmlNode.children[i].getElementsByTagName( 'rect' );
-
-                for( let j = 0; j < nodeAry.length; ++j )
-                {
-                    this.data.push( _utilities_xmlparsehelper__WEBPACK_IMPORTED_MODULE_1__.loadRectFromChild( nodeAry[j] ) );
-                    this.trans.push( new _common_rect__WEBPACK_IMPORTED_MODULE_0__.Rect );
-                    this.trans[j].copy( this.data[j] );
-                }
-
-                break;
-            }
-        }
-    }
-
-    // 
-    //  DESC: Transform the rects for collision
-    //
-    transform()
-    {
-        if( this.enable )
-        {
-            if( this.type == COL_RECT )
-            {
-                for( let i = 0; i < this.data.length; ++i )
-                    this.matrix.transformRect( this.trans[i], this.data[i] );
-            }
-        }
-    }
-
-    // 
-    //  DESC: Check for collision
-    //
-    checkForCollision( node )
-    {
-        if( this.enable && node.collisionComponent && node.collisionComponent.enable )
-        {
-            // Do the broad phase check
-            let obj = node.collisionComponent.obj;
-            if( this.obj.transPos.calcLength2D( obj.transPos ) <= (this.node.radius + node.radius) )
-            {
-            }
-        }
-    }
-}
-
-// 
-//  DESC: Function to check collision detection has been defined
-//
-function isCollision( xmlNode )
-{
-    for( let i = 0; i < xmlNode.children.length; ++i )
-    {
-        if( xmlNode.children[i].nodeName == 'AABB' )
-        {
-            if( xmlNode.children[i].getElementsByTagName( 'rect' ) )
-                return true;
-        }
-    }
-
-    return false;
-}
-
-
-/***/ }),
-/* 163 */
+/* 166 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41519,10 +43058,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SpriteLeafNode": () => (/* binding */ SpriteLeafNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(161);
-/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
-/* harmony import */ var _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(162);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(165);
+/* harmony import */ var _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: spriteleafnode.js
@@ -41536,24 +43074,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 {
     constructor( objectData, nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
         
         this.name = nodeData.nodeName;
         this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__.ENT_SPRITE;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_2__.ENT_SPRITE;
         this.userId = nodeData.userId;
-
-        // Allocate the collision component if collision is defined
-        if( _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_2__.isCollision( nodeData.baseXmlNode ) )
-        {
-            this.collisionComponent = new _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_2__.CollisionComponent( nodeData.baseXmlNode, this );
-            this.collisionComponent.init();
-        }
     }
 
     // 
@@ -41594,10 +43124,6 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
             this.sprite.transform( object );
         else
             this.sprite.transform();
-
-        // Transform the AABB
-        //if( this.AABBrect && this.enableAABB )
-        //    this.sprite.matrix.transformRect( this.AABBtrans, this.AABBrect );
     }
     
     //
@@ -41644,18 +43170,22 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     //  DESC: Calculate the radius
     //  NOTE: The head node does not have a size
     //
-    calcRadius( size )
+    calcRadius( size = null )
     {
-        if( size )
+        if( size !== null )
+        {
             this.calcSize( size );
+        }
         else
+        {
             this.radius = this.sprite.getSize().getLength() / 2;
+        }
     }
 }
 
 
 /***/ }),
-/* 164 */
+/* 167 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41663,7 +43193,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControlNode": () => (/* binding */ UIControlNode)
 /* harmony export */ });
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(159);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(163);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 
 // 
@@ -41680,7 +43210,7 @@ class UIControlNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 {
     constructor( uiControl, nodeData )
     {
-        super(nodeData.nodeId, nodeData.parentNodeId);
+        super( nodeData );
         
         this.name = nodeData.nodeName;
         this.uiControl = uiControl;
@@ -41751,7 +43281,7 @@ class UIControlNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
 
 
 /***/ }),
-/* 165 */
+/* 168 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41759,7 +43289,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "UIControlLeafNode": () => (/* binding */ UIControlLeafNode)
 /* harmony export */ });
-/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(161);
+/* harmony import */ var _inode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(165);
 /* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 
 // 
@@ -41776,7 +43306,7 @@ class UIControlLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 {
     constructor( uiControl, nodeData )
     {
-        super(nodeData.nodeId, nodeData.parentNodeId);
+        super( nodeData );
         
         this.name = nodeData.nodeName;
         this.uiControl = uiControl;
@@ -41834,11 +43364,19 @@ class UIControlLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
     {
         this.uiControl.cleanUp();
     }
+
+    // 
+    //  DESC: Calculate the head node radius
+    //
+    calcRadius()
+    {
+        // Empty by design
+    }
 }
 
 
 /***/ }),
-/* 166 */
+/* 169 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41847,10 +43385,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ObjectNode": () => (/* binding */ ObjectNode)
 /* harmony export */ });
 /* harmony import */ var _common_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(159);
+/* harmony import */ var _rendernode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(163);
 /* harmony import */ var _common_size__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(162);
-/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: objectnode.js
@@ -41864,24 +43401,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
 {
     constructor( nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
         
         this.name = nodeData.nodeName;
         this.object = new _common_object__WEBPACK_IMPORTED_MODULE_0__.Object( this );
-        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_4__.ENT_OBJECT;
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__.ENT_OBJECT;
         this.userId = nodeData.userId;
-
-        // Allocate the collision component if collision is defined
-        if( _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__.isCollision( nodeData.baseXmlNode ) )
-        {
-            this.collisionComponent = new _collision_collisioncomponent__WEBPACK_IMPORTED_MODULE_3__.CollisionComponent( nodeData.baseXmlNode, this );
-            this.collisionComponent.init();
-        }
     }
     
     // 
@@ -41904,10 +43433,6 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
             this.object.transform( object );
         else
             this.object.transform();
-
-        // Transform the AABB
-        //if( this.AABBrect && this.enableAABB )
-        //    this.object.matrix.transformRect( this.AABBtrans, this.AABBrect );
         
         // Call the parent but it has to be last
         super.transform();
@@ -41925,26 +43450,27 @@ class ObjectNode extends _rendernode__WEBPACK_IMPORTED_MODULE_1__.RenderNode
     //  DESC: Calculate the radius
     //  NOTE: The head node does not have a size
     //
-    calcRadius( size )
+    calcRadius( size = null )
     {
-        let headNode = false;
-        if( !size )
+        let headNode = (size === null);
+        if( headNode )
         {
             size = new _common_size__WEBPACK_IMPORTED_MODULE_2__.Size;
-            headNode = true;
         }
 
         this.calcSize( size );
         super.calcRadius( size );
 
-        // The head node gets the accumulated size of all the sprites
+        // The head node gets the accumulated size of all the objects/sprites
         if( headNode )
+        {
             this.radius = size.getLength() / 2;
+        }
     }
 }
 
 /***/ }),
-/* 167 */
+/* 170 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -41954,23 +43480,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "TitleScreenState": () => (/* binding */ TitleScreenState),
 /* harmony export */   "load": () => (/* binding */ load)
 /* harmony export */ });
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(168);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(114);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(24);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(151);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(152);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(171);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(116);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(26);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(155);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(156);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(17);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(45);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(47);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(18);
-/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(118);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(33);
-/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(31);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(26);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(36);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(120);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(35);
+/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(33);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(28);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(38);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(6);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(147);
-/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(169);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(151);
+/* harmony import */ var raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(172);
 
 // 
 //  FILE NAME: titlescreenstate.js
@@ -42109,7 +43635,7 @@ function load()
     return _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_2__.objectDataManager.loadGroup( groupAry )
 
         // Create and load all the actor strategies.
-        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__.strategyLoader.load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_16__.default ) ))
+        .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_5__.strategyLoader.loadFromXml( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_12__.stringLoadXML( raw_loader_data_objects_strategy_state_titlescreen_loader__WEBPACK_IMPORTED_MODULE_16__["default"] ) ))
 
         // Clean up the temporary files
         .then(() =>
@@ -42121,7 +43647,7 @@ function load()
 
 
 /***/ }),
-/* 168 */
+/* 171 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42129,11 +43655,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "CommonState": () => (/* binding */ CommonState)
 /* harmony export */ });
-/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(145);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
-/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(31);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(36);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(147);
+/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(149);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
+/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(33);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(38);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(151);
 
 // 
 //  FILE NAME: commonstate.js
@@ -42209,7 +43735,7 @@ class CommonState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
 
 /***/ }),
-/* 169 */
+/* 172 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42220,25 +43746,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_title-screen_\" type=\"actor\">\r\n        <node name=\"background\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 170 */
+/* 173 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ColorTo": () => (/* binding */ ColorTo),
+/* harmony export */   "FadeTo": () => (/* binding */ FadeTo),
+/* harmony export */   "FrameExecute": () => (/* binding */ FrameExecute),
 /* harmony export */   "Hold": () => (/* binding */ Hold),
 /* harmony export */   "PlayAnim": () => (/* binding */ PlayAnim),
-/* harmony export */   "FrameExecute": () => (/* binding */ FrameExecute),
-/* harmony export */   "FadeTo": () => (/* binding */ FadeTo),
-/* harmony export */   "ColorTo": () => (/* binding */ ColorTo),
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
-/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(40);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(47);
+/* harmony import */ var _library_managers_shadermanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(32);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(21);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(147);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(151);
 
 //
 //  FILE NAME: utilityscripts.js
@@ -42617,7 +44143,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 171 */
+/* 174 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42626,7 +44152,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(170);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(173);
 
 //
 //  FILE NAME: statescripts.js
@@ -42678,7 +44204,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 172 */
+/* 175 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42686,15 +44212,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(47);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
-/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(148);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(24);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(152);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
 /* harmony import */ var _library_common_color__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(170);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
-/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(134);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(173);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(38);
+/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(138);
 
 //
 //  FILE NAME: menuscripts.js
@@ -43564,7 +45090,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 173 */
+/* 176 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -43572,12 +45098,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "loadScripts": () => (/* binding */ loadScripts)
 /* harmony export */ });
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(151);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(155);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
-/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(148);
-/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(147);
-/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(170);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(152);
+/* harmony import */ var _state_statedefs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(151);
+/* harmony import */ var _utilityscripts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(173);
 
 //
 //  FILE NAME: levelcripts.js
@@ -43692,7 +45218,7 @@ function loadScripts()
 
 
 /***/ }),
-/* 174 */
+/* 177 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -43703,7 +45229,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"(startup)\">\r\n        <file path=\"data/objects/2d/objectDataList/startupDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(loadingScreen)\">\r\n        <file path=\"data/objects/2d/objectDataList/loadingScreenDataList.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/objectDataList/menuBackgrounds.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuButtonFrames.lst\"/>\r\n        <file path=\"data/objects/2d/objectDataList/menuMisc.lst\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"(title_screen)\">\r\n        <file path=\"data/objects/2d/objectDataList/titleScreenDataList.lst\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"(level_1)\">\r\n        <file path=\"data/objects/2d/objectDataList/level1DataList.lst\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 175 */
+/* 178 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -43714,7 +45240,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n    \r\n    <groupList groupName=\"_startup_\">\r\n        <file path=\"data/objects/strategy/state/startup.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_title-screen_\">\r\n        <file path=\"data/objects/strategy/state/titlescreen.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_loading-screen_\">\r\n        <file path=\"data/objects/strategy/state/loadscreen.strategy\"/>\r\n    </groupList>\r\n\r\n    <groupList groupName=\"_level-1-stage_\">\r\n        <file path=\"data/objects/strategy/level1/stage.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-ui_\">\r\n        <file path=\"data/objects/strategy/level1/ui.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-ball_\">\r\n        <file path=\"data/objects/strategy/level1/ball.strategy\"/>\r\n    </groupList>\r\n    \r\n    <groupList groupName=\"_level-1-multiplier_\">\r\n        <file path=\"data/objects/strategy/level1/multiplier.strategy\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
-/* 176 */
+/* 179 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -43725,44 +45251,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<cameraLst>\r\n    \r\n    <default projectType=\"orthographic\" minZDist=\"5\" maxZDist=\"1000\" view_angle=\"45.0\">\r\n        <position x=\"0\" y=\"0\" z=\"20\"/>\r\n    </default>\r\n  \r\n</cameraLst>\r\n");
 
 /***/ }),
-/* 177 */
+/* 180 */
 /***/ ((module) => {
 
 "use strict";
 module.exports = JSON.parse('{"shader_2d":{"vert":{"file":"data/shaders/shader_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_uv","location":1},{"name":"cameraViewProjMatrix"}]},"frag":{"file":"data/shaders/shader_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_2d_spriteSheet":{"vert":{"file":"data/shaders/shader_spriteSheet_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_uv","location":1},{"name":"cameraViewProjMatrix"},{"name":"glyphRect"}]},"frag":{"file":"data/shaders/shader_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_solid_2d":{"vert":{"file":"data/shaders/shader_solid_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"cameraViewProjMatrix"}]},"frag":{"file":"data/shaders/shader_soild_v100.frag","dataType":[{"name":"color"},{"name":"additive"}]}},"shader_3d":{"vert":{"file":"data/shaders/shader_mesh_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_normal","location":1},{"name":"in_uv","location":2},{"name":"cameraViewProjMatrix"},{"name":"normalMatrix"}]},"frag":{"file":"data/shaders/shader_mesh_v100.frag","dataType":[{"name":"text0"},{"name":"color"},{"name":"additive"}]}},"shader_3d_no_txt":{"vert":{"file":"data/shaders/shader_mesh_no_txt_v100.vert","dataType":[{"name":"in_position","location":0},{"name":"in_normal","location":1},{"name":"cameraViewProjMatrix"},{"name":"normalMatrix"}]},"frag":{"file":"data/shaders/shader_mesh_no_txt_v100.frag","dataType":[{"name":"color"},{"name":"additive"}]}}}');
-
-/***/ }),
-/* 178 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
-
-/***/ }),
-/* 179 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
-
-/***/ }),
-/* 180 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 181 */
@@ -43773,7 +45266,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n    \r\n    <strategy name=\"_startup_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"UIProgressBar\" instance=\"UIProgressBar\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
 /* 182 */
@@ -43784,21 +45277,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<listTable>\r\n\r\n  <groupList groupName=\"(menu)\">\r\n    <file path=\"data/sound/menuSound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_1)\">\r\n    <file path=\"data/sound/level1Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_2)\">\r\n    <file path=\"data/sound/level2Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_3)\">\r\n    <file path=\"data/sound/level3Sound.lst\"/>\r\n  </groupList>\r\n  \r\n  <groupList groupName=\"(level_4)\">\r\n    <file path=\"data/sound/level4Sound.lst\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 183 */
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-module.exports = JSON.parse('{"keyboardMapping":{"playerHidden":[{"action":"menu_escape","componetId":"ESCAPE"},{"action":"menu_up","componetId":"W"},{"action":"menu_down","componetId":"S"},{"action":"menu_left","componetId":"A"},{"action":"menu_right","componetId":"D"},{"action":"menu_up","componetId":"ARROW UP"},{"action":"menu_down","componetId":"ARROW DOWN"},{"action":"menu_left","componetId":"ARROW LEFT"},{"action":"menu_right","componetId":"ARROW RIGHT"}],"playerVisible":[{"action":"menu_select","componetId":"ENTER","configurable":"false"},{"action":"menu_escape","componetId":"M","defaultId":"M","configurable":"true"},{"action":"menu_toggle","componetId":"LEFT SHIFT","defaultId":"LEFT SHIFT","configurable":"true"},{"action":"fullscreen_toggle","componetId":"F","defaultId":"F","configurable":"true"},{"action":"up","componetId":"W","defaultId":"W","configurable":"true"},{"action":"down","componetId":"S","defaultId":"S","configurable":"true"},{"action":"left","componetId":"A","defaultId":"A","configurable":"true"},{"action":"right","componetId":"D","defaultId":"D","configurable":"true"}]},"mouseMapping":{"playerVisible":[{"action":"menu_select","componetId":"LEFT MOUSE","defaultId":"LEFT MOUSE","configurable":"true"}]},"gamepadMapping":{"playerHidden":[{"action":"menu_up","componetId":"L STICK UP"},{"action":"menu_down","componetId":"L STICK DOWN"},{"action":"menu_left","componetId":"L STICK LEFT"},{"action":"menu_right","componetId":"L STICK RIGHT"},{"action":"menu_up","componetId":"UP"},{"action":"menu_down","componetId":"DOWN"},{"action":"menu_left","componetId":"LEFT"},{"action":"menu_right","componetId":"RIGHT"},{"action":"menu_back","componetId":"BACK"},{"action":"menu_toggle","componetId":"START"}],"playerVisible":[{"action":"menu_select","componetId":"A","defaultId":"A","configurable":"true"},{"action":"menu_back","componetId":"B","defaultId":"B","configurable":"true"}]}}');
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n  <groupList groupName=\"(game)\">\r\n    <file path=\"data/objects/2d/physics/gamePhysics.cfg\"/>\r\n  </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 184 */
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-module.exports = JSON.parse('{"backAction":"menu_back","toggleAction":"menu_toggle","escapeAction":"menu_escape","selectAction":"menu_select","upAction":"menu_up","downAction":"menu_down","leftAction":"menu_left","rightAction":"menu_right","tabLeft":"menu_tab_left","tabRight":"menu_tab_right","defaultTree":"pause_tree"}');
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<listTable>\r\n\r\n    <groupList groupName=\"(menu)\">\r\n        <file path=\"data/objects/2d/menu/main_menu.cfg\"/>\r\n    </groupList>\r\n  \r\n</listTable>\r\n");
 
 /***/ }),
 /* 185 */
@@ -43807,26 +45308,51 @@ module.exports = JSON.parse('{"backAction":"menu_back","toggleAction":"menu_togg
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<fontLst>\r\n\r\n  <listGroup name=\"(font)\"/>\r\n  \r\n  <fonts>\r\n\r\n    <!-- the name of the font xml file and texture needs to be the same name except for the file extension -->\r\n    <font name=\"dejavu_sans_cond_45\" file=\"data/textures/fonts/dejavu_sans_cond_45\"/>\r\n    <font name=\"dejavu_sans_reg_bold_32\" file=\"data/textures/fonts/dejavu_sans_reg_bold_32\"/>\r\n    <font name=\"dejavu_sans_bold_45\" file=\"data/textures/fonts/dejavu_sans_bold_45\"/>\r\n    <font name=\"dejavu_sans_reg_45\" file=\"data/textures/fonts/dejavu_sans_reg_45\"/>\r\n    <font name=\"dejavu_sans_cond_32\" file=\"data/textures/fonts/dejavu_sans_cond_32\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>\r\n    <font name=\"dejavu_sans_bold_70\" file=\"data/textures/fonts/dejavu_sans_bold_70\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <!--<font name=\"dejavu_sans_cond_26\" file=\"data/textures/fonts/dejavu_sans_cond_26\"/>\r\n    <font name=\"dejavu_sans_cond_bold_32\" file=\"data/textures/fonts/dejavu_sans_cond_bold_32\"/>\r\n    <font name=\"dejavu_sans_reg_40\" file=\"data/textures/fonts/dejavu_sans_reg_40\"/>\r\n    <font name=\"dejavu_sans_bold_50\" file=\"data/textures/fonts/dejavu_sans_bold_50\"/>\r\n    \r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_reg_70\" file=\"data/textures/fonts/dejavu_sans_reg_70\"/>\r\n    <font name=\"dejavu_sans_reg_bold_14\" file=\"data/textures/fonts/dejavu_sans_reg_bold_14\"/>\r\n    <font name=\"dejavu_sans_reg_32\" file=\"data/textures/fonts/dejavu_sans_reg_32\"/>\r\n    <font name=\"dejavu_sans_cond_28\" file=\"data/textures/fonts/dejavu_sans_cond_28\"/>\r\n    <font name=\"dejavu_sans_reg_28\" file=\"data/textures/fonts/dejavu_sans_reg_28\"/>\r\n    <font name=\"dejavu_sans_cond_24\" file=\"data/textures/fonts/dejavu_sans_cond_24\"/>-->\r\n\r\n  </fonts>\r\n  \r\n</fontLst>\r\n");
+
+/***/ }),
+/* 186 */
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('{"keyboardMapping":{"playerHidden":[{"action":"menu_escape","componetId":"ESCAPE"},{"action":"menu_up","componetId":"W"},{"action":"menu_down","componetId":"S"},{"action":"menu_left","componetId":"A"},{"action":"menu_right","componetId":"D"},{"action":"menu_up","componetId":"ARROW UP"},{"action":"menu_down","componetId":"ARROW DOWN"},{"action":"menu_left","componetId":"ARROW LEFT"},{"action":"menu_right","componetId":"ARROW RIGHT"}],"playerVisible":[{"action":"menu_select","componetId":"ENTER","configurable":"false"},{"action":"menu_escape","componetId":"M","defaultId":"M","configurable":"true"},{"action":"menu_toggle","componetId":"LEFT SHIFT","defaultId":"LEFT SHIFT","configurable":"true"},{"action":"fullscreen_toggle","componetId":"F","defaultId":"F","configurable":"true"},{"action":"up","componetId":"W","defaultId":"W","configurable":"true"},{"action":"down","componetId":"S","defaultId":"S","configurable":"true"},{"action":"left","componetId":"A","defaultId":"A","configurable":"true"},{"action":"right","componetId":"D","defaultId":"D","configurable":"true"}]},"mouseMapping":{"playerVisible":[{"action":"menu_select","componetId":"LEFT MOUSE","defaultId":"LEFT MOUSE","configurable":"true"}]},"gamepadMapping":{"playerHidden":[{"action":"menu_up","componetId":"L STICK UP"},{"action":"menu_down","componetId":"L STICK DOWN"},{"action":"menu_left","componetId":"L STICK LEFT"},{"action":"menu_right","componetId":"L STICK RIGHT"},{"action":"menu_up","componetId":"UP"},{"action":"menu_down","componetId":"DOWN"},{"action":"menu_left","componetId":"LEFT"},{"action":"menu_right","componetId":"RIGHT"},{"action":"menu_back","componetId":"BACK"},{"action":"menu_toggle","componetId":"START"}],"playerVisible":[{"action":"menu_select","componetId":"A","defaultId":"A","configurable":"true"},{"action":"menu_back","componetId":"B","defaultId":"B","configurable":"true"}]}}');
+
+/***/ }),
+/* 187 */
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('{"backAction":"menu_back","toggleAction":"menu_toggle","escapeAction":"menu_escape","selectAction":"menu_select","upAction":"menu_up","downAction":"menu_down","leftAction":"menu_left","rightAction":"menu_right","tabLeft":"menu_tab_left","tabRight":"menu_tab_right","defaultTree":"pause_tree"}');
+
+/***/ }),
+/* 188 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "LoadState": () => (/* binding */ LoadState)
 /* harmony export */ });
-/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(145);
+/* harmony import */ var _gamestate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(149);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(114);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(116);
 /* harmony import */ var _library_managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(151);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(152);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(45);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(155);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(156);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(47);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(17);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(3);
-/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(118);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(33);
-/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(31);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(26);
-/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(167);
-/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(186);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(147);
-/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(189);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(120);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(35);
+/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(33);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(28);
+/* harmony import */ var _state_titlescreenstate__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(170);
+/* harmony import */ var _state_level1state__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(189);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(151);
+/* harmony import */ var raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(192);
 
 // 
 //  FILE NAME: loadstate.js
@@ -43892,7 +45418,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
         _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_3__.objectDataManager.loadGroup( groupAry )
 
             // Create and load all the actor strategies.
-            .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__.strategyLoader.load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__.stringLoadXML( raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_17__.default ) ))
+            .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_6__.strategyLoader.loadFromXml( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_13__.stringLoadXML( raw_loader_data_objects_strategy_state_loadscreen_loader__WEBPACK_IMPORTED_MODULE_17__["default"] ) ))
 
             // Clean up the temporary files
             .then(() =>
@@ -44081,7 +45607,7 @@ class LoadState extends _gamestate__WEBPACK_IMPORTED_MODULE_0__.GameState
 
 
 /***/ }),
-/* 186 */
+/* 189 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -44091,29 +45617,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Level1State": () => (/* binding */ Level1State),
 /* harmony export */   "load": () => (/* binding */ load)
 /* harmony export */ });
-/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(168);
-/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(30);
-/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(24);
-/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(45);
+/* harmony import */ var _commonstate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(171);
+/* harmony import */ var _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(32);
+/* harmony import */ var _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
+/* harmony import */ var _library_utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(47);
 /* harmony import */ var _library_script_scriptcomponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(17);
 /* harmony import */ var _library_script_scriptmanager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(18);
-/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(57);
-/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(114);
-/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(148);
-/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(151);
-/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(27);
-/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(152);
+/* harmony import */ var _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(59);
+/* harmony import */ var _library_objectdatamanager_objectdatamanager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(116);
+/* harmony import */ var _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(152);
+/* harmony import */ var _library_strategy_strategymanager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(155);
+/* harmony import */ var _library_managers_actionmanager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(29);
+/* harmony import */ var _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(156);
 /* harmony import */ var _library_utilities_settings__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(3);
-/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(118);
-/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(33);
-/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(31);
-/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(134);
-/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(36);
+/* harmony import */ var _library_managers_spritesheetmanager__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(120);
+/* harmony import */ var _library_utilities_assetholder__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(35);
+/* harmony import */ var _library_common_genericevent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(33);
+/* harmony import */ var _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(138);
+/* harmony import */ var _library_gui_menudefs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(38);
 /* harmony import */ var _library_common_defs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(6);
-/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(147);
-/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(26);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(187);
-/* harmony import */ var raw_loader_data_objects_strategy_level1_stage_strategy_loader__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(188);
+/* harmony import */ var _statedefs__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(151);
+/* harmony import */ var _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(28);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(190);
+/* harmony import */ var raw_loader_data_objects_strategy_level1_stage_strategy_loader__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(191);
 
 // 
 //  FILE NAME: level1state.js
@@ -44597,10 +46123,10 @@ function load()
     ])
 
     // Load stage strategy.
-    .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__.strategyLoader.load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_20__.stringLoadXML( raw_loader_data_objects_strategy_level1_stage_strategy_loader__WEBPACK_IMPORTED_MODULE_22__.default ) ))
+    .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__.strategyLoader.loadFromXml( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_20__.stringLoadXML( raw_loader_data_objects_strategy_level1_stage_strategy_loader__WEBPACK_IMPORTED_MODULE_22__["default"] ) ))
 
     // Load the remaining strategies.
-    .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__.strategyLoader.load( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_20__.stringLoadXML( raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_21__.default ) ))
+    .then(() => _library_strategy_strategyloader__WEBPACK_IMPORTED_MODULE_11__.strategyLoader.loadFromXml( _library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_20__.stringLoadXML( raw_loader_data_objects_strategy_level1_strategy_loader__WEBPACK_IMPORTED_MODULE_21__["default"] ) ))
 
     // Clean up the temporary files
     .then(() =>
@@ -44613,7 +46139,7 @@ function load()
 
 
 /***/ }),
-/* 187 */
+/* 190 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -44624,7 +46150,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_level-1-ball_\"/>\r\n    <strategy name=\"_level-1-multiplier_\"/>\r\n    \r\n    <strategy name=\"_level-ui_\">\r\n        <node name=\"uiWinMeter\" instance=\"uiWinMeter\"/>\r\n        <node name=\"uiBallMeter\" instance=\"uiBallMeter\"/>\r\n        <node name=\"uiMultiplier\" instance=\"uiMultiplier\"/>\r\n\r\n        <node name=\"ui_tennis_ball_green\" instance=\"ui_tennis_ball_green\" active=\"false\"/>\r\n        <node name=\"ui_tennis_ball_pink\" instance=\"ui_tennis_ball_pink\" active=\"false\"/>\r\n        <node name=\"ui_frisbee\" instance=\"ui_frisbee\" active=\"false\"/>\r\n        <node name=\"ui_bone_biscuit\" instance=\"ui_bone_biscuit\" active=\"false\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 188 */
+/* 191 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -44635,7 +46161,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_level-1-stage_\">\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"380\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"220\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"60\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"-100\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-800\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-640\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-480\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-320\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"-160\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"0\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"160\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"320\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"480\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"640\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"peg\">\r\n            <sprite>\r\n                <position x=\"800\" y=\"-260\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        \r\n        \r\n        <!--  rails  -->\r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-720\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-560\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-400\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-240\" y=\"-570\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"-80\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"80\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"240\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"400\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"560\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n        \r\n        <node name=\"bar\">\r\n            <sprite>\r\n                <position x=\"720\" y=\"-560\"/>\r\n            </sprite> \r\n        </node>\r\n\r\n    </strategy>\r\n  \r\n</loader>\r\n\r\n");
 
 /***/ }),
-/* 189 */
+/* 192 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -44646,7 +46172,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<?xml version=\"1.0\"?>\r\n<loader>\r\n\r\n    <strategy name=\"_loading-screen_\" type=\"actor\">\r\n        <node name=\"logo\"/>\r\n        <node name=\"loadAnim\" instance=\"loadAnim\">\r\n            <sprite>\r\n                <script prepare=\"animate\"/>\r\n            </sprite>\r\n        </node>\r\n        <node name=\"load_font\" instance=\"load_font\"/>\r\n    </strategy>\r\n  \r\n</loader>\r\n");
 
 /***/ }),
-/* 190 */
+/* 193 */
 /***/ ((module) => {
 
 "use strict";

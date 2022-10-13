@@ -10,9 +10,9 @@ import { iNode } from './inode';
 
 export class Node extends iNode
 {
-    constructor( id, parentId )
+    constructor( nodeData )
     {
-        super( id, parentId );
+        super( nodeData );
         
         // Child node array
         this.nodeAry = [];

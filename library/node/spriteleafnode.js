@@ -15,7 +15,7 @@ export class SpriteLeafNode extends iNode
 {
     constructor( objectData, nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
         
         this.name = nodeData.nodeName;
         this.sprite = new Sprite( objectData, this );

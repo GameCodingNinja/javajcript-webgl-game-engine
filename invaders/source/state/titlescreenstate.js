@@ -126,7 +126,7 @@ export function load()
     return objectDataManager.loadGroup( groupAry )
 
         // Create and load all the actor strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( titleScreenStrategyLoader ) ))
+        .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( titleScreenStrategyLoader ) ))
 
         // Clean up the temporary files
         .then(() =>

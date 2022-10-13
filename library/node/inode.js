@@ -10,7 +10,7 @@ import * as defs from '../common/defs';
 
 export class iNode
 {
-    constructor( nodeId, parentId )
+    constructor( nodeData )
     {
         // Parent node
         this.parentNode = null;
@@ -22,10 +22,10 @@ export class iNode
         this.userId = defs.DEFAULT_ID;
 
         // node id
-        this.nodeId = nodeId;
+        this.nodeId = nodeData.nodeId;
 
         // parent node id
-        this.parentId = parentId;
+        this.parentId = nodeData.parentNodeId;
 
         // Node name
         this.name = '';

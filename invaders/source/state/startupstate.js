@@ -19,6 +19,7 @@ import { spriteSheetManager } from '../../../library/managers/spritesheetmanager
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
+import { aiManager } from '../../../library/ai/aimanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
@@ -38,6 +39,8 @@ import * as stateDefs from './statedefs';
 // Load data from bundle as string
 import dataListTable2D from '../../data/objects/2d/objectDataList/dataListTable.json';
 import strategyListTable from '../../data/objects/strategy/strageyListTable.json';
+import strategyLoaderListTable from '../../data/objects/strategy/strageyLoaderListTable.json';
+import aiListTable from '../../data/objects/ai/aiListTable.json';
 import soundManagerListTable from '../../data/sound/soundListTable.json';
 import physicsManagerListTable from '../../data/objects/2d/physics/physicsListTable.json';
 import menuManagerListTable from '../../data/objects/2d/menu/menuListTable.json';
@@ -60,6 +63,8 @@ export class StartUpState extends GameState
         // Load the list tables
         objectDataManager.loadListTableFromObj( dataListTable2D );
         strategyManager.loadListTableFromObj( strategyListTable );
+        strategyLoader.loadListTableFromObj( strategyLoaderListTable );
+        aiManager.loadListTableFromObj( aiListTable );
         soundManager.loadListTableFromObj( soundManagerListTable );
         physicsWorldManager.loadListTableFromObj( physicsManagerListTable );
         menuManager.loadListTableFromObj( menuManagerListTable );
@@ -104,7 +109,7 @@ export class StartUpState extends GameState
 
         ])
         // Create and load all the actor strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( startUpStrategyLoader ) ))
+        .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( startUpStrategyLoader ) ))
 
         // Clean up the temporary files
         .then(() =>

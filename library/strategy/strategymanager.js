@@ -43,11 +43,11 @@ class StrategyManager extends ManagerBase
     //
     //  DESC: Load strategy data from an xml node
     //
-    loadFromNode( strategyId, node, filePath )
+    loadFromNode( strategyId, xmlNode, filePath )
     {
         let strategy = this.strategyMap.get( strategyId );
         
-        strategy.loadFromNode( node, filePath );
+        strategy.loadFromNode( xmlNode, filePath );
     }
     
     //

@@ -105,7 +105,7 @@ export class TestArenaState extends GameState
 
         ])
         // Create and load all the actor strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( testArenaLoader ) ))
+        .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( testArenaLoader ) ))
 
         // Clean up the temporary files
         .then(() =>

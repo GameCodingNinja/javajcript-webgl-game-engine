@@ -13,7 +13,7 @@ export class UIControlNode extends RenderNode
 {
     constructor( uiControl, nodeData )
     {
-        super(nodeData.nodeId, nodeData.parentNodeId);
+        super( nodeData );
         
         this.name = nodeData.nodeName;
         this.uiControl = uiControl;

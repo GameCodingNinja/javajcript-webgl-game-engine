@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: settingsmenucripts.js
-//  DESC:      script for settings menu
+//  DESC:      scripts for settings menu
 //
 
 "use strict";

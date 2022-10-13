@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: utilityscripts.js
-//  DESC:      script for fading the screen
+//  DESC:      scripts for fading the screen
 //
 
 "use strict";
@@ -366,7 +366,7 @@ class ScreenFade
 }
 
 // 
-//  DESC: Load the scripts in this file
+//  DESC: Load scripts
 //
 export function loadScripts()
 {

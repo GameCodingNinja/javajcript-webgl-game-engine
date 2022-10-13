@@ -15,7 +15,7 @@ export class ObjectNode extends RenderNode
 {
     constructor( nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
         
         this.name = nodeData.nodeName;
         this.object = new Object( this );

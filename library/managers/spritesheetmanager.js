@@ -18,7 +18,7 @@ class SpriteSheetManager
     //
     //  DESC: Load the glyph data from XML node
     //
-    load( group, filePath, node )
+    load( group, filePath, xmlNode )
     {
         let groupMap = this.spriteSheetMapMap.get( group );
         if( groupMap === undefined )
@@ -33,7 +33,7 @@ class SpriteSheetManager
             spriteSheet = new SpriteSheet;
             
             // Load the glyph data from XML node
-            spriteSheet.loadFromNode( node );
+            spriteSheet.loadFromNode( xmlNode );
             
             // Add a new entry to the map
             groupMap.set( filePath, spriteSheet );

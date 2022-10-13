@@ -147,10 +147,10 @@ export function load()
         .then(() => physicsWorldManager.loadWorldGroup2D( '(game)' ))
 
         // Load stage strategy.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( stageStrategyLoader ) ))
+        .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( stageStrategyLoader ) ))
 
         // Load ball strategy.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( ballStrategyLoader ) ))
+        .then(() => strategyLoader.loadFromXml( genFunc.stringLoadXML( ballStrategyLoader ) ))
 
         // Clean up the temporary files
         .then(() =>

@@ -28,14 +28,6 @@ import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
-// Load data from bundle as string
-import shipStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/ship.strategy.loader';
-import buildingsbackStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/buildingsback.strategy.loader';
-import buildingsfrontStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/buildingsfront.strategy.loader';
-import buildingsStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/buildings.strategy.loader';
-import backgroundStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/background.strategy.loader';
-import forgroundStrategyLoader from 'raw-loader!../../data/objects/strategy/level1/forground.strategy.loader';
-
 export const ASSET_COUNT = 48;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
@@ -423,23 +415,8 @@ export function load()
     
     return objectDataManager.loadGroup( groupAry )
 
-        // Load ship strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( shipStrategyLoader ) ))
-
-        // Load buildings back strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( buildingsbackStrategyLoader ) ))
-
-        // Load buildings front strategies.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( buildingsfrontStrategyLoader ) ))
-
-        // Load buildings strategy.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( buildingsStrategyLoader ) ))
-
-        // Load background strategy.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( backgroundStrategyLoader ) ))
-
-        // Load trees strategy.
-        .then(() => strategyLoader.load( genFunc.stringLoadXML( forgroundStrategyLoader ) ))
+        // Load and execute all the strategy loaders.
+        .then(() => strategyLoader.loadGroup( ['-level1-'] ))
 
         // Clean up the temporary files
         .then(() =>

@@ -7,13 +7,12 @@
 "use strict";
 
 import { Node } from './node';
-import * as defs from '../common/defs';
 
 export class RenderNode extends Node
 {
-    constructor( id = defs.DEFAULT_ID, parentId = defs.DEFAULT_ID )
+    constructor( nodeData)
     {
-        super( id, parentId )
+        super( nodeData )
     }
 
     // 

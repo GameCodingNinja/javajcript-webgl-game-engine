@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: levelcripts.js
-//  DESC:      script for the level
+//  DESC:      scripts for the level
 //
 
 "use strict";
@@ -121,7 +121,6 @@ class PlayerShip_ShootLazer
         return true;
     }
 }
-
 
 // 
 //  DESC: Load scripts

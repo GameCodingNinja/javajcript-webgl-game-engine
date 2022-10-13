@@ -74,17 +74,25 @@ export class ManagerBase
             let pathAry = this.listTableMap.get( group );
             if( pathAry !== undefined )
             {
-                // Load the group data if it doesn't already exist
-                if( groupMapMap.get( group ) === undefined )
+                if( groupMapMap )
                 {
-                    // Create a new group map inside of our map
-                    groupMapMap.set( group, new Map );
+                    // Load the group data if it doesn't already exist
+                    if( groupMapMap.get( group ) === undefined )
+                    {
+                        // Create a new group map inside of our map
+                        groupMapMap.set( group, new Map );
 
-                    promiseAry.push( this.load( group ) );
+                        promiseAry.push( this.load( group ) );
+                    }
+                    else
+                    {
+                        throw new Error( `${groupNameStr} group has alread been loaded (${group})!` );
+                    }
                 }
                 else
                 {
-                    throw new Error( `${groupNameStr} group has alread been loaded (${group})!` );
+                    // Just load if group map is not defined
+                    promiseAry.push( this.load( group ) );
                 }
             }
             else

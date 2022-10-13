@@ -25,12 +25,11 @@ class ShaderManager
     //
     loadFromObj( obj )
     {
-        let promiseAry = [];
-
         for( const [key, value] of Object.entries(obj) )
             this.createShader( key, value );
 
-        return Promise.all( promiseAry );
+        // Nothing else to do here. Return an empty promise
+        return Promise.all( [] );
     }
 
     // 

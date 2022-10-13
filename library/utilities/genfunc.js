@@ -34,6 +34,12 @@ export function downloadFile( fileType, filePath )
             request.responseType = 'text';
             request.overrideMimeType('text/plain');
         }
+        else if( fileType === 'json' )
+        {
+            //console.log(`Load Text: ${filePath}`);
+            request.responseType = 'text';
+            request.overrideMimeType('text/plain');
+        }
         else if( fileType === 'binary' )
         {
             //console.log(`Load Binary: ${filePath}`);
@@ -63,6 +69,9 @@ export function downloadFile( fileType, filePath )
 
                             if( fileType === 'xml' && this.responseXML )
                                 resolve(this.responseXML.childNodes[0]);
+
+                            else if( fileType === 'json' && this.responseText )
+                                resolve(JSON.parse(this.responseText));
 
                             else if( fileType === 'txt' && this.responseText )
                                 resolve(this.responseText);

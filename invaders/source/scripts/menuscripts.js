@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: menuscripts.js
-//  DESC:      script for the menus
+//  DESC:      scripts for the menus
 //
 
 "use strict";

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<ai>
+
+    <node name="AI_Enemy">
+
+        <head script="AI_Head"/>
+
+        <node>
+
+            <selector script="AI_Selector"/>
+
+            <node>
+
+                <sequence script="AI_Sequence"/>
+
+                <node>
+
+                    <action script="AI_Check_for_player"/>
+
+                </node>
+
+            </node>
+
+        </node>
+
+    </node>
+
+</ai>

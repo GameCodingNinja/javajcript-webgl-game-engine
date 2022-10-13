@@ -44,8 +44,13 @@ export class ObjectNodeData extends SpriteData
         // Is this a node with children nodes?
         this.hasChildrenNodes = false;
         for( let i = 0; i < xmlNode.children.length; ++i )
+        {
             if( xmlNode.children[i].nodeName == 'node' )
+            {
                 this.hasChildrenNodes = true;
+                break;
+            }
+        }
 
         for( let i = 0; i < xmlNode.children.length; ++i )
         {

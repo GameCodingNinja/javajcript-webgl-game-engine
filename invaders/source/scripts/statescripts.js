@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: statescripts.js
-//  DESC:      script for the state
+//  DESC:      scripts for the state
 //
 
 "use strict";
@@ -52,9 +52,8 @@ class State_RotateCube
     }
 }
 
-
 // 
-//  DESC: Load XML files
+//  DESC: Load scripts
 //
 export function loadScripts()
 {
