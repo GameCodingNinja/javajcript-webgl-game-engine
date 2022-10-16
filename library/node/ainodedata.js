@@ -13,13 +13,13 @@ export class AINodeData
     constructor(
         xmlNode,
         nodeId = defs.DEFAULT_ID,
-        parentNodeId = defs.DEFAULT_ID )
+        parentId = defs.DEFAULT_ID )
     {
         // Node Id
         this.nodeId = nodeId;
 
         // Parent Id
-        this.parentNodeId = parentNodeId;
+        this.parentId = parentId;
 
         // Node type
         this.nodeType = defs.ENT_NULL;

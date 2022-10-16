@@ -89,15 +89,23 @@ class TextureManager
     //
     deleteGroup( group )
     {
-        let groupMap = this.textureForMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            let gl = device.gl;
+        let groupAry = group;
+        if( !(group instanceof Array) )
+            groupAry = [group];
 
-            for( let texture of groupMap.values() )
-                gl.deleteTexture( texture.id );
-            
-            this.textureForMapMap.delete( group );
+        for( let grp = 0; grp < groupAry.length; ++grp )
+        {
+            let group = groupAry[grp];
+            let groupMap = this.textureForMapMap.get( group );
+            if( groupMap !== undefined )
+            {
+                let gl = device.gl;
+
+                for( let texture of groupMap.values() )
+                    gl.deleteTexture( texture.id );
+                
+                this.textureForMapMap.delete( group );
+            }
         }
     }
 

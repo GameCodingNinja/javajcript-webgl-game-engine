@@ -36,9 +36,12 @@ class SoundManager extends ManagerBase
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadGroup( groupAry )
+    loadGroup( group )
     {
-        return super.loadGroupAry( 'Sound', this.soundMapMap, groupAry );
+        if( group instanceof Array )
+            return super.loadGroupAry( 'Sound', this.soundMapMap, group );
+        
+        return super.loadGroupAry( 'Sound', this.soundMapMap, [group] );
     }
     
     //
@@ -132,8 +135,12 @@ class SoundManager extends ManagerBase
     //
     //  DESC: Free a symbol group
     //
-    freeGroup( groupAry )
+    freeGroup( group )
     {
+        let groupAry = group;
+        if( !(group instanceof Array) )
+            groupAry = [group];
+
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];

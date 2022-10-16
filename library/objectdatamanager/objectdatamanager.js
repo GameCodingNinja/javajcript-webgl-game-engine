@@ -28,11 +28,18 @@ class ObjectDataManager extends ManagerBase
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadGroup( groupAry )
+    loadGroup( group )
     {
-        return super.loadGroupAry( 'Object data list', this.objectDataMapMap, groupAry )
-            .then(() => this.loadAssets( groupAry ))
-            .then(() => this.createFromData( groupAry ));
+        if( group instanceof Array )
+        {
+            return super.loadGroupAry( 'Object data list', this.objectDataMapMap, group )
+                .then(() => this.loadAssets( group ))
+                .then(() => this.createFromData( group ));
+        }
+
+        return super.loadGroupAry( 'Object data list', this.objectDataMapMap, [group] )
+                .then(() => this.loadAssets( [group] ))
+                .then(() => this.createFromData( [group] ));
     }
 
     //
@@ -239,8 +246,12 @@ class ObjectDataManager extends ManagerBase
     //
     //  DESC: Free all of the meshes materials and data of a specific group
     //
-    freeGroup( groupAry )
+    freeGroup( group )
     {
+        let groupAry = group;
+        if( !(group instanceof Array) )
+            groupAry = [group];
+
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];

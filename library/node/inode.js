@@ -25,7 +25,7 @@ export class iNode
         this.nodeId = nodeData.nodeId;
 
         // parent node id
-        this.parentId = nodeData.parentNodeId;
+        this.parentId = nodeData.parentId;
 
         // Node name
         this.name = '';

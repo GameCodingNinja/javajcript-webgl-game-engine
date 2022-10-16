@@ -19,6 +19,25 @@ class AIManager extends ManagerBase
         this.aiMap = new Map;
     }
 
+    // 
+    //  DESC: Load from the XML node
+    //        NOTE: The loading of strategies has to be broken up because
+    //              they load their own XML that describes what is defined
+    //              in the strategy.
+    //
+    loadFromXml( xmlNode )
+    {
+        if( xmlNode instanceof Array )
+        {
+            for( let i = 0; i < xmlNode.length; ++i )
+                this.loadFromNode( 'manual load', xmlNode[i].children[0], 'from raw-loader!' );
+        }
+        else
+        {
+            this.loadFromNode( 'manual load', xmlNode.children[0], 'from raw-loader!' );
+        }
+    }
+
     //
     //  DESC: Load all XML's associated with this group
     //

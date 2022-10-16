@@ -17,7 +17,7 @@ class AI_Head extends Node
 {
     constructor( nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
         this.data = {};
     }
     
@@ -37,7 +37,7 @@ class AI_Selector extends Node
 {
     constructor( nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
     }
     
     // 
@@ -56,7 +56,7 @@ class AI_Sequence extends Node
 {
     constructor( nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
     }
     
     // 
@@ -75,7 +75,7 @@ class AI_Check_for_player extends Node
 {
     constructor( nodeData )
     {
-        super( nodeData.nodeId, nodeData.parentNodeId );
+        super( nodeData );
     }
     
     // 

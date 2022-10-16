@@ -16,7 +16,7 @@ export class StrategyNodeData extends SpriteNodeData
         xmlNode,
         nodeName,
         nodeId = defs.DEFAULT_ID,
-        parentNodeId = defs.DEFAULT_ID,
+        parentId = defs.DEFAULT_ID,
         defGroup = '',
         defObjName = '',
         userId = defs.DEFAULT_ID )
@@ -33,13 +33,21 @@ export class StrategyNodeData extends SpriteNodeData
         this.nodeId = nodeId;
 
         // Parent Id
-        this.parentNodeId = parentNodeId;
+        this.parentId = parentId;
 
         // Node type
         this.nodeType = defs.ENT_NULL;
 
+        // Node AI
+        this.ai = '';
+
         // Node level xml
         this.baseXmlNode = xmlNode;
+
+        // See if there's ai associated with this strategy
+        let attr = xmlNode.getAttribute( 'ai' );
+        if( attr )
+            this.ai = attr;
 
         // Is this a node with children nodes?
         this.hasChildrenNodes = false;

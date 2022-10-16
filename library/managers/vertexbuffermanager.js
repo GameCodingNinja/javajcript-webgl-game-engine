@@ -340,24 +340,32 @@ class VertexBufferManager
     //
     deleteGroup( group )
     {
-        let gl = device.gl;
+        let groupAry = group;
+        if( !(group instanceof Array) )
+            groupAry = [group];
 
-        let groupMap = this.vertexBufMapMap.get( group );
-        if( groupMap !== undefined )
+        for( let grp = 0; grp < groupAry.length; ++grp )
         {
-            for( let vboID of groupMap.values() )
-                gl.deleteBuffer( vboID );
+            let group = groupAry[grp];
+            let gl = device.gl;
+
+            let groupMap = this.vertexBufMapMap.get( group );
+            if( groupMap !== undefined )
+            {
+                for( let vboID of groupMap.values() )
+                    gl.deleteBuffer( vboID );
+                
+                this.vertexBufMapMap.delete( group );
+            }
             
-            this.vertexBufMapMap.delete( group );
-        }
-        
-        groupMap = this.indexBufMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            for( let iboID of groupMap.values() )
-                gl.deleteBuffer( iboID );
-            
-            this.indexBufMapMap.delete( group );
+            groupMap = this.indexBufMapMap.get( group );
+            if( groupMap !== undefined )
+            {
+                for( let iboID of groupMap.values() )
+                    gl.deleteBuffer( iboID );
+                
+                this.indexBufMapMap.delete( group );
+            }
         }
     }
     

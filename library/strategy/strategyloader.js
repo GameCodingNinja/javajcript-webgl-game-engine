@@ -21,9 +21,12 @@ class Strategyloader extends ManagerBase
     //
     //  DESC: Load all XML's associated with this group
     //
-    loadGroup( groupAry )
+    loadGroup( group )
     {
-        return super.loadGroupAry( 'Strategy Loader', null, groupAry );
+        if( group instanceof Array )
+            return super.loadGroupAry( 'Strategy Loader', null, group );
+        
+        return super.loadGroupAry( 'Strategy Loader', null, [group] );
     }
 
     //

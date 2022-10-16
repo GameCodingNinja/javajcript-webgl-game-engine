@@ -95,20 +95,24 @@ class StrategyManager extends ManagerBase
     //
     deleteStrategy( strategyGrp )
     {
-        for( let i = 0; i < strategyGrp.length; ++i )
+        let strategyGrpAry = strategyGrp;
+        if( !(strategyGrp instanceof Array) )
+            strategyGrpAry = [strategyGrp];
+
+        for( let i = 0; i < strategyGrpAry.length; ++i )
         {
             // First deactivate the strategy
-            this.deactivateStrategy( strategyGrp[i] );
+            this.deactivateStrategy( strategyGrpAry[i] );
 
             // Cleanup and delete the strategy
-            let strategy = this.strategyMap.get( strategyGrp[i] );
+            let strategy = this.strategyMap.get( strategyGrpAry[i] );
             if( strategy )
             {
                 strategy.cleanUp();
-                this.strategyMap.delete( strategyGrp[i] );
+                this.strategyMap.delete( strategyGrpAry[i] );
             }
             else
-                console.warn( `Strategy id can't be found to clean up (${strategyGrp[i]})!` );
+                console.warn( `Strategy id can't be found to clean up (${strategyGrpAry[i]})!` );
         }
     }
     

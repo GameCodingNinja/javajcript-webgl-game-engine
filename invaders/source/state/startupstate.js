@@ -105,7 +105,7 @@ export class StartUpState extends GameState
             shaderManager.loadFromObj( shaderObj ),
 
             // Load the object data
-            objectDataManager.loadGroup( ['(startup)'] )
+            objectDataManager.loadGroup( groupAry )
 
         ])
         // Create and load all the actor strategies.
@@ -255,9 +255,9 @@ export class StartUpState extends GameState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_startup_'] );
+        strategyManager.deleteStrategy( '_startup_' );
 
         // Free the state assets from the video memory
-        objectDataManager.freeGroup( ['(startup)'] );
+        objectDataManager.freeGroup( '(startup)' );
     }
 }

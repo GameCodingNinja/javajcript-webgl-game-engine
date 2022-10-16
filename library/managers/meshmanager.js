@@ -345,21 +345,29 @@ class MeshManager
     //
     deleteGroup( group )
     {
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap !== undefined )
-        {
-            let gl = device.gl;
-            
-            for( const each of groupMap.values() )
-            {
-                for( const mesh of each.meshAry )
-                {
-                    gl.deleteBuffer( mesh.vbo );
-                    gl.deleteBuffer( mesh.ibo );
-                }
-            }
+        let groupAry = group;
+        if( !(group instanceof Array) )
+            groupAry = [group];
 
-            this.meshBufMapMap.delete( group );
+        for( let grp = 0; grp < groupAry.length; ++grp )
+        {
+            let group = groupAry[grp];
+            let groupMap = this.meshBufMapMap.get( group );
+            if( groupMap !== undefined )
+            {
+                let gl = device.gl;
+                
+                for( const each of groupMap.values() )
+                {
+                    for( const mesh of each.meshAry )
+                    {
+                        gl.deleteBuffer( mesh.vbo );
+                        gl.deleteBuffer( mesh.ibo );
+                    }
+                }
+
+                this.meshBufMapMap.delete( group );
+            }
         }
     }
 }

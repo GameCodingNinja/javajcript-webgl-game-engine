@@ -59,10 +59,10 @@ export class TitleScreenState extends CommonState
     cleanUp()
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_title_screen_'] );
+        strategyManager.deleteStrategy( '_title_screen_' );
         
         // Free the object data
-        objectDataManager.freeGroup( ['(title_screen)'] );
+        objectDataManager.freeGroup( '(title_screen)' );
     }
     
     // 

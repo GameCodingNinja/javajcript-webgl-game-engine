@@ -17,6 +17,7 @@ import { cameraManager } from '../../../library/managers/cameramanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
+import { aiManager } from '../../../library/managers/aimanager';
 import { CommonState } from './commonstate';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
@@ -27,6 +28,8 @@ import * as easing from '../../../library/utilities/easingfunc';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
+
+import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
 export const ASSET_COUNT = 48;
 const MOVE_NULL = -1,
@@ -416,7 +419,9 @@ export function load()
     return objectDataManager.loadGroup( groupAry )
 
         // Load and execute all the strategy loaders.
-        .then(() => strategyLoader.loadGroup( ['-level1-'] ))
+        .then(() => strategyLoader.loadGroup( '-level1-' ))
+
+        .then(() => aiManager.loadFromXml( genFunc.stringLoadXML( enemy_ai ) ))
 
         // Clean up the temporary files
         .then(() =>

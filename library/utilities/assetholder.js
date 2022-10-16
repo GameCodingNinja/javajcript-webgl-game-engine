@@ -74,8 +74,12 @@ class AssetHolder
     // 
     //  DESC: Delete the group
     //
-    deleteGroup( groupAry )
+    deleteGroup( group )
     {
+        let groupAry = group;
+        if( !(group instanceof Array) )
+            groupAry = [group];
+
         for( let i = 0; i < groupAry.length; ++i )
             this.loadMapMap.delete( groupAry[i] );
     }

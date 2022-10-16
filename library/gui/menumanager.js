@@ -83,9 +83,13 @@ class MenuManager extends ManagerBase
     // 
     //  DESC: Load the menu group
     //
-    loadGroupXML( groupAry )
+    loadGroupXML( group )
     {
         let promiseAry = [];
+
+        let groupAry = group;
+        if( !(group instanceof Array) )
+            groupAry = [group];
 
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
@@ -325,8 +329,12 @@ class MenuManager extends ManagerBase
     //
     //  DESC: Free the menu group
     //
-    freeGroup( groupAry )
+    freeGroup( group )
     {
+        let groupAry = group;
+        if( !(group instanceof Array) )
+            groupAry = [group];
+
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
