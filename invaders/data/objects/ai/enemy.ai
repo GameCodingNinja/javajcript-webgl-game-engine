@@ -7,15 +7,27 @@
 
         <node>
 
-            <selector script="AI_Selector"/>
+            <decorator script="AI_Decorator" type="repeater" condition="until_success" repeatCount="2"/>
 
             <node>
 
-                <sequence script="AI_Sequence"/>
+                <composite script="AI_Composite" condition="until_failure"/>
 
                 <node>
 
-                    <action script="AI_Check_for_player"/>
+                    <leaf script="AI_Return_Success"/>
+
+                </node>
+
+                <node>
+
+                    <leaf script="AI_Return_Success"/>
+
+                </node>
+
+                <node>
+
+                    <leaf script="AI_Return_Failure"/>
 
                 </node>
 

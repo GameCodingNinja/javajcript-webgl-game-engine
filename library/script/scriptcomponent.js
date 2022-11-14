@@ -6,6 +6,7 @@
 
 "use strict";
 import { scriptManager } from '../script/scriptmanager';
+import { aiManager } from '../managers/aimanager';
 import { CScriptPrepareFunc } from '../script/scriptpreparefunc';
 
 export class ScriptComponent
@@ -34,6 +35,7 @@ export class ScriptComponent
         {
             let prepareOnInit = false;
             let forceUpdate = false;
+            let ai = false;
             let attr = scriptNode[i].getAttribute( 'prepareOnInit' );
             if( attr !== null )
                 prepareOnInit = (attr === 'true')
@@ -42,10 +44,15 @@ export class ScriptComponent
             if( attr !== null )
                 forceUpdate = (attr === 'true')
 
+            // See if this is an ai
+            attr = scriptNode[i].getAttribute( 'ai' );
+            if( attr )
+                ai = (attr === 'true');
+
             attr = scriptNode[i].attributes[0];
             if( attr )
                 // This allocates the script to the map
-                this.scriptFactoryMap.set( attr.name, new CScriptPrepareFunc(attr.value, prepareOnInit, forceUpdate) );
+                this.scriptFactoryMap.set( attr.name, new CScriptPrepareFunc(attr.value, prepareOnInit, forceUpdate, ai) );
         }
     }
 
@@ -63,42 +70,51 @@ export class ScriptComponent
             let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
             if( scriptPrepareFunc )
             {
-                let script = scriptManager.get( scriptPrepareFunc.funcName );
-                if( script )
+                let script = null;
+                if(scriptPrepareFunc.ai)
                 {
-                    switch(args.length)
+                    activeScript = aiManager.get( scriptPrepareFunc.funcName );
+                }
+                else
+                {
+                    script = scriptManager.get( scriptPrepareFunc.funcName );
+                    
+                    if( script )
                     {
-                        case 1:
-                            activeScript = script();
-                        break;
-                        case 2:
-                            activeScript = script(args[1]);
-                        break;
-                        case 3:
-                            activeScript = script(args[1],args[2]);
-                        break;
-                        case 4:
-                            activeScript = script(args[1],args[2],args[3])
-                        break;
-                        case 5:
-                            activeScript = script(args[1],args[2],args[3],args[4]);
-                        break;
-                        case 6:
-                            activeScript = script(args[1],args[2],args[3],args[4],args[5]);
-                        break;
+                        switch(args.length)
+                        {
+                            case 1:
+                                activeScript = script();
+                            break;
+                            case 2:
+                                activeScript = script(args[1]);
+                            break;
+                            case 3:
+                                activeScript = script(args[1],args[2]);
+                            break;
+                            case 4:
+                                activeScript = script(args[1],args[2],args[3])
+                            break;
+                            case 5:
+                                activeScript = script(args[1],args[2],args[3],args[4]);
+                            break;
+                            case 6:
+                                activeScript = script(args[1],args[2],args[3],args[4],args[5]);
+                            break;
+                        }
                     }
+                }
 
-                    if( activeScript )
+                if( activeScript )
+                {
+                    if( scriptPrepareFunc.forceUpdate )
                     {
-                        if( scriptPrepareFunc.forceUpdate )
-                        {
-                            if( !activeScript.execute() )
-                                this.scriptAry.push( activeScript );
-                        }
-                        else
-                        {
+                        if( !activeScript.execute() )
                             this.scriptAry.push( activeScript );
-                        }
+                    }
+                    else
+                    {
+                        this.scriptAry.push( activeScript );
                     }
                 }
             }
@@ -132,12 +148,31 @@ export class ScriptComponent
             {
                 if( scriptPrepareFunc.prepareOnInit )
                 {
-                    let script = scriptManager.get( scriptPrepareFunc.funcName );
-                    if( script )
+                    let activeScript = null;
+                    let script = null;
+                    if(scriptPrepareFunc.ai)
                     {
-                        this.scriptAry.push( script(object) );
+                        activeScript = aiManager.get( scriptPrepareFunc.funcName, object );
+                    }
+                    else
+                    {
+                        script = scriptManager.get( scriptPrepareFunc.funcName );
+
+                        if( script )
+                            activeScript = script(object);
+                    }
+
+                    if( activeScript )
+                    {
                         if( scriptPrepareFunc.forceUpdate )
-                            this.update();
+                        {
+                            if( !activeScript.execute() )
+                                this.scriptAry.push( activeScript );
+                        }
+                        else
+                        {
+                            this.scriptAry.push( activeScript );
+                        }
                     }
                 }
             }

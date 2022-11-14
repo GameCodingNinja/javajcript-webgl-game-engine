@@ -38,16 +38,8 @@ export class StrategyNodeData extends SpriteNodeData
         // Node type
         this.nodeType = defs.ENT_NULL;
 
-        // Node AI
-        this.ai = '';
-
         // Node level xml
         this.baseXmlNode = xmlNode;
-
-        // See if there's ai associated with this strategy
-        let attr = xmlNode.getAttribute( 'ai' );
-        if( attr )
-            this.ai = attr;
 
         // Is this a node with children nodes?
         this.hasChildrenNodes = false;

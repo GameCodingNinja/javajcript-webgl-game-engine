@@ -1,4 +1,3 @@
-
 //
 //  FILE NAME: aimanager.js
 //  DESC:      AI class singleton
@@ -7,7 +6,9 @@
 "use strict";
 
 import { AINodeDataList } from '../node/ainodedatalist';
+import { scriptManager } from '../script/scriptmanager';
 import { ManagerBase } from './managerbase';
+import * as defs from '../common/defs';
 
 class AIManager extends ManagerBase
 {
@@ -68,6 +69,52 @@ class AIManager extends ManagerBase
 
         // Nothing else to do here. Return an empty promise
         return Promise.all( [] );
+    }
+
+    //
+    //  DESC: Create the AI script
+    //
+    get( name, object )
+    {
+        let headNode = null;
+        let aiNodeData = this.aiMap.get( name );
+        if(aiNodeData)
+        {
+            let aiNodeDataAry = aiNodeData.dataAry;
+            for( let i = 0; i < aiNodeDataAry.length; i++ )
+            {
+                let node;
+                // The leaf node executes game logic so need to pass in the object
+                if(aiNodeDataAry[i].nodeType === defs.EAIT_LEAF_TASK)
+                {
+                    node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], object);
+                }
+                else
+                {
+                    node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i]);
+                }
+
+                if( headNode === null )
+                {
+                    headNode = node;
+                    continue;
+                }
+                else if( !headNode.addNode( node ) )
+                {
+                    throw new Error( `Parent node not found or node does not support adding children (${aiNodeDataAry[i].scriptName}, ${node.parentId})!` );
+                }
+
+                // All nodes share the same data dictionary
+                node.data = headNode.data;
+            }
+        }
+        else
+            throw new Error( `Error finding ai node data (${name})!` );
+
+        // Initialize the tree by doing a reset
+        headNode.resetTree();
+
+        return headNode;
     }
 
     //

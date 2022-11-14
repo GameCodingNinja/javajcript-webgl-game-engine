@@ -34,6 +34,7 @@ import * as menuScripts from '../scripts/menuscripts';
 import * as levelScripts from '../scripts/levelscripts';
 import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
 import * as settingsMenuScripts from '../scripts/settingsmenuscripts';
+import * as aiScripts from '../scripts/aiscripts';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
@@ -72,13 +73,14 @@ export class StartUpState extends GameState
         actionManager.loadFromObj( actionManagerJson );
         menuManager.loadMenuActionFromObj( menuActionJSON );
 
-        // Load the scripts
+        // Load the scripts into the scriptmanager
         utilScripts.loadScripts();
         stateScripts.loadScripts();
         menuScripts.loadScripts();
         levelScripts.loadScripts();
         keybindMenuScripts.loadScripts();
         settingsMenuScripts.loadScripts();
+        aiScripts.loadScripts();
                 
         // Set the default camera
         // NOTE: Can only call this after Camera Manager has been loaded

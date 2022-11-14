@@ -93,12 +93,7 @@ export const VISIBLE         = 0x100;
 export const ENT_NULL         = 0,
              ENT_OBJECT       = 1,
              ENT_SPRITE       = 2,
-             ENT_UI_CONTROL   = 3,
-             ENT_AI_HEAD      = 4,
-             ENT_AI_SELECTOR  = 5,
-             ENT_AI_DECORATOR = 6,
-             ENT_AI_SEQUENCE  = 7,
-             ENT_AI_ACTION    = 8;
+             ENT_UI_CONTROL   = 3;
 
 // ESelection Message Arguments
 export const ESMA_PRESS_TYPE  = 0,
@@ -135,6 +130,10 @@ export const NO_ACTIVE_CONTROL = -1;
 export const ECSF_ON_ACTIVE   = 0,
              ECSF_ON_SELECTED = 1;
 
+// EAccessOrder
+export const EAO_SEQUENTIAL = 0,
+             EAO_RAMDOM     = 1;
+
 // EOrientation
 export const EO_HORIZONTAL = 0,
              EO_VERTICAL   = 1;
@@ -144,4 +143,22 @@ export const EM_NULL                = 0,
              EM_HORIZONTAL          = 1,
              EM_VERTICAL            = 2,
              EM_HORIZONTAL_VERTICAL = 3;
-     
+
+// EAIState
+export const EAIS_FAILURE = -1,
+             EAIS_ACTIVE  = 0,
+             EAIS_SUCCESS = 1;
+
+// EAIType
+export const EAIT_NULL           = 0,
+             EAIT_HEAD           = 1,
+             EAIT_COMPOSITE      = 2,
+             EAIT_REPEATER       = 3,
+             EAIT_INVERTER       = 4,
+             EAIT_LEAF_TASK      = 5;
+
+// EAICondition
+export const EAIC_NULL           = 0,
+             EAIC_UNTIL_SUCCESS  = 1,
+             EAIC_UNTIL_FAILURE  = 2,
+             EAIC_UNTIL_COUNT    = 3;

@@ -164,7 +164,7 @@ export class Strategy extends Object
             if( headNode === null )
                 headNode = node;
 
-            else if( !headNode.addNode( node, nodeAry[i].nodeName ) )
+            else if( !headNode.addNode( node ) )
                 throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
         }
 

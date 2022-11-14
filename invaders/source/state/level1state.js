@@ -276,6 +276,9 @@ export class Level1State extends CommonState
     {
         // Only delete the strategy(s) used in this state. Don't use clear().
         strategyManager.deleteStrategy( ['_forground_','_background_','_buildingsfront_','_buildingsback_','_buildings_','_player_ship_','_enemy_'] );
+
+        // Clear out any loaded AI
+        aiManager.clear();
         
         objectDataManager.freeGroup( ['(level_1)'] );
 
@@ -418,10 +421,12 @@ export function load()
     
     return objectDataManager.loadGroup( groupAry )
 
+        // Load the AI. Needs to be loaded before the strategy loader
+        .then(() => aiManager.loadFromXml( genFunc.stringLoadXML( enemy_ai ) ))
+
         // Load and execute all the strategy loaders.
         .then(() => strategyLoader.loadGroup( '-level1-' ))
 
-        .then(() => aiManager.loadFromXml( genFunc.stringLoadXML( enemy_ai ) ))
 
         // Clean up the temporary files
         .then(() =>

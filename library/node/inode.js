@@ -67,6 +67,14 @@ export class iNode
     }
 
     // 
+    //  DESC: Reset the node
+    //
+    reset()
+    {
+        // Empty by design
+    }
+
+    // 
     //  DESC: Is this a child node
     //
     isChild()

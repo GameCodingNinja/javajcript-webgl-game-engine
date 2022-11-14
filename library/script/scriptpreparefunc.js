@@ -8,7 +8,7 @@
 
 export class CScriptPrepareFunc
 {
-    constructor(funcName, prepareOnInit = false, forceUpdate = false)
+    constructor(funcName, prepareOnInit = false, forceUpdate = false, ai = false)
     {
         // Function Id
         this.funcName = funcName;
@@ -18,5 +18,8 @@ export class CScriptPrepareFunc
 
         // Force Update flag
         this.forceUpdate = forceUpdate;
+
+        // Indicates this is for AI
+        this.ai = ai;
     }
 }
