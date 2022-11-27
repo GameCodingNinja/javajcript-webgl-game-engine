@@ -11,17 +11,17 @@
 
             <node>
 
-                <composite script="AI_Composite" condition="until_failure"/>
+                <composite script="AI_Composite" condition="all_failure"/>
 
                 <node>
 
-                    <leaf script="AI_Return_Success"/>
+                    <leaf script="AI_Return_Failure"/>
 
                 </node>
 
                 <node>
 
-                    <leaf script="AI_Return_Success"/>
+                    <leaf script="AI_Return_Failure"/>
 
                 </node>
 

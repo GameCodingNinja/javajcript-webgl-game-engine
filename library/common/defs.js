@@ -145,20 +145,30 @@ export const EM_NULL                = 0,
              EM_HORIZONTAL_VERTICAL = 3;
 
 // EAIState
-export const EAIS_FAILURE = -1,
-             EAIS_ACTIVE  = 0,
-             EAIS_SUCCESS = 1;
+export const EAIS_FAILURE        = -1,
+             EAIS_ACTIVE         = 0,
+             EAIS_SUCCESS        = 1;
+
+// EAIBehavior
+export const EAIB_NULL           = 0,
+             EAIB_HEAD           = 1,
+             EAIB_COMPOSITE      = 2,
+             EAIB_DECORATOR      = 3,
+             EAIB_LEAF_TASK      = 4;
 
 // EAIType
 export const EAIT_NULL           = 0,
-             EAIT_HEAD           = 1,
-             EAIT_COMPOSITE      = 2,
+             EAIT_SEQUENCE       = 1,
+             EAIT_FALLBACK       = 2,
              EAIT_REPEATER       = 3,
              EAIT_INVERTER       = 4,
-             EAIT_LEAF_TASK      = 5;
+             EAIT_ALWAYS_SUCCEED = 5,
+             EAIT_ALWAYS_FAIL    = 6;
 
 // EAICondition
 export const EAIC_NULL           = 0,
              EAIC_UNTIL_SUCCESS  = 1,
              EAIC_UNTIL_FAILURE  = 2,
-             EAIC_UNTIL_COUNT    = 3;
+             EAIC_ALL_SUCCESS    = 3,
+             EAIC_ALL_FAILURE    = 4,
+             EAIC_UNTIL_COUNT    = 5;

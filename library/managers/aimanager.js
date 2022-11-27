@@ -85,7 +85,7 @@ class AIManager extends ManagerBase
             {
                 let node;
                 // The leaf node executes game logic so need to pass in the object
-                if(aiNodeDataAry[i].nodeType === defs.EAIT_LEAF_TASK)
+                if(aiNodeDataAry[i].nodeType === defs.EAIB_LEAF_TASK)
                 {
                     node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], object);
                 }

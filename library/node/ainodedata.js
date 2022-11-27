@@ -20,8 +20,11 @@ export class AINodeData
         // Parent Id
         this.parentId = parentId;
 
+        // Node behavior
+        this.behavior = defs.EAIB_NULL;
+
         // Node type
-        this.nodeType = defs.EAIT_NULL;
+        this.type = defs.EAIT_NULL;
 
         // Repeat count
         this.repeatCount = 0;
@@ -50,24 +53,39 @@ export class AINodeData
         {
             if( xmlNode.children[i].nodeName == 'head' )
             {
-                this.nodeType = defs.EAIT_HEAD;
+                this.behavior = defs.EAIB_HEAD;
                 this.scriptName = xmlNode.children[i].getAttribute( 'script' );
 
                 break;
             }
             else if( xmlNode.children[i].nodeName == 'composite' )
             {
-                this.nodeType = defs.EAIT_COMPOSITE;
+                this.behavior = defs.EAIB_COMPOSITE;
                 this.scriptName = xmlNode.children[i].getAttribute( 'script' );
 
                 let attr = xmlNode.children[i].getAttribute( 'condition' );
                 if( attr )
                 {
                     if(attr === 'until_success')
+                    {
+                        this.type = defs.EAIT_FALLBACK;
                         this.condition = defs.EAIC_UNTIL_SUCCESS;
-                    
+                    }
                     else if(attr === 'until_failure')
+                    {
+                        this.type = defs.EAIT_FALLBACK;
                         this.condition = defs.EAIC_UNTIL_FAILURE;
+                    }
+                    else if(attr === 'all_success')
+                    {
+                        this.type = defs.EAIT_SEQUENCE;
+                        this.condition = defs.EAIC_ALL_SUCCESS;
+                    }
+                    else if(attr === 'all_failure')
+                    {
+                        this.type = defs.EAIT_SEQUENCE;
+                        this.condition = defs.EAIC_ALL_FAILURE;
+                    }
                 }
 
                 attr = xmlNode.children[i].getAttribute( 'order' );
@@ -84,6 +102,7 @@ export class AINodeData
             }
             else if( xmlNode.children[i].nodeName == 'decorator' )
             {
+                this.behavior = defs.EAIB_DECORATOR;
                 this.scriptName = xmlNode.children[i].getAttribute( 'script' );
 
                 let attr = xmlNode.children[i].getAttribute( 'type' );
@@ -91,7 +110,7 @@ export class AINodeData
                 {
                     if(attr === 'repeater')
                     {
-                        this.nodeType = defs.EAIT_REPEATER;
+                        this.type = defs.EAIT_REPEATER;
                         this.condition = defs.EAIC_UNTIL_COUNT;
 
                         attr = xmlNode.children[i].getAttribute( 'repeatCount' );
@@ -100,7 +119,15 @@ export class AINodeData
                     }
                     else if(attr === 'inverter')
                     {
-                        this.nodeType = defs.EAIT_INVERTER;
+                        this.type = defs.EAIT_INVERTER;
+                    }
+                    else if(attr === 'always_succeed')
+                    {
+                        this.type = defs.EAIT_ALWAYS_SUCCEED;
+                    }
+                    else if(attr === 'always_fail')
+                    {
+                        this.type = defs.EAIT_ALWAYS_FAIL;
                     }
                 }
 
@@ -118,15 +145,15 @@ export class AINodeData
             }
             else if( xmlNode.children[i].nodeName == 'leaf' )
             {
-                this.nodeType = defs.EAIT_LEAF_TASK;
+                this.behavior = defs.EAIB_LEAF_TASK;
                 this.scriptName = xmlNode.children[i].getAttribute( 'script' );
 
                 break;
             }
         }
 
-        // Throw an error if a node type is not found
-        if( this.nodeType === defs.EAIT_NULL )
+        // Throw an error if a node behavior is not found
+        if( this.behavior === defs.EAIB_NULL )
             throw new Error( `Node type not defined (${xmlNode.baseURI}).` );
     }
 }

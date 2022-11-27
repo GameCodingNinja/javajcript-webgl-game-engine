@@ -34,6 +34,7 @@ import * as menuScripts from '../scripts/menuscripts';
 import * as levelScripts from '../scripts/levelscripts';
 import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
 import * as settingsMenuScripts from '../scripts/settingsmenuscripts';
+import * as aiBaseScripts from '../scripts/aibasescripts';
 import * as aiScripts from '../scripts/aiscripts';
 import * as stateDefs from './statedefs';
 
@@ -80,6 +81,7 @@ export class StartUpState extends GameState
         levelScripts.loadScripts();
         keybindMenuScripts.loadScripts();
         settingsMenuScripts.loadScripts();
+        aiBaseScripts.loadScripts();
         aiScripts.loadScripts();
                 
         // Set the default camera
