@@ -65,7 +65,7 @@ class StrategyManager extends ManagerBase
                 console.warn( `Strategy is already active (${strategyId})!` );
         }
         else
-            throw new Error( `Strategy id can't be found (${strategyId})!` );
+            throw new Error( `Strategy id can't be found (${strategyId})! Need to add the strategy before you can activate it.` );
         
         return strategy;
     }

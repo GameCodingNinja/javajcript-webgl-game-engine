@@ -229,4 +229,46 @@ export class Camera extends Object
 
         return true;
     }
+
+    //
+    //  DESC: Check if the raduis is in the view frustrum of the Y
+    //
+    inViewY( transPos, radius )
+    {
+        if(this.projType == defs.EPT_ORTHOGRAPHIC)
+        {
+            // Check the top and bottom sides of the screen
+            if( Math.abs(-this.transPos.y - transPos.y) > (settings.defaultSize_half.h + radius) )
+                return false;
+        }
+        else
+        {
+            // Check the top and bottom sides of the screen
+            if( Math.abs(-this.transPos.y - transPos.y) > ((Math.abs(transPos.z) * settings.screenAspectRatio.h) + radius) )
+                return false;
+        }
+
+        return true;
+    }
+
+    //
+    //  DESC: Check if the raduis is in the view frustrum
+    //
+    inViewX( transPos, radius )
+    {
+        if(this.projType == defs.EPT_ORTHOGRAPHIC)
+        {
+            // Check the right and left sides of the screen
+            if( Math.abs(-this.transPos.x - transPos.x) > (settings.defaultSize_half.w + radius) )
+                return false;
+        }
+        else
+        {
+            // Check the right and left sides of the screen
+            if( Math.abs(-this.transPos.x - transPos.x) > ((Math.abs(transPos.z) * settings.screenAspectRatio.w) + radius) )
+                return false;
+        }
+
+        return true;
+    }
 }

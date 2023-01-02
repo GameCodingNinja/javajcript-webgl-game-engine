@@ -138,6 +138,29 @@ export class Node extends iNode
     }
 
     // 
+    //  DESC: Init the tree
+    //
+    initTree()
+    {
+        this.index = 0;
+        let nextNode = null;
+        this.init();
+
+        do
+        {
+            // get the next node
+            nextNode = this.next();
+
+            if( nextNode != null )
+            {
+                // Call a recursive function to reset the node
+                nextNode.initTree();
+            }
+        }
+        while( nextNode !== null );
+    }
+
+    // 
     //  DESC: Find the child
     //
     findChild( childName )

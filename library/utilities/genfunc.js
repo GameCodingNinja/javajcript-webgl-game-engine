@@ -207,3 +207,14 @@ export function getKey(map, searchValue)
 
     return undefined;
 }
+
+// 
+//  DESC: Check if an object is empty
+//
+export function isEmpty(obj)
+{
+    for( const property in obj )
+        return false;
+
+    return true;
+}

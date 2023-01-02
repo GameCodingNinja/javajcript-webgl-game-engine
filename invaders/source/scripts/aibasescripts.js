@@ -11,39 +11,12 @@ import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
 //
-//  DESC: AI head (root) node base class script
-//        Only supports one child
-//
-class AI_Head extends Node
-{
-    constructor( nodeData )
-    {
-        super( nodeData );
-        this.name = nodeData.scriptName;
-        this.behavior = nodeData.behavior;
-        this.data = {'first_active_node': null};
-    }
-    
-    // 
-    //  DESC: Execute the children
-    //
-    execute()
-    {
-        // Returning SUCCESS or FAILURE terminates the execution of this behavioral tree
-        if( this.nodeAry[0].evaluate() != defs.EAIS_ACTIVE )
-            return true;
-
-        return false;
-    }
-}
-
-//
 //  DESC: AI composite node script
 //        Evaluates every child until one of them succeeds, otherwise it fails.
 //
 class AI_Composite extends Node
 {
-    constructor( nodeData )
+    constructor( nodeData, headNode )
     {
         super( nodeData );
         this.name = nodeData.scriptName;
@@ -51,7 +24,7 @@ class AI_Composite extends Node
         this.type = nodeData.type;
         this.order = nodeData.order;
         this.condition = nodeData.condition;
-        this.data = null;
+        this.data = headNode.data;
         this.state = defs.EAIS_ACTIVE;
         this.childIndexAry = [];
         this.index = 0;
@@ -122,7 +95,7 @@ class AI_Composite extends Node
                             this.state = defs.EAIS_FAILURE;
                     }
                 }
-                // Until all success - OR operation for success
+                // Until all success - AND operation for success
                 if( this.condition === defs.EAIC_ALL_SUCCESS )
                 {
                     // If the child returns FAILURE, set this node's state to FAILURE
@@ -137,7 +110,7 @@ class AI_Composite extends Node
                             this.state = defs.EAIS_SUCCESS;
                     }
                 }
-                // Until all failure - OR operation for failure
+                // Until all failure - AND operation for failure
                 else if( this.condition === defs.EAIC_ALL_FAILURE )
                 {
                     // If the child returns SUCCESS, set this node's state to FAILURE
@@ -167,10 +140,10 @@ class AI_Composite extends Node
 //
 class AI_Decorator extends Node
 {
-    constructor( nodeData )
+    constructor( nodeData, headNode )
     {
         super( nodeData );
-        this.data = null;
+        this.data = headNode.data;
         this.name = nodeData.scriptName;
         this.behavior = nodeData.behavior;
         this.type = nodeData.type;
@@ -266,12 +239,9 @@ class AI_Decorator extends Node
 //
 export function loadScripts()
 {
-    scriptManager.set( 'AI_Head',
-        ( nodeData ) => { return new AI_Head( nodeData ); } );
-
     scriptManager.set( 'AI_Composite',
-        ( nodeData ) => { return new AI_Composite( nodeData ); } );
+        ( nodeData, headNode ) => { return new AI_Composite( nodeData, headNode ); } );
 
     scriptManager.set( 'AI_Decorator',
-        ( nodeData ) => { return new AI_Decorator( nodeData ); } );
+        ( nodeData, headNode ) => { return new AI_Decorator( nodeData, headNode ); } );
 }

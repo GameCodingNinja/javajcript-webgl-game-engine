@@ -148,6 +148,11 @@
             <visual>
                 <texture file="data/textures/playerShip/blue_1_idle.png" filter="NEAREST"/>
             </visual>
+            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000001" collisionSignal="true">
+                <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                    <rect x1="5" y1="5" x2="-5" y2="-5"/>
+                </rect>
+            </collision>
         </object>
 
         <object name="player_fire_tail">
@@ -156,26 +161,49 @@
             </visual>
         </object>
 
-        <object name="lazer_blast">
+        <object name="player_shot">
             <visual>
-                <texture count="4" file="data/textures/playerShip/laser_blast_${NUM}.png"/>
+                <texture file="data/textures/playerShip/projectile03-4.png" filter="NEAREST"/>
             </visual>
+            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000001" collisionSignal="true">
+                <!--<circle radiusFromVisual="true"/>-->
+                <!--<rect radiusFromVisual="true" rectFromVisual="true"/>-->
+                <point radiusFromVisual="true"/>
+                <!--<lineList radiusFromVisual="true" pointsToModelView="true">
+                    <line>
+                        <point x="5" y="4"/>
+                        <point x="10" y="-4"/>
+                    </line>
+                </lineList>-->
+                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="0" y="0"/>
+                        <point x="0" y="7"/>
+                        <point x="16" y="7"/>
+                        <point x="16" y="0"/>
+                    </polygon>
+                </polygonList>-->
+            </collision>
         </object>
 
         <object name="enemy_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy.png"/>
+                <texture file="data/textures/enemyShip/enemy_3.png"/>
             </visual>
-            <collision filterCategoryBits="0x00000001" filterMaskBits="0xFFFFFFFF">
-                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000001">
+                
+                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
-                        <point x="78" y="1"/>
-                        <point x="0" y="68"/>
-                        <point x="28" y="109"/>
-                        <point x="126" y="109"/>
-                        <point x="155" y="68"/>
+                        <point x="2" y="2"/>
+                        <point x="2" y="86"/>
+                        <point x="68" y="86"/>
+                        <point x="68" y="2"/>
                     </polygon>
-                </polygonList>
+                </polygonList>-->
+
+                <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                    <rect x1="5" y1="5" x2="-5" y2="-5"/>
+                </rect>
 
                 <!--<rect radiusFromVisual="true" rectToModelView="true">
                     <rect x1="9" y1="12" x2="47" y2="120"/>
@@ -194,30 +222,13 @@
             </collision>
         </object>
 
-        <object name="null_lazer_sprite">
+        <object name="enemy_shot">
             <visual>
-                <mesh genType="null"/>
+                <texture file="data/textures/enemyShip/projectile06-5.png" filter="NEAREST"/>
             </visual>
-            <collision filterCategoryBits="0x00000002" filterMaskBits="0xFFFFFFFF" collisionSignal="true">
-                <!--<circle radiusFromVisual="true"/>-->
-                <rect radiusFromVisual="true" rectFromVisual="true"/>
-                <!--<point radiusFromVisual="true"/>
-                <lineList radiusFromVisual="true" pointsToModelView="true">
-                    <line>
-                        <point x="5" y="4"/>
-                        <point x="10" y="-4"/>
-                    </line>
-                </lineList>
-                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
-                    <polygon>
-                        <point x="0" y="0"/>
-                        <point x="16" y="2"/>
-                        <point x="16" y="5"/>
-                        <point x="0" y="7"/>
-                    </polygon>
-                </polygonList>-->
+            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000001" collisionSignal="true">
+                <circle radius="10"/>
             </collision>
-            <size width="16" height="7"/>
         </object>
 
     </objectList>

@@ -173,7 +173,7 @@ export class Object
         this.scale.inc( scale );
     }
     
-    incScaleXYZ( x = 1, y = 1, z = 1 )
+    incScaleXYZ( x = 0, y = 0, z = 0 )
     {
         this.parameters.add( defs.SCALE | defs.TRANSFORM );
 

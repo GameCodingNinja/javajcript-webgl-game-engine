@@ -345,6 +345,15 @@ export class Sprite extends Object
     }
 
     //
+    //  DESC: Returns the current radius of this sprite only.
+    //        Use this function if scale is constantly changing
+    //
+    getRadius()
+    {
+        return this.getSize().getLength() / 2;
+    }
+
+    //
     //  DESC: Get the rect of this sprite from orgin 0,0
     //
     getRect()

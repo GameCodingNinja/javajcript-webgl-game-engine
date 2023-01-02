@@ -12,7 +12,7 @@ import { highResTimer } from './highresolutiontimer';
 //
 export function getLinear()
 {
-    return (time) => { return time; };
+    return (time) => time;
 }
 
 // 
@@ -20,12 +20,12 @@ export function getLinear()
 //
 export function getPowIn( pow )
 {
-    return (time) => { return Math.pow( time, pow ); }
+    return (time) => Math.pow( time, pow );
 }
 
 export function getPowOut( pow )
 {
-    return (time) => { return 1-Math.pow( 1-time, pow ); }
+    return (time) => 1 - Math.pow( 1-time, pow );
 }
 
 export function getPowInOut( pow )
@@ -40,21 +40,87 @@ export function getPowInOut( pow )
 }
 
 // 
+//  DESC: Quad functions
+//
+
+// Accelerating from zero velocity
+export function getQuadIn()
+{
+    return (time) => time * time;
+}
+
+// Decelerating to zero velocity
+export function getQuadOut()
+{
+    return (time) => time * (2 - time);
+}
+
+// Acceleration until halfway, then deceleration
+export function getQuadInOut()
+{
+    return (time) => time < 0.5 ? 2 * time * time : - 1 + ( 4 - 2 * time ) * time;
+}
+
+// 
+//  DESC: Cube functions
+//
+
+// Accelerating from zero velocity
+export function getCubicIn()
+{
+    return (time) => time * time * time;
+}
+
+// Decelerating to zero velocity
+export function getCubicOut()
+{
+    return (time) => (--time) * time * time + 1;
+}
+
+// Acceleration until halfway, then deceleration
+export function getCubicInOut()
+{
+    return (time) => time < 0.5 ? 4 * time * time * time : ( time - 1 ) * ( 2 * time - 2 ) * ( 2 * time - 2 ) + 1;
+}
+
+// 
+//  DESC: Quart functions
+//
+
+// Accelerating from zero velocity
+export function setQuartIn()
+{
+    return (time) => time * time * time * time;
+}
+
+// Decelerating to zero velocity
+export function setQuartOut()
+{
+    return (time) => 1 - (--time) * time * time * time;
+}
+
+// Acceleration until halfway, then deceleration
+export function setQuartInOut()
+{
+    return (time) => 1 - time < .5 ? 8 * time * time * time * time : 1 - 8 * (--time) * time * time * time
+}
+
+// 
 //  DESC: Sine functions
 //
 export function getSineIn()
 {
-    return (time) => 1-Math.cos( time * Math.PI/2 );
+    return (time) => -1 * Math.cos( time * ( Math.PI / 2 ) ) + 1;
 }
 
 export function getSineOut()
 {
-    return (time) => Math.sin( time * Math.PI/2 );
+    return (time) => Math.sin( time * ( Math.PI / 2 ) );
 }
 
 export function getSineInOut()
 {
-    return (time) => -0.5 * ( Math.cos( Math.PI * time )-1 );
+    return (time) => -0.5 * ( Math.cos( Math.PI * time ) - 1 ); 
 }
 
 // 
@@ -62,12 +128,12 @@ export function getSineInOut()
 //
 export function getBackIn( amount )
 {
-    return (time) => { return time * time * ((amount + 1) * time - amount); }
+    return (time) =>  time * time * ((amount + 1) * time - amount);
 }
 
 export function getBackOut( amount )
 {
-    return (time) => { return (--time * time * ((amount + 1) * time + amount) + 1); }
+    return (time) => (--time * time * ((amount + 1) * time + amount) + 1);
 }
 
 export function getBackInOut( amount )
@@ -88,12 +154,12 @@ export function getBackInOut( amount )
 //
 export function getCircleIn()
 {
-    return (time) => { return -(Math.sqrt(1 - time * time) - 1); }
+    return (time) => -(Math.sqrt(1 - time * time) - 1);
 }
 
 export function getCircleOut()
 {
-    return (time) => { return Math.sqrt(1-(--time) * time); }
+    return (time) => Math.sqrt(1-(--time) * time);
 }
 
 export function getCircleInOut()
@@ -132,12 +198,12 @@ function bounce( time )
 
 export function getBounceIn()
 {
-    return (time) => { return 1 - bounce( 1 - time ); }
+    return (time) => 1 - bounce( 1 - time );
 }
 
 export function getBounceOut()
 {
-    return (time) => { return bounce( time ); }
+    return (time) => bounce( time );
 }
 
 export function getBounceInOut()
@@ -261,4 +327,9 @@ export class valueTo
     //  DESC: Finished access function
     //
     isFinished() { return this.finished; }
+
+    // 
+    //  DESC: Is this class initialized
+    //
+    isInitialized() { return this.easingFunc !== null; }
 }

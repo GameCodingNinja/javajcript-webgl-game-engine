@@ -192,6 +192,15 @@ export class ScriptComponent
                 this.scriptAry.splice( i, 1 );
         }
     }
+
+    //
+    //  DESC: Init the script tree
+    //
+    initScriptTree()
+    {
+        for( let i = 0; i < this.scriptAry.length; i++ )
+            this.scriptAry[i].initTree();
+    }
     
     // 
     //  DESC: Is this component active?

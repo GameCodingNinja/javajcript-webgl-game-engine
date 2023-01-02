@@ -229,6 +229,15 @@ export class Strategy extends Object
 
         return false;
     }
+
+    //
+    //  DESC: Init the script tree
+    //
+    initScriptTree()
+    {
+        for( let i = 0; i < this.activateAry.length; i++ )
+            this.activateAry[i].get().scriptComponent.initScriptTree();
+    }
     
     //
     //  DESC: activate node

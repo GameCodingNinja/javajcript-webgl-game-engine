@@ -4,6 +4,7 @@
     <node name="enemy_ship" id="-2">
 
         <sprite>
+            <scale x="0.70" y="0.70"/>
             <scriptList>
                 <script ai_enemy="AI_Enemy" prepareOnInit="true" ai="true"/>
             </scriptList>

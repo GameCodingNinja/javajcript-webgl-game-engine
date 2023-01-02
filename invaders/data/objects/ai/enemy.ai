@@ -3,31 +3,31 @@
 
     <node name="AI_Enemy">
 
-        <head script="AI_Head"/>
+        <head script="AI_Enemy_Head"/>
 
         <node>
 
-            <decorator script="AI_Decorator" type="repeater" condition="until_success" repeatCount="2"/>
+            <composite script="AI_Composite" condition="all_success"/>
 
             <node>
 
-                <composite script="AI_Composite" condition="all_failure"/>
+                <leaf script="AI_Enemy_Desend"/>
+
+            </node>
+
+            <node>
+
+                <decorator script="AI_Decorator" type="repeater"/>
 
                 <node>
 
-                    <leaf script="AI_Return_Failure"/>
+                    <composite script="AI_Composite" condition="all_success"/>
 
-                </node>
+                        <node>
 
-                <node>
+                            <leaf script="AI_Enemy_Roam"/>
 
-                    <leaf script="AI_Return_Failure"/>
-
-                </node>
-
-                <node>
-
-                    <leaf script="AI_Return_Failure"/>
+                        </node>
 
                 </node>
 

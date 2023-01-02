@@ -1,17 +1,22 @@
 <?xml version="1.0"?>
 <loader>
 
+    <!-- Needs to be loaded before the enemys because the enemies will refer to the player ship during the load -->
     <strategy name="_player_ship_">
         <node name="player_ship" instance="player_ship"/>
     </strategy>
 
     <strategy name="_enemy_">
-        <node name="enemy_ship" instance="enemy_ship">
-            <sprite>
-                <position x="700" y="0"/>
-                <rotation z="90"/>
-            </sprite>
-        </node>
+        <node name="enemy_ship"/>
+        <!--<node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>-->
     </strategy>
   
 </loader>

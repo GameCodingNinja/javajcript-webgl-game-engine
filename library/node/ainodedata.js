@@ -112,6 +112,8 @@ export class AINodeData
                     {
                         this.type = defs.EAIT_REPEATER;
                         this.condition = defs.EAIC_UNTIL_COUNT;
+                        // Default to endless repeat count
+                        this.repeatCount = 0;
 
                         attr = xmlNode.children[i].getAttribute( 'repeatCount' );
                         if( attr )

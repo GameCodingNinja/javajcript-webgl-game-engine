@@ -100,6 +100,7 @@ class Strategyloader extends ManagerBase
     {
         let defaultName = xmlNode.getAttribute( 'defaultName' );
         let defaultGroup = xmlNode.getAttribute( 'defaultGroup' );
+        let defaultId = xmlNode.getAttribute( 'defaultId' );
 
         let xmlNodeLst = xmlNode.children;
 
@@ -117,6 +118,11 @@ class Strategyloader extends ManagerBase
                 if( !group )
                     group = defaultGroup
 
+                // See if a group has been specified
+                let id = xmlNodeLst[i].getAttribute( 'id' );
+                if( !id )
+                    id = defaultId
+
                 // Get the instance name if one is provided.
                 // Nodes with instance names are stored in a map so that a reference can be returned
                 let instance = xmlNodeLst[i].getAttribute( 'instance' );
@@ -125,6 +131,10 @@ class Strategyloader extends ManagerBase
                 let active = xmlNodeLst[i].getAttribute( 'active' );
                 let headNode = strategy.create( name, instance, (!active || active === 'true'), group );
                 let recalcRadius = false;
+
+                // Set the ID if one has been specified
+                if( id )
+                    headNode.userId = Number(id);
 
                 for( let j = 0; j < xmlNodeLst[i].children.length; j++ )
                 {

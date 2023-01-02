@@ -101,6 +101,10 @@ export class Level1State extends CommonState
         // The enemy strategy needs to be activated before the player ship strategy
         this.enemyStratagy = strategyManager.activateStrategy('_enemy_');
 
+        // Init the AI script tree and move the building into the active list
+        strategyManager.get("_buildings_").addToActiveList();
+        this.enemyStratagy.initScriptTree();
+
         // Get the nodes and sprites we need to call and tuck them under the node for easy access
         this.playerShipStratagy = strategyManager.activateStrategy('_player_ship_');
         this.playerShipNode = this.playerShipStratagy.get('player_ship');
@@ -133,8 +137,8 @@ export class Level1State extends CommonState
         spriteB.collisionComponent.enable = false;
 
         // Schedule these sprite to be destroyed
-        this.playerShipStratagy.destroy(spriteA.parentNode);
-        this.enemyStratagy.destroy(spriteB.parentNode);
+        this.playerShipStratagy.destroy( spriteA.parentNode );
+        this.enemyStratagy.destroy( spriteB.parentNode );
     }
     
     // 
@@ -161,7 +165,7 @@ export class Level1State extends CommonState
 
             if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
             {
-                let laserBlast = this.playerShipStratagy.create('player_lazer').get();
+                let laserBlast = this.playerShipStratagy.create('player_shot').get();
                 laserBlast.scriptComponent.prepare( 'shoot', laserBlast, this.easingX.getValue() );
             }
         }
@@ -303,6 +307,7 @@ export class Level1State extends CommonState
 
             let easingVal = this.easingX.getValue() + this.cameraEasingX.getValue();
             this.camera.incPosXYZ( easingVal );
+            
             this.forgroundCamera.incPosXYZ( easingVal );
             this.buildingsCamera.incPosXYZ( easingVal );
             this.buildingsbackCamera.incPosXYZ( easingVal * 0.25 );
@@ -310,24 +315,24 @@ export class Level1State extends CommonState
 
             // Loop the static backgrounds
             if( this.buildingsbackCamera.pos.x < -1280 )
-                this.buildingsbackCamera.incPosXYZ( -1280 );
+                this.buildingsbackCamera.incPosXYZ( -(1280 * 2) );
             else if( this.buildingsbackCamera.pos.x > 1280 )
-                this.buildingsbackCamera.incPosXYZ( 1280 );
+                this.buildingsbackCamera.incPosXYZ( 1280 * 2 );
 
             if( this.buildingsfrontCamera.pos.x < -1280 )
-                this.buildingsfrontCamera.incPosXYZ( -1280 );
+                this.buildingsfrontCamera.incPosXYZ( -(1280 * 2) );
             else if( this.buildingsfrontCamera.pos.x > 1280 )
-                this.buildingsfrontCamera.incPosXYZ( 1280 );
+                this.buildingsfrontCamera.incPosXYZ( 1280 * 2 );
 
             if( this.forgroundCamera.pos.x < -1280 )
-                this.forgroundCamera.incPosXYZ( -1280 );
+                this.forgroundCamera.incPosXYZ( -(1280 * 2) );
             else if( this.forgroundCamera.pos.x > 1280 )
-                this.forgroundCamera.incPosXYZ( 1280 );
+                this.forgroundCamera.incPosXYZ( 1280 * 2 );
 
-            if( this.buildingsCamera.pos.x < -2800 )
-                this.buildingsCamera.incPosXYZ( -2800 );
-            else if( this.buildingsCamera.pos.x > 2800)
-                this.buildingsCamera.incPosXYZ( 2800 );
+            if( this.buildingsCamera.pos.x < -6300 )
+                this.buildingsCamera.incPosXYZ( -(6300 * 2) );
+            else if( this.buildingsCamera.pos.x > 6300)
+                this.buildingsCamera.incPosXYZ( 6300 * 2 );
 
             let incY = this.easingY.getValue();
             let playerPos = this.playerShipNode.object.transPos;
@@ -359,6 +364,17 @@ export class Level1State extends CommonState
 
             this.playerShipNode.object.incPosXYZ( this.easingX.getValue(), incY );
 
+            // Loop the player and camera
+            if( this.playerShipNode.object.pos.x < -6300 )
+            {
+                this.playerShipNode.object.incPosXYZ( 6300 * 2 );
+                this.camera.incPosXYZ( 6300 * 2 );
+            }
+            else if( this.playerShipNode.object.pos.x > 6300 )
+            {
+                this.playerShipNode.object.incPosXYZ( -(6300 * 2) );
+                this.camera.incPosXYZ( -(6300 * 2) );
+            }
             
             for( let i = 0; i < MAX_CLOUDS; i++ )
             {
@@ -426,7 +442,6 @@ export function load()
 
         // Load and execute all the strategy loaders.
         .then(() => strategyLoader.loadGroup( '-level1-' ))
-
 
         // Clean up the temporary files
         .then(() =>

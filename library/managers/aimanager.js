@@ -84,32 +84,33 @@ class AIManager extends ManagerBase
             for( let i = 0; i < aiNodeDataAry.length; i++ )
             {
                 let node;
-                // The leaf node executes game logic so need to pass in the object
-                if(aiNodeDataAry[i].nodeType === defs.EAIB_LEAF_TASK)
+
+                // Handle the head node
+                if( aiNodeDataAry[i].behavior === defs.EAIB_HEAD )
                 {
-                    node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], object);
+                    headNode = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i]);
+                    continue;
+                }
+                // The leaf node executes game logic so need to pass in the object
+                else if( aiNodeDataAry[i].behavior === defs.EAIB_LEAF_TASK )
+                {
+                    node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], headNode, object);
                 }
                 else
                 {
-                    node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i]);
+                    node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], headNode);
                 }
 
-                if( headNode === null )
-                {
-                    headNode = node;
-                    continue;
-                }
-                else if( !headNode.addNode( node ) )
+                if( !headNode.addNode( node ) )
                 {
                     throw new Error( `Parent node not found or node does not support adding children (${aiNodeDataAry[i].scriptName}, ${node.parentId})!` );
                 }
-
-                // All nodes share the same data dictionary
-                node.data = headNode.data;
             }
         }
         else
+        {
             throw new Error( `Error finding ai node data (${name})!` );
+        }
 
         // Initialize the tree by doing a reset
         headNode.resetTree();

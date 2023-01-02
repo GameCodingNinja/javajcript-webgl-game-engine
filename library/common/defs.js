@@ -37,8 +37,7 @@ export const ECT_NULL     = 0,
              ECT_CIRCLE   = 2,
              ECT_LINE     = 3,
              ECT_RECT     = 4,
-             ECT_POLYGON  = 5;
-             
+             ECT_POLYGON  = 5;ECT_CIRCLE
 
 // EProjectionType
 export const EPT_NULL         = 0,

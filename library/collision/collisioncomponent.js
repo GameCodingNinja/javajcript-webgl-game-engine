@@ -4,6 +4,10 @@
 //             NOTE: Works in squared space
 //             The more complex checks were lifted from: http://jeffreythompson.org/collision-detection/
 //
+//             NOTE: For speed reasons, many of the checks don't work if collision object has been rotated especially rect.
+//                   Not all combinations work in all situations.
+//                   Point works the best in all situations.
+//                   Use polygon for objects that need to be rotated.
 
 "use strict";
 
@@ -791,19 +795,20 @@ export class CollisionComponent
     pointToPolygonCheck( point, polygon )
     {
         let collision = false;
+        let next, vc, vn, px, py;
 
         for( let i = 0; i < polygon.pointAry.length; ++i )
         {
             // Get next vertex in list. If we've hit the end, wrap around to 0
-            let next = i + 1;
+            next = i + 1;
             if( next == polygon.pointAry.length )
                 next = 0;
 
             // Ge the current and next point
-            let vc = polygon.pointAry[i];
-            let vn = polygon.pointAry[next];
-            let px = point.x;
-            let py = point.y;
+            vc = polygon.pointAry[i];
+            vn = polygon.pointAry[next];
+            px = point.x;
+            py = point.y;
 
             // compare position, flip 'collision' variable back and forth
             if( ((vc.y >= py && vn.y < py) || (vc.y < py && vn.y >= py)) &&
