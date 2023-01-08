@@ -21,6 +21,7 @@ export class SpriteLeafNode extends iNode
         this.sprite = new Sprite( objectData, this );
         this.type = defs.ENT_SPRITE;
         this.userId = nodeData.userId;
+        this.useSizeForRadiusCalc = nodeData.useSizeForRadiusCalc;
     }
 
     // 
@@ -92,14 +93,17 @@ export class SpriteLeafNode extends iNode
     //
     calcSize( size )
     {
-        let vSize = this.sprite.getSize();
-        if( vSize )
+        if( this.useSizeForRadiusCalc )
         {
-            if( vSize.w > size.w )
-                size.w = vSize.w;
+            let vSize = this.sprite.getSize();
+            if( vSize )
+            {
+                if( vSize.w > size.w )
+                    size.w = vSize.w;
 
-            if( vSize.h > size.h )
-                size.h = vSize.h;
+                if( vSize.h > size.h )
+                    size.h = vSize.h;
+            }
         }
     }
 

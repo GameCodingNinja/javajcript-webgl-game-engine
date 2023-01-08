@@ -19,6 +19,7 @@
             </spriteLst>
             
             <!-- stencil mask -->
+            <!-- Not using stencil mask. Sprite index points to solid bar -->
             <stencilMask objectName="" spriteIndex="1" />
         </uiProgressBar>
     </node>

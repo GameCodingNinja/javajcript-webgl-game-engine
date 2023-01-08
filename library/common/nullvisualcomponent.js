@@ -10,9 +10,10 @@ import { ivisualComponent } from '../common/ivisualcomponent';
 
 export class NullVisualComponent extends ivisualComponent
 {
-    constructor()
+    constructor( objData )
     {
         super();
+        this.objData = objData;
     }
 
     //
@@ -36,5 +37,13 @@ export class NullVisualComponent extends ivisualComponent
     getFrameCount()
     {
         return 0;
+    }
+
+    //
+    //  DESC: Get the size specified in the object data
+    //
+    getSize()
+    {
+        return this.objData.size;
     }
 }

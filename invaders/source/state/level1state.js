@@ -41,7 +41,8 @@ const MOVE_NULL = -1,
       CAMERA_EASING_SPEED = 11,
       CAMERA_EASING_DIVISOR = 3,
       CAMERA_EASING_OFFSET = 350,
-      MAX_CLOUDS = 8;
+      MAX_CLOUDS = 8,
+      PLAYER_SHIP_ID = 0;
 
 export class Level1State extends CommonState
 {
@@ -108,8 +109,14 @@ export class Level1State extends CommonState
         // Get the nodes and sprites we need to call and tuck them under the node for easy access
         this.playerShipStratagy = strategyManager.activateStrategy('_player_ship_');
         this.playerShipNode = this.playerShipStratagy.get('player_ship');
-        this.playerShipNode.fireTailSprite = this.playerShipNode.findChild('player_fire_tail').sprite;
+        this.playerShipObject = this.playerShipNode.findChild('playerShip_object').get();
+        this.playerShipNode.fireTailSprite = this.playerShipNode.findChild('player_fire_tail').get();
+        this.playerShipProgressBar = this.playerShipNode.findChild('UIProgressBar').get();
+        this.playerShipProgressBar.setProgressBarMax( 100 );
+        this.playerShipProgressBar.setCurrentValue( 60 );
+
         this.playerShipNode.fireTailScript = this.playerShipNode.fireTailSprite.scriptComponent.prepare( 'fireTailAnim', this.playerShipNode.fireTailSprite );
+        this.playerShipSprite = this.playerShipNode.get();
 
         // Player/camera movement
         this.easingX = new easing.valueTo;
@@ -132,13 +139,21 @@ export class Level1State extends CommonState
     //
     collisionCallBack( spriteA, spriteB )
     {
-        // Stop any more collision detection
-        spriteA.collisionComponent.enable = false;
-        spriteB.collisionComponent.enable = false;
+        if(spriteB.parentNode.userId == PLAYER_SHIP_ID)
+        {
+            spriteA.collisionComponent.enable = false;
+            spriteA.scriptComponent.prepare( 'hit', spriteA );
+        }
+        else
+        {
+            // Stop any more collision detection
+            spriteA.collisionComponent.enable = false;
+            spriteB.collisionComponent.enable = false;
 
-        // Schedule these sprite to be destroyed
-        this.playerShipStratagy.destroy( spriteA.parentNode );
-        this.enemyStratagy.destroy( spriteB.parentNode );
+            // Execute the scripts that handle being hit
+            spriteA.scriptComponent.prepare( 'hit', spriteA );
+            spriteB.scriptComponent.prepare( 'hit', spriteB );
+        }
     }
     
     // 
@@ -190,7 +205,7 @@ export class Level1State extends CommonState
                     if( i === MOVE_LEFT )
                     {
                         // Flip the ship facing left
-                        this.playerShipNode.object.setRotXYZ( 0, 180 );
+                        this.playerShipObject.setRotXYZ( 0, 180 );
 
                         if( actionResult === defs.EAP_DOWN )
                         {
@@ -214,7 +229,7 @@ export class Level1State extends CommonState
                     else if( i === MOVE_RIGHT )
                     {
                         // Flip the ship facing right (default orientation)
-                        this.playerShipNode.object.setRotXYZ();
+                        this.playerShipObject.setRotXYZ();
 
                         if( actionResult === defs.EAP_DOWN )
                         {
@@ -335,7 +350,7 @@ export class Level1State extends CommonState
                 this.buildingsCamera.incPosXYZ( 6300 * 2 );
 
             let incY = this.easingY.getValue();
-            let playerPos = this.playerShipNode.object.transPos;
+            let playerPos = this.playerShipSprite.transPos;
 
             // Stop the up/down movement
             if( (this.moveDirY === MOVE_DOWN && playerPos.y < -settings.defaultSize_half.h) ||
@@ -362,17 +377,17 @@ export class Level1State extends CommonState
                     this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0, easing.getLinear() );
             }
 
-            this.playerShipNode.object.incPosXYZ( this.easingX.getValue(), incY );
+            this.playerShipSprite.incPosXYZ( this.easingX.getValue(), incY );
 
             // Loop the player and camera
-            if( this.playerShipNode.object.pos.x < -6300 )
+            if( this.playerShipSprite.pos.x < -6300 )
             {
-                this.playerShipNode.object.incPosXYZ( 6300 * 2 );
+                this.playerShipSprite.incPosXYZ( 6300 * 2 );
                 this.camera.incPosXYZ( 6300 * 2 );
             }
-            else if( this.playerShipNode.object.pos.x > 6300 )
+            else if( this.playerShipSprite.pos.x > 6300 )
             {
-                this.playerShipNode.object.incPosXYZ( -(6300 * 2) );
+                this.playerShipSprite.incPosXYZ( -(6300 * 2) );
                 this.camera.incPosXYZ( -(6300 * 2) );
             }
             

@@ -199,7 +199,13 @@ export class ScriptComponent
     initScriptTree()
     {
         for( let i = 0; i < this.scriptAry.length; i++ )
-            this.scriptAry[i].initTree();
+        {
+            // initTree is only in scripts that inherit from Node
+            if( this.scriptAry[i].initTree !== undefined )
+            {
+                this.scriptAry[i].initTree();
+            }
+        }
     }
     
     // 

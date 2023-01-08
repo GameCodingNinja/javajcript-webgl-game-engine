@@ -12,6 +12,25 @@
   
     <objectList>
 
+        <object name="progress_frame">
+            <visual>
+                <texture file="data/textures/level/8x8_1_pixel_frame.png" filter="NEAREST"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="3" thicknessHeight="3" centerQuad="true"/>
+                </mesh>
+                <color r="0" g="0" b="0" a="1"/>
+            </visual>
+            <size width="60" height="8"/>
+        </object>
+        
+        <object name="progress_solid">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="0" g="255" b="0" a="0.8"/>
+            </visual>
+            <size width="54" height="4"/>
+        </object>
+
         <object name="background">
             <visual>
                 <texture file="data/textures/level/daytime_background.png" filter="NEAREST"/>
@@ -144,15 +163,30 @@
             </visual>
         </object>
 
+        <object name="null_player_ship">
+            <visual>
+                <mesh genType="null"/>
+            </visual>
+            <collision filterCategoryBits="0x00000000" filterMaskBits="0x00000006" collisionSignal="false">
+                <!--<rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                    <rect x1="5" y1="5" x2="-5" y2="-5"/>
+                </rect>-->
+                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="5" y="5"/>
+                        <point x="5" y="20"/>
+                        <point x="40" y="20"/>
+                        <point x="40" y="5"/>
+                    </polygon>
+                </polygonList>
+            </collision>
+            <size width="45" height="25"/>
+        </object>
+
         <object name="player_ship_body">
             <visual>
                 <texture file="data/textures/playerShip/blue_1_idle.png" filter="NEAREST"/>
             </visual>
-            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000001" collisionSignal="true">
-                <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
-                    <rect x1="5" y1="5" x2="-5" y2="-5"/>
-                </rect>
-            </collision>
         </object>
 
         <object name="player_fire_tail">
@@ -165,7 +199,7 @@
             <visual>
                 <texture file="data/textures/playerShip/projectile03-4.png" filter="NEAREST"/>
             </visual>
-            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000001" collisionSignal="true">
+            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000000" collisionSignal="true">
                 <!--<circle radiusFromVisual="true"/>-->
                 <!--<rect radiusFromVisual="true" rectFromVisual="true"/>-->
                 <point radiusFromVisual="true"/>
@@ -190,7 +224,7 @@
             <visual>
                 <texture file="data/textures/enemyShip/enemy_3.png"/>
             </visual>
-            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000001">
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
                 
                 <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
@@ -226,7 +260,7 @@
             <visual>
                 <texture file="data/textures/enemyShip/projectile06-5.png" filter="NEAREST"/>
             </visual>
-            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000001" collisionSignal="true">
+            <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <circle radius="10"/>
             </collision>
         </object>

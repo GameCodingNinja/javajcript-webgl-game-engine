@@ -47,6 +47,6 @@ export class ivisualComponent
     //
     getSize()
     {
-        return 0;
+        return null;
     }
 }

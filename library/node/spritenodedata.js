@@ -19,8 +19,8 @@ export class SpriteNodeData
         // Object name
         this.objectName = null;
 
-        // Sprite is visible by default
-        this.visible = true;
+        // Use the size for radius calulations
+        this.useSizeForRadiusCalc = true;
     }
 
     // 
@@ -49,10 +49,21 @@ export class SpriteNodeData
         
         // Get the object data name
         attr = xmlNode.getAttribute( 'objectName' );
-        if( attr)
+        if( attr )
+        {
             this.objectName = attr;
+        }
         // Indicate we are going to try to use the node name to lookup the sprite object name
         else if( !defObjName && xmlNode.nodeName === "sprite" )
+        {
             console.debug(`Node name used for object data look-up (${this.group}, ${this.objectName})`);
+        }
+
+        // Do we use the size of this sprite to calc the radius
+        attr = xmlNode.getAttribute( 'useSizeForRadiusCalc' );
+        if( attr )
+        {
+            this.useSizeForRadiusCalc = (attr === 'true');
+        }
     }
 }

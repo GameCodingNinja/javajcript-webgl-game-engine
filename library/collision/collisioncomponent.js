@@ -253,7 +253,7 @@ export class CollisionComponent
             {
                 let sprite = nodeAry[node].sprite;
 
-                if( sprite && sprite.collisionComponent && sprite.collisionComponent.enable && (this.filterMaskBits & sprite.collisionComponent.filterCategoryBits) )
+                if( sprite && sprite.collisionComponent && sprite.collisionComponent.enable && (this.filterCategoryBits & sprite.collisionComponent.filterMaskBits) )
                 {
                     if( this.type === defs.ECT_POINT )
                     {
@@ -384,7 +384,8 @@ export class CollisionComponent
     }
 
     // 
-    //  DESC: Check for rect to rect collision
+    //  DESC: Check for rect to rect collision (Axis-Aligned Bounding Box)
+    //  NOTE: Does not work if one or more of the rects are rotated. Use poly for rotated box
     //
     rectToRectCollision( sprite )
     {

@@ -342,6 +342,22 @@ export class Object
         }
     }
 
+    // 
+    //  DESC: do the render
+    //
+    render( /* camera */ )
+    {
+        // Empty render function to help with recursion
+    }
+
+    //
+    //  DESC: Do some cleanup
+    //
+    cleanUp()
+    {
+        // Empty render function to help with recursion
+    }
+    
     //
     //  DESC: Apply the scale
     //

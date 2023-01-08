@@ -13,6 +13,7 @@ export class RenderNode extends Node
     constructor( nodeData)
     {
         super( nodeData )
+        this.useSizeForRadiusCalc = nodeData.useSizeForRadiusCalc;
     }
 
     // 
@@ -32,14 +33,17 @@ export class RenderNode extends Node
     //
     calcSize( size )
     {
-        let vSize = this.get().getSize();
-        if( vSize )
+        if( this.useSizeForRadiusCalc )
         {
-            if( vSize.w > size.w )
-                size.w = vSize.w;
+            let vSize = this.get().getSize();
+            if( vSize )
+            {
+                if( vSize.w > size.w )
+                    size.w = vSize.w;
 
-            if( vSize.h > size.h )
-                size.h = vSize.h;
+                if( vSize.h > size.h )
+                    size.h = vSize.h;
+            }
         }
     }
     
@@ -69,7 +73,7 @@ export class RenderNode extends Node
                 if( nextNode !== null )
                 {
                     // Clean up the children
-                    nextNode.cleanUp();
+                    nextNode.get().cleanUp();
 
                     // Call a recursive function again
                     this.updateRecursive( nextNode );
@@ -104,8 +108,8 @@ export class RenderNode extends Node
 
                 if( nextNode !== null )
                 {
-                    // Update the children
-                    nextNode.update();
+                    // Update the child
+                    nextNode.get().update();
 
                     // Call a recursive function again
                     this.updateRecursive( nextNode );
@@ -138,13 +142,10 @@ export class RenderNode extends Node
                 // get the next node
                 nextNode = node.next();
 
-                if( nextNode != null )
+                if( nextNode !== null )
                 {
-                    let nextObj = nextNode.get();
-                    let obj = node.get();
-
                     // Transform the child node
-                    nextObj.transform( obj );
+                    nextNode.get().transform( node.get() );
 
                     // Call a recursive function again
                     this.transformRecursive( nextNode );
@@ -177,9 +178,9 @@ export class RenderNode extends Node
                 // get the next node
                 nextNode = node.next();
 
-                if( nextNode != null )
+                if( nextNode !== null )
                 {
-                    nextNode.render( camera );
+                    nextNode.get().render( camera );
 
                     // Call a recursive function again
                     this.renderRecursive( nextNode, camera );
@@ -212,7 +213,7 @@ export class RenderNode extends Node
                 // get the next node
                 nextNode = node.next();
 
-                if( nextNode != null )
+                if( nextNode !== null )
                 {
                     nextNode.calcRadius( size );
 
@@ -247,7 +248,7 @@ export class RenderNode extends Node
                 // get the next node
                 nextNode = node.next();
 
-                if( nextNode != null )
+                if( nextNode !== null )
                 {
                     nextNode.prepareScriptOnInit();
 

@@ -66,7 +66,7 @@ export class Sprite extends Object
 
         // Allocate the null component if no visual component was created
         if( this.visualComponent === null )
-            this.visualComponent = new NullVisualComponent();
+            this.visualComponent = new NullVisualComponent( objData );
         
         // If there's no visual data, set the hide flag
         this.setVisible( objData.visualData.isActive() );

@@ -5,21 +5,20 @@
 
         <sprite>
             <position x="50" y="-3" z="0"/>
-            <!--<scale x="1" y="1" z="1"/>-->
             <scriptList>
-                <script shoot="PlayerShip_ShootLazer" prepareOnInit="false"/>
+                <script shoot="PlayerShip_ShootLazer"/>
+                <script hit="PlayerShip_LazerHit"/>
             </scriptList>
         </sprite>
 
     </node>
 
-    <node name="enemy_shot" id="2">
+    <node name="enemy_shot" id="-3">
 
         <sprite>
-            <!--<position x="50" y="-3" z="0"/>
-            <scale x="1" y="1" z="1"/>-->
             <scriptList>
-                <script shoot="EnemyShip_Shoot" prepareOnInit="false"/>
+                <script shoot="EnemyShip_Shot"/>
+                <script hit="EnemyShot_Hit"/>
             </scriptList>
         </sprite>
 
@@ -27,25 +26,46 @@
 
     <node name="player_ship" id="0">
 
-        <object/>
+        <sprite objectName="null_player_ship"/>
 
-        <node name="player_fire_tail">
-
-            <sprite visible="false">
-                <position x="-120" y="0" z="0"/>
-                <scale x="2" y="2"/>
-                <scriptList>
-                    <script fireTailAnim="PlayerShip_FireTailAnim"/>
-                </scriptList>
-            </sprite>
+        <node name="UIProgressBar" type="uiControlNode">
+        
+            <uiProgressBar defaultState="inactive">
+                <position x="0" y="35" z="0"/>
+                <spriteLst>
+                    <sprite objectName="progress_frame"/>
+                    <sprite objectName="progress_solid"/>
+                </spriteLst>
+                
+                <!-- stencil mask -->
+                <stencilMask objectName="" spriteIndex="1" />
+            </uiProgressBar>
 
         </node>
 
-        <node name="player_ship_body">
+        <node name="playerShip_object">
 
-            <sprite>
-                <scale x="2" y="2"/>
-            </sprite>
+            <object/>
+
+            <node name="player_fire_tail">
+
+                <sprite visible="false" useSizeForRadiusCalc="false">
+                    <position x="-120" y="0" z="0"/>
+                    <scale x="2" y="2"/>
+                    <scriptList>
+                        <script fireTailAnim="PlayerShip_FireTailAnim"/>
+                    </scriptList>
+                </sprite>
+
+            </node>
+
+            <node name="player_ship_body">
+
+                <sprite useSizeForRadiusCalc="false">
+                    <scale x="2" y="2"/>
+                </sprite>
+
+            </node>
 
         </node>
 

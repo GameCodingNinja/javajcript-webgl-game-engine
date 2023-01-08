@@ -74,7 +74,7 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
     }
 
     //
-    //  DESC: Get the size of the texture
+    //  DESC: Get the size of the frame
     //
     getSize()
     {
