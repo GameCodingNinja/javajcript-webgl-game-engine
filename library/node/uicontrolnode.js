@@ -7,6 +7,7 @@
 "use strict";
 
 import { RenderNode } from './rendernode';
+import { Size } from '../common/size';
 import * as defs from '../common/defs';
 
 export class UIControlNode extends RenderNode
@@ -79,5 +80,23 @@ export class UIControlNode extends RenderNode
     cleanUp()
     {
         this.uiControl.cleanUp();
+    }
+
+    // 
+    //  DESC: Calculate the radius
+    //
+    calcRadius()
+    {
+        // Allocate a size object to acumulate the size across all the children
+        let size = new Size;
+
+        // Get the initial size
+        this.calcSize( size );
+
+        // Call the recursive function to acumulate the size across all the children
+        super.calcRadius( size );
+
+        // Calculate the radius in squared space. Avoids having to use sqrt
+        this.radius = size.getLength() / 2;
     }
 }

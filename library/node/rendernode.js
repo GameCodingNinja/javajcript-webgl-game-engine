@@ -2,6 +2,7 @@
 // 
 //  FILE NAME: rendernode.js
 //  DESC:      Node multi link list class
+//             NOTE: Recursive functions can't call inherited/abstract functions. Must call concrete functions or it will restart the loop
 //
 
 "use strict";
@@ -21,30 +22,11 @@ export class RenderNode extends Node
     //
     init()
     {
-        // Calculate the radius and rect for funtrum culling and collision detection
+        // Calculate the radius for funtrum culling and collision detection
         this.calcRadius();
 
         // Prepare any script functions that are flagged to prepareOnInit
-        this.get().prepareScriptOnInit();
-    }
-
-    // 
-    //  DESC: Adjust the size based on the object
-    //
-    calcSize( size )
-    {
-        if( this.useSizeForRadiusCalc )
-        {
-            let vSize = this.get().getSize();
-            if( vSize )
-            {
-                if( vSize.w > size.w )
-                    size.w = vSize.w;
-
-                if( vSize.h > size.h )
-                    size.h = vSize.h;
-            }
-        }
+        this.prepareScriptOnInit();
     }
     
     // 
@@ -164,7 +146,7 @@ export class RenderNode extends Node
     }
     
     //
-    //  DESC: Render the sprite
+    //  DESC: Render the spritecalcRadius
     //
     renderRecursive( node, camera )
     {
@@ -215,13 +197,36 @@ export class RenderNode extends Node
 
                 if( nextNode !== null )
                 {
-                    nextNode.calcRadius( size );
+                    console.log(nextNode.name);
+                    nextNode.calcSize( size );
+
+                    // Calculate the radius in squared space. Avoids having to use sqrt
+                    nextNode.radius = nextNode.get().getSize().getLength() / 2;
 
                     // Call a recursive function again
                     this.calcRadiusRecursive( nextNode, size );
                 }
             }
             while( nextNode !== null );
+        }
+    }
+
+    // 
+    //  DESC: Adjust the size based on the object
+    //
+    calcSize( size )
+    {
+        if( this.useSizeForRadiusCalc )
+        {
+            let vSize = this.get().getSize();
+            if( vSize )
+            {
+                if( vSize.w > size.w )
+                    size.w = vSize.w;
+
+                if( vSize.h > size.h )
+                    size.h = vSize.h;
+            }
         }
     }
 
@@ -250,7 +255,7 @@ export class RenderNode extends Node
 
                 if( nextNode !== null )
                 {
-                    nextNode.prepareScriptOnInit();
+                    nextNode.get().prepareScriptOnInit();
 
                     // Call a recursive function again
                     this.prepareScriptOnInitRecursive( nextNode );

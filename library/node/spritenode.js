@@ -52,10 +52,6 @@ export class SpriteNode extends RenderNode
             this.sprite.transform( object );
         else
             this.sprite.transform();
-
-        // Transform the AABB
-        //if( this.AABBrect && this.enableAABB )
-        //    this.sprite.matrix.transformRect( this.AABBtrans, this.AABBrect );
         
         // Call the parent but it has to be last
         super.transform();
@@ -93,23 +89,19 @@ export class SpriteNode extends RenderNode
 
     // 
     //  DESC: Calculate the radius
-    //  NOTE: The head node does not have a size
     //
-    calcRadius( size = null )
+    calcRadius()
     {
-        let headNode = (size === null);
-        if( headNode )
-        {
-            size = new Size;
-        }
+        // Allocate a size object to acumulate the size across all the children
+        let size = new Size;
 
+        // Get the initial size
         this.calcSize( size );
+
+        // Call the recursive function to acumulate the size across all the children
         super.calcRadius( size );
 
-        // The head node gets the accumulated size of all the sprites
-        if( headNode )
-        {
-            this.radius = size.getLength() / 2;
-        }
+        // Calculate the radius in squared space. Avoids having to use sqrt
+        this.radius = size.getLength() / 2;
     }
 }

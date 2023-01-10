@@ -954,4 +954,12 @@ export class UIControl extends ControlBase
     {
         return 1;
     }
+
+    //
+    //  DESC: Get the size of this control
+    //
+    getSize()
+    {
+        return this.size;
+    }
 }

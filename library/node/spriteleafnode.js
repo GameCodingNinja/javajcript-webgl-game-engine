@@ -95,7 +95,7 @@ export class SpriteLeafNode extends iNode
     {
         if( this.useSizeForRadiusCalc )
         {
-            let vSize = this.sprite.getSize();
+            let vSize = this.get().getSize();
             if( vSize )
             {
                 if( vSize.w > size.w )
@@ -111,15 +111,9 @@ export class SpriteLeafNode extends iNode
     //  DESC: Calculate the radius
     //  NOTE: The head node does not have a size
     //
-    calcRadius( size = null )
+    calcRadius()
     {
-        if( size !== null )
-        {
-            this.calcSize( size );
-        }
-        else
-        {
-            this.radius = this.sprite.getSize().getLength() / 2;
-        }
+        // Calculate the radius in squared space. Avoids having to use sqrt
+        this.radius = this.get().getSize().getLength() / 2;
     }
 }

@@ -30,7 +30,7 @@
 
         <node name="UIProgressBar" type="uiControlNode">
         
-            <uiProgressBar defaultState="inactive">
+            <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
                 <position x="0" y="35" z="0"/>
                 <spriteLst>
                     <sprite objectName="progress_frame"/>

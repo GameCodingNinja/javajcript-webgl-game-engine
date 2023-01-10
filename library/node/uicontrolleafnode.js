@@ -19,6 +19,7 @@ export class UIControlLeafNode extends iNode
         this.uiControl = uiControl;
         this.userId = nodeData.userId;
         this.type = defs.ENT_UI_CONTROL;
+        this.useSizeForRadiusCalc = nodeData.useSizeForRadiusCalc;
     }
     
     // 
@@ -73,10 +74,30 @@ export class UIControlLeafNode extends iNode
     }
 
     // 
-    //  DESC: Calculate the head node radius
+    //  DESC: Adjust the size based on the object
+    //
+    calcSize( size )
+    {
+        if( this.useSizeForRadiusCalc )
+        {
+            let vSize = this.get().getSize();
+            if( vSize )
+            {
+                if( vSize.w > size.w )
+                    size.w = vSize.w;
+
+                if( vSize.h > size.h )
+                    size.h = vSize.h;
+            }
+        }
+    }
+
+    // 
+    //  DESC: Calculate the radius
     //
     calcRadius()
     {
-        // Empty by design
+        // Calculate the radius in squared space. Avoids having to use sqrt
+        this.radius = this.get().getSize().getLength() / 2;
     }
 }
