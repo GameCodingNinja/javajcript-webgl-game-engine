@@ -218,3 +218,17 @@ export function isEmpty(obj)
 
     return true;
 }
+
+// 
+//  DESC: Cap the value to min or max
+//
+export function cap(value, min, max)
+{
+    if( value < min )
+        return min;
+    
+    else if( value > max )
+        return max;
+
+    return value;
+}

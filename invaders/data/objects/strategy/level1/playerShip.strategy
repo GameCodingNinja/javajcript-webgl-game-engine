@@ -13,7 +13,7 @@
 
     </node>
 
-    <node name="enemy_shot" id="-3">
+    <node name="enemy_shot" id="-2">
 
         <sprite>
             <scriptList>
@@ -26,12 +26,18 @@
 
     <node name="player_ship" id="0">
 
-        <sprite objectName="null_player_ship"/>
+        <sprite objectName="null_player_ship">
+            <scale x="2" y="2"/>
+            <scriptList>
+                <script die="PlayerShip_Die"/>
+            </scriptList>
+        </sprite>
 
         <node name="UIProgressBar" type="uiControlNode">
         
             <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
-                <position x="0" y="35" z="0"/>
+                <position x="0" y="15" z="0"/>
+                <scale x="0.5" y="0.5"/>
                 <spriteLst>
                     <sprite objectName="progress_frame"/>
                     <sprite objectName="progress_solid"/>
@@ -50,8 +56,7 @@
             <node name="player_fire_tail">
 
                 <sprite visible="false" useSizeForRadiusCalc="false">
-                    <position x="-120" y="0" z="0"/>
-                    <scale x="2" y="2"/>
+                    <position x="-60" y="0" z="0"/>
                     <scriptList>
                         <script fireTailAnim="PlayerShip_FireTailAnim"/>
                     </scriptList>
@@ -62,7 +67,6 @@
             <node name="player_ship_body">
 
                 <sprite useSizeForRadiusCalc="false">
-                    <scale x="2" y="2"/>
                 </sprite>
 
             </node>

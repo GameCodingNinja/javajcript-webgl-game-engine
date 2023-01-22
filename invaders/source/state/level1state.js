@@ -42,7 +42,9 @@ const MOVE_NULL = -1,
       CAMERA_EASING_DIVISOR = 3,
       CAMERA_EASING_OFFSET = 350,
       MAX_CLOUDS = 8,
-      PLAYER_SHIP_ID = 0;
+      PLAYER_SHIP_ID = 0,
+      ENEMY_SHOT_ID = -2,
+      ENEMY_SHIP_ID = -3;
 
 export class Level1State extends CommonState
 {
@@ -113,9 +115,9 @@ export class Level1State extends CommonState
         this.playerShipNode.fireTailSprite = this.playerShipNode.findChild('player_fire_tail').get();
         this.playerShipProgressBar = this.playerShipNode.findChild('UIProgressBar').get();
         this.playerShipProgressBar.setProgressBarMax( 100 );
-        this.playerShipProgressBar.setCurrentValue( 60 );
+        this.playerShipProgressBar.setCurrentValue( 100 );
 
-        this.playerShipNode.fireTailScript = this.playerShipNode.fireTailSprite.scriptComponent.prepare( 'fireTailAnim', this.playerShipNode.fireTailSprite );
+        this.playerShipNode.fireTailScript = this.playerShipNode.fireTailSprite.prepareScript( 'fireTailAnim' );
         this.playerShipSprite = this.playerShipNode.get();
 
         // Player/camera movement
@@ -139,10 +141,27 @@ export class Level1State extends CommonState
     //
     collisionCallBack( spriteA, spriteB )
     {
+        // Player ship was involved in a collision
         if(spriteB.parentNode.userId == PLAYER_SHIP_ID)
         {
             spriteA.collisionComponent.enable = false;
-            spriteA.scriptComponent.prepare( 'hit', spriteA );
+            spriteA.prepareScript( 'hit' );
+
+            if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
+            {
+                this.playerShipProgressBar.incCurrentValue( -30 );
+            }
+            else if( spriteA.parentNode.userId == ENEMY_SHIP_ID )
+            {
+                this.playerShipProgressBar.incCurrentValue( -30 );
+            }
+
+            if( this.playerShipProgressBar.isMinValue() && this.playerShipSprite.collisionComponent.enable )
+            {
+                this.playerShipSprite.collisionComponent.enable = false;
+                this.playerShipProgressBar.setVisible( false );
+                this.playerShipSprite.prepareScript( 'die' );
+            }
         }
         else
         {
@@ -151,8 +170,8 @@ export class Level1State extends CommonState
             spriteB.collisionComponent.enable = false;
 
             // Execute the scripts that handle being hit
-            spriteA.scriptComponent.prepare( 'hit', spriteA );
-            spriteB.scriptComponent.prepare( 'hit', spriteB );
+            spriteA.prepareScript( 'hit' );
+            spriteB.prepareScript( 'hit' );
         }
     }
     
@@ -173,7 +192,7 @@ export class Level1State extends CommonState
             }
         }
 
-        if( !menuManager.active )
+        if( !menuManager.active && this.playerShipSprite.collisionComponent.enable  )
         {
             // Handle the ship movement
             this.handleShipMovement( event );
@@ -181,7 +200,7 @@ export class Level1State extends CommonState
             if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
             {
                 let laserBlast = this.playerShipStratagy.create('player_shot').get();
-                laserBlast.scriptComponent.prepare( 'shoot', laserBlast, this.easingX.getValue() );
+                laserBlast.prepareScript( 'shoot', this.easingX.getValue() );
             }
         }
     }

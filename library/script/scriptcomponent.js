@@ -93,7 +93,7 @@ export class ScriptComponent
                                 activeScript = script(args[1],args[2]);
                             break;
                             case 4:
-                                activeScript = script(args[1],args[2],args[3])
+                                activeScript = script(args[1],args[2],args[3]);
                             break;
                             case 5:
                                 activeScript = script(args[1],args[2],args[3],args[4]);

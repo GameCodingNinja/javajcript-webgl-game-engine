@@ -162,10 +162,11 @@ export class RenderNode extends Node
 
                 if( nextNode !== null )
                 {
-                    nextNode.get().render( camera );
-
-                    // Call a recursive function again
-                    this.renderRecursive( nextNode, camera );
+                    if( nextNode.get().render( camera ) )
+                    {
+                        // Call a recursive function again
+                        this.renderRecursive( nextNode, camera );
+                    }
                 }
             }
             while( nextNode !== null );

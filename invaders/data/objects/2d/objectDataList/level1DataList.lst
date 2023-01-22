@@ -167,18 +167,19 @@
             <visual>
                 <mesh genType="null"/>
             </visual>
+            <!-- Don't need a collision signal for the player ship since other elements initiate the collision -->
             <collision filterCategoryBits="0x00000000" filterMaskBits="0x00000006" collisionSignal="false">
-                <!--<rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
                     <rect x1="5" y1="5" x2="-5" y2="-5"/>
-                </rect>-->
-                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                </rect>
+                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
                         <point x="5" y="5"/>
                         <point x="5" y="20"/>
                         <point x="40" y="20"/>
                         <point x="40" y="5"/>
                     </polygon>
-                </polygonList>
+                </polygonList>-->
             </collision>
             <size width="45" height="25"/>
         </object>

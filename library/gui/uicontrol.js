@@ -181,6 +181,15 @@ export class UIControl extends ControlBase
     }
 
     // 
+    //  DESC: Set if the control is visible
+    //
+    setVisible( visible )
+    {
+        for( let i = 0; i < this.spriteAry.length; ++i )
+            this.spriteAry[i].setVisible( visible );
+    }
+
+    // 
     //  DESC: Update the control
     //
     update()

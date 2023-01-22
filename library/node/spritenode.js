@@ -62,10 +62,11 @@ export class SpriteNode extends RenderNode
     //
     render( camera )
     {
-        this.sprite.render( camera );
-        
-        // Call the parent but it has to be last
-        super.render( camera );
+        if( this.sprite.render( camera ) )
+        {
+            // Call the parent but it has to be last
+            super.render( camera );
+        }
     }
     
     // 

@@ -13,6 +13,7 @@ import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { device } from '../system/device';
 import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
+import * as genFunc from '../utilities/genfunc';
 
 export class UIProgressBar extends UIControl
 {
@@ -176,19 +177,42 @@ export class UIProgressBar extends UIControl
     //
     setCurrentValue( cur )
     {
-        this.curValue = cur;
-        
+        this.curValue = genFunc.cap( cur, this.minValue, this.maxValue );
         this.setSizePos();
     }
     
     // 
     //  DESC: Inc the current value
     //
-    incCurrentValue()
+    incCurrentValue( value )
     {
-        ++this.curValue;
-        
+        if( value === undefined )
+        {
+            ++this.curValue;
+        }
+        else
+        {
+            this.curValue += value;
+        }
+
+        this.curValue = genFunc.cap( this.curValue, this.minValue, this.maxValue );
         this.setSizePos();
+    }
+
+    // 
+    //  DESC: Is the current value is minValue?
+    //
+    isMinValue()
+    {
+        return (this.curValue === this.minValue);
+    }
+
+    // 
+    //  DESC: Is the current value is maxValue?
+    //
+    isMaxValue()
+    {
+        return (this.curValue === this.maxValue);
     }
 
     //
@@ -208,6 +232,7 @@ export class UIProgressBar extends UIControl
     //
     transformCollision()
     {
+        // Empty by design
     }
 
     //

@@ -15,6 +15,8 @@ import * as easing from '../../../library/utilities/easingfunc';
 
 export var ai_data = {};
 
+const pixel_per_sec = 100;
+
 //
 //  DESC: AI Enemy head (root) node base class script
 //        Only supports one child
@@ -58,8 +60,6 @@ class AI_Enemy_Head extends Node
     }
 }
 
-const pixel_per_sec = 100;
-
 //
 //  DESC: AI Leaf (task) node script. Desend into the game
 //        The last node on the branch. Implements game specific tests or actions.
@@ -79,7 +79,7 @@ class AI_Enemy_Desend extends Node
     }
 
     // 
-    //  DESC: Handle post load init
+    //  DESC: Handle post load initthis.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
     //
     init()
     {
@@ -90,7 +90,7 @@ class AI_Enemy_Desend extends Node
         this.sprite.setPosXYZ( this.data['buildings'][this.sprite.targetIndex].get().pos.x, settings.size_half.h + (this.sprite.getSize().h / 2) + offsetY );
         offsetY += (this.sprite.getSize().h / 2) + genFunc.randomInt(50, settings.size_half.h - 50);
 
-        // Calculated to move X pixels per second
+        // Calculated to move in pixels per second
         this.easingY.init( this.sprite.pos.y, (this.sprite.pos.y - offsetY), offsetY / pixel_per_sec, easing.getSineOut() );
     }
     
@@ -145,10 +145,13 @@ class AI_Enemy_Roam extends Node
             this.sprite.setPosXYZ( this.easingX.getValue(), this.easingY.getValue() );
         }
 
-        if( (this.shootCounter++ % 250 == 0) && this.data['camera'].inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
+        if( this.data['playerShip'].collisionComponent.enable )
         {
-            let shootSprite = this.data['playerShipStratagy'].create('enemy_shot').get();
-            shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
+            if( (this.shootCounter++ % 250 == 0) && this.data['camera'].inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
+            {
+                let shootSprite = this.data['playerShipStratagy'].create('enemy_shot').get();
+                shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
+            }
         }
 
         /*if( this.easingX.isFinished() && this.easingY.isFinished() )

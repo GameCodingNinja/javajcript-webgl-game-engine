@@ -69,7 +69,7 @@ export class Sprite extends Object
             this.visualComponent = new NullVisualComponent( objData );
         
         // If there's no visual data, set the hide flag
-        this.setVisible( objData.visualData.isActive() );
+        //this.setVisible( objData.visualData.isActive() );
     }
     
     // 
@@ -171,7 +171,13 @@ export class Sprite extends Object
     render( camera )
     {
         if( this.isVisible() )
+        {
             this.visualComponent.render( this, camera );
+
+            return true;
+        }
+
+        return false;
     }
     
     // 

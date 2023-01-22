@@ -12,6 +12,7 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { Point } from '../../../library/common/point';
 import { settings } from '../../../library/utilities/settings';
 import * as utilScripts from './utilityscripts';
+import * as easing from '../../../library/utilities/easingfunc';
 
 //
 //  DESC: Script for animating fire tale
@@ -118,6 +119,48 @@ class PlayerShip_LazerHit
     execute()
     {
         return true;
+    }
+}
+
+//
+//  DESC: Script for handling player ship dieing
+//
+class PlayerShip_Die
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+        this.easingY = new easing.valueTo;
+        // Y Rotation
+        let rot = this.sprite.parentNode.findChild('playerShip_object').get().rot;
+        let dest = -(settings.defaultSize_half.h + this.sprite.parentNode.radius)
+        let offsetY = Math.abs(this.sprite.pos.y - dest);
+        this.easingY.init( this.sprite.pos.y, dest, offsetY / 250, easing.getSineIn() );
+        this.rotateVelocity = -0.00005;
+        this.rotate = -0.05;
+        if(rot.y != 0)
+        {
+            this.rotate = 0.05;
+            this.rotateVelocity = 0.00005;
+        }
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.easingY.execute();
+        this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+        this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
+        this.rotate += this.rotateVelocity * highResTimer.elapsedTime;
+
+        if( this.easingY.isFinished() )
+        {
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -256,6 +299,9 @@ export function loadScripts()
 
     scriptManager.set( 'PlayerShip_LazerHit',
         ( sprite ) => { return new PlayerShip_LazerHit( sprite ); } );
+    
+    scriptManager.set( 'PlayerShip_Die',
+        ( sprite ) => { return new PlayerShip_Die( sprite ); } );
 
     scriptManager.set( 'EnemyShip_LazerHit',
         ( sprite ) => { return new EnemyShip_LazerHit( sprite ); } );

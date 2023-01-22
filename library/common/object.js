@@ -64,6 +64,33 @@ export class Object
     }
 
     // 
+    //  DESC: Prepare basic script functions that passes itself as the object
+    //
+    prepareScript(...args)
+    {
+        switch(args.length)
+        {
+            case 1:
+                return this.scriptComponent.prepare( args[0],this );
+
+            case 2:
+                return this.scriptComponent.prepare( args[0],this,args[1] );
+
+            case 3:
+                return this.scriptComponent.prepare( args[0],this,args[1],args[2] );
+
+            case 4:
+                return this.scriptComponent.prepare( args[0],this,args[1],args[2],args[3] );
+
+            case 5:
+                return this.scriptComponent.prepare( args[0],this,args[1],args[2],args[3],args[4] );
+
+            case 6:
+                return this.scriptComponent.prepare( args[0],this,args[1],args[2],args[3],args[4],args[5] );
+        }
+    }
+
+    // 
     //  DESC: Update the sprite
     //
     update()
@@ -348,6 +375,7 @@ export class Object
     render( /* camera */ )
     {
         // Empty render function to help with recursion
+        return this.isVisible();
     }
 
     //
