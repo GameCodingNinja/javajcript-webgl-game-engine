@@ -16,6 +16,9 @@ export const EGS_NULL         = 0,
     
 // EStateEvent
 export const ESE_STATE_EVENTS         = 1000,
-             ESE_FADE_IN_COMPLETE     = 1001,
-             ESE_FADE_OUT_COMPLETE    = 1002,
-             ESE_ASSET_LOAD_COMPLETE  = 1003;
+             ESE_FADE_IN_START        = 1001,
+             ESE_FADE_OUT_START       = 1002,
+             ESE_FADE_IN_COMPLETE     = 1003,
+             ESE_FADE_OUT_COMPLETE    = 1004,
+             ESE_ASSET_LOAD_COMPLETE  = 1005,
+             ESE_SHOW_GAME_OVER_MENU  = 1006;

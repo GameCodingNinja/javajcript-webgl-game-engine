@@ -322,6 +322,16 @@ export class valueTo
         else
             return this.current;
     }
+
+    // 
+    //  DESC: Force the easing to finish
+    //
+    finish()
+    {
+        this.time = this.totalTime;
+        this.finished = true;
+        this.current = this.end;
+    }
     
     // 
     //  DESC: Finished access function

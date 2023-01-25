@@ -144,6 +144,54 @@ class Menu_TransOut
 }
 
 //
+//  DESC: Show the menu without doing an transition
+//
+class Menu_Show
+{
+    constructor( menu )
+    {
+        this.menu = menu;
+        this.menu.setAlpha( 1.0 );
+        this.menu.setVisible( false );
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        this.menu.setVisible( true );
+        eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_END );
+
+        return true;
+    }
+}
+
+//
+//  DESC: Hide the menu without doing an transition
+//
+class Menu_Hide
+{
+    constructor( menu )
+    {
+        this.menu = menu;
+        this.menu.setAlpha( 1.0 );
+        this.menu.setVisible( true );
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        this.menu.setVisible( false );
+        eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_END );
+
+        return true;
+    }
+}
+
+//
 //  DESC: Script for setting the look of the disabled state
 //
 class Control_Disabled
@@ -810,6 +858,12 @@ export function loadScripts()
             
     scriptManager.set( 'Menu_TransOut',
         ( menu ) => { return new Menu_TransOut( menu ); } );
+
+    scriptManager.set( 'Menu_Show',
+        ( menu ) => { return new Menu_Show( menu ); } );
+
+    scriptManager.set( 'Menu_Hide',
+        ( menu ) => { return new Menu_Hide( menu ); } );
             
     scriptManager.set( 'Control_Disabled',
         ( sprite ) => { return new Control_Disabled( sprite ); } );

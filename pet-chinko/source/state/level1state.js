@@ -301,7 +301,7 @@ export class Level1State extends CommonState
                     break;
                 }
             }
-
+            setVisible
             if( found )
             {
                 indexPos = multiIndexPosAry[i];

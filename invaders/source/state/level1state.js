@@ -23,11 +23,13 @@ import { spriteSheetManager } from '../../../library/managers/spritesheetmanager
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import { settings } from '../../../library/utilities/settings';
+import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
+import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
@@ -58,13 +60,19 @@ export class Level1State extends CommonState
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
         this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+
+        // Clear the event queue
+        eventManager.clear();
+
+        // Clear the last device used so that the button on start game menu is active by default
+        actionManager.clearLastDeviceUsed();
         
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
+        //menuManager.activateTree( ['pause_tree'] );
+        menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
         menuManager.activateTree( ['pause_tree'] );
-        
-        // Clear the event queue
-        eventManager.clear();
+        menuManager.getTree( 'pause_tree' ).transitionMenu();
         
         // Prepare the strategies to run
         this.bkgStratagy = strategyManager.activateStrategy('_background_');
@@ -149,7 +157,7 @@ export class Level1State extends CommonState
 
             if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
             {
-                this.playerShipProgressBar.incCurrentValue( -30 );
+                this.playerShipProgressBar.incCurrentValue( -130 );
             }
             else if( spriteA.parentNode.userId == ENEMY_SHIP_ID )
             {
@@ -174,6 +182,44 @@ export class Level1State extends CommonState
             spriteB.prepareScript( 'hit' );
         }
     }
+
+    // 
+    //  DESC: Restart the game
+    //
+    restartGame()
+    {
+        // Clear the last device used so that the button on start game menu is active by default
+        actionManager.clearLastDeviceUsed();
+
+        this.playerShipProgressBar.setProgressBarMax( 100 );
+        this.playerShipProgressBar.setCurrentValue( 100 );
+
+        this.buildingsbackCamera.initFromXml();
+        this.buildingsfrontCamera.initFromXml();
+        this.buildingsCamera.initFromXml();
+        this.camera.initFromXml();
+
+        this.moveDirX = MOVE_NULL;
+        this.moveDirY = MOVE_NULL;
+        this.lastMoveDirX = MOVE_NULL;
+
+        this.playerShipObject.setRotXYZ();
+        this.playerShipSprite.setPosXYZ();
+        this.playerShipSprite.setRotXYZ();
+        this.playerShipSprite.collisionComponent.enable = true;
+        this.playerShipProgressBar.setVisible( true );
+
+        strategyManager.deleteStrategy( '_buildings_' );
+        strategyLoader.loadGroup( '-reloadlevel1-' )
+        .then(() =>
+        {
+            strategyManager.activateStrategy('_buildings_');
+
+            this.easingX.finish();
+            this.easingY.finish();
+            this.cameraEasingX.finish();
+        })
+    }
     
     // 
     //  DESC: handle events
@@ -190,17 +236,46 @@ export class Level1State extends CommonState
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
-        }
-
-        if( !menuManager.active && this.playerShipSprite.collisionComponent.enable  )
-        {
-            // Handle the ship movement
-            this.handleShipMovement( event );
-
-            if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
+            else if( event.type === stateDefs.ESE_FADE_IN_START )
             {
-                let laserBlast = this.playerShipStratagy.create('player_shot').get();
-                laserBlast.prepareScript( 'shoot', this.easingX.getValue() );
+                // Force an update on the start of the fade in so that the game elements are drawn
+                strategyManager.update();
+            }
+            else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
+            {
+                if( event.arg[0] === menuDefs.ETC_END )
+                {
+                    let tree = menuManager.getTree( 'pause_tree' );
+                    if( !tree.isDefaultMenu('pause_menu') )
+                        tree.setDefaultMenu('pause_menu');
+                }
+            }
+            else if( event.type === stateDefs.ESE_SHOW_GAME_OVER_MENU )
+            {
+                menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
+                menuManager.getTree( 'pause_tree' ).transitionMenu();
+            }
+            else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )
+            {
+                if( event.arg[0] === 'restart_game' )
+                {
+                    menuManager.getTree( 'pause_tree' ).transitionMenu();
+                    this.restartGame();
+                }
+            }
+        }
+        else
+        {
+            if( !menuManager.active && this.playerShipSprite.collisionComponent.enable )
+            {
+                // Handle the ship movement
+                this.handleShipMovement( event );
+
+                if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
+                {
+                    let laserBlast = this.playerShipStratagy.create('player_shot').get();
+                    laserBlast.prepareScript( 'shoot', this.easingX.getValue() );
+                }
             }
         }
     }
@@ -306,24 +381,7 @@ export class Level1State extends CommonState
             }
         }
     }
-    
-    // 
-    //  DESC: Clean up after this state ends
-    //
-    cleanUp()
-    {
-        // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_forground_','_background_','_buildingsfront_','_buildingsback_','_buildings_','_player_ship_','_enemy_'] );
 
-        // Clear out any loaded AI
-        aiManager.clear();
-        
-        objectDataManager.freeGroup( ['(level_1)'] );
-
-        // Disconnect to the collision signal
-        signalManager.clear_collisionSignal();
-    }
-    
     // 
     //  DESC: Update objects that require them
     //
@@ -456,6 +514,26 @@ export class Level1State extends CommonState
         strategyManager.render();
         
         menuManager.render();
+    }
+
+    // 
+    //  DESC: Clean up after this state ends
+    //
+    cleanUp()
+    {
+        // Only delete the strategy(s) used in this state. Don't use clear().
+        strategyManager.deleteStrategy( ['_forground_','_background_','_buildingsfront_','_buildingsback_','_buildings_','_player_ship_','_enemy_'] );
+
+        // Clear out any loaded AI
+        aiManager.clear();
+
+        // Clear out any AI data dictionaries
+        ai.clearAIData();
+        
+        objectDataManager.freeGroup( ['(level_1)'] );
+
+        // Disconnect to the collision signal
+        signalManager.clear_collisionSignal();
     }
 }
 

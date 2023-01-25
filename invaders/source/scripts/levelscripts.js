@@ -11,8 +11,10 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { Point } from '../../../library/common/point';
 import { settings } from '../../../library/utilities/settings';
+import { eventManager } from '../../../library/managers/eventmanager';
 import * as utilScripts from './utilityscripts';
 import * as easing from '../../../library/utilities/easingfunc';
+import * as stateDefs from '../state/statedefs';
 
 //
 //  DESC: Script for animating fire tale
@@ -157,6 +159,7 @@ class PlayerShip_Die
 
         if( this.easingY.isFinished() )
         {
+            eventManager.dispatchEvent( stateDefs.ESE_SHOW_GAME_OVER_MENU );
             return true;
         }
 

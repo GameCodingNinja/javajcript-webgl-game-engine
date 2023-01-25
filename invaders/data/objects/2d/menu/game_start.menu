@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<menu>
+
+    <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
+    
+    <scriptList>
+        <script transIn="Menu_Show"/>
+        <script transOut="Menu_TransOut"/>
+    </scriptList>
+
+    <staticMenuControls>
+
+        <!-- Pause Label -->
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
+            <position x="0" y="50" z="0"/>
+            <fontStringList>
+                <string text="Your city is under attack!||Try to keep the alien invaders|from destroying the buildings."/>
+            </fontStringList>
+        </control>
+
+    </staticMenuControls>
+  
+    <menuControls>
+
+        <!-- Start Game Button -->
+        <control name="start_game_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55_frame.ctrl"/>
+            <position x="0" y="-120" z="0"/>
+            <fontStringList>
+                <string text="Start Game"/>
+            </fontStringList>
+            <action actionType="close"/>
+            <!--<navigate up="main_menu_btn" down="help_btn"/>-->
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+
+    </menuControls>
+
+    <spriteList>
+
+        <sprite objectName="start_game_menu_bg"/>
+    
+    </spriteList>
+  
+</menu>
+

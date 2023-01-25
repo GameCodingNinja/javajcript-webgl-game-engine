@@ -13,9 +13,17 @@ import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 
-export var ai_data = {};
+var ai_data = {};
 
 const pixel_per_sec = 100;
+
+// 
+//  DESC: Clear the AI data
+//
+export function clearAIData()
+{
+    ai_data = {};
+}
 
 //
 //  DESC: AI Enemy head (root) node base class script

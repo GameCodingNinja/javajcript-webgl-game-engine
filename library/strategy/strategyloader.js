@@ -87,6 +87,8 @@ class Strategyloader extends ManagerBase
             let cameraId = strategyNode[i].getAttribute( 'camera' );
             if( cameraId )
                 strategy.setCamera( cameraId );
+
+            //strategy.loadTransFromNode( strategyNode[i] );
             
             // Populate the strategies with their objects
             this.populateStartegy( strategyNode[i], strategy );
@@ -127,7 +129,7 @@ class Strategyloader extends ManagerBase
                 // Nodes with instance names are stored in a map so that a reference can be returned
                 let instance = xmlNodeLst[i].getAttribute( 'instance' );
 
-                // Creating a node is automaticly active unless defined as false. Default true even if not specified
+                // Creating a node is automaticly actstrategyLoaderive unless defined as false. Default true even if not specified
                 let active = xmlNodeLst[i].getAttribute( 'active' );
                 let headNode = strategy.create( name, instance, (!active || active === 'true'), group );
                 let recalcRadius = false;

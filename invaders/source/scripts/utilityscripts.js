@@ -335,6 +335,11 @@ class ScreenFade
     //
     * iteration()
     {
+        if( this.fadeTo.inc > 0 )
+            eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_START );
+        else
+            eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_START );
+
         do
         {
             if( this.fadeTo.execute() )
