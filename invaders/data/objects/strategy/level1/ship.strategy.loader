@@ -6,17 +6,8 @@
         <node name="player_ship" instance="player_ship"/>
     </strategy>
 
-    <strategy name="_enemy_">
+    <!--<strategy name="_enemy_">
         <node name="enemy_ship"/>
-        <!--<node name="enemy_ship"/>
-        <node name="enemy_ship"/>
-        <node name="enemy_ship"/>
-        <node name="enemy_ship"/>
-        <node name="enemy_ship"/>
-        <node name="enemy_ship"/>
-        <node name="enemy_ship"/>
-        <node name="enemy_ship"/>
-        <node name="enemy_ship"/>-->
-    </strategy>
+    </strategy>-->
   
 </loader>

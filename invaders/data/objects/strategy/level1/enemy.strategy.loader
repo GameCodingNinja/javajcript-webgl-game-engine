@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_enemy_">
+        <node name="enemy_ship"/>
+    </strategy>
+  
+</loader>

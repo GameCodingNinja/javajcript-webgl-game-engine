@@ -10,12 +10,19 @@
 
     <staticMenuControls>
 
-        <!-- Pause Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
-            <position x="0" y="50" z="0"/>
+            <position x="0" y="120" z="0"/>
             <fontStringList>
-                <string text="Your city is under attack!||Try to keep the alien invaders|from destroying the buildings."/>
+                <string text="Your city is under attack!"/>
+            </fontStringList>
+        </control>
+
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/menu_label_cond_45.ctrl"/>
+            <position x="0" y="0" z="0"/>
+            <fontStringList>
+                <string text="Try to keep the alien invaders|from destroying the buildings."/>
             </fontStringList>
         </control>
 

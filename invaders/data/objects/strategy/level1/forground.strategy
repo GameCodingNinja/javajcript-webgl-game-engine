@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)" defaultCamera="forgroundCamera">
 
+    <object>
+        <position z="-50"/>
+    </object>
+
     <node name="trees">
         <sprite>
             <scale x="2" y="2"/>

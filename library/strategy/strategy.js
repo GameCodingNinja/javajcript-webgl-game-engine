@@ -73,15 +73,27 @@ export class Strategy extends Object
         if( attr !== null )
             this.setCamera( attr )
 
-        for( let i = 0; i < xmlNode.children.length; ++i )
-        {
-            // There must be a name associated with this node data
-            let nodeName = xmlNode.children[i].getAttribute( 'name' );
-            if( !nodeName )
-                throw new Error( `Strategy missing node name! (${filePath})` );
+        // Load any transforms for the strategy
+        //this.loadTransFromNode( xmlNode );
 
-            // Allocate the node data list and add it to the map
-            this.dataMap.set( nodeName, new StrategyNodeDataList( xmlNode.children[i], defaultGroup, defaultObjName, defaultId ) );
+        let xmlNodeLst = xmlNode.children;
+
+        for( let i = 0; i < xmlNodeLst.length; ++i )
+        {
+            if( xmlNodeLst[i].nodeName === 'node' )
+            {
+                // There must be a name associated with this node data
+                let nodeName = xmlNodeLst[i].getAttribute( 'name' );
+                if( !nodeName )
+                    throw new Error( `Strategy missing node name! (${filePath})` );
+
+                // Allocate the node data list and add it to the map
+                this.dataMap.set( nodeName, new StrategyNodeDataList( xmlNodeLst[i], defaultGroup, defaultObjName, defaultId ) );
+            }
+            else if( xmlNodeLst[i].nodeName === 'object' )
+            {
+                this.loadTransFromNode( xmlNodeLst[i] );
+            }
         }
     }
 

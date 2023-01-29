@@ -162,11 +162,12 @@ class AI_Enemy_Roam extends Node
             }
         }
 
-        /*if( this.easingX.isFinished() && this.easingY.isFinished() )
+        if( this.easingX.isFinished() && this.easingY.isFinished() )
         {
             let index = genFunc.randomInt( 0, this.data['buildings'].length-1 );
             let offset = Math.abs(this.sprite.targetIndex - index);
             
+            // Filter the X range in which the enemy will travel
             if( (offset > 5) && (Math.abs(this.sprite.targetIndex - index) < 10) )
             {
                 this.sprite.targetIndex = index;
@@ -174,15 +175,18 @@ class AI_Enemy_Roam extends Node
                 let time = Math.abs(this.sprite.pos.x - offsetX) / pixel_per_sec;
 
                 this.easingX.init( this.sprite.pos.x, offsetX, time, easing.getSineInOut() );
+
+                // Force an initialization to start the movement on first time execution of this function
                 this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
 
+                // Filter the Y range in which the enemy will travel
                 let offsetY = genFunc.randomInt( 50, settings.size_half.h - (this.sprite.getSize().h / 2) - 50 );
-                if( Math.abs(this.sprite.pos.y - offsetY) > 50 )
+                if( Math.abs( this.sprite.pos.y - offsetY) > 50 )
                 {
                     this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
                 }
             }
-        }*/
+        }
         
         return this.state;
     }

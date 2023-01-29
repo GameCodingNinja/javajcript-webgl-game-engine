@@ -43,7 +43,7 @@ export class LoadState extends GameState
         
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 250 ) );
+        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 250, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
         
         // Clear the event queue
         eventManager.clear();
@@ -112,11 +112,13 @@ export class LoadState extends GameState
         {
             if( event.type === stateDefs.ESE_FADE_IN_COMPLETE )
             {
-                this.assetLoad();
+                if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
+                    this.assetLoad();
             }
             else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
             {
-                this.stateChange = true;
+                if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
+                    this.stateChange = true;
             }
             else if( event.type === stateDefs.ESE_ASSET_LOAD_COMPLETE )
             {
@@ -124,9 +126,9 @@ export class LoadState extends GameState
                 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
+                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
                 else
-                    setTimeout( () => this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) ), MIN_LOAD_TIME - loadTime );
+                    setTimeout( () => this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) ), MIN_LOAD_TIME - loadTime );
 
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();

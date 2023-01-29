@@ -33,7 +33,7 @@ import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
-export const ASSET_COUNT = 48;
+export const ASSET_COUNT = 54;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
@@ -59,7 +59,7 @@ export class Level1State extends CommonState
 
         // Create the script component and add a script
         this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500 ) );
+        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
 
         // Clear the event queue
         eventManager.clear();
@@ -80,6 +80,7 @@ export class Level1State extends CommonState
         strategyManager.activateStrategy('_buildingsfront_');
         strategyManager.activateStrategy('_buildings_');
         strategyManager.activateStrategy('_forground_');
+        strategyManager.activateStrategy('_enemy_');
 
         // Randomly distrabute the clouds
         this.cloudAry = [];
@@ -109,12 +110,11 @@ export class Level1State extends CommonState
         this.buildingsCamera.initFromXml();
         this.camera.initFromXml();
 
-        // The enemy strategy needs to be activated before the player ship strategy
-        this.enemyStratagy = strategyManager.activateStrategy('_enemy_');
-
-        // Init the AI script tree and move the building into the active list
+        // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
         strategyManager.get("_buildings_").addToActiveList();
-        this.enemyStratagy.initScriptTree();
+
+        // The enemy strategy needs to be activated before the player ship strategy
+        strategyManager.activateStrategy('_enemy_').initScriptTree();
 
         // Get the nodes and sprites we need to call and tuck them under the node for easy access
         this.playerShipStratagy = strategyManager.activateStrategy('_player_ship_');
@@ -157,7 +157,7 @@ export class Level1State extends CommonState
 
             if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
             {
-                this.playerShipProgressBar.incCurrentValue( -130 );
+                this.playerShipProgressBar.incCurrentValue( -1 );
             }
             else if( spriteA.parentNode.userId == ENEMY_SHIP_ID )
             {
@@ -182,44 +182,6 @@ export class Level1State extends CommonState
             spriteB.prepareScript( 'hit' );
         }
     }
-
-    // 
-    //  DESC: Restart the game
-    //
-    restartGame()
-    {
-        // Clear the last device used so that the button on start game menu is active by default
-        actionManager.clearLastDeviceUsed();
-
-        this.playerShipProgressBar.setProgressBarMax( 100 );
-        this.playerShipProgressBar.setCurrentValue( 100 );
-
-        this.buildingsbackCamera.initFromXml();
-        this.buildingsfrontCamera.initFromXml();
-        this.buildingsCamera.initFromXml();
-        this.camera.initFromXml();
-
-        this.moveDirX = MOVE_NULL;
-        this.moveDirY = MOVE_NULL;
-        this.lastMoveDirX = MOVE_NULL;
-
-        this.playerShipObject.setRotXYZ();
-        this.playerShipSprite.setPosXYZ();
-        this.playerShipSprite.setRotXYZ();
-        this.playerShipSprite.collisionComponent.enable = true;
-        this.playerShipProgressBar.setVisible( true );
-
-        strategyManager.deleteStrategy( '_buildings_' );
-        strategyLoader.loadGroup( '-reloadlevel1-' )
-        .then(() =>
-        {
-            strategyManager.activateStrategy('_buildings_');
-
-            this.easingX.finish();
-            this.easingY.finish();
-            this.cameraEasingX.finish();
-        })
-    }
     
     // 
     //  DESC: handle events
@@ -234,12 +196,20 @@ export class Level1State extends CommonState
             if( event.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
+                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
             }
             else if( event.type === stateDefs.ESE_FADE_IN_START )
             {
                 // Force an update on the start of the fade in so that the game elements are drawn
-                strategyManager.update();
+                if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
+                {
+                    strategyManager.update();
+                }
+                else if( event.arg[0] === stateDefs.ESE_GAME_RELOAD )
+                {
+                    menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
+                    menuManager.getTree( 'pause_tree' ).transitionMenu();
+                }
             }
             else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
             {
@@ -252,12 +222,21 @@ export class Level1State extends CommonState
             }
             else if( event.type === stateDefs.ESE_SHOW_GAME_OVER_MENU )
             {
+                eventManager.clear();
+                actionManager.clearLastDeviceUsed();
                 menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
                 menuManager.getTree( 'pause_tree' ).transitionMenu();
             }
             else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )
             {
                 if( event.arg[0] === 'restart_game' )
+                {
+                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_GAME_RELOAD ) );
+                }
+            }
+            else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
+            {
+                if( event.arg[0] === stateDefs.ESE_GAME_RELOAD )
                 {
                     menuManager.getTree( 'pause_tree' ).transitionMenu();
                     this.restartGame();
@@ -278,6 +257,55 @@ export class Level1State extends CommonState
                 }
             }
         }
+    }
+
+    // 
+    //  DESC: Restart the game
+    //
+    restartGame()
+    {
+        strategyManager.deleteStrategy( '_buildings_' );
+        strategyManager.deleteStrategy( '_enemy_' );
+        strategyLoader.loadGroup( '-reloadlevel1-' )
+        .then(() =>
+        {
+            strategyManager.activateStrategy('_buildings_');
+
+            // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
+            strategyManager.get("_buildings_").addToActiveList();
+
+            // The enemy strategy needs to be activated before the player ship strategy
+            strategyManager.activateStrategy('_enemy_').initScriptTree();
+
+            strategyManager.sort();
+
+            this.playerShipProgressBar.setProgressBarMax( 100 );
+            this.playerShipProgressBar.setCurrentValue( 100 );
+
+            this.buildingsbackCamera.initFromXml();
+            this.buildingsfrontCamera.initFromXml();
+            this.buildingsCamera.initFromXml();
+            this.camera.initFromXml();
+
+            this.moveDirX = MOVE_NULL;
+            this.moveDirY = MOVE_NULL;
+            this.lastMoveDirX = MOVE_NULL;
+
+            this.playerShipObject.setRotXYZ();
+            this.playerShipSprite.setPosXYZ();
+            this.playerShipSprite.setRotXYZ();
+            this.playerShipSprite.collisionComponent.enable = true;
+            this.playerShipProgressBar.setVisible( true );
+
+            this.easingX.finish();
+            this.easingY.finish();
+            this.cameraEasingX.finish();
+
+            // Clear the last device used so that the button on start game menu is active by default
+            actionManager.clearLastDeviceUsed();
+
+            this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_GAME_RELOAD ) );
+        })
     }
 
     // 

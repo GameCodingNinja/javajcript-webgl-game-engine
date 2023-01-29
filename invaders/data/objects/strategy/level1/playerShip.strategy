@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)" defaultCamera="levelCamera">
 
+    <object>
+        <position z="-70"/>
+    </object>
+
     <node name="player_shot" id="1">
 
         <sprite>

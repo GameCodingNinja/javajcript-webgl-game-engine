@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)" defaultCamera="buildingsCamera">
 
+    <object>
+        <position z="-40"/>
+    </object>
+
     <node name="building01">
         <sprite>
             <scale x="2" y="2"/>

@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(level_1)">
 
+    <object>
+        <position z="-10"/>
+    </object>
+
     <node name="background">
         <sprite>
             <scale x="4" y="3.6"/>

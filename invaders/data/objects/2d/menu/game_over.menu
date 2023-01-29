@@ -3,17 +3,24 @@
     
     <scriptList>
         <script transIn="Menu_TransIn"/>
-        <script transOut="Menu_TransOut"/>
+        <script transOut="Menu_Hide"/>
     </scriptList>
 
     <staticMenuControls>
 
-        <!-- Message Label -->
-        <control name="message_lbl" controlType="label" defaultState="inactive">
-            <filePath file="data/objects/2d/menu/control/game_over_label.ctrl"/>
-            <position x="0" y="40" z="0"/>
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
+            <position x="0" y="90" z="0"/>
             <fontStringList>
-                <string text="Game Over.|Would you like to try again?"/>
+                <string text="Valiant effort brave warrior!"/>
+            </fontStringList>
+        </control>
+
+        <control controlType="label" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/menu_label_cond_45.ctrl"/>
+            <position x="0" y="20" z="0"/>
+            <fontStringList>
+                <string text="Enter the frey again?"/>
             </fontStringList>
         </control>
 

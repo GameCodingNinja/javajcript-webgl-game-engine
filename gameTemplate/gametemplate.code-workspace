@@ -8,6 +8,7 @@
 		}
 	],
 	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "gameTemplate"
+		"liveServer.settings.multiRootWorkspaceName": "gameTemplate",
+		"liveServer.settings.port": 5501
 	}
 }

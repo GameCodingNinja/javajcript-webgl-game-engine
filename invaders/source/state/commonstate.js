@@ -43,11 +43,14 @@ export class CommonState extends GameState
             }
             else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
             {
-                // Clear out all the trees
-                menuManager.clearActiveTrees();
+                if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
+                {
+                    // Clear out all the trees
+                    menuManager.clearActiveTrees();
 
-                // Set the flag to change the state
-                this.stateChange = true;
+                    // Set the flag to change the state
+                    this.stateChange = true;
+                }
             }
         }
     }

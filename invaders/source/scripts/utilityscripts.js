@@ -323,11 +323,12 @@ export class ColorTo
 //
 class ScreenFade
 {
-    constructor( current, final, time )
+    constructor( current, final, time, fadeType )
     {
         this.fadeTo = new FadeTo();
         this.fadeTo.init( current, final, time );
         this.iter = this.iteration();
+        this.fadeType = fadeType;
     }
 
     // 
@@ -336,9 +337,9 @@ class ScreenFade
     * iteration()
     {
         if( this.fadeTo.inc > 0 )
-            eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_START );
+            eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_START, this.fadeType );
         else
-            eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_START );
+            eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_START, this.fadeType );
 
         do
         {
@@ -347,9 +348,9 @@ class ScreenFade
                 shaderManager.setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
 
                 if( this.fadeTo.inc > 0 )
-                    eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_COMPLETE );
+                    eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_COMPLETE, this.fadeType );
                 else
-                    eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_COMPLETE );
+                    eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_COMPLETE, this.fadeType );
 
                 break;
             }
@@ -376,5 +377,5 @@ class ScreenFade
 export function loadScripts()
 {
     scriptManager.set( 'ScreenFade',
-        ( current, final, time ) => { return new ScreenFade( current, final, time ); } );
+        ( current, final, time, fadeType = null ) => { return new ScreenFade( current, final, time, fadeType ); } );
 }
