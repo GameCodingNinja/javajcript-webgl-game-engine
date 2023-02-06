@@ -114,7 +114,7 @@ export class Level1State extends CommonState
         strategyManager.get("_buildings_").addToActiveList();
 
         // The enemy strategy needs to be activated before the player ship strategy
-        strategyManager.activateStrategy('_enemy_').initScriptTree();
+        strategyManager.get('_enemy_');
 
         // Get the nodes and sprites we need to call and tuck them under the node for easy access
         this.playerShipStratagy = strategyManager.activateStrategy('_player_ship_');
@@ -157,11 +157,11 @@ export class Level1State extends CommonState
 
             if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
             {
-                this.playerShipProgressBar.incCurrentValue( -1 );
+                //this.playerShipProgressBar.incCurrentValue( -1 );
             }
             else if( spriteA.parentNode.userId == ENEMY_SHIP_ID )
             {
-                this.playerShipProgressBar.incCurrentValue( -30 );
+                //this.playerShipProgressBar.incCurrentValue( -30 );
             }
 
             if( this.playerShipProgressBar.isMinValue() && this.playerShipSprite.collisionComponent.enable )

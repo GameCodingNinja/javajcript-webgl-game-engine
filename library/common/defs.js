@@ -145,8 +145,9 @@ export const EM_NULL                = 0,
 
 // EAIState
 export const EAIS_FAILURE        = -1,
-             EAIS_ACTIVE         = 0,
-             EAIS_SUCCESS        = 1;
+             EAIS_INIT           = 0,
+             EAIS_ACTIVE         = 1,
+             EAIS_SUCCESS        = 2;
 
 // EAIBehavior
 export const EAIB_NULL           = 0,

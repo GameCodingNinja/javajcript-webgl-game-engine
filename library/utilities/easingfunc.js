@@ -288,6 +288,8 @@ export class valueTo
     {
         if(resetCurrent)
             this.current = 0.0;
+        else
+            this.current = start;
 
         this.start = start;
         this.end = end;

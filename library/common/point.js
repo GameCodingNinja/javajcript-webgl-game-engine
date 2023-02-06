@@ -205,6 +205,25 @@ export class Point
     {
         return (0 === this.z);
     }
+
+    // 
+    //  DESC: Is this point equil
+    //
+    isEquil( pos )
+    {
+        if( this.data[0] === pos.x )
+        {
+            if( this.data[1] === pos.y )
+            {
+                if( this.data[2] === pos.z )
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
     
     // 
     //  DESC: Is this point equil

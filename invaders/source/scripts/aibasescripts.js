@@ -6,7 +6,7 @@
 "use strict";
 
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { Node } from '../../../library/node/node';
+import { aiNode } from '../../../library/node/ainode';
 import * as defs from '../../../library/common/defs';
 import * as genFunc from '../../../library/utilities/genfunc';
 
@@ -14,16 +14,12 @@ import * as genFunc from '../../../library/utilities/genfunc';
 //  DESC: AI composite node script
 //        Evaluates every child until one of them succeeds, otherwise it fails.
 //
-class AI_Composite extends Node
+class AI_Composite extends aiNode
 {
     constructor( nodeData, headNode )
     {
         super( nodeData );
-        this.name = nodeData.scriptName;
-        this.behavior = nodeData.behavior;
-        this.type = nodeData.type;
-        this.order = nodeData.order;
-        this.condition = nodeData.condition;
+
         this.data = headNode.data;
         this.state = defs.EAIS_ACTIVE;
         this.childIndexAry = [];
@@ -61,6 +57,7 @@ class AI_Composite extends Node
 
             // Index into the children random or sequentially
             let index = this.childIndexAry[this.index];
+
             let childState = this.nodeAry[index].evaluate();
 
             if( childState !== defs.EAIS_ACTIVE )
@@ -138,18 +135,14 @@ class AI_Composite extends Node
 //  DESC: AI Decorator node script
 //        Only allows for one child
 //
-class AI_Decorator extends Node
+class AI_Decorator extends aiNode
 {
     constructor( nodeData, headNode )
     {
         super( nodeData );
+
         this.data = headNode.data;
-        this.name = nodeData.scriptName;
-        this.behavior = nodeData.behavior;
-        this.type = nodeData.type;
-        this.condition = nodeData.condition;
-        this.repeatCount = nodeData.repeatCount;
-        this.repeatCounter = 0;
+        this.repeatCounter = 1;
         this.state = defs.EAIS_ACTIVE;
     }
 
@@ -184,7 +177,7 @@ class AI_Decorator extends Node
                             this.state = childState;
 
                         else
-                            this.resetTree();
+                            this.nodeAry[0].resetTree();
                     }
                     else if( this.condition === defs.EAIC_UNTIL_SUCCESS )
                     {
@@ -192,7 +185,7 @@ class AI_Decorator extends Node
                             this.state = childState;
 
                         else
-                            this.resetTree();
+                            this.nodeAry[0].resetTree();
                     }
                     else if( this.condition === defs.EAIC_UNTIL_FAILURE )
                     {
@@ -200,7 +193,7 @@ class AI_Decorator extends Node
                             this.state = defs.EAIS_SUCCESS;
 
                         else
-                            this.resetTree();
+                            this.nodeAry[0].resetTree();
                     }
                 }
                 // Invert type

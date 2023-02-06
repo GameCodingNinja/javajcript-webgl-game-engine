@@ -13,7 +13,7 @@ export class RenderNode extends Node
 {
     constructor( nodeData)
     {
-        super( nodeData )
+        super( nodeData );
         this.useSizeForRadiusCalc = nodeData.useSizeForRadiusCalc;
     }
 

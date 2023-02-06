@@ -12,6 +12,7 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { Point } from '../../../library/common/point';
 import { settings } from '../../../library/utilities/settings';
 import { eventManager } from '../../../library/managers/eventmanager';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as utilScripts from './utilityscripts';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as stateDefs from '../state/statedefs';
@@ -289,6 +290,43 @@ class EnemyShip_CheckForCollideWithPlayer
     }
 }
 
+//
+//  DESC: Script for handling building being destroy
+//
+class Building_Die
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+        this.rotDir = 0.005;
+
+        // Flag indicating this building was destroyed
+        this.sprite.destroyed = true;
+
+        if( genFunc.randomInt( 0, 1 ) === 0 )
+            this.rotDir = -0.005;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( (this.sprite.pos.y + (this.sprite.getSize().h / 2)) > -settings.defaultSize_half.h )
+        {
+            this.sprite.incPosXYZ( 0, -(0.05 * highResTimer.elapsedTime) );
+            this.sprite.incRotXYZ( 0, 0, this.rotDir * highResTimer.elapsedTime );
+
+            return false;
+        }
+
+        // We are done with this sprite, queue it up to be deleted
+        strategyManager.get('_buildings_').destroy( this.sprite.parentNode );
+        
+        return true;
+    }
+}
+
 // 
 //  DESC: Load scripts
 //
@@ -317,4 +355,7 @@ export function loadScripts()
 
     scriptManager.set( 'EnemyShip_Shot',
         ( sprite, enemySprite ) => { return new EnemyShip_Shot( sprite, enemySprite ); } );
+
+    scriptManager.set( 'Building_Die',
+        ( sprite ) => { return new Building_Die( sprite ); } );
 }

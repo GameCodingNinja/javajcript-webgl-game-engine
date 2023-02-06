@@ -8,48 +8,72 @@
     <node name="building01">
         <sprite>
             <scale x="2" y="2"/>
+            <scriptList>
+                <script die="Building_Die"/>
+            </scriptList>
         </sprite>
     </node>
 
     <node name="building02">
         <sprite>
             <scale x="2" y="2"/>
+            <scriptList>
+                <script die="Building_Die"/>
+            </scriptList>
         </sprite>
     </node>
 
     <node name="building03">
         <sprite>
             <scale x="2" y="2"/>
+            <scriptList>
+                <script die="Building_Die"/>
+            </scriptList>
         </sprite>
     </node>
 
     <node name="building04">
         <sprite>
             <scale x="2" y="2"/>
+            <scriptList>
+                <script die="Building_Die"/>
+            </scriptList>
         </sprite>
     </node>
 
     <node name="building05">
         <sprite>
             <scale x="2" y="2"/>
+            <scriptList>
+                <script die="Building_Die"/>
+            </scriptList>
         </sprite>
     </node>
 
     <node name="building06">
         <sprite>
             <scale x="2" y="2"/>
+            <scriptList>
+                <script die="Building_Die"/>
+            </scriptList>
         </sprite>
     </node>
 
     <node name="building07">
         <sprite>
             <scale x="2" y="2"/>
+            <scriptList>
+                <script die="Building_Die"/>
+            </scriptList>
         </sprite>
     </node>
 
     <node name="building08">
         <sprite>
             <scale x="2" y="2"/>
+            <scriptList>
+                <script die="Building_Die"/>
+            </scriptList>
         </sprite>
     </node>
   

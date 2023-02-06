@@ -23,11 +23,23 @@
 
                     <composite script="AI_Composite" condition="all_success"/>
 
-                        <node>
+                    <node>
 
-                            <leaf script="AI_Enemy_Roam"/>
+                        <leaf script="AI_Enemy_Roam"/>
 
-                        </node>
+                    </node>
+
+                    <node>
+
+                        <leaf script="AI_Enemy_DesendToBuilding"/>
+
+                    </node>
+
+                    <node>
+
+                        <leaf script="AI_Enemy_DestroyBuilding"/>
+
+                    </node>
 
                 </node>
 
