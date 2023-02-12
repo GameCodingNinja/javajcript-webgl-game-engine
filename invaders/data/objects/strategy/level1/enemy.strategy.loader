@@ -2,7 +2,11 @@
 <loader>
 
     <strategy name="_enemy_">
+        <!--<node name="enemy_ship"/>
         <node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>
+        <node name="enemy_ship"/>-->
     </strategy>
   
 </loader>

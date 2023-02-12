@@ -50,12 +50,13 @@ class AI_Enemy_Head extends aiNode
     {
         if( genFunc.isEmpty( this.data ) )
         {
-            let playerShipStratagy = strategyManager.get('_player_ship_');
-            this.data['playerShipStratagy'] = playerShipStratagy;
-            this.data['buildings'] = strategyManager.get("_buildings_").nodeAry;
-            this.data['enemy'] = strategyManager.get("_enemy_").nodeAry;
-            this.data['playerShip'] = playerShipStratagy.get('player_ship').get();
-            this.data['camera'] = playerShipStratagy.camera;
+            this.data.playerShipStratagy = strategyManager.get('_player_ship_');
+            this.data.buildings = strategyManager.get("_buildings_").nodeAry;
+            this.data.enemy = strategyManager.get("_enemy_").nodeAry;
+            this.data.playerShip = this.data.playerShipStratagy.get('player_ship').get();
+            this.data.camera = this.data.playerShipStratagy.camera;
+            this.data.minX = this.data.buildings[0].get().pos.x;
+            this.data.maxX = this.data.buildings[this.data.buildings.length-1].get().pos.x;
         }
     }
 
@@ -101,11 +102,10 @@ class AI_Enemy_Desend extends aiNode
     {
         // Set the initial position of the sprite above the height of the screen
         // with a random amount to delay how long it takes to be visible on the screen
-        this.sprite.targetBuilding = this.data['buildings'][31].get();//genFunc.randomInt( 0, this.data['buildings'].length-1 );
-        this.sprite.targetLocked = false;
+        this.sprite.targetBuilding = null;//this.data.buildings[genFunc.randomInt( 0, this.data.buildings.length-1 )].get();
         this.sprite.shootTime = 0;
         let offsetY = genFunc.randomInt(0, 200);
-        this.sprite.setPosXYZ( this.sprite.targetBuilding.pos.x, settings.size_half.h + (this.sprite.getSize().h / 2) + offsetY );
+        this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.size_half.h + (this.sprite.getSize().h / 2) + offsetY );
         offsetY += (this.sprite.getSize().h / 2) + genFunc.randomInt(50, settings.size_half.h - 50);
 
         // Calculated to move in pixels per second
@@ -130,13 +130,13 @@ class AI_Enemy_Desend extends aiNode
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             // Shoot at the player
-            if( this.data['playerShip'].collisionComponent.enable )
+            if( this.data.playerShip.collisionComponent.enable )
             {
                 this.sprite.shootTime -= highResTimer.elapsedTime;
 
-                if( (this.sprite.shootTime < 0) && this.data['camera'].inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                if( (this.sprite.shootTime < 0) && this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
                 {
-                    let shootSprite = this.data['playerShipStratagy'].create('enemy_shot').get();
+                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
                     shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
                     this.sprite.shootTime = highResTimer.elapsedTime + passive_shooter_time;
                 }
@@ -164,9 +164,6 @@ class AI_Enemy_Roam extends aiNode
 
         this.data = headNode.data;
         this.sprite = sprite;
-        this.state = defs.EAIS_ACTIVE;
-        this.easingX = new easing.valueTo;
-        this.easingY = new easing.valueTo;
     }
 
     // 
@@ -176,7 +173,7 @@ class AI_Enemy_Roam extends aiNode
     {
         this.easingX = new easing.valueTo;
         this.easingY = new easing.valueTo;
-        this.sprite.targetLocked = false;
+        this.sprite.targetBuilding = null;
         this.state = defs.EAIS_ACTIVE;
     }
     
@@ -185,7 +182,7 @@ class AI_Enemy_Roam extends aiNode
     //
     evaluate()
     {
-        if( this.state === defs.EAIS_ACTIVE )
+        if( this.state === defs.EAIS_ACTIVE && this.data.buildings.length )
         {
             this.easingY.execute();
             this.easingX.execute();
@@ -197,13 +194,13 @@ class AI_Enemy_Roam extends aiNode
             }
 
             // Shoot at the player
-            if( this.data['playerShip'].collisionComponent.enable )
+            if( this.data.playerShip.collisionComponent.enable )
             {
                 this.sprite.shootTime -= highResTimer.elapsedTime;
 
-                if( (this.sprite.shootTime < 0) && this.data['camera'].inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                if( (this.sprite.shootTime < 0) && this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
                 {
-                    let shootSprite = this.data['playerShipStratagy'].create('enemy_shot').get();
+                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
                     shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
                     this.sprite.shootTime = highResTimer.elapsedTime + passive_shooter_time;
                 }
@@ -211,49 +208,74 @@ class AI_Enemy_Roam extends aiNode
 
             if( this.easingX.isFinished() && this.easingY.isFinished() )
             {
-                if( !this.sprite.targetLocked )
+                if( this.sprite.targetBuilding === null )
                 {
                     // Randmoly pick a building to target on
-                    let index = genFunc.randomInt( 0, this.data['buildings'].length-1 );
-                    let targetBuilding = this.data['buildings'][index].get();
+                    let index = genFunc.randomInt( 0, this.data.buildings.length-1 );
+                    let targetBuilding = this.data.buildings[index].get();
 
-                    if( targetBuilding.destroyed === undefined )
+                    let freeBuildingFound = true;
+                    for( let i = 0; i < this.data.enemy.length; i++ )
                     {
-                        this.sprite.targetBuilding = this.data['buildings'][index].get();
+                        if( (this.data.enemy[i].get() != this.sprite) && (this.data.enemy[i].get().targetBuilding === targetBuilding) )
+                        {
+                            freeBuildingFound = false;
+                            freeBuildingFound = null;
+                            break;
+                        }
+                    }
 
+                    if( (targetBuilding.destroyed === undefined) && freeBuildingFound )
+                    {
+                        // Should target lock on a building
+                        if( genFunc.randomInt( 0, 0 ) === 0 )
+                        {
+                            this.sprite.targetBuilding = targetBuilding;
+
+                            // Calculate the travel time
+                            let time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / pixel_per_sec;
+                            this.easingX.init( this.sprite.pos.x, this.sprite.targetBuilding.pos.x, time, easing.getSineInOut() );
+
+                            // Force an initialization to start the movement on first time execution of this function
+                            this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
+
+                            // Only set the Y easing if not the same building position as we are now
+                            if( Math.abs(this.sprite.targetBuilding.pos.x - this.sprite.pos.x) > 100 )
+                            {
+                                // Generate the Y range in which the enemy will travel
+                                let offsetY = genFunc.randomInt( -(settings.size_half.h / 2), settings.size_half.h / 4 );
+                                this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
+                            }
+                        }
+                    }
+
+                    // If a building is not targeted, go after the player unless their is more enemies then buildings
+                    if( this.sprite.targetBuilding === null )
+                    {
+                        let offsetX = this.data.playerShip.pos.x;
+                        let attackPlayer = true;
+
+                        if( this.data.buildings.length >= this.data.enemy.length )
+                        {
+                            attackPlayer = false;
+                            offsetX = genFunc.randomInt( this.data.minX, this.data.maxX );
+                        }
+                        
                         // Calculate the travel time
-                        let time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / pixel_per_sec;
-                        this.easingX.init( this.sprite.pos.x, this.sprite.targetBuilding.pos.x, time, easing.getSineInOut() );
+                        let time = Math.abs( this.sprite.pos.x - offsetX ) / pixel_per_sec;
+                        this.easingX.init( this.sprite.pos.x, offsetX, time, easing.getSineInOut() );
 
                         // Force an initialization to start the movement on first time execution of this function
                         this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
 
-                        // See if we should target lock on a house
-                        let targetLockValue = 0;//genFunc.randomInt( 0, 2 );
-                        if( targetLockValue === 0 )
-                        {
-                            let targetLockFound = false;
-                            let enemyAry = this.data['enemy'];
-                            for( let i = 0; i < enemyAry.length; i++ )
-                            {
-                                if( (enemyAry[i] != this.sprite) && (enemyAry[i].targetBuilding === this.sprite.targetBuilding) && enemyAry[i].targetLocked )
-                                {
-                                    targetLockFound = true;
-                                    break;
-                                }
-                            }
-
-                            if( !targetLockFound )
-                            {
-                                this.sprite.targetLocked = true;
-                            }
-                        }
-
                         // Only set the Y easing if not the same building position as we are now
-                        if( this.sprite.targetBuilding.pos.x != this.sprite.pos.x )
+                        if( Math.abs( this.sprite.pos.x - offsetX ) > 100 )
                         {
-                            // Filter the Y range in which the enemy will travel
-                            let offsetY = genFunc.randomInt( 50, settings.size_half.h - (this.sprite.getSize().h / 2) - 50 );
+                            // Generate the Y range in which the enemy will travel
+                            let offsetY = this.data.playerShip.pos.y;
+                            if( !attackPlayer )
+                                offsetY = genFunc.randomInt( -(settings.size_half.h / 2), settings.size_half.h / 4 );
+
                             this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
                         }
                     }
@@ -281,8 +303,6 @@ class AI_Enemy_DesendToBuilding extends aiNode
 
         this.data = headNode.data;
         this.sprite = sprite;
-        this.state = defs.EAIS_ACTIVE;
-        this.easingY = new easing.valueTo;
     }
 
     // 
@@ -290,8 +310,8 @@ class AI_Enemy_DesendToBuilding extends aiNode
     //
     reset()
     {
-        this.easingY = new easing.valueTo;
         this.state = defs.EAIS_ACTIVE;
+        this.easingY = new easing.valueTo;
     }
     
     // 
@@ -314,13 +334,13 @@ class AI_Enemy_DesendToBuilding extends aiNode
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             // Shoot at the player
-            if( this.data['playerShip'].collisionComponent.enable )
+            if( this.data.playerShip.collisionComponent.enable )
             {
                 this.sprite.shootTime -= highResTimer.elapsedTime;
 
-                if( (this.sprite.shootTime < 0) && this.data['camera'].inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                if( (this.sprite.shootTime < 0) && this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
                 {
-                    let shootSprite = this.data['playerShipStratagy'].create('enemy_shot').get();
+                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
                     shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
                     this.sprite.shootTime = highResTimer.elapsedTime + aggrssive_shooter_time;
                 }
@@ -348,12 +368,6 @@ class AI_Enemy_DestroyBuilding extends aiNode
 
         this.data = headNode.data;
         this.sprite = sprite;
-        this.state = defs.EAIS_ACTIVE;
-        this.shakeTime = 0;
-        this.shakeTimeout = 40;
-        this.indexX = 0;
-        this.indexY = 2;
-        this.offset = [-1, 1, 0, 1, -1];
     }
 
     // 
@@ -379,18 +393,19 @@ class AI_Enemy_DestroyBuilding extends aiNode
             this.shakeTime -= highResTimer.elapsedTime;
 
             // Shoot at the player
-            if( this.data['playerShip'].collisionComponent.enable )
+            if( this.data.playerShip.collisionComponent.enable )
             {
                 this.sprite.shootTime -= highResTimer.elapsedTime;
 
-                if( (this.sprite.shootTime < 0) && this.data['camera'].inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                if( (this.sprite.shootTime < 0) && this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
                 {
-                    let shootSprite = this.data['playerShipStratagy'].create('enemy_shot').get();
+                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
                     shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
                     this.sprite.shootTime = highResTimer.elapsedTime + destroy_building_shooter_time;
                 }
             }
 
+            // Shake a the enemy to simulate it attacking the building
             if( this.shakeTime < 0 )
             {
                 this.shakeTime = highResTimer.elapsedTime + this.shakeTimeout;
@@ -420,7 +435,16 @@ class AI_Enemy_DestroyBuilding extends aiNode
                     else if( this.shakeTimeout === -10 )
                     {
                         this.sprite.targetBuilding.prepareScript( 'die' );
-                        this.state = defs.EAIS_SUCCESS;
+                        this.sprite.targetBuilding = null;
+
+                        if( this.data.buildings.length === 1 )
+                        {
+                            this.state = defs.EAIS_FAILURE;
+                        }
+                        else
+                        {
+                            this.state = defs.EAIS_SUCCESS;
+                        }
                     }
                 }
             }

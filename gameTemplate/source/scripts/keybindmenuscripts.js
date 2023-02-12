@@ -121,7 +121,7 @@ export class KeyBindBtn_event
         actionManager.allowActionHandling = true;
 
         // Dispatch a message to clear the selected control and put it back into active state
-        eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
+        eventManager.dispatchEvent( menuDefs.EME_MENU_REACTIVATE );
     }
 
     // 
@@ -186,7 +186,7 @@ class Control_OnKeybindReset
                 each.scriptComponent.prepare( 'init', each );
         }
 
-        eventManager.dispatchEvent( menuDefs.EGE_MENU_BACK_ACTION );
+        eventManager.dispatchEvent( menuDefs.EME_MENU_BACK_ACTION );
 
         return true;
     }

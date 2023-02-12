@@ -199,51 +199,51 @@ export class UISubControl extends UIControl
 
         if( this.isActive() && (event instanceof GenericEvent) )
         {
-            if( (event.type >= menuDefs.EGE_MENU_UP_ACTION) &&
-                (event.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
+            if( (event.type >= menuDefs.EME_MENU_UP_ACTION) &&
+                (event.type <= menuDefs.EME_MENU_RIGHT_ACTION) )
             {
-                if( event.type === menuDefs.EGE_MENU_UP_ACTION )
+                if( event.type === menuDefs.EME_MENU_UP_ACTION )
                 {
                     this.onUpAction( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_DOWN_ACTION )
+                else if( event.type === menuDefs.EME_MENU_DOWN_ACTION )
                 {
                     this.onDownAction( event );
                 }
-                if( event.type === menuDefs.EGE_MENU_LEFT_ACTION )
+                if( event.type === menuDefs.EME_MENU_LEFT_ACTION )
                 {
                     this.onLeftAction( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_RIGHT_ACTION )
+                else if( event.type === menuDefs.EME_MENU_RIGHT_ACTION )
                 {
                     this.onRightAction( event );
                 }
             }
-            else if( (event.type >= menuDefs.EGE_MENU_SCROLL_UP) &&
-                     (event.type <= menuDefs.EGE_MENU_SCROLL_RIGHT) )
+            else if( (event.type >= menuDefs.EME_MENU_SCROLL_UP) &&
+                     (event.type <= menuDefs.EME_MENU_SCROLL_RIGHT) )
             {
-                if( event.type === menuDefs.EGE_MENU_SCROLL_UP )
+                if( event.type === menuDefs.EME_MENU_SCROLL_UP )
                 {
                     this.onUpScroll( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_SCROLL_DOWN )
+                else if( event.type === menuDefs.EME_MENU_SCROLL_DOWN )
                 {
                     this.onDownScroll( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_SCROLL_LEFT )
+                else if( event.type === menuDefs.EME_MENU_SCROLL_LEFT )
                 {
                     this.onLeftScroll( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_SCROLL_RIGHT )
+                else if( event.type === menuDefs.EME_MENU_SCROLL_RIGHT )
                 {
                     this.onRightScroll( event );
                 }
             }
-            else if( event.type === menuDefs.EGE_MENU_TAB_LEFT )
+            else if( event.type === menuDefs.EME_MENU_TAB_LEFT )
             {
                 this.onTabLeft( event );
             }
-            else if( event.type === menuDefs.EGE_MENU_TAB_RIGHT )
+            else if( event.type === menuDefs.EME_MENU_TAB_RIGHT )
             {
                 this.onTabRight( event );
             }
@@ -353,7 +353,7 @@ export class UISubControl extends UIControl
                     this.activeNode = navNode;
 
                     eventManager.dispatchEvent(
-                        menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                        menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
                         uiControlDefs.ECS_ACTIVE,
                         navNode.uiControl );
 

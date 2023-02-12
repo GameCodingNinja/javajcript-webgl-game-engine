@@ -309,7 +309,7 @@ export class UISlider extends UISubControl
 
             // Send a message to blink the button
             eventManager.dispatchEvent( 
-                menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
                 uiControlDefs.ECS_SELECT,
                 this.subControlAry[0] );
 

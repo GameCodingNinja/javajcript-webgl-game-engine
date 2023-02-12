@@ -279,27 +279,27 @@ export class UIControl extends ControlBase
     //
     handleEvent( event )
     {
-        if( event.type === menuDefs.EGE_MENU_CONTROL_STATE_CHANGE )
+        if( event.type === menuDefs.EME_MENU_CONTROL_STATE_CHANGE )
         {
             this.onStateChange( event );
         }
-        else if( event.type === menuDefs.EGE_MENU_SELECT_EXECUTE )
+        else if( event.type === menuDefs.EME_MENU_SELECT_EXECUTE )
         {
             this.onSelectExecute( event );
         }
-        else if( event.type === menuDefs.EGE_MENU_SET_ACTIVE_CONTROL )
+        else if( event.type === menuDefs.EME_MENU_SET_ACTIVE_CONTROL )
         {
             this.onSetActiveControl( event );
         }
-        else if( event.type === menuDefs.EGE_MENU_REACTIVATE )
+        else if( event.type === menuDefs.EME_MENU_REACTIVATE )
         {
             this.onReactivate( event );
         }
-        else if( event.type === menuDefs.EGE_MENU_TRANS_IN )
+        else if( event.type === menuDefs.EME_MENU_TRANS_IN )
         {
             this.onTransIn( event );
         }
-        else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
+        else if( event.type === menuDefs.EME_MENU_TRANS_OUT )
         {
             this.onTransOut( event );
         }
@@ -367,19 +367,19 @@ export class UIControl extends ControlBase
         if( this.state === uiControlDefs.ECS_SELECT )
         {
             if( this.actionType === uiControlDefs.ECAT_TO_TREE )
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_TO_TREE, this.executionAction );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TO_TREE, this.executionAction );
 
             else if( this.actionType === uiControlDefs.ECAT_TO_MENU )
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_TO_MENU, this.executionAction, this );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TO_MENU, this.executionAction, this );
 
             else if( this.actionType === uiControlDefs.ECAT_BACK )
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_BACK_ACTION );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_BACK_ACTION );
 
             else if( this.actionType === uiControlDefs.ECAT_CLOSE )
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_TOGGLE_ACTION );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TOGGLE_ACTION );
 
             else if( this.actionType === uiControlDefs.ECAT_GAME_STATE_CHANGE )
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_GAME_STATE_CHANGE, menuDefs.ETC_BEGIN, this.executionAction );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_GAME_STATE_CHANGE, menuDefs.ETC_BEGIN, this.executionAction );
 
             else if( this.actionType === uiControlDefs.ECAT_ACTION_EVENT )
                 eventManager.dispatchEvent( uiControlDefs.ECAT_ACTION_EVENT, this.executionAction, this );
@@ -447,7 +447,7 @@ export class UIControl extends ControlBase
             if( !this.isActive() )
             {
                 eventManager.dispatchEvent(
-                    menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                    menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
                     uiControlDefs.ECS_ACTIVE,
                     this );
             }
@@ -822,7 +822,7 @@ export class UIControl extends ControlBase
             (this.isActive() && (event.arg[defs.ESMA_DEVICE_TYPE] !== defs.MOUSE) && (event.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN)) )
         {
             eventManager.dispatchEvent(
-                menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
                 uiControlDefs.ECS_SELECT,
                 this );
 

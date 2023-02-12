@@ -74,7 +74,7 @@ class Menu_TransIn
             if( this.fadeTo.execute() )
             {
                 this.menu.setAlpha( this.fadeTo.value );
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_END );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_END );
 
                 break;
             }
@@ -122,7 +122,7 @@ class Menu_TransOut
             {
                 this.menu.setAlpha( this.fadeTo.value );
 
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_END );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_END );
 
                 break;
             }
@@ -161,7 +161,7 @@ class Menu_Show
     execute()
     {
         this.menu.setVisible( true );
-        eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_END );
+        eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_END );
 
         return true;
     }
@@ -185,7 +185,7 @@ class Menu_Hide
     execute()
     {
         this.menu.setVisible( false );
-        eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_END );
+        eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_END );
 
         return true;
     }
@@ -463,7 +463,7 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
     {
         if( super.execute() )
         {
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_SELECT_EXECUTE );
             return true;
         }
 
@@ -487,8 +487,8 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
     {
         if( super.execute() )
         {
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_SELECT_EXECUTE );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_REACTIVATE );
 
             return true;
         }
@@ -682,7 +682,7 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_REACTIVATE );
             return true;
         }
 
@@ -710,8 +710,8 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
         if( this.time < 0 )
         {
             this.sprite.setDefaultColor();
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_SELECT_EXECUTE );
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_REACTIVATE );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_SELECT_EXECUTE );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_REACTIVATE );
             return true;
         }
 

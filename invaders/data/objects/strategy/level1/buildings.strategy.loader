@@ -219,7 +219,7 @@
                 <position x="400" y="-310"/>
             </sprite>
         </node>
-        
+
         <node name="building02" id="3">
             <sprite>
                 <position x="600" y="-260"/>

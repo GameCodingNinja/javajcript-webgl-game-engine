@@ -187,12 +187,12 @@ export class Level1State extends CommonState
         else if( event instanceof GenericEvent )
         {
             // Check for the "game change state" message
-            if( event.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.type === menuDefs.EME_MENU_GAME_STATE_CHANGE )
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, true ) );
             }
-            else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
+            else if( event.type === menuDefs.EME_MENU_TRANS_OUT )
             {
                 if( event.arg[0] === menuDefs.ETC_END )
                 {
@@ -301,7 +301,7 @@ export class Level1State extends CommonState
                     break;
                 }
             }
-            setVisible
+
             if( found )
             {
                 indexPos = multiIndexPosAry[i];

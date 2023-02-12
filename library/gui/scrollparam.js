@@ -36,16 +36,16 @@ export class ScrollParam
             this.scrollDelay = Number(node[0].getAttribute( 'scrollDelay' ));
             
             if( node[0].getAttribute( 'up' ) === 'true' )
-                this.scrollTypesMap.set( menuDefs.EGE_MENU_UP_ACTION, menuDefs.EGE_MENU_SCROLL_UP );
+                this.scrollTypesMap.set( menuDefs.EME_MENU_UP_ACTION, menuDefs.EME_MENU_SCROLL_UP );
 
             if( node[0].getAttribute( 'down' ) === 'true' )
-                this.scrollTypesMap.set( menuDefs.EGE_MENU_DOWN_ACTION, menuDefs.EGE_MENU_SCROLL_DOWN );
+                this.scrollTypesMap.set( menuDefs.EME_MENU_DOWN_ACTION, menuDefs.EME_MENU_SCROLL_DOWN );
 
             if( node[0].getAttribute( 'left' ) === 'true' )
-                this.scrollTypesMap.set( menuDefs.EGE_MENU_LEFT_ACTION, menuDefs.EGE_MENU_SCROLL_LEFT );
+                this.scrollTypesMap.set( menuDefs.EME_MENU_LEFT_ACTION, menuDefs.EME_MENU_SCROLL_LEFT );
 
             if( node[0].getAttribute( 'right' ) === 'true' )
-                this.scrollTypesMap.set( menuDefs.EGE_MENU_RIGHT_ACTION, menuDefs.EGE_MENU_SCROLL_RIGHT );
+                this.scrollTypesMap.set( menuDefs.EME_MENU_RIGHT_ACTION, menuDefs.EME_MENU_SCROLL_RIGHT );
         }
     }
     

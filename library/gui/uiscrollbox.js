@@ -573,7 +573,7 @@ export class UIScrollBox extends UISubControl
         if( (scrollResult & IN_VIEWABLE_AREA) && !(scrollResult & NEW_ACTIVE_CTRL) )
         {
             eventManager.dispatchEvent(
-                menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
                 uiControlDefs.ECS_ACTIVE,
                 this.scrollControlAry[this.activeScrollCtrl] );
         }
@@ -705,7 +705,7 @@ export class UIScrollBox extends UISubControl
             !this.scrollControlAry[scrollControlIndex].isDisabled() )
         {
             eventManager.dispatchEvent(
-                menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
                 uiControlDefs.ECS_ACTIVE,
                 this.scrollControlAry[scrollControlIndex] );
 

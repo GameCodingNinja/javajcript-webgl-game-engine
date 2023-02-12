@@ -16,6 +16,7 @@ import * as genFunc from '../../../library/utilities/genfunc';
 import * as utilScripts from './utilityscripts';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as stateDefs from '../state/statedefs';
+import * as gameDefs from '../state/gamedefs';
 
 //
 //  DESC: Script for animating fire tale
@@ -55,9 +56,9 @@ class PlayerShip_ShootLazer
         this.PROJECTILE_SPEED = 1.5;
 
         // Player ship
-        let playerShipStratagy = strategyManager.get('_player_ship_');
-        let playerShipNode = playerShipStratagy.get('player_ship');
-        this.camera = playerShipStratagy.camera;
+        this.playerShipStratagy = strategyManager.get('_player_ship_');
+        let playerShipNode = this.playerShipStratagy.get('player_ship');
+        this.camera = this.playerShipStratagy.camera;
 
         // Enemy strategy
         this.enemyStratagy = strategyManager.get('_enemy_');
@@ -93,13 +94,17 @@ class PlayerShip_ShootLazer
     //
     execute()
     {
-        if( this.camera.inView( this.sprite.transPos, this.sprite.parentNode.radiusius ) )
+        if( this.camera.inViewX( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
             this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
             this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
 
             return false;
         }
+
+        // We are done with this sprite, disable collision and queue it up to be deleted
+        this.sprite.collisionComponent.enable = false;
+        this.playerShipStratagy.destroy(this.sprite.parentNode);
 
         return true;
     }
@@ -187,10 +192,9 @@ class EnemyShip_Shot
         this.camera = this.playerShipStratagy.camera;
         this.sprite.setPos(enemySprite.pos);
 
-        let playerShipSprite = this.playerShipNode.get();
-        let length = playerShipSprite.pos.calcLength2D( enemySprite.pos );
-        this.moveX = (playerShipSprite.pos.x - enemySprite.pos.x) / length;
-        this.moveY = (playerShipSprite.pos.y - enemySprite.pos.y) / length;
+        let length = this.playerShipNode.get().pos.calcLength2D( enemySprite.pos );
+        this.moveX = (this.playerShipNode.get().pos.x - enemySprite.pos.x) / length;
+        this.moveY = (this.playerShipNode.get().pos.y - enemySprite.pos.y) / length;
 
         this.startPos = new Point;
         this.startPos.copy( enemySprite.pos );
@@ -312,7 +316,7 @@ class Building_Die
     //
     execute()
     {
-        if( (this.sprite.pos.y + (this.sprite.getSize().h / 2)) > -settings.defaultSize_half.h )
+        if( (this.sprite.pos.y + this.sprite.parentNode.radius) > -settings.defaultSize_half.h )
         {
             this.sprite.incPosXYZ( 0, -(0.05 * highResTimer.elapsedTime) );
             this.sprite.incRotXYZ( 0, 0, this.rotDir * highResTimer.elapsedTime );
@@ -320,8 +324,13 @@ class Building_Die
             return false;
         }
 
+        this.sprite.toBeDeleted = true;
+
         // We are done with this sprite, queue it up to be deleted
         strategyManager.get('_buildings_').destroy( this.sprite.parentNode );
+
+        // Send a message to keep track of buildings being destroyed
+        eventManager.dispatchEvent( gameDefs.EGE_BUILDING_DESTROYED );
         
         return true;
     }

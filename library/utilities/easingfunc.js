@@ -270,6 +270,15 @@ export class valueTo
 {
     constructor()
     {
+        this.clear();
+        this.easingFunc = null;
+    }
+
+    // 
+    //  DESC: Set back to a pre-init state
+    //
+    clear()
+    {
         this.start = 0;
         this.end = 0;
         this.current = 0.0;
@@ -277,7 +286,6 @@ export class valueTo
         this.totalTime = 0;
         this.dif = 0;
         this.finished = false;
-        this.easingFunc = null;
     }
     
     // 

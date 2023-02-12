@@ -104,7 +104,7 @@ export class UIButtonList extends UISubControl
     inc()
     {
         eventManager.dispatchEvent(
-            menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+            menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
             uiControlDefs.ECS_SELECT,
             this.subControlAry[uiControlDefs.BTN_INC] );
     }
@@ -112,7 +112,7 @@ export class UIButtonList extends UISubControl
     dec()
     {
         eventManager.dispatchEvent(
-            menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+            menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
             uiControlDefs.ECS_SELECT,
             this.subControlAry[uiControlDefs.BTN_DEC] );
     }

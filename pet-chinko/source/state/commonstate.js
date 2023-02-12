@@ -30,7 +30,7 @@ export class CommonState extends GameState
         if( event instanceof GenericEvent )
         {
             // Check for the "game change state" message
-            if( event.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.type === menuDefs.EME_MENU_GAME_STATE_CHANGE )
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
                 {

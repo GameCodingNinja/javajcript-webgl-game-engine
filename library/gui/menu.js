@@ -428,62 +428,62 @@ export class Menu extends Object
 
         if( event instanceof GenericEvent )
         {
-            if( event.type === menuDefs.EGE_MENU_TRANS_IN )
+            if( event.type === menuDefs.EME_MENU_TRANS_IN )
             {
                 this.onTransIn( event );
             }
-            else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
+            else if( event.type === menuDefs.EME_MENU_TRANS_OUT )
             {
                 this.onTransOut( event );
             }
-            else if( event.type === menuDefs.EGE_MENU_REACTIVATE )
+            else if( event.type === menuDefs.EME_MENU_REACTIVATE )
             {
                 this.onReactivate( event );
             }
             else if( this.state === menuDefs.EMS_IDLE )
             {
-                if( event.type === menuDefs.EGE_MENU_SELECT_ACTION )
+                if( event.type === menuDefs.EME_MENU_SELECT_ACTION )
                 {
                     this.onSelectAction( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_SET_ACTIVE_CONTROL )
+                else if( event.type === menuDefs.EME_MENU_SET_ACTIVE_CONTROL )
                 {
                     this.onSetActiveControl( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_SCROLL_UP )
+                else if( event.type === menuDefs.EME_MENU_SCROLL_UP )
                 {
                     this.onUpAction( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_SCROLL_DOWN )
+                else if( event.type === menuDefs.EME_MENU_SCROLL_DOWN )
                 {
                     this.onDownAction( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_SCROLL_LEFT )
+                else if( event.type === menuDefs.EME_MENU_SCROLL_LEFT )
                 {
                     this.onLeftAction( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_SCROLL_RIGHT )
+                else if( event.type === menuDefs.EME_MENU_SCROLL_RIGHT )
                 {
                     this.onRightAction( event );
                 }
-                else if( (event.type >= menuDefs.EGE_MENU_UP_ACTION) &&
-                         (event.type <= menuDefs.EGE_MENU_RIGHT_ACTION) )
+                else if( (event.type >= menuDefs.EME_MENU_UP_ACTION) &&
+                         (event.type <= menuDefs.EME_MENU_RIGHT_ACTION) )
                 {
                     if( event.arg[0] === defs.EAP_DOWN )
                     {
-                        if( event.type === menuDefs.EGE_MENU_UP_ACTION )
+                        if( event.type === menuDefs.EME_MENU_UP_ACTION )
                         {
                             this.onUpAction( event );
                         }
-                        else if( event.type === menuDefs.EGE_MENU_DOWN_ACTION )
+                        else if( event.type === menuDefs.EME_MENU_DOWN_ACTION )
                         {
                             this.onDownAction( event );
                         }
-                        if( event.type === menuDefs.EGE_MENU_LEFT_ACTION )
+                        if( event.type === menuDefs.EME_MENU_LEFT_ACTION )
                         {
                             this.onLeftAction( event );
                         }
-                        else if( event.type === menuDefs.EGE_MENU_RIGHT_ACTION )
+                        else if( event.type === menuDefs.EME_MENU_RIGHT_ACTION )
                         {
                             this.onRightAction( event );
                         }
@@ -559,7 +559,7 @@ export class Menu extends Object
                     this.activeNode = navNode;
 
                     eventManager.dispatchEvent(
-                        menuDefs.EGE_MENU_CONTROL_STATE_CHANGE,
+                        menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
                         uiControlDefs.ECS_ACTIVE,
                         navNode.uiControl );
 

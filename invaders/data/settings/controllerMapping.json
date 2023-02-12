@@ -46,7 +46,11 @@
                 { "action": "up", "componetId": "L STICK UP" },
                 { "action": "down", "componetId": "L STICK DOWN" },
                 { "action": "left", "componetId": "L STICK LEFT" },
-                { "action": "right", "componetId": "L STICK RIGHT" } ],
+                { "action": "right", "componetId": "L STICK RIGHT" },
+                { "action": "up", "componetId": "UP" },
+                { "action": "down", "componetId": "DOWN" },
+                { "action": "left", "componetId": "LEFT" },
+                { "action": "right", "componetId": "RIGHT" } ],
 
         "playerVisible": [
                 { "action": "menu_select", "componetId": "A", "defaultId": "A", "configurable": "true" },

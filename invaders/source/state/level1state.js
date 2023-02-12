@@ -23,12 +23,14 @@ import { spriteSheetManager } from '../../../library/managers/spritesheetmanager
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import { settings } from '../../../library/utilities/settings';
+import { Timer } from '../../../library/utilities/timer';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
+import * as gameDefs from './gamedefs';
 import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
@@ -40,7 +42,7 @@ const MOVE_NULL = -1,
       MOVE_LEFT_RIGHT = 2,
       MOVE_UP = 2,
       MOVE_DOWN = 3,
-      CAMERA_EASING_SPEED = 11,
+      CAMERA_EASING_SPEED = 10,
       CAMERA_EASING_DIVISOR = 3,
       CAMERA_EASING_OFFSET = 350,
       MAX_CLOUDS = 8,
@@ -69,13 +71,12 @@ export class Level1State extends CommonState
         
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
-        //menuManager.activateTree( ['pause_tree'] );
         menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
         menuManager.activateTree( ['pause_tree'] );
         menuManager.getTree( 'pause_tree' ).transitionMenu();
         
         // Prepare the strategies to run
-        this.bkgStratagy = strategyManager.activateStrategy('_background_');
+        this.bkgStrategy = strategyManager.activateStrategy('_background_');
         strategyManager.activateStrategy('_buildingsback_');
         strategyManager.activateStrategy('_buildingsfront_');
         strategyManager.activateStrategy('_buildings_');
@@ -86,7 +87,7 @@ export class Level1State extends CommonState
         this.cloudAry = [];
         for( let i = 0; i < MAX_CLOUDS; i++ )
         {
-            let node = this.bkgStratagy.get(`cloud_${i}`);
+            let node = this.bkgStrategy.get(`cloud_${i}`);
             let cloud = new Object();
             cloud.speed = genFunc.randomArbitrary(0.001, 0.02);
             cloud.sprite = node.get();
@@ -113,20 +114,8 @@ export class Level1State extends CommonState
         // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
         strategyManager.get("_buildings_").addToActiveList();
 
-        // The enemy strategy needs to be activated before the player ship strategy
-        strategyManager.get('_enemy_');
-
-        // Get the nodes and sprites we need to call and tuck them under the node for easy access
-        this.playerShipStratagy = strategyManager.activateStrategy('_player_ship_');
-        this.playerShipNode = this.playerShipStratagy.get('player_ship');
-        this.playerShipObject = this.playerShipNode.findChild('playerShip_object').get();
-        this.playerShipNode.fireTailSprite = this.playerShipNode.findChild('player_fire_tail').get();
-        this.playerShipProgressBar = this.playerShipNode.findChild('UIProgressBar').get();
-        this.playerShipProgressBar.setProgressBarMax( 100 );
-        this.playerShipProgressBar.setCurrentValue( 100 );
-
-        this.playerShipNode.fireTailScript = this.playerShipNode.fireTailSprite.prepareScript( 'fireTailAnim' );
-        this.playerShipSprite = this.playerShipNode.get();
+        // Init the player ship
+        this.initPlayerShip();
 
         // Player/camera movement
         this.easingX = new easing.valueTo;
@@ -145,6 +134,36 @@ export class Level1State extends CommonState
     }
 
     // 
+    //  DESC: Init the player ship
+    //
+    initPlayerShip()
+    {
+        // Get the nodes and sprites we need to call and tuck them under the node for easy access
+        this.playerShip = {};
+        this.playerShip.strategy = strategyManager.activateStrategy('_player_ship_');
+        this.playerShip.node = this.playerShip.strategy.get('player_ship');
+        this.playerShip.object = this.playerShip.node.findChild('playerShip_object').get();
+        this.playerShip.sprite = this.playerShip.node.get();
+        this.playerShip.progressBar = this.playerShip.node.findChild('UIProgressBar').get();
+        this.playerShip.fireTailSprite = this.playerShip.node.findChild('player_fire_tail').get();
+        this.playerShip.fireTailScript = this.playerShip.fireTailSprite.prepareScript( 'fireTailAnim' );
+
+        this.playerShip.progressBar.setProgressBarMax( 100 );
+        this.playerShip.progressBar.setCurrentValue( 100 );
+
+        // This part is needed for the reload but here for completeness
+        this.playerShip.object.setRotXYZ();
+        this.playerShip.sprite.setPosXYZ();
+        this.playerShip.sprite.setRotXYZ();
+        this.playerShip.sprite.collisionComponent.enable = true;
+        this.playerShip.progressBar.setVisible( false );
+
+        this.enemySpawnTimer = new Timer(3000);
+        this.enemyMaxTimer = new Timer(30000);
+        this.maxEnemies = 5;
+    }
+
+    // 
     //  DESC: handle collisions
     //
     collisionCallBack( spriteA, spriteB )
@@ -157,18 +176,22 @@ export class Level1State extends CommonState
 
             if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
             {
-                //this.playerShipProgressBar.incCurrentValue( -1 );
+                this.playerShip.progressBar.incCurrentValue( -10 );
+                this.playerShip.progressBar.setVisible( true );
             }
             else if( spriteA.parentNode.userId == ENEMY_SHIP_ID )
             {
-                //this.playerShipProgressBar.incCurrentValue( -30 );
+                this.playerShip.progressBar.incCurrentValue( -30 );
+                this.playerShip.progressBar.setVisible( true );
             }
 
-            if( this.playerShipProgressBar.isMinValue() && this.playerShipSprite.collisionComponent.enable )
+            if( this.playerShip.progressBar.isMinValue() && this.playerShip.sprite.collisionComponent.enable )
             {
-                this.playerShipSprite.collisionComponent.enable = false;
-                this.playerShipProgressBar.setVisible( false );
-                this.playerShipSprite.prepareScript( 'die' );
+                this.playerShip.sprite.collisionComponent.enable = false;
+                this.playerShip.progressBar.setVisible( false );
+                this.playerShip.fireTailSprite.setVisible( false );
+                this.playerShip.fireTailScript.pause = true;
+                this.playerShip.sprite.prepareScript( 'die' );
             }
         }
         else
@@ -193,7 +216,7 @@ export class Level1State extends CommonState
         if( event instanceof GenericEvent )
         {
             // Check for the "game change state" message
-            if( event.type === menuDefs.EGE_MENU_GAME_STATE_CHANGE )
+            if( event.type === menuDefs.EME_MENU_GAME_STATE_CHANGE )
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
@@ -211,7 +234,7 @@ export class Level1State extends CommonState
                     menuManager.getTree( 'pause_tree' ).transitionMenu();
                 }
             }
-            else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
+            else if( event.type === menuDefs.EME_MENU_TRANS_OUT )
             {
                 if( event.arg[0] === menuDefs.ETC_END )
                 {
@@ -242,17 +265,33 @@ export class Level1State extends CommonState
                     this.restartGame();
                 }
             }
+            else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
+            {
+                let allToBeDeleted = true;
+                let buildingsAry = strategyManager.get('_buildings_').nodeAry;
+                for( let i = 0; i < buildingsAry.length; i++ )
+                {
+                    if( buildingsAry[i].toBeDeleted === undefined )
+                    {
+                        allToBeDeleted = false;
+                        break;
+                    }
+                }
+
+                if( allToBeDeleted )
+                    eventManager.dispatchEvent( stateDefs.ESE_SHOW_GAME_OVER_MENU );
+            }
         }
         else
         {
-            if( !menuManager.active && this.playerShipSprite.collisionComponent.enable )
+            if( !menuManager.active && this.playerShip.sprite.collisionComponent.enable )
             {
                 // Handle the ship movement
                 this.handleShipMovement( event );
 
                 if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
                 {
-                    let laserBlast = this.playerShipStratagy.create('player_shot').get();
+                    let laserBlast = this.playerShip.strategy.create('player_shot').get();
                     laserBlast.prepareScript( 'shoot', this.easingX.getValue() );
                 }
             }
@@ -264,8 +303,10 @@ export class Level1State extends CommonState
     //
     restartGame()
     {
-        strategyManager.deleteStrategy( '_buildings_' );
-        strategyManager.deleteStrategy( '_enemy_' );
+        this.playerShip = null;
+
+        ai.clearAIData();
+        strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
         .then(() =>
         {
@@ -274,13 +315,13 @@ export class Level1State extends CommonState
             // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
             strategyManager.get("_buildings_").addToActiveList();
 
-            // The enemy strategy needs to be activated before the player ship strategy
-            strategyManager.activateStrategy('_enemy_').initScriptTree();
+            // Reactivate strategies
+            strategyManager.activateStrategy('_enemy_');
+
+            // Init the player ship
+            this.initPlayerShip();
 
             strategyManager.sort();
-
-            this.playerShipProgressBar.setProgressBarMax( 100 );
-            this.playerShipProgressBar.setCurrentValue( 100 );
 
             this.buildingsbackCamera.initFromXml();
             this.buildingsfrontCamera.initFromXml();
@@ -291,15 +332,9 @@ export class Level1State extends CommonState
             this.moveDirY = MOVE_NULL;
             this.lastMoveDirX = MOVE_NULL;
 
-            this.playerShipObject.setRotXYZ();
-            this.playerShipSprite.setPosXYZ();
-            this.playerShipSprite.setRotXYZ();
-            this.playerShipSprite.collisionComponent.enable = true;
-            this.playerShipProgressBar.setVisible( true );
-
-            this.easingX.finish();
-            this.easingY.finish();
-            this.cameraEasingX.finish();
+            this.easingX.clear();
+            this.easingY.clear();
+            this.cameraEasingX.clear();
 
             // Clear the last device used so that the button on start game menu is active by default
             actionManager.clearLastDeviceUsed();
@@ -327,21 +362,21 @@ export class Level1State extends CommonState
                     if( i === MOVE_LEFT )
                     {
                         // Flip the ship facing left
-                        this.playerShipObject.setRotXYZ( 0, 180 );
+                        this.playerShip.object.setRotXYZ( 0, 180 );
 
                         if( actionResult === defs.EAP_DOWN )
                         {
-                            this.playerShipNode.fireTailSprite.setVisible( true );
-                            this.playerShipNode.fireTailScript.pause = false;
+                            this.playerShip.fireTailSprite.setVisible( true );
+                            this.playerShip.fireTailScript.pause = false;
                             this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
-                            this.cameraEasingX.init( this.cameraEasingX.getValue(), -CAMERA_EASING_SPEED, 2, easing.getLinear() );
+                            this.cameraEasingX.init( this.cameraEasingX.getValue(), -CAMERA_EASING_SPEED, 1, easing.getLinear() );
                         }
                         else
                         {
-                            this.playerShipNode.fireTailSprite.setVisible( false );
-                            this.playerShipNode.fireTailScript.pause = true;
+                            this.playerShip.fireTailSprite.setVisible( false );
+                            this.playerShip.fireTailScript.pause = true;
                             this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                         }
@@ -351,21 +386,21 @@ export class Level1State extends CommonState
                     else if( i === MOVE_RIGHT )
                     {
                         // Flip the ship facing right (default orientation)
-                        this.playerShipObject.setRotXYZ();
+                        this.playerShip.object.setRotXYZ();
 
                         if( actionResult === defs.EAP_DOWN )
                         {
-                            this.playerShipNode.fireTailSprite.setVisible( true );
-                            this.playerShipNode.fireTailScript.pause = false;
+                            this.playerShip.fireTailSprite.setVisible( true );
+                            this.playerShip.fireTailScript.pause = false;
                             this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
-                            this.cameraEasingX.init( this.cameraEasingX.getValue(), CAMERA_EASING_SPEED, 2, easing.getLinear() );
+                            this.cameraEasingX.init( this.cameraEasingX.getValue(), CAMERA_EASING_SPEED, 1, easing.getLinear() );
                         }
                         else
                         {
-                            this.playerShipNode.fireTailSprite.setVisible( false );
-                            this.playerShipNode.fireTailScript.pause = true;
+                            this.playerShip.fireTailSprite.setVisible( false );
+                            this.playerShip.fireTailScript.pause = true;
                             this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                         }
@@ -419,8 +454,25 @@ export class Level1State extends CommonState
         
         this.scriptComponent.update();
         
-        if( !menuManager.active )
+        if( !menuManager.active && this.playerShip )
         {
+            if( this.enemySpawnTimer.expired(true) )
+            {
+                // Create a enemy and position it outside of the view
+                let strategy = strategyManager.get('_enemy_');
+                if( strategy.nodeAry.length < this.maxEnemies )
+                {
+                    let node = strategy.create('enemy_ship');
+                    node.get().setPosXYZ(0, settings.defaultSize.h);
+                    node.transform();
+                }
+
+                if( this.enemyMaxTimer.expired(true) && this.maxEnemies < 20 )
+                {
+                    this.maxEnemies++;
+                }
+            }
+            
             this.easingX.execute();
             this.easingY.execute();
             this.cameraEasingX.execute();
@@ -455,7 +507,7 @@ export class Level1State extends CommonState
                 this.buildingsCamera.incPosXYZ( 6300 * 2 );
 
             let incY = this.easingY.getValue();
-            let playerPos = this.playerShipSprite.transPos;
+            let playerPos = this.playerShip.sprite.transPos;
 
             // Stop the up/down movement
             if( (this.moveDirY === MOVE_DOWN && playerPos.y < -settings.defaultSize_half.h) ||
@@ -482,17 +534,17 @@ export class Level1State extends CommonState
                     this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0, easing.getLinear() );
             }
 
-            this.playerShipSprite.incPosXYZ( this.easingX.getValue(), incY );
+            this.playerShip.sprite.incPosXYZ( this.easingX.getValue(), incY );
 
             // Loop the player and camera
-            if( this.playerShipSprite.pos.x < -6300 )
+            if( this.playerShip.sprite.pos.x < -6300 )
             {
-                this.playerShipSprite.incPosXYZ( 6300 * 2 );
+                this.playerShip.sprite.incPosXYZ( 6300 * 2 );
                 this.camera.incPosXYZ( 6300 * 2 );
             }
-            else if( this.playerShipSprite.pos.x > 6300 )
+            else if( this.playerShip.sprite.pos.x > 6300 )
             {
-                this.playerShipSprite.incPosXYZ( -(6300 * 2) );
+                this.playerShip.sprite.incPosXYZ( -(6300 * 2) );
                 this.camera.incPosXYZ( -(6300 * 2) );
             }
             

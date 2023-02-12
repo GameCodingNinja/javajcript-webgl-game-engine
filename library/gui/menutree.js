@@ -158,32 +158,32 @@ export class MenuTree
             {
                 if( this.state === menuDefs.EMTS_IDLE )
                 {
-                    if( event.type === menuDefs.EGE_MENU_ESCAPE_ACTION )
+                    if( event.type === menuDefs.EME_MENU_ESCAPE_ACTION )
                     {
                         this.onEscape( event );
                     }
-                    else if( event.type === menuDefs.EGE_MENU_TOGGLE_ACTION )
+                    else if( event.type === menuDefs.EME_MENU_TOGGLE_ACTION )
                     {
                         this.onToggle( event );
                     }
-                    else if( event.type === menuDefs.EGE_MENU_BACK_ACTION )
+                    else if( event.type === menuDefs.EME_MENU_BACK_ACTION )
                     {
                         this.onBack( event );
                     }
-                    else if( event.type === menuDefs.EGE_MENU_TO_TREE )
+                    else if( event.type === menuDefs.EME_MENU_TO_TREE )
                     {
                         this.onToTree( event );
                     }
-                    else if( event.type === menuDefs.EGE_MENU_TO_MENU )
+                    else if( event.type === menuDefs.EME_MENU_TO_MENU )
                     {
                         this.onToMenu( event );
                     }
                 }
-                else if( event.type === menuDefs.EGE_MENU_TRANS_IN )
+                else if( event.type === menuDefs.EME_MENU_TRANS_IN )
                 {
                     this.onTransIn( event );
                 }
-                else if( event.type === menuDefs.EGE_MENU_TRANS_OUT )
+                else if( event.type === menuDefs.EME_MENU_TRANS_OUT )
                 {
                     this.onTransOut( event );
                 }
@@ -192,7 +192,7 @@ export class MenuTree
         else
         {
             // Don't process menu specific messages for an interface menu
-            if( (event instanceof GenericEvent) && event.type <= menuDefs.EGE_MENU_GAME_STATE_CHANGE )
+            if( (event instanceof GenericEvent) && event.type <= menuDefs.EME_MENU_GAME_STATE_CHANGE )
                 return;
                 
             if( this.menuPathAry.length )
@@ -223,7 +223,7 @@ export class MenuTree
             this.state = menuDefs.EMTS_ACTIVE;
 
             // Start the transition in
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
         }
         else
         {
@@ -234,7 +234,7 @@ export class MenuTree
                 this.state = menuDefs.EMTS_ACTIVE;
 
                 // Start the transition out
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
             }
         }
     }
@@ -339,7 +339,7 @@ export class MenuTree
                 throw new Error( `Menu does not exist! (${this.toMenu}).` );
 
             // Start the transition out
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
         }
     }
     
@@ -353,7 +353,7 @@ export class MenuTree
             if( this.toMenu.length )
             {
                 this.menuPathAry.push( this.menuMap.get(this.toMenu) );
-                eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
             }
             else if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] !== this.rootMenu) )
             {
@@ -364,7 +364,7 @@ export class MenuTree
                 menu.reset();
 
                 if( this.menuPathAry.length )
-                    eventManager.dispatchEvent( menuDefs.EGE_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+                    eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
             }
 
             // Normally, after one menu transitions out, the next menu transitions in
@@ -384,7 +384,7 @@ export class MenuTree
             // m_toMenu is also used as a flag to indicate moving up the menu tree
             // When moving up the menu tree, activate the first control on the menu
             // When backing out of the menu tree, activate the last control used
-            eventManager.dispatchEvent( menuDefs.EGE_MENU_SET_ACTIVE_CONTROL, 
+            eventManager.dispatchEvent( menuDefs.EME_MENU_SET_ACTIVE_CONTROL, 
                 (this.toMenu.length === 0) ? menuDefs.EAC_LAST_ACTIVE_CONTROL : menuDefs.EAC_FIRST_ACTIVE_CONTROL );
 
             // Set to idle to allow for input messages to come through
