@@ -170,7 +170,7 @@
             <!-- Don't need a collision signal for the player ship since other elements initiate the collision -->
             <collision filterCategoryBits="0x00000000" filterMaskBits="0x00000006" collisionSignal="false">
                 <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
-                    <rect x1="10" y1="10" x2="-10" y2="-10"/>
+                    <rect x1="-5" y1="-5" x2="-5" y2="-5"/>
                 </rect>
                 <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
@@ -237,7 +237,7 @@
                 </polygonList>-->
 
                 <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
-                    <rect x1="7" y1="5" x2="-7" y2="-5"/>
+                    <rect x1="-5" y1="-5" x2="-5" y2="-5"/>
                 </rect>
 
                 <!--<rect radiusFromVisual="true" rectToModelView="true">
@@ -264,6 +264,52 @@
             <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <circle radius="10"/>
             </collision>
+        </object>
+
+        <object name="hud_background">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="0" g="150" b="255" a="1"/>
+            </visual>
+            <size width="1280" height="66"/>
+        </object>
+
+        <object name="hud_frame">
+            <visual>
+                <texture file="data/textures/level/16x16_3_pixel_frame.png" filter="NEAREST"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="1288" height="74"/>
+        </object>
+
+        <object name="level_frame">
+            <visual>
+                <texture file="data/textures/level/16x16_3_pixel_frame.png" filter="NEAREST"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="158" height="74"/>
+        </object>
+
+        <object name="level_background">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="0" g="150" b="255" a="1"/>
+            </visual>
+            <size width="153" height="66"/>
+        </object>
+
+        <object name="level_font">
+            <visual>
+                <mesh genType="font"/>
+                <shader id="shader_2d"/>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
         </object>
 
     </objectList>

@@ -28,7 +28,7 @@
 
         <node name="building01" id="-28">
             <sprite>
-                <position x="-5600" y="-298"/>
+                <position x="-5600" y="-280"/>
             </sprite>
         </node>
 
@@ -116,7 +116,7 @@
 
         <node name="building01" id="-14">
             <sprite>
-                <position x="-2800" y="-298"/>
+                <position x="-2800" y="-280"/>
             </sprite>
         </node>
 
@@ -204,7 +204,7 @@
 
         <node name="building01" id="0">
             <sprite>
-                <position x="0" y="-298"/>
+                <position x="0" y="-280"/>
             </sprite>
         </node>
 
@@ -292,7 +292,7 @@
 
         <node name="building01" id="14">
             <sprite>
-                <position x="2800" y="-298"/>
+                <position x="2800" y="-280"/>
             </sprite>
         </node>
 
@@ -380,7 +380,7 @@
 
         <!--<node name="building01" id="-28">
             <sprite>
-                <position x="5600" y="-298"/>
+                <position x="5600" y="-280"/>
             </sprite>
         </node>
 

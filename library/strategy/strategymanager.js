@@ -170,11 +170,11 @@ class StrategyManager extends ManagerBase
     //
     //  DESC: Render the strategy
     //
-    render()
+    render( overrideCamera = null )
     {
         for( let i = 0; i < this.strategyAry.length; i++ )
             if( this.strategyAry[i].isVisible() )
-                this.strategyAry[i].render();
+                this.strategyAry[i].render( overrideCamera );
     }
 
     //

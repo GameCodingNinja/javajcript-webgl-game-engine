@@ -143,6 +143,11 @@ export class VisualComponentQuad extends ivisualComponent
     //
     getSize()
     {
-        return this.texture.size;
+        if( this.texture !== null )
+        {
+            return this.texture.size;
+        }
+
+        return null;
     }
 }

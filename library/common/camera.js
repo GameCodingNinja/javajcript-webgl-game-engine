@@ -29,10 +29,12 @@ export class Camera extends Object
         this.projType = settings.projectionType;
         this.minZDist = settings.minZdist;
         this.maxZDist = settings.maxZdist;
+        this.projWidth = settings.defaultSize.w;
+        this.projHeight = settings.defaultSize.h;
         this.angle = settings.viewAngle;
 
         // cull flag
-        this.cull = false;
+        this.cull = defs.CULL_NULL;
 
         // Setup the camera
         this.setup();
@@ -70,13 +72,30 @@ export class Camera extends Object
         if( attr )
             this.maxZDist = Number(attr);
 
+        attr = xmlNode.getAttribute('projWidth');
+            if( attr )
+                this.projWidth = Number(attr);
+
+        attr = xmlNode.getAttribute('projHeight');
+            if( attr )
+                this.projHeight = Number(attr);
+
         attr = xmlNode.getAttribute('view_angle');
         if( attr )
             this.angle = Number(attr) * defs.DEG_TO_RAD;
 
         attr = xmlNode.getAttribute('cull');
         if( attr )
-            this.cull = (attr === 'true');
+        {
+            if( attr === 'CULL_FULL' )
+                this.cull = defs.CULL_FULL;
+
+            else if( attr === 'cull_x_only' )
+                this.cull = defs.CULL_X_ONLY;
+
+            else if( attr === 'cull_y_only' )
+                this.cull = defs.CULL_Y_ONLY;
+        }
         
         // Load the transform data from node
         this.loadTransFromNode( xmlNode );
@@ -136,8 +155,8 @@ export class Camera extends Object
         else
         {
             this.projectionMatrix.orthographicRH(
-                settings.defaultSize.w,
-                settings.defaultSize.h,
+                this.projWidth,
+                this.projHeight,
                 this.minZDist,
                 this.maxZDist );
         }
@@ -209,21 +228,21 @@ export class Camera extends Object
         if(this.projType == defs.EPT_ORTHOGRAPHIC)
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - transPos.x) > (settings.defaultSize_half.w + radius) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > (settings.defaultSize_half.w + (this.scale.x * radius)) )
                 return false;
 
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > (settings.defaultSize_half.h + radius) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > (settings.defaultSize_half.h + (this.scale.y * radius)) )
                 return false;
         }
         else
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - transPos.x) > ((Math.abs(transPos.z) * settings.screenAspectRatio.w) + radius) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > ((Math.abs(transPos.z) * settings.screenAspectRatio.w) + (this.scale.x * radius)) )
                 return false;
 
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > ((Math.abs(transPos.z) * settings.screenAspectRatio.h) + radius) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > ((Math.abs(transPos.z) * settings.screenAspectRatio.h) + (this.scale.y * radius)) )
                 return false;
         }
 
@@ -238,13 +257,13 @@ export class Camera extends Object
         if(this.projType == defs.EPT_ORTHOGRAPHIC)
         {
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > (settings.defaultSize_half.h + radius) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > (settings.defaultSize_half.h + (this.scale.y * radius)) )
                 return false;
         }
         else
         {
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > ((Math.abs(transPos.z) * settings.screenAspectRatio.h) + radius) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > ((Math.abs(transPos.z) * settings.screenAspectRatio.h) + (this.scale.y * radius)) )
                 return false;
         }
 
@@ -259,13 +278,13 @@ export class Camera extends Object
         if(this.projType == defs.EPT_ORTHOGRAPHIC)
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - transPos.x) > (settings.defaultSize_half.w + radius) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > (settings.defaultSize_half.w + (this.scale.x * radius)) )
                 return false;
         }
         else
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - transPos.x) > ((Math.abs(transPos.z) * settings.screenAspectRatio.w) + radius) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > ((Math.abs(transPos.z) * settings.screenAspectRatio.w) + (this.scale.x * radius)) )
                 return false;
         }
 

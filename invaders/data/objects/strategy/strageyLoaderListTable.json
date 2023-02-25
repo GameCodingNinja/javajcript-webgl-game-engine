@@ -6,7 +6,8 @@
         "data/objects/strategy/level1/buildings.strategy.loader",
         "data/objects/strategy/level1/forground.strategy.loader",
         "data/objects/strategy/level1/enemy.strategy.loader",
-        "data/objects/strategy/level1/ship.strategy.loader"],
+        "data/objects/strategy/level1/ship.strategy.loader",
+        "data/objects/strategy/level1/hud.strategy.loader"],
     
     "-reloadlevel1-": [
         "data/objects/strategy/level1/enemy.strategy.loader",

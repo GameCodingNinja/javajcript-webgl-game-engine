@@ -369,21 +369,44 @@ export class Strategy extends Object
     //
     //  DESC: Render the nodes
     //
-    render()
+    render( overrideCamera = null )
     {
+        let camera = this.camera;
+        if( overrideCamera )
+            camera = overrideCamera;
+
         // Cull frustrum on the head node
-        if( this.camera.cull )
+        if( camera.cull === defs.CULL_NULL )
         {
             for( let i = 0; i < this.nodeAry.length; i++ )
-            {
-                if( this.camera.inView( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
-                    this.nodeAry[i].render( this.camera );
-            }
+                this.nodeAry[i].render( camera );
         }
         else
         {
-            for( let i = 0; i < this.nodeAry.length; i++ )
-                this.nodeAry[i].render( this.camera );
+            if( camera.cull === defs.CULL_FULL )
+            {
+                for( let i = 0; i < this.nodeAry.length; i++ )
+                {
+                    if( camera.inView( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( camera );
+                }
+            }
+            else if( camera.cull === defs.CULL_X_ONLY )
+            {
+                for( let i = 0; i < this.nodeAry.length; i++ )
+                {
+                    if( camera.inViewX( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( camera );
+                }
+            }
+            else if( camera.cull === defs.CULL_Y_ONLY )
+            {
+                for( let i = 0; i < this.nodeAry.length; i++ )
+                {
+                    if( camera.inViewY( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( camera );
+                }
+            }
         }
     }
 

@@ -24,5 +24,8 @@
         "data/objects/strategy/level1/playerShip.strategy"],
 
     "_enemy_": [
-        "data/objects/strategy/level1/enemy.strategy"]
+        "data/objects/strategy/level1/enemy.strategy"],
+    
+    "_hud_": [
+        "data/objects/strategy/level1/hud.strategy"]
 }

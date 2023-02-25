@@ -257,7 +257,7 @@ export class UIScrollBox extends UISubControl
     // 
     //  DESC: Handle OnUpScroll message
     //
-    onUpScroll( event )
+    onUpScroll( /* event */ )
     {
         this.handleKeyboardGamepadScroll( -1 );
         this.scrollMsg = true;
@@ -266,7 +266,7 @@ export class UIScrollBox extends UISubControl
     // 
     //  DESC: Handle OnDownScroll message
     //
-    onDownScroll( event )
+    onDownScroll( /* event */ )
     {
         this.handleKeyboardGamepadScroll( 1 );
         this.scrollMsg = true;
@@ -642,7 +642,7 @@ export class UIScrollBox extends UISubControl
     //  DESC: Set the active control to the viewable area
     //        This also deactivates the last known active control
     //
-    setActiveCtrlToViewableArea( scrollVector )
+    setActiveCtrlToViewableArea( /* scrollVector */ )
     {
         // If the active control is not within the active area, make it so that it will be the first one selected
         if( (this.activeScrollCtrl < this.firstScrollCtrlIndex) || (this.activeScrollCtrl >= (this.firstScrollCtrlIndex + this.visibleCount)) )
@@ -803,7 +803,7 @@ export class UIScrollBox extends UISubControl
     getControlAlignment()
     {
         let pos = this.scrollCurPos / this.controlHeight;
-        return this.controlHeight * Math.trunc(pos);
+        return this.controlHeight * (pos - Math.trunc(pos));
     }
 
     // 

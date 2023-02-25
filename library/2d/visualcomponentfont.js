@@ -551,7 +551,7 @@ export class VisualComponentFont extends VisualComponentQuad
     //
     getSize()
     {
-        if( !this.fontData )
+        if( this.fontData === null )
             throw new Error( `Can't ask for the font size from a sprite that is not defined!` );
 
         return this.fontData.fontStrSize;

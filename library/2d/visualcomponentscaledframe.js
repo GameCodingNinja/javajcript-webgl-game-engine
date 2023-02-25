@@ -78,6 +78,11 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
     //
     getSize()
     {
-        return this.visualData.size;
+        if( this.visualData.size )
+        {
+            return this.visualData.size;
+        }
+
+        return null;
     }
 }

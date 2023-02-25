@@ -24,6 +24,7 @@ import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import { settings } from '../../../library/utilities/settings';
 import { Timer } from '../../../library/utilities/timer';
+import { device } from '../../../library/system/device';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
@@ -35,7 +36,7 @@ import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
-export const ASSET_COUNT = 54;
+export const ASSET_COUNT = 57;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
@@ -43,7 +44,7 @@ const MOVE_NULL = -1,
       MOVE_UP = 2,
       MOVE_DOWN = 3,
       CAMERA_EASING_SPEED = 10,
-      CAMERA_EASING_DIVISOR = 3,
+      CAMERA_EASING_DIVISOR = 4,
       CAMERA_EASING_OFFSET = 350,
       MAX_CLOUDS = 8,
       PLAYER_SHIP_ID = 0,
@@ -79,9 +80,9 @@ export class Level1State extends CommonState
         this.bkgStrategy = strategyManager.activateStrategy('_background_');
         strategyManager.activateStrategy('_buildingsback_');
         strategyManager.activateStrategy('_buildingsfront_');
-        strategyManager.activateStrategy('_buildings_');
+        this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
         strategyManager.activateStrategy('_forground_');
-        strategyManager.activateStrategy('_enemy_');
+        this.enemyStrategy = strategyManager.activateStrategy('_enemy_');
 
         // Randomly distrabute the clouds
         this.cloudAry = [];
@@ -91,7 +92,7 @@ export class Level1State extends CommonState
             let cloud = new Object();
             cloud.speed = genFunc.randomArbitrary(0.001, 0.02);
             cloud.sprite = node.get();
-            cloud.sprite.setPosXYZ(genFunc.randomInt(-640, 640), genFunc.randomInt(-100, 350));
+            cloud.sprite.setPosXYZ(genFunc.randomInt(-640, 640), genFunc.randomInt(-100, 300));
             cloud.sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
             // Flip the sprite?
             if(genFunc.randomInt(0, 1))
@@ -106,16 +107,22 @@ export class Level1State extends CommonState
         this.buildingsCamera = cameraManager.get('buildingsCamera');
         this.forgroundCamera = cameraManager.get('forgroundCamera');
         this.camera = cameraManager.get('levelCamera');
+        this.radarCamera = cameraManager.get('radarCamera');
         this.buildingsbackCamera.initFromXml();
         this.buildingsfrontCamera.initFromXml();
         this.buildingsCamera.initFromXml();
         this.camera.initFromXml();
+
+        this.radarCamera.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera.scale.x;
+        this.radarCamera.initFromXml();
 
         // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
         strategyManager.get("_buildings_").addToActiveList();
 
         // Init the player ship
         this.initPlayerShip();
+
+        strategyManager.activateStrategy('_hud_');
 
         // Player/camera movement
         this.easingX = new easing.valueTo;
@@ -129,6 +136,8 @@ export class Level1State extends CommonState
         this.moveDirX = MOVE_NULL;
         this.moveDirY = MOVE_NULL;
         this.lastMoveDirX = MOVE_NULL;
+
+        this.gameReady = true;
         
         requestAnimationFrame( this.callback );
     }
@@ -303,6 +312,7 @@ export class Level1State extends CommonState
     //
     restartGame()
     {
+        this.gameReady = false;
         this.playerShip = null;
 
         ai.clearAIData();
@@ -310,13 +320,13 @@ export class Level1State extends CommonState
         strategyLoader.loadGroup( '-reloadlevel1-' )
         .then(() =>
         {
-            strategyManager.activateStrategy('_buildings_');
+            this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
 
             // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
             strategyManager.get("_buildings_").addToActiveList();
 
             // Reactivate strategies
-            strategyManager.activateStrategy('_enemy_');
+            this.enemyStrategy = strategyManager.activateStrategy('_enemy_');
 
             // Init the player ship
             this.initPlayerShip();
@@ -336,6 +346,8 @@ export class Level1State extends CommonState
             this.easingY.clear();
             this.cameraEasingX.clear();
 
+            this.gameReady = true;
+
             // Clear the last device used so that the button on start game menu is active by default
             actionManager.clearLastDeviceUsed();
 
@@ -348,6 +360,8 @@ export class Level1State extends CommonState
     //
     handleShipMovement( event )
     {
+        let dir = -this.camera.pos.x - this.playerShip.sprite.pos.x;
+
         for( let i = 0; i < this.moveActionAry.length; i++ )
         {
             let actionResult = actionManager.wasAction( event, this.moveActionAry[i] );
@@ -364,6 +378,7 @@ export class Level1State extends CommonState
                         // Flip the ship facing left
                         this.playerShip.object.setRotXYZ( 0, 180 );
 
+                        // The camera easing positions the player ship at then end of the screen facing inwards
                         if( actionResult === defs.EAP_DOWN )
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
@@ -371,13 +386,16 @@ export class Level1State extends CommonState
                             this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
-                            this.cameraEasingX.init( this.cameraEasingX.getValue(), -CAMERA_EASING_SPEED, 1, easing.getLinear() );
+                            // Don't allow any more camera easing, in this direction, after a certain point
+                            if(dir > -CAMERA_EASING_OFFSET)
+                                this.cameraEasingX.init( this.cameraEasingX.getValue(), -CAMERA_EASING_SPEED, 1, easing.getLinear() );
                         }
                         else
                         {
                             this.playerShip.fireTailSprite.setVisible( false );
                             this.playerShip.fireTailScript.pause = true;
                             this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                         }
 
@@ -388,6 +406,7 @@ export class Level1State extends CommonState
                         // Flip the ship facing right (default orientation)
                         this.playerShip.object.setRotXYZ();
 
+                        // The camera easing positions the player ship at then end of the screen facing inwards
                         if( actionResult === defs.EAP_DOWN )
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
@@ -395,13 +414,16 @@ export class Level1State extends CommonState
                             this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
-                            this.cameraEasingX.init( this.cameraEasingX.getValue(), CAMERA_EASING_SPEED, 1, easing.getLinear() );
+                            // Don't allow any more camera easing, in this direction, after a certain point
+                            if(dir < CAMERA_EASING_OFFSET)
+                                this.cameraEasingX.init( this.cameraEasingX.getValue(), CAMERA_EASING_SPEED, 1, easing.getLinear() );
                         }
                         else
                         {
                             this.playerShip.fireTailSprite.setVisible( false );
                             this.playerShip.fireTailScript.pause = true;
                             this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                         }
 
@@ -454,7 +476,7 @@ export class Level1State extends CommonState
         
         this.scriptComponent.update();
         
-        if( !menuManager.active && this.playerShip )
+        if( !menuManager.active && this.gameReady )
         {
             if( this.enemySpawnTimer.expired(true) )
             {
@@ -506,35 +528,59 @@ export class Level1State extends CommonState
             else if( this.buildingsCamera.pos.x > 6300)
                 this.buildingsCamera.incPosXYZ( 6300 * 2 );
 
-            let incY = this.easingY.getValue();
-            let playerPos = this.playerShip.sprite.transPos;
-
             // Stop the up/down movement
-            if( (this.moveDirY === MOVE_DOWN && playerPos.y < -settings.defaultSize_half.h) ||
-                (this.moveDirY === MOVE_UP && playerPos.y > settings.defaultSize_half.h) )
+            if( (this.moveDirY === MOVE_UP && this.playerShip.sprite.transPos.y > (settings.defaultSize_half.h * 0.73)) ||
+                (this.moveDirY === MOVE_DOWN && this.playerShip.sprite.transPos.y < -(settings.defaultSize_half.h * 0.92)) )
             {
                 this.moveDirY = MOVE_NULL;
-                incY = 0;
-                this.easingY.init( 0, 0, 0, easing.getLinear() );
+                this.easingY.init( 0, 0, 0, easing.getLinear(), true );
             }
 
-            let dir = -this.camera.transPos.x - playerPos.x;
-            let radius = settings.defaultSize_half.w - CAMERA_EASING_OFFSET;
-            let offset = Math.abs(dir);
-
-            // Slow the camera movement to a stop
-            if( (this.moveDirX === MOVE_RIGHT && dir > 0 && offset > radius) ||
-                (this.moveDirX === MOVE_LEFT && dir < 0 && offset > radius) )
+            // Handle camera easing when at the other end of the screen, based on which way the player ship is facing.
+            // The camera easing positions the player ship at then end of the screen facing inwards
+            if( this.moveDirX > MOVE_NULL )
             {
-                this.moveDirX = MOVE_NULL;
-                let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
-                if( time < CAMERA_EASING_DIVISOR )
-                    this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, time, easing.getLinear() );
-                else
-                    this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0, easing.getLinear() );
+                let dir = -this.camera.transPos.x - this.playerShip.sprite.transPos.x;
+
+                if( (this.moveDirX === MOVE_LEFT && dir < -(settings.defaultSize_half.w - CAMERA_EASING_OFFSET)) )
+                {
+                    this.moveDirX = MOVE_NULL;
+                    let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
+
+                    // Don't allow any more camera easing, in this direction, after a certain point
+                    // We enter this if when the player holds down thrust
+                    if( time < CAMERA_EASING_DIVISOR && dir > -CAMERA_EASING_OFFSET )
+                    {
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, time, easing.getLinear() );
+                    }
+                    // Bring the camera easing to a stop once we've reached our limit
+                    // We enter this eles if the player is constantly thrusting
+                    else
+                    {
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0.25, easing.getLinear() );
+                    }
+                }
+                else if( (this.moveDirX === MOVE_RIGHT && dir > (settings.defaultSize_half.w - CAMERA_EASING_OFFSET)) )
+                {
+                    this.moveDirX = MOVE_NULL;
+                    let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
+
+                    // Don't allow any more camera easing, in this direction, after a certain point
+                    // We enter this if when the player holds down thrust
+                    if( time < CAMERA_EASING_DIVISOR && dir < CAMERA_EASING_OFFSET )
+                    {
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, time, easing.getLinear() );
+                    }
+                    // Bring the camera easing to a stop once we've reached our limit
+                    // We enter this eles if the player is constantly thrusting
+                    else
+                    {
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0.25, easing.getLinear() );
+                    }
+                }
             }
 
-            this.playerShip.sprite.incPosXYZ( this.easingX.getValue(), incY );
+            this.playerShip.sprite.incPosXYZ( this.easingX.getValue(), this.easingY.getValue() );
 
             // Loop the player and camera
             if( this.playerShip.sprite.pos.x < -6300 )
@@ -589,11 +635,21 @@ export class Level1State extends CommonState
     //
     render()
     {
-        super.render();
-        
-        strategyManager.render();
-        
-        menuManager.render();
+        if( this.gameReady )
+        {
+            super.render();
+            
+            strategyManager.render();
+            
+            menuManager.render();
+
+            let viewPort = device.gl.getParameter(device.gl.VIEWPORT);
+            device.gl.viewport(0, viewPort[3] - (viewPort[3] * 0.09), viewPort[2], viewPort[3] * this.radarCamera.scale.x);
+            this.buildingsStrategy.render( this.radarCamera );
+            this.enemyStrategy.render( this.radarCamera );
+            this.playerShip.strategy.render( this.radarCamera );
+            device.gl.viewport(0, 0, viewPort[2], viewPort[3]);
+        }
     }
 
     // 
@@ -601,8 +657,8 @@ export class Level1State extends CommonState
     //
     cleanUp()
     {
-        // Only delete the strategy(s) used in this state. Don't use clear().
-        strategyManager.deleteStrategy( ['_forground_','_background_','_buildingsfront_','_buildingsback_','_buildings_','_player_ship_','_enemy_'] );
+        // Can also delete individual strategies
+        strategyManager.clear();
 
         // Clear out any loaded AI
         aiManager.clear();

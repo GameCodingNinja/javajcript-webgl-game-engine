@@ -5,24 +5,29 @@
         <position x="0" y="0" z="20"/>
     </default>
 
-    <camera id="levelCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="true">
+    <camera id="levelCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_full">
         <position x="400" y="0" z="20"/>
     </camera>
 
-    <camera id="buildingsCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="true">
+    <camera id="buildingsCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
         <position x="400" y="0" z="20"/>
     </camera>
 
-    <camera id="buildingsbackCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="true">
+    <camera id="buildingsbackCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
         <position x="400" y="0" z="20"/>
     </camera>
 
-    <camera id="buildingsfrontCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="true">
+    <camera id="buildingsfrontCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
         <position x="400" y="0" z="20"/>
     </camera>
 
-    <camera id="forgroundCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="true">
+    <camera id="forgroundCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
         <position x="400" y="0" z="20"/>
+    </camera>
+
+    <camera id="radarCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0">
+        <position x="68" y="0" z="20"/>
+        <scale x="0.1" y="0.1"/>
     </camera>
   
 </cameraLst>

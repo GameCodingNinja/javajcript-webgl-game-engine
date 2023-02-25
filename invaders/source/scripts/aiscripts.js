@@ -102,14 +102,13 @@ class AI_Enemy_Desend extends aiNode
     {
         // Set the initial position of the sprite above the height of the screen
         // with a random amount to delay how long it takes to be visible on the screen
-        this.sprite.targetBuilding = null;//this.data.buildings[genFunc.randomInt( 0, this.data.buildings.length-1 )].get();
+        this.sprite.targetBuilding = null;
         this.sprite.shootTime = 0;
-        let offsetY = genFunc.randomInt(0, 200);
-        this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.size_half.h + (this.sprite.getSize().h / 2) + offsetY );
-        offsetY += (this.sprite.getSize().h / 2) + genFunc.randomInt(50, settings.size_half.h - 50);
+        this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.size_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
+        let offsetY = genFunc.randomInt( -(settings.size_half.h * 0.15), settings.size_half.h * 0.5);
 
         // Calculated to move in pixels per second
-        this.easingY.init( this.sprite.pos.y, (this.sprite.pos.y - offsetY), offsetY / pixel_per_sec, easing.getSineOut() );
+        this.easingY.init( this.sprite.pos.y, offsetY, (this.sprite.pos.y - offsetY) / pixel_per_sec, easing.getSineOut() );
     }
     
     // 
@@ -274,7 +273,7 @@ class AI_Enemy_Roam extends aiNode
                             // Generate the Y range in which the enemy will travel
                             let offsetY = this.data.playerShip.pos.y;
                             if( !attackPlayer )
-                                offsetY = genFunc.randomInt( -(settings.size_half.h / 2), settings.size_half.h / 4 );
+                                offsetY = genFunc.randomInt( -(settings.size_half.h * 0.15), settings.size_half.h * 0.5 );
 
                             this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
                         }

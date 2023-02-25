@@ -172,3 +172,8 @@ export const EAIC_NULL           = 0,
              EAIC_ALL_SUCCESS    = 3,
              EAIC_ALL_FAILURE    = 4,
              EAIC_UNTIL_COUNT    = 5;
+
+export const CULL_NULL    = 0,
+             CULL_FULL    = 1,
+             CULL_X_ONLY  = 2,
+             CULL_Y_ONLY  = 3;
