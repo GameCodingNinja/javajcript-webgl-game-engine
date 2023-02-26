@@ -17,9 +17,9 @@ import * as easing from '../../../library/utilities/easingfunc';
 var ai_data = {};
 
 const pixel_per_sec = 100,
-      passive_shooter_time = 3500,
+      passive_shooter_time = 2500,
       aggrssive_shooter_time = 1500,
-      destroy_building_shooter_time = 1000;
+      destroy_building_shooter_time = 800;
 
 // 
 //  DESC: Clear the AI data
@@ -27,6 +27,40 @@ const pixel_per_sec = 100,
 export function clearAIData()
 {
     ai_data = {};
+}
+
+//
+//  DESC: AI Enemy base class
+//
+class AI_Enemy_base extends aiNode
+{
+    constructor( nodeData )
+    {
+        super( nodeData );
+    }
+
+    // 
+    //  DESC: Shoot at the player
+    //
+    shootPlayer( shootTime )
+    {
+        // Shoot at the player
+        if( this.data.playerShip.collisionComponent.enable)
+        {
+            this.sprite.shootTime -= highResTimer.elapsedTime;
+
+            if( this.sprite.shootTime < 0 )
+            {
+                if( this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius )  )
+                {
+                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
+                    shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
+                }
+
+                this.sprite.shootTime = highResTimer.elapsedTime + shootTime;
+            }
+        }
+    }
 }
 
 //
@@ -83,7 +117,7 @@ class AI_Enemy_Head extends aiNode
 //  DESC: AI Leaf (task) node script. Desend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy_Desend extends aiNode
+class AI_Enemy_Desend extends AI_Enemy_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -103,9 +137,9 @@ class AI_Enemy_Desend extends aiNode
         // Set the initial position of the sprite above the height of the screen
         // with a random amount to delay how long it takes to be visible on the screen
         this.sprite.targetBuilding = null;
-        this.sprite.shootTime = 0;
+        this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
         this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.size_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
-        let offsetY = genFunc.randomInt( -(settings.size_half.h * 0.15), settings.size_half.h * 0.5);
+        let offsetY = genFunc.randomInt( -(settings.size_half.h * 0.15), settings.size_half.h * 0.4);
 
         // Calculated to move in pixels per second
         this.easingY.init( this.sprite.pos.y, offsetY, (this.sprite.pos.y - offsetY) / pixel_per_sec, easing.getSineOut() );
@@ -129,17 +163,7 @@ class AI_Enemy_Desend extends aiNode
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             // Shoot at the player
-            if( this.data.playerShip.collisionComponent.enable )
-            {
-                this.sprite.shootTime -= highResTimer.elapsedTime;
-
-                if( (this.sprite.shootTime < 0) && this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
-                {
-                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
-                    shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
-                    this.sprite.shootTime = highResTimer.elapsedTime + passive_shooter_time;
-                }
-            }
+            this.shootPlayer( passive_shooter_time );
 
             if( this.easingY.isFinished() )
             {
@@ -155,7 +179,7 @@ class AI_Enemy_Desend extends aiNode
 //  DESC: AI Leaf (task) node script. Roam around the play area.
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy_Roam extends aiNode
+class AI_Enemy_Roam extends AI_Enemy_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -193,17 +217,7 @@ class AI_Enemy_Roam extends aiNode
             }
 
             // Shoot at the player
-            if( this.data.playerShip.collisionComponent.enable )
-            {
-                this.sprite.shootTime -= highResTimer.elapsedTime;
-
-                if( (this.sprite.shootTime < 0) && this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
-                {
-                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
-                    shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
-                    this.sprite.shootTime = highResTimer.elapsedTime + passive_shooter_time;
-                }
-            }
+            this.shootPlayer( passive_shooter_time );
 
             if( this.easingX.isFinished() && this.easingY.isFinished() )
             {
@@ -294,7 +308,7 @@ class AI_Enemy_Roam extends aiNode
 //  DESC: AI Leaf (task) node script. Destroy building
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy_DesendToBuilding extends aiNode
+class AI_Enemy_DesendToBuilding extends AI_Enemy_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -333,17 +347,7 @@ class AI_Enemy_DesendToBuilding extends aiNode
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             // Shoot at the player
-            if( this.data.playerShip.collisionComponent.enable )
-            {
-                this.sprite.shootTime -= highResTimer.elapsedTime;
-
-                if( (this.sprite.shootTime < 0) && this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
-                {
-                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
-                    shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
-                    this.sprite.shootTime = highResTimer.elapsedTime + aggrssive_shooter_time;
-                }
-            }
+            this.shootPlayer( aggrssive_shooter_time );
 
             if( this.easingY.isFinished() )
             {
@@ -359,7 +363,7 @@ class AI_Enemy_DesendToBuilding extends aiNode
 //  DESC: AI Leaf (task) node script. Destroy building
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy_DestroyBuilding extends aiNode
+class AI_Enemy_DestroyBuilding extends AI_Enemy_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -392,17 +396,7 @@ class AI_Enemy_DestroyBuilding extends aiNode
             this.shakeTime -= highResTimer.elapsedTime;
 
             // Shoot at the player
-            if( this.data.playerShip.collisionComponent.enable )
-            {
-                this.sprite.shootTime -= highResTimer.elapsedTime;
-
-                if( (this.sprite.shootTime < 0) && this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
-                {
-                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
-                    shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
-                    this.sprite.shootTime = highResTimer.elapsedTime + destroy_building_shooter_time;
-                }
-            }
+            this.shootPlayer( destroy_building_shooter_time );
 
             // Shake a the enemy to simulate it attacking the building
             if( this.shakeTime < 0 )

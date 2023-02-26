@@ -11,7 +11,7 @@
             <scale x="0.70" y="0.70"/>
             <scriptList>
                 <script ai_enemy="AI_Enemy" prepareOnInit="true" ai="true"/>
-                <script hit="EnemyShip_LazerHit"/>
+                <script hit="EnemyShip_Hit"/>
                 <script collision="EnemyShip_CheckForCollideWithPlayer" prepareOnInit="true"/>
             </scriptList>
         </sprite>

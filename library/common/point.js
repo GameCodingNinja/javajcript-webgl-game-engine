@@ -315,4 +315,12 @@ export class Point
     {
         return ( this.data[0] * point.data[0] ) + ( this.data[1] * point.data[1] );
     }
+
+    // 
+    //  DESC: Get the distance
+    //
+    getDistance( point )
+    {
+        return new Point( this.data[0] - point.data[0], this.data[1] - point.data[1], this.data[2] - point.data[2] );
+    }
 }

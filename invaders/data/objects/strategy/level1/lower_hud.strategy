@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(level_1)">
+
+    <object>
+        <position z="-80"/>
+    </object>
+
+    <node name="hud_frame">
+
+        <sprite>
+            <position y="328"/>
+        </sprite>
+
+    </node>
+
+    <node name="hud_background">
+
+        <sprite>
+            <position y="328"/>
+        </sprite>
+
+    </node>
+
+</strategy>

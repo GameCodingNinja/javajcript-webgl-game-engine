@@ -36,7 +36,7 @@ import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
-export const ASSET_COUNT = 57;
+export const ASSET_COUNT = 59;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
@@ -46,10 +46,13 @@ const MOVE_NULL = -1,
       CAMERA_EASING_SPEED = 10,
       CAMERA_EASING_DIVISOR = 4,
       CAMERA_EASING_OFFSET = 350,
+      PLAYER_SHIP_TOP_SPEED = 12,
       MAX_CLOUDS = 8,
       PLAYER_SHIP_ID = 0,
       ENEMY_SHOT_ID = -2,
-      ENEMY_SHIP_ID = -3;
+      ENEMY_SHIP_ID = -3,
+      CLOUD_MIN_Y = -150,
+      CLOUD_MAX_Y = 300;
 
 export class Level1State extends CommonState
 {
@@ -92,7 +95,7 @@ export class Level1State extends CommonState
             let cloud = new Object();
             cloud.speed = genFunc.randomArbitrary(0.001, 0.02);
             cloud.sprite = node.get();
-            cloud.sprite.setPosXYZ(genFunc.randomInt(-640, 640), genFunc.randomInt(-100, 300));
+            cloud.sprite.setPosXYZ(genFunc.randomInt(-640, 640), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
             cloud.sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
             // Flip the sprite?
             if(genFunc.randomInt(0, 1))
@@ -122,7 +125,13 @@ export class Level1State extends CommonState
         // Init the player ship
         this.initPlayerShip();
 
-        strategyManager.activateStrategy('_hud_');
+        strategyManager.activateStrategy('_lower_hud_');
+        this.upperHudStategy = strategyManager.get('_upper_hud_');
+        this.hudLevelFont = this.upperHudStategy.get('level_font').get();
+        this.hudProgressBar = this.upperHudStategy.get('level_progress_bar').get();
+        this.hudProgressBar.setProgressBarMax( 10 );
+        this.hudProgressBar.setCurrentValue( 0 );
+        this.playerLevel = 1;
 
         // Player/camera movement
         this.easingX = new easing.valueTo;
@@ -136,6 +145,7 @@ export class Level1State extends CommonState
         this.moveDirX = MOVE_NULL;
         this.moveDirY = MOVE_NULL;
         this.lastMoveDirX = MOVE_NULL;
+        this.playerShipSpeed = PLAYER_SHIP_TOP_SPEED;
 
         this.gameReady = true;
         
@@ -167,8 +177,8 @@ export class Level1State extends CommonState
         this.playerShip.sprite.collisionComponent.enable = true;
         this.playerShip.progressBar.setVisible( false );
 
-        this.enemySpawnTimer = new Timer(3000);
-        this.enemyMaxTimer = new Timer(30000);
+        this.enemySpawnTimer = new Timer(2000);
+        this.enemyMaxTimer = new Timer(15000);
         this.maxEnemies = 5;
     }
 
@@ -181,17 +191,18 @@ export class Level1State extends CommonState
         if(spriteB.parentNode.userId == PLAYER_SHIP_ID)
         {
             spriteA.collisionComponent.enable = false;
-            spriteA.prepareScript( 'hit' );
 
             if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
             {
                 this.playerShip.progressBar.incCurrentValue( -10 );
                 this.playerShip.progressBar.setVisible( true );
+                spriteA.prepareScript( 'hit' );
             }
             else if( spriteA.parentNode.userId == ENEMY_SHIP_ID )
             {
                 this.playerShip.progressBar.incCurrentValue( -30 );
                 this.playerShip.progressBar.setVisible( true );
+                spriteA.prepareScript( 'hit', spriteB );
             }
 
             if( this.playerShip.progressBar.isMinValue() && this.playerShip.sprite.collisionComponent.enable )
@@ -203,7 +214,7 @@ export class Level1State extends CommonState
                 this.playerShip.sprite.prepareScript( 'die' );
             }
         }
-        else
+        else if( spriteB.parentNode.userId == ENEMY_SHIP_ID )
         {
             // Stop any more collision detection
             spriteA.collisionComponent.enable = false;
@@ -211,7 +222,7 @@ export class Level1State extends CommonState
 
             // Execute the scripts that handle being hit
             spriteA.prepareScript( 'hit' );
-            spriteB.prepareScript( 'hit' );
+            spriteB.prepareScript( 'hit', spriteA );
         }
     }
     
@@ -236,6 +247,7 @@ export class Level1State extends CommonState
                 if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
                 {
                     strategyManager.update();
+                    this.upperHudStategy.update();
                 }
                 else if( event.arg[0] === stateDefs.ESE_GAME_RELOAD )
                 {
@@ -290,6 +302,19 @@ export class Level1State extends CommonState
                 if( allToBeDeleted )
                     eventManager.dispatchEvent( stateDefs.ESE_SHOW_GAME_OVER_MENU );
             }
+            else if( event.type === gameDefs.EGE_ENEMY_DESTROYED )
+            {
+                if( this.hudProgressBar.isMaxValue() )
+                {
+                    this.hudProgressBar.setCurrentValue( 0 );
+                    this.hudProgressBar.incProgressBarMax( 2 );
+                    this.playerLevel += 1;
+
+                    this.hudLevelFont.visualComponent.createFontString( `Level ${this.playerLevel}` );
+                }
+
+                this.hudProgressBar.incCurrentValue( 1 );
+            }
         }
         else
         {
@@ -327,6 +352,7 @@ export class Level1State extends CommonState
 
             // Reactivate strategies
             this.enemyStrategy = strategyManager.activateStrategy('_enemy_');
+            this.upperHudStategy = strategyManager.get('_upper_hud_');
 
             // Init the player ship
             this.initPlayerShip();
@@ -345,6 +371,10 @@ export class Level1State extends CommonState
             this.easingX.clear();
             this.easingY.clear();
             this.cameraEasingX.clear();
+
+            this.hudLevelFont.visualComponent.createFontString('Level 1');
+            this.hudProgressBar.setProgressBarMax( 10 );
+            this.hudProgressBar.setCurrentValue( 0 );
 
             this.gameReady = true;
 
@@ -383,7 +413,7 @@ export class Level1State extends CommonState
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
                             this.playerShip.fireTailScript.pause = false;
-                            this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), -this.playerShipSpeed, 2, easing.getLinear() );
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
@@ -411,7 +441,7 @@ export class Level1State extends CommonState
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
                             this.playerShip.fireTailScript.pause = false;
-                            this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), this.playerShipSpeed, 2, easing.getLinear() );
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
@@ -602,7 +632,7 @@ export class Level1State extends CommonState
                 {
                     this.cloudAry[i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
                     this.cloudAry[i].speed = genFunc.randomArbitrary(0.001, 0.02);
-                    this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.size_half.w), genFunc.randomInt(-100, 350));
+                    this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.size_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
 
                     // Flip the sprite?
                     this.cloudAry[i].sprite.setRotXYZ(0, 0);
@@ -612,6 +642,7 @@ export class Level1State extends CommonState
             }
 
             strategyManager.update();
+            this.upperHudStategy.update();
         }
     }
     
@@ -628,6 +659,7 @@ export class Level1State extends CommonState
         this.forgroundCamera.transform();
         this.camera.transform();
         strategyManager.transform();
+        this.upperHudStategy.transform();
     }
     
     // 
@@ -640,8 +672,6 @@ export class Level1State extends CommonState
             super.render();
             
             strategyManager.render();
-            
-            menuManager.render();
 
             let viewPort = device.gl.getParameter(device.gl.VIEWPORT);
             device.gl.viewport(0, viewPort[3] - (viewPort[3] * 0.09), viewPort[2], viewPort[3] * this.radarCamera.scale.x);
@@ -649,6 +679,10 @@ export class Level1State extends CommonState
             this.enemyStrategy.render( this.radarCamera );
             this.playerShip.strategy.render( this.radarCamera );
             device.gl.viewport(0, 0, viewPort[2], viewPort[3]);
+
+            this.upperHudStategy.render();
+
+            menuManager.render();
         }
     }
 

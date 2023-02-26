@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_upper_hud_">
+        <node name="level_background"/>
+        <node name="level_frame"/>
+        <node name="level_font" instance="level_font"/>
+        <node name="level_progress_bar" instance="level_progress_bar"/>
+    </strategy>
+  
+</loader>

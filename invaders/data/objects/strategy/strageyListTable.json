@@ -26,6 +26,9 @@
     "_enemy_": [
         "data/objects/strategy/level1/enemy.strategy"],
     
-    "_hud_": [
-        "data/objects/strategy/level1/hud.strategy"]
+    "_lower_hud_": [
+        "data/objects/strategy/level1/lower_hud.strategy"],
+    
+    "_upper_hud_": [
+        "data/objects/strategy/level1/upper_hud.strategy"]
 }

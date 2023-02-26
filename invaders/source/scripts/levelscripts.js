@@ -225,14 +225,38 @@ class EnemyShip_Shot
 }
 
 //
-//  DESC: Script for handling enemy getting hit by player laser
+//  DESC: Script for handling enemy getting hit
 //
-class EnemyShip_LazerHit
+class EnemyShip_Hit
 {
-    constructor( sprite )
+    constructor( sprite, projectileSprite )
     {
-        // We are done with this sprite, queue it up to be deleted
-        strategyManager.get('_enemy_').destroy( sprite.parentNode );
+        this.sprite = sprite;
+
+        // Remove the AI script since the enemy is to die
+        sprite.scriptComponent.remove( 'AI_Enemy_Head' );
+
+        let dist = sprite.pos.getDistance( projectileSprite.pos );
+
+        this.easingY = new easing.valueTo;
+
+        let dest = -(settings.defaultSize_half.h + this.sprite.parentNode.radius)
+        let offsetY = Math.abs(this.sprite.pos.y - dest);
+        this.easingY.init( this.sprite.pos.y, dest, offsetY / 250, easing.getSineIn() );
+
+        if( (dist.x > 0 && dist.y > 0) || (dist.x < 0 && dist.y < 0) )
+        {
+            this.rotate = -0.04;
+            this.rotateVelocity = -0.00004;
+        }
+        else if( (dist.x < 0 && dist.y > 0) || (dist.x > 0 && dist.y < 0) )
+        {
+            this.rotate = 0.04;
+            this.rotateVelocity = 0.00004;
+        }
+
+        // Send a message to keep track of aliens being destroyed
+        eventManager.dispatchEvent( gameDefs.EGE_ENEMY_DESTROYED );
     }
     
     // 
@@ -240,7 +264,20 @@ class EnemyShip_LazerHit
     //
     execute()
     {
-        return true;
+        this.easingY.execute();
+        this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+        this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
+        this.rotate += this.rotateVelocity * highResTimer.elapsedTime;
+
+        if( this.easingY.isFinished() )
+        {
+            // We are done with this sprite, queue it up to be deleted
+            strategyManager.get('_enemy_').destroy( this.sprite.parentNode );
+
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -353,8 +390,8 @@ export function loadScripts()
     scriptManager.set( 'PlayerShip_Die',
         ( sprite ) => { return new PlayerShip_Die( sprite ); } );
 
-    scriptManager.set( 'EnemyShip_LazerHit',
-        ( sprite ) => { return new EnemyShip_LazerHit( sprite ); } );
+    scriptManager.set( 'EnemyShip_Hit',
+        ( sprite, projectileSprite ) => { return new EnemyShip_Hit( sprite, projectileSprite ); } );
 
     scriptManager.set( 'EnemyShot_Hit',
         ( sprite ) => { return new EnemyShot_Hit( sprite ); } );

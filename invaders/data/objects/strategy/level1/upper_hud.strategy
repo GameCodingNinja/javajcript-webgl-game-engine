@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(level_1)">
+
+    <object>
+        <position z="-90"/>
+    </object>
+
+    <node name="level_background">
+
+        <sprite>
+            <position x="563" y="328"/>
+        </sprite>
+
+    </node>
+    
+    <node name="level_frame">
+
+        <sprite>
+            <position x="565" y="328"/>
+        </sprite>
+
+    </node>
+
+    <node name="level_font">
+        
+        <sprite>
+            <font fontName="dejavu_sans_cond_bold_32" fontString="Level 1">
+                <attributes kerning="-1"/>
+            </font>
+            <position x="563" y="335"/>
+        </sprite>
+
+    </node>
+
+    <node name="level_progress_bar" type="uiControlNode">
+        
+        <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
+            <position x="563" y="310"/>
+            <spriteLst>
+                <sprite objectName="level_progress_frame"/>
+                <sprite objectName="level_progress_solid"/>
+            </spriteLst>
+            
+            <!-- stencil mask -->
+            <stencilMask objectName="" spriteIndex="1" />
+        </uiProgressBar>
+
+    </node>
+
+</strategy>

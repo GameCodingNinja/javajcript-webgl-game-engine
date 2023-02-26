@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_lower_hud_">
+        <node name="hud_frame"/>
+        <node name="hud_background"/>
+    </strategy>
+  
+</loader>

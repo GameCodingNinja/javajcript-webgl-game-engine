@@ -14,6 +14,7 @@ export class ScriptComponent
     constructor()
     {
         this.scriptAry = [];
+        this.removeAry = [];
 
         // Script object map. Prepare scripts by name
         this.scriptFactoryMap = null;
@@ -102,6 +103,8 @@ export class ScriptComponent
                                 activeScript = script(args[1],args[2],args[3],args[4],args[5]);
                             break;
                         }
+
+                        activeScript.name = scriptPrepareFunc.funcName;
                     }
                 }
 
@@ -159,7 +162,10 @@ export class ScriptComponent
                         script = scriptManager.get( scriptPrepareFunc.funcName );
 
                         if( script )
+                        {
                             activeScript = script(object);
+                            activeScript.name = scriptPrepareFunc.funcName;
+                        }
                     }
 
                     if( activeScript )
@@ -191,6 +197,24 @@ export class ScriptComponent
             if( this.scriptAry[i].execute() )
                 this.scriptAry.splice( i, 1 );
         }
+
+        if( this.removeAry )
+        {
+            for( let i = 0; i < this.removeAry.length; i++ )
+            {
+                for( let j = 0; j < this.scriptAry.length; j++ )
+                {
+                    // If the script is finished, remove it
+                    if( this.scriptAry[i].name === this.removeAry[i] )
+                    {
+                        this.scriptAry.splice( j, 1 );
+                        break;
+                    }
+                }
+            }
+
+            this.removeAry = [];
+        }
     }
 
     //
@@ -206,6 +230,14 @@ export class ScriptComponent
                 this.scriptAry[i].initTree();
             }
         }
+    }
+
+    // 
+    //  DESC: Remove script
+    //
+    remove( name )
+    {
+        this.removeAry.push( name );
     }
     
     // 

@@ -312,6 +312,25 @@
             </visual>
         </object>
 
+        <object name="level_progress_frame">
+            <visual>
+                <texture file="data/textures/level/8x8_1_pixel_frame.png" filter="NEAREST"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="3" thicknessHeight="3" centerQuad="true"/>
+                </mesh>
+                <color r="0" g="0" b="0" a="1"/>
+            </visual>
+            <size width="120" height="8"/>
+        </object>
+        
+        <object name="level_progress_solid">
+            <visual>
+                <shader id="shader_solid_2d"/>
+                <color r="0" g="255" b="0" a="0.8"/>
+            </visual>
+            <size width="114" height="4"/>
+        </object>
+
     </objectList>
 
 </objectDataList2D>

@@ -8,4 +8,5 @@
     
     
 // EGameEvent
-export const EGE_BUILDING_DESTROYED            = 2000;
+export const EGE_BUILDING_DESTROYED   = 2000,
+             EGE_ENEMY_DESTROYED      = 2001;

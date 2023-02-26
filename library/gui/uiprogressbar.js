@@ -140,6 +140,15 @@ export class UIProgressBar extends UIControl
     }
 
     // 
+    //  DESC: Inc progress bar max
+    //
+    incProgressBarMax( inc )
+    {
+        this.maxValue += inc;
+        this.setSizePos();
+    }
+
+    // 
     //  DESC: Init the progress bar size, pos and scale
     //
     initSizePosScale( spriteApplyIndex, stencilMaskSprite = null )
