@@ -17,9 +17,9 @@ import * as easing from '../../../library/utilities/easingfunc';
 var ai_data = {};
 
 const pixel_per_sec = 100,
-      passive_shooter_time = 2500,
-      aggrssive_shooter_time = 1500,
-      destroy_building_shooter_time = 800;
+      passive_shooter_time = 2000,
+      aggrssive_shooter_time = 1000,
+      destroy_building_shooter_time = 500;
 
 // 
 //  DESC: Clear the AI data
@@ -53,11 +53,15 @@ class AI_Enemy_base extends aiNode
             {
                 if( this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius )  )
                 {
-                    let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
-                    shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
-                }
+                    // Should we skip a shot?
+                    if( genFunc.randomInt( 0, 10 ) > 3 )
+                    {
+                        let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
+                        shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
+                    }
 
-                this.sprite.shootTime = highResTimer.elapsedTime + shootTime;
+                    this.sprite.shootTime = highResTimer.elapsedTime + shootTime;
+                }
             }
         }
     }
@@ -138,8 +142,8 @@ class AI_Enemy_Desend extends AI_Enemy_base
         // with a random amount to delay how long it takes to be visible on the screen
         this.sprite.targetBuilding = null;
         this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
-        this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.size_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
-        let offsetY = genFunc.randomInt( -(settings.size_half.h * 0.15), settings.size_half.h * 0.4);
+        this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.nativeSize_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
+        let offsetY = genFunc.randomInt( -(settings.nativeSize_half.h * 0.15), settings.nativeSize_half.h * 0.5);
 
         // Calculated to move in pixels per second
         this.easingY.init( this.sprite.pos.y, offsetY, (this.sprite.pos.y - offsetY) / pixel_per_sec, easing.getSineOut() );
@@ -256,7 +260,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
                             if( Math.abs(this.sprite.targetBuilding.pos.x - this.sprite.pos.x) > 100 )
                             {
                                 // Generate the Y range in which the enemy will travel
-                                let offsetY = genFunc.randomInt( -(settings.size_half.h / 2), settings.size_half.h / 4 );
+                                let offsetY = genFunc.randomInt( -(settings.nativeSize_half.h * 0.15), settings.nativeSize_half.h * 0.5);
                                 this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
                             }
                         }
@@ -266,11 +270,9 @@ class AI_Enemy_Roam extends AI_Enemy_base
                     if( this.sprite.targetBuilding === null )
                     {
                         let offsetX = this.data.playerShip.pos.x;
-                        let attackPlayer = true;
 
                         if( this.data.buildings.length >= this.data.enemy.length )
                         {
-                            attackPlayer = false;
                             offsetX = genFunc.randomInt( this.data.minX, this.data.maxX );
                         }
                         
@@ -285,9 +287,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
                         if( Math.abs( this.sprite.pos.x - offsetX ) > 100 )
                         {
                             // Generate the Y range in which the enemy will travel
-                            let offsetY = this.data.playerShip.pos.y;
-                            if( !attackPlayer )
-                                offsetY = genFunc.randomInt( -(settings.size_half.h * 0.15), settings.size_half.h * 0.5 );
+                            let offsetY = genFunc.randomInt( -(settings.nativeSize_half.h * 0.15), settings.nativeSize_half.h * 0.5 );
 
                             this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
                         }

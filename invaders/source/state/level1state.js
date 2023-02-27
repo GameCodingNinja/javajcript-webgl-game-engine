@@ -628,11 +628,11 @@ export class Level1State extends CommonState
             {
                 this.cloudAry[i].sprite.incPosXYZ(highResTimer.elapsedTime * this.cloudAry[i].speed);
 
-                if(this.cloudAry[i].sprite.pos.x - (this.cloudAry[i].sprite.getSize().w / 2) > settings.size_half.w)
+                if(this.cloudAry[i].sprite.pos.x - (this.cloudAry[i].sprite.getSize().w / 2) > settings.nativeSize_half.w)
                 {
                     this.cloudAry[i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
                     this.cloudAry[i].speed = genFunc.randomArbitrary(0.001, 0.02);
-                    this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.size_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
+                    this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.nativeSize_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
 
                     // Flip the sprite?
                     this.cloudAry[i].sprite.setRotXYZ(0, 0);
@@ -674,11 +674,11 @@ export class Level1State extends CommonState
             strategyManager.render();
 
             let viewPort = device.gl.getParameter(device.gl.VIEWPORT);
-            device.gl.viewport(0, viewPort[3] - (viewPort[3] * 0.09), viewPort[2], viewPort[3] * this.radarCamera.scale.x);
+            device.gl.viewport(viewPort[0], viewPort[3] - (viewPort[3] * 0.09), viewPort[2], viewPort[3] * this.radarCamera.scale.y);
             this.buildingsStrategy.render( this.radarCamera );
             this.enemyStrategy.render( this.radarCamera );
             this.playerShip.strategy.render( this.radarCamera );
-            device.gl.viewport(0, 0, viewPort[2], viewPort[3]);
+            device.gl.viewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 
             this.upperHudStategy.render();
 

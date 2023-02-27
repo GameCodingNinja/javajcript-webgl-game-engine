@@ -55,7 +55,7 @@ export const GAMEPAD_BUTTON_A             = 0,
              GAMEPAD_BUTTON_R_STICK_LEFT  = 36,
              GAMEPAD_BUTTON_R_STICK_RIGHT = 37;
 
-export const ANALOG_STICK_MSG_MAX = 0.5;
+export const ANALOG_STICK_MSG_MAX = 0.3;
 
 export class GamepadEvent
 {
