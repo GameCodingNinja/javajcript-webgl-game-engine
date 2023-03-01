@@ -45,7 +45,7 @@ class Settings
         this.stats = false;
 
         this.user = {
-            "stickDeadZone": 0.1,
+            "stickDeadZone": 0.0,
             "soundEnabled": 1 };
 
         // Calculate the ratios

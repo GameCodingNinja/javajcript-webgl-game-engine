@@ -52,7 +52,9 @@ const MOVE_NULL = -1,
       ENEMY_SHOT_ID = -2,
       ENEMY_SHIP_ID = -3,
       CLOUD_MIN_Y = -150,
-      CLOUD_MAX_Y = 300;
+      CLOUD_MAX_Y = 300,
+      LOOPING_BKG_WRAP_DIST = 1280,
+      GAMEPLAY_LOOPING_WRAP_DIST = 6300;
 
 export class Level1State extends CommonState
 {
@@ -538,25 +540,25 @@ export class Level1State extends CommonState
             this.buildingsfrontCamera.incPosXYZ( easingVal * 0.5 );
 
             // Loop the static backgrounds
-            if( this.buildingsbackCamera.pos.x < -1280 )
-                this.buildingsbackCamera.incPosXYZ( -(1280 * 2) );
-            else if( this.buildingsbackCamera.pos.x > 1280 )
-                this.buildingsbackCamera.incPosXYZ( 1280 * 2 );
+            if( this.buildingsbackCamera.pos.x < -LOOPING_BKG_WRAP_DIST )
+                this.buildingsbackCamera.incPosXYZ( -(LOOPING_BKG_WRAP_DIST * 2) );
+            else if( this.buildingsbackCamera.pos.x > LOOPING_BKG_WRAP_DIST )
+                this.buildingsbackCamera.incPosXYZ( LOOPING_BKG_WRAP_DIST * 2 );
 
-            if( this.buildingsfrontCamera.pos.x < -1280 )
-                this.buildingsfrontCamera.incPosXYZ( -(1280 * 2) );
-            else if( this.buildingsfrontCamera.pos.x > 1280 )
-                this.buildingsfrontCamera.incPosXYZ( 1280 * 2 );
+            if( this.buildingsfrontCamera.pos.x < -LOOPING_BKG_WRAP_DIST )
+                this.buildingsfrontCamera.incPosXYZ( -(LOOPING_BKG_WRAP_DIST * 2) );
+            else if( this.buildingsfrontCamera.pos.x > LOOPING_BKG_WRAP_DIST )
+                this.buildingsfrontCamera.incPosXYZ( LOOPING_BKG_WRAP_DIST * 2 );
 
-            if( this.forgroundCamera.pos.x < -1280 )
-                this.forgroundCamera.incPosXYZ( -(1280 * 2) );
-            else if( this.forgroundCamera.pos.x > 1280 )
-                this.forgroundCamera.incPosXYZ( 1280 * 2 );
+            if( this.forgroundCamera.pos.x < -LOOPING_BKG_WRAP_DIST )
+                this.forgroundCamera.incPosXYZ( -(LOOPING_BKG_WRAP_DIST * 2) );
+            else if( this.forgroundCamera.pos.x > LOOPING_BKG_WRAP_DIST )
+                this.forgroundCamera.incPosXYZ( LOOPING_BKG_WRAP_DIST * 2 );
 
-            if( this.buildingsCamera.pos.x < -6300 )
-                this.buildingsCamera.incPosXYZ( -(6300 * 2) );
-            else if( this.buildingsCamera.pos.x > 6300)
-                this.buildingsCamera.incPosXYZ( 6300 * 2 );
+            if( this.buildingsCamera.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
+                this.buildingsCamera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+            else if( this.buildingsCamera.pos.x > GAMEPLAY_LOOPING_WRAP_DIST)
+                this.buildingsCamera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
             // Stop the up/down movement
             if( (this.moveDirY === MOVE_UP && this.playerShip.sprite.transPos.y > (settings.defaultSize_half.h * 0.73)) ||
@@ -613,15 +615,15 @@ export class Level1State extends CommonState
             this.playerShip.sprite.incPosXYZ( this.easingX.getValue(), this.easingY.getValue() );
 
             // Loop the player and camera
-            if( this.playerShip.sprite.pos.x < -6300 )
+            if( this.playerShip.sprite.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                this.playerShip.sprite.incPosXYZ( 6300 * 2 );
-                this.camera.incPosXYZ( 6300 * 2 );
+                this.playerShip.sprite.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                this.camera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
             }
-            else if( this.playerShip.sprite.pos.x > 6300 )
+            else if( this.playerShip.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                this.playerShip.sprite.incPosXYZ( -(6300 * 2) );
-                this.camera.incPosXYZ( -(6300 * 2) );
+                this.playerShip.sprite.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                this.camera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
             
             for( let i = 0; i < MAX_CLOUDS; i++ )
@@ -673,6 +675,7 @@ export class Level1State extends CommonState
             
             strategyManager.render();
 
+            // Render the top hud radar map
             let viewPort = device.gl.getParameter(device.gl.VIEWPORT);
             device.gl.viewport(viewPort[0], viewPort[3] - (viewPort[3] * 0.09), viewPort[2], viewPort[3] * this.radarCamera.scale.y);
             this.buildingsStrategy.render( this.radarCamera );

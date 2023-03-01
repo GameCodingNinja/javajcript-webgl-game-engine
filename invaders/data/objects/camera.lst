@@ -25,7 +25,7 @@
         <position x="400" y="0" z="20"/>
     </camera>
 
-    <camera id="radarCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0">
+    <camera id="radarCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" projWidth="1280" projHeight="66">
         <position x="68" y="0" z="20"/>
         <scale x="0.1" y="0.1"/>
     </camera>
