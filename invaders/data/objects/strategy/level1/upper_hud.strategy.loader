@@ -2,6 +2,7 @@
 <loader>
 
     <strategy name="_upper_hud_">
+        <node name="hud_screen_frame"/>
         <node name="level_background"/>
         <node name="level_frame"/>
         <node name="level_font" instance="level_font"/>

@@ -119,7 +119,8 @@ export class Level1State extends CommonState
         this.buildingsCamera = cameraManager.get('buildingsCamera');
         this.forgroundCamera = cameraManager.get('forgroundCamera');
         this.camera = cameraManager.get('levelCamera');
-        this.radarCamera = cameraManager.get('radarCamera');
+        this.radarCamera1 = cameraManager.get('radarCamera1');
+        this.radarCamera2 = cameraManager.get('radarCamera2');
         this.wrapAroundCamera = cameraManager.get('wrapAroundCamera');
         this.buildingsbackCamera.initFromXml();
         this.buildingsfrontCamera.initFromXml();
@@ -127,8 +128,13 @@ export class Level1State extends CommonState
         this.camera.initFromXml();
         this.wrapAroundCamera.initFromXml();
 
-        this.radarCamera.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera.scale.x;
-        this.radarCamera.initFromXml();
+        this.radarCamera1.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera1.scale.x;
+        this.radarCamera1.initFromXml();
+
+        this.radarCamera2.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera2.scale.x;
+        this.radarCamera2.initFromXml();
+
+        this.radarCamAry = [this.radarCamera1,this.radarCamera2];
 
         // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
         strategyManager.get("_buildings_").addToActiveList();
@@ -379,6 +385,8 @@ export class Level1State extends CommonState
             this.buildingsfrontCamera.initFromXml();
             this.buildingsCamera.initFromXml();
             this.camera.initFromXml();
+            this.radarCamera1.initFromXml();
+            this.radarCamera2.initFromXml();
             this.wrapAroundCamera.initFromXml();
 
             this.moveDirX = MOVE_NULL;
@@ -565,6 +573,22 @@ export class Level1State extends CommonState
 
             let easingVal = this.easingX.getValue() + this.cameraEasingX.getValue();
             this.camera.incPosXYZ( easingVal );
+            this.radarCamAry[0].incPosXYZ( easingVal * 0.1 );
+
+            // Wrap the radar by flipping the camera
+            if( this.radarCamAry[1].pos.x > -68 )
+            {
+                this.radarCamAry.push( this.radarCamAry.shift() );
+            }
+
+            if( this.radarCamAry[0].pos.x > -68 )
+            {
+                this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x - ((GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
+            }
+            else
+            {
+                this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x + ((GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
+            }
             
             this.forgroundCamera.incPosXYZ( easingVal );
             this.buildingsCamera.incPosXYZ( easingVal );
@@ -601,9 +625,9 @@ export class Level1State extends CommonState
 
             // Set the wrap around camera when we are about to exceed the range of the buildings
             if( this.buildingsCamera.pos.x > -6200 && this.buildingsCamera.pos.x < -4900 )
-                    this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x + ((GAMEPLAY_LOOPING_WRAP_DIST * 2)))  );
+                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x + ((GAMEPLAY_LOOPING_WRAP_DIST * 2))) );
             else if( this.buildingsCamera.pos.x > 5000 && this.buildingsCamera.pos.x < 6300 )
-                    this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x - (GAMEPLAY_LOOPING_WRAP_DIST * 2)) );
+                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x - (GAMEPLAY_LOOPING_WRAP_DIST * 2)) );
 
             // Reset the building camera once we are done with filling the gap with the wrap around camera
             if( this.buildingsCamera.pos.x < -6200 )
@@ -714,6 +738,8 @@ export class Level1State extends CommonState
         this.buildingsCamera.transform();
         this.forgroundCamera.transform();
         this.camera.transform();
+        this.radarCamera1.transform();
+        this.radarCamera2.transform();
         this.wrapAroundCamera.transform();
         strategyManager.transform();
         this.upperHudStategy.transform();
@@ -746,10 +772,13 @@ export class Level1State extends CommonState
 
             // Render the top hud radar map
             let viewPort = device.gl.getParameter(device.gl.VIEWPORT);
-            device.gl.viewport(viewPort[0], viewPort[3] - (viewPort[3] * 0.09), viewPort[2], viewPort[3] * this.radarCamera.scale.y);
-            this.buildingsStrategy.render( this.radarCamera );
-            this.enemyStrategy.render( this.radarCamera );
-            this.playerShip.strategy.render( this.radarCamera );
+            device.gl.viewport(viewPort[0], viewPort[3] - (viewPort[3] * 0.09), viewPort[2], viewPort[3] * this.radarCamera1.scale.y);
+            this.buildingsStrategy.render( this.radarCamera1 );
+            this.enemyStrategy.render( this.radarCamera1 );
+            this.playerShip.strategy.render( this.radarCamera1 );
+            this.buildingsStrategy.render( this.radarCamera2 );
+            this.enemyStrategy.render( this.radarCamera2 );
+            this.playerShip.strategy.render( this.radarCamera2 );
             device.gl.viewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 
             this.upperHudStategy.render();

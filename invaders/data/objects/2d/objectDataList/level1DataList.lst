@@ -296,6 +296,17 @@
             <size width="158" height="74"/>
         </object>
 
+        <object name="hud_screen_frame">
+            <visual>
+                <texture file="data/textures/level/16x16_3_pixel_frame.png" filter="NEAREST"/>
+                <mesh genType="scaled_frame">
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <color r="28" g="77" b="123" a="1"/>
+            </visual>
+            <size width="140" height="69"/>
+        </object>
+
         <object name="level_background">
             <visual>
                 <shader id="shader_solid_2d"/>
