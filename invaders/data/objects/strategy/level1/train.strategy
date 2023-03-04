@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(level_1)">
+
+    <object>
+        <position z="-50"/>
+    </object>
+
+    <node name="train">
+        <sprite>
+            <position x="0" y="-298"/>
+            <scale x="2" y="2"/>
+        </sprite>
+    </node>
+  
+</strategy>

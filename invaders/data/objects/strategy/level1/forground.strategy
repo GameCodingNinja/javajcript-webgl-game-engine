@@ -16,11 +16,5 @@
             <scale x="2" y="2"/>
         </sprite>
     </node>
-
-    <node name="train">
-        <sprite>
-            <scale x="2" y="2"/>
-        </sprite>
-    </node>
   
 </strategy>

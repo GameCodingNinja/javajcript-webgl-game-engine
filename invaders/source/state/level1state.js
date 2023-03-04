@@ -36,7 +36,7 @@ import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
-export const ASSET_COUNT = 59;
+export const ASSET_COUNT = 61;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
@@ -54,7 +54,7 @@ const MOVE_NULL = -1,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
-      GAMEPLAY_LOOPING_WRAP_DIST = 6300;
+      GAMEPLAY_LOOPING_WRAP_DIST = 5600;
 
 export class Level1State extends CommonState
 {
@@ -86,8 +86,15 @@ export class Level1State extends CommonState
         strategyManager.activateStrategy('_buildingsback_');
         strategyManager.activateStrategy('_buildingsfront_');
         this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
-        strategyManager.activateStrategy('_forground_');
         this.enemyStrategy = strategyManager.activateStrategy('_enemy_');
+
+        // Aquire strategies that are managed outside of the manager
+        this.forgroundStrategy = strategyManager.get('_forground_');
+        this.trainStrategy = strategyManager.get('_train_');
+        this.lowerHudStategy = strategyManager.get('_lower_hud_');
+        this.upperHudStategy = strategyManager.get('_upper_hud_');
+        this.hudLevelFont = this.upperHudStategy.get('level_font').get();
+        this.hudProgressBar = this.upperHudStategy.get('level_progress_bar').get();
 
         // Randomly distrabute the clouds
         this.cloudAry = [];
@@ -113,10 +120,12 @@ export class Level1State extends CommonState
         this.forgroundCamera = cameraManager.get('forgroundCamera');
         this.camera = cameraManager.get('levelCamera');
         this.radarCamera = cameraManager.get('radarCamera');
+        this.wrapAroundCamera = cameraManager.get('wrapAroundCamera');
         this.buildingsbackCamera.initFromXml();
         this.buildingsfrontCamera.initFromXml();
         this.buildingsCamera.initFromXml();
         this.camera.initFromXml();
+        this.wrapAroundCamera.initFromXml();
 
         this.radarCamera.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera.scale.x;
         this.radarCamera.initFromXml();
@@ -127,10 +136,6 @@ export class Level1State extends CommonState
         // Init the player ship
         this.initPlayerShip();
 
-        strategyManager.activateStrategy('_lower_hud_');
-        this.upperHudStategy = strategyManager.get('_upper_hud_');
-        this.hudLevelFont = this.upperHudStategy.get('level_font').get();
-        this.hudProgressBar = this.upperHudStategy.get('level_progress_bar').get();
         this.hudProgressBar.setProgressBarMax( 10 );
         this.hudProgressBar.setCurrentValue( 0 );
         this.playerLevel = 1;
@@ -181,6 +186,10 @@ export class Level1State extends CommonState
 
         this.enemySpawnTimer = new Timer(2000);
         this.enemyMaxTimer = new Timer(15000);
+        this.trainTimer = new Timer( genFunc.randomInt( 10000, 25000 ) );
+
+        this.train = null;
+
         this.maxEnemies = 5;
     }
 
@@ -249,7 +258,10 @@ export class Level1State extends CommonState
                 if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
                 {
                     strategyManager.update();
+                    this.lowerHudStategy.update();
                     this.upperHudStategy.update();
+                    this.forgroundStrategy.update();
+                    this.trainStrategy.update();
                 }
                 else if( event.arg[0] === stateDefs.ESE_GAME_RELOAD )
                 {
@@ -343,7 +355,7 @@ export class Level1State extends CommonState
         this.playerShip = null;
 
         ai.clearAIData();
-        strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_'] );
+        strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
         .then(() =>
         {
@@ -354,7 +366,9 @@ export class Level1State extends CommonState
 
             // Reactivate strategies
             this.enemyStrategy = strategyManager.activateStrategy('_enemy_');
-            this.upperHudStategy = strategyManager.get('_upper_hud_');
+
+            // Aquire unactivated strategies
+            this.trainStrategy = strategyManager.get('_train_');
 
             // Init the player ship
             this.initPlayerShip();
@@ -365,6 +379,7 @@ export class Level1State extends CommonState
             this.buildingsfrontCamera.initFromXml();
             this.buildingsCamera.initFromXml();
             this.camera.initFromXml();
+            this.wrapAroundCamera.initFromXml();
 
             this.moveDirX = MOVE_NULL;
             this.moveDirY = MOVE_NULL;
@@ -526,7 +541,24 @@ export class Level1State extends CommonState
                     this.maxEnemies++;
                 }
             }
-            
+
+            if( this.trainTimer.expired() )
+            {
+                this.trainTimer.disable( true );
+
+                this.train = this.trainStrategy.create( 'train', 'train' );
+                if( genFunc.randomInt( 0, 1 ) === 0 )
+                {
+                    this.train.inc = -1;
+                    this.train.get().setPosXYZ( 1000, -298 );
+                }
+                else
+                {
+                    this.train.inc = 1;
+                    this.train.get().setPosXYZ( -1000, -298 );
+                }
+            }
+
             this.easingX.execute();
             this.easingY.execute();
             this.cameraEasingX.execute();
@@ -538,6 +570,18 @@ export class Level1State extends CommonState
             this.buildingsCamera.incPosXYZ( easingVal );
             this.buildingsbackCamera.incPosXYZ( easingVal * 0.25 );
             this.buildingsfrontCamera.incPosXYZ( easingVal * 0.5 );
+
+            if( this.train )
+            {
+                this.train.get().incPosXYZ( (this.train.inc * highResTimer.elapsedTime) + -easingVal );
+
+                if( this.train.get().pos.x > 1000 || this.train.get().pos.x < -1000 )
+                {
+                    this.trainStrategy.destroy( this.train );
+                    this.train = null;
+                    this.trainTimer.reset( genFunc.randomInt( 10000, 25000 ) );
+                }
+            }
 
             // Loop the static backgrounds
             if( this.buildingsbackCamera.pos.x < -LOOPING_BKG_WRAP_DIST )
@@ -555,9 +599,16 @@ export class Level1State extends CommonState
             else if( this.forgroundCamera.pos.x > LOOPING_BKG_WRAP_DIST )
                 this.forgroundCamera.incPosXYZ( LOOPING_BKG_WRAP_DIST * 2 );
 
-            if( this.buildingsCamera.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
+            // Set the wrap around camera when we are about to exceed the range of the buildings
+            if( this.buildingsCamera.pos.x > -6200 && this.buildingsCamera.pos.x < -4900 )
+                    this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x + ((GAMEPLAY_LOOPING_WRAP_DIST * 2)))  );
+            else if( this.buildingsCamera.pos.x > 5000 && this.buildingsCamera.pos.x < 6300 )
+                    this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x - (GAMEPLAY_LOOPING_WRAP_DIST * 2)) );
+
+            // Reset the building camera once we are done with filling the gap with the wrap around camera
+            if( this.buildingsCamera.pos.x < -6200 )
                 this.buildingsCamera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
-            else if( this.buildingsCamera.pos.x > GAMEPLAY_LOOPING_WRAP_DIST)
+            else if( this.buildingsCamera.pos.x > 6300)
                 this.buildingsCamera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
             // Stop the up/down movement
@@ -644,7 +695,10 @@ export class Level1State extends CommonState
             }
 
             strategyManager.update();
+            this.forgroundStrategy.update();
+            this.trainStrategy.update();
             this.upperHudStategy.update();
+            this.lowerHudStategy.update();
         }
     }
     
@@ -660,8 +714,12 @@ export class Level1State extends CommonState
         this.buildingsCamera.transform();
         this.forgroundCamera.transform();
         this.camera.transform();
+        this.wrapAroundCamera.transform();
         strategyManager.transform();
         this.upperHudStategy.transform();
+        this.lowerHudStategy.transform();
+        this.forgroundStrategy.transform();
+        this.trainStrategy.transform();
     }
     
     // 
@@ -674,6 +732,17 @@ export class Level1State extends CommonState
             super.render();
             
             strategyManager.render();
+
+            // Render with the wrap around camera when we exceed the range of the buildings
+            if( this.buildingsCamera.pos.x < -4900 || this.buildingsCamera.pos.x > 5000 )
+            {
+                this.buildingsStrategy.render( this.wrapAroundCamera );
+                this.enemyStrategy.render( this.wrapAroundCamera );
+            }
+
+            this.lowerHudStategy.render();
+            this.forgroundStrategy.render();
+            this.trainStrategy.render();
 
             // Render the top hud radar map
             let viewPort = device.gl.getParameter(device.gl.VIEWPORT);

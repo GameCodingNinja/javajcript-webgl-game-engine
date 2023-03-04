@@ -32,8 +32,11 @@ export class Timer
     //
     //  DESC: Reset the timer to start over
     //
-    reset()
+    reset( interval = null )
     {
+        if( interval )
+            this.timeInterval = interval;
+
         this.expiredTime = this.timeInterval + performance.now();
         this.disabled = false;
     }
@@ -80,7 +83,7 @@ export class Timer
     //
     //  DESC: Disable this timer
     //
-    disable( disabled )
+    disable( disabled = true )
     {
         this.disabled = disabled;
     }

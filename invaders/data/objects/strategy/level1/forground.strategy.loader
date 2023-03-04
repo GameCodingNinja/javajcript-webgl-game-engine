@@ -44,7 +44,7 @@
 
         <node name="traintracks">
             <sprite>
-                <position x="-0" y="-332"/>
+                <position x="0" y="-332"/>
             </sprite>
         </node>
 
@@ -53,12 +53,6 @@
                 <position x="0" y="-342"/>
             </sprite>
         </node>
-
-        <!--<node name="train">
-            <sprite>
-                <position x="-0" y="-299"/>
-            </sprite>
-        </node>-->
 
 
         <node name="traintracks">

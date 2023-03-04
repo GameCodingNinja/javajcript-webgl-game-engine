@@ -9,6 +9,10 @@
         <position x="400" y="0" z="20"/>
     </camera>
 
+    <camera id="wrapAroundCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
+        <position x="400" y="0" z="20"/>
+    </camera>
+
     <camera id="buildingsCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
         <position x="400" y="0" z="20"/>
     </camera>

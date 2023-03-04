@@ -30,5 +30,8 @@
         "data/objects/strategy/level1/lower_hud.strategy"],
     
     "_upper_hud_": [
-        "data/objects/strategy/level1/upper_hud.strategy"]
+        "data/objects/strategy/level1/upper_hud.strategy"],
+
+    "_train_": [
+        "data/objects/strategy/level1/train.strategy"]
 }
