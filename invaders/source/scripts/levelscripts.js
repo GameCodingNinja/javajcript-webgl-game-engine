@@ -104,28 +104,8 @@ class PlayerShip_ShootLazer
 
         // We are done with this sprite, disable collision and queue it up to be deleted
         this.sprite.collisionComponent.enable = false;
-        this.playerShipStratagy.destroy(this.sprite.parentNode);
+        this.playerShipStratagy.destroy( this.sprite.parentNode );
 
-        return true;
-    }
-}
-
-//
-//  DESC: Script for handling player laser hitting target
-//
-class PlayerShip_LazerHit
-{
-    constructor( sprite )
-    {
-        // We are done with this sprite, queue it up to be deleted
-        strategyManager.get('_player_ship_').destroy( sprite.parentNode );
-    }
-    
-    // 
-    //  DESC: Execute this script object
-    //
-    execute()
-    {
         return true;
     }
 }
@@ -225,6 +205,45 @@ class EnemyShip_Shot
 }
 
 //
+//  DESC: Script for handling player being hit
+//
+class PlayerShip_Hit
+{
+    constructor( sprite, projectileSprite )
+    {
+        this.sprite = sprite;
+
+        // Get the player ship strategy to create the explosion animation
+        this.playerShipStratagy = strategyManager.get('_player_ship_');
+
+        // Create an explode graphic node and translate it to the projectile sprite
+        this.explodeAnim = new utilScripts.PlayAnim( this.playerShipStratagy.create('explode').get() );
+        this.explodeAnim.init( 24 );
+        this.explodeAnim.sprite.setPos( projectileSprite.pos );
+        this.explodeAnim.sprite.transform();
+
+        this.dif = sprite.pos.getDistance( this.explodeAnim.sprite.pos );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
+
+        if( this.explodeAnim.execute() )
+        {
+            this.playerShipStratagy.destroy( this.explodeAnim.sprite.parentNode );
+
+            return true;
+        }
+
+        return false;
+    }
+}
+
+//
 //  DESC: Script for handling enemy getting hit
 //
 class EnemyShip_Hit
@@ -257,6 +276,28 @@ class EnemyShip_Hit
 
         // Send a message to keep track of aliens being destroyed
         eventManager.dispatchEvent( gameDefs.EGE_ENEMY_DESTROYED );
+
+        // Get the enemy strategy to create the explosion animation
+        this.enemyStratagy = strategyManager.get('_enemy_');
+
+        // Create an explode graphic node and translate it to the projectile sprite
+        this.explodeAnim = new utilScripts.PlayAnim( this.enemyStratagy.create('explode').get() );
+        this.explodeAnim.init( 24 );
+
+        if( projectileSprite.rot.y > 1 )
+            this.explodeAnim.sprite.setPosXYZ( sprite.pos.x + 15, projectileSprite.pos.y );
+        else
+            this.explodeAnim.sprite.setPosXYZ( sprite.pos.x - 15, projectileSprite.pos.y );
+
+        this.explodeAnim.sprite.transform();
+
+        // Hide the projectile and allow it to be deleted from the script moving it
+        if( projectileSprite.parentNode.name === 'player_shot' )
+        {
+            projectileSprite.setVisible( false );
+        }
+
+        this.dif = sprite.pos.getDistance( this.explodeAnim.sprite.pos );
     }
     
     // 
@@ -269,10 +310,20 @@ class EnemyShip_Hit
         this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
         this.rotate += this.rotateVelocity * highResTimer.elapsedTime;
 
+        if( this.explodeAnim )
+        {
+            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
+            if( this.explodeAnim.execute() )
+            {
+                this.enemyStratagy.destroy( this.explodeAnim.sprite.parentNode );
+                this.explodeAnim = null;
+            }
+        }
+
         if( this.easingY.isFinished() )
         {
             // We are done with this sprite, queue it up to be deleted
-            strategyManager.get('_enemy_').destroy( this.sprite.parentNode );
+            this.enemyStratagy.destroy( this.sprite.parentNode );
 
             return true;
         }
@@ -384,8 +435,8 @@ export function loadScripts()
     scriptManager.set( 'PlayerShip_ShootLazer',
         ( obj, shipVelocity ) => { return new PlayerShip_ShootLazer( obj, shipVelocity ); } );
 
-    scriptManager.set( 'PlayerShip_LazerHit',
-        ( sprite ) => { return new PlayerShip_LazerHit( sprite ); } );
+    scriptManager.set( 'PlayerShip_Hit',
+        ( sprite, projectileSprite ) => { return new PlayerShip_Hit( sprite, projectileSprite ); } );
     
     scriptManager.set( 'PlayerShip_Die',
         ( sprite ) => { return new PlayerShip_Die( sprite ); } );

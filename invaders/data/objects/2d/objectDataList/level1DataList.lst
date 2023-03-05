@@ -342,6 +342,18 @@
             <size width="114" height="4"/>
         </object>
 
+        <object name="explode">
+            <visual>
+                <texture count="11" file="data/textures/explosion/explosion_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="marker">
+            <visual>
+                <texture file="data/textures/level/projectile02-4.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
     </objectList>
 
 </objectDataList2D>

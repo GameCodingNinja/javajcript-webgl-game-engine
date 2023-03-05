@@ -36,7 +36,7 @@ import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
-export const ASSET_COUNT = 61;
+export const ASSET_COUNT = 73;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
@@ -208,6 +208,7 @@ export class Level1State extends CommonState
         if(spriteB.parentNode.userId == PLAYER_SHIP_ID)
         {
             spriteA.collisionComponent.enable = false;
+            spriteB.prepareScript( 'hit', spriteA );
 
             if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
             {
@@ -599,7 +600,7 @@ export class Level1State extends CommonState
             {
                 this.train.get().incPosXYZ( (this.train.inc * highResTimer.elapsedTime) + -easingVal );
 
-                if( this.train.get().pos.x > 1000 || this.train.get().pos.x < -1000 )
+                if( this.train.get().transPos.x > 1000 || this.train.get().transPos.x < -1000 )
                 {
                     this.trainStrategy.destroy( this.train );
                     this.train = null;

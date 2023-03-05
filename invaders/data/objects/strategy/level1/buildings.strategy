@@ -76,5 +76,11 @@
             </scriptList>
         </sprite>
     </node>
+
+    <node name="marker">
+        <sprite>
+            <scale x="2" y="2"/>
+        </sprite>
+    </node>
   
 </strategy>

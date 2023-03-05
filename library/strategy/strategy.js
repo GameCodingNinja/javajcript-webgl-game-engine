@@ -301,8 +301,8 @@ export class Strategy extends Object
                 this.deactivateAry.push( this.nodeAry[index] );
             else
                 console.warn( `Node is not active (${key})!` );
+            }
         }
-    }
 
     //
     //  DESC: destroy the node

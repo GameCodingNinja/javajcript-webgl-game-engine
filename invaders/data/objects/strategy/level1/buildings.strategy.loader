@@ -25,6 +25,11 @@
 
         <!-- Start of wrap around -->
 
+        <!--<node name="marker">
+            <sprite>
+                <position x="-5700" y="-80"/>
+            </sprite>
+        </node>-->
 
         <node name="building01" id="-28">
             <sprite>
