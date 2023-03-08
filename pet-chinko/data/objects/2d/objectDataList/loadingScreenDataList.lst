@@ -13,11 +13,11 @@
   
     <objectList>
         
-        <object name="logo">
-            <visual defaultUniformScale="1.5">
+        <!--<object name="logo">
+            <visual defaultUniformScale="1.0">
                 <texture file="data/textures/startup/logo.jpg"/>
             </visual>
-        </object>
+        </object>-->
         
         <object name="loadAnim">
             <visual>

@@ -46,7 +46,7 @@ import fontManagerListTable from 'raw-loader!../../data/textures/fonts/font.lst'
 import actionManagerObj from '../../data/settings/controllerMapping.json';
 import menuActionObj from '../../data/objects/2d/menu/menu_action.json';
 
-const STARTUP_ASSET_COUNT = 54,
+const STARTUP_ASSET_COUNT = 53,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState

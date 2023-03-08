@@ -3,14 +3,16 @@
     
     <node name="logo">
         
-        <sprite objectName="logo"/>
+        <sprite>
+            <position x="0" y="50" z="0"/>
+        </sprite>
 
     </node>
     
     <node name="UIProgressBar">
         
         <uiProgressBar defaultState="inactive">
-            <position x="0" y="-350" z="0"/>
+            <position x="0" y="-400" z="0"/>
             <spriteLst>
                 <sprite objectName="progress_frame"/>
                 <sprite objectName="progress_solid"/>

@@ -14,26 +14,26 @@
 
     <menuControls>
         <!-- Texture button list -->
-        <control name="texture_btn_lst" controlType="button_list" defaultState="inactive">
+        <!--<control name="texture_btn_lst" controlType="button_list" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
             <position x="-400" y="120" z="0"/>
             <fontStringList>
                 <string text="Cats"/>
                 <string text="Dogs"/>
                 <string text="Cats &#38; Dogs"/>
-            </fontStringList>
+            </fontStringList>-->
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
-            <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
-            <actionResponse left="true" right="true"/>
+            <!--<scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
+            <actionResponse left="true" right="true"/>-->
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptList>
+            <!--<scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
-        </control>
+        </control>-->
         
         <!-- Level button list -->
-        <control name="level_btn_lst" controlType="button_list" defaultState="inactive">
+        <!--<control name="level_btn_lst" controlType="button_list" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
             <position x="400" y="120" z="0"/>
             <fontStringList>
@@ -41,16 +41,16 @@
                 <string text="Level 2"/>
                 <string text="Level 3"/>
                 <string text="Level 4"/>
-            </fontStringList>
+            </fontStringList>-->
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
-            <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
-            <actionResponse left="true" right="true"/>
+            <!--<scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
+            <actionResponse left="true" right="true"/>-->
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptList>
+            <!--<scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
             </scriptList>
-        </control>
+        </control>-->
 
         <!-- Start Game Button -->
         <control name="continue_btn" controlType="button" defaultState="inactive">

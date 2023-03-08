@@ -45,10 +45,8 @@
             <filePath file="data/objects/2d/menu/control/help_btn_list.ctrl"/>
             <position x="0" y="0" z="0"/>
             <fontStringList>
-                <string text="Pet-Chinko:||If you are a pet lover or not, you will love this fast and action packed Pet-Chinko game. You can play as a dog or cat lover or both!!"/>
-                <string text="Object of the Game:||Strategically drop the correct Pet Items and Balls into the right slots to match the correct Goal Items (Cats and/or Dogs) at the bottom of each selected slots with the correct Pet Items and/or Balls to win credits, multipliers, extra balls and pet items!"/>
-                <string text="Choose Your Game:||      Dogs    Cats    Cats n' Dogs||Choose Your Level:||      Levels 1 - 50"/>
-                <string text='Press the Start Button:||Then touch the screen at the top of each of the slots to drop your Pet Items and/or Balls.||Game Over:||When you run out of Pet Items and/or Balls to drop your game is over. Hit "Play Again" to have some more fun!!!'/>
+                <string text="Pet-Chinko:||If you are a pet lover or not, you will love this fast and action packed Pet-Chinko game.||Object of the Game:||Strategically drop Pet Items into slots with pets to increase your multiplier. Drop a milk bone into a slot with a pet to win extra balls!"/>
+                <string text='Press the Start Button:||Click anywhere to drop the Pet Items from the top of the screen where you clicked.||Game Over:||When you run out of Pet Items to drop, the game is over. Hit "Play Again" to have some more fun!!!'/>
             </fontStringList>
             <!--<navigate up="settings_apply_btn" down="full_screen_check_box"/>-->
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>

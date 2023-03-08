@@ -2,7 +2,7 @@
 <loader>
 
     <strategy name="_loading-screen_" type="actor">
-        <node name="logo"/>
+        <!--<node name="logo"/>-->
         <node name="loadAnim" instance="loadAnim">
             <sprite>
                 <script prepare="animate"/>

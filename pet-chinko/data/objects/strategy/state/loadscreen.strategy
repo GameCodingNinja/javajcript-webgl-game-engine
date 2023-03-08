@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <strategy defaultGroup="(loadingScreen)">
     
-    <node name="logo">
+    <!--<node name="logo">
         
         <sprite objectName="logo"/>
 
-    </node>
+    </node>-->
     
     <node name="loadAnim">
         
