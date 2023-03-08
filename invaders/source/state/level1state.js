@@ -306,6 +306,10 @@ export class Level1State extends CommonState
                     menuManager.getTree( 'pause_tree' ).transitionMenu();
                     this.restartGame();
                 }
+                else if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
+                {
+                    this.gameReady = false;
+                }
             }
             else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
             {
@@ -389,6 +393,8 @@ export class Level1State extends CommonState
             this.radarCamera1.initFromXml();
             this.radarCamera2.initFromXml();
             this.wrapAroundCamera.initFromXml();
+
+            this.radarCamAry = [this.radarCamera1,this.radarCamera2];
 
             this.moveDirX = MOVE_NULL;
             this.moveDirY = MOVE_NULL;
