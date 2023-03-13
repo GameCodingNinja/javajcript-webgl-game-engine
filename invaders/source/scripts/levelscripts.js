@@ -12,6 +12,7 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { Point } from '../../../library/common/point';
 import { settings } from '../../../library/utilities/settings';
 import { eventManager } from '../../../library/managers/eventmanager';
+import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as utilScripts from './utilityscripts';
 import * as easing from '../../../library/utilities/easingfunc';
@@ -145,6 +146,7 @@ class PlayerShip_Die
 
         if( this.easingY.isFinished() )
         {
+            soundManager.play( '(level_1)', 'player_explode' );
             eventManager.dispatchEvent( stateDefs.ESE_SHOW_GAME_OVER_MENU );
             return true;
         }

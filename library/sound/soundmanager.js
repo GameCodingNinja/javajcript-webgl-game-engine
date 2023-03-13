@@ -9,6 +9,7 @@
 import { ManagerBase } from '../managers/managerbase';
 import { Sound } from '../sound/sound';
 import { PlayList } from '../sound/playlist';
+import { GroupPlayer } from '../sound/groupplayer';
 import * as genFunc from '../utilities/genfunc';
 
 class SoundManager extends ManagerBase
@@ -25,10 +26,10 @@ class SoundManager extends ManagerBase
         else
             throw new Error('AudioContext not supported.');
         
-        // Map containing a group of sound ID's
+        // Map containing a group of map of sound ID's
         this.soundMapMap = new Map;
 
-        // Map containing a group of play list ID's
+        // Map containing a group of map of play list ID's
         // Do not free the sounds copied to the play list
         this.playListMapMap = new Map;
     }
@@ -84,8 +85,13 @@ class SoundManager extends ManagerBase
         let playListNode = xmlNode.getElementsByTagName( 'playList' );
         if( playListNode.length )
         {
-            let groupMap = new Map;
-            this.playListMapMap.set( group, groupMap );
+            // Create the group map if it doesn't already exist
+            let groupMap = this.playListMapMap.get( group );
+            if( groupMap === undefined )
+            {
+                groupMap = new Map;
+                this.playListMapMap.set( group, groupMap );
+            }
             
             for( let i = 0; i < playListNode.length; ++i )
             {
@@ -161,6 +167,20 @@ class SoundManager extends ManagerBase
             if( this.playListMapMap.has( group ) )
                 this.playListMapMap.delete( group );
         }
+    }
+
+    //
+    //  DESC: Create and return a group player
+    //
+    createGroupPlayer( group )
+    {
+        let soundMap = this.soundMapMap.get( group );
+
+        // At a minmum, a sound map group needs to exist
+        if( soundMap === undefined )
+            throw new Error( `Sound group name can't be found (${group})!` );
+
+        return new GroupPlayer( soundMap, this.playListMapMap.get( group ) );
     }
     
     //

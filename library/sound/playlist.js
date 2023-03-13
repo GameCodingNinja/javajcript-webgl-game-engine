@@ -83,13 +83,13 @@ export class PlayList
     // 
     //  DESC: Play the play list
     //
-    play( channel, loopCount )
+    play( loop = false, offset = 0 )
     {
         if( (this.type === EST_RANDOM) && (this.counter === 0) )
             genFunc.shuffle( this.soundAry );
 
         this.current = this.counter;
-        this.soundAry[this.current].play( channel, loopCount );
+        this.soundAry[this.current].play( loop, offset );
         this.counter = (this.counter + 1) % this.soundAry.length;
     }
 

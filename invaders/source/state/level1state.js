@@ -19,6 +19,7 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { aiManager } from '../../../library/managers/aimanager';
 import { CommonState } from './commonstate';
+import { soundManager } from '../../../library/sound/soundmanager';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
@@ -160,6 +161,9 @@ export class Level1State extends CommonState
         this.lastMoveDirX = MOVE_NULL;
         this.playerShipSpeed = PLAYER_SHIP_TOP_SPEED;
 
+        // Create a player for this group
+        this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
+
         this.gameReady = true;
         
         requestAnimationFrame( this.callback );
@@ -215,12 +219,16 @@ export class Level1State extends CommonState
                 this.playerShip.progressBar.incCurrentValue( -10 );
                 this.playerShip.progressBar.setVisible( true );
                 spriteA.prepareScript( 'hit' );
+                this.groupPlayer.play( 'player_hit' );
             }
+            // Player collides into enemy
             else if( spriteA.parentNode.userId == ENEMY_SHIP_ID )
             {
                 this.playerShip.progressBar.incCurrentValue( -30 );
                 this.playerShip.progressBar.setVisible( true );
                 spriteA.prepareScript( 'hit', spriteB );
+
+                this.groupPlayer.play( 'player_hit' );
             }
 
             if( this.playerShip.progressBar.isMinValue() && this.playerShip.sprite.collisionComponent.enable )
@@ -241,6 +249,8 @@ export class Level1State extends CommonState
             // Execute the scripts that handle being hit
             spriteA.prepareScript( 'hit' );
             spriteB.prepareScript( 'hit', spriteA );
+
+            this.groupPlayer.play( 'enemy_1_explosion' );
         }
     }
     
@@ -352,6 +362,8 @@ export class Level1State extends CommonState
                 {
                     let laserBlast = this.playerShip.strategy.create('player_shot').get();
                     laserBlast.prepareScript( 'shoot', this.easingX.getValue() );
+
+                    this.groupPlayer.play( 'player_gun_1' );
                 }
             }
         }
@@ -394,7 +406,7 @@ export class Level1State extends CommonState
             this.radarCamera2.initFromXml();
             this.wrapAroundCamera.initFromXml();
 
-            this.radarCamAry = [this.radarCamera1,this.radarCamera2];
+            this.radarCamAry = [this.radarCamera1, this.radarCamera2];
 
             this.moveDirX = MOVE_NULL;
             this.moveDirY = MOVE_NULL;
@@ -407,6 +419,7 @@ export class Level1State extends CommonState
             this.hudLevelFont.visualComponent.createFontString('Level 1');
             this.hudProgressBar.setProgressBarMax( 10 );
             this.hudProgressBar.setCurrentValue( 0 );
+            this.playerLevel = 1;
 
             this.gameReady = true;
 
@@ -812,6 +825,10 @@ export class Level1State extends CommonState
 
         // Disconnect to the collision signal
         signalManager.clear_collisionSignal();
+
+        this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
+
+        soundManager.freeGroup( '(level_1)' );
     }
 }
 
@@ -832,6 +849,8 @@ export function load()
 
         // Load and execute all the strategy loaders.
         .then(() => strategyLoader.loadGroup( '-level1-' ))
+
+        .then(() => soundManager.loadGroup( groupAry ))
 
         // Clean up the temporary files
         .then(() =>

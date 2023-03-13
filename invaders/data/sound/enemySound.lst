@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<soundList>
+
+    <soundFiles>
+        <load id="enemy_1_explosion_bang" file="data/sound/level/enemy/EXPLOSION_Subtle_Bang_stereo.ogg"/>
+        <load id="enemy_1_explosion_bright" file="data/sound/level/enemy/EXPLOSION_Subtle_Bright_stereo.ogg"/>
+        <load id="enemy_1_explosion_dark" file="data/sound/level/enemy/EXPLOSION_Subtle_Dark_stereo.ogg"/>
+        <load id="enemy_1_explosion_dirty" file="data/sound/level/enemy/EXPLOSION_Subtle_Dirty_Distorted_stereo.ogg"/>
+        <load id="enemy_1_gun" file="data/sound/level/enemy/GUNAuto_PhantomFire_01.ogg"/>
+    </soundFiles>
+
+    <playlistSet>
+        <playList id="enemy_1_explosion" playtype="random">
+            <sound id="enemy_1_explosion_bang"/>
+            <sound id="enemy_1_explosion_bright"/>
+            <sound id="enemy_1_explosion_dark"/>
+            <sound id="enemy_1_explosion_dirty"/>
+        </playList>
+    </playlistSet>
+
+</soundList>

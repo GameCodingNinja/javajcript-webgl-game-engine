@@ -10,6 +10,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { aiNode } from '../../../library/node/ainode';
+import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
@@ -58,6 +59,8 @@ class AI_Enemy_base extends aiNode
                     {
                         let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
                         shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
+
+                        this.data.groupPlayer.play( 'enemy_1_gun' );
                     }
 
                     this.sprite.shootTime = highResTimer.elapsedTime + shootTime;
@@ -95,6 +98,7 @@ class AI_Enemy_Head extends aiNode
             this.data.camera = this.data.playerShipStratagy.camera;
             this.data.minX = this.data.buildings[0].get().pos.x;
             this.data.maxX = this.data.buildings[this.data.buildings.length-1].get().pos.x;
+            this.data.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
         }
     }
 

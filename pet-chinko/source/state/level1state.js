@@ -210,6 +210,7 @@ export class Level1State extends CommonState
                 this.ballStrategy.setAllToDefaultId();
                 this.uiWinMeter.clear();
                 this.ballStrategy.clear();
+                this.uiMultiplier.visualComponent.createFontString( `${this.multiplier}x` );
             }
             else if( event.type === stateDefs.ESE_CREATE_MULTI_HEAD )
             {
