@@ -356,6 +356,7 @@ class AI_Enemy_DesendToBuilding extends AI_Enemy_base
             if( this.easingY.isFinished() )
             {
                 this.state = defs.EAIS_SUCCESS;
+                this.data.groupPlayer.play( 'enemy_1_attack_building' );
             }
         }
 

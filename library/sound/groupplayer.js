@@ -40,9 +40,9 @@ export class GroupPlayer
     //
     //  DESC: Play a sound
     //
-    play( soundID, loop = false )
+    play( soundID, loop = false, offset = 0 )
     {
-        this.getSound( soundID ).play( loop );
+        this.getSound( soundID ).play( loop, offset );
     }
 
     //

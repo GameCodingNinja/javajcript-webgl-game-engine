@@ -2,14 +2,15 @@
 <soundList>
 
     <soundFiles>
-        <load id="Blaster_B_Fire_01" file="data/sound/level/player/LASRGun_Classic_Blaster_B_Fire_01.ogg"/>
-        <load id="Blaster_A_Fire_03" file="data/sound/level/player/LASRGun_Classic_Blaster_A_Fire_03.ogg"/>
-        <load id="Blaster_A_Fire_05" file="data/sound/level/player/LASRGun_Classic_Blaster_A_Fire_05.ogg"/>
-        <load id="Blaster_B_Fire_04" file="data/sound/level/player/LASRGun_Classic_Blaster_B_Fire_04.ogg"/>
-        <load id="EXPLOSION_Impact" file="data/sound/level/player/EXPLOSION_Short_Impact_Explosion_stereo.ogg"/>
-        <load id="EXPLOSION_Kickback" file="data/sound/level/player/EXPLOSION_Short_Bright_Kickback_stereo.ogg"/>
-        <load id="EXPLOSION_Metllic" file="data/sound/level/player/EXPLOSION_Short_Fused_Impact_Metllic_Debris_stereo.ogg"/>
-        <load id="player_explode" file="data/sound/level/player/EXPLOSION_Medium_Blast_Scatter_Debris_stereo.ogg"/>
+        <load id="Blaster_B_Fire_01" file="data/sound/level/player/LASRGun_Classic_Blaster_B_Fire_01.ogg" volume="0.25"/>
+        <load id="Blaster_A_Fire_03" file="data/sound/level/player/LASRGun_Classic_Blaster_A_Fire_03.ogg" volume="0.25"/>
+        <load id="Blaster_A_Fire_05" file="data/sound/level/player/LASRGun_Classic_Blaster_A_Fire_05.ogg" volume="0.25"/>
+        <load id="Blaster_B_Fire_04" file="data/sound/level/player/LASRGun_Classic_Blaster_B_Fire_04.ogg" volume="0.25"/>
+        <load id="EXPLOSION_Impact" file="data/sound/level/player/EXPLOSION_Short_Impact_Explosion_stereo.ogg" volume="0.4"/>
+        <load id="EXPLOSION_Kickback" file="data/sound/level/player/EXPLOSION_Short_Bright_Kickback_stereo.ogg" volume="0.4"/>
+        <load id="EXPLOSION_Metllic" file="data/sound/level/player/EXPLOSION_Short_Fused_Impact_Metllic_Debris_stereo.ogg" volume="0.4"/>
+        <load id="player_explode" file="data/sound/level/player/EXPLOSION_Medium_Blast_Scatter_Debris_stereo.ogg" volume="0.4"/>
+        <load id="player_thrust" file="data/sound/level/player/THRUSTER_Deep_Hot_Constant_loop_mono.ogg" volume="0.1"/>
     </soundFiles>
 
     <playlistSet>

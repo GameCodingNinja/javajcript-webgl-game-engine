@@ -37,7 +37,7 @@ import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
-export const ASSET_COUNT = 73;
+export const ASSET_COUNT = 90;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
@@ -55,7 +55,8 @@ const MOVE_NULL = -1,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
-      GAMEPLAY_LOOPING_WRAP_DIST = 5600;
+      GAMEPLAY_LOOPING_WRAP_DIST = 5600,
+      LOOP_SND = true;
 
 export class Level1State extends CommonState
 {
@@ -163,6 +164,8 @@ export class Level1State extends CommonState
 
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
+        this.groupPlayer.play( 'player_thrust', LOOP_SND );
+        this.groupPlayer.pause( 'player_thrust' );
 
         this.gameReady = true;
         
@@ -237,6 +240,7 @@ export class Level1State extends CommonState
                 this.playerShip.progressBar.setVisible( false );
                 this.playerShip.fireTailSprite.setVisible( false );
                 this.playerShip.fireTailScript.pause = true;
+                this.groupPlayer.pause( 'player_thrust' );
                 this.playerShip.sprite.prepareScript( 'die' );
             }
         }
@@ -460,6 +464,8 @@ export class Level1State extends CommonState
                             this.playerShip.fireTailScript.pause = false;
                             this.easingX.init( this.easingX.getValue(), -this.playerShipSpeed, 2, easing.getLinear() );
 
+                            this.groupPlayer.resume( 'player_thrust' );
+
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
                             if(dir > -CAMERA_EASING_OFFSET)
@@ -470,6 +476,8 @@ export class Level1State extends CommonState
                             this.playerShip.fireTailSprite.setVisible( false );
                             this.playerShip.fireTailScript.pause = true;
                             this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+
+                            this.groupPlayer.pause( 'player_thrust' );
 
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                         }
@@ -488,6 +496,8 @@ export class Level1State extends CommonState
                             this.playerShip.fireTailScript.pause = false;
                             this.easingX.init( this.easingX.getValue(), this.playerShipSpeed, 2, easing.getLinear() );
 
+                            this.groupPlayer.resume( 'player_thrust' );
+
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
                             if(dir < CAMERA_EASING_OFFSET)
@@ -498,6 +508,8 @@ export class Level1State extends CommonState
                             this.playerShip.fireTailSprite.setVisible( false );
                             this.playerShip.fireTailScript.pause = true;
                             this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+
+                            this.groupPlayer.pause( 'player_thrust' );
 
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
                         }
