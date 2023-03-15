@@ -1,7 +1,15 @@
 <soundList>
 
   <soundFiles>
-    <load id="music_0" file="data/sound/125_full_playbook-of-happiness_0158_preview.mp3"/>
+    <load id="music_0" file="data/sound/125_full_playbook-of-happiness_0158_preview.mp3" volume="0.25"/>
+  </soundFiles>
+
+  <soundFiles>
+    <load id="cat" file="data/sound/sfx_hit_cat.wav" volume="0.45"/>
+  </soundFiles>
+
+  <soundFiles>
+    <load id="dog" file="data/sound/sfx_hit_dog.wav" volume="0.3"/>
   </soundFiles>
 
 </soundList>
