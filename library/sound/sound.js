@@ -7,6 +7,7 @@
 "use strict";
 
 import { settings } from '../utilities/settings';
+import * as defs from '../common/defs';
 
 export class Sound
 {
@@ -33,6 +34,9 @@ export class Sound
         
         // Pause flag
         this.paused = false;
+
+        // Sound type
+        this.type = defs.ESND_EFFECT;
     }
     
     //
@@ -44,6 +48,16 @@ export class Sound
         let attr = node.getAttribute( 'volume' );
         if( attr )
             this.defaultVolume = Number( attr );
+
+        attr = node.getAttribute( 'type' );
+        if( attr )
+        {
+            if( attr === 'music' )
+                this.type = defs.ESND_MUSIC;
+
+            else if( attr === 'dialog' )
+                this.type = defs.ESND_DIALOG;
+        }
     }
     
     //
@@ -65,7 +79,10 @@ export class Sound
     {
         this.stop();
 
-        if( settings.user.soundEnabled )
+        if( settings.user.soundEnabled && 
+            (this.type === defs.ESND_EFFECT && settings.user.soundEffectsEnabled) ||
+            (this.type === defs.ESND_MUSIC && settings.user.soundMusicEnabled) ||
+            (this.type === defs.ESND_DIALOG && settings.user.soundDialogEnabled) )
         {
             this.source = this.context.createBufferSource();
             this.source.buffer = this.buffer;

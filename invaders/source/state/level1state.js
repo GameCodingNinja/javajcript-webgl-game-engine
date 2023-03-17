@@ -350,6 +350,8 @@ export class Level1State extends CommonState
                     this.playerLevel += 1;
 
                     this.hudLevelFont.visualComponent.createFontString( `Level ${this.playerLevel}` );
+
+                    this.groupPlayer.play( 'level_up' );
                 }
 
                 this.hudProgressBar.incCurrentValue( 1 );

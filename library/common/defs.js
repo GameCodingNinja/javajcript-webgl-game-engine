@@ -177,3 +177,8 @@ export const CULL_NULL    = 0,
              CULL_FULL    = 1,
              CULL_X_ONLY  = 2,
              CULL_Y_ONLY  = 3;
+
+export const ESND_NULL    = 0,
+             ESND_EFFECT  = 1,
+             ESND_MUSIC   = 2,
+             ESND_DIALOG  = 3;

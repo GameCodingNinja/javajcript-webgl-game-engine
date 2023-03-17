@@ -416,9 +416,7 @@ class Settings
 
         this.stats = false;
 
-        this.user = {
-            "stickDeadZone": 0.0,
-            "soundEnabled": 1 };
+        this.user = null;
 
         // Calculate the ratios
         this.calcRatio();
@@ -434,7 +432,13 @@ class Settings
             this.user = obj;
             let savedUserSettings = _utilities_localstorage__WEBPACK_IMPORTED_MODULE_1__.localStorage.get( 'userSettings' );
             if( savedUserSettings )
-                this.user = JSON.parse( savedUserSettings );
+            {
+                let userObj = JSON.parse( savedUserSettings );
+                if( this.user.version == userObj.version )
+                    this.user = userObj;
+                else
+                    _utilities_localstorage__WEBPACK_IMPORTED_MODULE_1__.localStorage.set( 'userSettings', JSON.stringify(this.user) );
+            }
         }
     }
 
@@ -914,6 +918,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ESMA_MOUSE_X": () => (/* binding */ ESMA_MOUSE_X),
 /* harmony export */   "ESMA_MOUSE_Y": () => (/* binding */ ESMA_MOUSE_Y),
 /* harmony export */   "ESMA_PRESS_TYPE": () => (/* binding */ ESMA_PRESS_TYPE),
+/* harmony export */   "ESND_DIALOG": () => (/* binding */ ESND_DIALOG),
+/* harmony export */   "ESND_EFFECT": () => (/* binding */ ESND_EFFECT),
+/* harmony export */   "ESND_MUSIC": () => (/* binding */ ESND_MUSIC),
+/* harmony export */   "ESND_NULL": () => (/* binding */ ESND_NULL),
 /* harmony export */   "EVA_VERT_BOTTOM": () => (/* binding */ EVA_VERT_BOTTOM),
 /* harmony export */   "EVA_VERT_CENTER": () => (/* binding */ EVA_VERT_CENTER),
 /* harmony export */   "EVA_VERT_TOP": () => (/* binding */ EVA_VERT_TOP),
@@ -1121,6 +1129,11 @@ const CULL_NULL    = 0,
              CULL_FULL    = 1,
              CULL_X_ONLY  = 2,
              CULL_Y_ONLY  = 3;
+
+const ESND_NULL    = 0,
+             ESND_EFFECT  = 1,
+             ESND_MUSIC   = 2,
+             ESND_DIALOG  = 3;
 
 
 /***/ }),
@@ -1758,6 +1771,7 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
     //
     createProjectionMatrix()
     {
+        console.log(`Proj Width: ${this.projWidth}; Proj Height: ${this.projHeight}`);
         if( this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_PERSPECTIVE )
         {
             this.projectionMatrix.perspectiveFovRH(
@@ -41569,11 +41583,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Sound": () => (/* binding */ Sound)
 /* harmony export */ });
 /* harmony import */ var _utilities_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _common_defs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 
 // 
 //  FILE NAME: sound.js
 //  DESC:      Class to hold the sound resource
 //
+
 
 
 
@@ -41604,6 +41620,9 @@ class Sound
         
         // Pause flag
         this.paused = false;
+
+        // Sound type
+        this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ESND_EFFECT;
     }
     
     //
@@ -41615,6 +41634,16 @@ class Sound
         let attr = node.getAttribute( 'volume' );
         if( attr )
             this.defaultVolume = Number( attr );
+
+        attr = node.getAttribute( 'type' );
+        if( attr )
+        {
+            if( attr === 'music' )
+                this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ESND_MUSIC;
+
+            else if( attr === 'dialog' )
+                this.type = _common_defs__WEBPACK_IMPORTED_MODULE_1__.ESND_DIALOG;
+        }
     }
     
     //
@@ -47262,7 +47291,7 @@ function load()
         _library_physics_physicsworldmanager__WEBPACK_IMPORTED_MODULE_6__.physicsWorldManager.loadWorldGroup2D( '(game)' ),
 
         // Load the Sound Manager group
-        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_8__.soundManager.loadGroup( [`(level_${_library_utilities_genfunc__WEBPACK_IMPORTED_MODULE_20__.randomInt(1, 4)})`] )
+        _library_sound_soundmanager__WEBPACK_IMPORTED_MODULE_8__.soundManager.loadGroup( [`(level_1)`] )
     ])
 
     // Load stage strategy.

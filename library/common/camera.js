@@ -144,6 +144,8 @@ export class Camera extends Object
     //
     createProjectionMatrix()
     {
+        //console.log(`Proj Width: ${this.projWidth}; Proj Height: ${this.projHeight}`);
+
         if( this.projType == defs.EPT_PERSPECTIVE )
         {
             this.projectionMatrix.perspectiveFovRH(

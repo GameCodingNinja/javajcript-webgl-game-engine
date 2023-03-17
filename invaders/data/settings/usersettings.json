@@ -1,4 +1,8 @@
 {
-    "stickDeadZone": 0.1,
-    "soundEnabled": 1
+    "version": 2,
+    "stickDeadZone": 0.0,
+    "soundEnabled": 1,
+    "soundEffectsEnabled": 1,
+    "soundMusicEnabled": 1,
+    "soundDialogEnabled": 1
 }

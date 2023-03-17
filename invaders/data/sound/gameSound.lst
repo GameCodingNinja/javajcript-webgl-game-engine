@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<soundList>
+
+    <soundFiles>
+        <load id="level_up" file="data/sound/level/game/Computers-Interact_001.ogg" volume="0.5"/>
+    </soundFiles>
+
+</soundList>

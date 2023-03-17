@@ -44,9 +44,7 @@ class Settings
 
         this.stats = false;
 
-        this.user = {
-            "stickDeadZone": 0.0,
-            "soundEnabled": 1 };
+        this.user = null;
 
         // Calculate the ratios
         this.calcRatio();
@@ -62,7 +60,13 @@ class Settings
             this.user = obj;
             let savedUserSettings = localStorage.get( 'userSettings' );
             if( savedUserSettings )
-                this.user = JSON.parse( savedUserSettings );
+            {
+                let userObj = JSON.parse( savedUserSettings );
+                if( this.user.version == userObj.version )
+                    this.user = userObj;
+                else
+                    localStorage.set( 'userSettings', JSON.stringify(this.user) );
+            }
         }
     }
 
