@@ -20,7 +20,7 @@
 
         <sprite>
             <scriptList>
-                <script shoot="EnemyShip_Shot"/>
+                <script shoot="EnemyShip_Shoot"/>
                 <script hit="EnemyShot_Hit"/>
             </scriptList>
         </sprite>

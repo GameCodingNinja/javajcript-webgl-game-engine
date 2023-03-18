@@ -170,8 +170,9 @@ class AI_Enemy_Desend extends AI_Enemy_base
             this.easingY.execute();
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
-            // Shoot at the player
-            this.shootPlayer( passive_shooter_time );
+            // Shoot at the player once it's in view
+            if( (this.sprite.pos.y + this.sprite.parentNode.radius) < settings.nativeSize_half.h )
+                this.shootPlayer( passive_shooter_time );
 
             if( this.easingY.isFinished() )
             {
@@ -231,7 +232,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
             {
                 if( this.sprite.targetBuilding === null )
                 {
-                    // Randmoly pick a building to target on
+                    // Randmoly pick a building to target
                     let index = genFunc.randomInt( 0, this.data.buildings.length-1 );
                     let targetBuilding = this.data.buildings[index].get();
 
@@ -248,8 +249,8 @@ class AI_Enemy_Roam extends AI_Enemy_base
 
                     if( (targetBuilding.destroyed === undefined) && freeBuildingFound )
                     {
-                        // Should target lock on a building
-                        if( genFunc.randomInt( 0, 0 ) === 0 )
+                        // Should we target lock on a building?
+                        if( genFunc.randomInt( 0, 10 ) > 4 )
                         {
                             this.sprite.targetBuilding = targetBuilding;
 

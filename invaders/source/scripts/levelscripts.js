@@ -19,6 +19,8 @@ import * as easing from '../../../library/utilities/easingfunc';
 import * as stateDefs from '../state/statedefs';
 import * as gameDefs from '../state/gamedefs';
 
+const GAMEPLAY_LOOPING_WRAP_DIST = 5600;
+
 //
 //  DESC: Script for animating fire tale
 //
@@ -100,6 +102,20 @@ class PlayerShip_ShootLazer
             this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
             this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
 
+            // Do wrapparound collision detection
+            if( this.sprite.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
+            {
+                // Set the transpos just for the wraparound collision check that will be overwritten on the next translate
+                this.sprite.transPos.x += (GAMEPLAY_LOOPING_WRAP_DIST * 2);
+                this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
+            }
+            else if( this.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
+            {
+                // Set the transpos just for the wraparound collision check that will be overwritten on the next translate
+                this.sprite.transPos.x += -(GAMEPLAY_LOOPING_WRAP_DIST * 2);
+                this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
+            }
+
             return false;
         }
 
@@ -156,9 +172,9 @@ class PlayerShip_Die
 }
 
 //
-//  DESC: Script for shooting laser
+//  DESC: Script for shooting enemy projectile
 //
-class EnemyShip_Shot
+class EnemyShip_Shoot
 {
     constructor( sprite, enemySprite )
     {
@@ -452,8 +468,8 @@ export function loadScripts()
     scriptManager.set( 'EnemyShip_CheckForCollideWithPlayer',
         ( sprite ) => { return new EnemyShip_CheckForCollideWithPlayer( sprite ); } );
 
-    scriptManager.set( 'EnemyShip_Shot',
-        ( sprite, enemySprite ) => { return new EnemyShip_Shot( sprite, enemySprite ); } );
+    scriptManager.set( 'EnemyShip_Shoot',
+        ( sprite, enemySprite ) => { return new EnemyShip_Shoot( sprite, enemySprite ); } );
 
     scriptManager.set( 'Building_Die',
         ( sprite ) => { return new Building_Die( sprite ); } );

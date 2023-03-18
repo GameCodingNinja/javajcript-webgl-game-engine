@@ -37,7 +37,7 @@ import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
-export const ASSET_COUNT = 90;
+export const ASSET_COUNT = 91;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,
@@ -88,15 +88,15 @@ export class Level1State extends CommonState
         strategyManager.activateStrategy('_buildingsback_');
         strategyManager.activateStrategy('_buildingsfront_');
         this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
-        this.enemyStrategy = strategyManager.activateStrategy('_enemy_');
 
-        // Aquire strategies that are managed outside of the manager
+        // Aquire strategies that are handled outside of the manager
         this.forgroundStrategy = strategyManager.get('_forground_');
         this.trainStrategy = strategyManager.get('_train_');
         this.lowerHudStategy = strategyManager.get('_lower_hud_');
         this.upperHudStategy = strategyManager.get('_upper_hud_');
         this.hudLevelFont = this.upperHudStategy.get('level_font').get();
         this.hudProgressBar = this.upperHudStategy.get('level_progress_bar').get();
+        this.enemyStrategy = strategyManager.get('_enemy_');
 
         // Randomly distrabute the clouds
         this.cloudAry = [];
@@ -179,7 +179,7 @@ export class Level1State extends CommonState
     {
         // Get the nodes and sprites we need to call and tuck them under the node for easy access
         this.playerShip = {};
-        this.playerShip.strategy = strategyManager.activateStrategy('_player_ship_');
+        this.playerShip.strategy = strategyManager.get('_player_ship_');
         this.playerShip.node = this.playerShip.strategy.get('player_ship');
         this.playerShip.object = this.playerShip.node.findChild('playerShip_object').get();
         this.playerShip.sprite = this.playerShip.node.get();
@@ -204,6 +204,67 @@ export class Level1State extends CommonState
         this.train = null;
 
         this.maxEnemies = 5;
+    }
+
+    // 
+    //  DESC: Restart the game
+    //
+    restartGame()
+    {
+        this.gameReady = false;
+        this.playerShip = null;
+
+        ai.clearAIData();
+        strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_','_train_'] );
+        strategyLoader.loadGroup( '-reloadlevel1-' )
+        .then(() =>
+        {
+            this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
+
+            // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
+            strategyManager.get("_buildings_").addToActiveList();
+
+            // Reactivate strategies
+            this.enemyStrategy = strategyManager.get('_enemy_');
+
+            // Aquire unactivated strategies
+            this.trainStrategy = strategyManager.get('_train_');
+
+            // Init the player ship
+            this.initPlayerShip();
+
+            strategyManager.sort();
+
+            this.buildingsbackCamera.initFromXml();
+            this.buildingsfrontCamera.initFromXml();
+            this.buildingsCamera.initFromXml();
+            this.camera.initFromXml();
+            this.radarCamera1.initFromXml();
+            this.radarCamera2.initFromXml();
+            this.wrapAroundCamera.initFromXml();
+
+            this.radarCamAry = [this.radarCamera1, this.radarCamera2];
+
+            this.moveDirX = MOVE_NULL;
+            this.moveDirY = MOVE_NULL;
+            this.lastMoveDirX = MOVE_NULL;
+
+            this.easingX.clear();
+            this.easingY.clear();
+            this.cameraEasingX.clear();
+
+            this.hudLevelFont.visualComponent.createFontString('Level 1');
+            this.hudProgressBar.setProgressBarMax( 10 );
+            this.hudProgressBar.setCurrentValue( 0 );
+            this.playerLevel = 1;
+
+            this.gameReady = true;
+
+            // Clear the last device used so that the button on start game menu is active by default
+            actionManager.clearLastDeviceUsed();
+
+            this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_GAME_RELOAD ) );
+        })
     }
 
     // 
@@ -278,11 +339,14 @@ export class Level1State extends CommonState
                 // Force an update on the start of the fade in so that the game elements are drawn
                 if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
                 {
+                    // Do a pre-update of all strategies so they display before the game starts
                     strategyManager.update();
                     this.lowerHudStategy.update();
                     this.upperHudStategy.update();
                     this.forgroundStrategy.update();
                     this.trainStrategy.update();
+                    this.enemyStrategy.update();
+                    this.playerShip.strategy.update();
                 }
                 else if( event.arg[0] === stateDefs.ESE_GAME_RELOAD )
                 {
@@ -373,67 +437,6 @@ export class Level1State extends CommonState
                 }
             }
         }
-    }
-
-    // 
-    //  DESC: Restart the game
-    //
-    restartGame()
-    {
-        this.gameReady = false;
-        this.playerShip = null;
-
-        ai.clearAIData();
-        strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_','_train_'] );
-        strategyLoader.loadGroup( '-reloadlevel1-' )
-        .then(() =>
-        {
-            this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
-
-            // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
-            strategyManager.get("_buildings_").addToActiveList();
-
-            // Reactivate strategies
-            this.enemyStrategy = strategyManager.activateStrategy('_enemy_');
-
-            // Aquire unactivated strategies
-            this.trainStrategy = strategyManager.get('_train_');
-
-            // Init the player ship
-            this.initPlayerShip();
-
-            strategyManager.sort();
-
-            this.buildingsbackCamera.initFromXml();
-            this.buildingsfrontCamera.initFromXml();
-            this.buildingsCamera.initFromXml();
-            this.camera.initFromXml();
-            this.radarCamera1.initFromXml();
-            this.radarCamera2.initFromXml();
-            this.wrapAroundCamera.initFromXml();
-
-            this.radarCamAry = [this.radarCamera1, this.radarCamera2];
-
-            this.moveDirX = MOVE_NULL;
-            this.moveDirY = MOVE_NULL;
-            this.lastMoveDirX = MOVE_NULL;
-
-            this.easingX.clear();
-            this.easingY.clear();
-            this.cameraEasingX.clear();
-
-            this.hudLevelFont.visualComponent.createFontString('Level 1');
-            this.hudProgressBar.setProgressBarMax( 10 );
-            this.hudProgressBar.setCurrentValue( 0 );
-            this.playerLevel = 1;
-
-            this.gameReady = true;
-
-            // Clear the last device used so that the button on start game menu is active by default
-            actionManager.clearLastDeviceUsed();
-
-            this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_GAME_RELOAD ) );
-        })
     }
 
     // 
@@ -723,15 +726,19 @@ export class Level1State extends CommonState
 
             this.playerShip.sprite.incPosXYZ( this.easingX.getValue(), this.easingY.getValue() );
 
-            // Loop the player and camera
+            // Loop the player strategy and camera
             if( this.playerShip.sprite.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                this.playerShip.sprite.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                for( let i = 0; i < this.playerShip.strategy.nodeAry.length; i++ )
+                    this.playerShip.strategy.nodeAry[i].get().incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+
                 this.camera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
             }
             else if( this.playerShip.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                this.playerShip.sprite.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                for( let i = 0; i < this.playerShip.strategy.nodeAry.length; i++ )
+                    this.playerShip.strategy.nodeAry[i].get().incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+
                 this.camera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
             
@@ -757,6 +764,8 @@ export class Level1State extends CommonState
             this.trainStrategy.update();
             this.upperHudStategy.update();
             this.lowerHudStategy.update();
+            this.enemyStrategy.update();
+            this.playerShip.strategy.update();
         }
     }
     
@@ -775,11 +784,17 @@ export class Level1State extends CommonState
         this.radarCamera1.transform();
         this.radarCamera2.transform();
         this.wrapAroundCamera.transform();
-        strategyManager.transform();
-        this.upperHudStategy.transform();
-        this.lowerHudStategy.transform();
-        this.forgroundStrategy.transform();
-        this.trainStrategy.transform();
+
+        if( this.gameReady )
+        {
+            strategyManager.transform();
+            this.upperHudStategy.transform();
+            this.lowerHudStategy.transform();
+            this.forgroundStrategy.transform();
+            this.trainStrategy.transform();
+            this.enemyStrategy.transform();
+            this.playerShip.strategy.transform();
+        }
     }
     
     // 
@@ -800,9 +815,11 @@ export class Level1State extends CommonState
                 this.enemyStrategy.render( this.wrapAroundCamera );
             }
 
-            this.lowerHudStategy.render();
+            this.enemyStrategy.render();
+            this.playerShip.strategy.render();
             this.forgroundStrategy.render();
             this.trainStrategy.render();
+            this.lowerHudStategy.render();
 
             // Render the top hud radar map
             let viewPort = device.gl.getParameter(device.gl.VIEWPORT);

@@ -200,7 +200,8 @@ export class UISlider extends UISubControl
     //
     onUpScroll( /*event*/ )
     {
-        this.handleSliderChange( -this.incValue );
+        if( this.orientation == defs.EO_VERTICAL )
+            this.handleSliderChange( -this.incValue );
     }
 
     // 
@@ -208,7 +209,8 @@ export class UISlider extends UISubControl
     //
     onDownScroll( /*event*/ )
     {
-        this.handleSliderChange( this.incValue );
+        if( this.orientation == defs.EO_VERTICAL )
+            this.handleSliderChange( this.incValue );
     }
 
     // 
@@ -216,7 +218,8 @@ export class UISlider extends UISubControl
     //
     onLeftScroll( /*event*/ )
     {
-        this.handleSliderChange( -this.incValue );
+        if( this.orientation == defs.EO_HORIZONTAL )
+            this.handleSliderChange( -this.incValue );
     }
 
     // 
@@ -224,7 +227,8 @@ export class UISlider extends UISubControl
     //
     onRightScroll( /*event*/ )
     {
-        this.handleSliderChange( this.incValue );
+        if( this.orientation == defs.EO_HORIZONTAL )
+            this.handleSliderChange( this.incValue );
     }
 
     // 
