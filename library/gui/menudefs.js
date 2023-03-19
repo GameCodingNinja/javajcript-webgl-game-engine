@@ -5,6 +5,10 @@
 
 "use strict";
 
+// EMenuType
+export const EMT_NON_BLOCKING = 0,
+             EMT_BLOCKING     = 1;
+
 // EMenuState
 export const EMS_INACTIVE        = 0,
              EMS_IDLE            = 1,

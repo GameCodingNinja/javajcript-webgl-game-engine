@@ -37,7 +37,7 @@ import * as ai from '../scripts/aiscripts';
 
 import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
 
-export const ASSET_COUNT = 91;
+export const ASSET_COUNT = 92;
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
       MOVE_RIGHT = 1,

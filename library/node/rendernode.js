@@ -198,7 +198,7 @@ export class RenderNode extends Node
 
                 if( nextNode !== null )
                 {
-                    console.log(nextNode.name);
+                    //console.log(nextNode.name);
                     nextNode.calcSize( size );
 
                     // Calculate the radius in squared space. Avoids having to use sqrt

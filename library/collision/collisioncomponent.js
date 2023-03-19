@@ -364,7 +364,7 @@ export class CollisionComponent
                         // The sprite doing the collision checks should always be the first parameter
                         if( this.collisionSignal )
                             signalManager.broadcast_collisionSignal( this.sprite, sprite );
-                            console.log('hit');
+                        //console.log('hit');
                         
                         return sprite;
                     }

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<menu>
+<menu type="blocking">
 
     <scroll startDelay="900" scrollDelay="300" up="true" down="true"/>
     
@@ -38,7 +38,8 @@
                 <string text="Start Game"/>
             </fontStringList>
             <action actionType="close"/>
-            <!--<navigate up="main_menu_btn" down="help_btn"/>-->
+            <!-- When only one control, the below allows for reactivating when the control when deactivated -->
+            <navigate up="start_game_btn" down="start_game_btn" left="start_game_btn" right="start_game_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>

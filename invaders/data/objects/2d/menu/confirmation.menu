@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<menu>
+<menu type="blocking">
     
     <scriptList>
         <script transIn="Menu_TransIn"/>

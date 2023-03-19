@@ -152,7 +152,11 @@ export class MenuTree
         if( !this.interfaceMenu )
         {
             if( this.menuPathAry.length )
-                this.menuPathAry[this.menuPathAry.length-1].handleEvent( event );
+            {
+                // Allow the menu to reject this event
+                if( !this.menuPathAry[this.menuPathAry.length-1].handleEvent( event ) )
+                    return;
+            }
 
             if( event instanceof GenericEvent )
             {

@@ -69,6 +69,9 @@ export class Menu extends Object
         
         // The menu needs to default hidden
         this.setVisible(false);
+
+        // The menu type
+        this.type = menuDefs.EMT_NON_BLOCKING;
     }
     
     // 
@@ -76,6 +79,14 @@ export class Menu extends Object
     //
     loadFromNode( node )
     {
+        // Get the type of object
+        let attr = node.getAttribute( 'type' );
+        if( attr )
+        {
+            if( attr === 'blocking' )
+                this.type = menuDefs.EMT_BLOCKING;
+        }
+
         // Init the script Ids
         this.initScriptIds( node );
         
@@ -419,6 +430,17 @@ export class Menu extends Object
     //
     handleEvent( event )
     {
+        // See if we need to reject any events based on the type of menu this is.
+        if( this.type == menuDefs.EMT_BLOCKING && this.state == menuDefs.EMS_IDLE )
+        {
+            if( event.type === menuDefs.EME_MENU_ESCAPE_ACTION || 
+                event.type === menuDefs.EME_MENU_TOGGLE_ACTION || 
+                event.type === menuDefs.EME_MENU_BACK_ACTION )
+            {
+                return false;
+            }
+        }
+
         // Have the controls handle events
         for( let i = 0; i < this.controlAry.length; ++i )
             this.controlAry[i].handleEvent( event );
@@ -502,6 +524,8 @@ export class Menu extends Object
                 this.onWheel( event );
             }
         }
+
+        return true;
     }
 
     // 
