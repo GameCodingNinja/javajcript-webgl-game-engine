@@ -216,7 +216,15 @@ class ActionManager
             this.actionDict = obj;
             let savedActionDict = localStorage.get( 'keybinding' );
             if( savedActionDict )
-                this.actionDict = JSON.parse( savedActionDict );
+            {
+                let actionDict = JSON.parse( savedActionDict );
+
+                // If the version does not match, delete the local storage
+                if( this.actionDict.version != actionDict.version )
+                    localStorage.free( 'keybinding' );
+                else
+                    this.actionDict = actionDict;
+            }
 
             // Load the keyboard mapping
             this.loadAction( this.actionDict.keyboardMapping.playerHidden, this.keyboardKeyCodeMap, this.keyboardActionMap );

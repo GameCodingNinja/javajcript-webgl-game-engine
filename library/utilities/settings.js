@@ -62,10 +62,12 @@ class Settings
             if( savedUserSettings )
             {
                 let userObj = JSON.parse( savedUserSettings );
-                if( this.user.version == userObj.version )
-                    this.user = userObj;
+
+                // If the version does not match, delete the local storage
+                if( this.user.version != userObj.version )
+                    localStorage.free( 'userSettings' );
                 else
-                    localStorage.set( 'userSettings', JSON.stringify(this.user) );
+                    this.user = userObj;
             }
         }
     }

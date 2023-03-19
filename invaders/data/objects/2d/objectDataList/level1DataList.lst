@@ -348,11 +348,11 @@
             </visual>
         </object>
 
-        <!--<object name="marker">
+        <object name="marker">
             <visual>
                 <texture file="data/textures/level/projectile02-4.png" filter="NEAREST"/>
             </visual>
-        </object>-->
+        </object>
 
     </objectList>
 

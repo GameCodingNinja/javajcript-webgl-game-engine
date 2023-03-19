@@ -379,6 +379,12 @@
             </sprite>
         </node>
 
+        <!--<node name="marker">
+            <sprite>
+                <position x="5500" y="-80"/>
+            </sprite>
+        </node>-->
+
 
         <!-- Start of wrap around -->
 
