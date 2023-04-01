@@ -11,8 +11,8 @@ import { eventManager } from '../../../library/managers/eventmanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { scriptManager } from '../../../library/script/scriptmanager';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
@@ -56,6 +56,8 @@ const MOVE_NULL = -1,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
       GAMEPLAY_LOOPING_WRAP_DIST = 5600,
+      TRAIN_BUFFER = 10,
+      RADAR_SCALE = 0.1,
       LOOP_SND = true;
 
 export class Level1State extends CommonState
@@ -67,9 +69,8 @@ export class Level1State extends CommonState
         // Set the collision callback signal
         signalManager.connect_collisionSignal( this.collisionCallBack.bind(this) );
 
-        // Create the script component and add a script
-        this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
+        // Start the fade script
+        scriptSingleton.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
 
         // Clear the event queue
         eventManager.clear();
@@ -263,7 +264,7 @@ export class Level1State extends CommonState
             // Clear the last device used so that the button on start game menu is active by default
             actionManager.clearLastDeviceUsed();
 
-            this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_GAME_RELOAD ) );
+            scriptSingleton.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_GAME_RELOAD ) );
         })
     }
 
@@ -332,7 +333,7 @@ export class Level1State extends CommonState
             if( event.type === menuDefs.EME_MENU_GAME_STATE_CHANGE )
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
+                    scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
             }
             else if( event.type === stateDefs.ESE_FADE_IN_START )
             {
@@ -374,7 +375,7 @@ export class Level1State extends CommonState
             {
                 if( event.arg[0] === 'restart_game' )
                 {
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_GAME_RELOAD ) );
+                    scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_GAME_RELOAD ) );
                 }
             }
             else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
@@ -560,89 +561,142 @@ export class Level1State extends CommonState
     }
 
     // 
+    //  DESC: Handle the enemy spawn
+    //
+    handleEnemySpawn()
+    {
+        if( this.enemySpawnTimer.expired(true) )
+        {
+            // Create a enemy and position it outside of the view
+            let strategy = strategyManager.get('_enemy_');
+            if( strategy.nodeAry.length < this.maxEnemies )
+            {
+                let node = strategy.create('enemy_ship');
+                node.get().setPosXYZ(0, settings.defaultSize.h);
+                node.transform();
+            }
+
+            if( this.enemyMaxTimer.expired(true) && this.maxEnemies < 20 )
+            {
+                this.maxEnemies++;
+            }
+        }
+    }
+
+    // 
+    //  DESC: Handle the train spawn
+    //
+    handleTrainSpawn( easingVal )
+    {
+        if( this.train )
+        {
+            this.train.incPosXYZ( (this.train.inc * highResTimer.elapsedTime) + -easingVal );
+
+            // A little bit of buffer is needed so the the start of the train doesn't trigger it's imeadiate delete
+            if( Math.abs(this.train.transPos.x) - this.train.parentNode.radius > settings.nativeSize_half.w + TRAIN_BUFFER )
+            {
+                this.trainStrategy.destroy( this.train.parentNode );
+                this.train = null;
+                this.trainTimer.reset( genFunc.randomInt( 10000, 25000 ) );
+            }
+        }
+
+        if( this.trainTimer.expired() )
+        {
+            this.trainTimer.disable( true );
+
+            this.train = this.trainStrategy.create( 'train', 'train' ).get();
+            if( genFunc.randomInt( 0, 1 ) === 0 )
+            {
+                this.train.inc = -1;
+                this.train.setPosXYZ( settings.nativeSize_half.w + this.train.parentNode.radius, -298 );
+            }
+            else
+            {
+                this.train.inc = 1;
+                this.train.setPosXYZ( -(settings.nativeSize_half.w + this.train.parentNode.radius), -298 );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Handle the cloud movement
+    //
+    handleCloudMovement()
+    {
+        for( let i = 0; i < MAX_CLOUDS; i++ )
+        {
+            this.cloudAry[i].sprite.incPosXYZ(highResTimer.elapsedTime * this.cloudAry[i].speed);
+
+            if(this.cloudAry[i].sprite.pos.x - (this.cloudAry[i].sprite.getSize().w / 2) > settings.nativeSize_half.w)
+            {
+                this.cloudAry[i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
+                this.cloudAry[i].speed = genFunc.randomArbitrary(0.001, 0.02);
+                this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.nativeSize_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
+
+                // Flip the sprite?
+                this.cloudAry[i].sprite.setRotXYZ(0, 0);
+                if(genFunc.randomInt(0, 1))
+                    this.cloudAry[i].sprite.setRotXYZ(0, 180);
+            }
+        }
+    }
+
+    //
+    //  DESC: Handle the radar movement
+    //
+    handleRadarMovement( easingVal )
+    {
+        this.radarCamAry[0].incPosXYZ( easingVal * RADAR_SCALE );
+
+        // Wrap the radar by flipping the camera
+        if( this.radarCamAry[1].pos.x > -68 )
+        {
+            this.radarCamAry.push( this.radarCamAry.shift() );
+        }
+
+        if( this.radarCamAry[0].pos.x > -68 )
+        {
+            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x - ((GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
+        }
+        else
+        {
+            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x + ((GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
+        }
+    }
+
+    // 
     //  DESC: Update objects that require them
     //
     update()
     {
         super.update();
         
-        this.scriptComponent.update();
-        
         if( !menuManager.active && this.gameReady )
         {
-            if( this.enemySpawnTimer.expired(true) )
-            {
-                // Create a enemy and position it outside of the view
-                let strategy = strategyManager.get('_enemy_');
-                if( strategy.nodeAry.length < this.maxEnemies )
-                {
-                    let node = strategy.create('enemy_ship');
-                    node.get().setPosXYZ(0, settings.defaultSize.h);
-                    node.transform();
-                }
-
-                if( this.enemyMaxTimer.expired(true) && this.maxEnemies < 20 )
-                {
-                    this.maxEnemies++;
-                }
-            }
-
-            if( this.trainTimer.expired() )
-            {
-                this.trainTimer.disable( true );
-
-                this.train = this.trainStrategy.create( 'train', 'train' );
-                if( genFunc.randomInt( 0, 1 ) === 0 )
-                {
-                    this.train.inc = -1;
-                    this.train.get().setPosXYZ( 1000, -298 );
-                }
-                else
-                {
-                    this.train.inc = 1;
-                    this.train.get().setPosXYZ( -1000, -298 );
-                }
-            }
-
             this.easingX.execute();
             this.easingY.execute();
             this.cameraEasingX.execute();
 
             let easingVal = this.easingX.getValue() + this.cameraEasingX.getValue();
+
+            // Handle the enemy spawn
+            this.handleEnemySpawn();
+
+            // Handle the train spawn
+            this.handleTrainSpawn( easingVal );
+
+            // Handle the cloud movement
+            this.handleCloudMovement();
+
+            // Handle the radar movement
+            this.handleRadarMovement( easingVal );
+
             this.camera.incPosXYZ( easingVal );
-            this.radarCamAry[0].incPosXYZ( easingVal * 0.1 );
-
-            // Wrap the radar by flipping the camera
-            if( this.radarCamAry[1].pos.x > -68 )
-            {
-                this.radarCamAry.push( this.radarCamAry.shift() );
-            }
-
-            if( this.radarCamAry[0].pos.x > -68 )
-            {
-                this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x - ((GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
-            }
-            else
-            {
-                this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x + ((GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
-            }
-            
             this.forgroundCamera.incPosXYZ( easingVal );
             this.buildingsCamera.incPosXYZ( easingVal );
             this.buildingsbackCamera.incPosXYZ( easingVal * 0.25 );
             this.buildingsfrontCamera.incPosXYZ( easingVal * 0.5 );
-
-            if( this.train )
-            {
-                this.train.get().incPosXYZ( (this.train.inc * highResTimer.elapsedTime) + -easingVal );
-
-                if( this.train.get().transPos.x > 1000 || this.train.get().transPos.x < -1000 )
-                {
-                    this.trainStrategy.destroy( this.train );
-                    this.train = null;
-                    this.trainTimer.reset( genFunc.randomInt( 10000, 25000 ) );
-                }
-            }
 
             // Loop the static backgrounds
             if( this.buildingsbackCamera.pos.x < -LOOPING_BKG_WRAP_DIST )
@@ -673,8 +727,8 @@ export class Level1State extends CommonState
                 this.buildingsCamera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
             // Stop the up/down movement
-            if( (this.moveDirY === MOVE_UP && this.playerShip.sprite.transPos.y > (settings.defaultSize_half.h * 0.73)) ||
-                (this.moveDirY === MOVE_DOWN && this.playerShip.sprite.transPos.y < -(settings.defaultSize_half.h * 0.92)) )
+            if( (this.moveDirY === MOVE_UP && this.playerShip.sprite.transPos.y > (settings.nativeSize_half.h * 0.73)) ||
+                (this.moveDirY === MOVE_DOWN && this.playerShip.sprite.transPos.y < -(settings.nativeSize_half.h * 0.92)) )
             {
                 this.moveDirY = MOVE_NULL;
                 this.easingY.init( 0, 0, 0, easing.getLinear(), true );
@@ -686,7 +740,7 @@ export class Level1State extends CommonState
             {
                 let dir = -this.camera.transPos.x - this.playerShip.sprite.transPos.x;
 
-                if( (this.moveDirX === MOVE_LEFT && dir < -(settings.defaultSize_half.w - CAMERA_EASING_OFFSET)) )
+                if( (this.moveDirX === MOVE_LEFT && dir < -(settings.nativeSize_half.w - CAMERA_EASING_OFFSET)) )
                 {
                     this.moveDirX = MOVE_NULL;
                     let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
@@ -704,7 +758,7 @@ export class Level1State extends CommonState
                         this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0.25, easing.getLinear() );
                     }
                 }
-                else if( (this.moveDirX === MOVE_RIGHT && dir > (settings.defaultSize_half.w - CAMERA_EASING_OFFSET)) )
+                else if( (this.moveDirX === MOVE_RIGHT && dir > (settings.nativeSize_half.w - CAMERA_EASING_OFFSET)) )
                 {
                     this.moveDirX = MOVE_NULL;
                     let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
@@ -742,23 +796,6 @@ export class Level1State extends CommonState
                 this.camera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
             
-            for( let i = 0; i < MAX_CLOUDS; i++ )
-            {
-                this.cloudAry[i].sprite.incPosXYZ(highResTimer.elapsedTime * this.cloudAry[i].speed);
-
-                if(this.cloudAry[i].sprite.pos.x - (this.cloudAry[i].sprite.getSize().w / 2) > settings.nativeSize_half.w)
-                {
-                    this.cloudAry[i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
-                    this.cloudAry[i].speed = genFunc.randomArbitrary(0.001, 0.02);
-                    this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.nativeSize_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
-
-                    // Flip the sprite?
-                    this.cloudAry[i].sprite.setRotXYZ(0, 0);
-                    if(genFunc.randomInt(0, 1))
-                        this.cloudAry[i].sprite.setRotXYZ(0, 180);
-                }
-            }
-
             strategyManager.update();
             this.forgroundStrategy.update();
             this.trainStrategy.update();

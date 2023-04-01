@@ -8,6 +8,7 @@
 
 import { GameState } from './gamestate';
 import { scriptManager } from '../../../library/script/scriptmanager';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { settings } from '../../../library/utilities/settings';
@@ -15,7 +16,6 @@ import { signalManager } from '../../../library/managers/signalmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
@@ -41,9 +41,8 @@ export class LoadState extends GameState
         this.loadCounter = 0;
         this.maxLoadCount = 0;
         
-        // Create the script component and add a script
-        this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 250, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
+        // Start the fade script
+        scriptSingleton.prepare( scriptManager.get('ScreenFade')( 0, 1, 250, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
         
         // Clear the event queue
         eventManager.clear();
@@ -83,9 +82,9 @@ export class LoadState extends GameState
     {
         // Position at the bottom of the screen.
         let strategy = strategyManager.activateStrategy( '_loading-screen_' );
-        strategy.get( 'loadAnim' ).get().setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        strategy.get( 'loadAnim' ).get().setPosXYZ( settings.nativeSize_half.w - 150, -(settings.nativeSize_half.h - 150), 0 );
         this.loadFont = strategy.get( 'load_font' ).get();
-        this.loadFont.setPosXYZ( settings.defaultSize_half.w - 150, -(settings.defaultSize_half.h - 150), 0 );
+        this.loadFont.setPosXYZ( settings.nativeSize_half.w - 150, -(settings.nativeSize_half.h - 150), 0 );
         
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
@@ -126,9 +125,9 @@ export class LoadState extends GameState
                 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
+                    scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
                 else
-                    setTimeout( () => this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) ), MIN_LOAD_TIME - loadTime );
+                    setTimeout( () => scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) ), MIN_LOAD_TIME - loadTime );
 
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();
@@ -143,7 +142,8 @@ export class LoadState extends GameState
     //
     update()
     {
-        this.scriptComponent.update();
+        super.update();
+
         strategyManager.update();
     }
 

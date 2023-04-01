@@ -138,7 +138,7 @@ class PlayerShip_Die
         this.easingY = new easing.valueTo;
         // Y Rotation
         let rot = this.sprite.parentNode.findChild('playerShip_object').get().rot;
-        let dest = -(settings.defaultSize_half.h + this.sprite.parentNode.radius)
+        let dest = -(settings.nativeSize_half.h + this.sprite.parentNode.radius)
         let offsetY = Math.abs(this.sprite.pos.y - dest);
         this.easingY.init( this.sprite.pos.y, dest, offsetY / 250, easing.getSineIn() );
         this.rotateVelocity = -0.00005;
@@ -277,7 +277,7 @@ class EnemyShip_Hit
 
         this.easingY = new easing.valueTo;
 
-        let dest = -(settings.defaultSize_half.h + this.sprite.parentNode.radius)
+        let dest = -(settings.nativeSize_half.h + this.sprite.parentNode.radius)
         let offsetY = Math.abs(this.sprite.pos.y - dest);
         this.easingY.init( this.sprite.pos.y, dest, offsetY / 250, easing.getSineIn() );
 
@@ -422,7 +422,7 @@ class Building_Die
     //
     execute()
     {
-        if( (this.sprite.pos.y + this.sprite.parentNode.radius) > -settings.defaultSize_half.h )
+        if( (this.sprite.pos.y + this.sprite.parentNode.radius) > -settings.nativeSize_half.h )
         {
             this.sprite.incPosXYZ( 0, -(0.05 * highResTimer.elapsedTime) );
             this.sprite.incRotXYZ( 0, 0, this.rotDir * highResTimer.elapsedTime );

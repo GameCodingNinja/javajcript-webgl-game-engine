@@ -60,6 +60,8 @@ export class CommonState extends GameState
     //
     update()
     {
+        super.update();
+        
         // Update the menus
         menuManager.update();
     }

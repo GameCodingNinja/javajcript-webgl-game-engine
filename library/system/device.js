@@ -55,7 +55,8 @@ class Device
         this._canvas.width = width
         this._canvas.height = height;
         this._glContext.viewport(0, 0, width, height);
-        //console.log( `Canvas size: ${width} x ${height}; DPR: ${window.devicePixelRatio}` );
+
+        //console.log( `Resolution Change: ${width} x ${height}; DPR: ${window.devicePixelRatio}` );
     }
 
     // 

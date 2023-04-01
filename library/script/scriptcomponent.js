@@ -256,3 +256,5 @@ export class ScriptComponent
         this.scriptAry = [];
     }
 }
+
+export var scriptSingleton = new ScriptComponent;

@@ -12,9 +12,9 @@ import { objectDataManager } from '../../../library/objectdatamanager/objectdata
 import { menuManager } from '../../../library/gui/menumanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
-import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
@@ -35,9 +35,8 @@ export class TitleScreenState extends CommonState
         
         strategyManager.activateStrategy('_title_screen_');
         
-        // Create the script component and add a script
-        this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
+        // Start the fade script
+        scriptSingleton.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
 
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
@@ -78,7 +77,7 @@ export class TitleScreenState extends CommonState
             if( event.type === menuDefs.EME_MENU_GAME_STATE_CHANGE )
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
+                    scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
             }
         }
     }
@@ -90,7 +89,6 @@ export class TitleScreenState extends CommonState
     {
         super.update();
         
-        this.scriptComponent.update();
         strategyManager.update();
     }
     
