@@ -170,6 +170,8 @@ export class Level1State extends CommonState
 
         this.gameReady = true;
         this.musicCounter = 0;
+        this.musicAry = [0, 1, 2];
+        genFunc.shuffle( this.musicAry );
         
         requestAnimationFrame( this.callback );
     }
@@ -202,10 +204,9 @@ export class Level1State extends CommonState
         this.enemySpawnTimer = new Timer(2000);
         this.enemyMaxTimer = new Timer(15000);
         this.trainTimer = new Timer( genFunc.randomInt( 10000, 25000 ) );
+        this.maxEnemies = 5;
 
         this.train = null;
-
-        this.maxEnemies = 5;
     }
 
     // 
@@ -366,7 +367,7 @@ export class Level1State extends CommonState
                     if( asnd.isPaused() )
                     {
                         // Fade out the game music
-                        let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
+                        let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
                         scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
 
                         // Start the ambient music
@@ -378,7 +379,7 @@ export class Level1State extends CommonState
             {
                 if( event.arg[0] === menuDefs.ETC_END )
                 {
-                    let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
+                    let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
 
                     if( !menuManager.getActiveTree() && (gsnd.isPaused() || !gsnd.wasPlayed()) && this.gameReady )
                     {
@@ -403,7 +404,7 @@ export class Level1State extends CommonState
                 menuManager.getTree( 'pause_tree' ).transitionMenu();
 
                 // Fade out the game music
-                let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
+                let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
                 scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
 
                 // Start the ambient music
@@ -461,14 +462,14 @@ export class Level1State extends CommonState
                     if( (this.playerLevel % 5) == 0)
                     {
                         // Fade out the current game music
-                        let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
+                        let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.stop() ) );
 
-                        this.musicCounter = (this.musicCounter + 1) % 3;
+                        this.musicCounter = (this.musicCounter + 1) % this.musicAry.length;
 
                         // Start the next game music
-                        let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                        let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.play(true), null ) );
                     }
                 }
 
@@ -629,7 +630,7 @@ export class Level1State extends CommonState
                 node.transform();
             }
 
-            if( this.enemyMaxTimer.expired(true) && this.maxEnemies < 20 )
+            if( this.enemyMaxTimer.expired(true) && this.maxEnemies < 25 )
             {
                 this.maxEnemies++;
             }
