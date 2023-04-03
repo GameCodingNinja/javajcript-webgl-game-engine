@@ -371,6 +371,55 @@ class ScreenFade
     }
 }
 
+//
+//  DESC: Script for fading the music
+//
+class MusicFade
+{
+    constructor( final, time, snd, preAction = null, postAction = null )
+    {
+        this.fadeTo = new FadeTo();
+        this.fadeTo.init( snd.getVolume(), final, time );
+        this.iter = this.iteration();
+        this.snd = snd;
+        this.result;
+        this.postAction = postAction;
+
+        if( preAction )
+            preAction();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.result = this.fadeTo.execute();
+
+            this.snd.setVolume( this.fadeTo.value );
+
+            if( this.result )
+                break;
+
+            yield;
+        }
+        while( true );
+
+        if( this.postAction )
+            this.postAction();
+    }
+
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
 // 
 //  DESC: Load scripts
 //
@@ -378,4 +427,7 @@ export function loadScripts()
 {
     scriptManager.set( 'ScreenFade',
         ( current, final, time, fadeType = null ) => { return new ScreenFade( current, final, time, fadeType ); } );
+
+    scriptManager.set( 'MusicFade',
+        ( final, time, snd, preAction, postAction ) => { return new MusicFade( final, time, snd, preAction, postAction ); } );
 }

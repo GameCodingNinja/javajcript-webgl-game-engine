@@ -2,7 +2,7 @@
 <soundList>
 
     <soundFiles>
-        <load id="level_up" file="data/sound/level/game/Computers-Interact_001.ogg" volume="0.5"/>
+        <load id="level_up" file="data/sound/level/game/Computers-Interact_001.ogg" defaultVolume="0.5"/>
     </soundFiles>
 
 </soundList>

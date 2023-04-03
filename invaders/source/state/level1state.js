@@ -169,6 +169,7 @@ export class Level1State extends CommonState
         this.groupPlayer.pause( 'player_thrust' );
 
         this.gameReady = true;
+        this.musicCounter = 0;
         
         requestAnimationFrame( this.callback );
     }
@@ -279,6 +280,7 @@ export class Level1State extends CommonState
             spriteA.collisionComponent.enable = false;
             spriteB.prepareScript( 'hit', spriteA );
 
+            // Player hit by enemy projectile
             if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
             {
                 this.playerShip.progressBar.incCurrentValue( -10 );
@@ -292,10 +294,10 @@ export class Level1State extends CommonState
                 this.playerShip.progressBar.incCurrentValue( -30 );
                 this.playerShip.progressBar.setVisible( true );
                 spriteA.prepareScript( 'hit', spriteB );
-
-                this.groupPlayer.play( 'player_hit' );
+                this.groupPlayer.play( 'EXPLOSION_Metllic' );
             }
 
+            // Player ship is to die from above hit/collision
             if( this.playerShip.progressBar.isMinValue() && this.playerShip.sprite.collisionComponent.enable )
             {
                 this.playerShip.sprite.collisionComponent.enable = false;
@@ -355,10 +357,39 @@ export class Level1State extends CommonState
                     menuManager.getTree( 'pause_tree' ).transitionMenu();
                 }
             }
+            else if( event.type === menuDefs.EME_MENU_TRANS_IN )
+            {
+                if( event.arg[0] === menuDefs.ETC_BEGIN )
+                {
+                    let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
+
+                    if( asnd.isPaused() )
+                    {
+                        // Fade out the game music
+                        let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
+
+                        // Start the ambient music
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                    }
+                }
+            }
             else if( event.type === menuDefs.EME_MENU_TRANS_OUT )
             {
                 if( event.arg[0] === menuDefs.ETC_END )
                 {
+                    let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
+
+                    if( !menuManager.getActiveTree() && (gsnd.isPaused() || !gsnd.wasPlayed()) && this.gameReady )
+                    {
+                        // Fade out the ambient music
+                        let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, asnd, null, () => asnd.pause() ) );
+
+                        // Start the game music
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true), null ) );
+                    }
+
                     let tree = menuManager.getTree( 'pause_tree' );
                     if( !tree.isDefaultMenu('pause_menu') )
                         tree.setDefaultMenu('pause_menu');
@@ -370,6 +401,14 @@ export class Level1State extends CommonState
                 actionManager.clearLastDeviceUsed();
                 menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
                 menuManager.getTree( 'pause_tree' ).transitionMenu();
+
+                // Fade out the game music
+                let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
+                scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
+
+                // Start the ambient music
+                let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
+                scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
             }
             else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )
             {
@@ -417,6 +456,20 @@ export class Level1State extends CommonState
                     this.hudLevelFont.visualComponent.createFontString( `Level ${this.playerLevel}` );
 
                     this.groupPlayer.play( 'level_up' );
+
+                    // Change out the music every 5 levels
+                    if( (this.playerLevel % 5) == 0)
+                    {
+                        // Fade out the current game music
+                        let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
+
+                        this.musicCounter = (this.musicCounter + 1) % 3;
+
+                        // Start the next game music
+                        let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicCounter}` );
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                    }
                 }
 
                 this.hudProgressBar.incCurrentValue( 1 );

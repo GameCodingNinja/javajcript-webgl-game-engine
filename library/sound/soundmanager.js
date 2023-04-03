@@ -139,7 +139,7 @@ class SoundManager extends ManagerBase
     }
     
     //
-    //  DESC: Free a symbol group
+    //  DESC: Free a group
     //
     freeGroup( group )
     {
@@ -166,6 +166,20 @@ class SoundManager extends ManagerBase
             
             if( this.playListMapMap.has( group ) )
                 this.playListMapMap.delete( group );
+        }
+    }
+
+    //
+    //  DESC: Stop a group
+    //
+    stopGroup( group )
+    {
+        // Stop any currently playing files
+        let groupMap = this.soundMapMap.get( group );
+        if( groupMap )
+        {
+            for( let sound of groupMap.values() )
+                sound.stop();
         }
     }
 

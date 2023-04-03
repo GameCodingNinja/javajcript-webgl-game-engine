@@ -2,12 +2,12 @@
 <soundList>
 
     <soundFiles>
-        <load id="enemy_1_explosion_bang" file="data/sound/level/enemy/EXPLOSION_Subtle_Bang_stereo.ogg" volume="0.5"/>
-        <load id="enemy_1_explosion_bright" file="data/sound/level/enemy/EXPLOSION_Subtle_Bright_stereo.ogg" volume="0.5"/>
-        <load id="enemy_1_explosion_dark" file="data/sound/level/enemy/EXPLOSION_Subtle_Dark_stereo.ogg" volume="0.5"/>
-        <load id="enemy_1_explosion_dirty" file="data/sound/level/enemy/EXPLOSION_Subtle_Dirty_Distorted_stereo.ogg" volume="0.5"/>
-        <load id="enemy_1_gun" file="data/sound/level/enemy/GUNAuto_PhantomFire_01.ogg" volume="0.5"/>
-        <load id="enemy_1_attack_building" file="data/sound/level/enemy/ALARM_Submarine_Slow_loop_stereo.ogg" volume="0.075"/>
+        <load id="enemy_1_explosion_bang" file="data/sound/level/enemy/EXPLOSION_Subtle_Bang_stereo.ogg" defaultVolume="0.5"/>
+        <load id="enemy_1_explosion_bright" file="data/sound/level/enemy/EXPLOSION_Subtle_Bright_stereo.ogg" defaultVolume="0.5"/>
+        <load id="enemy_1_explosion_dark" file="data/sound/level/enemy/EXPLOSION_Subtle_Dark_stereo.ogg" defaultVolume="0.5"/>
+        <load id="enemy_1_explosion_dirty" file="data/sound/level/enemy/EXPLOSION_Subtle_Dirty_Distorted_stereo.ogg" defaultVolume="0.5"/>
+        <load id="enemy_1_gun" file="data/sound/level/enemy/GUNAuto_PhantomFire_01.ogg" defaultVolume="0.5"/>
+        <load id="enemy_1_attack_building" file="data/sound/level/enemy/ALARM_Submarine_Slow_loop_stereo.ogg" defaultVolume="0.075"/>
     </soundFiles>
 
     <playlistSet>

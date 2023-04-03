@@ -29,6 +29,9 @@ export class UIProgressBar extends UIControl
         // current value of progress bar
         this.curValue = 0;
 
+        // Total value not capped
+        this.totalValue = 0;
+
         // Minimum value
         this.minValue = 0;
 
@@ -67,7 +70,10 @@ export class UIProgressBar extends UIControl
         {
             let attr = rangeNode[0].getAttribute( 'cur' );
             if( attr )
+            {
                 this.curValue = Number( attr );
+                this.totalValue = this.curValue;
+            }
 
             attr = rangeNode[0].getAttribute( 'min' );
             if( attr )
@@ -186,6 +192,7 @@ export class UIProgressBar extends UIControl
     //
     setCurrentValue( cur )
     {
+        this.totalValue = cur;
         this.curValue = genFunc.cap( cur, this.minValue, this.maxValue );
         this.setSizePos();
     }
@@ -198,10 +205,12 @@ export class UIProgressBar extends UIControl
         if( value === undefined )
         {
             ++this.curValue;
+            ++this.totalValue;
         }
         else
         {
             this.curValue += value;
+            this.totalValue += value;
         }
 
         this.curValue = genFunc.cap( this.curValue, this.minValue, this.maxValue );

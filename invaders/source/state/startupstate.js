@@ -53,7 +53,7 @@ import actionManagerJson from '../../data/settings/controllerMapping.json';
 import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
-const STARTUP_ASSET_COUNT = 68,
+const STARTUP_ASSET_COUNT = 77,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState
@@ -173,7 +173,7 @@ export class StartUpState extends GameState
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();
 
-                console.debug('StartUp State load complete!: ' + this.progressBar.curValue);
+                console.debug('StartUp State load complete!: ' + this.progressBar.totalValue);
             }
         }
     }
@@ -220,7 +220,7 @@ export class StartUpState extends GameState
         Promise.all([
 
             // Load the Sound Manager group
-            soundManager.loadGroup( groupAry ),
+            soundManager.loadGroup( ['(menu)','(music)'] ),
 
             // Load the Object Manager group
             objectDataManager.loadGroup( groupAry ),

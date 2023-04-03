@@ -26,6 +26,9 @@ export class Sound
         // Default volume of sound
         this.defaultVolume = 1;
 
+        // The init volume
+        this.initVolume = 1;
+
         // Gain node for volume
         this.gainNode = null;
         
@@ -37,6 +40,12 @@ export class Sound
 
         // Sound type
         this.type = defs.ESND_EFFECT;
+
+        // Play onn load
+        this.playOnLoad = false;
+
+        // Looping sound
+        this.loop = false;
     }
     
     //
@@ -44,10 +53,20 @@ export class Sound
     //
     loadFromNode( node )
     {
-        // Set the volume if defined
-        let attr = node.getAttribute( 'volume' );
+        // Set the default volume if defined. Same goes for the init volume
+        let attr = node.getAttribute( 'defaultVolume' );
         if( attr )
+        {
             this.defaultVolume = Number( attr );
+            this.initVolume = this.defaultVolume;
+        }
+
+        // The init volume mught be different
+        attr = node.getAttribute( 'initVolume' );
+        if( attr )
+        {
+            this.initVolume = Number( attr );
+        }
 
         attr = node.getAttribute( 'type' );
         if( attr )
@@ -58,6 +77,14 @@ export class Sound
             else if( attr === 'dialog' )
                 this.type = defs.ESND_DIALOG;
         }
+
+        attr = node.getAttribute( 'playOnLoad' );
+        if( attr )
+            this.playOnLoad = (attr === 'true');
+
+        attr = node.getAttribute( 'loop' );
+        if( attr )
+            this.loop = (attr === 'true');
     }
     
     //
@@ -69,7 +96,10 @@ export class Sound
         this.buffer = buffer;
         
         this.gainNode = this.context.createGain();
-        this.gainNode.gain.value = this.defaultVolume;
+        this.gainNode.gain.value = this.initVolume;
+
+        if( this.playOnLoad )
+            this.play( this.loop );
     }
     
     //
@@ -130,7 +160,10 @@ export class Sound
     //
     resume()
     {
-        if( this.paused && settings.user.soundEnabled )
+        if( this.paused && settings.user.soundEnabled && 
+            (this.type === defs.ESND_EFFECT && settings.user.soundEffectEnabled) ||
+            (this.type === defs.ESND_MUSIC && settings.user.soundMusicEnabled) ||
+            (this.type === defs.ESND_DIALOG && settings.user.soundDialogEnabled) )
         {
             this.paused = false;
             this.play(this.source.loop, this.startTime);
@@ -181,6 +214,25 @@ export class Sound
     isPaused()
     {
         return this.paused;
+    }
+
+    //
+    //  DESC: Resume if paused, play if not?
+    //
+    playOrResume( loop = false )
+    {
+        if( this.paused )
+            this.resume();
+        else
+            this.play( loop );
+    }
+
+    //
+    //  DESC: Was this sound played?
+    //
+    wasPlayed()
+    {
+        return (this.startTime !== 0);
     }
 }
 

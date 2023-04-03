@@ -10,6 +10,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { settings } from '../../../library/utilities/settings';
 import { localStorage } from '../../../library/utilities/localstorage';
 import { menuManager } from '../../../library/gui/menumanager';
+import { soundManager } from '../../../library/sound/soundmanager';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 
 //
@@ -57,11 +58,15 @@ export class SoundCheckBox_execute
         {
             settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
             settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
+
+            soundManager.play( '(music)', 'LOOP_Synthetic_Humanity', true );
         }
         else
         {
             settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
             settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
+
+            soundManager.stopGroup( '(music)' );
         }
 
         return true;
@@ -155,6 +160,11 @@ export class SoundMusicCheckBox_execute
     {
         settings.user.soundMusicEnabled = this.control.toggleState == true ? 1 : 0;
         localStorage.set( 'userSettings', JSON.stringify(settings.user) );
+
+        if( this.control.toggleState )
+            soundManager.play( '(music)', 'LOOP_Synthetic_Humanity', true );
+        else
+            soundManager.stopGroup( '(music)' );
 
         return true;
     }
