@@ -2,10 +2,10 @@
 <soundList>
 
     <soundFiles>
-        <load id="LOOP_Synthetic_Humanity" file="data/sound/music/LOOP_Synthetic_Humanity.ogg" defaultVolume="0.1" type="music" playOnLoad="true" loop="true"/>
-        <load id="LOOP_Techno_in_Space_0" file="data/sound/music/LOOP_Techno_in_Space_1.ogg" defaultVolume="0.2" initVolume="0.0" type="music"/>
-        <load id="LOOP_Techno_in_Space_1" file="data/sound/music/LOOP_Techno_in_Space_2.ogg" defaultVolume="0.2" initVolume="0.0" type="music"/>
-        <load id="LOOP_Techno_in_Space_2" file="data/sound/music/LOOP_Techno_in_Space_3.ogg" defaultVolume="0.2" initVolume="0.0" type="music"/>
+        <load id="LOOP_Synthetic_Humanity" file="data/sound/music/LOOP_Synthetic_Humanity.ogg" defaultVolume="0.3" type="music" playOnLoad="true" loop="true"/>
+        <load id="LOOP_Techno_in_Space_0" file="data/sound/music/LOOP_Techno_in_Space_1.ogg" defaultVolume="0.3" initVolume="0.0" type="music"/>
+        <load id="LOOP_Techno_in_Space_1" file="data/sound/music/LOOP_Techno_in_Space_2.ogg" defaultVolume="0.3" initVolume="0.0" type="music"/>
+        <load id="LOOP_Techno_in_Space_2" file="data/sound/music/LOOP_Techno_in_Space_3.ogg" defaultVolume="0.4" initVolume="0.0" type="music"/>
     </soundFiles>
 
 </soundList>

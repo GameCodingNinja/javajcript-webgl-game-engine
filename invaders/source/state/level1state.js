@@ -951,6 +951,13 @@ export class Level1State extends CommonState
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
 
         soundManager.freeGroup( '(level_1)' );
+
+        // Do a delayed stop on all the music except the ambient
+        for( let i = 0; i < this.musicAry.length; i++ )
+        {
+            let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[i]}` );
+            scriptSingleton.prepare( scriptManager.get('DelayedExecution')( 500, null, () => gsnd.stop() ) );
+        }
     }
 }
 

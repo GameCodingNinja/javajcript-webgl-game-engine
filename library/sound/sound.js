@@ -34,6 +34,9 @@ export class Sound
         
         // The time the sound started
         this.startTime = 0;
+
+        // Are we playing
+        this.playing = false;
         
         // Pause flag
         this.paused = false;
@@ -124,6 +127,7 @@ export class Sound
             
             this.source.start(0, offset % this.buffer.duration);
             this.startTime = this.context.currentTime - offset;
+            this.playing = true;
         }
     }
     
@@ -132,12 +136,11 @@ export class Sound
     //
     stop()
     {
-        if( this.startTime )
+        if( this.playing )
         {
-            if( !this.source.loop )
-                this.startTime = 0;
-            
+            this.startTime = 0;
             this.paused = false;
+            this.playing = false;
             this.source.stop();
         }
     }
@@ -147,9 +150,10 @@ export class Sound
     //
     pause()
     {
-        if( !this.paused && this.startTime )
+        if( !this.paused )
         {
             this.paused = true;
+            this.playing = false;
             this.source.stop();
             this.startTime = (this.context.currentTime - this.startTime);
         }
@@ -166,6 +170,7 @@ export class Sound
             (this.type === defs.ESND_DIALOG && settings.user.soundDialogEnabled) )
         {
             this.paused = false;
+            this.playing = true;
             this.play(this.source.loop, this.startTime);
         }
     }
@@ -202,10 +207,8 @@ export class Sound
     //
     isPlaying()
     {
-        if( this.startTime && this.source.loop )
-            return true;
-        
-        return (this.startTime && ((this.context.currentTime - this.startTime) < this.source.buffer.duration) );
+
+        return this.playing;
     }
 
     //

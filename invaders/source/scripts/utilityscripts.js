@@ -420,6 +420,51 @@ class MusicFade
     }
 }
 
+//
+//  DESC: Script that executes a function before and after a timeout
+//
+class DelayedExecution
+{
+    constructor( time, preAction = null, postAction = null )
+    {
+        this.hold = new Hold();
+        this.hold.init( time );
+        this.postAction = postAction;
+        this.iter = this.iteration();
+
+        if( preAction )
+            preAction();
+    }
+    
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            if( this.hold.execute() )
+            {
+                if( this.postAction )
+                    this.postAction();
+
+                break;
+            }
+
+            yield;
+        }
+        while( true );
+    }
+
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
 // 
 //  DESC: Load scripts
 //
@@ -430,4 +475,7 @@ export function loadScripts()
 
     scriptManager.set( 'MusicFade',
         ( final, time, snd, preAction, postAction ) => { return new MusicFade( final, time, snd, preAction, postAction ); } );
+
+    scriptManager.set( 'DelayedExecution',
+        ( time, preAction, postAction ) => { return new DelayedExecution( time, preAction, postAction ); } );
 }
