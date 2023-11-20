@@ -136,12 +136,13 @@ export class Sound
     //
     stop()
     {
-        if( this.playing )
+        if( this.source )
         {
             this.startTime = 0;
             this.paused = false;
             this.playing = false;
             this.source.stop();
+            this.source = null;
         }
     }
     
@@ -150,7 +151,7 @@ export class Sound
     //
     pause()
     {
-        if( !this.paused )
+        if( this.source )
         {
             this.paused = true;
             this.playing = false;
@@ -207,7 +208,6 @@ export class Sound
     //
     isPlaying()
     {
-
         return this.playing;
     }
 
