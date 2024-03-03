@@ -113,9 +113,9 @@ export class Sound
         this.stop();
 
         if( settings.user.soundEnabled && 
-            (this.type === defs.ESND_EFFECT && settings.user.soundEffectEnabled) ||
+            ((this.type === defs.ESND_EFFECT && settings.user.soundEffectEnabled) ||
             (this.type === defs.ESND_MUSIC && settings.user.soundMusicEnabled) ||
-            (this.type === defs.ESND_DIALOG && settings.user.soundDialogEnabled) )
+            (this.type === defs.ESND_DIALOG && settings.user.soundDialogEnabled)) )
         {
             this.source = this.context.createBufferSource();
             this.source.buffer = this.buffer;

@@ -213,6 +213,22 @@
             </scriptList>
         </control>
 
+        <!-- Boost Key Binding Button -->
+        <control name="boost" faction="key_binding_btn" controlType="sub_control" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/key_binding_button.ctrl"/>
+            <fontStringList>
+                <string text="Boost"/>
+            </fontStringList>
+            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptList>
+                <script init="KeyBindBtn_init" prepareOnInit="true" forceUpdate="true"/>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+                <script execute="KeyBindBtn_execute"/>
+                <script event="KeyBindBtn_event"/>
+            </scriptList>
+        </control>
+
         <!-- Menu Seperator - Key Binding Option(s) -->
         <control controlType="button" defaultState="disabled">
             <filePath file="data/objects/2d/menu/control/key_binding_seperator.ctrl"/>

@@ -25,12 +25,14 @@
                 { "action": "down", "componetId": "S", "defaultId": "S", "configurable": "true" },
                 { "action": "left", "componetId": "A", "defaultId": "A", "configurable": "true" },
                 { "action": "right", "componetId": "D", "defaultId": "D", "configurable": "true" },
-                { "action": "shoot", "componetId": "SPACE", "defaultId": "SPACE", "configurable": "true" } ] },
+                { "action": "shoot", "componetId": "SPACE", "defaultId": "SPACE", "configurable": "true" },
+                { "action": "boost", "componetId": "SHIFT LEFT", "defaultId": "SHIFT LEFT", "configurable": "true" } ] },
 
     "mouseMapping": {
         "playerVisible": [
             { "action": "menu_select", "componetId": "LEFT MOUSE", "defaultId": "LEFT MOUSE", "configurable": "true" },
-            { "action": "shoot", "componetId": "LEFT MOUSE", "defaultId": "LEFT MOUSE", "configurable": "true" } ] },
+            { "action": "shoot", "componetId": "LEFT MOUSE", "defaultId": "LEFT MOUSE", "configurable": "true" },
+            { "action": "boost", "componetId": "MIDDLE MOUSE", "defaultId": "MIDDLE MOUSE", "configurable": "true" } ] },
 
     "gamepadMapping": {
         "playerHidden": [
@@ -56,5 +58,6 @@
         "playerVisible": [
                 { "action": "menu_select", "componetId": "A", "defaultId": "A", "configurable": "true" },
                 { "action": "menu_back", "componetId": "B", "defaultId": "B", "configurable": "true" },
-                { "action": "shoot", "componetId": "A", "defaultId": "A", "configurable": "true" } ] }
+                { "action": "shoot", "componetId": "A", "defaultId": "A", "configurable": "true" },
+                { "action": "boost", "componetId": "B", "defaultId": "B", "configurable": "true" } ] }
 }
