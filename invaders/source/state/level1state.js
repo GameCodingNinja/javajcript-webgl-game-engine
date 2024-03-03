@@ -57,7 +57,6 @@ const MOVE_NULL = -1,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
       GAMEPLAY_LOOPING_WRAP_DIST = 5600,
-      TRAIN_BUFFER = 10,
       RADAR_SCALE = 0.1,
       LOOP_SND = true;
 
@@ -691,19 +690,24 @@ export class Level1State extends CommonState
     {
         if( this.train )
         {
+            // If a train is active, move it
             this.train.incPosXYZ( (this.train.inc * highResTimer.elapsedTime) + -easingVal );
 
-            // A little bit of buffer is needed so the the start of the train doesn't trigger it's imeadiate delete
-            if( Math.abs(this.train.transPos.x) - this.train.parentNode.radius > settings.nativeSize_half.w + TRAIN_BUFFER )
+            // Delete the train if it exit's the side of the screen it's moving towards
+            if( (this.train.inc === 1 && (this.train.transPos.x - this.train.parentNode.radius) > settings.nativeSize_half.w) ||
+                (this.train.inc === -1 && (this.train.transPos.x + this.train.parentNode.radius) < -settings.nativeSize_half.w) )
             {
+                console.log("delete train");
                 this.trainStrategy.destroy( this.train.parentNode );
                 this.train = null;
                 this.trainTimer.reset( genFunc.randomInt( 10000, 25000 ) );
             }
         }
+        // If we've been without a train for a long enough period, create one
         else if( this.trainTimer.expired() )
         {
             this.trainTimer.disable( true );
+            console.log("create train");
 
             this.train = this.trainStrategy.create( 'train', 'train' ).get();
             if( genFunc.randomInt( 0, 1 ) === 0 )
