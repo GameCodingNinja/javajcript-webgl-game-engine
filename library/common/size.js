@@ -25,10 +25,10 @@ export class Size
     // 
     //  Copy the data
     //
-    copy( obj )
+    copy( size )
     {
-        this.w = obj.w;
-        this.h = obj.h;
+        this.w = size.w;
+        this.h = size.h;
     }
 
     // 
@@ -65,6 +65,35 @@ export class Size
     {
         if( (this.w == 0) && (this.h == 0) )
             return true;
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Is this size equil
+    //
+    isEquil( w = 0, h = 0 )
+    {
+        if(w instanceof Size)
+        {
+            if( this.w === w.w )
+            {
+                if( this.h === w.h )
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            if( this.w === w )
+            {
+                if( this.h === h )
+                {
+                    return true;
+                }
+            }
+        }
         
         return false;
     }

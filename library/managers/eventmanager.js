@@ -42,7 +42,7 @@ class EventManager
         window.addEventListener( "gamepaddisconnected", this.onGamepadDisconnected.bind(this) );
 
         // Resize even handler
-        //window.addEventListener( 'resize', this.onResize.bind(this) );
+        window.addEventListener( 'resize', this.onResize.bind(this) );
 
         // Wheel even handler
         window.addEventListener( 'wheel', this.onWheel.bind(this) );
@@ -60,6 +60,9 @@ class EventManager
 
         // Store then initial backgroud color
         this.backgroundColor = document.body.style.backgroundColor;
+
+        // fullscreen change flag
+        this.fullscreenChange = false;
     }
     
     //
@@ -86,7 +89,7 @@ class EventManager
     //
     /*onScroll( event )
     {
-        this.mouseOffset.setXYZ(
+        this.mouseOffset.setXYZ(settings
             document.documentElement.scrollLeft - this.canvas.offsetLeft,
             document.documentElement.scrollTop - this.canvas.offsetTop );
     }*/
@@ -141,19 +144,16 @@ class EventManager
     //
     onFullScreenChange( event )
     {
-        //console.log('onFullScreenChange');
+        console.log('onFullScreenChange');
         if (document.fullscreenElement)
         {
-            let dpr = window.devicePixelRatio;
-            let width = Math.trunc(event.target.clientWidth * dpr);
-            let height = Math.trunc(event.target.clientHeight * dpr);
-            device.handleResolutionChange( width, height );
-            document.body.style.backgroundColor = 'black';
+            this.fullscreenChange = true;
+            device.handleResolutionChange( window.innerWidth, window.innerHeight, this.fullscreenChange );
         }
         else
         {
-            device.handleResolutionChange( settings.initialSize.w, settings.initialSize.h );
-            document.body.style.backgroundColor = this.backgroundColor;
+            device.handleResolutionChange( settings.lastDisplayRes.w, settings.lastDisplayRes.h, this.fullscreenChange );
+            this.fullscreenChange = false;
         }
     }
     
@@ -203,9 +203,17 @@ class EventManager
     //
     //  DESC: onResizeObserver even handler
     //
-    /*onResize( event )
+    onResize( event )
     {
-    }*/
+        // Don't handle resize during a fullscreen
+        if( !event.target.document.fullscreen && !this.fullscreenChange &&
+            !settings.displayRes.isEquil( window.innerWidth, window.innerHeight ) )
+        {
+            console.log( "onResize handled" );
+            device.handleResolutionChange( window.innerWidth, window.innerHeight, false );
+            settings.lastDisplayRes.copy( settings.displayRes );
+        }
+    }
 
     //
     //  DESC: Handle onGamepadconnected events

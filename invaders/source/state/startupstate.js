@@ -15,6 +15,7 @@ import { menuManager } from '../../../library/gui/menumanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/sound/soundmanager';
+import { settings } from '../../../library/utilities/settings';
 import { aiManager } from '../../../library/managers/aimanager';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
@@ -37,6 +38,7 @@ import * as settingsMenuScripts from '../scripts/settingsmenuscripts';
 import * as aiBaseScripts from '../scripts/aibasescripts';
 import * as aiScripts from '../scripts/aiscripts';
 import * as stateDefs from './statedefs';
+import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 
 // Load data from bundle as string
 import dataListTable2D from '../../data/objects/2d/objectDataList/dataListTable.json';
@@ -138,6 +140,44 @@ export class StartUpState extends GameState
 
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
+
+        // Init Youtube playable if in the environment
+        if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
+        {
+            ytgame.system.onAudioEnabledChange((isAudioEnabled) =>
+            {
+                if(menuManager.initialized)
+                {
+                    let settingsMenu = menuManager.getMenu('settings_menu');
+
+                    // Allow audio.
+                    if (isAudioEnabled)
+                    {
+                        settings.user.soundEnabled = 1;
+                        settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
+                        settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
+
+                        soundManager.play( '(music)', 'LOOP_Synthetic_Humanity', true );
+                    }
+                    else // Disable audio.
+                    {
+                        settings.user.soundEnabled = 0;
+                        settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
+                        settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
+
+                        soundManager.stopGroup( '(music)' );
+                        soundManager.stopGroup( '(level_1)' );
+                        soundManager.stopGroup( '(menu)' );
+                    }
+                }
+            });
+
+            // Send first frame ready now that we've started to draw.
+            ytgame.game.firstFrameReady();
+
+            // Send game ready since there isn't any other processing.
+            ytgame.game.gameReady();
+        }
 
         // Start the game loop
         requestAnimationFrame( this.callback );

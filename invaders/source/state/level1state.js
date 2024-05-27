@@ -672,7 +672,7 @@ export class Level1State extends CommonState
             if( strategy.nodeAry.length < this.maxEnemies )
             {
                 let node = strategy.create('enemy_ship');
-                node.get().setPosXYZ(0, settings.defaultSize.h);
+                node.get().setPosXYZ(0, settings.deviceRes.h);
                 node.transform();
             }
 
@@ -694,8 +694,8 @@ export class Level1State extends CommonState
             this.train.incPosXYZ( (this.train.inc * highResTimer.elapsedTime) + -easingVal );
 
             // Delete the train if it exit's the side of the screen it's moving towards
-            if( (this.train.inc === 1 && (this.train.transPos.x - this.train.parentNode.radius) > settings.nativeSize_half.w) ||
-                (this.train.inc === -1 && (this.train.transPos.x + this.train.parentNode.radius) < -settings.nativeSize_half.w) )
+            if( (this.train.inc === 1 && (this.train.transPos.x - this.train.parentNode.radius) > settings.deviceRes_half.w) ||
+                (this.train.inc === -1 && (this.train.transPos.x + this.train.parentNode.radius) < -settings.deviceRes_half.w) )
             {
                 console.log("delete train");
                 this.trainStrategy.destroy( this.train.parentNode );
@@ -713,12 +713,12 @@ export class Level1State extends CommonState
             if( genFunc.randomInt( 0, 1 ) === 0 )
             {
                 this.train.inc = -1;
-                this.train.setPosXYZ( settings.nativeSize_half.w + this.train.parentNode.radius, -298 );
+                this.train.setPosXYZ( settings.deviceRes_half.w + this.train.parentNode.radius, -298 );
             }
             else
             {
                 this.train.inc = 1;
-                this.train.setPosXYZ( -(settings.nativeSize_half.w + this.train.parentNode.radius), -298 );
+                this.train.setPosXYZ( -(settings.deviceRes_half.w + this.train.parentNode.radius), -298 );
             }
         }
     }
@@ -732,11 +732,11 @@ export class Level1State extends CommonState
         {
             this.cloudAry[i].sprite.incPosXYZ(highResTimer.elapsedTime * this.cloudAry[i].speed);
 
-            if(this.cloudAry[i].sprite.pos.x - (this.cloudAry[i].sprite.getSize().w / 2) > settings.nativeSize_half.w)
+            if(this.cloudAry[i].sprite.pos.x - (this.cloudAry[i].sprite.getSize().w / 2) > settings.deviceRes_half.w)
             {
                 this.cloudAry[i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
                 this.cloudAry[i].speed = genFunc.randomArbitrary(0.001, 0.02);
-                this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.nativeSize_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
+                this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.deviceRes_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
 
                 // Flip the sprite?
                 this.cloudAry[i].sprite.setRotXYZ(0, 0);
@@ -831,8 +831,8 @@ export class Level1State extends CommonState
                 this.buildingsCamera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
             // Stop the up/down movement
-            if( (this.moveDirY === MOVE_UP && this.playerShip.sprite.transPos.y > (settings.nativeSize_half.h * 0.73)) ||
-                (this.moveDirY === MOVE_DOWN && this.playerShip.sprite.transPos.y < -(settings.nativeSize_half.h * 0.92)) )
+            if( (this.moveDirY === MOVE_UP && this.playerShip.sprite.transPos.y > (settings.deviceRes_half.h * 0.73)) ||
+                (this.moveDirY === MOVE_DOWN && this.playerShip.sprite.transPos.y < -(settings.deviceRes_half.h * 0.92)) )
             {
                 this.moveDirY = MOVE_NULL;
                 this.easingY.init( 0, 0, 0, easing.getLinear(), true );
@@ -844,7 +844,7 @@ export class Level1State extends CommonState
             {
                 let dir = -this.camera.transPos.x - this.playerShip.sprite.transPos.x;
 
-                if( (this.moveDirX === MOVE_LEFT && dir < -(settings.nativeSize_half.w - CAMERA_EASING_OFFSET)) )
+                if( (this.moveDirX === MOVE_LEFT && dir < -(settings.deviceRes_half.w - CAMERA_EASING_OFFSET)) )
                 {
                     this.moveDirX = MOVE_NULL;
                     let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
@@ -862,7 +862,7 @@ export class Level1State extends CommonState
                         this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0.25, easing.getLinear() );
                     }
                 }
-                else if( (this.moveDirX === MOVE_RIGHT && dir > (settings.nativeSize_half.w - CAMERA_EASING_OFFSET)) )
+                else if( (this.moveDirX === MOVE_RIGHT && dir > (settings.deviceRes_half.w - CAMERA_EASING_OFFSET)) )
                 {
                     this.moveDirX = MOVE_NULL;
                     let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());

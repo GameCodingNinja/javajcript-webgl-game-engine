@@ -22,6 +22,7 @@ import * as stateDefs from '../state/statedefs';
 
 // Load data from bundle
 import settingsObj from '../../data/settings/settings.json';
+import userSettingsObj from '../../data/settings/usersettings.json';
 
 export class Game
 {
@@ -36,6 +37,7 @@ export class Game
     {
         // Load the settings
         settings.loadFromObj( settingsObj );
+        settings.loadUserSettingsFromObj( userSettingsObj );
 
         // Create the OpenGL context
         let gl = device.create();

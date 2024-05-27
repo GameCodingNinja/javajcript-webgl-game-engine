@@ -13,15 +13,17 @@ class Settings
 {
     constructor()
     {
-        this.size = new Size(853, 480);
-        this.initialSize = new Size(this.size.w, this.size.h);
-        this.size_half = new Size;
-        this.nativeSize = new Size(1280, 720);
-        this.nativeSize_half = new Size;
+        this.deviceRes = new Size;  // Render resolution in video hardware
+        this.displayRes = new Size; // Screen resolution size
+        this.dynamicResize = false; // Allow the display to be resized
+        this.centerInWnd = false;   // Allow the display to be centered
+
+        this.deviceRes_half = new Size;
+        this.displayRes_half = new Size;
+        this.lastDisplayRes = new Size;
+
         this.screenAspectRatio = new Size;
         this.orthoAspectRatio = new Size;
-        this.defaultSize = new Size(0, this.nativeSize.h);
-        this.defaultSize_half = new Size;
         
         this.enableDepthBuffer = false;
         this.createStencilBuffer = false;
@@ -45,9 +47,6 @@ class Settings
         this.stats = false;
 
         this.user = null;
-
-        // Calculate the ratios
-        this.calcRatio();
     }
 
     // 
@@ -81,21 +80,46 @@ class Settings
         {
             if( obj.display.resolution )
             {
-                this.size.set( obj.display.resolution.width, obj.display.resolution.height );
-                this.initialSize.set( this.size.w, this.size.h );
+                // Initial display resolution
+                this.displayRes.set( obj.display.resolution.width, obj.display.resolution.height );
+                this.lastDisplayRes.set( obj.display.resolution.width, obj.display.resolution.height );
+
+                // If locked, display resolution does not expand with the size of the window
+                this.dynamicResize = (obj.display.resolution.dynamicResize == 1);
+
+                // Indicates if it is to be centered within the window
+                this.centerInWnd = (obj.display.resolution.centerInWnd == 1);
             }
 
-            if( obj.display.default )
+            if( obj.display.canvasStyle )
             {
-                this.nativeSize.set( obj.display.default.width, obj.display.default.height );
-                this.nativeSize_half.w = this.nativeSize.w / 2;
-                this.nativeSize_half.h = this.nativeSize.h / 2;
-                this.defaultSize.h = this.nativeSize.h;
+                this.canvasStylePosition = obj.display.canvasStyle.position;
+                this.canvasStyleDisplay = obj.display.canvasStyle.display;
+            }
+
+            if( obj.display.docBodyStyle )
+            {
+                this.docBodyStyleBackgroundColor = obj.display.docBodyStyle.backgroundColor;
+                this.docBodyStyleMargin = obj.display.docBodyStyle.margin;
+                this.docBodyStyleWidth = obj.display.docBodyStyle.width;
+                this.docBodyStyleHeight = obj.display.docBodyStyle.height;
             }
         }
 
         if( obj.device )
         {
+            if( obj.device.resolution )
+            {
+                // Device rendering resolution
+                this.deviceRes.set( obj.display.resolution.width, obj.display.resolution.height );
+                this.deviceRes_half.w = this.deviceRes.w / 2;
+                this.deviceRes_half.h = this.deviceRes.h / 2;
+
+                // Height and width screen ratio for perspective projection
+                this.screenAspectRatio.w = obj.display.resolution.width / obj.display.resolution.height;
+                this.screenAspectRatio.h = obj.display.resolution.height / obj.display.resolution.width;
+            }
+
             if( obj.device.projection )
             {
                 if( obj.device.projection.projectType === 'perspective' )
@@ -138,7 +162,7 @@ class Settings
                     this.stencilBufferBitSize = obj.device.depthStencilBuffer.stencilBufferBitSize;
             }
 
-            if( obj.device.targetBuffer )
+            if( obj.device.targ0etBuffer )
             {
                 if( obj.device.targetBuffer.clear )
                     this.clearTargetBuffer = (obj.device.targetBuffer.clear === 'true');
@@ -178,25 +202,36 @@ class Settings
     //
     calcRatio()
     {
-        // Height and width screen ratio for perspective projection
-        this.screenAspectRatio.w = this.size.w / this.size.h;
-        this.screenAspectRatio.h = this.size.h / this.size.w;
-        
-        // NOTE: The default width is based on the current aspect ratio
-        // NOTE: Make sure the width does not have a floating point component
-        this.defaultSize.w = Math.floor((this.screenAspectRatio.w * this.defaultSize.h) + 0.5);
-        
-        // Get half the size for use with screen boundries
-        this.defaultSize_half.w = this.defaultSize.w / 2;
-        this.defaultSize_half.h = this.defaultSize.h / 2;
+        if( this.dynamicResize )
+        {
+            if( window.innerWidth / window.innerHeight > this.screenAspectRatio.w )
+            {
+                this.displayRes.h = window.innerHeight;
+                this.displayRes.w = Math.floor((this.screenAspectRatio.w * window.innerHeight) + 0.5);
+            }
+            else
+            {
+                this.displayRes.w = window.innerWidth;
+                this.displayRes.h = Math.floor((this.screenAspectRatio.h * window.innerWidth) + 0.5);
+            }
+        }
 
-        // Screen size devided by two
-        this.size_half.w = this.size.w / 2;
-        this.size_half.h = this.size.h / 2;
+        // Get half the size for use with screen boundries
+        this.displayRes_half.w = this.displayRes.w / 2;
+        this.displayRes_half.h = this.displayRes.h / 2;
         
         // Precalculate the aspect ratios for orthographic projection
-        this.orthoAspectRatio.h = this.size.h / this.defaultSize.h;
-        this.orthoAspectRatio.w = this.size.w / this.defaultSize.w;
+        this.orthoAspectRatio.h = this.displayRes.h / this.deviceRes.h;
+        this.orthoAspectRatio.w = this.displayRes.w / this.deviceRes.w;
+    }
+
+    // 
+    //  DESC: Handle the resolution change
+    //
+    handleResolutionChange( width, height )
+    {
+        this.displayRes.set( width, height );
+        this.calcRatio();
     }
 }
 

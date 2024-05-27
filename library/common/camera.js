@@ -29,8 +29,8 @@ export class Camera extends Object
         this.projType = settings.projectionType;
         this.minZDist = settings.minZdist;
         this.maxZDist = settings.maxZdist;
-        this.projWidth = settings.defaultSize.w;
-        this.projHeight = settings.defaultSize.h;
+        this.projWidth = settings.deviceRes.w;
+        this.projHeight = settings.deviceRes.h;
         this.angle = settings.viewAngle;
 
         // cull flag
@@ -230,11 +230,11 @@ export class Camera extends Object
         if(this.projType == defs.EPT_ORTHOGRAPHIC)
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > (settings.nativeSize_half.w + (this.scale.x * radius)) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > (settings.deviceRes_half.w + (this.scale.x * radius)) )
                 return false;
 
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > (settings.nativeSize_half.h + (this.scale.y * radius)) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > (settings.deviceRes_half.h + (this.scale.y * radius)) )
                 return false;
         }
         else
@@ -259,7 +259,7 @@ export class Camera extends Object
         if(this.projType == defs.EPT_ORTHOGRAPHIC)
         {
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > (settings.nativeSize_half.h + (this.scale.y * radius)) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > (settings.deviceRes_half.h + (this.scale.y * radius)) )
                 return false;
         }
         else
@@ -280,7 +280,7 @@ export class Camera extends Object
         if(this.projType == defs.EPT_ORTHOGRAPHIC)
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > (settings.nativeSize_half.w + (this.scale.x * radius)) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > (settings.deviceRes_half.w + (this.scale.x * radius)) )
                 return false;
         }
         else

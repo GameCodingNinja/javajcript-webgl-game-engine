@@ -56,6 +56,28 @@ export class Rect
         
         return false;
     }
+
+    // 
+    //  DESC: Is this rect equil
+    //
+    isEquil( rect )
+    {
+        if( this.data[0] === rect.data[0] )
+        {
+            if( this.data[1] === rect.data[1] )
+            {
+                if( this.data[2] === rect.data[2] )
+                {
+                    if( this.data[3] === rect.data[3] )
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
     
     set x1(value) { this.data[0] = value; }
     get x1() { return this.data[0]; }

@@ -30,11 +30,11 @@ export class Point
     // 
     //  DESC: Copy from another point
     //
-    copy( obj )
+    copy( point )
     {
-        this.data[0] = obj.data[0];
-        this.data[1] = obj.data[1];
-        this.data[2] = obj.data[2];
+        this.data[0] = point.data[0];
+        this.data[1] = point.data[1];
+        this.data[2] = point.data[2];
     }
 
     // 

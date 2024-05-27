@@ -14,16 +14,14 @@ and open the template in the editor.
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
-        <style>
-            canvas:focus{outline:none;}
-        </style>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!-- Load the YouTube Playables SDK as the first script on the page. -->
+        <script src="https://www.youtube.com/game_api/v1"></script>
     </head>
     <body>
         <canvas tabindex='0' id="game-surface">
             Your browser does not support HTML5
         </canvas>
-        <br>Invaders. Chrome, Edge and Firefox are the only supported browsers. 
-        <br>Supports the use of a game controller. Press F to enter and exit full screen.
         <script src="bundle.js?version=1.0.0"></script>
     </body>
 </html>

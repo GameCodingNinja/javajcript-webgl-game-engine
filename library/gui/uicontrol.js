@@ -229,7 +229,7 @@ export class UIControl extends ControlBase
             finalMatrix.invertY();
 
             // Get half the screen size to convert to screen coordinates
-            let screenHalf = settings.size_half;
+            let screenHalf = settings.displayRes_half;
 
             // Create the rect of the control based on half it's size
             let halfwidth = this.size.w * 0.5;

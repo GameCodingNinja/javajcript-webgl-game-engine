@@ -24,12 +24,22 @@ class Device
     create()
     {
         let parm = {premultipliedAlpha: false, alpha: false, stencil:true, preserveDrawingBuffer: true};
-        
-        document.body.style.width = `${settings.size.w}px`;
-        document.body.style.height = `${settings.size.h}px`;
+
         this._canvas = document.getElementById('game-surface');
-        this._canvas.width = settings.size.w;
-        this._canvas.height = settings.size.h;
+        this._canvas.width = settings.displayRes.w;
+        this._canvas.height = settings.displayRes.h;
+        this._canvas.style.position = settings.canvasStylePosition;
+        this._canvas.style.display = settings.canvasStyleDisplay;
+        document.body.style.backgroundColor = settings.docBodyStyleBackgroundColor;
+        document.body.style.margin = settings.docBodyStyleMargin;
+        document.body.style.width = settings.docBodyStyleWidth;
+        document.body.style.height = settings.docBodyStyleHeight;
+
+        if( settings.centerInWnd )
+        {
+            this._canvas.style.left = `${(window.innerWidth - settings.displayRes.w) / 2}px`;
+            this._canvas.style.top = `${(window.innerHeight - settings.displayRes.h) / 2}px`;
+        }
 
         this._glContext =
             this._canvas.getContext('webgl2', parm) ||
@@ -45,16 +55,24 @@ class Device
     //
     //  DESC: Handle the resolution change
     //
-    handleResolutionChange( width, height )
+    handleResolutionChange( width, height, fullscreenChange )
     {
-        settings.size.set( width, height );
-        settings.calcRatio();
-        menuManager.resetTransform();
-        menuManager.resetDynamicOffset();
-        cameraManager.rebuild();
-        this._canvas.width = width
-        this._canvas.height = height;
-        this._glContext.viewport(0, 0, width, height);
+        if( settings.dynamicResize || fullscreenChange )
+        {
+            settings.handleResolutionChange( width, height );
+            menuManager.resetTransform();
+            menuManager.resetDynamicOffset();
+            cameraManager.rebuild();
+            this._canvas.width = settings.displayRes.w;
+            this._canvas.height = settings.displayRes.h;
+            this._glContext.viewport(0, 0, settings.displayRes.w, settings.displayRes.h);
+        }
+
+        if( settings.centerInWnd )
+        {
+            this._canvas.style.left = `${(width - settings.displayRes.w) / 2}px`;
+            this._canvas.style.top = `${(height - settings.displayRes.h) / 2}px`;
+        }
 
         //console.log( `Resolution Change: ${width} x ${height}; DPR: ${window.devicePixelRatio}` );
     }

@@ -367,15 +367,17 @@ class Settings
 {
     constructor()
     {
-        this.size = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(853, 480);
-        this.initialSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(this.size.w, this.size.h);
-        this.size_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
-        this.nativeSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(1280, 720);
-        this.nativeSize_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.deviceRes = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;  // Render resolution in video hardware
+        this.displayRes = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size; // Screen resolution size
+        this.dynamicResize = false; // Allow the display to be resized
+        this.centerInWnd = false;   // Allow the display to be centered
+
+        this.deviceRes_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.displayRes_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+        this.lastDisplayRes = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
+
         this.screenAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         this.orthoAspectRatio = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
-        this.defaultSize = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size(0, this.nativeSize.h);
-        this.defaultSize_half = new _common_size__WEBPACK_IMPORTED_MODULE_0__.Size;
         
         this.enableDepthBuffer = false;
         this.createStencilBuffer = false;
@@ -398,12 +400,7 @@ class Settings
 
         this.stats = false;
 
-        this.user = {
-            "stickDeadZone": 0.1,
-            "soundEnabled": 1 };
-
-        // Calculate the ratios
-        this.calcRatio();
+        this.user = null;
     }
 
     // 
@@ -416,7 +413,15 @@ class Settings
             this.user = obj;
             let savedUserSettings = _utilities_localstorage__WEBPACK_IMPORTED_MODULE_1__.localStorage.get( 'userSettings' );
             if( savedUserSettings )
-                this.user = JSON.parse( savedUserSettings );
+            {
+                let userObj = JSON.parse( savedUserSettings );
+
+                // If the version does not match, delete the local storage
+                if( this.user.version != userObj.version )
+                    _utilities_localstorage__WEBPACK_IMPORTED_MODULE_1__.localStorage.free( 'userSettings' );
+                else
+                    this.user = userObj;
+            }
         }
     }
 
@@ -429,21 +434,46 @@ class Settings
         {
             if( obj.display.resolution )
             {
-                this.size.set( obj.display.resolution.width, obj.display.resolution.height );
-                this.initialSize.set( this.size.w, this.size.h );
+                // Initial display resolution
+                this.displayRes.set( obj.display.resolution.width, obj.display.resolution.height );
+                this.lastDisplayRes.set( obj.display.resolution.width, obj.display.resolution.height );
+
+                // If locked, display resolution does not expand with the size of the window
+                this.dynamicResize = (obj.display.resolution.dynamicResize == 1);
+
+                // Indicates if it is to be centered within the window
+                this.centerInWnd = (obj.display.resolution.centerInWnd == 1);
             }
 
-            if( obj.display.default )
+            if( obj.display.canvasStyle )
             {
-                this.nativeSize.set( obj.display.default.width, obj.display.default.height );
-                this.nativeSize_half.w = this.nativeSize.w / 2;
-                this.nativeSize_half.h = this.nativeSize.h / 2;
-                this.defaultSize.h = this.nativeSize.h;
+                this.canvasStylePosition = obj.display.canvasStyle.position;
+                this.canvasStyleDisplay = obj.display.canvasStyle.display;
+            }
+
+            if( obj.display.docBodyStyle )
+            {
+                this.docBodyStyleBackgroundColor = obj.display.docBodyStyle.backgroundColor;
+                this.docBodyStyleMargin = obj.display.docBodyStyle.margin;
+                this.docBodyStyleWidth = obj.display.docBodyStyle.width;
+                this.docBodyStyleHeight = obj.display.docBodyStyle.height;
             }
         }
 
         if( obj.device )
         {
+            if( obj.device.resolution )
+            {
+                // Device rendering resolution
+                this.deviceRes.set( obj.display.resolution.width, obj.display.resolution.height );
+                this.deviceRes_half.w = this.deviceRes.w / 2;
+                this.deviceRes_half.h = this.deviceRes.h / 2;
+
+                // Height and width screen ratio for perspective projection
+                this.screenAspectRatio.w = obj.display.resolution.width / obj.display.resolution.height;
+                this.screenAspectRatio.h = obj.display.resolution.height / obj.display.resolution.width;
+            }
+
             if( obj.device.projection )
             {
                 if( obj.device.projection.projectType === 'perspective' )
@@ -486,7 +516,7 @@ class Settings
                     this.stencilBufferBitSize = obj.device.depthStencilBuffer.stencilBufferBitSize;
             }
 
-            if( obj.device.targetBuffer )
+            if( obj.device.targ0etBuffer )
             {
                 if( obj.device.targetBuffer.clear )
                     this.clearTargetBuffer = (obj.device.targetBuffer.clear === 'true');
@@ -526,25 +556,36 @@ class Settings
     //
     calcRatio()
     {
-        // Height and width screen ratio for perspective projection
-        this.screenAspectRatio.w = this.size.w / this.size.h;
-        this.screenAspectRatio.h = this.size.h / this.size.w;
-        
-        // NOTE: The default width is based on the current aspect ratio
-        // NOTE: Make sure the width does not have a floating point component
-        this.defaultSize.w = Math.floor((this.screenAspectRatio.w * this.defaultSize.h) + 0.5);
-        
-        // Get half the size for use with screen boundries
-        this.defaultSize_half.w = this.defaultSize.w / 2;
-        this.defaultSize_half.h = this.defaultSize.h / 2;
+        if( this.dynamicResize )
+        {
+            if( window.innerWidth / window.innerHeight > this.screenAspectRatio.w )
+            {
+                this.displayRes.h = window.innerHeight;
+                this.displayRes.w = Math.floor((this.screenAspectRatio.w * window.innerHeight) + 0.5);
+            }
+            else
+            {
+                this.displayRes.w = window.innerWidth;
+                this.displayRes.h = Math.floor((this.screenAspectRatio.h * window.innerWidth) + 0.5);
+            }
+        }
 
-        // Screen size devided by two
-        this.size_half.w = this.size.w / 2;
-        this.size_half.h = this.size.h / 2;
+        // Get half the size for use with screen boundries
+        this.displayRes_half.w = this.displayRes.w / 2;
+        this.displayRes_half.h = this.displayRes.h / 2;
         
         // Precalculate the aspect ratios for orthographic projection
-        this.orthoAspectRatio.h = this.size.h / this.defaultSize.h;
-        this.orthoAspectRatio.w = this.size.w / this.defaultSize.w;
+        this.orthoAspectRatio.h = this.displayRes.h / this.deviceRes.h;
+        this.orthoAspectRatio.w = this.displayRes.w / this.deviceRes.w;
+    }
+
+    // 
+    //  DESC: Handle the resolution change
+    //
+    handleResolutionChange( width, height )
+    {
+        this.displayRes.set( width, height );
+        this.calcRatio();
     }
 }
 
@@ -587,10 +628,10 @@ class Size
     // 
     //  Copy the data
     //
-    copy( obj )
+    copy( size )
     {
-        this.w = obj.w;
-        this.h = obj.h;
+        this.w = size.w;
+        this.h = size.h;
     }
 
     // 
@@ -627,6 +668,35 @@ class Size
     {
         if( (this.w == 0) && (this.h == 0) )
             return true;
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Is this size equil
+    //
+    isEquil( w = 0, h = 0 )
+    {
+        if(w instanceof Size)
+        {
+            if( this.w === w.w )
+            {
+                if( this.h === w.h )
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            if( this.w === w )
+            {
+                if( this.h === h )
+                {
+                    return true;
+                }
+            }
+        }
         
         return false;
     }
@@ -814,6 +884,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "CHAR_CODE_PIPE": () => (/* binding */ CHAR_CODE_PIPE),
 /* harmony export */   "CHAR_CODE_SPACE": () => (/* binding */ CHAR_CODE_SPACE),
 /* harmony export */   "CROP_OFFSET": () => (/* binding */ CROP_OFFSET),
+/* harmony export */   "CULL_FULL": () => (/* binding */ CULL_FULL),
+/* harmony export */   "CULL_NULL": () => (/* binding */ CULL_NULL),
+/* harmony export */   "CULL_X_ONLY": () => (/* binding */ CULL_X_ONLY),
+/* harmony export */   "CULL_Y_ONLY": () => (/* binding */ CULL_Y_ONLY),
 /* harmony export */   "DEFAULT_ID": () => (/* binding */ DEFAULT_ID),
 /* harmony export */   "DEG_TO_RAD": () => (/* binding */ DEG_TO_RAD),
 /* harmony export */   "DEVICE_NULL": () => (/* binding */ DEVICE_NULL),
@@ -892,6 +966,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ESMA_MOUSE_X": () => (/* binding */ ESMA_MOUSE_X),
 /* harmony export */   "ESMA_MOUSE_Y": () => (/* binding */ ESMA_MOUSE_Y),
 /* harmony export */   "ESMA_PRESS_TYPE": () => (/* binding */ ESMA_PRESS_TYPE),
+/* harmony export */   "ESND_DIALOG": () => (/* binding */ ESND_DIALOG),
+/* harmony export */   "ESND_EFFECT": () => (/* binding */ ESND_EFFECT),
+/* harmony export */   "ESND_MUSIC": () => (/* binding */ ESND_MUSIC),
+/* harmony export */   "ESND_NULL": () => (/* binding */ ESND_NULL),
 /* harmony export */   "EVA_VERT_BOTTOM": () => (/* binding */ EVA_VERT_BOTTOM),
 /* harmony export */   "EVA_VERT_CENTER": () => (/* binding */ EVA_VERT_CENTER),
 /* harmony export */   "EVA_VERT_TOP": () => (/* binding */ EVA_VERT_TOP),
@@ -1094,6 +1172,16 @@ const EAIC_NULL           = 0,
              EAIC_ALL_SUCCESS    = 3,
              EAIC_ALL_FAILURE    = 4,
              EAIC_UNTIL_COUNT    = 5;
+
+const CULL_NULL    = 0,
+             CULL_FULL    = 1,
+             CULL_X_ONLY  = 2,
+             CULL_Y_ONLY  = 3;
+
+const ESND_NULL    = 0,
+             ESND_EFFECT  = 1,
+             ESND_MUSIC   = 2,
+             ESND_DIALOG  = 3;
 
 
 /***/ }),
@@ -1340,12 +1428,22 @@ class Device
     create()
     {
         let parm = {premultipliedAlpha: false, alpha: false, stencil:true, preserveDrawingBuffer: true};
-        
-        document.body.style.width = `${_utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.size.w}px`;
-        document.body.style.height = `${_utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.size.h}px`;
+
         this._canvas = document.getElementById('game-surface');
-        this._canvas.width = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.size.w;
-        this._canvas.height = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.size.h;
+        this._canvas.width = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.w;
+        this._canvas.height = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.h;
+        this._canvas.style.position = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.canvasStylePosition;
+        this._canvas.style.display = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.canvasStyleDisplay;
+        document.body.style.backgroundColor = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.docBodyStyleBackgroundColor;
+        document.body.style.margin = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.docBodyStyleMargin;
+        document.body.style.width = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.docBodyStyleWidth;
+        document.body.style.height = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.docBodyStyleHeight;
+
+        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.centerInWnd )
+        {
+            this._canvas.style.left = `${(window.innerWidth - _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.w) / 2}px`;
+            this._canvas.style.top = `${(window.innerHeight - _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.h) / 2}px`;
+        }
 
         this._glContext =
             this._canvas.getContext('webgl2', parm) ||
@@ -1361,17 +1459,26 @@ class Device
     //
     //  DESC: Handle the resolution change
     //
-    handleResolutionChange( width, height )
+    handleResolutionChange( width, height, fullscreenChange )
     {
-        _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.size.set( width, height );
-        _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.calcRatio();
-        _gui_menumanager__WEBPACK_IMPORTED_MODULE_2__.menuManager.resetTransform();
-        _gui_menumanager__WEBPACK_IMPORTED_MODULE_2__.menuManager.resetDynamicOffset();
-        _managers_cameramanager__WEBPACK_IMPORTED_MODULE_1__.cameraManager.rebuild();
-        this._canvas.width = width
-        this._canvas.height = height;
-        this._glContext.viewport(0, 0, width, height);
-        //console.log( `Canvas size: ${width} x ${height}; DPR: ${window.devicePixelRatio}` );
+        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.dynamicResize || fullscreenChange )
+        {
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.handleResolutionChange( width, height );
+            _gui_menumanager__WEBPACK_IMPORTED_MODULE_2__.menuManager.resetTransform();
+            _gui_menumanager__WEBPACK_IMPORTED_MODULE_2__.menuManager.resetDynamicOffset();
+            _managers_cameramanager__WEBPACK_IMPORTED_MODULE_1__.cameraManager.rebuild();
+            this._canvas.width = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.w;
+            this._canvas.height = _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.h;
+            this._glContext.viewport(0, 0, _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.w, _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.h);
+        }
+
+        if( _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.centerInWnd )
+        {
+            this._canvas.style.left = `${(width - _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.w) / 2}px`;
+            this._canvas.style.top = `${(height - _utilities_settings__WEBPACK_IMPORTED_MODULE_0__.settings.displayRes.h) / 2}px`;
+        }
+
+        //console.log( `Resolution Change: ${width} x ${height}; DPR: ${window.devicePixelRatio}` );
     }
 
     // 
@@ -1616,10 +1723,12 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         this.projType = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.projectionType;
         this.minZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.minZdist;
         this.maxZDist = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.maxZdist;
+        this.projWidth = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.deviceRes.w;
+        this.projHeight = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.deviceRes.h;
         this.angle = _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.viewAngle;
 
         // cull flag
-        this.cull = false;
+        this.cull = _defs__WEBPACK_IMPORTED_MODULE_3__.CULL_NULL;
 
         // Setup the camera
         this.setup();
@@ -1657,13 +1766,30 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         if( attr )
             this.maxZDist = Number(attr);
 
+        attr = xmlNode.getAttribute('projWidth');
+            if( attr )
+                this.projWidth = Number(attr);
+
+        attr = xmlNode.getAttribute('projHeight');
+            if( attr )
+                this.projHeight = Number(attr);
+
         attr = xmlNode.getAttribute('view_angle');
         if( attr )
             this.angle = Number(attr) * _defs__WEBPACK_IMPORTED_MODULE_3__.DEG_TO_RAD;
 
         attr = xmlNode.getAttribute('cull');
         if( attr )
-            this.cull = (attr === 'true');
+        {
+            if( attr === 'CULL_FULL' )
+                this.cull = _defs__WEBPACK_IMPORTED_MODULE_3__.CULL_FULL;
+
+            else if( attr === 'cull_x_only' )
+                this.cull = _defs__WEBPACK_IMPORTED_MODULE_3__.CULL_X_ONLY;
+
+            else if( attr === 'cull_y_only' )
+                this.cull = _defs__WEBPACK_IMPORTED_MODULE_3__.CULL_Y_ONLY;
+        }
         
         // Load the transform data from node
         this.loadTransFromNode( xmlNode );
@@ -1712,6 +1838,8 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
     //
     createProjectionMatrix()
     {
+        //console.log(`Proj Width: ${this.projWidth}; Proj Height: ${this.projHeight}`);
+
         if( this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_PERSPECTIVE )
         {
             this.projectionMatrix.perspectiveFovRH(
@@ -1723,8 +1851,8 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         else
         {
             this.projectionMatrix.orthographicRH(
-                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize.w,
-                _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize.h,
+                this.projWidth,
+                this.projHeight,
                 this.minZDist,
                 this.maxZDist );
         }
@@ -1796,21 +1924,21 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         if(this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_ORTHOGRAPHIC)
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - transPos.x) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize_half.w + radius) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.deviceRes_half.w + (this.scale.x * radius)) )
                 return false;
 
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize_half.h + radius) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.deviceRes_half.h + (this.scale.y * radius)) )
                 return false;
         }
         else
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - transPos.x) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.w) + radius) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.w) + (this.scale.x * radius)) )
                 return false;
 
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.h) + radius) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.h) + (this.scale.y * radius)) )
                 return false;
         }
 
@@ -1825,13 +1953,13 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         if(this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_ORTHOGRAPHIC)
         {
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize_half.h + radius) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.deviceRes_half.h + (this.scale.y * radius)) )
                 return false;
         }
         else
         {
             // Check the top and bottom sides of the screen
-            if( Math.abs(-this.transPos.y - transPos.y) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.h) + radius) )
+            if( Math.abs(-this.transPos.y - (this.scale.y * transPos.y)) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.h) + (this.scale.y * radius)) )
                 return false;
         }
 
@@ -1846,13 +1974,13 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
         if(this.projType == _defs__WEBPACK_IMPORTED_MODULE_3__.EPT_ORTHOGRAPHIC)
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - transPos.x) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.defaultSize_half.w + radius) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > (_utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.deviceRes_half.w + (this.scale.x * radius)) )
                 return false;
         }
         else
         {
             // Check the right and left sides of the screen
-            if( Math.abs(-this.transPos.x - transPos.x) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.w) + radius) )
+            if( Math.abs(-this.transPos.x - (this.scale.x * transPos.x)) > ((Math.abs(transPos.z) * _utilities_settings__WEBPACK_IMPORTED_MODULE_2__.settings.screenAspectRatio.w) + (this.scale.x * radius)) )
                 return false;
         }
 
@@ -2841,11 +2969,11 @@ class Point
     // 
     //  DESC: Copy from another point
     //
-    copy( obj )
+    copy( point )
     {
-        this.data[0] = obj.data[0];
-        this.data[1] = obj.data[1];
-        this.data[2] = obj.data[2];
+        this.data[0] = point.data[0];
+        this.data[1] = point.data[1];
+        this.data[2] = point.data[2];
     }
 
     // 
@@ -3126,6 +3254,14 @@ class Point
     {
         return ( this.data[0] * point.data[0] ) + ( this.data[1] * point.data[1] );
     }
+
+    // 
+    //  DESC: Get the distance
+    //
+    getDistance( point )
+    {
+        return new Point( this.data[0] - point.data[0], this.data[1] - point.data[1], this.data[2] - point.data[2] );
+    }
 }
 
 
@@ -3193,6 +3329,28 @@ class Rect
     {
         if( (this.data[2] == 0) && (this.data[3] == 0) )
             return true;
+        
+        return false;
+    }
+
+    // 
+    //  DESC: Is this rect equil
+    //
+    isEquil( rect )
+    {
+        if( this.data[0] === rect.data[0] )
+        {
+            if( this.data[1] === rect.data[1] )
+            {
+                if( this.data[2] === rect.data[2] )
+                {
+                    if( this.data[3] === rect.data[3] )
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
         
         return false;
     }
@@ -3319,7 +3477,8 @@ class BitMask
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ScriptComponent": () => (/* binding */ ScriptComponent)
+/* harmony export */   "ScriptComponent": () => (/* binding */ ScriptComponent),
+/* harmony export */   "scriptSingleton": () => (/* binding */ scriptSingleton)
 /* harmony export */ });
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _managers_aimanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
@@ -3340,6 +3499,7 @@ class ScriptComponent
     constructor()
     {
         this.scriptAry = [];
+        this.removeAry = [];
 
         // Script object map. Prepare scripts by name
         this.scriptFactoryMap = null;
@@ -3428,6 +3588,8 @@ class ScriptComponent
                                 activeScript = script(args[1],args[2],args[3],args[4],args[5]);
                             break;
                         }
+
+                        activeScript.name = scriptPrepareFunc.funcName;
                     }
                 }
 
@@ -3485,7 +3647,10 @@ class ScriptComponent
                         script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
 
                         if( script )
+                        {
                             activeScript = script(object);
+                            activeScript.name = scriptPrepareFunc.funcName;
+                        }
                     }
 
                     if( activeScript )
@@ -3517,6 +3682,24 @@ class ScriptComponent
             if( this.scriptAry[i].execute() )
                 this.scriptAry.splice( i, 1 );
         }
+
+        if( this.removeAry )
+        {
+            for( let i = 0; i < this.removeAry.length; i++ )
+            {
+                for( let j = 0; j < this.scriptAry.length; j++ )
+                {
+                    // If the script is finished, remove it
+                    if( this.scriptAry[i].name === this.removeAry[i] )
+                    {
+                        this.scriptAry.splice( j, 1 );
+                        break;
+                    }
+                }
+            }
+
+            this.removeAry = [];
+        }
     }
 
     //
@@ -3532,6 +3715,14 @@ class ScriptComponent
                 this.scriptAry[i].initTree();
             }
         }
+    }
+
+    // 
+    //  DESC: Remove script
+    //
+    remove( name )
+    {
+        this.removeAry.push( name );
     }
     
     // 
@@ -3551,6 +3742,7 @@ class ScriptComponent
     }
 }
 
+var scriptSingleton = new ScriptComponent;
 
 /***/ }),
 /* 18 */
@@ -5334,6 +5526,9 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
         // menu manager state
         this.active = false;
 
+        // Memu manager initialized
+        this.initialized = false;
+
         // Actions
         this.backAction;
         this.toggleAction;
@@ -5613,6 +5808,8 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
 
             this.initGroup( group );
         }
+
+        this.initialized = true;
 
         return 0;
     }
@@ -6679,7 +6876,15 @@ class ActionManager
             this.actionDict = obj;
             let savedActionDict = _utilities_localstorage__WEBPACK_IMPORTED_MODULE_2__.localStorage.get( 'keybinding' );
             if( savedActionDict )
-                this.actionDict = JSON.parse( savedActionDict );
+            {
+                let actionDict = JSON.parse( savedActionDict );
+
+                // If the version does not match, delete the local storage
+                if( this.actionDict.version != actionDict.version )
+                    _utilities_localstorage__WEBPACK_IMPORTED_MODULE_2__.localStorage.free( 'keybinding' );
+                else
+                    this.actionDict = actionDict;
+            }
 
             // Load the keyboard mapping
             this.loadAction( this.actionDict.keyboardMapping.playerHidden, this.keyboardKeyCodeMap, this.keyboardActionMap );
@@ -7223,7 +7428,7 @@ const GAMEPAD_BUTTON_A             = 0,
              GAMEPAD_BUTTON_R_STICK_LEFT  = 36,
              GAMEPAD_BUTTON_R_STICK_RIGHT = 37;
 
-const ANALOG_STICK_MSG_MAX = 0.5;
+const ANALOG_STICK_MSG_MAX = 0.3;
 
 class GamepadEvent
 {
@@ -7380,7 +7585,7 @@ class EventManager
         window.addEventListener( "gamepaddisconnected", this.onGamepadDisconnected.bind(this) );
 
         // Resize even handler
-        //window.addEventListener( 'resize', this.onResize.bind(this) );
+        window.addEventListener( 'resize', this.onResize.bind(this) );
 
         // Wheel even handler
         window.addEventListener( 'wheel', this.onWheel.bind(this) );
@@ -7398,6 +7603,9 @@ class EventManager
 
         // Store then initial backgroud color
         this.backgroundColor = document.body.style.backgroundColor;
+
+        // fullscreen change flag
+        this.fullscreenChange = false;
     }
     
     //
@@ -7424,7 +7632,7 @@ class EventManager
     //
     /*onScroll( event )
     {
-        this.mouseOffset.setXYZ(
+        this.mouseOffset.setXYZ(settings
             document.documentElement.scrollLeft - this.canvas.offsetLeft,
             document.documentElement.scrollTop - this.canvas.offsetTop );
     }*/
@@ -7479,19 +7687,16 @@ class EventManager
     //
     onFullScreenChange( event )
     {
-        //console.log('onFullScreenChange');
+        console.log('onFullScreenChange');
         if (document.fullscreenElement)
         {
-            let dpr = window.devicePixelRatio;
-            let width = Math.trunc(event.target.clientWidth * dpr);
-            let height = Math.trunc(event.target.clientHeight * dpr);
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.device.handleResolutionChange( width, height );
-            document.body.style.backgroundColor = 'black';
+            this.fullscreenChange = true;
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.device.handleResolutionChange( window.innerWidth, window.innerHeight, this.fullscreenChange );
         }
         else
         {
-            _system_device__WEBPACK_IMPORTED_MODULE_6__.device.handleResolutionChange( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.initialSize.w, _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.initialSize.h );
-            document.body.style.backgroundColor = this.backgroundColor;
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.device.handleResolutionChange( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.lastDisplayRes.w, _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.lastDisplayRes.h, this.fullscreenChange );
+            this.fullscreenChange = false;
         }
     }
     
@@ -7541,9 +7746,17 @@ class EventManager
     //
     //  DESC: onResizeObserver even handler
     //
-    /*onResize( event )
+    onResize( event )
     {
-    }*/
+        // Don't handle resize during a fullscreen
+        if( !event.target.document.fullscreen && !this.fullscreenChange &&
+            !_utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.displayRes.isEquil( window.innerWidth, window.innerHeight ) )
+        {
+            console.log( "onResize handled" );
+            _system_device__WEBPACK_IMPORTED_MODULE_6__.device.handleResolutionChange( window.innerWidth, window.innerHeight, false );
+            _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.lastDisplayRes.copy( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.displayRes );
+        }
+    }
 
     //
     //  DESC: Handle onGamepadconnected events
@@ -8006,6 +8219,9 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         
         // The menu needs to default hidden
         this.setVisible(false);
+
+        // The menu type
+        this.type = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMT_NON_BLOCKING;
     }
     
     // 
@@ -8013,6 +8229,14 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     loadFromNode( node )
     {
+        // Get the type of object
+        let attr = node.getAttribute( 'type' );
+        if( attr )
+        {
+            if( attr === 'blocking' )
+                this.type = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMT_BLOCKING;
+        }
+
         // Init the script Ids
         this.initScriptIds( node );
         
@@ -8170,14 +8394,9 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     setDynamicPos()
     {
         // Position the menu based on the dynamic offset
-        // Don't have it exceed the boundries of the art
         if( this.dynamicOffset )
         {
-            let size = _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half;
-            if( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.defaultSize_half > _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.nativeSize_half )
-                size = _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.nativeSize_half;
-
-            this.setPos( this.dynamicOffset.getPos( size ) );
+            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_3__.settings.deviceRes_half ) );
         }
     } 
 
@@ -8356,6 +8575,17 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     handleEvent( event )
     {
+        // See if we need to reject any events based on the type of menu this is.
+        if( this.type == _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMT_BLOCKING && this.state == _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_IDLE )
+        {
+            if( event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EME_MENU_ESCAPE_ACTION || 
+                event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EME_MENU_TOGGLE_ACTION || 
+                event.type === _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EME_MENU_BACK_ACTION )
+            {
+                return false;
+            }
+        }
+
         // Have the controls handle events
         for( let i = 0; i < this.controlAry.length; ++i )
             this.controlAry[i].handleEvent( event );
@@ -8439,6 +8669,8 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
                 this.onWheel( event );
             }
         }
+
+        return true;
     }
 
     // 
@@ -8919,6 +9151,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "EMTS_IDLE": () => (/* binding */ EMTS_IDLE),
 /* harmony export */   "EMTS_INACTIVE": () => (/* binding */ EMTS_INACTIVE),
 /* harmony export */   "EMTS_MAX_MENU_TREE_STATES": () => (/* binding */ EMTS_MAX_MENU_TREE_STATES),
+/* harmony export */   "EMT_BLOCKING": () => (/* binding */ EMT_BLOCKING),
+/* harmony export */   "EMT_NON_BLOCKING": () => (/* binding */ EMT_NON_BLOCKING),
 /* harmony export */   "ETC_BEGIN": () => (/* binding */ ETC_BEGIN),
 /* harmony export */   "ETC_END": () => (/* binding */ ETC_END),
 /* harmony export */   "ETC_RESET": () => (/* binding */ ETC_RESET)
@@ -8929,6 +9163,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 
+
+// EMenuType
+const EMT_NON_BLOCKING = 0,
+             EMT_BLOCKING     = 1;
 
 // EMenuState
 const EMS_INACTIVE        = 0,
@@ -9550,7 +9788,12 @@ class VisualComponentQuad extends _common_ivisualcomponent__WEBPACK_IMPORTED_MOD
     //
     getSize()
     {
-        return this.texture.size;
+        if( this.texture !== null )
+        {
+            return this.texture.size;
+        }
+
+        return null;
     }
 }
 
@@ -10626,8 +10869,11 @@ class Timer
     //
     //  DESC: Reset the timer to start over
     //
-    reset()
+    reset( interval = null )
     {
+        if( interval )
+            this.timeInterval = interval;
+
         this.expiredTime = this.timeInterval + performance.now();
         this.disabled = false;
     }
@@ -10674,7 +10920,7 @@ class Timer
     //
     //  DESC: Disable this timer
     //
-    disable( disabled )
+    disable( disabled = true )
     {
         this.disabled = disabled;
     }
@@ -10919,7 +11165,12 @@ class VisualComponentScaledFrame extends _2d_visualcomponentquad__WEBPACK_IMPORT
     //
     getSize()
     {
-        return this.visualData.size;
+        if( this.visualData.size )
+        {
+            return this.visualData.size;
+        }
+
+        return null;
     }
 }
 
@@ -11497,7 +11748,7 @@ class VisualComponentFont extends _2d_visualcomponentquad__WEBPACK_IMPORTED_MODU
     //
     getSize()
     {
-        if( !this.fontData )
+        if( this.fontData === null )
             throw new Error( `Can't ask for the font size from a sprite that is not defined!` );
 
         return this.fontData.fontStrSize;
@@ -31992,7 +32243,7 @@ class CollisionComponent
                         // The sprite doing the collision checks should always be the first parameter
                         if( this.collisionSignal )
                             _managers_signalmanager__WEBPACK_IMPORTED_MODULE_4__.signalManager.broadcast_collisionSignal( this.sprite, sprite );
-                            console.log('hit');
+                        //console.log('hit');
                         
                         return sprite;
                     }
@@ -35942,7 +36193,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
             finalMatrix.invertY();
 
             // Get half the screen size to convert to screen coordinates
-            let screenHalf = _utilities_settings__WEBPACK_IMPORTED_MODULE_8__.settings.size_half;
+            let screenHalf = _utilities_settings__WEBPACK_IMPORTED_MODULE_8__.settings.displayRes_half;
 
             // Create the rect of the control based on half it's size
             let halfwidth = this.size.w * 0.5;
@@ -36818,11 +37069,9 @@ class ControlBase extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         // Don't have it exceed the boundries of the art
         if( this.dynamicOffset )
         {
-            let size = _utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.defaultSize_half;
-            if( _utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.defaultSize_half > _utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.nativeSize_half )
-                size = _utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.nativeSize_half;
-
-            this.setPos( this.dynamicOffset.getPos( size ) );
+            this.displayRes_half = new Size;
+            
+            this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.deviceRes_half ) );
         }
     }
 
@@ -38206,7 +38455,8 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
     //
     onUpScroll( /*event*/ )
     {
-        this.handleSliderChange( -this.incValue );
+        if( this.orientation == _common_defs__WEBPACK_IMPORTED_MODULE_6__.EO_VERTICAL )
+            this.handleSliderChange( -this.incValue );
     }
 
     // 
@@ -38214,7 +38464,8 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
     //
     onDownScroll( /*event*/ )
     {
-        this.handleSliderChange( this.incValue );
+        if( this.orientation == _common_defs__WEBPACK_IMPORTED_MODULE_6__.EO_VERTICAL )
+            this.handleSliderChange( this.incValue );
     }
 
     // 
@@ -38222,7 +38473,8 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
     //
     onLeftScroll( /*event*/ )
     {
-        this.handleSliderChange( -this.incValue );
+        if( this.orientation == _common_defs__WEBPACK_IMPORTED_MODULE_6__.EO_HORIZONTAL )
+            this.handleSliderChange( -this.incValue );
     }
 
     // 
@@ -38230,7 +38482,8 @@ class UISlider extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubControl
     //
     onRightScroll( /*event*/ )
     {
-        this.handleSliderChange( this.incValue );
+        if( this.orientation == _common_defs__WEBPACK_IMPORTED_MODULE_6__.EO_HORIZONTAL )
+            this.handleSliderChange( this.incValue );
     }
 
     // 
@@ -38703,7 +38956,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     // 
     //  DESC: Handle OnUpScroll message
     //
-    onUpScroll( event )
+    onUpScroll( /* event */ )
     {
         this.handleKeyboardGamepadScroll( -1 );
         this.scrollMsg = true;
@@ -38712,7 +38965,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     // 
     //  DESC: Handle OnDownScroll message
     //
-    onDownScroll( event )
+    onDownScroll( /* event */ )
     {
         this.handleKeyboardGamepadScroll( 1 );
         this.scrollMsg = true;
@@ -39088,7 +39341,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //  DESC: Set the active control to the viewable area
     //        This also deactivates the last known active control
     //
-    setActiveCtrlToViewableArea( scrollVector )
+    setActiveCtrlToViewableArea( /* scrollVector */ )
     {
         // If the active control is not within the active area, make it so that it will be the first one selected
         if( (this.activeScrollCtrl < this.firstScrollCtrlIndex) || (this.activeScrollCtrl >= (this.firstScrollCtrlIndex + this.visibleCount)) )
@@ -39249,7 +39502,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     getControlAlignment()
     {
         let pos = this.scrollCurPos / this.controlHeight;
-        return this.controlHeight * Math.trunc(pos);
+        return this.controlHeight * (pos - Math.trunc(pos));
     }
 
     // 
@@ -39910,6 +40163,9 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
         // current value of progress bar
         this.curValue = 0;
 
+        // Total value not capped
+        this.totalValue = 0;
+
         // Minimum value
         this.minValue = 0;
 
@@ -39948,7 +40204,10 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
         {
             let attr = rangeNode[0].getAttribute( 'cur' );
             if( attr )
+            {
                 this.curValue = Number( attr );
+                this.totalValue = this.curValue;
+            }
 
             attr = rangeNode[0].getAttribute( 'min' );
             if( attr )
@@ -40021,6 +40280,15 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
     }
 
     // 
+    //  DESC: Inc progress bar max
+    //
+    incProgressBarMax( inc )
+    {
+        this.maxValue += inc;
+        this.setSizePos();
+    }
+
+    // 
     //  DESC: Init the progress bar size, pos and scale
     //
     initSizePosScale( spriteApplyIndex, stencilMaskSprite = null )
@@ -40058,6 +40326,7 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
     //
     setCurrentValue( cur )
     {
+        this.totalValue = cur;
         this.curValue = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.cap( cur, this.minValue, this.maxValue );
         this.setSizePos();
     }
@@ -40070,10 +40339,12 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
         if( value === undefined )
         {
             ++this.curValue;
+            ++this.totalValue;
         }
         else
         {
             this.curValue += value;
+            this.totalValue += value;
         }
 
         this.curValue = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_8__.cap( this.curValue, this.minValue, this.maxValue );
@@ -40394,7 +40665,11 @@ class MenuTree
         if( !this.interfaceMenu )
         {
             if( this.menuPathAry.length )
-                this.menuPathAry[this.menuPathAry.length-1].handleEvent( event );
+            {
+                // Allow the menu to reject this event
+                if( !this.menuPathAry[this.menuPathAry.length-1].handleEvent( event ) )
+                    return;
+            }
 
             if( event instanceof _common_genericevent__WEBPACK_IMPORTED_MODULE_1__.GenericEvent )
             {
@@ -41268,11 +41543,11 @@ class StrategyManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__
     //
     //  DESC: Render the strategy
     //
-    render()
+    render( overrideCamera = null )
     {
         for( let i = 0; i < this.strategyAry.length; i++ )
             if( this.strategyAry[i].isVisible() )
-                this.strategyAry[i].render();
+                this.strategyAry[i].render( overrideCamera );
     }
 
     //
@@ -41855,8 +42130,8 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
                 this.deactivateAry.push( this.nodeAry[index] );
             else
                 console.warn( `Node is not active (${key})!` );
+            }
         }
-    }
 
     //
     //  DESC: destroy the node
@@ -41923,21 +42198,44 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     //  DESC: Render the nodes
     //
-    render()
+    render( overrideCamera = null )
     {
+        let camera = this.camera;
+        if( overrideCamera )
+            camera = overrideCamera;
+
         // Cull frustrum on the head node
-        if( this.camera.cull )
+        if( camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_NULL )
         {
             for( let i = 0; i < this.nodeAry.length; i++ )
-            {
-                if( this.camera.inView( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
-                    this.nodeAry[i].render( this.camera );
-            }
+                this.nodeAry[i].render( camera );
         }
         else
         {
-            for( let i = 0; i < this.nodeAry.length; i++ )
-                this.nodeAry[i].render( this.camera );
+            if( camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_FULL )
+            {
+                for( let i = 0; i < this.nodeAry.length; i++ )
+                {
+                    if( camera.inView( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( camera );
+                }
+            }
+            else if( camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_X_ONLY )
+            {
+                for( let i = 0; i < this.nodeAry.length; i++ )
+                {
+                    if( camera.inViewX( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( camera );
+                }
+            }
+            else if( camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_Y_ONLY )
+            {
+                for( let i = 0; i < this.nodeAry.length; i++ )
+                {
+                    if( camera.inViewY( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( camera );
+                }
+            }
         }
     }
 
@@ -42813,7 +43111,7 @@ class RenderNode extends _node__WEBPACK_IMPORTED_MODULE_0__.Node
 
                 if( nextNode !== null )
                 {
-                    console.log(nextNode.name);
+                    //console.log(nextNode.name);
                     nextNode.calcSize( size );
 
                     // Calculate the radius in squared space. Avoids having to use sqrt
@@ -43725,7 +44023,7 @@ class PlayerShip_RotateGun
         do
         {
             let ratio = 1 / _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.orthoAspectRatio.h;
-            let halfSize = _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.size_half;
+            let halfSize = _library_utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.displayRes_half;
 
             let spritePos = this.sprite.transPos;
             let mousePos = _library_managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__.eventManager.mouseAbsolutePos;
@@ -44224,7 +44522,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"display":{"resolution":{"width":1280,"height":720},"default":{"width":1920,"height":1080}},"device":{"projection":{"projectType":"orthographic","minZDist":5,"maxZDist":1000,"viewAngle":45},"cull":{"enable":"true","frontFace":"CCW","cullFace":"BACK"},"depthStencilBuffer":{"enableDepthBuffer":"false","createStencilBuffer":"true","clearStencilBuffer":"true","stencilBufferBitSize":1},"targetBuffer":{"clear":"true"},"gamepad":{"allow":"true","stickDeadZone":0.3},"stats":{"allow":"true"}},"game":{"name":"Game Template","id":"gametemplate"}}');
+module.exports = JSON.parse('{"display":{"resolution":{"width":1920,"height":1080,"dynamicResize":1,"centerInWnd":0},"canvasStyle":{"position":"absolute","display":"block"},"docBodyStyle":{"backgroundColor":"white","margin":0,"width":"100%","height":"100%"}},"device":{"resolution":{"width":1920,"height":1080},"projection":{"projectType":"orthographic","minZDist":5,"maxZDist":1000,"viewAngle":45},"cull":{"enable":"true","frontFace":"CCW","cullFace":"BACK"},"depthStencilBuffer":{"enableDepthBuffer":"false","createStencilBuffer":"true","clearStencilBuffer":"true","stencilBufferBitSize":1},"targetBuffer":{"clear":"true"},"gamepad":{"allow":"true","stickDeadZone":0.3},"stats":{"allow":"true"}},"game":{"name":"Game Template","id":"gametemplate"}}');
 
 /***/ })
 /******/ 	]);

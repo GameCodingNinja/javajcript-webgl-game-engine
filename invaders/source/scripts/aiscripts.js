@@ -146,8 +146,8 @@ class AI_Enemy_Desend extends AI_Enemy_base
         // with a random amount to delay how long it takes to be visible on the screen
         this.sprite.targetBuilding = null;
         this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
-        this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.nativeSize_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
-        let offsetY = genFunc.randomInt( -(settings.nativeSize_half.h * 0.15), settings.nativeSize_half.h * 0.5);
+        this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.deviceRes_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
+        let offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
 
         // Calculated to move in pixels per second
         this.easingY.init( this.sprite.pos.y, offsetY, (this.sprite.pos.y - offsetY) / pixel_per_sec, easing.getSineOut() );
@@ -171,7 +171,7 @@ class AI_Enemy_Desend extends AI_Enemy_base
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             // Shoot at the player once it's in view
-            if( (this.sprite.pos.y + this.sprite.parentNode.radius) < settings.nativeSize_half.h )
+            if( (this.sprite.pos.y + this.sprite.parentNode.radius) < settings.deviceRes_half.h )
                 this.shootPlayer( passive_shooter_time );
 
             if( this.easingY.isFinished() )
@@ -265,7 +265,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
                             if( Math.abs(this.sprite.targetBuilding.pos.x - this.sprite.pos.x) > 100 )
                             {
                                 // Generate the Y range in which the enemy will travel
-                                let offsetY = genFunc.randomInt( -(settings.nativeSize_half.h * 0.15), settings.nativeSize_half.h * 0.5);
+                                let offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
                                 this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
                             }
                         }
@@ -292,7 +292,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
                         if( Math.abs( this.sprite.pos.x - offsetX ) > 100 )
                         {
                             // Generate the Y range in which the enemy will travel
-                            let offsetY = genFunc.randomInt( -(settings.nativeSize_half.h * 0.15), settings.nativeSize_half.h * 0.5 );
+                            let offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
 
                             this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
                         }

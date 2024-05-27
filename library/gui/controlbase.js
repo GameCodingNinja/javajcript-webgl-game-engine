@@ -116,11 +116,9 @@ export class ControlBase extends Object
         // Don't have it exceed the boundries of the art
         if( this.dynamicOffset )
         {
-            let size = settings.defaultSize_half;
-            if( settings.defaultSize_half > settings.nativeSize_half )
-                size = settings.nativeSize_half;
-
-            this.setPos( this.dynamicOffset.getPos( size ) );
+            this.displayRes_half = new Size;
+            
+            this.setPos( this.dynamicOffset.getPos( settings.deviceRes_half ) );
         }
     }
 

@@ -43,6 +43,9 @@ class MenuManager extends ManagerBase
         // menu manager state
         this.active = false;
 
+        // Memu manager initialized
+        this.initialized = false;
+
         // Actions
         this.backAction;
         this.toggleAction;
@@ -322,6 +325,8 @@ class MenuManager extends ManagerBase
 
             this.initGroup( group );
         }
+
+        this.initialized = true;
 
         return 0;
     }

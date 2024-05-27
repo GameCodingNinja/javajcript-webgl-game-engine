@@ -48,7 +48,7 @@ class PlayerShip_RotateGun
         do
         {
             let ratio = 1 / settings.orthoAspectRatio.h;
-            let halfSize = settings.size_half;
+            let halfSize = settings.displayRes_half;
 
             let spritePos = this.sprite.transPos;
             let mousePos = eventManager.mouseAbsolutePos;

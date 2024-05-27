@@ -153,7 +153,7 @@ export class Level1State extends CommonState
             // Get the spot on the screen they clicked
             let ratio = 1.0 / settings.orthoAspectRatio.h;
             let y = 600;
-            let x = (ratio * event.gameAdjustedMouseX) - settings.defaultSize_half.w;
+            let x = (ratio * event.gameAdjustedMouseX) - settings.displayRes_half.w;
             
             // Set a random rotation
             let angle = genFunc.randomInt(0, 350) * defs.DEG_TO_RAD;
