@@ -37090,8 +37090,6 @@ class ControlBase extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         // Don't have it exceed the boundries of the art
         if( this.dynamicOffset )
         {
-            this.displayRes_half = new Size;
-            
             this.setPos( this.dynamicOffset.getPos( _utilities_settings__WEBPACK_IMPORTED_MODULE_1__.settings.deviceRes_half ) );
         }
     }
@@ -47594,7 +47592,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"display":{"resolution":{"width":1920,"height":1080,"dynamicResize":1,"centerInWnd":0},"canvasStyle":{"position":"absolute","display":"block"},"docBodyStyle":{"backgroundColor":"white","margin":0,"width":"100%","height":"100%"}},"device":{"resolution":{"width":1920,"height":1080},"projection":{"projectType":"orthographic","minZDist":5,"maxZDist":1000,"viewAngle":45},"cull":{"enable":"true","frontFace":"CCW","cullFace":"BACK"},"depthStencilBuffer":{"enableDepthBuffer":"false","createStencilBuffer":"true","clearStencilBuffer":"true","stencilBufferBitSize":1},"targetBuffer":{"clear":"true"},"gamepad":{"allow":"true","stickDeadZone":0.3},"stats":{"allow":"true"}},"game":{"name":"Game Template","id":"gametemplate"}}');
+module.exports = JSON.parse('{"display":{"resolution":{"width":1920,"height":1080,"dynamicResize":1,"centerInWnd":1},"canvasStyle":{"position":"absolute","display":"block"},"docBodyStyle":{"backgroundColor":"white","margin":0,"width":"100%","height":"100%"}},"device":{"resolution":{"width":1920,"height":1080},"projection":{"projectType":"orthographic","minZDist":5,"maxZDist":1000,"viewAngle":45},"cull":{"enable":"true","frontFace":"CCW","cullFace":"BACK"},"depthStencilBuffer":{"enableDepthBuffer":"false","createStencilBuffer":"true","clearStencilBuffer":"true","stencilBufferBitSize":1},"targetBuffer":{"clear":"true"},"gamepad":{"allow":"true","stickDeadZone":0.3},"stats":{"allow":"true"}},"game":{"name":"Game Template","id":"gametemplate"}}');
 
 /***/ }),
 /* 198 */

@@ -116,8 +116,6 @@ export class ControlBase extends Object
         // Don't have it exceed the boundries of the art
         if( this.dynamicOffset )
         {
-            this.displayRes_half = new Size;
-            
             this.setPos( this.dynamicOffset.getPos( settings.deviceRes_half ) );
         }
     }
