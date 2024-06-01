@@ -37,8 +37,8 @@ export class UICheckBox extends UIControl
     //
     render( matrix )
     {
-        for( let i = 0; i < this.spriteAry.length-1; ++i )
-            this.spriteAry[i].render( matrix );
+        for( this._i = 0; this._i < this.spriteAry.length-1; ++this._i )
+            this.spriteAry[this._i].render( matrix );
 
         if( this.toggleState === defs.TOGGLE_STATE_ON )
             this.spriteAry[this.spriteAry.length-1].render( matrix );

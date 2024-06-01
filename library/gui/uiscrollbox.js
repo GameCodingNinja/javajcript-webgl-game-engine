@@ -351,8 +351,8 @@ export class UIScrollBox extends UISubControl
         super.update();
 
         // Update all controls
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].update();
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].update();
 
         // Handle any scrolling
         this.handleScrollUpdate();
@@ -367,8 +367,8 @@ export class UIScrollBox extends UISubControl
         super.transform( object );
 
         // Transform all controls
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].transform( this );
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].transform( this );
 
         // Transform the mask
         this.stencilMaskSprite.transform( this );
@@ -383,20 +383,18 @@ export class UIScrollBox extends UISubControl
         super.render( camera );
 
 
-        let gl = device.gl;
-
         // Disable rendering to the color buffer
         // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-        gl.colorMask( false, false, false, false );
+        device.gl.colorMask( false, false, false, false );
         
         // Disable rendering to the depth mask
-        gl.depthMask( false );
+        device.gl.depthMask( false );
 
         // Start using the stencil
-        gl.enable( gl.STENCIL_TEST );
+        device.gl.enable( device.gl.STENCIL_TEST );
 
-        gl.stencilFunc( gl.ALWAYS, 0x1, 0x1 );
-        gl.stencilOp( gl.REPLACE, gl.REPLACE, gl.REPLACE );
+        device.gl.stencilFunc( device.gl.ALWAYS, 0x1, 0x1 );
+        device.gl.stencilOp( device.gl.REPLACE, device.gl.REPLACE, device.gl.REPLACE );
 
 
         this.stencilMaskSprite.render( camera );
@@ -404,24 +402,24 @@ export class UIScrollBox extends UISubControl
 
         // Re-enable color
         // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-        gl.colorMask( true, true, true, true );
+        device.gl.colorMask( true, true, true, true );
 
         // Where a 1 was not rendered
-        gl.stencilFunc( gl.EQUAL, 0x1, 0x1 );
+        device.gl.stencilFunc( device.gl.EQUAL, 0x1, 0x1 );
 
         // Keep the pixel
-        gl.stencilOp( gl.KEEP, gl.KEEP, gl.KEEP );
+        device.gl.stencilOp( device.gl.KEEP, device.gl.KEEP, device.gl.KEEP );
 
         // Enable rendering to the depth mask
-        gl.depthMask( true );
+        device.gl.depthMask( true );
 
 
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].render( camera );
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].render( camera );
 
 
         // Finished using stencil
-        gl.disable( gl.STENCIL_TEST );
+        device.gl.disable( device.gl.STENCIL_TEST );
     }
 
     // 

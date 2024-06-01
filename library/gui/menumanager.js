@@ -805,19 +805,19 @@ class MenuManager extends ManagerBase
     //
     updateMenu( activeTreeAry )
     {
-        let menuActive = false;
+        this._menuActive = false;
 
-        for( let i = 0; i < activeTreeAry.length; ++i )
+        for( this._i = 0; this._i < activeTreeAry.length; ++this._i )
         {
             // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
+            if( activeTreeAry[this._i].isActive() )
             {
-                menuActive = true;
-                activeTreeAry[i].update();
+                this._menuActive = true;
+                activeTreeAry[this._i].update();
             }
         }
 
-        return menuActive;
+        return this._menuActive;
     }
     
     // 
@@ -841,19 +841,19 @@ class MenuManager extends ManagerBase
     //
     transformMenu( activeTreeAry )
     {
-        let menuActive = false;
+        this._menuActive = false;
 
-        for( let i = 0; i < activeTreeAry.length; ++i )
+        for( this._i = 0; this._i < activeTreeAry.length; ++this._i )
         {
             // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
+            if( activeTreeAry[this._i].isActive() )
             {
-                menuActive = true;
-                activeTreeAry[i].transform();
+                this._menuActive = true;
+                activeTreeAry[this._i].transform();
             }
         }
 
-        return menuActive;
+        return this._menuActive;
     }
     
     // 
@@ -863,9 +863,9 @@ class MenuManager extends ManagerBase
     {
         if( this.active )
         {
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-                if( this.activeMenuTreeAry[i].isActive() )
-                    this.activeMenuTreeAry[i].render( this.camera );
+            for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
+                if( this.activeMenuTreeAry[this._i].isActive() )
+                    this.activeMenuTreeAry[this._i].render( this.camera );
         }
     }
 
@@ -876,9 +876,9 @@ class MenuManager extends ManagerBase
     {
         if( this.active )
         {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
-                if( this.activeInterTreeAry[i].isActive() )
-                    this.activeInterTreeAry[i].render( matrix );
+            for( this._i = 0; this._i < this.activeInterTreeAry.length; ++this._i )
+                if( this.activeInterTreeAry[this._i].isActive() )
+                    this.activeInterTreeAry[this._i].render( matrix );
         }
     }
     

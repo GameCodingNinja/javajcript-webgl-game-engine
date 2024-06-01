@@ -258,26 +258,24 @@ export class UIProgressBar extends UIControl
     //
     render( camera )
     {
-        let gl = device.gl;
-        
         if( this.stencilMaskSprite )
         {
-            for( let i  = 0; i < this.spriteAry.length; ++i )
+            for( this._i  = 0; this._i < this.spriteAry.length; ++this._i )
             {
-                if( i === this.spriteApplyIndex )
+                if( this._i === this.spriteApplyIndex )
                 {
                     // Disable rendering to the color buffer
                     // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-                    gl.colorMask( false, false, false, false );
+                    device.gl.colorMask( false, false, false, false );
 
                     // Disable rendering to the depth mask
-                    gl.depthMask( false );
+                    device.gl.depthMask( false );
 
                     // Start using the stencil
-                    gl.enable( gl.STENCIL_TEST );
+                    device.gl.enable( device.gl.STENCIL_TEST );
 
-                    gl.stencilFunc( gl.ALWAYS, 0x1, 0x1 );
-                    gl.stencilOp( gl.REPLACE, gl.REPLACE, gl.REPLACE );
+                    device.gl.stencilFunc( device.gl.ALWAYS, 0x1, 0x1 );
+                    device.gl.stencilOp( device.gl.REPLACE, device.gl.REPLACE, device.gl.REPLACE );
         
 
                     this.stencilMaskSprite.render( camera );
@@ -285,26 +283,26 @@ export class UIProgressBar extends UIControl
                     
                     // Re-enable color
                     // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
-                    gl.colorMask( true, true, true, true );
+                    device.gl.colorMask( true, true, true, true );
 
                     // Where a 1 was not rendered
-                    gl.stencilFunc( gl.EQUAL, 0x1, 0x1 );
+                    device.gl.stencilFunc( device.gl.EQUAL, 0x1, 0x1 );
 
                     // Keep the pixel
-                    gl.stencilOp( gl.KEEP, gl.KEEP, gl.KEEP );
+                    device.gl.stencilOp( device.gl.KEEP, device.gl.KEEP, device.gl.KEEP );
 
                     // Enable rendering to the depth mask
-                    gl.depthMask( true );
+                    device.gl.depthMask( true );
 
 
-                    this.spriteAry[i].render( this.matrix );
+                    this.spriteAry[this._i].render( this.matrix );
 
 
                     // Finished using stencil
-                    gl.disable( gl.STENCIL_TEST );
+                    device.gl.disable( device.gl.STENCIL_TEST );
                 }
                 else
-                    this.spriteAry[i].render( camera );
+                    this.spriteAry[this._i].render( camera );
             }
         }
         else

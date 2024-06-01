@@ -14,8 +14,8 @@ class Device
 {
     constructor()
     {
-        this._canvas = null;
-        this._glContext = null;
+        this.canvas = null;
+        this.glContext = null;
     }
     
     // 
@@ -25,11 +25,11 @@ class Device
     {
         let parm = {premultipliedAlpha: false, alpha: false, stencil:true, preserveDrawingBuffer: true};
 
-        this._canvas = document.getElementById('game-surface');
-        this._canvas.width = settings.displayRes.w;
-        this._canvas.height = settings.displayRes.h;
-        this._canvas.style.position = settings.canvasStylePosition;
-        this._canvas.style.display = settings.canvasStyleDisplay;
+        this.canvas = document.getElementById('game-surface');
+        this.canvas.width = settings.displayRes.w;
+        this.canvas.height = settings.displayRes.h;
+        this.canvas.style.position = settings.canvasStylePosition;
+        this.canvas.style.display = settings.canvasStyleDisplay;
         document.body.style.backgroundColor = settings.docBodyStyleBackgroundColor;
         document.body.style.margin = settings.docBodyStyleMargin;
         document.body.style.width = settings.docBodyStyleWidth;
@@ -37,19 +37,19 @@ class Device
 
         if( settings.centerInWnd )
         {
-            this._canvas.style.left = `${(window.innerWidth - settings.displayRes.w) / 2}px`;
-            this._canvas.style.top = `${(window.innerHeight - settings.displayRes.h) / 2}px`;
+            this.canvas.style.left = `${(window.innerWidth - settings.displayRes.w) / 2}px`;
+            this.canvas.style.top = `${(window.innerHeight - settings.displayRes.h) / 2}px`;
         }
 
-        this._glContext =
-            this._canvas.getContext('webgl2', parm) ||
-            this._canvas.getContext('webgl', parm) ||
-            this._canvas.getContext('experimental-webgl', parm);
+        this.glContext =
+            this.canvas.getContext('webgl2', parm) ||
+            this.canvas.getContext('webgl', parm) ||
+            this.canvas.getContext('experimental-webgl', parm);
         
-        if( !this._glContext )
+        if( !this.glContext )
             alert('Your browser does not support WebGL');
 
-        return this._glContext;
+        return this.glContext;
     }
 
     //
@@ -63,26 +63,18 @@ class Device
             menuManager.resetTransform();
             menuManager.resetDynamicOffset();
             cameraManager.rebuild();
-            this._canvas.width = settings.displayRes.w;
-            this._canvas.height = settings.displayRes.h;
-            this._glContext.viewport(0, 0, settings.displayRes.w, settings.displayRes.h);
+            this.canvas.width = settings.displayRes.w;
+            this.canvas.height = settings.displayRes.h;
+            this.glContext.viewport(0, 0, settings.displayRes.w, settings.displayRes.h);
         }
 
         if( settings.centerInWnd )
         {
-            this._canvas.style.left = `${(width - settings.displayRes.w) / 2}px`;
-            this._canvas.style.top = `${(height - settings.displayRes.h) / 2}px`;
+            this.canvas.style.left = `${(width - settings.displayRes.w) / 2}px`;
+            this.canvas.style.top = `${(height - settings.displayRes.h) / 2}px`;
         }
 
         //console.log( `Resolution Change: ${width} x ${height}; DPR: ${window.devicePixelRatio}` );
-    }
-
-    // 
-    //  DESC: Get the canvas
-    //
-    get canvas()
-    {
-        return this._canvas;
     }
 
     // 
@@ -90,7 +82,7 @@ class Device
     //
     get gl()
     {
-        return this._glContext;
+        return this.glContext;
     }
 }
 

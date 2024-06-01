@@ -157,8 +157,8 @@ export class UISubControl extends UIControl
         super.update();
 
         // Update all controls
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].update();
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].update();
     }
 
     // 
@@ -170,8 +170,8 @@ export class UISubControl extends UIControl
         super.transform( object );
 
         // Update all controls
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].transform( this );
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].transform( this );
     }
 
     // 
@@ -182,8 +182,8 @@ export class UISubControl extends UIControl
         // Call the parent
         super.render( camera );
 
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].render( camera );
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].render( camera );
     }
 
     // 

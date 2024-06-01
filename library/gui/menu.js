@@ -362,17 +362,17 @@ export class Menu extends Object
 
         if( this.isVisible() )
         {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].update();
+            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+                this.spriteAry[this._i].update();
             
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].update();
+            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
+                this.staticControlAry[this._i].update();
             
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].update();
+            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+                this.mouseOnlyControlAry[this._i].update();
             
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].update();
+            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+                this.controlAry[this._i].update();
         }
     }
 
@@ -385,17 +385,17 @@ export class Menu extends Object
         {
             super.transform();
             
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].transform( this );
+            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+                this.spriteAry[this._i].transform( this );
             
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].transform( this );
+            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
+                this.staticControlAry[this._i].transform( this );
             
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].transform( this );
+            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+                this.mouseOnlyControlAry[this._i].transform( this );
             
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].transform( this );
+            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+                this.controlAry[this._i].transform( this );
         }
     }
 
@@ -406,17 +406,17 @@ export class Menu extends Object
     {
         if( this.isVisible() )
         {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].render( camera );
+            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+                this.spriteAry[this._i].render( camera );
             
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].render( camera );
+            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
+                this.staticControlAry[this._i].render( camera );
             
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].render( camera );
+            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+                this.mouseOnlyControlAry[this._i].render( camera );
             
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].render( camera );
+            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+                this.controlAry[this._i].render( camera );
         }
     }
 
