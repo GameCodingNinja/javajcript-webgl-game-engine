@@ -33,8 +33,6 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
     {
         if( this.allowRender() )
         {
-            let gl = device.gl;
-            
             // Bind the VBO and IBO
             vertexBufferManager.bind( this.vbo, this.ibo );
 
@@ -42,7 +40,7 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
             shaderManager.bind( this.shaderData );
             
             // Setup the vertex attribute shader data
-            gl.vertexAttribPointer( this.vertexLocation, 3, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            device.gl.vertexAttribPointer( this.vertexLocation, 3, device.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
 
             // Increment our stat counter to keep track of what is going on.
             statCounter.vObjCounter++;
@@ -51,14 +49,14 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
             {
                 // Bind the texture
                 textureManager.bind( this.texture.id );
-                gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
+                device.gl.uniform1i( this.text0Location, 0 ); // 0 = TEXTURE0
 
                 // Setup the UV attribute shade data
-                gl.vertexAttribPointer( this.uvLocation, 2, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+                device.gl.vertexAttribPointer( this.uvLocation, 2, device.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
             }
             
             // Send the color to the shader
-            gl.uniform4fv( this.colorLocation, this.color.data );
+            device.gl.uniform4fv( this.colorLocation, this.color.data );
             
             // Calculate the final matrix
             gFinalMatrix.initilizeMatrix();
@@ -66,10 +64,10 @@ export class VisualComponentScaledFrame extends VisualComponentQuad
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
 
             // Send the final matrix to the shader
-            gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            device.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
             
             // Do the render
-            gl.drawElements(gl.TRIANGLES, this.iboCount, gl.UNSIGNED_BYTE, 0);
+            device.gl.drawElements(device.gl.TRIANGLES, this.iboCount, device.gl.UNSIGNED_BYTE, 0);
         }
     }
 

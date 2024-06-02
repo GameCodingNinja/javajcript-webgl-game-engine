@@ -342,8 +342,8 @@ export class Strategy extends Object
     //
     update()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].update();
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.nodeAry[this._i].update();
 
         // Remove nodes from the active list
         this.removeFromActiveList();
@@ -362,8 +362,8 @@ export class Strategy extends Object
     {
         super.transform();
 
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].transform( this );
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.nodeAry[this._i].transform( this );
     }
 
     //
@@ -378,33 +378,33 @@ export class Strategy extends Object
         // Cull frustrum on the head node
         if( camera.cull === defs.CULL_NULL )
         {
-            for( let i = 0; i < this.nodeAry.length; i++ )
-                this.nodeAry[i].render( camera );
+            for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+                this.nodeAry[this._i].render( camera );
         }
         else
         {
             if( camera.cull === defs.CULL_FULL )
             {
-                for( let i = 0; i < this.nodeAry.length; i++ )
+                for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inView( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
-                        this.nodeAry[i].render( camera );
+                    if( camera.inView( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( camera );
                 }
             }
             else if( camera.cull === defs.CULL_X_ONLY )
             {
-                for( let i = 0; i < this.nodeAry.length; i++ )
+                for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inViewX( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
-                        this.nodeAry[i].render( camera );
+                    if( camera.inViewX( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( camera );
                 }
             }
             else if( camera.cull === defs.CULL_Y_ONLY )
             {
-                for( let i = 0; i < this.nodeAry.length; i++ )
+                for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inViewY( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
-                        this.nodeAry[i].render( camera );
+                    if( camera.inViewY( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( camera );
                 }
             }
         }

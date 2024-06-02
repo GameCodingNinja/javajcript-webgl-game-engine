@@ -67,21 +67,19 @@ export class VisualComponent3D extends ivisualComponent
     //
     render( object, camera )
     {
-        let gl = device.gl;
-        
-        for( let i = 0; i < this.meshAry.length; ++i )
+        for( this._i = 0; this._i < this.meshAry.length; ++this._i )
         {
             // Bind the VBO and IBO. NOTE: One singlton needs to manage the vertex bindings
-            vertexBufferManager.bind( this.meshAry[i].vbo, this.meshAry[i].ibo );
+            vertexBufferManager.bind( this.meshAry[this._i].vbo, this.meshAry[this._i].ibo );
 
             // Bind the shader.
             shaderManager.bind( this.shaderData );
 
             // Setup the vertex attribute shader data
-            gl.vertexAttribPointer( this.vertexLocation, 3, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
+            device.gl.vertexAttribPointer( this.vertexLocation, 3, device.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
 
             // Setup the normal attribute shade data
-            gl.vertexAttribPointer( this.normalLocation, 3, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
+            device.gl.vertexAttribPointer( this.normalLocation, 3, device.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 12 );
 
             // Increment our stat counter to keep track of what is going on.
             statCounter.vObjCounter++;
@@ -90,31 +88,31 @@ export class VisualComponent3D extends ivisualComponent
             if( this.uvLocation )
             {
                 // Bind the texture
-                for( let j = 0; j < this.meshAry[i].textureAry.length; ++j )
+                for( this._j = 0; this._j < this.meshAry[this._i].textureAry.length; ++this._j )
                 {
-                    textureManager.bind( this.meshAry[i].textureAry[j].id );
-                    gl.uniform1i( this.text0Location, 0);// future implementation - this.meshAry[i].textureAry[j].type ); // 0 = TEXTURE0
+                    textureManager.bind( this.meshAry[this._i].textureAry[this._j].id );
+                    device.gl.uniform1i( this.text0Location, 0);// future implementation - this.meshAry[i].textureAry[j].type ); // 0 = TEXTURE0
                 }
 
                 // Setup the uv attribute shade data
-                gl.vertexAttribPointer( this.uvLocation, 2, gl.FLOAT, false, this.VERTEX_BUF_SIZE, 24 );
+                device.gl.vertexAttribPointer( this.uvLocation, 2, device.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 24 );
             }
 
             // Send the color to the shader
-            gl.uniform4fv( this.colorLocation, this.color.data );
+            device.gl.uniform4fv( this.colorLocation, this.color.data );
 
             gFinalMatrix.initilizeMatrix();
             gFinalMatrix.mergeMatrix( object.matrix.matrix );
             gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-            gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+            device.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
             
             gFinalMatrix.initilizeMatrix();
             gFinalMatrix.mergeMatrix( object.rotMatrix.matrix );
             gFinalMatrix.mergeMatrix( camera.rotMatrix.matrix );
-            gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
+            device.gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
 
             // Render it
-            gl.drawElements( gl.TRIANGLES, this.meshAry[i].iboCount, gl.UNSIGNED_SHORT, 0);
+            device.gl.drawElements( device.gl.TRIANGLES, this.meshAry[this._i].iboCount, device.gl.UNSIGNED_SHORT, 0);
         }
     }
 }

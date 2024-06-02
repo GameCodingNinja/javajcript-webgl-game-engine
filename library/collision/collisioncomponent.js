@@ -224,18 +224,18 @@ export class CollisionComponent
         {
             if( this.type === defs.ECT_RECT )
             {
-                for( let i = 0; i < this.rectAry.length; ++i )
-                    this.matrix.transformRect( this.transRectAry[i], this.rectAry[i] );
+                for( this._i = 0; this._i < this.rectAry.length; ++this._i )
+                    this.matrix.transformRect( this.transRectAry[this._i], this.rectAry[this._i] );
             }
             else if( this.type === defs.ECT_POLYGON )
             {
-                for( let i = 0; i < this.polygonAry.length; ++i )
-                    this.matrix.transformPolygon( this.transPolygonAry[i], this.polygonAry[i] );
+                for( this._i = 0; this._i < this.polygonAry.length; ++this._i )
+                    this.matrix.transformPolygon( this.transPolygonAry[this._i], this.polygonAry[this._i] );
             }
             else if( this.type === defs.ECT_LINE )
             {
-                for( let i = 0; i < this.lineAry.length; ++i )
-                    this.matrix.transformLine( this.transLineAry[i], this.lineAry[i] );
+                for( this._i = 0; this._i < this.lineAry.length; ++this._i )
+                    this.matrix.transformLine( this.transLineAry[this._i], this.lineAry[this._i] );
             }
         }
     }
@@ -247,126 +247,126 @@ export class CollisionComponent
     {
         if( this.enable )
         {
-            let result = false;
+            this._result = false;
             
-            for( let node = 0; node < nodeAry.length; ++node )
+            for( this._node = 0; this._node < nodeAry.length; ++this._node )
             {
-                let sprite = nodeAry[node].sprite;
+                this.local_sprite = nodeAry[this._node].sprite;
 
-                if( sprite && sprite.collisionComponent && sprite.collisionComponent.enable && (this.filterCategoryBits & sprite.collisionComponent.filterMaskBits) )
+                if( this.local_sprite && this.local_sprite.collisionComponent && this.local_sprite.collisionComponent.enable && (this.filterCategoryBits & this.local_sprite.collisionComponent.filterMaskBits) )
                 {
                     if( this.type === defs.ECT_POINT )
                     {
-                        if( sprite.collisionComponent.type === defs.ECT_CIRCLE )
+                        if( this.local_sprite.collisionComponent.type === defs.ECT_CIRCLE )
                         {
-                            result = this.pointToCircleCollision( sprite );
+                            this._result = this.pointToCircleCollision( this.local_sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_RECT )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_RECT )
                         {
-                            result = this.pointToRectCollision( sprite );
+                            this._result = this.pointToRectCollision( this.local_sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_POLYGON )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_POLYGON )
                         {
-                            result = this.pointToPolygonCollision( sprite );
+                            this._result = this.pointToPolygonCollision( this.local_sprite );
                         }
                     }
                     else if( this.type === defs.ECT_CIRCLE )
                     {
-                        if( sprite.collisionComponent.type === defs.ECT_POINT )
+                        if( this.local_sprite.collisionComponent.type === defs.ECT_POINT )
                         {
-                            result = sprite.collisionComponent.pointToCircleCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.pointToCircleCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_CIRCLE )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_CIRCLE )
                         {
-                            result = this.circleToCircleCheck( sprite );
+                            this._result = this.circleToCircleCheck( this.local_sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_RECT )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_RECT )
                         {
-                            result = this.circleToRectCollision( sprite );
+                            this._result = this.circleToRectCollision( this.local_sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_POLYGON )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_POLYGON )
                         {
-                            result = this.circleToPolygonCollision( sprite );
+                            this._result = this.circleToPolygonCollision( this.local_sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_LINE )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_LINE )
                         {
-                            result = this.circleToLineCollision( sprite );
+                            this._result = this.circleToLineCollision( this.local_sprite );
                         }
                     }
                     else if( this.type === defs.ECT_LINE )
                     {
-                        if( sprite.collisionComponent.type === defs.ECT_CIRCLE )
+                        if( this.local_sprite.collisionComponent.type === defs.ECT_CIRCLE )
                         {
-                            result = sprite.collisionComponent.circleToLineCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.circleToLineCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_LINE )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_LINE )
                         {
-                            result = this.lineToLineCollision( sprite );
+                            this._result = this.lineToLineCollision( this.local_sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_RECT )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_RECT )
                         {
-                            result = this.lineToRectCollision( sprite );
+                            this._result = this.lineToRectCollision( this.local_sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_POLYGON )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_POLYGON )
                         {
-                            result = this.lineToPolygonCollision( sprite );
+                            this._result = this.lineToPolygonCollision( this.local_sprite );
                         }
                     }
                     else if( this.type === defs.ECT_RECT )
                     {
-                        if( sprite.collisionComponent.type === defs.ECT_POINT )
+                        if( this.local_sprite.collisionComponent.type === defs.ECT_POINT )
                         {
-                            result = sprite.collisionComponent.pointToRectCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.pointToRectCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_CIRCLE )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_CIRCLE )
                         {
-                            result = sprite.collisionComponent.circleToRectCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.circleToRectCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_RECT )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_RECT )
                         {
-                            result = this.rectToRectCollision( sprite );
+                            this._result = this.rectToRectCollision( this.local_sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_LINE )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_LINE )
                         {
-                            result = sprite.collisionComponent.lineToRectCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.lineToRectCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_POLYGON )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_POLYGON )
                         {
-                            result = this.rectToPolygonCollision( sprite );
+                            this._result = this.rectToPolygonCollision( this.local_sprite );
                         }
                     }
                     else if( this.type === defs.ECT_POLYGON )
                     {
-                        if( sprite.collisionComponent.type === defs.ECT_POINT )
+                        if( this.local_sprite.collisionComponent.type === defs.ECT_POINT )
                         {
-                            result = sprite.collisionComponent.pointToPolygonCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.pointToPolygonCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_CIRCLE )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_CIRCLE )
                         {
-                            result = sprite.collisionComponent.circleToPolygonCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.circleToPolygonCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_RECT )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_RECT )
                         {
-                            result = sprite.collisionComponent.rectToPolygonCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.rectToPolygonCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_LINE )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_LINE )
                         {
-                            result = sprite.collisionComponent.lineToPolygonCollision( this.sprite );
+                            this._result = this.local_sprite.collisionComponent.lineToPolygonCollision( this.sprite );
                         }
-                        else if( sprite.collisionComponent.type === defs.ECT_POLYGON )
+                        else if( this.local_sprite.collisionComponent.type === defs.ECT_POLYGON )
                         {
-                            result = this.polygonToPolygonCollision( sprite );
+                            this._result = this.polygonToPolygonCollision( this.local_sprite );
                         }
                     }
 
-                    if( result )
+                    if( this._result )
                     {
                         // The sprite doing the collision checks should always be the first parameter
                         if( this.collisionSignal )
-                            signalManager.broadcast_collisionSignal( this.sprite, sprite );
+                            signalManager.broadcast_collisionSignal( this.sprite, this.local_sprite );
                         //console.log('hit');
                         
-                        return sprite;
+                        return this.local_sprite;
                     }
                 }
             }
