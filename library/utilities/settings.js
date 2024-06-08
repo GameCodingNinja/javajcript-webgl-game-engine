@@ -60,13 +60,11 @@ class Settings
             let savedUserSettings = localStorage.get( 'userSettings' );
             if( savedUserSettings )
             {
-                let userObj = JSON.parse( savedUserSettings );
-
                 // If the version does not match, delete the local storage
-                if( this.user.version != userObj.version )
+                if( this.user.version != savedUserSettings.version )
                     localStorage.free( 'userSettings' );
                 else
-                    this.user = userObj;
+                    this.user = savedUserSettings;
             }
         }
     }
@@ -191,6 +189,9 @@ class Settings
             
             if( obj.game.id )
                 this.gameId = obj.game.id;
+
+            if( obj.game.version )
+                this.gameVersion = obj.game.version;
         }
 
         // Calculate the ratios

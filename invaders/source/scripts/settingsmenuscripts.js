@@ -50,7 +50,7 @@ export class SoundCheckBox_execute
     execute()
     {
         settings.user.soundEnabled = this.control.toggleState == true ? 1 : 0;
-        localStorage.set( 'userSettings', JSON.stringify(settings.user) );
+        localStorage.set( 'userSettings', settings.user );
 
         let settingsMenu = menuManager.getMenu('settings_menu');
 
@@ -113,7 +113,7 @@ export class SoundEffectCheckBox_execute
     execute()
     {
         settings.user.soundEffectEnabled = this.control.toggleState == true ? 1 : 0;
-        localStorage.set( 'userSettings', JSON.stringify(settings.user) );
+        localStorage.set( 'userSettings', settings.user );
 
         return true;
     }
@@ -159,7 +159,7 @@ export class SoundMusicCheckBox_execute
     execute()
     {
         settings.user.soundMusicEnabled = this.control.toggleState == true ? 1 : 0;
-        localStorage.set( 'userSettings', JSON.stringify(settings.user) );
+        localStorage.set( 'userSettings', settings.user );
 
         if( this.control.toggleState )
             soundManager.play( '(music)', 'LOOP_Synthetic_Humanity', true );
@@ -207,7 +207,7 @@ export class DeadZoneSlider_execute
     execute()
     {
         settings.user.stickDeadZone = (Math.trunc(this.control.curValue) * 0.01).toFixed(2);
-        localStorage.set( 'userSettings', JSON.stringify(settings.user) );
+        localStorage.set( 'userSettings', settings.user );
         return true;
     }
 }

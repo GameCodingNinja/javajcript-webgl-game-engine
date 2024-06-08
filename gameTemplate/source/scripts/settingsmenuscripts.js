@@ -47,7 +47,7 @@ export class SoundCheckBox_execute
     execute()
     {
         settings.user.soundEnabled = this.control.toggleState == true ? 1 : 0;
-        localStorage.set( 'userSettings', JSON.stringify(settings.user) );
+        localStorage.set( 'userSettings', settings.user );
 
         return true;
     }
@@ -90,7 +90,7 @@ export class DeadZoneSlider_execute
     execute()
     {
         settings.user.stickDeadZone = (Math.trunc(this.control.curValue) * 0.01).toFixed(2);
-        localStorage.set( 'userSettings', JSON.stringify(settings.user) );
+        localStorage.set( 'userSettings', settings.user );
         return true;
     }
 }

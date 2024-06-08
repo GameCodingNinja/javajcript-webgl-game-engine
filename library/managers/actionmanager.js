@@ -217,7 +217,7 @@ class ActionManager
             let savedActionDict = localStorage.get( 'keybinding' );
             if( savedActionDict )
             {
-                let actionDict = JSON.parse( savedActionDict );
+                let actionDict = savedActionDict;
 
                 // If the version does not match, delete the local storage
                 if( this.actionDict.version != actionDict.version )
@@ -550,7 +550,7 @@ class ActionManager
     //
     saveKeybinding()
     {
-        localStorage.set( 'keybinding', JSON.stringify(this.actionDict) );
+        localStorage.set( 'keybinding', this.actionDict );
     }
 
     // 

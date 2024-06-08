@@ -12,5 +12,5 @@
         "gamepad": { "allow": "true", "stickDeadZone": 0.3 },
         "stats": { "allow": "true" } },
 
-    "game": { "name": "Game Template", "id": "gametemplate" }
+    "game": { "name": "Game Template", "id": "RYVB5941", "version": "1.0.0" }
 }
