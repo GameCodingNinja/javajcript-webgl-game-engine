@@ -1,6 +1,6 @@
 {
     "display": {
-        "resolution": { "width": 1920, "height": 1080, "dynamicResize": 1, "centerInWnd": 1 },
+        "resolution": { "width": 1920, "height": 1080, "dynamicResize": 1, "centerInWnd": 0 },
         "canvasStyle": { "position": "absolute", "display": "block" },
         "docBodyStyle": { "backgroundColor": "white", "margin": 0, "width": "100%", "height": "100%" } },
     

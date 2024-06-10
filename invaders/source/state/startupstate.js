@@ -28,10 +28,11 @@ import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import * as genFunc from '../../../library/utilities/genfunc';
-import * as titleScreenState from '../state/titlescreenstate';
+import * as level1State from './level1state';
 import * as utilScripts from '../scripts/utilityscripts';
 import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
+import * as menuDefs from '../../../library/gui/menudefs';
 import * as levelScripts from '../scripts/levelscripts';
 import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
 import * as settingsMenuScripts from '../scripts/settingsmenuscripts';
@@ -62,7 +63,7 @@ export class StartUpState extends GameState
 {
     constructor( gameLoopCallback )
     {
-        super( stateDefs.EGS_STARTUP, stateDefs.EGS_TITLE_SCREEN, gameLoopCallback );
+        super( stateDefs.EGS_STARTUP, stateDefs.EGS_LEVEL_1, gameLoopCallback );
 
         // Load the list tables
         objectDataManager.loadListTableFromObj( dataListTable2D );
@@ -144,7 +145,7 @@ export class StartUpState extends GameState
         // Init Youtube playable if in the environment
         if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
         {
-            ytgame.system.onAudioEnabledChange((isAudioEnabled) =>
+            /*ytgame.system.onAudioEnabledChange((isAudioEnabled) =>
             {
                 if(menuManager.initialized)
                 {
@@ -171,6 +172,22 @@ export class StartUpState extends GameState
                     }
                 }
             });
+
+            ytgame.system.onPause(() =>
+            {
+                if( menuManager.initialized && !menuManager.active)
+                {
+                    eventManager.dispatchEvent( menuDefs.EME_MENU_ESCAPE_ACTION, 'pause_tree' );
+                }
+            });
+            
+            ytgame.system.onResume(() =>
+            {
+                if( menuManager.initialized && menuManager.active)
+                {
+                    eventManager.dispatchEvent( menuDefs.EME_MENU_TOGGLE_ACTION, 'pause_tree' );
+                }
+            });*/
 
             // Send first frame ready now that we've started to draw.
             ytgame.game.firstFrameReady();
@@ -277,7 +294,7 @@ export class StartUpState extends GameState
             menuManager.createFromData( groupAry ),
 
             // Load the state specific assets
-            titleScreenState.load()
+            level1State.load()
 
         ]))
 

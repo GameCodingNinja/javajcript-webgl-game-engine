@@ -338,7 +338,7 @@ class ActionManager
     //
     wasAction( event, actionStr )
     {
-        let result = defs.EAP_IDLE;
+        this._result = defs.EAP_IDLE;
 
         if( this.allowAction )
         {
@@ -349,26 +349,29 @@ class ActionManager
 
                 if( this.wasActionMap( event.code, actionStr, this.keyboardActionMap ) )
                 {
-                    result = defs.EAP_DOWN;
+                    this._result = defs.EAP_DOWN;
 
                     if( event.type === 'keyup' )
                     {
-                        result = defs.EAP_UP;
+                        this._result = defs.EAP_UP;
                     }
                 }
             }
             // Check for mouse event
-            else if( event instanceof MouseEvent && event.type != 'mousemove' )
+            else if( event instanceof MouseEvent )
             {
                 this.lastDeviceUsed = defs.MOUSE;
 
-                if( this.wasActionMap( event.button, actionStr, this.mouseActionMap ) )
+                if( (event.type === 'mouseup' || event.type === 'mousedown') )
                 {
-                    result = defs.EAP_DOWN;
-
-                    if( event.type === 'mouseup' )
+                    if( this.wasActionMap( event.button, actionStr, this.mouseActionMap ) )
                     {
-                        result = defs.EAP_UP;
+                        this._result = defs.EAP_DOWN;
+
+                        if( event.type === 'mouseup' )
+                        {
+                            this._result = defs.EAP_UP;
+                        }
                     }
                 }
             }
@@ -381,18 +384,18 @@ class ActionManager
                 {
                     if( this.wasActionMap( event.buttonIndex, actionStr, this.gamepadActionMap ) )
                     {
-                        result = defs.EAP_DOWN;
+                        this._result = defs.EAP_DOWN;
 
                         if( event.type === gamepadevent.GAMEPAD_BUTTON_UP )
                         {
-                            result = defs.EAP_UP;
+                            this._result = defs.EAP_UP;
                         }
                     }
                 }
             }
         }
 
-        return result;
+        return this._result;
     }
     
     // 
@@ -400,18 +403,18 @@ class ActionManager
     //
     wasActionMap( id, actionStr, actionMap )
     {
-        let result = false;
+        this._result = false;
 
         // See if the action has already been added
-        let action = actionMap.get( actionStr );
+        this._action = actionMap.get( actionStr );
 
         // If it's found, see if this is the correct action
-        if( action !== undefined )
+        if( this._action !== undefined )
         {
-            result = action.wasAction( id );
+            this._result = this._action.wasAction( id );
         }
 
-        return result;
+        return this._result;
     }
 
     // 

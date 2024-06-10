@@ -133,6 +133,34 @@ export class StartUpState extends GameState
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
 
+        // Init Youtube playable if in the environment
+        if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
+            {
+                ytgame.system.onAudioEnabledChange((isAudioEnabled) =>
+                {
+                    if(menuManager.initialized)
+                    {
+                        let settingsMenu = menuManager.getMenu('settings_menu');
+    
+                        // Allow audio.
+                        if (isAudioEnabled)
+                        {
+                            settings.user.soundEnabled = 1;
+                        }
+                        else // Disable audio.
+                        {
+                            settings.user.soundEnabled = 0;
+                        }
+                    }
+                });
+    
+                // Send first frame ready now that we've started to draw.
+                ytgame.game.firstFrameReady();
+    
+                // Send game ready since there isn't any other processing.
+                ytgame.game.gameReady();
+            }
+
         // Start the game loop
         requestAnimationFrame( this.callback );
     }

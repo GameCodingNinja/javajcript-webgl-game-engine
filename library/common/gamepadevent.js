@@ -59,7 +59,11 @@ export const ANALOG_STICK_MSG_MAX = 0.3;
 
 export class GamepadEvent
 {
-    constructor( type, eventIndex, gamepad )
+    constructor()
+    {
+    }
+
+    init( type, eventIndex, gamepad )
     {
         // Event type
         this._type = type;

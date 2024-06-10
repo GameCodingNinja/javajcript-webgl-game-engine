@@ -33,10 +33,6 @@ class FontManager
             // Sanity check to make sure the font has not already been added in
             if( this.fontMap.has( each.name ) )
                 throw new Error( `Font name has already been loaded (${each.name}).` );
-
-            // Sanity check to make sure the font has not already been added in
-            if( this.fontMap.has( each.name ) )
-                throw new Error( `Font name has already been loaded (${each.name}).` );
             
             // Add the font to our list
             this.fontMap.set( each.name, new Font );

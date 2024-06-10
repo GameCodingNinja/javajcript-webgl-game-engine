@@ -359,7 +359,7 @@ export class Level1State extends CommonState
                 else if( event.arg[0] === stateDefs.ESE_GAME_RELOAD )
                 {
                     menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
-                    menuManager.getTree( 'pause_tree' ).transitionMenu();
+                    menuManager.getTree('pause_tree').transitionMenu();
                 }
             }
             else if( event.type === menuDefs.EME_MENU_TRANS_IN )
@@ -395,9 +395,9 @@ export class Level1State extends CommonState
                         scriptSingleton.prepare( scriptManager.get('MusicFade')( gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true), null ) );
                     }
 
-                    let tree = menuManager.getTree( 'pause_tree' );
-                    if( !tree.isDefaultMenu('pause_menu') )
-                        tree.setDefaultMenu('pause_menu');
+                    this._tree = menuManager.getTree( 'pause_tree' );
+                    if( !this._tree.isDefaultMenu('pause_menu') )
+                        this._tree.setDefaultMenu('pause_menu');
                 }
             }
             else if( event.type === stateDefs.ESE_SHOW_GAME_OVER_MENU )
@@ -405,7 +405,7 @@ export class Level1State extends CommonState
                 eventManager.clear();
                 actionManager.clearLastDeviceUsed();
                 menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
-                menuManager.getTree( 'pause_tree' ).transitionMenu();
+                menuManager.getTree('pause_tree').transitionMenu();
 
                 // Fade out the game music
                 let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
@@ -436,18 +436,18 @@ export class Level1State extends CommonState
             }
             else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
             {
-                let allToBeDeleted = true;
-                let buildingsAry = strategyManager.get('_buildings_').nodeAry;
-                for( let i = 0; i < buildingsAry.length; i++ )
+                this._allToBeDeleted = true;
+                this._buildingsAry = strategyManager.get('_buildings_').nodeAry;
+                for( this._i = 0; this._i < this._buildingsAry.length; this._i++ )
                 {
-                    if( buildingsAry[i].toBeDeleted === undefined )
+                    if( this._buildingsAry[this._i].toBeDeleted === undefined )
                     {
-                        allToBeDeleted = false;
+                        this._allToBeDeleted = false;
                         break;
                     }
                 }
 
-                if( allToBeDeleted )
+                if( this._allToBeDeleted )
                     eventManager.dispatchEvent( stateDefs.ESE_SHOW_GAME_OVER_MENU );
             }
             else if( event.type === gameDefs.EGE_ENEMY_DESTROYED )
@@ -489,8 +489,8 @@ export class Level1State extends CommonState
 
                 if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
                 {
-                    let laserBlast = this.playerShip.strategy.create('player_shot').get();
-                    laserBlast.prepareScript( 'shoot', this.easingX.getValue() );
+                    this._laserBlast = this.playerShip.strategy.create('player_shot').get();
+                    this._laserBlast.prepareScript( 'shoot', this.easingX.getValue() );
 
                     this.groupPlayer.play( 'player_gun_1' );
                 }
@@ -532,26 +532,26 @@ export class Level1State extends CommonState
     //
     handleShipMovement( event )
     {
-        let dir = -this.camera.pos.x - this.playerShip.sprite.pos.x;
+        this._dir = -this.camera.pos.x - this.playerShip.sprite.pos.x;
 
-        for( let i = 0; i < this.moveActionAry.length; i++ )
+        for( this._i = 0; this._i < this.moveActionAry.length; this._i++ )
         {
-            let actionResult = actionManager.wasAction( event, this.moveActionAry[i] );
-            if( actionResult != defs.EAP_IDLE )
+            this._actionResult = actionManager.wasAction( event, this.moveActionAry[this._i] );
+            if( this._actionResult != defs.EAP_IDLE )
             {
-                if( i < MOVE_LEFT_RIGHT )
+                if( this._i < MOVE_LEFT_RIGHT )
                 {
                     // Only act on action press for the last button down
-                    if( actionResult === defs.EAP_UP && i !== this.lastMoveDirX )
+                    if( this._actionResult === defs.EAP_UP && this._i !== this.lastMoveDirX )
                         continue;
 
-                    if( i === MOVE_LEFT )
+                    if( this._i === MOVE_LEFT )
                     {
                         // Flip the ship facing left
                         this.playerShip.object.setRotXYZ( 0, 180 );
 
                         // The camera easing positions the player ship at then end of the screen facing inwards
-                        if( actionResult === defs.EAP_DOWN )
+                        if( this._actionResult === defs.EAP_DOWN )
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
                             this.playerShip.fireTailScript.pause = false;
@@ -561,7 +561,7 @@ export class Level1State extends CommonState
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
-                            if(dir > -CAMERA_EASING_OFFSET)
+                            if(this._dir > -CAMERA_EASING_OFFSET)
                                 this.cameraEasingX.init( this.cameraEasingX.getValue(), -CAMERA_EASING_SPEED, 1, easing.getLinear() );
                         }
                         else
@@ -583,13 +583,13 @@ export class Level1State extends CommonState
 
                         this.moveDirX = MOVE_LEFT;
                     }
-                    else if( i === MOVE_RIGHT )
+                    else if( this._i === MOVE_RIGHT )
                     {
                         // Flip the ship facing right (default orientation)
                         this.playerShip.object.setRotXYZ();
 
                         // The camera easing positions the player ship at then end of the screen facing inwards
-                        if( actionResult === defs.EAP_DOWN )
+                        if( this._actionResult === defs.EAP_DOWN )
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
                             this.playerShip.fireTailScript.pause = false;
@@ -599,7 +599,7 @@ export class Level1State extends CommonState
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
-                            if(dir < CAMERA_EASING_OFFSET)
+                            if(this._dir < CAMERA_EASING_OFFSET)
                                 this.cameraEasingX.init( this.cameraEasingX.getValue(), CAMERA_EASING_SPEED, 1, easing.getLinear() );
                         }
                         else
@@ -623,13 +623,13 @@ export class Level1State extends CommonState
                     }
 
                     this.lastMoveDirX = this.moveDirX;
-                    this.lastMoveAction = actionResult;
+                    this.lastMoveAction = this._actionResult;
                 }
                 else
                 {
-                    if( i === MOVE_UP )
+                    if( this._i === MOVE_UP )
                     {
-                        if( actionResult === defs.EAP_DOWN )
+                        if( this._actionResult === defs.EAP_DOWN )
                         {
                             this.easingY.init( this.easingY.getValue(), 7, 0.5, easing.getLinear() );
                         }
@@ -640,9 +640,9 @@ export class Level1State extends CommonState
 
                         this.moveDirY = MOVE_UP;
                     }
-                    else if( i === MOVE_DOWN )
+                    else if( this._i === MOVE_DOWN )
                     {
-                        if( actionResult === defs.EAP_DOWN )
+                        if( this._actionResult === defs.EAP_DOWN )
                         {
                             this.easingY.init( this.easingY.getValue(), -7, 0.5, easing.getLinear() );
                         }
@@ -668,12 +668,11 @@ export class Level1State extends CommonState
         if( this.enemySpawnTimer.expired(true) )
         {
             // Create a enemy and position it outside of the view
-            let strategy = strategyManager.get('_enemy_');
-            if( strategy.nodeAry.length < this.maxEnemies )
+            if( this.enemyStrategy.nodeAry.length < this.maxEnemies )
             {
-                let node = strategy.create('enemy_ship');
-                node.get().setPosXYZ(0, settings.deviceRes.h);
-                node.transform();
+                this._node = this.enemyStrategy.create('enemy_ship');
+                this._node.get().setPosXYZ(0, settings.deviceRes.h);
+                this._node.transform();
             }
 
             if( this.enemyMaxTimer.expired(true) && this.maxEnemies < 25 )
@@ -697,7 +696,7 @@ export class Level1State extends CommonState
             if( (this.train.inc === 1 && (this.train.transPos.x - this.train.parentNode.radius) > settings.deviceRes_half.w) ||
                 (this.train.inc === -1 && (this.train.transPos.x + this.train.parentNode.radius) < -settings.deviceRes_half.w) )
             {
-                console.log("delete train");
+                //console.log("delete train");
                 this.trainStrategy.destroy( this.train.parentNode );
                 this.train = null;
                 this.trainTimer.reset( genFunc.randomInt( 10000, 25000 ) );
@@ -707,7 +706,7 @@ export class Level1State extends CommonState
         else if( this.trainTimer.expired() )
         {
             this.trainTimer.disable( true );
-            console.log("create train");
+            //console.log("create train");
 
             this.train = this.trainStrategy.create( 'train', 'train' ).get();
             if( genFunc.randomInt( 0, 1 ) === 0 )
@@ -728,20 +727,20 @@ export class Level1State extends CommonState
     //
     handleCloudMovement()
     {
-        for( let i = 0; i < MAX_CLOUDS; i++ )
+        for( this._i = 0; this._i < MAX_CLOUDS; this._i++ )
         {
-            this.cloudAry[i].sprite.incPosXYZ(highResTimer.elapsedTime * this.cloudAry[i].speed);
+            this.cloudAry[this._i].sprite.incPosXYZ(highResTimer.elapsedTime * this.cloudAry[this._i].speed);
 
-            if(this.cloudAry[i].sprite.pos.x - (this.cloudAry[i].sprite.getSize().w / 2) > settings.deviceRes_half.w)
+            if(this.cloudAry[this._i].sprite.pos.x - (this.cloudAry[this._i].sprite.getSize().w / 2) > settings.deviceRes_half.w)
             {
-                this.cloudAry[i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
-                this.cloudAry[i].speed = genFunc.randomArbitrary(0.001, 0.02);
-                this.cloudAry[i].sprite.setPosXYZ(-((this.cloudAry[i].sprite.getSize().w / 2) + settings.deviceRes_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
+                this.cloudAry[this._i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
+                this.cloudAry[this._i].speed = genFunc.randomArbitrary(0.001, 0.02);
+                this.cloudAry[this._i].sprite.setPosXYZ(-((this.cloudAry[this._i].sprite.getSize().w / 2) + settings.deviceRes_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
 
                 // Flip the sprite?
-                this.cloudAry[i].sprite.setRotXYZ(0, 0);
+                this.cloudAry[this._i].sprite.setRotXYZ(0, 0);
                 if(genFunc.randomInt(0, 1))
-                    this.cloudAry[i].sprite.setRotXYZ(0, 180);
+                    this.cloudAry[this._i].sprite.setRotXYZ(0, 180);
             }
         }
     }
@@ -782,25 +781,25 @@ export class Level1State extends CommonState
             this.easingY.execute();
             this.cameraEasingX.execute();
 
-            let easingVal = this.easingX.getValue() + this.cameraEasingX.getValue();
+            this._easingVal = this.easingX.getValue() + this.cameraEasingX.getValue();
 
             // Handle the enemy spawn
             this.handleEnemySpawn();
 
             // Handle the train spawn
-            this.handleTrainSpawn( easingVal );
+            this.handleTrainSpawn( this._easingVal );
 
             // Handle the cloud movement
             this.handleCloudMovement();
 
             // Handle the radar movement
-            this.handleRadarMovement( easingVal );
+            this.handleRadarMovement( this._easingVal );
 
-            this.camera.incPosXYZ( easingVal );
-            this.forgroundCamera.incPosXYZ( easingVal );
-            this.buildingsCamera.incPosXYZ( easingVal );
-            this.buildingsbackCamera.incPosXYZ( easingVal * 0.25 );
-            this.buildingsfrontCamera.incPosXYZ( easingVal * 0.5 );
+            this.camera.incPosXYZ( this._easingVal );
+            this.forgroundCamera.incPosXYZ( this._easingVal );
+            this.buildingsCamera.incPosXYZ( this._easingVal );
+            this.buildingsbackCamera.incPosXYZ( this._easingVal * 0.25 );
+            this.buildingsfrontCamera.incPosXYZ( this._easingVal * 0.5 );
 
             // Loop the static backgrounds
             if( this.buildingsbackCamera.pos.x < -LOOPING_BKG_WRAP_DIST )
@@ -842,18 +841,18 @@ export class Level1State extends CommonState
             // The camera easing positions the player ship at then end of the screen facing inwards
             if( this.moveDirX > MOVE_NULL )
             {
-                let dir = -this.camera.transPos.x - this.playerShip.sprite.transPos.x;
+                this._dir = -this.camera.transPos.x - this.playerShip.sprite.transPos.x;
 
-                if( (this.moveDirX === MOVE_LEFT && dir < -(settings.deviceRes_half.w - CAMERA_EASING_OFFSET)) )
+                if( (this.moveDirX === MOVE_LEFT && this._dir < -(settings.deviceRes_half.w - CAMERA_EASING_OFFSET)) )
                 {
                     this.moveDirX = MOVE_NULL;
-                    let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
+                    this._time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
 
                     // Don't allow any more camera easing, in this direction, after a certain point
                     // We enter this if when the player holds down thrust
-                    if( time < CAMERA_EASING_DIVISOR && dir > -CAMERA_EASING_OFFSET )
+                    if( this._time < CAMERA_EASING_DIVISOR && this._dir > -CAMERA_EASING_OFFSET )
                     {
-                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, time, easing.getLinear() );
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, this._time, easing.getLinear() );
                     }
                     // Bring the camera easing to a stop once we've reached our limit
                     // We enter this eles if the player is constantly thrusting
@@ -862,16 +861,16 @@ export class Level1State extends CommonState
                         this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 0.25, easing.getLinear() );
                     }
                 }
-                else if( (this.moveDirX === MOVE_RIGHT && dir > (settings.deviceRes_half.w - CAMERA_EASING_OFFSET)) )
+                else if( (this.moveDirX === MOVE_RIGHT && this._dir > (settings.deviceRes_half.w - CAMERA_EASING_OFFSET)) )
                 {
                     this.moveDirX = MOVE_NULL;
-                    let time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
+                    this._time = CAMERA_EASING_DIVISOR / Math.abs(this.cameraEasingX.getValue());
 
                     // Don't allow any more camera easing, in this direction, after a certain point
                     // We enter this if when the player holds down thrust
-                    if( time < CAMERA_EASING_DIVISOR && dir < CAMERA_EASING_OFFSET )
+                    if( this._time < CAMERA_EASING_DIVISOR && this._dir < CAMERA_EASING_OFFSET )
                     {
-                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, time, easing.getLinear() );
+                        this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, this._time, easing.getLinear() );
                     }
                     // Bring the camera easing to a stop once we've reached our limit
                     // We enter this eles if the player is constantly thrusting
@@ -887,15 +886,15 @@ export class Level1State extends CommonState
             // Loop the player strategy and camera
             if( this.playerShip.sprite.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                for( let i = 0; i < this.playerShip.strategy.nodeAry.length; i++ )
-                    this.playerShip.strategy.nodeAry[i].get().incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; this._i++ )
+                    this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
                 this.camera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
             }
             else if( this.playerShip.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                for( let i = 0; i < this.playerShip.strategy.nodeAry.length; i++ )
-                    this.playerShip.strategy.nodeAry[i].get().incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; this._i++ )
+                    this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
 
                 this.camera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
@@ -963,15 +962,15 @@ export class Level1State extends CommonState
             this.lowerHudStategy.render();
 
             // Render the top hud radar map
-            let viewPort = device.gl.getParameter(device.gl.VIEWPORT);
-            device.gl.viewport(viewPort[0], viewPort[3] - (viewPort[3] * 0.09), viewPort[2], viewPort[3] * this.radarCamera1.scale.y);
+            this._viewPort = device.gl.getParameter(device.gl.VIEWPORT);
+            device.gl.viewport(this._viewPort[0], this._viewPort[3] - (this._viewPort[3] * 0.09), this._viewPort[2], this._viewPort[3] * this.radarCamera1.scale.y);
             this.buildingsStrategy.render( this.radarCamera1 );
             this.enemyStrategy.render( this.radarCamera1 );
             this.playerShip.strategy.render( this.radarCamera1 );
             this.buildingsStrategy.render( this.radarCamera2 );
             this.enemyStrategy.render( this.radarCamera2 );
             this.playerShip.strategy.render( this.radarCamera2 );
-            device.gl.viewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
+            device.gl.viewport(this._viewPort[0], this._viewPort[1], this._viewPort[2], this._viewPort[3]);
 
             this.upperHudStategy.render();
 

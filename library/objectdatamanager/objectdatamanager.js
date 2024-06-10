@@ -257,7 +257,7 @@ class ObjectDataManager extends ManagerBase
             let group = groupAry[grp];
             
             // Make sure the group we are looking for exists
-            if( this.listTableMap.get( group ) === undefined )
+            if( !this.listTableMap.has( group ) )
                 throw new Error( `Object data list group name can't be found (${group})!` );
 
             // Get the group map

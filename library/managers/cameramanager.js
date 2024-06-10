@@ -127,8 +127,8 @@ class CameraManager
     //
     transform()
     {
-        for( let i = 0; i < this.transformAry.length; i++ )
-            this.transformAry[i].transform();
+        for( this._i = 0; this._i < this.transformAry.length; this._i++ )
+            this.transformAry[this._i].transform();
     }
     
     //

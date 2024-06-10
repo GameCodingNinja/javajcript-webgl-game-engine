@@ -76,34 +76,34 @@ class AIManager extends ManagerBase
     //
     get( name, object )
     {
-        let headNode = null;
-        let aiNodeData = this.aiMap.get( name );
-        if(aiNodeData)
+        this._headNode = null;
+        this._aiNodeData = this.aiMap.get( name );
+        if(this._aiNodeData)
         {
-            let aiNodeDataAry = aiNodeData.dataAry;
-            for( let i = 0; i < aiNodeDataAry.length; i++ )
+            this._aiNodeDataAry = this._aiNodeData.dataAry;
+            for( this._i = 0; this._i < this._aiNodeDataAry.length; this._i++ )
             {
-                let node;
+                this._node;
 
                 // Handle the head node
-                if( aiNodeDataAry[i].behavior === defs.EAIB_HEAD )
+                if( this._aiNodeDataAry[this._i].behavior === defs.EAIB_HEAD )
                 {
-                    headNode = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i]);
+                    this._headNode = scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i]);
                     continue;
                 }
                 // The leaf node executes game logic so need to pass in the object
-                else if( aiNodeDataAry[i].behavior === defs.EAIB_LEAF_TASK )
+                else if( this._aiNodeDataAry[this._i].behavior === defs.EAIB_LEAF_TASK )
                 {
-                    node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], headNode, object);
+                    this._node = scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i], this._headNode, object);
                 }
                 else
                 {
-                    node = scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], headNode);
+                    this._node = scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i], this._headNode);
                 }
 
-                if( !headNode.addNode( node ) )
+                if( !this._headNode.addNode( this._node ) )
                 {
-                    throw new Error( `Parent node not found or node does not support adding children (${aiNodeDataAry[i].scriptName}, ${node.parentId})!` );
+                    throw new Error( `Parent node not found or node does not support adding children (${this._aiNodeDataAry[i].scriptName}, ${this._node.parentId})!` );
                 }
             }
         }
@@ -113,9 +113,9 @@ class AIManager extends ManagerBase
         }
 
         // Initialize the tree by doing a reset
-        headNode.resetTree();
+        this._headNode.resetTree();
 
-        return headNode;
+        return this._headNode;
     }
 
     //
@@ -132,8 +132,7 @@ class AIManager extends ManagerBase
     deleteAI( aiName )
     {
         // Check for the AI name
-        let ai = this.aiMap.get( aiName );
-        if( ai )
+        if( this.aiMap.has( aiName ) )
         {
             this.aiMap.delete( aiName );
         }
