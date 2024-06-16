@@ -93,7 +93,7 @@ export class Sprite extends Object
     }
 
     // 
-    //  DESC: Load from XML node
+    //  DESC: Reload from XML node
     //
     reload( xmlNode )
     {
@@ -105,6 +105,21 @@ export class Sprite extends Object
         
         if( this.physicsComponent )
             this.physicsComponent.setTransform(this.pos.x, this.pos.y, this.rot.z);
+    }
+
+    // 
+    //  DESC: Reset from XML node
+    //
+    reset( xmlNode )
+    {
+        // Reset to factory defaults
+        this.parameters.clear();
+        this.parameters.add( defs.VISIBLE );
+
+        if( this.collisionComponent && this.objData.collisionData.isActive() )
+            this.collisionComponent.enable = true;
+
+        this.reload( xmlNode );
     }
     
     // 

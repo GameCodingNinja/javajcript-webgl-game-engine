@@ -29,6 +29,16 @@ class PlayerShip_FireTailAnim
     constructor( sprite )
     {
         this.animate = new utilScripts.PlayAnim( sprite );
+
+        // // Continues the init
+        this.reset();
+    }
+
+    // 
+    //  DESC: Reset the script
+    //
+    reset()
+    {
         this.animate.init( 24, true );
         this.pause = true;
     }
@@ -53,39 +63,49 @@ class PlayerShip_ShootLazer
     constructor( sprite, shipVelocity )
     {
         this.sprite = sprite;
-        this.shipVelocity = shipVelocity
-
-        // Speed of the projectile
-        this.PROJECTILE_SPEED = 1.5;
 
         // Player ship
         this.playerShipStratagy = strategyManager.get('_player_ship_');
-        let playerShipNode = this.playerShipStratagy.get('player_ship');
+        this.playerShipNode = this.playerShipStratagy.get('player_ship');
         this.camera = this.playerShipStratagy.camera;
 
         // Enemy strategy
         this.enemyStratagy = strategyManager.get('_enemy_');
 
+        // Continues the init
+        this.reset( shipVelocity );
+    }
+
+    // 
+    //  DESC: Reset the script
+    //
+    reset( shipVelocity )
+    {
+        // Speed of the projectile
+        this.PROJECTILE_SPEED = 1.5;
+        
+        this.shipVelocity = shipVelocity
+
         // Y Rotation
-        let rot = playerShipNode.findChild('playerShip_object').get().rot;
+        this._rot = this.playerShipNode.findChild('playerShip_object').get().rot;
 
         // Is the position flipped?
-        let offsetX = this.sprite.pos.x;
-        let offsetY = this.sprite.pos.y;
-        if( rot.y )
+        this._offsetX = this.sprite.pos.x;
+        this._offsetY = this.sprite.pos.y;
+        if( this._rot.y )
         {
-            offsetX = -offsetX;
+            this._offsetX = -this._offsetX;
             this.PROJECTILE_SPEED = -this.PROJECTILE_SPEED;
         }
 
         // Set the rotation
-        this.sprite.setRot( rot, false );
+        this.sprite.setRot( this._rot, false );
 
         // Set the initial position
-        this.sprite.setPos( playerShipNode.get().pos );
+        this.sprite.setPos( this.playerShipNode.get().pos );
 
         // Set the initial offset
-        this.sprite.incPosXYZ( offsetX, offsetY );
+        this.sprite.incPosXYZ( this._offsetX, this._offsetY );
 
         // Will have to do a preemptive transform so that the transPos data is available
         // for camera.inView because that doesn't happen until later in the pipeline.
@@ -106,7 +126,7 @@ class PlayerShip_ShootLazer
             if( this.sprite.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
             {
                 // Set the transpos just for the wraparound collision check that will be overwritten on the next translate
-                this.sprite.transPos.x += (GAMEPLAY_LOOPING_WRAP_DIST * 2);
+                this.sprite.transPos.x += // Continues the init(GAMEPLAY_LOOPING_WRAP_DIST * 2);
                 this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
             }
             else if( this.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
@@ -121,7 +141,7 @@ class PlayerShip_ShootLazer
 
         // We are done with this sprite, disable collision and queue it up to be deleted
         this.sprite.collisionComponent.enable = false;
-        this.playerShipStratagy.destroy( this.sprite.parentNode );
+        this.playerShipStratagy.recycle( this.sprite.parentNode );
 
         return true;
     }
@@ -148,6 +168,17 @@ class PlayerShip_Die
             this.rotate = 0.05;
             this.rotateVelocity = 0.00005;
         }
+
+        // Continues the init
+        this.reset();
+    }
+
+    // 
+    //  DESC: Reset the script
+    //
+    reset()
+    {
+        // Empty by design
     }
     
     // 
@@ -184,20 +215,32 @@ class EnemyShip_Shoot
         this.PROJECTILE_SPEED = 0.25;
         this.PROJECTILE_ROT_SPEED = 0.5;
 
+        this.startPos = new Point;
+
         // Player ship
         this.playerShipStratagy = strategyManager.get('_player_ship_');
-        this.playerShipNode = this.playerShipStratagy.get('player_ship');
         this.camera = this.playerShipStratagy.camera;
-        this.sprite.setPos(enemySprite.pos);
 
-        let length = this.playerShipNode.get().pos.calcLength2D( enemySprite.pos );
-        this.moveX = (this.playerShipNode.get().pos.x - enemySprite.pos.x) / length;
-        this.moveY = (this.playerShipNode.get().pos.y - enemySprite.pos.y) / length;
+        // Continues the init
+        this.reset( enemySprite );
+    }
 
-        this.startPos = new Point;
+    // 
+    //  DESC: Reset the script
+    //
+    reset( enemySprite )
+    {
+        this.sprite.setPos( enemySprite.pos );
+        this.sprite.setRotXYZ(0, 0, 0);
+
+        this.playerShipSprite = this.playerShipStratagy.get('player_ship').get();
+        this._length = this.playerShipSprite.pos.calcLength2D( enemySprite.pos );
+        this.moveX = (this.playerShipSprite.pos.x - enemySprite.pos.x) / this._length;
+        this.moveY = (this.playerShipSprite.pos.y - enemySprite.pos.y) / this._length;
+
         this.startPos.copy( enemySprite.pos );
 
-        sprite.transform();
+        this.sprite.transform();
     }
 
     // 
@@ -216,7 +259,7 @@ class EnemyShip_Shoot
         }
 
         // We are done with this sprite, queue it up to be deleted
-        this.playerShipStratagy.destroy(this.sprite.parentNode);
+        this.playerShipStratagy.recycle( this.sprite.parentNode );
 
         return true;
     }
@@ -224,6 +267,8 @@ class EnemyShip_Shoot
 
 //
 //  DESC: Script for handling player being hit
+//  NOTE: Just need this script to execute the explosion sprite animation
+//        Execution can get interupted by multiple hits which is why there's no execution
 //
 class PlayerShip_Hit
 {
@@ -234,13 +279,18 @@ class PlayerShip_Hit
         // Get the player ship strategy to create the explosion animation
         this.playerShipStratagy = strategyManager.get('_player_ship_');
 
-        // Create an explode graphic node and translate it to the projectile sprite
-        this.explodeAnim = new utilScripts.PlayAnim( this.playerShipStratagy.create('explode').get() );
-        this.explodeAnim.init( 24 );
-        this.explodeAnim.sprite.setPos( projectileSprite.pos );
-        this.explodeAnim.sprite.transform();
+        // Continues the init
+        this.reset( projectileSprite );
+    }
 
-        this.dif = sprite.pos.getDistance( this.explodeAnim.sprite.pos );
+    // 
+    //  DESC: Reset the script
+    //
+    reset( projectileSprite )
+    {
+        // Create an explode graphic node and translate it to the projectile sprite
+        this.explodeSprite = this.playerShipStratagy.create('explode').get();
+        this.explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite );
     }
     
     // 
@@ -248,11 +298,56 @@ class PlayerShip_Hit
     //
     execute()
     {
-        this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
+        return true;
+    }
+}
+
+//
+//  DESC: Script for handling player ship explosion
+//
+class Explode_animation
+{
+    constructor( sprite, projectileSprite, shipSprite )
+    {
+        this.sprite = sprite;
+
+        // Get the player ship strategy to delete the explosion animation
+        this.playerShipStratagy = strategyManager.get('_player_ship_');
+
+        // Setup the animation
+        this.explodeAnim = new utilScripts.PlayAnim( sprite );
+
+        // Continues the init
+        this.reset( projectileSprite, shipSprite );
+    }
+
+    // 
+    //  DESC: Reset the script
+    //
+    reset( projectileSprite, shipSprite )
+    {
+        this.shipSprite = shipSprite
+
+        // This resets the animation
+        this.explodeAnim.init( 24 );
+
+        // Create an explode graphic node and translate it to the projectile sprite
+        this.sprite.setPos( projectileSprite.pos );
+        this.sprite.transform();
+
+        this.dif = this.shipSprite.pos.getDistance( this.explodeAnim.sprite.pos );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.explodeAnim.sprite.setPosXYZ( this.shipSprite.pos.x - this.dif.x, this.shipSprite.pos.y - this.dif.y );
 
         if( this.explodeAnim.execute() )
         {
-            this.playerShipStratagy.destroy( this.explodeAnim.sprite.parentNode );
+            this.playerShipStratagy.recycle( this.sprite.parentNode );
 
             return true;
         }
@@ -270,12 +365,21 @@ class EnemyShip_Hit
     {
         this.sprite = sprite;
 
-        // Remove the AI script since the enemy is to die
-        sprite.scriptComponent.remove( 'AI_Enemy_Head' );
-
-        let dist = sprite.pos.getDistance( projectileSprite.pos );
-
         this.easingY = new easing.valueTo;
+
+        // Continues the init
+        this.reset( projectileSprite );
+    }
+
+    // 
+    //  DESC: Reset the script
+    //
+    reset( projectileSprite )
+    {
+        // Remove the AI script since the enemy is to die
+        this.sprite.scriptComponent.remove( 'AI_Enemy_Head' );
+
+        let dist = this.sprite.pos.getDistance( projectileSprite.pos );
 
         let dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
         let offsetY = Math.abs(this.sprite.pos.y - dest);
@@ -303,9 +407,9 @@ class EnemyShip_Hit
         this.explodeAnim.init( 24 );
 
         if( projectileSprite.rot.y > 1 )
-            this.explodeAnim.sprite.setPosXYZ( sprite.pos.x + 15, projectileSprite.pos.y );
+            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x + 15, projectileSprite.pos.y );
         else
-            this.explodeAnim.sprite.setPosXYZ( sprite.pos.x - 15, projectileSprite.pos.y );
+            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - 15, projectileSprite.pos.y );
 
         this.explodeAnim.sprite.transform();
 
@@ -315,7 +419,7 @@ class EnemyShip_Hit
             projectileSprite.setVisible( false );
         }
 
-        this.dif = sprite.pos.getDistance( this.explodeAnim.sprite.pos );
+        this.dif = this.sprite.pos.getDistance( this.explodeAnim.sprite.pos );
     }
     
     // 
@@ -357,8 +461,19 @@ class EnemyShot_Hit
 {
     constructor( sprite )
     {
+        this.sprite = sprite;
+
+        // Continues the init
+        this.reset();
+    }
+
+    // 
+    //  DESC: Reset the script
+    //
+    reset()
+    {
         // We are done with this sprite, queue it up to be deleted
-        strategyManager.get('_player_ship_').destroy( sprite.parentNode );
+        strategyManager.get('_player_ship_').recycle( this.sprite.parentNode );
     }
     
     // 
@@ -382,6 +497,14 @@ class EnemyShip_CheckForCollideWithPlayer
         // Player ship
         this.playerShipStratagy = strategyManager.get('_player_ship_');
         this.camera = this.playerShipStratagy.camera;
+    }
+
+    // 
+    //  DESC: Reset the script
+    //
+    reset()
+    {
+        // Empty by design
     }
     
     // 
@@ -410,6 +533,15 @@ class Building_Die
         this.sprite = sprite;
         this.rotDir = 0.005;
 
+        // Continues the init
+        this.reset();
+    }
+
+    // 
+    //  DESC: Reset the script
+    //
+    reset()
+    {
         // Flag indicating this building was destroyed
         this.sprite.destroyed = true;
 
@@ -455,7 +587,10 @@ export function loadScripts()
 
     scriptManager.set( 'PlayerShip_Hit',
         ( sprite, projectileSprite ) => { return new PlayerShip_Hit( sprite, projectileSprite ); } );
-    
+
+    scriptManager.set( 'Explode_animation',
+        ( sprite, projectileSprite, shipSprite ) => { return new Explode_animation( sprite, projectileSprite, shipSprite ); } );
+
     scriptManager.set( 'PlayerShip_Die',
         ( sprite ) => { return new PlayerShip_Die( sprite ); } );
 

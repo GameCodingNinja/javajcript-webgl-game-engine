@@ -8,7 +8,11 @@
 
 import { signalManager } from '../managers/signalmanager';
 
-var sessionCacheBustNo = Math.random();
+// Globals used in functions to avoid garbage collection
+var gSessionCacheBustNo = Math.random();
+var gLen;
+var gI;
+var gReturn;
 
 // 
 //  DESC: Load files via a promise
@@ -90,7 +94,7 @@ export function downloadFile( fileType, filePath )
                 }
 
             // Define which file to open and send the request. True = asynchronous
-            request.open('GET', filePath + '?cache_buster=' + sessionCacheBustNo, true);
+            request.open('GET', filePath + '?cache_buster=' + gSessionCacheBustNo, true);
             request.send();
         }
         // Images are handled differently
@@ -200,10 +204,8 @@ export function stringLoadXML( stringData )
 export function getKey(map, searchValue)
 {
     for (let [key, value] of map.entries())
-    {
         if( value === searchValue )
             return key;
-    }
 
     return undefined;
 }
@@ -231,4 +233,32 @@ export function cap(value, min, max)
         return max;
 
     return value;
+}
+
+// 
+//  DESC: Remove value from array without incuring garbage collection
+//
+export function removeAt(array, index)
+{
+    gLen = array.length;
+    gReturn = array[index];
+
+    for( gI = index + 1; gI < gLen; ++gI )
+        array[gI - 1] = array[gI];
+
+    array.length = gLen - 1;
+
+    return gReturn;
+}
+
+// 
+//  DESC: Remove value from array without incuring garbage collection
+//
+export function indexOf(array, obj)
+{
+    for( gI = 0; gI < array.length; gI++ )
+        if( array[gI] === obj )
+            return gI;
+
+    return -1;
 }

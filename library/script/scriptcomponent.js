@@ -8,6 +8,7 @@
 import { scriptManager } from '../script/scriptmanager';
 import { aiManager } from '../managers/aimanager';
 import { CScriptPrepareFunc } from '../script/scriptpreparefunc';
+import * as genFunc from '../utilities/genfunc';
 
 export class ScriptComponent
 {
@@ -18,6 +19,9 @@ export class ScriptComponent
 
         // Script object map. Prepare scripts by name
         this.scriptFactoryMap = null;
+
+        // Script pool
+        this.scriptRecycleMap = new Map;
     }
 
     // 
@@ -27,33 +31,99 @@ export class ScriptComponent
     initScriptIds( xmlNode )
     {
         // Check for scripting
-        let scriptNode = xmlNode.getElementsByTagName( 'script' );
+        this._scriptNode = xmlNode.getElementsByTagName( 'script' );
 
-        if( !this.scriptFactoryMap && scriptNode.length )
+        if( !this.scriptFactoryMap && this._scriptNode.length )
             this.scriptFactoryMap = new Map;
 
-        for( let i = 0; i < scriptNode.length; ++i )
+        for( this._i = 0; this._i < this._scriptNode.length; ++this._i )
         {
-            let prepareOnInit = false;
-            let forceUpdate = false;
-            let ai = false;
-            let attr = scriptNode[i].getAttribute( 'prepareOnInit' );
-            if( attr !== null )
-                prepareOnInit = (attr === 'true')
+            this._prepareOnInit = false;
+            this._forceUpdate = false;
+            this._ai = false;
+            this._attr = this._scriptNode[this._i].getAttribute( 'prepareOnInit' );
+            if( this._attr !== null )
+                this._prepareOnInit = (this._attr === 'true')
 
-            attr = scriptNode[i].getAttribute( 'forceUpdate' );
-            if( attr !== null )
-                forceUpdate = (attr === 'true')
+            this._attr = this._scriptNode[this._i].getAttribute( 'forceUpdate' );
+            if( this._attr !== null )
+                this._forceUpdate = (this._attr === 'true')
 
             // See if this is an ai
-            attr = scriptNode[i].getAttribute( 'ai' );
-            if( attr )
-                ai = (attr === 'true');
+            this._attr = this._scriptNode[this._i].getAttribute( 'ai' );
+            if( this._attr )
+                this._ai = (this._attr === 'true');
 
-            attr = scriptNode[i].attributes[0];
-            if( attr )
+            this._attr = this._scriptNode[this._i].attributes[0];
+            if( this._attr )
                 // This allocates the script to the map
-                this.scriptFactoryMap.set( attr.name, new CScriptPrepareFunc(attr.value, prepareOnInit, forceUpdate, ai) );
+                this.scriptFactoryMap.set( this._attr.name, new CScriptPrepareFunc(this._attr.value, this._prepareOnInit, this._forceUpdate, this._ai) );
+        }
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle(args)
+    {
+        this._scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
+
+        if( this._scriptPrepareFunc )
+        {
+            this._script = this.scriptRecycleMap.get(this._scriptPrepareFunc.funcName );
+
+            if( this._script )
+            {
+                switch(args.length)
+                {
+                    case 1:
+                        this._script.reset();
+                    break;
+                    case 2:
+                        this._script.reset(args[1]);
+                    break;
+                    case 3:
+                        this._script.reset(args[1],args[2]);
+                    break;
+                    case 4:
+                        this._script.reset(args[1],args[2],args[3]);
+                    break;
+                    case 5:
+                        this._script.reset(args[1],args[2],args[3],args[4]);
+                    break;
+                    case 6:
+                        this._script.reset(args[1],args[2],args[3],args[4],args[5]);
+                    break;
+                }
+
+                if( this._scriptPrepareFunc.forceUpdate )
+                {
+                    if( !this._script.execute() )
+                        this.scriptAry.push( this._script );
+                }
+                else
+                {
+                    this.scriptAry.push( this._script );
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // 
+    //  DESC: Recycle all the active scripts
+    //
+    recycleActiveScripts()
+    {
+        if( this.scriptAry.length )
+        {
+            for( this._i = 0; this._i < this.scriptAry.length; this._i++ )
+                this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+
+            this.scriptAry.length = 0;
         }
     }
 
@@ -64,80 +134,79 @@ export class ScriptComponent
     //
     prepare(...args)
     {
-        let activeScript = null;
+        this._activeScript = null;
 
         if( this.scriptFactoryMap && typeof args[0] === 'string' )
         {
-            let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
-            if( scriptPrepareFunc )
+            this._scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
+            if( this._scriptPrepareFunc )
             {
-                let script = null;
-                if(scriptPrepareFunc.ai)
+                if(this._scriptPrepareFunc.ai)
                 {
-                    activeScript = aiManager.get( scriptPrepareFunc.funcName );
+                    this._activeScript = aiManager.get( this._scriptPrepareFunc.funcName );
                 }
                 else
                 {
-                    script = scriptManager.get( scriptPrepareFunc.funcName );
+                    this._script = scriptManager.get( this._scriptPrepareFunc.funcName );
                     
-                    if( script )
+                    if( this._script )
                     {
                         switch(args.length)
                         {
                             case 1:
-                                activeScript = script();
+                                this._activeScript = this._script();
                             break;
                             case 2:
-                                activeScript = script(args[1]);
+                                this._activeScript = this._script(args[1]);
                             break;
                             case 3:
-                                activeScript = script(args[1],args[2]);
+                                this._activeScript = this._script(args[1],args[2]);
                             break;
                             case 4:
-                                activeScript = script(args[1],args[2],args[3]);
+                                this._activeScript = this._script(args[1],args[2],args[3]);
                             break;
                             case 5:
-                                activeScript = script(args[1],args[2],args[3],args[4]);
+                                this._activeScript = this._script(args[1],args[2],args[3],args[4]);
                             break;
                             case 6:
-                                activeScript = script(args[1],args[2],args[3],args[4],args[5]);
+                                this._activeScript = this._script(args[1],args[2],args[3],args[4],args[5]);
                             break;
                         }
-
-                        activeScript.name = scriptPrepareFunc.funcName;
                     }
                 }
 
-                if( activeScript )
+                if( this._activeScript )
                 {
-                    if( scriptPrepareFunc.forceUpdate )
+                    this._activeScript.name = this._scriptPrepareFunc.funcName;
+
+                    if( this._scriptPrepareFunc.forceUpdate )
                     {
-                        if( !activeScript.execute() )
-                            this.scriptAry.push( activeScript );
+                        if( !this._activeScript.execute() )
+                            this.scriptAry.push( this._activeScript );
                     }
                     else
                     {
-                        this.scriptAry.push( activeScript );
+                        this.scriptAry.push( this._activeScript );
                     }
                 }
             }
         }
         else if( typeof args[0] === 'object' )
         {
-            activeScript = args[0];
+            this._activeScript = args[0];
 
             if( args.length > 1 && args[1] )
             {
-                if( !activeScript.execute() )
-                    this.scriptAry.push( activeScript );
+                if( !this._activeScript.execute() )
+                    this.scriptAry.push( this._activeScript );
             }
             else
             {
-                this.scriptAry.push( activeScript );
+                this.scriptAry.push( this._activeScript );
             }
         }
 
-        return activeScript;
+        return this._activeScript;
     }
 
     // 
@@ -147,37 +216,45 @@ export class ScriptComponent
     {
         if( this.scriptFactoryMap )
         {
-            for( let scriptPrepareFunc of this.scriptFactoryMap.values() )
+            for( this._scriptPrepareFunc of this.scriptFactoryMap.values() )
             {
-                if( scriptPrepareFunc.prepareOnInit )
+                if( this._scriptPrepareFunc.prepareOnInit )
                 {
-                    let activeScript = null;
-                    let script = null;
-                    if(scriptPrepareFunc.ai)
+                    // See if this script has been recycled
+                    this._activeScript = this.scriptRecycleMap.get(this._scriptPrepareFunc.funcName );
+                    if( this._activeScript )
                     {
-                        activeScript = aiManager.get( scriptPrepareFunc.funcName, object );
+                        this._activeScript.recycle( object );
                     }
                     else
                     {
-                        script = scriptManager.get( scriptPrepareFunc.funcName );
-
-                        if( script )
+                        if(this._scriptPrepareFunc.ai)
                         {
-                            activeScript = script(object);
-                            activeScript.name = scriptPrepareFunc.funcName;
-                        }
-                    }
-
-                    if( activeScript )
-                    {
-                        if( scriptPrepareFunc.forceUpdate )
-                        {
-                            if( !activeScript.execute() )
-                                this.scriptAry.push( activeScript );
+                            this._activeScript = aiManager.get( this._scriptPrepareFunc.funcName, object );
                         }
                         else
                         {
-                            this.scriptAry.push( activeScript );
+                            this._script = scriptManager.get( this._scriptPrepareFunc.funcName );
+
+                            if( this._script )
+                            {
+                                this._activeScript = this._script(object);
+                                this._activeScript.name = this._scriptPrepareFunc.funcName;
+                            }
+                        }
+                    }
+
+                    if( this._activeScript )
+                    {
+
+                        if( this._scriptPrepareFunc.forceUpdate )
+                        {
+                            if( !this._activeScript.execute() )
+                                this.scriptAry.push( this._activeScript );
+                        }
+                        else
+                        {
+                            this.scriptAry.push( this._activeScript );
                         }
                     }
                 }
@@ -191,29 +268,33 @@ export class ScriptComponent
     update()
     {
         // Call the active scripts
-        for( let i = this.scriptAry.length - 1; i > -1; --i )
+        for( this._i = this.scriptAry.length - 1; this._i > -1; --this._i )
         {
-            // If the script is finished, remove it
-            if( this.scriptAry[i].execute() )
-                this.scriptAry.splice( i, 1 );
+            // If the script is finished, recycle it
+            if( this.scriptAry[this._i].execute() )
+            {
+                this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+                genFunc.removeAt( this.scriptAry, this._i );
+            }
         }
 
-        if( this.removeAry )
+        if( this.removeAry.length )
         {
-            for( let i = 0; i < this.removeAry.length; i++ )
+            for( this._i = 0; this._i < this.removeAry.length; this._i++ )
             {
-                for( let j = 0; j < this.scriptAry.length; j++ )
+                for( this._j = 0; this._j < this.scriptAry.length; this._j++ )
                 {
                     // If the script is finished, remove it
-                    if( this.scriptAry[i].name === this.removeAry[i] )
+                    if( this.scriptAry[this._i].name === this.removeAry[this._i] )
                     {
-                        this.scriptAry.splice( j, 1 );
+                        this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+                        genFunc.removeAt( this.scriptAry, this._j );
                         break;
                     }
                 }
             }
 
-            this.removeAry = [];
+            this.removeAry.length = 0;
         }
     }
 
@@ -222,12 +303,12 @@ export class ScriptComponent
     //
     initScriptTree()
     {
-        for( let i = 0; i < this.scriptAry.length; i++ )
+        for( this._i = 0; this._i < this.scriptAry.length; this._i++ )
         {
             // initTree is only in scripts that inherit from Node
-            if( this.scriptAry[i].initTree !== undefined )
+            if( this.scriptAry[this._i].initTree !== undefined )
             {
-                this.scriptAry[i].initTree();
+                this.scriptAry[this._i].initTree();
             }
         }
     }

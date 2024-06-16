@@ -35,17 +35,23 @@ export class Strategy extends Object
         // Array of nodes to be added to the active vector
         this.activateAry = [];
         
-        // Array of nodess to be removed to the active vector
+        // Array of nodess to be removed from the active vector
         this.deactivateAry = [];
         
-        // Set of indexes to delete
+        // Array of nodess to be removed from the active vector and deleted
         this.deleteAry = [];
+
+        // Array of nodess to be removed from the active vector and added to the pool
+        this.recycleAry = [];
 
         // Clear all array
         this.clearAllAry = [];
 
         // Clear all nodes flag
         this.clearAllNodesFlag = false;
+
+        // Pool map for sprite recycle
+        this.recycleMap = new Map;
     }
 
     //
@@ -102,8 +108,8 @@ export class Strategy extends Object
     //
     clear()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.deleteAry.push( this.nodeAry[i] );
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.deleteAry.push( this.nodeAry[this._i] );
     }
 
     //
@@ -111,16 +117,11 @@ export class Strategy extends Object
     //
     cleanUp()
     {
-        // See if any nodes in the map are not part of the node array and clean
-        for( let node of this.nodeMap.values() )
-        {
-            let index = this.nodeAry.findIndex( (obj) => obj === node );
-            if( index === -1 )
-                node.cleanUp();
-        }
+        for( this._node of this.nodeMap.values() )
+            this._node.cleanUp();
 
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].cleanUp();
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.nodeAry[this._i].cleanUp();
     }
 
     //
@@ -130,8 +131,8 @@ export class Strategy extends Object
     {
         // If the data can't be found, this could be a simple one-off sprite node 
         // which can be generated from the group and object data name
-        let data = this.dataMap.get( name );
-        if( !data )
+        this._date = this.dataMap.get( name );
+        if( this._date === undefined )
         {
             // If we can't find the data and the group param is empty, see if we can find the group 
             // in the Object Data Manager as a last attemp. 
@@ -150,13 +151,13 @@ export class Strategy extends Object
                 this.loadFromNode( 
                     genFunc.stringLoadXML(`<strategy defaultGroup="${group}"><node name="${name}"><sprite/></node></strategy>`).getElementsByTagName( 'strategy' )[0],
                     'Dynamic generation');
-                data = this.dataMap.get( name );
+                this._date = this.dataMap.get( name );
             }
             else
                 throw new Error( `Error finding node data (${name})!` );
         }
 
-        return data;
+        return this._date;
     }
 
     //
@@ -165,27 +166,40 @@ export class Strategy extends Object
     create( dataName, instanceName = null, makeActive = true, group = '' )
     {
         // Get the data for this data name
-        let nodeAry = this.getData( dataName, group ).dataAry;
+        this._nodeDataAry = this.getData( dataName, group ).dataAry;
+
+        // Do we have any nodes from the pool to draw from?
+        this._poolNodeAry = this.recycleMap.get( this._nodeDataAry[0].nodeName );
+        if( this._poolNodeAry && this._poolNodeAry.length )
+        {
+            this._node = this._poolNodeAry.pop();
+            this._node.resetTree();
+
+            if( !instanceName || makeActive )
+                this.activateAry.push( this._node );
+
+            return this._node;
+        }
 
         // Build the node list
-        let headNode = null;
-        for( let i = 0; i < nodeAry.length; i++ )
+        this._headNode = null;
+        for( this._i = 0; this._i < this._nodeDataAry.length; this._i++ )
         {
-            let node = nodeFactory.create( nodeAry[i] );
+            this._node = nodeFactory.create( this._nodeDataAry[this._i] );
 
-            if( headNode === null )
-                headNode = node;
+            if( this._headNode === null )
+                this._headNode = this._node;
 
-            else if( !headNode.addNode( node ) )
-                throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
+            else if( !this._headNode.addNode( this._node ) )
+                throw new Error( `Parent node not found or node does not support adding children (${this._nodeDataAry[i].nodeName}, ${node.parentId})!` );
         }
 
         // Init the head node
-        headNode.init();
+        this._headNode.init();
 
         // Add the node to the array for adding to the active list
         if( !instanceName || makeActive )
-            this.activateAry.push( headNode );
+            this.activateAry.push( this._headNode );
 
         // If there is an instance name with this node, add it to the map
         if( instanceName )
@@ -194,10 +208,10 @@ export class Strategy extends Object
             if( this.nodeMap.has( instanceName ) )
                 throw new Error( `Duplicate node instance name (${instanceName})!` );
 
-            this.nodeMap.set( instanceName, headNode );
+            this.nodeMap.set( instanceName, this._headNode );
         }
 
-        return headNode;
+        return this._headNode;
     }
 
     //
@@ -213,17 +227,21 @@ export class Strategy extends Object
     //
     awakeCount()
     {
-        let result = 0;
+        this._result = 0;
 
-        for( let i = 0; i < this.nodeAry.length; i++ )
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
         {
-            let sprite = this.nodeAry[i].get();
-            if( sprite.isPhysicsActive() )
-                if( sprite.isPhysicsAwake() )
-                    result += 1;
+            this._sprite = this.nodeAry[this._i].get();
+            if( this._sprite.isPhysicsActive() )
+            {
+                if( this._sprite.isPhysicsAwake() )
+                {
+                    this._result += 1;
+                }
+            }
         }
 
-        return result;
+        return this._result;
     }
 
     //
@@ -231,12 +249,16 @@ export class Strategy extends Object
     //
     isPhysicsAwake()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
         {
-            let sprite = this.nodeAry[i].get();
-            if( sprite.isPhysicsActive() )
-                if( sprite.isPhysicsAwake() )
+            this._sprite = this.nodeAry[this._i].get();
+            if( this._sprite.isPhysicsActive() )
+            {
+                if( this._sprite.isPhysicsAwake() )
+                {
                     return true;
+                }
+            }
         }
 
         return false;
@@ -247,8 +269,8 @@ export class Strategy extends Object
     //
     initScriptTree()
     {
-        for( let i = 0; i < this.activateAry.length; i++ )
-            this.activateAry[i].get().scriptComponent.initScriptTree();
+        for( this._i = 0; this._i < this.activateAry.length; this._i++ )
+            this.activateAry[this._i].get().scriptComponent.initScriptTree();
     }
     
     //
@@ -256,19 +278,20 @@ export class Strategy extends Object
     //
     activateNode( instanceName )
     {
-        let node = this.nodeMap.get( instanceName );
-        if( node )
+        this._node = this.nodeMap.get( instanceName );
+        if( this._node !== undefined )
         {
-            let index = this.nodeAry.findIndex( (obj) => obj === node );
-            if( index !== -1 )
-                console.warn( `Node is already active (${instanceName})!` );
+            this._index = genFunc.indexOf( this.nodeAry, this._node );
+
+            if( this._index === -1 )
+                this.activateAry.push( this._node );
             else
-                this.activateAry.push( node );
+                console.warn( `Node is already active (${instanceName})!` );
         }
         else
             throw new Error( `Node can't be found (%s) (${instanceName})!` );
         
-        return node;
+        return this._node;
     }
     
     //
@@ -276,12 +299,11 @@ export class Strategy extends Object
     //
     deactivateNode( instanceName )
     {
-        let node = this.nodeMap.get( instanceName );
-        if( node )
+        this._node = this.nodeMap.get( instanceName );
+        if( this._node !== undefined )
         {
-            let index = this.nodeAry.findIndex( (obj) => obj === node );
-            if( index !== -1 )
-                this.deactivateAry.push( this.nodeAry[index] );
+            if( genFunc.indexOf( this.nodeAry, this._node ) !== -1 )
+                this.deactivateAry.push( this._node );
             else
                 console.warn( `Node is not active (${instanceName})!` );
         }
@@ -294,18 +316,12 @@ export class Strategy extends Object
     //
     deactivateAll()
     {
-        for( let [ key, node ] of this.nodeMap.entries() )
-        {
-            let index = this.nodeAry.findIndex( (obj) => obj === node );
-            if( index !== -1 )
-                this.deactivateAry.push( this.nodeAry[index] );
-            else
-                console.warn( `Node is not active (${key})!` );
-            }
-        }
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.deactivateAry.push( this.nodeAry[this._index] );
+    }
 
     //
-    //  DESC: destroy the node
+    //  DESC: Add the node to the delete list
     //
     destroy( node )
     {
@@ -313,28 +329,46 @@ export class Strategy extends Object
     }
 
     //
+    //  DESC: Add the node to the pool list
+    //
+    recycle( node )
+    {
+        this.recycleAry.push( node );
+    }
+
+    //
     //  DESC: Get the node by id
     //
     get( id )
     {
-        let node = null;
+        this._node = null;
     
         if( typeof id === 'string' )
         {
-            node = this.nodeMap.get( id );
-            if( !node )
+            this._node = this.nodeMap.get( id );
+            if( this._node === undefined )
                 throw new Error( `Node instance name can't be found (${id})!` );
         }
         else
         {
-            let index = this.nodeAry.findIndex( (node) => node.userId === id );
-            if( index !== -1 )
-                node = this.nodeAry[index];
+            this._index = -1;
+
+            for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            {
+                if( this.nodeAry[this._i].userId === id  )
+                {
+                    this._index = this._i;
+                    break;
+                }
+            }
+
+            if( this._index !== -1 )
+                this._node = this.nodeAry[this._index];
             else
                 throw new Error( `Node index can't be found (${id})!` );
         }
 
-        return node;
+        return this._node;
     }
 
     //
@@ -350,6 +384,9 @@ export class Strategy extends Object
         
         // Remove deleted nodes from the active list and map
         this.deleteFromActiveList();
+
+        // Remove recycled nodes from the active list and add to pool
+        this.recycleFromActiveList();
 
         // Add created nodes to the active list
         this.addToActiveList();
@@ -371,40 +408,40 @@ export class Strategy extends Object
     //
     render( overrideCamera = null )
     {
-        let camera = this.camera;
+        this._camera = this.camera;
         if( overrideCamera )
-            camera = overrideCamera;
+            this._camera = overrideCamera;
 
         // Cull frustrum on the head node
-        if( camera.cull === defs.CULL_NULL )
+        if( this._camera.cull === defs.CULL_NULL )
         {
             for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
-                this.nodeAry[this._i].render( camera );
+                this.nodeAry[this._i].render( this._camera );
         }
         else
         {
-            if( camera.cull === defs.CULL_FULL )
+            if( this._camera.cull === defs.CULL_FULL )
             {
                 for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inView( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( camera );
+                    if( this._camera.inView( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( this._camera );
                 }
             }
-            else if( camera.cull === defs.CULL_X_ONLY )
+            else if( this._camera.cull === defs.CULL_X_ONLY )
             {
                 for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inViewX( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( camera );
+                    if( this._camera.inViewX( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( this._camera );
                 }
             }
-            else if( camera.cull === defs.CULL_Y_ONLY )
+            else if( this._camera.cull === defs.CULL_Y_ONLY )
             {
                 for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inViewY( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( camera );
+                    if( this._camera.inViewY( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( this._camera );
                 }
             }
         }
@@ -417,13 +454,13 @@ export class Strategy extends Object
     {
         if( this.activateAry.length )
         {
-            for( let i = 0; i < this.activateAry.length; i++ )
+            for( this._i = 0; this._i < this.activateAry.length; this._i++ )
             {
-                this.activateAry[i].update();
-                this.nodeAry.push( this.activateAry[i] );
+                this.activateAry[this._i].update();
+                this.nodeAry.push( this.activateAry[this._i] );
             }
 
-            this.activateAry = [];
+            this.activateAry.length = 0;
         }
     }
 
@@ -434,18 +471,17 @@ export class Strategy extends Object
     {
         if( this.deactivateAry.length )
         {
-            for( let i = 0; i < this.deactivateAry.length; i++ )
+            for( this._i = 0; this._i < this.deactivateAry.length; this._i++ )
             {
-                let node = this.deactivateAry[i];
+                this._index = genFunc.indexOf( this.nodeAry, this.deactivateAry[this._i] );
 
-                let index = this.nodeAry.findIndex( (obj) => obj === node );
-                if( index !== -1 )
-                    this.nodeAry.splice( index, 1 );
+                if( this._index !== -1 )
+                    genFunc.removeAt( this.nodeAry, this._index );
                 else
                     throw new Error( `Node id can't be found to remove from active list!` );
             }
 
-            this.deactivateAry = [];
+            this.deactivateAry.length = 0;
         }
     }
     
@@ -456,32 +492,51 @@ export class Strategy extends Object
     {
         if( this.deleteAry.length )
         {
-            for( let i = 0; i < this.deleteAry.length; i++ )
+            for( this._i = 0; this._i < this.deleteAry.length; this._i++ )
             {
-                let node = this.deleteAry[i];
+                this._index = genFunc.indexOf( this.nodeAry, this.deleteAry[this._i] );
 
-                let index = this.nodeAry.findIndex( (obj) => obj === node );
-                if( index !== -1 )
+                if( this._index !== -1 )
                 {
                     // Clean up if font or physics sprite
-                    this.nodeAry[index].cleanUp();
-                    this.nodeAry.splice( index, 1 );
+                    this.nodeAry[this._index].cleanUp();
+                    genFunc.removeAt( this.nodeAry, this._index );
                 }
                 else
                     throw new Error( `Node can't be found to delete!` );
                 
                 // If this same node is in the map, delete it here too.
-                for( let [ key, obj ] of this.nodeMap.entries() )
-                {
-                    if( obj === node )
-                    {
-                        this.nodeMap.delete(key);
-                        break;
-                    }
-                }
+                this._key = genFunc.getKey( this.nodeMap, this.deleteAry[this._i] );
+
+                if( this._key !== undefined )
+                    this.nodeMap.delete(this._key);
             }
 
-            this.deleteAry = [];
+            this.deleteAry.length = 0;
+        }
+    }
+
+    //
+    //  DESC: Remove recycled nodes from the active list and add to pool
+    //
+    recycleFromActiveList()
+    {
+        if( this.recycleAry.length )
+        {
+            for( this._i = 0; this._i < this.recycleAry.length; this._i++ )
+            {
+                this._index = genFunc.indexOf( this.nodeAry, this.recycleAry[this._i] );
+
+                if( this._index !== -1 )
+                {
+                    this.addToRecycle( this.nodeAry[this._index] );
+                    genFunc.removeAt( this.nodeAry, this._index );
+                }
+                else
+                    throw new Error( `Node can't be found to recycle!` );
+            }
+
+            this.recycleAry.length = 0;
         }
     }
 
@@ -490,8 +545,8 @@ export class Strategy extends Object
     //
     setAllToDefaultId()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].userId = defs.DEFAULT_ID;
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.nodeAry[this._i].userId = defs.DEFAULT_ID;
     }
 
     // 
@@ -548,5 +603,19 @@ export class Strategy extends Object
 
                     return 0;
                 });
+    }
+
+    //
+    //  DESC: Add a node to recycle
+    //
+    addToRecycle( node )
+    {
+        // Add an array to the map if this object type doesn't already exist
+        if( !this.recycleMap.has(node.name) )
+            this.recycleMap.set( node.name, [] );
+
+        // Recycle any active scripts for next time
+        node.get().scriptComponent.recycleActiveScripts();
+        this.recycleMap.get(node.name).push(node);
     }
 }

@@ -29,6 +29,9 @@ export class iNode
 
         // Node name
         this.name = '';
+
+        // The node data
+        this.nodeData = nodeData;
     }
 
     // 
@@ -70,6 +73,14 @@ export class iNode
     //  DESC: Reset the node
     //
     reset()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Reset the tree
+    //
+    resetTree()
     {
         // Empty by design
     }

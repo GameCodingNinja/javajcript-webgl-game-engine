@@ -27,6 +27,16 @@
 
     </node>
 
+    <node name="explode">
+
+        <sprite>
+            <scriptList>
+                <script explode="Explode_animation"/>
+            </scriptList>
+        </sprite>
+
+    </node>
+
     <node name="player_ship" id="0">
 
         <sprite objectName="null_player_ship">

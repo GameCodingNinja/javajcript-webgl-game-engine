@@ -64,10 +64,15 @@ export class Object
     }
 
     // 
-    //  DESC: Prepare basic script functions that passes itself as the object
+    //  DESC: Prepare script functions. Script may also be recycled
     //
     prepareScript(...args)
     {
+        // See if this script was recycled
+        if( this.scriptComponent.recycle( args ) )
+            return;
+
+        // First time script creation
         switch(args.length)
         {
             case 1:

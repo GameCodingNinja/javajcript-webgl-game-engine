@@ -37,6 +37,22 @@ export class SpriteLeafNode extends iNode
     }
 
     // 
+    //  DESC: Reset the tree
+    //
+    resetTree()
+    {
+        this.reset();
+    }
+
+    // 
+    //  DESC: Reset the node
+    //
+    reset()
+    {
+        this.sprite.reset( this.nodeData.xmlNode );
+    }
+
+    // 
     //  DESC: Handle events
     //
     handleEvent( event )

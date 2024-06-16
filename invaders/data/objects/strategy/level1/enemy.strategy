@@ -18,14 +18,4 @@
 
     </node>
 
-    <node name="explode">
-
-        <sprite>
-            <scriptList>
-                <script fireTailAnim="explode"/>
-            </scriptList>
-        </sprite>
-
-    </node>
-
 </strategy>

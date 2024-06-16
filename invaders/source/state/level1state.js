@@ -489,8 +489,8 @@ export class Level1State extends CommonState
 
                 if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
                 {
-                    this._laserBlast = this.playerShip.strategy.create('player_shot').get();
-                    this._laserBlast.prepareScript( 'shoot', this.easingX.getValue() );
+                    this._laserBlastNode = this.playerShip.strategy.create('player_shot');
+                    this._laserBlastNode.get().prepareScript( 'shoot', this.easingX.getValue() );
 
                     this.groupPlayer.play( 'player_gun_1' );
                 }
