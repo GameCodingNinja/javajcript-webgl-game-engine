@@ -103,6 +103,15 @@ class AI_Enemy_Head extends aiNode
     }
 
     // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Initialize the tree by doing a reset
+        this.resetTree();
+    }
+
+    // 
     //  DESC: Execute the children
     //
     execute()
@@ -152,6 +161,15 @@ class AI_Enemy_Desend extends AI_Enemy_base
         // Calculated to move in pixels per second
         this.easingY.init( this.sprite.pos.y, offsetY, (this.sprite.pos.y - offsetY) / pixel_per_sec, easing.getSineOut() );
     }
+
+    // 
+    //  DESC: Reset the node
+    //
+    reset()
+    {
+        this.state = defs.EAIS_INIT;
+        this.easingY.clear();
+    }
     
     // 
     //  DESC: Handle the desend
@@ -194,6 +212,8 @@ class AI_Enemy_Roam extends AI_Enemy_base
     {
         super( nodeData );
 
+        this.easingX = new easing.valueTo;
+        this.easingY = new easing.valueTo;
         this.data = headNode.data;
         this.sprite = sprite;
     }
@@ -203,8 +223,8 @@ class AI_Enemy_Roam extends AI_Enemy_base
     //
     reset()
     {
-        this.easingX = new easing.valueTo;
-        this.easingY = new easing.valueTo;
+        this.easingX.clear(easing.CLEAR_EASING_FUNC);
+        this.easingY.clear(easing.CLEAR_EASING_FUNC);
         this.sprite.targetBuilding = null;
         this.state = defs.EAIS_ACTIVE;
     }
@@ -321,6 +341,7 @@ class AI_Enemy_DesendToBuilding extends AI_Enemy_base
 
         this.data = headNode.data;
         this.sprite = sprite;
+        this.easingY = new easing.valueTo;
     }
 
     // 
@@ -329,7 +350,7 @@ class AI_Enemy_DesendToBuilding extends AI_Enemy_base
     reset()
     {
         this.state = defs.EAIS_ACTIVE;
-        this.easingY = new easing.valueTo;
+        this.easingY.clear(easing.CLEAR_EASING_FUNC);
     }
     
     // 

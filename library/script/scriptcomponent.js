@@ -55,7 +55,7 @@ export class ScriptComponent
                 this._ai = (this._attr === 'true');
 
             this._attr = this._scriptNode[this._i].attributes[0];
-            if( this._attr )
+            if( this._attr && !this.scriptFactoryMap.has(this._attr.name) )
                 // This allocates the script to the map
                 this.scriptFactoryMap.set( this._attr.name, new CScriptPrepareFunc(this._attr.value, this._prepareOnInit, this._forceUpdate, this._ai) );
         }
@@ -77,22 +77,22 @@ export class ScriptComponent
                 switch(args.length)
                 {
                     case 1:
-                        this._script.reset();
+                        this._script.recycle();
                     break;
                     case 2:
-                        this._script.reset(args[1]);
+                        this._script.recycle(args[1]);
                     break;
                     case 3:
-                        this._script.reset(args[1],args[2]);
+                        this._script.recycle(args[1],args[2]);
                     break;
                     case 4:
-                        this._script.reset(args[1],args[2],args[3]);
+                        this._script.recycle(args[1],args[2],args[3]);
                     break;
                     case 5:
-                        this._script.reset(args[1],args[2],args[3],args[4]);
+                        this._script.recycle(args[1],args[2],args[3],args[4]);
                     break;
                     case 6:
-                        this._script.reset(args[1],args[2],args[3],args[4],args[5]);
+                        this._script.recycle(args[1],args[2],args[3],args[4],args[5]);
                     break;
                 }
 
@@ -224,7 +224,7 @@ export class ScriptComponent
                     this._activeScript = this.scriptRecycleMap.get(this._scriptPrepareFunc.funcName );
                     if( this._activeScript )
                     {
-                        this._activeScript.recycle( object );
+                        this._activeScript.recycle();
                     }
                     else
                     {
@@ -334,7 +334,7 @@ export class ScriptComponent
     //
     reset()
     {
-        this.scriptAry = [];
+        this.scriptAry.length = 0;
     }
 }
 

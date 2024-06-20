@@ -31,13 +31,13 @@ class PlayerShip_FireTailAnim
         this.animate = new utilScripts.PlayAnim( sprite );
 
         // // Continues the init
-        this.reset();
+        this.recycle();
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset()
+    recycle()
     {
         this.animate.init( 24, true );
         this.pause = true;
@@ -73,13 +73,13 @@ class PlayerShip_ShootLazer
         this.enemyStratagy = strategyManager.get('_enemy_');
 
         // Continues the init
-        this.reset( shipVelocity );
+        this.recycle( shipVelocity );
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset( shipVelocity )
+    recycle( shipVelocity )
     {
         // Speed of the projectile
         this.PROJECTILE_SPEED = 1.5;
@@ -170,13 +170,13 @@ class PlayerShip_Die
         }
 
         // Continues the init
-        this.reset();
+        this.recycle();
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset()
+    recycle()
     {
         // Empty by design
     }
@@ -222,13 +222,13 @@ class EnemyShip_Shoot
         this.camera = this.playerShipStratagy.camera;
 
         // Continues the init
-        this.reset( enemySprite );
+        this.recycle( enemySprite );
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset( enemySprite )
+    recycle( enemySprite )
     {
         this.sprite.setPos( enemySprite.pos );
         this.sprite.setRotXYZ(0, 0, 0);
@@ -280,13 +280,13 @@ class PlayerShip_Hit
         this.playerShipStratagy = strategyManager.get('_player_ship_');
 
         // Continues the init
-        this.reset( projectileSprite );
+        this.recycle( projectileSprite );
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset( projectileSprite )
+    recycle( projectileSprite )
     {
         // Create an explode graphic node and translate it to the projectile sprite
         this.explodeSprite = this.playerShipStratagy.create('explode').get();
@@ -318,13 +318,13 @@ class Explode_animation
         this.explodeAnim = new utilScripts.PlayAnim( sprite );
 
         // Continues the init
-        this.reset( projectileSprite, shipSprite );
+        this.recycle( projectileSprite, shipSprite );
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset( projectileSprite, shipSprite )
+    recycle( projectileSprite, shipSprite )
     {
         this.shipSprite = shipSprite
 
@@ -368,16 +368,16 @@ class EnemyShip_Hit
         this.easingY = new easing.valueTo;
 
         // Continues the init
-        this.reset( projectileSprite );
+        this.recycle( projectileSprite );
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset( projectileSprite )
+    recycle( projectileSprite )
     {
         // Remove the AI script since the enemy is to die
-        this.sprite.scriptComponent.remove( 'AI_Enemy_Head' );
+        this.sprite.scriptComponent.remove( 'AI_Enemy' );
 
         let dist = this.sprite.pos.getDistance( projectileSprite.pos );
 
@@ -445,7 +445,7 @@ class EnemyShip_Hit
         if( this.easingY.isFinished() )
         {
             // We are done with this sprite, queue it up to be deleted
-            this.enemyStratagy.destroy( this.sprite.parentNode );
+            this.enemyStratagy.recycle( this.sprite.parentNode );
 
             return true;
         }
@@ -464,13 +464,13 @@ class EnemyShot_Hit
         this.sprite = sprite;
 
         // Continues the init
-        this.reset();
+        this.recycle();
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset()
+    recycle()
     {
         // We are done with this sprite, queue it up to be deleted
         strategyManager.get('_player_ship_').recycle( this.sprite.parentNode );
@@ -500,9 +500,9 @@ class EnemyShip_CheckForCollideWithPlayer
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset()
+    recycle()
     {
         // Empty by design
     }
@@ -534,13 +534,13 @@ class Building_Die
         this.rotDir = 0.005;
 
         // Continues the init
-        this.reset();
+        this.recycle();
     }
 
     // 
-    //  DESC: Reset the script
+    //  DESC: Recycle the script
     //
-    reset()
+    recycle()
     {
         // Flag indicating this building was destroyed
         this.sprite.destroyed = true;

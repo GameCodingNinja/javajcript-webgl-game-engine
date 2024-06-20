@@ -14,7 +14,8 @@ export class aiNode extends Node
     {
         super( nodeData );
 
-        this.name = nodeData.scriptName;
+        this.name = '';
+        this.scriptName = nodeData.scriptName;
         this.behavior = nodeData.behavior;
         this.type = nodeData.type;
         this.order = nodeData.order;

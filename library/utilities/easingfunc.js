@@ -7,6 +7,9 @@
 "use strict";
 import { highResTimer } from './highresolutiontimer';
 
+export const CLEAR_EASING_FUNC = true,
+             KEEP_EASING_FUNC = false;
+
 // 
 //  DESC: linear
 //
@@ -277,7 +280,7 @@ export class valueTo
     // 
     //  DESC: Set back to a pre-init state
     //
-    clear()
+    clear(clearEasingFunc = false)
     {
         this.start = 0;
         this.end = 0;
@@ -286,6 +289,9 @@ export class valueTo
         this.totalTime = 0;
         this.dif = 0;
         this.finished = false;
+
+        if(clearEasingFunc === CLEAR_EASING_FUNC)
+            this.easingFunc = null;
     }
     
     // 

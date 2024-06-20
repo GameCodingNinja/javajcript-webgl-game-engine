@@ -83,12 +83,13 @@ class AIManager extends ManagerBase
             this._aiNodeDataAry = this._aiNodeData.dataAry;
             for( this._i = 0; this._i < this._aiNodeDataAry.length; this._i++ )
             {
-                this._node;
+                this._node = null;
 
                 // Handle the head node
                 if( this._aiNodeDataAry[this._i].behavior === defs.EAIB_HEAD )
                 {
                     this._headNode = scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i]);
+                    this._headNode.name = name;
                     continue;
                 }
                 // The leaf node executes game logic so need to pass in the object

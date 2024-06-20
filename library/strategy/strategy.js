@@ -172,7 +172,8 @@ export class Strategy extends Object
         this._poolNodeAry = this.recycleMap.get( this._nodeDataAry[0].nodeName );
         if( this._poolNodeAry && this._poolNodeAry.length )
         {
-            this._node = this._poolNodeAry.pop();
+            this._node = this._poolNodeAry[this._poolNodeAry.length-1];
+            this._poolNodeAry.length -= 1;
             this._node.resetTree();
 
             if( !instanceName || makeActive )

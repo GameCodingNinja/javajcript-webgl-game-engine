@@ -67,9 +67,6 @@ export class Sprite extends Object
         // Allocate the null component if no visual component was created
         if( this.visualComponent === null )
             this.visualComponent = new NullVisualComponent( objData );
-        
-        // If there's no visual data, set the hide flag
-        //this.setVisible( objData.visualData.isActive() );
     }
     
     // 
@@ -115,11 +112,19 @@ export class Sprite extends Object
         // Reset to factory defaults
         this.parameters.clear();
         this.parameters.add( defs.VISIBLE );
+        this.pos.clear();
+        this.rot.clear();
+        this.scale.setXYZ( 1, 1, 1 );
+        this.matrix.initilizeMatrix();
 
         if( this.collisionComponent && this.objData.collisionData.isActive() )
             this.collisionComponent.enable = true;
 
+        // Reload from XML node
         this.reload( xmlNode );
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.prepareScriptOnInit();
     }
     
     // 
