@@ -45,7 +45,7 @@ export class SpriteLeafNode extends iNode
     }
 
     // 
-    //  DESC: Reset the node
+    //  DESC: Reset the sprite node
     //
     reset()
     {

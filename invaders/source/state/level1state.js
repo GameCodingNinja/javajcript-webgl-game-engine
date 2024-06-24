@@ -696,8 +696,8 @@ export class Level1State extends CommonState
             if( (this.train.inc === 1 && (this.train.transPos.x - this.train.parentNode.radius) > settings.deviceRes_half.w) ||
                 (this.train.inc === -1 && (this.train.transPos.x + this.train.parentNode.radius) < -settings.deviceRes_half.w) )
             {
-                //console.log("delete train");
-                this.trainStrategy.destroy( this.train.parentNode );
+                //console.log("recycle train");
+                this.trainStrategy.recycle( this.train.parentNode );
                 this.train = null;
                 this.trainTimer.reset( genFunc.randomInt( 10000, 25000 ) );
             }
@@ -708,7 +708,7 @@ export class Level1State extends CommonState
             this.trainTimer.disable( true );
             //console.log("create train");
 
-            this.train = this.trainStrategy.create( 'train', 'train' ).get();
+            this.train = this.trainStrategy.create( 'train' ).get();
             if( genFunc.randomInt( 0, 1 ) === 0 )
             {
                 this.train.inc = -1;

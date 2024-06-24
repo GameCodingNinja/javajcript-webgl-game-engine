@@ -24,8 +24,6 @@ class TextureManager
     //
     load( group, filePath, image, filter = device.gl.LINEAR, wrap = device.gl.CLAMP_TO_EDGE )
     {
-        let gl = device.gl;
-
         if( !image.complete )
             throw new Error( `Image file not completely loaded! (${group}, ${filePath}).` );
 
@@ -41,17 +39,17 @@ class TextureManager
         if( texture === undefined || texture === -1 )
         {
             texture = new Texture;
-            texture.id = gl.createTexture();
+            texture.id = device.gl.createTexture();
             texture.size.w = image.width;
             texture.size.h = image.height;
 
-            gl.bindTexture( gl.TEXTURE_2D, texture.id );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter );
-            gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image );
-            gl.bindTexture( gl.TEXTURE_2D, null );
+            device.gl.bindTexture( device.gl.TEXTURE_2D, texture.id );
+            device.gl.texParameteri( device.gl.TEXTURE_2D, device.gl.TEXTURE_WRAP_S, wrap );
+            device.gl.texParameteri( device.gl.TEXTURE_2D, device.gl.TEXTURE_WRAP_T, wrap );
+            device.gl.texParameteri( device.gl.TEXTURE_2D, device.gl.TEXTURE_MIN_FILTER, filter);
+            device.gl.texParameteri( device.gl.TEXTURE_2D, device.gl.TEXTURE_MAG_FILTER, filter );
+            device.gl.texImage2D( device.gl.TEXTURE_2D, 0, device.gl.RGBA, device.gl.RGBA, device.gl.UNSIGNED_BYTE, image );
+            device.gl.bindTexture( device.gl.TEXTURE_2D, null );
 
             groupMap.set( filePath, texture );
         }
@@ -99,10 +97,8 @@ class TextureManager
             let groupMap = this.textureForMapMap.get( group );
             if( groupMap !== undefined )
             {
-                let gl = device.gl;
-
                 for( let texture of groupMap.values() )
-                    gl.deleteTexture( texture.id );
+                    device.gl.deleteTexture( texture.id );
                 
                 this.textureForMapMap.delete( group );
             }
@@ -132,13 +128,11 @@ class TextureManager
     {
         if( this.currentTexture != textureId )
         {
-            let gl = device.gl;
-
             // save the current binding
             this.currentTexture = textureId;
 
             // Have OpenGL bind this texture now
-            gl.bindTexture(gl.TEXTURE_2D, textureId);
+            device.gl.bindTexture(device.gl.TEXTURE_2D, textureId);
         }
     }
 
@@ -147,10 +141,8 @@ class TextureManager
     //
     unbind()
     {
-        let gl = device.gl;
-        
         this.currentTexture = null;
-        gl.bindTexture(gl.TEXTURE_2D, null);
+        device.gl.bindTexture(device.gl.TEXTURE_2D, null);
     }
 }
 

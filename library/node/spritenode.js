@@ -24,6 +24,14 @@ export class SpriteNode extends RenderNode
     }
 
     // 
+    //  DESC: Reset the sprite node
+    //
+    reset()
+    {
+        this.sprite.reset( this.nodeData.xmlNode );
+    }
+
+    // 
     //  DESC: Handle events
     //
     handleEvent( event )

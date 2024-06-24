@@ -179,8 +179,12 @@ export class Strategy extends Object
             if( !instanceName || makeActive )
                 this.activateAry.push( this._node );
 
+            //console.log(`Sprite Recycle; Name: ${dataName}`);
+
             return this._node;
         }
+
+        //console.log(`Sprite Create; Name: ${dataName}`);
 
         // Build the node list
         this._headNode = null;

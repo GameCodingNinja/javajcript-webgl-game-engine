@@ -687,7 +687,7 @@ export class UIControl extends ControlBase
     resetSpriteScript()
     {
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].scriptComponent.reset();
+            this.spriteAry[i].scriptComponent.recycleActiveScripts();
     }
 
     // 

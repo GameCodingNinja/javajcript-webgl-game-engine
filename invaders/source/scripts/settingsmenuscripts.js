@@ -22,6 +22,14 @@ export class SoundCheckBox_InitStatus
     {
         this.control = control;
     }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
     
     // 
     //  DESC: Execute this script object
@@ -42,6 +50,14 @@ export class SoundCheckBox_execute
     constructor( control )
     {
         this.control = control;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
     
     // 
@@ -82,6 +98,14 @@ export class SoundEffectCheckBox_InitStatus
     {
         this.control = control;
     }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
     
     // 
     //  DESC: Execute this script object
@@ -106,6 +130,14 @@ export class SoundEffectCheckBox_execute
     {
         this.control = control;
     }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
     
     // 
     //  DESC: Execute this script object
@@ -127,6 +159,14 @@ export class SoundMusicCheckBox_InitStatus
     constructor( control )
     {
         this.control = control;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
     
     // 
@@ -151,6 +191,14 @@ export class SoundMusicCheckBox_execute
     constructor( control )
     {
         this.control = control;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
     
     // 
@@ -179,6 +227,14 @@ export class DeadZoneSlider_InitStatus
     {
         this.control = control;
     }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
     
     // 
     //  DESC: Execute this script object
@@ -199,6 +255,14 @@ export class DeadZoneSlider_execute
     constructor( control )
     {
         this.control = control;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
     
     // 

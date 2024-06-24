@@ -36,8 +36,6 @@ class VertexBufferManager
     //
     createVBO( group, name, vertAry )
     {
-        let gl = device.gl;
-
         // Create the group map if it doesn't already exist
         let groupMap = this.vertexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -50,10 +48,10 @@ class VertexBufferManager
         let vboID = groupMap.get( name );
         if( vboID === undefined )
         {
-            vboID = gl.createBuffer();
-            gl.bindBuffer( gl.ARRAY_BUFFER, vboID );
-            gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(vertAry), gl.STATIC_DRAW );
-            gl.bindBuffer( gl.ARRAY_BUFFER, null );
+            vboID = device.gl.createBuffer();
+            device.gl.bindBuffer( device.gl.ARRAY_BUFFER, vboID );
+            device.gl.bufferData( device.gl.ARRAY_BUFFER, new Float32Array(vertAry), device.gl.STATIC_DRAW );
+            device.gl.bindBuffer( device.gl.ARRAY_BUFFER, null );
 
             groupMap.set( name, vboID );
         }
@@ -66,8 +64,6 @@ class VertexBufferManager
     //
     createIBO( group, name, indexAry, intAs8bit )
     {
-        let gl = device.gl;
-
         // Create the group map if it doesn't already exist
         let groupMap = this.indexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -80,15 +76,15 @@ class VertexBufferManager
         let iboID = groupMap.get( name );
         if( iboID === undefined )
         {
-            iboID = gl.createBuffer();
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iboID);
+            iboID = device.gl.createBuffer();
+            device.gl.bindBuffer( device.gl.ELEMENT_ARRAY_BUFFER, iboID);
 
             if( intAs8bit )
-                gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indexAry), gl.STATIC_DRAW );
+                device.gl.bufferData( device.gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indexAry), device.gl.STATIC_DRAW );
             else
-                gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), gl.STATIC_DRAW );
+            device.gl.bufferData( device.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), device.gl.STATIC_DRAW );
 
-            gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, null );
+            device.gl.bindBuffer( device.gl.ELEMENT_ARRAY_BUFFER, null );
 
             groupMap.set( name, iboID );
         }
@@ -101,8 +97,6 @@ class VertexBufferManager
     //
     createDynamicFontIBO( group, name, indexAry, maxIndicies )
     {
-        let gl = device.gl;
-
         // Create the group map if it doesn't already exist
         let groupMap = this.indexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -115,7 +109,7 @@ class VertexBufferManager
         let iboID = groupMap.get( name );
         if( iboID === undefined )
         {
-            iboID = gl.createBuffer();
+            iboID = device.gl.createBuffer();
 
             groupMap.set( name, iboID );
         }    
@@ -123,9 +117,9 @@ class VertexBufferManager
         // If the new indices are greater then the current, init the IBO with the newest
         if( maxIndicies > this.currentMaxFontIndices )
         {
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iboID);
-            gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), gl.STATIC_DRAW );
-            gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, null );
+            device.gl.bindBuffer( device.gl.ELEMENT_ARRAY_BUFFER, iboID);
+            device.gl.bufferData( device.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), device.gl.STATIC_DRAW );
+            device.gl.bindBuffer( device.gl.ELEMENT_ARRAY_BUFFER, null );
 
             // Save the number of indices for later to compare and expand this size of this IBO
             this.currentMaxFontIndices = maxIndicies;
@@ -139,8 +133,6 @@ class VertexBufferManager
     //
     createScaledFrame( group, name, scaledFrame, textureSize, glyphSize, frameSize, spriteSheetOffset, meshFileVertAry = null )
     {
-        let gl = device.gl;
-
         // Create the group map if it doesn't already exist
         let groupMap = this.vertexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -161,10 +153,10 @@ class VertexBufferManager
             if( meshFileVertAry !== null )
                 Array.prototype.push.apply( vertAry, meshFileVertAry );
             
-            vboID = gl.createBuffer();
-            gl.bindBuffer( gl.ARRAY_BUFFER, vboID );
-            gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(vertAry), gl.STATIC_DRAW );
-            gl.bindBuffer( gl.ARRAY_BUFFER, null );
+            vboID = device.gl.createBuffer();
+            device.gl.bindBuffer( device.gl.ARRAY_BUFFER, vboID );
+            device.gl.bufferData( device.gl.ARRAY_BUFFER, new Float32Array(vertAry), device.gl.STATIC_DRAW );
+            device.gl.bindBuffer( device.gl.ARRAY_BUFFER, null );
 
             groupMap.set( name, vboID );
         }
@@ -347,13 +339,12 @@ class VertexBufferManager
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
-            let gl = device.gl;
 
             let groupMap = this.vertexBufMapMap.get( group );
             if( groupMap !== undefined )
             {
                 for( let vboID of groupMap.values() )
-                    gl.deleteBuffer( vboID );
+                    device.gl.deleteBuffer( vboID );
                 
                 this.vertexBufMapMap.delete( group );
             }
@@ -362,7 +353,7 @@ class VertexBufferManager
             if( groupMap !== undefined )
             {
                 for( let iboID of groupMap.values() )
-                    gl.deleteBuffer( iboID );
+                    device.gl.deleteBuffer( iboID );
                 
                 this.indexBufMapMap.delete( group );
             }
@@ -392,15 +383,13 @@ class VertexBufferManager
     //
     bind( vbo, ibo )
     {
-        let gl = device.gl;
-
         if( this.currentVBO != vbo )
         {
             // save the current binding
             this.currentVBO = vbo;
 
             // Have OpenGL bind this buffer now
-            gl.bindBuffer( gl.ARRAY_BUFFER, vbo );
+            device.gl.bindBuffer( device.gl.ARRAY_BUFFER, vbo );
         }
 
         if( this.currentIBO != ibo )
@@ -409,7 +398,7 @@ class VertexBufferManager
             this.currentIBO = ibo;
 
             // Have OpenGL bind this buffer now
-            gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, ibo );
+            device.gl.bindBuffer( device.gl.ELEMENT_ARRAY_BUFFER, ibo );
         }
     }
     
@@ -418,12 +407,10 @@ class VertexBufferManager
     //
     unbind()
     {
-        let gl = device.gl;
-        
         this.currentVBO = null;
         this.currentIBO = null;
-        gl.bindBuffer( gl.ARRAY_BUFFER, null );
-        gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, null );
+        device.gl.bindBuffer( device.gl.ARRAY_BUFFER, null );
+        device.gl.bindBuffer( device.gl.ELEMENT_ARRAY_BUFFER, null );
     }
 }
 

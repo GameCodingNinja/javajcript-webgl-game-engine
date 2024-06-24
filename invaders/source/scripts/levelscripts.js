@@ -30,7 +30,7 @@ class PlayerShip_FireTailAnim
     {
         this.animate = new utilScripts.PlayAnim( sprite );
 
-        // // Continues the init
+        // Continues the init
         this.recycle();
     }
 
@@ -437,7 +437,7 @@ class EnemyShip_Hit
             this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
             if( this.explodeAnim.execute() )
             {
-                this.enemyStratagy.destroy( this.explodeAnim.sprite.parentNode );
+                this.enemyStratagy.recycle( this.explodeAnim.sprite.parentNode );
                 this.explodeAnim = null;
             }
         }
@@ -565,7 +565,7 @@ class Building_Die
         this.sprite.toBeDeleted = true;
 
         // We are done with this sprite, queue it up to be deleted
-        strategyManager.get('_buildings_').destroy( this.sprite.parentNode );
+        strategyManager.get('_buildings_').recycle( this.sprite.parentNode );
 
         // Send a message to keep track of buildings being destroyed
         eventManager.dispatchEvent( gameDefs.EGE_BUILDING_DESTROYED );

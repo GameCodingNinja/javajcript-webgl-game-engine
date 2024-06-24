@@ -18,6 +18,16 @@ class State_PlayLoadAnim
     constructor( sprite )
     {
         this.animate = new utilScripts.PlayAnim( sprite );
+        
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.animate.init( 12, true );
     }
 
@@ -38,6 +48,14 @@ class State_RotateCube
     constructor( sprite )
     {
         this.sprite = sprite;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
     
     // 

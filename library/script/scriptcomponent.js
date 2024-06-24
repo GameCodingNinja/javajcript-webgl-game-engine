@@ -64,53 +64,37 @@ export class ScriptComponent
     // 
     //  DESC: Recycle the script
     //
-    recycle(args)
+    //  NOTE: The function can call a script that can call this function so local variables nee to be allocated
+    //
+    recycle(funcName, args)
     {
-        this._scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
+        let script = this.scriptRecycleMap.get(funcName );
 
-        if( this._scriptPrepareFunc )
+        if( script )
         {
-            this._script = this.scriptRecycleMap.get(this._scriptPrepareFunc.funcName );
+            //console.log(`Script Recycle; Name: ${funcName}`);
 
-            if( this._script )
+            switch(args.length)
             {
-                switch(args.length)
-                {
-                    case 1:
-                        this._script.recycle();
-                    break;
-                    case 2:
-                        this._script.recycle(args[1]);
-                    break;
-                    case 3:
-                        this._script.recycle(args[1],args[2]);
-                    break;
-                    case 4:
-                        this._script.recycle(args[1],args[2],args[3]);
-                    break;
-                    case 5:
-                        this._script.recycle(args[1],args[2],args[3],args[4]);
-                    break;
-                    case 6:
-                        this._script.recycle(args[1],args[2],args[3],args[4],args[5]);
-                    break;
-                }
-
-                if( this._scriptPrepareFunc.forceUpdate )
-                {
-                    if( !this._script.execute() )
-                        this.scriptAry.push( this._script );
-                }
-                else
-                {
-                    this.scriptAry.push( this._script );
-                }
-
-                return true;
+                case 2:
+                    script.recycle();
+                break;
+                case 3:
+                    script.recycle(args[2]);
+                break;
+                case 4:
+                    script.recycle(args[2],args[3]);
+                break;
+                case 5:
+                    script.recycle(args[2],args[3],args[4]);
+                break;
+                case 6:
+                    script.recycle(args[2],args[3],args[4],args[5]);
+                break;
             }
         }
 
-        return false;
+        return script;
     }
 
     // 
@@ -132,81 +116,100 @@ export class ScriptComponent
     //  NOTE: Function uses arguments object to handle multiple parameters
     //        The last parameter will be the script Id so that it is ignored by the calling function
     //
+    //  NOTE: The function can call a script that can call this function so local variables nee to be allocated
+    //
     prepare(...args)
     {
-        this._activeScript = null;
+        let activeScript = null;
 
         if( this.scriptFactoryMap && typeof args[0] === 'string' )
         {
-            this._scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
-            if( this._scriptPrepareFunc )
+            let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
+            if( scriptPrepareFunc )
             {
-                if(this._scriptPrepareFunc.ai)
+                // See if this script was recycled
+                activeScript = this.recycle( scriptPrepareFunc.funcName, args );
+
+                // Create one if none is in recycle
+                if( !activeScript )
                 {
-                    this._activeScript = aiManager.get( this._scriptPrepareFunc.funcName );
-                }
-                else
-                {
-                    this._script = scriptManager.get( this._scriptPrepareFunc.funcName );
-                    
-                    if( this._script )
+                    if(scriptPrepareFunc.ai)
                     {
-                        switch(args.length)
+                        //console.log(`AI Script Create; Name: ${scriptPrepareFunc.funcName}`);
+                        activeScript = aiManager.get( scriptPrepareFunc.funcName );
+                    }
+                    else
+                    {
+                        let script = scriptManager.get( scriptPrepareFunc.funcName );
+                        
+                        if( script )
                         {
-                            case 1:
-                                this._activeScript = this._script();
-                            break;
-                            case 2:
-                                this._activeScript = this._script(args[1]);
-                            break;
-                            case 3:
-                                this._activeScript = this._script(args[1],args[2]);
-                            break;
-                            case 4:
-                                this._activeScript = this._script(args[1],args[2],args[3]);
-                            break;
-                            case 5:
-                                this._activeScript = this._script(args[1],args[2],args[3],args[4]);
-                            break;
-                            case 6:
-                                this._activeScript = this._script(args[1],args[2],args[3],args[4],args[5]);
-                            break;
+                            //console.log(`Script Create; Name: ${scriptPrepareFunc.funcName}`);
+
+                            switch(args.length)
+                            {
+                                case 1:
+                                    activeScript = script();
+                                break;
+                                case 2:
+                                    activeScript = script(args[1]);
+                                break;
+                                case 3:
+                                    activeScript = script(args[1],args[2]);
+                                break;
+                                case 4:
+                                    activeScript = script(args[1],args[2],args[3]);
+                                break;
+                                case 5:
+                                    activeScript = script(args[1],args[2],args[3],args[4]);
+                                break;
+                                case 6:
+                                    activeScript = script(args[1],args[2],args[3],args[4],args[5]);
+                                break;
+                            }
+
+                            if( activeScript )
+                            {
+                                activeScript.name = scriptPrepareFunc.funcName;
+                            }
                         }
                     }
                 }
 
-                if( this._activeScript )
+                if( activeScript )
                 {
-                    this._activeScript.name = this._scriptPrepareFunc.funcName;
-
-                    if( this._scriptPrepareFunc.forceUpdate )
+                    if( scriptPrepareFunc.forceUpdate )
                     {
-                        if( !this._activeScript.execute() )
-                            this.scriptAry.push( this._activeScript );
+                        if( activeScript.execute() )
+                            this.scriptRecycleMap.set(activeScript.name, activeScript);
+                        else
+                            this.scriptAry.push( activeScript );
                     }
                     else
                     {
-                        this.scriptAry.push( this._activeScript );
+                        this.scriptAry.push( activeScript );
                     }
                 }
             }
         }
         else if( typeof args[0] === 'object' )
         {
-            this._activeScript = args[0];
+            activeScript = args[0];
 
             if( args.length > 1 && args[1] )
             {
-                if( !this._activeScript.execute() )
-                    this.scriptAry.push( this._activeScript );
+                if( activeScript.execute() )
+                    this.scriptRecycleMap.set(activeScript.name, activeScript);
+                else
+                    this.scriptAry.push( activeScript );
             }
             else
             {
-                this.scriptAry.push( this._activeScript );
+                this.scriptAry.push( activeScript );
             }
         }
 
-        return this._activeScript;
+        return activeScript;
     }
 
     // 
@@ -221,40 +224,48 @@ export class ScriptComponent
                 if( this._scriptPrepareFunc.prepareOnInit )
                 {
                     // See if this script has been recycled
-                    this._activeScript = this.scriptRecycleMap.get(this._scriptPrepareFunc.funcName );
-                    if( this._activeScript )
+                    let activeScript = this.scriptRecycleMap.get(this._scriptPrepareFunc.funcName );
+                    if( activeScript )
                     {
-                        this._activeScript.recycle();
+                        //console.log(`Script Recycle; Name: ${this._scriptPrepareFunc.funcName}`);
+                        activeScript.recycle();
                     }
                     else
                     {
                         if(this._scriptPrepareFunc.ai)
                         {
-                            this._activeScript = aiManager.get( this._scriptPrepareFunc.funcName, object );
+                            //console.log(`AI Script Create; Name: ${this._scriptPrepareFunc.funcName}`);
+                            activeScript = aiManager.get( this._scriptPrepareFunc.funcName, object );
                         }
                         else
                         {
+                            //console.log(`Script Create; Name: ${this._scriptPrepareFunc.funcName}`);
                             this._script = scriptManager.get( this._scriptPrepareFunc.funcName );
 
                             if( this._script )
                             {
-                                this._activeScript = this._script(object);
-                                this._activeScript.name = this._scriptPrepareFunc.funcName;
+                                activeScript = this._script(object);
                             }
+                        }
+
+                        if( activeScript )
+                        {
+                            activeScript.name = this._scriptPrepareFunc.funcName;
                         }
                     }
 
-                    if( this._activeScript )
+                    if( activeScript )
                     {
-
                         if( this._scriptPrepareFunc.forceUpdate )
                         {
-                            if( !this._activeScript.execute() )
-                                this.scriptAry.push( this._activeScript );
+                            if( activeScript.execute() )
+                                this.scriptRecycleMap.set(activeScript.name, activeScript);
+                            else
+                                this.scriptAry.push( activeScript );
                         }
                         else
                         {
-                            this.scriptAry.push( this._activeScript );
+                            this.scriptAry.push( activeScript );
                         }
                     }
                 }

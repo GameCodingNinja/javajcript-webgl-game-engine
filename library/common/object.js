@@ -68,10 +68,6 @@ export class Object
     //
     prepareScript(...args)
     {
-        // See if this script was recycled
-        if( this.scriptComponent.recycle( args ) )
-            return;
-
         // First time script creation
         switch(args.length)
         {
