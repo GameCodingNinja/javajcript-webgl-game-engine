@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: statescripts.js
-//  DESC:      script for the state
+//  DESC:      scripts for the state
 //
 
 "use strict";
@@ -18,6 +18,16 @@ class State_PlayLoadAnim
     constructor( sprite )
     {
         this.animate = new utilScripts.PlayAnim( sprite );
+        
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.animate.init( 12, true );
     }
 
@@ -39,6 +49,14 @@ class State_RotateCube
     {
         this.sprite = sprite;
     }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
     
     // 
     //  DESC: Execute this script object
@@ -52,9 +70,8 @@ class State_RotateCube
     }
 }
 
-
 // 
-//  DESC: Load XML files
+//  DESC: Load scripts
 //
 export function loadScripts()
 {

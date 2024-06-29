@@ -357,8 +357,8 @@ class SignalManager
     //
     broadcast_loadComplete()
     {
-        for( let i = 0; i < this.loadCompleteSignal.length; ++i )
-            this.loadCompleteSignal[i]();
+        for( this._i = 0; this._i < this.loadCompleteSignal.length; ++this._i )
+            this.loadCompleteSignal[this._i]();
     }
     
     // 
@@ -366,8 +366,8 @@ class SignalManager
     //
     broadcast_resolutionChange()
     {
-        for( let i = 0; i < this.resolutionChangeSignal.length; ++i )
-            this.resolutionChangeSignal[i]();
+        for( this._i = 0; this._i < this.resolutionChangeSignal.length; ++this._i )
+            this.resolutionChangeSignal[this._i]();
     }
 
     // 
@@ -375,8 +375,8 @@ class SignalManager
     //
     broadcast_initShader( shaderId )
     {
-        for( let i = 0; i < this.initShaderSignal.length; ++i )
-            this.initShaderSignal[i](shaderId);
+        for( this._i = 0; this._i < this.initShaderSignal.length; ++this._i )
+            this.initShaderSignal[this._i](shaderId);
     }
 
     // 
@@ -384,8 +384,8 @@ class SignalManager
     //
     broadcast_collisionSignal( spriteA, spriteB )
     {
-        for( let i = 0; i < this.collisionSignal.length; ++i )
-            this.collisionSignal[i](spriteA, spriteB);
+        for( this._i = 0; this._i < this.collisionSignal.length; ++this._i )
+            this.collisionSignal[this._i](spriteA, spriteB);
     }
 }
 
@@ -1457,8 +1457,6 @@ class TextureManager
     //
     load( group, filePath, image, filter = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.LINEAR, wrap = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.CLAMP_TO_EDGE )
     {
-        let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl;
-
         if( !image.complete )
             throw new Error( `Image file not completely loaded! (${group}, ${filePath}).` );
 
@@ -1474,17 +1472,17 @@ class TextureManager
         if( texture === undefined || texture === -1 )
         {
             texture = new _common_texture__WEBPACK_IMPORTED_MODULE_0__.Texture;
-            texture.id = gl.createTexture();
+            texture.id = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.createTexture();
             texture.size.w = image.width;
             texture.size.h = image.height;
 
-            gl.bindTexture( gl.TEXTURE_2D, texture.id );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap );
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
-            gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter );
-            gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image );
-            gl.bindTexture( gl.TEXTURE_2D, null );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.bindTexture( _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, texture.id );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_WRAP_S, wrap );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_WRAP_T, wrap );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_MIN_FILTER, filter);
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.texParameteri( _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_MAG_FILTER, filter );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.texImage2D( _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, 0, _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.RGBA, _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.RGBA, _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.UNSIGNED_BYTE, image );
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.bindTexture( _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, null );
 
             groupMap.set( filePath, texture );
         }
@@ -1532,10 +1530,8 @@ class TextureManager
             let groupMap = this.textureForMapMap.get( group );
             if( groupMap !== undefined )
             {
-                let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl;
-
                 for( let texture of groupMap.values() )
-                    gl.deleteTexture( texture.id );
+                    _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.deleteTexture( texture.id );
                 
                 this.textureForMapMap.delete( group );
             }
@@ -1565,13 +1561,11 @@ class TextureManager
     {
         if( this.currentTexture != textureId )
         {
-            let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl;
-
             // save the current binding
             this.currentTexture = textureId;
 
             // Have OpenGL bind this texture now
-            gl.bindTexture(gl.TEXTURE_2D, textureId);
+            _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.bindTexture(_system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, textureId);
         }
     }
 
@@ -1580,10 +1574,8 @@ class TextureManager
     //
     unbind()
     {
-        let gl = _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl;
-        
         this.currentTexture = null;
-        gl.bindTexture(gl.TEXTURE_2D, null);
+        _system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.bindTexture(_system_device__WEBPACK_IMPORTED_MODULE_1__.device.gl.TEXTURE_2D, null);
     }
 }
 
@@ -1878,8 +1870,8 @@ class CameraManager
     //
     transform()
     {
-        for( let i = 0; i < this.transformAry.length; i++ )
-            this.transformAry[i].transform();
+        for( this._i = 0; this._i < this.transformAry.length; this._i++ )
+            this.transformAry[this._i].transform();
     }
     
     //
@@ -2786,10 +2778,11 @@ class Object
     }
 
     // 
-    //  DESC: Prepare basic script functions that passes itself as the object
+    //  DESC: Prepare script functions. Script may also be recycled
     //
     prepareScript(...args)
     {
+        // First time script creation
         switch(args.length)
         {
             case 1:
@@ -3728,11 +3721,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
 /* harmony import */ var _managers_aimanager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 /* harmony import */ var _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(25);
+/* harmony import */ var _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(24);
 
 //
 //  FILE NAME: scriptcomponent.js
 //  DESC:      Class for handling game scripting
 //
+
 
 
 
@@ -3748,6 +3743,9 @@ class ScriptComponent
 
         // Script object map. Prepare scripts by name
         this.scriptFactoryMap = null;
+
+        // Script pool
+        this.scriptRecycleMap = new Map;
     }
 
     // 
@@ -3757,33 +3755,83 @@ class ScriptComponent
     initScriptIds( xmlNode )
     {
         // Check for scripting
-        let scriptNode = xmlNode.getElementsByTagName( 'script' );
+        this._scriptNode = xmlNode.getElementsByTagName( 'script' );
 
-        if( !this.scriptFactoryMap && scriptNode.length )
+        if( !this.scriptFactoryMap && this._scriptNode.length )
             this.scriptFactoryMap = new Map;
 
-        for( let i = 0; i < scriptNode.length; ++i )
+        for( this._i = 0; this._i < this._scriptNode.length; ++this._i )
         {
-            let prepareOnInit = false;
-            let forceUpdate = false;
-            let ai = false;
-            let attr = scriptNode[i].getAttribute( 'prepareOnInit' );
-            if( attr !== null )
-                prepareOnInit = (attr === 'true')
+            this._prepareOnInit = false;
+            this._forceUpdate = false;
+            this._ai = false;
+            this._attr = this._scriptNode[this._i].getAttribute( 'prepareOnInit' );
+            if( this._attr !== null )
+                this._prepareOnInit = (this._attr === 'true')
 
-            attr = scriptNode[i].getAttribute( 'forceUpdate' );
-            if( attr !== null )
-                forceUpdate = (attr === 'true')
+            this._attr = this._scriptNode[this._i].getAttribute( 'forceUpdate' );
+            if( this._attr !== null )
+                this._forceUpdate = (this._attr === 'true')
 
             // See if this is an ai
-            attr = scriptNode[i].getAttribute( 'ai' );
-            if( attr )
-                ai = (attr === 'true');
+            this._attr = this._scriptNode[this._i].getAttribute( 'ai' );
+            if( this._attr )
+                this._ai = (this._attr === 'true');
 
-            attr = scriptNode[i].attributes[0];
-            if( attr )
+            this._attr = this._scriptNode[this._i].attributes[0];
+            if( this._attr && !this.scriptFactoryMap.has(this._attr.name) )
                 // This allocates the script to the map
-                this.scriptFactoryMap.set( attr.name, new _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_2__.CScriptPrepareFunc(attr.value, prepareOnInit, forceUpdate, ai) );
+                this.scriptFactoryMap.set( this._attr.name, new _script_scriptpreparefunc__WEBPACK_IMPORTED_MODULE_2__.CScriptPrepareFunc(this._attr.value, this._prepareOnInit, this._forceUpdate, this._ai) );
+        }
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    //  NOTE: The function can call a script that can call this function so local variables nee to be allocated
+    //
+    recycle(funcName, args)
+    {
+        let script = this.scriptRecycleMap.get(funcName );
+
+        if( script )
+        {
+            //console.log(`Script Recycle; Name: ${funcName}`);
+
+            switch(args.length)
+            {
+                case 2:
+                    script.recycle();
+                break;
+                case 3:
+                    script.recycle(args[2]);
+                break;
+                case 4:
+                    script.recycle(args[2],args[3]);
+                break;
+                case 5:
+                    script.recycle(args[2],args[3],args[4]);
+                break;
+                case 6:
+                    script.recycle(args[2],args[3],args[4],args[5]);
+                break;
+            }
+        }
+
+        return script;
+    }
+
+    // 
+    //  DESC: Recycle all the active scripts
+    //
+    recycleActiveScripts()
+    {
+        if( this.scriptAry.length )
+        {
+            for( this._i = 0; this._i < this.scriptAry.length; this._i++ )
+                this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+
+            this.scriptAry.length = 0;
         }
     }
 
@@ -3791,6 +3839,8 @@ class ScriptComponent
     //  DESC: Prepare a script to run
     //  NOTE: Function uses arguments object to handle multiple parameters
     //        The last parameter will be the script Id so that it is ignored by the calling function
+    //
+    //  NOTE: The function can call a script that can call this function so local variables nee to be allocated
     //
     prepare(...args)
     {
@@ -3801,40 +3851,52 @@ class ScriptComponent
             let scriptPrepareFunc = this.scriptFactoryMap.get( args[0] );
             if( scriptPrepareFunc )
             {
-                let script = null;
-                if(scriptPrepareFunc.ai)
-                {
-                    activeScript = _managers_aimanager__WEBPACK_IMPORTED_MODULE_1__.aiManager.get( scriptPrepareFunc.funcName );
-                }
-                else
-                {
-                    script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
-                    
-                    if( script )
-                    {
-                        switch(args.length)
-                        {
-                            case 1:
-                                activeScript = script();
-                            break;
-                            case 2:
-                                activeScript = script(args[1]);
-                            break;
-                            case 3:
-                                activeScript = script(args[1],args[2]);
-                            break;
-                            case 4:
-                                activeScript = script(args[1],args[2],args[3]);
-                            break;
-                            case 5:
-                                activeScript = script(args[1],args[2],args[3],args[4]);
-                            break;
-                            case 6:
-                                activeScript = script(args[1],args[2],args[3],args[4],args[5]);
-                            break;
-                        }
+                // See if this script was recycled
+                activeScript = this.recycle( scriptPrepareFunc.funcName, args );
 
-                        activeScript.name = scriptPrepareFunc.funcName;
+                // Create one if none is in recycle
+                if( !activeScript )
+                {
+                    if(scriptPrepareFunc.ai)
+                    {
+                        //console.log(`AI Script Create; Name: ${scriptPrepareFunc.funcName}`);
+                        activeScript = _managers_aimanager__WEBPACK_IMPORTED_MODULE_1__.aiManager.get( scriptPrepareFunc.funcName );
+                    }
+                    else
+                    {
+                        let script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
+                        
+                        if( script )
+                        {
+                            //console.log(`Script Create; Name: ${scriptPrepareFunc.funcName}`);
+
+                            switch(args.length)
+                            {
+                                case 1:
+                                    activeScript = script();
+                                break;
+                                case 2:
+                                    activeScript = script(args[1]);
+                                break;
+                                case 3:
+                                    activeScript = script(args[1],args[2]);
+                                break;
+                                case 4:
+                                    activeScript = script(args[1],args[2],args[3]);
+                                break;
+                                case 5:
+                                    activeScript = script(args[1],args[2],args[3],args[4]);
+                                break;
+                                case 6:
+                                    activeScript = script(args[1],args[2],args[3],args[4],args[5]);
+                                break;
+                            }
+
+                            if( activeScript )
+                            {
+                                activeScript.name = scriptPrepareFunc.funcName;
+                            }
+                        }
                     }
                 }
 
@@ -3842,7 +3904,9 @@ class ScriptComponent
                 {
                     if( scriptPrepareFunc.forceUpdate )
                     {
-                        if( !activeScript.execute() )
+                        if( activeScript.execute() )
+                            this.scriptRecycleMap.set(activeScript.name, activeScript);
+                        else
                             this.scriptAry.push( activeScript );
                     }
                     else
@@ -3858,7 +3922,9 @@ class ScriptComponent
 
             if( args.length > 1 && args[1] )
             {
-                if( !activeScript.execute() )
+                if( activeScript.execute() )
+                    this.scriptRecycleMap.set(activeScript.name, activeScript);
+                else
                     this.scriptAry.push( activeScript );
             }
             else
@@ -3877,32 +3943,48 @@ class ScriptComponent
     {
         if( this.scriptFactoryMap )
         {
-            for( let scriptPrepareFunc of this.scriptFactoryMap.values() )
+            for( this._scriptPrepareFunc of this.scriptFactoryMap.values() )
             {
-                if( scriptPrepareFunc.prepareOnInit )
+                if( this._scriptPrepareFunc.prepareOnInit )
                 {
-                    let activeScript = null;
-                    let script = null;
-                    if(scriptPrepareFunc.ai)
+                    // See if this script has been recycled
+                    let activeScript = this.scriptRecycleMap.get(this._scriptPrepareFunc.funcName );
+                    if( activeScript )
                     {
-                        activeScript = _managers_aimanager__WEBPACK_IMPORTED_MODULE_1__.aiManager.get( scriptPrepareFunc.funcName, object );
+                        //console.log(`Script Recycle; Name: ${this._scriptPrepareFunc.funcName}`);
+                        activeScript.recycle();
                     }
                     else
                     {
-                        script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( scriptPrepareFunc.funcName );
-
-                        if( script )
+                        if(this._scriptPrepareFunc.ai)
                         {
-                            activeScript = script(object);
-                            activeScript.name = scriptPrepareFunc.funcName;
+                            //console.log(`AI Script Create; Name: ${this._scriptPrepareFunc.funcName}`);
+                            activeScript = _managers_aimanager__WEBPACK_IMPORTED_MODULE_1__.aiManager.get( this._scriptPrepareFunc.funcName, object );
+                        }
+                        else
+                        {
+                            //console.log(`Script Create; Name: ${this._scriptPrepareFunc.funcName}`);
+                            this._script = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_0__.scriptManager.get( this._scriptPrepareFunc.funcName );
+
+                            if( this._script )
+                            {
+                                activeScript = this._script(object);
+                            }
+                        }
+
+                        if( activeScript )
+                        {
+                            activeScript.name = this._scriptPrepareFunc.funcName;
                         }
                     }
 
                     if( activeScript )
                     {
-                        if( scriptPrepareFunc.forceUpdate )
+                        if( this._scriptPrepareFunc.forceUpdate )
                         {
-                            if( !activeScript.execute() )
+                            if( activeScript.execute() )
+                                this.scriptRecycleMap.set(activeScript.name, activeScript);
+                            else
                                 this.scriptAry.push( activeScript );
                         }
                         else
@@ -3921,29 +4003,33 @@ class ScriptComponent
     update()
     {
         // Call the active scripts
-        for( let i = this.scriptAry.length - 1; i > -1; --i )
+        for( this._i = this.scriptAry.length - 1; this._i > -1; --this._i )
         {
-            // If the script is finished, remove it
-            if( this.scriptAry[i].execute() )
-                this.scriptAry.splice( i, 1 );
+            // If the script is finished, recycle it
+            if( this.scriptAry[this._i].execute() )
+            {
+                this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+                _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.removeAt( this.scriptAry, this._i );
+            }
         }
 
-        if( this.removeAry )
+        if( this.removeAry.length )
         {
-            for( let i = 0; i < this.removeAry.length; i++ )
+            for( this._i = 0; this._i < this.removeAry.length; this._i++ )
             {
-                for( let j = 0; j < this.scriptAry.length; j++ )
+                for( this._j = 0; this._j < this.scriptAry.length; this._j++ )
                 {
                     // If the script is finished, remove it
-                    if( this.scriptAry[i].name === this.removeAry[i] )
+                    if( this.scriptAry[this._i].name === this.removeAry[this._i] )
                     {
-                        this.scriptAry.splice( j, 1 );
+                        this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+                        _utilities_genfunc__WEBPACK_IMPORTED_MODULE_3__.removeAt( this.scriptAry, this._j );
                         break;
                     }
                 }
             }
 
-            this.removeAry = [];
+            this.removeAry.length = 0;
         }
     }
 
@@ -3952,12 +4038,12 @@ class ScriptComponent
     //
     initScriptTree()
     {
-        for( let i = 0; i < this.scriptAry.length; i++ )
+        for( this._i = 0; this._i < this.scriptAry.length; this._i++ )
         {
             // initTree is only in scripts that inherit from Node
-            if( this.scriptAry[i].initTree !== undefined )
+            if( this.scriptAry[this._i].initTree !== undefined )
             {
-                this.scriptAry[i].initTree();
+                this.scriptAry[this._i].initTree();
             }
         }
     }
@@ -3983,7 +4069,7 @@ class ScriptComponent
     //
     reset()
     {
-        this.scriptAry = [];
+        this.scriptAry.length = 0;
     }
 }
 
@@ -4141,34 +4227,35 @@ class AIManager extends _managerbase__WEBPACK_IMPORTED_MODULE_2__.ManagerBase
     //
     get( name, object )
     {
-        let headNode = null;
-        let aiNodeData = this.aiMap.get( name );
-        if(aiNodeData)
+        this._headNode = null;
+        this._aiNodeData = this.aiMap.get( name );
+        if(this._aiNodeData)
         {
-            let aiNodeDataAry = aiNodeData.dataAry;
-            for( let i = 0; i < aiNodeDataAry.length; i++ )
+            this._aiNodeDataAry = this._aiNodeData.dataAry;
+            for( this._i = 0; this._i < this._aiNodeDataAry.length; this._i++ )
             {
-                let node;
+                this._node = null;
 
                 // Handle the head node
-                if( aiNodeDataAry[i].behavior === _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAIB_HEAD )
+                if( this._aiNodeDataAry[this._i].behavior === _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAIB_HEAD )
                 {
-                    headNode = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__.scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i]);
+                    this._headNode = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__.scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i]);
+                    this._headNode.name = name;
                     continue;
                 }
                 // The leaf node executes game logic so need to pass in the object
-                else if( aiNodeDataAry[i].behavior === _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAIB_LEAF_TASK )
+                else if( this._aiNodeDataAry[this._i].behavior === _common_defs__WEBPACK_IMPORTED_MODULE_3__.EAIB_LEAF_TASK )
                 {
-                    node = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__.scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], headNode, object);
+                    this._node = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__.scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i], this._headNode, object);
                 }
                 else
                 {
-                    node = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__.scriptManager.get( aiNodeDataAry[i].scriptName )(aiNodeDataAry[i], headNode);
+                    this._node = _script_scriptmanager__WEBPACK_IMPORTED_MODULE_1__.scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i], this._headNode);
                 }
 
-                if( !headNode.addNode( node ) )
+                if( !this._headNode.addNode( this._node ) )
                 {
-                    throw new Error( `Parent node not found or node does not support adding children (${aiNodeDataAry[i].scriptName}, ${node.parentId})!` );
+                    throw new Error( `Parent node not found or node does not support adding children (${this._aiNodeDataAry[i].scriptName}, ${this._node.parentId})!` );
                 }
             }
         }
@@ -4178,9 +4265,9 @@ class AIManager extends _managerbase__WEBPACK_IMPORTED_MODULE_2__.ManagerBase
         }
 
         // Initialize the tree by doing a reset
-        headNode.resetTree();
+        this._headNode.resetTree();
 
-        return headNode;
+        return this._headNode;
     }
 
     //
@@ -4197,8 +4284,7 @@ class AIManager extends _managerbase__WEBPACK_IMPORTED_MODULE_2__.ManagerBase
     deleteAI( aiName )
     {
         // Check for the AI name
-        let ai = this.aiMap.get( aiName );
-        if( ai )
+        if( this.aiMap.has( aiName ) )
         {
             this.aiMap.delete( aiName );
         }
@@ -4602,10 +4688,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   countStrOccurrence: () => (/* binding */ countStrOccurrence),
 /* harmony export */   downloadFile: () => (/* binding */ downloadFile),
 /* harmony export */   getKey: () => (/* binding */ getKey),
+/* harmony export */   indexOf: () => (/* binding */ indexOf),
 /* harmony export */   isEmpty: () => (/* binding */ isEmpty),
 /* harmony export */   modulus: () => (/* binding */ modulus),
 /* harmony export */   randomArbitrary: () => (/* binding */ randomArbitrary),
 /* harmony export */   randomInt: () => (/* binding */ randomInt),
+/* harmony export */   removeAt: () => (/* binding */ removeAt),
 /* harmony export */   shuffle: () => (/* binding */ shuffle),
 /* harmony export */   stringLoadXML: () => (/* binding */ stringLoadXML)
 /* harmony export */ });
@@ -4620,7 +4708,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var sessionCacheBustNo = Math.random();
+// Globals used in functions to avoid garbage collection
+var gSessionCacheBustNo = Math.random();
+var gLen;
+var gI;
+var gReturn;
 
 // 
 //  DESC: Load files via a promise
@@ -4702,7 +4794,7 @@ function downloadFile( fileType, filePath )
                 }
 
             // Define which file to open and send the request. True = asynchronous
-            request.open('GET', filePath + '?cache_buster=' + sessionCacheBustNo, true);
+            request.open('GET', filePath + '?cache_buster=' + gSessionCacheBustNo, true);
             request.send();
         }
         // Images are handled differently
@@ -4812,10 +4904,8 @@ function stringLoadXML( stringData )
 function getKey(map, searchValue)
 {
     for (let [key, value] of map.entries())
-    {
         if( value === searchValue )
             return key;
-    }
 
     return undefined;
 }
@@ -4843,6 +4933,34 @@ function cap(value, min, max)
         return max;
 
     return value;
+}
+
+// 
+//  DESC: Remove value from array without incuring garbage collection
+//
+function removeAt(array, index)
+{
+    gLen = array.length;
+    gReturn = array[index];
+
+    for( gI = index + 1; gI < gLen; ++gI )
+        array[gI - 1] = array[gI];
+
+    array.length = gLen - 1;
+
+    return gReturn;
+}
+
+// 
+//  DESC: Remove value from array without incuring garbage collection
+//
+function indexOf(array, obj)
+{
+    for( gI = 0; gI < array.length; gI++ )
+        if( array[gI] === obj )
+            return gI;
+
+    return -1;
 }
 
 /***/ }),
@@ -7251,7 +7369,7 @@ class ActionManager
     //
     wasAction( event, actionStr )
     {
-        let result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_IDLE;
+        this._result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_IDLE;
 
         if( this.allowAction )
         {
@@ -7262,26 +7380,29 @@ class ActionManager
 
                 if( this.wasActionMap( event.code, actionStr, this.keyboardActionMap ) )
                 {
-                    result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_DOWN;
+                    this._result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_DOWN;
 
                     if( event.type === 'keyup' )
                     {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_UP;
+                        this._result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_UP;
                     }
                 }
             }
             // Check for mouse event
-            else if( event instanceof MouseEvent && event.type != 'mousemove' )
+            else if( event instanceof MouseEvent )
             {
                 this.lastDeviceUsed = _common_defs__WEBPACK_IMPORTED_MODULE_4__.MOUSE;
 
-                if( this.wasActionMap( event.button, actionStr, this.mouseActionMap ) )
+                if( (event.type === 'mouseup' || event.type === 'mousedown') )
                 {
-                    result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_DOWN;
-
-                    if( event.type === 'mouseup' )
+                    if( this.wasActionMap( event.button, actionStr, this.mouseActionMap ) )
                     {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_UP;
+                        this._result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_DOWN;
+
+                        if( event.type === 'mouseup' )
+                        {
+                            this._result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_UP;
+                        }
                     }
                 }
             }
@@ -7294,18 +7415,18 @@ class ActionManager
                 {
                     if( this.wasActionMap( event.buttonIndex, actionStr, this.gamepadActionMap ) )
                     {
-                        result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_DOWN;
+                        this._result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_DOWN;
 
                         if( event.type === _common_gamepadevent__WEBPACK_IMPORTED_MODULE_1__.GAMEPAD_BUTTON_UP )
                         {
-                            result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_UP;
+                            this._result = _common_defs__WEBPACK_IMPORTED_MODULE_4__.EAP_UP;
                         }
                     }
                 }
             }
         }
 
-        return result;
+        return this._result;
     }
     
     // 
@@ -7313,18 +7434,18 @@ class ActionManager
     //
     wasActionMap( id, actionStr, actionMap )
     {
-        let result = false;
+        this._result = false;
 
         // See if the action has already been added
-        let action = actionMap.get( actionStr );
+        this._action = actionMap.get( actionStr );
 
         // If it's found, see if this is the correct action
-        if( action !== undefined )
+        if( this._action !== undefined )
         {
-            result = action.wasAction( id );
+            this._result = this._action.wasAction( id );
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -7687,7 +7808,11 @@ const ANALOG_STICK_MSG_MAX = 0.3;
 
 class GamepadEvent
 {
-    constructor( type, eventIndex, gamepad )
+    constructor()
+    {
+    }
+
+    init( type, eventIndex, gamepad )
     {
         // Event type
         this._type = type;
@@ -7814,6 +7939,8 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_man
 
 
 
+const MAX_GAMEPAD_EVENT_QUEUE = 50;
+
 class EventManager
 {
     constructor()
@@ -7864,6 +7991,12 @@ class EventManager
 
         // fullscreen change flag
         this.fullscreenChange = false;
+
+        // Reuable Gamepad event ques
+        this.gamePadEventIndex = 0;
+        this.gamePadEventQueue = [];
+        for( let i = 0; i < MAX_GAMEPAD_EVENT_QUEUE; i++ )
+            this.gamePadEventQueue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent() );
     }
     
     //
@@ -8047,26 +8180,26 @@ class EventManager
     //
     filterMousePos( event )
     {
-        let x = event.offsetX;
-        let y = event.offsetY;
-        let pixelRatio = window.devicePixelRatio;
+        this._x = event.offsetX;
+        this._y = event.offsetY;
+        this._pixelRatio = window.devicePixelRatio;
 
         if( document.fullscreenElement )
         {
-            x = Math.trunc(event.offsetX * pixelRatio);
-            y = Math.trunc(event.offsetY * pixelRatio);
+            this._x = Math.trunc(event.offsetX * this._pixelRatio);
+            this._y = Math.trunc(event.offsetY * this._pixelRatio);
 
             // Since it's needed for fullscreen, nullify it for anyone else using it
-            pixelRatio = 1.0; 
+            this._pixelRatio = 1.0; 
         }
 
         // Create a new event member to hold game custom values
-        event.gameAdjustedMouseX = x;
-        event.gameAdjustedMouseY = y;
-        event.gameAdjustedPixelRatio = pixelRatio;
-
+        event.gameAdjustedMouseX = this._x;
+        event.gameAdjustedMouseY = this._y;
+        event.gameAdjustedPixelRatio = this._pixelRatio;
+        MAX_GAMEPAD_EVENT_QUEUE
         this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
-        this.mouseAbsolutePos.setXYZ( x, y);
+        this.mouseAbsolutePos.setXYZ( this._x, this._y);
     }
 
     //
@@ -8079,23 +8212,27 @@ class EventManager
             // Send out events for the button presses
             for ( let [index, lastGp] of this.gamePadMap )
             {
-                let gp = navigator.getGamepads()[index];
+                this._gp = navigator.getGamepads()[index];
 
-                if( gp && gp.connected )
+                if( this._gp && this._gp.connected )
                 {
                     // Create Up/DOWN events for the buttons
-                    for(let i = 0; i < gp.buttons.length; i++)
+                    for(this._i = 0; this._i < this._gp.buttons.length; this._i++)
                     {
                         // Check for button down
-                        if(!lastGp.pressed[i] && gp.buttons[i].pressed)
+                        if(!lastGp.pressed[this._i] && this._gp.buttons[this._i].pressed)
                         {
-                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, i, gp) );
+                            this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, this._i, this._gp);
+                            this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                            this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                             //console.log( `Button Index Down: ${i};` );
                         }
                         // Check for button up
-                        else if(lastGp.pressed[i] && !gp.buttons[i].pressed)
+                        else if(lastGp.pressed[this._i] && !this._gp.buttons[this._i].pressed)
                         {
-                            this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, i, gp) );
+                            this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, this._i, this._gp);
+                            this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                            this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                             //console.log( `Button Index Up: ${i};` );
                         }
                     }
@@ -8105,58 +8242,74 @@ class EventManager
 
                     // Create UP/DOWN events for the Left analog stick
                     if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
-                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        (this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, gp) );
-                        //console.log( `Left Y Axes UP Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, this._gp);
+                        this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                        this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
+                        //console.log( `Left Y Axes UP Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
                     else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
-                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        !(this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, gp) );
-                        //console.log( `Left Y Axes UP Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, this._gp);
+                        this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                        this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
+                        //console.log( `Left Y Axes UP Button Up; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
                     else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
-                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        (this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
-                        //console.log( `Left Y Axes DOWN Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, this._gp);
+                        this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                        this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
+                        //console.log( `Left Y Axes DOWN Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
                     else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
-                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        !(this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, gp) );
-                        //console.log( `Left Y Axes DOWN Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
+                        this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, this._gp);
+                        this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                        this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
+                        //console.log( `Left Y Axes DOWN Button Up; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
 
                     // Create Left/Right events for the Left analog stick
                     if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
-                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        (this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
-                        //console.log( `Left X Axes LEFT Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, this._gp);
+                        this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                        this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
+                        //console.log( `Left X Axes LEFT Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
                     else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
-                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        !(this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, gp) );
-                        //console.log( `Left X Axes LEFT Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, this._gp);
+                        this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                        this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
+                        //console.log( `Left X Axes LEFT Button Up; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
                     else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
-                        (gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        (this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
-                        //console.log( `Left X Axes RIGHT Button Down; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, this._gp);
+                        this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                        this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
+                        //console.log( `Left X Axes RIGHT Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
                     else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
-                        !(gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
+                        !(this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
-                        this.queue.push( new _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GamepadEvent(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, gp) );
-                        //console.log( `Left X Axes RIGHT Button Up; Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
+                        this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, this._gp);
+                        this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
+                        this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
+                        //console.log( `Left X Axes RIGHT Button Up; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
 
                     // Sets the current gamepad
-                    lastGp.gamepad = gp;
+                    lastGp.gamepad = this._gp;
                 }
             }
         }
@@ -9577,9 +9730,6 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         // Allocate the null component if no visual component was created
         if( this.visualComponent === null )
             this.visualComponent = new _common_nullvisualcomponent__WEBPACK_IMPORTED_MODULE_6__.NullVisualComponent( objData );
-        
-        // If there's no visual data, set the hide flag
-        //this.setVisible( objData.visualData.isActive() );
     }
     
     // 
@@ -9603,7 +9753,7 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     }
 
     // 
-    //  DESC: Load from XML node
+    //  DESC: Reload from XML node
     //
     reload( xmlNode )
     {
@@ -9615,6 +9765,29 @@ class Sprite extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         
         if( this.physicsComponent )
             this.physicsComponent.setTransform(this.pos.x, this.pos.y, this.rot.z);
+    }
+
+    // 
+    //  DESC: Reset from XML node
+    //
+    reset( xmlNode )
+    {
+        // Reset to factory defaults
+        this.parameters.clear();
+        this.parameters.add( _common_defs__WEBPACK_IMPORTED_MODULE_10__.VISIBLE );
+        this.pos.clear();
+        this.rot.clear();
+        this.scale.setXYZ( 1, 1, 1 );
+        this.matrix.initilizeMatrix();
+
+        if( this.collisionComponent && this.objData.collisionData.isActive() )
+            this.collisionComponent.enable = true;
+
+        // Reload from XML node
+        this.reload( xmlNode );
+
+        // Prepare any script functions that are flagged to prepareOnInit
+        this.prepareScriptOnInit();
     }
     
     // 
@@ -10507,8 +10680,6 @@ class VertexBufferManager
     //
     createVBO( group, name, vertAry )
     {
-        let gl = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl;
-
         // Create the group map if it doesn't already exist
         let groupMap = this.vertexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -10521,10 +10692,10 @@ class VertexBufferManager
         let vboID = groupMap.get( name );
         if( vboID === undefined )
         {
-            vboID = gl.createBuffer();
-            gl.bindBuffer( gl.ARRAY_BUFFER, vboID );
-            gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(vertAry), gl.STATIC_DRAW );
-            gl.bindBuffer( gl.ARRAY_BUFFER, null );
+            vboID = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ARRAY_BUFFER, vboID );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ARRAY_BUFFER, null );
 
             groupMap.set( name, vboID );
         }
@@ -10537,8 +10708,6 @@ class VertexBufferManager
     //
     createIBO( group, name, indexAry, intAs8bit )
     {
-        let gl = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl;
-
         // Create the group map if it doesn't already exist
         let groupMap = this.indexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -10551,15 +10720,15 @@ class VertexBufferManager
         let iboID = groupMap.get( name );
         if( iboID === undefined )
         {
-            iboID = gl.createBuffer();
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iboID);
+            iboID = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, iboID);
 
             if( intAs8bit )
-                gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indexAry), gl.STATIC_DRAW );
+                _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.STATIC_DRAW );
             else
-                gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.STATIC_DRAW );
 
-            gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, null );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, null );
 
             groupMap.set( name, iboID );
         }
@@ -10572,8 +10741,6 @@ class VertexBufferManager
     //
     createDynamicFontIBO( group, name, indexAry, maxIndicies )
     {
-        let gl = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl;
-
         // Create the group map if it doesn't already exist
         let groupMap = this.indexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -10586,7 +10753,7 @@ class VertexBufferManager
         let iboID = groupMap.get( name );
         if( iboID === undefined )
         {
-            iboID = gl.createBuffer();
+            iboID = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.createBuffer();
 
             groupMap.set( name, iboID );
         }    
@@ -10594,9 +10761,9 @@ class VertexBufferManager
         // If the new indices are greater then the current, init the IBO with the newest
         if( maxIndicies > this.currentMaxFontIndices )
         {
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iboID);
-            gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), gl.STATIC_DRAW );
-            gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, null );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, iboID);
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, null );
 
             // Save the number of indices for later to compare and expand this size of this IBO
             this.currentMaxFontIndices = maxIndicies;
@@ -10610,8 +10777,6 @@ class VertexBufferManager
     //
     createScaledFrame( group, name, scaledFrame, textureSize, glyphSize, frameSize, spriteSheetOffset, meshFileVertAry = null )
     {
-        let gl = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl;
-
         // Create the group map if it doesn't already exist
         let groupMap = this.vertexBufMapMap.get( group );
         if( groupMap === undefined )
@@ -10632,10 +10797,10 @@ class VertexBufferManager
             if( meshFileVertAry !== null )
                 Array.prototype.push.apply( vertAry, meshFileVertAry );
             
-            vboID = gl.createBuffer();
-            gl.bindBuffer( gl.ARRAY_BUFFER, vboID );
-            gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(vertAry), gl.STATIC_DRAW );
-            gl.bindBuffer( gl.ARRAY_BUFFER, null );
+            vboID = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.createBuffer();
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ARRAY_BUFFER, vboID );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bufferData( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ARRAY_BUFFER, new Float32Array(vertAry), _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.STATIC_DRAW );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ARRAY_BUFFER, null );
 
             groupMap.set( name, vboID );
         }
@@ -10818,13 +10983,12 @@ class VertexBufferManager
         for( let grp = 0; grp < groupAry.length; ++grp )
         {
             let group = groupAry[grp];
-            let gl = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl;
 
             let groupMap = this.vertexBufMapMap.get( group );
             if( groupMap !== undefined )
             {
                 for( let vboID of groupMap.values() )
-                    gl.deleteBuffer( vboID );
+                    _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.deleteBuffer( vboID );
                 
                 this.vertexBufMapMap.delete( group );
             }
@@ -10833,7 +10997,7 @@ class VertexBufferManager
             if( groupMap !== undefined )
             {
                 for( let iboID of groupMap.values() )
-                    gl.deleteBuffer( iboID );
+                    _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.deleteBuffer( iboID );
                 
                 this.indexBufMapMap.delete( group );
             }
@@ -10863,15 +11027,13 @@ class VertexBufferManager
     //
     bind( vbo, ibo )
     {
-        let gl = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl;
-
         if( this.currentVBO != vbo )
         {
             // save the current binding
             this.currentVBO = vbo;
 
             // Have OpenGL bind this buffer now
-            gl.bindBuffer( gl.ARRAY_BUFFER, vbo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ARRAY_BUFFER, vbo );
         }
 
         if( this.currentIBO != ibo )
@@ -10880,7 +11042,7 @@ class VertexBufferManager
             this.currentIBO = ibo;
 
             // Have OpenGL bind this buffer now
-            gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, ibo );
+            _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, ibo );
         }
     }
     
@@ -10889,12 +11051,10 @@ class VertexBufferManager
     //
     unbind()
     {
-        let gl = _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl;
-        
         this.currentVBO = null;
         this.currentIBO = null;
-        gl.bindBuffer( gl.ARRAY_BUFFER, null );
-        gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, null );
+        _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ARRAY_BUFFER, null );
+        _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.bindBuffer( _system_device__WEBPACK_IMPORTED_MODULE_0__.device.gl.ELEMENT_ARRAY_BUFFER, null );
     }
 }
 
@@ -12101,10 +12261,6 @@ class FontManager
 
         for( const each of obj )
         {
-            // Sanity check to make sure the font has not already been added in
-            if( this.fontMap.has( each.name ) )
-                throw new Error( `Font name has already been loaded (${each.name}).` );
-
             // Sanity check to make sure the font has not already been added in
             if( this.fontMap.has( each.name ) )
                 throw new Error( `Font name has already been loaded (${each.name}).` );
@@ -33501,7 +33657,7 @@ class ObjectDataManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0
             let group = groupAry[grp];
             
             // Make sure the group we are looking for exists
-            if( this.listTableMap.get( group ) === undefined )
+            if( !this.listTableMap.has( group ) )
                 throw new Error( `Object data list group name can't be found (${group})!` );
 
             // Get the group map
@@ -37014,7 +37170,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     resetSpriteScript()
     {
         for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].scriptComponent.reset();
+            this.spriteAry[i].scriptComponent.recycleActiveScripts();
     }
 
     // 
@@ -43096,17 +43252,23 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         // Array of nodes to be added to the active vector
         this.activateAry = [];
         
-        // Array of nodess to be removed to the active vector
+        // Array of nodess to be removed from the active vector
         this.deactivateAry = [];
         
-        // Set of indexes to delete
+        // Array of nodess to be removed from the active vector and deleted
         this.deleteAry = [];
+
+        // Array of nodess to be removed from the active vector and added to the pool
+        this.recycleAry = [];
 
         // Clear all array
         this.clearAllAry = [];
 
         // Clear all nodes flag
         this.clearAllNodesFlag = false;
+
+        // Pool map for sprite recycle
+        this.recycleMap = new Map;
     }
 
     //
@@ -43163,8 +43325,8 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     clear()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.deleteAry.push( this.nodeAry[i] );
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.deleteAry.push( this.nodeAry[this._i] );
     }
 
     //
@@ -43172,16 +43334,11 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     cleanUp()
     {
-        // See if any nodes in the map are not part of the node array and clean
-        for( let node of this.nodeMap.values() )
-        {
-            let index = this.nodeAry.findIndex( (obj) => obj === node );
-            if( index === -1 )
-                node.cleanUp();
-        }
+        for( this._node of this.nodeMap.values() )
+            this._node.cleanUp();
 
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].cleanUp();
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.nodeAry[this._i].cleanUp();
     }
 
     //
@@ -43191,8 +43348,8 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     {
         // If the data can't be found, this could be a simple one-off sprite node 
         // which can be generated from the group and object data name
-        let data = this.dataMap.get( name );
-        if( !data )
+        this._date = this.dataMap.get( name );
+        if( this._date === undefined )
         {
             // If we can't find the data and the group param is empty, see if we can find the group 
             // in the Object Data Manager as a last attemp. 
@@ -43211,13 +43368,13 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
                 this.loadFromNode( 
                     _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.stringLoadXML(`<strategy defaultGroup="${group}"><node name="${name}"><sprite/></node></strategy>`).getElementsByTagName( 'strategy' )[0],
                     'Dynamic generation');
-                data = this.dataMap.get( name );
+                this._date = this.dataMap.get( name );
             }
             else
                 throw new Error( `Error finding node data (${name})!` );
         }
 
-        return data;
+        return this._date;
     }
 
     //
@@ -43226,27 +43383,45 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     create( dataName, instanceName = null, makeActive = true, group = '' )
     {
         // Get the data for this data name
-        let nodeAry = this.getData( dataName, group ).dataAry;
+        this._nodeDataAry = this.getData( dataName, group ).dataAry;
+
+        // Do we have any nodes from the pool to draw from?
+        this._poolNodeAry = this.recycleMap.get( this._nodeDataAry[0].nodeName );
+        if( this._poolNodeAry && this._poolNodeAry.length )
+        {
+            this._node = this._poolNodeAry[this._poolNodeAry.length-1];
+            this._poolNodeAry.length -= 1;
+            this._node.resetTree();
+
+            if( !instanceName || makeActive )
+                this.activateAry.push( this._node );
+
+            //console.log(`Sprite Recycle; Name: ${dataName}`);
+
+            return this._node;
+        }
+
+        //console.log(`Sprite Create; Name: ${dataName}`);
 
         // Build the node list
-        let headNode = null;
-        for( let i = 0; i < nodeAry.length; i++ )
+        this._headNode = null;
+        for( this._i = 0; this._i < this._nodeDataAry.length; this._i++ )
         {
-            let node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_4__.create( nodeAry[i] );
+            this._node = _node_nodefactory__WEBPACK_IMPORTED_MODULE_4__.create( this._nodeDataAry[this._i] );
 
-            if( headNode === null )
-                headNode = node;
+            if( this._headNode === null )
+                this._headNode = this._node;
 
-            else if( !headNode.addNode( node ) )
-                throw new Error( `Parent node not found or node does not support adding children (${nodeAry[i].nodeName}, ${node.parentId})!` );
+            else if( !this._headNode.addNode( this._node ) )
+                throw new Error( `Parent node not found or node does not support adding children (${this._nodeDataAry[i].nodeName}, ${node.parentId})!` );
         }
 
         // Init the head node
-        headNode.init();
+        this._headNode.init();
 
         // Add the node to the array for adding to the active list
         if( !instanceName || makeActive )
-            this.activateAry.push( headNode );
+            this.activateAry.push( this._headNode );
 
         // If there is an instance name with this node, add it to the map
         if( instanceName )
@@ -43255,10 +43430,10 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
             if( this.nodeMap.has( instanceName ) )
                 throw new Error( `Duplicate node instance name (${instanceName})!` );
 
-            this.nodeMap.set( instanceName, headNode );
+            this.nodeMap.set( instanceName, this._headNode );
         }
 
-        return headNode;
+        return this._headNode;
     }
 
     //
@@ -43274,17 +43449,21 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     awakeCount()
     {
-        let result = 0;
+        this._result = 0;
 
-        for( let i = 0; i < this.nodeAry.length; i++ )
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
         {
-            let sprite = this.nodeAry[i].get();
-            if( sprite.isPhysicsActive() )
-                if( sprite.isPhysicsAwake() )
-                    result += 1;
+            this._sprite = this.nodeAry[this._i].get();
+            if( this._sprite.isPhysicsActive() )
+            {
+                if( this._sprite.isPhysicsAwake() )
+                {
+                    this._result += 1;
+                }
+            }
         }
 
-        return result;
+        return this._result;
     }
 
     //
@@ -43292,12 +43471,16 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     isPhysicsAwake()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
         {
-            let sprite = this.nodeAry[i].get();
-            if( sprite.isPhysicsActive() )
-                if( sprite.isPhysicsAwake() )
+            this._sprite = this.nodeAry[this._i].get();
+            if( this._sprite.isPhysicsActive() )
+            {
+                if( this._sprite.isPhysicsAwake() )
+                {
                     return true;
+                }
+            }
         }
 
         return false;
@@ -43308,8 +43491,8 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     initScriptTree()
     {
-        for( let i = 0; i < this.activateAry.length; i++ )
-            this.activateAry[i].get().scriptComponent.initScriptTree();
+        for( this._i = 0; this._i < this.activateAry.length; this._i++ )
+            this.activateAry[this._i].get().scriptComponent.initScriptTree();
     }
     
     //
@@ -43317,19 +43500,20 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     activateNode( instanceName )
     {
-        let node = this.nodeMap.get( instanceName );
-        if( node )
+        this._node = this.nodeMap.get( instanceName );
+        if( this._node !== undefined )
         {
-            let index = this.nodeAry.findIndex( (obj) => obj === node );
-            if( index !== -1 )
-                console.warn( `Node is already active (${instanceName})!` );
+            this._index = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.indexOf( this.nodeAry, this._node );
+
+            if( this._index === -1 )
+                this.activateAry.push( this._node );
             else
-                this.activateAry.push( node );
+                console.warn( `Node is already active (${instanceName})!` );
         }
         else
             throw new Error( `Node can't be found (%s) (${instanceName})!` );
         
-        return node;
+        return this._node;
     }
     
     //
@@ -43337,12 +43521,11 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     deactivateNode( instanceName )
     {
-        let node = this.nodeMap.get( instanceName );
-        if( node )
+        this._node = this.nodeMap.get( instanceName );
+        if( this._node !== undefined )
         {
-            let index = this.nodeAry.findIndex( (obj) => obj === node );
-            if( index !== -1 )
-                this.deactivateAry.push( this.nodeAry[index] );
+            if( _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.indexOf( this.nodeAry, this._node ) !== -1 )
+                this.deactivateAry.push( this._node );
             else
                 console.warn( `Node is not active (${instanceName})!` );
         }
@@ -43355,18 +43538,12 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     deactivateAll()
     {
-        for( let [ key, node ] of this.nodeMap.entries() )
-        {
-            let index = this.nodeAry.findIndex( (obj) => obj === node );
-            if( index !== -1 )
-                this.deactivateAry.push( this.nodeAry[index] );
-            else
-                console.warn( `Node is not active (${key})!` );
-            }
-        }
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.deactivateAry.push( this.nodeAry[this._index] );
+    }
 
     //
-    //  DESC: destroy the node
+    //  DESC: Add the node to the delete list
     //
     destroy( node )
     {
@@ -43374,28 +43551,46 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     }
 
     //
+    //  DESC: Add the node to the pool list
+    //
+    recycle( node )
+    {
+        this.recycleAry.push( node );
+    }
+
+    //
     //  DESC: Get the node by id
     //
     get( id )
     {
-        let node = null;
+        this._node = null;
     
         if( typeof id === 'string' )
         {
-            node = this.nodeMap.get( id );
-            if( !node )
+            this._node = this.nodeMap.get( id );
+            if( this._node === undefined )
                 throw new Error( `Node instance name can't be found (${id})!` );
         }
         else
         {
-            let index = this.nodeAry.findIndex( (node) => node.userId === id );
-            if( index !== -1 )
-                node = this.nodeAry[index];
+            this._index = -1;
+
+            for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            {
+                if( this.nodeAry[this._i].userId === id  )
+                {
+                    this._index = this._i;
+                    break;
+                }
+            }
+
+            if( this._index !== -1 )
+                this._node = this.nodeAry[this._index];
             else
                 throw new Error( `Node index can't be found (${id})!` );
         }
 
-        return node;
+        return this._node;
     }
 
     //
@@ -43411,6 +43606,9 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         
         // Remove deleted nodes from the active list and map
         this.deleteFromActiveList();
+
+        // Remove recycled nodes from the active list and add to pool
+        this.recycleFromActiveList();
 
         // Add created nodes to the active list
         this.addToActiveList();
@@ -43432,40 +43630,40 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     render( overrideCamera = null )
     {
-        let camera = this.camera;
+        this._camera = this.camera;
         if( overrideCamera )
-            camera = overrideCamera;
+            this._camera = overrideCamera;
 
         // Cull frustrum on the head node
-        if( camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_NULL )
+        if( this._camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_NULL )
         {
             for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
-                this.nodeAry[this._i].render( camera );
+                this.nodeAry[this._i].render( this._camera );
         }
         else
         {
-            if( camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_FULL )
+            if( this._camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_FULL )
             {
                 for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inView( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( camera );
+                    if( this._camera.inView( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( this._camera );
                 }
             }
-            else if( camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_X_ONLY )
+            else if( this._camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_X_ONLY )
             {
                 for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inViewX( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( camera );
+                    if( this._camera.inViewX( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( this._camera );
                 }
             }
-            else if( camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_Y_ONLY )
+            else if( this._camera.cull === _common_defs__WEBPACK_IMPORTED_MODULE_5__.CULL_Y_ONLY )
             {
                 for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
                 {
-                    if( camera.inViewY( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( camera );
+                    if( this._camera.inViewY( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
+                        this.nodeAry[this._i].render( this._camera );
                 }
             }
         }
@@ -43478,13 +43676,13 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     {
         if( this.activateAry.length )
         {
-            for( let i = 0; i < this.activateAry.length; i++ )
+            for( this._i = 0; this._i < this.activateAry.length; this._i++ )
             {
-                this.activateAry[i].update();
-                this.nodeAry.push( this.activateAry[i] );
+                this.activateAry[this._i].update();
+                this.nodeAry.push( this.activateAry[this._i] );
             }
 
-            this.activateAry = [];
+            this.activateAry.length = 0;
         }
     }
 
@@ -43495,18 +43693,17 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     {
         if( this.deactivateAry.length )
         {
-            for( let i = 0; i < this.deactivateAry.length; i++ )
+            for( this._i = 0; this._i < this.deactivateAry.length; this._i++ )
             {
-                let node = this.deactivateAry[i];
+                this._index = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.indexOf( this.nodeAry, this.deactivateAry[this._i] );
 
-                let index = this.nodeAry.findIndex( (obj) => obj === node );
-                if( index !== -1 )
-                    this.nodeAry.splice( index, 1 );
+                if( this._index !== -1 )
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.removeAt( this.nodeAry, this._index );
                 else
                     throw new Error( `Node id can't be found to remove from active list!` );
             }
 
-            this.deactivateAry = [];
+            this.deactivateAry.length = 0;
         }
     }
     
@@ -43517,32 +43714,51 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     {
         if( this.deleteAry.length )
         {
-            for( let i = 0; i < this.deleteAry.length; i++ )
+            for( this._i = 0; this._i < this.deleteAry.length; this._i++ )
             {
-                let node = this.deleteAry[i];
+                this._index = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.indexOf( this.nodeAry, this.deleteAry[this._i] );
 
-                let index = this.nodeAry.findIndex( (obj) => obj === node );
-                if( index !== -1 )
+                if( this._index !== -1 )
                 {
                     // Clean up if font or physics sprite
-                    this.nodeAry[index].cleanUp();
-                    this.nodeAry.splice( index, 1 );
+                    this.nodeAry[this._index].cleanUp();
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.removeAt( this.nodeAry, this._index );
                 }
                 else
                     throw new Error( `Node can't be found to delete!` );
                 
                 // If this same node is in the map, delete it here too.
-                for( let [ key, obj ] of this.nodeMap.entries() )
-                {
-                    if( obj === node )
-                    {
-                        this.nodeMap.delete(key);
-                        break;
-                    }
-                }
+                this._key = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.getKey( this.nodeMap, this.deleteAry[this._i] );
+
+                if( this._key !== undefined )
+                    this.nodeMap.delete(this._key);
             }
 
-            this.deleteAry = [];
+            this.deleteAry.length = 0;
+        }
+    }
+
+    //
+    //  DESC: Remove recycled nodes from the active list and add to pool
+    //
+    recycleFromActiveList()
+    {
+        if( this.recycleAry.length )
+        {
+            for( this._i = 0; this._i < this.recycleAry.length; this._i++ )
+            {
+                this._index = _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.indexOf( this.nodeAry, this.recycleAry[this._i] );
+
+                if( this._index !== -1 )
+                {
+                    this.addToRecycle( this.nodeAry[this._index] );
+                    _utilities_genfunc__WEBPACK_IMPORTED_MODULE_6__.removeAt( this.nodeAry, this._index );
+                }
+                else
+                    throw new Error( `Node can't be found to recycle!` );
+            }
+
+            this.recycleAry.length = 0;
         }
     }
 
@@ -43551,8 +43767,8 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     setAllToDefaultId()
     {
-        for( let i = 0; i < this.nodeAry.length; i++ )
-            this.nodeAry[i].userId = _common_defs__WEBPACK_IMPORTED_MODULE_5__.DEFAULT_ID;
+        for( this._i = 0; this._i < this.nodeAry.length; this._i++ )
+            this.nodeAry[this._i].userId = _common_defs__WEBPACK_IMPORTED_MODULE_5__.DEFAULT_ID;
     }
 
     // 
@@ -43609,6 +43825,20 @@ class Strategy extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
                     return 0;
                 });
+    }
+
+    //
+    //  DESC: Add a node to recycle
+    //
+    addToRecycle( node )
+    {
+        // Add an array to the map if this object type doesn't already exist
+        if( !this.recycleMap.has(node.name) )
+            this.recycleMap.set( node.name, [] );
+
+        // Recycle any active scripts for next time
+        node.get().scriptComponent.recycleActiveScripts();
+        this.recycleMap.get(node.name).push(node);
     }
 }
 
@@ -44056,6 +44286,14 @@ class SpriteNode extends _rendernode__WEBPACK_IMPORTED_MODULE_0__.RenderNode
         this.sprite = new _sprite_sprite__WEBPACK_IMPORTED_MODULE_1__.Sprite( objectData, this );
         this.type = _common_defs__WEBPACK_IMPORTED_MODULE_3__.ENT_SPRITE;
         this.userId = nodeData.userId;
+    }
+
+    // 
+    //  DESC: Reset the sprite node
+    //
+    reset()
+    {
+        this.sprite.reset( this.nodeData.xmlNode );
     }
 
     // 
@@ -44673,6 +44911,9 @@ class iNode
 
         // Node name
         this.name = '';
+
+        // The node data
+        this.nodeData = nodeData;
     }
 
     // 
@@ -44714,6 +44955,14 @@ class iNode
     //  DESC: Reset the node
     //
     reset()
+    {
+        // Empty by design
+    }
+
+    // 
+    //  DESC: Reset the tree
+    //
+    resetTree()
     {
         // Empty by design
     }
@@ -44798,6 +45047,22 @@ class SpriteLeafNode extends _inode__WEBPACK_IMPORTED_MODULE_0__.iNode
 
         // Prepare any script functions that are flagged to prepareOnInit
         this.sprite.prepareScriptOnInit();
+    }
+
+    // 
+    //  DESC: Reset the tree
+    //
+    resetTree()
+    {
+        this.reset();
+    }
+
+    // 
+    //  DESC: Reset the sprite node
+    //
+    reset()
+    {
+        this.sprite.reset( this.nodeData.xmlNode );
     }
 
     // 
@@ -45986,7 +46251,7 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_lib
 
 //
 //  FILE NAME: menuscripts.js
-//  DESC:      script for the menus
+//  DESC:      scripts for the menus
 //
 
 
@@ -46007,6 +46272,14 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([_lib
 class Control_OnActive
 {
     // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
+
+    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -46022,6 +46295,14 @@ class Control_OnActive
 //
 class Control_OnSelect
 {
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
+
     // 
     //  DESC: Execute this script object
     //
@@ -46042,8 +46323,20 @@ class Menu_TransIn
     {
         this.fadeTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__.FadeTo();
         this.menu = menu;
-        this.menu.setAlpha( this.current );
+        
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        this.menu.setAlpha( 0.0 );
         this.menu.setVisible( true );
+        this.fadeTo.init( 0, 1, 250 );
+
         this.iter = this.iteration();
     }
 
@@ -46052,8 +46345,6 @@ class Menu_TransIn
     //
     * iteration()
     {
-        this.fadeTo.init( 0, 1, 250 );
-
         do
         {
             if( this.fadeTo.execute() )
@@ -46089,8 +46380,20 @@ class Menu_TransOut
     {
         this.fadeTo = new _utilityscripts__WEBPACK_IMPORTED_MODULE_6__.FadeTo();
         this.menu = menu;
+
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
+        this.fadeTo.init( 1, 0, 250 );
+
         this.iter = this.iteration();
     }
 
@@ -46099,8 +46402,6 @@ class Menu_TransOut
     //
     * iteration()
     {
-        this.fadeTo.init( 1, 0, 250 );
-
         do
         {
             if( this.fadeTo.execute() )
@@ -46136,6 +46437,19 @@ class Control_Disabled
     constructor( sprite )
     {
         this.sprite = sprite;
+        this.color = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__.Color;
+
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        this.color.copy( this.sprite.getDefaultColor() );
+        this.color.transformHSV( 0, 0, 1 );
     }
     
     // 
@@ -46143,11 +46457,7 @@ class Control_Disabled
     //
     execute()
     {
-        let color = new _library_common_color__WEBPACK_IMPORTED_MODULE_5__.Color;
-        color.copy( this.sprite.getDefaultColor() );
-        color.transformHSV( 0, 0, 1 );
-
-        this.sprite.setColor( color );
+        this.sprite.setColor( this.color );
 
         return true;
     }
@@ -46163,6 +46473,14 @@ class Control_Inactive
         this.sprite = sprite;
     }
     
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
+
     // 
     //  DESC: Execute this script object
     //
@@ -46182,6 +46500,14 @@ class Control_Hidden
     constructor( sprite )
     {
         this.sprite = sprite;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
     
     // 
@@ -46273,6 +46599,15 @@ class Control_Active extends Base_Control_Active
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.3, 0.5 );
     }
     
@@ -46291,6 +46626,15 @@ class Control_Solid_Active extends Base_Control_Active
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.1, 0.5 );
     }
     
@@ -46390,6 +46734,15 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -46414,6 +46767,15 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -46440,6 +46802,15 @@ class Control_Selected_Visible extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -46462,6 +46833,15 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.5, 0.6 );
     }
     
@@ -46480,6 +46860,15 @@ class Control_Selected extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -46504,6 +46893,15 @@ class Control_Solid_Selected extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.5, 0.6 );
     }
     
@@ -46528,6 +46926,15 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -46578,6 +46985,15 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -46605,6 +47021,15 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -46633,6 +47058,15 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -46662,6 +47096,15 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -46689,6 +47132,15 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -46716,6 +47168,15 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7 );
     }
     
@@ -46728,7 +47189,6 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     }
 }
 
-
 //
 //  DESC: Execution script for a button control to change to the confirmation menu
 //
@@ -46737,6 +47197,23 @@ class ConfirmBtn_execute
     constructor( control )
     {
         this.control = control;
+
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        this.menu = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__.menuManager.getMenu("confirmation_menu");
+        this.yesBtn = this.menu.getControl("yes_btn");
+        this.megLbl = this.menu.getControl("message_lbl");
+        
+        this.conformationMsg = '';
+        this.executionAction = '';
+        this.actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECAT_BACK;
     }
     
     // 
@@ -46744,36 +47221,27 @@ class ConfirmBtn_execute
     //
     execute()
     {
-        let menu = _library_gui_menumanager__WEBPACK_IMPORTED_MODULE_4__.menuManager.getMenu("confirmation_menu");
-        let yesBtn = menu.getControl("yes_btn");
-        let megLbl = menu.getControl("message_lbl");
-        
-        let conformationMsg = '';
-        let executionAction = '';
-        let actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECAT_BACK;
-        
         if( this.control.name === 'continue_btn' )
         {
-            conformationMsg = "Are you sure you|want to continue|on to the next state?";
-            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECAT_GAME_STATE_CHANGE;
-            executionAction = "level_1_state";
+            this.conformationMsg = "Are you sure you|want to play the game?";
+            this.actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECAT_GAME_STATE_CHANGE;
+            this.executionAction = "level_1_state";
         }
         else if( this.control.name === 'main_menu_btn' )
         {
-            conformationMsg = 'Are you sure you|want to go back to|the main menu?';
-            actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECAT_GAME_STATE_CHANGE;
-            executionAction = 'title_screen_state';
+            this.conformationMsg = 'Are you sure you|want to go back to|the Title Screen?';
+            this.actionType = _library_gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_8__.ECAT_GAME_STATE_CHANGE;
+            this.executionAction = 'title_screen_state';
         }
         
         // Set the conformation menu
-        yesBtn.actionType = actionType;
-        yesBtn.executionAction = executionAction;
-        megLbl.createFontString( conformationMsg );
+        this.yesBtn.actionType = this.actionType;
+        this.yesBtn.executionAction = this.executionAction;
+        this.megLbl.createFontString( this.conformationMsg );
 
         return true;
     }
 }
-
 
 // 
 //  DESC: Load scripts

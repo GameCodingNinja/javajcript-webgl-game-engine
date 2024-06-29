@@ -1026,8 +1026,8 @@ class ConfirmBtn_execute
     recycle()
     {
         this.menu = menuManager.getMenu("confirmation_menu");
-        this.yesBtn = menu.getControl("yes_btn");
-        this.megLbl = menu.getControl("message_lbl");
+        this.yesBtn = this.menu.getControl("yes_btn");
+        this.megLbl = this.menu.getControl("message_lbl");
         
         this.conformationMsg = '';
         this.executionAction = '';

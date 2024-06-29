@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: keybindmenucripts.js
-//  DESC:      script for keybinding
+//  DESC:      scripts for keybinding
 //
 
 "use strict";
@@ -24,6 +24,14 @@ export class KeyBindBtn_init
     constructor( control )
     {
         this.control = control;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
     
     // 
@@ -62,6 +70,14 @@ export class KeyBindBtn_execute
     {}
 
     // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
+
+    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -82,6 +98,17 @@ export class KeyBindBtn_event
     constructor( control, event )
     {
         this.control = control;
+        
+
+        // Continues the init
+        this.recycle(event);
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( event )
+    {
         this.event = event;
     }
 
@@ -90,26 +117,26 @@ export class KeyBindBtn_event
     //
     bindButtonPress( deviceId, keyCode )
     {
-        let labelStr = "keyboard";
+        this._labelStr = "keyboard";
         if( deviceId == defs.MOUSE )
-            labelStr = "mouse";
+            this._labelStr = "mouse";
         else if( deviceId == defs.GAMEPAD )
-            labelStr = "gamepad";
+            this._labelStr = "gamepad";
 
         // Check for escape/enter to disable key mapping process
         if( !(keyCode === 'Enter' || keyCode === 'Escape') )
         {
-            console.log(`${labelStr} mapped: ${keyCode}`);
+            console.debug(`${this._labelStr} mapped: ${keyCode}`);
             let [componetIdStr, configurable] = actionManager.resetAction( deviceId, this.control.name, keyCode );
 
             if( configurable )
             {
                 // Reset the string Id
-                let labelCrtl = this.control.findControlByName( labelStr );
-                if( labelCrtl )
+                this._labelCrtl = this.control.findControlByName( this._labelStr );
+                if( this._labelCrtl )
                 {
-                    labelCrtl.createFontString( componetIdStr );
-                    labelCrtl.prepareSpriteScript( 'changed' );
+                    this._labelCrtl.createFontString( componetIdStr );
+                    this._labelCrtl.prepareSpriteScript( 'changed' );
 
                     // Save the key binding changes to file
                     actionManager.saveKeybinding();
@@ -165,6 +192,14 @@ class Control_OnKeybindReset
 {
     constructor( /*control*/ )
     {
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
 
     // 

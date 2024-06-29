@@ -101,19 +101,17 @@ export class Level1State extends CommonState
 
         // Randomly distrabute the clouds
         this.cloudAry = [];
-        for( let i = 0; i < MAX_CLOUDS; i++ )
+        for( this._i = 0; this._i < MAX_CLOUDS; this._i++ )
         {
-            let node = this.bkgStrategy.get(`cloud_${i}`);
-            let cloud = new Object();
-            cloud.speed = genFunc.randomArbitrary(0.001, 0.02);
-            cloud.sprite = node.get();
-            cloud.sprite.setPosXYZ(genFunc.randomInt(-640, 640), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
-            cloud.sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
+            this._sprite = this.bkgStrategy.get(`cloud_${this._i}`).get();
+            this._sprite.speed = genFunc.randomArbitrary(0.001, 0.02);
+            this._sprite.setPosXYZ(genFunc.randomInt(-640, 640), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
+            this._sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
             // Flip the sprite?
             if(genFunc.randomInt(0, 1))
-                cloud.sprite.setRotXYZ(0, 180);
+                this._sprite.setRotXYZ(0, 180);
 
-            this.cloudAry.push(cloud);
+            this.cloudAry.push(this._sprite);
         }
 
         // Get the camera and reinit
@@ -729,18 +727,18 @@ export class Level1State extends CommonState
     {
         for( this._i = 0; this._i < MAX_CLOUDS; this._i++ )
         {
-            this.cloudAry[this._i].sprite.incPosXYZ(highResTimer.elapsedTime * this.cloudAry[this._i].speed);
+            this.cloudAry[this._i].incPosXYZ(highResTimer.elapsedTime * this.cloudAry[this._i].speed);
 
-            if(this.cloudAry[this._i].sprite.pos.x - (this.cloudAry[this._i].sprite.getSize().w / 2) > settings.deviceRes_half.w)
+            if(this.cloudAry[this._i].pos.x - (this.cloudAry[this._i].getSize().w / 2) > settings.deviceRes_half.w)
             {
-                this.cloudAry[this._i].sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
+                this.cloudAry[this._i].setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
                 this.cloudAry[this._i].speed = genFunc.randomArbitrary(0.001, 0.02);
-                this.cloudAry[this._i].sprite.setPosXYZ(-((this.cloudAry[this._i].sprite.getSize().w / 2) + settings.deviceRes_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
+                this.cloudAry[this._i].setPosXYZ(-((this.cloudAry[this._i].getSize().w / 2) + settings.deviceRes_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
 
                 // Flip the sprite?
-                this.cloudAry[this._i].sprite.setRotXYZ(0, 0);
+                this.cloudAry[this._i].setRotXYZ(0, 0);
                 if(genFunc.randomInt(0, 1))
-                    this.cloudAry[this._i].sprite.setRotXYZ(0, 180);
+                    this.cloudAry[this._i].setRotXYZ(0, 180);
             }
         }
     }

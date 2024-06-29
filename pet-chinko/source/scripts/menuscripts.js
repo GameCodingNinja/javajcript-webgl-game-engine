@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: menuscripts.js
-//  DESC:      script for the menus
+//  DESC:      scripts for the menus
 //
 
 "use strict";
@@ -22,6 +22,14 @@ import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 class Control_OnActive
 {
     // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
+
+    // 
     //  DESC: Execute this script object
     //
     execute()
@@ -37,6 +45,14 @@ class Control_OnActive
 //
 class Control_OnSelect
 {
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
+
     // 
     //  DESC: Execute this script object
     //
@@ -57,8 +73,20 @@ class Menu_TransIn
     {
         this.fadeTo = new utilScripts.FadeTo();
         this.menu = menu;
-        this.menu.setAlpha( this.current );
+        
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        this.menu.setAlpha( 0.0 );
         this.menu.setVisible( true );
+        this.fadeTo.init( 0, 1, 250 );
+
         this.iter = this.iteration();
     }
 
@@ -67,8 +95,6 @@ class Menu_TransIn
     //
     * iteration()
     {
-        this.fadeTo.init( 0, 1, 250 );
-
         do
         {
             if( this.fadeTo.execute() )
@@ -104,8 +130,20 @@ class Menu_TransOut
     {
         this.fadeTo = new utilScripts.FadeTo();
         this.menu = menu;
+
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
+        this.fadeTo.init( 1, 0, 250 );
+
         this.iter = this.iteration();
     }
 
@@ -114,8 +152,6 @@ class Menu_TransOut
     //
     * iteration()
     {
-        this.fadeTo.init( 1, 0, 250 );
-
         do
         {
             if( this.fadeTo.execute() )
@@ -151,6 +187,19 @@ class Control_Disabled
     constructor( sprite )
     {
         this.sprite = sprite;
+        this.color = new Color;
+
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        this.color.copy( this.sprite.getDefaultColor() );
+        this.color.transformHSV( 0, 0, 1 );
     }
     
     // 
@@ -158,11 +207,7 @@ class Control_Disabled
     //
     execute()
     {
-        let color = new Color;
-        color.copy( this.sprite.getDefaultColor() );
-        color.transformHSV( 0, 0, 1 );
-
-        this.sprite.setColor( color );
+        this.sprite.setColor( this.color );
 
         return true;
     }
@@ -178,6 +223,14 @@ class Control_Inactive
         this.sprite = sprite;
     }
     
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
+    }
+
     // 
     //  DESC: Execute this script object
     //
@@ -197,6 +250,14 @@ class Control_Hidden
     constructor( sprite )
     {
         this.sprite = sprite;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Nothing to do here
     }
     
     // 
@@ -288,6 +349,15 @@ class Control_Active extends Base_Control_Active
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.3, 0.5 );
     }
     
@@ -306,6 +376,15 @@ class Control_Solid_Active extends Base_Control_Active
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.1, 0.5 );
     }
     
@@ -405,6 +484,15 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -429,6 +517,15 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -455,6 +552,15 @@ class Control_Selected_Visible extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -477,6 +583,15 @@ class Control_Solid_Selected_visible extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.5, 0.6 );
     }
     
@@ -495,6 +610,15 @@ class Control_Selected extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -519,6 +643,15 @@ class Control_Solid_Selected extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.5, 0.6 );
     }
     
@@ -543,6 +676,15 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7, 0.6 );
     }
     
@@ -593,6 +735,15 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -620,6 +771,15 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -648,6 +808,15 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -677,6 +846,15 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -704,6 +882,15 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
         
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.time = 80;
         super.init( 1.7 );
     }
@@ -731,6 +918,15 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     {
         super( sprite );
 
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         super.init( 1.7 );
     }
     
@@ -743,7 +939,6 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
     }
 }
 
-
 //
 //  DESC: Execution script for a button control to change to the confirmation menu
 //
@@ -752,6 +947,23 @@ class ConfirmBtn_execute
     constructor( control )
     {
         this.control = control;
+
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        this.menu = menuManager.getMenu("confirmation_menu");
+        this.yesBtn = this.menu.getControl("yes_btn");
+        this.megLbl = this.menu.getControl("message_lbl");
+        
+        this.conformationMsg = '';
+        this.executionAction = '';
+        this.actionType = uiControlDefs.ECAT_BACK;
     }
     
     // 
@@ -759,36 +971,27 @@ class ConfirmBtn_execute
     //
     execute()
     {
-        let menu = menuManager.getMenu("confirmation_menu");
-        let yesBtn = menu.getControl("yes_btn");
-        let megLbl = menu.getControl("message_lbl");
-        
-        let conformationMsg = '';
-        let executionAction = '';
-        let actionType = uiControlDefs.ECAT_BACK;
-        
         if( this.control.name === 'continue_btn' )
         {
-            conformationMsg = "Are you sure you|want to continue|on to the next state?";
-            actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
-            executionAction = "level_1_state";
+            this.conformationMsg = "Are you sure you|want to play the game?";
+            this.actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
+            this.executionAction = "level_1_state";
         }
         else if( this.control.name === 'main_menu_btn' )
         {
-            conformationMsg = 'Are you sure you|want to go back to|the main menu?';
-            actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
-            executionAction = 'title_screen_state';
+            this.conformationMsg = 'Are you sure you|want to go back to|the Title Screen?';
+            this.actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
+            this.executionAction = 'title_screen_state';
         }
         
         // Set the conformation menu
-        yesBtn.actionType = actionType;
-        yesBtn.executionAction = executionAction;
-        megLbl.createFontString( conformationMsg );
+        this.yesBtn.actionType = this.actionType;
+        this.yesBtn.executionAction = this.executionAction;
+        this.megLbl.createFontString( this.conformationMsg );
 
         return true;
     }
 }
-
 
 // 
 //  DESC: Load scripts
