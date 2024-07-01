@@ -194,8 +194,8 @@ export class UISubControl extends UIControl
         // Call the parent
         super.handleEvent( event );
 
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].handleEvent( event );
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].handleEvent( event );
 
         if( this.isActive() && (event instanceof GenericEvent) )
         {
@@ -338,29 +338,29 @@ export class UISubControl extends UIControl
     {
         if( this.activeNode !== null )
         {
-            let navNode = this.activeNode;
+            this._navNode = this.activeNode;
 
             do
             {
-                navNode = navNode.getNode( navNode );
+                this._navNode = this._navNode.getNode( this._navNode );
                 
-                if( navNode === null )
+                if( this._navNode === null )
                 {
                     break;
                 }
-                else if( !navNode.uiControl.isDisabled() )
+                else if( !this._navNode.uiControl.isDisabled() )
                 {
-                    this.activeNode = navNode;
+                    this.activeNode = this._navNode;control
 
                     eventManager.dispatchEvent(
                         menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
                         uiControlDefs.ECS_ACTIVE,
-                        navNode.uiControl );
+                        this._navNode.uiControl );
 
                     break;
                 }
             }
-            while( navNode );
+            while( this._navNode );
         }
     }
 
@@ -375,17 +375,17 @@ export class UISubControl extends UIControl
         }
         else
         {
-            let state = event.arg[defs.EMSC_STATE];
+            this._state = event.arg[defs.EMSC_STATE];
 
-            let ctrl = this.findSubControlByRef( event.arg[defs.EMSC_CONTROL] );
+            this._control = this.findSubControlByRef( event.arg[defs.EMSC_CONTROL] );
 
             // Restart the active state of the sub control if something
             // changed in the child controls or their children controls
-            if( (state === uiControlDefs.ECS_ACTIVE) && (ctrl !== null) )
+            if( (this._state === uiControlDefs.ECS_ACTIVE) && (this._control !== null) )
             {
-                if( ctrl.state != state )
+                if( this._control.state != this._state )
                 {
-                    this.setState(state, true);
+                    this.setState(this._state, true);
 
                     this.resetSpriteScript();
 
@@ -393,7 +393,7 @@ export class UISubControl extends UIControl
                 }
             }
             // The sub control doesn't respond to selected message
-            else if( state < uiControlDefs.ECS_SELECT )
+            else if( this._state < uiControlDefs.ECS_SELECT )
                 super.onStateChange( event );
         }
     }
@@ -405,8 +405,8 @@ export class UISubControl extends UIControl
     {
         super.reset( complete );
         
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].reset( complete );
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].reset( complete );
     }
 
     // 
@@ -414,15 +414,15 @@ export class UISubControl extends UIControl
     //
     onMouseMove( event )
     {
-        let result = super.onMouseMove( event );
+        this._result = super.onMouseMove( event );
 
-        let found = this.onSubControlMouseMove( event );
+        this._found = this.onSubControlMouseMove( event );
 
         // If the sub control is not found, deactivate them
-        if( result && !found )
+        if( this._result && !this._found )
             this.deactivateSubControl();
 
-        return result || found;
+        return this._result || this._found;
     }
 
     // 
@@ -430,12 +430,12 @@ export class UISubControl extends UIControl
     //
     onSubControlMouseMove( event )
     {
-        let result = false;
+        this._result1 = false;
 
-        for( let i = 0; i < this.subControlAry.length && !result; ++i )
-            result = this.subControlAry[i].onMouseMove( event );
+        for( this._i = 0; this._i < this.subControlAry.length && !this._result1; ++this._i )
+            this._result1 = this.subControlAry[this._i].onMouseMove( event );
 
-        return result;
+        return this._result1;
     }
 
     // 
@@ -449,8 +449,8 @@ export class UISubControl extends UIControl
         }
         else
         {
-            for( let i = 0; i < this.subControlAry.length; ++i )
-                if( this.subControlAry[i].handleSelectAction( event ) )
+            for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+                if( this.subControlAry[this._i].handleSelectAction( event ) )
                     return true;
         }
 
@@ -462,22 +462,22 @@ export class UISubControl extends UIControl
     //
     findControlByName( name )
     {
-        let ctrl = super.findControlByName( name );
+        this._ctrl1 = super.findControlByName( name );
 
-        if( ctrl === null )
-            ctrl = this.findSubControlByName( name );
+        if( this._ctrl1 === null )
+            this._ctrl1 = this.findSubControlByName( name );
 
-        return ctrl;
+        return this._ctrl1;
     }
 
     findControlByRef( control )
     {
-        let ctrl = super.findControlByRef( control );
+        this._ctrl2 = super.findControlByRef( control );
 
-        if( ctrl === null )
-            ctrl = this.findSubControlByRef( control );
+        if( this._ctrl2 === null )
+            this._ctrl2 = this.findSubControlByRef( control );
 
-        return ctrl;
+        return this._ctrl2;
     }
 
     // 
@@ -485,22 +485,22 @@ export class UISubControl extends UIControl
     //
     findSubControlByName( name )
     {
-        let ctrl = null;
+        this._ctrl3 = null;
 
-        for( let i = 0; i < this.subControlAry.length && !ctrl; ++i )
-            ctrl = this.subControlAry[i].findControlByName( name );
+        for( this._i = 0; this._i < this.subControlAry.length && !this._ctrl3; ++this._i )
+            this._ctrl3 = this.subControlAry[this._i].findControlByName( name );
 
-        return ctrl;
+        return this._ctrl3;
     }
 
     findSubControlByRef( control )
     {
-        let ctrl = null;
+        this._ctrl4 = null;
 
-        for( let i = 0; i < this.subControlAry.length && !ctrl; ++i )
-            ctrl = this.subControlAry[i].findControlByRef( control );
+        for( this._i = 0; this._i < this.subControlAry.length && !this._ctrl4; ++this._i )
+            this._ctrl4 = this.subControlAry[this._i].findControlByRef( control );
 
-        return ctrl;
+        return this._ctrl4;
     }
 
     // 
@@ -511,19 +511,19 @@ export class UISubControl extends UIControl
     {
         if( super.activateFirstInactiveControl() )
         {
-            let found = false;
+            this._found = false;
 
-            for( let i = 0; i < this.controlNodeAry.length; ++i )
+            for( this._i = 0; this._i < this.controlNodeAry.length; ++this._i )
             {
-                if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
+                if( !this._found && this.controlNodeAry[this._i].uiControl.activateFirstInactiveControl() )
                 {
-                    this.activeNode = this.controlNodeAry[i];
+                    this.activeNode = this.controlNodeAry[this._i];
 
-                    found = true;
+                    this._found = true;
                 }
                 else
                 {
-                    this.controlNodeAry[i].uiControl.deactivateControl();
+                    this.controlNodeAry[this._i].uiControl.deactivateControl();
                 }
             }
 
@@ -553,8 +553,8 @@ export class UISubControl extends UIControl
     //
     deactivateSubControl()
     {
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].deactivateControl();
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].deactivateControl();
     }
 
     // 
@@ -572,8 +572,8 @@ export class UISubControl extends UIControl
     {
         super.disableControl();
 
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].disableControl();
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].disableControl();
     }
 
     // 
@@ -583,8 +583,8 @@ export class UISubControl extends UIControl
     {
         super.enableControl();
 
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].enableControl();
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].enableControl();
     }
 
     // 
@@ -594,8 +594,8 @@ export class UISubControl extends UIControl
     {
         super.setAlpha( alpha );
 
-        for( let i = 0; i < this.subControlAry.length; ++i )
-            this.subControlAry[i].setAlpha( alpha );
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+            this.subControlAry[this._i].setAlpha( alpha );
     }
 
     // 
@@ -604,20 +604,20 @@ export class UISubControl extends UIControl
     //
     getActiveControl()
     {
-        let result = null;
+        this._result = null;
 
         if( this.respondsToSelectMsg )
-            result = this;
+            this._result = this;
 
-        for( let i = 0; i < this.subControlAry.length; ++i )
+        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
         {
-            if( this.subControlAry[i].state > uiControlDefs.ECS_INACTIVE )
+            if( this.subControlAry[this._i].state > uiControlDefs.ECS_INACTIVE )
             {
-                result = this.subControlAry[i].getActiveControl();
+                this._result = this.subControlAry[this._i].getActiveControl();
                 break;
             }
         }
         
-        return result;
+        return this._result;
     }
 }

@@ -262,19 +262,19 @@ export class Point
     //
     calcLengthSquared( point )
     {
-        let dx = this.data[0] - point.data[0];
-        let dy = this.data[1] - point.data[1];
-        let dz = this.data[2] - point.data[2];
+        this._dx = this.data[0] - point.data[0];
+        this._dy = this.data[1] - point.data[1];
+        this._dz = this.data[2] - point.data[2];
 
-        return ( dx * dx ) + ( dy * dy ) + ( dz * dz );
+        return ( this._dx * this._dx ) + ( this._dy * this._dy ) + ( this._dz * this._dz );
     }
 
     calcLengthSquared2D( point )
     {
-        let dx = this.data[0] - point.data[0];
-        let dy = this.data[1] - point.data[1];
+        this._dx = this.data[0] - point.data[0];
+        this._dy = this.data[1] - point.data[1];
 
-        return ( dx * dx ) + ( dy * dy );
+        return ( this._dx * this._dx ) + ( this._dy * this._dy );
     }
 
     // 

@@ -590,8 +590,8 @@ class MenuManager extends ManagerBase
         if( this.scrollTimerId !== 0 )
             clearInterval( this.scrollTimerId );
 
-        this.activeMenuTreeAry = [];
-        this.activeInterTreeAry = [];
+        this.activeMenuTreeAry.length = 0;
+        this.activeInterTreeAry.length = 0;
     }
     
     // 
@@ -627,25 +627,25 @@ class MenuManager extends ManagerBase
                 // Only the default tree can execute an escape or toggle when none are active.
                 if( actionManager.wasActionPress( event, this.escapeAction, defs.EAP_DOWN ) )
                 {
-                    let tree = this.getActiveTree();
+                    this._tree = this.getActiveTree();
 
-                    if( tree === null )
+                    if( this._tree === null )
                         eventManager.dispatchEvent( menuDefs.EME_MENU_ESCAPE_ACTION, this.defaultTree );
                     else
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_ESCAPE_ACTION, tree.name );
+                        eventManager.dispatchEvent( menuDefs.EME_MENU_ESCAPE_ACTION, this._tree.name );
                 }
                 else if( actionManager.wasActionPress( event, this.toggleAction, defs.EAP_DOWN ) )
                 {
-                    let tree = this.getActiveTree();
+                    this._tree = this.getActiveTree();
 
-                    if( tree === null )
+                    if( this._tree === null )
                         eventManager.dispatchEvent( menuDefs.EME_MENU_TOGGLE_ACTION, this.defaultTree );
                     else
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_TOGGLE_ACTION, tree.name );
+                        eventManager.dispatchEvent( menuDefs.EME_MENU_TOGGLE_ACTION, this._tree.name );
                 }
                 else if( this.active )
                 {
-                    let pressType;
+                    this._pressType;
 
                     // common and can result in many messages which is why it's specifically defined here
                     if( event.type === 'mousemove' || event.type === 'wheel' )
@@ -654,46 +654,46 @@ class MenuManager extends ManagerBase
                         this.handleEventForTrees( event );
                     }
                     // Select action based on input device
-                    else if( (pressType = actionManager.wasAction( event, this.selectAction )) > defs.EAP_IDLE )
+                    else if( (this._pressType = actionManager.wasAction( event, this.selectAction )) > defs.EAP_IDLE )
                     {
                         if( event instanceof KeyboardEvent )
                         {
-                            eventManager.dispatchEvent( menuDefs.EME_MENU_SELECT_ACTION, pressType, defs.KEYBOARD );
+                            eventManager.dispatchEvent( menuDefs.EME_MENU_SELECT_ACTION, this._pressType, defs.KEYBOARD );
                         }
                         else if( event instanceof MouseEvent )
                         {
                             eventManager.dispatchEvent(
                                 menuDefs.EME_MENU_SELECT_ACTION,
-                                pressType,
+                                this._pressType,
                                 defs.MOUSE,
                                 event.gameAdjustedMouseX,
                                 event.gameAdjustedMouseY );
                         }
                         else if( event instanceof GamepadEvent )
                         {
-                            eventManager.dispatchEvent( menuDefs.EME_MENU_SELECT_ACTION, pressType, defs.GAMEPAD );
+                            eventManager.dispatchEvent( menuDefs.EME_MENU_SELECT_ACTION, this._pressType, defs.GAMEPAD );
                         }
                     }
                     else if( actionManager.wasActionPress( event, this.backAction, defs.EAP_DOWN ) )
                         eventManager.dispatchEvent( menuDefs.EME_MENU_BACK_ACTION );
 
-                    else if( (pressType = actionManager.wasAction( event, this.upAction )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_UP_ACTION, pressType );
+                    else if( (this._pressType = actionManager.wasAction( event, this.upAction )) > defs.EAP_IDLE )
+                        eventManager.dispatchEvent( menuDefs.EME_MENU_UP_ACTION, this._pressType );
 
-                    else if( (pressType = actionManager.wasAction( event, this.downAction )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_DOWN_ACTION, pressType );
+                    else if( (this._pressType = actionManager.wasAction( event, this.downAction )) > defs.EAP_IDLE )
+                        eventManager.dispatchEvent( menuDefs.EME_MENU_DOWN_ACTION, this._pressType );
 
-                    else if( (pressType = actionManager.wasAction( event, this.leftAction )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_LEFT_ACTION, pressType );
+                    else if( (this._pressType = actionManager.wasAction( event, this.leftAction )) > defs.EAP_IDLE )
+                        eventManager.dispatchEvent( menuDefs.EME_MENU_LEFT_ACTION, this._pressType );
 
-                    else if( (pressType = actionManager.wasAction( event, this.rightAction )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_RIGHT_ACTION, pressType );
+                    else if( (this._pressType = actionManager.wasAction( event, this.rightAction )) > defs.EAP_IDLE )
+                        eventManager.dispatchEvent( menuDefs.EME_MENU_RIGHT_ACTION, this._pressType );
 
-                    else if( (pressType = actionManager.wasAction( event, this.tabLeft )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_TAB_LEFT, pressType );
+                    else if( (this._pressType = actionManager.wasAction( event, this.tabLeft )) > defs.EAP_IDLE )
+                        eventManager.dispatchEvent( menuDefs.EME_MENU_TAB_LEFT, this._pressType );
 
-                    else if( (pressType = actionManager.wasAction( event, this.tabRight )) > defs.EAP_IDLE )
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_TAB_RIGHT, pressType );
+                    else if( (this._pressType = actionManager.wasAction( event, this.tabRight )) > defs.EAP_IDLE )
+                        eventManager.dispatchEvent( menuDefs.EME_MENU_TAB_RIGHT, this._pressType );
 
                     // If none of the predefined actions have been hit, just send the message for processing
                     else
@@ -710,24 +710,24 @@ class MenuManager extends ManagerBase
     //
     handleEventForTrees( event )
     {
-        let menuActive = false;
+        this._menuActive = false;
 
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
         {
             // See if there's an active tree
-            menuActive |= this.activeMenuTreeAry[i].isActive();
+            this._menuActive |= this.activeMenuTreeAry[this._i].isActive();
 
             // Even if a menu tree is not active, it needs to receive events to become active
-            this.activeMenuTreeAry[i].handleEvent( event );
+            this.activeMenuTreeAry[this._i].handleEvent( event );
         }
 
         // Only allow event handling for interface menus when regular menus are not active
-        if( !menuActive )
+        if( !this._menuActive )
         {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            for( this._i = 0; this._i < this.activeInterTreeAry.length; ++this._i )
             {
-                if( this.activeInterTreeAry[i].isActive() )
-                    this.activeInterTreeAry[i].handleEvent( event );
+                if( this.activeInterTreeAry[this._i].isActive() )
+                    this.activeInterTreeAry[this._i].handleEvent( event );
             }
         }
     }
@@ -752,16 +752,16 @@ class MenuManager extends ManagerBase
     //
     handleMenuScrolling( event, activeTreeAry )
     {
-        let menuActive = false;
+        this._menuActive = false;
 
-        for( let i = 0; i < activeTreeAry.length; ++i )
+        for( this._i = 0; this._i < activeTreeAry.length; ++this._i )
         {
             // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
+            if( activeTreeAry[this._i].isActive() )
             {
-                menuActive = true;
+                this._menuActive = true;
 
-                let scrollParam = activeTreeAry[i].getScrollParam( event.type );
+                let scrollParam = activeTreeAry[this._i].getScrollParam( event.type );
 
                 // If scrolling is allowed, start the timer
                 if( scrollParam.canScroll( event.type ) )
@@ -782,7 +782,7 @@ class MenuManager extends ManagerBase
             }
         }
 
-        return menuActive;
+        return this._menuActive;
     }
     
     // 
@@ -888,8 +888,8 @@ class MenuManager extends ManagerBase
     isMenuActive()
     {
         if( this.active )
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-                if( this.activeMenuTreeAry[i].isActive() )
+            for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
+                if( this.activeMenuTreeAry[this._i].isActive() )
                     return true;
 
         return false;
@@ -900,22 +900,22 @@ class MenuManager extends ManagerBase
     //
     isMenuItemActive()
     {
-        let result = false;
+        this._result = false;
 
         if( this.active )
         {
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+            for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
             {
-                if( this.activeMenuTreeAry[i].isActive() )
+                if( this.activeMenuTreeAry[this._i].isActive() )
                 {
-                    result = this.activeMenuTreeAry[i].isMenuItemActive();
+                    this._result = this.activeMenuTreeAry[this._i].isMenuItemActive();
 
                     break;
                 }
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -923,22 +923,22 @@ class MenuManager extends ManagerBase
     //
     isInterfaceItemActive()
     {
-        let result = false;
+        this._result = false;
 
         if( this.active )
         {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            for( this._i = 0; this._i < this.activeInterTreeAry.length; ++this._i )
             {
-                if( this.activeInterTreeAry[i].isActive() )
+                if( this.activeInterTreeAry[this._i].isActive() )
                 {
-                    result = this.activeInterTreeAry[i].isMenuItemActive();
+                    this._result = this.activeInterTreeAry[this._i].isMenuItemActive();
 
                     break;
                 }
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -948,9 +948,9 @@ class MenuManager extends ManagerBase
     {
         this.active = false;
 
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
         {
-            if( this.activeMenuTreeAry[i].isActive() )
+            if( this.activeMenuTreeAry[this._i].isActive() )
             {
                 this.active = true;
                 break;
@@ -959,9 +959,9 @@ class MenuManager extends ManagerBase
 
         if( !this.active )
         {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            for( this._i = 0; this._i < this.activeInterTreeAry.length; ++this._i )
             {
-                if( this.activeInterTreeAry[i].isActive() )
+                if( this.activeInterTreeAry[this._i].isActive() )
                 {
                     this.active = true;
                     break;
@@ -977,9 +977,9 @@ class MenuManager extends ManagerBase
     {
         for( let groupMap of this.menuMapMap.values() )
         {
-            let menu = groupMap.get( name );
-            if( menu !== undefined )
-                return menu;
+            this._menu = groupMap.get( name );
+            if( this._menu !== undefined )
+                return this._menu;
         }
 
         throw new Error( `Menu being asked for is missing (${name})!` );
@@ -990,13 +990,13 @@ class MenuManager extends ManagerBase
     //
     getMenuControl( name, controlName )
     {
-        let menu = this.getMenu( name );
-        let control = menu.getControl( controlName );
+        this._menu = this.getMenu( name );
+        this._control = this._menu.getControl( controlName );
         
-        if( control === null )
+        if( this._control === null )
             throw new Error( `Menu control being asked for is missing (${name})!` );
 
-        return control;
+        return this._control;
     }
 
     // 
@@ -1004,8 +1004,8 @@ class MenuManager extends ManagerBase
     //
     getActiveControl( name )
     {
-        let menu = this.getMenu(name);
-        return menu.GetActiveControl();
+        this._menu = this.getMenu(name);
+        return this._menu.GetActiveControl();
     }
 
     // 
@@ -1014,21 +1014,21 @@ class MenuManager extends ManagerBase
     //
     getActiveMenu()
     {
-        let menu = null;
+        this._menu = null;
 
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
         {
-            if( this.activeMenuTreeAry[i].isActive() )
+            if( this.activeMenuTreeAry[this._i].isActive() )
             {
-                menu = this.activeMenuTreeAry[i].getActiveMenu();
+                this._menu = this.activeMenuTreeAry[this._i].getActiveMenu();
                 break;
             }
         }
 
-        if( menu === null )
+        if( this._menu === null )
             throw new Error( 'There is no active menu!' );
 
-        return menu;
+        return this._menu;
     }
     
     // 
@@ -1036,9 +1036,9 @@ class MenuManager extends ManagerBase
     //
     getTree( treeStr )
     {
-        for( let groupMap of this.menuTreeMapMap.values() )
+        for( this._groupMap of this.menuTreeMapMap.values() )
         {
-            for( let [ key, tree ] of groupMap.entries() )
+            for( let [ key, tree ] of this._groupMap.entries() )
             {
                 if( key === treeStr )
                     return tree;
@@ -1054,13 +1054,13 @@ class MenuManager extends ManagerBase
     //
     getTreeGroup( group, treeStr )
     {
-        let groupMap = this.menuTreeMapMap.get( group );
-        if( groupMap !== undefined )
+        this._groupMap = this.menuTreeMapMap.get( group );
+        if( this._groupMap !== undefined )
         {
             // Find the tree in the map
-            let tree = groupMap.get( treeStr );
-            if( tree !== undefined )
-                return tree;
+            this._tree = this._groupMap.get( treeStr );
+            if( this._tree !== undefined )
+                return this._tree;
             
             throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
         }
@@ -1073,18 +1073,18 @@ class MenuManager extends ManagerBase
     //
     getActiveTree()
     {
-        let tree = null;
+        this._tree = null;
 
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
         {
-            if( this.activeMenuTreeAry[i].isActive() )
+            if( this.activeMenuTreeAry[this._i].isActive() )
             {
-                tree = this.activeMenuTreeAry[i];
+                this._tree = this.activeMenuTreeAry[this._i];
                 break;
             }
         }
 
-        return tree;
+        return this._tree;
     }
     
     // 
@@ -1092,22 +1092,22 @@ class MenuManager extends ManagerBase
     //
     isTreeInActivelist( treeStr )
     {
-        for( let groupMap of this.menuTreeMapMap.values() )
+        for( this._groupMap of this.menuTreeMapMap.values() )
         {
-            for( let [ key, tree ] of groupMap.entries() )
+            for( let [ key, tree ] of this._groupMap.entries() )
             {
                 if( key === treeStr )
                 {
                     if( tree.interfaceMenu )
                     {
-                        let index = this.activeInterTreeAry.indexOf( tree );
-                        if( index > -1 )
+                        this._index = this.activeInterTreeAry.indexOf( tree );
+                        if( this._index > -1 )
                             return true;
                     }
                     else
                     {
-                        let index = this.activeMenuTreeAry.indexOf( tree );
-                        if( index > -1 )
+                        this._index = this.activeMenuTreeAry.indexOf( tree );
+                        if( this._index > -1 )
                             return true;
                     }
                 }
@@ -1122,9 +1122,9 @@ class MenuManager extends ManagerBase
     //
     resetTransform()
     {
-        for( let groupMap of this.menuMapMap.values() )
-            for( let menu of groupMap.values() )
-                menu.forceTransform();
+        for( this._groupMap of this.menuMapMap.values() )
+            for( this._menu of this._groupMap.values() )
+                this._menu.forceTransform();
     }
 
     // 
@@ -1132,9 +1132,9 @@ class MenuManager extends ManagerBase
     //
     resetDynamicOffset()
     {
-        for( let groupMap of this.menuMapMap.values() )
-            for( let menu of groupMap.values() )
-                menu.resetDynamicPos();
+        for( this._groupMap of this.menuMapMap.values() )
+            for( this._menu of this._groupMap.values() )
+                this._menu.resetDynamicPos();
     }
     
     // 

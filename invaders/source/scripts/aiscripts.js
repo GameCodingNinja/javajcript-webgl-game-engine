@@ -253,30 +253,30 @@ class AI_Enemy_Roam extends AI_Enemy_base
                 if( this.sprite.targetBuilding === null )
                 {
                     // Randmoly pick a building to target
-                    let index = genFunc.randomInt( 0, this.data.buildings.length-1 );
-                    let targetBuilding = this.data.buildings[index].get();
+                    this._index = genFunc.randomInt( 0, this.data.buildings.length-1 );
+                    this._targetBuilding = this.data.buildings[this._index].get();
 
-                    let freeBuildingFound = true;
-                    for( let i = 0; i < this.data.enemy.length; i++ )
+                    this._freeBuildingFound = true;
+                    for( this._i = 0; this._i < this.data.enemy.length; this._i++ )
                     {
-                        if( (this.data.enemy[i].get() != this.sprite) && (this.data.enemy[i].get().targetBuilding === targetBuilding) )
+                        if( (this.data.enemy[this._i].get() != this.sprite) && (this.data.enemy[this._i].get().targetBuilding === this._targetBuilding) )
                         {
-                            freeBuildingFound = false;
-                            freeBuildingFound = null;
+                            this._freeBuildingFound = false;
+                            this._freeBuildingFound = null;
                             break;
                         }
                     }
 
-                    if( (targetBuilding.destroyed === undefined) && freeBuildingFound )
+                    if( (this._targetBuilding.destroyed === undefined) && this._freeBuildingFound )
                     {
                         // Should we target lock on a building?
                         if( genFunc.randomInt( 0, 10 ) > 4 )
                         {
-                            this.sprite.targetBuilding = targetBuilding;
+                            this.sprite.targetBuilding = this._targetBuilding;
 
                             // Calculate the travel time
-                            let time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / pixel_per_sec;
-                            this.easingX.init( this.sprite.pos.x, this.sprite.targetBuilding.pos.x, time, easing.getSineInOut() );
+                            this._time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / pixel_per_sec;
+                            this.easingX.init( this.sprite.pos.x, this.sprite.targetBuilding.pos.x, this._time, easing.getSineInOut() );
 
                             // Force an initialization to start the movement on first time execution of this function
                             this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
@@ -286,7 +286,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
                             {
                                 // Generate the Y range in which the enemy will travel
                                 let offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
-                                this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
+                                this.easingY.init( this.sprite.pos.y, offsetY, this._time, easing.getSineInOut() );
                             }
                         }
                     }
@@ -294,27 +294,27 @@ class AI_Enemy_Roam extends AI_Enemy_base
                     // If a building is not targeted, go after the player unless their is more enemies then buildings
                     if( this.sprite.targetBuilding === null )
                     {
-                        let offsetX = this.data.playerShip.pos.x;
+                        this._offsetX = this.data.playerShip.pos.x;
 
                         if( this.data.buildings.length >= this.data.enemy.length )
                         {
-                            offsetX = genFunc.randomInt( this.data.minX, this.data.maxX );
+                            this._offsetX = genFunc.randomInt( this.data.minX, this.data.maxX );
                         }
                         
                         // Calculate the travel time
-                        let time = Math.abs( this.sprite.pos.x - offsetX ) / pixel_per_sec;
-                        this.easingX.init( this.sprite.pos.x, offsetX, time, easing.getSineInOut() );
+                        this._time = Math.abs( this.sprite.pos.x - this._offsetX ) / pixel_per_sec;
+                        this.easingX.init( this.sprite.pos.x, this._offsetX, this._time, easing.getSineInOut() );
 
                         // Force an initialization to start the movement on first time execution of this function
                         this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
 
                         // Only set the Y easing if not the same building position as we are now
-                        if( Math.abs( this.sprite.pos.x - offsetX ) > 100 )
+                        if( Math.abs( this.sprite.pos.x - this._offsetX ) > 100 )
                         {
                             // Generate the Y range in which the enemy will travel
-                            let offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
+                            this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
 
-                            this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
+                            this.easingY.init( this.sprite.pos.y, this._offsetY, this._time, easing.getSineInOut() );
                         }
                     }
                 }
@@ -363,10 +363,10 @@ class AI_Enemy_DesendToBuilding extends AI_Enemy_base
             // First interation, init the easing
             if( !this.easingY.isInitialized() )
             {
-                let offsetY = this.sprite.targetBuilding.pos.y + (this.sprite.targetBuilding.getSize().h / 2) + (this.sprite.getSize().h / 2) - 20;
-                let time = Math.abs(this.sprite.pos.y - offsetY) / pixel_per_sec;
+                this._offsetY = this.sprite.targetBuilding.pos.y + (this.sprite.targetBuilding.getSize().h / 2) + (this.sprite.getSize().h / 2) - 20;
+                this._time = Math.abs(this.sprite.pos.y - this._offsetY) / pixel_per_sec;
 
-                this.easingY.init( this.sprite.pos.y, offsetY, time, easing.getSineInOut() );
+                this.easingY.init( this.sprite.pos.y, this._offsetY, this._time, easing.getSineInOut() );
             }
 
             this.easingY.execute();
@@ -398,6 +398,7 @@ class AI_Enemy_DestroyBuilding extends AI_Enemy_base
 
         this.data = headNode.data;
         this.sprite = sprite;
+        this.shakeLevel = [[-1, 1, 0, 1, -1], [-2, 2, 0, 2, -2], [-3, 3, 0, 3, -3], [-4, 4, 0, 4, -4], [-5, 5, 0, 5, -5]];
     }
 
     // 
@@ -410,7 +411,7 @@ class AI_Enemy_DestroyBuilding extends AI_Enemy_base
         this.shakeTimeout = 40;
         this.indexX = 0;
         this.indexY = 2;
-        this.offset = [-1, 1, 0, 1, -1];
+        this.offset = this.shakeLevel[0];
     }
     
     // 
@@ -438,19 +439,19 @@ class AI_Enemy_DestroyBuilding extends AI_Enemy_base
                     this.shakeTimeout -= 1;
                     if( this.shakeTimeout === 30 )
                     {
-                        this.offset = [-2, 2, 0, 2, -2];
+                        this.offset = this.shakeLevel[1];
                     }
                     else if( this.shakeTimeout === 20 )
                     {
-                        this.offset = [-3, 3, 0, 3, -3];
+                        this.offset = this.shakeLevel[2];
                     }
                     else if( this.shakeTimeout === 10 )
                     {
-                        this.offset = [-4, 4, 0, 4, -4];
+                        this.offset = this.shakeLevel[3];
                     }
                     else if( this.shakeTimeout === 0 )
                     {
-                        this.offset = [-5, 5, 0, 5, -5];
+                        this.offset = this.shakeLevel[4];
                     }
                     else if( this.shakeTimeout === -10 )
                     {

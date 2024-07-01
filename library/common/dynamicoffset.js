@@ -9,6 +9,9 @@ import { Point } from './point';
 import { Size } from './size';
 import * as defs from '../common/defs';
 
+var gPos = new Point;
+var gSize = new Size;
+
 export class DynamicOffset
 {
     constructor()
@@ -54,31 +57,31 @@ export class DynamicOffset
     //
     getPos( defaultHalfSize )
     {
-        let pos = new Point;
-        
-        let halfSize = new Size( defaultHalfSize.w, defaultHalfSize.h );
+        gPos.clear();
+
+        gSize.set( defaultHalfSize.w, defaultHalfSize.h );
         
         // Strip out any fractional component for correct rendering
-        halfSize.round();
+        gSize.round();
 
         if( this.parameters.isSet( defs.EDO_LEFT ) )
-            pos.x = -(halfSize.w - this.point.x);
+            gPos.x = -(gSize.w - this.point.x);
 
         else if( this.parameters.isSet( defs.EDO_RIGHT ) )
-            pos.x = halfSize.w - this.point.x;
+            gPos.x = gSize.w - this.point.x;
 
         else if( this.parameters.isSet( defs.EDO_HORZ_CENTER ) )
-            pos.x = this.point.x;
+            gPos.x = this.point.x;
 
         if( this.parameters.isSet( defs.EDO_TOP ) )
-            pos.y = halfSize.h - this.point.y;
+            gPos.y = gSize.h - this.point.y;
             
         else if( this.parameters.isSet( defs.EDO_BOTTOM ) )
-            pos.y = -(halfSize.h - this.point.y);
+            gPos.y = -(gSize.h - this.point.y);
 
         else if( this.parameters.isSet( defs.EDO_VERT_CENTER ) )
-            pos.y = this.point.y;
+            gPos.y = this.point.y;
 
-        return pos;
+        return gPos;
     }
 }

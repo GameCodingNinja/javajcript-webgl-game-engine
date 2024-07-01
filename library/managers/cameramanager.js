@@ -91,14 +91,14 @@ class CameraManager
     //
     addToTransform( cameraId )
     {
-        let camera = this.cameraMap.get( cameraId );
-        if( camera )
+        this._camera = this.cameraMap.get( cameraId );
+        if( this._camera )
         {
-            let index = this.transformAry.findIndex( (obj) => obj === camera );
-            if( index !== -1 )
+            this._index = this.transformAry.findIndex( (obj) => obj === this._camera );
+            if( this._index !== -1 )
                 console.warn( `Camera is already being transformed (${cameraId})!` );
             else
-                this.transformAry.push( camera );
+                this.transformAry.push( this._camera );
         }
         else
             throw new Error( `Camera id is not defined (${cameraId})!` );
@@ -109,14 +109,14 @@ class CameraManager
     //
     removeFromTransform( cameraId )
     {
-        let camera = this.cameraMap.get( cameraId );
-        if( camera )
+        this._camera = this.cameraMap.get( cameraId );
+        if( this._camera )
         {
-            let index = this.transformAry.findIndex( (obj) => obj === camera );
-            if( index === -1 )
+            this._index = this.transformAry.findIndex( (obj) => obj === this._camera );
+            if( this._index === -1 )
                 console.warn( `Camera is not being transformed (${cameraId})!` );
             else
-                this.transformAry.splice(index, 1);
+                this.transformAry.splice(this._index, 1);
         }
         else
             throw new Error( `Camera id is not defined (${cameraId})!` );

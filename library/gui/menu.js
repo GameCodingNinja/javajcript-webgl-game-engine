@@ -251,23 +251,6 @@ export class Menu extends Object
     } 
 
     // 
-    //  DESC: Reset the dynamic position
-    //
-    resetDynamicPos()
-    {
-        this.setDynamicPos();
-
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].setDynamicPos();
-        
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].setDynamicPos();
-
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].setDynamicPos();
-    }
-
-    // 
     //  DESC: Find the reference nodes
     //
     findNodes( node, nodeIndex, navNodeMap )
@@ -354,6 +337,23 @@ export class Menu extends Object
     }
 
     // 
+    //  DESC: Reset the dynamic position
+    //
+    resetDynamicPos()
+    {
+        this.setDynamicPos();
+
+        for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
+            this.staticControlAry[this._i].setDynamicPos();
+        
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            this.mouseOnlyControlAry[this._i].setDynamicPos();
+
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+            this.controlAry[this._i].setDynamicPos();
+    }
+
+    // 
     //  DESC: Update the menu
     //
     update()
@@ -437,11 +437,11 @@ export class Menu extends Object
         }
 
         // Have the controls handle events
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].handleEvent( event );
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+            this.controlAry[this._i].handleEvent( event );
 
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].handleEvent( event );
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            this.mouseOnlyControlAry[this._i].handleEvent( event );
 
         if( event instanceof GenericEvent )
         {
@@ -594,17 +594,17 @@ export class Menu extends Object
     //
     onMouseMove( event )
     {
-        for( let each of this.controlNodeAry )
+        for( this._each of this.controlNodeAry )
         {
-            if( each.uiControl.onMouseMove( event ) )
-                this.activeNode = each;
+            if( this._each.uiControl.onMouseMove( event ) )
+                this.activeNode = this._each;
             else
-                each.uiControl.deactivateControl();
+                this._each.uiControl.deactivateControl();
         }
 
-        for( let each of this.mouseOnlyControlAry )
-            if( !each.onMouseMove( event ) )
-                each.deactivateControl();
+        for( this._each of this.mouseOnlyControlAry )
+            if( !this._each.onMouseMove( event ) )
+                this._each.deactivateControl();
     }
 
     // 
@@ -612,11 +612,11 @@ export class Menu extends Object
     //
     onWheel( event )
     {
-        for( let each of this.mouseOnlyControlAry )
-            each.onWheel( event );
+        for( this._each of this.mouseOnlyControlAry )
+            this._each.onWheel( event );
 
-        for( let each of this.controlAry )
-            each.onWheel( event );
+        for( this._each of this.controlAry )
+            this._each.onWheel( event );
     }
 
     // 
@@ -624,29 +624,29 @@ export class Menu extends Object
     //
     onSelectAction( event )
     {
-        let selectionFound = false;
+        this._selectionFound = false;
 
         if( (this.activeNode !== null) &&
             (this.activeNode.uiControl.handleSelectAction( event )) )
         {
-            selectionFound = true;
+            this._selectionFound = true;
 
             // Set the state to active which will block all messages until the state is reset to idle
-            let ctrl = this.activeNode.uiControl.getActiveControl();
-            if( ctrl && ctrl.actionType > uiControlDefs.ECAT_IDLE )
+            this._ctrl = this.activeNode.uiControl.getActiveControl();
+            if( this._ctrl && this._ctrl.actionType > uiControlDefs.ECAT_IDLE )
                 this.state = menuDefs.EMS_ACTIVE;
         }
         else if( event.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
         {
             // For mouse only controls
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
             {
-                if( this.mouseOnlyControlAry[i].handleSelectAction( event ) )
+                if( this.mouseOnlyControlAry[this._i].handleSelectAction( event ) )
                 {
-                    selectionFound = true;
+                    this._selectionFound = true;
 
                     // Set the state to active which will block all messages until the state is reset to idle
-                    if( this.mouseOnlyControlAry[i].actionType > uiControlDefs.ECAT_IDLE )
+                    if( this.mouseOnlyControlAry[this._i].actionType > uiControlDefs.ECAT_IDLE )
                         this.state = menuDefs.EMS_ACTIVE;
 
                     break;
@@ -656,7 +656,7 @@ export class Menu extends Object
 
         // Try to handle touch presses on a non-active control
         // The mouse just happends to be clicked over a non-active control
-        if( !selectionFound && event.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
+        if( !this._selectionFound && event.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
         {
             // Deactivate the control that should be active
             if( (this.activeNode !== null) &&
@@ -665,13 +665,13 @@ export class Menu extends Object
                 this.activeNode.uiControl.deactivateControl();
 
                 // Go through all the controls on this menu to try to find the one clicked on
-                for( let i = 0; i < this.controlAry.length; ++i )
+                for( this._i = 0; this._i < this.controlAry.length; ++this._i )
                 {
-                    if( this.controlAry[i].handleSelectAction( event ) )
+                    if( this.controlAry[this._i].handleSelectAction( event ) )
                     {
                         // Set the state to active which will block all messages until the state is reset to idle
-                        let ctrl = this.activeNode.uiControl.getActiveControl();
-                        if( ctrl && ctrl.actionType > uiControlDefs.ECAT_IDLE )
+                        this._ctrl = this.activeNode.uiControl.getActiveControl();
+                        if( this._ctrl && this._ctrl.actionType > uiControlDefs.ECAT_IDLE )
                             this.state = menuDefs.EMS_ACTIVE;
 
                         break;
@@ -738,20 +738,20 @@ export class Menu extends Object
     //
     activateFirstInactiveControl()
     {
-        let found = false;
+        this._found = false;
 
         // Activate the first control found and deactivate all the rest
-        for( let i = 0; i < this.controlNodeAry.length; ++i )
+        for( this._i = 0; this._i < this.controlNodeAry.length; ++this._i )
         {
-            if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
+            if( !this._found && this.controlNodeAry[this._i].uiControl.activateFirstInactiveControl() )
             {
-                this.activeNode = this.controlNodeAry[i];
+                this.activeNode = this.controlNodeAry[this._i];
 
-                found = true;
+                this._found = true;
             }
             else
             {
-                this.controlNodeAry[i].uiControl.deactivateControl();
+                this.controlNodeAry[this._i].uiControl.deactivateControl();
             }
         }
     }
@@ -761,11 +761,11 @@ export class Menu extends Object
     //
     reset()
     {
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].reset( true );
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+            this.controlAry[this._i].reset( true );
 
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].reset( true );
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            this.mouseOnlyControlAry[this._i].reset( true );
     }
 
     // 
@@ -774,14 +774,14 @@ export class Menu extends Object
     getControl( name )
     {
         // See if the control can be found
-        let control = this.controlMap.get( name );
+        this._control = this.controlMap.get( name );
 
         // Make sure control is available
-        if( control === undefined )
+        if( this._control === undefined )
             throw new Error( `Control being asked for is missing! (${name}).` );
 
         // Pass back the control if found
-        return control;
+        return this._control;
     }
 
     // 
@@ -789,18 +789,18 @@ export class Menu extends Object
     //
     getActiveControl()
     {
-        let result = null;
+        this._result = null;
 
-        for( let i = 0; i < this.controlAry.length; ++i )
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
         {
-            if( this.controlAry[i].state > uiControlDefs.ECS_INACTIVE )
+            if( this.controlAry[this._i].state > uiControlDefs.ECS_INACTIVE )
             {
-                result = this.controlAry[i].getActiveControl();
+                this._result = this.controlAry[this._i].getActiveControl();
                 break;
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -832,17 +832,17 @@ export class Menu extends Object
     {
         if( this.isVisible() )
         {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].setAlpha( alpha );
+            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+                this.spriteAry[this._i].setAlpha( alpha );
 
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].setAlpha( alpha );
+            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
+                this.staticControlAry[this._i].setAlpha( alpha );
 
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].setAlpha( alpha );
+            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+                this.mouseOnlyControlAry[this._i].setAlpha( alpha );
 
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].setAlpha( alpha );
+            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+                this.controlAry[this._i].setAlpha( alpha );
         }
 
         this.alpha = alpha;

@@ -58,9 +58,9 @@ export class MenuTree
     //
     setDefaultMenu( menuStr )
     {
-        let menu = this.menuMap.get( menuStr );
-        if( menu !== undefined )
-            this.defaultMenu = menu;
+        this._menu = this.menuMap.get( menuStr );
+        if( this._menu !== undefined )
+            this.defaultMenu = this._menu;
         else
             throw new Error( `Menu being set is missing (${menuStr})!` );
     }
@@ -70,9 +70,9 @@ export class MenuTree
     //
     setRootMenu( menuStr )
     {
-        let menu = this.menuMap.get( menuStr );
-        if( menu !== undefined )
-            this.rootMenu = menu;
+        this._menu = this.menuMap.get( menuStr );
+        if( this._menu !== undefined )
+            this.rootMenu = this._menu;
         else
             throw new Error( `Menu being set is missing (${menuStr})!` );
     }
@@ -248,8 +248,8 @@ export class MenuTree
     //
     onEscape( event )
     {
-        let nameStr = event.arg[0];
-        if( this.menuPathAry.length || ((nameStr !== null) && (nameStr === this.name)))
+        this._nameStr = event.arg[0];
+        if( this.menuPathAry.length || ((this._nameStr !== null) && (this._nameStr === this.name)))
         {
             this.transitionMenu();
         }
@@ -260,8 +260,8 @@ export class MenuTree
     //
     onToggle( event )
     {
-        let nameStr = event.arg[0];
-        if( this.menuPathAry.length || ((nameStr !== null) && (nameStr === this.name)))
+        this._nameStr = event.arg[0];
+        if( this.menuPathAry.length || ((this._nameStr !== null) && (this._nameStr === this.name)))
         {
             // Toggle "on" only works when there is no root menu
             if( this.rootMenu === undefined )
@@ -272,9 +272,9 @@ export class MenuTree
                 // The current menu will then be used for the transitions out
                 if( this.menuPathAry.length > 1 )
                 {
-                    let curMenu = this.menuPathAry[this.menuPathAry.length-1];
-                    this.menuPathAry = [];
-                    this.menuPathAry.push( curMenu );
+                    this._curMenu = this.menuPathAry[this.menuPathAry.length-1];
+                    this.menuPathAry.length = 0;
+                    this.menuPathAry.push( this._curMenu );
                 }
             }
             else
@@ -286,10 +286,10 @@ export class MenuTree
                 // The current menu will then be used for the transitions out
                 if( this.menuPathAry.length > 2 )
                 {
-                    let curMenu = this.menuPathAry[this.menuPathAry.length-1];
-                    this.menuPathAry = [];
+                    this._curMenu = this.menuPathAry[this.menuPathAry.length-1];
+                    this.menuPathAry.length = 0;
                     this.menuPathAry.push( this.rootMenu );
-                    this.menuPathAry.push( curMenu );
+                    this.menuPathAry.push( this._curMenu );
                 }
             }
         }
@@ -312,8 +312,8 @@ export class MenuTree
     //
     onToTree( event )
     {
-        let nameStr = event.arg[0];
-        if( (nameStr !== null) && (nameStr === this.name) )
+        this._nameStr = event.arg[0];
+        if( (nameStr !== null) && (this._nameStr === this.name) )
         {
             // Only works when there is no root menu
             if( this.rootMenu === undefined )
@@ -362,10 +362,10 @@ export class MenuTree
             else if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] !== this.rootMenu) )
             {
                 // Pop it off the array because this menu is done
-                let menu = this.menuPathAry.pop();
+                this._menu = this.menuPathAry.pop();
                 
                 // Do a full reset on all the controls
-                menu.reset();
+                this._menu.reset();
 
                 if( this.menuPathAry.length )
                     eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );

@@ -29,7 +29,9 @@ import userSettingsObj from '../../data/settings/usersettings.json';
 export class Game
 {
     constructor()
-    { }
+    {
+        this.gameLoopFunc = this.gameLoop.bind(this)
+    }
     
     // 
     //  DESC: Init the game
@@ -211,6 +213,6 @@ export class Game
         statCounter.incCycle();
 
         // Continues the loop
-        requestAnimationFrame( this.gameLoop.bind(this) );
+        requestAnimationFrame( this.gameLoopFunc );
     }
 }

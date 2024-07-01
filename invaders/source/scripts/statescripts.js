@@ -63,8 +63,8 @@ class State_RotateCube
     //
     execute()
     {
-        let rot = highResTimer.elapsedTime * 0.04;
-        this.sprite.incRotXYZ( rot, rot, 0 );
+        this._rot = highResTimer.elapsedTime * 0.04;
+        this.sprite.incRotXYZ( this._rot, this._rot, 0 );
 
         return false;
     }

@@ -42,7 +42,7 @@ export class SpriteSheet
         if( obj.glyphAry )
         {
             if( this.glyphAry === null )
-                this.glyphAry = [];
+                this.glyphAry.length = 0;
             
             for( let i = 0; i < obj.glyphAry.length; ++i )
             {

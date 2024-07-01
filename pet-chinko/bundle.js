@@ -1834,14 +1834,14 @@ class CameraManager
     //
     addToTransform( cameraId )
     {
-        let camera = this.cameraMap.get( cameraId );
-        if( camera )
+        this._camera = this.cameraMap.get( cameraId );
+        if( this._camera )
         {
-            let index = this.transformAry.findIndex( (obj) => obj === camera );
-            if( index !== -1 )
+            this._index = this.transformAry.findIndex( (obj) => obj === this._camera );
+            if( this._index !== -1 )
                 console.warn( `Camera is already being transformed (${cameraId})!` );
             else
-                this.transformAry.push( camera );
+                this.transformAry.push( this._camera );
         }
         else
             throw new Error( `Camera id is not defined (${cameraId})!` );
@@ -1852,14 +1852,14 @@ class CameraManager
     //
     removeFromTransform( cameraId )
     {
-        let camera = this.cameraMap.get( cameraId );
-        if( camera )
+        this._camera = this.cameraMap.get( cameraId );
+        if( this._camera )
         {
-            let index = this.transformAry.findIndex( (obj) => obj === camera );
-            if( index === -1 )
+            this._index = this.transformAry.findIndex( (obj) => obj === this._camera );
+            if( this._index === -1 )
                 console.warn( `Camera is not being transformed (${cameraId})!` );
             else
-                this.transformAry.splice(index, 1);
+                this.transformAry.splice(this._index, 1);
         }
         else
             throw new Error( `Camera id is not defined (${cameraId})!` );
@@ -2121,11 +2121,11 @@ class Camera extends _common_object__WEBPACK_IMPORTED_MODULE_1__.Object
     //
     transform()
     {
-        let wasTransformed = this.parameters.isSet( _defs__WEBPACK_IMPORTED_MODULE_3__.TRANSFORM );
+        this._wasTransformed = this.parameters.isSet( _defs__WEBPACK_IMPORTED_MODULE_3__.TRANSFORM );
     
         super.transform();
 
-        if( wasTransformed )
+        if( this._wasTransformed )
             this.calcFinalMatrix();
     }
     
@@ -3439,19 +3439,19 @@ class Point
     //
     calcLengthSquared( point )
     {
-        let dx = this.data[0] - point.data[0];
-        let dy = this.data[1] - point.data[1];
-        let dz = this.data[2] - point.data[2];
+        this._dx = this.data[0] - point.data[0];
+        this._dy = this.data[1] - point.data[1];
+        this._dz = this.data[2] - point.data[2];
 
-        return ( dx * dx ) + ( dy * dy ) + ( dz * dz );
+        return ( this._dx * this._dx ) + ( this._dy * this._dy ) + ( this._dz * this._dz );
     }
 
     calcLengthSquared2D( point )
     {
-        let dx = this.data[0] - point.data[0];
-        let dy = this.data[1] - point.data[1];
+        this._dx = this.data[0] - point.data[0];
+        this._dy = this.data[1] - point.data[1];
 
-        return ( dx * dx ) + ( dy * dy );
+        return ( this._dx * this._dx ) + ( this._dy * this._dy );
     }
 
     // 
@@ -5677,8 +5677,8 @@ class Polygon
         if( this.pointAry.length )
             this.pointAry = [];
 
-        for( let i = 0; i < obj.pointAry.length; ++i )
-            this.pointAry.push( new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point( obj.pointAry[i] ) );
+        for( this._i = 0; this._i < obj.pointAry.length; ++this._i )
+            this.pointAry.push( new _common_point__WEBPACK_IMPORTED_MODULE_0__.Point( obj.pointAry[this._i] ) );
     }
 }
 
@@ -5748,6 +5748,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var gPos = new _point__WEBPACK_IMPORTED_MODULE_1__.Point;
+
 class DynamicOffset
 {
     constructor()
@@ -5793,7 +5795,7 @@ class DynamicOffset
     //
     getPos( defaultHalfSize )
     {
-        let pos = new _point__WEBPACK_IMPORTED_MODULE_1__.Point;
+        gPos.clear();
         
         let halfSize = new _size__WEBPACK_IMPORTED_MODULE_2__.Size( defaultHalfSize.w, defaultHalfSize.h );
         
@@ -5801,24 +5803,24 @@ class DynamicOffset
         halfSize.round();
 
         if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_LEFT ) )
-            pos.x = -(halfSize.w - this.point.x);
+            gPos.x = -(halfSize.w - this.point.x);
 
         else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_RIGHT ) )
-            pos.x = halfSize.w - this.point.x;
+            gPos.x = halfSize.w - this.point.x;
 
         else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_HORZ_CENTER ) )
-            pos.x = this.point.x;
+            gPos.x = this.point.x;
 
         if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_TOP ) )
-            pos.y = halfSize.h - this.point.y;
+            gPos.y = halfSize.h - this.point.y;
             
         else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_BOTTOM ) )
-            pos.y = -(halfSize.h - this.point.y);
+            gPos.y = -(halfSize.h - this.point.y);
 
         else if( this.parameters.isSet( _common_defs__WEBPACK_IMPORTED_MODULE_3__.EDO_VERT_CENTER ) )
-            pos.y = this.point.y;
+            gPos.y = this.point.y;
 
-        return pos;
+        return gPos;
     }
 }
 
@@ -6476,25 +6478,25 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
                 // Only the default tree can execute an escape or toggle when none are active.
                 if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.escapeAction, _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_DOWN ) )
                 {
-                    let tree = this.getActiveTree();
+                    this._tree = this.getActiveTree();
 
-                    if( tree === null )
+                    if( this._tree === null )
                         _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_ESCAPE_ACTION, this.defaultTree );
                     else
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_ESCAPE_ACTION, tree.name );
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_ESCAPE_ACTION, this._tree.name );
                 }
                 else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.toggleAction, _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_DOWN ) )
                 {
-                    let tree = this.getActiveTree();
+                    this._tree = this.getActiveTree();
 
-                    if( tree === null )
+                    if( this._tree === null )
                         _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_TOGGLE_ACTION, this.defaultTree );
                     else
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_TOGGLE_ACTION, tree.name );
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_TOGGLE_ACTION, this._tree.name );
                 }
                 else if( this.active )
                 {
-                    let pressType;
+                    this._pressType;
 
                     // common and can result in many messages which is why it's specifically defined here
                     if( event.type === 'mousemove' || event.type === 'wheel' )
@@ -6503,46 +6505,46 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
                         this.handleEventForTrees( event );
                     }
                     // Select action based on input device
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.selectAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
+                    else if( (this._pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.selectAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
                     {
                         if( event instanceof KeyboardEvent )
                         {
-                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_SELECT_ACTION, pressType, _common_defs__WEBPACK_IMPORTED_MODULE_11__.KEYBOARD );
+                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_SELECT_ACTION, this._pressType, _common_defs__WEBPACK_IMPORTED_MODULE_11__.KEYBOARD );
                         }
                         else if( event instanceof MouseEvent )
                         {
                             _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent(
                                 _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_SELECT_ACTION,
-                                pressType,
+                                this._pressType,
                                 _common_defs__WEBPACK_IMPORTED_MODULE_11__.MOUSE,
                                 event.gameAdjustedMouseX,
                                 event.gameAdjustedMouseY );
                         }
                         else if( event instanceof _common_gamepadevent__WEBPACK_IMPORTED_MODULE_8__.GamepadEvent )
                         {
-                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_SELECT_ACTION, pressType, _common_defs__WEBPACK_IMPORTED_MODULE_11__.GAMEPAD );
+                            _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_SELECT_ACTION, this._pressType, _common_defs__WEBPACK_IMPORTED_MODULE_11__.GAMEPAD );
                         }
                     }
                     else if( _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasActionPress( event, this.backAction, _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_DOWN ) )
                         _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_BACK_ACTION );
 
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.upAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_UP_ACTION, pressType );
+                    else if( (this._pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.upAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_UP_ACTION, this._pressType );
 
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.downAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_DOWN_ACTION, pressType );
+                    else if( (this._pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.downAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_DOWN_ACTION, this._pressType );
 
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.leftAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_LEFT_ACTION, pressType );
+                    else if( (this._pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.leftAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_LEFT_ACTION, this._pressType );
 
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.rightAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_RIGHT_ACTION, pressType );
+                    else if( (this._pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.rightAction )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_RIGHT_ACTION, this._pressType );
 
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.tabLeft )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_TAB_LEFT, pressType );
+                    else if( (this._pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.tabLeft )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_TAB_LEFT, this._pressType );
 
-                    else if( (pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.tabRight )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
-                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_TAB_RIGHT, pressType );
+                    else if( (this._pressType = _managers_actionmanager__WEBPACK_IMPORTED_MODULE_1__.actionManager.wasAction( event, this.tabRight )) > _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_IDLE )
+                        _managers_eventmanager__WEBPACK_IMPORTED_MODULE_2__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_TAB_RIGHT, this._pressType );
 
                     // If none of the predefined actions have been hit, just send the message for processing
                     else
@@ -6559,24 +6561,24 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     handleEventForTrees( event )
     {
-        let menuActive = false;
+        this._menuActive = false;
 
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
         {
             // See if there's an active tree
-            menuActive |= this.activeMenuTreeAry[i].isActive();
+            this._menuActive |= this.activeMenuTreeAry[this._i].isActive();
 
             // Even if a menu tree is not active, it needs to receive events to become active
-            this.activeMenuTreeAry[i].handleEvent( event );
+            this.activeMenuTreeAry[this._i].handleEvent( event );
         }
 
         // Only allow event handling for interface menus when regular menus are not active
-        if( !menuActive )
+        if( !this._menuActive )
         {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            for( this._i = 0; this._i < this.activeInterTreeAry.length; ++this._i )
             {
-                if( this.activeInterTreeAry[i].isActive() )
-                    this.activeInterTreeAry[i].handleEvent( event );
+                if( this.activeInterTreeAry[this._i].isActive() )
+                    this.activeInterTreeAry[this._i].handleEvent( event );
             }
         }
     }
@@ -6601,16 +6603,16 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     handleMenuScrolling( event, activeTreeAry )
     {
-        let menuActive = false;
+        this._menuActive = false;
 
-        for( let i = 0; i < activeTreeAry.length; ++i )
+        for( this._i = 0; this._i < activeTreeAry.length; ++this._i )
         {
             // See if there's an active menu
-            if( activeTreeAry[i].isActive() )
+            if( activeTreeAry[this._i].isActive() )
             {
-                menuActive = true;
+                this._menuActive = true;
 
-                let scrollParam = activeTreeAry[i].getScrollParam( event.type );
+                let scrollParam = activeTreeAry[this._i].getScrollParam( event.type );
 
                 // If scrolling is allowed, start the timer
                 if( scrollParam.canScroll( event.type ) )
@@ -6631,7 +6633,7 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
             }
         }
 
-        return menuActive;
+        return this._menuActive;
     }
     
     // 
@@ -6737,8 +6739,8 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     isMenuActive()
     {
         if( this.active )
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
-                if( this.activeMenuTreeAry[i].isActive() )
+            for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
+                if( this.activeMenuTreeAry[this._i].isActive() )
                     return true;
 
         return false;
@@ -6749,22 +6751,22 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     isMenuItemActive()
     {
-        let result = false;
+        this._result = false;
 
         if( this.active )
         {
-            for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+            for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
             {
-                if( this.activeMenuTreeAry[i].isActive() )
+                if( this.activeMenuTreeAry[this._i].isActive() )
                 {
-                    result = this.activeMenuTreeAry[i].isMenuItemActive();
+                    this._result = this.activeMenuTreeAry[this._i].isMenuItemActive();
 
                     break;
                 }
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -6772,22 +6774,22 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     isInterfaceItemActive()
     {
-        let result = false;
+        this._result = false;
 
         if( this.active )
         {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            for( this._i = 0; this._i < this.activeInterTreeAry.length; ++this._i )
             {
-                if( this.activeInterTreeAry[i].isActive() )
+                if( this.activeInterTreeAry[this._i].isActive() )
                 {
-                    result = this.activeInterTreeAry[i].isMenuItemActive();
+                    this._result = this.activeInterTreeAry[this._i].isMenuItemActive();
 
                     break;
                 }
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -6797,9 +6799,9 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     {
         this.active = false;
 
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
         {
-            if( this.activeMenuTreeAry[i].isActive() )
+            if( this.activeMenuTreeAry[this._i].isActive() )
             {
                 this.active = true;
                 break;
@@ -6808,9 +6810,9 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
 
         if( !this.active )
         {
-            for( let i = 0; i < this.activeInterTreeAry.length; ++i )
+            for( this._i = 0; this._i < this.activeInterTreeAry.length; ++this._i )
             {
-                if( this.activeInterTreeAry[i].isActive() )
+                if( this.activeInterTreeAry[this._i].isActive() )
                 {
                     this.active = true;
                     break;
@@ -6826,9 +6828,9 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     {
         for( let groupMap of this.menuMapMap.values() )
         {
-            let menu = groupMap.get( name );
-            if( menu !== undefined )
-                return menu;
+            this._menu = groupMap.get( name );
+            if( this._menu !== undefined )
+                return this._menu;
         }
 
         throw new Error( `Menu being asked for is missing (${name})!` );
@@ -6839,13 +6841,13 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     getMenuControl( name, controlName )
     {
-        let menu = this.getMenu( name );
-        let control = menu.getControl( controlName );
+        this._menu = this.getMenu( name );
+        this._control = this._menu.getControl( controlName );
         
-        if( control === null )
+        if( this._control === null )
             throw new Error( `Menu control being asked for is missing (${name})!` );
 
-        return control;
+        return this._control;
     }
 
     // 
@@ -6853,8 +6855,8 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     getActiveControl( name )
     {
-        let menu = this.getMenu(name);
-        return menu.GetActiveControl();
+        this._menu = this.getMenu(name);
+        return this._menu.GetActiveControl();
     }
 
     // 
@@ -6863,21 +6865,21 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     getActiveMenu()
     {
-        let menu = null;
+        this._menu = null;
 
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
         {
-            if( this.activeMenuTreeAry[i].isActive() )
+            if( this.activeMenuTreeAry[this._i].isActive() )
             {
-                menu = this.activeMenuTreeAry[i].getActiveMenu();
+                this._menu = this.activeMenuTreeAry[this._i].getActiveMenu();
                 break;
             }
         }
 
-        if( menu === null )
+        if( this._menu === null )
             throw new Error( 'There is no active menu!' );
 
-        return menu;
+        return this._menu;
     }
     
     // 
@@ -6885,9 +6887,9 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     getTree( treeStr )
     {
-        for( let groupMap of this.menuTreeMapMap.values() )
+        for( this._groupMap of this.menuTreeMapMap.values() )
         {
-            for( let [ key, tree ] of groupMap.entries() )
+            for( let [ key, tree ] of this._groupMap.entries() )
             {
                 if( key === treeStr )
                     return tree;
@@ -6903,13 +6905,13 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     getTreeGroup( group, treeStr )
     {
-        let groupMap = this.menuTreeMapMap.get( group );
-        if( groupMap !== undefined )
+        this._groupMap = this.menuTreeMapMap.get( group );
+        if( this._groupMap !== undefined )
         {
             // Find the tree in the map
-            let tree = groupMap.get( treeStr );
-            if( tree !== undefined )
-                return tree;
+            this._tree = this._groupMap.get( treeStr );
+            if( this._tree !== undefined )
+                return this._tree;
             
             throw new Error( `Menu tree doesn't exist (${group} - ${treeStr})!` );
         }
@@ -6922,18 +6924,18 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     getActiveTree()
     {
-        let tree = null;
+        this._tree = null;
 
-        for( let i = 0; i < this.activeMenuTreeAry.length; ++i )
+        for( this._i = 0; this._i < this.activeMenuTreeAry.length; ++this._i )
         {
-            if( this.activeMenuTreeAry[i].isActive() )
+            if( this.activeMenuTreeAry[this._i].isActive() )
             {
-                tree = this.activeMenuTreeAry[i];
+                this._tree = this.activeMenuTreeAry[this._i];
                 break;
             }
         }
 
-        return tree;
+        return this._tree;
     }
     
     // 
@@ -6941,22 +6943,22 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     isTreeInActivelist( treeStr )
     {
-        for( let groupMap of this.menuTreeMapMap.values() )
+        for( this._groupMap of this.menuTreeMapMap.values() )
         {
-            for( let [ key, tree ] of groupMap.entries() )
+            for( let [ key, tree ] of this._groupMap.entries() )
             {
                 if( key === treeStr )
                 {
                     if( tree.interfaceMenu )
                     {
-                        let index = this.activeInterTreeAry.indexOf( tree );
-                        if( index > -1 )
+                        this._index = this.activeInterTreeAry.indexOf( tree );
+                        if( this._index > -1 )
                             return true;
                     }
                     else
                     {
-                        let index = this.activeMenuTreeAry.indexOf( tree );
-                        if( index > -1 )
+                        this._index = this.activeMenuTreeAry.indexOf( tree );
+                        if( this._index > -1 )
                             return true;
                     }
                 }
@@ -6971,9 +6973,9 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     resetTransform()
     {
-        for( let groupMap of this.menuMapMap.values() )
-            for( let menu of groupMap.values() )
-                menu.forceTransform();
+        for( this._groupMap of this.menuMapMap.values() )
+            for( this._menu of this._groupMap.values() )
+                this._menu.forceTransform();
     }
 
     // 
@@ -6981,9 +6983,9 @@ class MenuManager extends _managers_managerbase__WEBPACK_IMPORTED_MODULE_0__.Man
     //
     resetDynamicOffset()
     {
-        for( let groupMap of this.menuMapMap.values() )
-            for( let menu of groupMap.values() )
-                menu.resetDynamicPos();
+        for( this._groupMap of this.menuMapMap.values() )
+            for( this._menu of this._groupMap.values() )
+                this._menu.resetDynamicPos();
     }
     
     // 
@@ -7984,7 +7986,7 @@ class EventManager
         //this.mouseOffset = new Point();
 
         // Dictionary for holding all the gamepads
-        this.gamePadMap = new Map;
+        this.gamePadList = [];
 
         // Store then initial backgroud color
         this.backgroundColor = document.body.style.backgroundColor;
@@ -8157,7 +8159,7 @@ class EventManager
         if( _utilities_settings__WEBPACK_IMPORTED_MODULE_4__.settings.allowGamepad )
         {
             _managers_actionmanager__WEBPACK_IMPORTED_MODULE_3__.actionManager.initGamepadMapping( event.gamepad.mapping );
-            this.gamePadMap.set( event.gamepad.index, new _common_gamepad__WEBPACK_IMPORTED_MODULE_2__.Gamepad( event.gamepad ) );
+            this.gamePadList.push( new _common_gamepad__WEBPACK_IMPORTED_MODULE_2__.Gamepad( event.gamepad ) );
             this.queue.push( event );
             console.debug(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
         }
@@ -8207,20 +8209,23 @@ class EventManager
     //
     handleGamepad()
     {
-        if( this.gamePadMap.size )
+        if( this.gamePadList.length )
         {
             // Send out events for the button presses
-            for ( let [index, lastGp] of this.gamePadMap )
+            //for ( let [index, lastGp] of this.gamePadMap )
+            for ( this._each = 0; this._each < this.gamePadList.length; this._each++ )
             {
-                this._gp = navigator.getGamepads()[index];
+                this._gp = navigator.getGamepads()[this._each];
 
                 if( this._gp && this._gp.connected )
                 {
+                    this._lastGp = this.gamePadList[this._each];
+
                     // Create Up/DOWN events for the buttons
                     for(this._i = 0; this._i < this._gp.buttons.length; this._i++)
                     {
                         // Check for button down
-                        if(!lastGp.pressed[this._i] && this._gp.buttons[this._i].pressed)
+                        if(!this._lastGp.pressed[this._i] && this._gp.buttons[this._i].pressed)
                         {
                             this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, this._i, this._gp);
                             this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
@@ -8228,7 +8233,7 @@ class EventManager
                             //console.log( `Button Index Down: ${i};` );
                         }
                         // Check for button up
-                        else if(lastGp.pressed[this._i] && !this._gp.buttons[this._i].pressed)
+                        else if(this._lastGp.pressed[this._i] && !this._gp.buttons[this._i].pressed)
                         {
                             this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, this._i, this._gp);
                             this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
@@ -8241,7 +8246,7 @@ class EventManager
                     //console.log( `Left Axes Y Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
 
                     // Create UP/DOWN events for the Left analog stick
-                    if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                    if(!(this._lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
                         (this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, this._gp);
@@ -8249,7 +8254,7 @@ class EventManager
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left Y Axes UP Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                    else if((this._lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
                         !(this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_UP, this._gp);
@@ -8257,7 +8262,7 @@ class EventManager
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left Y Axes UP Button Up; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                    else if(!(this._lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
                         (this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, this._gp);
@@ -8265,7 +8270,7 @@ class EventManager
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left Y Axes DOWN Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                    else if((this._lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
                         !(this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_Y] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_DOWN, this._gp);
@@ -8275,7 +8280,7 @@ class EventManager
                     }
 
                     // Create Left/Right events for the Left analog stick
-                    if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                    if(!(this._lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
                         (this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, this._gp);
@@ -8283,7 +8288,7 @@ class EventManager
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left X Axes LEFT Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                    else if((this._lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
                         !(this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] < -_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_LEFT, this._gp);
@@ -8291,7 +8296,7 @@ class EventManager
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left X Axes LEFT Button Up; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if(!(lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                    else if(!(this._lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
                         (this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_DOWN, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, this._gp);
@@ -8299,7 +8304,7 @@ class EventManager
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left X Axes RIGHT Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if((lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
+                    else if((this._lastGp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX) && 
                         !(this._gp.axes[_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_AXIS_LEFT_X] > _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.ANALOG_STICK_MSG_MAX))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(_common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_UP, _common_gamepadevent__WEBPACK_IMPORTED_MODULE_5__.GAMEPAD_BUTTON_L_STICK_RIGHT, this._gp);
@@ -8309,7 +8314,7 @@ class EventManager
                     }
 
                     // Sets the current gamepad
-                    lastGp.gamepad = this._gp;
+                    this._lastGp.gamepad = this._gp;
                 }
             }
         }
@@ -8405,11 +8410,11 @@ class Gamepad
         // Update the class member because the gamepad object might be different
         this.gp = gp;
 
-        for( let i = 0; i < gp.buttons.length; i++ )
-            this._pressed[i] = gp.buttons[i].pressed;
+        for( this._i = 0; this._i < gp.buttons.length; this._i++ )
+            this._pressed[this._i] = gp.buttons[this._i].pressed;
 
-        for( let i = 0; i < gp.axes.length; i++ )
-            this._axes[i] = gp.axes[i];
+        for( this._i = 0; this._i < gp.axes.length; this._i++ )
+            this._axes[this._i] = gp.axes[this._i];
     }
 
     //
@@ -9003,11 +9008,11 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
         }
 
         // Have the controls handle events
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].handleEvent( event );
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+            this.controlAry[this._i].handleEvent( event );
 
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].handleEvent( event );
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            this.mouseOnlyControlAry[this._i].handleEvent( event );
 
         if( event instanceof _common_genericevent__WEBPACK_IMPORTED_MODULE_8__.GenericEvent )
         {
@@ -9160,17 +9165,17 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     onMouseMove( event )
     {
-        for( let each of this.controlNodeAry )
+        for( this._each of this.controlNodeAry )
         {
-            if( each.uiControl.onMouseMove( event ) )
-                this.activeNode = each;
+            if( this._each.uiControl.onMouseMove( event ) )
+                this.activeNode = this._each;
             else
-                each.uiControl.deactivateControl();
+            this._each.uiControl.deactivateControl();
         }
 
-        for( let each of this.mouseOnlyControlAry )
-            if( !each.onMouseMove( event ) )
-                each.deactivateControl();
+        for( this._each of this.mouseOnlyControlAry )
+            if( !this._each.onMouseMove( event ) )
+                this._each.deactivateControl();
     }
 
     // 
@@ -9178,11 +9183,11 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     onWheel( event )
     {
-        for( let each of this.mouseOnlyControlAry )
-            each.onWheel( event );
+        for( this._each of this.mouseOnlyControlAry )
+            this._each.onWheel( event );
 
-        for( let each of this.controlAry )
-            each.onWheel( event );
+        for( this._each of this.controlAry )
+            this._each.onWheel( event );
     }
 
     // 
@@ -9190,29 +9195,29 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     onSelectAction( event )
     {
-        let selectionFound = false;
+        this._selectionFound = false;
 
         if( (this.activeNode !== null) &&
             (this.activeNode.uiControl.handleSelectAction( event )) )
         {
-            selectionFound = true;
+            this._selectionFound = true;
 
             // Set the state to active which will block all messages until the state is reset to idle
-            let ctrl = this.activeNode.uiControl.getActiveControl();
-            if( ctrl && ctrl.actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_IDLE )
+            this._ctrl = this.activeNode.uiControl.getActiveControl();
+            if( this._ctrl && this._ctrl.actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_IDLE )
                 this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
         }
         else if( event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_DEVICE_TYPE ] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.MOUSE )
         {
             // For mouse only controls
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
             {
-                if( this.mouseOnlyControlAry[i].handleSelectAction( event ) )
+                if( this.mouseOnlyControlAry[this._i].handleSelectAction( event ) )
                 {
-                    selectionFound = true;
+                    this._selectionFound = true;
 
                     // Set the state to active which will block all messages until the state is reset to idle
-                    if( this.mouseOnlyControlAry[i].actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_IDLE )
+                    if( this.mouseOnlyControlAry[this._i].actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_IDLE )
                         this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
 
                     break;
@@ -9222,7 +9227,7 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
 
         // Try to handle touch presses on a non-active control
         // The mouse just happends to be clicked over a non-active control
-        if( !selectionFound && event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_DEVICE_TYPE ] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.MOUSE )
+        if( !this._selectionFound && event.arg[ _common_defs__WEBPACK_IMPORTED_MODULE_13__.ESMA_DEVICE_TYPE ] === _common_defs__WEBPACK_IMPORTED_MODULE_13__.MOUSE )
         {
             // Deactivate the control that should be active
             if( (this.activeNode !== null) &&
@@ -9231,13 +9236,13 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
                 this.activeNode.uiControl.deactivateControl();
 
                 // Go through all the controls on this menu to try to find the one clicked on
-                for( let i = 0; i < this.controlAry.length; ++i )
+                for( this._i = 0; this._i < this.controlAry.length; ++this._i )
                 {
-                    if( this.controlAry[i].handleSelectAction( event ) )
+                    if( this.controlAry[this._i].handleSelectAction( event ) )
                     {
                         // Set the state to active which will block all messages until the state is reset to idle
-                        let ctrl = this.activeNode.uiControl.getActiveControl();
-                        if( ctrl && ctrl.actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_IDLE )
+                        this._ctrl = this.activeNode.uiControl.getActiveControl();
+                        if( this._ctrl && this._ctrl.actionType > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECAT_IDLE )
                             this.state = _gui_menudefs__WEBPACK_IMPORTED_MODULE_12__.EMS_ACTIVE;
 
                         break;
@@ -9304,20 +9309,20 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     activateFirstInactiveControl()
     {
-        let found = false;
+        this._found = false;
 
         // Activate the first control found and deactivate all the rest
-        for( let i = 0; i < this.controlNodeAry.length; ++i )
+        for( this._i = 0; this._i < this.controlNodeAry.length; ++this._i )
         {
-            if( !found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
+            if( !this._found && this.controlNodeAry[this._i].uiControl.activateFirstInactiveControl() )
             {
-                this.activeNode = this.controlNodeAry[i];
+                this.activeNode = this.controlNodeAry[this._i];
 
-                found = true;
+                this._found = true;
             }
             else
             {
-                this.controlNodeAry[i].uiControl.deactivateControl();
+                this.controlNodeAry[this._i].uiControl.deactivateControl();
             }
         }
     }
@@ -9327,11 +9332,11 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     reset()
     {
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].reset( true );
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+            this.controlAry[this._i].reset( true );
 
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].reset( true );
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            this.mouseOnlyControlAry[this._i].reset( true );
     }
 
     // 
@@ -9340,14 +9345,14 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     getControl( name )
     {
         // See if the control can be found
-        let control = this.controlMap.get( name );
+        this._control = this.controlMap.get( name );
 
         // Make sure control is available
-        if( control === undefined )
+        if( this._control === undefined )
             throw new Error( `Control being asked for is missing! (${name}).` );
 
         // Pass back the control if found
-        return control;
+        return this._control;
     }
 
     // 
@@ -9355,18 +9360,18 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     //
     getActiveControl()
     {
-        let result = null;
+        this._result = null;
 
-        for( let i = 0; i < this.controlAry.length; ++i )
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
         {
-            if( this.controlAry[i].state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECS_INACTIVE )
+            if( this.controlAry[this._i].state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_11__.ECS_INACTIVE )
             {
-                result = this.controlAry[i].getActiveControl();
+                this._result = this.controlAry[this._i].getActiveControl();
                 break;
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -9398,17 +9403,17 @@ class Menu extends _common_object__WEBPACK_IMPORTED_MODULE_0__.Object
     {
         if( this.isVisible() )
         {
-            for( let i = 0; i < this.spriteAry.length; ++i )
-                this.spriteAry[i].setAlpha( alpha );
+            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+                this.spriteAry[this._i].setAlpha( alpha );
 
-            for( let i = 0; i < this.staticControlAry.length; ++i )
-                this.staticControlAry[i].setAlpha( alpha );
+            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
+                this.staticControlAry[this._i].setAlpha( alpha );
 
-            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-                this.mouseOnlyControlAry[i].setAlpha( alpha );
+            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+                this.mouseOnlyControlAry[this._i].setAlpha( alpha );
 
-            for( let i = 0; i < this.controlAry.length; ++i )
-                this.controlAry[i].setAlpha( alpha );
+            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+                this.controlAry[this._i].setAlpha( alpha );
         }
 
         this.alpha = alpha;
@@ -9512,11 +9517,11 @@ class ScrollParam
         {
             this.msg = -1;
 
-            let result = this.scrollTypesMap.get( msg );
+            this._result = this.scrollTypesMap.get( msg );
 
-            if( result )
+            if( this._result )
             {
-                this.msg = result;
+                this.msg = this._result;
                 return true;
             }
         }
@@ -10609,9 +10614,9 @@ class ShaderData
     //
     getLocation( id )
     {
-        let loc = this.locationMap.get( id );
-        if( loc !== undefined )
-            return loc;
+        this._loc = this.locationMap.get( id );
+        if( this._loc !== undefined )
+            return this._loc;
         else
             throw new Error( 'ERROR Shader variable location does not exist! (' + id + ').' );
     }
@@ -32747,17 +32752,17 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transRectAry = sprite.collisionComponent.transRectAry;
+            this._transRectAry = sprite.collisionComponent.transRectAry;
 
             // Do the narrow phase check
-            for( let i = 0; i < transRectAry.length; ++i )
+            for( this._i = 0; this._i < this._transRectAry.length; ++this._i )
             {
-                for( let j = 0; j < this.transRectAry.length; ++j )
+                for( this._j = 0; this._j < this.transRectAry.length; ++this._j )
                 {
-                    if( this.transRectAry[j].x1 < transRectAry[i].x2 &&
-                        this.transRectAry[j].x2 > transRectAry[i].x1 &&
-                        this.transRectAry[j].y1 > transRectAry[i].y2 &&
-                        this.transRectAry[j].y2 < transRectAry[i].y1 )
+                    if( this.transRectAry[this._j].x1 < this._transRectAry[this._i].x2 &&
+                        this.transRectAry[this._j].x2 > this._transRectAry[this._i].x1 &&
+                        this.transRectAry[this._j].y1 > this._transRectAry[this._i].y2 &&
+                        this.transRectAry[this._j].y2 < this._transRectAry[this._i].y1 )
                     {
                         return true;
                     }
@@ -32776,32 +32781,32 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transRectAry = sprite.collisionComponent.transRectAry;
-            let transPos = this.sprite.transPos;
+            this._transRectAry = sprite.collisionComponent.transRectAry;
+            this._transPos = this.sprite.transPos;
 
             // Do the narrow phase check
-            for( let i = 0; i < transRectAry.length; ++i )
+            for( this._i = 0; this._i < this._transRectAry.length; ++this._i )
             {
                 // Find the edge the point is out side of
-                let edgeX = transPos.x;
-                let edgeY = transPos.y;
+                this._edgeX = this._transPos.x;
+                this._edgeY = this._transPos.y;
 
-                if( transPos.x < transRectAry[i].x1 )
-                    edgeX = transRectAry[i].x1;
-                else if( transPos.x > transRectAry[i].x2 )
-                    edgeX = transRectAry[i].x2;
+                if( this._transPos.x < this._transRectAry[this._i].x1 )
+                    this._edgeX = this._transRectAry[this._i].x1;
+                else if( this._transPos.x > this._transRectAry[this._i].x2 )
+                    this._edgeX = this._transRectAry[this._i].x2;
 
-                if( transPos.y < transRectAry[i].y2 )
-                    edgeY = transRectAry[i].y2;
-                else if( transPos.y > transRectAry[i].y1 )
-                    edgeY = transRectAry[i].y1;
+                if( this._transPos.y < this._transRectAry[this._i].y2 )
+                    this._edgeY = this._transRectAry[this._i].y2;
+                else if( this._transPos.y > this._transRectAry[this._i].y1 )
+                    this._edgeY = this._transRectAry[this._i].y1;
                 
                 // Get distance from closest edges
-                let distX = transPos.x - edgeX;
-                let distY = transPos.y - edgeY;
-                let distance = (distX * distX) + (distY * distY);
+                this._distX = this._transPos.x - this._edgeX;
+                this._distY = this._transPos.y - this._edgeY;
+                this._distance = (this._distX * this._distX) + (this._distY * this._distY);
 
-                if( distance <= this.radius )
+                if( this._distance <= this.radius )
                     return true;
             }
         }
@@ -32817,14 +32822,14 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transPos = this.sprite.transPos;
-            let transRectAry = sprite.collisionComponent.transRectAry;
+            this._transPos = this.sprite.transPos;
+            this._transRectAry = sprite.collisionComponent.transRectAry;
 
             // Just do the narrow phase check
-            for( let i = 0; i < transRectAry.length; ++i )
+            for( this._i = 0; this._i < this._transRectAry.length; ++this._i )
             {
-                if( !(transPos.x < transRectAry[i].x1 || transPos.x > transRectAry[i].x2 ||
-                    transPos.y > transRectAry[i].y1 || transPos.y < transRectAry[i].y2) )
+                if( !(this._transPos.x < this._transRectAry[this._i].x1 || this._transPos.x > this._transRectAry[this._i].x2 ||
+                    this._transPos.y > this._transRectAry[this._i].y1 || this._transPos.y < this._transRectAry[this._i].y2) )
                     return true;
             }
         }
@@ -32840,11 +32845,11 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+            this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( let i = 0; i < transPolygonAry.length; ++i )
-                return this.pointToPolygonCheck( this.sprite.transPos, transPolygonAry[i] );
+            for( this._i = 0; this._i < transPolygonAry.length; ++this._i )
+                return this.pointToPolygonCheck( this.sprite.transPos, this._transPolygonAry[this._i] );
         }
         
         return false;
@@ -32858,21 +32863,21 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transPos = this.sprite.transPos;
-            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+            this._transPos = this.sprite.transPos;
+            this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( let i = 0; i < transPolygonAry.length; ++i )
+            for( this._i = 0; this._i < transPolygonAry.length; ++this._i )
             {
-                for( let j = 0; j < transPolygonAry[i].pointAry.length; ++j )
+                for( this._j = 0; this._j < transPolygonAry[this._i].pointAry.length; ++this._j )
                 {
                     // Get next vertex in list. If we've hit the end, wrap around to 0
-                    let next = j + 1;
-                    if( next == transPolygonAry[i].pointAry.length )
-                        next = 0;
+                    this._next = this._j + 1;
+                    if( this._next == transPolygonAry[this._i].pointAry.length )
+                        this._next = 0;
 
                     // check for collision between the circle and a line formed between the two vertices
-                    if( this.lineToCircleCheck(transPolygonAry[i].pointAry[j], transPolygonAry[i].pointAry[next], transPos, this.radius) )
+                    if( this.lineToCircleCheck(this._transPolygonAry[this._i].pointAry[this._j], this._transPolygonAry[this._i].pointAry[next], this._transPos, this.radius) )
                         return true;
                 }
 
@@ -32880,7 +32885,7 @@ class CollisionComponent
                 // sides of the polygon again, so only use this if you need to
                 if( sprite.collisionComponent.optionalPointCheck )
                 {
-                    if( this.pointToPolygonCheck( transPos, transPolygonAry[i] ) )
+                    if( this.pointToPolygonCheck( this._transPos, this._transPolygonAry[this._i] ) )
                         return true;
                 }
             }
@@ -32897,14 +32902,14 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transPos = this.sprite.transPos;
-            let transLineAry = sprite.collisionComponent.transLineAry;
+            this._transPos = this.sprite.transPos;
+            this._transLineAry = sprite.collisionComponent.transLineAry;
 
             // Do the narrow phase check
-            for( let i = 0; i < transLineAry.length; ++i )
+            for( this._i = 0; this._i < this._transLineAry.length; ++this._i )
             {
                 // Check for collision between the circle and a line formed between the two vertices
-                if( this.lineToCircleCheck(transLineAry[i].head, transLineAry[i].tail, transPos, this.radius) )
+                if( this.lineToCircleCheck(this._transLineAry[this._i].head, this._transLineAry[this._i].tail, this._transPos, this.radius) )
                     return true;
             }
         }
@@ -32920,15 +32925,15 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transLineAry = sprite.collisionComponent.transLineAry;
+            this._transLineAry = sprite.collisionComponent.transLineAry;
 
             // Do the narrow phase check
-            for( let i = 0; i < transLineAry.length; ++i )
+            for( this._i = 0; this._i < transLineAry.length; ++this._i )
             {
-                for( let j = 0; j < this.transLineAry.length; ++j )
+                for( this._j = 0; this._j < this.transLineAry.length; ++this._j )
                 {
                     // Check for collision between the circle and a line formed between the two vertices
-                    if( this.lineToLineCheck( this.transLineAry[j], transLineAry[i] ) )
+                    if( this.lineToLineCheck( this.transLineAry[this._j], this._transLineAry[this._i] ) )
                         return true;
                 }
             }
@@ -32945,14 +32950,14 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transRectAry = sprite.collisionComponent.transRectAry;
+            this._transRectAry = sprite.collisionComponent.transRectAry;
 
             // Do the narrow phase check
-            for( let i = 0; i < transRectAry.length; ++i )
+            for( this._i = 0; this._i < transRectAry.length; ++this._i )
             {
-                for( let j = 0; j < this.transLineAry.length; ++j )
+                for( this._j = 0; this._j < this.transLineAry.length; ++this._j )
                 {
-                    if( this.lineToRectCheck( this.transLineAry[j], transRectAry[i] ) )
+                    if( this.lineToRectCheck( this.transLineAry[this._j], this._transRectAry[this._i] ) )
                         return true;
                 }
             }
@@ -32969,25 +32974,25 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+            this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( let line = 0; line < this.transLineAry.length; ++line )
+            for( this._line = 0; this._line < this.transLineAry.length; ++this._line )
             {
-                for( let i = 0; i < transPolygonAry.length; ++i )
+                for( this._i = 0; this._i < this._transPolygonAry.length; ++this._i )
                 {
-                    for( let j = 0; j < transPolygonAry[i].pointAry.length; ++j )
+                    for( this._j = 0; this._j < this._transPolygonAry[this._i].pointAry.length; ++this._j )
                     {
                         // Get next vertex in list. If we've hit the end, wrap around to 0
-                        let next = j + 1;
-                        if( next == transPolygonAry[i].pointAry.length )
-                            next = 0;
+                        this._next = this._j + 1;
+                        if( this._next == this._transPolygonAry[this._i].pointAry.length )
+                            this._next = 0;
 
-                        gLine1.head.setXYZ( transPolygonAry[i].pointAry[j].x, transPolygonAry[i].pointAry[j].y );
-                        gLine1.tail.setXYZ( transPolygonAry[i].pointAry[next].x, transPolygonAry[i].pointAry[next].y );
+                        gLine1.head.setXYZ( this._transPolygonAry[this._i].pointAry[this._j].x, this._transPolygonAry[this._].pointAry[this._j].y );
+                        gLine1.tail.setXYZ( this._transPolygonAry[this._i].pointAry[this._next].x, this._transPolygonAry[this._i].pointAry[this._next].y );
                             
                         // check for collision between the line and a polygon line formed between the two vertices
-                        if( this.lineToLineCheck( gLine1, this.transLineAry[line] ) )
+                        if( this.lineToLineCheck( gLine1, this.transLineAry[this._line] ) )
                             return true;
                     }
 
@@ -32995,10 +33000,10 @@ class CollisionComponent
                     // sides of the polygon again, so only use this if you need to
                     if( sprite.collisionComponent.optionalPointCheck )
                     {
-                        if( this.pointToPolygonCheck( this.transLineAry[line].head, transPolygonAry[i] ) )
+                        if( this.pointToPolygonCheck( this.transLineAry[this._line].head, this._transPolygonAry[this._i] ) )
                             return true;
                         
-                        if( this.pointToPolygonCheck( this.transLineAry[line].tail, transPolygonAry[i] ) )
+                        if( this.pointToPolygonCheck( this.transLineAry[this._line].tail, this._transPolygonAry[this._i] ) )
                             return true;
                     }
                 }
@@ -33016,25 +33021,25 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+            this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( let rect = 0; rect < this.transRectAry.length; ++rect )
+            for( this._rect = 0; this._rect < this.transRectAry.length; ++this._rect )
             {
-                for( let i = 0; i < transPolygonAry.length; ++i )
+                for( this._i = 0; this._i < this._transPolygonAry.length; ++this._i )
                 {
-                    for( let j = 0; j < transPolygonAry[i].pointAry.length; ++j )
+                    for( this._j = 0; this._j < this._transPolygonAry[this._i].pointAry.length; ++this._j )
                     {
                         // Get next vertex in list. If we've hit the end, wrap around to 0
-                        let next = j + 1;
-                        if( next == transPolygonAry[i].pointAry.length )
-                            next = 0;
+                        this._next = this._j + 1;
+                        if( this._next == this._transPolygonAry[this._i].pointAry.length )
+                            this._next = 0;
 
-                        gLine1.head.setXYZ( transPolygonAry[i].pointAry[j].x, transPolygonAry[i].pointAry[j].y );
-                        gLine1.tail.setXYZ( transPolygonAry[i].pointAry[next].x, transPolygonAry[i].pointAry[next].y );
+                        gLine1.head.setXYZ( this._transPolygonAry[this._i].pointAry[this._j].x, this._transPolygonAry[this._i].pointAry[this._j].y );
+                        gLine1.tail.setXYZ( this._transPolygonAry[this._i].pointAry[this._next].x, this._transPolygonAry[this._i].pointAry[this._next].y );
                             
                         // check for collision between the rect and a polygon line formed between the two vertices
-                        if( this.lineToRectCheck( gLine1, this.transRectAry[rect] ) )
+                        if( this.lineToRectCheck( gLine1, this.transRectAry[this._rect] ) )
                             return true;
                     }
 
@@ -33042,20 +33047,20 @@ class CollisionComponent
                     // sides of the polygon again, so only use this if you need to
                     if( sprite.collisionComponent.optionalPointCheck )
                     {
-                        gPoint.setXYZ( this.transRectAry[rect].x1, this.transRectAry[rect].y1 );
-                        if( this.pointToPolygonCheck( gPoint, transPolygonAry[i] ) )
+                        gPoint.setXYZ( this.transRectAry[this._rect].x1, this.transRectAry[this._rect].y1 );
+                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[this._i] ) )
                             return true;
                         
-                        gPoint.setXYZ( this.transRectAry[rect].x2, this.transRectAry[rect].y1 );
-                        if( this.pointToPolygonCheck( gPoint, transPolygonAry[i] ) )
+                        gPoint.setXYZ( this.transRectAry[this._rect].x2, this.transRectAry[this._rect].y1 );
+                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[this._i] ) )
                             return true;
 
-                        gPoint.setXYZ( this.transRectAry[rect].x2, this.transRectAry[rect].y2 );
-                        if( this.pointToPolygonCheck( gPoint, transPolygonAry[i] ) )
+                        gPoint.setXYZ( this.transRectAry[this._rect].x2, this.transRectAry[this._rect].y2 );
+                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[this._i] ) )
                             return true;
 
-                        gPoint.setXYZ( this.transRectAry[rect].x1, this.transRectAry[rect].y2 );
-                        if( this.pointToPolygonCheck( gPoint, transPolygonAry[i] ) )
+                        gPoint.setXYZ( this.transRectAry[this._rect].x1, this.transRectAry[this._rect].y2 );
+                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[this._i] ) )
                             return true;
                     }
                 }
@@ -33073,32 +33078,32 @@ class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            let transPolygonAry = sprite.collisionComponent.transPolygonAry;
+            this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( let poly1 = 0; poly1 < this.transPolygonAry.length; ++poly1 )
+            for( this._poly1 = 0; this._poly1 < this.transPolygonAry.length; ++this._poly1 )
             {
-                for( let point1 = 0; point1 < this.transPolygonAry[poly1].pointAry.length; ++point1 )
+                for( this._point1 = 0; this._point1 < this.transPolygonAry[this._poly1].pointAry.length; ++this._point1 )
                 {
                     // Get next vertex in list. If we've hit the end, wrap around to 0
-                    let next1 = point1 + 1;
-                    if( next1 == this.transPolygonAry[poly1].pointAry.length )
-                        next1 = 0;
+                    this._next1 = this._point1 + 1;
+                    if( this._next1 == this.transPolygonAry[this._poly1].pointAry.length )
+                        this._next1 = 0;
 
-                    gLine1.head.setXYZ( this.transPolygonAry[poly1].pointAry[point1].x, this.transPolygonAry[poly1].pointAry[point1].y );
-                    gLine1.tail.setXYZ( this.transPolygonAry[poly1].pointAry[next1].x, this.transPolygonAry[poly1].pointAry[next1].y );
+                    gLine1.head.setXYZ( this.transPolygonAry[this._poly1].pointAry[this._point1].x, this.transPolygonAry[this._poly1].pointAry[this._point1].y );
+                    gLine1.tail.setXYZ( this.transPolygonAry[this._poly1].pointAry[this._next1].x, this.transPolygonAry[this._poly1].pointAry[this._next1].y );
 
-                    for( let poly2 = 0; poly2 < transPolygonAry.length; ++poly2 )
+                    for( this._poly2 = 0; this._poly2 < this._transPolygonAry.length; ++this._poly2 )
                     {
-                        for( let point2 = 0; point2 < transPolygonAry[poly2].pointAry.length; ++point2 )
+                        for( this._point2 = 0; this._point2 < this._transPolygonAry[this._poly2].pointAry.length; ++this._point2 )
                         {
                             // Get next vertex in list. If we've hit the end, wrap around to 0
-                            let next2 = point2 + 1;
-                            if( next2 == transPolygonAry[poly2].pointAry.length )
-                                next2 = 0;
+                            this._next2 = this._point2 + 1;
+                            if( this._next2 == this._transPolygonAry[this._poly2].pointAry.length )
+                                this._next2 = 0;
 
-                            gLine2.head.setXYZ( transPolygonAry[poly2].pointAry[point2].x, transPolygonAry[poly2].pointAry[point2].y );
-                            gLine2.tail.setXYZ( transPolygonAry[poly2].pointAry[next2].x, transPolygonAry[poly2].pointAry[next2].y );
+                            gLine2.head.setXYZ( this._transPolygonAry[this._poly2].pointAry[this._point2].x, this._transPolygonAry[this._poly2].pointAry[this._point2].y );
+                            gLine2.tail.setXYZ( this._transPolygonAry[this._poly2].pointAry[this._next2].x, this._transPolygonAry[this._poly2].pointAry[this._next2].y );
                                 
                             // check for collision between the rect and a polygon line formed between the two vertices
                             if( this.lineToLineCheck( gLine1, gLine2 ) )
@@ -33108,10 +33113,10 @@ class CollisionComponent
                             // sides of the polygon again, so only use this if you need to
                             if( this.optionalPointCheck )
                             {
-                                if( this.pointToPolygonCheck( gLine2.head, this.transPolygonAry[poly1] ) )
+                                if( this.pointToPolygonCheck( gLine2.head, this.transPolygonAry[this._poly1] ) )
                                     return true;
                                 
-                                if( this.pointToPolygonCheck( gLine2.tail, this.transPolygonAry[poly1] ) )
+                                if( this.pointToPolygonCheck( gLine2.tail, this.transPolygonAry[this._poly1] ) )
                                     return true;
                             }
                         }
@@ -33120,10 +33125,10 @@ class CollisionComponent
                         // sides of the polygon again, so only use this if you need to
                         if( sprite.collisionComponent.optionalPointCheck )
                         {
-                            if( this.pointToPolygonCheck( gLine1.head, transPolygonAry[poly2] ) )
+                            if( this.pointToPolygonCheck( gLine1.head, this._transPolygonAry[poly2] ) )
                                 return true;
                             
-                            if( this.pointToPolygonCheck( gLine1.tail, transPolygonAry[poly2] ) )
+                            if( this.pointToPolygonCheck( gLine1.tail, this._transPolygonAry[poly2] ) )
                                 return true;
                         }
                     }
@@ -33150,31 +33155,30 @@ class CollisionComponent
     //
     pointToPolygonCheck( point, polygon )
     {
-        let collision = false;
-        let next, vc, vn, px, py;
+        this._collision = false;
 
-        for( let i = 0; i < polygon.pointAry.length; ++i )
+        for( this._i = 0; this._i < polygon.pointAry.length; ++this._i )
         {
             // Get next vertex in list. If we've hit the end, wrap around to 0
-            next = i + 1;
-            if( next == polygon.pointAry.length )
-                next = 0;
+            this._next = this._i + 1;
+            if( this._next == polygon.pointAry.length )
+                this._next = 0;
 
             // Ge the current and next point
-            vc = polygon.pointAry[i];
-            vn = polygon.pointAry[next];
-            px = point.x;
-            py = point.y;
+            this._vc = polygon.pointAry[this._i];
+            this._vn = polygon.pointAry[next];
+            this._px = point.x;
+            this._py = point.y;
 
             // compare position, flip 'collision' variable back and forth
-            if( ((vc.y >= py && vn.y < py) || (vc.y < py && vn.y >= py)) &&
-                (px < (vn.x-vc.x)*(py-vc.y) / (vn.y-vc.y)+vc.x) )
+            if( ((this._vc.y >= this._py && this._vn.y < this._py) || (this._vc.y < this._py && this._vn.y >= this._py)) &&
+                (this._px < (this._vn.x-this._vc.x)*(this._py-this._vc.y) / (this._vn.y-this._vc.y)+this._vc.x) )
             {
-                collision = !collision;
+                this._collision = !this._collision;
             }
         }
 
-        return collision;
+        return this._collision;
     }
 
     // 
@@ -33188,10 +33192,10 @@ class CollisionComponent
             return true;
       
         // Get length of the line
-        let distance = pointPos1.calcLengthSquared2D( pointPos2 );
+        this._distance = pointPos1.calcLengthSquared2D( pointPos2 );
       
         // Get dot product of the line and circle
-        let dot = ( ((circlePos.x-pointPos1.x)*(pointPos2.x-pointPos1.x)) + ((circlePos.y-pointPos1.y)*(pointPos2.y-pointPos1.y)) ) / distance;
+        this._dot = ( ((circlePos.x-pointPos1.x)*(pointPos2.x-pointPos1.x)) + ((circlePos.y-pointPos1.y)*(pointPos2.y-pointPos1.y)) ) / this._distance;
       
         // Find the closest point on the line
         gPoint.setXYZ(
@@ -33229,22 +33233,22 @@ class CollisionComponent
     //
     lineToLineCheck( line1, line2 )
     {
-        let x1 = line1.head.x;
-        let y1 = line1.head.y;
-        let x2 = line1.tail.x;
-        let y2 = line1.tail.y;
+        this._x1 = line1.head.x;
+        this._y1 = line1.head.y;
+        this._x2 = line1.tail.x;
+        this._y2 = line1.tail.y;
         
-        let x3 = line2.head.x;
-        let y3 = line2.head.y;
-        let x4 = line2.tail.x;
-        let y4 = line2.tail.y;
+        this._x3 = line2.head.x;
+        this._y3 = line2.head.y;
+        this._x4 = line2.tail.x;
+        this._y4 = line2.tail.y;
 
         // calculate the distance to intersection point
-        let uA = ((x4-x3)*(y1-y3) - (y4-y3)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1));
-        let uB = ((x2-x1)*(y1-y3) - (y2-y1)*(x1-x3)) / ((y4-y3)*(x2-x1) - (x4-x3)*(y2-y1));
+        this._uA = ((this._x4-this._x3)*(this._y1-this._y3) - (this._y4-this._y3)*(this._x1-this._x3)) / ((this._y4-this._y3)*(x2-x1) - (this._x4-this._x3)*(this._y2-this._y1));
+        this._uB = ((this._x2-this._x1)*(this._y1-this._y3) - (this._y2-this._y1)*(this._x1-this._x3)) / ((this._y4-this._y3)*(x2-x1) - (this._x4-this._x3)*(this._y2-this._y1));
       
         // if uA and uB are between 0-1, lines are colliding
-        if( uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1 )
+        if( this._uA >= 0 && this._uA <= 1 && this._uB >= 0 && this._uB <= 1 )
           return true;
 
         return false;
@@ -36668,8 +36672,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     setVisible( visible )
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].setVisible( visible );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].setVisible( visible );
     }
 
     // 
@@ -36679,8 +36683,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     {
         this.scriptComponent.update();
 
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].update();
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].update();
     }
 
     // 
@@ -36693,8 +36697,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
         else
             super.transform();
 
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].transform( this );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].transform( this );
 
         // Transform the collision
         this.transformCollision();
@@ -36753,8 +36757,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     render( camera )
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].render( camera );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].render( camera );
     }
 
     // 
@@ -36920,11 +36924,11 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     onMouseMove( event )
     {
-        let result = false;
+        this._result = false;
 
         if( !this.isDisabled() && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
         {
-            result = true;
+            this._result = true;
 
             // Only send the message if it's not already active
             if( !this.isActive() )
@@ -36936,7 +36940,7 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -37041,10 +37045,10 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     {
         // Create any font strings
         // This allows for delayed VBO create so that the fonts can be allocated during a load screen
-        for( let i = 0; i < this.spriteAry.length; ++i )
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
         {
-            this.spriteAry[i].init();
-            this.spriteAry[i].prepareScriptOnInit();
+            this.spriteAry[this._i].init();
+            this.spriteAry[this._i].prepareScriptOnInit();
         }
 
         // Prepare any script functions that are flagged to prepareOnInit
@@ -37058,8 +37062,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     {
         // Free the font VBO
         // This allows for early VBO delete so that the menu manager can be freed from a thread
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].cleanUp();
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].cleanUp();
     }
 
     // 
@@ -37096,8 +37100,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     prepareSpriteScript( scriptId )
     {    
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].scriptComponent.prepare( scriptId, this.spriteAry[i] );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].scriptComponent.prepare( scriptId, this.spriteAry[this._i] );
     }
 
     // 
@@ -37169,8 +37173,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     resetSpriteScript()
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].scriptComponent.recycleActiveScripts();
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].scriptComponent.recycleActiveScripts();
     }
 
     // 
@@ -37424,8 +37428,8 @@ class UIControl extends _controlbase__WEBPACK_IMPORTED_MODULE_0__.ControlBase
     //
     setAlpha( alpha )
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].setAlpha( alpha );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].setAlpha( alpha );
     }
     
     // 
@@ -37639,20 +37643,20 @@ class Quad
     //
     isPointInQuad( x, y )
     {
-        let result = false;
+        this._result = false;
         
         //console.log( `isPointInQuad - X: ${x}, Y: ${y}` );
         
-        for( let i = 0, j = 3; i < 4; j = i++ )
+        for( this._i = 0, this._j = 3; this._i < 4; this._j = this._i++ )
         {
-            if( ((this.point[i].y > y) != (this.point[j].y > y)) && 
-                (x < (this.point[j].x - this.point[i].x) * (y - this.point[i].y) / (this.point[j].y - this.point[i].y) + this.point[i].x) )
+            if( ((this.point[this._i].y > y) != (this.point[this._j].y > y)) && 
+                (x < (this.point[this._j].x - this.point[this._i].x) * (y - this.point[this._i].y) / (this.point[this._j].y - this.point[this._i].y) + this.point[this._i].x) )
             {
-                result = !result;
+                this._result = !this._result;
             }
         }
 
-        return result;
+        return this._result;
     }
 }
 
@@ -39371,8 +39375,8 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     {
         super.handleEvent( event );
 
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].handleEvent( event );
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].handleEvent( event );
     }
 
     // 
@@ -39441,7 +39445,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     onMouseMove( event )
     {
-        let result = super.onMouseMove( event );
+        this._result = super.onMouseMove( event );
 
         // Invalidate the active control
         this.activeScrollCtrl = _common_defs__WEBPACK_IMPORTED_MODULE_11__.NO_ACTIVE_CONTROL;
@@ -39458,7 +39462,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
             this.repositionScrollControls();
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -39466,17 +39470,17 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     onWheel( event )
     {
-        let scrollCurPos = this.scrollCurPos + (event.deltaY * 0.5);
+        this._scrollCurPos = this.scrollCurPos + (event.deltaY * 0.5);
 
         // Handle bounds checking
-        if( scrollCurPos < 0 )
-            scrollCurPos = 0;
+        if( this._scrollCurPos < 0 )
+            this._scrollCurPos = 0;
 
-        else if( scrollCurPos > this.maxMoveAmount )
-            scrollCurPos = this.maxMoveAmount;
+        else if( this._scrollCurPos > this.maxMoveAmount )
+            this._scrollCurPos = this.maxMoveAmount;
         
         // Set the current scroll position
-        this.scrollCurPos = scrollCurPos;
+        this.scrollCurPos = this._scrollCurPos;
 
         // Move the slider
         this.subControlAry[0].setSlider(this.scrollCurPos);
@@ -39575,11 +39579,11 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     {
         if( super.baseActivateFirstInactiveControl() )
         {
-            for( let i = 0; i < this.scrollControlAry.length; ++i )
+            for( this._i = 0; this._i < this.scrollControlAry.length; ++this._i )
             {
-                if( this.scrollControlAry[i].activateFirstInactiveControl() )
+                if( this.scrollControlAry[this._i].activateFirstInactiveControl() )
                 {
-                    this.activeScrollCtrl = i;
+                    this.activeScrollCtrl = this._i;
                     break;
                 }
             }
@@ -39593,23 +39597,23 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     handleSelectAction( event )
     {
-        let result = super.handleSelectAction( event );
+        this._result = super.handleSelectAction( event );
 
         // Let the scroll controls handle any selection
-        for( let i = 0; i < this.scrollControlAry.length && !result; ++i )
+        for( this._i = 0; this._i < this.scrollControlAry.length && !this._result; ++this._i )
         {
-            result = this.scrollControlAry[i].handleSelectAction( event );
-            if( result )
+            this._result = this.scrollControlAry[this._i].handleSelectAction( event );
+            if( this._result )
             {
                 // Set the active scroll control to the one the mouse clicked
                 if( event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_11__.ESMA_DEVICE_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_11__.MOUSE )
-                    this.activeScrollCtrl = i;
+                    this.activeScrollCtrl = this._i;
                     
                 break;
             }
         }
 
-        if( result && (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_11__.ESMA_DEVICE_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_11__.MOUSE) &&
+        if( this._result && (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_11__.ESMA_DEVICE_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_11__.MOUSE) &&
             (event.arg[_common_defs__WEBPACK_IMPORTED_MODULE_11__.ESMA_PRESS_TYPE] === _common_defs__WEBPACK_IMPORTED_MODULE_11__.EAP_DOWN) )
         {
             // Get the current scroll position
@@ -39622,7 +39626,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
             this.repositionScrollControls();
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -39689,11 +39693,11 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
         if( !this.selectAndRepositionCtrl( scrollVector ) )
         {
             // Try to select the next control
-            let scrollResult = this.selectNextControl( scrollVector );
+            this._scrollResult = this.selectNextControl( scrollVector );
 
             // Scroll the contents of the scroll box if we need to activate a control
             // that's outside of the viewable area of the scroll box.
-            if( !(scrollResult & IN_VIEWABLE_AREA) )
+            if( !(this._scrollResult & IN_VIEWABLE_AREA) )
             {
                 this.initScrolling( scrollVector, this.controlHeight );
             }
@@ -39709,11 +39713,11 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
         this.setActiveCtrlToViewableArea( scrollVector );
 
         // Scroll to the next control in the viewable area
-        let scrollResult = this.scrollToTheNextCtrlInViewableArea( scrollVector );
+        this._scrollResult = this.scrollToTheNextCtrlInViewableArea( scrollVector );
 
         // If we are still in the viewable area but have no active control,
         // try to activate the current control
-        if( (scrollResult & IN_VIEWABLE_AREA) && !(scrollResult & NEW_ACTIVE_CTRL) )
+        if( (this._scrollResult & IN_VIEWABLE_AREA) && !(this._scrollResult & NEW_ACTIVE_CTRL) )
         {
             _managers_eventmanager__WEBPACK_IMPORTED_MODULE_4__.eventManager.dispatchEvent(
                 _gui_menudefs__WEBPACK_IMPORTED_MODULE_10__.EME_MENU_CONTROL_STATE_CHANGE,
@@ -39721,7 +39725,7 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
                 this.scrollControlAry[this.activeScrollCtrl] );
         }
 
-        return scrollResult;
+        return this._scrollResult;
     }
 
     // 
@@ -39738,17 +39742,17 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
                 this.selectNextControl( 1 );
 
             // Get the alignment to see if it needs to be adjusted
-            let diff = this.getControlAlignment();
-            if( diff > 0.1 )
+            this._diff = this.getControlAlignment();
+            if( this._diff > 0.1 )
             {
-                let pos = this.scrollCurPos / this.controlHeight;
+                this._pos = this.scrollCurPos / this.controlHeight;
 
-                let nextCtrl = (this.activeScrollCtrl - this.firstScrollCtrlIndex) * this.controlHeight;
+                this._nextCtrl = (this.activeScrollCtrl - this.firstScrollCtrlIndex) * this.controlHeight;
 
-                if( nextCtrl || (this.firstScrollCtrlIndex > pos) )
-                    this.initScrolling( 1, this.controlHeight - diff, false );
+                if( this._nextCtrl || (this.firstScrollCtrlIndex > this._pos) )
+                    this.initScrolling( 1, this.controlHeight - this._diff, false );
                 else
-                    this.initScrolling( -1, diff, false );
+                    this.initScrolling( -1, this._diff, false );
             }
 
             return true;
@@ -39806,11 +39810,11 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     scrollToTheNextCtrlInViewableArea( scrollVector )
     {
-        let newActiveCtrl = 0;
-        let inView = this.inView( this.activeScrollCtrl, scrollVector );
+        this._newActiveCtrl = 0;
+        this._inView = this.inView( this.activeScrollCtrl, scrollVector );
 
         // Only scroll within the viewable area
-        if( inView )
+        if( this._inView )
         {
             // Set a temp variable to the active scroll control
             let tmpScrollCtrl = this.activeScrollCtrl;
@@ -39822,20 +39826,18 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
 
                 if( this.activateScrollCtrl( tmpScrollCtrl ) )
                 {
-                    newActiveCtrl = NEW_ACTIVE_CTRL;
+                    this._newActiveCtrl = NEW_ACTIVE_CTRL;
 
                     this.activeScrollCtrl = tmpScrollCtrl;
                     break;
                 }
 
-                inView = this.inView( tmpScrollCtrl, scrollVector );
+                this._inView = this.inView( tmpScrollCtrl, scrollVector );
             }
-            while( inView );
+            while( this._inView );
         }
 
-        let result = inView | newActiveCtrl;
-
-        return result;
+        return this._inView | this._newActiveCtrl;
     }
 
     // 
@@ -39889,19 +39891,19 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     {
         if( this.scrollVector )
         {
-            let dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__.highResTimer.elapsedTime * this.scrollSpeed;
+            this._dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__.highResTimer.elapsedTime * this.scrollSpeed;
 
             if( this.paging )
-                dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__.highResTimer.elapsedTime * this.pageSpeed;
+                this._dist = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_5__.highResTimer.elapsedTime * this.pageSpeed;
 
             if( this.scrollVector > 0 )
-                this.scrollCurPos += dist;
+                this.scrollCurPos += this._dist;
             else
-                this.scrollCurPos -= dist;
+                this.scrollCurPos -= this._dist;
 
             this.subControlAry[0].setSlider(this.scrollCurPos);
 
-            this.scrollCounter += dist;
+            this.scrollCounter += this._dist;
 
             // Set the bounds
             this.setStartEndPos();
@@ -39945,8 +39947,8 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     getControlAlignment()
     {
-        let pos = this.scrollCurPos / this.controlHeight;
-        return this.controlHeight * (pos - Math.trunc(pos));
+        this._pos = this.scrollCurPos / this.controlHeight;
+        return this.controlHeight * (this._pos - Math.trunc(this._pos));
     }
 
     // 
@@ -39963,12 +39965,12 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     findSubControlByName( name )
     {
-        let ctrl = super.findSubControlByName( name );
+        this._ctrl = super.findSubControlByName( name );
 
-        for( let i = this.visStartPos; i < this.visEndPos && (ctrl === null); ++i )
-            ctrl = this.scrollControlAry[i].findControlByName( name );
+        for( this._i = this.visStartPos; this._i < this.visEndPos && (this._ctrl === null); ++this._i )
+            this._ctrl = this.scrollControlAry[this._i].findControlByName( name );
 
-        return ctrl;
+        return this._ctrl;
     }
 
     // 
@@ -39976,13 +39978,13 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     findSubControlByRef( control )
     {
-        let ctrl = super.findSubControlByRef( control );
+        this._ctrl = super.findSubControlByRef( control );
 
-        for( let i = this.visStartPos; i < this.visEndPos && (ctrl === null); ++i )
-            if( this.scrollControlAry[i] === control )
-                ctrl = this.scrollControlAry[i];
+        for( this._i = this.visStartPos; this._i < this.visEndPos && (this._ctrl === null); ++this._i )
+            if( this.scrollControlAry[this._i] === control )
+                this._ctrl = this.scrollControlAry[this._i];
 
-        return ctrl;
+        return this._ctrl;
     }
 
     // 
@@ -39990,21 +39992,21 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     onSubControlMouseMove( event )
     {
-        let result = super.onSubControlMouseMove( event );
+        this._result = super.onSubControlMouseMove( event );
 
         // We only care about the scroll controls if the point is within the scroll box
-        if( !result && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
+        if( !this._result && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
         {
-            for( let i = this.visStartPos; i < this.visEndPos && !result; ++i )
+            for( this._i = this.visStartPos; this._i < this.visEndPos && !this._result; ++this._i )
             {
-                result = this.scrollControlAry[i].onMouseMove( event );
+                this._result = this.scrollControlAry[this._i].onMouseMove( event );
 
-                if( result )
-                    this.activeScrollCtrl = i;
+                if( this._result )
+                    this.activeScrollCtrl = this._i;
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -40014,8 +40016,8 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     {
         super.deactivateSubControl();
 
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].deactivateControl();
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].deactivateControl();
     }
 
     // 
@@ -40023,12 +40025,12 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     setStartEndPos()
     {
-        let pos = this.scrollCurPos / this.controlHeight;
+        this._pos = this.scrollCurPos / this.controlHeight;
 
         // Push the ceiling so that the starting index is viewable
-        this.firstScrollCtrlIndex = Math.trunc(pos + 0.7);
+        this.firstScrollCtrlIndex = Math.trunc(this._pos + 0.7);
 
-        this.visStartPos = Math.trunc(pos);
+        this.visStartPos = Math.trunc(this._pos);
         this.visEndPos = this.visStartPos + this.visibleCount + 1;
 
         // Sanity checks
@@ -40044,11 +40046,11 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     repositionScrollControls()
     {
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
         {
-            let pos = this.scrollControlAry[i].pos;
-            let y = this.defaultOffsetAry[i] + this.scrollCurPos;
-            this.scrollControlAry[i].setPosXYZ( pos.x, y, pos.z );
+            this._pos = this.scrollControlAry[this._i].pos;
+            this._y = this.defaultOffsetAry[this._i] + this.scrollCurPos;
+            this.scrollControlAry[this._i].setPosXYZ( this._pos.x, this._y, this._pos.z );
         }
     }
 
@@ -40084,8 +40086,8 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     {
         super.setAlpha( alpha );
 
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].setAlpha( alpha );
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].setAlpha( alpha );
     }
 
     // 
@@ -40093,21 +40095,21 @@ class UIScrollBox extends _uisubcontrol__WEBPACK_IMPORTED_MODULE_0__.UISubContro
     //
     getActiveControl()
     {
-        let result = super.getActiveControl();
+        this._result = super.getActiveControl();
 
-        if( result === null )
+        if( this._result === null )
         {
-            for( let i = 0; i < this.scrollControlAry.length; ++i )
+            for( this._i = 0; this._i < this.scrollControlAry.length; ++this._i )
             {
-                if( this.scrollControlAry[i].state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__.ECS_INACTIVE )
+                if( this.scrollControlAry[this._i].state > _gui_uicontroldefs__WEBPACK_IMPORTED_MODULE_9__.ECS_INACTIVE )
                 {
-                    result = this.scrollControlAry[i].getActiveControl();
+                    this._result = this.scrollControlAry[this._i].getActiveControl();
                     break;
                 }
             }
         }
 
-        return result;
+        return this._result;
     }
 }
 
@@ -40290,10 +40292,10 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
     //
     findFontSprite()
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
         {
-            if( this.spriteAry[i].visualComponent.isFontSprite() )
-                this.fontSprite = this.spriteAry[i];
+            if( this.spriteAry[this._i].visualComponent.isFontSprite() )
+                this.fontSprite = this.spriteAry[this._i];
         }
 
         if( this.fontSprite == null )
@@ -40345,19 +40347,19 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
     //
     setBangRange()
     {
-        let found = false;
+        this._found = false;
 
-        for( let i = 0; i < this.bangRangeAry.length; ++i )
+        for( this._i = 0; this._i < this.bangRangeAry.length; ++this._i )
         {
-            if( (this.targetValue - this.currentValue) <= this.bangRangeAry[i].target )
+            if( (this.targetValue - this.currentValue) <= this.bangRangeAry[this._i].target )
             {
-                found = true;
-                this.initBangRange( this.bangRangeAry[i] );
+                this._found = true;
+                this.initBangRange( this.bangRangeAry[this._i] );
                 break;
             }
         }
 
-        if( !found )
+        if( !this._found )
             this.initBangRange( this.bangRangeAry[this.bangRangeAry.length-1] );
     }
 
@@ -40376,24 +40378,24 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
 
         this.velocity = bangRange.velocity / 1000.0;
 
-        let range = this.targetValue - this.currentValue;
+        this._range = this.targetValue - this.currentValue;
 
         // Ramp up from start to finish
         if( bangRange.bangType === EBT_RAMP_UP )
         {
-            this.impulse = range / (bangRange.estimatedTime * bangRange.estimatedTime * 1000.0);
+            this.impulse = this._range / (bangRange.estimatedTime * bangRange.estimatedTime * 1000.0);
             this.acceleration = this.impulse;
         }
         // Linear bang up from the start
         else if( bangRange.bangType === EBT_LINEAR )
         {
-            this.acceleration = range / (bangRange.estimatedTime * 1000.0);
+            this.acceleration = this._range / (bangRange.estimatedTime * 1000.0);
         }
         // combination of ramp up and linear
         else if( bangRange.bangType === EBT_HYBRID )
         {
-            this.terminalVelocity = range / (bangRange.estimatedTime * 1000.0);
-            this.impulse = range / (bangRange.estimatedTime * bangRange.estimatedTime * 500.0);
+            this.terminalVelocity = this._range / (bangRange.estimatedTime * 1000.0);
+            this.impulse = this._range / (bangRange.estimatedTime * bangRange.estimatedTime * 500.0);
             this.acceleration = this.impulse;
         }
 
@@ -40428,21 +40430,19 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
 
         if( this.bangUp )
         {
-            let elapsedTime = _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
-
             // Ramp up from start to finish
             if( this.bangRange.bangType === EBT_RAMP_UP )
             {
-                this.currentValue += this.velocity * elapsedTime;
+                this.currentValue += this.velocity * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
 
                 if( this.startUpTimer.expired() )
                 {
-                    this.velocity += this.acceleration * elapsedTime;
-                    this.acceleration += this.impulse * elapsedTime;
+                    this.velocity += this.acceleration * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
+                    this.acceleration += this.impulse * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
                 }
                 else
                 {
-                    this.velocity += this.acceleration * elapsedTime;
+                    this.velocity += this.acceleration * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
                 }
             }
             // Linear bang up from the start
@@ -40451,7 +40451,7 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
                 this.currentValue += this.velocity;
 
                 if( this.startUpTimer.expired() )
-                    this.velocity += this.acceleration * elapsedTime;
+                    this.velocity += this.acceleration * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
             }
             // combination of ramp up and linear
             else if( this.bangRange.bangType === EBT_HYBRID )
@@ -40462,17 +40462,17 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
                 {
                     if( this.terminalVelocity > this.acceleration )
                     {
-                        this.velocity += this.acceleration * elapsedTime;
-                        this.acceleration += this.impulse * elapsedTime;
+                        this.velocity += this.acceleration * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
+                        this.acceleration += this.impulse * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
                     }
                     else
                     {
-                        this.velocity += this.acceleration * elapsedTime;
+                        this.velocity += this.acceleration * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
                     }
                 }
                 else
                 {
-                    this.velocity += this.acceleration * elapsedTime;
+                    this.velocity += this.acceleration * _utilities_highresolutiontimer__WEBPACK_IMPORTED_MODULE_1__.highResTimer.elapsedTime;
                 }
             }
 
@@ -40506,37 +40506,37 @@ class UIMeter extends _uicontrol__WEBPACK_IMPORTED_MODULE_3__.UIControl
         this.fontSprite.visualComponent.createFontString( Math.trunc(this.currentValue).toString() );
 
         // Get the font size
-        let size = this.fontSprite.visualComponent.getSize();
+        this._size = this.fontSprite.visualComponent.getSize();
 
         // Check if the font string size is greater then what is allowed
-        if( (size.w > this.maxFontStrSize.w) || (size.h > this.maxFontStrSize.h) )
+        if( (this._size.w > this.maxFontStrSize.w) || (this._size.h > this.maxFontStrSize.h) )
         {
-            let difW = this.maxFontStrSize.w / size.w;
-            let difH = this.maxFontStrSize.h / size.h;
+            this._difW = this.maxFontStrSize.w / this._size.w;
+            this._difH = this.maxFontStrSize.h / this._size.h;
 
             // Is the difference less then the last size change
-            if( (difW < this.bangScaleAdjustment.w) || (difH < this.bangScaleAdjustment.h) )
+            if( (this._difW < this.bangScaleAdjustment.w) || (this._difH < this.bangScaleAdjustment.h) )
             {
-                this.bangScaleAdjustment.set( difW, difH );
+                this.bangScaleAdjustment.set( this._difW, this._difH );
 
-                let scaleX = this.fontSprite.scale.x;
-                let scaleY = this.fontSprite.scale.y;
-                if( difW < difH )
+                this._scaleX = this.fontSprite.scale.x;
+                this._scaleY = this.fontSprite.scale.y;
+                if( this._difW < this._difH )
                 {
-                    scaleX = difW;
+                    this._scaleX = this._difW;
                     
                     if( this.scaleType !== EST_AXIS )
-                        scaleY = difW;
+                        this._scaleY = this._difW;
                 }
                 else
                 {
-                    scaleY = difH;
+                    this._scaleY = this._difH;
                     
                     if( this.scaleType !== EST_AXIS )
-                        scaleX = difH;
+                        this._scaleX = this._difH;
                 }
 
-                this.fontSprite.setScaleXYZ( scaleX, scaleY );
+                this.fontSprite.setScaleXYZ( this._scaleX, this._scaleY );
             }
         }
     }
@@ -40904,48 +40904,48 @@ class UIProgressBar extends _uicontrol__WEBPACK_IMPORTED_MODULE_0__.UIControl
     //
     setSizePos()
     {
-        let scaleX = this.progressBarScale.x;
-        let scaleY = this.progressBarScale.y;
-        let posX = this.progressBarPos.x;
-        let posY = this.progressBarPos.y;
+        this._scaleX = this.progressBarScale.x;
+        this._scaleY = this.progressBarScale.y;
+        this._posX = this.progressBarPos.x;
+        this._posY = this.progressBarPos.y;
 
         // Calculate the new scale for the progress bar
-        let scaler = (this.curValue - this.minValue) / (this.maxValue - this.minValue);
+        this._scaler = (this.curValue - this.minValue) / (this.maxValue - this.minValue);
 
         if( this.orentation == _common_defs__WEBPACK_IMPORTED_MODULE_7__.EO_HORIZONTAL )
         {
-            scaleX = this.progressBarScale.x * scaler;
+            this._scaleX = this.progressBarScale.x * this._scaler;
             
-            let offset = this.progressBarSize.w * scaler;
+            this._offset = this.progressBarSize.w * this._scaler;
 
             if( this.alignment == _common_defs__WEBPACK_IMPORTED_MODULE_7__.EHA_HORZ_LEFT )
-                posX -= (this.progressBarSize.w - offset) / 2;
+                this._posX -= (this.progressBarSize.w - this._offset) / 2;
 
             else if( this.alignment.horz == _common_defs__WEBPACK_IMPORTED_MODULE_7__.EHA_HORZ_RIGHT )
-                posX += (this.progressBarSize.w - offset) / 2;
+                this._posX += (this.progressBarSize.w - this._offset) / 2;
         }
         else
         {
-            scaleY = this.progressBarScale.y * scaler;
+            this._scaleY = this.progressBarScale.y * this._scaler;
             
-            let offset = this.progressBarSize.h * scaler;
+            this._offset = this.progressBarSize.h * this._scaler;
 
             if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_7__.EVA_VERT_TOP )
-                posY += (this.progressBarSize.h - offset) / 2;
+                this._posY += (this.progressBarSize.h - this._offset) / 2;
 
             else if( this.alignment === _common_defs__WEBPACK_IMPORTED_MODULE_7__.EVA_VERT_BOTTOM )
-                posY -= (this.progressBarSize.h - offset) / 2;
+                this._posY -= (this.progressBarSize.h - this._offset) / 2;
         }
 
         if( this.stencilMaskSprite )
         {
-            this.stencilMaskSprite.setScaleXYZ( scaleX, scaleY, 1 );
-            this.stencilMaskSprite.setPosXYZ( posX, posY );
+            this.stencilMaskSprite.setScaleXYZ( this._scaleX, this._scaleY, 1 );
+            this.stencilMaskSprite.setPosXYZ( this._posX, this._posY );
         }
         else
         {
-            this.spriteAry[this.spriteApplyIndex].setScaleXYZ( scaleX, scaleY, 1 );
-            this.spriteAry[this.spriteApplyIndex].setPosXYZ( posX, posY, 0 );
+            this.spriteAry[this.spriteApplyIndex].setScaleXYZ( this._scaleX, this._scaleY, 1 );
+            this.spriteAry[this.spriteApplyIndex].setPosXYZ( this._posX, this._posY, 0 );
         }
     }
 }
@@ -41028,9 +41028,9 @@ class MenuTree
     //
     setDefaultMenu( menuStr )
     {
-        let menu = this.menuMap.get( menuStr );
-        if( menu !== undefined )
-            this.defaultMenu = menu;
+        this._menu = this.menuMap.get( menuStr );
+        if( this._menu !== undefined )
+            this.defaultMenu = this._menu;
         else
             throw new Error( `Menu being set is missing (${menuStr})!` );
     }
@@ -41040,9 +41040,9 @@ class MenuTree
     //
     setRootMenu( menuStr )
     {
-        let menu = this.menuMap.get( menuStr );
-        if( menu !== undefined )
-            this.rootMenu = menu;
+        this._menu = this.menuMap.get( menuStr );
+        if( this._menu !== undefined )
+            this.rootMenu = this._menu;
         else
             throw new Error( `Menu being set is missing (${menuStr})!` );
     }
@@ -41218,8 +41218,8 @@ class MenuTree
     //
     onEscape( event )
     {
-        let nameStr = event.arg[0];
-        if( this.menuPathAry.length || ((nameStr !== null) && (nameStr === this.name)))
+        this._nameStr = event.arg[0];
+        if( this.menuPathAry.length || ((this._nameStr !== null) && (this._nameStr === this.name)))
         {
             this.transitionMenu();
         }
@@ -41230,8 +41230,8 @@ class MenuTree
     //
     onToggle( event )
     {
-        let nameStr = event.arg[0];
-        if( this.menuPathAry.length || ((nameStr !== null) && (nameStr === this.name)))
+        this._nameStr = event.arg[0];
+        if( this.menuPathAry.length || ((this._nameStr !== null) && (this._nameStr === this.name)))
         {
             // Toggle "on" only works when there is no root menu
             if( this.rootMenu === undefined )
@@ -41242,9 +41242,9 @@ class MenuTree
                 // The current menu will then be used for the transitions out
                 if( this.menuPathAry.length > 1 )
                 {
-                    let curMenu = this.menuPathAry[this.menuPathAry.length-1];
-                    this.menuPathAry = [];
-                    this.menuPathAry.push( curMenu );
+                    this._curMenu = this.menuPathAry[this.menuPathAry.length-1];
+                    this.menuPathAry.length = 0;
+                    this.menuPathAry.push( this._curMenu );
                 }
             }
             else
@@ -41256,10 +41256,10 @@ class MenuTree
                 // The current menu will then be used for the transitions out
                 if( this.menuPathAry.length > 2 )
                 {
-                    let curMenu = this.menuPathAry[this.menuPathAry.length-1];
-                    this.menuPathAry = [];
+                    this._curMenu = this.menuPathAry[this.menuPathAry.length-1];
+                    this.menuPathAry.length = 0;
                     this.menuPathAry.push( this.rootMenu );
-                    this.menuPathAry.push( curMenu );
+                    this.menuPathAry.push( this._curMenu );
                 }
             }
         }
@@ -41282,8 +41282,8 @@ class MenuTree
     //
     onToTree( event )
     {
-        let nameStr = event.arg[0];
-        if( (nameStr !== null) && (nameStr === this.name) )
+        this._nameStr = event.arg[0];
+        if( (nameStr !== null) && (this._nameStr === this.name) )
         {
             // Only works when there is no root menu
             if( this.rootMenu === undefined )
@@ -41332,10 +41332,10 @@ class MenuTree
             else if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] !== this.rootMenu) )
             {
                 // Pop it off the array because this menu is done
-                let menu = this.menuPathAry.pop();
+                this._menu = this.menuPathAry.pop();
                 
                 // Do a full reset on all the controls
-                menu.reset();
+                this._menu.reset();
 
                 if( this.menuPathAry.length )
                     _managers_eventmanager__WEBPACK_IMPORTED_MODULE_0__.eventManager.dispatchEvent( _gui_menudefs__WEBPACK_IMPORTED_MODULE_2__.EME_MENU_TRANS_IN, _gui_menudefs__WEBPACK_IMPORTED_MODULE_2__.ETC_BEGIN );

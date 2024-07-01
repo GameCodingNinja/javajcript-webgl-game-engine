@@ -20,19 +20,19 @@ export class Quad
     //
     isPointInQuad( x, y )
     {
-        let result = false;
+        this._result = false;
         
         //console.log( `isPointInQuad - X: ${x}, Y: ${y}` );
         
-        for( let i = 0, j = 3; i < 4; j = i++ )
+        for( this._i = 0, this._j = 3; this._i < 4; this._j = this._i++ )
         {
-            if( ((this.point[i].y > y) != (this.point[j].y > y)) && 
-                (x < (this.point[j].x - this.point[i].x) * (y - this.point[i].y) / (this.point[j].y - this.point[i].y) + this.point[i].x) )
+            if( ((this.point[this._i].y > y) != (this.point[this._j].y > y)) && 
+                (x < (this.point[this._j].x - this.point[this._i].x) * (y - this.point[this._i].y) / (this.point[this._j].y - this.point[this._i].y) + this.point[this._i].x) )
             {
-                result = !result;
+                this._result = !this._result;
             }
         }
 
-        return result;
+        return this._result;
     }
 }

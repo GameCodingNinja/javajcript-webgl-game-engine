@@ -379,18 +379,18 @@ class EnemyShip_Hit
         // Remove the AI script since the enemy is to die
         this.sprite.scriptComponent.remove( 'AI_Enemy' );
 
-        let dist = this.sprite.pos.getDistance( projectileSprite.pos );
+        this._dist = this.sprite.pos.getDistance( projectileSprite.pos );
 
-        let dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
-        let offsetY = Math.abs(this.sprite.pos.y - dest);
-        this.easingY.init( this.sprite.pos.y, dest, offsetY / 250, easing.getSineIn() );
+        this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
+        this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
+        this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn() );
 
-        if( (dist.x > 0 && dist.y > 0) || (dist.x < 0 && dist.y < 0) )
+        if( (this._dist.x > 0 && this._dist.y > 0) || (this._dist.x < 0 && this._dist.y < 0) )
         {
             this.rotate = -0.04;
             this.rotateVelocity = -0.00004;
         }
-        else if( (dist.x < 0 && dist.y > 0) || (dist.x > 0 && dist.y < 0) )
+        else if( (this._dist.x < 0 && this._dist.y > 0) || (this._dist.x > 0 && this._dist.y < 0) )
         {
             this.rotate = 0.04;
             this.rotateVelocity = 0.00004;

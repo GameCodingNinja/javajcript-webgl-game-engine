@@ -58,11 +58,11 @@ export class ScrollParam
         {
             this.msg = -1;
 
-            let result = this.scrollTypesMap.get( msg );
+            this._result = this.scrollTypesMap.get( msg );
 
-            if( result )
+            if( this._result )
             {
-                this.msg = result;
+                this.msg = this._result;
                 return true;
             }
         }

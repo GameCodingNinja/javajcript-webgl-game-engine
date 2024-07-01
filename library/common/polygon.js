@@ -25,7 +25,7 @@ export class Polygon
         if( this.pointAry.length )
             this.pointAry = [];
 
-        for( let i = 0; i < obj.pointAry.length; ++i )
-            this.pointAry.push( new Point( obj.pointAry[i] ) );
+        for( this._i = 0; this._i < obj.pointAry.length; ++this._i )
+            this.pointAry.push( new Point( obj.pointAry[this._i] ) );
     }
 }

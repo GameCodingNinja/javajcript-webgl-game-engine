@@ -113,11 +113,11 @@ class FontManager
     //
     loadFont( name, xmlNode )
     {
-        let font = this.fontMap.get( name );
-        if( font === undefined )
+        this._font = this.fontMap.get( name );
+        if( this._font === undefined )
             throw new Error( `Font name has not been added to the map (${name}).` );
         
-        font.loadFromNode( this.group, name, xmlNode );
+        this._font.loadFromNode( this.group, name, xmlNode );
     }
 
     //
@@ -134,11 +134,11 @@ class FontManager
     //
     getFont( name )
     {
-        let font = this.fontMap.get( name );
-        if( font === undefined )
+        this._font = this.fontMap.get( name );
+        if( this._font === undefined )
             throw new Error( `Font name can't be found (${name}).` );
 
-        return font;
+        return this._font;
     }
     
     //
@@ -146,8 +146,8 @@ class FontManager
     //
     isFont( name )
     {
-        let font = this.fontMap.get( name );
-        if( font === undefined )
+        this._font = this.fontMap.get( name );
+        if( this._font === undefined )
             throw new Error( `Font name can't be found (${name}).` );
     }
 }

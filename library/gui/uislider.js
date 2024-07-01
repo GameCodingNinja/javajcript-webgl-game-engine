@@ -236,20 +236,20 @@ export class UISlider extends UISubControl
     //
     onMouseMove( event )
     {
-        let result = super.onMouseMove( event );
+        this._result = super.onMouseMove( event );
 
         if( this.isActive() && (this.pressType === defs.EAP_DOWN) )
         {
-            let oneOverAspectRatio = 1.0 / settings.orthoAspectRatio.h;
+            this._oneOverAspectRatio = 1.0 / settings.orthoAspectRatio.h;
 
             // (1.0 / this.matrix.matrix[]) handles the scaling of the control
             if( this.orientation === defs.EO_HORIZONTAL )
-                this.incSliderMovePos( event.movementX * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[0]) );
+                this.incSliderMovePos( event.movementX * this._oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[0]) );
             else
-                this.incSliderMovePos( event.movementY * oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[5]) );
+                this.incSliderMovePos( event.movementY * this._oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[5]) );
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -257,11 +257,11 @@ export class UISlider extends UISubControl
     //
     handleSelectAction( event )
     {
-        let result = this.isActive() &&
+        this._result = this.isActive() &&
                      (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
                      this.isPointInControl( event.arg[defs.ESMA_MOUSE_X], event.arg[defs.ESMA_MOUSE_Y] );
              
-        if( result && (event.arg[defs.ESMA_PRESS_TYPE] === this.mouseSelectType) )
+        if( this._result && (event.arg[defs.ESMA_PRESS_TYPE] === this.mouseSelectType) )
         {
             // Get the press type to know if we need to move the slider 
             // along with the mouse move
@@ -271,13 +271,13 @@ export class UISlider extends UISubControl
             {
                 this.prepareControlScript( uiControlDefs.ECS_SELECT );
 
-                let ratio = 1.0 / settings.orthoAspectRatio.h;
+                this._ratio = 1.0 / settings.orthoAspectRatio.h;
 
                 // (1.0 / this.matrix.matrix[]) handles the scaling of the control
                 if( this.orientation === defs.EO_HORIZONTAL )
-                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * ratio * (1.0 / this.matrix.matrix[0]) );
+                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * this._ratio * (1.0 / this.matrix.matrix[0]) );
                 else
-                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * ratio * (1.0 / this.matrix.matrix[5]) );
+                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * this._ratio * (1.0 / this.matrix.matrix[5]) );
             }
         }
         else if( event.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType )
@@ -288,7 +288,7 @@ export class UISlider extends UISubControl
             this.pressType = defs.EAP_IDLE;
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -369,14 +369,14 @@ export class UISlider extends UISubControl
         if( this.stringAry.length )
         {
             // Format for display
-            let valueStr;
+            this._valueStr;
 
             if( this.displayValueAsInt )
-                valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, Math.trunc(this.curValue));
+                this._valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, Math.trunc(this.curValue));
             else
-                valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this.curValue.toFixed(this.displayValueDecimalPlaces));
+            this._valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this.curValue.toFixed(this.displayValueDecimalPlaces));
 
-            this.createFontString( valueStr );
+            this.createFontString( this._valueStr );
         }
     }
 
@@ -400,14 +400,14 @@ export class UISlider extends UISubControl
     {
         if( Math.abs(this.maxValue) > 0.001 )
         {
-            let startPos = -(this.travelDistPixels / 2);
-            let pixelsPerValue = this.travelDistPixels / (this.maxValue - this.minValue);
-            let pos = startPos + (pixelsPerValue * (this.curValue - this.minValue));
+            this._startPos = -(this.travelDistPixels / 2);
+            this._pixelsPerValue = this.travelDistPixels / (this.maxValue - this.minValue);
+            this._pos = this._startPos + (this._pixelsPerValue * (this.curValue - this.minValue));
 
             if( this.orientation === defs.EO_HORIZONTAL )
-                this.subControlAry[0].setPosXYZ( this.defaultPos.x + pos, this.defaultPos.y );
+                this.subControlAry[0].setPosXYZ( this.defaultPos.x + this._pos, this.defaultPos.y );
             else
-                this.subControlAry[0].setPosXYZ( this.defaultPos.x, this.defaultPos.y + -pos );
+                this.subControlAry[0].setPosXYZ( this.defaultPos.x, this.defaultPos.y + -this._pos );
         }
     }
 

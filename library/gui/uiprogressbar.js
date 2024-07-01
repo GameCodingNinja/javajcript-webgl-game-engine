@@ -316,48 +316,48 @@ export class UIProgressBar extends UIControl
     //
     setSizePos()
     {
-        let scaleX = this.progressBarScale.x;
-        let scaleY = this.progressBarScale.y;
-        let posX = this.progressBarPos.x;
-        let posY = this.progressBarPos.y;
+        this._scaleX = this.progressBarScale.x;
+        this._scaleY = this.progressBarScale.y;
+        this._posX = this.progressBarPos.x;
+        this._posY = this.progressBarPos.y;
 
         // Calculate the new scale for the progress bar
-        let scaler = (this.curValue - this.minValue) / (this.maxValue - this.minValue);
+        this._scaler = (this.curValue - this.minValue) / (this.maxValue - this.minValue);
 
         if( this.orentation == defs.EO_HORIZONTAL )
         {
-            scaleX = this.progressBarScale.x * scaler;
+            this._scaleX = this.progressBarScale.x * this._scaler;
             
-            let offset = this.progressBarSize.w * scaler;
+            this._offset = this.progressBarSize.w * this._scaler;
 
             if( this.alignment == defs.EHA_HORZ_LEFT )
-                posX -= (this.progressBarSize.w - offset) / 2;
+                this._posX -= (this.progressBarSize.w - this._offset) / 2;
 
             else if( this.alignment.horz == defs.EHA_HORZ_RIGHT )
-                posX += (this.progressBarSize.w - offset) / 2;
+                this._posX += (this.progressBarSize.w - this._offset) / 2;
         }
         else
         {
-            scaleY = this.progressBarScale.y * scaler;
+            this._scaleY = this.progressBarScale.y * this._scaler;
             
-            let offset = this.progressBarSize.h * scaler;
+            this._offset = this.progressBarSize.h * this._scaler;
 
             if( this.alignment === defs.EVA_VERT_TOP )
-                posY += (this.progressBarSize.h - offset) / 2;
+                this._posY += (this.progressBarSize.h - this._offset) / 2;
 
             else if( this.alignment === defs.EVA_VERT_BOTTOM )
-                posY -= (this.progressBarSize.h - offset) / 2;
+                this._posY -= (this.progressBarSize.h - this._offset) / 2;
         }
 
         if( this.stencilMaskSprite )
         {
-            this.stencilMaskSprite.setScaleXYZ( scaleX, scaleY, 1 );
-            this.stencilMaskSprite.setPosXYZ( posX, posY );
+            this.stencilMaskSprite.setScaleXYZ( this._scaleX, this._scaleY, 1 );
+            this.stencilMaskSprite.setPosXYZ( this._posX, this._posY );
         }
         else
         {
-            this.spriteAry[this.spriteApplyIndex].setScaleXYZ( scaleX, scaleY, 1 );
-            this.spriteAry[this.spriteApplyIndex].setPosXYZ( posX, posY, 0 );
+            this.spriteAry[this.spriteApplyIndex].setScaleXYZ( this._scaleX, this._scaleY, 1 );
+            this.spriteAry[this.spriteApplyIndex].setPosXYZ( this._posX, this._posY, 0 );
         }
     }
 }

@@ -226,8 +226,8 @@ export class UIScrollBox extends UISubControl
     {
         super.handleEvent( event );
 
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].handleEvent( event );
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].handleEvent( event );
     }
 
     // 
@@ -296,7 +296,7 @@ export class UIScrollBox extends UISubControl
     //
     onMouseMove( event )
     {
-        let result = super.onMouseMove( event );
+        this._result = super.onMouseMove( event );
 
         // Invalidate the active control
         this.activeScrollCtrl = defs.NO_ACTIVE_CONTROL;
@@ -313,7 +313,7 @@ export class UIScrollBox extends UISubControl
             this.repositionScrollControls();
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -321,17 +321,17 @@ export class UIScrollBox extends UISubControl
     //
     onWheel( event )
     {
-        let scrollCurPos = this.scrollCurPos + (event.deltaY * 0.5);
+        this._scrollCurPos = this.scrollCurPos + (event.deltaY * 0.5);
 
         // Handle bounds checking
-        if( scrollCurPos < 0 )
-            scrollCurPos = 0;
+        if( this._scrollCurPos < 0 )
+            this._scrollCurPos = 0;
 
-        else if( scrollCurPos > this.maxMoveAmount )
-            scrollCurPos = this.maxMoveAmount;
+        else if( this._scrollCurPos > this.maxMoveAmount )
+            this._scrollCurPos = this.maxMoveAmount;
         
         // Set the current scroll position
-        this.scrollCurPos = scrollCurPos;
+        this.scrollCurPos = this._scrollCurPos;
 
         // Move the slider
         this.subControlAry[0].setSlider(this.scrollCurPos);
@@ -430,11 +430,11 @@ export class UIScrollBox extends UISubControl
     {
         if( super.baseActivateFirstInactiveControl() )
         {
-            for( let i = 0; i < this.scrollControlAry.length; ++i )
+            for( this._i = 0; this._i < this.scrollControlAry.length; ++this._i )
             {
-                if( this.scrollControlAry[i].activateFirstInactiveControl() )
+                if( this.scrollControlAry[this._i].activateFirstInactiveControl() )
                 {
-                    this.activeScrollCtrl = i;
+                    this.activeScrollCtrl = this._i;
                     break;
                 }
             }
@@ -448,23 +448,23 @@ export class UIScrollBox extends UISubControl
     //
     handleSelectAction( event )
     {
-        let result = super.handleSelectAction( event );
+        this._result = super.handleSelectAction( event );
 
         // Let the scroll controls handle any selection
-        for( let i = 0; i < this.scrollControlAry.length && !result; ++i )
+        for( this._i = 0; this._i < this.scrollControlAry.length && !this._result; ++this._i )
         {
-            result = this.scrollControlAry[i].handleSelectAction( event );
-            if( result )
+            this._result = this.scrollControlAry[this._i].handleSelectAction( event );
+            if( this._result )
             {
                 // Set the active scroll control to the one the mouse clicked
                 if( event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE )
-                    this.activeScrollCtrl = i;
+                    this.activeScrollCtrl = this._i;
                     
                 break;
             }
         }
 
-        if( result && (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
+        if( this._result && (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
             (event.arg[defs.ESMA_PRESS_TYPE] === defs.EAP_DOWN) )
         {
             // Get the current scroll position
@@ -477,7 +477,7 @@ export class UIScrollBox extends UISubControl
             this.repositionScrollControls();
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -490,28 +490,28 @@ export class UIScrollBox extends UISubControl
             // If there's no controls to select or reposition, do the scroll
             if( !this.selectAndRepositionCtrl( scrollVector ) )
             {
-                const SCROLL_DOWN = (scrollVector > 0);
-                const SCROLL_UP = (scrollVector < 0);
+                this._SCROLL_DOWN = (scrollVector > 0);
+                this._SCROLL_UP = (scrollVector < 0);
 
                 // Make sure we have some place to page to
-                if( (SCROLL_UP && (this.firstScrollCtrlIndex > 0)) ||
-                    (SCROLL_DOWN && (this.firstScrollCtrlIndex + this.visibleCount < this.scrollControlAry.length)) )
+                if( (this._SCROLL_UP && (this.firstScrollCtrlIndex > 0)) ||
+                    (this._SCROLL_DOWN && (this.firstScrollCtrlIndex + this.visibleCount < this.scrollControlAry.length)) )
                 {
-                    let visibleCount = this.visibleCount;
+                    this._visibleCount = this.visibleCount;
 
                     // Cap the scroll amount to what is capable
-                    if( SCROLL_UP && (visibleCount > this.firstScrollCtrlIndex) )
+                    if( this._SCROLL_UP && (this._visibleCount > this.firstScrollCtrlIndex) )
                     {
-                        visibleCount = this.firstScrollCtrlIndex;
+                        this._visibleCount = this.firstScrollCtrlIndex;
                     }
-                    else if( SCROLL_DOWN &&
-                           ((visibleCount + this.firstScrollCtrlIndex + this.visibleCount - 1) >= this.scrollControlAry.length) )
+                    else if( this._SCROLL_DOWN &&
+                           ((this._visibleCount + this.firstScrollCtrlIndex + this.visibleCount - 1) >= this.scrollControlAry.length) )
                     {
-                        visibleCount = this.scrollControlAry.length - this.firstScrollCtrlIndex - this.visibleCount;
+                        this._visibleCount = this.scrollControlAry.length - this.firstScrollCtrlIndex - this.visibleCount;
                     }
 
                     // Init the scroll
-                    this.initScrolling( scrollVector, this.controlHeight * visibleCount, true, true );
+                    this.initScrolling( scrollVector, this.controlHeight * this._visibleCount, true, true );
 
                     // Deactivate the last control if the scrolling has been activated
                     if( this.scrollVector )
@@ -524,7 +524,7 @@ export class UIScrollBox extends UISubControl
                 {
                     this.activeScrollCtrl = this.firstScrollCtrlIndex;
 
-                    if( SCROLL_DOWN )
+                    if( this._SCROLL_DOWN )
                         this.activeScrollCtrl += this.visibleCount - 1;
 
                     // If the first control can't be selected, then find one that can
@@ -544,11 +544,11 @@ export class UIScrollBox extends UISubControl
         if( !this.selectAndRepositionCtrl( scrollVector ) )
         {
             // Try to select the next control
-            let scrollResult = this.selectNextControl( scrollVector );
+            this._scrollResult = this.selectNextControl( scrollVector );
 
             // Scroll the contents of the scroll box if we need to activate a control
             // that's outside of the viewable area of the scroll box.
-            if( !(scrollResult & IN_VIEWABLE_AREA) )
+            if( !(this._scrollResult & IN_VIEWABLE_AREA) )
             {
                 this.initScrolling( scrollVector, this.controlHeight );
             }
@@ -564,11 +564,11 @@ export class UIScrollBox extends UISubControl
         this.setActiveCtrlToViewableArea( scrollVector );
 
         // Scroll to the next control in the viewable area
-        let scrollResult = this.scrollToTheNextCtrlInViewableArea( scrollVector );
+        this._scrollResult = this.scrollToTheNextCtrlInViewableArea( scrollVector );
 
         // If we are still in the viewable area but have no active control,
         // try to activate the current control
-        if( (scrollResult & IN_VIEWABLE_AREA) && !(scrollResult & NEW_ACTIVE_CTRL) )
+        if( (this._scrollResult & IN_VIEWABLE_AREA) && !(this._scrollResult & NEW_ACTIVE_CTRL) )
         {
             eventManager.dispatchEvent(
                 menuDefs.EME_MENU_CONTROL_STATE_CHANGE,
@@ -576,7 +576,7 @@ export class UIScrollBox extends UISubControl
                 this.scrollControlAry[this.activeScrollCtrl] );
         }
 
-        return scrollResult;
+        return this._scrollResult;
     }
 
     // 
@@ -593,17 +593,17 @@ export class UIScrollBox extends UISubControl
                 this.selectNextControl( 1 );
 
             // Get the alignment to see if it needs to be adjusted
-            let diff = this.getControlAlignment();
-            if( diff > 0.1 )
+            this._diff = this.getControlAlignment();
+            if( this._diff > 0.1 )
             {
-                let pos = this.scrollCurPos / this.controlHeight;
+                this._pos = this.scrollCurPos / this.controlHeight;
 
-                let nextCtrl = (this.activeScrollCtrl - this.firstScrollCtrlIndex) * this.controlHeight;
+                this._nextCtrl = (this.activeScrollCtrl - this.firstScrollCtrlIndex) * this.controlHeight;
 
-                if( nextCtrl || (this.firstScrollCtrlIndex > pos) )
-                    this.initScrolling( 1, this.controlHeight - diff, false );
+                if( this._nextCtrl || (this.firstScrollCtrlIndex > this._pos) )
+                    this.initScrolling( 1, this.controlHeight - this._diff, false );
                 else
-                    this.initScrolling( -1, diff, false );
+                    this.initScrolling( -1, this._diff, false );
             }
 
             return true;
@@ -661,11 +661,11 @@ export class UIScrollBox extends UISubControl
     //
     scrollToTheNextCtrlInViewableArea( scrollVector )
     {
-        let newActiveCtrl = 0;
-        let inView = this.inView( this.activeScrollCtrl, scrollVector );
+        this._newActiveCtrl = 0;
+        this._inView = this.inView( this.activeScrollCtrl, scrollVector );
 
         // Only scroll within the viewable area
-        if( inView )
+        if( this._inView )
         {
             // Set a temp variable to the active scroll control
             let tmpScrollCtrl = this.activeScrollCtrl;
@@ -677,20 +677,18 @@ export class UIScrollBox extends UISubControl
 
                 if( this.activateScrollCtrl( tmpScrollCtrl ) )
                 {
-                    newActiveCtrl = NEW_ACTIVE_CTRL;
+                    this._newActiveCtrl = NEW_ACTIVE_CTRL;
 
                     this.activeScrollCtrl = tmpScrollCtrl;
                     break;
                 }
 
-                inView = this.inView( tmpScrollCtrl, scrollVector );
+                this._inView = this.inView( tmpScrollCtrl, scrollVector );
             }
-            while( inView );
+            while( this._inView );
         }
 
-        let result = inView | newActiveCtrl;
-
-        return result;
+        return this._inView | this._newActiveCtrl;
     }
 
     // 
@@ -720,11 +718,11 @@ export class UIScrollBox extends UISubControl
     {
         if( this.scrollVector === 0 )
         {
-            const SCROLL_DOWN = (scrollVector > 0);
-            const SCROLL_UP = (scrollVector < 0);
+            this._SCROLL_DOWN = (scrollVector > 0);
+            this._SCROLL_UP = (scrollVector < 0);
 
-            if( ((SCROLL_UP && (this.scrollCurPos > 0)) ||
-                (SCROLL_DOWN && (this.scrollCurPos < this.maxMoveAmount))) )
+            if( ((this._SCROLL_UP && (this.scrollCurPos > 0)) ||
+                (this._SCROLL_DOWN && (this.scrollCurPos < this.maxMoveAmount))) )
             {
                 this.scrollVector = scrollVector;
                 this.scrollCounter = 0;
@@ -744,19 +742,19 @@ export class UIScrollBox extends UISubControl
     {
         if( this.scrollVector )
         {
-            let dist = highResTimer.elapsedTime * this.scrollSpeed;
+            this._dist = highResTimer.elapsedTime * this.scrollSpeed;
 
             if( this.paging )
-                dist = highResTimer.elapsedTime * this.pageSpeed;
+                this._dist = highResTimer.elapsedTime * this.pageSpeed;
 
             if( this.scrollVector > 0 )
-                this.scrollCurPos += dist;
+                this.scrollCurPos += this._dist;
             else
-                this.scrollCurPos -= dist;
+                this.scrollCurPos -= this._dist;
 
             this.subControlAry[0].setSlider(this.scrollCurPos);
 
-            this.scrollCounter += dist;
+            this.scrollCounter += this._dist;
 
             // Set the bounds
             this.setStartEndPos();
@@ -800,8 +798,8 @@ export class UIScrollBox extends UISubControl
     //
     getControlAlignment()
     {
-        let pos = this.scrollCurPos / this.controlHeight;
-        return this.controlHeight * (pos - Math.trunc(pos));
+        this._pos = this.scrollCurPos / this.controlHeight;
+        return this.controlHeight * (this._pos - Math.trunc(this._pos));
     }
 
     // 
@@ -818,12 +816,12 @@ export class UIScrollBox extends UISubControl
     //
     findSubControlByName( name )
     {
-        let ctrl = super.findSubControlByName( name );
+        this._ctrl = super.findSubControlByName( name );
 
-        for( let i = this.visStartPos; i < this.visEndPos && (ctrl === null); ++i )
-            ctrl = this.scrollControlAry[i].findControlByName( name );
+        for( this._i = this.visStartPos; this._i < this.visEndPos && (this._ctrl === null); ++this._i )
+            this._ctrl = this.scrollControlAry[this._i].findControlByName( name );
 
-        return ctrl;
+        return this._ctrl;
     }
 
     // 
@@ -831,13 +829,13 @@ export class UIScrollBox extends UISubControl
     //
     findSubControlByRef( control )
     {
-        let ctrl = super.findSubControlByRef( control );
+        this._ctrl = super.findSubControlByRef( control );
 
-        for( let i = this.visStartPos; i < this.visEndPos && (ctrl === null); ++i )
-            if( this.scrollControlAry[i] === control )
-                ctrl = this.scrollControlAry[i];
+        for( this._i = this.visStartPos; this._i < this.visEndPos && (this._ctrl === null); ++this._i )
+            if( this.scrollControlAry[this._i] === control )
+                this._ctrl = this.scrollControlAry[this._i];
 
-        return ctrl;
+        return this._ctrl;
     }
 
     // 
@@ -845,21 +843,21 @@ export class UIScrollBox extends UISubControl
     //
     onSubControlMouseMove( event )
     {
-        let result = super.onSubControlMouseMove( event );
+        this._result = super.onSubControlMouseMove( event );
 
         // We only care about the scroll controls if the point is within the scroll box
-        if( !result && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
+        if( !this._result && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
         {
-            for( let i = this.visStartPos; i < this.visEndPos && !result; ++i )
+            for( this._i = this.visStartPos; this._i < this.visEndPos && !this._result; ++this._i )
             {
-                result = this.scrollControlAry[i].onMouseMove( event );
+                this._result = this.scrollControlAry[this._i].onMouseMove( event );
 
-                if( result )
-                    this.activeScrollCtrl = i;
+                if( this._result )
+                    this.activeScrollCtrl = this._i;
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -869,8 +867,8 @@ export class UIScrollBox extends UISubControl
     {
         super.deactivateSubControl();
 
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].deactivateControl();
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].deactivateControl();
     }
 
     // 
@@ -878,12 +876,12 @@ export class UIScrollBox extends UISubControl
     //
     setStartEndPos()
     {
-        let pos = this.scrollCurPos / this.controlHeight;
+        this._pos = this.scrollCurPos / this.controlHeight;
 
         // Push the ceiling so that the starting index is viewable
-        this.firstScrollCtrlIndex = Math.trunc(pos + 0.7);
+        this.firstScrollCtrlIndex = Math.trunc(this._pos + 0.7);
 
-        this.visStartPos = Math.trunc(pos);
+        this.visStartPos = Math.trunc(this._pos);
         this.visEndPos = this.visStartPos + this.visibleCount + 1;
 
         // Sanity checks
@@ -899,11 +897,11 @@ export class UIScrollBox extends UISubControl
     //
     repositionScrollControls()
     {
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
         {
-            let pos = this.scrollControlAry[i].pos;
-            let y = this.defaultOffsetAry[i] + this.scrollCurPos;
-            this.scrollControlAry[i].setPosXYZ( pos.x, y, pos.z );
+            this._pos = this.scrollControlAry[this._i].pos;
+            this._y = this.defaultOffsetAry[this._i] + this.scrollCurPos;
+            this.scrollControlAry[this._i].setPosXYZ( this._pos.x, this._y, this._pos.z );
         }
     }
 
@@ -939,8 +937,8 @@ export class UIScrollBox extends UISubControl
     {
         super.setAlpha( alpha );
 
-        for( let i = this.visStartPos; i < this.visEndPos; ++i )
-            this.scrollControlAry[i].setAlpha( alpha );
+        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+            this.scrollControlAry[this._i].setAlpha( alpha );
     }
 
     // 
@@ -948,20 +946,20 @@ export class UIScrollBox extends UISubControl
     //
     getActiveControl()
     {
-        let result = super.getActiveControl();
+        this._result = super.getActiveControl();
 
-        if( result === null )
+        if( this._result === null )
         {
-            for( let i = 0; i < this.scrollControlAry.length; ++i )
+            for( this._i = 0; this._i < this.scrollControlAry.length; ++this._i )
             {
-                if( this.scrollControlAry[i].state > uiControlDefs.ECS_INACTIVE )
+                if( this.scrollControlAry[this._i].state > uiControlDefs.ECS_INACTIVE )
                 {
-                    result = this.scrollControlAry[i].getActiveControl();
+                    this._result = this.scrollControlAry[this._i].getActiveControl();
                     break;
                 }
             }
         }
 
-        return result;
+        return this._result;
     }
 }

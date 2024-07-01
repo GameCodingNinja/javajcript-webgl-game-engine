@@ -192,11 +192,11 @@ export class Camera extends Object
     //
     transform()
     {
-        let wasTransformed = this.parameters.isSet( defs.TRANSFORM );
+        this._wasTransformed = this.parameters.isSet( defs.TRANSFORM );
     
         super.transform();
 
-        if( wasTransformed )
+        if( this._wasTransformed )
             this.calcFinalMatrix();
     }
     

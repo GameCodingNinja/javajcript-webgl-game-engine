@@ -27,9 +27,9 @@ export class ShaderData
     //
     getLocation( id )
     {
-        let loc = this.locationMap.get( id );
-        if( loc !== undefined )
-            return loc;
+        this._loc = this.locationMap.get( id );
+        if( this._loc !== undefined )
+            return this._loc;
         else
             throw new Error( 'ERROR Shader variable location does not exist! (' + id + ').' );
     }

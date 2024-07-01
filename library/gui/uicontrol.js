@@ -185,8 +185,8 @@ export class UIControl extends ControlBase
     //
     setVisible( visible )
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].setVisible( visible );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].setVisible( visible );
     }
 
     // 
@@ -196,8 +196,8 @@ export class UIControl extends ControlBase
     {
         this.scriptComponent.update();
 
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].update();
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].update();
     }
 
     // 
@@ -210,8 +210,8 @@ export class UIControl extends ControlBase
         else
             super.transform();
 
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].transform( this );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].transform( this );
 
         // Transform the collision
         this.transformCollision();
@@ -270,8 +270,8 @@ export class UIControl extends ControlBase
     //
     render( camera )
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].render( camera );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].render( camera );
     }
 
     // 
@@ -437,11 +437,11 @@ export class UIControl extends ControlBase
     //
     onMouseMove( event )
     {
-        let result = false;
+        this._result = false;
 
         if( !this.isDisabled() && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
         {
-            result = true;
+            this._result = true;
 
             // Only send the message if it's not already active
             if( !this.isActive() )
@@ -453,7 +453,7 @@ export class UIControl extends ControlBase
             }
         }
 
-        return result;
+        return this._result;
     }
 
     // 
@@ -558,10 +558,10 @@ export class UIControl extends ControlBase
     {
         // Create any font strings
         // This allows for delayed VBO create so that the fonts can be allocated during a load screen
-        for( let i = 0; i < this.spriteAry.length; ++i )
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
         {
-            this.spriteAry[i].init();
-            this.spriteAry[i].prepareScriptOnInit();
+            this.spriteAry[this._i].init();
+            this.spriteAry[this._i].prepareScriptOnInit();
         }
 
         // Prepare any script functions that are flagged to prepareOnInit
@@ -575,8 +575,8 @@ export class UIControl extends ControlBase
     {
         // Free the font VBO
         // This allows for early VBO delete so that the menu manager can be freed from a thread
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].cleanUp();
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].cleanUp();
     }
 
     // 
@@ -613,8 +613,8 @@ export class UIControl extends ControlBase
     //
     prepareSpriteScript( scriptId )
     {    
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].scriptComponent.prepare( scriptId, this.spriteAry[i] );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].scriptComponent.prepare( scriptId, this.spriteAry[this._i] );
     }
 
     // 
@@ -686,8 +686,8 @@ export class UIControl extends ControlBase
     //
     resetSpriteScript()
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].scriptComponent.recycleActiveScripts();
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].scriptComponent.recycleActiveScripts();
     }
 
     // 
@@ -941,8 +941,8 @@ export class UIControl extends ControlBase
     //
     setAlpha( alpha )
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].setAlpha( alpha );
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].setAlpha( alpha );
     }
     
     // 

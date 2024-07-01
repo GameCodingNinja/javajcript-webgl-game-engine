@@ -47,10 +47,10 @@ class HighResTimer
     calcElapsedTime()
     {
         // Get the current performance time
-        let time = performance.now();
+        this._time = performance.now();
 
         // Set the elapsed time
-        this.elapsedTime = time - this.lastTime;
+        this.elapsedTime = this._time - this.lastTime;
 
         // Set the fps
         this.fps = 1000.0 / this.elapsedTime;
@@ -62,7 +62,7 @@ class HighResTimer
             this.elapsedTime = 100.0;
 
         // Reset the last time
-        this.lastTime = time;
+        this.lastTime = this._time;
     }
 }
 

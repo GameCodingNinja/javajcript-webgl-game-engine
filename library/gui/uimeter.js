@@ -156,10 +156,10 @@ export class UIMeter extends UIControl
     //
     findFontSprite()
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
         {
-            if( this.spriteAry[i].visualComponent.isFontSprite() )
-                this.fontSprite = this.spriteAry[i];
+            if( this.spriteAry[this._i].visualComponent.isFontSprite() )
+                this.fontSprite = this.spriteAry[this._i];
         }
 
         if( this.fontSprite == null )
@@ -211,19 +211,19 @@ export class UIMeter extends UIControl
     //
     setBangRange()
     {
-        let found = false;
+        this._found = false;
 
-        for( let i = 0; i < this.bangRangeAry.length; ++i )
+        for( this._i = 0; this._i < this.bangRangeAry.length; ++this._i )
         {
-            if( (this.targetValue - this.currentValue) <= this.bangRangeAry[i].target )
+            if( (this.targetValue - this.currentValue) <= this.bangRangeAry[this._i].target )
             {
-                found = true;
-                this.initBangRange( this.bangRangeAry[i] );
+                this._found = true;
+                this.initBangRange( this.bangRangeAry[this._i] );
                 break;
             }
         }
 
-        if( !found )
+        if( !this._found )
             this.initBangRange( this.bangRangeAry[this.bangRangeAry.length-1] );
     }
 
@@ -242,24 +242,24 @@ export class UIMeter extends UIControl
 
         this.velocity = bangRange.velocity / 1000.0;
 
-        let range = this.targetValue - this.currentValue;
+        this._range = this.targetValue - this.currentValue;
 
         // Ramp up from start to finish
         if( bangRange.bangType === EBT_RAMP_UP )
         {
-            this.impulse = range / (bangRange.estimatedTime * bangRange.estimatedTime * 1000.0);
+            this.impulse = this._range / (bangRange.estimatedTime * bangRange.estimatedTime * 1000.0);
             this.acceleration = this.impulse;
         }
         // Linear bang up from the start
         else if( bangRange.bangType === EBT_LINEAR )
         {
-            this.acceleration = range / (bangRange.estimatedTime * 1000.0);
+            this.acceleration = this._range / (bangRange.estimatedTime * 1000.0);
         }
         // combination of ramp up and linear
         else if( bangRange.bangType === EBT_HYBRID )
         {
-            this.terminalVelocity = range / (bangRange.estimatedTime * 1000.0);
-            this.impulse = range / (bangRange.estimatedTime * bangRange.estimatedTime * 500.0);
+            this.terminalVelocity = this._range / (bangRange.estimatedTime * 1000.0);
+            this.impulse = this._range / (bangRange.estimatedTime * bangRange.estimatedTime * 500.0);
             this.acceleration = this.impulse;
         }
 
@@ -294,21 +294,19 @@ export class UIMeter extends UIControl
 
         if( this.bangUp )
         {
-            let elapsedTime = highResTimer.elapsedTime;
-
             // Ramp up from start to finish
             if( this.bangRange.bangType === EBT_RAMP_UP )
             {
-                this.currentValue += this.velocity * elapsedTime;
+                this.currentValue += this.velocity * highResTimer.elapsedTime;
 
                 if( this.startUpTimer.expired() )
                 {
-                    this.velocity += this.acceleration * elapsedTime;
-                    this.acceleration += this.impulse * elapsedTime;
+                    this.velocity += this.acceleration * highResTimer.elapsedTime;
+                    this.acceleration += this.impulse * highResTimer.elapsedTime;
                 }
                 else
                 {
-                    this.velocity += this.acceleration * elapsedTime;
+                    this.velocity += this.acceleration * highResTimer.elapsedTime;
                 }
             }
             // Linear bang up from the start
@@ -317,7 +315,7 @@ export class UIMeter extends UIControl
                 this.currentValue += this.velocity;
 
                 if( this.startUpTimer.expired() )
-                    this.velocity += this.acceleration * elapsedTime;
+                    this.velocity += this.acceleration * highResTimer.elapsedTime;
             }
             // combination of ramp up and linear
             else if( this.bangRange.bangType === EBT_HYBRID )
@@ -328,17 +326,17 @@ export class UIMeter extends UIControl
                 {
                     if( this.terminalVelocity > this.acceleration )
                     {
-                        this.velocity += this.acceleration * elapsedTime;
-                        this.acceleration += this.impulse * elapsedTime;
+                        this.velocity += this.acceleration * highResTimer.elapsedTime;
+                        this.acceleration += this.impulse * highResTimer.elapsedTime;
                     }
                     else
                     {
-                        this.velocity += this.acceleration * elapsedTime;
+                        this.velocity += this.acceleration * highResTimer.elapsedTime;
                     }
                 }
                 else
                 {
-                    this.velocity += this.acceleration * elapsedTime;
+                    this.velocity += this.acceleration * highResTimer.elapsedTime;
                 }
             }
 
@@ -372,37 +370,37 @@ export class UIMeter extends UIControl
         this.fontSprite.visualComponent.createFontString( Math.trunc(this.currentValue).toString() );
 
         // Get the font size
-        let size = this.fontSprite.visualComponent.getSize();
+        this._size = this.fontSprite.visualComponent.getSize();
 
         // Check if the font string size is greater then what is allowed
-        if( (size.w > this.maxFontStrSize.w) || (size.h > this.maxFontStrSize.h) )
+        if( (this._size.w > this.maxFontStrSize.w) || (this._size.h > this.maxFontStrSize.h) )
         {
-            let difW = this.maxFontStrSize.w / size.w;
-            let difH = this.maxFontStrSize.h / size.h;
+            this._difW = this.maxFontStrSize.w / this._size.w;
+            this._difH = this.maxFontStrSize.h / this._size.h;
 
             // Is the difference less then the last size change
-            if( (difW < this.bangScaleAdjustment.w) || (difH < this.bangScaleAdjustment.h) )
+            if( (this._difW < this.bangScaleAdjustment.w) || (this._difH < this.bangScaleAdjustment.h) )
             {
-                this.bangScaleAdjustment.set( difW, difH );
+                this.bangScaleAdjustment.set( this._difW, this._difH );
 
-                let scaleX = this.fontSprite.scale.x;
-                let scaleY = this.fontSprite.scale.y;
-                if( difW < difH )
+                this._scaleX = this.fontSprite.scale.x;
+                this._scaleY = this.fontSprite.scale.y;
+                if( this._difW < this._difH )
                 {
-                    scaleX = difW;
+                    this._scaleX = this._difW;
                     
                     if( this.scaleType !== EST_AXIS )
-                        scaleY = difW;
+                        this._scaleY = this._difW;
                 }
                 else
                 {
-                    scaleY = difH;
+                    this._scaleY = this._difH;
                     
                     if( this.scaleType !== EST_AXIS )
-                        scaleX = difH;
+                        this._scaleX = this._difH;
                 }
 
-                this.fontSprite.setScaleXYZ( scaleX, scaleY );
+                this.fontSprite.setScaleXYZ( this._scaleX, this._scaleY );
             }
         }
     }

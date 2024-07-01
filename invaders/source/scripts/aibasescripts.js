@@ -35,8 +35,8 @@ class AI_Composite extends aiNode
 
         if( this.childIndexAry.length === 0 )
         {
-            for( let i = 0; i < this.nodeAry.length; ++i )
-                this.childIndexAry[i] = i;
+            for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+                this.childIndexAry[this._i] = this._i;
         }
 
         if( this.order === defs.EAO_RAMDOM )
@@ -56,37 +56,37 @@ class AI_Composite extends aiNode
                 this.index = 0;
 
             // Index into the children random or sequentially
-            let index = this.childIndexAry[this.index];
+            this._index = this.childIndexAry[this.index];
 
-            let childState = this.nodeAry[index].evaluate();
+            this._childState = this.nodeAry[this._index].evaluate();
 
-            if( childState !== defs.EAIS_ACTIVE )
+            if( this._childState !== defs.EAIS_ACTIVE )
             {
                 // Until success - OR operation for success
                 if( this.condition === defs.EAIC_UNTIL_SUCCESS )
                 {
                     // If the child returns success, Set this node's state to the same
-                    if( childState === defs.EAIS_SUCCESS )
+                    if( this._childState === defs.EAIS_SUCCESS )
                     {
-                        this.state = childState;
+                        this.state = this._childState;
                     }
                     // If the child returns FAILURE, try the next child unless there is no more children, then return the same
-                    else if( childState === defs.EAIS_FAILURE )
+                    else if( this._childState === defs.EAIS_FAILURE )
                     {
                         if(++this.index >= this.nodeAry.length)
-                            this.state = childState;
+                            this.state = this._childState;
                     }
                 }
                 // Until failure - OR operation for failure
                 else if( this.condition === defs.EAIC_UNTIL_FAILURE )
                 {
                     // If the child returns FAILURE, set this node's state to SUCCESS
-                    if( childState === defs.EAIS_FAILURE )
+                    if( this._childState === defs.EAIS_FAILURE )
                     {
                         this.state = defs.EAIS_SUCCESS;
                     }
                     // If the child returns SUCCESS, try the next child unless there is no more children, then return FAILURE
-                    else if( childState === defs.EAIS_SUCCESS )
+                    else if( this._childState === defs.EAIS_SUCCESS )
                     {
                         if(++this.index >= this.nodeAry.length)
                             this.state = defs.EAIS_FAILURE;
@@ -96,12 +96,12 @@ class AI_Composite extends aiNode
                 if( this.condition === defs.EAIC_ALL_SUCCESS )
                 {
                     // If the child returns FAILURE, set this node's state to FAILURE
-                    if( childState === defs.EAIS_FAILURE )
+                    if( this._childState === defs.EAIS_FAILURE )
                     {
                         this.state = defs.EAIS_FAILURE;
                     }
                     // If the child returns SUCCESS, try the next child unless there is no more children, then return SUCCESS
-                    else if( childState === defs.EAIS_SUCCESS )
+                    else if( this._childState === defs.EAIS_SUCCESS )
                     {
                         if(++this.index >= this.nodeAry.length)
                             this.state = defs.EAIS_SUCCESS;
@@ -111,12 +111,12 @@ class AI_Composite extends aiNode
                 else if( this.condition === defs.EAIC_ALL_FAILURE )
                 {
                     // If the child returns SUCCESS, set this node's state to FAILURE
-                    if( childState === defs.EAIS_SUCCESS )
+                    if( this._childState === defs.EAIS_SUCCESS )
                     {
                         this.state = defs.EAIS_FAILURE;
                     }
                     // If the child returns FAILURE, try the next child unless there is no more children, then return SUCCESS
-                    else if( childState === defs.EAIS_FAILURE )
+                    else if( this._childState === defs.EAIS_FAILURE )
                     {
                         if(++this.index >= this.nodeAry.length)
                             this.state = defs.EAIS_SUCCESS;
@@ -162,9 +162,9 @@ class AI_Decorator extends aiNode
         // Only allow processing of the children if this node's state is ACTIVE
         if( this.state === defs.EAIS_ACTIVE )
         {
-            let childState = this.nodeAry[0].evaluate();
+            this._childState = this.nodeAry[0].evaluate();
 
-            if( childState !== defs.EAIS_ACTIVE )
+            if( this._childState !== defs.EAIS_ACTIVE )
             {
                 // Repeat type
                 if( this.type === defs.EAIT_REPEATER )
@@ -174,22 +174,22 @@ class AI_Decorator extends aiNode
                     {
                         // A repeat count of zero will repeat indefinately 
                         if( (this.repeatCount > 0) && (++this.repeatCounter > this.repeatCount) )
-                            this.state = childState;
+                            this.state = this._childState;
 
                         else
                             this.nodeAry[0].resetTree();
                     }
                     else if( this.condition === defs.EAIC_UNTIL_SUCCESS )
                     {
-                        if( childState === defs.EAIS_SUCCESS )
-                            this.state = childState;
+                        if( this._childState === defs.EAIS_SUCCESS )
+                            this.state = this._childState;
 
                         else
                             this.nodeAry[0].resetTree();
                     }
                     else if( this.condition === defs.EAIC_UNTIL_FAILURE )
                     {
-                        if( childState === defs.EAIS_FAILURE )
+                        if( this._childState === defs.EAIS_FAILURE )
                             this.state = defs.EAIS_SUCCESS;
 
                         else
@@ -200,12 +200,12 @@ class AI_Decorator extends aiNode
                 else if( this.type === defs.EAIT_INVERTER )
                 {
                     // If the child returns FAILURE, set this node's state to SUCCESS
-                    if( childState === defs.EAIS_FAILURE )
+                    if( this._childState === defs.EAIS_FAILURE )
                     {
                         this.state = defs.EAIS_SUCCESS;
                     }
                     // If the child returns SUCCESS, set this node's state to FAILURE
-                    else if( childState === defs.EAIS_SUCCESS )
+                    else if( this._childState === defs.EAIS_SUCCESS )
                     {
                         this.state = defs.EAIS_FAILURE;
                     }
