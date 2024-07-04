@@ -154,7 +154,7 @@ class StrategyManager extends ManagerBase
     //
     update()
     {
-        for( this._i = 0; this._i < this.strategyAry.length; this._i++ )
+        for( this._i = 0; this._i < this.strategyAry.length; ++this._i )
             this.strategyAry[this._i].update();
     }
 
@@ -163,7 +163,7 @@ class StrategyManager extends ManagerBase
     //
     transform()
     {
-        for( this._i = 0; this._i < this.strategyAry.length; this._i++ )
+        for( this._i = 0; this._i < this.strategyAry.length; ++this._i )
             this.strategyAry[this._i].transform();
     }
 
@@ -172,7 +172,7 @@ class StrategyManager extends ManagerBase
     //
     render( overrideCamera = null )
     {
-        for( this._i = 0; this._i < this.strategyAry.length; this._i++ )
+        for( this._i = 0; this._i < this.strategyAry.length; ++this._i )
             if( this.strategyAry[this._i].isVisible() )
                 this.strategyAry[this._i].render( overrideCamera );
     }

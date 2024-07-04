@@ -38,10 +38,10 @@ export class Gamepad
         // Update the class member because the gamepad object might be different
         this.gp = gp;
 
-        for( this._i = 0; this._i < gp.buttons.length; this._i++ )
+        for( this._i = 0; this._i < gp.buttons.length; ++this._i )
             this._pressed[this._i] = gp.buttons[this._i].pressed;
 
-        for( this._i = 0; this._i < gp.axes.length; this._i++ )
+        for( this._i = 0; this._i < gp.axes.length; ++this._i )
             this._axes[this._i] = gp.axes[this._i];
     }
 

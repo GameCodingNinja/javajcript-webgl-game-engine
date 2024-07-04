@@ -44,7 +44,7 @@ export class KeyBindBtn_init
             this.control.findSubControlByName('mouse'),
             this.control.findSubControlByName('gamepad') ];
 
-        for( let i = 0; i < deviceAry.length; i++ )
+        for( let i = 0; i < deviceAry.length; ++i )
         {
             const [actionStr, configurable] = actionManager.getDeviceActionStr( i, this.control.name );
 

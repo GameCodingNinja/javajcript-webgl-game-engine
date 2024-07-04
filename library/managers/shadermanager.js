@@ -37,8 +37,6 @@ class ShaderManager
     //
     createShader( name, data )
     {
-        let gl = device.gl;
-
         // Check for duplicate
         if( this.shaderMap.has(name) )
             throw new Error( `Shader of this name already exists (${name}).` );
@@ -49,11 +47,11 @@ class ShaderManager
 
         // Create the vertex shader
         let vertPromise = genFunc.downloadFile( 'txt', data.vert.file )
-            .then(( vertText ) => this.create( gl.VERTEX_SHADER, shaderData, name, vertText ) );
+            .then(( vertText ) => this.create( device.gl.VERTEX_SHADER, shaderData, name, vertText ) );
 
         // Create the frag shader
         let fragPromise = genFunc.downloadFile( 'txt', data.frag.file )
-            .then( (fragText ) => this.create( gl.FRAGMENT_SHADER, shaderData, name, fragText ) );
+            .then( (fragText ) => this.create( device.gl.FRAGMENT_SHADER, shaderData, name, fragText ) );
         
         return Promise.all( [vertPromise, fragPromise] )
             .then(() =>
@@ -74,24 +72,23 @@ class ShaderManager
     //
     create( shaderType, shaderData, shaderTxtId, shaderTxt )
     {
-        let gl = device.gl;
-        let id = gl.createShader(shaderType);
-        if( id === 0 )
+        this._id = device.gl.createShader(shaderType);
+        if( this._id === 0 )
             throw new Error( `Error creating shader (${shaderTxtId}).` );
         
         // Load the shader text
-        gl.shaderSource(id, shaderTxt);
+        device.gl.shaderSource(this._id, shaderTxt);
         
         // Compile the shader and check for error
-        gl.compileShader(id);
-        if( !gl.getShaderParameter(id, gl.COMPILE_STATUS) )
-                throw new Error( `ERROR compiling shader! (${gl.getShaderInfoLog(id)}).` );
+        device.gl.compileShader(this._id);
+        if( !device.gl.getShaderParameter(this._id, device.gl.COMPILE_STATUS) )
+                throw new Error( `ERROR compiling shader! (${device.gl.getShaderInfoLog(this._id)}).` );
         
-        if( shaderType === gl.VERTEX_SHADER )
-            shaderData.vertexId = id;
+        if( shaderType === device.gl.VERTEX_SHADER )
+            shaderData.vertexId = this._id;
 
         else
-            shaderData.fragmentId = id;
+            shaderData.fragmentId = this._id;
     }
     
     // 
@@ -99,23 +96,21 @@ class ShaderManager
     //
     createProgram( shaderData )
     {
-        let gl = device.gl;
-
         // Combine the shaders into a program
-        shaderData.programId = gl.createProgram();
-        gl.attachShader( shaderData.programId, shaderData.vertexId );
-        gl.attachShader( shaderData.programId, shaderData.fragmentId );
+        shaderData.programId = device.gl.createProgram();
+        device.gl.attachShader( shaderData.programId, shaderData.vertexId );
+        device.gl.attachShader( shaderData.programId, shaderData.fragmentId );
         
         // Link the shader program
-        gl.linkProgram( shaderData.programId );
+        device.gl.linkProgram( shaderData.programId );
             
-        if( !gl.getProgramParameter( shaderData.programId, gl.LINK_STATUS ) )
-            throw new Error( `ERROR linking program! (${shaderData.name}, ${gl.getProgramInfoLog(shaderData.programId)}).` );
+        if( !device.gl.getProgramParameter( shaderData.programId, device.gl.LINK_STATUS ) )
+            throw new Error( `ERROR linking program! (${shaderData.name}, ${device.gl.getProgramInfoLog(shaderData.programId)}).` );
 
-        gl.validateProgram( shaderData.programId );
+        device.gl.validateProgram( shaderData.programId );
 
-        if( !gl.getProgramParameter( shaderData.programId, gl.VALIDATE_STATUS ) )
-            throw new Error( `ERROR validating program! (${shaderData.name}, ${gl.getProgramInfoLog(shaderData.programId)}).` );
+        if( !device.gl.getProgramParameter( shaderData.programId, device.gl.VALIDATE_STATUS ) )
+            throw new Error( `ERROR validating program! (${shaderData.name}, ${device.gl.getProgramInfoLog(shaderData.programId)}).` );
     }
 
     // 
@@ -123,23 +118,21 @@ class ShaderManager
     //
     locateShaderVariables( shaderData, vertObj, fragObj )
     {
-        let gl = device.gl;
-
-        for( const each of vertObj )
+        for( this._each of vertObj )
         {
-            if( each.location !== undefined )
+            if( this._each.location !== undefined )
             {
-                shaderData.locationMap.set( each.name, gl.getAttribLocation(shaderData.programId, each.name) );
+                shaderData.locationMap.set( this._each.name, device.gl.getAttribLocation(shaderData.programId, this._each.name) );
                 ++shaderData.attributeCount;
             }
             else
             {
-                shaderData.locationMap.set( each.name, gl.getUniformLocation(shaderData.programId, each.name) );
+                shaderData.locationMap.set( this._each.name, device.gl.getUniformLocation(shaderData.programId, this._each.name) );
             }
         }
         
-        for( const each of fragObj )
-            shaderData.locationMap.set( each.name, gl.getUniformLocation(shaderData.programId, each.name) );
+        for( this._each of fragObj )
+            shaderData.locationMap.set( this._each.name, device.gl.getUniformLocation(shaderData.programId, this._each.name) );
     }
     
     // 
@@ -149,26 +142,24 @@ class ShaderManager
     {
         if( this.currentShaderData != shaderData )
         {
-            let gl = device.gl;
-            
             if( this.currentShaderData === null )
             {
                 this.currentAttributeCount = shaderData.attributeCount;
                 
-                for( let i = 0; i < this.currentAttributeCount; ++i )
-                    gl.enableVertexAttribArray(i);
+                for( this._i = 0; this._i < this.currentAttributeCount; ++this._i )
+                    device.gl.enableVertexAttribArray(this._i);
             }
             else if( this.currentAttributeCount != shaderData.attributeCount )
             {
                 if( this.currentAttributeCount < shaderData.attributeCount )
                 {
-                    for( let i = this.currentAttributeCount; i < shaderData.attributeCount; ++i )
-                        gl.enableVertexAttribArray(i);
+                    for( this._i = this.currentAttributeCount; this._i < shaderData.attributeCount; ++this._i )
+                        device.gl.enableVertexAttribArray(this._i);
                 }
                 else
                 {
-                    for( let i = shaderData.attributeCount; i < this.currentAttributeCount; ++i )
-                        gl.disableVertexAttribArray(i);
+                    for( this._i = shaderData.attributeCount; this._i < this.currentAttributeCount; ++this._i )
+                        device.gl.disableVertexAttribArray(this._i);
                 }
 
                 this.currentAttributeCount = shaderData.attributeCount;
@@ -178,7 +169,7 @@ class ShaderManager
             this.currentShaderData = shaderData;
             
             // Have OpenGL bind this shader now
-            gl.useProgram( shaderData.programId );
+            device.gl.useProgram( shaderData.programId );
         }
     }
     
@@ -187,14 +178,12 @@ class ShaderManager
     //
     unbind()
     {
-        let gl = device.gl;
-
-        for( let i = 0; i < this.currentAttributeCount; ++i )
-            gl.disableVertexAttribArray(i);
+        for( this._i = 0; this._i < this.currentAttributeCount; ++this._i )
+            device.gl.disableVertexAttribArray(this._i);
     
         this.currentShaderData = null;
         this.currentAttributeCount = 0;
-        gl.useProgram( null );
+        device.gl.useProgram( null );
     }
     
     // 
@@ -202,9 +191,9 @@ class ShaderManager
     //
     getShaderData( shaderId )
     {
-        let shader = this.shaderMap.get( shaderId );
-        if( shader !== undefined )
-            return shader;
+        this._shader = this.shaderMap.get( shaderId );
+        if( this._shader !== undefined )
+            return this._shader;
  
         throw new Error( `ERROR Shader has not been created! (${shaderId}).` );
     }
@@ -236,8 +225,8 @@ class ShaderManager
     //
     setAllShaderValue4fv( locationId, data )
     {
-        for( let key of this.shaderMap.keys() )
-            this.setShaderValue4fv( key, locationId, data );
+        for( this._key of this.shaderMap.keys() )
+            this.setShaderValue4fv( this._key, locationId, data );
     }
 }
 

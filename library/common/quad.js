@@ -24,13 +24,15 @@ export class Quad
         
         //console.log( `isPointInQuad - X: ${x}, Y: ${y}` );
         
-        for( this._i = 0, this._j = 3; this._i < 4; this._j = this._i++ )
+        for( this._i = 0, this._j = 3; this._i < 4; ++this._i )
         {
             if( ((this.point[this._i].y > y) != (this.point[this._j].y > y)) && 
                 (x < (this.point[this._j].x - this.point[this._i].x) * (y - this.point[this._i].y) / (this.point[this._j].y - this.point[this._i].y) + this.point[this._i].x) )
             {
                 this._result = !this._result;
             }
+
+            this._j = this._i;
         }
 
         return this._result;

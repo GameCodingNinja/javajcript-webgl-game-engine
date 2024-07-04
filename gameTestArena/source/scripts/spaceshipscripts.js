@@ -20,6 +20,16 @@ class PlayerShip_FireTailAnim
     constructor( sprite )
     {
         this.animate = new utilScripts.PlayAnim( sprite );
+        
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.animate.init( 24, true );
     }
     
@@ -37,6 +47,16 @@ class PlayerShip_RotateGun
     constructor( sprite )
     {
         this.sprite = sprite;
+        
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
         this.iter = this.iteration();
     }
 
@@ -47,14 +67,14 @@ class PlayerShip_RotateGun
     {
         do
         {
-            let ratio = 1 / settings.orthoAspectRatio.h;
-            let halfSize = settings.displayRes_half;
+            this._ratio = 1 / settings.orthoAspectRatio.h;
+            this._halfSize = settings.displayRes_half;
 
-            let spritePos = this.sprite.transPos;
-            let mousePos = eventManager.mouseAbsolutePos;
+            this._spritePos = this.sprite.transPos;
+            this._mousePos = eventManager.mouseAbsolutePos;
 
-            let gunRotation = Math.atan2( (ratio * (halfSize.w - mousePos.x)) + spritePos.x, (ratio * (halfSize.h - mousePos.y)) - spritePos.y ) + defs.M_PI_2;
-            this.sprite.setRotXYZ( 0, 0, gunRotation, false );
+            this._gunRotation = Math.atan2( (this._ratio * (this._halfSize.w - this._mousePos.x)) + this._spritePos.x, (this._ratio * (this._halfSize.h - this._mousePos.y)) - this._spritePos.y ) + defs.M_PI_2;
+            this.sprite.setRotXYZ( 0, 0, this._gunRotation, false );
 
             yield;
         }

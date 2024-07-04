@@ -257,7 +257,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
                     this._targetBuilding = this.data.buildings[this._index].get();
 
                     this._freeBuildingFound = true;
-                    for( this._i = 0; this._i < this.data.enemy.length; this._i++ )
+                    for( this._i = 0; this._i < this.data.enemy.length; ++this._i )
                     {
                         if( (this.data.enemy[this._i].get() != this.sprite) && (this.data.enemy[this._i].get().targetBuilding === this._targetBuilding) )
                         {

@@ -45,23 +45,22 @@ export class RenderNode extends Node
         if( node !== null )
         {
             node.index = 0;
-            let nextNode;
 
             do
             {
                 // get the next node
-                nextNode = node.next();
+                node.nextNode = node.next();
 
-                if( nextNode !== null )
+                if( node.nextNode !== null )
                 {
                     // Clean up the children
-                    nextNode.get().cleanUp();
+                    node.nextNode.get().cleanUp();
 
                     // Call a recursive function again
-                    this.updateRecursive( nextNode );
+                    node.cleanUpRecursive( node.nextNode );
                 }
             }
-            while( nextNode !== null );
+            while( node.nextNode !== null );
         }
     }
     
@@ -81,23 +80,22 @@ export class RenderNode extends Node
         if( node !== null )
         {
             node.index = 0;
-            let nextNode;
 
             do
             {
                 // get the next node
-                nextNode = node.next();
+                node.nextNode = node.next();
 
-                if( nextNode !== null )
+                if( node.nextNode !== null )
                 {
                     // Update the child
-                    nextNode.get().update();
+                    node.nextNode.get().update();
 
                     // Call a recursive function again
-                    this.updateRecursive( nextNode );
+                    node.updateRecursive( node.nextNode );
                 }
             }
-            while( nextNode !== null );
+            while( node.nextNode !== null );
         }
     }
 
@@ -117,23 +115,22 @@ export class RenderNode extends Node
         if( node !== null )
         {
             node.index = 0;
-            let nextNode;
 
             do
             {
                 // get the next node
-                nextNode = node.next();
+                node.nextNode = node.next();
 
-                if( nextNode !== null )
+                if( node.nextNode !== null )
                 {
                     // Transform the child node
-                    nextNode.get().transform( node.get() );
+                    node.nextNode.get().transform( node.get() );
 
                     // Call a recursive function again
-                    this.transformRecursive( nextNode );
+                    node.transformRecursive( node.nextNode );
                 }
             }
-            while( nextNode !== null );
+            while( node.nextNode !== null );
         }
     }
     
@@ -153,23 +150,22 @@ export class RenderNode extends Node
         if( node !== null )
         {
             node.index = 0;
-            let nextNode;
 
             do
             {
                 // get the next node
-                nextNode = node.next();
+                node.nextNode = node.next();
 
-                if( nextNode !== null )
+                if( node.nextNode !== null )
                 {
-                    if( nextNode.get().render( camera ) )
+                    if( node.nextNode.get().render( camera ) )
                     {
                         // Call a recursive function again
-                        this.renderRecursive( nextNode, camera );
+                        node.renderRecursive( node.nextNode, camera );
                     }
                 }
             }
-            while( nextNode !== null );
+            while( node.nextNode !== null );
         }
     }
 
@@ -189,26 +185,25 @@ export class RenderNode extends Node
         if( node !== null )
         {
             node.index = 0;
-            let nextNode;
 
             do
             {
                 // get the next node
-                nextNode = node.next();
+                node.nextNode = node.next();
 
-                if( nextNode !== null )
+                if( node.nextNode !== null )
                 {
                     //console.log(nextNode.name);
-                    nextNode.calcSize( size );
+                    node.nextNode.calcSize( size );
 
                     // Calculate the radius in squared space. Avoids having to use sqrt
-                    nextNode.radius = nextNode.get().getSize().getLength() / 2;
+                    node.nextNode.radius = node.nextNode.get().getSize().getLength() / 2;
 
                     // Call a recursive function again
-                    this.calcRadiusRecursive( nextNode, size );
+                    node.calcRadiusRecursive( node.nextNode, size );
                 }
             }
-            while( nextNode !== null );
+            while( node.nextNode !== null );
         }
     }
 

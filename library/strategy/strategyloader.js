@@ -104,7 +104,7 @@ class Strategyloader extends ManagerBase
 
         let xmlNodeLst = xmlNode.children;
 
-        for( let i = 0; i < xmlNodeLst.length; i++ )
+        for( let i = 0; i < xmlNodeLst.length; ++i )
         {
             if( xmlNodeLst[i].nodeName === 'node' )
             {
@@ -136,7 +136,7 @@ class Strategyloader extends ManagerBase
                 if( id )
                     headNode.userId = Number(id);
 
-                for( let j = 0; j < xmlNodeLst[i].children.length; j++ )
+                for( let j = 0; j < xmlNodeLst[i].children.length; ++j )
                 {
                     let xmlChildNode = xmlNodeLst[i].children[j];
 
@@ -148,7 +148,7 @@ class Strategyloader extends ManagerBase
                         let xmlObjLst = xmlChildNode.children;
 
                         // Check if scale has been defined because we'll need to recalculate the radius
-                        for( let w = 0; w < xmlObjLst.length; w++ )
+                        for( let w = 0; w < xmlObjLst.length; ++w )
                         {
                             if( xmlObjLst[w].nodeName === 'scale')
                             {

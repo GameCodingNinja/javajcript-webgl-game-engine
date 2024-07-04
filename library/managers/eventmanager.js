@@ -10,8 +10,9 @@ import { GenericEvent } from '../common/genericevent';
 import { Gamepad } from '../common/gamepad';
 import { actionManager } from '../managers/actionmanager';
 import { settings } from '../utilities/settings';
-import * as gamepadevent from '../common/gamepadevent';
 import { device } from '../system/device';
+import * as gamepadevent from '../common/gamepadevent';
+import * as genFunc from '../utilities/genfunc';
 
 const MAX_GAMEPAD_EVENT_QUEUE = 50;
 
@@ -69,7 +70,7 @@ class EventManager
         // Reuable Gamepad event ques
         this.gamePadEventIndex = 0;
         this.gamePadEventQueue = [];
-        for( let i = 0; i < MAX_GAMEPAD_EVENT_QUEUE; i++ )
+        for( let i = 0; i < MAX_GAMEPAD_EVENT_QUEUE; ++i )
             this.gamePadEventQueue.push( new gamepadevent.GamepadEvent() );
     }
     
@@ -79,7 +80,7 @@ class EventManager
     pollEvent()
     {
         if( this.queue.length )
-            return this.queue.shift();
+            return genFunc.removeAt(this.queue, 0);
         
         return null;
     }
@@ -285,7 +286,7 @@ class EventManager
         {
             // Send out events for the button presses
             //for ( let [index, lastGp] of this.gamePadMap )
-            for ( this._each = 0; this._each < this.gamePadList.length; this._each++ )
+            for ( this._each = 0; this._each < this.gamePadList.length; ++this._each )
             {
                 this._gp = navigator.getGamepads()[this._each];
 
@@ -294,7 +295,7 @@ class EventManager
                     this._lastGp = this.gamePadList[this._each];
 
                     // Create Up/DOWN events for the buttons
-                    for(this._i = 0; this._i < this._gp.buttons.length; this._i++)
+                    for(this._i = 0; this._i < this._gp.buttons.length; ++this._i)
                     {
                         // Check for button down
                         if(!this._lastGp.pressed[this._i] && this._gp.buttons[this._i].pressed)

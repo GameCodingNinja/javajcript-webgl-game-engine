@@ -7,6 +7,7 @@
 import { eventManager } from '../managers/eventmanager';
 import { GenericEvent } from '../common/genericevent';
 import * as menuDefs from '../gui/menudefs';
+import * as genFunc from '../utilities/genfunc';
 
 export class MenuTree
 {
@@ -362,7 +363,7 @@ export class MenuTree
             else if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] !== this.rootMenu) )
             {
                 // Pop it off the array because this menu is done
-                this._menu = this.menuPathAry.pop();
+                this._menu = genFunc.removeAt(this.menuPathAry, this.menuPathAry.length-1);
                 
                 // Do a full reset on all the controls
                 this._menu.reset();

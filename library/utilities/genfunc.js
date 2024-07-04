@@ -256,7 +256,7 @@ export function removeAt(array, index)
 //
 export function indexOf(array, obj)
 {
-    for( gI = 0; gI < array.length; gI++ )
+    for( gI = 0; gI < array.length; ++gI )
         if( array[gI] === obj )
             return gI;
 

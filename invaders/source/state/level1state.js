@@ -101,7 +101,7 @@ export class Level1State extends CommonState
 
         // Randomly distrabute the clouds
         this.cloudAry = [];
-        for( this._i = 0; this._i < MAX_CLOUDS; this._i++ )
+        for( this._i = 0; this._i < MAX_CLOUDS; ++this._i )
         {
             this._sprite = this.bkgStrategy.get(`cloud_${this._i}`).get();
             this._sprite.speed = genFunc.randomArbitrary(0.001, 0.02);
@@ -436,7 +436,7 @@ export class Level1State extends CommonState
             {
                 this._allToBeDeleted = true;
                 this._buildingsAry = strategyManager.get('_buildings_').nodeAry;
-                for( this._i = 0; this._i < this._buildingsAry.length; this._i++ )
+                for( this._i = 0; this._i < this._buildingsAry.length; ++this._i )
                 {
                     if( this._buildingsAry[this._i].toBeDeleted === undefined )
                     {
@@ -496,7 +496,7 @@ export class Level1State extends CommonState
                 {
                     if( this.lastMoveAction === defs.EAP_DOWN )
                     {
-                        console.log("boost On");
+                        //console.log("boost On");
                         this.playerShipBoostSpeed = PLAYER_SHIP_BOOST_TOP_SPEED;
                         
                         if( this.lastMoveDirX === MOVE_LEFT )
@@ -509,7 +509,7 @@ export class Level1State extends CommonState
                 {
                     if( this.playerShipBoostSpeed == PLAYER_SHIP_BOOST_TOP_SPEED )
                     {
-                        console.log("boost Off");
+                        //console.log("boost Off");
                         this.playerShipBoostSpeed = 0;
                     }
 
@@ -532,7 +532,7 @@ export class Level1State extends CommonState
     {
         this._dir = -this.camera.pos.x - this.playerShip.sprite.pos.x;
 
-        for( this._i = 0; this._i < this.moveActionAry.length; this._i++ )
+        for( this._i = 0; this._i < this.moveActionAry.length; ++this._i )
         {
             this._actionResult = actionManager.wasAction( event, this.moveActionAry[this._i] );
             if( this._actionResult != defs.EAP_IDLE )
@@ -725,7 +725,7 @@ export class Level1State extends CommonState
     //
     handleCloudMovement()
     {
-        for( this._i = 0; this._i < MAX_CLOUDS; this._i++ )
+        for( this._i = 0; this._i < MAX_CLOUDS; ++this._i )
         {
             this.cloudAry[this._i].incPosXYZ(highResTimer.elapsedTime * this.cloudAry[this._i].speed);
 
@@ -884,14 +884,14 @@ export class Level1State extends CommonState
             // Loop the player strategy and camera
             if( this.playerShip.sprite.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; this._i++ )
+                for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; ++this._i )
                     this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
                 this.camera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
             }
             else if( this.playerShip.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; this._i++ )
+                for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; ++this._i )
                     this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
 
                 this.camera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
@@ -1000,7 +1000,7 @@ export class Level1State extends CommonState
         soundManager.freeGroup( '(level_1)' );
 
         // Do a delayed stop on all the music except the ambient
-        for( let i = 0; i < this.musicAry.length; i++ )
+        for( let i = 0; i < this.musicAry.length; ++i )
         {
             let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[i]}` );
             scriptSingleton.prepare( scriptManager.get('DelayedExecution')( 500, null, () => gsnd.stop() ) );

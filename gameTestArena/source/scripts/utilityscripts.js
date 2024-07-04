@@ -280,8 +280,8 @@ export class ColorTo
         this.final = final;
         this.value.copy( start );
         
-        for( let i = 0; i < 4; ++i )
-            this.inc.data[i] = (this.final.data[i] - this.value.data[i]) / this.time;
+        for( this._i = 0; this._i < 4; ++this._i )
+            this.inc.data[this._i] = (this.final.data[this._i] - this.value.data[this._i]) / this.time;
 
         this.iter = this.iteration();
     }
@@ -301,8 +301,8 @@ export class ColorTo
                 break;
             }
 
-            for( let i = 0; i < 4; ++i )
-                this.value.data[i] += this.inc.data[i] * highResTimer.elapsedTime;
+            for( this._i = 0; this._i < 4; ++this._i )
+                this.value.data[this._i] += this.inc.data[this._i] * highResTimer.elapsedTime;
                 
             yield;
         }

@@ -29,6 +29,7 @@ export class Game
 {
     constructor()
     {
+        this.gameLoopFunc = this.gameLoop.bind(this);
     }
     
     // 
@@ -107,7 +108,7 @@ export class Game
         gl.clear( this.clearBufferMask );
         
         // Create the startup state
-        this.gameState = new TestArenaState( this.gameLoop.bind(this) );
+        this.gameState = new TestArenaState( this.gameLoopFunc );
     }
     
     // 
@@ -183,6 +184,6 @@ export class Game
         vertexBufferManager.unbind();
 
         // Continues the loop
-        requestAnimationFrame( this.gameLoop.bind(this) );
+        requestAnimationFrame( this.gameLoopFunc );
     }
 }
