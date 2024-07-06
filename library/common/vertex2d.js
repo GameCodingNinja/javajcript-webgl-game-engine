@@ -12,6 +12,18 @@ export class Vertex2d
     {
         this.data = [x,y,z,u,v];
     }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.data[0] = 0;
+        this.data[1] = 0;
+        this.data[2] = 0;
+        this.data[3] = 0;
+        this.data[4] = 0;
+    }
     
     set x(value) { this.data[0] = value; }
     get x() { return this.data[0]; }

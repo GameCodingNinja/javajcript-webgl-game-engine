@@ -17,42 +17,46 @@ import { ObjectNode } from '../node/objectnode';
 import * as uiControlDefs from '../gui/uicontroldefs';
 import * as defs from '../common/defs';
 
+// Globals used in functions to avoid garbage collection
+var gControl;
+var gNode;
+
 // 
 //  DESC: Load files
 //
 export function create( nodeData )
 {
-    let node = null;
+    gNode = null;
     
     if( nodeData.nodeType === defs.ENT_SPRITE )
     {
         if( nodeData.hasChildrenNodes )
-            node = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
+            gNode = new SpriteNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
 
         // Single node sprite that doesn't support children. Low overhead for when you only need one sprite
         else
-            node = new SpriteLeafNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
+        gNode = new SpriteLeafNode( objectDataManager.getData( nodeData.group, nodeData.objectName ), nodeData );
         
-        LoadSprite( node, nodeData );
+        LoadSprite( gNode, nodeData );
     }
     else if( nodeData.nodeType === defs.ENT_OBJECT )
     {
         // Object node is automatically a multilist node because an object node without children is pretty useless
-        node = new ObjectNode( nodeData );
+        gNode = new ObjectNode( nodeData );
         
-        node.object.loadTransFromNode( nodeData.xmlNode );
+        gNode.object.loadTransFromNode( nodeData.xmlNode );
 
         // Load the script functions from node
-        node.object.scriptComponent.initScriptIds( nodeData.xmlNode );
+        gNode.object.scriptComponent.initScriptIds( nodeData.xmlNode );
     }
     else if( nodeData.nodeType === defs.ENT_UI_CONTROL )
     {
-        node = CreateUIControlNode( nodeData );
+        gNode = CreateUIControlNode( nodeData );
     }
     else
         throw new Error( `Node type not defined (${nodeData.nodeName}).` );
     
-    return node;
+    return gNode;
 }
 
 // 
@@ -75,22 +79,22 @@ function LoadSprite( node, nodeData )
 //
 function CreateUIControlNode( nodeData )
 {
-    let control = null;
+    gControl = null;
     
     if( nodeData.uiControlType == uiControlDefs.ECT_PROGRESS_BAR )
-        control = new UIProgressBar( nodeData.group );
+        gControl = new UIProgressBar( nodeData.group );
     
     else if( nodeData.uiControlType == uiControlDefs.ECT_METER )
-        control = new UIMeter( nodeData.group );
+        gControl = new UIMeter( nodeData.group );
     
     else
         throw new Error( `Node control type not defined (${nodeData.nodeName}).` );
     
-    control.loadFromNode( nodeData.xmlNode );
-    control.init();
+    gControl.loadFromNode( nodeData.xmlNode );
+    gControl.init();
 
     if( nodeData.hasChildrenNodes )
-        return new UIControlNode( control, nodeData );
+        return new UIControlNode( gControl, nodeData );
     else
-        return new UIControlLeafNode( control, nodeData );
+        return new UIControlLeafNode( gControl, nodeData );
 }

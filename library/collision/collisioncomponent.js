@@ -850,7 +850,7 @@ export class CollisionComponent
 
         // Is the circle on the line?
         if( this.pointToCircleCheck( gPoint, circlePos, radius ) )
-          return true;
+            return true;
 
         return false;
       }
@@ -889,7 +889,7 @@ export class CollisionComponent
       
         // if uA and uB are between 0-1, lines are colliding
         if( this._uA >= 0 && this._uA <= 1 && this._uB >= 0 && this._uB <= 1 )
-          return true;
+            return true;
 
         return false;
     }

@@ -286,22 +286,22 @@ export class Menu extends Object
     //
     init()
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
         {
-            this.spriteAry[i].init();
+            this.spriteAry[this._i].init();
 
             // Prepare any script functions that are flagged to prepareOnInit
-            this.spriteAry[i].prepareScriptOnInit();
+            this.spriteAry[this._i].prepareScriptOnInit();
         }
 
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].init();
+        for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
+            this.staticControlAry[this._i].init();
 
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].init();
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            this.mouseOnlyControlAry[this._i].init();
 
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].init();
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+            this.controlAry[this._i].init();
         
         // Prepare any script functions that are flagged to prepareOnInit
         this.scriptComponent.prepareOnInit( this );
@@ -312,17 +312,17 @@ export class Menu extends Object
     //
     cleanUp()
     {
-        for( let i = 0; i < this.spriteAry.length; ++i )
-            this.spriteAry[i].cleanUp();
+        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+            this.spriteAry[this._i].cleanUp();
 
-        for( let i = 0; i < this.staticControlAry.length; ++i )
-            this.staticControlAry[i].cleanUp();
+        for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
+            this.staticControlAry[this._i].cleanUp();
 
-        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
-            this.mouseOnlyControlAry[i].cleanUp();
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            this.mouseOnlyControlAry[this._i].cleanUp();
 
-        for( let i = 0; i < this.controlAry.length; ++i )
-            this.controlAry[i].cleanUp();
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+            this.controlAry[this._i].cleanUp();
     }
     
     // 

@@ -18,16 +18,16 @@ class AssetHolder
     //
     set( group, name, data = null )
     {
-        let groupMap = this.loadMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.loadMapMap.get( group );
+        if( this._groupMap === undefined )
         {
-            groupMap = new Map;
-            this.loadMapMap.set( group, groupMap );
+            this._groupMap = new Map;
+            this.loadMapMap.set( group, this._groupMap );
         }
 
-        let asset = groupMap.get( name );
-        if( asset === undefined || asset === -1 )
-            groupMap.set( name, data );
+        this._asset = this._groupMap.get( name );
+        if( this._asset === undefined || this._asset === -1 )
+            this._groupMap.set( name, data );
     }
     
     // 
@@ -35,19 +35,19 @@ class AssetHolder
     //
     allowLoad( group, name )
     {
-        let groupMap = this.loadMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.loadMapMap.get( group );
+        if( this._groupMap === undefined )
         {
-            groupMap = new Map;
-            this.loadMapMap.set( group, groupMap );
+            this._groupMap = new Map;
+            this.loadMapMap.set( group, this._groupMap );
         }
         
-        let asset = groupMap.get( name );
-        if( asset === undefined )
+        this._asset = this._groupMap.get( name );
+        if( this._asset === undefined )
         {
             // Add an entry to the map as a 
             // place holder for future checks
-            groupMap.set( name, -1 );
+            this._groupMap.set( name, -1 );
 
             return true;
         }
@@ -60,15 +60,15 @@ class AssetHolder
     //
     get( group, name )
     {
-        let groupMap = this.loadMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.loadMapMap.get( group );
+        if( this._groupMap === undefined )
             throw new Error( `Group does not exist! (${group}).` );
             
-        let data = groupMap.get( name );
-        if( data === undefined || data === -1 )
+        this._data = this._groupMap.get( name );
+        if( this._data === undefined || this._data === -1 )
             throw new Error( `Data does not exist! (${name}).` );
         
-        return data;
+        return this._data;
     }
     
     // 
@@ -76,12 +76,12 @@ class AssetHolder
     //
     deleteGroup( group )
     {
-        let groupAry = group;
+        this._groupAry = group;
         if( !(group instanceof Array) )
-            groupAry = [group];
+            this._groupAry = [group];
 
-        for( let i = 0; i < groupAry.length; ++i )
-            this.loadMapMap.delete( groupAry[i] );
+        for( this._i = 0; this._i < this._groupAry.length; ++this._i )
+            this.loadMapMap.delete( this._groupAry[this._i] );
     }
     
     // 

@@ -102,15 +102,15 @@ export class SpriteNode extends RenderNode
     calcRadius()
     {
         // Allocate a size object to acumulate the size across all the children
-        let size = new Size;
+        this._size = new Size;
 
         // Get the initial size
-        this.calcSize( size );
+        this.calcSize( this._size );
 
         // Call the recursive function to acumulate the size across all the children
-        super.calcRadius( size );
+        super.calcRadius( this._size );
 
         // Calculate the radius in squared space. Avoids having to use sqrt
-        this.radius = size.getLength() / 2;
+        this.radius = this._size.getLength() / 2;
     }
 }

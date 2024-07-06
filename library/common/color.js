@@ -13,6 +13,17 @@ export class Color
     {
         this.data = new Float32Array([r,g,b,a]);
     }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.data[0] = 1;
+        this.data[1] = 1;
+        this.data[2] = 1;
+        this.data[3] = 1;
+    }
     
     set( r = 1, g = 1, b = 1, a = 1 )
     {

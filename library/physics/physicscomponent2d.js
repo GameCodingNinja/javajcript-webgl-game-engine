@@ -289,10 +289,10 @@ export class PhysicsComponent2D
     //
     applyTransforms()
     {
-        let pos = this.body.getPosition();
-        let angle = this.body.getAngle();
-        this.sprite.setPosXYZ( pos.x * this.metersToPixels, -(pos.y * this.metersToPixels) );
-        this.sprite.setRotXYZ( 0, 0, -angle, false );
+        this._pos = this.body.getPosition();
+        this._angle = this.body.getAngle();
+        this.sprite.setPosXYZ( this._pos.x * this.metersToPixels, -(this._pos.y * this.metersToPixels) );
+        this.sprite.setRotXYZ( 0, 0, -this._angle, false );
     }
     
     // 

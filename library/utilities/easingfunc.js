@@ -225,7 +225,6 @@ export function getBounceInOut()
 //
 export function getElasticIn( amplitude, period )
 {
-    var pi2 = Math.PI * 2;
     return (time) =>
         { 
             if( time == 0 || time == 1 )
@@ -238,7 +237,6 @@ export function getElasticIn( amplitude, period )
 
 export function getElasticOut( amplitude, period )
 {
-    var pi2 = Math.PI * 2;
     return (time) =>
         {
             if( time == 0 || time == 1 )
@@ -251,7 +249,6 @@ export function getElasticOut( amplitude, period )
 
 export function getElasticInOut( amplitude, period )
 {
-    var pi2 = Math.PI * 2;
     return (time) =>
         {
             if( time == 0 || time == 1 )
@@ -275,6 +272,7 @@ export class valueTo
     {
         this.clear();
         this.easingFunc = null;
+        this.pi2 = Math.PI * 2;
     }
 
     // 

@@ -175,11 +175,11 @@ class SoundManager extends ManagerBase
     stopGroup( group )
     {
         // Stop any currently playing files
-        let groupMap = this.soundMapMap.get( group );
-        if( groupMap )
+        this._groupMap = this.soundMapMap.get( group );
+        if( this._groupMap )
         {
-            for( let sound of groupMap.values() )
-                sound.stop();
+            for( this._sound of this._groupMap.values() )
+                this._sound.stop();
         }
     }
 
@@ -203,19 +203,19 @@ class SoundManager extends ManagerBase
     getSound( group, soundID )
     {
         // Check if this is a playlist sound ID
-        let playLst = this.getPlayList( group, soundID );
-        if( playLst )
-            return playLst.getSound();
+        this._playLst = this.getPlayList( group, soundID );
+        if( this._playLst )
+            return this._playLst.getSound();
 
-        let groupMap = this.soundMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.soundMapMap.get( group );
+        if( this._groupMap === undefined )
             throw new Error( `Sound group name can't be found (${group})!` );
 
-        let snd = groupMap.get( soundID );
-        if( snd === undefined )
+        this._snd = this._groupMap.get( soundID );
+        if( this._snd === undefined )
             throw new Error( `Sound ID can't be found (${group}, ${soundID})!` );
 
-        return snd;
+        return this._snd;
     }
 
     //
@@ -224,9 +224,9 @@ class SoundManager extends ManagerBase
     getPlayList( group, playLstID )
     {
         // Check if this is a playlist sound ID
-        let groupMap = this.playListMapMap.get( group );
-        if( groupMap !== undefined )
-            return groupMap.get( playLstID );
+        this._groupMap = this.playListMapMap.get( group );
+        if( this._groupMap !== undefined )
+            return this._groupMap.get( playLstID );
         
         return undefined;
     }

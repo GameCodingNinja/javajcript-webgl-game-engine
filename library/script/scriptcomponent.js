@@ -64,7 +64,7 @@ export class ScriptComponent
     // 
     //  DESC: Recycle the script
     //
-    //  NOTE: The function can call a script that can call this function so local variables nee to be allocated
+    //  NOTE: The function can call a script that can call this function so local variables need to be allocated
     //
     recycle(funcName, args)
     {

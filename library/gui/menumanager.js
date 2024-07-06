@@ -384,11 +384,11 @@ class MenuManager extends ManagerBase
     //
     initGroup( group )
     {
-        let groupMap = this.menuMapMap.get( group );
-        if( groupMap !== undefined )
+        this._groupMap = this.menuMapMap.get( group );
+        if( this._groupMap !== undefined )
         {
-            for( let menu of groupMap.values() )
-                menu.init();
+            for( this._menu of this._groupMap.values() )
+                this._menu.init();
         }
         else
         {
@@ -402,11 +402,11 @@ class MenuManager extends ManagerBase
     //
     cleanUpGroup( group )
     {
-        let groupMap = this.menuMapMap.get( group );
-        if( groupMap !== undefined )
+        this._groupMap = this.menuMapMap.get( group );
+        if( this._groupMap !== undefined )
         {
-            for( let menu of groupMap.values() )
-                menu.cleanUp();
+            for( this._menu of this._groupMap.values() )
+                this._menu.cleanUp();
         }
         else
         {

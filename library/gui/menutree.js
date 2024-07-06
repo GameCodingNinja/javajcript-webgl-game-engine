@@ -43,7 +43,7 @@ export class MenuTree
     //
     init()
     {
-        this.menuPathAry = [];
+        this.menuPathAry.length = 0;
 
         if( this.rootMenu !== undefined )
         {

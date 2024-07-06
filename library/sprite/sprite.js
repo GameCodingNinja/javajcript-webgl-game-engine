@@ -351,26 +351,26 @@ export class Sprite extends Object
     //
     getSize()
     {
-        let vSize = this.visualComponent.getSize();
-        let size = super.getSize();
+        this._vSize = this.visualComponent.getSize();
+        this._size = super.getSize();
 
-        if( vSize !== null )
+        if( this._vSize !== null )
         {
             // If this sprite has a parent node, take the position into account
             // because it might add to the radius
             if(this.parentNode && this.parentNode.isChild())
             {
-                size.w = (vSize.w + Math.abs(this.pos.x)) * this.scale.x;
-                size.h = (vSize.h + Math.abs(this.pos.y)) * this.scale.y;
+                this._size.w = (this._vSize.w + Math.abs(this.pos.x)) * this.scale.x;
+                this._size.h = (this._vSize.h + Math.abs(this.pos.y)) * this.scale.y;
             }
             else
             {
-                size.w = vSize.w * this.scale.x;
-                size.h = vSize.h * this.scale.y;
+                this._size.w = this._vSize.w * this.scale.x;
+                this._size.h = this._vSize.h * this.scale.y;
             }
         }
         
-        return size;
+        return this._size;
     }
 
     //
@@ -387,17 +387,17 @@ export class Sprite extends Object
     //
     getRect()
     {
-        let vSize = this.visualComponent.getSize();
-        let rect = super.getRect();
+        this._vSize = this.visualComponent.getSize();
+        this._rect = super.getRect();
 
-        let halfX = vSize.w / 2;
-        let halfY = vSize.h / 2;
+        this._halfX = this._vSize.w / 2;
+        this._halfY = this._vSize.h / 2;
 
-        rect.x1 = (-halfX + this.pos.x) * this.scale.x;
-        rect.y1 = (halfY + this.pos.y) * this.scale.y;
-        rect.x2 = (halfX + this.pos.x) * this.scale.x;
-        rect.y2 = (-halfY + this.pos.y) * this.scale.y;
+        this._rect.x1 = (-this._halfX + this.pos.x) * this.scale.x;
+        this._rect.y1 = (this._halfY + this.pos.y) * this.scale.y;
+        this._rect.x2 = (this._halfX + this.pos.x) * this.scale.x;
+        this._rect.y2 = (-this._halfY + this.pos.y) * this.scale.y;
 
-        return rect;
+        return this._rect;
     }
 }

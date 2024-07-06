@@ -19,6 +19,12 @@ export class Node extends iNode
         
         // Child node index
         this.index = 0;
+
+        // Next node to avoid garbage collection
+        this.nextNode = null;
+
+        // Result node to avoid garbage collection
+        this.resultNode = null;
     }
 
     // 
@@ -37,15 +43,12 @@ export class Node extends iNode
     //
     next()
     {
-        let result = null;
-        
         if( this.index < this.nodeAry.length )
         {
-            result = this.nodeAry[this.index];
-            this.index++;
+            return this.nodeAry[this.index++];
         }
         
-        return result;
+        return null;
     }
     
     // 
@@ -54,15 +57,15 @@ export class Node extends iNode
     addNode( node )
     {
         // Call a recursive function to find the parent node
-        let parentNode = this.findParent( node );
+        this._parentNode = this.findParent( node );
 
-        if( parentNode != null )
+        if( this._parentNode != null )
         {
             // Set the parent node
-            node.parentNode = parentNode;
+            node.parentNode = this._parentNode;
 
             // Add the node
-            parentNode.pushNode( node );
+            this._parentNode.pushNode( node );
 
             return true;
         }
@@ -83,35 +86,34 @@ export class Node extends iNode
     //
     findParent( searchNode )
     {
-        let result = null;
+        this.resultNode = null;
 
         if( searchNode != null )
         {
             if( this.nodeId == searchNode.parentId )
             {
-                result = this;
+                this.resultNode = this;
             }
             else
             {
                 this.index = 0;
-                let nextNode = null;
 
                 do
                 {
                     // get the next node
-                    nextNode = this.next();
+                    this.nextNode = this.next();
 
-                    if( nextNode != null )
+                    if( this.nextNode != null )
                     {
                         // Call a recursive function to find the parent node
-                        result = nextNode.findParent( searchNode );
+                        this.resultNode = this.nextNode.findParent( searchNode );
                     }
                 }
-                while( nextNode !== null && result === null );
+                while( this.nextNode !== null && this.resultNode === null );
             }
         }
 
-        return result;
+        return this.resultNode;
     }
 
     // 
@@ -120,21 +122,20 @@ export class Node extends iNode
     resetTree()
     {
         this.index = 0;
-        let nextNode = null;
         this.reset();
 
         do
         {
             // get the next node
-            nextNode = this.next();
+            this.nextNode = this.next();
 
-            if( nextNode != null )
+            if( this.nextNode != null )
             {
                 // Call a recursive function to reset the node
-                nextNode.resetTree();
+                this.nextNode.resetTree();
             }
         }
-        while( nextNode !== null );
+        while( this.nextNode !== null );
     }
 
     // 
@@ -143,21 +144,20 @@ export class Node extends iNode
     initTree()
     {
         this.index = 0;
-        let nextNode = null;
         this.init();
 
         do
         {
             // get the next node
-            nextNode = this.next();
+            this.nextNode = this.next();
 
-            if( nextNode != null )
+            if( this.nextNode != null )
             {
                 // Call a recursive function to reset the node
-                nextNode.initTree();
+                this.nextNode.initTree();
             }
         }
-        while( nextNode !== null );
+        while( this.nextNode !== null );
     }
 
     // 
@@ -165,31 +165,30 @@ export class Node extends iNode
     //
     findChild( childName )
     {
-        let result = null;
+        this.resultNode = null;
 
         if( childName == this.name )
         {
-            result = this;
+            this.resultNode = this;
         }
         else
         {
             this.index = 0;
-            let nextNode = null;
 
             do
             {
                 // get the next node
-                nextNode = this.next();
+                this.nextNode = this.next();
 
-                if( nextNode != null )
+                if( this.nextNode != null )
                 {
                     // Call a recursive function to find the parent node
-                    result = nextNode.findChild( childName );
+                    this.resultNode = this.nextNode.findChild( childName );
                 }
             }
-            while( nextNode !== null && result === null );
+            while( this.nextNode !== null && this.resultNode === null );
         }
 
-        return result;
+        return this.resultNode;
     }
 }

@@ -80,14 +80,14 @@ export class UIControlLeafNode extends iNode
     {
         if( this.useSizeForRadiusCalc )
         {
-            let vSize = this.get().getSize();
-            if( vSize )
+            this._size = this.get().getSize();
+            if( this._size )
             {
-                if( vSize.w > size.w )
-                    size.w = vSize.w;
+                if( this._size.w > size.w )
+                    size.w = this._size.w;
 
-                if( vSize.h > size.h )
-                    size.h = vSize.h;
+                if( this._size.h > size.h )
+                    size.h = this._size.h;
             }
         }
     }

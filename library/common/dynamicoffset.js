@@ -22,6 +22,15 @@ export class DynamicOffset
         // offset
         this.point = new Point;
     }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.parameters.clear();
+        this.point.clear();
+    }
     
     // 
     //  DESC: Add to the bit mask

@@ -31,10 +31,10 @@ export class Matrix
     
     copy( obj )
     {
-        let i = this.matrix.length;
+        this._i = this.matrix.length;
         
-        while( i-- )
-            this.matrix[i] = obj.matrix[i];  
+        while( this._i-- )
+            this.matrix[this._i] = obj.matrix[this._i];  
     }
     
     //
@@ -59,14 +59,14 @@ export class Matrix
     //  
     mergeMatrix( matrix )
     {
-        for( let i = 0; i < 4; ++i )
+        for( this._i = 0; this._i < 4; ++this._i )
         {
-            for( let j = 0; j < 4; ++j )
+            for( this._j = 0; this._j < 4; ++this._j )
             { 
-                gTempMergeMatrix[(i*4)+j] = (this.matrix[i*4] * matrix[j])
-                + (this.matrix[(i*4)+1] * matrix[4+j])
-                + (this.matrix[(i*4)+2] * matrix[8+j])
-                + (this.matrix[(i*4)+3] * matrix[12+j]);
+                gTempMergeMatrix[(this._i*4)+this._j] = (this.matrix[this._i*4] * matrix[this._j])
+                + (this.matrix[(this._i*4)+1] * matrix[4+this._j])
+                + (this.matrix[(this._i*4)+2] * matrix[8+this._j])
+                + (this.matrix[(this._i*4)+3] * matrix[12+this._j]);
             }
         }
 
@@ -81,7 +81,7 @@ export class Matrix
     //
     rotate( point )
     {
-        let flags = NO_ROT;
+        this._flags = NO_ROT;
         
         // init the rotation matrix
         this.initIdentityMatrix( gTempMatrix );
@@ -89,22 +89,22 @@ export class Matrix
         // Apply Z rotation
         if( !point.isZEmpty() )
         {
-            this.rotateZRad( gTempMatrix, point.z, flags );
-            flags |= ROT_Z;
+            this.rotateZRad( gTempMatrix, point.z, this._flags );
+            this._flags |= ROT_Z;
         }
 
         // Apply Y rotation
         if( !point.isYEmpty() )
         {
-            this.rotateYRad( gTempMatrix, point.y, flags );
-            flags |= ROT_Y;
+            this.rotateYRad( gTempMatrix, point.y, this._flags );
+            this._flags |= ROT_Y;
         }
 
         // Apply X rotation
         if( !point.isXEmpty() )
         {
-            this.rotateXRad( gTempMatrix, point.x, flags );
-            flags |= ROT_X;
+            this.rotateXRad( gTempMatrix, point.x, this._flags );
+            this._flags |= ROT_X;
         }
 
         // Merg the rotation into the master matrix
@@ -116,13 +116,13 @@ export class Matrix
     //
     rotateZRad( dest, value )
     {
-        let cos = Math.cos(value);
-        let sin = Math.sin(value);
+        this._cos = Math.cos(value);
+        this._sin = Math.sin(value);
 
-        dest[0] = cos;
-        dest[1] = sin;
-        dest[4] = -sin;
-        dest[5] = cos;
+        dest[0] = this._cos;
+        dest[1] = this._sin;
+        dest[4] = -this._sin;
+        dest[5] = this._cos;
     }
  
     //
@@ -130,32 +130,31 @@ export class Matrix
     //
     rotateYRad( dest, value, rotFlags )
     {
-        let cos = Math.cos(value);
-        let sin = Math.sin(value);
+        this._cos = Math.cos(value);
+        this._sin = Math.sin(value);
 
         switch( rotFlags )
         {
             case ROT_Z:
             {
-                let tmp0, tmp1, tmp8, tmp9;
-                tmp0 = dest[0] * cos;
-                tmp1 = dest[1] * cos;
-                tmp8 = dest[0] * sin;
-                tmp9 = dest[1] * sin;
-                dest[0] = tmp0;
-                dest[1] = tmp1;
-                dest[2] = -sin;
-                dest[8] = tmp8;
-                dest[9] = tmp9;
-                dest[10] = cos;
+                this._tmp0 = dest[0] * this._cos;
+                this._tmp1 = dest[1] * this._cos;
+                this._tmp8 = dest[0] * this._sin;
+                this._tmp9 = dest[1] * this._sin;
+                dest[0] = this._tmp0;
+                dest[1] = this._tmp1;
+                dest[2] = -this._sin;
+                dest[8] = this._tmp8;
+                dest[9] = this._tmp9;
+                dest[10] = this._cos;
                 break;
             }
             case NO_ROT:
             {
-                dest[0]  =  cos;
-                dest[2]  = -sin;
-                dest[8]  =  sin;
-                dest[10] =  cos;
+                dest[0]  =  this._cos;
+                dest[2]  = -this._sin;
+                dest[8]  =  this._sin;
+                dest[10] =  this._cos;
                 break;
             }
         }
@@ -166,67 +165,64 @@ export class Matrix
     //
     rotateXRad( dest, value, rotFlags )
     {
-        let cos = Math.cos(value);
-        let sin = Math.sin(value);
+        this._cos = Math.cos(value);
+        this._sin = Math.sin(value);
 
         switch( rotFlags )
         {
             case ROT_Z:
             {
-                let tmp4, tmp5, tmp8, tmp9;
-                tmp4 = dest[4] * cos;
-                tmp5 = dest[5] * cos;
-                tmp8 = dest[4] * -sin;
-                tmp9 = dest[5] * -sin;
-                dest[4] = tmp4;
-                dest[5] = tmp5;
-                dest[6] = sin;
-                dest[8] = tmp8;
-                dest[9] = tmp9;
-                dest[10] = cos;
+                this._tmp4 = dest[4] * this._cos;
+                this._tmp5 = dest[5] * this._cos;
+                this._tmp8 = dest[4] * -this._sin;
+                this._tmp9 = dest[5] * -this._sin;
+                dest[4] =  this._tmp4;
+                dest[5] =  this._tmp5;
+                dest[6] =  this._sin;
+                dest[8] =  this._tmp8;
+                dest[9] =  this._tmp9;
+                dest[10] = this._cos;
                 break;
             }
 
             case ROT_Y:
             {
-                let tmp4, tmp6, tmp8, tmp10;
-                tmp4 = dest[8] * sin;
-                tmp6 = dest[10] * sin;
-                tmp8 = dest[8] * cos;
-                tmp10 = dest[10] * cos;
-                dest[4] = tmp4;
-                dest[5] = cos;
-                dest[6] = tmp6;
-                dest[8] = tmp8;
-                dest[9] = -sin;
-                dest[10] = tmp10;
+                this._tmp4 = dest[8] * this._sin;
+                this._tmp6 = dest[10] * this._sin;
+                this._tmp8 = dest[8] * this._cos;
+                this._tmp10 = dest[10] * this._cos;
+                dest[4] =  this._tmp4;
+                dest[5] =  this._cos;
+                dest[6] =  this._tmp6;
+                dest[8] =  this._tmp8;
+                dest[9] = -this._sin;
+                dest[10] = this._tmp10;
                 break;
             }
 
             case ROT_Z | ROT_Y:
             {
-                let tmp4, tmp5, tmp6, tmp8, tmp9, tmp10;
-                tmp4 = ( dest[4] * cos ) + ( dest[8] * sin );
-                tmp5 = ( dest[5] * cos ) + ( dest[9] * sin );
-                tmp6 = dest[10] * sin;
-                tmp8 = ( dest[4] * -sin ) + ( dest[8] * cos );
-                tmp9 = ( dest[5] * -sin ) + ( dest[9] * cos );
-                tmp10 = dest[10] * cos;
-                dest[4] = tmp4;
-                dest[5] = tmp5;
-                dest[6] = tmp6;
-                dest[8] = tmp8;
-                dest[9] = tmp9;
-                dest[10] = tmp10;
+                this._tmp4 = ( dest[4] * this._cos ) + ( dest[8] * this._sin );
+                this._tmp5 = ( dest[5] * this._cos ) + ( dest[9] * this._sin );
+                this._tmp6 = dest[10] * sin;
+                this._tmp8 = ( dest[4] * -this._sin ) + ( dest[8] * this._cos );
+                this._tmp9 = ( dest[5] * -this._sin ) + ( dest[9] * this._cos );
+                this._tmp10 = dest[10] * this._cos;
+                dest[4] =  this._tmp4;
+                dest[5] =  this._tmp5;
+                dest[6] =  this._tmp6;
+                dest[8] =  this._tmp8;
+                dest[9] =  this._tmp9;
+                dest[10] = this._tmp10;
                 break;
             }
 
             case NO_ROT:
             {
-                dest[5]  =  cos;
-                dest[6]  =  sin;
-                dest[9]  = -sin;
-                dest[10] =  cos;
+                dest[5]  =  this._cos;
+                dest[6]  =  this._sin;
+                dest[9]  = -this._sin;
+                dest[10] =  this._cos;
                 break;
             }
         }
@@ -291,14 +287,14 @@ export class Matrix
     
     transformQuad( dest, source )
     {
-        for( let i = 0; i < 4; ++i )
-            this.transformPoint( dest.point[i], source.point[i] );
+        for( this._i = 0; this._i < 4; ++this._i )
+            this.transformPoint( dest.point[this._i], source.point[this._i] );
     }
 
     transformPolygon( dest, source )
     {
-        for( let i = 0; i < source.pointAry.length; ++i )
-            this.transformPoint( dest.pointAry[i], source.pointAry[i] );
+        for( this._i = 0; this._i < source.pointAry.length; ++this._i )
+            this.transformPoint( dest.pointAry[this._i], source.pointAry[this._i] );
     }
 
     transformLine( dest, source )
@@ -399,11 +395,11 @@ export class Matrix
         //  0        0        zf/(zn-zf)        -1
         //  0        0        zn*zf/(zn-zf)      0
 
-        let yScale = 1 / Math.tan(fovy/2);
-        let xScale = yScale / aspect;
+        this._yScale = 1 / Math.tan(fovy/2);
+        this._xScale = this._yScale / aspect;
 
-        this.matrix[0] = xScale;
-        this.matrix[5] = yScale;
+        this.matrix[0] = this._xScale;
+        this.matrix[5] = this._yScale;
         this.matrix[10] = zf / (zn-zf);
         this.matrix[11] = -1;
         this.matrix[14] = zn * zf / (zn-zf);
@@ -440,13 +436,13 @@ export class Matrix
     {
         this.initIdentityMatrix( gTempMergeMatrix );
 
-        for( let i = 0; i < 3; ++i )
+        for( this._i = 0; this._i < 3; ++this._i )
         {
-            for( let j = 0; j < 3; ++j )
+            for( this._j = 0; this._j < 3; ++this._j )
             { 
-                gTempMergeMatrix[(i*4)+j] = (this.matrix[i*4] * matrix[j])
-                + (this.matrix[(i*4)+1] * matrix[4+j])
-                + (this.matrix[(i*4)+2] * matrix[8+j]);
+                gTempMergeMatrix[(this._i*4)+this._j] = (this.matrix[this._i*4] * matrix[this._j])
+                + (this.matrix[(this._i*4)+1] * matrix[4+this._j])
+                + (this.matrix[(this._i*4)+2] * matrix[8+this._j]);
             }
         }
 

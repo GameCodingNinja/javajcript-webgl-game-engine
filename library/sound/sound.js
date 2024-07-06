@@ -181,17 +181,17 @@ export class Sound
     //
     setVolume( volume )
     {
-        let cappedVolume = volume;
+        this._cappedVolume = volume;
         
         if( this.gainNode )
         {
-            if( cappedVolume < 0 )
-                cappedVolume = 0;
+            if( this._cappedVolume < 0 )
+                this._cappedVolume = 0;
             
-            else if( cappedVolume > 1 )
-                cappedVolume = 1;
+            else if( this._cappedVolume > 1 )
+                this._cappedVolume = 1;
                 
-            this.gainNode.gain.value = cappedVolume;
+            this.gainNode.gain.value = this._cappedVolume;
         }
     }
     

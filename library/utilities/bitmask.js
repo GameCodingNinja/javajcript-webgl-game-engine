@@ -12,6 +12,14 @@ export class BitMask
     {
         this.bitmask = value;
     }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.bitmask = 0;
+    }
     
     // 
     //  DESC: Add the parameters to the bitmask
