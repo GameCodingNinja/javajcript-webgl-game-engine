@@ -222,25 +222,21 @@ class ObjectDataManager extends ManagerBase
     //
     createFromData( groupAry )
     {
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        for( this._grp = 0; this._grp < groupAry.length; ++this._grp )
         {
-            let group = groupAry[grp];
+            this._group = groupAry[this._grp];
             
             // Get the group map
-            let groupMap = this.objectDataMapMap.get( group );
-            if( groupMap !== undefined )
+            this._groupMap = this.objectDataMapMap.get( this._group );
+            if( this._groupMap !== undefined )
             {
                 // Create OpenGL objects from data
-                for( let objData of groupMap.values() )
-                    objData.createFromData( group );
+                for( this._objData of this._groupMap.values() )
+                    this._objData.createFromData( this._group );
             }
         }
 
         return 0;
-        
-        // Temporary assets can now be freed
-        //assetHolder.deleteGroup( groupAry );
-        //spriteSheetManager.deleteGroup( groupAry );
     }
     
     //
@@ -248,26 +244,26 @@ class ObjectDataManager extends ManagerBase
     //
     freeGroup( group )
     {
-        let groupAry = group;
+        this._groupAry = group;
         if( !(group instanceof Array) )
-            groupAry = [group];
+            this._groupAry = [group];
 
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
         {
-            let group = groupAry[grp];
+            this._group = this._groupAry[this._grp];
             
             // Make sure the group we are looking for exists
-            if( !this.listTableMap.has( group ) )
-                throw new Error( `Object data list group name can't be found (${group})!` );
+            if( !this.listTableMap.has( this._group ) )
+                throw new Error( `Object data list group name can't be found (${this._group})!` );
 
             // Get the group map
-            if( this.objectDataMapMap.has( group ) )
+            if( this.objectDataMapMap.has( this._group ) )
             {
-                textureManager.deleteGroup( group );
-                vertexBufferManager.deleteGroup( group );
-                meshManager.deleteGroup( group );
+                textureManager.deleteGroup( this._group );
+                vertexBufferManager.deleteGroup( this._group );
+                meshManager.deleteGroup( this._group );
 
-                this.objectDataMapMap.delete( group );
+                this.objectDataMapMap.delete( this._group );
             }
         }
     }
@@ -278,12 +274,12 @@ class ObjectDataManager extends ManagerBase
     getData( group, name )
     {
         // Get the group map
-        let groupMap = this.objectDataMapMap.get( group );
-        if( groupMap !== undefined )
+        this._groupMap = this.objectDataMapMap.get( group );
+        if( this._groupMap !== undefined )
         {
-            let objData = groupMap.get( name );
-            if( objData )
-                return objData;
+            this._objData = this._groupMap.get( name );
+            if( this._objData )
+                return this._objData;
 
             throw new Error( `Object data not found (${group}, ${name})!` );
         }
@@ -296,10 +292,12 @@ class ObjectDataManager extends ManagerBase
     //
     findGroup( objectName )
     {
-        for( let [ groupKey, groupMap ] of this.objectDataMapMap.entries() )
+        for( this._groupKey of this.objectDataMapMap.keys() )
         {
-            if( groupMap.get( objectName ) !== undefined )
-                return groupKey;
+            this._groupMap = this.objectDataMapMap.get(this._groupKey);
+
+            if( this._groupMap.get( objectName ) !== undefined )
+                return this._groupKey;
         }
 
         return undefined;

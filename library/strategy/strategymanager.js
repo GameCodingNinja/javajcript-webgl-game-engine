@@ -55,19 +55,19 @@ class StrategyManager extends ManagerBase
     //
     activateStrategy( strategyId )
     {
-        let strategy = this.strategyMap.get( strategyId );
-        if( strategy )
+        this._strategy = this.strategyMap.get( strategyId );
+        if( this._strategy )
         {
-            let index = this.strategyAry.findIndex( (obj) => obj === strategy );
-            if( index === -1 )
-                this.strategyAry.push( strategy );
+            this._index = this.strategyAry.findIndex( (obj) => obj === this._strategy );
+            if( this._index === -1 )
+                this.strategyAry.push( this._strategy );
             else
                 console.warn( `Strategy is already active (${strategyId})!` );
         }
         else
             throw new Error( `Strategy id can't be found (${strategyId})! Need to add the strategy before you can activate it.` );
         
-        return strategy;
+        return this._strategy;
     }
     
     //
@@ -75,19 +75,19 @@ class StrategyManager extends ManagerBase
     //
     deactivateStrategy( strategyId )
     {
-        let strategy = this.strategyMap.get( strategyId );
-        if( strategy )
+        this._strategy = this.strategyMap.get( strategyId );
+        if( this._strategy )
         {
-            let index = this.strategyAry.findIndex( (obj) => obj === strategy );
-            if( index !== -1 )
-                this.strategyAry.splice( index, 1 );
+            this._index = this.strategyAry.findIndex( (obj) => obj === this._strategy );
+            if( this._index !== -1 )
+                this.strategyAry.splice( this._index, 1 );
             else
                 console.warn( `Strategy is not active (${strategyId})!` );
         }
         else
             console.warn( `Strategy id can't be found to deactivate (${strategyId})!` );
         
-        return strategy;
+        return this._strategy;
     }
     
     //
@@ -95,24 +95,24 @@ class StrategyManager extends ManagerBase
     //
     deleteStrategy( strategyGrp )
     {
-        let strategyGrpAry = strategyGrp;
+        this._strategyGrpAry = strategyGrp;
         if( !(strategyGrp instanceof Array) )
-            strategyGrpAry = [strategyGrp];
+            this._strategyGrpAry = [strategyGrp];
 
-        for( let i = 0; i < strategyGrpAry.length; ++i )
+        for( this._i = 0; this._i < this._strategyGrpAry.length; ++this._i )
         {
             // First deactivate the strategy
-            this.deactivateStrategy( strategyGrpAry[i] );
+            this.deactivateStrategy( this._strategyGrpAry[this._i] );
 
             // Cleanup and delete the strategy
-            let strategy = this.strategyMap.get( strategyGrpAry[i] );
-            if( strategy )
+            this._strategy = this.strategyMap.get( this._strategyGrpAry[this._i] );
+            if( this._strategy )
             {
-                strategy.cleanUp();
-                this.strategyMap.delete( strategyGrpAry[i] );
+                this._strategy.cleanUp();
+                this.strategyMap.delete( this._strategyGrpAry[this._i] );
             }
             else
-                console.warn( `Strategy id can't be found to clean up (${strategyGrpAry[i]})!` );
+                console.warn( `Strategy id can't be found to clean up (${this._strategyGrpAry[this._i]})!` );
         }
     }
     
@@ -122,11 +122,11 @@ class StrategyManager extends ManagerBase
     get( strategyId )
     {
         // Make sure the strategy we are looking for is available
-        let strategy = this.strategyMap.get( strategyId );
-        if( !strategy )
+        this._strategy = this.strategyMap.get( strategyId );
+        if( !this._strategy )
             throw new Error( `Sprite Manager strategy Id can't be found (${strategyId})!` );
         
-        return strategy;
+        return this._strategy;
     }
     
     //
@@ -137,7 +137,7 @@ class StrategyManager extends ManagerBase
         this.cleanUp();
         
         this.strategyMap.clear();
-        this.strategyAry = [];
+        this.strategyAry.length = 0;
     }
 
     //
@@ -145,8 +145,8 @@ class StrategyManager extends ManagerBase
     //
     cleanUp()
     {
-        for( let each of this.strategyMap.values() )
-            each.cleanUp();
+        for( this._each of this.strategyMap.values() )
+            this._each.cleanUp();
     }
 
     //

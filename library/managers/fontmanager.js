@@ -125,8 +125,11 @@ class FontManager
     //
     setFontTexture()
     {
-        for( let [ key, font ] of this.fontMap.entries() )
-            font.texture = textureManager.get( this.group, key );
+        for( this._key of this.fontMap.keys() )
+        {
+            this._font = this.fontMap.get( this._key );
+            this._font.texture = textureManager.get( this.group, this._key );
+        }
     }
     
     //

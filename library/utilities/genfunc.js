@@ -13,6 +13,8 @@ var gSessionCacheBustNo = Math.random();
 var gLen;
 var gI;
 var gReturn;
+var gKey;
+var gValue;
 
 // 
 //  DESC: Load files via a promise
@@ -203,9 +205,13 @@ export function stringLoadXML( stringData )
 //
 export function getKey(map, searchValue)
 {
-    for (let [key, value] of map.entries())
-        if( value === searchValue )
-            return key;
+    // Handled this way to avoid garbage collection when looping a map
+    for (gKey of map.keys())
+    {
+        gValue = map.get(gKey);
+        if( gValue === searchValue )
+            return gKey;
+    }
 
     return undefined;
 }

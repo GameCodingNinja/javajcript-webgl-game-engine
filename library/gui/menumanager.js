@@ -305,25 +305,25 @@ class MenuManager extends ManagerBase
     //
     createFromData( groupAry )
     {
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        for( this._grp = 0; this._grp < groupAry.length; ++this._grp )
         {
-            let group = groupAry[grp];
+            this._group = groupAry[this._grp];
             
             // Get the menu group map
-            let groupMap = this.menuMapMap.get( group );
-            if( groupMap === undefined )
-                throw new Error( `Group map can't be found! (${group}).` );
+            this._groupMap = this.menuMapMap.get( this._group );
+            if( this._groupMap === undefined )
+                throw new Error( `Group map can't be found! (${this._group}).` );
 
-            for( let menu of groupMap.values() )
+            for( this._menu of this._groupMap.values() )
             {
                 // Get the menu XML node
-                let xmlNode = assetHolder.get( group, menu.filePath );
+                this._xmlNode = assetHolder.get( this._group, this._menu.filePath );
 
                 // Have the menu load it's share
-                menu.loadFromNode( xmlNode );
+                this._menu.loadFromNode( this._xmlNode );
             }
 
-            this.initGroup( group );
+            this.initGroup( this._group );
         }
 
         this.initialized = true;
@@ -336,44 +336,44 @@ class MenuManager extends ManagerBase
     //
     freeGroup( group )
     {
-        let groupAry = group;
+        this._groupAry = group;
         if( !(group instanceof Array) )
-            groupAry = [group];
+            this._groupAry = [group];
 
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
         {
-            let group = groupAry[grp];
+            this._group = this._groupAry[this._grp];
             
             // Make sure the group we are looking for exists
-            if( this.listTableMap.get( group ) === undefined )
-                throw new Error( `Object data list group name can't be found (${group})!` );
+            if( this.listTableMap.get( this._group ) === undefined )
+                throw new Error( `Object data list group name can't be found (${this._group})!` );
 
             // Get the group map
-            let groupMap = this.menuTreeMapMap.get( group );
-            if( groupMap !== undefined )
+            this._groupMap = this.menuTreeMapMap.get( this._group );
+            if( this._groupMap !== undefined )
             {
                 // Remove it from the tree vectors if it is there
-                for( let menuTree of groupMap.values() )
+                for( this._menuTree of this._groupMap.values() )
                 {
-                    if( menuTree.interfaceMenu )
+                    if( this._menuTree.interfaceMenu )
                     {
-                        let index = this.activeInterTreeAry.indexOf( menuTree );
+                        this._index = this.activeInterTreeAry.indexOf( this._menuTree );
 
-                        if( index > -1 )
-                            this.activeInterTreeAry.splice( index, 1 );
+                        if( this._index > -1 )
+                            this.activeInterTreeAry.splice( this._index, 1 );
                     }
                     else
                     {
-                        let index = this.activeMenuTreeAry.indexOf( menuTree );
+                        this._index = this.activeMenuTreeAry.indexOf( this._menuTree );
 
-                        if( index > -1 )
-                            this.activeMenuTreeAry.splice( index, 1 );
+                        if( this._index > -1 )
+                            this.activeMenuTreeAry.splice( this._index, 1 );
                     }
                 }
 
                 // Free the menu group
-                this.menuTreeMapMap.delete( group );
-                this.menuMapMap.delete( group );
+                this.menuTreeMapMap.delete( this._group );
+                this.menuMapMap.delete( this._group );
             }
         }
     }
@@ -447,30 +447,31 @@ class MenuManager extends ManagerBase
     //
     activateTree( treeAry )
     {
-        for( let tree = 0; tree < treeAry.length; ++tree )
+        for( this._tree = 0; this._tree < treeAry.length; ++this._tree )
         {
-            let treeStr = treeAry[tree];
-            let found = false;
+            this._treeStr = treeAry[this._tree];
+            this._found = false;
             
-            for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+            for( this._groupKey of this.menuTreeMapMap.keys() )
             {
-                for( let key of groupMap.keys() )
+                this._groupMap = this.menuTreeMapMap.get(this._groupKey)
+                for( this._key of this._groupMap.keys() )
                 {
-                    if( key === treeStr )
+                    if( this._key === this._treeStr )
                     {
-                        this.activateTreeGroup( groupKey, key );
-                        found = true;
+                        this.activateTreeGroup( this._groupKey, this._key );
+                        this._found = true;
                         break;
                     }
                 }
                 
-                if( found )
+                if( this._found )
                     break;
             }
 
             // If you got this far, it's a problem
-            if( !found )
-                throw new Error( `Menu tree doesn't exist (${treeStr})!` );
+            if( !this._found )
+                throw new Error( `Menu tree doesn't exist (${this._treeStr})!` );
         }
     }
     
@@ -524,13 +525,15 @@ class MenuManager extends ManagerBase
     //
     deactivateTree( treeStr )
     {
-        for( let [ groupKey, groupMap ] of this.menuTreeMapMap.entries() )
+        for( this._groupKey of this.menuTreeMapMap.keys() )
         {
-            for( let key of groupMap.keys() )
+            this._groupMap = this.menuTreeMapMap.get(this._groupKey);
+
+            for( this._key of this._groupMap.keys() )
             {
-                if( key === treeStr )
+                if( this._key === treeStr )
                 {
-                    this.deactivateTreeGroup( groupKey, key );
+                    this.deactivateTreeGroup( this._groupKey, this._key );
                     return;
                 }
             }
@@ -1037,13 +1040,8 @@ class MenuManager extends ManagerBase
     getTree( treeStr )
     {
         for( this._groupMap of this.menuTreeMapMap.values() )
-        {
-            for( let [ key, tree ] of this._groupMap.entries() )
-            {
-                if( key === treeStr )
-                    return tree;
-            }
-        }
+            if( this._groupMap.has(treeStr) )
+                return this._groupMap.get(treeStr);
 
         // If you got this far, it's a problem
         throw new Error( `Menu tree doesn't exist (${treeStr})!` );
@@ -1094,19 +1092,21 @@ class MenuManager extends ManagerBase
     {
         for( this._groupMap of this.menuTreeMapMap.values() )
         {
-            for( let [ key, tree ] of this._groupMap.entries() )
+            for( this._key of this._groupMap.keys() )
             {
-                if( key === treeStr )
+                this._tree = this._groupMap.get(this._key);
+
+                if( this._key === treeStr )
                 {
-                    if( tree.interfaceMenu )
+                    if( this._tree.interfaceMenu )
                     {
-                        this._index = this.activeInterTreeAry.indexOf( tree );
+                        this._index = this.activeInterTreeAry.indexOf( this._tree );
                         if( this._index > -1 )
                             return true;
                     }
                     else
                     {
-                        this._index = this.activeMenuTreeAry.indexOf( tree );
+                        this._index = this.activeMenuTreeAry.indexOf( this._tree );
                         if( this._index > -1 )
                             return true;
                     }

@@ -285,7 +285,6 @@ class EventManager
         if( this.gamePadList.length )
         {
             // Send out events for the button presses
-            //for ( let [index, lastGp] of this.gamePadMap )
             for ( this._each = 0; this._each < this.gamePadList.length; ++this._each )
             {
                 this._gp = navigator.getGamepads()[this._each];
