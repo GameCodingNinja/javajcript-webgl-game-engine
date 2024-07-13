@@ -219,6 +219,24 @@ class SoundManager extends ManagerBase
     }
 
     //
+    //  DESC: Pause all active sounds
+    //
+    suspendAllSounds()
+    {
+        if(this.context)
+            this.context.suspend();
+    }
+
+    //
+    //  DESC: Resume all active sounds
+    //
+    resumeAllSounds()
+    {
+        if(this.context)
+            this.context.resume();
+    }
+
+    //
     //  DESC: Get the playlist
     //
     getPlayList( group, playLstID )

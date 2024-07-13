@@ -172,6 +172,8 @@ export class Level1State extends CommonState
         this.musicCounter = 0;
         this.musicAry = [0, 1, 2];
         genFunc.shuffle( this.musicAry );
+
+        this.setYTGameScore();
         
         requestAnimationFrame( this.callback );
     }
@@ -207,6 +209,15 @@ export class Level1State extends CommonState
         this.maxEnemies = 5;
 
         this.train = null;
+    }
+
+    // 
+    //  DESC: Set the level score
+    //
+    setYTGameScore()
+    {
+        if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
+            ytgame.engagement.sendScore({ value: this.playerLevel });
     }
 
     // 
@@ -265,6 +276,8 @@ export class Level1State extends CommonState
 
             this.gameReady = true;
 
+            this.setYTGameScore();
+
             // Clear the last device used so that the button on start game menu is active by default
             actionManager.clearLastDeviceUsed();
 
@@ -304,7 +317,7 @@ export class Level1State extends CommonState
             if( this.playerShip.progressBar.isMinValue() && this.playerShip.sprite.collisionComponent.enable )
             {
                 this.playerShip.sprite.collisionComponent.enable = false;
-                this.playerShip.progressBar.setVisible( false );
+                this.playerShip.progressBar.setVisible( false );if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
                 this.playerShip.fireTailSprite.setVisible( false );
                 this.playerShip.fireTailScript.pause = true;
                 this.groupPlayer.pause( 'player_thrust' );
@@ -455,6 +468,8 @@ export class Level1State extends CommonState
                     this.hudProgressBar.setCurrentValue( 0 );
                     this.hudProgressBar.incProgressBarMax( 2 );
                     this.playerLevel += 1;
+
+                    this.setYTGameScore();
 
                     this.hudLevelFont.visualComponent.createFontString( `Level ${this.playerLevel}` );
 

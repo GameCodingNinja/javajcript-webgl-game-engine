@@ -145,31 +145,18 @@ export class StartUpState extends GameState
         // Init Youtube playable if in the environment
         if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
         {
-            /*ytgame.system.onAudioEnabledChange((isAudioEnabled) =>
+            ytgame.system.onAudioEnabledChange((isAudioEnabled) =>
             {
-                if(menuManager.initialized)
+                // Resume all audio
+                if (isAudioEnabled)
                 {
-                    let settingsMenu = menuManager.getMenu('settings_menu');
-
-                    // Allow audio.
-                    if (isAudioEnabled)
-                    {
-                        settings.user.soundEnabled = 1;
-                        settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
-                        settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
-
-                        soundManager.play( '(music)', 'LOOP_Synthetic_Humanity', true );
-                    }
-                    else // Disable audio.
-                    {
-                        settings.user.soundEnabled = 0;
-                        settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
-                        settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
-
-                        soundManager.stopGroup( '(music)' );
-                        soundManager.stopGroup( '(level_1)' );
-                        soundManager.stopGroup( '(menu)' );
-                    }
+                    soundManager.resumeAllSounds();
+                    //console.log('Resume all audio');
+                }
+                else // Suspend all audio.
+                {
+                    soundManager.suspendAllSounds();
+                    //console.log('Suspend all audio');
                 }
             });
 
@@ -179,6 +166,8 @@ export class StartUpState extends GameState
                 {
                     eventManager.dispatchEvent( menuDefs.EME_MENU_ESCAPE_ACTION, 'pause_tree' );
                 }
+
+                //console.log('Suspend game');
             });
             
             ytgame.system.onResume(() =>
@@ -187,7 +176,9 @@ export class StartUpState extends GameState
                 {
                     eventManager.dispatchEvent( menuDefs.EME_MENU_TOGGLE_ACTION, 'pause_tree' );
                 }
-            });*/
+
+                //console.log('Resume game');
+            });
 
             // Send first frame ready now that we've started to draw.
             ytgame.game.firstFrameReady();
