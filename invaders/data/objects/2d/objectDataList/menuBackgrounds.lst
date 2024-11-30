@@ -21,7 +21,7 @@
     <objectList>
 
         <object name="pause_menu_bg">
-            <size width="355" height="395"/>
+            <size width="350" height="380"/>
         </object>
 
         <object name="settings_menu_bg">
@@ -33,7 +33,7 @@
         </object>
         
         <object name="key_bindings_menu_bg">
-            <size width="1065" height="800"/>
+            <size width="1065" height="760"/>
         </object>
 
         <object name="game_over_menu_bg">

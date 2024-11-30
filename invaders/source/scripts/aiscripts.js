@@ -256,13 +256,13 @@ class AI_Enemy_Roam extends AI_Enemy_base
                     this._index = genFunc.randomInt( 0, this.data.buildings.length-1 );
                     this._targetBuilding = this.data.buildings[this._index].get();
 
+                    // Find a building that's not already targeted
                     this._freeBuildingFound = true;
                     for( this._i = 0; this._i < this.data.enemy.length; ++this._i )
                     {
-                        if( (this.data.enemy[this._i].get() != this.sprite) && (this.data.enemy[this._i].get().targetBuilding === this._targetBuilding) )
+                        if( this.data.enemy[this._i].get().targetBuilding === this._targetBuilding )
                         {
                             this._freeBuildingFound = false;
-                            this._freeBuildingFound = null;
                             break;
                         }
                     }
@@ -272,6 +272,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
                         // Should we target lock on a building?
                         if( genFunc.randomInt( 0, 10 ) > 4 )
                         {
+                            // Set the target building
                             this.sprite.targetBuilding = this._targetBuilding;
 
                             // Calculate the travel time
@@ -282,10 +283,10 @@ class AI_Enemy_Roam extends AI_Enemy_base
                             this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
 
                             // Only set the Y easing if not the same building position as we are now
-                            if( Math.abs(this.sprite.targetBuilding.pos.x - this.sprite.pos.x) > 100 )
+                            if( Math.abs( this.sprite.targetBuilding.pos.x - this.sprite.pos.x) > 100 )
                             {
                                 // Generate the Y range in which the enemy will travel
-                                let offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
+                                let offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
                                 this.easingY.init( this.sprite.pos.y, offsetY, this._time, easing.getSineInOut() );
                             }
                         }

@@ -13,7 +13,7 @@
         <!-- Pause Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
-            <position x="0" y="150" z="0"/>
+            <position x="0" y="140" z="0"/>
             <fontStringList>
                 <string text="Pause"/>
             </fontStringList>
@@ -26,7 +26,7 @@
         <!-- mouse-only close Button -->
         <control name="close_btn" controlType="button" defaultState="inactive" mouseOnlyCtrl="true">
             <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
-            <position x="140" y="160" z="0"/>
+            <position x="136" y="150" z="0"/>
             <fontStringList>
                 <string text="x"/>
             </fontStringList>
@@ -45,7 +45,7 @@
         <!-- Resume Button -->
         <control name="resume_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="70" z="0"/>
+            <position x="0" y="60" z="0"/>
             <fontStringList>
                 <string text="Resume"/>
             </fontStringList>
@@ -61,7 +61,7 @@
         <!-- Settings Button -->
         <control name="settings_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="10" z="0"/>
+            <position x="0" y="0" z="0"/>
             <fontStringList>
                 <string text="Settings"/>
             </fontStringList>
@@ -77,7 +77,7 @@
         <!-- Key Bindings Button -->
         <control name="key_binding_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="-50" z="0"/>
+            <position x="0" y="-60" z="0"/>
             <fontStringList>
                 <string text="Key Bindings"/>
             </fontStringList>
@@ -93,7 +93,7 @@
         <!-- Title Screen Menu Button -->
         <control name="title_screen_btn" faction="decision_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="-110" z="0"/>
+            <position x="0" y="-120" z="0"/>
             <fontStringList>
                 <string text="Title Screen"/>
             </fontStringList>

@@ -11,7 +11,7 @@
         <!-- Key Bindings Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
-            <position x="0" y="355" z="0"/>
+            <position x="0" y="340" z="0"/>
             <fontStringList>
                 <string text="Key Bindings"/>
             </fontStringList>
@@ -20,7 +20,7 @@
         <!-- Key Bind Controls Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_label.ctrl"/>
-            <position x="-17" y="295" z="0"/>
+            <position x="-17" y="290" z="0"/>
             <fontStringList>
                 <string text="Action"/>
                 <string text="Keyboard                 Mouse             Controller"/>
@@ -30,7 +30,7 @@
         <!-- instructions Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/key_binding_instructions_label.ctrl"/>
-            <position x="-500" y="-340" z="0"/>
+            <position x="-500" y="-338" z="0"/>
             <fontStringList>
                 <string text="Select the desired action to change. Press the button of the device to bind.|Press the same device button to unbind. Press Esc to cancel."/>
             </fontStringList>
@@ -43,7 +43,7 @@
         <!-- mouse-only close Button -->
         <control name="close_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
-            <position x="495" y="360" z="0"/>
+            <position x="495" y="344" z="0"/>
             <fontStringList>
                 <string text="x"/>
             </fontStringList>
@@ -58,7 +58,7 @@
         <!-- mouse-only close Button -->
         <control name="back_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/back_button.ctrl"/>
-            <position x="465" y="360" z="0"/>
+            <position x="465" y="344" z="0"/>
             <fontStringList>
                 <string text="^"/>
             </fontStringList>

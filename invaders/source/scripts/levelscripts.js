@@ -238,6 +238,10 @@ class EnemyShip_Shoot
         this.moveX = (this.playerShipSprite.pos.x - enemySprite.pos.x) / this._length;
         this.moveY = (this.playerShipSprite.pos.y - enemySprite.pos.y) / this._length;
 
+        this.projectile_rot_speed = -this.PROJECTILE_ROT_SPEED;
+        if( this.moveX < 0.0 )
+            this.projectile_rot_speed = this.PROJECTILE_ROT_SPEED;
+
         this.startPos.copy( enemySprite.pos );
 
         this.sprite.transform();
@@ -251,14 +255,14 @@ class EnemyShip_Shoot
         if( this.camera.inViewY( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
             this.sprite.incPosXYZ( this.moveX * highResTimer.elapsedTime * this.PROJECTILE_SPEED, this.moveY * highResTimer.elapsedTime * this.PROJECTILE_SPEED );
-            this.sprite.incRotXYZ( 0, 0, -(this.PROJECTILE_ROT_SPEED * highResTimer.elapsedTime) );
+            this.sprite.incRotXYZ( 0, 0, this.projectile_rot_speed * highResTimer.elapsedTime );
             this.sprite.collisionComponent.checkForCollision( this.playerShipStratagy.nodeAry );
 
             if( this.startPos.calcLength2D( this.sprite.pos ) < settings.deviceRes.w )
                 return false;
         }
 
-        // We are done with this sprite, queue it up to be deleted
+        // We are done with this sprite, queue it up to be recycled
         this.playerShipStratagy.recycle( this.sprite.parentNode );
 
         return true;

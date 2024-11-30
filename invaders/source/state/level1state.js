@@ -324,6 +324,7 @@ export class Level1State extends CommonState
                 this.playerShip.sprite.prepareScript( 'die' );
             }
         }
+        // Player shot enemy ship
         else if( spriteB.parentNode.userId == ENEMY_SHIP_ID )
         {
             // Stop any more collision detection
