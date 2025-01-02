@@ -36,6 +36,10 @@ export class ObjectData2D extends iObjectData
 
         // The initial size of the object
         this.size = new Size;
+
+        // The radius
+        this.radius = 0.0;
+        this.radiusSquared = 0.0;
     }
     
     // 
@@ -77,6 +81,9 @@ export class ObjectData2D extends iObjectData
     {
         // Create the visuales
         this.visualData.createFromData( group, this.size );
+
+        this.radiusSquared = this.size.getLengthSquared() / 2;
+        this.radius = this.size.getLength() / 2;
     }
 
     // 

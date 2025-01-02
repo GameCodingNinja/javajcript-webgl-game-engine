@@ -119,15 +119,19 @@ export class Level1State extends CommonState
         this.buildingsfrontCamera = cameraManager.get('buildingsfrontCamera');
         this.buildingsCamera = cameraManager.get('buildingsCamera');
         this.forgroundCamera = cameraManager.get('forgroundCamera');
-        this.camera = cameraManager.get('levelCamera');
+        this.levelCamera = cameraManager.get('levelCamera');
         this.radarCamera1 = cameraManager.get('radarCamera1');
         this.radarCamera2 = cameraManager.get('radarCamera2');
         this.wrapAroundCamera = cameraManager.get('wrapAroundCamera');
         this.buildingsbackCamera.initFromXml();
         this.buildingsfrontCamera.initFromXml();
         this.buildingsCamera.initFromXml();
-        this.camera.initFromXml();
+        this.levelCamera.initFromXml();
         this.wrapAroundCamera.initFromXml();
+
+        cameraManager.addToTransform( 
+            ['buildingsbackCamera','buildingsfrontCamera','buildingsCamera','forgroundCamera',
+             'levelCamera','radarCamera1','radarCamera2','radarCamera2','wrapAroundCamera','menuCamera'] );
 
         this.radarCamera1.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera1.scale.x;
         this.radarCamera1.initFromXml();
@@ -252,7 +256,7 @@ export class Level1State extends CommonState
             this.buildingsbackCamera.initFromXml();
             this.buildingsfrontCamera.initFromXml();
             this.buildingsCamera.initFromXml();
-            this.camera.initFromXml();
+            this.levelCamera.initFromXml();
             this.radarCamera1.initFromXml();
             this.radarCamera2.initFromXml();
             this.wrapAroundCamera.initFromXml();
@@ -546,7 +550,7 @@ export class Level1State extends CommonState
     //
     handleShipMovement( event )
     {
-        this._dir = -this.camera.pos.x - this.playerShip.sprite.pos.x;
+        this._dir = -this.levelCamera.pos.x - this.playerShip.sprite.pos.x;
 
         for( this._i = 0; this._i < this.moveActionAry.length; ++this._i )
         {
@@ -573,6 +577,8 @@ export class Level1State extends CommonState
 
                             this.groupPlayer.resume( 'player_thrust' );
 
+                            console.log("Move Left DOWN");
+
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
                             if(this._dir > -CAMERA_EASING_OFFSET)
@@ -587,6 +593,8 @@ export class Level1State extends CommonState
                             this.groupPlayer.pause( 'player_thrust' );
 
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+
+                            console.log("Move Left UP");
 
                             if( this.playerShipBoostSpeed )
                             {
@@ -611,6 +619,8 @@ export class Level1State extends CommonState
 
                             this.groupPlayer.resume( 'player_thrust' );
 
+                            console.log("Move Right DOWN");
+
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
                             if(this._dir < CAMERA_EASING_OFFSET)
@@ -625,6 +635,8 @@ export class Level1State extends CommonState
                             this.groupPlayer.pause( 'player_thrust' );
 
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+
+                            console.log("Move Right UP");
 
                             if( this.playerShipBoostSpeed )
                             {
@@ -809,7 +821,7 @@ export class Level1State extends CommonState
             // Handle the radar movement
             this.handleRadarMovement( this._easingVal );
 
-            this.camera.incPosXYZ( this._easingVal );
+            this.levelCamera.incPosXYZ( this._easingVal );
             this.forgroundCamera.incPosXYZ( this._easingVal );
             this.buildingsCamera.incPosXYZ( this._easingVal );
             this.buildingsbackCamera.incPosXYZ( this._easingVal * 0.25 );
@@ -855,7 +867,7 @@ export class Level1State extends CommonState
             // The camera easing positions the player ship at then end of the screen facing inwards
             if( this.moveDirX > MOVE_NULL )
             {
-                this._dir = -this.camera.transPos.x - this.playerShip.sprite.transPos.x;
+                this._dir = -this.levelCamera.transPos.x - this.playerShip.sprite.transPos.x;
 
                 if( (this.moveDirX === MOVE_LEFT && this._dir < -(settings.deviceRes_half.w - CAMERA_EASING_OFFSET)) )
                 {
@@ -903,14 +915,14 @@ export class Level1State extends CommonState
                 for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; ++this._i )
                     this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
-                this.camera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                this.levelCamera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
             }
             else if( this.playerShip.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
             {
                 for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; ++this._i )
                     this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
 
-                this.camera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                this.levelCamera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
             
             strategyManager.update();
@@ -929,15 +941,6 @@ export class Level1State extends CommonState
     transform()
     {
         super.transform();
-        
-        this.buildingsbackCamera.transform();
-        this.buildingsfrontCamera.transform();
-        this.buildingsCamera.transform();
-        this.forgroundCamera.transform();
-        this.camera.transform();
-        this.radarCamera1.transform();
-        this.radarCamera2.transform();
-        this.wrapAroundCamera.transform();
 
         if( this.gameReady )
         {

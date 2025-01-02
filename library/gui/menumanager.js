@@ -152,11 +152,15 @@ class MenuManager extends ManagerBase
     {
         let promiseAry = [];
 
+        // Get the name
+        let defaultCamera = xmlNode.getAttribute( 'defaultCamera' );
+        if( defaultCamera )
+            this.camera = cameraManager.get( defaultCamera );
+
         // Get the menu group map
         let groupMap = this.menuMapMap.get( group );
         
         let menuNode = xmlNode.getElementsByTagName('menu');
-
         for( let i = 0; i < menuNode.length; ++i )
         {
             // Get the name of the menu

@@ -66,6 +66,7 @@ export class StartUpState extends GameState
         super( stateDefs.EGS_STARTUP, stateDefs.EGS_LEVEL_1, gameLoopCallback );
 
         // Load the list tables
+        cameraManager.loadFromNode( genFunc.stringLoadXML( cameraListTable ) ); // Must be loaded first
         objectDataManager.loadListTableFromObj( dataListTable2D );
         strategyManager.loadListTableFromObj( strategyListTable );
         strategyLoader.loadListTableFromObj( strategyLoaderListTable );
@@ -73,7 +74,6 @@ export class StartUpState extends GameState
         soundManager.loadListTableFromObj( soundManagerListTable );
         physicsWorldManager.loadListTableFromObj( physicsManagerListTable );
         menuManager.loadListTableFromObj( menuManagerListTable );
-        cameraManager.loadFromNode( genFunc.stringLoadXML( cameraListTable ) );
         actionManager.loadFromObj( actionManagerJson );
         menuManager.loadMenuActionFromObj( menuActionJSON );
 

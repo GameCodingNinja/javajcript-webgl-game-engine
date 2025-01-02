@@ -1,0 +1,21 @@
+Inverted Y
+
+Vulkan
+   -Y
+-X    +X
+   +y
+
+   Visible Z = -
+
+WebGL
+   +Y
+-X    +X
+   -y
+
+   Visible Z = -
+
+High resolution timer; Difference is * or / by 100
+
+Vulkan: Fractional value; Example: 1082985.622775
+
+WebGL: Whole number; Example: 14961

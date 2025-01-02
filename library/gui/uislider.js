@@ -9,9 +9,13 @@ import { UISubControl } from './uisubcontrol';
 import { Point } from '../common/point';
 import { settings } from '../utilities/settings';
 import { eventManager } from '../managers/eventmanager';
+import { menuManager } from '../gui/menumanager';
+import { Matrix } from '../utilities/matrix';
 import * as uiControlDefs from '../gui/uicontroldefs';
 import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
+
+var globalMatrix = new Matrix
 
 export class UISlider extends UISubControl
 {
@@ -240,13 +244,16 @@ export class UISlider extends UISubControl
 
         if( this.isActive() && (this.pressType === defs.EAP_DOWN) )
         {
-            this._oneOverAspectRatio = 1.0 / settings.orthoAspectRatio.h;
+            globalMatrix.initilizeMatrix();
+            globalMatrix.mergeMatrix( this.matrix.matrix );
+            globalMatrix.mergeMatrix( menuManager.camera.matrix.matrix );
+            globalMatrix.scaleFromValue( settings.orthoAspectRatio.h );
 
             // (1.0 / this.matrix.matrix[]) handles the scaling of the control
             if( this.orientation === defs.EO_HORIZONTAL )
-                this.incSliderMovePos( event.movementX * this._oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[0]) );
+                this.incSliderMovePos( event.movementX * (1 / event.gameAdjustedPixelRatio) * (1.0 / globalMatrix.matrix[0]) );
             else
-                this.incSliderMovePos( event.movementY * this._oneOverAspectRatio * (1 / event.gameAdjustedPixelRatio) * (1.0 / this.matrix.matrix[5]) );
+                this.incSliderMovePos( event.movementY * (1 / event.gameAdjustedPixelRatio) * (1.0 / globalMatrix.matrix[5]) );
         }
 
         return this._result;
@@ -271,13 +278,16 @@ export class UISlider extends UISubControl
             {
                 this.prepareControlScript( uiControlDefs.ECS_SELECT );
 
-                this._ratio = 1.0 / settings.orthoAspectRatio.h;
+                globalMatrix.initilizeMatrix();
+                globalMatrix.mergeMatrix( this.matrix.matrix );
+                globalMatrix.mergeMatrix( menuManager.camera.matrix.matrix );
+                globalMatrix.scaleFromValue( settings.orthoAspectRatio.h );
 
                 // (1.0 / this.matrix.matrix[]) handles the scaling of the control
                 if( this.orientation === defs.EO_HORIZONTAL )
-                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * this._ratio * (1.0 / this.matrix.matrix[0]) );
+                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_X] - this.subControlAry[0].collisionCenter.x) * (1.0 / globalMatrix.matrix[0]) );
                 else
-                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * this._ratio * (1.0 / this.matrix.matrix[5]) );
+                    this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * (1.0 / globalMatrix.matrix[5]) );
             }
         }
         else if( event.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType )

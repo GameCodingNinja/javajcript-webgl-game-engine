@@ -91,17 +91,24 @@ class CameraManager
     //
     addToTransform( cameraId )
     {
-        this._camera = this.cameraMap.get( cameraId );
-        if( this._camera )
+        this._cameraIdAry = cameraId;
+        if( !(cameraId instanceof Array) )
+            this._cameraIdAry = [cameraId];
+
+        for( this._i = 0; this._i < this._cameraIdAry.length; ++this._i )
         {
-            this._index = this.transformAry.findIndex( (obj) => obj === this._camera );
-            if( this._index !== -1 )
-                console.warn( `Camera is already being transformed (${cameraId})!` );
+            this._camera = this.cameraMap.get( this._cameraIdAry[this._i] );
+            if( this._camera )
+            {
+                this._index = this.transformAry.findIndex( (obj) => obj === this._camera );
+                if( this._index !== -1 )
+                    console.warn( `Camera is already being transformed (${this._cameraIdAry[this._i]})!` );
+                else
+                    this.transformAry.push( this._camera );
+            }
             else
-                this.transformAry.push( this._camera );
+                throw new Error( `Camera id is not defined (${this._cameraIdAry[this._i]})!` );
         }
-        else
-            throw new Error( `Camera id is not defined (${cameraId})!` );
     }
     
     // 

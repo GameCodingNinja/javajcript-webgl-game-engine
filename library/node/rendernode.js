@@ -18,7 +18,7 @@ export class RenderNode extends Node
     }
 
     // 
-    //  DESC: Only called after node creation
+    //  DESC: Only called after node creation with all it's children
     //
     init()
     {

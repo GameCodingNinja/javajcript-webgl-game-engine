@@ -2,40 +2,44 @@
 <cameraLst>
     
     <default projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0">
-        <position x="0" y="0" z="20"/>
+        <position x="0" y="0" z="0"/>
     </default>
 
+    <camera id="menuCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0">
+        <position x="0" y="0" z="20"/>
+    </camera>
+
     <camera id="levelCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_full">
-        <position x="400" y="0" z="20"/>
+        <position x="400" y="0" z="0"/>
     </camera>
 
     <camera id="wrapAroundCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
-        <position x="400" y="0" z="20"/>
+        <position x="400" y="0" z="0"/>
     </camera>
 
     <camera id="buildingsCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
-        <position x="400" y="0" z="20"/>
+        <position x="400" y="0" z="0"/>
     </camera>
 
     <camera id="buildingsbackCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
-        <position x="400" y="0" z="20"/>
+        <position x="400" y="0" z="0"/>
     </camera>
 
     <camera id="buildingsfrontCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
-        <position x="400" y="0" z="20"/>
+        <position x="400" y="0" z="0"/>
     </camera>
 
     <camera id="forgroundCamera" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" cull="cull_x_only">
-        <position x="400" y="0" z="20"/>
+        <position x="400" y="0" z="0"/>
     </camera>
 
     <camera id="radarCamera1" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" projWidth="1280" projHeight="66" cull="cull_x_only">
-        <position x="68" y="0" z="20"/>
+        <position x="68" y="0" z="0"/>
         <scale x="0.1" y="0.1"/>
     </camera>
 
     <camera id="radarCamera2" projectType="orthographic" minZDist="5" maxZDist="1000" view_angle="45.0" projWidth="1280" projHeight="66" cull="cull_x_only">
-        <position x="-1052" y="0" z="20"/>
+        <position x="-1052" y="0" z="0"/>
         <scale x="0.1" y="0.1"/>
     </camera>
   

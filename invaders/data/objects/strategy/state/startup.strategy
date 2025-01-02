@@ -4,7 +4,7 @@
     <node name="logo">
         
         <sprite>
-            <position x="0" y="10" z="0"/>
+            <position x="0" y="10" z="-20"/>
         </sprite>
 
     </node>

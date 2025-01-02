@@ -9,6 +9,7 @@
 import { GameState } from './gamestate';
 import { menuManager } from '../../../library/gui/menumanager';
 import { GenericEvent } from '../../../library/common/genericevent';
+import { cameraManager } from '../../../library/managers/cameramanager';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 
@@ -73,6 +74,9 @@ export class CommonState extends GameState
     {
         // Transform the menus
         menuManager.transform();
+
+        // Tranform all the camera
+        cameraManager.transform();
     }
     
     // 

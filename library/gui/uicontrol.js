@@ -18,6 +18,7 @@ import { settings } from '../utilities/settings';
 import { objectDataManager } from '../objectdatamanager/objectdatamanager';
 import { eventManager } from '../managers/eventmanager';
 import { actionManager } from '../managers/actionmanager';
+import { menuManager } from '../gui/menumanager';
 import * as parseHelper from '../utilities/xmlparsehelper';
 import * as uiControlDefs from '../gui/uicontroldefs';
 import * as menuDefs from '../gui/menudefs';
@@ -225,6 +226,7 @@ export class UIControl extends ControlBase
         if( this.wasWorldPosTranformed() && !this.size.isEmpty() )
         {
             let finalMatrix = new Matrix( this.matrix );
+            finalMatrix.mergeMatrix( menuManager.camera.matrix.matrix );
             finalMatrix.scaleFromValue( settings.orthoAspectRatio.h );
             finalMatrix.invertY();
 
