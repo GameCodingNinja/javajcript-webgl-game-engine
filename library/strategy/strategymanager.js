@@ -7,6 +7,7 @@
 "use strict";
 
 import { ManagerBase } from '../managers/managerbase';
+import * as genFunc from '../utilities/genfunc';
 
 class StrategyManager extends ManagerBase
 {
@@ -75,19 +76,32 @@ class StrategyManager extends ManagerBase
     //
     deactivateStrategy( strategyId )
     {
-        this._strategy = this.strategyMap.get( strategyId );
-        if( this._strategy )
+        if( typeof id === 'string' )
         {
-            this._index = this.strategyAry.findIndex( (obj) => obj === this._strategy );
+            this._strategy = this.strategyMap.get( strategyId );
+            if( this._strategy )
+            {
+                this._index = genFunc.indexOf( this.strategyAry, this._strategy );
+
+                if( this._index !== -1 )
+                    genFunc.removeAt( this.strategyAry, this._index );
+                else
+                    console.warn( `Strategy is not active (${strategyId})!` );
+            }
+            else
+                console.warn( `Strategy id can't be found to deactivate (${strategyId})!` );
+            
+            return this._strategy;
+        }
+        else
+        {
+            this._index = genFunc.indexOf( this.strategyAry, strategyId );
+
             if( this._index !== -1 )
-                this.strategyAry.splice( this._index, 1 );
+                genFunc.removeAt( this.strategyAry, this._index );
             else
                 console.warn( `Strategy is not active (${strategyId})!` );
         }
-        else
-            console.warn( `Strategy id can't be found to deactivate (${strategyId})!` );
-        
-        return this._strategy;
     }
     
     //

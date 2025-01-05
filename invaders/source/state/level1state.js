@@ -89,10 +89,9 @@ export class Level1State extends CommonState
         strategyManager.activateStrategy('_buildingsback_');
         strategyManager.activateStrategy('_buildingsfront_');
         this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
+        strategyManager.activateStrategy('_forground_');
 
         // Aquire strategies that are handled outside of the manager
-        this.forgroundStrategy = strategyManager.get('_forground_');
-        this.trainStrategy = strategyManager.get('_train_');
         this.lowerHudStategy = strategyManager.get('_lower_hud_');
         this.upperHudStategy = strategyManager.get('_upper_hud_');
         this.hudLevelFont = this.upperHudStategy.get('level_font').get();
@@ -146,6 +145,9 @@ export class Level1State extends CommonState
 
         // Init the player ship
         this.initPlayerShip();
+
+        // Init misc objects
+        this.initMiscObjects();
 
         this.hudProgressBar.setProgressBarMax( 10 );
         this.hudProgressBar.setCurrentValue( 0 );
@@ -206,13 +208,23 @@ export class Level1State extends CommonState
         this.playerShip.sprite.setRotXYZ();
         this.playerShip.sprite.collisionComponent.enable = true;
         this.playerShip.progressBar.setVisible( false );
+    }
 
+    // 
+    //  DESC: Init the misc objects
+    //
+    initMiscObjects()
+    {
         this.enemySpawnTimer = new Timer(2000);
         this.enemyMaxTimer = new Timer(15000);
-        this.trainTimer = new Timer( genFunc.randomInt( 10000, 25000 ) );
         this.maxEnemies = 5;
 
-        this.train = null;
+        this.train = {};
+        this.train.strategy = null;
+        this.train.timer = new Timer( genFunc.randomInt( 10000, 25000 ) );
+        this.train.sprite = null;
+        this.train.node = null;
+        this.train.dir = 0;
     }
 
     // 
@@ -245,11 +257,11 @@ export class Level1State extends CommonState
             // Reactivate strategies
             this.enemyStrategy = strategyManager.get('_enemy_');
 
-            // Aquire unactivated strategies
-            this.trainStrategy = strategyManager.get('_train_');
-
             // Init the player ship
             this.initPlayerShip();
+
+            // Init misc objects
+            this.initMiscObjects();
 
             strategyManager.sort();
 
@@ -367,8 +379,6 @@ export class Level1State extends CommonState
                     strategyManager.update();
                     this.lowerHudStategy.update();
                     this.upperHudStategy.update();
-                    this.forgroundStrategy.update();
-                    this.trainStrategy.update();
                     this.enemyStrategy.update();
                     this.playerShip.strategy.update();
                 }
@@ -577,7 +587,7 @@ export class Level1State extends CommonState
 
                             this.groupPlayer.resume( 'player_thrust' );
 
-                            console.log("Move Left DOWN");
+                            //console.log("Move Left DOWN");
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
@@ -594,12 +604,12 @@ export class Level1State extends CommonState
 
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
 
-                            console.log("Move Left UP");
+                            //console.log("Move Left UP");
 
                             if( this.playerShipBoostSpeed )
                             {
                                 this.playerShipBoostSpeed = 0;
-                                console.log("boost Off");
+                                //console.log("boost Off");
                             }
                         }
 
@@ -619,7 +629,7 @@ export class Level1State extends CommonState
 
                             this.groupPlayer.resume( 'player_thrust' );
 
-                            console.log("Move Right DOWN");
+                            //console.log("Move Right DOWN");
 
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
@@ -636,12 +646,12 @@ export class Level1State extends CommonState
 
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
 
-                            console.log("Move Right UP");
+                            //console.log("Move Right UP");
 
                             if( this.playerShipBoostSpeed )
                             {
                                 this.playerShipBoostSpeed = 0;
-                                console.log("boost Off");
+                                //console.log("boost Off");
                             }
                         }
 
@@ -713,37 +723,40 @@ export class Level1State extends CommonState
     //
     handleTrainSpawn( easingVal )
     {
-        if( this.train )
+        if( this.train.strategy )
         {
             // If a train is active, move it
-            this.train.incPosXYZ( (this.train.inc * highResTimer.elapsedTime) + -easingVal );
+            this.train.sprite.incPosXYZ( (this.train.dir * highResTimer.elapsedTime) + -easingVal );
 
             // Delete the train if it exit's the side of the screen it's moving towards
-            if( (this.train.inc === 1 && (this.train.transPos.x - this.train.parentNode.radius) > settings.deviceRes_half.w) ||
-                (this.train.inc === -1 && (this.train.transPos.x + this.train.parentNode.radius) < -settings.deviceRes_half.w) )
+            if( (this.train.dir === 1 && (this.train.sprite.transPos.x - this.train.node.radius) > settings.deviceRes_half.w) ||
+                (this.train.dir === -1 && (this.train.sprite.transPos.x + this.train.node.radius) < -settings.deviceRes_half.w) )
             {
-                //console.log("recycle train");
-                this.trainStrategy.recycle( this.train.parentNode );
-                this.train = null;
-                this.trainTimer.reset( genFunc.randomInt( 10000, 25000 ) );
+                strategyManager.deactivateStrategy( this.train.strategy );
+                this.train.strategy = null;
+                this.train.sprite = null;
+                this.train.node = null;
+                this.train.timer.reset( genFunc.randomInt( 10000, 25000 ) );
             }
         }
-        // If we've been without a train for a long enough period, create one
-        else if( this.trainTimer.expired() )
+        // If we've been without a train for a long enough period, activate the strategy
+        else if( this.train.timer.expired() )
         {
-            this.trainTimer.disable( true );
-            //console.log("create train");
+            this.train.timer.disable( true );
 
-            this.train = this.trainStrategy.create( 'train' ).get();
+            this.train.strategy = strategyManager.activateStrategy('_train_');
+            this.train.node = this.train.strategy.get('train');
+            this.train.sprite = this.train.node.get();
+
             if( genFunc.randomInt( 0, 1 ) === 0 )
             {
-                this.train.inc = -1;
-                this.train.setPosXYZ( settings.deviceRes_half.w + this.train.parentNode.radius, -298 );
+                this.train.dir = -1;
+                this.train.sprite.setPosXYZ( settings.deviceRes_half.w + this.train.node.radius, -298 );
             }
             else
             {
-                this.train.inc = 1;
-                this.train.setPosXYZ( -(settings.deviceRes_half.w + this.train.parentNode.radius), -298 );
+                this.train.dir = 1;
+                this.train.sprite.setPosXYZ( -(settings.deviceRes_half.w + this.train.node.radius), -298 );
             }
         }
     }
@@ -926,8 +939,6 @@ export class Level1State extends CommonState
             }
             
             strategyManager.update();
-            this.forgroundStrategy.update();
-            this.trainStrategy.update();
             this.upperHudStategy.update();
             this.lowerHudStategy.update();
             this.enemyStrategy.update();
@@ -947,8 +958,6 @@ export class Level1State extends CommonState
             strategyManager.transform();
             this.upperHudStategy.transform();
             this.lowerHudStategy.transform();
-            this.forgroundStrategy.transform();
-            this.trainStrategy.transform();
             this.enemyStrategy.transform();
             this.playerShip.strategy.transform();
         }
@@ -974,8 +983,6 @@ export class Level1State extends CommonState
 
             this.enemyStrategy.render();
             this.playerShip.strategy.render();
-            this.forgroundStrategy.render();
-            this.trainStrategy.render();
             this.lowerHudStategy.render();
 
             // Render the top hud radar map

@@ -258,7 +258,7 @@ export function removeAt(array, index)
 }
 
 // 
-//  DESC: Remove value from array without incuring garbage collection
+//  DESC: Find value from array without incuring garbage collection
 //
 export function indexOf(array, obj)
 {

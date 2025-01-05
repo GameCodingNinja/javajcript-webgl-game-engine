@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <loader>
 
-    <strategy name="_train_"/>
+    <strategy name="_train_">
+        <node name="train" instance="train"/>
+    </strategy>
   
 </loader>
