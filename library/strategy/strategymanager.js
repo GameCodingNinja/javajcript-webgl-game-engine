@@ -76,7 +76,7 @@ class StrategyManager extends ManagerBase
     //
     deactivateStrategy( strategyId )
     {
-        if( typeof id === 'string' )
+        if( typeof strategyId === 'string' )
         {
             this._strategy = this.strategyMap.get( strategyId );
             if( this._strategy )

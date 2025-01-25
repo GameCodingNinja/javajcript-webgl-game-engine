@@ -333,7 +333,7 @@ export class Level1State extends CommonState
             if( this.playerShip.progressBar.isMinValue() && this.playerShip.sprite.collisionComponent.enable )
             {
                 this.playerShip.sprite.collisionComponent.enable = false;
-                this.playerShip.progressBar.setVisible( false );if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
+                this.playerShip.progressBar.setVisible( false );
                 this.playerShip.fireTailSprite.setVisible( false );
                 this.playerShip.fireTailScript.pause = true;
                 this.groupPlayer.pause( 'player_thrust' );
