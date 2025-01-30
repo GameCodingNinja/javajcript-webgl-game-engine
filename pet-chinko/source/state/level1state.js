@@ -151,9 +151,8 @@ export class Level1State extends CommonState
             this.uiBallMeter.incBangUp( -1 );
 
             // Get the spot on the screen they clicked
-            let ratio = 1.0 / settings.orthoAspectRatio.h;
             let y = 600;
-            let x = (ratio * event.gameAdjustedMouseX) - settings.displayRes_half.w;
+            let x = (event.gameAdjustedMouseX - settings.displayRes_half.w) / settings.orthoAspectRatio.h;
             
             // Set a random rotation
             let angle = genFunc.randomInt(0, 350) * defs.DEG_TO_RAD;

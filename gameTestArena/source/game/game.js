@@ -132,11 +132,11 @@ export class Game
     //
     pollEvents()
     {
-        let event = null;
+        this._event = null;
         
         // Handle events on the queue
-        while( (event = eventManager.pollEvent()) )
-            this.handleEvent( event );
+        while( (this._event = eventManager.pollEvent()) )
+            this.handleEvent( this._event );
     }
     
     // 
