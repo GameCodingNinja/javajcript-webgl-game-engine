@@ -1045,12 +1045,6 @@ class ConfirmBtn_execute
             this.actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
             this.executionAction = "level_1_state";
         }
-        else if( this.control.name === 'title_screen_btn' )
-        {
-            this.conformationMsg = 'Are you sure you|want to go back to|the Title Screen?';
-            this.actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
-            this.executionAction = 'title_screen_state';
-        }
         else if( this.control.name === 'Key_Binding_reset_btn' )
         {
             this.conformationMsg = 'Are you sure you want|to reset keybinding back|to the default settings?';

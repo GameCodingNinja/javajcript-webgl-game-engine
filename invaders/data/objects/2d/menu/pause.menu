@@ -13,7 +13,7 @@
         <!-- Pause Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
-            <position x="0" y="140" z="0"/>
+            <position x="0" y="120" z="0"/>
             <fontStringList>
                 <string text="Pause"/>
             </fontStringList>
@@ -26,7 +26,7 @@
         <!-- mouse-only close Button -->
         <control name="close_btn" controlType="button" defaultState="inactive" mouseOnlyCtrl="true">
             <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
-            <position x="136" y="150" z="0"/>
+            <position x="136" y="120" z="0"/>
             <fontStringList>
                 <string text="x"/>
             </fontStringList>
@@ -45,12 +45,12 @@
         <!-- Resume Button -->
         <control name="resume_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="60" z="0"/>
+            <position x="0" y="40" z="0"/>
             <fontStringList>
                 <string text="Resume"/>
             </fontStringList>
             <action actionType="back"/>
-            <navigate up="title_screen_btn" down="settings_btn"/>
+            <navigate up="key_binding_btn" down="settings_btn"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
@@ -61,7 +61,7 @@
         <!-- Settings Button -->
         <control name="settings_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="0" z="0"/>
+            <position x="0" y="-30" z="0"/>
             <fontStringList>
                 <string text="Settings"/>
             </fontStringList>
@@ -77,33 +77,16 @@
         <!-- Key Bindings Button -->
         <control name="key_binding_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="-60" z="0"/>
+            <position x="0" y="-100" z="0"/>
             <fontStringList>
                 <string text="Key Bindings"/>
             </fontStringList>
             <action actionType="to_menu" executionAction="key_bindings_menu"/>
-            <navigate up="settings_btn" down="title_screen_btn"/>
+            <navigate up="settings_btn" down="resume_btn"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
                 <script select="Control_OnSelect"/>
-            </scriptList>
-        </control>
-
-        <!-- Title Screen Menu Button -->
-        <control name="title_screen_btn" faction="decision_btn" controlType="button" defaultState="inactive">
-            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
-            <position x="0" y="-120" z="0"/>
-            <fontStringList>
-                <string text="Title Screen"/>
-            </fontStringList>
-            <action actionType="to_menu" executionAction="confirmation_menu"/>
-            <navigate up="key_binding_btn" down="resume_btn"/>
-            <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
-            <scriptList>
-                <script active="Control_OnActive"/>
-                <script select="Control_OnSelect"/>
-                <script execute="ConfirmBtn_execute"/>
             </scriptList>
         </control> 
 

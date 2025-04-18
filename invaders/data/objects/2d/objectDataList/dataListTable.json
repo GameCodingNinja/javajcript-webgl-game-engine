@@ -2,16 +2,10 @@
     "(startup)": [
         "data/objects/2d/objectDataList/startupDataList.lst"],
 
-    "(loadingScreen)": [
-        "data/objects/2d/objectDataList/loadingScreenDataList.lst"],
-
     "(menu)": [
         "data/objects/2d/objectDataList/menuBackgrounds.lst",
         "data/objects/2d/objectDataList/menuButtonFrames.lst",
         "data/objects/2d/objectDataList/menuMisc.lst"],
-
-    "(title_screen)": [
-        "data/objects/2d/objectDataList/titleScreenDataList.lst"],
 
     "(level_1)": [
         "data/objects/2d/objectDataList/level1DataList.lst"]

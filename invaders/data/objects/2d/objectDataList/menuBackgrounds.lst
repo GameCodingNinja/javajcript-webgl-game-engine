@@ -21,7 +21,7 @@
     <objectList>
 
         <object name="pause_menu_bg">
-            <size width="350" height="380"/>
+            <size width="350" height="340"/>
         </object>
 
         <object name="settings_menu_bg">
