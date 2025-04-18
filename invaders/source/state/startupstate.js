@@ -40,6 +40,7 @@ import * as aiBaseScripts from '../scripts/aibasescripts';
 import * as aiScripts from '../scripts/aiscripts';
 import * as stateDefs from './statedefs';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
+import { localStorage } from '../../../library/utilities/localstorage';
 
 // Load data from bundle as string
 import dataListTable2D from '../../data/objects/2d/objectDataList/dataListTable.json';
@@ -55,9 +56,27 @@ import shaderObj from '../../data/shaders/shader.json';
 import actionManagerJson from '../../data/settings/controllerMapping.json';
 import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
+import userSettingsObj from '../../data/settings/usersettings.json';
 
 const STARTUP_ASSET_COUNT = 167,
       MIN_LOAD_TIME = 1500;
+
+async function initCrazyGames()
+{
+    if(typeof window.CrazyGames !== 'undefined')
+    {
+        await window.CrazyGames.SDK.init();
+
+        // Indicate to Crazy Games the start of the loading
+        window.CrazyGames.SDK.game.loadingStart();
+
+        // Init local storage
+        localStorage.init();
+
+        // Load the user settings. Needs to be after localStorage.init()
+        settings.loadUserSettingsFromObj( userSettingsObj );
+    }
+}
 
 export class StartUpState extends GameState
 {
@@ -106,6 +125,8 @@ export class StartUpState extends GameState
         let groupAry = ['(startup)'];
 
         Promise.all([
+
+            initCrazyGames(),
 
             // Load the shaders
             shaderManager.loadFromObj( shaderObj ),

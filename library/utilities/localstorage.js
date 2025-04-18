@@ -6,12 +6,7 @@
 
 "use strict";
 
-import { EAR_LEFT } from '../gui/uicontroldefs';
 import { settings } from '../utilities/settings';
-
-const NULL_STORAGE = 0,
-      LOCAL_STORAGE = 1,
-      YTGAME_STORAGE = 2
 
 var YTGameData = null;
 
@@ -28,8 +23,8 @@ class LocalStorage
 {
     constructor()
     {
+        this.buffer = null;
         this.storage = null;
-        this.storageType = NULL_STORAGE;
     }
 
     // 
@@ -39,27 +34,29 @@ class LocalStorage
     {
         try
         {
-            if(typeof ytgame === 'undefined')
+            if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV )
             {
-                this.storage = window.localStorage.getItem( `${settings.gameName}_${settings.gameId}` );
-
-                this.storageType = LOCAL_STORAGE;
+                this.buffer = YTGameData;
             }
-            else if( ytgame.IN_PLAYABLES_ENV )
+            else if( typeof window.CrazyGames !== 'undefined')
             {
-                // Check form an empty string then data has never been saved
-                this.storage = YTGameData;
-
-                this.storageType = YTGAME_STORAGE;
-            }
-
-            if (this.storage)
-            {
-                this.storage = JSON.parse( this.storage );
+                this.storage = window.CrazyGames.SDK.data;
+                this.buffer = this.storage.getItem( `${settings.gameName}_${settings.gameId}` );
             }
             else
             {
-                this.storage = {};
+                this.storage = window.localStorage;
+                this.buffer = this.storage.getItem( `${settings.gameName}_${settings.gameId}` );
+            }
+
+            // Check for an empty string then data has never been saved
+            if (this.buffer)
+            {
+                this.buffer = JSON.parse( this.buffer );
+            }
+            else
+            {
+                this.buffer = {};
             }
         }
         catch (e)
@@ -75,15 +72,11 @@ class LocalStorage
     {
         try
         {
-            this.storage[key] = value;
+            this.buffer[key] = value;
 
-            if( this.storageType === LOCAL_STORAGE )
+            if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV )
             {
-                window.localStorage.setItem( `${settings.gameName}_${settings.gameId}`, JSON.stringify(this.storage) );
-            }
-            else if( this.storageType === YTGAME_STORAGE )
-            {
-                ytgame.game.saveData(JSON.stringify(this.storage)).then(() => {
+                ytgame.game.saveData(JSON.stringify(this.buffer)).then(() => {
                     // Handle data save success.
                     }, (e) => {
                         // Handle data save failure.
@@ -91,6 +84,10 @@ class LocalStorage
                         // Send an error to YouTube when this happens.
                         ytgame.health.logError();
                     });
+            }
+            else
+            {
+                this.storage.setItem( `${settings.gameName}_${settings.gameId}`, JSON.stringify(this.buffer) );
             }
         }
         catch (e)
@@ -106,7 +103,7 @@ class LocalStorage
     {
         try
         {
-            return this.storage[key];
+            return this.buffer[key];
         }
         catch (e)
         {
@@ -121,15 +118,11 @@ class LocalStorage
     {
         try
         {
-            delete this.storage[key];
+            delete this.buffer[key];
 
-            if( this.storageType === LOCAL_STORAGE )
+            if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV )
             {
-                window.localStorage.setItem( `${settings.gameName}_${settings.gameId}`, JSON.stringify(this.storage) );
-            }
-            else if( this.storageType === YTGAME_STORAGE )
-            {
-                ytgame.game.saveData(JSON.stringify(this.storage)).then(() => {
+                ytgame.game.saveData(JSON.stringify(this.buffer)).then(() => {
                     // Handle data save success.
                     }, (e) => {
                         // Handle data save failure.
@@ -137,6 +130,10 @@ class LocalStorage
                         // Send an error to YouTube when this happens.
                         ytgame.health.logError();
                     });
+            }
+            else
+            {
+                this.storage.setItem( `${settings.gameName}_${settings.gameId}`, JSON.stringify(this.buffer) );
             }
         }
         catch (e)
@@ -152,13 +149,9 @@ class LocalStorage
     {
         try
         {
-            this.storage = {};
+            this.buffer = {};
 
-            if( this.storageType === LOCAL_STORAGE )
-            {
-                window.localStorage.clear();
-            }
-            else if( this.storageType === YTGAME_STORAGE )
+            if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV )
             {
                 ytgame.game.saveData('').then(() => {
                     // Handle data save success.
@@ -168,6 +161,10 @@ class LocalStorage
                         // Send an error to YouTube when this happens.
                         ytgame.health.logError();
                     });
+            }
+            else
+            {
+                this.storage.clear();
             }
         }
         catch (e)

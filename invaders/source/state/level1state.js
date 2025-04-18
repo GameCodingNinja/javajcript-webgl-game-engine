@@ -130,7 +130,7 @@ export class Level1State extends CommonState
 
         cameraManager.addToTransform( 
             ['buildingsbackCamera','buildingsfrontCamera','buildingsCamera','forgroundCamera',
-             'levelCamera','radarCamera1','radarCamera2','radarCamera2','wrapAroundCamera','menuCamera'] );
+             'levelCamera','radarCamera1','radarCamera2','wrapAroundCamera','menuCamera'] );
 
         this.radarCamera1.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera1.scale.x;
         this.radarCamera1.initFromXml();
@@ -180,6 +180,10 @@ export class Level1State extends CommonState
         genFunc.shuffle( this.musicAry );
 
         this.setYTGameScore();
+
+        // Indicate to Crazy Games the start of the loading
+        if(typeof window.CrazyGames !== 'undefined')
+            window.CrazyGames.SDK.game.loadingStop();
         
         requestAnimationFrame( this.callback );
     }
@@ -402,6 +406,10 @@ export class Level1State extends CommonState
 
                         // Start the ambient music
                         scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+
+                        // Indicate to Crazy Games the game has started
+                        if(typeof window.CrazyGames !== 'undefined')
+                            window.CrazyGames.SDK.game.gameplayStop();
                     }
                 }
             }
@@ -419,6 +427,10 @@ export class Level1State extends CommonState
 
                         // Start the game music
                         scriptSingleton.prepare( scriptManager.get('MusicFade')( gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true), null ) );
+
+                        // Indicate to Crazy Games the game has stopped
+                        if(typeof window.CrazyGames !== 'undefined')
+                            window.CrazyGames.SDK.game.gameplayStart();
                     }
 
                     this._tree = menuManager.getTree( 'pause_tree' );
@@ -440,6 +452,10 @@ export class Level1State extends CommonState
                 // Start the ambient music
                 let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
                 scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+
+                // Indicate to Crazy Games the game has started
+                if(typeof window.CrazyGames !== 'undefined')
+                    window.CrazyGames.SDK.game.gameplayStop();
             }
             else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )
             {
