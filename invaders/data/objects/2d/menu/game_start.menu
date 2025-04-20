@@ -10,7 +10,7 @@
 
     <staticMenuControls>
 
-        <control controlType="label" defaultState="inactive">
+        <control name="bold_font_msg" controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
             <position x="0" y="120" z="0"/>
             <fontStringList>
@@ -18,7 +18,7 @@
             </fontStringList>
         </control>
 
-        <control controlType="label" defaultState="inactive">
+        <control name="reg_font_msg" controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label_cond_45.ctrl"/>
             <position x="0" y="0" z="0"/>
             <fontStringList>

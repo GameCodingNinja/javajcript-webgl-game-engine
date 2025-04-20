@@ -55,7 +55,11 @@ export class Camera extends Object
         else
             throw new Error( 'Camera XML is NULL!' );
 
-        let attr = xmlNode.getAttribute('projectType');
+        let attr = xmlNode.getAttribute('id');
+        if( attr )
+            this.id = attr;
+
+        attr = xmlNode.getAttribute('projectType');
         if( attr )
         {
             if( attr === 'orthographic' )

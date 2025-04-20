@@ -1039,13 +1039,7 @@ class ConfirmBtn_execute
     //
     execute()
     {
-        if( this.control.name === 'play_game_btn' )
-        {
-            this.conformationMsg = "Are you sure you|want to play the game?";
-            this.actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
-            this.executionAction = "level_1_state";
-        }
-        else if( this.control.name === 'Key_Binding_reset_btn' )
+        if( this.control.name === 'Key_Binding_reset_btn' )
         {
             this.conformationMsg = 'Are you sure you want|to reset keybinding back|to the default settings?';
             this.actionType = uiControlDefs.ECAT_SCRIPT_EXECUTE;

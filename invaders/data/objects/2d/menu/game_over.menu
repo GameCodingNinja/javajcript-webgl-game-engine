@@ -20,7 +20,7 @@
             <filePath file="data/objects/2d/menu/control/menu_label_cond_45.ctrl"/>
             <position x="0" y="20" z="0"/>
             <fontStringList>
-                <string text="Enter the frey again?"/>
+                <string text="Watch an AD for double health?"/>
             </fontStringList>
         </control>
 
@@ -28,13 +28,13 @@
   
     <menuControls>
       
-        <control name="no_btn" controlType="button" defaultState="inactive">
+        <control name="yes_with_ad_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
-            <position x="70" y="-70" z="0"/>
+            <position x="100" y="-70" z="0"/>
             <fontStringList>
                 <string text="No"/>
             </fontStringList>
-            <action actionType="game_state_change" executionAction="title_screen_state"/>
+            <action actionType="action_event" executionAction="restart_game"/>
             <navigate left="yes_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
@@ -44,13 +44,13 @@
         </control>
 
         <control name="yes_btn" controlType="button" defaultState="inactive">
-            <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
-            <position x="-70" y="-70" z="0"/>
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="-120" y="-70" z="0"/>
             <fontStringList>
-                <string text="Yes"/>
+                <string text="Watch Ad"/>
             </fontStringList>
-            <action actionType="action_event" executionAction="restart_game"/>
-            <navigate right="no_btn"/>
+            <action actionType="action_event" executionAction="restart_game_with_ad"/>
+            <navigate right="yes_with_ad_btn"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>

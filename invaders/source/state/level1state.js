@@ -58,7 +58,39 @@ const MOVE_NULL = -1,
       LOOPING_BKG_WRAP_DIST = 1280,
       GAMEPLAY_LOOPING_WRAP_DIST = 5600,
       RADAR_SCALE = 0.1,
-      LOOP_SND = true;
+      LOOP_SND = true,
+      DEFAULT_SHIP_PROGRESS_BAR_VALUE = 100;
+
+var gPlayAd = false,
+    gAdError = false,
+    gAdErrorCode = "";
+
+const fadeOutAmbientMusic_cb =
+{
+    adStarted: () => {
+        // Fade out the ambient music
+        let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
+        if(asnd.isPlaying())
+            scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 250, asnd, null, () => asnd.pause() ) );
+    },
+    adFinished: () => {
+        // Fade in the ambient music
+        let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
+        if(asnd.isPaused())
+            scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+    },
+    adError: (error) => {
+        console.log("Ad ERROR", error);
+        gAdError = true;
+        gAdErrorCode = error;
+    }
+};
+
+async function crazyGamesRequestAd()
+{
+    if(gPlayAd && typeof window.CrazyGames !== 'undefined')
+        await window.CrazyGames.SDK.ad.requestAd("rewarded", fadeOutAmbientMusic_cb);
+}
 
 export class Level1State extends CommonState
 {
@@ -89,7 +121,7 @@ export class Level1State extends CommonState
         strategyManager.activateStrategy('_buildingsback_');
         strategyManager.activateStrategy('_buildingsfront_');
         this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
-        strategyManager.activateStrategy('_forground_');
+        this.forgroundStrategy = strategyManager.activateStrategy('_forground_');
 
         // Aquire strategies that are handled outside of the manager
         this.lowerHudStategy = strategyManager.get('_lower_hud_');
@@ -140,7 +172,7 @@ export class Level1State extends CommonState
 
         this.radarCamAry = [this.radarCamera1,this.radarCamera2];
 
-        // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
+        // Move the buildings into the active list so that the AI script tree has access to the sprites
         strategyManager.get("_buildings_").addToActiveList();
 
         // Init the player ship
@@ -203,8 +235,8 @@ export class Level1State extends CommonState
         this.playerShip.fireTailSprite = this.playerShip.node.findChild('player_fire_tail').get();
         this.playerShip.fireTailScript = this.playerShip.fireTailSprite.prepareScript( 'fireTailAnim' );
 
-        this.playerShip.progressBar.setProgressBarMax( 100 );
-        this.playerShip.progressBar.setCurrentValue( 100 );
+        this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
+        this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
 
         // This part is needed for the reload but here for completeness
         this.playerShip.object.setRotXYZ();
@@ -229,6 +261,7 @@ export class Level1State extends CommonState
         this.train.sprite = null;
         this.train.node = null;
         this.train.dir = 0;
+        this.train.camera = cameraManager.get('trainCamera');
     }
 
     // 
@@ -251,11 +284,15 @@ export class Level1State extends CommonState
         ai.clearAIData();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
+        .then( () => Promise.all([
+        
+            crazyGamesRequestAd()
+        ]))
         .then(() =>
         {
             this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
 
-            // Move the buildings into the active list so that the so that the AI script tree has access to the sprites
+            // Move the buildings into the active list so that the AI script tree has access to the sprites
             strategyManager.get("_buildings_").addToActiveList();
 
             // Reactivate strategies
@@ -358,6 +395,54 @@ export class Level1State extends CommonState
             this.groupPlayer.play( 'enemy_1_explosion' );
         }
     }
+
+    // 
+    //  DESC: Display the game start menu based on ad results
+    //
+    displayGameStartMenu()
+    {
+        this._menu = menuManager.getMenu("game_start_menu");
+        this._boldFontMsg = this._menu.getControl("bold_font_msg");
+        this._regFontMsg = this._menu.getControl("reg_font_msg");
+
+        if( gPlayAd )
+        {
+            if( !gAdError )
+            {
+                this._boldFontMsg.createFontString( "Thanks for watching the AD" );
+                this._regFontMsg.createFontString( "Watching the AD helps me|maintain and create new games.|Your reward has been enabled." );
+
+                this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
+                this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
+                this.playerShip.progressBar.setScaleXYZ( 0.6, 0.5 );
+            }
+            else
+            {
+                this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
+                this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
+                this.playerShip.progressBar.setScaleXYZ( 0.35, 0.5 );
+
+                if(gAdErrorCode == "unfilled")
+                {
+                    this._boldFontMsg.createFontString( "Your city is under attack!" );
+                    this._regFontMsg.createFontString( "Try to keep the alien invaders|from destroying the buildings!" );
+                }
+                else
+                {
+                    this._boldFontMsg.createFontString( "Reward AD failed" );
+                    this._regFontMsg.createFontString( "The AD may have been stopped or|blocked. Reward not enabled." );
+                }
+            }
+        }
+        else
+        {
+            this._boldFontMsg.createFontString( "Your city is under attack!" );
+            this._regFontMsg.createFontString( "Try to keep the alien invaders|from destroying the buildings!" );
+        }
+
+        menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
+        menuManager.getTree('pause_tree').transitionMenu();
+    }
     
     // 
     //  DESC: handle events
@@ -388,8 +473,8 @@ export class Level1State extends CommonState
                 }
                 else if( event.arg[0] === stateDefs.ESE_GAME_RELOAD )
                 {
-                    menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
-                    menuManager.getTree('pause_tree').transitionMenu();
+                    // Display the game start menu based on ad results
+                    this.displayGameStartMenu();
                 }
             }
             else if( event.type === menuDefs.EME_MENU_TRANS_IN )
@@ -459,8 +544,13 @@ export class Level1State extends CommonState
             }
             else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )
             {
-                if( event.arg[0] === 'restart_game' )
+                if( event.arg[0] === 'restart_game' || event.arg[0] === 'restart_game_with_ad' )
                 {
+                    gPlayAd = false;
+
+                    if( event.arg[0] === 'restart_game_with_ad' )
+                        gPlayAd = true;
+
                     scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_GAME_RELOAD ) );
                 }
             }
@@ -994,6 +1084,9 @@ export class Level1State extends CommonState
             if( this.buildingsCamera.pos.x < -4900 || this.buildingsCamera.pos.x > 5000 )
             {
                 this.buildingsStrategy.render( this.wrapAroundCamera );
+                this.forgroundStrategy.render( this.forgroundCamera );
+                if( this.train.strategy )
+                    this.train.strategy.render( this.train.camera );
                 this.enemyStrategy.render( this.wrapAroundCamera );
             }
 

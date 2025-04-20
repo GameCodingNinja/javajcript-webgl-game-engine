@@ -51,7 +51,7 @@
         
             <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
                 <position x="0" y="15" z="0"/>
-                <scale x="0.5" y="0.5"/>
+                <scale x="0.35" y="0.5"/>
                 <spriteLst>
                     <sprite objectName="progress_frame"/>
                     <sprite objectName="progress_solid"/>

@@ -49,6 +49,7 @@ class StrategyManager extends ManagerBase
         let strategy = this.strategyMap.get( strategyId );
         
         strategy.loadFromNode( xmlNode, filePath );
+        strategy.id = strategyId; // Set the id to the class for debugging purposes
     }
     
     //
@@ -85,11 +86,7 @@ class StrategyManager extends ManagerBase
 
                 if( this._index !== -1 )
                     genFunc.removeAt( this.strategyAry, this._index );
-                else
-                    console.warn( `Strategy is not active (${strategyId})!` );
             }
-            else
-                console.warn( `Strategy id can't be found to deactivate (${strategyId})!` );
             
             return this._strategy;
         }
@@ -99,8 +96,6 @@ class StrategyManager extends ManagerBase
 
             if( this._index !== -1 )
                 genFunc.removeAt( this.strategyAry, this._index );
-            else
-                console.warn( `Strategy is not active (${strategyId})!` );
         }
     }
     
