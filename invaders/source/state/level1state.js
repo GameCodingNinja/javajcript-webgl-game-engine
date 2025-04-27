@@ -61,35 +61,34 @@ const MOVE_NULL = -1,
       LOOP_SND = true,
       DEFAULT_SHIP_PROGRESS_BAR_VALUE = 100;
 
-var gPlayAd = false,
+var gAdPlayed = false,
     gAdError = false,
     gAdErrorCode = "";
 
 const fadeOutAmbientMusic_cb =
 {
     adStarted: () => {
-        // Fade out the ambient music
-        let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
-        if(asnd.isPlaying())
-            scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 250, asnd, null, () => asnd.pause() ) );
     },
     adFinished: () => {
-        // Fade in the ambient music
-        let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
-        if(asnd.isPaused())
-            scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+        gAdPlayed = true;
+        
+        eventManager.dispatchEvent( stateDefs.ESE_GAME_AD_FINISHED, 0 );
     },
     adError: (error) => {
-        console.log("Ad ERROR", error);
+        console.log("Howie: Ad ERROR", error);
         gAdError = true;
         gAdErrorCode = error;
+
+        eventManager.dispatchEvent( stateDefs.ESE_GAME_AD_FINISHED, 0 );
     }
 };
 
 async function crazyGamesRequestAd()
 {
-    if(gPlayAd && typeof window.CrazyGames !== 'undefined')
+    if(typeof window.CrazyGames !== 'undefined')
+    {
         await window.CrazyGames.SDK.ad.requestAd("rewarded", fadeOutAmbientMusic_cb);
+    }
 }
 
 export class Level1State extends CommonState
@@ -284,10 +283,6 @@ export class Level1State extends CommonState
         ai.clearAIData();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
-        .then( () => Promise.all([
-        
-            crazyGamesRequestAd()
-        ]))
         .then(() =>
         {
             this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
@@ -340,6 +335,19 @@ export class Level1State extends CommonState
 
             scriptSingleton.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_GAME_RELOAD ) );
         })
+    }
+
+    // 
+    //  DESC: Start the Ad
+    //
+    startAd()
+    {
+        this.gameReady = false;
+
+        // Preload the strategies
+        Promise.all([
+            crazyGamesRequestAd()
+        ]);
     }
 
     // 
@@ -405,7 +413,7 @@ export class Level1State extends CommonState
         this._boldFontMsg = this._menu.getControl("bold_font_msg");
         this._regFontMsg = this._menu.getControl("reg_font_msg");
 
-        if( gPlayAd )
+        if( gAdPlayed )
         {
             if( !gAdError )
             {
@@ -504,7 +512,7 @@ export class Level1State extends CommonState
                 {
                     let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
 
-                    if( !menuManager.getActiveTree() && (gsnd.isPaused() || !gsnd.wasPlayed()) && this.gameReady )
+                    if( !menuManager.getActiveTree() && (event.arg[1].name == 'game_start_menu') && this.gameReady )
                     {
                         // Fade out the ambient music
                         let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
@@ -544,14 +552,18 @@ export class Level1State extends CommonState
             }
             else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )
             {
-                if( event.arg[0] === 'restart_game' || event.arg[0] === 'restart_game_with_ad' )
+                if( event.arg[0] === 'restart_game' )
                 {
-                    gPlayAd = false;
-
-                    if( event.arg[0] === 'restart_game_with_ad' )
-                        gPlayAd = true;
-
                     scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_GAME_RELOAD ) );
+                }
+                else if( event.arg[0] === 'restart_game_with_ad' )
+                {
+                    // Fade out the ambient music
+                    let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
+                    if(asnd.isPlaying())
+                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 250, asnd, null, () => asnd.pause() ) );
+                    
+                    scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_GAME_AD_START ) );
                 }
             }
             else if( event.type === stateDefs.ESE_FADE_OUT_COMPLETE )
@@ -561,10 +573,23 @@ export class Level1State extends CommonState
                     menuManager.getTree( 'pause_tree' ).transitionMenu();
                     this.restartGame();
                 }
+                else if( event.arg[0] === stateDefs.ESE_GAME_AD_START )
+                {
+                    menuManager.getTree( 'pause_tree' ).transitionMenu();
+                    this.startAd();
+                }
                 else if( event.arg[0] === stateDefs.ESE_FADE_GAME_STATE_CHANGE )
                 {
                     this.gameReady = false;
                 }
+            }
+            else if( event.type === stateDefs.ESE_GAME_AD_FINISHED )
+            {
+                // Fade in the ambient music
+                let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
+                if(asnd.isPaused())
+                    scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                this.restartGame();
             }
             else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
             {

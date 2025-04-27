@@ -23,4 +23,6 @@ export const ESE_STATE_EVENTS            = 1000,
              ESE_FADE_OUT_COMPLETE       = 1005,
              ESE_ASSET_LOAD_COMPLETE     = 1006,
              ESE_SHOW_GAME_OVER_MENU     = 1007,
-             ESE_GAME_RELOAD             = 1008;
+             ESE_GAME_RELOAD             = 1008,
+             ESE_GAME_AD_START           = 1009,
+             ESE_GAME_AD_FINISHED        = 1010;

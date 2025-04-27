@@ -33,133 +33,133 @@
 
         <object name="background">
             <visual>
-                <texture file="data/textures/level/daytime_background.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/background_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="buildingsback">
             <visual>
-                <texture file="data/textures/level/daytime_buildingsback.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="trees">
-            <visual>
-                <texture file="data/textures/level/daytime_trees.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="traintracks">
-            <visual>
-                <texture file="data/textures/level/daytime_traintracks.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="train">
-            <visual>
-                <texture file="data/textures/level/daytime_train.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="cloud_0">
-            <visual>
-                <texture file="data/textures/level/daytime_cloud01.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="cloud_1">
-            <visual>
-                <texture file="data/textures/level/daytime_cloud02.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="cloud_2">
-            <visual>
-                <texture file="data/textures/level/daytime_cloud03.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="cloud_3">
-            <visual>
-                <texture file="data/textures/level/daytime_cloud04.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="cloud_4">
-            <visual>
-                <texture file="data/textures/level/daytime_cloud05.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="cloud_5">
-            <visual>
-                <texture file="data/textures/level/daytime_cloud06.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="cloud_6">
-            <visual>
-                <texture file="data/textures/level/daytime_cloud07.png" filter="NEAREST"/>
-            </visual>
-        </object>
-
-        <object name="cloud_7">
-            <visual>
-                <texture file="data/textures/level/daytime_cloud08.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingsback_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="buildingsfront">
             <visual>
-                <texture file="data/textures/level/daytime_buildingsfront.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingsfront_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="trees">
+            <visual>
+                <texture count="3" file="data/textures/level/trees_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="traintracks">
+            <visual>
+                <texture count="3" file="data/textures/level/traintracks_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="train">
+            <visual>
+                <texture count="3" file="data/textures/level/train_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="cloud_0">
+            <visual>
+                <texture count="3" file="data/textures/level/cloudA_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="cloud_1">
+            <visual>
+                <texture count="3" file="data/textures/level/cloudB_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="cloud_2">
+            <visual>
+                <texture count="3" file="data/textures/level/cloudC_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="cloud_3">
+            <visual>
+                <texture count="3" file="data/textures/level/cloudD_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="cloud_4">
+            <visual>
+                <texture count="3" file="data/textures/level/cloudE_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="cloud_5">
+            <visual>
+                <texture count="3" file="data/textures/level/cloudF_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="cloud_6">
+            <visual>
+                <texture count="3" file="data/textures/level/cloudG_${NUM}.png" filter="NEAREST"/>
+            </visual>
+        </object>
+
+        <object name="cloud_7">
+            <visual>
+                <texture count="3" file="data/textures/level/cloudH_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="building01">
             <visual>
-                <texture file="data/textures/level/daytime_building01.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingA_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="building02">
             <visual>
-                <texture file="data/textures/level/daytime_building02.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingB_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="building03">
             <visual>
-                <texture file="data/textures/level/daytime_building03.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingC_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="building04">
             <visual>
-                <texture file="data/textures/level/daytime_building04.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingD_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="building05">
             <visual>
-                <texture file="data/textures/level/daytime_building05.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingE_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="building06">
             <visual>
-                <texture file="data/textures/level/daytime_building06.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingF_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="building07">
             <visual>
-                <texture file="data/textures/level/daytime_building07.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingG_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 
         <object name="building08">
             <visual>
-                <texture file="data/textures/level/daytime_building08.png" filter="NEAREST"/>
+                <texture count="3" file="data/textures/level/buildingH_${NUM}.png" filter="NEAREST"/>
             </visual>
         </object>
 

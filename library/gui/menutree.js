@@ -228,7 +228,7 @@ export class MenuTree
             this.state = menuDefs.EMTS_ACTIVE;
 
             // Start the transition in
-            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN, this );
         }
         else
         {
@@ -239,7 +239,7 @@ export class MenuTree
                 this.state = menuDefs.EMTS_ACTIVE;
 
                 // Start the transition out
-                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN, this );
             }
         }
     }
@@ -344,7 +344,7 @@ export class MenuTree
                 throw new Error( `Menu does not exist! (${this.toMenu}).` );
 
             // Start the transition out
-            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN, this );
         }
     }
     
@@ -358,7 +358,7 @@ export class MenuTree
             if( this.toMenu.length )
             {
                 this.menuPathAry.push( this.menuMap.get(this.toMenu) );
-                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN, this );
             }
             else if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] !== this.rootMenu) )
             {
@@ -369,7 +369,7 @@ export class MenuTree
                 this._menu.reset();
 
                 if( this.menuPathAry.length )
-                    eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+                    eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN, this );
             }
 
             // Normally, after one menu transitions out, the next menu transitions in

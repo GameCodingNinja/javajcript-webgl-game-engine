@@ -100,7 +100,7 @@ class Menu_TransIn
             if( this.fadeTo.execute() )
             {
                 this.menu.setAlpha( this.fadeTo.value );
-                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_END );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_END, this.menu );
 
                 break;
             }
@@ -158,7 +158,7 @@ class Menu_TransOut
             {
                 this.menu.setAlpha( this.fadeTo.value );
 
-                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_END );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_END, this.menu );
 
                 break;
             }
@@ -207,7 +207,7 @@ class Menu_Show
     execute()
     {
         this.menu.setVisible( true );
-        eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_END );
+        eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_END, this.menu );
 
         return true;
     }
@@ -241,7 +241,7 @@ class Menu_Hide
     execute()
     {
         this.menu.setVisible( false );
-        eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_END );
+        eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_END, this.menu );
 
         return true;
     }
