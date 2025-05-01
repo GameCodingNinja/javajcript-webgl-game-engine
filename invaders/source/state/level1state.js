@@ -59,7 +59,10 @@ const MOVE_NULL = -1,
       GAMEPLAY_LOOPING_WRAP_DIST = 5600,
       RADAR_SCALE = 0.1,
       LOOP_SND = true,
-      DEFAULT_SHIP_PROGRESS_BAR_VALUE = 100;
+      DEFAULT_SHIP_PROGRESS_BAR_VALUE = 100,
+      GAME_START_MENU_DEFAULT_MSG = 0,
+      GAME_START_MENU_AD_THANKS_MSG = 1,
+      GAME_START_MENU_AD_ERROR_MSG = 2;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -417,36 +420,38 @@ export class Level1State extends CommonState
         {
             if( !gAdError )
             {
-                this._boldFontMsg.createFontString( "Thanks for watching the AD" );
-                this._regFontMsg.createFontString( "Watching the AD helps me|maintain and create new games.|Your reward has been enabled." );
+                this._boldFontMsg.createFontString( GAME_START_MENU_AD_THANKS_MSG );
+                this._regFontMsg.createFontString( GAME_START_MENU_AD_THANKS_MSG );
 
-                this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
-                this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
-                this.playerShip.progressBar.setScaleXYZ( 0.6, 0.5 );
+                //this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
+                //this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
+                //this.playerShip.progressBar.setScaleXYZ( 0.6, 0.5 );
             }
             else
             {
-                this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
-                this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
-                this.playerShip.progressBar.setScaleXYZ( 0.35, 0.5 );
+                //this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
+                //this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
+                //this.playerShip.progressBar.setScaleXYZ( 0.35, 0.5 );
 
                 if(gAdErrorCode == "unfilled")
                 {
-                    this._boldFontMsg.createFontString( "Your city is under attack!" );
-                    this._regFontMsg.createFontString( "Try to keep the alien invaders|from destroying the buildings!" );
+                    this._boldFontMsg.createFontString( GAME_START_MENU_DEFAULT_MSG );
+                    this._regFontMsg.createFontString( GAME_START_MENU_DEFAULT_MSG );
                 }
                 else
                 {
-                    this._boldFontMsg.createFontString( "Reward AD failed" );
-                    this._regFontMsg.createFontString( "The AD may have been stopped or|blocked. Reward not enabled." );
+                    this._boldFontMsg.createFontString( GAME_START_MENU_AD_ERROR_MSG );
+                    this._regFontMsg.createFontString( GAME_START_MENU_AD_ERROR_MSG );
                 }
             }
         }
         else
         {
-            this._boldFontMsg.createFontString( "Your city is under attack!" );
-            this._regFontMsg.createFontString( "Try to keep the alien invaders|from destroying the buildings!" );
+            this._boldFontMsg.createFontString( GAME_START_MENU_DEFAULT_MSG );
+            this._regFontMsg.createFontString( GAME_START_MENU_DEFAULT_MSG );
         }
+
+        gAdPlayed = false;
 
         menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
         menuManager.getTree('pause_tree').transitionMenu();

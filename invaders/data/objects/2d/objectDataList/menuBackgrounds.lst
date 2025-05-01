@@ -37,7 +37,7 @@
         </object>
 
         <object name="game_over_menu_bg">
-            <size width="750" height="300"/>
+            <size width="750" height="400"/>
         </object>
         
         <object name="start_game_menu_bg">

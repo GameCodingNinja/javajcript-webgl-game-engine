@@ -3,7 +3,7 @@
 
     <spriteList>
 
-        <sprite objectName="275x55_button_frame">
+        <sprite objectName="325x55_button_frame">
             <scriptList>
                 <script disable="Control_Hidden"/>
                 <script inactive="Control_Hidden"/>
@@ -31,7 +31,7 @@
         <!-- Decrement Button -->
         <control controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
-            <position x="-110" y="0" z="0"/>
+            <position x="-135" y="0" z="0"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
@@ -42,7 +42,7 @@
         <!-- Increment Button -->
         <control controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
-            <position x="110" y="0" z="0"/>
+            <position x="135" y="0" z="0"/>
             <rotation z="180"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
