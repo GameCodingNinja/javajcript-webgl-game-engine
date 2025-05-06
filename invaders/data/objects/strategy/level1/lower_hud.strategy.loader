@@ -2,8 +2,8 @@
 <loader>
 
     <strategy name="_lower_hud_">
-        <node name="hud_frame"/>
-        <node name="hud_background"/>
+        <node name="hud_frame" instance="hud_frame"/>
+        <node name="hud_background" instance="hud_background"/>
     </strategy>
   
 </loader>

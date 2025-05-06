@@ -2,9 +2,9 @@
 <loader>
 
     <strategy name="_upper_hud_">
-        <node name="hud_screen_frame"/>
-        <node name="level_background"/>
-        <node name="level_frame"/>
+        <node name="hud_screen_frame" instance="hud_screen_frame"/>
+        <node name="level_background" instance="level_background"/>
+        <node name="level_frame" instance="level_frame"/>
         <node name="level_font" instance="level_font"/>
         <node name="level_progress_bar" instance="level_progress_bar"/>
     </strategy>

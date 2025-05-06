@@ -12,6 +12,18 @@ export class Color
     constructor( r = 1, g = 1, b = 1, a = 1 )
     {
         this.data = new Float32Array([r,g,b,a]);
+
+        if( r > 1.5 )
+            this.data[0] = r * defs.RGB_TO_DEC;
+        
+        if( g > 1.5 )
+            this.data[1] = g * defs.RGB_TO_DEC;
+        
+        if( b > 1.5 )
+            this.data[2] = b * defs.RGB_TO_DEC;
+        
+        if( a > 1.5 )
+            this.data[3] = a * defs.RGB_TO_DEC;
     }
 
     // 

@@ -26,6 +26,7 @@ import { GenericEvent } from '../../../library/common/genericevent';
 import { settings } from '../../../library/utilities/settings';
 import { Timer } from '../../../library/utilities/timer';
 import { device } from '../../../library/system/device';
+import { Color } from '../../../library/common/color';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
@@ -78,7 +79,6 @@ const fadeOutAmbientMusic_cb =
         eventManager.dispatchEvent( stateDefs.ESE_GAME_AD_FINISHED, 0 );
     },
     adError: (error) => {
-        console.log("Howie: Ad ERROR", error);
         gAdError = true;
         gAdErrorCode = error;
 
@@ -120,8 +120,8 @@ export class Level1State extends CommonState
         
         // Prepare the strategies to run
         this.bkgStrategy = strategyManager.activateStrategy('_background_');
-        strategyManager.activateStrategy('_buildingsback_');
-        strategyManager.activateStrategy('_buildingsfront_');
+        this.buildingsBackStrategy = strategyManager.activateStrategy('_buildingsback_');
+        this.buildingsFrontStrategy = strategyManager.activateStrategy('_buildingsfront_');
         this.buildingsStrategy = strategyManager.activateStrategy('_buildings_');
         this.forgroundStrategy = strategyManager.activateStrategy('_forground_');
 
@@ -146,6 +146,18 @@ export class Level1State extends CommonState
 
             this.cloudAry.push(this._sprite);
         }
+
+        // Init the hud background colors
+        this.hudBkColor = [];
+        this.hudBkColor.push(new Color(0, 150, 255, 1));
+        this.hudBkColor.push(new Color(114, 114, 216, 1));
+        this.hudBkColor.push(new Color(255, 190, 163, 1));
+
+        // Init the hud frame colors
+        this.hudFrameColor = [];
+        this.hudFrameColor.push(new Color(48, 97, 153, 1));
+        this.hudFrameColor.push(new Color(56, 56, 108, 1));
+        this.hudFrameColor.push(new Color(125, 83, 94, 1));
 
         // Get the camera and reinit
         this.buildingsbackCamera = cameraManager.get('buildingsbackCamera');
@@ -329,6 +341,9 @@ export class Level1State extends CommonState
 
             this.playerShipBoostSpeed = 0;
 
+            // Setup the rewards if the player watched an ad
+            this.setupRewards();
+
             this.gameReady = true;
 
             this.setYTGameScore();
@@ -408,6 +423,66 @@ export class Level1State extends CommonState
     }
 
     // 
+    //  DESC: Setup the rewards if the player watched an ad
+    //
+    setupRewards()
+    {
+        this._menu = menuManager.getMenu("game_over_menu");
+        this._doubleHealthToggle = this._menu.getControl("double_health_check_box").toggleState;
+        this._battleTimeIndex = this._menu.getControl("battle_time_btn_lst").activeIndex;
+
+        if( gAdPlayed )
+        {
+            if( this._doubleHealthToggle === defs.TOGGLE_STATE_ON )
+            {
+                this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
+                this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
+                this.playerShip.progressBar.setScaleXYZ( 0.6, 0.5 );
+            }
+
+            this.setBattleTime( this._battleTimeIndex );
+        }
+        else
+        {
+            this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
+            this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
+            this.playerShip.progressBar.setScaleXYZ( 0.35, 0.5 );
+
+            this.setBattleTime();
+        }
+    }
+
+    // 
+    //  DESC: Set the battle time
+    //
+    setBattleTime( index = 0 )
+    {
+        for( this._i = 0; this._i < this.bkgStrategy.nodeAry.length; ++this._i )
+            this.bkgStrategy.nodeAry[this._i].get().setFrame( index );
+
+        for( this._i = 0; this._i < this.buildingsBackStrategy.nodeAry.length; ++this._i )
+            this.buildingsBackStrategy.nodeAry[this._i].get().setFrame( index );
+
+        for( this._i = 0; this._i < this.buildingsFrontStrategy.nodeAry.length; ++this._i )
+            this.buildingsFrontStrategy.nodeAry[this._i].get().setFrame( index );
+
+        for( this._i = 0; this._i < this.buildingsStrategy.nodeAry.length; ++this._i )
+            this.buildingsStrategy.nodeAry[this._i].get().setFrame( index );
+
+        for( this._i = 0; this._i < this.forgroundStrategy.nodeAry.length; ++this._i )
+            this.forgroundStrategy.nodeAry[this._i].get().setFrame( index );
+
+        strategyManager.get('_train_').get('train').get().setFrame( index );
+
+        this.lowerHudStategy.get('hud_background').get().setColor( this.hudBkColor[index] );
+        this.lowerHudStategy.get('hud_frame').get().setColor( this.hudFrameColor[index] );
+        this.upperHudStategy.get('hud_screen_frame').get().setColor( this.hudFrameColor[index] );
+        this.upperHudStategy.get('level_background').get().setColor( this.hudBkColor[index] );
+        this.upperHudStategy.get('level_frame').get().setColor( this.hudFrameColor[index] );
+        this.upperHudStategy.get('level_font').get().setColor( this.hudFrameColor[index] );
+    }
+
+    // 
     //  DESC: Display the game start menu based on ad results
     //
     displayGameStartMenu()
@@ -418,31 +493,20 @@ export class Level1State extends CommonState
 
         if( gAdPlayed )
         {
-            if( !gAdError )
+            this._boldFontMsg.createFontString( GAME_START_MENU_AD_THANKS_MSG );
+            this._regFontMsg.createFontString( GAME_START_MENU_AD_THANKS_MSG );
+        }
+        else if( gAdError )
+        {
+            if(gAdErrorCode == "unfilled")
             {
-                this._boldFontMsg.createFontString( GAME_START_MENU_AD_THANKS_MSG );
-                this._regFontMsg.createFontString( GAME_START_MENU_AD_THANKS_MSG );
-
-                //this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
-                //this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
-                //this.playerShip.progressBar.setScaleXYZ( 0.6, 0.5 );
+                this._boldFontMsg.createFontString( GAME_START_MENU_DEFAULT_MSG );
+                this._regFontMsg.createFontString( GAME_START_MENU_DEFAULT_MSG );
             }
             else
             {
-                //this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
-                //this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
-                //this.playerShip.progressBar.setScaleXYZ( 0.35, 0.5 );
-
-                if(gAdErrorCode == "unfilled")
-                {
-                    this._boldFontMsg.createFontString( GAME_START_MENU_DEFAULT_MSG );
-                    this._regFontMsg.createFontString( GAME_START_MENU_DEFAULT_MSG );
-                }
-                else
-                {
-                    this._boldFontMsg.createFontString( GAME_START_MENU_AD_ERROR_MSG );
-                    this._regFontMsg.createFontString( GAME_START_MENU_AD_ERROR_MSG );
-                }
+                this._boldFontMsg.createFontString( GAME_START_MENU_AD_ERROR_MSG );
+                this._regFontMsg.createFontString( GAME_START_MENU_AD_ERROR_MSG );
             }
         }
         else
@@ -452,6 +516,7 @@ export class Level1State extends CommonState
         }
 
         gAdPlayed = false;
+        gAdError = false;
 
         menuManager.getTree('pause_tree').setDefaultMenu('game_start_menu');
         menuManager.getTree('pause_tree').transitionMenu();
