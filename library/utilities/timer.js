@@ -61,7 +61,7 @@ export class Timer
     //
     //  DESC: Has the timer expired?
     //
-    expired( resetOnExpire )
+    expired( resetOnExpire = false )
     {
         // Has the timer been disabled
         if( this.disabled )
@@ -78,6 +78,17 @@ export class Timer
         }
 
         return result;
+    }
+
+    //
+    //  DESC: Get the elapsed time
+    //
+    getElapsedTime()
+    {
+        if(performance.now() > this.expiredTime)
+            return this.timeInterval;
+
+        return this.expiredTime - performance.now();
     }
 
     //

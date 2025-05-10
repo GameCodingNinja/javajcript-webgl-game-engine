@@ -61,9 +61,12 @@ const MOVE_NULL = -1,
       RADAR_SCALE = 0.1,
       LOOP_SND = true,
       DEFAULT_SHIP_PROGRESS_BAR_VALUE = 100,
+      DEFAULT_SHIP_BOOST_BAR_VALUE = 3000,
       GAME_START_MENU_DEFAULT_MSG = 0,
       GAME_START_MENU_AD_THANKS_MSG = 1,
-      GAME_START_MENU_AD_ERROR_MSG = 2;
+      GAME_START_MENU_AD_ERROR_MSG = 2,
+      REWARD_FEATURE_UNLIMITED_BOOST = 1,
+      REWARD_FEATURE_DOUBLE_HEALTH = 2;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -212,8 +215,7 @@ export class Level1State extends CommonState
         this.moveDirY = MOVE_NULL;
         this.lastMoveDirX = MOVE_NULL;
         this.lastMoveAction != defs.EAP_IDLE;
-        this.playerShipSpeed = PLAYER_SHIP_TOP_SPEED;
-        this.playerShipBoostSpeed = 0;
+        this.unlimitedBoot = false;
 
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
@@ -246,11 +248,19 @@ export class Level1State extends CommonState
         this.playerShip.object = this.playerShip.node.findChild('playerShip_object').get();
         this.playerShip.sprite = this.playerShip.node.get();
         this.playerShip.progressBar = this.playerShip.node.findChild('UIProgressBar').get();
+        this.playerShip.boostBar = this.playerShip.node.findChild('UIBoostBar').get();
         this.playerShip.fireTailSprite = this.playerShip.node.findChild('player_fire_tail').get();
         this.playerShip.fireTailScript = this.playerShip.fireTailSprite.prepareScript( 'fireTailAnim' );
+        this.playerShip.speed = PLAYER_SHIP_TOP_SPEED;
+        this.playerShip.boostSpeed = 0;
+        this.playerShip.boostButtonPress = defs.EAP_UP;
+        this.playerShip.waitForFullBoostCharge = false;
 
         this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
         this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
+
+        this.playerShip.boostBar.setProgressBarMax( DEFAULT_SHIP_BOOST_BAR_VALUE );
+        this.playerShip.boostBar.setCurrentValue( DEFAULT_SHIP_BOOST_BAR_VALUE );
 
         // This part is needed for the reload but here for completeness
         this.playerShip.object.setRotXYZ();
@@ -258,6 +268,7 @@ export class Level1State extends CommonState
         this.playerShip.sprite.setRotXYZ();
         this.playerShip.sprite.collisionComponent.enable = true;
         this.playerShip.progressBar.setVisible( false );
+        this.playerShip.boostBar.setVisible( false );
     }
 
     // 
@@ -339,8 +350,6 @@ export class Level1State extends CommonState
             this.hudProgressBar.setCurrentValue( 0 );
             this.playerLevel = 1;
 
-            this.playerShipBoostSpeed = 0;
-
             // Setup the rewards if the player watched an ad
             this.setupRewards();
 
@@ -401,6 +410,7 @@ export class Level1State extends CommonState
             {
                 this.playerShip.sprite.collisionComponent.enable = false;
                 this.playerShip.progressBar.setVisible( false );
+                this.playerShip.boostBar.setVisible( false );
                 this.playerShip.fireTailSprite.setVisible( false );
                 this.playerShip.fireTailScript.pause = true;
                 this.groupPlayer.pause( 'player_thrust' );
@@ -428,12 +438,18 @@ export class Level1State extends CommonState
     setupRewards()
     {
         this._menu = menuManager.getMenu("game_over_menu");
-        this._doubleHealthToggle = this._menu.getControl("double_health_check_box").toggleState;
+        this._featureIndex = this._menu.getControl("feature_btn_lst").activeIndex;
         this._battleTimeIndex = this._menu.getControl("battle_time_btn_lst").activeIndex;
+
+        this.unlimitedBoot = false;
 
         if( gAdPlayed )
         {
-            if( this._doubleHealthToggle === defs.TOGGLE_STATE_ON )
+            if( this._featureIndex === REWARD_FEATURE_UNLIMITED_BOOST )
+            {
+                this.unlimitedBoot = true;
+            }
+            else if( this._featureIndex === REWARD_FEATURE_DOUBLE_HEALTH )
             {
                 this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
                 this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
@@ -727,29 +743,33 @@ export class Level1State extends CommonState
                 {
                     if( this.lastMoveAction === defs.EAP_DOWN )
                     {
-                        //console.log("boost On");
-                        this.playerShipBoostSpeed = PLAYER_SHIP_BOOST_TOP_SPEED;
-                        
-                        if( this.lastMoveDirX === MOVE_LEFT )
-                            this.easingX.init( this.easingX.getValue(), -(this.playerShipSpeed + this.playerShipBoostSpeed), 2, easing.getLinear() );
-                        else
-                            this.easingX.init( this.easingX.getValue(), this.playerShipSpeed + this.playerShipBoostSpeed, 2, easing.getLinear() );
+                        if(this.unlimitedBoot || !this.playerShip.waitForFullBoostCharge || this.playerShip.boostBar.isMaxValue())
+                        {
+                            this.playerShip.waitForFullBoostCharge = false;
+                            this.playerShip.boostSpeed = PLAYER_SHIP_BOOST_TOP_SPEED;
+                            this.playerShip.boostButtonPress = defs.EAP_DOWN;
+
+                            if( !this.unlimitedBoot )
+                                this.playerShip.boostBar.setVisible( true );
+
+                            if( this.lastMoveDirX === MOVE_LEFT )
+                                this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
+                            else
+                                this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
+                        }
                     }
                 }
                 else if( actionManager.wasActionPress( event, 'boost', defs.EAP_UP ) )
                 {
-                    if( this.playerShipBoostSpeed == PLAYER_SHIP_BOOST_TOP_SPEED )
-                    {
-                        //console.log("boost Off");
-                        this.playerShipBoostSpeed = 0;
-                    }
+                    this.playerShip.boostSpeed = 0;
+                    this.playerShip.boostButtonPress = defs.EAP_UP;
 
                     if( this.lastMoveAction === defs.EAP_DOWN )
                     {
                         if( this.lastMoveDirX === MOVE_LEFT )
-                            this.easingX.init( this.easingX.getValue(), -(this.playerShipSpeed + this.playerShipBoostSpeed), 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
                         else
-                            this.easingX.init( this.easingX.getValue(), this.playerShipSpeed + this.playerShipBoostSpeed, 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
                     }
                 }
             }
@@ -784,7 +804,7 @@ export class Level1State extends CommonState
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
                             this.playerShip.fireTailScript.pause = false;
-                            this.easingX.init( this.easingX.getValue(), -(this.playerShipSpeed + this.playerShipBoostSpeed), 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
 
                             this.groupPlayer.resume( 'player_thrust' );
 
@@ -804,14 +824,7 @@ export class Level1State extends CommonState
                             this.groupPlayer.pause( 'player_thrust' );
 
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
-
-                            //console.log("Move Left UP");
-
-                            if( this.playerShipBoostSpeed )
-                            {
-                                this.playerShipBoostSpeed = 0;
-                                //console.log("boost Off");
-                            }
+                            this.playerShip.boostSpeed = 0;
                         }
 
                         this.moveDirX = MOVE_LEFT;
@@ -826,7 +839,7 @@ export class Level1State extends CommonState
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
                             this.playerShip.fireTailScript.pause = false;
-                            this.easingX.init( this.easingX.getValue(), this.playerShipSpeed + this.playerShipBoostSpeed, 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
 
                             this.groupPlayer.resume( 'player_thrust' );
 
@@ -846,14 +859,7 @@ export class Level1State extends CommonState
                             this.groupPlayer.pause( 'player_thrust' );
 
                             this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
-
-                            //console.log("Move Right UP");
-
-                            if( this.playerShipBoostSpeed )
-                            {
-                                this.playerShipBoostSpeed = 0;
-                                //console.log("boost Off");
-                            }
+                            this.playerShip.boostSpeed = 0;
                         }
 
                         this.moveDirX = MOVE_RIGHT;
@@ -1034,6 +1040,34 @@ export class Level1State extends CommonState
 
             // Handle the radar movement
             this.handleRadarMovement( this._easingVal );
+
+            if( !this.unlimitedBoot )
+            {
+                if(this.playerShip.boostSpeed === PLAYER_SHIP_BOOST_TOP_SPEED && !this.playerShip.boostBar.isMinValue())
+                {
+                    this.playerShip.boostBar.incCurrentValue( -highResTimer.elapsedTime );
+
+                    if(this.playerShip.boostBar.isMinValue())
+                    {
+                        this.playerShip.waitForFullBoostCharge = true;
+                        this.playerShip.boostSpeed = 0;
+                        if( this.lastMoveDirX === MOVE_LEFT )
+                            this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
+                        else
+                            this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
+                    }
+                }
+                else if(this.playerShip.boostButtonPress === defs.EAP_UP)
+                {
+                    this.playerShip.boostBar.incCurrentValue( highResTimer.elapsedTime * 1.5 );
+
+                    if(this.playerShip.boostBar.isMaxValue())
+                    {
+                        this.playerShip.boostButtonPress = defs.EAP_IDLE;
+                        this.playerShip.boostBar.setVisible( false );
+                    }
+                }
+            }
 
             this.levelCamera.incPosXYZ( this._easingVal );
             this.forgroundCamera.incPosXYZ( this._easingVal );

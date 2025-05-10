@@ -47,6 +47,22 @@
             </scriptList>
         </sprite>
 
+        <node name="UIBoostBar" type="uiControlNode">
+        
+            <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
+                <position x="0" y="20" z="0"/>
+                <scale x="0.35" y="0.5"/>
+                <spriteLst>
+                    <sprite objectName="progress_frame"/>
+                    <sprite objectName="boost_solid"/>
+                </spriteLst>
+                
+                <!-- stencil mask -->
+                <stencilMask objectName="" spriteIndex="1" />
+            </uiProgressBar>
+
+        </node>
+
         <node name="UIProgressBar" type="uiControlNode">
         
             <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
