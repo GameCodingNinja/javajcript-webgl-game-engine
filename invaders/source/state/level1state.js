@@ -607,10 +607,14 @@ export class Level1State extends CommonState
                     {
                         let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
 
-                        if( asnd.isPlaying() && settings.user.soundMusicEnabled && (event.arg[1].name == 'game_start_menu' || event.arg[1].name == 'pause_menu') )
+                        if( asnd.isPlaying() &&
+                            settings.user.soundMusicEnabled && 
+                            (event.arg[1].name == 'game_start_menu' || 
+                            event.arg[1].name == 'pause_menu' || 
+                            event.arg[1].name == 'settings_menu' || 
+                            event.arg[1].name == 'key_bindings_menu') )
                         {
                             // Fade out the ambient music
-                            
                             scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, asnd, null, () => asnd.pause() ) );
 
                             // Start the game music
