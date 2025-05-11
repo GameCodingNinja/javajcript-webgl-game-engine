@@ -222,6 +222,7 @@ export class Level1State extends CommonState
         this.groupPlayer.play( 'player_thrust', LOOP_SND );
         this.groupPlayer.pause( 'player_thrust' );
 
+        this.gameStartStopToggle = false;
         this.gameReady = true;
         this.musicCounter = 0;
         this.musicAry = [0, 1, 2];
@@ -575,20 +576,26 @@ export class Level1State extends CommonState
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
                 {
-                    let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
-
-                    if( asnd.isPaused() )
+                    if( settings.user.soundMusicEnabled )
                     {
-                        // Fade out the game music
-                        let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
+                        let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
 
-                        // Start the ambient music
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                        if( asnd.isPaused() )
+                        {
+                            // Fade out the game music
+                            let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                            scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
 
-                        // Indicate to Crazy Games the game has started
-                        if(typeof window.CrazyGames !== 'undefined')
-                            window.CrazyGames.SDK.game.gameplayStop();
+                            // Start the ambient music
+                            scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                        }
+                    }
+
+                    // Indicate to Crazy Games the game has started
+                    if(typeof window.CrazyGames !== 'undefined' && this.gameStartStopToggle)
+                    {
+                        window.CrazyGames.SDK.game.gameplayStop();
+                        this.gameStartStopToggle = !this.gameStartStopToggle;
                     }
                 }
             }
@@ -596,25 +603,32 @@ export class Level1State extends CommonState
             {
                 if( event.arg[0] === menuDefs.ETC_END )
                 {
-                    let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-
-                    if( !menuManager.getActiveTree() && (event.arg[1].name == 'game_start_menu') && this.gameReady )
+                    if( !menuManager.getActiveTree() && this.gameReady )
                     {
-                        // Fade out the ambient music
                         let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, asnd, null, () => asnd.pause() ) );
 
-                        // Start the game music
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true), null ) );
+                        if( asnd.isPlaying() && settings.user.soundMusicEnabled && (event.arg[1].name == 'game_start_menu' || event.arg[1].name == 'pause_menu') )
+                        {
+                            // Fade out the ambient music
+                            
+                            scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, asnd, null, () => asnd.pause() ) );
+
+                            // Start the game music
+                            let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                            scriptSingleton.prepare( scriptManager.get('MusicFade')( gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true), null ) );
+                        }
 
                         // Indicate to Crazy Games the game has stopped
-                        if(typeof window.CrazyGames !== 'undefined')
+                        if(typeof window.CrazyGames !== 'undefined' && !this.gameStartStopToggle)
+                        {
                             window.CrazyGames.SDK.game.gameplayStart();
-                    }
+                            this.gameStartStopToggle = !this.gameStartStopToggle;
+                        }
 
-                    this._tree = menuManager.getTree( 'pause_tree' );
-                    if( !this._tree.isDefaultMenu('pause_menu') )
-                        this._tree.setDefaultMenu('pause_menu');
+                        this._tree = menuManager.getTree( 'pause_tree' );
+                        if( !this._tree.isDefaultMenu('pause_menu') )
+                            this._tree.setDefaultMenu('pause_menu');
+                    }
                 }
             }
             else if( event.type === stateDefs.ESE_SHOW_GAME_OVER_MENU )
@@ -633,8 +647,11 @@ export class Level1State extends CommonState
                 scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
 
                 // Indicate to Crazy Games the game has started
-                if(typeof window.CrazyGames !== 'undefined')
+                if(typeof window.CrazyGames !== 'undefined' && !this.gameStartStopToggle)
+                {
                     window.CrazyGames.SDK.game.gameplayStop();
+                    this.gameStartStopToggle = !this.gameStartStopToggle;
+                }
             }
             else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )
             {
