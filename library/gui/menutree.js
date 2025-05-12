@@ -227,8 +227,11 @@ export class MenuTree
             // Set the state as "active" so that input messages are ignored
             this.state = menuDefs.EMTS_ACTIVE;
 
+            // Get the menu in question that is transitioning out
+            this._menu = this.menuMap.get(this.toMenu) ;
+
             // Start the transition in
-            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN, this._menu );
         }
         else
         {
@@ -238,8 +241,11 @@ export class MenuTree
                 // Set the state as "active" so that input messages are ignored
                 this.state = menuDefs.EMTS_ACTIVE;
 
+                // Get the menu in question that is transitioning out
+                this._menu = this.menuPathAry[this.menuPathAry.length-1];
+
                 // Start the transition out
-                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN, this._menu );
             }
         }
     }
@@ -343,8 +349,11 @@ export class MenuTree
             if( this.menuMap.get(this.toMenu) === undefined )
                 throw new Error( `Menu does not exist! (${this.toMenu}).` );
 
+            // Get the menu that is transitioning out
+            this._menu = this.menuPathAry[this.menuPathAry.length-1];
+
             // Start the transition out
-            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN );
+            eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_OUT, menuDefs.ETC_BEGIN, this._menu );
         }
     }
     
@@ -357,8 +366,9 @@ export class MenuTree
         {
             if( this.toMenu.length )
             {
-                this.menuPathAry.push( this.menuMap.get(this.toMenu) );
-                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+                this._menu = this.menuMap.get(this.toMenu);
+                this.menuPathAry.push( this._menu );
+                eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN, this._menu );
             }
             else if( this.menuPathAry.length && (this.menuPathAry[this.menuPathAry.length-1] !== this.rootMenu) )
             {
@@ -368,8 +378,11 @@ export class MenuTree
                 // Do a full reset on all the controls
                 this._menu.reset();
 
+                // Get the menu we are tranitioning to
+                this._menu = this.menuPathAry[this.menuPathAry.length-1];
+
                 if( this.menuPathAry.length )
-                    eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN );
+                    eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN, this._menu );
             }
 
             // Normally, after one menu transitions out, the next menu transitions in

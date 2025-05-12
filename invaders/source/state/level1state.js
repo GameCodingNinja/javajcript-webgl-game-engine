@@ -605,17 +605,16 @@ export class Level1State extends CommonState
                 {
                     if( !menuManager.getActiveTree() && this.gameReady )
                     {
-                        let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
-
-                        if( asnd.isPlaying() &&
-                            settings.user.soundMusicEnabled && 
+                        if( settings.user.soundEnabled && settings.user.soundMusicEnabled && 
                             (event.arg[1].name == 'game_start_menu' || 
                             event.arg[1].name == 'pause_menu' || 
                             event.arg[1].name == 'settings_menu' || 
                             event.arg[1].name == 'key_bindings_menu') )
                         {
                             // Fade out the ambient music
-                            scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, asnd, null, () => asnd.pause() ) );
+                            let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
+                            if(asnd.isPlaying())
+                                scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, asnd, null, () => asnd.pause() ) );
 
                             // Start the game music
                             let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
@@ -743,7 +742,7 @@ export class Level1State extends CommonState
                     }
                 }
 
-                this.hudProgressBar.incCurrentValue( 1 );
+                this.hudProgressBar.incCurrentValue( event.arg[0] );
             }
         }
         else

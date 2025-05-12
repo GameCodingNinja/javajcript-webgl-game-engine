@@ -401,7 +401,7 @@ class EnemyShip_Hit
         }
 
         // Send a message to keep track of aliens being destroyed
-        eventManager.dispatchEvent( gameDefs.EGE_ENEMY_DESTROYED );
+        eventManager.dispatchEvent( gameDefs.EGE_ENEMY_DESTROYED, 1 );
 
         // Get the enemy strategy to create the explosion animation
         this.enemyStratagy = strategyManager.get('_enemy_');
