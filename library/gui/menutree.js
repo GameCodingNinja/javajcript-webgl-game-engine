@@ -378,11 +378,11 @@ export class MenuTree
                 // Do a full reset on all the controls
                 this._menu.reset();
 
-                // Get the menu we are tranitioning to
-                this._menu = this.menuPathAry[this.menuPathAry.length-1];
-
                 if( this.menuPathAry.length )
+                {
+                    this._menu = this.menuPathAry[this.menuPathAry.length-1];
                     eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN, this._menu );
+                }
             }
 
             // Normally, after one menu transitions out, the next menu transitions in
