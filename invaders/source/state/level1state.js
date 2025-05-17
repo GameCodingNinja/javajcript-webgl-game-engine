@@ -36,7 +36,7 @@ import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 import * as ai from '../scripts/aiscripts';
 
-import enemy_ai from 'raw-loader!../../data/objects/ai/enemy.ai';
+import enemy00_ai from 'raw-loader!../../data/objects/ai/enemy00.ai';
 
 export const ASSET_COUNT = 92;
 const MOVE_NULL = -1,
@@ -52,8 +52,8 @@ const MOVE_NULL = -1,
       PLAYER_SHIP_BOOST_TOP_SPEED = 16,
       MAX_CLOUDS = 8,
       PLAYER_SHIP_ID = 0,
-      ENEMY_SHOT_ID = -2,
-      ENEMY_SHIP_ID = -3,
+      ENEMY00_SHOT_ID = -2,
+      ENEMY00_SHIP_ID = -3,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
@@ -277,9 +277,9 @@ export class Level1State extends CommonState
     //
     initMiscObjects()
     {
-        this.enemySpawnTimer = new Timer(2000);
-        this.enemyMaxTimer = new Timer(15000);
-        this.maxEnemies = 5;
+        this.enemy00SpawnTimer = new Timer(2000);
+        this.enemy00MaxTimer = new Timer(15000);
+        this.enemy00Max = 5;
 
         this.train = {};
         this.train.strategy = null;
@@ -390,7 +390,7 @@ export class Level1State extends CommonState
             spriteB.prepareScript( 'hit', spriteA );
 
             // Player hit by enemy projectile
-            if( spriteA.parentNode.userId == ENEMY_SHOT_ID )
+            if( spriteA.parentNode.userId == ENEMY00_SHOT_ID )
             {
                 this.playerShip.progressBar.incCurrentValue( -10 );
                 this.playerShip.progressBar.setVisible( true );
@@ -398,7 +398,7 @@ export class Level1State extends CommonState
                 this.groupPlayer.play( 'player_hit' );
             }
             // Player collides into enemy
-            else if( spriteA.parentNode.userId == ENEMY_SHIP_ID )
+            else if( spriteA.parentNode.userId == ENEMY00_SHIP_ID )
             {
                 this.playerShip.progressBar.incCurrentValue( -30 );
                 this.playerShip.progressBar.setVisible( true );
@@ -419,7 +419,7 @@ export class Level1State extends CommonState
             }
         }
         // Player shot enemy ship
-        else if( spriteB.parentNode.userId == ENEMY_SHIP_ID )
+        else if( spriteB.parentNode.userId == ENEMY00_SHIP_ID )
         {
             // Stop any more collision detection
             spriteA.collisionComponent.enable = false;
@@ -429,7 +429,7 @@ export class Level1State extends CommonState
             spriteA.prepareScript( 'hit' );
             spriteB.prepareScript( 'hit', spriteA );
 
-            this.groupPlayer.play( 'enemy_1_explosion' );
+            this.groupPlayer.play( 'enemy00_1_explosion' );
         }
     }
 
@@ -713,7 +713,7 @@ export class Level1State extends CommonState
                 if( this._allToBeDeleted )
                     eventManager.dispatchEvent( stateDefs.ESE_SHOW_GAME_OVER_MENU );
             }
-            else if( event.type === gameDefs.EGE_ENEMY_DESTROYED )
+            else if( event.type === gameDefs.EGE_ENEMY00_DESTROYED )
             {
                 if( this.hudProgressBar.isMaxValue() )
                 {
@@ -928,19 +928,19 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
-        if( this.enemySpawnTimer.expired(true) )
+        if( this.enemy00SpawnTimer.expired(true) )
         {
             // Create a enemy and position it outside of the view
-            if( this.enemyStrategy.nodeAry.length < this.maxEnemies )
+            if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
             {
-                this._node = this.enemyStrategy.create('enemy_ship');
+                this._node = this.enemyStrategy.create('enemy00_ship');
                 this._node.get().setPosXYZ(0, settings.deviceRes.h);
                 this._node.transform();
             }
 
-            if( this.enemyMaxTimer.expired(true) && this.maxEnemies < 25 )
+            if( this.enemy00MaxTimer.expired(true) && this.enemy00Max < 25 )
             {
-                this.maxEnemies++;
+                this.enemy00Max++;
             }
         }
     }
@@ -1305,7 +1305,7 @@ export function load()
     return objectDataManager.loadGroup( groupAry )
 
         // Load the AI. Needs to be loaded before the strategy loader
-        .then(() => aiManager.loadFromXml( genFunc.stringLoadXML( enemy_ai ) ))
+        .then(() => aiManager.loadFromXml( genFunc.stringLoadXML( enemy00_ai ) ))
 
         // Load and execute all the strategy loaders.
         .then(() => strategyLoader.loadGroup( '-level1-' ))

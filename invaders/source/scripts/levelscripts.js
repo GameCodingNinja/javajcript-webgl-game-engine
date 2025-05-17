@@ -203,9 +203,9 @@ class PlayerShip_Die
 }
 
 //
-//  DESC: Script for shooting enemy projectile
+//  DESC: Script for shooting enemy00 projectile
 //
-class EnemyShip_Shoot
+class Enemy00Ship_Shoot
 {
     constructor( sprite, enemySprite )
     {
@@ -361,9 +361,9 @@ class Explode_animation
 }
 
 //
-//  DESC: Script for handling enemy getting hit
+//  DESC: Script for handling enemy00 getting hit
 //
-class EnemyShip_Hit
+class Enemy00Ship_Hit
 {
     constructor( sprite, projectileSprite )
     {
@@ -381,7 +381,7 @@ class EnemyShip_Hit
     recycle( projectileSprite )
     {
         // Remove the AI script since the enemy is to die
-        this.sprite.scriptComponent.remove( 'AI_Enemy' );
+        this.sprite.scriptComponent.remove( 'AI_Enemy00' );
 
         this._dist = this.sprite.pos.getDistance( projectileSprite.pos );
 
@@ -401,7 +401,7 @@ class EnemyShip_Hit
         }
 
         // Send a message to keep track of aliens being destroyed
-        eventManager.dispatchEvent( gameDefs.EGE_ENEMY_DESTROYED, 1 );
+        eventManager.dispatchEvent( gameDefs.EGE_ENEMY00_DESTROYED, 1 );
 
         // Get the enemy strategy to create the explosion animation
         this.enemyStratagy = strategyManager.get('_enemy_');
@@ -459,9 +459,9 @@ class EnemyShip_Hit
 }
 
 //
-//  DESC: Script for handling enemy shot hitting player
+//  DESC: Script for handling enemy00 shot hitting player
 //
-class EnemyShot_Hit
+class Enemy00Shot_Hit
 {
     constructor( sprite )
     {
@@ -490,9 +490,9 @@ class EnemyShot_Hit
 }
 
 //
-//  DESC: Script for handling enemy ship colliding with the player ship
+//  DESC: Script for handling enemy00 ship colliding with the player ship
 //
-class EnemyShip_CheckForCollideWithPlayer
+class Enemy00Ship_CheckForCollideWithPlayer
 {
     constructor( sprite )
     {
@@ -516,7 +516,7 @@ class EnemyShip_CheckForCollideWithPlayer
     //
     execute()
     {
-        // This enemy needs to be in view to possibly collide with the player
+        // This enemy00 needs to be in view to possibly collide with the player
         if( this.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
             if( this.sprite.collisionComponent.checkForCollision( this.playerShipStratagy.nodeAry ) )
@@ -598,17 +598,17 @@ export function loadScripts()
     scriptManager.set( 'PlayerShip_Die',
         ( sprite ) => { return new PlayerShip_Die( sprite ); } );
 
-    scriptManager.set( 'EnemyShip_Hit',
-        ( sprite, projectileSprite ) => { return new EnemyShip_Hit( sprite, projectileSprite ); } );
+    scriptManager.set( 'Enemy00Ship_Hit',
+        ( sprite, projectileSprite ) => { return new Enemy00Ship_Hit( sprite, projectileSprite ); } );
 
-    scriptManager.set( 'EnemyShot_Hit',
-        ( sprite ) => { return new EnemyShot_Hit( sprite ); } );
+    scriptManager.set( 'Enemy00Shot_Hit',
+        ( sprite ) => { return new Enemy00Shot_Hit( sprite ); } );
 
-    scriptManager.set( 'EnemyShip_CheckForCollideWithPlayer',
-        ( sprite ) => { return new EnemyShip_CheckForCollideWithPlayer( sprite ); } );
+    scriptManager.set( 'Enemy00Ship_CheckForCollideWithPlayer',
+        ( sprite ) => { return new Enemy00Ship_CheckForCollideWithPlayer( sprite ); } );
 
-    scriptManager.set( 'EnemyShip_Shoot',
-        ( sprite, enemySprite ) => { return new EnemyShip_Shoot( sprite, enemySprite ); } );
+    scriptManager.set( 'Enemy00Ship_Shoot',
+        ( sprite, enemySprite ) => { return new Enemy00Ship_Shoot( sprite, enemySprite ); } );
 
     scriptManager.set( 'Building_Die',
         ( sprite ) => { return new Building_Die( sprite ); } );

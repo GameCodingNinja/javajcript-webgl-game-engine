@@ -229,9 +229,9 @@
             </collision>
         </object>
 
-        <object name="enemy_ship">
+        <object name="enemy00_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy_3.png"/>
+                <texture file="data/textures/enemyShip/enemy00.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
                 

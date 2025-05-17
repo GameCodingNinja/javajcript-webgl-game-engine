@@ -5,14 +5,14 @@
         <position z="-60"/>
     </object>
 
-    <node name="enemy_ship" id="-3">
+    <node name="enemy00_ship" id="-3">
 
         <sprite>
             <scale x="0.70" y="0.70"/>
             <scriptList>
-                <script ai_enemy="AI_Enemy" prepareOnInit="true" ai="true"/>
-                <script hit="EnemyShip_Hit"/>
-                <script collision="EnemyShip_CheckForCollideWithPlayer" prepareOnInit="true"/>
+                <script ai_enemy="AI_Enemy00" prepareOnInit="true" ai="true"/>
+                <script hit="Enemy00Ship_Hit"/>
+                <script collision="Enemy00Ship_CheckForCollideWithPlayer" prepareOnInit="true"/>
             </scriptList>
         </sprite>
 

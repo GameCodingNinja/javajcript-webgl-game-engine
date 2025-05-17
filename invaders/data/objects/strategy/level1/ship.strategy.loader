@@ -7,7 +7,7 @@
     </strategy>
 
     <!--<strategy name="_enemy_">
-        <node name="enemy_ship"/>
+        <node name="enemy00_ship"/>
     </strategy>-->
   
 </loader>

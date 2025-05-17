@@ -33,7 +33,7 @@ export function clearAIData()
 //
 //  DESC: AI Enemy base class
 //
-class AI_Enemy_base extends aiNode
+class AI_Enemy00_base extends aiNode
 {
     constructor( nodeData )
     {
@@ -74,7 +74,7 @@ class AI_Enemy_base extends aiNode
 //  DESC: AI Enemy head (root) node base class script
 //        Only supports one child
 //
-class AI_Enemy_Head extends aiNode
+class AI_Enemy00_Head extends aiNode
 {
     constructor( nodeData )
     {
@@ -134,7 +134,7 @@ class AI_Enemy_Head extends aiNode
 //  DESC: AI Leaf (task) node script. Desend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy_Desend extends AI_Enemy_base
+class AI_Enemy00_Desend extends AI_Enemy00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -206,7 +206,7 @@ class AI_Enemy_Desend extends AI_Enemy_base
 //  DESC: AI Leaf (task) node script. Roam around the play area.
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy_Roam extends AI_Enemy_base
+class AI_Enemy00_Roam extends AI_Enemy00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -334,7 +334,7 @@ class AI_Enemy_Roam extends AI_Enemy_base
 //  DESC: AI Leaf (task) node script. Destroy building
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy_DesendToBuilding extends AI_Enemy_base
+class AI_Enemy00_DesendToBuilding extends AI_Enemy00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -391,7 +391,7 @@ class AI_Enemy_DesendToBuilding extends AI_Enemy_base
 //  DESC: AI Leaf (task) node script. Destroy building
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy_DestroyBuilding extends AI_Enemy_base
+class AI_Enemy00_DestroyBuilding extends AI_Enemy00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -481,18 +481,18 @@ class AI_Enemy_DestroyBuilding extends AI_Enemy_base
 //
 export function loadScripts()
 {
-    scriptManager.set( 'AI_Enemy_Head',
-        ( nodeData ) => { return new AI_Enemy_Head( nodeData ); } );
+    scriptManager.set( 'AI_Enemy00_Head',
+        ( nodeData ) => { return new AI_Enemy00_Head( nodeData ); } );
 
-    scriptManager.set( 'AI_Enemy_Desend',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy_Desend( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Enemy00_Desend',
+        ( nodeData, headNode, sprite ) => { return new AI_Enemy00_Desend( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy_Roam',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy_Roam( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Enemy00_Roam',
+        ( nodeData, headNode, sprite ) => { return new AI_Enemy00_Roam( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy_DesendToBuilding',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy_DesendToBuilding( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Enemy00_DesendToBuilding',
+        ( nodeData, headNode, sprite ) => { return new AI_Enemy00_DesendToBuilding( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy_DestroyBuilding',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy_DestroyBuilding( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Enemy00_DestroyBuilding',
+        ( nodeData, headNode, sprite ) => { return new AI_Enemy00_DestroyBuilding( nodeData, headNode, sprite ); } );
 }
