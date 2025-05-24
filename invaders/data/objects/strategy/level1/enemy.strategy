@@ -18,4 +18,15 @@
 
     </node>
 
+    <node name="enemy01_ship" id="-4">
+
+        <sprite>
+            <scale x="1" y="1"/>
+            <scriptList>
+                <script hit="Enemy01Ship_Hit"/>
+            </scriptList>
+        </sprite>
+
+    </node>
+
 </strategy>

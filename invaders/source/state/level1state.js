@@ -54,6 +54,7 @@ const MOVE_NULL = -1,
       PLAYER_SHIP_ID = 0,
       ENEMY00_SHOT_ID = -2,
       ENEMY00_SHIP_ID = -3,
+      ENEMY01_SHIP_ID = -4,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
@@ -418,12 +419,25 @@ export class Level1State extends CommonState
                 this.playerShip.sprite.prepareScript( 'die' );
             }
         }
-        // Player shot enemy ship
+        // Player shot enemy00 ship
         else if( spriteB.parentNode.userId == ENEMY00_SHIP_ID )
         {
             // Stop any more collision detection
             spriteA.collisionComponent.enable = false;
             spriteB.collisionComponent.enable = false;
+
+            // Execute the scripts that handle being hit
+            spriteA.prepareScript( 'hit' );
+            spriteB.prepareScript( 'hit', spriteA );
+
+            this.groupPlayer.play( 'enemy00_1_explosion' );
+        }
+        // Player shot enemy01 ship
+        else if( spriteB.parentNode.userId == ENEMY01_SHIP_ID )
+        {
+            // Stop any more collision detection for the shot
+            spriteA.collisionComponent.enable = false;
+            //spriteB.collisionComponent.enable = false;
 
             // Execute the scripts that handle being hit
             spriteA.prepareScript( 'hit' );
@@ -928,7 +942,7 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
-        if( this.enemy00SpawnTimer.expired(true) )
+        /*if( this.enemy00SpawnTimer.expired(true) )
         {
             // Create a enemy and position it outside of the view
             if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
@@ -942,7 +956,7 @@ export class Level1State extends CommonState
             {
                 this.enemy00Max++;
             }
-        }
+        }*/
     }
 
     // 

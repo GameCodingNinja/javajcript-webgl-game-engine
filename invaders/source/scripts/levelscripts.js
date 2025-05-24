@@ -410,6 +410,7 @@ class Enemy00Ship_Hit
         this.explodeAnim = new utilScripts.PlayAnim( this.enemyStratagy.create('explode').get() );
         this.explodeAnim.init( 24 );
 
+        // Ajust the initial offset of the explosion animation based off the position of the enemy sprite X
         if( projectileSprite.rot.y > 1 )
             this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x + 15, projectileSprite.pos.y );
         else
@@ -417,7 +418,7 @@ class Enemy00Ship_Hit
 
         this.explodeAnim.sprite.transform();
 
-        // Hide the projectile and allow it to be deleted from the script moving it
+        // Hide the projectile and allow it to be recycled from the script moving it
         if( projectileSprite.parentNode.name === 'player_shot' )
         {
             projectileSprite.setVisible( false );
@@ -448,11 +449,110 @@ class Enemy00Ship_Hit
 
         if( this.easingY.isFinished() )
         {
-            // We are done with this sprite, queue it up to be deleted
+            // We are done with this sprite, queue it up to be recycled
             this.enemyStratagy.recycle( this.sprite.parentNode );
 
             return true;
         }
+
+        return false;
+    }
+}
+
+//
+//  DESC: Script for handling enemy01 getting hit
+//
+class Enemy01Ship_Hit
+{
+    constructor( sprite, projectileSprite )
+    {
+        this.sprite = sprite;
+
+        this.easingY = new easing.valueTo;
+
+        // Continues the init
+        this.recycle( projectileSprite );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( projectileSprite )
+    {
+        // Remove the AI script since the enemy is to die
+        //this.sprite.scriptComponent.remove( 'AI_Enemy01' );
+
+        this._dist = this.sprite.pos.getDistance( projectileSprite.pos );
+
+        //this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
+        //this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
+        //this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn() );
+
+        /*if( (this._dist.x > 0 && this._dist.y > 0) || (this._dist.x < 0 && this._dist.y < 0) )
+        {
+            this.rotate = -0.04;
+            this.rotateVelocity = -0.00004;
+        }
+        else if( (this._dist.x < 0 && this._dist.y > 0) || (this._dist.x > 0 && this._dist.y < 0) )
+        {
+            this.rotate = 0.04;
+            this.rotateVelocity = 0.00004;
+        }*/
+
+        // Send a message to keep track of aliens being destroyed
+        //eventManager.dispatchEvent( gameDefs.EGE_ENEMY01_DESTROYED, 1 );
+
+        // Get the enemy strategy to create the explosion animation
+        this.enemyStratagy = strategyManager.get('_enemy_');
+
+        // Create an explode graphic node and translate it to the projectile sprite
+        this.explodeAnim = new utilScripts.PlayAnim( this.enemyStratagy.create('explode').get() );
+        this.explodeAnim.init( 24 );
+
+        // Ajust the initial offset of the explosion animation
+        if( projectileSprite.rot.y > 1 )
+            this.explodeAnim.sprite.setPosXYZ( projectileSprite.pos.x + 30, projectileSprite.pos.y );
+        else
+            this.explodeAnim.sprite.setPosXYZ( projectileSprite.pos.x - 15, projectileSprite.pos.y );
+
+        this.explodeAnim.sprite.transform();
+
+        // Hide the projectile and allow it to be recycled from the script moving it
+        if( projectileSprite.parentNode.name === 'player_shot' )
+        {
+            projectileSprite.setVisible( false );
+        }
+
+        this.dif = this.sprite.pos.getDistance( this.explodeAnim.sprite.pos );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        /*this.easingY.execute();
+        this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+        this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
+        this.rotate += this.rotateVelocity * highResTimer.elapsedTime;*/
+
+        if( this.explodeAnim )
+        {
+            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
+            if( this.explodeAnim.execute() )
+            {
+                this.enemyStratagy.recycle( this.explodeAnim.sprite.parentNode );
+                this.explodeAnim = null;
+            }
+        }
+
+        /*if( this.easingY.isFinished() )
+        {
+            // We are done with this sprite, queue it up to be recycled
+            this.enemyStratagy.recycle( this.sprite.parentNode );
+
+            return true;
+        }*/
 
         return false;
     }
@@ -600,6 +700,9 @@ export function loadScripts()
 
     scriptManager.set( 'Enemy00Ship_Hit',
         ( sprite, projectileSprite ) => { return new Enemy00Ship_Hit( sprite, projectileSprite ); } );
+
+    scriptManager.set( 'Enemy01Ship_Hit',
+            ( sprite, projectileSprite ) => { return new Enemy01Ship_Hit( sprite, projectileSprite ); } );
 
     scriptManager.set( 'Enemy00Shot_Hit',
         ( sprite ) => { return new Enemy00Shot_Hit( sprite ); } );

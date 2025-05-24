@@ -234,15 +234,6 @@
                 <texture file="data/textures/enemyShip/enemy00.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                
-                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
-                    <polygon>
-                        <point x="2" y="2"/>
-                        <point x="2" y="86"/>
-                        <point x="68" y="86"/>
-                        <point x="68" y="2"/>
-                    </polygon>
-                </polygonList>-->
 
                 <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
                     <rect x1="-5" y1="-5" x2="-5" y2="-5"/>
@@ -262,6 +253,50 @@
                         <point x="79" y="100"/>
                     </line>
                 </lineList>-->
+            </collision>
+        </object>
+
+        <object name="enemy01_ship">
+            <visual>
+                <texture file="data/textures/enemyShip/enemy01.png" />
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                
+                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="26" y="1"/>
+                        <point x="50" y="1"/>
+                        <point x="111" y="115"/>
+                        <point x="49" y="148"/>
+                    </polygon>
+                    <polygon>
+                        <point x="49" y="128"/>
+                        <point x="107" y="103"/>
+                        <point x="126" y="229"/>
+                        <point x="39" y="229"/>
+                    </polygon>
+                    <polygon>
+                        <point x="56" y="223"/>
+                        <point x="113" y="223"/>
+                        <point x="113" y="297"/>
+                        <point x="53" y="297"/>
+                        <point x="0" y="268"/>
+                        <point x="0" y="254"/>
+                    </polygon>
+                    <polygon>
+                        <point x="35" y="291"/>
+                        <point x="126" y="291"/>
+                        <point x="99" y="427"/>
+                        <point x="48" y="387"/>
+                    </polygon>
+                    <polygon>
+                        <point x="47" y="337"/>
+                        <point x="103" y="418"/>
+                        <point x="38" y="520"/>
+                        <point x="20" y="520"/>
+                    </polygon>
+                </polygonList>
+
             </collision>
         </object>
 

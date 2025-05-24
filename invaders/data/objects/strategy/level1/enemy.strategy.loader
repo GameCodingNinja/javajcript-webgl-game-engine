@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <loader>
 
-    <strategy name="_enemy_"/>
+    <strategy name="_enemy_">
+        <node name="enemy01_ship">
+            <sprite>
+                <position x="700" y="0"/>
+            </sprite>
+        </node>
+    </strategy>
   
 </loader>

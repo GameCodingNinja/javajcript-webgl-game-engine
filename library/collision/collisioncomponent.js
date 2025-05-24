@@ -488,8 +488,11 @@ export class CollisionComponent
             this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < transPolygonAry.length; ++this._i )
-                return this.pointToPolygonCheck( this.sprite.transPos, this._transPolygonAry[this._i] );
+            for( this._i = 0; this._i < this._transPolygonAry.length; ++this._i )
+            {
+                if( this.pointToPolygonCheck( this.sprite.transPos, this._transPolygonAry[this._i]) )
+                    return true;
+            }
         }
         
         return false;
@@ -507,13 +510,13 @@ export class CollisionComponent
             this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < transPolygonAry.length; ++this._i )
+            for( this._i = 0; this._i < this._transPolygonAry.length; ++this._i )
             {
-                for( this._j = 0; this._j < transPolygonAry[this._i].pointAry.length; ++this._j )
+                for( this._j = 0; this._j < this._transPolygonAry[this._i].pointAry.length; ++this._j )
                 {
                     // Get next vertex in list. If we've hit the end, wrap around to 0
                     this._next = this._j + 1;
-                    if( this._next == transPolygonAry[this._i].pointAry.length )
+                    if( this._next == this._transPolygonAry[this._i].pointAry.length )
                         this._next = 0;
 
                     // check for collision between the circle and a line formed between the two vertices
@@ -797,16 +800,16 @@ export class CollisionComponent
     {
         this._collision = false;
 
-        for( this._i = 0; this._i < polygon.pointAry.length; ++this._i )
+        for( this._ii = 0; this._ii < polygon.pointAry.length; ++this._ii )
         {
             // Get next vertex in list. If we've hit the end, wrap around to 0
-            this._next = this._i + 1;
+            this._next = this._ii + 1;
             if( this._next == polygon.pointAry.length )
                 this._next = 0;
 
-            // Ge the current and next point
-            this._vc = polygon.pointAry[this._i];
-            this._vn = polygon.pointAry[next];
+            // Go the current and next point
+            this._vc = polygon.pointAry[this._ii];
+            this._vn = polygon.pointAry[this._next];
             this._px = point.x;
             this._py = point.y;
 
