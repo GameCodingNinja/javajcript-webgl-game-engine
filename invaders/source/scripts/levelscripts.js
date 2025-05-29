@@ -92,7 +92,7 @@ class PlayerShip_ShootLazer
         // Is the position flipped?
         this._offsetX = this.sprite.pos.x;
         this._offsetY = this.sprite.pos.y;
-        if( this._rot.y )
+        if( this._rot.y > 1 )
         {
             this._offsetX = -this._offsetX;
             this.PROJECTILE_SPEED = -this.PROJECTILE_SPEED;
@@ -163,14 +163,11 @@ class PlayerShip_Die
         this.easingY.init( this.sprite.pos.y, dest, offsetY / 250, easing.getSineIn() );
         this.rotateVelocity = -0.00005;
         this.rotate = -0.05;
-        if(rot.y != 0)
+        if(rot.y > 1)
         {
             this.rotate = 0.05;
             this.rotateVelocity = 0.00005;
         }
-
-        // Continues the init
-        this.recycle();
     }
 
     // 
@@ -326,7 +323,7 @@ class Explode_animation
     }
 
     // 
-    //  DESC: Recycle the script
+    //  DESC: Using as an init
     //
     recycle( projectileSprite, shipSprite )
     {
@@ -340,6 +337,18 @@ class Explode_animation
         this.sprite.transform();
 
         this.dif = this.shipSprite.pos.getDistance( this.explodeAnim.sprite.pos );
+
+        this._size = this.shipSprite.getSize();
+
+        if(this.dif.x > this._size.w / 2)
+            this.dif.x = (this._size.w / 2) - 15;
+        else if(this.dif.x < -(this._size.w / 2))
+            this.dif.x = -(this._size.w / 2) + 15
+
+        if(this.dif.y > this._size.h / 2)
+            this.dif.y = (this._size.h / 2) - 15;
+        else if(this.dif.y < -(this._size.h / 2))
+            this.dif.y = -(this._size.h / 2) + 15
     }
     
     // 
@@ -347,7 +356,7 @@ class Explode_animation
     //
     execute()
     {
-        this.explodeAnim.sprite.setPosXYZ( this.shipSprite.pos.x - this.dif.x, this.shipSprite.pos.y - this.dif.y );
+        this.explodeAnim.sprite.setPosXYZ( this.shipSprite.pos.x - this.dif.x, this.shipSprite.pos.y - this.dif.y);
 
         if( this.explodeAnim.execute() )
         {
@@ -399,9 +408,6 @@ class Enemy00Ship_Hit
             this.rotate = 0.04;
             this.rotateVelocity = 0.00004;
         }
-
-        // Send a message to keep track of aliens being destroyed
-        eventManager.dispatchEvent( gameDefs.EGE_ENEMY00_DESTROYED, 1 );
 
         // Get the enemy strategy to create the explosion animation
         this.enemyStratagy = strategyManager.get('_enemy_');
@@ -479,25 +485,7 @@ class Enemy01Ship_Hit
     //
     recycle( projectileSprite )
     {
-        // Remove the AI script since the enemy is to die
-        //this.sprite.scriptComponent.remove( 'AI_Enemy01' );
-
         this._dist = this.sprite.pos.getDistance( projectileSprite.pos );
-
-        //this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
-        //this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
-        //this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn() );
-
-        /*if( (this._dist.x > 0 && this._dist.y > 0) || (this._dist.x < 0 && this._dist.y < 0) )
-        {
-            this.rotate = -0.04;
-            this.rotateVelocity = -0.00004;
-        }
-        else if( (this._dist.x < 0 && this._dist.y > 0) || (this._dist.x > 0 && this._dist.y < 0) )
-        {
-            this.rotate = 0.04;
-            this.rotateVelocity = 0.00004;
-        }*/
 
         // Send a message to keep track of aliens being destroyed
         //eventManager.dispatchEvent( gameDefs.EGE_ENEMY01_DESTROYED, 1 );
@@ -531,11 +519,6 @@ class Enemy01Ship_Hit
     //
     execute()
     {
-        /*this.easingY.execute();
-        this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
-        this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
-        this.rotate += this.rotateVelocity * highResTimer.elapsedTime;*/
-
         if( this.explodeAnim )
         {
             this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
@@ -546,13 +529,51 @@ class Enemy01Ship_Hit
             }
         }
 
-        /*if( this.easingY.isFinished() )
+        return false;
+    }
+}
+
+//
+//  DESC: Script for handling player ship dieing
+//
+class Enemy01Ship_Die
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+        this.easingY = new easing.valueTo;
+        // Y Rotation
+        this.dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
+        this.offsetY = Math.abs(this.sprite.pos.y - this.dest);
+        this.easingY.init( this.sprite.pos.y, this.dest, this.offsetY / 300, easing.getSineIn() );
+        this.rotateVelocity = -0.00001;
+        this.rotate = -0.005;
+        if(this.sprite.rot.y > 1)
         {
-            // We are done with this sprite, queue it up to be recycled
-            this.enemyStratagy.recycle( this.sprite.parentNode );
+            this.rotate = 0.005;
+            this.rotateVelocity = 0.00001;
+        }
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.easingY.execute();
+        this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+        this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
+        this.rotate += this.rotateVelocity * highResTimer.elapsedTime;
+
+        if( this.easingY.isFinished() )
+        {
+            // Remove the AI script since the enemy is to die
+            this.sprite.scriptComponent.remove( 'AI_Enemy01' );
+
+            soundManager.play( '(level_1)', 'enemy01_crash' );
 
             return true;
-        }*/
+        }
 
         return false;
     }
@@ -592,7 +613,7 @@ class Enemy00Shot_Hit
 //
 //  DESC: Script for handling enemy00 ship colliding with the player ship
 //
-class Enemy00Ship_CheckForCollideWithPlayer
+class EnemyShip_CheckForCollideWithPlayer
 {
     constructor( sprite )
     {
@@ -620,7 +641,8 @@ class Enemy00Ship_CheckForCollideWithPlayer
         if( this.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
             if( this.sprite.collisionComponent.checkForCollision( this.playerShipStratagy.nodeAry ) )
-                return true;
+                if(this.sprite.collisionComponent.enable == false)
+                    return true;
         }
 
         return false;
@@ -704,11 +726,14 @@ export function loadScripts()
     scriptManager.set( 'Enemy01Ship_Hit',
             ( sprite, projectileSprite ) => { return new Enemy01Ship_Hit( sprite, projectileSprite ); } );
 
+    scriptManager.set( 'Enemy01Ship_Die',
+        ( sprite ) => { return new Enemy01Ship_Die( sprite ); } );
+
     scriptManager.set( 'Enemy00Shot_Hit',
         ( sprite ) => { return new Enemy00Shot_Hit( sprite ); } );
 
-    scriptManager.set( 'Enemy00Ship_CheckForCollideWithPlayer',
-        ( sprite ) => { return new Enemy00Ship_CheckForCollideWithPlayer( sprite ); } );
+    scriptManager.set( 'EnemyShip_CheckForCollideWithPlayer',
+        ( sprite ) => { return new EnemyShip_CheckForCollideWithPlayer( sprite ); } );
 
     scriptManager.set( 'Enemy00Ship_Shoot',
         ( sprite, enemySprite ) => { return new Enemy00Ship_Shoot( sprite, enemySprite ); } );

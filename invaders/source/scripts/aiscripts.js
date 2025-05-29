@@ -11,13 +11,17 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
+import * as gameDefs from '../state/gamedefs';
 
-var ai_data = {};
+// Shared AI data
+var ai_data_00 = {};
 
-const pixel_per_sec = 100,
+const pixel_per_sec_100 = 100,
+      pixel_per_sec_200 = 200,
       passive_shooter_time = 2000,
       aggrssive_shooter_time = 1000,
       destroy_building_shooter_time = 500;
@@ -27,11 +31,11 @@ const pixel_per_sec = 100,
 //
 export function clearAIData()
 {
-    ai_data = {};
+    ai_data_00 = {};
 }
 
 //
-//  DESC: AI Enemy base class
+//  DESC: AI Enemy00 base class
 //
 class AI_Enemy00_base extends aiNode
 {
@@ -60,7 +64,7 @@ class AI_Enemy00_base extends aiNode
                         let shootSprite = this.data.playerShipStratagy.create('enemy_shot').get();
                         shootSprite.scriptComponent.prepare( 'shoot', shootSprite, this.sprite );
 
-                        this.data.groupPlayer.play( 'enemy_1_gun' );
+                        this.data.groupPlayer.play( 'enemy00_gun' );
                     }
 
                     this.sprite.shootTime = highResTimer.elapsedTime + shootTime;
@@ -71,7 +75,7 @@ class AI_Enemy00_base extends aiNode
 }
 
 //
-//  DESC: AI Enemy head (root) node base class script
+//  DESC: AI Enemy00 head (root) node base class script
 //        Only supports one child
 //
 class AI_Enemy00_Head extends aiNode
@@ -80,7 +84,7 @@ class AI_Enemy00_Head extends aiNode
     {
         super( nodeData );
 
-        this.data = ai_data;
+        this.data = ai_data_00;
         this.state = defs.EAIS_INIT;
     }
     
@@ -159,7 +163,7 @@ class AI_Enemy00_Desend extends AI_Enemy00_base
         let offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
 
         // Calculated to move in pixels per second
-        this.easingY.init( this.sprite.pos.y, offsetY, (this.sprite.pos.y - offsetY) / pixel_per_sec, easing.getSineOut() );
+        this.easingY.init( this.sprite.pos.y, offsetY, (this.sprite.pos.y - offsetY) / pixel_per_sec_100, easing.getSineOut() );
     }
 
     // 
@@ -276,7 +280,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                             this.sprite.targetBuilding = this._targetBuilding;
 
                             // Calculate the travel time
-                            this._time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / pixel_per_sec;
+                            this._time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / pixel_per_sec_100;
                             this.easingX.init( this.sprite.pos.x, this.sprite.targetBuilding.pos.x, this._time, easing.getSineInOut() );
 
                             // Force an initialization to start the movement on first time execution of this function
@@ -303,7 +307,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                         }
                         
                         // Calculate the travel time
-                        this._time = Math.abs( this.sprite.pos.x - this._offsetX ) / pixel_per_sec;
+                        this._time = Math.abs( this.sprite.pos.x - this._offsetX ) / pixel_per_sec_100;
                         this.easingX.init( this.sprite.pos.x, this._offsetX, this._time, easing.getSineInOut() );
 
                         // Force an initialization to start the movement on first time execution of this function
@@ -365,7 +369,7 @@ class AI_Enemy00_DesendToBuilding extends AI_Enemy00_base
             if( !this.easingY.isInitialized() )
             {
                 this._offsetY = this.sprite.targetBuilding.pos.y + (this.sprite.targetBuilding.getSize().h / 2) + (this.sprite.getSize().h / 2) - 20;
-                this._time = Math.abs(this.sprite.pos.y - this._offsetY) / pixel_per_sec;
+                this._time = Math.abs(this.sprite.pos.y - this._offsetY) / pixel_per_sec_100;
 
                 this.easingY.init( this.sprite.pos.y, this._offsetY, this._time, easing.getSineInOut() );
             }
@@ -379,7 +383,7 @@ class AI_Enemy00_DesendToBuilding extends AI_Enemy00_base
             if( this.easingY.isFinished() )
             {
                 this.state = defs.EAIS_SUCCESS;
-                this.data.groupPlayer.play( 'enemy_1_attack_building' );
+                this.data.groupPlayer.play( 'enemy00_attack_building' );
             }
         }
 
@@ -476,11 +480,189 @@ class AI_Enemy00_DestroyBuilding extends AI_Enemy00_base
     }
 }
 
+//
+//  DESC: AI Enemy01 head (root) node base class script
+//        Only supports one child
+//
+class AI_Enemy01_Head extends aiNode
+{
+    constructor( nodeData )
+    {
+        super( nodeData );
+
+        this.state = defs.EAIS_INIT;
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        // Initialize the tree by doing a reset
+        this.resetTree();
+    }
+
+    // 
+    //  DESC: Execute the children
+    //
+    execute()
+    {
+        if( this.state === defs.EAIS_INIT )
+        {
+            this.state = defs.EAIS_ACTIVE;
+        }
+
+        // Returning SUCCESS or FAILURE terminates the execution of this behavioral tree
+        if( this.nodeAry[0].evaluate() != defs.EAIS_ACTIVE )
+            return true;
+
+        return false;
+    }
+}
+
+//
+//  DESC: AI Leaf (task) node script. Desend into the game
+//        The last node on the branch. Implements game specific tests or actions.
+//
+class AI_Enemy01_Desend extends aiNode
+{
+    constructor( nodeData, headNode, sprite )
+    {
+        super( nodeData );
+
+        this.sprite = sprite;
+        this.state = defs.EAIS_INIT;
+        this.easingY = new easing.valueTo;
+        this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
+    }
+
+    // 
+    //  DESC: Handle post load init this.easingY.init
+    //
+    init()
+    {
+        // Calculated to move in pixels per second
+        this.easingY.init( this.sprite.pos.y, 0, (this.sprite.pos.y - 0) / pixel_per_sec_200, easing.getSineOut() );
+
+        // Init the hit count
+        this.sprite.hitCount = 0;
+    }
+
+    // 
+    //  DESC: Reset the node
+    //
+    reset()
+    {
+        this.state = defs.EAIS_INIT;
+        this.easingY.clear();
+    }
+    
+    // 
+    //  DESC: Handle the desend
+    //
+    evaluate()
+    {
+        // Do first time inits
+        if( this.state === defs.EAIS_INIT )
+        {
+            this.init();
+            this.state = defs.EAIS_ACTIVE;
+            this.groupPlayer.play('enemy01_desend');
+        }
+
+        if( this.state === defs.EAIS_ACTIVE )
+        {
+            this.easingY.execute();
+            this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+
+            if( this.easingY.isFinished() )
+            {
+                this.state = defs.EAIS_SUCCESS;
+
+                let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
+                scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.75, 1000, gsnd, () => gsnd.play('enemy01_loop_sound', true), null ) );
+            }
+        }
+
+        return this.state;
+    }
+}
+
+//
+//  DESC: AI Leaf (task) node script. Desend into the game
+//        The last node on the branch. Implements game specific tests or actions.
+//
+class AI_Enemy01_Go extends aiNode
+{
+    constructor( nodeData, headNode, sprite )
+    {
+        super( nodeData );
+
+        this.sprite = sprite;
+        this.state = defs.EAIS_INIT;
+        this.easingX = new easing.valueTo;
+    }
+
+    // 
+    //  DESC: Handle post load init this.easingY.init
+    //
+    init()
+    {
+        // Calculated to move in pixels per second
+        if(this.sprite.rot.y > 1)
+            this.easingX.init( this.easingX.getValue(), -20, 2, easing.getLinear() );
+        else
+            this.easingX.init( this.easingX.getValue(), 20, 2, easing.getLinear() );
+    }
+
+    // 
+    //  DESC: Reset the node
+    //
+    reset()
+    {
+        this.state = defs.EAIS_INIT;
+        this.easingX.clear();
+    }
+    
+    // 
+    //  DESC: Handle the desend
+    //
+    evaluate()
+    {
+        // Do first time inits
+        if( this.state === defs.EAIS_INIT )
+        {
+            this.init();
+            this.state = defs.EAIS_ACTIVE;
+        }
+
+        if( this.state === defs.EAIS_ACTIVE )
+        {
+            this.easingX.execute();
+            this.sprite.incPosXYZ( this.easingX.getValue(), 0 );
+
+            // Loop the player strategy and camera
+            if( this.sprite.pos.x < -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST + 50) )
+            {
+                this.sprite.incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+            }
+            else if( this.sprite.pos.x > (gameDefs.GAMEPLAY_LOOPING_WRAP_DIST - 20) )
+            {
+                this.sprite.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+            }
+        }
+
+        return this.state;
+    }
+}
+
+
 // 
 //  DESC: Load scripts
 //
 export function loadScripts()
 {
+    // Enemy00 AI functions
     scriptManager.set( 'AI_Enemy00_Head',
         ( nodeData ) => { return new AI_Enemy00_Head( nodeData ); } );
 
@@ -495,4 +677,15 @@ export function loadScripts()
 
     scriptManager.set( 'AI_Enemy00_DestroyBuilding',
         ( nodeData, headNode, sprite ) => { return new AI_Enemy00_DestroyBuilding( nodeData, headNode, sprite ); } );
+
+
+    // Enemy01 AI functions
+    scriptManager.set( 'AI_Enemy01_Head',
+        ( nodeData ) => { return new AI_Enemy01_Head( nodeData ); } );
+
+    scriptManager.set( 'AI_Enemy01_Desend',
+        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Desend( nodeData, headNode, sprite ); } );
+
+    scriptManager.set( 'AI_Enemy01_Go',
+        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Go( nodeData, headNode, sprite ); } );
 }

@@ -61,7 +61,7 @@ export class Timer
     //
     //  DESC: Has the timer expired?
     //
-    expired( resetOnExpire = false )
+    expired( resetOnExpire = false, disableOnExpire = false )
     {
         // Has the timer been disabled
         if( this.disabled )
@@ -75,6 +75,9 @@ export class Timer
 
             if( resetOnExpire )
                 this.reset();
+
+            if( disableOnExpire )
+                this.disabled = disableOnExpire;
         }
 
         return result;

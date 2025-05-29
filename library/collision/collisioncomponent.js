@@ -887,8 +887,8 @@ export class CollisionComponent
         this._y4 = line2.tail.y;
 
         // calculate the distance to intersection point
-        this._uA = ((this._x4-this._x3)*(this._y1-this._y3) - (this._y4-this._y3)*(this._x1-this._x3)) / ((this._y4-this._y3)*(x2-x1) - (this._x4-this._x3)*(this._y2-this._y1));
-        this._uB = ((this._x2-this._x1)*(this._y1-this._y3) - (this._y2-this._y1)*(this._x1-this._x3)) / ((this._y4-this._y3)*(x2-x1) - (this._x4-this._x3)*(this._y2-this._y1));
+        this._uA = ((this._x4-this._x3)*(this._y1-this._y3) - (this._y4-this._y3)*(this._x1-this._x3)) / ((this._y4-this._y3)*(this._x2-this._x1) - (this._x4-this._x3)*(this._y2-this._y1));
+        this._uB = ((this._x2-this._x1)*(this._y1-this._y3) - (this._y2-this._y1)*(this._x1-this._x3)) / ((this._y4-this._y3)*(this._x2-this._x1) - (this._x4-this._x3)*(this._y2-this._y1));
       
         // if uA and uB are between 0-1, lines are colliding
         if( this._uA >= 0 && this._uA <= 1 && this._uB >= 0 && this._uB <= 1 )

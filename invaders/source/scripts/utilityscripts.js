@@ -374,7 +374,7 @@ class ScreenFade
 //
 //  DESC: Script for fading the music
 //
-class MusicFade
+class SoundFade
 {
     constructor( final, time, snd, preAction = null, postAction = null )
     {
@@ -473,8 +473,8 @@ export function loadScripts()
     scriptManager.set( 'ScreenFade',
         ( current, final, time, fadeType = null ) => { return new ScreenFade( current, final, time, fadeType ); } );
 
-    scriptManager.set( 'MusicFade',
-        ( final, time, snd, preAction, postAction ) => { return new MusicFade( final, time, snd, preAction, postAction ); } );
+    scriptManager.set( 'SoundFade',
+        ( final, time, snd, preAction, postAction ) => { return new SoundFade( final, time, snd, preAction, postAction ); } );
 
     scriptManager.set( 'DelayedExecution',
         ( time, preAction, postAction ) => { return new DelayedExecution( time, preAction, postAction ); } );

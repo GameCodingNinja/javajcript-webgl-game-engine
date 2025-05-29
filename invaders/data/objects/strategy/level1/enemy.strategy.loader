@@ -2,9 +2,21 @@
 <loader>
 
     <strategy name="_enemy_">
-        <node name="enemy01_ship">
+        <!--<node name="enemy01_ship">
             <sprite>
                 <position x="700" y="0"/>
+            </sprite>
+        </node>-->
+        <node name="marker">
+            <sprite>
+                <position x="5500" y="-80"/>
+                <scale x="2" y="2" z="1"/>
+            </sprite>
+        </node>
+        <node name="marker">
+            <sprite>
+                <position x="-5700" y="-80"/>
+                <scale x="2" y="2" z="1"/>
             </sprite>
         </node>
     </strategy>

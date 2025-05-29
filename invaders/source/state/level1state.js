@@ -37,6 +37,7 @@ import * as gameDefs from './gamedefs';
 import * as ai from '../scripts/aiscripts';
 
 import enemy00_ai from 'raw-loader!../../data/objects/ai/enemy00.ai';
+import enemy01_ai from 'raw-loader!../../data/objects/ai/enemy01.ai';
 
 export const ASSET_COUNT = 92;
 const MOVE_NULL = -1,
@@ -55,12 +56,13 @@ const MOVE_NULL = -1,
       ENEMY00_SHOT_ID = -2,
       ENEMY00_SHIP_ID = -3,
       ENEMY01_SHIP_ID = -4,
+      ENEMY00_SHIP_HIT_VALUE = 1,
+      ENEMY01_SHIP_HIT_VALUE = 5,
+      ENEMY01_SHIP_HIT_COUNT = 30,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
-      GAMEPLAY_LOOPING_WRAP_DIST = 5600,
       RADAR_SCALE = 0.1,
-      LOOP_SND = true,
       DEFAULT_SHIP_PROGRESS_BAR_VALUE = 100,
       DEFAULT_SHIP_BOOST_BAR_VALUE = 3000,
       GAME_START_MENU_DEFAULT_MSG = 0,
@@ -220,7 +222,7 @@ export class Level1State extends CommonState
 
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
-        this.groupPlayer.play( 'player_thrust', LOOP_SND );
+        this.groupPlayer.play( 'player_thrust', true );
         this.groupPlayer.pause( 'player_thrust' );
 
         this.gameStartStopToggle = false;
@@ -257,6 +259,7 @@ export class Level1State extends CommonState
         this.playerShip.boostSpeed = 0;
         this.playerShip.boostButtonPress = defs.EAP_UP;
         this.playerShip.waitForFullBoostCharge = false;
+        this.playerShip.collisionTimer = new Timer(1000, true);
 
         this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
         this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
@@ -279,6 +282,7 @@ export class Level1State extends CommonState
     initMiscObjects()
     {
         this.enemy00SpawnTimer = new Timer(2000);
+        this.enemy01SpawnTimer = new Timer((1000 * 30) );//+ genFunc.randomInt( (1000 * 30), (1000 * 60)));
         this.enemy00MaxTimer = new Timer(15000);
         this.enemy00Max = 5;
 
@@ -388,23 +392,37 @@ export class Level1State extends CommonState
         if(spriteB.parentNode.userId == PLAYER_SHIP_ID)
         {
             spriteA.collisionComponent.enable = false;
-            spriteB.prepareScript( 'hit', spriteA );
 
-            // Player hit by enemy projectile
+            // Player hit by enemy00 projectile
             if( spriteA.parentNode.userId == ENEMY00_SHOT_ID )
             {
+                spriteB.prepareScript( 'hit', spriteA );
                 this.playerShip.progressBar.incCurrentValue( -10 );
                 this.playerShip.progressBar.setVisible( true );
                 spriteA.prepareScript( 'hit' );
                 this.groupPlayer.play( 'player_hit' );
             }
-            // Player collides into enemy
+            // Player collides into enemy00
             else if( spriteA.parentNode.userId == ENEMY00_SHIP_ID )
             {
+                spriteB.prepareScript( 'hit', spriteA );
                 this.playerShip.progressBar.incCurrentValue( -30 );
                 this.playerShip.progressBar.setVisible( true );
                 spriteA.prepareScript( 'hit', spriteB );
                 this.groupPlayer.play( 'EXPLOSION_Metllic' );
+            }
+            // Player collides into enemy01
+            else if( spriteA.parentNode.userId == ENEMY01_SHIP_ID )
+            {
+                spriteA.collisionComponent.enable = true;
+                if(this.playerShip.collisionTimer.expired(true))
+                {
+                    this.playerShip.allowCollision = false;
+                    this.playerShip.sprite.prepareScript( 'hit', spriteA );
+                    this.playerShip.progressBar.incCurrentValue( -30 );
+                    this.playerShip.progressBar.setVisible( true );
+                    this.groupPlayer.play( 'EXPLOSION_Metllic' );
+                }
             }
 
             // Player ship is to die from above hit/collision
@@ -430,20 +448,35 @@ export class Level1State extends CommonState
             spriteA.prepareScript( 'hit' );
             spriteB.prepareScript( 'hit', spriteA );
 
-            this.groupPlayer.play( 'enemy00_1_explosion' );
+            this.groupPlayer.play( 'enemy_explosion' );
+
+            this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
         }
         // Player shot enemy01 ship
         else if( spriteB.parentNode.userId == ENEMY01_SHIP_ID )
         {
             // Stop any more collision detection for the shot
             spriteA.collisionComponent.enable = false;
-            //spriteB.collisionComponent.enable = false;
 
             // Execute the scripts that handle being hit
             spriteA.prepareScript( 'hit' );
             spriteB.prepareScript( 'hit', spriteA );
 
-            this.groupPlayer.play( 'enemy00_1_explosion' );
+            if(spriteB.hitCount == ENEMY01_SHIP_HIT_COUNT)
+            {
+                spriteB.prepareScript( 'die' );
+                this.updateHudProgress( ENEMY01_SHIP_HIT_VALUE );
+                this.enemy01SpawnTimer.reset();
+
+                this.groupPlayer.play( 'enemy01_desend_to_crash' );
+
+                let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
+                scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 2000, gsnd, null, () => gsnd.stop() ) );
+            }
+
+            spriteB.hitCount++;
+
+            this.groupPlayer.play( 'enemy_explosion' );
         }
     }
 
@@ -598,10 +631,10 @@ export class Level1State extends CommonState
                         {
                             // Fade out the game music
                             let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-                            scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
+                            scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
 
                             // Start the ambient music
-                            scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                            scriptSingleton.prepare( scriptManager.get('SoundFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
                         }
                     }
 
@@ -628,11 +661,11 @@ export class Level1State extends CommonState
                             // Fade out the ambient music
                             let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
                             if(asnd.isPlaying())
-                                scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, asnd, null, () => asnd.pause() ) );
+                                scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 500, asnd, null, () => asnd.pause() ) );
 
                             // Start the game music
                             let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-                            scriptSingleton.prepare( scriptManager.get('MusicFade')( gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true), null ) );
+                            scriptSingleton.prepare( scriptManager.get('SoundFade')( gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true), null ) );
                         }
 
                         // Indicate to Crazy Games the game has stopped
@@ -657,11 +690,15 @@ export class Level1State extends CommonState
 
                 // Fade out the game music
                 let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-                scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
+                scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 500, gsnd, null, () => gsnd.pause() ) );
 
                 // Start the ambient music
                 let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
-                scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                scriptSingleton.prepare( scriptManager.get('SoundFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+
+                let gsnd_loop = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
+                if(gsnd_loop.isPlaying( 'enemy01_loop_sound' ))
+                    scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 2000, gsnd_loop, null, () => gsnd_loop.stop() ) );
 
                 // Indicate to Crazy Games the game has started
                 if(typeof window.CrazyGames !== 'undefined' && !this.gameStartStopToggle)
@@ -681,7 +718,7 @@ export class Level1State extends CommonState
                     // Fade out the ambient music
                     let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
                     if(asnd.isPlaying())
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 250, asnd, null, () => asnd.pause() ) );
+                        scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 250, asnd, null, () => asnd.pause() ) );
                     
                     scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_GAME_AD_START ) );
                 }
@@ -708,7 +745,7 @@ export class Level1State extends CommonState
                 // Fade in the ambient music
                 let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
                 if(asnd.isPaused())
-                    scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
+                    scriptSingleton.prepare( scriptManager.get('SoundFade')( asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true), null ) );
                 this.restartGame();
             }
             else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
@@ -726,37 +763,6 @@ export class Level1State extends CommonState
 
                 if( this._allToBeDeleted )
                     eventManager.dispatchEvent( stateDefs.ESE_SHOW_GAME_OVER_MENU );
-            }
-            else if( event.type === gameDefs.EGE_ENEMY00_DESTROYED )
-            {
-                if( this.hudProgressBar.isMaxValue() )
-                {
-                    this.hudProgressBar.setCurrentValue( 0 );
-                    this.hudProgressBar.incProgressBarMax( 2 );
-                    this.playerLevel += 1;
-
-                    this.setYTGameScore();
-
-                    this.hudLevelFont.visualComponent.createFontString( `Level ${this.playerLevel}` );
-
-                    this.groupPlayer.play( 'level_up' );
-
-                    // Change out the music every 5 levels
-                    if( (this.playerLevel % 5) == 0)
-                    {
-                        // Fade out the current game music
-                        let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( 0.0, 500, gsnd, null, () => gsnd.stop() ) );
-
-                        this.musicCounter = (this.musicCounter + 1) % this.musicAry.length;
-
-                        // Start the next game music
-                        let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-                        scriptSingleton.prepare( scriptManager.get('MusicFade')( asnd.defaultVolume, 500, asnd, () => asnd.play(true), null ) );
-                    }
-                }
-
-                this.hudProgressBar.incCurrentValue( event.arg[0] );
             }
         }
         else
@@ -808,6 +814,41 @@ export class Level1State extends CommonState
                 }
             }
         }
+    }
+
+    // 
+    //  DESC: Handle the ship movement
+    //
+    updateHudProgress( value )
+    {
+        if( this.hudProgressBar.isMaxValue() )
+        {
+            this.hudProgressBar.setCurrentValue( 0 );
+            this.hudProgressBar.incProgressBarMax( 2 );
+            this.playerLevel += value;
+
+            this.setYTGameScore();
+
+            this.hudLevelFont.visualComponent.createFontString( `Level ${this.playerLevel}` );
+
+            this.groupPlayer.play( 'level_up' );
+
+            // Change out the music every 5 levels
+            if( (this.playerLevel % 5) == 0)
+            {
+                // Fade out the current game music
+                let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 500, gsnd, null, () => gsnd.stop() ) );
+
+                this.musicCounter = (this.musicCounter + 1) % this.musicAry.length;
+
+                // Start the next game music
+                let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                scriptSingleton.prepare( scriptManager.get('SoundFade')( asnd.defaultVolume, 500, asnd, () => asnd.play(true), null ) );
+            }
+        }
+
+        this.hudProgressBar.incCurrentValue( value );
     }
 
     // 
@@ -942,9 +983,9 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
-        /*if( this.enemy00SpawnTimer.expired(true) )
+        if( this.enemy00SpawnTimer.expired(true) )
         {
-            // Create a enemy and position it outside of the view
+            // Create enemy00 and position it outside of the view
             if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
             {
                 this._node = this.enemyStrategy.create('enemy00_ship');
@@ -956,7 +997,19 @@ export class Level1State extends CommonState
             {
                 this.enemy00Max++;
             }
-        }*/
+        }
+        // Create enemy01 and position it outside of the view
+        else if(this.enemy01SpawnTimer.expired( false, true ))
+        {
+            this._node = this.enemyStrategy.create('enemy01_ship');
+            this._node.get().setPosXYZ(genFunc.randomInt(-5000, 5000), settings.deviceRes.h + (this._node.radius / 2));
+            this._node.get().setRotXYZ();
+
+            if( genFunc.randomInt( 0, 1 ) === 0 )
+                this._node.get().setRotXYZ(0, 180);
+
+            this._node.transform();
+        }
     }
 
     // 
@@ -981,10 +1034,8 @@ export class Level1State extends CommonState
             }
         }
         // If we've been without a train for a long enough period, activate the strategy
-        else if( this.train.timer.expired() )
+        else if( this.train.timer.expired( false, true ) )
         {
-            this.train.timer.disable( true );
-
             this.train.strategy = strategyManager.activateStrategy('_train_');
             this.train.node = this.train.strategy.get('train');
             this.train.sprite = this.train.node.get();
@@ -1040,11 +1091,11 @@ export class Level1State extends CommonState
 
         if( this.radarCamAry[0].pos.x > -68 )
         {
-            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x - ((GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
+            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x - ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
         }
         else
         {
-            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x + ((GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
+            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x + ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
         }
     }
 
@@ -1127,15 +1178,15 @@ export class Level1State extends CommonState
 
             // Set the wrap around camera when we are about to exceed the range of the buildings
             if( this.buildingsCamera.pos.x > -6200 && this.buildingsCamera.pos.x < -4900 )
-                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x + ((GAMEPLAY_LOOPING_WRAP_DIST * 2))) );
+                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x + ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2))) );
             else if( this.buildingsCamera.pos.x > 5000 && this.buildingsCamera.pos.x < 6300 )
-                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x - (GAMEPLAY_LOOPING_WRAP_DIST * 2)) );
+                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x - (gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2)) );
 
             // Reset the building camera once we are done with filling the gap with the wrap around camera
             if( this.buildingsCamera.pos.x < -6200 )
-                this.buildingsCamera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                this.buildingsCamera.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             else if( this.buildingsCamera.pos.x > 6300)
-                this.buildingsCamera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                this.buildingsCamera.incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
             // Stop the up/down movement
             if( (this.moveDirY === MOVE_UP && this.playerShip.sprite.transPos.y > (settings.deviceRes_half.h * 0.73)) ||
@@ -1192,19 +1243,19 @@ export class Level1State extends CommonState
             this.playerShip.sprite.incPosXYZ( this.easingX.getValue(), this.easingY.getValue() );
 
             // Loop the player strategy and camera
-            if( this.playerShip.sprite.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
+            if( this.playerShip.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
             {
                 for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; ++this._i )
-                    this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                    this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
-                this.levelCamera.incPosXYZ( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                this.levelCamera.incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
             }
-            else if( this.playerShip.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
+            else if( this.playerShip.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
             {
                 for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; ++this._i )
-                    this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                    this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
 
-                this.levelCamera.incPosXYZ( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                this.levelCamera.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
             
             strategyManager.update();
@@ -1319,7 +1370,7 @@ export function load()
     return objectDataManager.loadGroup( groupAry )
 
         // Load the AI. Needs to be loaded before the strategy loader
-        .then(() => aiManager.loadFromXml( genFunc.stringLoadXML( enemy00_ai ) ))
+        .then(() => aiManager.loadFromXml( [genFunc.stringLoadXML( enemy00_ai ), genFunc.stringLoadXML( enemy01_ai )] ))
 
         // Load and execute all the strategy loaders.
         .then(() => strategyLoader.loadGroup( '-level1-' ))

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<ai>
+
+    <node name="AI_Enemy01">
+
+        <head script="AI_Enemy01_Head"/>
+
+        <node>
+
+            <composite script="AI_Composite" condition="all_success"/>
+
+            <node>
+
+                <leaf script="AI_Enemy01_Desend"/>
+
+            </node>
+
+            <node>
+
+                <composite script="AI_Composite" condition="all_success"/>
+
+                <node>
+
+                    <leaf script="AI_Enemy01_Go"/>
+
+                </node>
+
+
+            </node>
+
+        </node>
+
+    </node>
+
+</ai>

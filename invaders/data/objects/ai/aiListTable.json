@@ -1,4 +1,5 @@
 {
     "|enemy|": [
-        "data/objects/ai/enemy00.ai"]
+        "data/objects/ai/enemy00.ai",
+        "data/objects/ai/enemy01.ai"]
 }

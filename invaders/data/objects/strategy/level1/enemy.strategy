@@ -8,11 +8,11 @@
     <node name="enemy00_ship" id="-3">
 
         <sprite>
-            <scale x="0.70" y="0.70"/>
+            <scale x="0.70" y="0.70" z="1"/>
             <scriptList>
                 <script ai_enemy="AI_Enemy00" prepareOnInit="true" ai="true"/>
                 <script hit="Enemy00Ship_Hit"/>
-                <script collision="Enemy00Ship_CheckForCollideWithPlayer" prepareOnInit="true"/>
+                <script collision="EnemyShip_CheckForCollideWithPlayer" prepareOnInit="true"/>
             </scriptList>
         </sprite>
 
@@ -21,9 +21,11 @@
     <node name="enemy01_ship" id="-4">
 
         <sprite>
-            <scale x="1" y="1"/>
             <scriptList>
+                <script ai_enemy="AI_Enemy01" prepareOnInit="true" ai="true"/>
                 <script hit="Enemy01Ship_Hit"/>
+                <script die="Enemy01Ship_Die"/>
+                <script collision="EnemyShip_CheckForCollideWithPlayer" prepareOnInit="true"/>
             </scriptList>
         </sprite>
 

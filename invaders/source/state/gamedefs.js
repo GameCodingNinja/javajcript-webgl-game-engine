@@ -8,5 +8,5 @@
     
     
 // EGameEvent
-export const EGE_BUILDING_DESTROYED   = 2000,
-             EGE_ENEMY00_DESTROYED      = 2001;
+export const EGE_BUILDING_DESTROYED     = 2000,
+             GAMEPLAY_LOOPING_WRAP_DIST = 5600;
