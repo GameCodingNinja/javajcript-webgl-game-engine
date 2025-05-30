@@ -487,13 +487,17 @@ export class Level1State extends CommonState
     //
     setupRewards()
     {
-        this._menu = menuManager.getMenu("game_over_menu");
+        if(typeof window.CrazyGames !== 'undefined')
+            this._menu = menuManager.getMenu("game_over_menu_ad");
+        else
+            this._menu = menuManager.getMenu("game_over_menu");
+
         this._featureIndex = this._menu.getControl("feature_btn_lst").activeIndex;
         this._battleTimeIndex = this._menu.getControl("battle_time_btn_lst").activeIndex;
 
         this.unlimitedBoot = false;
 
-        if( gAdPlayed )
+        if( gAdPlayed || (typeof window.CrazyGames === 'undefined'))
         {
             if( this._featureIndex === REWARD_FEATURE_UNLIMITED_BOOST )
             {
@@ -705,7 +709,12 @@ export class Level1State extends CommonState
             {
                 eventManager.clear();
                 actionManager.clearLastDeviceUsed();
-                menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
+
+                if(typeof window.CrazyGames !== 'undefined')
+                    menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu_ad');
+                else
+                    menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
+
                 menuManager.getTree('pause_tree').transitionMenu();
 
                 // Fade out the game music

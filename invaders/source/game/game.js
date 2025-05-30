@@ -50,7 +50,8 @@ export class Game
         .then(() =>
         {
             // Indicate to Crazy Games the start of the loading
-            window.CrazyGames.SDK.game.loadingStart();
+            if(typeof window.CrazyGames !== 'undefined')
+                window.CrazyGames.SDK.game.loadingStart();
 
             // Load the settings
             settings.loadFromObj( settingsObj );

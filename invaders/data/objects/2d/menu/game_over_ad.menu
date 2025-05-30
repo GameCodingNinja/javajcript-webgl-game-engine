@@ -10,7 +10,7 @@
 
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
-            <position x="0" y="160" z="0"/>
+            <position x="0" y="150" z="0"/>
             <fontStringList>
                 <string text="Valiant effort brave warrior!"/>
             </fontStringList>
@@ -18,9 +18,9 @@
 
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label_cond_45.ctrl"/>
-            <position x="0" y="70" z="0"/>
+            <position x="0" y="90" z="0"/>
             <fontStringList>
-                <string text="Choose rewards and enter|the frey again"/>
+                <string text="Choose rewards and watch an AD?"/>
             </fontStringList>
         </control>
 
@@ -31,13 +31,13 @@
         <!-- Feature list -->
         <control name="feature_btn_lst" controlType="button_list" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
-            <position x="0" y="-10" z="0"/>
+            <position x="0" y="10" z="0"/>
             <fontStringList>
                 <string text="No Reward"/>
                 <string text="Unlimited Boost"/>
                 <string text="Double Health"/>
             </fontStringList>
-            <navigate up="ok_btn" down="battle_time_btn_lst"/>
+            <navigate up="no_btn" down="battle_time_btn_lst"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
             <!-- Supports rootTransIn, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
@@ -50,13 +50,13 @@
         <!-- Battle time list -->
         <control name="battle_time_btn_lst" controlType="button_list" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_list.ctrl"/>
-            <position x="0" y="-80" z="0"/>
+            <position x="0" y="-60" z="0"/>
             <fontStringList>
                 <string text="Daytime Battle"/>
                 <string text="Nighttime Battle"/>
                 <string text="Dawn Battle"/>
             </fontStringList>
-            <navigate up="feature_btn_lst" down="ok_btn"/>
+            <navigate up="feature_btn_lst" down="yes_with_ad_btn"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>
             <actionResponse left="true" right="true"/>
             <!-- Supports rootTransIn, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
@@ -65,15 +65,30 @@
                 <script select="Control_OnSelect"/>
             </scriptList>
         </control>
-      
-        <control name="ok_btn" controlType="button" defaultState="inactive">
-            <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
-            <position x="0" y="-155" z="0"/>
+
+        <control name="yes_with_ad_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_275x55.ctrl"/>
+            <position x="-120" y="-140" z="0"/>
             <fontStringList>
-                <string text="Ok"/>
+                <string text="Watch Ad"/>
+            </fontStringList>
+            <action actionType="action_event" executionAction="restart_game_with_ad"/>
+            <navigate right="no_btn" left="no_btn" up="battle_time_btn_lst" down="no_btn"/>
+            <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
+            <scriptList>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+            </scriptList>
+        </control>
+      
+        <control name="no_btn" controlType="button" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/button_125x55.ctrl"/>
+            <position x="100" y="-140" z="0"/>
+            <fontStringList>
+                <string text="No"/>
             </fontStringList>
             <action actionType="action_event" executionAction="restart_game"/>
-            <navigate up="battle_time_btn_lst" down="feature_btn_lst"/>
+            <navigate right="yes_with_ad_btn" left="yes_with_ad_btn"  up="yes_with_ad_btn" down="feature_btn_lst"/>
             <!-- Supports init, transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
@@ -85,7 +100,7 @@
 
     <spriteList>
 
-        <sprite objectName="game_over_menu_bg"/>
+        <sprite objectName="game_over_menu_ad_bg"/>
     
     </spriteList>
   

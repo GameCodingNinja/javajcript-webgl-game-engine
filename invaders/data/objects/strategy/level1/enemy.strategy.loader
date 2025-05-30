@@ -7,7 +7,7 @@
                 <position x="700" y="0"/>
             </sprite>
         </node>-->
-        <node name="marker">
+        <!--<node name="marker">
             <sprite>
                 <position x="5500" y="-80"/>
                 <scale x="2" y="2" z="1"/>
@@ -18,7 +18,7 @@
                 <position x="-5700" y="-80"/>
                 <scale x="2" y="2" z="1"/>
             </sprite>
-        </node>
+        </node>-->
     </strategy>
   
 </loader>
