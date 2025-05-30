@@ -597,7 +597,7 @@ class Enemy00Shot_Hit
     //
     recycle()
     {
-        // We are done with this sprite, queue it up to be deleted
+        // We are done with this sprite, queue it up to be recycled
         strategyManager.get('_player_ship_').recycle( this.sprite.parentNode );
     }
     

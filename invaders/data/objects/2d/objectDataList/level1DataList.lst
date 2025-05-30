@@ -265,12 +265,12 @@
                 <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
                         <point x="26" y="1"/>
-                        <point x="50" y="1"/>
+                        <point x="60" y="1"/>
                         <point x="111" y="115"/>
-                        <point x="49" y="148"/>
+                        <point x="60" y="148"/>
                     </polygon>
                     <polygon>
-                        <point x="49" y="128"/>
+                        <point x="60" y="128"/>
                         <point x="107" y="103"/>
                         <point x="126" y="229"/>
                         <point x="39" y="229"/>
@@ -287,10 +287,10 @@
                         <point x="35" y="291"/>
                         <point x="126" y="291"/>
                         <point x="99" y="427"/>
-                        <point x="48" y="387"/>
+                        <point x="60" y="387"/>
                     </polygon>
                     <polygon>
-                        <point x="47" y="337"/>
+                        <point x="60" y="337"/>
                         <point x="103" y="418"/>
                         <point x="38" y="520"/>
                         <point x="20" y="520"/>

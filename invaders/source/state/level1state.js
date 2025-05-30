@@ -281,8 +281,10 @@ export class Level1State extends CommonState
     //
     initMiscObjects()
     {
+        this.musicTimer = new Timer((1000 * 60 * 5));
+
         this.enemy00SpawnTimer = new Timer(2000);
-        this.enemy01SpawnTimer = new Timer((1000 * 30) );//+ genFunc.randomInt( (1000 * 30), (1000 * 60)));
+        this.enemy01SpawnTimer = new Timer((1000 * 60) + genFunc.randomInt( (1000 * 30), (1000 * 120)));
         this.enemy00MaxTimer = new Timer(15000);
         this.enemy00Max = 5;
 
@@ -638,11 +640,20 @@ export class Level1State extends CommonState
                         }
                     }
 
-                    // Indicate to Crazy Games the game has started
-                    if(typeof window.CrazyGames !== 'undefined' && this.gameStartStopToggle)
+                    if( this.gameStartStopToggle )
                     {
-                        window.CrazyGames.SDK.game.gameplayStop();
                         this.gameStartStopToggle = !this.gameStartStopToggle;
+
+                        this.musicTimer.pause();
+                        this.enemy00SpawnTimer.pause();
+                        this.enemy01SpawnTimer.pause();
+                        this.train.timer.pause();
+
+                        // Indicate to Crazy Games the game has started
+                        if(typeof window.CrazyGames !== 'undefined')
+                        {
+                            window.CrazyGames.SDK.game.gameplayStop();
+                        }
                     }
                 }
             }
@@ -668,11 +679,20 @@ export class Level1State extends CommonState
                             scriptSingleton.prepare( scriptManager.get('SoundFade')( gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true), null ) );
                         }
 
-                        // Indicate to Crazy Games the game has stopped
-                        if(typeof window.CrazyGames !== 'undefined' && !this.gameStartStopToggle)
+                        if( !this.gameStartStopToggle )
                         {
-                            window.CrazyGames.SDK.game.gameplayStart();
                             this.gameStartStopToggle = !this.gameStartStopToggle;
+
+                            this.musicTimer.resume();
+                            this.enemy00SpawnTimer.resume();
+                            this.enemy01SpawnTimer.resume();
+                            this.train.timer.resume();
+
+                            // Indicate to Crazy Games the game has stopped
+                            if(typeof window.CrazyGames !== 'undefined')
+                            {
+                                window.CrazyGames.SDK.game.gameplayStart();
+                            }
                         }
 
                         this._tree = menuManager.getTree( 'pause_tree' );
@@ -700,11 +720,20 @@ export class Level1State extends CommonState
                 if(gsnd_loop.isPlaying( 'enemy01_loop_sound' ))
                     scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 2000, gsnd_loop, null, () => gsnd_loop.stop() ) );
 
-                // Indicate to Crazy Games the game has started
-                if(typeof window.CrazyGames !== 'undefined' && !this.gameStartStopToggle)
+                if( !this.gameStartStopToggle )
                 {
-                    window.CrazyGames.SDK.game.gameplayStop();
                     this.gameStartStopToggle = !this.gameStartStopToggle;
+
+                    this.musicTimer.resume();
+                    this.enemy00SpawnTimer.resume();
+                    this.enemy01SpawnTimer.resume();
+                    this.train.timer.resume();
+
+                    // Indicate to Crazy Games the game has started
+                    if(typeof window.CrazyGames !== 'undefined' )
+                    {
+                        window.CrazyGames.SDK.game.gameplayStop();
+                    }
                 }
             }
             else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )
@@ -832,23 +861,29 @@ export class Level1State extends CommonState
             this.hudLevelFont.visualComponent.createFontString( `Level ${this.playerLevel}` );
 
             this.groupPlayer.play( 'level_up' );
-
-            // Change out the music every 5 levels
-            if( (this.playerLevel % 5) == 0)
-            {
-                // Fade out the current game music
-                let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-                scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 500, gsnd, null, () => gsnd.stop() ) );
-
-                this.musicCounter = (this.musicCounter + 1) % this.musicAry.length;
-
-                // Start the next game music
-                let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-                scriptSingleton.prepare( scriptManager.get('SoundFade')( asnd.defaultVolume, 500, asnd, () => asnd.play(true), null ) );
-            }
         }
 
         this.hudProgressBar.incCurrentValue( value );
+    }
+
+    // 
+    //  DESC: Handle changing the music every 5 minutes
+    //
+    handleMusicChange()
+    {
+        // Change out the music every 5 minutes
+        if( this.musicTimer.expired(true) )
+        {
+            // Fade out the current game music
+            let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+            scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 500, gsnd, null, () => gsnd.stop() ) );
+
+            this.musicCounter = (this.musicCounter + 1) % this.musicAry.length;
+
+            // Start the next game music
+            let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+            scriptSingleton.prepare( scriptManager.get('SoundFade')( asnd.defaultVolume, 500, asnd, () => asnd.play(true), null ) );
+        }
     }
 
     // 
@@ -1125,6 +1160,9 @@ export class Level1State extends CommonState
 
             // Handle the radar movement
             this.handleRadarMovement( this._easingVal );
+
+            // Handle changing the music every 5 minutes
+            this.handleMusicChange();
 
             if( !this.unlimitedBoot )
             {

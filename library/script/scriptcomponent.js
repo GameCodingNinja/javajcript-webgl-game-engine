@@ -295,7 +295,7 @@ export class ScriptComponent
             {
                 for( this._j = 0; this._j < this.scriptAry.length; this._j++ )
                 {
-                    // If the script is finished, remove it
+                    // If the script is finished, recycle it
                     if( this.scriptAry[this._i].name === this.removeAry[this._i] )
                     {
                         this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);

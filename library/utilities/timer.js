@@ -22,11 +22,34 @@ export class Timer
         // Disabled return value.
         // This value allows a disabled timer to act as expired or not
         this.disableValue = false;
+
+        // Last time recorded
+        this.lastTime = performance.now();
+
+        // Flag to pause timer
+        this.isPaused = false;
         
         if( startExpired )
             this.setExpired();
         else
             this.reset();
+    }
+
+    //
+    //  DESC: Pause the timer
+    //
+    pause()
+    {
+        this.isPaused = true;
+    }
+
+    //
+    //  DESC: Resume the timer
+    //
+    resume()
+    {
+        this.isPaused = false;
+        this.lastTime = performance.now();
     }
     
     //
@@ -37,8 +60,9 @@ export class Timer
         if( interval )
             this.timeInterval = interval;
 
-        this.expiredTime = this.timeInterval + performance.now();
+        this.expiredTime = 0;
         this.disabled = false;
+        this.lastTime = performance.now();
     }
 
     //
@@ -46,7 +70,7 @@ export class Timer
     //
     setExpired()
     {
-        this.expiredTime = performance.now();
+        this.expiredTime = this.timeInterval;
     }
 
     //
@@ -67,20 +91,27 @@ export class Timer
         if( this.disabled )
             return this.disableValue;
 
-        let result = false;
+        this._result = false;
 
-        if( performance.now() > this.expiredTime )
+        if( !this.isPaused )
         {
-            result = true;
+            this._currentTime = performance.now();
+            this.expiredTime += this._currentTime - this.lastTime;
+            this.lastTime = this._currentTime;
 
-            if( resetOnExpire )
-                this.reset();
+            if( this.expiredTime > this.timeInterval )
+            {
+                this._result = true;
 
-            if( disableOnExpire )
-                this.disabled = disableOnExpire;
+                if( resetOnExpire )
+                    this.reset();
+
+                if( disableOnExpire )
+                    this.disabled = disableOnExpire;
+            }
         }
 
-        return result;
+        return this._result;
     }
 
     //
@@ -88,10 +119,14 @@ export class Timer
     //
     getElapsedTime()
     {
-        if(performance.now() > this.expiredTime)
+        this._currentTime = performance.now();
+        this.expiredTime += this._currentTime - this.lastTime;
+        this.lastTime = this._currentTime;
+
+        if( this.expiredTime > this.timeInterval )
             return this.timeInterval;
 
-        return this.expiredTime - performance.now();
+        return this.expiredTime;
     }
 
     //

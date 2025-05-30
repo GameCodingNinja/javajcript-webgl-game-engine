@@ -10,7 +10,7 @@
         <load id="EXPLOSION_Kickback" file="data/sound/level/player/EXPLOSION_Short_Bright_Kickback_stereo.ogg" defaultVolume="0.3"/>
         <load id="EXPLOSION_Metllic" file="data/sound/level/player/EXPLOSION_Short_Fused_Impact_Metllic_Debris_stereo.ogg" defaultVolume="0.4"/>
         <load id="player_explode" file="data/sound/level/player/EXPLOSION_Medium_Blast_Scatter_Debris_stereo.ogg" defaultVolume="0.2"/>
-        <load id="player_thrust" file="data/sound/level/player/THRUSTER_Deep_Hot_Constant_loop_mono.ogg" defaultVolume="0.07"/>
+        <load id="player_thrust" file="data/sound/level/player/THRUSTER_Deep_Hot_Constant_loop_mono.ogg" defaultVolume="0.1"/>
     </soundFiles>
 
     <playlistSet>
