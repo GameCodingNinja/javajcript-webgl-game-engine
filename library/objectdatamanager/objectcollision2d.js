@@ -95,14 +95,14 @@ export class ObjectCollisionData2D
             if( collisionNode[0].children[0].nodeName == 'lineList' )
                 this.loadLineData( collisionNode[0].children[0] );
 
-            else if( collisionNode[0].children[0].nodeName == 'rect' )
+            else if( collisionNode[0].children[0].nodeName == 'rectList' )
                 this.loadRectData( collisionNode[0].children[0] );
 
             else if( collisionNode[0].children[0].nodeName == 'circle' )
                 this.type = defs.ECT_CIRCLE;
 
-            else if( collisionNode[0].children[0].nodeName == 'point' )
-                this.type = defs.ECT_POINT;
+            else if( collisionNode[0].children[0].nodeName == 'pointList' )
+                this.loadPointData( collisionNode[0].children[0] );
 
             else if( collisionNode[0].children[0].nodeName == 'polygonList' )
                 this.loadPolygonData( collisionNode[0].children[0] );
@@ -146,6 +146,7 @@ export class ObjectCollisionData2D
         this.type = defs.ECT_LINE;
         this.lineAry = [];
 
+        this.pointsToModelView = false;
         let attr = xmlNode.getAttribute( 'pointsToModelView' );
         if( attr )
         {
@@ -187,9 +188,9 @@ export class ObjectCollisionData2D
 
         // Load any rects
         this.rectAry = [];
-        let nodeAry = xmlNode.getElementsByTagName( 'rect' );
-        for( let i = 0; i < nodeAry.length; ++i )
-            this.rectAry.push( parseHelper.loadRectFromChild( nodeAry[i] ) );
+        let rectNodeAry = xmlNode.getElementsByTagName( 'rect' );
+        for( let i = 0; i < rectNodeAry.length; ++i )
+            this.rectAry.push( parseHelper.loadRectFromChild( rectNodeAry[i] ) );
     }
 
     // 
@@ -200,12 +201,14 @@ export class ObjectCollisionData2D
         this.type = defs.ECT_POLYGON;
         this.polygonAry = [];
 
+        this.pointsToModelView = false;
         let attr = xmlNode.getAttribute( 'pointsToModelView' );
         if( attr )
         {
             this.pointsToModelView = (attr === 'true');
         }
 
+        this.optionalPointCheck = false;
         attr = xmlNode.getAttribute( 'optionalPointCheck' );
         if( attr )
         {
@@ -215,6 +218,26 @@ export class ObjectCollisionData2D
         let polygonNodeAry = xmlNode.getElementsByTagName( 'polygon' );
         for( let i = 0; i < polygonNodeAry.length; ++i )
             this.polygonAry.push( parseHelper.loadPolygon( polygonNodeAry[i] ) );
+    }
+
+    // 
+    //  DESC: Load the point data
+    //
+    loadPointData( xmlNode )
+    {
+        this.type = defs.ECT_POINT;
+        this.pointAry = [];
+
+        this.pointsToModelView = false;
+        let attr = xmlNode.getAttribute( 'pointsToModelView' );
+        if( attr )
+        {
+            this.pointsToModelView = (attr === 'true');
+        }
+
+        let pointNodeAry = xmlNode.getElementsByTagName( 'point' );
+        for( let i = 0; i < pointNodeAry.length; ++i )
+            this.pointAry.push( parseHelper.loadPoint( pointNodeAry[i] ) );
     }
     
     // 

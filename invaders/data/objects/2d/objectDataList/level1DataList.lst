@@ -177,9 +177,9 @@
             </visual>
             <!-- Don't need a collision signal for the player ship since other elements initiate the collision -->
             <collision filterCategoryBits="0x00000000" filterMaskBits="0x00000006" collisionSignal="false">
-                <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                <rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
                     <rect x1="-5" y1="-5" x2="-5" y2="-5"/>
-                </rect>
+                </rectList>
                 <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
                         <point x="5" y="5"/>
@@ -211,11 +211,14 @@
             <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000000" collisionSignal="true">
                 <!--<circle radiusFromVisual="true"/>-->
                 <!--<rect radiusFromVisual="true" rectFromVisual="true"/>-->
-                <point radiusFromVisual="true"/>
+                <pointList radiusFromVisual="true">
+                    <point x="18" y="0"/>
+                    <point x="-18" y="0"/>
+                </pointList>
                 <!--<lineList radiusFromVisual="true" pointsToModelView="true">
                     <line>
-                        <point x="5" y="4"/>
-                        <point x="10" y="-4"/>
+                        <point x="37" y="2"/>
+                        <point x="0" y="2"/>
                     </line>
                 </lineList>-->
                 <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
@@ -235,15 +238,15 @@
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
 
-                <rect radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
-                    <rect x1="-5" y1="-5" x2="-5" y2="-5"/>
-                </rect>
+                <rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                    <rect x1="-5" y1="-1" x2="-5" y2="-1"/>
+                </rectList>
 
-                <!--<rect radiusFromVisual="true" rectToModelView="true">
+                <!--<rectList radiusFromVisual="true" rectToModelView="true">
                     <rect x1="9" y1="12" x2="47" y2="120"/>
                     <rect x1="45" y1="17" x2="111" y2="102"/>
                     <rect x1="112" y1="12" x2="150" y2="120"/>
-                </rect>
+                </rectList>
                 
                 <circle radiusFromVisual="true"/>
                 <point radiusFromVisual="true"/>

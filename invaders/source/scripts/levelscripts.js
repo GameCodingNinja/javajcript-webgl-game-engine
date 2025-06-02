@@ -126,12 +126,18 @@ class PlayerShip_ShootLazer
             if( this.sprite.pos.x < -GAMEPLAY_LOOPING_WRAP_DIST )
             {
                 // Set the transpos just for the wraparound collision check that will be overwritten on the next translate
+                for( this._i = 0; this._i < this.sprite.collisionComponent.transPointAry.length; ++this._i )
+                    this.sprite.collisionComponent.transPointAry[this._i].x += (GAMEPLAY_LOOPING_WRAP_DIST * 2);
+
                 this.sprite.transPos.x += (GAMEPLAY_LOOPING_WRAP_DIST * 2);
                 this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
             }
             else if( this.sprite.pos.x > GAMEPLAY_LOOPING_WRAP_DIST )
             {
                 // Set the transpos just for the wraparound collision check that will be overwritten on the next translate
+                for( this._i = 0; this._i < this.sprite.collisionComponent.transPointAry.length; ++this._i )
+                    this.sprite.collisionComponent.transPointAry[this._i].x += -(GAMEPLAY_LOOPING_WRAP_DIST * 2);
+                
                 this.sprite.transPos.x += -(GAMEPLAY_LOOPING_WRAP_DIST * 2);
                 this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
             }

@@ -59,11 +59,14 @@ export class CollisionComponent
             if( objectData.collisionData.type === defs.ECT_LINE )
                 this.loadLineData( objectData );
 
-            if( objectData.collisionData.type === defs.ECT_RECT )
+            else if( objectData.collisionData.type === defs.ECT_RECT )
                 this.loadRectData( objectData );
 
             else if( objectData.collisionData.type === defs.ECT_POLYGON )
                 this.loadPolygonData( objectData );
+
+            else if( objectData.collisionData.type === defs.ECT_POINT )
+                this.loadPointData( objectData );
         }
     }
 
@@ -216,6 +219,40 @@ export class CollisionComponent
     }
 
     // 
+    //  DESC: Load point data
+    //
+    loadPointData( objectData )
+    {
+        let halfW = objectData.size.w / 2;
+        let halfH = objectData.size.h / 2;
+
+        this.pointAry = [];
+        this.transPointAry = [];
+
+        // Convert the polygon points to model view offsets
+        if( objectData.collisionData.pointsToModelView )
+        {
+            for( let i = 0; i < objectData.collisionData.pointAry.length; ++i )
+            {
+                let p = objectData.collisionData.pointAry[i];
+                this.pointAry.push( new Point( p.x - halfW, halfH - p.y, p.z) );
+            }
+
+            for( let i = 0; i < this.pointAry.length; ++i )
+                this.transPointAry.push( new Point(this.pointAry[i]) );
+        }
+        // Load the point data as is
+        else
+        {
+            for( let i = 0; i < objectData.collisionData.pointAry.length; ++i )
+            {
+                this.pointAry.push( new Point( objectData.collisionData.pointAry[i] ) );
+                this.transPointAry.push( new Point( this.pointAry[i] ) );
+            }
+        }
+    }
+
+    // 
     //  DESC: Transform the data for collision
     //
     transform()
@@ -236,6 +273,11 @@ export class CollisionComponent
             {
                 for( this._i = 0; this._i < this.lineAry.length; ++this._i )
                     this.matrix.transformLine( this.transLineAry[this._i], this.lineAry[this._i] );
+            }
+            else if( this.type === defs.ECT_POINT )
+            {
+                for( this._i = 0; this._i < this.pointAry.length; ++this._i )
+                    this.matrix.transformPoint( this.transPointAry[this._i], this.pointAry[this._i] );
             }
         }
     }
@@ -380,7 +422,15 @@ export class CollisionComponent
     //
     pointToCircleCollision( sprite )
     {
-        return this.pointToCircleCheck( this.sprite.transPos, sprite.transPos, sprite.collisionComponent.radius );
+        this._transPointAry = this.sprite.collisionComponent.transPointAry;
+
+        for( this._i = 0; this._i < this._transPointAry.length; ++this._i )
+        {
+            if( this.pointToCircleCheck( this._transPointAry[this._i], sprite.transPos, sprite.collisionComponent.radius ) )
+                return true;
+        }
+        
+        return false;
     }
 
     // 
@@ -462,15 +512,18 @@ export class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
-            this._transPos = this.sprite.transPos;
+            this._transPointAry = this.sprite.collisionComponent.transPointAry;
             this._transRectAry = sprite.collisionComponent.transRectAry;
 
-            // Just do the narrow phase check
-            for( this._i = 0; this._i < this._transRectAry.length; ++this._i )
+            // Do the narrow phase check
+            for( this._i = 0; this._i < this._transPointAry.length; ++this._i )
             {
-                if( !(this._transPos.x < this._transRectAry[this._i].x1 || this._transPos.x > this._transRectAry[this._i].x2 ||
-                    this._transPos.y > this._transRectAry[this._i].y1 || this._transPos.y < this._transRectAry[this._i].y2) )
-                    return true;
+                for( this._j = 0; this._j < this._transRectAry.length; ++this._j )
+                {
+                    if( !(this._transPointAry[this._i].x < this._transRectAry[this._j].x1 || this._transPointAry[this._i].x > this._transRectAry[this._j].x2 ||
+                        this._transPointAry[this._i].y > this._transRectAry[this._j].y1 || this._transPointAry[this._i].y < this._transRectAry[this._j].y2) )
+                        return true;
+                }
             }
         }
         
@@ -485,13 +538,17 @@ export class CollisionComponent
         // Do the broad phase check
         if( this.circleToCircleCheck( sprite ) )
         {
+            this._transPointAry = this.sprite.collisionComponent.transPointAry;
             this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transPolygonAry.length; ++this._i )
+            for( this._i = 0; this._i < this._transPointAry.length; ++this._i )
             {
-                if( this.pointToPolygonCheck( this.sprite.transPos, this._transPolygonAry[this._i]) )
-                    return true;
+                for( this._j = 0; this._j < this._transPolygonAry.length; ++this._j )
+                {
+                    if( this.pointToPolygonCheck( this._transPointAry[this._i], this._transPolygonAry[this._j]) )
+                        return true;
+                }
             }
         }
         
@@ -596,7 +653,7 @@ export class CollisionComponent
             this._transRectAry = sprite.collisionComponent.transRectAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < transRectAry.length; ++this._i )
+            for( this._i = 0; this._i < this._transRectAry.length; ++this._i )
             {
                 for( this._j = 0; this._j < this.transLineAry.length; ++this._j )
                 {
@@ -631,7 +688,7 @@ export class CollisionComponent
                         if( this._next == this._transPolygonAry[this._i].pointAry.length )
                             this._next = 0;
 
-                        gLine1.head.setXYZ( this._transPolygonAry[this._i].pointAry[this._j].x, this._transPolygonAry[this._].pointAry[this._j].y );
+                        gLine1.head.setXYZ( this._transPolygonAry[this._i].pointAry[this._j].x, this._transPolygonAry[this._i].pointAry[this._j].y );
                         gLine1.tail.setXYZ( this._transPolygonAry[this._i].pointAry[this._next].x, this._transPolygonAry[this._i].pointAry[this._next].y );
                             
                         // check for collision between the line and a polygon line formed between the two vertices
@@ -788,7 +845,10 @@ export class CollisionComponent
     circleToCircleCheck( sprite )
     {
         if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this.radius + sprite.collisionComponent.radius) )
+        {
+            console.log(`circleToCircleCheck ${sprite.transPos.x}`);
             return true;
+        }
         
         return false;
     }
