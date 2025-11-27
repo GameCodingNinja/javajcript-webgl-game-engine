@@ -36,6 +36,7 @@
                 <string text="No Reward"/>
                 <string text="Unlimited Boost"/>
                 <string text="Double Health"/>
+                <string text="Heal Over Time"/>
             </fontStringList>
             <navigate up="no_btn" down="battle_time_btn_lst"/>
             <scroll startDelay="750" scrollDelay="350" left="true" right="true"/>

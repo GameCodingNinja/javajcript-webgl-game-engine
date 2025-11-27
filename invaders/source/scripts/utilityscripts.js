@@ -65,11 +65,10 @@ export class Hold
 //
 export class PlayAnim
 {
-    constructor( sprite )
+    constructor( sprite = null )
     {
         this.sprite = sprite;
-        
-        this.frameCount = this.sprite.getFrameCount();
+        this.frameCount = 0;
         this.time = 0;
         this.fps = 0;
         this.counter = 0;
@@ -82,6 +81,7 @@ export class PlayAnim
     //
     init( fps, loop = false )
     {
+        this.frameCount = this.sprite.getFrameCount();
         this.fps = fps;
         this.time = 1000.0 / this.fps;
         this.loop = loop;

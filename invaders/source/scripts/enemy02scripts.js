@@ -1,0 +1,156 @@
+
+//
+//  FILE NAME: enemy02scripts.js
+//  DESC:      scripts for the enemy02
+//
+
+"use strict";
+
+import { scriptManager } from '../../../library/script/scriptmanager';
+import { highResTimer } from '../../../library/utilities/highresolutiontimer';
+import { strategyManager } from '../../../library/strategy/strategymanager';
+import { settings } from '../../../library/utilities/settings';
+import * as utilScripts from './utilityscripts';
+import * as easing from '../../../library/utilities/easingfunc';
+
+//
+//  DESC: Script for handling enemy02 getting hit
+//
+class Enemy02Ship_Hit
+{
+    constructor( sprite, projectileSprite )
+    {
+        this.sprite = sprite;
+
+        // Get the player ship strategy to delete the explosion animation
+        this.playerShipStratagy = strategyManager.get('_player_ship_');
+
+        // Get the enemy strategy to create the explosion animation
+        this.enemyStratagy = strategyManager.get('_enemy_');
+
+        // Create an explode graphic node and translate it to the projectile sprite
+        this.explodeAnim = new utilScripts.PlayAnim();
+
+        // Continues the init
+        this.recycle( projectileSprite );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( projectileSprite )
+    {
+        this.explodeAnim.sprite = this.enemyStratagy.create('explode').get();
+        this.explodeAnim.init( 24 );
+
+        // Ajust the initial offset of the explosion animation
+        if( projectileSprite.rot.y > 1 )
+            this.explodeAnim.sprite.setPosXYZ( projectileSprite.pos.x + 10, projectileSprite.pos.y );
+        else
+            this.explodeAnim.sprite.setPosXYZ( projectileSprite.pos.x - 10, projectileSprite.pos.y );
+
+        this.explodeAnim.sprite.transform();
+
+        // Hide the projectile and allow it to be recycled from the script moving it
+        if( projectileSprite.parentNode.name === 'player_shot' )
+        {
+            projectileSprite.setVisible( false );
+            // The projectile sprite script will recycle itself
+        }
+
+        this.sprite.dist = this.sprite.pos.getDistance( this.explodeAnim.sprite.pos );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( this.explodeAnim.sprite )
+        {
+            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
+            if( this.explodeAnim.execute() )
+            {
+                this.enemyStratagy.recycle( this.explodeAnim.sprite.parentNode );
+                this.explodeAnim.sprite = null;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+//
+//  DESC: Script for handling enemy02 dying
+//
+class Enemy02Ship_Die
+{
+    constructor( sprite )
+    {
+        this.sprite = sprite;
+        this.easingY = new easing.valueTo;
+
+        // Enemy strategy
+        this.enemyStratagy = strategyManager.get('_enemy_');
+
+        // Continues the init
+        this.recycle();
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle()
+    {
+        this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
+        this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
+        this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
+
+        this.rotate = 0.04;
+        this.rotateVelocity = 0.00004;
+
+        if( (this.sprite.dist.x > 0 && this.sprite.dist.y > 0) || (this.sprite.dist.x < 0 && this.sprite.dist.y < 0) )
+        {
+            this.rotate = -0.04;
+            this.rotateVelocity = -0.00004;
+        }
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.easingY.execute();
+        this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+        this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
+        this.rotate += this.rotateVelocity * highResTimer.elapsedTime;
+
+        if( this.easingY.isFinished() )
+        {
+            // Remove the AI script since the enemy is to die
+            this.sprite.scriptComponent.remove( 'AI_Enemy02' );
+
+            // We are done with this sprite, queue it up to be recycled
+            this.enemyStratagy.recycle( this.sprite.parentNode );
+
+            return true;
+        }
+
+        return false;
+    }
+}
+
+// 
+//  DESC: Load scripts
+//
+export function loadScripts()
+{
+    scriptManager.set( 'Enemy02Ship_Hit',
+            ( sprite, projectileSprite ) => { return new Enemy02Ship_Hit( sprite, projectileSprite ); } );
+
+    scriptManager.set( 'Enemy02Ship_Die',
+            ( sprite, projectileSprite ) => { return new Enemy02Ship_Die( sprite, projectileSprite ); } );
+}

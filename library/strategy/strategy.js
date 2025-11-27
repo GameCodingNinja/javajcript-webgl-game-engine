@@ -170,7 +170,7 @@ export class Strategy extends Object
 
         // Do we have any nodes from the pool to draw from?
         this._poolNodeAry = this.recycleMap.get( this._nodeDataAry[0].nodeName );
-        if( this._poolNodeAry && this._poolNodeAry.length )
+        if( this._poolNodeAry != undefined && this._poolNodeAry.length )
         {
             this._node = this._poolNodeAry[this._poolNodeAry.length-1];
             this._poolNodeAry.length -= 1;
@@ -179,7 +179,7 @@ export class Strategy extends Object
             if( !instanceName || makeActive )
                 this.activateAry.push( this._node );
 
-            //console.log(`Sprite Recycle; Name: ${dataName}`);
+            //console.log(`Sprite Recycle; Name: ${dataName}; Node: ${this._node}`);
 
             return this._node;
         }
@@ -534,11 +534,12 @@ export class Strategy extends Object
 
                 if( this._index !== -1 )
                 {
-                    this.addToRecycle( this.nodeAry[this._index] );
+                    this.setNodeToRecycle( this.nodeAry[this._index] );
                     genFunc.removeAt( this.nodeAry, this._index );
+                    
                 }
                 else
-                    throw new Error( `Node can't be found to recycle!` );
+                    throw new Error( `Node can't be found to recycle!: ${this.recycleAry[this._ii].name}` );
             }
 
             this.recycleAry.length = 0;
@@ -613,14 +614,20 @@ export class Strategy extends Object
     //
     //  DESC: Add a node to recycle
     //
-    addToRecycle( node )
+    setNodeToRecycle( node )
     {
-        // Add an array to the map if this object type doesn't already exist
-        if( !this.recycleMap.has(node.name) )
-            this.recycleMap.set( node.name, [] );
+        //console.log(`set recycled node: ${node.name}`);
 
-        // Recycle any active scripts for next time
-        node.get().scriptComponent.recycleActiveScripts();
-        this.recycleMap.get(node.name).push(node);
+        this._recycleAry = this.recycleMap.get(node.name);
+
+        if( this._recycleAry == undefined )
+        {
+            this.recycleMap.set(node.name, [node]);
+        }
+        else
+        {
+            node.get().scriptComponent.recycleActiveScripts();
+            this._recycleAry.push(node);
+        }
     }
 }

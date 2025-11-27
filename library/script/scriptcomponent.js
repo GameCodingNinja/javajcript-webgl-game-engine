@@ -68,7 +68,7 @@ export class ScriptComponent
     //
     recycle(funcName, args)
     {
-        let script = this.scriptRecycleMap.get(funcName );
+        let script = this.getScriptFromRecycle(funcName);
 
         if( script )
         {
@@ -105,7 +105,7 @@ export class ScriptComponent
         if( this.scriptAry.length )
         {
             for( this._i = 0; this._i < this.scriptAry.length; this._i++ )
-                this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+                this.setScriptToRecycle(this.scriptAry[this._i].name, this.scriptAry[this._i])
 
             this.scriptAry.length = 0;
         }
@@ -181,7 +181,7 @@ export class ScriptComponent
                     if( scriptPrepareFunc.forceUpdate )
                     {
                         if( activeScript.execute() )
-                            this.scriptRecycleMap.set(activeScript.name, activeScript);
+                            this.setScriptToRecycle(activeScript.name, activeScript);
                         else
                             this.scriptAry.push( activeScript );
                     }
@@ -199,7 +199,7 @@ export class ScriptComponent
             if( args.length > 1 && args[1] )
             {
                 if( activeScript.execute() )
-                    this.scriptRecycleMap.set(activeScript.name, activeScript);
+                    this.setScriptToRecycle(activeScript.name, activeScript);
                 else
                     this.scriptAry.push( activeScript );
             }
@@ -224,7 +224,7 @@ export class ScriptComponent
                 if( this._scriptPrepareFunc.prepareOnInit )
                 {
                     // See if this script has been recycled
-                    let activeScript = this.scriptRecycleMap.get(this._scriptPrepareFunc.funcName );
+                    let activeScript = this.getScriptFromRecycle(this._scriptPrepareFunc.funcName );
                     if( activeScript )
                     {
                         //console.log(`Script Recycle; Name: ${this._scriptPrepareFunc.funcName}`);
@@ -259,7 +259,7 @@ export class ScriptComponent
                         if( this._scriptPrepareFunc.forceUpdate )
                         {
                             if( activeScript.execute() )
-                                this.scriptRecycleMap.set(activeScript.name, activeScript);
+                                this.setScriptToRecycle(activeScript.name, activeScript);
                             else
                                 this.scriptAry.push( activeScript );
                         }
@@ -284,7 +284,7 @@ export class ScriptComponent
             // If the script is finished, recycle it
             if( this.scriptAry[this._i].execute() )
             {
-                this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+                this.setScriptToRecycle(this.scriptAry[this._i].name, this.scriptAry[this._i]);
                 genFunc.removeAt( this.scriptAry, this._i );
             }
         }
@@ -296,9 +296,9 @@ export class ScriptComponent
                 for( this._j = 0; this._j < this.scriptAry.length; this._j++ )
                 {
                     // If the script is finished, recycle it
-                    if( this.scriptAry[this._i].name === this.removeAry[this._i] )
+                    if( this.scriptAry[this._j].name === this.removeAry[this._i] )
                     {
-                        this.scriptRecycleMap.set(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+                        this.setScriptToRecycle(this.scriptAry[this._j].name, this.scriptAry[this._j]);
                         genFunc.removeAt( this.scriptAry, this._j );
                         break;
                     }
@@ -346,6 +346,46 @@ export class ScriptComponent
     reset()
     {
         this.scriptAry.length = 0;
+    }
+
+    // 
+    //  DESC: Add a script to recycle
+    //
+    setScriptToRecycle(key, script)
+    {
+        if( key != undefined )
+        {
+            //console.log(`Script recycled: ${key}`);
+
+            this._recycleAry = this.scriptRecycleMap.get(key);
+
+            if( this._recycleAry == undefined )
+            {
+                this.scriptRecycleMap.set(key, [script]);
+            }
+            else
+            {
+                this._recycleAry.push(script);
+            }
+        }
+    }
+
+    // 
+    //  DESC: Get a script from recycle
+    //
+    getScriptFromRecycle(key)
+    {
+        this._recycleAry = this.scriptRecycleMap.get(key);
+
+        if( this._recycleAry == undefined || this._recycleAry.length === 0 )
+        {
+            return null;
+        }
+
+        this._script = this._recycleAry[this._recycleAry.length-1];
+        this._recycleAry.length--;
+
+        return this._script; 
     }
 }
 

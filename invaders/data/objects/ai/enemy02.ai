@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<ai>
+
+    <node name="AI_Enemy02">
+
+        <head script="AI_Enemy02_Head"/>
+
+        <node>
+
+            <composite script="AI_Composite" condition="all_success"/>
+
+            <node>
+
+                <leaf script="AI_Enemy02_Desend"/>
+
+            </node>
+
+            <node>
+
+                <composite script="AI_Composite" condition="all_success"/>
+
+                <node>
+
+                    <leaf script="AI_Enemy02_Seek_and_Destroy"/>
+
+                </node>
+
+
+            </node>
+
+        </node>
+
+    </node>
+
+</ai>

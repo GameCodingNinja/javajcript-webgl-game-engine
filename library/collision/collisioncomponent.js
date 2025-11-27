@@ -846,7 +846,7 @@ export class CollisionComponent
     {
         if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this.radius + sprite.collisionComponent.radius) )
         {
-            console.log(`circleToCircleCheck ${sprite.transPos.x}`);
+            //console.log(`circleToCircleCheck ${sprite.transPos.x}`);
             return true;
         }
         

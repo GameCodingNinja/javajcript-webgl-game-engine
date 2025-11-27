@@ -36,8 +36,10 @@ import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 import * as ai from '../scripts/aiscripts';
 
+// AI_Enemy00 AI_Enemy01 AI_Enemy02
 import enemy00_ai from 'raw-loader!../../data/objects/ai/enemy00.ai';
 import enemy01_ai from 'raw-loader!../../data/objects/ai/enemy01.ai';
+import enemy02_ai from 'raw-loader!../../data/objects/ai/enemy02.ai';
 
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
@@ -55,9 +57,12 @@ const MOVE_NULL = -1,
       ENEMY00_SHOT_ID = -2,
       ENEMY00_SHIP_ID = -3,
       ENEMY01_SHIP_ID = -4,
+      ENEMY02_SHIP_ID = -5,
       ENEMY00_SHIP_HIT_VALUE = 1,
       ENEMY01_SHIP_HIT_VALUE = 5,
+      ENEMY02_SHIP_HIT_VALUE = 3,
       ENEMY01_SHIP_HIT_COUNT = 30,
+      ENEMY02_SHIP_HIT_COUNT = 5,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
@@ -68,7 +73,8 @@ const MOVE_NULL = -1,
       GAME_START_MENU_AD_THANKS_MSG = 1,
       GAME_START_MENU_AD_ERROR_MSG = 2,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
-      REWARD_FEATURE_DOUBLE_HEALTH = 2;
+      REWARD_FEATURE_DOUBLE_HEALTH = 2,
+      REWARD_FEATURE_HEAL_OVER_TIME = 3;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -218,6 +224,7 @@ export class Level1State extends CommonState
         this.lastMoveDirX = MOVE_NULL;
         this.lastMoveAction != defs.EAP_IDLE;
         this.unlimitedBoot = false;
+        this.slowHealOverTime = false;
 
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
@@ -284,6 +291,7 @@ export class Level1State extends CommonState
 
         this.enemy00SpawnTimer = new Timer(2000);
         this.enemy01SpawnTimer = new Timer((1000 * 60) + genFunc.randomInt( (1000 * 30), (1000 * 120)));
+        this.enemy02SpawnTimer = new Timer(2000);
         this.enemy00MaxTimer = new Timer(15000);
         this.enemy00Max = 5;
 
@@ -412,8 +420,8 @@ export class Level1State extends CommonState
                 spriteA.prepareScript( 'hit', spriteB );
                 this.groupPlayer.play( 'EXPLOSION_Metllic' );
             }
-            // Player collides into enemy01
-            else if( spriteA.parentNode.userId == ENEMY01_SHIP_ID )
+            // Player collides into enemy01 or enemy02
+            else if( spriteA.parentNode.userId == ENEMY01_SHIP_ID || spriteA.parentNode.userId == ENEMY02_SHIP_ID )
             {
                 spriteA.collisionComponent.enable = true;
                 if(this.playerShip.collisionTimer.expired(true))
@@ -446,7 +454,6 @@ export class Level1State extends CommonState
             spriteB.collisionComponent.enable = false;
 
             // Execute the scripts that handle being hit
-            spriteA.prepareScript( 'hit' );
             spriteB.prepareScript( 'hit', spriteA );
 
             this.groupPlayer.play( 'enemy_explosion' );
@@ -460,11 +467,11 @@ export class Level1State extends CommonState
             spriteA.collisionComponent.enable = false;
 
             // Execute the scripts that handle being hit
-            spriteA.prepareScript( 'hit' );
             spriteB.prepareScript( 'hit', spriteA );
 
             if(spriteB.hitCount == ENEMY01_SHIP_HIT_COUNT)
             {
+                spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die' );
                 this.updateHudProgress( ENEMY01_SHIP_HIT_VALUE );
                 this.enemy01SpawnTimer.reset();
@@ -473,6 +480,27 @@ export class Level1State extends CommonState
 
                 let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                 scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.0, 2000, gsnd, null, () => gsnd.stop() ) );
+            }
+
+            spriteB.hitCount++;
+
+            this.groupPlayer.play( 'enemy_explosion' );
+        }
+        // Player shot enemy02 ship
+        else if( spriteB.parentNode.userId == ENEMY02_SHIP_ID )
+        {
+            // Stop any more collision detection for the shot
+            spriteA.collisionComponent.enable = false;
+
+            // Execute the scripts that handle being hit
+            spriteB.prepareScript( 'hit', spriteA );
+
+            if(spriteB.hitCount == ENEMY02_SHIP_HIT_COUNT)
+            {
+                spriteB.collisionComponent.enable = false;
+                spriteB.prepareScript( 'die' );
+                this.updateHudProgress( ENEMY02_SHIP_HIT_VALUE );
+                this.enemy02SpawnTimer.reset();
             }
 
             spriteB.hitCount++;
@@ -507,6 +535,10 @@ export class Level1State extends CommonState
                 this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
                 this.playerShip.progressBar.setCurrentValue( DEFAULT_SHIP_PROGRESS_BAR_VALUE * 2 );
                 this.playerShip.progressBar.setScaleXYZ( 0.6, 0.5 );
+            }
+            else if( this._featureIndex === REWARD_FEATURE_HEAL_OVER_TIME )
+            {
+                this.slowHealOverTime = true;
             }
 
             this.setBattleTime( this._battleTimeIndex );
@@ -650,6 +682,7 @@ export class Level1State extends CommonState
                         this.musicTimer.pause();
                         this.enemy00SpawnTimer.pause();
                         this.enemy01SpawnTimer.pause();
+                        this.enemy02SpawnTimer.pause();
                         this.train.timer.pause();
 
                         // Indicate to Crazy Games the game has started
@@ -689,6 +722,7 @@ export class Level1State extends CommonState
                             this.musicTimer.resume();
                             this.enemy00SpawnTimer.resume();
                             this.enemy01SpawnTimer.resume();
+                            this.enemy02SpawnTimer.resume();
                             this.train.timer.resume();
 
                             // Indicate to Crazy Games the game has stopped
@@ -735,6 +769,7 @@ export class Level1State extends CommonState
                     this.musicTimer.resume();
                     this.enemy00SpawnTimer.resume();
                     this.enemy01SpawnTimer.resume();
+                    this.enemy02SpawnTimer.resume();
                     this.train.timer.resume();
 
                     // Indicate to Crazy Games the game has started
@@ -1026,9 +1061,9 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
+        // Create enemy00 and position it outside of the view
         if( this.enemy00SpawnTimer.expired(true) )
         {
-            // Create enemy00 and position it outside of the view
             if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
             {
                 this._node = this.enemyStrategy.create('enemy00_ship');
@@ -1053,6 +1088,13 @@ export class Level1State extends CommonState
 
             this._node.transform();
         }
+        // Create enemy02 and position it outside of the view
+        /*else if( this.enemy02SpawnTimer.expired(false, true) )
+        {
+            this._node = this.enemyStrategy.create('enemy02_ship');
+            this._node.get().setPosXYZ(0, settings.deviceRes.h);
+            this._node.transform();
+        }*/
     }
 
     // 
@@ -1416,7 +1458,10 @@ export function load()
     return objectDataManager.loadGroup( groupAry )
 
         // Load the AI. Needs to be loaded before the strategy loader
-        .then(() => aiManager.loadFromXml( [genFunc.stringLoadXML( enemy00_ai ), genFunc.stringLoadXML( enemy01_ai )] ))
+        .then(() => aiManager.loadFromXml( [
+            genFunc.stringLoadXML( enemy00_ai ),
+            genFunc.stringLoadXML( enemy01_ai ),
+            genFunc.stringLoadXML( enemy02_ai )] ))
 
         // Load and execute all the strategy loaders.
         .then(() => strategyLoader.loadGroup( '-level1-' ))

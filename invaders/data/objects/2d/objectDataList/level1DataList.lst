@@ -303,6 +303,19 @@
             </collision>
         </object>
 
+        <object name="enemy02_ship">
+            <visual>
+                <texture file="data/textures/enemyShip/enemy02.png"/>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+
+                <rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                    <rect x1="-15" y1="-5" x2="-15" y2="-5"/>
+                </rectList>
+
+            </collision>
+        </object>
+
         <object name="enemy_shot">
             <visual>
                 <texture file="data/textures/enemyShip/projectile06-5.png" filter="NEAREST"/>
