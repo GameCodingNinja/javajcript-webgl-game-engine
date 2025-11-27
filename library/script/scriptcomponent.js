@@ -105,7 +105,7 @@ export class ScriptComponent
         if( this.scriptAry.length )
         {
             for( this._i = 0; this._i < this.scriptAry.length; this._i++ )
-                this.setScriptToRecycle(this.scriptAry[this._i].name, this.scriptAry[this._i])
+                this.setScriptToRecycle(this.scriptAry[this._i])
 
             this.scriptAry.length = 0;
         }
@@ -181,7 +181,7 @@ export class ScriptComponent
                     if( scriptPrepareFunc.forceUpdate )
                     {
                         if( activeScript.execute() )
-                            this.setScriptToRecycle(activeScript.name, activeScript);
+                            this.setScriptToRecycle(activeScript);
                         else
                             this.scriptAry.push( activeScript );
                     }
@@ -192,6 +192,7 @@ export class ScriptComponent
                 }
             }
         }
+        // Load scripts directly like "Fade Screen"
         else if( typeof args[0] === 'object' )
         {
             activeScript = args[0];
@@ -199,7 +200,7 @@ export class ScriptComponent
             if( args.length > 1 && args[1] )
             {
                 if( activeScript.execute() )
-                    this.setScriptToRecycle(activeScript.name, activeScript);
+                    this.setScriptToRecycle(activeScript);
                 else
                     this.scriptAry.push( activeScript );
             }
@@ -259,7 +260,7 @@ export class ScriptComponent
                         if( this._scriptPrepareFunc.forceUpdate )
                         {
                             if( activeScript.execute() )
-                                this.setScriptToRecycle(activeScript.name, activeScript);
+                                this.setScriptToRecycle(activeScript);
                             else
                                 this.scriptAry.push( activeScript );
                         }
@@ -284,7 +285,7 @@ export class ScriptComponent
             // If the script is finished, recycle it
             if( this.scriptAry[this._i].execute() )
             {
-                this.setScriptToRecycle(this.scriptAry[this._i].name, this.scriptAry[this._i]);
+                this.setScriptToRecycle(this.scriptAry[this._i]);
                 genFunc.removeAt( this.scriptAry, this._i );
             }
         }
@@ -298,7 +299,7 @@ export class ScriptComponent
                     // If the script is finished, recycle it
                     if( this.scriptAry[this._j].name === this.removeAry[this._i] )
                     {
-                        this.setScriptToRecycle(this.scriptAry[this._j].name, this.scriptAry[this._j]);
+                        this.setScriptToRecycle(this.scriptAry[this._j]);
                         genFunc.removeAt( this.scriptAry, this._j );
                         break;
                     }
@@ -351,22 +352,26 @@ export class ScriptComponent
     // 
     //  DESC: Add a script to recycle
     //
-    setScriptToRecycle(key, script)
+    setScriptToRecycle(script)
     {
-        if( key != undefined )
+        if( script.name != undefined )
         {
-            //console.log(`Script recycled: ${key}`);
+            //console.log(`Script recycled: ${script.name}`);
 
-            this._recycleAry = this.scriptRecycleMap.get(key);
+            this._recycleAry = this.scriptRecycleMap.get(script.name);
 
             if( this._recycleAry == undefined )
             {
-                this.scriptRecycleMap.set(key, [script]);
+                this.scriptRecycleMap.set(script.name, [script]);
             }
             else
             {
                 this._recycleAry.push(script);
             }
+        }
+        else
+        {
+            console.log(`Script not recycled`);
         }
     }
 

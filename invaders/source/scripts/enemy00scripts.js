@@ -169,13 +169,13 @@ class Enemy00Ship_Hit
         this.enemyStratagy = strategyManager.get('_enemy_');
 
         // Continues the init
-        this.recycle( projectileSprite, 5 );
+        this.recycle( projectileSprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( projectileSprite, test )
+    recycle( projectileSprite )
     {
         // Remove the AI script since the enemy is to die
         this.sprite.scriptComponent.remove( 'AI_Enemy00' );
