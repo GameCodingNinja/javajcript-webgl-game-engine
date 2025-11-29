@@ -11,8 +11,78 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { eventManager } from '../../../library/managers/eventmanager';
+import * as utilScripts from './utilityscripts';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as gameDefs from '../state/gamedefs';
+
+//
+//  DESC: Script for handling player ship explosion
+//
+class Explode_animation
+{
+    constructor( sprite, projectileSprite, shipSprite, offset )
+    {
+        this.sprite = sprite;
+
+        // Setup the animation
+        this.explodeAnim = new utilScripts.PlayAnim();
+
+        // Continues the init
+        this.recycle( projectileSprite, shipSprite, offset );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( projectileSprite, shipSprite, offset )
+    {
+        this.shipSprite = shipSprite
+
+        // This resets the animation
+        this.explodeAnim.init( 24, false, this.sprite );
+
+        // Create an explode graphic node and translate it to the projectile sprite
+        this.explodeAnim.sprite.setPos( projectileSprite.pos );
+        this.explodeAnim.sprite.transform();
+
+        this.dif = this.shipSprite.pos.getDistance( projectileSprite.pos );
+
+        this._size = this.shipSprite.getSize();
+
+
+        // If the distance is too big like colliding with a big enemy ship, size it down
+        if(this.dif.x > this._size.w / 2)
+            this.dif.x = (this._size.w / 2) - 15;
+        else if(this.dif.x < -(this._size.w / 2))
+            this.dif.x = -((this._size.w / 2) + 15);
+
+        if(this.dif.y > this._size.h / 2)
+            this.dif.y = (this._size.h / 2) - 15;
+        else if(this.dif.y < -(this._size.h / 2))
+            this.dif.y = -((this._size.h / 2) + 15);
+
+        // Add in the offset
+        this.dif.x += offset;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        // Translate the position of the explosion to the object being hit
+        this.explodeAnim.sprite.setPosXYZ( this.shipSprite.pos.x - this.dif.x, this.shipSprite.pos.y - this.dif.y);
+
+        if( this.explodeAnim.execute() )
+        {
+            this.explodeAnim.sprite.parentNode.strategy.recycle( this.explodeAnim.sprite.parentNode );
+
+            return true;
+        }
+
+        return false;
+    }
+}
 
 //
 //  DESC: Script for handling building being destroy
@@ -109,6 +179,9 @@ class EnemyShip_CheckForCollideWithPlayer
 //
 export function loadScripts()
 {
+    scriptManager.set( 'Explode_animation',
+            ( sprite, projectileSprite, shipSprite, offset ) => { return new Explode_animation( sprite, projectileSprite, shipSprite, offset ); } );
+
     scriptManager.set( 'EnemyShip_CheckForCollideWithPlayer',
         ( sprite ) => { return new EnemyShip_CheckForCollideWithPlayer( sprite ); } );
 

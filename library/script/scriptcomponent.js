@@ -91,6 +91,9 @@ export class ScriptComponent
                 case 6:
                     script.recycle(args[2],args[3],args[4],args[5]);
                 break;
+                case 7:
+                    script.recycle(args[2],args[3],args[4],args[5],args[6]);
+                break;
             }
         }
 
@@ -368,10 +371,6 @@ export class ScriptComponent
             {
                 this._recycleAry.push(script);
             }
-        }
-        else
-        {
-            console.log(`Script not recycled`);
         }
     }
 

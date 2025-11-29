@@ -227,7 +227,7 @@ class PlayerShip_Hit
     {
         // Create an explode graphic node and translate it to the projectile sprite
         this.explodeSprite = this.playerShipStratagy.create('explode').get();
-        this.explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite );
+        this.explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, 0 );
     }
     
     // 

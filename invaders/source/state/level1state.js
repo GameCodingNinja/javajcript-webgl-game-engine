@@ -224,7 +224,6 @@ export class Level1State extends CommonState
         this.lastMoveDirX = MOVE_NULL;
         this.lastMoveAction != defs.EAP_IDLE;
         this.unlimitedBoot = false;
-        this.slowHealOverTime = false;
 
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
@@ -287,6 +286,7 @@ export class Level1State extends CommonState
     //
     initMiscObjects()
     {
+        this.slowHealTimer = null;
         this.musicTimer = new Timer((1000 * 60 * 5));
 
         this.enemy00SpawnTimer = new Timer(2000);
@@ -538,7 +538,7 @@ export class Level1State extends CommonState
             }
             else if( this._featureIndex === REWARD_FEATURE_HEAL_OVER_TIME )
             {
-                this.slowHealOverTime = true;
+                this.slowHealTimer = new Timer(2000);
             }
 
             this.setBattleTime( this._battleTimeIndex );
@@ -1213,6 +1213,17 @@ export class Level1State extends CommonState
 
             // Handle changing the music every 5 minutes
             this.handleMusicChange();
+
+            if(this.slowHealTimer && this.slowHealTimer.expired(true))
+            {
+                if(this.playerShip.progressBar.isVisible())
+                {
+                    if(this.playerShip.progressBar.isMaxValue())
+                        this.playerShip.progressBar.setVisible( false );
+                    else
+                        this.playerShip.progressBar.incCurrentValue(1);
+                }
+            }
 
             if( !this.unlimitedBoot )
             {

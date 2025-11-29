@@ -79,8 +79,11 @@ export class PlayAnim
     // 
     //  DESC: Init the script for use
     //
-    init( fps, loop = false )
+    init( fps, loop = false, sprite = null )
     {
+        if( sprite != null )
+            this.sprite = sprite;
+        
         this.frameCount = this.sprite.getFrameCount();
         this.fps = fps;
         this.time = 1000.0 / this.fps;

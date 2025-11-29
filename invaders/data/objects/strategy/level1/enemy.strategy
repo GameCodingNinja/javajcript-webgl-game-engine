@@ -5,6 +5,16 @@
         <position z="-60"/>
     </object>
 
+    <node name="explode">
+
+        <sprite>
+            <scriptList>
+                <script explode="Explode_animation"/>
+            </scriptList>
+        </sprite>
+
+    </node>
+
     <node name="enemy00_ship" id="-3">
 
         <sprite>

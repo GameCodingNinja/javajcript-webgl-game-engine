@@ -82,72 +82,6 @@ class Enemy00Ship_Shoot
 }
 
 //
-//  DESC: Script for handling player ship explosion
-//
-class Explode_animation
-{
-    constructor( sprite, projectileSprite, shipSprite )
-    {
-        this.sprite = sprite;
-
-        // Get the player ship strategy to delete the explosion animation
-        this.playerShipStratagy = strategyManager.get('_player_ship_');
-
-        // Setup the animation
-        this.explodeAnim = new utilScripts.PlayAnim( sprite );
-
-        // Continues the init
-        this.recycle( projectileSprite, shipSprite );
-    }
-
-    // 
-    //  DESC: Using as an init
-    //
-    recycle( projectileSprite, shipSprite )
-    {
-        this.shipSprite = shipSprite
-
-        // This resets the animation
-        this.explodeAnim.init( 24 );
-
-        // Create an explode graphic node and translate it to the projectile sprite
-        this.sprite.setPos( projectileSprite.pos );
-        this.sprite.transform();
-
-        this.dif = this.shipSprite.pos.getDistance( this.explodeAnim.sprite.pos );
-
-        this._size = this.shipSprite.getSize();
-
-        if(this.dif.x > this._size.w / 2)
-            this.dif.x = (this._size.w / 2) - 15;
-        else if(this.dif.x < -(this._size.w / 2))
-            this.dif.x = -(this._size.w / 2) + 15
-
-        if(this.dif.y > this._size.h / 2)
-            this.dif.y = (this._size.h / 2) - 15;
-        else if(this.dif.y < -(this._size.h / 2))
-            this.dif.y = -(this._size.h / 2) + 15
-    }
-    
-    // 
-    //  DESC: Execute this script object
-    //
-    execute()
-    {
-        this.explodeAnim.sprite.setPosXYZ( this.shipSprite.pos.x - this.dif.x, this.shipSprite.pos.y - this.dif.y);
-
-        if( this.explodeAnim.execute() )
-        {
-            this.playerShipStratagy.recycle( this.sprite.parentNode );
-
-            return true;
-        }
-
-        return false;
-    }
-}
-
-//
 //  DESC: Script for handling enemy00 getting hit
 //
 class Enemy00Ship_Hit
@@ -158,12 +92,6 @@ class Enemy00Ship_Hit
 
         // Create a reusable easing class
         this.easingY = new easing.valueTo;
-
-        // Create a reusable animation player
-        this.explodeAnim = new utilScripts.PlayAnim();
-
-        // Get the player ship strategy to delete the explosion animation
-        this.playerShipStratagy = strategyManager.get('_player_ship_');
 
         // Get the enemy strategy to create the explosion animation
         this.enemyStratagy = strategyManager.get('_enemy_');
@@ -195,17 +123,9 @@ class Enemy00Ship_Hit
             this.rotateVelocity = -0.00004;
         }
 
-        // Create an explode graphic node and translate it to the projectile sprite
-        this.explodeAnim.sprite = this.enemyStratagy.create('explode').get();
-        this.explodeAnim.init( 24 );
-
-        // Ajust the initial offset of the explosion animation based off the position of the enemy sprite X
-        if( projectileSprite.rot.y > 1 )
-            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x + 15, projectileSprite.pos.y );
-        else
-            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - 15, projectileSprite.pos.y );
-
-        this.explodeAnim.sprite.transform();
+        // Create an explode graphic node and translate it to the projectile sprite and execute the script
+        this._explodeSprite = this.enemyStratagy.create('explode').get();
+        this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -15 : 15 );
 
         // Hide the projectile and allow it to be recycled from the script moving it
         if( projectileSprite.parentNode.name === 'player_shot' )
@@ -213,8 +133,6 @@ class Enemy00Ship_Hit
             projectileSprite.setVisible( false );
             // The projectile sprite script will recycle itself
         }
-
-        this.dif = this.sprite.pos.getDistance( this.explodeAnim.sprite.pos );
     }
     
     // 
@@ -226,16 +144,6 @@ class Enemy00Ship_Hit
         this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
         this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
         this.rotate += this.rotateVelocity * highResTimer.elapsedTime;
-
-        if( this.explodeAnim.sprite )
-        {
-            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
-            if( this.explodeAnim.execute() )
-            {
-                this.enemyStratagy.recycle( this.explodeAnim.sprite.parentNode );
-                this.explodeAnim.sprite = null;
-            }
-        }
 
         if( this.easingY.isFinished() )
         {
@@ -286,9 +194,6 @@ class Enemy00Shot_Hit
 //
 export function loadScripts()
 {
-    scriptManager.set( 'Explode_animation',
-        ( sprite, projectileSprite, shipSprite ) => { return new Explode_animation( sprite, projectileSprite, shipSprite ); } );
-
     scriptManager.set( 'Enemy00Ship_Hit',
         ( sprite, projectileSprite ) => { return new Enemy00Ship_Hit( sprite, projectileSprite ); } );
 

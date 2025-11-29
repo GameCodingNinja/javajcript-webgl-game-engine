@@ -202,6 +202,9 @@ export class Strategy extends Object
         // Init the head node
         this._headNode.init();
 
+        // Set the strategy for easy reference
+        this._headNode.strategy = this;
+
         // Add the node to the array for adding to the active list
         if( !instanceName || makeActive )
             this.activateAry.push( this._headNode );
@@ -539,7 +542,12 @@ export class Strategy extends Object
                     
                 }
                 else
-                    throw new Error( `Node can't be found to recycle!: ${this.recycleAry[this._ii].name}` );
+                {
+                    if(this.recycleAry[this._ii].name)
+                        throw new Error( `Node can't be found to recycle!: ${this.recycleAry[this._ii].name}` );
+                    else
+                        throw new Error( `Nameless Node can't be found to recycle!` );
+                }
             }
 
             this.recycleAry.length = 0;

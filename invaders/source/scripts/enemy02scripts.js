@@ -22,14 +22,8 @@ class Enemy02Ship_Hit
     {
         this.sprite = sprite;
 
-        // Get the player ship strategy to delete the explosion animation
-        this.playerShipStratagy = strategyManager.get('_player_ship_');
-
         // Get the enemy strategy to create the explosion animation
         this.enemyStratagy = strategyManager.get('_enemy_');
-
-        // Create an explode graphic node and translate it to the projectile sprite
-        this.explodeAnim = new utilScripts.PlayAnim();
 
         // Continues the init
         this.recycle( projectileSprite );
@@ -40,16 +34,9 @@ class Enemy02Ship_Hit
     //
     recycle( projectileSprite )
     {
-        this.explodeAnim.sprite = this.enemyStratagy.create('explode').get();
-        this.explodeAnim.init( 24 );
-
-        // Ajust the initial offset of the explosion animation
-        if( projectileSprite.rot.y > 1 )
-            this.explodeAnim.sprite.setPosXYZ( projectileSprite.pos.x + 10, projectileSprite.pos.y );
-        else
-            this.explodeAnim.sprite.setPosXYZ( projectileSprite.pos.x - 10, projectileSprite.pos.y );
-
-        this.explodeAnim.sprite.transform();
+        // Create an explode graphic node and translate it to the projectile sprite and execute the script
+        this._explodeSprite = this.enemyStratagy.create('explode').get();
+        this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -10 : 10 );
 
         // Hide the projectile and allow it to be recycled from the script moving it
         if( projectileSprite.parentNode.name === 'player_shot' )
@@ -57,8 +44,6 @@ class Enemy02Ship_Hit
             projectileSprite.setVisible( false );
             // The projectile sprite script will recycle itself
         }
-
-        this.sprite.dist = this.sprite.pos.getDistance( this.explodeAnim.sprite.pos );
     }
     
     // 
@@ -66,19 +51,7 @@ class Enemy02Ship_Hit
     //
     execute()
     {
-        if( this.explodeAnim.sprite )
-        {
-            this.explodeAnim.sprite.setPosXYZ( this.sprite.pos.x - this.dif.x, this.sprite.pos.y - this.dif.y );
-            if( this.explodeAnim.execute() )
-            {
-                this.enemyStratagy.recycle( this.explodeAnim.sprite.parentNode );
-                this.explodeAnim.sprite = null;
-
-                return true;
-            }
-        }
-
-        return false;
+        return true;
     }
 }
 
