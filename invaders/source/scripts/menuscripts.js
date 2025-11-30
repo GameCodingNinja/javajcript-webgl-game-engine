@@ -72,17 +72,18 @@ class Menu_TransIn
     constructor( menu )
     {
         this.fadeTo = new utilScripts.FadeTo();
-        this.menu = menu;
         
         // Continues the init
-        this.recycle();
+        this.recycle( menu );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( menu )
     {
+        this.menu = menu;
+
         this.menu.setAlpha( 0.0 );
         this.menu.setVisible( true );
         this.fadeTo.init( 0, 1, 250 );
@@ -129,17 +130,18 @@ class Menu_TransOut
     constructor( menu )
     {
         this.fadeTo = new utilScripts.FadeTo();
-        this.menu = menu;
 
         // Continues the init
-        this.recycle();
+        this.recycle( menu );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( menu )
     {
+        this.menu = menu;
+
         this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
         this.fadeTo.init( 1, 0, 250 );
@@ -186,17 +188,17 @@ class Menu_Show
 {
     constructor( menu )
     {
-        this.menu = menu;
-
         // Continues the init
-        this.recycle();
+        this.recycle( menu );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( menu )
     {
+        this.menu = menu;
+
         this.menu.setAlpha( 1.0 );
         this.menu.setVisible( false );
     }
@@ -220,17 +222,17 @@ class Menu_Hide
 {
     constructor( menu )
     {
-        this.menu = menu;
-
         // Continues the init
-        this.recycle();
+        this.recycle( menu );
     }
     
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( menu )
     {
+        this.menu = menu;
+
         this.menu.setAlpha( 1.0 );
         this.menu.setVisible( true );
     }
@@ -254,18 +256,19 @@ class Control_Disabled
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
         this.color = new Color;
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
+        this.sprite = sprite;
+
         this.color.copy( this.sprite.getDefaultColor() );
         this.color.transformHSV( 0, 0, 1 );
     }
@@ -288,15 +291,16 @@ class Control_Inactive
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
+        // Continues the init
+        this.recycle( sprite );
     }
     
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        // Nothing to do here
+        this.sprite = sprite;
     }
 
     // 
@@ -317,15 +321,16 @@ class Control_Hidden
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
+        // Continues the init
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        // Nothing to do here
+        this.sprite = sprite;
     }
     
     // 
@@ -345,10 +350,8 @@ class Control_Hidden
 //
 class Base_Control_Active
 {
-    constructor( sprite )
+    constructor()
     {
-        this.sprite = sprite;
-
         this.hiColor = new Color;
         this.lowColor = new Color;
         this.colorTo = new utilScripts.ColorTo;
@@ -360,8 +363,10 @@ class Base_Control_Active
     // 
     //  DESC: Init the script for use
     //
-    init( hiHSV, lowHSV )
+    init( sprite, hiHSV, lowHSV )
     {
+        this.sprite = sprite;
+
         this.sprite.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
@@ -415,18 +420,18 @@ class Control_Active extends Base_Control_Active
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.3, 0.5 );
+        super.init( sprite, 1.3, 0.5 );
     }
     
     // 
@@ -442,18 +447,18 @@ class Control_Solid_Active extends Base_Control_Active
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.1, 0.5 );
+        super.init( sprite, 1.1, 0.5 );
     }
     
     // 
@@ -473,10 +478,8 @@ class Control_Solid_Active extends Base_Control_Active
 //
 class Base_Control_Selected
 {
-    constructor( sprite )
+    constructor()
     {
-        this.sprite = sprite;
-
         this.hiColor = new Color;
         this.lowColor = new Color;
 
@@ -489,8 +492,10 @@ class Base_Control_Selected
     // 
     //  DESC: Init the script for use
     //
-    init( hiHSV, lowHSV )
+    init( sprite, hiHSV, lowHSV )
     {
+        this.sprite = sprite;
+
         this.sprite.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
@@ -550,18 +555,18 @@ class Control_Selected_Dispatch_Exe extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.7, 0.6 );
+        super.init( sprite, 1.7, 0.6 );
     }
     
     // 
@@ -583,18 +588,18 @@ class Control_Selected_Dispatch_Exe_Act extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.7, 0.6 );
+        super.init( sprite, 1.7, 0.6 );
     }
     
     // 
@@ -618,18 +623,18 @@ class Control_Selected_Visible extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.7, 0.6 );
+        super.init( sprite, 1.7, 0.6 );
     }
     
     // 
@@ -647,20 +652,20 @@ class Control_Selected_Visible extends Base_Control_Selected
 //
 class Control_Solid_Selected_visible extends Base_Control_Selected
 {
-    constructor( sprite )
+    constructor( sprite ) 
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.5, 0.6 );
+        super.init( sprite, 1.5, 0.6 );
     }
     
     // 
@@ -676,18 +681,18 @@ class Control_Selected extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.7, 0.6 );
+        super.init(  sprite , 1.7, 0.6 );
     }
     
     // 
@@ -709,18 +714,18 @@ class Control_Solid_Selected extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.5, 0.6 );
+        super.init( sprite, 1.5, 0.6 );
     }
     
     // 
@@ -742,18 +747,18 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.7, 0.6 );
+        super.init( sprite, 1.7, 0.6 );
     }
     
     // 
@@ -777,17 +782,18 @@ class Control_Selected_frame_highlight extends Base_Control_Selected
 //
 class Base_Control_Fast_Selected
 {
-    constructor( sprite )
+    constructor()
     {
-        this.sprite = sprite;
         this.hiColor = new Color;
     }
     
     // 
     //  DESC: Init the script for use
     //
-    init( hiHSV )
+    init( sprite, hiHSV )
     {
+        this.sprite = sprite;
+
         this.sprite.setVisible( true );
         
         this.hiColor.copy( this.sprite.getDefaultColor() );
@@ -801,19 +807,19 @@ class Control_Fast_Face_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
         
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
         this.time = 80;
-        super.init( 1.7 );
+        super.init( sprite, 1.7 );
     }
     
     // 
@@ -837,19 +843,19 @@ class Control_Fast_Face_Selected_Act extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
         
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
         this.time = 80;
-        super.init( 1.7 );
+        super.init( sprite, 1.7 );
     }
     
     // 
@@ -874,19 +880,19 @@ class Control_Fast_Face_Selected_Exe_Act extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
         
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
         this.time = 80;
-        super.init( 1.7 );
+        super.init( sprite, 1.7 );
     }
     
     // 
@@ -912,19 +918,19 @@ class Control_Fast_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
         
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
         this.time = 80;
-        super.init( 1.7 );
+        super.init( sprite, 1.7 );
     }
     
     // 
@@ -948,19 +954,19 @@ class Control_Fast_Solid_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
         
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
         this.time = 80;
-        super.init( 1.7 );
+        super.init( sprite, 1.7 );
     }
     
     // 
@@ -984,18 +990,18 @@ class Control_slider_btn_Selected extends Base_Control_Fast_Selected
 {
     constructor( sprite )
     {
-        super( sprite );
+        super();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        super.init( 1.7 );
+        super.init( sprite, 1.7 );
     }
     
     // 
@@ -1014,17 +1020,17 @@ class ConfirmBtn_execute
 {
     constructor( control )
     {
-        this.control = control;
-
         // Continues the init
-        this.recycle();
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
+        this.control = control;
+
         this.menu = menuManager.getMenu("confirmation_menu");
         this.yesBtn = this.menu.getControl("yes_btn");
         this.megLbl = this.menu.getControl("message_lbl");

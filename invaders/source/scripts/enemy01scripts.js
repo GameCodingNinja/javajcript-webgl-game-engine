@@ -21,20 +21,20 @@ class Enemy01Ship_Hit
 {
     constructor( sprite, projectileSprite )
     {
-        this.sprite = sprite;
-
         // Get the enemy strategy to create the explosion animation
         this.enemyStratagy = strategyManager.get('_enemy_');
 
         // Continues the init
-        this.recycle( projectileSprite );
+        this.recycle( sprite, projectileSprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( projectileSprite )
+    recycle( sprite, projectileSprite )
     {
+        this.sprite = sprite;
+
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
         this._explodeSprite = this.enemyStratagy.create('explode').get();
         this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -30 : 20 );
@@ -63,18 +63,19 @@ class Enemy01Ship_Die
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
         this.easingY = new easing.valueTo;
         
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
+        this.sprite = sprite;
+
         // Y Rotation
         this.dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
         this.offsetY = Math.abs(this.sprite.pos.y - this.dest);

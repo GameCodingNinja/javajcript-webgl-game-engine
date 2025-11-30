@@ -28,20 +28,19 @@ class Explode_animation
 {
     constructor( sprite, projectileSprite, shipSprite, offset )
     {
-        this.sprite = sprite;
-
         // Setup the animation
         this.explodeAnim = new utilScripts.PlayAnim();
 
         // Continues the init
-        this.recycle( projectileSprite, shipSprite, offset );
+        this.recycle( sprite, projectileSprite, shipSprite, offset );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( projectileSprite, shipSprite, offset )
+    recycle( sprite, projectileSprite, shipSprite, offset )
     {
+        this.sprite = sprite;
         this.shipSprite = shipSprite
 
         // This resets the animation
@@ -100,18 +99,19 @@ class Building_Die
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
         this.rotDir = 0.005;
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
+        this.sprite = sprite;
+
         // Flag indicating this building was destroyed
         this.sprite.destroyed = true;
 
@@ -151,19 +151,20 @@ class EnemyShip_CheckForCollideWithPlayer
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
-
         // Player ship
         this.playerShipStratagy = strategyManager.get('_player_ship_');
         this.camera = this.playerShipStratagy.camera;
+
+        // Continues the init
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        // Empty by design
+        this.sprite = sprite;
     }
     
     // 

@@ -79,7 +79,7 @@ const MOVE_NULL = -1,
 var gAdPlayed = false,
     gAdError = false,
     gAdErrorCode = "",
-    gGodMode = false;
+    gGodMode = true;
 
 const fadeOutAmbientMusic_cb =
 {

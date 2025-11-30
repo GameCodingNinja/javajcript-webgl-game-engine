@@ -20,15 +20,16 @@ export class SoundCheckBox_InitStatus
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -49,15 +50,16 @@ export class SoundCheckBox_execute
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -96,15 +98,16 @@ export class SoundEffectCheckBox_InitStatus
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -128,15 +131,16 @@ export class SoundEffectCheckBox_execute
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -158,15 +162,16 @@ export class SoundMusicCheckBox_InitStatus
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -190,15 +195,16 @@ export class SoundMusicCheckBox_execute
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -225,15 +231,16 @@ export class DeadZoneSlider_InitStatus
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -254,15 +261,16 @@ export class DeadZoneSlider_execute
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 

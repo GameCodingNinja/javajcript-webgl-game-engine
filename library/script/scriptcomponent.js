@@ -89,23 +89,23 @@ export class ScriptComponent
 
             switch(args.length)
             {
-                case 2:
+                case 1:
                     script.recycle();
                 break;
+                case 2:
+                    script.recycle(args[1]);
+                break;
                 case 3:
-                    script.recycle(args[2]);
+                    script.recycle(args[1],args[2]);
                 break;
                 case 4:
-                    script.recycle(args[2],args[3]);
+                    script.recycle(args[1],args[2],args[3]);
                 break;
                 case 5:
-                    script.recycle(args[2],args[3],args[4]);
+                    script.recycle(args[1],args[2],args[3],args[4]);
                 break;
                 case 6:
-                    script.recycle(args[2],args[3],args[4],args[5]);
-                break;
-                case 7:
-                    script.recycle(args[2],args[3],args[4],args[5],args[6]);
+                    script.recycle(args[1],args[2],args[3],args[4],args[5]);
                 break;
             }
         }
@@ -245,7 +245,7 @@ export class ScriptComponent
                     if( activeScript )
                     {
                         //console.log(`Script Recycle; Name: ${this._scriptPrepareFunc.funcName}`);
-                        activeScript.recycle();
+                        activeScript.recycle( object );
                     }
                     else
                     {

@@ -21,8 +21,6 @@ class Enemy00Ship_Shoot
 {
     constructor( sprite, enemySprite )
     {
-        this.sprite = sprite;
-
         // Speed of the projectile
         this.PROJECTILE_SPEED = 0.25;
         this.PROJECTILE_ROT_SPEED = 0.5;
@@ -34,14 +32,16 @@ class Enemy00Ship_Shoot
         this.camera = this.playerShipStratagy.camera;
 
         // Continues the init
-        this.recycle( enemySprite );
+        this.recycle( sprite, enemySprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( enemySprite )
+    recycle( sprite, enemySprite )
     {
+        this.sprite = sprite;
+
         this.sprite.setPos( enemySprite.pos );
         this.sprite.setRotXYZ(0, 0, 0);
 
@@ -88,8 +88,6 @@ class Enemy00Ship_Hit
 {
     constructor( sprite, projectileSprite )
     {
-        this.sprite = sprite;
-
         // Create a reusable easing class
         this.easingY = new easing.valueTo;
 
@@ -97,14 +95,16 @@ class Enemy00Ship_Hit
         this.enemyStratagy = strategyManager.get('_enemy_');
 
         // Continues the init
-        this.recycle( projectileSprite );
+        this.recycle( sprite, projectileSprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( projectileSprite )
+    recycle( sprite, projectileSprite )
     {
+        this.sprite = sprite;
+
         // Remove the AI script since the enemy is to die
         this.sprite.scriptComponent.remove( 'AI_Enemy00' );
 
@@ -164,17 +164,17 @@ class Enemy00Shot_Hit
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
-
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
+        this.sprite = sprite;
+
         // We are done with this sprite, queue it up to be recycled
         strategyManager.get('_player_ship_').recycle( this.sprite.parentNode );
     }

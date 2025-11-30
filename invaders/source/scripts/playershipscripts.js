@@ -25,18 +25,18 @@ class PlayerShip_FireTailAnim
 {
     constructor( sprite )
     {
-        this.animate = new utilScripts.PlayAnim( sprite );
+        this.animate = new utilScripts.PlayAnim();
 
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        this.animate.init( 24, true );
+        this.animate.init( 24, true, sprite );
         this.pause = true;
     }
     
@@ -59,8 +59,6 @@ class PlayerShip_ShootLazer
 {
     constructor( sprite, shipVelocity )
     {
-        this.sprite = sprite;
-
         // Player ship
         this.playerShipStratagy = strategyManager.get('_player_ship_');
         this.playerShipNode = this.playerShipStratagy.get('player_ship');
@@ -70,18 +68,19 @@ class PlayerShip_ShootLazer
         this.enemyStratagy = strategyManager.get('_enemy_');
 
         // Continues the init
-        this.recycle( shipVelocity );
+        this.recycle( sprite, shipVelocity );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( shipVelocity )
+    recycle( sprite, shipVelocity )
     {
+        this.sprite = sprite;
+        this.shipVelocity = shipVelocity;
+
         // Speed of the projectile
         this.PROJECTILE_SPEED = 1.5;
-        
-        this.shipVelocity = shipVelocity
 
         // Y Rotation
         this._rot = this.playerShipNode.findChild('playerShip_object').get().rot;
@@ -157,28 +156,31 @@ class PlayerShip_Die
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
         this.easingY = new easing.valueTo;
-        // Y Rotation
-        let rot = this.sprite.parentNode.findChild('playerShip_object').get().rot;
-        let dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
-        let offsetY = Math.abs(this.sprite.pos.y - dest);
-        this.easingY.init( this.sprite.pos.y, dest, offsetY / 250, easing.getSineIn() );
-        this.rotateVelocity = -0.00005;
-        this.rotate = -0.05;
-        if(rot.y > 1)
-        {
-            this.rotate = 0.05;
-            this.rotateVelocity = 0.00005;
-        }
+        
+        // Continues the init
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        // Empty by design
+        this.sprite = sprite;
+
+        // Y Rotation
+        this._rot = this.sprite.parentNode.findChild('playerShip_object').get().rot;
+        this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
+        this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
+        this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn() );
+        this.rotateVelocity = -0.00005;
+        this.rotate = -0.05;
+        if(this._rot.y > 1)
+        {
+            this.rotate = 0.05;
+            this.rotateVelocity = 0.00005;
+        }
     }
     
     // 
@@ -211,20 +213,20 @@ class PlayerShip_Hit
 {
     constructor( sprite, projectileSprite )
     {
-        this.sprite = sprite;
-
         // Get the player ship strategy to create the explosion animation
         this.playerShipStratagy = strategyManager.get('_player_ship_');
 
         // Continues the init
-        this.recycle( projectileSprite );
+        this.recycle( sprite, projectileSprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( projectileSprite )
+    recycle( sprite, projectileSprite )
     {
+        this.sprite = sprite;
+
         // Create an explode graphic node and translate it to the projectile sprite
         this.explodeSprite = this.playerShipStratagy.create('explode').get();
         this.explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, 0 );
