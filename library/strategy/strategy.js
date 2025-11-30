@@ -543,10 +543,7 @@ export class Strategy extends Object
                 }
                 else
                 {
-                    if(this.recycleAry[this._ii].name)
-                        throw new Error( `Node can't be found to recycle!: ${this.recycleAry[this._ii].name}` );
-                    else
-                        throw new Error( `Nameless Node can't be found to recycle!` );
+                    console.warn( `Node can't be found to recycle!: ${this.recycleAry[this._i].name}` );
                 }
             }
 

@@ -78,7 +78,8 @@ const MOVE_NULL = -1,
 
 var gAdPlayed = false,
     gAdError = false,
-    gAdErrorCode = "";
+    gAdErrorCode = "",
+    gGodMode = false;
 
 const fadeOutAmbientMusic_cb =
 {
@@ -223,7 +224,11 @@ export class Level1State extends CommonState
         this.moveDirY = MOVE_NULL;
         this.lastMoveDirX = MOVE_NULL;
         this.lastMoveAction != defs.EAP_IDLE;
-        this.unlimitedBoot = false;
+
+        if(gGodMode)
+            this.unlimitedBoot = true;
+        else
+            this.unlimitedBoot = false;
 
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
@@ -406,8 +411,11 @@ export class Level1State extends CommonState
             if( spriteA.parentNode.userId == ENEMY00_SHOT_ID )
             {
                 spriteB.prepareScript( 'hit', spriteA );
-                this.playerShip.progressBar.incCurrentValue( -10 );
-                this.playerShip.progressBar.setVisible( true );
+                if( gGodMode == false )
+                {
+                    this.playerShip.progressBar.incCurrentValue( -10 );
+                    this.playerShip.progressBar.setVisible( true );
+                }
                 spriteA.prepareScript( 'hit' );
                 this.groupPlayer.play( 'player_hit' );
             }
@@ -415,8 +423,11 @@ export class Level1State extends CommonState
             else if( spriteA.parentNode.userId == ENEMY00_SHIP_ID )
             {
                 spriteB.prepareScript( 'hit', spriteA );
-                this.playerShip.progressBar.incCurrentValue( -30 );
-                this.playerShip.progressBar.setVisible( true );
+                if( gGodMode == false )
+                {
+                    this.playerShip.progressBar.incCurrentValue( -30 );
+                    this.playerShip.progressBar.setVisible( true );
+                }
                 spriteA.prepareScript( 'hit', spriteB );
                 this.groupPlayer.play( 'EXPLOSION_Metllic' );
             }
@@ -428,8 +439,11 @@ export class Level1State extends CommonState
                 {
                     this.playerShip.allowCollision = false;
                     this.playerShip.sprite.prepareScript( 'hit', spriteA );
-                    this.playerShip.progressBar.incCurrentValue( -30 );
-                    this.playerShip.progressBar.setVisible( true );
+                    if( gGodMode == false )
+                    {
+                        this.playerShip.progressBar.incCurrentValue( -30 );
+                        this.playerShip.progressBar.setVisible( true );
+                    }
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
                 }
             }
@@ -522,7 +536,10 @@ export class Level1State extends CommonState
         this._featureIndex = this._menu.getControl("feature_btn_lst").activeIndex;
         this._battleTimeIndex = this._menu.getControl("battle_time_btn_lst").activeIndex;
 
-        this.unlimitedBoot = false;
+        if(gGodMode)
+            this.unlimitedBoot = true;
+        else
+            this.unlimitedBoot = false;
 
         if( gAdPlayed || (typeof window.CrazyGames === 'undefined'))
         {

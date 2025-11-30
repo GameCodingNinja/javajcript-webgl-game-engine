@@ -98,6 +98,10 @@ export class StartUpState extends GameState
         // NOTE: Can only call this after Camera Manager has been loaded
         menuManager.setDefaultCamera();
 
+        scriptSingleton.setScriptInfo( 'screen_fade', 'ScreenFade' );
+        scriptSingleton.setScriptInfo( 'sound_fade', 'SoundFade' );
+        scriptSingleton.setScriptInfo( 'delayed_execution', 'DelayedExecution' );
+
         // Create the internal script component so that a script can be run across states
         scriptSingleton.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
 

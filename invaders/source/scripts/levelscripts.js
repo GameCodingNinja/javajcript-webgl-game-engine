@@ -15,6 +15,12 @@ import * as utilScripts from './utilityscripts';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as gameDefs from '../state/gamedefs';
 
+const PLAYER_SHIP_ID = 0,
+      ENEMY00_SHOT_ID = -2,
+      ENEMY00_SHIP_ID = -3,
+      ENEMY01_SHIP_ID = -4,
+      ENEMY02_SHIP_ID = -5
+
 //
 //  DESC: Script for handling player ship explosion
 //
@@ -45,24 +51,27 @@ class Explode_animation
         this.explodeAnim.sprite.setPos( projectileSprite.pos );
         this.explodeAnim.sprite.transform();
 
-        this.dif = this.shipSprite.pos.getDistance( projectileSprite.pos );
-
+        this.dif = this.shipSprite.pos.getDistance( this.explodeAnim.sprite.pos );
         this._size = this.shipSprite.getSize();
 
-
         // If the distance is too big like colliding with a big enemy ship, size it down
-        if(this.dif.x > this._size.w / 2)
-            this.dif.x = (this._size.w / 2) - 15;
-        else if(this.dif.x < -(this._size.w / 2))
-            this.dif.x = -((this._size.w / 2) + 15);
+        if( shipSprite.parentNode.userId == PLAYER_SHIP_ID && projectileSprite.parentNode.userId <= ENEMY00_SHIP_ID )
+        {
+            if(this.dif.x > this._size.w / 2)
+                this.dif.x = (this._size.w / 2) - 15;
+            else if(this.dif.x < -(this._size.w / 2))
+                this.dif.x = -(this._size.w / 2) + 15;
 
-        if(this.dif.y > this._size.h / 2)
-            this.dif.y = (this._size.h / 2) - 15;
-        else if(this.dif.y < -(this._size.h / 2))
-            this.dif.y = -((this._size.h / 2) + 15);
-
-        // Add in the offset
-        this.dif.x += offset;
+            if(this.dif.y > this._size.h / 2)
+                this.dif.y = (this._size.h / 2) - 15;
+            else if(this.dif.y < -(this._size.h / 2))
+                this.dif.y = -(this._size.h / 2) + 15;
+        }
+        else
+        {
+            // Add in the offset
+            this.dif.x += offset;
+        }
     }
     
     // 

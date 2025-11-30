@@ -56,9 +56,22 @@ export class ScriptComponent
 
             this._attr = this._scriptNode[this._i].attributes[0];
             if( this._attr && !this.scriptFactoryMap.has(this._attr.name) )
-                // This allocates the script to the map
+                // This allocates the script info to the map
                 this.scriptFactoryMap.set( this._attr.name, new CScriptPrepareFunc(this._attr.value, this._prepareOnInit, this._forceUpdate, this._ai) );
         }
+    }
+
+    // 
+    //  DESC: Set script info to the map
+    //
+    setScriptInfo( key, funct_name, prepareOnInit = false, forceUpdate = false, ai = false )
+    {
+        if( this.scriptFactoryMap == null )
+            this.scriptFactoryMap = new Map;
+
+        if( !this.scriptFactoryMap.has(key) )
+            // This allocates the script info to the map
+            this.scriptFactoryMap.set( key, new CScriptPrepareFunc(funct_name, prepareOnInit, forceUpdate, ai) );
     }
 
     // 

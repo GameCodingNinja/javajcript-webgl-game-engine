@@ -59,7 +59,6 @@ export class Hold
     }
 }
 
-
 //
 //  DESC: Script for playing the frames of an animation
 //
@@ -329,8 +328,18 @@ class ScreenFade
     constructor( current, final, time, fadeType )
     {
         this.fadeTo = new FadeTo();
-        this.fadeTo.init( current, final, time );
+
+        // Continues the init
+        this.recycle( current, final, time, fadeType );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( current, final, time, fadeType )
+    {
         this.iter = this.iteration();
+        this.fadeTo.init( current, final, time );
         this.fadeType = fadeType;
     }
 
@@ -382,11 +391,21 @@ class SoundFade
     constructor( final, time, snd, preAction = null, postAction = null )
     {
         this.fadeTo = new FadeTo();
-        this.fadeTo.init( snd.getVolume(), final, time );
-        this.iter = this.iteration();
-        this.snd = snd;
         this.result;
+        
+        // Continues the init
+        this.recycle( final, time, snd, preAction, postAction );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( final, time, snd, preAction, postAction )
+    {
+        this.iter = this.iteration();
+        this.fadeTo.init( snd.getVolume(), final, time );
         this.postAction = postAction;
+        this.snd = snd;
 
         if( preAction )
             preAction();
@@ -431,9 +450,19 @@ class DelayedExecution
     constructor( time, preAction = null, postAction = null )
     {
         this.hold = new Hold();
+
+        // Continues the init
+        this.recycle( time, preAction, postAction );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( time, preAction, postAction )
+    {
+        this.iter = this.iteration();
         this.hold.init( time );
         this.postAction = postAction;
-        this.iter = this.iteration();
 
         if( preAction )
             preAction();
