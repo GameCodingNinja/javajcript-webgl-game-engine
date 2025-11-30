@@ -98,12 +98,13 @@ export class StartUpState extends GameState
         // NOTE: Can only call this after Camera Manager has been loaded
         menuManager.setDefaultCamera();
 
+        // Setup the script info for the global scripts so that they are recyclable
         scriptSingleton.setScriptInfo( 'screen_fade', 'ScreenFade' );
         scriptSingleton.setScriptInfo( 'sound_fade', 'SoundFade' );
         scriptSingleton.setScriptInfo( 'delayed_execution', 'DelayedExecution' );
 
         // Create the internal script component so that a script can be run across states
-        scriptSingleton.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
+        scriptSingleton.prepare( 'screen_fade', 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE );
 
         // Preload assets for the startup screen
         this.preload();
@@ -225,9 +226,9 @@ export class StartUpState extends GameState
 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
-                    scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) );
+                    scriptSingleton.prepare( 'screen_fade', 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE );
                 else
-                    setTimeout( () => scriptSingleton.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) ), MIN_LOAD_TIME - loadTime );
+                    setTimeout( () => scriptSingleton.prepare( 'screen_fade', 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ), MIN_LOAD_TIME - loadTime );
                 
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();

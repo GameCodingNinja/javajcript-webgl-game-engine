@@ -582,7 +582,7 @@ class AI_Enemy01_Desend extends aiNode
                 this.state = defs.EAIS_SUCCESS;
 
                 let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
-                scriptSingleton.prepare( scriptManager.get('SoundFade')( 0.7, 1000, gsnd, () => gsnd.play('enemy01_loop_sound', true), null ) );
+                scriptSingleton.prepare( 'sound_fade', 0.7, 1000, gsnd, () => gsnd.play('enemy01_loop_sound', true) );
             }
         }
 

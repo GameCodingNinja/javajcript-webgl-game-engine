@@ -400,7 +400,7 @@ class SoundFade
     // 
     //  DESC: Recycle the script
     //
-    recycle( final, time, snd, preAction, postAction )
+    recycle( final, time, snd, preAction = null, postAction = null )
     {
         this.iter = this.iteration();
         this.fadeTo.init( snd.getVolume(), final, time );
@@ -458,7 +458,7 @@ class DelayedExecution
     // 
     //  DESC: Recycle the script
     //
-    recycle( time, preAction, postAction )
+    recycle( time, preAction = null, postAction = null )
     {
         this.iter = this.iteration();
         this.hold.init( time );
