@@ -11,7 +11,6 @@ import { eventManager } from '../../../library/managers/eventmanager';
 import { actionManager } from '../../../library/managers/actionmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { scriptManager } from '../../../library/script/scriptmanager';
 import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
@@ -34,7 +33,8 @@ import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
-import * as ai from '../scripts/aiscripts';
+import * as enemy00aiscripts from '../scripts/enemy00aiscripts';
+import * as enemy02aiscripts from '../scripts/enemy02aiscripts';
 
 // AI_Enemy00 AI_Enemy01 AI_Enemy02
 import enemy00_ai from 'raw-loader!../../data/objects/ai/enemy00.ai';
@@ -74,12 +74,12 @@ const MOVE_NULL = -1,
       GAME_START_MENU_AD_ERROR_MSG = 2,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
-      REWARD_FEATURE_HEAL_OVER_TIME = 3;
+      REWARD_FEATURE_HEAL_OVER_TIME = 3,
+      GOD_MODE = true;
 
 var gAdPlayed = false,
     gAdError = false,
-    gAdErrorCode = "",
-    gGodMode = false;
+    gAdErrorCode = "";
 
 const fadeOutAmbientMusic_cb =
 {
@@ -190,10 +190,10 @@ export class Level1State extends CommonState
             ['buildingsbackCamera','buildingsfrontCamera','buildingsCamera','forgroundCamera',
              'levelCamera','radarCamera1','radarCamera2','wrapAroundCamera','menuCamera'] );
 
-        this.radarCamera1.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera1.scale.x;
+        this.radarCamera1.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * RADAR_SCALE;
         this.radarCamera1.initFromXml();
 
-        this.radarCamera2.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * this.radarCamera2.scale.x;
+        this.radarCamera2.projHeight = device.gl.getParameter(device.gl.VIEWPORT)[3] * RADAR_SCALE;
         this.radarCamera2.initFromXml();
 
         this.radarCamAry = [this.radarCamera1,this.radarCamera2];
@@ -225,7 +225,7 @@ export class Level1State extends CommonState
         this.lastMoveDirX = MOVE_NULL;
         this.lastMoveAction != defs.EAP_IDLE;
 
-        if(gGodMode)
+        if(GOD_MODE)
             this.unlimitedBoot = true;
         else
             this.unlimitedBoot = false;
@@ -326,7 +326,8 @@ export class Level1State extends CommonState
         this.gameReady = false;
         this.playerShip = null;
 
-        ai.clearAIData();
+        enemy00aiscripts.clearAIData();
+        enemy02aiscripts.clearAIData();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
         .then(() =>
@@ -411,7 +412,7 @@ export class Level1State extends CommonState
             if( spriteA.parentNode.userId == ENEMY00_SHOT_ID )
             {
                 spriteB.prepareScript( 'hit', spriteA );
-                if( gGodMode == false )
+                if( GOD_MODE == false )
                 {
                     this.playerShip.progressBar.incCurrentValue( -10 );
                     this.playerShip.progressBar.setVisible( true );
@@ -423,7 +424,7 @@ export class Level1State extends CommonState
             else if( spriteA.parentNode.userId == ENEMY00_SHIP_ID )
             {
                 spriteB.prepareScript( 'hit', spriteA );
-                if( gGodMode == false )
+                if( GOD_MODE == false )
                 {
                     this.playerShip.progressBar.incCurrentValue( -30 );
                     this.playerShip.progressBar.setVisible( true );
@@ -439,7 +440,7 @@ export class Level1State extends CommonState
                 {
                     this.playerShip.allowCollision = false;
                     this.playerShip.sprite.prepareScript( 'hit', spriteA );
-                    if( gGodMode == false )
+                    if( GOD_MODE == false )
                     {
                         this.playerShip.progressBar.incCurrentValue( -30 );
                         this.playerShip.progressBar.setVisible( true );
@@ -536,7 +537,7 @@ export class Level1State extends CommonState
         this._featureIndex = this._menu.getControl("feature_btn_lst").activeIndex;
         this._battleTimeIndex = this._menu.getControl("battle_time_btn_lst").activeIndex;
 
-        if(gGodMode)
+        if(GOD_MODE)
             this.unlimitedBoot = true;
         else
             this.unlimitedBoot = false;
@@ -1109,7 +1110,12 @@ export class Level1State extends CommonState
         /*else if( this.enemy02SpawnTimer.expired(false, true) )
         {
             this._node = this.enemyStrategy.create('enemy02_ship');
-            this._node.get().setPosXYZ(0, settings.deviceRes.h);
+            this._node.get().setPosXYZ(genFunc.randomInt(-5000, 5000), settings.deviceRes.h + (this._node.radius / 2));
+            this._node.get().setRotXYZ();
+
+            //if( genFunc.randomInt( 0, 1 ) === 0 )
+                this._node.get().setRotXYZ(0, 180);
+
             this._node.transform();
         }*/
     }
@@ -1193,11 +1199,11 @@ export class Level1State extends CommonState
 
         if( this.radarCamAry[0].pos.x > -68 )
         {
-            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x - ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
+            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x - ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) * RADAR_SCALE)) );
         }
         else
         {
-            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x + ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) * this.radarCamera1.scale.x)) );
+            this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x + ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) * RADAR_SCALE)) );
         }
     }
 
@@ -1426,7 +1432,7 @@ export class Level1State extends CommonState
 
             // Render the top hud radar map
             this._viewPort = device.gl.getParameter(device.gl.VIEWPORT);
-            device.gl.viewport(this._viewPort[0], this._viewPort[3] - (this._viewPort[3] * 0.09), this._viewPort[2], this._viewPort[3] * this.radarCamera1.scale.y);
+            device.gl.viewport(this._viewPort[0], this._viewPort[3] - (this._viewPort[3] * 0.09), this._viewPort[2], this._viewPort[3] * RADAR_SCALE);
             this.buildingsStrategy.render( this.radarCamera1 );
             this.enemyStrategy.render( this.radarCamera1 );
             this.playerShip.strategy.render( this.radarCamera1 );
@@ -1453,7 +1459,8 @@ export class Level1State extends CommonState
         aiManager.clear();
 
         // Clear out any AI data dictionaries
-        ai.clearAIData();
+        enemy00aiscripts.clearAIData();
+        enemy02aiscripts.clearAIData();
         
         objectDataManager.freeGroup( ['(level_1)'] );
 

@@ -15,7 +15,6 @@ import { menuManager } from '../../../library/gui/menumanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { soundManager } from '../../../library/sound/soundmanager';
-import { settings } from '../../../library/utilities/settings';
 import { aiManager } from '../../../library/managers/aimanager';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
@@ -23,7 +22,6 @@ import { physicsWorldManager } from '../../../library/physics/physicsworldmanage
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { scriptManager } from '../../../library/script/scriptmanager';
 import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
@@ -38,10 +36,12 @@ import * as playershipscripts from '../scripts/playershipscripts';
 import * as enemy00scripts from '../scripts/enemy00scripts';
 import * as enemy01scripts from '../scripts/enemy01scripts';
 import * as enemy02scripts from '../scripts/enemy02scripts';
+import * as enemy00aiscripts from '../scripts/enemy00aiscripts';
+import * as enemy01aiscripts from '../scripts/enemy01aiscripts';
+import * as enemy02aiscripts from '../scripts/enemy02aiscripts';
 import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
 import * as settingsMenuScripts from '../scripts/settingsmenuscripts';
 import * as aiBaseScripts from '../scripts/aibasescripts';
-import * as aiScripts from '../scripts/aiscripts';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
@@ -89,10 +89,12 @@ export class StartUpState extends GameState
         enemy00scripts.loadScripts();
         enemy01scripts.loadScripts();
         enemy02scripts.loadScripts();
+        enemy00aiscripts.loadScripts();
+        enemy01aiscripts.loadScripts();
+        enemy02aiscripts.loadScripts();
         keybindMenuScripts.loadScripts();
         settingsMenuScripts.loadScripts();
         aiBaseScripts.loadScripts();
-        aiScripts.loadScripts();
                 
         // Set the default camera
         // NOTE: Can only call this after Camera Manager has been loaded

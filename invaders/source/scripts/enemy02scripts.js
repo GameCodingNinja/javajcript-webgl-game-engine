@@ -10,7 +10,6 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
-import * as utilScripts from './utilityscripts';
 import * as easing from '../../../library/utilities/easingfunc';
 
 //
@@ -24,7 +23,7 @@ class Enemy02Ship_Hit
         this.enemyStratagy = strategyManager.get('_enemy_');
 
         // Continues the init
-        this.recycle( projectileSprite );
+        this.recycle( sprite, projectileSprite );
     }
 
     // 
@@ -85,11 +84,14 @@ class Enemy02Ship_Die
         this.rotate = 0.04;
         this.rotateVelocity = 0.00004;
 
-        if( (this.sprite.dist.x > 0 && this.sprite.dist.y > 0) || (this.sprite.dist.x < 0 && this.sprite.dist.y < 0) )
+        if( this.sprite.rot.y > 1 )
         {
             this.rotate = -0.04;
             this.rotateVelocity = -0.00004;
         }
+
+        // Enemy strategy
+        this.enemyStratagy = strategyManager.get('_enemy_');
     }
     
     // 

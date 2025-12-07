@@ -238,6 +238,19 @@
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
 
+                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="24" y="-2"/>
+                        <point x="44" y="-2"/>
+                        <point x="70" y="30"/>
+                        <point x="70" y="64"/>
+                        <point x="51" y="87"/>
+                        <point x="18" y="87"/>
+                        <point x="0" y="64"/>
+                        <point x="0" y="30"/>
+                    </polygon>
+                </polygonList>-->
+
                 <rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
                     <rect x1="-5" y1="-1" x2="-5" y2="-1"/>
                 </rectList>
@@ -308,11 +321,7 @@
                 <texture file="data/textures/enemyShip/enemy02.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-
-                <rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
-                    <rect x1="-15" y1="-5" x2="-15" y2="-5"/>
-                </rectList>
-
+                <circle radius="25"/>
             </collision>
         </object>
 
