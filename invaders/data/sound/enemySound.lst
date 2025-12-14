@@ -12,6 +12,8 @@
         <load id="enemy01_crash" file="data/sound/level/enemy/EXPLOSION_Long_Bright_Debris_Tail_stereo.ogg" defaultVolume="0.75"/>
         <load id="enemy01_loop_sound" file="data/sound/level/enemy/CHARGE_Sci-Fi_High_Pass_Sweep_12_Semi_Low_Loop_loop_stereo.ogg" defaultVolume="0.0"/>
         <load id="enemy01_desend_to_crash" file="data/sound/level/enemy/CHARGE_Servo_24_Semi_Down_2000ms_stereo.ogg" defaultVolume="0.8"/>
+        <load id="enemy02_crash" file="data/sound/level/enemy/EXPLOSION_Distorted_01_Medium_stereo.ogg" defaultVolume="0.8"/>
+        <load id="enemy02_loop_sound" file="data/sound/level/enemy/CHARGE_Servo_24_Semi_High_Loop_loop_stereo.ogg" defaultVolume="0.0"/>
     </soundFiles>
 
     <playlistSet>

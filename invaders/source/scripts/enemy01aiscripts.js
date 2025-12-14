@@ -9,6 +9,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
 import { scriptSingleton } from '../../../library/script/scriptcomponent';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
@@ -77,8 +78,23 @@ class AI_Enemy01_Desend extends aiNode
     //
     init()
     {
-        // Calculated to move in pixels per second
-        this.easingY.init( this.sprite.pos.y, 0, (this.sprite.pos.y - 0) / pixel_per_sec_200, easing.getSineOut() );
+        // Randomly select it's Y offset to force to
+        // player to learn where to go to avoid getting hit.
+        switch (genFunc.randomInt( 0, 2 ))
+        {
+            case 0:
+                this._yDestination = 20;
+            break;
+            
+            case 1:
+                this._yDestination = -20;
+            break;
+
+            default:
+                this._yDestination = -60;
+        }
+
+        this.easingY.init( this.sprite.pos.y, this._yDestination, this.sprite.pos.y / pixel_per_sec_200, easing.getSineOut() );
 
         // Init the hit count
         this.sprite.hitCount = 0;

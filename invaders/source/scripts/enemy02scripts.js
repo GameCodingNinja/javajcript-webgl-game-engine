@@ -10,6 +10,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
+import { soundManager } from '../../../library/sound/soundmanager';
 import * as easing from '../../../library/utilities/easingfunc';
 
 //
@@ -90,6 +91,9 @@ class Enemy02Ship_Die
             this.rotateVelocity = -0.00004;
         }
 
+        // Let this sprite die
+        this.sprite.alive = false;
+
         // Enemy strategy
         this.enemyStratagy = strategyManager.get('_enemy_');
     }
@@ -108,6 +112,8 @@ class Enemy02Ship_Die
         {
             // Remove the AI script since the enemy is to die
             this.sprite.scriptComponent.remove( 'AI_Enemy02' );
+
+            soundManager.play( '(level_1)', 'enemy02_crash' );
 
             // We are done with this sprite, queue it up to be recycled
             this.enemyStratagy.recycle( this.sprite.parentNode );

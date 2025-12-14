@@ -47,7 +47,7 @@ class AI_Enemy00_base extends aiNode
     shootPlayer( shootTime )
     {
         // Shoot at the player
-        if( this.data.playerShip.collisionComponent.enable)
+        if( this.data.playerShipSprite.collisionComponent.enable)
         {
             this.sprite.shootTime -= highResTimer.elapsedTime;
 
@@ -95,7 +95,7 @@ class AI_Enemy00_Head extends aiNode
             this.data.playerShipStratagy = strategyManager.get('_player_ship_');
             this.data.buildings = strategyManager.get("_buildings_").nodeAry;
             this.data.enemy = strategyManager.get("_enemy_").nodeAry;
-            this.data.playerShip = this.data.playerShipStratagy.get('player_ship').get();
+            this.data.playerShipSprite = this.data.playerShipStratagy.get('player_ship').get();
             this.data.camera = this.data.playerShipStratagy.camera;
             this.data.minX = this.data.buildings[0].get().pos.x;
             this.data.maxX = this.data.buildings[this.data.buildings.length-1].get().pos.x;
@@ -160,7 +160,7 @@ class AI_Enemy00_Desend extends AI_Enemy00_base
         this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
 
         // Calculated to move in pixels per second
-        this.easingY.init( this.sprite.pos.y, this._offsetY, (this.sprite.pos.y - this._offsetY) / pixel_per_sec_100, easing.getSineOut() );
+        this.easingY.init( this.sprite.pos.y, this._offsetY, Math.abs(this.sprite.pos.y - this._offsetY) / pixel_per_sec_100, easing.getSineOut() );
     }
 
     // 
@@ -296,7 +296,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                     // If a building is not targeted, go after the player unless their is more enemies then buildings
                     if( this.sprite.targetBuilding === null )
                     {
-                        this._offsetX = this.data.playerShip.pos.x;
+                        this._offsetX = this.data.playerShipSprite.pos.x;
 
                         if( this.data.buildings.length >= this.data.enemy.length )
                         {

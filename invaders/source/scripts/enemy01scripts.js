@@ -11,7 +11,6 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { soundManager } from '../../../library/sound/soundmanager';
-import * as utilScripts from './utilityscripts';
 import * as easing from '../../../library/utilities/easingfunc';
 
 //

@@ -9,6 +9,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
@@ -17,7 +18,9 @@ import * as gameDefs from '../state/gamedefs';
 // Shared AI data
 var ai_data = {};
 
-const pixel_per_sec_100 = 100;
+const pixel_per_sec_100 = 100,
+      pixel_per_sec_200 = 200,
+      pixel_per_sec_300 = 300;
 
 // 
 //  DESC: Clear the AI data
@@ -49,8 +52,9 @@ class AI_Enemy02_Head extends aiNode
     {
         if( genFunc.isEmpty( this.data ) )
         {
-            this.data.playerShip = strategyManager.get('_player_ship_').get('player_ship').get();
-            this.data.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
+            this.data.playerShipStratagy = strategyManager.get('_player_ship_');
+            this.data.playerShipSprite = this.data.playerShipStratagy.get('player_ship').get();
+            this.data.camera = this.data.playerShipStratagy.camera;
         }
     }
 
@@ -104,11 +108,15 @@ class AI_Enemy02_Desend extends aiNode
     init()
     {
         // Calculated to move in pixels per second
-        this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
-        this.easingY.init( this.sprite.pos.y, this._offsetY, (this.sprite.pos.y - this._offsetY) / pixel_per_sec_100, easing.getSineOut() );
+        this.easingY.init(
+            this.sprite.pos.y,
+            this.data.playerShipSprite.pos.y,
+            Math.abs(this.sprite.pos.y - this.data.playerShipSprite.pos.y) / pixel_per_sec_200,
+            easing.getSineOut() );
 
         // Init the hit count
         this.sprite.hitCount = 0;
+        this.sprite.alive = true;
     }
 
     // 
@@ -130,6 +138,9 @@ class AI_Enemy02_Desend extends aiNode
         {
             this.init();
             this.state = defs.EAIS_ACTIVE;
+
+            let gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
+            scriptSingleton.prepare( 'sound_fade', 1.0, 4000, gsnd, () => gsnd.play('enemy02_loop_sound', true) );
         }
 
         if( this.state === defs.EAIS_ACTIVE )
@@ -157,9 +168,11 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
     {
         super( nodeData );
 
+        this.data = headNode.data;
         this.sprite = sprite;
         this.state = defs.EAIS_INIT;
         this.easingX = new easing.valueTo;
+        this.easingY = new easing.valueTo;
     }
 
     // 
@@ -169,9 +182,15 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
     {
         // Calculated to move in pixels per second
         if(this.sprite.rot.y > 1)
-            this.easingX.init( this.easingX.getValue(), -10, 2, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), -25, 2, easing.getLinear() );
         else
-            this.easingX.init( this.easingX.getValue(), 10, 2, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), 25, 2, easing.getLinear() );
+
+        this.easingY.init(
+            this.sprite.pos.y,
+            this.data.playerShipSprite.pos.y,
+            Math.abs(this.sprite.pos.y - this.data.playerShipSprite.pos.y) / pixel_per_sec_100,
+            easing.getLinear() );
     }
 
     // 
@@ -181,6 +200,7 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
     {
         this.state = defs.EAIS_INIT;
         this.easingX.clear();
+        this.easingY.clear();
     }
     
     // 
@@ -198,7 +218,14 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
         if( this.state === defs.EAIS_ACTIVE )
         {
             this.easingX.execute();
-            this.sprite.incPosXYZ( this.easingX.getValue(), 0 );
+            this.easingY.execute();
+
+            this.sprite.incPosXYZ( this.easingX.getValue() );
+
+            if(this.sprite.alive)
+                this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+            else
+                this.sprite.setPosXYZ( this.sprite.pos.x, this.sprite.pos.y );
 
             // Loop the player strategy and camera
             if( this.sprite.pos.x < -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST + 50) )
@@ -208,6 +235,39 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
             else if( this.sprite.pos.x > (gameDefs.GAMEPLAY_LOOPING_WRAP_DIST - 20) )
             {
                 this.sprite.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+            }
+
+            if(this.sprite.alive)
+            {
+                if(this.easingY.isFinished())
+                {
+                    this.easingY.init(
+                        this.easingY.getValue(),
+                        this.data.playerShipSprite.pos.y,
+                        Math.abs(this.easingY.getValue() - this.data.playerShipSprite.pos.y) / pixel_per_sec_300,
+                        easing.getLinear() );
+                }
+
+                if( !this.data.camera.inViewX( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                {
+                    if(Math.abs(this.sprite.pos.x - this.data.playerShipSprite.pos.x) > 800)
+                    {
+                        if((this.sprite.pos.x < this.data.playerShipSprite.pos.x) && (this.sprite.rot.y > 1))
+                        {
+                            // Flip the ship facing right
+                            this.sprite.setRotXYZ( 0, 0 );
+
+                            this.easingX.init( this.easingX.getValue(), 30, 2, easing.getLinear() );
+                        }
+                        else if((this.sprite.pos.x > this.data.playerShipSprite.pos.x) && (this.sprite.rot.y < 1))
+                        {
+                            // Flip the ship facing left
+                            this.sprite.setRotXYZ( 0, 180 );
+
+                            this.easingX.init( this.easingX.getValue(), -30, 2, easing.getLinear() );
+                        }
+                    }
+                }
             }
         }
 

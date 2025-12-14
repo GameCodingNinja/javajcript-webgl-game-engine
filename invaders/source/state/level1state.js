@@ -62,7 +62,7 @@ const MOVE_NULL = -1,
       ENEMY01_SHIP_HIT_VALUE = 5,
       ENEMY02_SHIP_HIT_VALUE = 3,
       ENEMY01_SHIP_HIT_COUNT = 30,
-      ENEMY02_SHIP_HIT_COUNT = 5,
+      ENEMY02_SHIP_HIT_COUNT = 10,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
@@ -75,7 +75,7 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
-      GOD_MODE = true;
+      GOD_MODE = false;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -296,7 +296,7 @@ export class Level1State extends CommonState
 
         this.enemy00SpawnTimer = new Timer(2000);
         this.enemy01SpawnTimer = new Timer((1000 * 60) + genFunc.randomInt( (1000 * 30), (1000 * 120)));
-        this.enemy02SpawnTimer = new Timer(2000);
+        this.enemy02SpawnTimer = new Timer((1000 * 25) + genFunc.randomInt( (1000 * 20), (1000 * 80)));
         this.enemy00MaxTimer = new Timer(15000);
         this.enemy00Max = 5;
 
@@ -516,6 +516,9 @@ export class Level1State extends CommonState
                 spriteB.prepareScript( 'die' );
                 this.updateHudProgress( ENEMY02_SHIP_HIT_VALUE );
                 this.enemy02SpawnTimer.reset();
+
+                let gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
+                scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
             }
 
             spriteB.hitCount++;
@@ -703,6 +706,14 @@ export class Level1State extends CommonState
                         this.enemy02SpawnTimer.pause();
                         this.train.timer.pause();
 
+                        this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
+                        if(this._gsnd.isPlaying())
+                            this._gsnd.pause()
+
+                        this._gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
+                        if(this._gsnd.isPlaying())
+                            this._gsnd.pause()
+
                         // Indicate to Crazy Games the game has started
                         if(typeof window.CrazyGames !== 'undefined')
                         {
@@ -743,6 +754,14 @@ export class Level1State extends CommonState
                             this.enemy02SpawnTimer.resume();
                             this.train.timer.resume();
 
+                            this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
+                            if(this._gsnd.isPaused())
+                                this._gsnd.resume()
+
+                            this._gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
+                            if(this._gsnd.isPaused())
+                                this._gsnd.resume()
+
                             // Indicate to Crazy Games the game has stopped
                             if(typeof window.CrazyGames !== 'undefined')
                             {
@@ -776,9 +795,13 @@ export class Level1State extends CommonState
                 let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
                 scriptSingleton.prepare( 'sound_fade', asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true) );
 
-                let gsnd_loop = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
-                if(gsnd_loop.isPlaying( 'enemy01_loop_sound' ))
-                    scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd_loop, null, () => gsnd_loop.stop() );
+                let gsnd_loop01 = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
+                if(gsnd_loop01.isPlaying( 'enemy01_loop_sound' ))
+                    scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd_loop01, null, () => gsnd_loop01.stop() );
+
+                let gsnd_loop02 = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
+                if(gsnd_loop02.isPlaying( 'enemy02_loop_sound' ))
+                    scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd_loop02, null, () => gsnd_loop02.stop() );
 
                 if( !this.gameStartStopToggle )
                 {
@@ -1107,17 +1130,17 @@ export class Level1State extends CommonState
             this._node.transform();
         }
         // Create enemy02 and position it outside of the view
-        /*else if( this.enemy02SpawnTimer.expired(false, true) )
+        else if( this.enemy02SpawnTimer.expired(false, true) )
         {
             this._node = this.enemyStrategy.create('enemy02_ship');
             this._node.get().setPosXYZ(genFunc.randomInt(-5000, 5000), settings.deviceRes.h + (this._node.radius / 2));
             this._node.get().setRotXYZ();
 
-            //if( genFunc.randomInt( 0, 1 ) === 0 )
+            if( genFunc.randomInt( 0, 1 ) === 0 )
                 this._node.get().setRotXYZ(0, 180);
 
             this._node.transform();
-        }*/
+        }
     }
 
     // 
