@@ -426,7 +426,7 @@ export class Level1State extends CommonState
                 spriteB.prepareScript( 'hit', spriteA );
                 if( GOD_MODE == false )
                 {
-                    this.playerShip.progressBar.incCurrentValue( -30 );
+                    this.playerShip.progressBar.incCurrentValue( -20 );
                     this.playerShip.progressBar.setVisible( true );
                 }
                 spriteA.prepareScript( 'hit', spriteB );
@@ -442,7 +442,7 @@ export class Level1State extends CommonState
                     this.playerShip.sprite.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false )
                     {
-                        this.playerShip.progressBar.incCurrentValue( -30 );
+                        this.playerShip.progressBar.incCurrentValue( -20 );
                         this.playerShip.progressBar.setVisible( true );
                     }
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
@@ -894,23 +894,8 @@ export class Level1State extends CommonState
                 }
                 else if( actionManager.wasActionPress( event, 'boost', defs.EAP_DOWN ) )
                 {
-                    if( this.lastMoveAction === defs.EAP_DOWN )
-                    {
-                        if(this.unlimitedBoot || !this.playerShip.waitForFullBoostCharge || this.playerShip.boostBar.isMaxValue())
-                        {
-                            this.playerShip.waitForFullBoostCharge = false;
-                            this.playerShip.boostSpeed = PLAYER_SHIP_BOOST_TOP_SPEED;
-                            this.playerShip.boostButtonPress = defs.EAP_DOWN;
-
-                            if( !this.unlimitedBoot )
-                                this.playerShip.boostBar.setVisible( true );
-
-                            if( this.lastMoveDirX === MOVE_LEFT )
-                                this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
-                            else
-                                this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
-                        }
-                    }
+                    this.playerShip.boostButtonPress = defs.EAP_DOWN;
+                    this.handleBoostActivation();
                 }
                 else if( actionManager.wasActionPress( event, 'boost', defs.EAP_UP ) )
                 {
@@ -930,7 +915,30 @@ export class Level1State extends CommonState
     }
 
     // 
-    //  DESC: Handle the ship movement
+    //  DESC: Handle boost activation
+    //
+    handleBoostActivation()
+    {
+        if( this.lastMoveAction === defs.EAP_DOWN )
+        {
+            if(this.unlimitedBoot || !this.playerShip.waitForFullBoostCharge || this.playerShip.boostBar.isMaxValue())
+            {
+                this.playerShip.waitForFullBoostCharge = false;
+                this.playerShip.boostSpeed = PLAYER_SHIP_BOOST_TOP_SPEED;
+
+                if( !this.unlimitedBoot )
+                    this.playerShip.boostBar.setVisible( true );
+
+                if( this.lastMoveDirX === MOVE_LEFT )
+                    this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
+                else
+                    this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
+            }
+        }
+    }
+
+    // 
+    //  DESC: Update hud progress
     //
     updateHudProgress( value )
     {
@@ -1061,6 +1069,9 @@ export class Level1State extends CommonState
 
                     this.lastMoveDirX = this.moveDirX;
                     this.lastMoveAction = this._actionResult;
+
+                    if(this.playerShip.boostButtonPress === defs.EAP_DOWN)
+                        this.handleBoostActivation();
                 }
                 else
                 {

@@ -20,7 +20,8 @@ var ai_data = {};
 
 const pixel_per_sec_100 = 100,
       pixel_per_sec_200 = 200,
-      pixel_per_sec_300 = 300;
+      pixel_per_sec_300 = 300,
+      X_EASING_SPEED = 30;
 
 // 
 //  DESC: Clear the AI data
@@ -182,9 +183,9 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
     {
         // Calculated to move in pixels per second
         if(this.sprite.rot.y > 1)
-            this.easingX.init( this.easingX.getValue(), -25, 2, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), -X_EASING_SPEED, 2, easing.getLinear() );
         else
-            this.easingX.init( this.easingX.getValue(), 25, 2, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), X_EASING_SPEED, 2, easing.getLinear() );
 
         this.easingY.init(
             this.sprite.pos.y,
@@ -239,17 +240,12 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
 
             if(this.sprite.alive)
             {
-                if(this.easingY.isFinished())
-                {
-                    this.easingY.init(
-                        this.easingY.getValue(),
-                        this.data.playerShipSprite.pos.y,
-                        Math.abs(this.easingY.getValue() - this.data.playerShipSprite.pos.y) / pixel_per_sec_300,
-                        easing.getLinear() );
-                }
+                this._y_pixel_per_sec = pixel_per_sec_200;
 
                 if( !this.data.camera.inViewX( this.sprite.transPos, this.sprite.parentNode.radius ) )
                 {
+                    this._y_pixel_per_sec = pixel_per_sec_300;
+
                     if(Math.abs(this.sprite.pos.x - this.data.playerShipSprite.pos.x) > 800)
                     {
                         if((this.sprite.pos.x < this.data.playerShipSprite.pos.x) && (this.sprite.rot.y > 1))
@@ -257,16 +253,25 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
                             // Flip the ship facing right
                             this.sprite.setRotXYZ( 0, 0 );
 
-                            this.easingX.init( this.easingX.getValue(), 30, 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), X_EASING_SPEED, 2, easing.getLinear() );
                         }
                         else if((this.sprite.pos.x > this.data.playerShipSprite.pos.x) && (this.sprite.rot.y < 1))
                         {
                             // Flip the ship facing left
                             this.sprite.setRotXYZ( 0, 180 );
 
-                            this.easingX.init( this.easingX.getValue(), -30, 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), -X_EASING_SPEED, 2, easing.getLinear() );
                         }
                     }
+                }
+
+                if(this.easingY.isFinished())
+                {
+                    this.easingY.init(
+                        this.easingY.getValue(),
+                        this.data.playerShipSprite.pos.y,
+                        Math.abs(this.easingY.getValue() - this.data.playerShipSprite.pos.y) / this._y_pixel_per_sec,
+                        easing.getLinear() );
                 }
             }
         }

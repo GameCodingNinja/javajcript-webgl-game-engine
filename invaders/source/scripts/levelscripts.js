@@ -56,12 +56,12 @@ class Explode_animation
         // If the distance is too big like colliding with a big enemy ship, size it down
         if( shipSprite.parentNode.userId == PLAYER_SHIP_ID && projectileSprite.parentNode.userId <= ENEMY00_SHIP_ID )
         {
-            if(this.dif.x > this._size.w / 2)
+            if(this.dif.x > (this._size.w / 2))
                 this.dif.x = (this._size.w / 2) - 15;
             else if(this.dif.x < -(this._size.w / 2))
                 this.dif.x = -(this._size.w / 2) + 15;
 
-            if(this.dif.y > this._size.h / 2)
+            if(this.dif.y > (this._size.h / 2))
                 this.dif.y = (this._size.h / 2) - 15;
             else if(this.dif.y < -(this._size.h / 2))
                 this.dif.y = -(this._size.h / 2) + 15;
