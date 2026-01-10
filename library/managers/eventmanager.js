@@ -272,7 +272,6 @@ class EventManager
         event.gameAdjustedMouseX = this._x;
         event.gameAdjustedMouseY = this._y;
         event.gameAdjustedPixelRatio = this._pixelRatio;
-        MAX_GAMEPAD_EVENT_QUEUE
         this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
         this.mouseAbsolutePos.setXYZ( this._x, this._y);
     }

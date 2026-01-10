@@ -154,6 +154,7 @@ class AI_Enemy00_Desend extends AI_Enemy00_base
     {
         // Set the initial position of the sprite above the height of the screen
         // with a random amount to delay how long it takes to be visible on the screen
+        this.sprite.shoot_player_time = passive_shooter_time;
         this.sprite.targetBuilding = null;
         this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
         this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.deviceRes_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
@@ -191,7 +192,7 @@ class AI_Enemy00_Desend extends AI_Enemy00_base
 
             // Shoot at the player once it's in view
             if( (this.sprite.pos.y + this.sprite.parentNode.radius) < settings.deviceRes_half.h )
-                this.shootPlayer( passive_shooter_time );
+                this.shootPlayer( this.sprite.shoot_player_time );
 
             if( this.easingY.isFinished() )
             {
@@ -247,7 +248,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
             }
 
             // Shoot at the player
-            this.shootPlayer( passive_shooter_time );
+            this.shootPlayer( this.sprite.shoot_player_time );
 
             if( this.easingX.isFinished() && this.easingY.isFinished() )
             {
@@ -375,7 +376,8 @@ class AI_Enemy00_DesendToBuilding extends AI_Enemy00_base
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             // Shoot at the player
-            this.shootPlayer( aggrssive_shooter_time );
+            this.sprite.shoot_player_time = aggrssive_shooter_time;
+            this.shootPlayer( this.sprite.shoot_player_time );
 
             if( this.easingY.isFinished() )
             {
