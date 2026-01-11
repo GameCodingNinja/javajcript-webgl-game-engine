@@ -140,9 +140,8 @@ class Menu_TransOut
     //
     recycle()
     {
-        this.menu.setAlpha( this.current );
         this.menu.setVisible( true );
-        this.fadeTo.init( 1, 0, 250 );
+        this.fadeTo.init( this.menu.alpha, 0, 250 );
 
         this.iter = this.iteration();
     }

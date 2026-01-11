@@ -121,7 +121,7 @@ export class DeadZoneSlider_execute
     //
     execute()
     {
-        settings.user.stickDeadZone = (Math.trunc(this.control.curValue) * 0.01).toFixed(2);
+        settings.user.stickDeadZone = Number((Math.trunc(this.control.curValue) * 0.01).toFixed(2));
         localStorage.set( 'userSettings', settings.user );
         return true;
     }

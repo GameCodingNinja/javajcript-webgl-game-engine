@@ -25,6 +25,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
+import { settings } from '../../../library/utilities/settings';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
@@ -140,8 +141,6 @@ export class StartUpState extends GameState
                 {
                     if(menuManager.initialized)
                     {
-                        let settingsMenu = menuManager.getMenu('settings_menu');
-    
                         // Allow audio.
                         if (isAudioEnabled)
                         {

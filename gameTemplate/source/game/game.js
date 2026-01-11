@@ -28,7 +28,9 @@ import userSettingsObj from '../../data/settings/usersettings.json';
 export class Game
 {
     constructor()
-    { }
+    {
+        this.clearBufferMask = 0;
+    }
     
     // 
     //  DESC: Init the game

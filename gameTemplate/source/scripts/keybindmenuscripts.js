@@ -156,7 +156,7 @@ export class KeyBindBtn_event
     //
     execute()
     {
-        if( !actionManager.allowAction && this.control.isSelected() )
+        if( !actionManager.allowActionHandling && this.control.isSelected() )
         {
             if( this.event instanceof KeyboardEvent )
             {
