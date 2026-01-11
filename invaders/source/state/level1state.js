@@ -223,12 +223,12 @@ export class Level1State extends CommonState
         this.moveDirX = MOVE_NULL;
         this.moveDirY = MOVE_NULL;
         this.lastMoveDirX = MOVE_NULL;
-        this.lastMoveAction != defs.EAP_IDLE;
+        this.lastMoveAction = defs.EAP_IDLE;
 
         if(GOD_MODE)
-            this.unlimitedBoot = true;
+            this.unlimitedBoost = true;
         else
-            this.unlimitedBoot = false;
+            this.unlimitedBoost = false;
 
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
@@ -491,7 +491,7 @@ export class Level1State extends CommonState
                 this.updateHudProgress( ENEMY01_SHIP_HIT_VALUE );
                 this.enemy01SpawnTimer.reset();
 
-                this.groupPlayer.play( 'enemy01_desend_to_crash' );
+                this.groupPlayer.play( 'enemy01_descend_to_crash' );
 
                 let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                 scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
@@ -541,15 +541,15 @@ export class Level1State extends CommonState
         this._battleTimeIndex = this._menu.getControl("battle_time_btn_lst").activeIndex;
 
         if(GOD_MODE)
-            this.unlimitedBoot = true;
+            this.unlimitedBoost = true;
         else
-            this.unlimitedBoot = false;
+            this.unlimitedBoost = false;
 
         if( gAdPlayed || (typeof window.CrazyGames === 'undefined'))
         {
             if( this._featureIndex === REWARD_FEATURE_UNLIMITED_BOOST )
             {
-                this.unlimitedBoot = true;
+                this.unlimitedBoos = true;
             }
             else if( this._featureIndex === REWARD_FEATURE_DOUBLE_HEALTH )
             {
@@ -921,12 +921,12 @@ export class Level1State extends CommonState
     {
         if( this.lastMoveAction === defs.EAP_DOWN )
         {
-            if(this.unlimitedBoot || !this.playerShip.waitForFullBoostCharge || this.playerShip.boostBar.isMaxValue())
+            if(this.unlimitedBoost || !this.playerShip.waitForFullBoostCharge || this.playerShip.boostBar.isMaxValue())
             {
                 this.playerShip.waitForFullBoostCharge = false;
                 this.playerShip.boostSpeed = PLAYER_SHIP_BOOST_TOP_SPEED;
 
-                if( !this.unlimitedBoot )
+                if( !this.unlimitedBoost )
                     this.playerShip.boostBar.setVisible( true );
 
                 if( this.lastMoveDirX === MOVE_LEFT )
@@ -1282,7 +1282,7 @@ export class Level1State extends CommonState
                 }
             }
 
-            if( !this.unlimitedBoot )
+            if( !this.unlimitedBoost )
             {
                 if(this.playerShip.boostSpeed === PLAYER_SHIP_BOOST_TOP_SPEED && !this.playerShip.boostBar.isMinValue())
                 {

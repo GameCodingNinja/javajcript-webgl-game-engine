@@ -11,7 +11,7 @@
 
             <node>
 
-                <leaf script="AI_Enemy00_Desend"/>
+                <leaf script="AI_Enemy00_Descend"/>
 
             </node>
 
@@ -31,7 +31,7 @@
 
                     <node>
 
-                        <leaf script="AI_Enemy00_DesendToBuilding"/>
+                        <leaf script="AI_Enemy00_DescendToBuilding"/>
 
                     </node>
 

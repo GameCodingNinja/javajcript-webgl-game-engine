@@ -195,7 +195,7 @@ class StrategyManager extends ManagerBase
             this.strategyAry.sort( sortFunc );
 
         // If sort function is not provided, sort on z order
-        // For this to render as expected, sort in desending order. 
+        // For this to render as expected, sort in descending order. 
         else
             this.strategyAry.sort( 
                 (a, b) =>

@@ -27,8 +27,8 @@ class Enemy00Ship_Shoot
         this.startPos = new Point;
 
         // Player ship
-        this.playerShipStratagy = strategyManager.get('_player_ship_');
-        this.camera = this.playerShipStratagy.camera;
+        this.playerShipStrategy = strategyManager.get('_player_ship_');
+        this.camera = this.playerShipStrategy.camera;
 
         // Continues the init
         this.recycle( sprite, enemySprite );
@@ -44,7 +44,7 @@ class Enemy00Ship_Shoot
         this.sprite.setPos( enemySprite.pos );
         this.sprite.setRotXYZ(0, 0, 0);
 
-        this.playerShipSprite = this.playerShipStratagy.get('player_ship').get();
+        this.playerShipSprite = this.playerShipStrategy.get('player_ship').get();
         this._length = this.playerShipSprite.pos.calcLength2D( enemySprite.pos );
         this.moveX = (this.playerShipSprite.pos.x - enemySprite.pos.x) / this._length;
         this.moveY = (this.playerShipSprite.pos.y - enemySprite.pos.y) / this._length;
@@ -67,14 +67,14 @@ class Enemy00Ship_Shoot
         {
             this.sprite.incPosXYZ( this.moveX * highResTimer.elapsedTime * this.PROJECTILE_SPEED, this.moveY * highResTimer.elapsedTime * this.PROJECTILE_SPEED );
             this.sprite.incRotXYZ( 0, 0, this.projectile_rot_speed * highResTimer.elapsedTime );
-            this.sprite.collisionComponent.checkForCollision( this.playerShipStratagy.nodeAry );
+            this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry );
 
             if( this.startPos.calcLength2D( this.sprite.pos ) < settings.deviceRes.w )
                 return false;
         }
 
         // We are done with this sprite, queue it up to be recycled
-        this.playerShipStratagy.recycle( this.sprite.parentNode );
+        this.playerShipStrategy.recycle( this.sprite.parentNode );
 
         return true;
     }
@@ -91,7 +91,7 @@ class Enemy00Ship_Hit
         this.easingY = new easing.valueTo;
 
         // Get the enemy strategy to create the explosion animation
-        this.enemyStratagy = strategyManager.get('_enemy_');
+        this.enemyStrategy = strategyManager.get('_enemy_');
 
         // Continues the init
         this.recycle( sprite, projectileSprite );
@@ -109,7 +109,7 @@ class Enemy00Ship_Hit
 
         this._dist = this.sprite.pos.getDistance( projectileSprite.pos );
 
-        this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
+        this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius);
         this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
         this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
 
@@ -123,7 +123,7 @@ class Enemy00Ship_Hit
         }
 
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
-        this._explodeSprite = this.enemyStratagy.create('explode').get();
+        this._explodeSprite = this.enemyStrategy.create('explode').get();
         this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -15 : 15 );
 
         // Hide the projectile and allow it to be recycled from the script moving it
@@ -147,7 +147,7 @@ class Enemy00Ship_Hit
         if( this.easingY.isFinished() )
         {
             // We are done with these sprites, queue it up to be recycled
-            this.enemyStratagy.recycle( this.sprite.parentNode );
+            this.enemyStrategy.recycle( this.sprite.parentNode );
             
             return true;
         }

@@ -131,7 +131,7 @@ export const ECSF_ON_ACTIVE   = 0,
 
 // EAccessOrder
 export const EAO_SEQUENTIAL = 0,
-             EAO_RAMDOM     = 1;
+             EAO_RANDOM     = 1;
 
 // EOrientation
 export const EO_HORIZONTAL = 0,

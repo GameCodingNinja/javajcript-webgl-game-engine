@@ -21,7 +21,7 @@ class Enemy02Ship_Hit
     constructor( sprite, projectileSprite )
     {
         // Get the enemy strategy to create the explosion animation
-        this.enemyStratagy = strategyManager.get('_enemy_');
+        this.enemyStrategy = strategyManager.get('_enemy_');
 
         // Continues the init
         this.recycle( sprite, projectileSprite );
@@ -35,7 +35,7 @@ class Enemy02Ship_Hit
         this.sprite = sprite;
 
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
-        this._explodeSprite = this.enemyStratagy.create('explode').get();
+        this._explodeSprite = this.enemyStrategy.create('explode').get();
         this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -10 : 10 );
 
         // Hide the projectile and allow it to be recycled from the script moving it
@@ -65,7 +65,7 @@ class Enemy02Ship_Die
         this.easingY = new easing.valueTo;
 
         // Enemy strategy
-        this.enemyStratagy = strategyManager.get('_enemy_');
+        this.enemyStrategy = strategyManager.get('_enemy_');
 
         // Continues the init
         this.recycle( sprite );
@@ -95,7 +95,7 @@ class Enemy02Ship_Die
         this.sprite.alive = false;
 
         // Enemy strategy
-        this.enemyStratagy = strategyManager.get('_enemy_');
+        this.enemyStrategy = strategyManager.get('_enemy_');
     }
     
     // 
@@ -116,7 +116,7 @@ class Enemy02Ship_Die
             soundManager.play( '(level_1)', 'enemy02_crash' );
 
             // We are done with this sprite, queue it up to be recycled
-            this.enemyStratagy.recycle( this.sprite.parentNode );
+            this.enemyStrategy.recycle( this.sprite.parentNode );
 
             return true;
         }
@@ -134,5 +134,5 @@ export function loadScripts()
             ( sprite, projectileSprite ) => { return new Enemy02Ship_Hit( sprite, projectileSprite ); } );
 
     scriptManager.set( 'Enemy02Ship_Die',
-            ( sprite, projectileSprite ) => { return new Enemy02Ship_Die( sprite, projectileSprite ); } );
+            ( sprite ) => { return new Enemy02Ship_Die( sprite ); } );
 }

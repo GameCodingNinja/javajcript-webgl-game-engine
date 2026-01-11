@@ -58,10 +58,10 @@ class AI_Enemy01_Head extends aiNode
 }
 
 //
-//  DESC: AI Leaf (task) node script. Desend into the game
+//  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy01_Desend extends aiNode
+class AI_Enemy01_Descend extends aiNode
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -110,7 +110,7 @@ class AI_Enemy01_Desend extends aiNode
     }
     
     // 
-    //  DESC: Handle the desend
+    //  DESC: Handle the descend
     //
     evaluate()
     {
@@ -119,7 +119,7 @@ class AI_Enemy01_Desend extends aiNode
         {
             this.init();
             this.state = defs.EAIS_ACTIVE;
-            this.groupPlayer.play('enemy01_desend');
+            this.groupPlayer.play('enemy01_descend');
         }
 
         if( this.state === defs.EAIS_ACTIVE )
@@ -141,7 +141,7 @@ class AI_Enemy01_Desend extends aiNode
 }
 
 //
-//  DESC: AI Leaf (task) node script. Desend into the game
+//  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
 class AI_Enemy01_Go extends aiNode
@@ -177,7 +177,7 @@ class AI_Enemy01_Go extends aiNode
     }
     
     // 
-    //  DESC: Handle the desend
+    //  DESC: Handle the descend
     //
     evaluate()
     {
@@ -218,8 +218,8 @@ export function loadScripts()
     scriptManager.set( 'AI_Enemy01_Head',
         ( nodeData ) => { return new AI_Enemy01_Head( nodeData ); } );
 
-    scriptManager.set( 'AI_Enemy01_Desend',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Desend( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Enemy01_Descend',
+        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Descend( nodeData, headNode, sprite ); } );
 
     scriptManager.set( 'AI_Enemy01_Go',
         ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Go( nodeData, headNode, sprite ); } );

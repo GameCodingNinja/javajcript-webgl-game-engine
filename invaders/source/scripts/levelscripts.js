@@ -152,8 +152,8 @@ class EnemyShip_CheckForCollideWithPlayer
     constructor( sprite )
     {
         // Player ship
-        this.playerShipStratagy = strategyManager.get('_player_ship_');
-        this.camera = this.playerShipStratagy.camera;
+        this.playerShipStrategy = strategyManager.get('_player_ship_');
+        this.camera = this.playerShipStrategy.camera;
 
         // Continues the init
         this.recycle( sprite );
@@ -175,7 +175,7 @@ class EnemyShip_CheckForCollideWithPlayer
         // This enemy00 needs to be in view to possibly collide with the player
         if( this.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
-            if( this.sprite.collisionComponent.checkForCollision( this.playerShipStratagy.nodeAry ) )
+            if( this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry ) )
                 if(this.sprite.collisionComponent.enable == false)
                     return true;
         }

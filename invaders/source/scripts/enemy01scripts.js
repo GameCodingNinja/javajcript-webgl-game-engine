@@ -21,7 +21,7 @@ class Enemy01Ship_Hit
     constructor( sprite, projectileSprite )
     {
         // Get the enemy strategy to create the explosion animation
-        this.enemyStratagy = strategyManager.get('_enemy_');
+        this.enemyStrategy = strategyManager.get('_enemy_');
 
         // Continues the init
         this.recycle( sprite, projectileSprite );
@@ -35,7 +35,7 @@ class Enemy01Ship_Hit
         this.sprite = sprite;
 
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
-        this._explodeSprite = this.enemyStratagy.create('explode').get();
+        this._explodeSprite = this.enemyStrategy.create('explode').get();
         this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -30 : 20 );
 
         // Hide the projectile and allow it to be recycled from the script moving it
@@ -89,7 +89,7 @@ class Enemy01Ship_Die
         }
 
         // Enemy strategy
-        this.enemyStratagy = strategyManager.get('_enemy_');
+        this.enemyStrategy = strategyManager.get('_enemy_');
     }
     
     // 
@@ -110,7 +110,7 @@ class Enemy01Ship_Die
             soundManager.play( '(level_1)', 'enemy01_crash' );
 
             // We are done with this sprite, queue it up to be recycled
-            this.enemyStratagy.recycle( this.sprite.parentNode );
+            this.enemyStrategy.recycle( this.sprite.parentNode );
 
             return true;
         }

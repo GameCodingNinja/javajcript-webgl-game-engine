@@ -577,7 +577,7 @@ export class Strategy extends Object
             this.nodeAry.sort( sortFunc );
 
         // If sort function is not provided, sort on z order
-        // For this to render as expected, sort in desending order. 
+        // For this to render as expected, sort in descending order. 
         else
             this.nodeAry.sort( 
                 (a, b) =>
@@ -601,7 +601,7 @@ export class Strategy extends Object
             this.activateAry.sort( sortFunc );
 
         // If sort function is not provided, sort on z order
-        // For this to render as expected, sort in desending order. 
+        // For this to render as expected, sort in descending order. 
         else
             this.activateAry.sort( 
                 (a, b) =>

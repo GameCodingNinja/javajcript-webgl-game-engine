@@ -53,9 +53,9 @@ class AI_Enemy02_Head extends aiNode
     {
         if( genFunc.isEmpty( this.data ) )
         {
-            this.data.playerShipStratagy = strategyManager.get('_player_ship_');
-            this.data.playerShipSprite = this.data.playerShipStratagy.get('player_ship').get();
-            this.data.camera = this.data.playerShipStratagy.camera;
+            this.data.playerShipStrategy = strategyManager.get('_player_ship_');
+            this.data.playerShipSprite = this.data.playerShipStrategy.get('player_ship').get();
+            this.data.camera = this.data.playerShipStrategy.camera;
         }
     }
 
@@ -88,10 +88,10 @@ class AI_Enemy02_Head extends aiNode
 }
 
 //
-//  DESC: AI Leaf (task) node script. Desend into the game
+//  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy02_Desend extends aiNode
+class AI_Enemy02_Descend extends aiNode
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -130,7 +130,7 @@ class AI_Enemy02_Desend extends aiNode
     }
     
     // 
-    //  DESC: Handle the desend
+    //  DESC: Handle the descend
     //
     evaluate()
     {
@@ -160,7 +160,7 @@ class AI_Enemy02_Desend extends aiNode
 }
 
 //
-//  DESC: AI Leaf (task) node script. Desend into the game
+//  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
 class AI_Enemy02_Seek_and_Destroy extends aiNode
@@ -205,7 +205,7 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
     }
     
     // 
-    //  DESC: Handle the desend
+    //  DESC: Handle the descend
     //
     evaluate()
     {
@@ -290,8 +290,8 @@ export function loadScripts()
     scriptManager.set( 'AI_Enemy02_Head',
         ( nodeData ) => { return new AI_Enemy02_Head( nodeData ); } );
 
-    scriptManager.set( 'AI_Enemy02_Desend',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy02_Desend( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Enemy02_Descend',
+        ( nodeData, headNode, sprite ) => { return new AI_Enemy02_Descend( nodeData, headNode, sprite ); } );
 
     scriptManager.set( 'AI_Enemy02_Seek_and_Destroy',
         ( nodeData, headNode, sprite ) => { return new AI_Enemy02_Seek_and_Destroy( nodeData, headNode, sprite ); } );

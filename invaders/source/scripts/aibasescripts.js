@@ -39,7 +39,7 @@ class AI_Composite extends aiNode
                 this.childIndexAry[this._i] = this._i;
         }
 
-        if( this.order === defs.EAO_RAMDOM )
+        if( this.order === defs.EAO_RANDOM )
             genFunc.shuffle( this.childIndexAry );
     }
     

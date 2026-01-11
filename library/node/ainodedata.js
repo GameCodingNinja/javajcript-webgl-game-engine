@@ -92,10 +92,10 @@ export class AINodeData
                 if( attr )
                 {
                     if(attr === 'sequential')
-                        this.order = defs.EAO_SEQUENTIAL;
+                        this.accessOrder = defs.EAO_SEQUENTIAL;
                     
                     else if(attr === 'random')
-                        this.order = defs.EAO_RAMDOM;
+                        this.accessOrder = defs.EAO_RANDOM;
                 }
 
                 break;

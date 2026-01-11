@@ -60,12 +60,12 @@ class PlayerShip_ShootLazer
     constructor( sprite, shipVelocity )
     {
         // Player ship
-        this.playerShipStratagy = strategyManager.get('_player_ship_');
-        this.playerShipNode = this.playerShipStratagy.get('player_ship');
-        this.camera = this.playerShipStratagy.camera;
+        this.playerShipStrategy = strategyManager.get('_player_ship_');
+        this.playerShipNode = this.playerShipStrategy.get('player_ship');
+        this.camera = this.playerShipStrategy.camera;
 
         // Enemy strategy
-        this.enemyStratagy = strategyManager.get('_enemy_');
+        this.enemyStrategy = strategyManager.get('_enemy_');
 
         // Continues the init
         this.recycle( sprite, shipVelocity );
@@ -116,7 +116,7 @@ class PlayerShip_ShootLazer
         if( this.camera.inViewX( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
             this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
-            this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
+            this.sprite.collisionComponent.checkForCollision( this.enemyStrategy.nodeAry );
 
             // Do wrapparound collision detection
             if( this.sprite.pos.x < -(GAMEPLAY_LOOPING_WRAP_DIST + 100) )
@@ -126,7 +126,7 @@ class PlayerShip_ShootLazer
                     this.sprite.collisionComponent.transPointAry[this._i].x += (GAMEPLAY_LOOPING_WRAP_DIST * 2);
 
                 this.sprite.transPos.x += (GAMEPLAY_LOOPING_WRAP_DIST * 2);
-                this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
+                this.sprite.collisionComponent.checkForCollision( this.enemyStrategy.nodeAry );
             }
             else if( this.sprite.pos.x > (GAMEPLAY_LOOPING_WRAP_DIST - 100) )
             {
@@ -135,7 +135,7 @@ class PlayerShip_ShootLazer
                     this.sprite.collisionComponent.transPointAry[this._i].x += -(GAMEPLAY_LOOPING_WRAP_DIST * 2);
                 
                 this.sprite.transPos.x += -(GAMEPLAY_LOOPING_WRAP_DIST * 2);
-                this.sprite.collisionComponent.checkForCollision( this.enemyStratagy.nodeAry );
+                this.sprite.collisionComponent.checkForCollision( this.enemyStrategy.nodeAry );
             }
 
             return false;
@@ -143,7 +143,7 @@ class PlayerShip_ShootLazer
 
         // We are done with this sprite, disable collision and queue it up to be deleted
         this.sprite.collisionComponent.enable = false;
-        this.playerShipStratagy.recycle( this.sprite.parentNode );
+        this.playerShipStrategy.recycle( this.sprite.parentNode );
 
         return true;
     }
@@ -214,7 +214,7 @@ class PlayerShip_Hit
     constructor( sprite, projectileSprite )
     {
         // Get the player ship strategy to create the explosion animation
-        this.playerShipStratagy = strategyManager.get('_player_ship_');
+        this.playerShipStrategy = strategyManager.get('_player_ship_');
 
         // Continues the init
         this.recycle( sprite, projectileSprite );
@@ -228,7 +228,7 @@ class PlayerShip_Hit
         this.sprite = sprite;
 
         // Create an explode graphic node and translate it to the projectile sprite
-        this.explodeSprite = this.playerShipStratagy.create('explode').get();
+        this.explodeSprite = this.playerShipStrategy.create('explode').get();
         this.explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, 0 );
     }
     

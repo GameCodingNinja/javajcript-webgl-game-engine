@@ -443,7 +443,7 @@ export class MenuTree
         if( this.isActive() )
         {
             if( this.getActiveMenu().getActiveControl() !== null )
-                return false;
+                return true;
         }
 
         return false;
