@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<UIControl>
+
+    <spriteList>
+    
+        <sprite objectName="button_slider">
+            <scriptList>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
+                <script active="Control_Active"/>
+                <script select="Control_slider_btn_Selected"/>
+            </scriptList>
+        </sprite>
+
+    </spriteList>
+
+</UIControl>

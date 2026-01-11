@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default name="">
+        <visual>
+            <texture file="data/textures/menu/menu_spriteSheet.png"/>
+            <mesh genType="scaled_frame">
+                <spriteSheet file="data/objects/2d/mesh/menu/menu.xml">
+                    <glyph id="menu_bg"/>
+                </spriteSheet>
+                <scaledFrame thicknessWidth="30" thicknessHeight="30"/>
+                <file name=""/>
+            </mesh>
+            <color r="48" g="97" b="153" a="217"/>
+            <shader id="shader_2d"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="pause_menu_bg">
+            <size width="355" height="395"/>
+        </object>
+
+        <object name="settings_menu_bg">
+            <size width="330" height="300"/>
+        </object>
+        
+        <object name="confirmation_menu_bg">
+            <size width="545" height="295"/>
+        </object>
+        
+        <object name="key_bindings_menu_bg">
+            <size width="1065" height="800"/>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
+

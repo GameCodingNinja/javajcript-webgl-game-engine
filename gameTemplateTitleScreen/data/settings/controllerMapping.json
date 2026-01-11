@@ -1,0 +1,44 @@
+﻿{
+    "keyboardMapping": {
+        "playerHidden": [
+                { "action": "menu_escape", "componetId": "ESCAPE" },
+                { "action": "menu_up", "componetId": "W" },
+                { "action": "menu_down", "componetId": "S" },
+                { "action": "menu_left", "componetId": "A" },
+                { "action": "menu_right", "componetId": "D" },
+                { "action": "menu_up", "componetId": "ARROW UP" },
+                { "action": "menu_down", "componetId": "ARROW DOWN" },
+                { "action": "menu_left", "componetId": "ARROW LEFT" },
+                { "action": "menu_right", "componetId": "ARROW RIGHT" } ],
+
+        "playerVisible": [
+                { "action": "menu_select", "componetId": "ENTER", "configurable": "false" },
+                { "action": "menu_escape", "componetId": "M", "defaultId": "M", "configurable": "true" },
+                { "action": "menu_toggle", "componetId": "LEFT SHIFT", "defaultId": "LEFT SHIFT", "configurable": "true" },
+                { "action": "fullscreen_toggle", "componetId": "F", "defaultId": "F", "configurable": "true" },
+                { "action": "up", "componetId": "W", "defaultId": "W", "configurable": "true" },
+                { "action": "down", "componetId": "S", "defaultId": "S", "configurable": "true" },
+                { "action": "left", "componetId": "A", "defaultId": "A", "configurable": "true" },
+                { "action": "right", "componetId": "D", "defaultId": "D", "configurable": "true" } ] },
+
+    "mouseMapping": {
+        "playerVisible": [
+            { "action": "menu_select", "componetId": "LEFT MOUSE", "defaultId": "LEFT MOUSE", "configurable": "true" } ] },
+
+    "gamepadMapping": {
+        "playerHidden": [
+                { "action": "menu_up", "componetId": "L STICK UP" },
+                { "action": "menu_down", "componetId": "L STICK DOWN" },
+                { "action": "menu_left", "componetId": "L STICK LEFT" },
+                { "action": "menu_right", "componetId": "L STICK RIGHT" },
+                { "action": "menu_up", "componetId": "UP" },
+                { "action": "menu_down", "componetId": "DOWN" },
+                { "action": "menu_left", "componetId": "LEFT" },
+                { "action": "menu_right", "componetId": "RIGHT" },
+                { "action": "menu_back", "componetId": "BACK" },
+                { "action": "menu_toggle", "componetId": "START" } ],
+
+        "playerVisible": [
+                { "action": "menu_select", "componetId": "A", "defaultId": "A", "configurable": "true" },
+                { "action": "menu_back", "componetId": "B", "defaultId": "B", "configurable": "true" } ] }
+}

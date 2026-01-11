@@ -1,0 +1,58 @@
+Original Mesh List Count: 1
+  Object Name: Cube, Type: MESH
+Total Unique Vert Count: 8
+Face Group Count: 1
+  Face List Count: 12; Text Count: 0; Text Indexes:
+
+Vert List: 8
+ x:   1.000000, y:   1.000000, z:  -1.000000
+ x:   1.000000, y:  -1.000000, z:  -1.000000
+ x:  -1.000000, y:  -1.000000, z:  -1.000000
+ x:  -1.000000, y:   1.000000, z:  -1.000000
+ x:   1.000000, y:   0.999999, z:   1.000000
+ x:   0.999999, y:  -1.000001, z:   1.000000
+ x:  -1.000000, y:  -1.000000, z:   1.000000
+ x:  -1.000000, y:   1.000000, z:   1.000000
+
+Face Group Count: 1
+
+  Each group of numbers represents one vertex.
+  Each row of numbers represents one face (triangle).
+
+  Face List Count: 12; Text Count: 0; Text Indexes:
+  0    1    2
+  2    3    0
+  4    7    6
+  6    5    4
+  0    4    5
+  5    1    0
+  1    5    6
+  6    2    1
+  2    6    7
+  7    3    2
+  4    0    3
+  3    7    4
+
+    Vertex buffer List: 8
+    0
+    1
+    2
+    3
+    4
+    7
+    6
+    5
+
+    Index buffer List: 36
+    0, 1, 2
+    2, 3, 0
+    4, 5, 6
+    6, 7, 4
+    0, 4, 7
+    7, 1, 0
+    1, 7, 6
+    6, 2, 1
+    2, 6, 5
+    5, 3, 2
+    4, 0, 3
+    3, 5, 4

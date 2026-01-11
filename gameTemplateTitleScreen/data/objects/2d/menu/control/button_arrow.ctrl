@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="arrow_button_solid">
+            <scriptList>
+                <script disable="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
+                <script active="Control_Hidden" forceUpdate="true"/>
+                <script select="Control_Fast_Solid_Selected"/>
+            </scriptList>
+        </sprite>
+    
+        <sprite objectName="arrow_button_frame">
+            <scriptList>
+                <script disable="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
+                <script active="Control_Active"/>
+                <script select="Control_Fast_Selected"/>
+            </scriptList>
+        </sprite>
+
+        <sprite objectName="arrow_button_face">
+            <scriptList>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
+                <script active="Control_Active"/>
+                <script select="Control_Fast_Face_Selected_Act"/>
+            </scriptList>
+        </sprite>
+
+    </spriteList>
+
+</UIControl>

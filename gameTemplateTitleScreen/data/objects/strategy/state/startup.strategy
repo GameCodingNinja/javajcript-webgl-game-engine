@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(startup)">
+    
+    <node name="logo">
+        
+        <sprite objectName="logo">
+            <position x="0" y="10" z="0"/>
+            <scale x="1" y="1" z="1"/>
+        </sprite>
+
+    </node>
+
+    <node name="UIProgressBar" type="uiControlNode">
+        
+        <uiProgressBar defaultState="inactive">
+            <position x="0" y="-360" z="0"/>
+            <spriteLst>
+                <sprite objectName="progress_frame"/>
+                <sprite objectName="progress_solid"/>
+            </spriteLst>
+            
+            <!-- stencil mask -->
+            <stencilMask objectName="" spriteIndex="1" />
+        </uiProgressBar>
+    </node>
+
+</strategy>

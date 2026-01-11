@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<objectDataList3D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual file="">
+            <color r="1" g="1" b="1" a="1"/>
+            <shader id="shader_3d"/>
+        </visual>
+        <physics world="">
+            <body type="" linearDamping="0" angularDamping="0" fixedRotation="false"/>
+            <fixtureLst>
+                <fixture shape="" radius="0" chainLoop="false" friction="0.2" density="0.2" restitution="0.2">
+                    <!-- vert list for polygon shapes - max of 8
+                    Box2D polygons are defined using Counter Clockwise Winding (CCW)
+                    <vert x="" y=""/> -->
+                    <sizeMod top="0" bottom="0" left="0" right="0"/>
+                </fixture>
+            </fixtureLst>
+        </physics>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="cube">
+            <visual file="data/objects/3d/meshes/cube.3dm"/>
+        </object>
+        
+        <!-- <object name="cube">
+            <visual file="data/objects/3d/meshes/cube_no_txt.3dm">
+                <color r="0.5" g="1" b="0.5" a="1"/>
+                <shader id="shader_3d_no_txt"/>
+            </visual>
+        </object> -->
+
+    </objectList>
+
+</objectDataList3D>
+

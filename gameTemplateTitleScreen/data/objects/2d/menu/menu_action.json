@@ -1,0 +1,13 @@
+{
+    "backAction": "menu_back",
+    "toggleAction": "menu_toggle",
+    "escapeAction": "menu_escape",
+    "selectAction": "menu_select",
+    "upAction": "menu_up",
+    "downAction": "menu_down",
+    "leftAction": "menu_left",
+    "rightAction": "menu_right",
+    "tabLeft": "menu_tab_left",
+    "tabRight": "menu_tab_right",
+    "defaultTree": "pause_tree"
+}

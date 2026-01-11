@@ -1,0 +1,138 @@
+Original Mesh List Count: 1
+  Object Name: Cube, Type: MESH
+Total Unique Vert Count: 8
+Total Unique UV Count: 8
+Total Unique Normal Count: 6
+Face Group Count: 6
+  Face List Count: 2; Text Count: 1; Text Indexes: 5
+  Face List Count: 2; Text Count: 1; Text Indexes: 4
+  Face List Count: 2; Text Count: 1; Text Indexes: 0
+  Face List Count: 2; Text Count: 1; Text Indexes: 2
+  Face List Count: 2; Text Count: 1; Text Indexes: 1
+  Face List Count: 2; Text Count: 1; Text Indexes: 3
+Total Unique Texture Count: 6
+
+Vert List: 8
+ x:   1.000000, y:   1.000000, z:  -1.000000
+ x:   1.000000, y:  -1.000000, z:  -1.000000
+ x:  -1.000000, y:  -1.000000, z:  -1.000000
+ x:  -1.000000, y:   1.000000, z:  -1.000000
+ x:   1.000000, y:   0.999999, z:   1.000000
+ x:   0.999999, y:  -1.000001, z:   1.000000
+ x:  -1.000000, y:  -1.000000, z:   1.000000
+ x:  -1.000000, y:   1.000000, z:   1.000000
+
+Normal List: 6
+ x:   0.000000, y:  -1.000000, z:   0.000000
+ x:   0.000000, y:   1.000000, z:  -0.000000
+ x:   1.000000, y:   0.000000, z:  -0.000000
+ x:  -0.000000, y:  -0.000000, z:  -1.000000
+ x:  -1.000000, y:  -0.000000, z:   0.000000
+ x:   0.000000, y:   0.000000, z:   1.000000
+
+UV List: 8
+ u: 0.000000, v: 1.000000
+ u: 1.000000, v: 1.000000
+ u: 1.000000, v: 0.000000
+ u: 0.000000, v: 0.000000
+ u: 0.999900, v: 0.999900
+ u: 0.999900, v: 0.000100
+ u: 0.000100, v: 0.000100
+ u: 0.000100, v: 0.999900
+
+Face Group Count: 6
+
+  Each group of numbers represents one vertex.
+  Each row of numbers represents one face (triangle).
+
+  Face List Count: 2; Text Count: 1; Text Indexes: 5
+  0, 0, 0    1, 0, 1    2, 0, 2
+  2, 0, 2    3, 0, 3    0, 0, 0
+
+    Vertex buffer List: 4
+    0, 0, 0
+    1, 0, 1
+    2, 0, 2
+    3, 0, 3
+
+    Index buffer List: 6
+    0, 1, 2
+    2, 3, 0
+
+  Face List Count: 2; Text Count: 1; Text Indexes: 4
+  4, 1, 0    7, 1, 1    6, 1, 2
+  6, 1, 2    5, 1, 3    4, 1, 0
+
+    Vertex buffer List: 4
+    4, 1, 0
+    7, 1, 1
+    6, 1, 2
+    5, 1, 3
+
+    Index buffer List: 6
+    0, 1, 2
+    2, 3, 0
+
+  Face List Count: 2; Text Count: 1; Text Indexes: 0
+  0, 2, 4    4, 2, 5    5, 2, 6
+  5, 2, 6    1, 2, 7    0, 2, 4
+
+    Vertex buffer List: 4
+    0, 2, 4
+    4, 2, 5
+    5, 2, 6
+    1, 2, 7
+
+    Index buffer List: 6
+    0, 1, 2
+    2, 3, 0
+
+  Face List Count: 2; Text Count: 1; Text Indexes: 2
+  1, 3, 0    5, 3, 1    6, 3, 2
+  6, 3, 2    2, 3, 3    1, 3, 0
+
+    Vertex buffer List: 4
+    1, 3, 0
+    5, 3, 1
+    6, 3, 2
+    2, 3, 3
+
+    Index buffer List: 6
+    0, 1, 2
+    2, 3, 0
+
+  Face List Count: 2; Text Count: 1; Text Indexes: 1
+  2, 4, 0    6, 4, 1    7, 4, 2
+  7, 4, 2    3, 4, 3    2, 4, 0
+
+    Vertex buffer List: 4
+    2, 4, 0
+    6, 4, 1
+    7, 4, 2
+    3, 4, 3
+
+    Index buffer List: 6
+    0, 1, 2
+    2, 3, 0
+
+  Face List Count: 2; Text Count: 1; Text Indexes: 3
+  4, 5, 0    0, 5, 1    3, 5, 2
+  3, 5, 2    7, 5, 3    4, 5, 0
+
+    Vertex buffer List: 4
+    4, 5, 0
+    0, 5, 1
+    3, 5, 2
+    7, 5, 3
+
+    Index buffer List: 6
+    0, 1, 2
+    2, 3, 0
+
+Texture List: 6
+  diffuse:  len: 28 - data/textures/cube/front.png 
+  diffuse:  len: 27 - data/textures/cube/back.png 
+  diffuse:  len: 27 - data/textures/cube/left.png 
+  diffuse:  len: 28 - data/textures/cube/right.png 
+  diffuse:  len: 26 - data/textures/cube/top.png 
+  diffuse:  len: 29 - data/textures/cube/bottom.png 
