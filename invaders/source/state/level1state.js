@@ -1225,12 +1225,6 @@ export class Level1State extends CommonState
     {
         this.radarCamAry[0].incPosXYZ( easingVal * RADAR_SCALE );
 
-        // Wrap the radar by flipping the camera
-        if( this.radarCamAry[1].pos.x > -68 )
-        {
-            this.radarCamAry.push( this.radarCamAry.shift() );
-        }
-
         if( this.radarCamAry[0].pos.x > -68 )
         {
             this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x - ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) * RADAR_SCALE)) );
@@ -1238,6 +1232,13 @@ export class Level1State extends CommonState
         else
         {
             this.radarCamAry[1].setPosXYZ( -(this.radarCamAry[0].pos.x + ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) * RADAR_SCALE)) );
+        }
+
+        // Wrap the radar by flipping the camera
+        // This needs to be last otherwise the radar cameras get out-of-sync with the level camera
+        if( this.radarCamAry[1].pos.x > -68 )
+        {
+            this.radarCamAry.push( this.radarCamAry.shift() );
         }
     }
 
