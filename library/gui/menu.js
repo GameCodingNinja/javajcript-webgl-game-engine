@@ -865,10 +865,10 @@ export class Menu extends Object
     }
 
     // 
-    //  DESC: Get the number of controls in this subcontrol
+    //  DESC: Get the number of controls in this menu
     //
     get length()
     {
-        return this.subControlAry.length;
+        return this.controlAry.length;
     }
 }

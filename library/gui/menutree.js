@@ -320,7 +320,7 @@ export class MenuTree
     onToTree( event )
     {
         this._nameStr = event.arg[0];
-        if( (nameStr !== null) && (this._nameStr === this.name) )
+        if( (this._nameStr !== null) && (this._nameStr === this.name) )
         {
             // Only works when there is no root menu
             if( this.rootMenu === undefined )

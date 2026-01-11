@@ -44,14 +44,6 @@ export class BitMask
     {
         this.bitmask &= args;
     }
-
-    // 
-    //  DESC: Set the bitmask to zero
-    //
-    clear()
-    {
-        this.bitmask = 0;
-    }
     
     // 
     //  DESC: Check if all of the parameters are set

@@ -235,7 +235,7 @@ export class PhysicsComponent2D
     createChainShapeFixture( fixture )
     {
         // Do a sanity check because we need more then 1 point to define a chain
-        if( fixture.vertAry.length > 1 )
+        if( fixture.vertAry.length < 2 )
             throw new Error( `Physics object has incorrect number of points defined (${fixture.vertAry.length})!` );
         
         // Apply scale to the size and divide by 2

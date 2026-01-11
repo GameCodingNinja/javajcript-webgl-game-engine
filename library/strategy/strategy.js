@@ -196,7 +196,7 @@ export class Strategy extends Object
                 this._headNode = this._node;
 
             else if( !this._headNode.addNode( this._node ) )
-                throw new Error( `Parent node not found or node does not support adding children (${this._nodeDataAry[i].nodeName}, ${node.parentId})!` );
+                throw new Error( `Parent node not found or node does not support adding children (${this._nodeDataAry[i].nodeName}, ${this._node.parentId})!` );
         }
 
         // Init the head node
@@ -625,13 +625,14 @@ export class Strategy extends Object
 
         this._recycleAry = this.recycleMap.get(node.name);
 
+        node.get().scriptComponent.recycleActiveScripts();
+
         if( this._recycleAry == undefined )
         {
             this.recycleMap.set(node.name, [node]);
         }
         else
         {
-            node.get().scriptComponent.recycleActiveScripts();
             this._recycleAry.push(node);
         }
     }

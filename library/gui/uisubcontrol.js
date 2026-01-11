@@ -350,7 +350,7 @@ export class UISubControl extends UIControl
                 }
                 else if( !this._navNode.uiControl.isDisabled() )
                 {
-                    this.activeNode = this._navNode;control
+                    this.activeNode = this._navNode;
 
                     eventManager.dispatchEvent(
                         menuDefs.EME_MENU_CONTROL_STATE_CHANGE,

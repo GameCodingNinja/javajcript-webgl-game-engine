@@ -160,7 +160,7 @@ class Settings
                     this.stencilBufferBitSize = obj.device.depthStencilBuffer.stencilBufferBitSize;
             }
 
-            if( obj.device.targ0etBuffer )
+            if( obj.device.targetBuffer )
             {
                 if( obj.device.targetBuffer.clear )
                     this.clearTargetBuffer = (obj.device.targetBuffer.clear === 'true');

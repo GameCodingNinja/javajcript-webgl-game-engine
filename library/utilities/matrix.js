@@ -204,7 +204,7 @@ export class Matrix
             {
                 this._tmp4 = ( dest[4] * this._cos ) + ( dest[8] * this._sin );
                 this._tmp5 = ( dest[5] * this._cos ) + ( dest[9] * this._sin );
-                this._tmp6 = dest[10] * sin;
+                this._tmp6 = dest[10] * this._sin;
                 this._tmp8 = ( dest[4] * -this._sin ) + ( dest[8] * this._cos );
                 this._tmp9 = ( dest[5] * -this._sin ) + ( dest[9] * this._cos );
                 this._tmp10 = dest[10] * this._cos;

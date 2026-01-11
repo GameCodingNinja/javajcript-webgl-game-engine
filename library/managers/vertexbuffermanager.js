@@ -295,11 +295,11 @@ class VertexBufferManager
         // by 0.5 for proper orthographic rendering
         // speed enhancement - if( Math.trunc(frameSize.w) % 2 != 0 )
         let additionalOffsetX = 0;
-        if( Math.trunc(frameSize.w) & 1 !== 0 )
+        if( (Math.trunc(frameSize.w) & 1) != 0 )
             additionalOffsetX = 0.5;
 
         let additionalOffsetY = 0;
-        if( Math.trunc(frameSize.h) & 2 !== 0 )
+        if( (Math.trunc(frameSize.h) & 1) != 0 )
             additionalOffsetY = 0.5;
 
         // Calculate the third vertex of the first face

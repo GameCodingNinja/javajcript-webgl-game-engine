@@ -577,7 +577,7 @@ export class CollisionComponent
                         this._next = 0;
 
                     // check for collision between the circle and a line formed between the two vertices
-                    if( this.lineToCircleCheck(this._transPolygonAry[this._i].pointAry[this._j], this._transPolygonAry[this._i].pointAry[next], this._transPos, this.radius) )
+                    if( this.lineToCircleCheck(this._transPolygonAry[this._i].pointAry[this._j], this._transPolygonAry[this._i].pointAry[this._next], this._transPos, this.radius) )
                         return true;
                 }
 
@@ -628,7 +628,7 @@ export class CollisionComponent
             this._transLineAry = sprite.collisionComponent.transLineAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < transLineAry.length; ++this._i )
+            for( this._i = 0; this._i < this._transLineAry.length; ++this._i )
             {
                 for( this._j = 0; this._j < this.transLineAry.length; ++this._j )
                 {
@@ -825,10 +825,10 @@ export class CollisionComponent
                         // sides of the polygon again, so only use this if you need to
                         if( sprite.collisionComponent.optionalPointCheck )
                         {
-                            if( this.pointToPolygonCheck( gLine1.head, this._transPolygonAry[poly2] ) )
+                            if( this.pointToPolygonCheck( gLine1.head, this._transPolygonAry[this._poly2] ) )
                                 return true;
                             
-                            if( this.pointToPolygonCheck( gLine1.tail, this._transPolygonAry[poly2] ) )
+                            if( this.pointToPolygonCheck( gLine1.tail, this._transPolygonAry[this._poly2] ) )
                                 return true;
                         }
                     }
@@ -902,8 +902,8 @@ export class CollisionComponent
       
         // Find the closest point on the line
         gPoint.setXYZ(
-            pointPos1.x + (dot * (pointPos2.x-pointPos1.x)),
-            pointPos1.y + (dot * (pointPos2.y-pointPos1.y)) );
+            pointPos1.x + (this._dot * (pointPos2.x-pointPos1.x)),
+            pointPos1.y + (this._dot * (pointPos2.y-pointPos1.y)) );
 
         // !! Commented out because it's too precise to trigger and keeps the below from catching any collision
         // Is this point actually on the line segment?

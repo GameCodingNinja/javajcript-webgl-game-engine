@@ -1012,7 +1012,7 @@ class MenuManager extends ManagerBase
     getActiveControl( name )
     {
         this._menu = this.getMenu(name);
-        return this._menu.GetActiveControl();
+        return this._menu.getActiveControl();
     }
 
     // 
