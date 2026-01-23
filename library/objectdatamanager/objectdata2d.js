@@ -93,4 +93,19 @@ export class ObjectData2D extends iObjectData
     {
         return true;
     }
+
+    // 
+    //  DESC: Dispose of resources
+    //
+    dispose()
+    {
+        if( this.visualData && this.visualData.dispose )
+            this.visualData.dispose();
+
+        if( this.physicsData && this.physicsData.dispose )
+            this.physicsData.dispose();
+
+        if( this.collisionData && this.collisionData.dispose )
+            this.collisionData.dispose();
+    }
 }

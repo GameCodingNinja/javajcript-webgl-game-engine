@@ -11,7 +11,7 @@ export class iObjectData
     constructor()
     {
     }
-    
+
     // 
     //  DESC: Is this 2D object data?
     //
@@ -26,5 +26,12 @@ export class iObjectData
     is3D()
     {
         return false;
+    }
+
+    // 
+    //  DESC: Dispose of resources (override in subclasses)
+    //
+    dispose()
+    {
     }
 }

@@ -112,4 +112,12 @@ export class ObjectVisualData3D extends iObjectVisualData
     {
         return (this.meshGrp !== null);
     }
+
+    // 
+    //  DESC: Dispose of GPU resources
+    //
+    dispose()
+    {
+        this.meshGrp = null;
+    }
 }

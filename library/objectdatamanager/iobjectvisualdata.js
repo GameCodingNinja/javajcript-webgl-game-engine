@@ -11,7 +11,7 @@ export class iObjectVisualData
     constructor()
     {
     }
-    
+
     // 
     //  DESC: Is this genType active
     //
@@ -19,12 +19,19 @@ export class iObjectVisualData
     {
         return false;
     }
-    
+
     // 
     //  DESC: Get the frame count
     //
     getFrameCount()
     {
         return 1;
+    }
+
+    // 
+    //  DESC: Dispose of GPU resources (override in subclasses)
+    //
+    dispose()
+    {
     }
 }

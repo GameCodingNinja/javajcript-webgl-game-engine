@@ -247,4 +247,24 @@ export class ObjectCollisionData2D
     {
         return (this.type !== defs.ECT_NULL);
     }
+
+    // 
+    //  DESC: Dispose of collision resources
+    //
+    dispose()
+    {
+        this.type = defs.ECT_NULL;
+
+        if( this.lineAry )
+            this.lineAry = [];
+
+        if( this.rectAry )
+            this.rectAry = [];
+
+        if( this.polygonAry )
+            this.polygonAry = [];
+
+        if( this.pointAry )
+            this.pointAry = [];
+    }
 }

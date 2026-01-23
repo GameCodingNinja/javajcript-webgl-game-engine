@@ -76,7 +76,7 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
-      GOD_MODE = true;
+      GOD_MODE = false;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -1140,7 +1140,7 @@ export class Level1State extends CommonState
     handleEnemySpawn()
     {
         // Create enemy00 and position it outside of the view
-        /*if( this.enemy00SpawnTimer.expired(true) )
+        if( this.enemy00SpawnTimer.expired(true) )
         {
             if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
             {
@@ -1177,8 +1177,8 @@ export class Level1State extends CommonState
                 this._node.get().setRotXYZ(0, 180);
 
             this._node.transform();
-        }*/
-        if(this.healthSpawnTimer.expired( false, true ))
+        }
+        /*if(this.healthSpawnTimer.expired( false, true ))
         {
             this._buildings = this.buildingsStrategy.nodeAry;
 
@@ -1191,7 +1191,7 @@ export class Level1State extends CommonState
             this._yOffsetValueHealth = parseInt(this._targetBuilding.parentNode.name.match(/\d+$/)[0], 10) - 1;
 
             this._node.get().setPosXYZ(this._targetBuilding.pos.x, this._targetBuilding.pos.y + this.healthCharYOffsetAry[this._yOffsetValueHealth]);
-        }
+        }*/
     }
 
     // 

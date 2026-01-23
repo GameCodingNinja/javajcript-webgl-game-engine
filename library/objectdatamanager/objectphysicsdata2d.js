@@ -74,6 +74,15 @@ export class Fixture
             this.vertAry.push( new planck.Vec2( vert.x, vert.y ) );
         }
     }
+
+    // 
+    //  DESC: Dispose of fixture resources
+    //
+    dispose()
+    {
+        this.vertAry = [];
+        this.shape = null;
+    }
 }
 
 export class ObjectPhysicsData2D
@@ -261,5 +270,15 @@ export class ObjectPhysicsData2D
     isActive()
     {
         return (this.bodyType !== null);
+    }
+
+    // 
+    //  DESC: Dispose of physics resources
+    //
+    dispose()
+    {
+        this.fixtureAry = [];
+        this.world = null;
+        this.bodyType = null;
     }
 }

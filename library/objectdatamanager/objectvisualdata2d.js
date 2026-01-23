@@ -1,6 +1,6 @@
 
 // 
-//  FILE NAME: ojectvisualdata2d.js
+//  FILE NAME: objectvisualdata2d.js
 //  DESC:      Class containing the 2D object's visual data
 //
 
@@ -296,8 +296,7 @@ export class ObjectVisualData2D extends iObjectVisualData
             {
                 for( let i = 0; i < this.textureSequenceCount; ++i )
                 {
-                    let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
-                    let filePath = eval('`' + this.textureFilePath + '`');
+                    let filePath = this.textureFilePath.replace( '${NUM}', i );
                     this.textureAry.push( textureManager.get( group, filePath ) );
                 }
             }
@@ -586,19 +585,28 @@ export class ObjectVisualData2D extends iObjectVisualData
     getTextureFilePathAry()
     {
         let filePathAry = [];
-        
+
         // Get the texture(s) for this object
         if( this.textureSequenceCount )
         {
             for( let i = 0; i < this.textureSequenceCount; ++i )
             {
-                let NUM = i; // NUM is defined in the file path and is consumed by the "eval' statement"
-                filePathAry.push( eval('`' + this.textureFilePath + '`') );
+                filePathAry.push( this.textureFilePath.replace( '${NUM}', i ) );
             }
         }
         else if( this.textureFilePath.length )
             filePathAry.push( this.textureFilePath );
-        
+
         return filePathAry;
+    }
+
+    // 
+    //  DESC: Dispose of GPU resources
+    //
+    dispose()
+    {
+        this.textureAry = [];
+        this.vbo = null;
+        this.ibo = null;
     }
 }

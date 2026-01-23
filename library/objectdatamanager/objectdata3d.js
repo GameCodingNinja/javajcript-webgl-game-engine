@@ -72,4 +72,13 @@ export class ObjectData3D extends iObjectData
     {
         return true;
     }
+
+    // 
+    //  DESC: Dispose of resources
+    //
+    dispose()
+    {
+        if( this.visualData && this.visualData.dispose )
+            this.visualData.dispose();
+    }
 }

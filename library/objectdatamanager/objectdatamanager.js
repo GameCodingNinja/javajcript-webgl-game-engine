@@ -1,7 +1,7 @@
 
 //
-//  FILE NAME: objactdatamanager.js
-//  DESC:      Singlton that holds a map of all 2D/3D object data used for later loading
+//  FILE NAME: objectdatamanager.js
+//  DESC:      Singleton that holds a map of all 2D/3D object data used for later loading
 //
 
 "use strict";
@@ -12,10 +12,31 @@ import { meshManager } from '../managers/meshmanager';
 import { vertexBufferManager } from '../managers/vertexbuffermanager';
 import { spriteSheetManager } from '../managers/spritesheetmanager';
 import { assetHolder } from '../utilities/assetholder';
+import { definitionValidator } from '../utilities/definitionvalidator';
 import { ObjectData2D } from './objectdata2d';
 import { ObjectData3D } from './objectdata3d';
 import * as genFunc from '../utilities/genfunc';
 
+// Load type constants
+const LOAD_2D = 0;
+const LOAD_3D = 1;
+
+// Reusable temp variables to avoid GC
+var gTempGroupAry = [];
+var gValidationContext = { group: null, objectName: null };
+
+/**
+ * @typedef {Object} ObjectDefinition
+ * @property {string} name - The name of the object
+ * @property {string} group - The group the object belongs to
+ */
+
+/**
+ * Singleton manager for 2D/3D object data definitions.
+ * Handles loading, caching, and lifecycle of object definitions from XML files.
+ * @class
+ * @extends ManagerBase
+ */
 class ObjectDataManager extends ManagerBase
 {
     constructor()
@@ -25,35 +46,41 @@ class ObjectDataManager extends ManagerBase
         this.objectDataMapMap = new Map;
     }
 
-    //
-    //  DESC: Load all XML's associated with this group
-    //
+    /**
+     * Load all XML's associated with this group
+     * @param {string|string[]} group - Group name or array of group names to load
+     * @returns {Promise<number>} Promise that resolves when loading is complete
+     */
     loadGroup( group )
     {
+        // Reuse temp array to avoid GC
         if( group instanceof Array )
         {
-            return super.loadGroupAry( 'Object data list', this.objectDataMapMap, group )
-                .then(() => this.loadAssets( group ))
-                .then(() => this.createFromData( group ));
+            gTempGroupAry = group;
+        }
+        else
+        {
+            gTempGroupAry.length = 1;
+            gTempGroupAry[0] = group;
         }
 
-        return super.loadGroupAry( 'Object data list', this.objectDataMapMap, [group] )
-                .then(() => this.loadAssets( [group] ))
-                .then(() => this.createFromData( [group] ));
+        return super.loadGroupAry( 'Object data list', this.objectDataMapMap, gTempGroupAry )
+            .then(() => this.loadAssets( gTempGroupAry ))
+            .then(() => this.createFromData( gTempGroupAry ));
     }
 
-    //
-    //  DESC: Load all object information from an xml node
-    //
+    /**
+     * Load all object information from an xml node
+     * @param {string} group - Group name to load objects into
+     * @param {Element} node - XML node containing object data
+     * @throws {Error} If object already exists in group
+     */
     loadFromNode( group, node )
     {
-        const LOAD_2D = 0;
-        const LOAD_3D = 1;
-
         // Get the group map
         let groupMap = this.objectDataMapMap.get( group );
 
-        // Determin the laod type
+        // Determine the load type
         let loadType = LOAD_2D;
         if( node.nodeName === 'objectDataList3D' )
             loadType = LOAD_3D;
@@ -65,29 +92,47 @@ class ObjectDataManager extends ManagerBase
             defaultData = new ObjectData3D;
 
         // Load the default data
-        defaultData.loadObjData( node.getElementsByTagName('default')[0], '', '' );
+        let defaultNode = node.getElementsByTagName('default')[0];
+        if( defaultNode )
+            defaultData.loadObjData( defaultNode, '', '' );
 
         // Get the node to the list of objects
-        let objNode = node.getElementsByTagName('object');
+        let objNodeList = node.getElementsByTagName('object');
 
-        for( let i = 0; i < objNode.length; ++i )
+        for( let i = 0; i < objNodeList.length; ++i )
         {
+            let objNode = objNodeList[i];
+
             // Get the object's name
-            let name = objNode[i].getAttribute( 'name' );
-            
+            let name = objNode.getAttribute( 'name' );
+
+            // Validate the object definition - reuse context object to avoid GC
+            definitionValidator.clear();
+            gValidationContext.group = group;
+            gValidationContext.objectName = name;
+            definitionValidator.validateObjectNode( objNode, group );
+            definitionValidator.validateVisualNode( objNode, gValidationContext );
+            definitionValidator.validatePhysicsNode( objNode, gValidationContext );
+
+            // Log warnings but continue, throw on errors
+            if( !definitionValidator.isValid() )
+            {
+                console.error( `Validation errors in object "${name}" (group: ${group}):`, definitionValidator.errors );
+            }
+
             // Check that this object doesn't already exist
             if( groupMap.get(name) === undefined )
             {
-                let objData
+                let objData;
                 if( loadType === LOAD_2D )
                     objData = new ObjectData2D;
                 else
                     objData = new ObjectData3D;
-                
+
                 objData.copy(defaultData);
 
                 // Load in the object data
-                objData.loadObjData( objNode[i], group, name );
+                objData.loadObjData( objNode, group, name );
 
                 // Save it to the map map
                 groupMap.set( name, objData );
@@ -99,9 +144,12 @@ class ObjectDataManager extends ManagerBase
         }
     }
 
-    //
-    //  DESC: Load all the assets associated with these groups
-    //
+    /**
+     * Load all the assets associated with these groups
+     * @param {string[]} groupAry - Array of group names to load assets for
+     * @returns {Promise<*[]>} Promise that resolves when all assets are loaded
+     * @throws {Error} If group does not exist
+     */
     loadAssets( groupAry )
     {
         let promiseAry = [];
@@ -119,59 +167,12 @@ class ObjectDataManager extends ManagerBase
                     // Load 2D elements
                     if( objData.is2D() )
                     {
-                        let filePathAry = objData.visualData.getTextureFilePathAry();
-                        let textureFilter = objData.visualData.textureFilter;
-                        let textureWrap = objData.visualData.textureWrap;
-
-                        for( let i = 0; i < filePathAry.length; ++i )
-                        {
-                            let filePath = filePathAry[i];
-
-                            if( filePath && textureManager.allowLoad( group, filePath ) )
-                            {
-                                // Load the texture file
-                                promiseAry.push( 
-                                    genFunc.downloadFile( 'img', filePath )
-                                        .then(( image ) => textureManager.load( group, filePath, image, textureFilter, textureWrap ))
-                                        .catch(( error ) => { console.error(error.stack); throw error; }));
-                            }
-                        }
-                        
-                        // Load the XML mesh
-                        let meshFilePath = objData.visualData.meshFilePath;
-                        if( meshFilePath && assetHolder.allowLoad( group, meshFilePath ) )
-                        {
-                            // Load the mesh file
-                            promiseAry.push( 
-                                genFunc.downloadFile( 'xml', meshFilePath )
-                                    .then(( xmlNode ) => assetHolder.set( group, meshFilePath, xmlNode ))
-                                    .catch(( error ) => { console.error(error.stack); throw error; }));
-                        }
-
-                        // Load the XML sprite sheet
-                        let spriteSheetfilePath = objData.visualData.spriteSheetFilePath;
-                        if( spriteSheetfilePath && spriteSheetManager.allowLoad( group, spriteSheetfilePath ) )
-                        {
-                            // Load the mesh file
-                            promiseAry.push( 
-                                genFunc.downloadFile( 'xml', spriteSheetfilePath )
-                                    .then(( xmlNode ) => spriteSheetManager.load( group, spriteSheetfilePath, xmlNode ))
-                                    .catch(( error ) => { console.error(error.stack); throw error; }));
-                        }
+                        this.load2DAssets( promiseAry, group, objData );
                     }
                     // Load 3D elements
                     else
                     {
-                        let filePath = objData.visualData.meshFilePath;
-
-                        if( filePath && meshManager.allowLoad( group, filePath ) )
-                        {
-                            // Load the mesh file
-                            promiseAry.push( 
-                                genFunc.downloadFile( 'binary', filePath )
-                                    .then(( binaryFile ) => this.loadMesh3D( group, filePath, objData, binaryFile ))
-                                    .catch(( error ) => { console.error(error.stack); throw error; }));
-                        }
+                        this.load3DAssets( promiseAry, group, objData );
                     }
                 }
             }
@@ -184,9 +185,80 @@ class ObjectDataManager extends ManagerBase
         return Promise.all( promiseAry );
     }
 
-    //
-    //  DESC: Load all the assets associated with this group
-    //
+    /**
+     * Load 2D assets (textures, meshes, sprite sheets)
+     * @param {Promise[]} promiseAry - Array to push loading promises into
+     * @param {string} group - Group name for asset organization
+     * @param {ObjectData2D} objData - Object data containing asset paths
+     */
+    load2DAssets( promiseAry, group, objData )
+    {
+        let filePathAry = objData.visualData.getTextureFilePathAry();
+        let textureFilter = objData.visualData.textureFilter;
+        let textureWrap = objData.visualData.textureWrap;
+
+        // Load textures
+        for( let i = 0; i < filePathAry.length; ++i )
+        {
+            let filePath = filePathAry[i];
+
+            if( filePath && textureManager.allowLoad( group, filePath ) )
+            {
+                promiseAry.push( 
+                    genFunc.downloadFile( 'img', filePath )
+                        .then(( image ) => textureManager.load( group, filePath, image, textureFilter, textureWrap ))
+                        .catch(( error ) => { console.error(error.stack); throw error; }));
+            }
+        }
+
+        // Load the XML mesh
+        let meshFilePath = objData.visualData.meshFilePath;
+        if( meshFilePath && assetHolder.allowLoad( group, meshFilePath ) )
+        {
+            promiseAry.push( 
+                genFunc.downloadFile( 'xml', meshFilePath )
+                    .then(( xmlNode ) => assetHolder.set( group, meshFilePath, xmlNode ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }));
+        }
+
+        // Load the XML sprite sheet
+        let spriteSheetFilePath = objData.visualData.spriteSheetFilePath;
+        if( spriteSheetFilePath && spriteSheetManager.allowLoad( group, spriteSheetFilePath ) )
+        {
+            promiseAry.push( 
+                genFunc.downloadFile( 'xml', spriteSheetFilePath )
+                    .then(( xmlNode ) => spriteSheetManager.load( group, spriteSheetFilePath, xmlNode ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }));
+        }
+    }
+
+    /**
+     * Load 3D assets (meshes and their textures)
+     * @param {Promise[]} promiseAry - Array to push loading promises into
+     * @param {string} group - Group name for asset organization
+     * @param {ObjectData3D} objData - Object data containing asset paths
+     */
+    load3DAssets( promiseAry, group, objData )
+    {
+        let filePath = objData.visualData.meshFilePath;
+
+        if( filePath && meshManager.allowLoad( group, filePath ) )
+        {
+            promiseAry.push( 
+                genFunc.downloadFile( 'binary', filePath )
+                    .then(( binaryFile ) => this.loadMesh3D( group, filePath, objData, binaryFile ))
+                    .catch(( error ) => { console.error(error.stack); throw error; }));
+        }
+    }
+
+    /**
+     * Load a 3D mesh and its associated textures
+     * @param {string} group - Group name for asset organization
+     * @param {string} binaryFilePath - Path to the binary mesh file
+     * @param {ObjectData3D} objData - Object data to populate with mesh
+     * @param {ArrayBuffer} binaryFile - Binary file data
+     * @returns {Promise<*[]>} Promise that resolves when mesh and textures are loaded
+     */
     loadMesh3D( group, binaryFilePath, objData, binaryFile )
     {
         let promiseAry = [];
@@ -200,13 +272,12 @@ class ObjectDataManager extends ManagerBase
         for( let i = 0; i < filePathAry.length; ++i )
         {
             let filePath = filePathAry[i].path;
-            
+
             if( filePath && textureManager.allowLoad( group, filePath ) )
             {
                 let textureFilter = objData.visualData.textureFilter;
                 let textureWrap = objData.visualData.textureWrap;
 
-                // Load the texture file
                 promiseAry.push( 
                     genFunc.downloadFile( 'img', filePath )
                         .then(( image ) => textureManager.load( group, filePath, image, textureFilter, textureWrap ))
@@ -217,69 +288,92 @@ class ObjectDataManager extends ManagerBase
         return Promise.all( promiseAry );
     }
 
-    //
-    //  DESC: Create OpenGL objects from data
-    //
+    /**
+     * Create OpenGL objects from data
+     * @param {string[]} groupAry - Array of group names to create objects for
+     * @returns {number} Always returns 0
+     */
     createFromData( groupAry )
     {
-        for( this._grp = 0; this._grp < groupAry.length; ++this._grp )
+        for( let grp = 0; grp < groupAry.length; ++grp )
         {
-            this._group = groupAry[this._grp];
-            
+            let group = groupAry[grp];
+
             // Get the group map
-            this._groupMap = this.objectDataMapMap.get( this._group );
-            if( this._groupMap !== undefined )
+            let groupMap = this.objectDataMapMap.get( group );
+            if( groupMap !== undefined )
             {
                 // Create OpenGL objects from data
-                for( this._objData of this._groupMap.values() )
-                    this._objData.createFromData( this._group );
+                for( let objData of groupMap.values() )
+                    objData.createFromData( group );
             }
         }
 
         return 0;
     }
-    
-    //
-    //  DESC: Free all of the meshes materials and data of a specific group
-    //
+
+    /**
+     * Free all of the meshes materials and data of a specific group
+     * @param {string|string[]} group - Group name or array of group names to free
+     * @throws {Error} If group name is not found in listTableMap
+     */
     freeGroup( group )
     {
-        this._groupAry = group;
-        if( !(group instanceof Array) )
-            this._groupAry = [group];
-
-        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
+        // Reuse temp array to avoid GC
+        if( group instanceof Array )
         {
-            this._group = this._groupAry[this._grp];
-            
+            gTempGroupAry = group;
+        }
+        else
+        {
+            gTempGroupAry.length = 1;
+            gTempGroupAry[0] = group;
+        }
+
+        for( let grp = 0; grp < gTempGroupAry.length; ++grp )
+        {
+            let grpName = gTempGroupAry[grp];
+
             // Make sure the group we are looking for exists
-            if( !this.listTableMap.has( this._group ) )
-                throw new Error( `Object data list group name can't be found (${this._group})!` );
+            if( !this.listTableMap.has( grpName ) )
+                throw new Error( `Object data list group name can't be found (${grpName})!` );
 
             // Get the group map
-            if( this.objectDataMapMap.has( this._group ) )
+            if( this.objectDataMapMap.has( grpName ) )
             {
-                textureManager.deleteGroup( this._group );
-                vertexBufferManager.deleteGroup( this._group );
-                meshManager.deleteGroup( this._group );
+                // Dispose object data resources before deleting
+                let groupMap = this.objectDataMapMap.get( grpName );
+                for( let objData of groupMap.values() )
+                {
+                    if( objData.dispose )
+                        objData.dispose();
+                }
 
-                this.objectDataMapMap.delete( this._group );
+                textureManager.deleteGroup( grpName );
+                vertexBufferManager.deleteGroup( grpName );
+                meshManager.deleteGroup( grpName );
+
+                this.objectDataMapMap.delete( grpName );
             }
         }
     }
-    
-    //
-    //  DESC: Get a specific object data
-    //
+
+    /**
+     * Get a specific object data
+     * @param {string} group - Group name to search in
+     * @param {string} name - Object name to retrieve
+     * @returns {ObjectData2D|ObjectData3D} The requested object data
+     * @throws {Error} If group or object is not found
+     */
     getData( group, name )
     {
         // Get the group map
-        this._groupMap = this.objectDataMapMap.get( group );
-        if( this._groupMap !== undefined )
+        let groupMap = this.objectDataMapMap.get( group );
+        if( groupMap !== undefined )
         {
-            this._objData = this._groupMap.get( name );
-            if( this._objData )
-                return this._objData;
+            let objData = groupMap.get( name );
+            if( objData )
+                return objData;
 
             throw new Error( `Object data not found (${group}, ${name})!` );
         }
@@ -287,17 +381,17 @@ class ObjectDataManager extends ManagerBase
         throw new Error( `Object group not found (${group}, ${name})!` );
     }
 
-    //
-    // DESC:  Find the group an object name belongs to
-    //
+    /**
+     * Find the group an object name belongs to
+     * @param {string} objectName - Object name to search for
+     * @returns {string|undefined} Group name if found, undefined otherwise
+     */
     findGroup( objectName )
     {
-        for( this._groupKey of this.objectDataMapMap.keys() )
+        for( let [groupKey, groupMap] of this.objectDataMapMap )
         {
-            this._groupMap = this.objectDataMapMap.get(this._groupKey);
-
-            if( this._groupMap.get( objectName ) !== undefined )
-                return this._groupKey;
+            if( groupMap.get( objectName ) !== undefined )
+                return groupKey;
         }
 
         return undefined;
