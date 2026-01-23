@@ -3,6 +3,13 @@
 ## Overview
 Space invaders-style game built on the custom WebGL game engine located at `../library/`.
 
+## Performance Goal
+**Avoid triggering garbage collection (GC) during gameplay.** GC pauses cause frame drops and stuttering. All runtime code should:
+- Reuse objects via global temp variables (e.g., `gTempPoint`, `gTempMatrix`)
+- Avoid creating temporary arrays/objects in hot paths (update, render, collision loops)
+- Use object pooling for frequently created/destroyed entities
+- Pre-allocate arrays and reuse them by setting `.length = 0` or index assignment
+
 ## Build Commands
 ```bash
 # Development build

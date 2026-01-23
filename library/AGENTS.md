@@ -3,6 +3,14 @@
 ## Overview
 Component-based 2D/3D WebGL game engine with scene graph architecture, manager singletons, and XML-driven asset loading.
 
+## Performance Goal
+**Avoid triggering garbage collection (GC) during gameplay.** GC pauses cause frame drops and stuttering. All runtime code should:
+- Reuse objects via global temp variables (e.g., `gTempMatrix`, `gTempPoint`, `gTempGroupAry`)
+- Avoid creating temporary arrays/objects in hot paths (update, render, collision, physics loops)
+- Use object pooling for frequently created/destroyed entities (sprites, projectiles, particles)
+- Pre-allocate arrays and reuse them by setting `.length = 0` or direct index assignment
+- Cache results instead of recalculating in loops
+
 ## Architecture
 - **Node Layer**: Scene graph hierarchy (iNode → Node → SpriteNode/ObjectNode/UIControlNode)
 - **Sprite Layer**: Entities compose visual, physics, collision, and script components
