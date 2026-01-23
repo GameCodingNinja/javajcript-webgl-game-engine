@@ -58,6 +58,7 @@ const MOVE_NULL = -1,
       ENEMY00_SHIP_ID = -3,
       ENEMY01_SHIP_ID = -4,
       ENEMY02_SHIP_ID = -5,
+      HEALTH_CHARACTER = -50,
       ENEMY00_SHIP_HIT_VALUE = 1,
       ENEMY01_SHIP_HIT_VALUE = 5,
       ENEMY02_SHIP_HIT_VALUE = 3,
@@ -75,7 +76,7 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
-      GOD_MODE = false;
+      GOD_MODE = true;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -143,6 +144,9 @@ export class Level1State extends CommonState
         this.hudLevelFont = this.upperHudStategy.get('level_font').get();
         this.hudProgressBar = this.upperHudStategy.get('level_progress_bar').get();
         this.enemyStrategy = strategyManager.get('_enemy_');
+
+        // Y Offset based on the building for the health character
+        this.healthCharYOffsetAry = [80,0,0,0,0,0,0,0,0];
 
         // Randomly distrabute the clouds
         this.cloudAry = [];
@@ -294,6 +298,7 @@ export class Level1State extends CommonState
         this.slowHealTimer = null;
         this.musicTimer = new Timer((1000 * 60 * 5));
 
+        this.healthSpawnTimer = new Timer(2000);
         this.enemy00SpawnTimer = new Timer(2000);
         this.enemy01SpawnTimer = new Timer((1000 * 60) + genFunc.randomInt( (1000 * 30), (1000 * 120)));
         this.enemy02SpawnTimer = new Timer((1000 * 25) + genFunc.randomInt( (1000 * 20), (1000 * 80)));
@@ -448,6 +453,13 @@ export class Level1State extends CommonState
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
                 }
             }
+            // Player collides with health character
+            else if( spriteA.parentNode.userId == HEALTH_CHARACTER )
+            {
+                // We are done with these sprites, queue it up to be recycled
+                //this.enemyStrategy.recycle( spriteA.parentNode );
+                //this.groupPlayer.play( 'EXPLOSION_Metllic' );
+            }
 
             // Player ship is to die from above hit/collision
             if( this.playerShip.progressBar.isMinValue() && this.playerShip.sprite.collisionComponent.enable )
@@ -524,6 +536,17 @@ export class Level1State extends CommonState
             spriteB.hitCount++;
 
             this.groupPlayer.play( 'enemy_explosion' );
+        }
+        // Player shot health character
+        else if( spriteB.parentNode.userId == HEALTH_CHARACTER )
+        {
+            // Stop any more collision detection for the shot
+            spriteB.collisionComponent.enable = false;
+
+            // Execute the scripts that handle being hit
+            spriteB.prepareScript( 'hit', spriteA );
+
+            this.groupPlayer.play( 'EXPLOSION_Metllic' );
         }
     }
 
@@ -705,6 +728,7 @@ export class Level1State extends CommonState
                         this.enemy01SpawnTimer.pause();
                         this.enemy02SpawnTimer.pause();
                         this.train.timer.pause();
+                        this.healthSpawnTimer.pause();
 
                         this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                         if(this._gsnd.isPlaying())
@@ -753,6 +777,7 @@ export class Level1State extends CommonState
                             this.enemy01SpawnTimer.resume();
                             this.enemy02SpawnTimer.resume();
                             this.train.timer.resume();
+                            this.healthSpawnTimer.resume();
 
                             this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                             if(this._gsnd.isPaused())
@@ -812,6 +837,7 @@ export class Level1State extends CommonState
                     this.enemy01SpawnTimer.resume();
                     this.enemy02SpawnTimer.resume();
                     this.train.timer.resume();
+                    this.healthSpawnTimer.resume();
 
                     // Indicate to Crazy Games the game has started
                     if(typeof window.CrazyGames !== 'undefined' )
@@ -1114,7 +1140,7 @@ export class Level1State extends CommonState
     handleEnemySpawn()
     {
         // Create enemy00 and position it outside of the view
-        if( this.enemy00SpawnTimer.expired(true) )
+        /*if( this.enemy00SpawnTimer.expired(true) )
         {
             if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
             {
@@ -1151,6 +1177,20 @@ export class Level1State extends CommonState
                 this._node.get().setRotXYZ(0, 180);
 
             this._node.transform();
+        }*/
+        if(this.healthSpawnTimer.expired( false, true ))
+        {
+            this._buildings = this.buildingsStrategy.nodeAry;
+
+            this._node = this.enemyStrategy.create('health_character');
+
+            this._index = 0;//genFunc.randomInt( 0, this.buildings.length-1 );
+            this._targetBuilding = this._buildings[this._index].get();
+
+            // Parce the additive Y offset for the health character to stand on the building
+            this._yOffsetValueHealth = parseInt(this._targetBuilding.parentNode.name.match(/\d+$/)[0], 10) - 1;
+
+            this._node.get().setPosXYZ(this._targetBuilding.pos.x, this._targetBuilding.pos.y + this.healthCharYOffsetAry[this._yOffsetValueHealth]);
         }
     }
 

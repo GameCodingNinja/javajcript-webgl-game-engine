@@ -19,6 +19,11 @@
                 <scale x="2" y="2" z="1"/>
             </sprite>
         </node>
+        <!--<node name="health_character">
+            <sprite>
+                <position x="800" y="80"/>
+            </sprite>
+        </node>-->
     </strategy>
   
 </loader>

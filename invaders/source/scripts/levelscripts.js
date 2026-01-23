@@ -11,6 +11,7 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { eventManager } from '../../../library/managers/eventmanager';
+import { cameraManager } from '../../../library/managers/cameramanager';
 import * as utilScripts from './utilityscripts';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as gameDefs from '../state/gamedefs';
@@ -47,29 +48,19 @@ class Explode_animation
         this.explodeAnim.init( 24, false, this.sprite );
 
         // Create an explode graphic node and translate it to the projectile sprite
-        this.explodeAnim.sprite.setPos( projectileSprite.pos );
+        this.explodeAnim.sprite.setPosXYZ( shipSprite.pos.x, projectileSprite.pos.y );
         this.explodeAnim.sprite.transform();
 
         this.dif = this.shipSprite.pos.getDistance( this.explodeAnim.sprite.pos );
-        this._size = this.shipSprite.getSize();
 
-        // If the distance is too big like colliding with a big enemy ship, size it down
-        if( shipSprite.parentNode.userId == PLAYER_SHIP_ID && projectileSprite.parentNode.userId <= ENEMY00_SHIP_ID )
+        // Offset a bit relitive to where the projectile hit
+        if(projectileSprite.rot.y > 1.0)
         {
-            if(this.dif.x > (this._size.w / 2))
-                this.dif.x = (this._size.w / 2) - 15;
-            else if(this.dif.x < -(this._size.w / 2))
-                this.dif.x = -(this._size.w / 2) + 15;
-
-            if(this.dif.y > (this._size.h / 2))
-                this.dif.y = (this._size.h / 2) - 15;
-            else if(this.dif.y < -(this._size.h / 2))
-                this.dif.y = -(this._size.h / 2) + 15;
+            this.dif.x -= 10;
         }
         else
         {
-            // Add in the offset
-            this.dif.x += offset;
+            this.dif.x += 10;
         }
     }
     
@@ -153,7 +144,7 @@ class EnemyShip_CheckForCollideWithPlayer
     {
         // Player ship
         this.playerShipStrategy = strategyManager.get('_player_ship_');
-        this.camera = this.playerShipStrategy.camera;
+        this.camera = cameraManager.get('levelCamera');
 
         // Continues the init
         this.recycle( sprite );
@@ -184,6 +175,82 @@ class EnemyShip_CheckForCollideWithPlayer
     }
 }
 
+//
+//  DESC: Health character animation
+//
+class HealthCharacter_Animation
+{
+    constructor( sprite )
+    {
+        this.animate = new utilScripts.PlayAnim();
+
+        // Continues the init
+        this.recycle( sprite );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( sprite )
+    {
+        this.animate.init( 1.5, true, sprite );
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.animate.execute();
+        return false;
+    }
+}
+
+//
+//  DESC: Common script for handling enemy getting hit
+//
+class HealthCharacter_Hit
+{
+    constructor( sprite, projectileSprite )
+    {
+        // Get the enemy strategy to create the explosion animation
+        this.enemyStrategy = strategyManager.get('_enemy_');
+
+        // Continues the init
+        this.recycle( sprite, projectileSprite );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( sprite, projectileSprite )
+    {
+        this.sprite = sprite;
+
+        // Create an explode graphic node and translate it to the projectile sprite and execute the script
+        this._explodeSprite = this.enemyStrategy.create('explode').get();
+        this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -10 : 10 );
+
+        // Hide the projectile and allow it to be recycled from the script moving it
+        if( projectileSprite.parentNode.name === 'player_shot' )
+        {
+            projectileSprite.setVisible( false );
+            // The projectile sprite script will recycle itself
+        }
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        // We are done with these sprites, queue it up to be recycled
+        this.enemyStrategy.recycle( this.sprite.parentNode );
+
+        return true;
+    }
+}
+
 // 
 //  DESC: Load scripts
 //
@@ -194,7 +261,16 @@ export function loadScripts()
 
     scriptManager.set( 'EnemyShip_CheckForCollideWithPlayer',
         ( sprite ) => { return new EnemyShip_CheckForCollideWithPlayer( sprite ); } );
+    
+    scriptManager.set( 'HealthCharacter_CheckForCollideWithPlayer',
+        ( sprite ) => { return new HealthCharacter_CheckForCollideWithPlayer( sprite ); } );
 
     scriptManager.set( 'Building_Die',
         ( sprite ) => { return new Building_Die( sprite ); } );
+
+    scriptManager.set( 'HealthCharacter_Animation',
+        ( sprite ) => { return new HealthCharacter_Animation( sprite ); } );
+
+    scriptManager.set( 'HealthCharacter_Hit',
+                ( sprite, projectileSprite ) => { return new HealthCharacter_Hit( sprite, projectileSprite ); } );
 }
