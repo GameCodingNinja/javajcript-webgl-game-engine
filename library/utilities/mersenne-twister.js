@@ -66,8 +66,8 @@
 */
 
 export var MersenneTwister = function(seed) {
-  if (seed == undefined) {
-    seed = new Date().getTime();
+  if (seed === undefined) {
+    seed = Date.now();
   } 
   /* Period parameters */  
   this.N = 624;
@@ -78,6 +78,8 @@ export var MersenneTwister = function(seed) {
  
   this.mt = new Array(this.N); /* the array for the state vector */
   this.mti=this.N+1; /* mti==N+1 means mt[N] is not initialized */
+
+  this.mag01 = [0x0, this.MATRIX_A]; /* mag01[x] = x * MATRIX_A for x=0,1 */
 
   this.init_genrand(seed);
 }  
@@ -131,8 +133,7 @@ MersenneTwister.prototype.init_by_array = function(init_key, key_length) {
 /* generates a random number on [0,0xffffffff]-interval */
 MersenneTwister.prototype.genrand_int32 = function() {
   var y;
-  var mag01 = new Array(0x0, this.MATRIX_A);
-  /* mag01[x] = x * MATRIX_A  for x=0,1 */
+  var mag01 = this.mag01;
 
   if (this.mti >= this.N) { /* generate N words at one time */
     var kk;

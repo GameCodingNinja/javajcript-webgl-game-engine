@@ -52,14 +52,18 @@ class HighResTimer
         // Set the elapsed time
         this.elapsedTime = this._time - this.lastTime;
 
-        // Set the fps
-        this.fps = 1000.0 / this.elapsedTime;
-
         // Catch any hickups - cap to about 10 fps
         // Elapsed time is not expected to get this 
         // high in a game which is why it's capped
         if( this.elapsedTime > 100.0 )
             this.elapsedTime = 100.0;
+        
+        // Prevent division by zero (clamp to minimum)
+        else if( this.elapsedTime < 0.0001 )
+            this.elapsedTime = 0.0001;
+
+        // Set the fps (after clamping)
+        this.fps = 1000.0 / this.elapsedTime;
 
         // Reset the last time
         this.lastTime = this._time;

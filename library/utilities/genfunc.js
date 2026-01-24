@@ -15,6 +15,7 @@ var gI;
 var gReturn;
 var gKey;
 var gValue;
+var gDOMParser = new DOMParser();
 
 // 
 //  DESC: Load files via a promise
@@ -196,8 +197,7 @@ export function shuffle( array )
 //
 export function stringLoadXML( stringData )
 {
-    let parser = new DOMParser();
-    return parser.parseFromString( stringData, "application/xml" );
+    return gDOMParser.parseFromString( stringData, "application/xml" );
 }
 
 // 

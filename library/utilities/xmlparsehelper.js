@@ -416,7 +416,7 @@ export function loadDynamicOffset( xmlNode )
                 if( attr )
                 {
                     dynamicOffset.add( defs.EDO_VERT_CENTER );
-                    dynamicOffset.setX( Number( attr ) );
+                    dynamicOffset.setY( Number( attr ) );
                 }
             }
         }

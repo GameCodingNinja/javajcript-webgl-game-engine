@@ -34,7 +34,7 @@ export class BitMask
     //
     remove( args )
     {
-        this.bitmask &= args ^ -1;
+        this.bitmask &= ~args;
     }
 
     // 
@@ -82,7 +82,7 @@ export class BitMask
     //
     getExcluding( args )
     {
-        return this.bitmask & (args ^ -1);
+        return this.bitmask & ~args;
     }
 }
     

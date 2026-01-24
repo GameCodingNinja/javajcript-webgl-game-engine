@@ -28,8 +28,8 @@ export class DefinitionValidator
     //
     clear()
     {
-        this.warnings = [];
-        this.errors = [];
+        this.warnings.length = 0;
+        this.errors.length = 0;
     }
 
     //

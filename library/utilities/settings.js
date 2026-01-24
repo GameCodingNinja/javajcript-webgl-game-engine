@@ -109,13 +109,13 @@ class Settings
             if( obj.device.resolution )
             {
                 // Device rendering resolution
-                this.deviceRes.set( obj.display.resolution.width, obj.display.resolution.height );
+                this.deviceRes.set( obj.device.resolution.width, obj.device.resolution.height );
                 this.deviceRes_half.w = this.deviceRes.w / 2;
                 this.deviceRes_half.h = this.deviceRes.h / 2;
 
                 // Height and width screen ratio for perspective projection
-                this.screenAspectRatio.w = obj.display.resolution.width / obj.display.resolution.height;
-                this.screenAspectRatio.h = obj.display.resolution.height / obj.display.resolution.width;
+                this.screenAspectRatio.w = obj.device.resolution.width / obj.device.resolution.height;
+                this.screenAspectRatio.h = obj.device.resolution.height / obj.device.resolution.width;
             }
 
             if( obj.device.projection )
