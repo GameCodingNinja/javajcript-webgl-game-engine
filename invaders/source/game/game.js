@@ -62,8 +62,8 @@ export class Game
             // Load the user settings. Needs to be after localStorage.init()
             settings.loadUserSettingsFromObj( userSettingsObj );
 
-            // Create the OpenGL context
-            let gl = device.create();
+            // Create the OpenGL context (disable antialias for pixel-art style)
+            let gl = device.create('game-surface', { antialias: false });
 
             // Set the init shader callback
             signalManager.connect_initShader( this.initShaderCallBack.bind(this) );

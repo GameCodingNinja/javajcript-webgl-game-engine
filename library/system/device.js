@@ -10,22 +10,47 @@ import { settings } from '../utilities/settings';
 import { cameraManager } from '../managers/cameramanager';
 import { menuManager } from '../gui/menumanager';
 
+const DEFAULT_CONTEXT_ATTRS = Object.freeze({
+    premultipliedAlpha: false,
+    alpha: false,
+    stencil: true,
+    preserveDrawingBuffer: false,
+    antialias: true,
+    powerPreference: 'high-performance'
+});
+
 class Device
 {
     constructor()
     {
         this.canvas = null;
         this.glContext = null;
+        this.isWebGL2 = false;
+        this.lost = false;
+
+        this.caps = {
+            maxTextureSize: 0,
+            maxAnisotropy: 0,
+            anisotropyExt: null,
+            vaoExt: null
+        };
     }
     
     // 
     //  DESC: Create the OpenGL context
     //
-    create()
+    create(canvasId = 'game-surface', attrs = null)
     {
-        let parm = {premultipliedAlpha: false, alpha: false, stencil:true, preserveDrawingBuffer: true};
+        if( this.glContext )
+            return this.glContext;
 
-        this.canvas = document.getElementById('game-surface');
+        // Merge passed attrs with defaults
+        let contextAttrs = attrs ? Object.assign({}, DEFAULT_CONTEXT_ATTRS, attrs) : DEFAULT_CONTEXT_ATTRS;
+
+        this.canvas = document.getElementById(canvasId);
+        if( !this.canvas )
+            throw new Error(`Canvas not found: #${canvasId}`);
+
         this.canvas.width = settings.displayRes.w;
         this.canvas.height = settings.displayRes.h;
         this.canvas.style.position = settings.canvasStylePosition;
@@ -41,15 +66,68 @@ class Device
             this.canvas.style.top = `${(window.innerHeight - settings.displayRes.h) / 2}px`;
         }
 
-        this.glContext =
-            this.canvas.getContext('webgl2', parm) ||
-            this.canvas.getContext('webgl', parm) ||
-            this.canvas.getContext('experimental-webgl', parm);
+        let gl2 = this.canvas.getContext('webgl2', contextAttrs);
+        if( gl2 )
+        {
+            this.glContext = gl2;
+            this.isWebGL2 = true;
+        }
+        else
+        {
+            let gl1 = this.canvas.getContext('webgl', contextAttrs) ||
+                      this.canvas.getContext('experimental-webgl', contextAttrs);
+            this.glContext = gl1;
+            this.isWebGL2 = false;
+        }
         
         if( !this.glContext )
-            alert('Your browser does not support WebGL');
+            throw new Error('WebGL is not supported by your browser');
+
+        this._installContextLossHandlers();
+        this._initCapsAndState();
 
         return this.glContext;
+    }
+
+    //
+    //  DESC: Install WebGL context lost/restored event handlers
+    //
+    _installContextLossHandlers()
+    {
+        this.canvas.addEventListener('webglcontextlost', (e) =>
+        {
+            e.preventDefault();
+            this.lost = true;
+            console.warn('WebGL context lost');
+        }, { passive: false });
+
+        this.canvas.addEventListener('webglcontextrestored', () =>
+        {
+            this.lost = false;
+            this._initCapsAndState();
+            console.log('WebGL context restored');
+        });
+    }
+
+    //
+    //  DESC: Initialize capabilities and baseline GL state
+    //
+    _initCapsAndState()
+    {
+        let gl = this.glContext;
+
+        this.caps.maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE) | 0;
+
+        let aniso =
+            gl.getExtension('EXT_texture_filter_anisotropic') ||
+            gl.getExtension('MOZ_EXT_texture_filter_anisotropic') ||
+            gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
+
+        this.caps.anisotropyExt = aniso;
+        this.caps.maxAnisotropy = aniso ? (gl.getParameter(aniso.MAX_TEXTURE_MAX_ANISOTROPY_EXT) | 0) : 0;
+
+        if( !this.isWebGL2 )
+            this.caps.vaoExt = gl.getExtension('OES_vertex_array_object');
     }
 
     //
@@ -73,8 +151,6 @@ class Device
             this.canvas.style.left = `${(width - settings.displayRes.w) / 2}px`;
             this.canvas.style.top = `${(height - settings.displayRes.h) / 2}px`;
         }
-
-        //console.log( `Resolution Change: ${width} x ${height}; DPR: ${window.devicePixelRatio}` );
     }
 
     // 

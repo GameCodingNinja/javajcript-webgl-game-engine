@@ -251,9 +251,9 @@ export class UISlider extends UISubControl
 
             // (1.0 / this.matrix.matrix[]) handles the scaling of the control
             if( this.orientation === defs.EO_HORIZONTAL )
-                this.incSliderMovePos( event.movementX * (1 / event.gameAdjustedPixelRatio) * (1.0 / globalMatrix.matrix[0]) );
+                this.incSliderMovePos( event.gameAdjustedMovementX * (1 / event.gameAdjustedPixelRatio) * (1.0 / globalMatrix.matrix[0]) );
             else
-                this.incSliderMovePos( event.movementY * (1 / event.gameAdjustedPixelRatio) * (1.0 / globalMatrix.matrix[5]) );
+                this.incSliderMovePos( event.gameAdjustedMovementY * (1 / event.gameAdjustedPixelRatio) * (1.0 / globalMatrix.matrix[5]) );
         }
 
         return this._result;

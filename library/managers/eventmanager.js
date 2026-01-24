@@ -257,12 +257,19 @@ class EventManager
     {
         this._x = event.offsetX;
         this._y = event.offsetY;
+        this._movementX = event.movementX;
+        this._movementY = event.movementY;
         this._pixelRatio = window.devicePixelRatio;
 
         if( document.fullscreenElement )
         {
-            this._x = Math.trunc(event.offsetX * this._pixelRatio);
-            this._y = Math.trunc(event.offsetY * this._pixelRatio);
+            // Scale mouse coordinates based on canvas internal size vs CSS display size
+            this._scaleX = device.canvas.width / device.canvas.clientWidth;
+            this._scaleY = device.canvas.height / device.canvas.clientHeight;
+            this._x = Math.trunc(event.offsetX * this._scaleX);
+            this._y = Math.trunc(event.offsetY * this._scaleY);
+            this._movementX = event.movementX * this._scaleX;
+            this._movementY = event.movementY * this._scaleY;
 
             // Since it's needed for fullscreen, nullify it for anyone else using it
             this._pixelRatio = 1.0; 
@@ -271,8 +278,10 @@ class EventManager
         // Create a new event member to hold game custom values
         event.gameAdjustedMouseX = this._x;
         event.gameAdjustedMouseY = this._y;
+        event.gameAdjustedMovementX = this._movementX;
+        event.gameAdjustedMovementY = this._movementY;
         event.gameAdjustedPixelRatio = this._pixelRatio;
-        this.mouseRelativePos.setXYZ( event.movementX, event.movementY );
+        this.mouseRelativePos.setXYZ( this._movementX, this._movementY );
         this.mouseAbsolutePos.setXYZ( this._x, this._y);
     }
 
