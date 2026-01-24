@@ -57,37 +57,37 @@ export class Sound
     loadFromNode( node )
     {
         // Set the default volume if defined. Same goes for the init volume
-        let attr = node.getAttribute( 'defaultVolume' );
-        if( attr )
+        this._attr = node.getAttribute( 'defaultVolume' );
+        if( this._attr )
         {
-            this.defaultVolume = Number( attr );
+            this.defaultVolume = Number( this._attr );
             this.initVolume = this.defaultVolume;
         }
 
         // The init volume mught be different
-        attr = node.getAttribute( 'initVolume' );
-        if( attr )
+        this._attr = node.getAttribute( 'initVolume' );
+        if( this._attr )
         {
-            this.initVolume = Number( attr );
+            this.initVolume = Number( this._attr );
         }
 
-        attr = node.getAttribute( 'type' );
-        if( attr )
+        this._attr = node.getAttribute( 'type' );
+        if( this._attr )
         {
-            if( attr === 'music' )
+            if( this._attr === 'music' )
                 this.type = defs.ESND_MUSIC;
 
-            else if( attr === 'dialog' )
+            else if( this._attr === 'dialog' )
                 this.type = defs.ESND_DIALOG;
         }
 
-        attr = node.getAttribute( 'playOnLoad' );
-        if( attr )
-            this.playOnLoad = (attr === 'true');
+        this._attr = node.getAttribute( 'playOnLoad' );
+        if( this._attr )
+            this.playOnLoad = (this._attr === 'true');
 
-        attr = node.getAttribute( 'loop' );
-        if( attr )
-            this.loop = (attr === 'true');
+        this._attr = node.getAttribute( 'loop' );
+        if( this._attr )
+            this.loop = (this._attr === 'true');
     }
     
     //
@@ -100,6 +100,7 @@ export class Sound
         
         this.gainNode = this.context.createGain();
         this.gainNode.gain.value = this.initVolume;
+        this.gainNode.connect(this.context.destination);
 
         if( this.playOnLoad )
             this.play( this.loop );
@@ -123,8 +124,7 @@ export class Sound
             this.source.loop = loop;
             
             this.source.connect(this.gainNode);
-            this.gainNode.connect(this.context.destination);
-            
+
             this.source.start(0, offset % this.buffer.duration);
             this.startTime = this.context.currentTime - offset;
             this.playing = true;
@@ -236,6 +236,22 @@ export class Sound
     wasPlayed()
     {
         return (this.startTime !== 0);
+    }
+
+        //
+    //  DESC: Dispose of sound resources
+    //
+    dispose()
+    {
+        this.source.stop();
+        if( this.gainNode )
+        {
+            this.gainNode.disconnect();
+        }
+        
+        this.gainNode = null;
+        this.buffer = null;
+        this.context = null;
     }
 }
 

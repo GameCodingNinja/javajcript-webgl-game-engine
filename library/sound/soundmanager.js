@@ -53,26 +53,26 @@ class SoundManager extends ManagerBase
         let promiseAry = [];
 
         // Get the group map
-        let groupMap = this.soundMapMap.get( group );
+        this._groupMap = this.soundMapMap.get( group );
         
         // Get the node to the sound files to be loaded into a buffer
-        let loadFilesNode = xmlNode.getElementsByTagName( 'load' );
+        this._loadFilesNode = xmlNode.getElementsByTagName( 'load' );
         
         // Load the buffered sounds
-        for( let i = 0; i < loadFilesNode.length; ++i )
+        for( this._i = 0; this._i < this._loadFilesNode.length; ++this._i )
         {
-            let id = loadFilesNode[i].getAttribute( 'id' );
-            let filePath = loadFilesNode[i].getAttribute( 'file' );
+            let id = this._loadFilesNode[this._i].getAttribute( 'id' );
+            let filePath = this._loadFilesNode[this._i].getAttribute( 'file' );
             
             // Check for duplicate names
-            if( groupMap.has(id) )
+            if( this._groupMap.has(id) )
                 throw new Error( `Duplicate sound group id (${id}, ${group}, ${filePath})!` );
             
-            let snd = new Sound;
-            groupMap.set( id, snd );
+            this._snd = new Sound;
+            this._groupMap.set( id, this._snd );
             
             // Load from node
-            snd.loadFromNode( loadFilesNode[i] );
+            this._snd.loadFromNode( this._loadFilesNode[this._i] );
 
             // Load the sound file
             promiseAry.push( 
@@ -82,32 +82,32 @@ class SoundManager extends ManagerBase
         }
         
         // Get the node to the sound files
-        let playListNode = xmlNode.getElementsByTagName( 'playList' );
-        if( playListNode.length )
+        this._playListNode = xmlNode.getElementsByTagName( 'playList' );
+        if( this._playListNode.length )
         {
             // Create the group map if it doesn't already exist
-            let groupMap = this.playListMapMap.get( group );
-            if( groupMap === undefined )
+            this._groupMap = this.playListMapMap.get( group );
+            if( this._groupMap === undefined )
             {
-                groupMap = new Map;
-                this.playListMapMap.set( group, groupMap );
+                this._groupMap = new Map;
+                this.playListMapMap.set( group, this._groupMap );
             }
             
-            for( let i = 0; i < playListNode.length; ++i )
+            for( this._i = 0; this._i < this._playListNode.length; ++this._i )
             {
                 // Get the id
-                let id = playListNode[i].getAttribute( 'id' );
+                this._id = this._playListNode[this._i].getAttribute( 'id' );
                 
                 // Check for duplicate names
-                if( groupMap.has(id) )
-                    throw new Error( `Duplicate playlist group id (${id}, ${group}, ${filePath})!` );
+                if( this._groupMap.has(this._id) )
+                    throw new Error( `Duplicate playlist group id (${this._id}, ${group}, ${filePath})!` );
                 
                 // Add the playlist data to the map
-                let playLst = new PlayList;
-                groupMap.set( id, playLst );
+                this._playLst = new PlayList;
+                this._groupMap.set( this._id, this._playLst );
                 
                 // Load the playlist from node
-                playLst.loadFromNode( playListNode[i], this.soundMapMap.get( group ), group, filePath );
+                this._playLst.loadFromNode( this._playListNode[this._i], this.soundMapMap.get( group ), group, filePath );
             }
         }
 
@@ -120,22 +120,14 @@ class SoundManager extends ManagerBase
     loadFromBinaryData( group, id, audioData, filePath )
     {
         // Get the group map
-        let groupMap = this.soundMapMap.get( group );
+        this._groupMap = this.soundMapMap.get( group );
         
         // Get the sound
-        let sound = groupMap.get( id );
+        let sound = this._groupMap.get( id );
 
-        return new Promise((resolve, reject) => {
-        
-            // Create a sound buffer and decode
-            this.context.decodeAudioData( audioData,
-                (soundBuffer) => 
-                {
-                    sound.init( this.context, soundBuffer );
-                    resolve();
-                },
-                (error) => reject( Error(`Error decoding audio data (${error.err}, ${filePath})!`) ) );
-        });
+        return this.context.decodeAudioData( audioData )
+            .then(( soundBuffer ) => { sound.init( this.context, soundBuffer ); })
+            .catch(( error ) => { throw new Error(`Error decoding audio data (${filePath}): ${error?.message ?? error}`); });
     }
     
     //
@@ -143,22 +135,25 @@ class SoundManager extends ManagerBase
     //
     freeGroup( group )
     {
-        let groupAry = group;
+        this._groupAry = group;
         if( !(group instanceof Array) )
-            groupAry = [group];
+            this._groupAry = [group];
 
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
         {
-            let group = groupAry[grp];
+            this._group = this._groupAry[this._grp];
             
             // Make sure the group we are looking for exists
-            if( this.listTableMap.get( group ) === undefined )
-                throw new Error( `Sound group name can't be found (${group})!` );
+            if( this.listTableMap.get( this._group ) === undefined )
+                throw new Error( `Sound group name can't be found (${this._group})!` );
             
             // Stop any currently playing files
-            let groupMap = this.soundMapMap.get( group );
-            for( let sound of groupMap.values() )
-                sound.stop();
+            this._groupMap = this.soundMapMap.get( this._group );
+            if( this._groupMap )
+            {
+                for( this._sound of this._groupMap.values() )
+                    this._sound.dispose();
+            }
 
             // Erase the group
             if( this.soundMapMap.has( group ) )
@@ -188,13 +183,13 @@ class SoundManager extends ManagerBase
     //
     createGroupPlayer( group )
     {
-        let soundMap = this.soundMapMap.get( group );
+        this._soundMap = this.soundMapMap.get( group );
 
         // At a minmum, a sound map group needs to exist
-        if( soundMap === undefined )
+        if( this._soundMap === undefined )
             throw new Error( `Sound group name can't be found (${group})!` );
 
-        return new GroupPlayer( soundMap, this.playListMapMap.get( group ) );
+        return new GroupPlayer( this._soundMap, this.playListMapMap.get( group ) );
     }
     
     //

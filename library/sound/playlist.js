@@ -36,31 +36,31 @@ export class PlayList
     loadFromNode( node, soundGroupMap, group, filePath )
     {
         // Get the play type
-        let playtype = node.getAttribute( 'playtype' );
-        if( playtype )
+        this._playtype = node.getAttribute( 'playtype' );
+        if( this._playtype )
         {
-            if( playtype === 'random' )
+            if( this._playtype === 'random' )
                 this.type = EST_RANDOM;
             
-            else if( playtype === 'sequential' )
+            else if( this._playtype === 'sequential' )
                 this.type = EST_SEQUENTIAL;
         }
         
         // Get the sound list node
-        let soundNode = node.children;
-        if( soundNode.length )
+        this._soundNode = node.children;
+        if( this._soundNode.length )
         {
-            for( let i = 0; i < soundNode.length; ++i )
+            for( this._i = 0; this._i < this._soundNode.length; ++this._i )
             {
                 // Get the id
-                let id = soundNode[i].getAttribute( "id" );
+                this._id = this._soundNode[this._i].getAttribute( "id" );
                 
                 // Add the sound to the playlist
-                let snd = soundGroupMap.get( id );
-                if( snd )
-                    this.soundAry.push( snd );
+                this._snd = soundGroupMap.get( this._id );
+                if( this._snd )
+                    this.soundAry.push( this._snd );
                 else
-                    throw new Error( `Playlist sound Id does not exist (${id}, ${group}, ${filePath})!` );
+                    throw new Error( `Playlist sound Id does not exist (${this._id}, ${group}, ${filePath})!` );
             }
         }
     }
