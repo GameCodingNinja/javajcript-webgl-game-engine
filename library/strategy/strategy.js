@@ -52,6 +52,9 @@ export class Strategy extends Object
 
         // Pool map for sprite recycle
         this.recycleMap = new Map;
+
+        // Pre-bound sort function to avoid GC from closure creation
+        this.sortByZDesc = this.sortByZDesc.bind(this);
     }
 
     //
@@ -131,8 +134,8 @@ export class Strategy extends Object
     {
         // If the data can't be found, this could be a simple one-off sprite node 
         // which can be generated from the group and object data name
-        this._date = this.dataMap.get( name );
-        if( this._date === undefined )
+        this._data = this.dataMap.get( name );
+        if( this._data === undefined )
         {
             // If we can't find the data and the group param is empty, see if we can find the group 
             // in the Object Data Manager as a last attemp. 
@@ -151,13 +154,13 @@ export class Strategy extends Object
                 this.loadFromNode( 
                     genFunc.stringLoadXML(`<strategy defaultGroup="${group}"><node name="${name}"><sprite/></node></strategy>`).getElementsByTagName( 'strategy' )[0],
                     'Dynamic generation');
-                this._date = this.dataMap.get( name );
+                this._data = this.dataMap.get( name );
             }
             else
                 throw new Error( `Error finding node data (${name})!` );
         }
 
-        return this._date;
+        return this._data;
     }
 
     //
@@ -325,7 +328,7 @@ export class Strategy extends Object
     deactivateAll()
     {
         for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-            this.deactivateAry.push( this.nodeAry[this._index] );
+            this.deactivateAry.push( this.nodeAry[this._i] );
     }
 
     //
@@ -579,17 +582,7 @@ export class Strategy extends Object
         // If sort function is not provided, sort on z order
         // For this to render as expected, sort in descending order. 
         else
-            this.nodeAry.sort( 
-                (a, b) =>
-                {
-                    if(a.get().transPos.z > b.get().transPos.z)
-                        return -1;
-
-                    else if(a.get().transPos.z < b.get().transPos.z)
-                        return 1;
-
-                    return 0;
-                });
+            this.nodeAry.sort( this.sortByZDesc );
     }
 
     //
@@ -603,17 +596,7 @@ export class Strategy extends Object
         // If sort function is not provided, sort on z order
         // For this to render as expected, sort in descending order. 
         else
-            this.activateAry.sort( 
-                (a, b) =>
-                {
-                    if(a.get().transPos.z > b.get().transPos.z)
-                        return -1;
-
-                    else if(a.get().transPos.z < b.get().transPos.z)
-                        return 1;
-
-                    return 0;
-                });
+            this.activateAry.sort( this.sortByZDesc );
     }
 
     //
@@ -635,5 +618,19 @@ export class Strategy extends Object
         {
             this._recycleAry.push(node);
         }
+    }
+
+    //
+    //  DESC: Sort comparator for z-order descending
+    //
+    sortByZDesc(a, b)
+    {
+        if(a.get().transPos.z > b.get().transPos.z)
+            return -1;
+
+        else if(a.get().transPos.z < b.get().transPos.z)
+            return 1;
+
+        return 0;
     }
 }

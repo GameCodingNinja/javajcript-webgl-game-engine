@@ -20,8 +20,11 @@ class StrategyManager extends ManagerBase
         
         // An array of active strategy references
         this.strategyAry = [];
+
+        // Pre-bound sort function to avoid GC from closure creation
+        this.sortByZDesc = this.sortByZDesc.bind(this);
     }
-    
+
     //
     //  DESC: Add strategy which will load it's data from XML node
     //
@@ -60,7 +63,7 @@ class StrategyManager extends ManagerBase
         this._strategy = this.strategyMap.get( strategyId );
         if( this._strategy )
         {
-            this._index = this.strategyAry.findIndex( (obj) => obj === this._strategy );
+            this._index = genFunc.indexOf( this.strategyAry, this._strategy );
             if( this._index === -1 )
                 this.strategyAry.push( this._strategy );
             else
@@ -197,17 +200,21 @@ class StrategyManager extends ManagerBase
         // If sort function is not provided, sort on z order
         // For this to render as expected, sort in descending order. 
         else
-            this.strategyAry.sort( 
-                (a, b) =>
-                {
-                    if(a.transPos.z > b.transPos.z)
-                        return -1;
+            this.strategyAry.sort( this.sortByZDesc );
+    }
 
-                    else if(a.transPos.z < b.transPos.z)
-                        return 1;
+    //
+    //  DESC: Sort comparator for z-order descending
+    //
+    sortByZDesc(a, b)
+    {
+        if(a.transPos.z > b.transPos.z)
+            return -1;
 
-                    return 0;
-                });
+        else if(a.transPos.z < b.transPos.z)
+            return 1;
+
+        return 0;
     }
 }
 

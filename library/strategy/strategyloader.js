@@ -61,7 +61,7 @@ class Strategyloader extends ManagerBase
 
         // Preload the strategies
         return Promise.all( promiseAry )
-            .then(() => this.loadStartegy( xmlNode ));
+            .then(() => this.loadStrategy( xmlNode ));
     }
     
     // 
@@ -70,7 +70,7 @@ class Strategyloader extends ManagerBase
     //              they load their own XML that describes what is defined
     //              in the strategy.
     //
-    loadStartegy( xmlNode )
+    loadStrategy( xmlNode )
     {
         let strategyNode = xmlNode.getElementsByTagName( 'strategy' );
 
@@ -89,14 +89,14 @@ class Strategyloader extends ManagerBase
                 strategy.setCamera( cameraId );
             
             // Populate the strategies with their objects
-            this.populateStartegy( strategyNode[i], strategy );
+            this.populateStrategy( strategyNode[i], strategy );
         }
     }
     
     // 
     //  DESC: Populate the strategies with their objects
     //
-    populateStartegy( xmlNode, strategy )
+    populateStrategy( xmlNode, strategy )
     {
         let defaultName = xmlNode.getAttribute( 'defaultName' );
         let defaultGroup = xmlNode.getAttribute( 'defaultGroup' );

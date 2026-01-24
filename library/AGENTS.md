@@ -75,6 +75,7 @@ export var exampleManager = new ExampleManager;
 - **Bitmask Flags**: Transform dirty flags (`defs.TRANSLATE | defs.TRANSFORM`)
 - **Generator Scripts**: JavaScript generators for coroutine-style behavior
 - **Global temp variables**: Reuse objects to avoid allocations (e.g., `gTempGroupAry`, `gValidationContext`)
+- **Pre-bound callbacks**: Sort comparators and other callbacks used in hot paths should be class methods bound once in constructor (e.g., `this.sortByZDesc = this.sortByZDesc.bind(this)`) to avoid closure allocation
 - **Dispose Lifecycle**: All data classes implement `dispose()` for GPU/physics resource cleanup
 - **Definition Validation**: XML definitions validated via `definitionValidator` before loading
 
@@ -83,6 +84,30 @@ export var exampleManager = new ExampleManager;
 - Spaces around operators
 - Comments above methods with `//  DESC:` format
 - No trailing commas in object literals
+
+## Device Singleton (system/device.js)
+The `device` singleton manages WebGL context creation and provides:
+- **Context attributes**: Default attrs in `DEFAULT_CONTEXT_ATTRS`; games can override by passing partial object to `device.create()` which merges with defaults
+- **Capabilities**: `device.caps` object contains `maxTextureSize`, `maxAnisotropy`, `anisotropyExt`, `vaoExt` (WebGL1 only)
+- **Context loss handling**: Listens for `webglcontextlost`/`webglcontextrestored` events; check `device.lost` flag
+- **WebGL version**: `device.isWebGL2` indicates which context was obtained
+
+Example game-level override:
+```javascript
+device.create('game-surface', { antialias: false }); // pixel-art games
+```
+
+## Mouse Coordinates (managers/eventmanager.js)
+Mouse events are filtered through `filterMousePos()` which adds game-adjusted properties:
+- `event.gameAdjustedMouseX/Y`: Position scaled for fullscreen
+- `event.gameAdjustedMovementX/Y`: Relative movement scaled for fullscreen (used by sliders)
+- `event.gameAdjustedPixelRatio`: DPR value (1.0 in fullscreen)
+
+Fullscreen scaling uses `canvas.width / canvas.clientWidth` ratio, NOT `devicePixelRatio`.
+
+## GC Optimization Caveats
+- **Do NOT reuse arrays in async/Promise contexts**: Instance variables for promise collection (e.g., `this._promiseAry`) cause race conditions when multiple loads occur concurrently. Use local variables for promise arrays.
+- **Avoid `findIndex` with closures**: Use `genFunc.indexOf()` instead of `Array.findIndex((obj) => ...)` to avoid closure creation per call.
 
 ## External Dependencies
 - **planck-js**: Box2D physics port
