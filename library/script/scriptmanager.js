@@ -38,12 +38,12 @@ class ScriptManager
     //
     get( name )
     {
-        let scriptFactory = this.scriptMap.get( name );
+        this._scriptFactory = this.scriptMap.get( name );
         
-        if( scriptFactory === undefined )
+        if( this._scriptFactory === undefined )
             throw new Error( `Script name could not be found! (${name})` );
         
-        return scriptFactory;
+        return this._scriptFactory;
     }
 }
 

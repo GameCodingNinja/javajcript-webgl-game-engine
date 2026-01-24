@@ -136,7 +136,7 @@ export class ScriptComponent
     //
     prepare(...args)
     {
-        let activeScript = null;
+        this._activeScript = null;
 
         if( this.scriptFactoryMap && typeof args[0] === 'string' )
         {
@@ -144,15 +144,15 @@ export class ScriptComponent
             if( scriptPrepareFunc )
             {
                 // See if this script was recycled
-                activeScript = this.recycle( scriptPrepareFunc.funcName, args );
+                this._activeScript = this.recycle( scriptPrepareFunc.funcName, args );
 
                 // Create one if none is in recycle
-                if( !activeScript )
+                if( !this._activeScript )
                 {
                     if(scriptPrepareFunc.ai)
                     {
                         //console.log(`AI Script Create; Name: ${scriptPrepareFunc.funcName}`);
-                        activeScript = aiManager.get( scriptPrepareFunc.funcName );
+                        this._activeScript = aiManager.get( scriptPrepareFunc.funcName );
                     }
                     else
                     {
@@ -165,45 +165,45 @@ export class ScriptComponent
                             switch(args.length)
                             {
                                 case 1:
-                                    activeScript = script();
+                                    this._activeScript = script();
                                 break;
                                 case 2:
-                                    activeScript = script(args[1]);
+                                    this._activeScript = script(args[1]);
                                 break;
                                 case 3:
-                                    activeScript = script(args[1],args[2]);
+                                    this._activeScript = script(args[1],args[2]);
                                 break;
                                 case 4:
-                                    activeScript = script(args[1],args[2],args[3]);
+                                    this._activeScript = script(args[1],args[2],args[3]);
                                 break;
                                 case 5:
-                                    activeScript = script(args[1],args[2],args[3],args[4]);
+                                    this._activeScript = script(args[1],args[2],args[3],args[4]);
                                 break;
                                 case 6:
-                                    activeScript = script(args[1],args[2],args[3],args[4],args[5]);
+                                    this._activeScript = script(args[1],args[2],args[3],args[4],args[5]);
                                 break;
                             }
 
-                            if( activeScript )
+                            if( this._activeScript )
                             {
-                                activeScript.name = scriptPrepareFunc.funcName;
+                                this._activeScript.name = scriptPrepareFunc.funcName;
                             }
                         }
                     }
                 }
 
-                if( activeScript )
+                if( this._activeScript )
                 {
                     if( scriptPrepareFunc.forceUpdate )
                     {
-                        if( activeScript.execute() )
-                            this.setScriptToRecycle(activeScript);
+                        if( this._activeScript.execute() )
+                            this.setScriptToRecycle(this._activeScript);
                         else
-                            this.scriptAry.push( activeScript );
+                            this.scriptAry.push( this._activeScript );
                     }
                     else
                     {
-                        this.scriptAry.push( activeScript );
+                        this.scriptAry.push( this._activeScript );
                     }
                 }
             }
@@ -211,22 +211,22 @@ export class ScriptComponent
         // Load scripts directly like "Fade Screen"
         else if( typeof args[0] === 'object' )
         {
-            activeScript = args[0];
+            this._activeScript = args[0];
 
             if( args.length > 1 && args[1] )
             {
-                if( activeScript.execute() )
-                    this.setScriptToRecycle(activeScript);
+                if( this._activeScript.execute() )
+                    this.setScriptToRecycle(this._activeScript);
                 else
-                    this.scriptAry.push( activeScript );
+                    this.scriptAry.push( this._activeScript );
             }
             else
             {
-                this.scriptAry.push( activeScript );
+                this.scriptAry.push( this._activeScript );
             }
         }
 
-        return activeScript;
+        return this._activeScript;
     }
 
     // 
