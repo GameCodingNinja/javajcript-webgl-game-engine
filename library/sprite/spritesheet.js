@@ -42,6 +42,8 @@ export class SpriteSheet
         if( obj.glyphAry )
         {
             if( this.glyphAry === null )
+                this.glyphAry = [];
+            else
                 this.glyphAry.length = 0;
             
             for( let i = 0; i < obj.glyphAry.length; ++i )
@@ -192,8 +194,8 @@ export class SpriteSheet
         if( (this.glyphAry !== null) && (this.glyphAry.length) )
             return this.glyphAry.length;
         
-        else if( (this.glyphMap !== null) && (this.glyphMap.length) )
-            return this.glyphMap.length;
+        else if( (this.glyphMap !== null) && (this.glyphMap.size) )
+            return this.glyphMap.size;
 
         return this.glyphCount;
     }

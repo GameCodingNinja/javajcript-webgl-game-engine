@@ -215,7 +215,7 @@ export class Object
     {
         this.parameters.add( defs.CENTER_POINT | defs.TRANSFORM );
 
-        this.centerPos = pos;
+        this.centerPos.copy( pos );
     }
     
     setCenterPosXYZ( x = 0, y = 0, z = 0 )
@@ -234,7 +234,7 @@ export class Object
         {
             this.parameters.add( defs.CROP_OFFSET | defs.TRANSFORM );
 
-            this.cropOffset = offset;
+            this.cropOffset.copy( offset );
         }
     }
 

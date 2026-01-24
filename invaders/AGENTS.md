@@ -80,7 +80,7 @@ Behavior classes registered with `scriptManager.set('ClassName', ClassName)` for
 - **Classes**: PascalCase (`PlayerShip`, `Level1State`)
 - **Files**: lowercase (`statedefs.js`, `commonstate.js`)
 - **Constants**: SCREAMING_SNAKE_CASE (`ESGS_GAME_START`, `EGS_LEVEL_1`)
-- **Private vars**: Underscore prefix (`this._event`)
+- **Private vars**: Underscore prefix (`this._event`) - assumed to be pre-allocated cache variables to avoid GC, does not need to be defined in the constructor
 
 ### Module Structure
 ```javascript

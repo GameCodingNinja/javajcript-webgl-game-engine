@@ -390,6 +390,9 @@ export class Sprite extends Object
         this._vSize = this.visualComponent.getSize();
         this._rect = super.getRect();
 
+        if( !this._vSize )
+            return this._rect;
+
         this._halfX = this._vSize.w / 2;
         this._halfY = this._vSize.h / 2;
 

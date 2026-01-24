@@ -42,7 +42,7 @@ Component-based 2D/3D WebGL game engine with scene graph architecture, manager s
 - **Classes**: PascalCase (`Sprite`, `UIControl`, `PhysicsComponent2D`)
 - **Files**: lowercase, no separators (`objectdatamanager.js`, `visualcomponentspritesheet.js`)
 - **Constants**: SCREAMING_SNAKE_CASE with prefix (`EGT_QUAD`, `ECT_CIRCLE`, `EAIS_ACTIVE`)
-- **Private/temp vars**: Underscore prefix (`this._node`, `this._result`)
+- **Private/temp vars**: Underscore prefix (`this._node`, `this._result`) - assumed to be pre-allocated cache variables to avoid GC, does not need to be defined in the constructor
 - **Singletons**: Lowercase exported instance (`export var device = new Device;`)
 
 ### Module Structure
