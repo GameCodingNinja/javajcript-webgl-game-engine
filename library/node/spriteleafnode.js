@@ -132,4 +132,12 @@ export class SpriteLeafNode extends iNode
         // Calculate the radius in squared space. Avoids having to use sqrt
         this.radius = this.get().getSize().getLength() / 2;
     }
+
+    // 
+    //  DESC: Is this a leaf node
+    //
+    isLeaf()
+    {
+        return true;
+    }
 }

@@ -1175,6 +1175,7 @@ export class Level1State extends CommonState
             if( genFunc.randomInt( 0, 1 ) === 0 )
                 this._node.get().setRotXYZ(0, 180);
         }
+        // Create a health character and position it on a building
         else if(this.healthSpawnTimer.expired( false, true ))
         {
             this._buildings = this.buildingsStrategy.nodeAry;

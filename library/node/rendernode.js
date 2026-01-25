@@ -53,11 +53,19 @@ export class RenderNode extends Node
 
                 if( node.nextNode !== null )
                 {
-                    // Clean up the children
-                    node.nextNode.get().cleanUp();
+                    if(node.nextNode.isLeaf())
+                    {
+                        // Let the child leaf node handle the cleanUp
+                        node.nextNode.cleanUp();
+                    }
+                    else
+                    {
+                        // Clean up the children
+                        node.nextNode.get().cleanUp();
 
-                    // Call a recursive function again
-                    node.cleanUpRecursive( node.nextNode );
+                        // Call a recursive function again
+                        node.cleanUpRecursive( node.nextNode );
+                    }
                 }
             }
             while( node.nextNode !== null );
@@ -88,11 +96,20 @@ export class RenderNode extends Node
 
                 if( node.nextNode !== null )
                 {
-                    // Update the child
-                    node.nextNode.get().update();
+                    if(node.nextNode.isLeaf())
+                    {
+                        // Let the child leaf node handle the update
+                        node.nextNode.update();
+                    }
+                    else
+                    {
+                        // Update the child
+                        node.nextNode.get().update();
+                        node.nextNode.get().physicsUpdate();
 
-                    // Call a recursive function again
-                    node.updateRecursive( node.nextNode );
+                        // Call a recursive function again
+                        node.updateRecursive( node.nextNode );
+                    }
                 }
             }
             while( node.nextNode !== null );
@@ -123,11 +140,19 @@ export class RenderNode extends Node
 
                 if( node.nextNode !== null )
                 {
-                    // Transform the child node
-                    node.nextNode.get().transform( node.get() );
+                    if(node.nextNode.isLeaf())
+                    {
+                        // Let the child leaf node handle the transform
+                        node.nextNode.transform( node.get() );
+                    }
+                    else
+                    {
+                        // Transform the child node
+                        node.nextNode.get().transform( node.get() );
 
-                    // Call a recursive function again
-                    node.transformRecursive( node.nextNode );
+                        // Call a recursive function again
+                        node.transformRecursive( node.nextNode );
+                    }
                 }
             }
             while( node.nextNode !== null );
@@ -158,10 +183,18 @@ export class RenderNode extends Node
 
                 if( node.nextNode !== null )
                 {
-                    if( node.nextNode.get().render( camera ) )
+                    if(node.nextNode.isLeaf())
                     {
-                        // Call a recursive function again
-                        node.renderRecursive( node.nextNode, camera );
+                        // Let the child leaf node handle the render
+                        node.nextNode.render( camera );
+                    }
+                    else
+                    {
+                        if( node.nextNode.get().render( camera ) )
+                        {
+                            // Call a recursive function again
+                            node.renderRecursive( node.nextNode, camera );
+                        }
                     }
                 }
             }

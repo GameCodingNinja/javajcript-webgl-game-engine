@@ -97,6 +97,14 @@ export class iNode
     }
 
     // 
+    //  DESC: Is this a leaf node
+    //
+    isLeaf()
+    {
+        return false;
+    }
+
+    // 
     //  DESC: Is this a Parent node
     //
     isParent()
