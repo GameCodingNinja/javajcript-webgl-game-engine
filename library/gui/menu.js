@@ -594,17 +594,17 @@ export class Menu extends Object
     //
     onMouseMove( event )
     {
-        for( this._each of this.controlNodeAry )
+        for( this._i = 0; this._i < this.controlNodeAry.length; ++this._i )
         {
-            if( this._each.uiControl.onMouseMove( event ) )
-                this.activeNode = this._each;
+            if( this.controlNodeAry[this._i].uiControl.onMouseMove( event ) )
+                this.activeNode = this.controlNodeAry[this._i];
             else
-                this._each.uiControl.deactivateControl();
+                this.controlNodeAry[this._i].uiControl.deactivateControl();
         }
 
-        for( this._each of this.mouseOnlyControlAry )
-            if( !this._each.onMouseMove( event ) )
-                this._each.deactivateControl();
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            if( !this.mouseOnlyControlAry[this._i].onMouseMove( event ) )
+                this.mouseOnlyControlAry[this._i].deactivateControl();
     }
 
     // 
@@ -612,11 +612,11 @@ export class Menu extends Object
     //
     onWheel( event )
     {
-        for( this._each of this.mouseOnlyControlAry )
-            this._each.onWheel( event );
+        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            this.mouseOnlyControlAry[this._i].onWheel( event );
 
-        for( this._each of this.controlAry )
-            this._each.onWheel( event );
+        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+            this.controlAry[this._i].onWheel( event );
     }
 
     // 

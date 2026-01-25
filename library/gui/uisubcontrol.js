@@ -144,7 +144,7 @@ export class UISubControl extends UIControl
             if( ctrlNode !== undefined )
                 this.controlNodeAry[nodeIndex].setNode( navId, ctrlNode );
             else
-                throw new Error( `Control node doesn't exist! (${name})` );
+                throw new Error( `Control node doesn't exist! (${attr}) in control "${this.name}"` );
         }
     }
 

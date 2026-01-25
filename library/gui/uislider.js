@@ -378,15 +378,18 @@ export class UISlider extends UISubControl
         // Set the slider label if there is one
         if( this.stringAry.length )
         {
-            // Format for display
-            this._valueStr;
-
+            // Format for display - only update if value changed to reduce GC
             if( this.displayValueAsInt )
-                this._valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, Math.trunc(this.curValue));
+                this._displayValue = Math.trunc(this.curValue);
             else
-            this._valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this.curValue.toFixed(this.displayValueDecimalPlaces));
+                this._displayValue = this.curValue.toFixed(this.displayValueDecimalPlaces);
 
-            this.createFontString( this._valueStr );
+            if( this._lastDisplayValue !== this._displayValue )
+            {
+                this._lastDisplayValue = this._displayValue;
+                this._valueStr = this.stringAry[this.stringAry.length-1].replace(/%d/i, this._displayValue);
+                this.createFontString( this._valueStr );
+            }
         }
     }
 

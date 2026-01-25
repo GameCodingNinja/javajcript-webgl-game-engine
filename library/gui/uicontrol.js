@@ -25,6 +25,8 @@ import * as menuDefs from '../gui/menudefs';
 import * as defs from '../common/defs';
 
 var gDummyPoint = new Point;
+var gTempUIMatrix = new Matrix;
+var gTempUIQuad = new Quad;
 
 export class UIControl extends ControlBase
 {
@@ -244,45 +246,44 @@ export class UIControl extends ControlBase
     {
         if( this.wasWorldPosTranformed() && !this.size.isEmpty() )
         {
-            let finalMatrix = new Matrix( this.matrix );
-            finalMatrix.mergeMatrix( menuManager.camera.matrix.matrix );
-            finalMatrix.scaleFromValue( settings.orthoAspectRatio.h );
-            finalMatrix.invertY();
+            gTempUIMatrix.copy( this.matrix );
+            gTempUIMatrix.mergeMatrix( menuManager.camera.matrix.matrix );
+            gTempUIMatrix.scaleFromValue( settings.orthoAspectRatio.h );
+            gTempUIMatrix.invertY();
 
             // Get half the screen size to convert to screen coordinates
-            let screenHalf = settings.displayRes_half;
+            this._screenHalf = settings.displayRes_half;
 
             // Create the rect of the control based on half it's size
-            let halfwidth = this.size.w * 0.5;
-            let halfHeight = this.size.h * 0.5;
+            this._halfwidth = this.size.w * 0.5;
+            this._halfHeight = this.size.h * 0.5;
 
-            let quad = new Quad;
-            quad.point[0].x = -halfwidth + -this.sizeModifier.x1;
-            quad.point[0].y = -halfHeight + -this.sizeModifier.y1;
-            quad.point[1].x = halfwidth + this.sizeModifier.x2;
-            quad.point[1].y = -halfHeight + -this.sizeModifier.y1;
-            quad.point[2].x = halfwidth + this.sizeModifier.x2;
-            quad.point[2].y = halfHeight + this.sizeModifier.y2;
-            quad.point[3].x = -halfwidth + -this.sizeModifier.x1;
-            quad.point[3].y = halfHeight + this.sizeModifier.y2;
+            gTempUIQuad.point[0].x = -this._halfwidth + -this.sizeModifier.x1;
+            gTempUIQuad.point[0].y = -this._halfHeight + -this.sizeModifier.y1;
+            gTempUIQuad.point[1].x = this._halfwidth + this.sizeModifier.x2;
+            gTempUIQuad.point[1].y = -this._halfHeight + -this.sizeModifier.y1;
+            gTempUIQuad.point[2].x = this._halfwidth + this.sizeModifier.x2;
+            gTempUIQuad.point[2].y = this._halfHeight + this.sizeModifier.y2;
+            gTempUIQuad.point[3].x = -this._halfwidth + -this.sizeModifier.x1;
+            gTempUIQuad.point[3].y = this._halfHeight + this.sizeModifier.y2;
 
-            finalMatrix.transformQuad( this.collisionQuad, quad );
+            gTempUIMatrix.transformQuad( this.collisionQuad, gTempUIQuad );
 
             // Convert the translated rect to screen coordinates
-            this.collisionQuad.point[0].x += screenHalf.w;
-            this.collisionQuad.point[0].y += screenHalf.h;
-            this.collisionQuad.point[1].x += screenHalf.w;
-            this.collisionQuad.point[1].y += screenHalf.h;
-            this.collisionQuad.point[2].x += screenHalf.w;
-            this.collisionQuad.point[2].y += screenHalf.h;
-            this.collisionQuad.point[3].x += screenHalf.w;
-            this.collisionQuad.point[3].y += screenHalf.h;
+            this.collisionQuad.point[0].x += this._screenHalf.w;
+            this.collisionQuad.point[0].y += this._screenHalf.h;
+            this.collisionQuad.point[1].x += this._screenHalf.w;
+            this.collisionQuad.point[1].y += this._screenHalf.h;
+            this.collisionQuad.point[2].x += this._screenHalf.w;
+            this.collisionQuad.point[2].y += this._screenHalf.h;
+            this.collisionQuad.point[3].x += this._screenHalf.w;
+            this.collisionQuad.point[3].y += this._screenHalf.h;
 
-            finalMatrix.transformPoint( this.collisionCenter, gDummyPoint );
+            gTempUIMatrix.transformPoint( this.collisionCenter, gDummyPoint );
 
             // Convert to screen coordinates
-            this.collisionCenter.x += screenHalf.w;
-            this.collisionCenter.y += screenHalf.h;
+            this.collisionCenter.x += this._screenHalf.w;
+            this.collisionCenter.y += this._screenHalf.h;
         }
     }
 
@@ -779,6 +780,9 @@ export class UIControl extends ControlBase
         
         else if( value === 'action_event' )
             this.actionType = uiControlDefs.ECAT_ACTION_EVENT;
+
+        else
+            console.warn( `Unknown actionType: "${value}" in control "${this.name}"` );
     }
 
     // 
