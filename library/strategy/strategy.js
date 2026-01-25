@@ -467,6 +467,8 @@ export class Strategy extends Object
         {
             for( this._i = 0; this._i < this.activateAry.length; ++this._i )
             {
+                // Do a transform if any scripts are to execute upon first update
+                this.activateAry[this._i].transform( this );
                 this.activateAry[this._i].update();
                 this.nodeAry.push( this.activateAry[this._i] );
             }
