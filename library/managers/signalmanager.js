@@ -53,7 +53,7 @@ class SignalManager
     //
     clear_loadComplete()
     {
-        this.loadCompleteSignal = [];
+        this.loadCompleteSignal.length = 0;
     }
 
     // 
@@ -61,7 +61,7 @@ class SignalManager
     //
     clear_resolutionChange()
     {
-        this.resolutionChangeSignal = [];
+        this.resolutionChangeSignal.length = 0;
     }
 
     // 
@@ -69,7 +69,7 @@ class SignalManager
     //
     clear_initShader()
     {
-        this.initShaderSignal = [];
+        this.initShaderSignal.length = 0;
     }
 
     // 
@@ -77,7 +77,7 @@ class SignalManager
     //
     clear_collisionSignal()
     {
-        this.collisionSignal = [];
+        this.collisionSignal.length = 0;
     }
 
     // 

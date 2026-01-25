@@ -104,7 +104,7 @@ class AIManager extends ManagerBase
 
                 if( !this._headNode.addNode( this._node ) )
                 {
-                    throw new Error( `Parent node not found or node does not support adding children (${this._aiNodeDataAry[i].scriptName}, ${this._node.parentId})!` );
+                    throw new Error( `Parent node not found or node does not support adding children (${this._aiNodeDataAry[this._i].scriptName}, ${this._node.parentId})!` );
                 }
             }
         }

@@ -20,23 +20,23 @@ class SpriteSheetManager
     //
     load( group, filePath, xmlNode )
     {
-        let groupMap = this.spriteSheetMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.spriteSheetMapMap.get( group );
+        if( this._groupMap === undefined )
         {
-            groupMap = new Map;
-            this.spriteSheetMapMap.set( group, groupMap );
+            this._groupMap = new Map;
+            this.spriteSheetMapMap.set( group, this._groupMap );
         }
         
-        let spriteSheet = groupMap.get( filePath );
-        if( spriteSheet === undefined || spriteSheet === -1 )
+        this._spriteSheet = this._groupMap.get( filePath );
+        if( this._spriteSheet === undefined || this._spriteSheet === -1 )
         {
-            spriteSheet = new SpriteSheet;
+            this._spriteSheet = new SpriteSheet;
             
             // Load the glyph data from XML node
-            spriteSheet.loadFromNode( xmlNode );
+            this._spriteSheet.loadFromNode( xmlNode );
             
             // Add a new entry to the map
-            groupMap.set( filePath, spriteSheet );
+            this._groupMap.set( filePath, this._spriteSheet );
         }
     }
 
@@ -45,19 +45,19 @@ class SpriteSheetManager
     //
     allowLoad( group, filePath )
     {
-        let groupMap = this.spriteSheetMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.spriteSheetMapMap.get( group );
+        if( this._groupMap === undefined )
         {
-            groupMap = new Map;
-            this.spriteSheetMapMap.set( group, groupMap );
+            this._groupMap = new Map;
+            this.spriteSheetMapMap.set( group, this._groupMap );
         }
         
-        let spriteSheet = groupMap.get( filePath );
-        if( spriteSheet === undefined )
+        this._spriteSheet = this._groupMap.get( filePath );
+        if( this._spriteSheet === undefined )
         {
             // Add an entry to the map as a 
             // place holder for future checks
-            groupMap.set( filePath, -1 );
+            this._groupMap.set( filePath, -1 );
 
             return true;
         }
@@ -70,15 +70,15 @@ class SpriteSheetManager
     //
     get( group, filePath )
     {
-        let groupMap = this.spriteSheetMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.spriteSheetMapMap.get( group );
+        if( this._groupMap === undefined )
             throw new Error( `Sprite sheet group does not exist! (${group}).` );
             
-        let data = groupMap.get( filePath );
-        if( data === undefined )
+        this._data = this._groupMap.get( filePath );
+        if( this._data === undefined )
             throw new Error( `Sprite sheet mesh file missing! (${filePath}).` );
         
-        return data;
+        return this._data;
     }
     
     // 
@@ -86,12 +86,12 @@ class SpriteSheetManager
     //
     deleteGroup( group )
     {
-        let groupAry = group;
+        this._groupAry = group;
         if( !(group instanceof Array) )
-            groupAry = [group];
+            this._groupAry = [group];
 
-        for( let i = 0; i < groupAry.length; ++i )
-            this.spriteSheetMapMap.delete( groupAry[i] );
+        for( this._i = 0; this._i < this._groupAry.length; ++this._i )
+            this.spriteSheetMapMap.delete( this._groupAry[this._i] );
     }
     
     //

@@ -28,22 +28,22 @@ class TextureManager
             throw new Error( `Image file not completely loaded! (${group}, ${filePath}).` );
 
         // Create the group map if it doesn't already exist
-        let groupMap = this.textureForMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.textureForMapMap.get( group );
+        if( this._groupMap === undefined )
         {
-            groupMap = new Map;
-            this.textureForMapMap.set( group, groupMap );
+            this._groupMap = new Map;
+            this.textureForMapMap.set( group, this._groupMap );
         }
 
-        let texture = groupMap.get( filePath );
-        if( texture === undefined || texture === -1 )
+        this._texture = this._groupMap.get( filePath );
+        if( this._texture === undefined || this._texture === -1 )
         {
-            texture = new Texture;
-            texture.id = device.gl.createTexture();
-            texture.size.w = image.width;
-            texture.size.h = image.height;
+            this._texture = new Texture;
+            this._texture.id = device.gl.createTexture();
+            this._texture.size.w = image.width;
+            this._texture.size.h = image.height;
 
-            device.gl.bindTexture( device.gl.TEXTURE_2D, texture.id );
+            device.gl.bindTexture( device.gl.TEXTURE_2D, this._texture.id );
             device.gl.texParameteri( device.gl.TEXTURE_2D, device.gl.TEXTURE_WRAP_S, wrap );
             device.gl.texParameteri( device.gl.TEXTURE_2D, device.gl.TEXTURE_WRAP_T, wrap );
             device.gl.texParameteri( device.gl.TEXTURE_2D, device.gl.TEXTURE_MIN_FILTER, filter);
@@ -51,10 +51,10 @@ class TextureManager
             device.gl.texImage2D( device.gl.TEXTURE_2D, 0, device.gl.RGBA, device.gl.RGBA, device.gl.UNSIGNED_BYTE, image );
             device.gl.bindTexture( device.gl.TEXTURE_2D, null );
 
-            groupMap.set( filePath, texture );
+            this._groupMap.set( filePath, this._texture );
         }
         
-        return texture;
+        return this._texture;
     }
 
     // 
@@ -62,19 +62,19 @@ class TextureManager
     //
     allowLoad( group, filePath )
     {
-        let groupMap = this.textureForMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.textureForMapMap.get( group );
+        if( this._groupMap === undefined )
         {
-            groupMap = new Map;
-            this.textureForMapMap.set( group, groupMap );
+            this._groupMap = new Map;
+            this.textureForMapMap.set( group, this._groupMap );
         }
         
-        let texture = groupMap.get( filePath );
-        if( texture === undefined )
+        this._texture = this._groupMap.get( filePath );
+        if( this._texture === undefined )
         {
             // Add an entry to the map as a 
             // place holder for future checks
-            groupMap.set( filePath, -1 );
+            this._groupMap.set( filePath, -1 );
 
             return true;
         }
@@ -87,20 +87,20 @@ class TextureManager
     //
     deleteGroup( group )
     {
-        let groupAry = group;
+        this._groupAry = group;
         if( !(group instanceof Array) )
-            groupAry = [group];
+            this._groupAry = [group];
 
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
         {
-            let group = groupAry[grp];
-            let groupMap = this.textureForMapMap.get( group );
-            if( groupMap !== undefined )
+            this._group = this._groupAry[this._grp];
+            this._groupMap = this.textureForMapMap.get( this._group );
+            if( this._groupMap !== undefined )
             {
-                for( let texture of groupMap.values() )
-                    device.gl.deleteTexture( texture.id );
+                for( this._each of this._groupMap.values() )
+                    device.gl.deleteTexture( this._each.id );
                 
-                this.textureForMapMap.delete( group );
+                this.textureForMapMap.delete( this._group );
             }
         }
     }
@@ -110,15 +110,15 @@ class TextureManager
     //
     get( group, filePath )
     {
-        let groupMap = this.textureForMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.textureForMapMap.get( group );
+        if( this._groupMap === undefined )
             throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
 
-        let texture = groupMap.get( filePath );
-        if( texture === undefined || texture === -1 )
+        this._texture = this._groupMap.get( filePath );
+        if( this._texture === undefined || this._texture === -1 )
             throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
         
-        return texture;
+        return this._texture;
     }
 
     //

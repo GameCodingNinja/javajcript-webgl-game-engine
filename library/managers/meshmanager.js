@@ -31,23 +31,23 @@ class MeshManager
     load( group, filePath, binaryData )
     {
         // Create the group map if it doesn't already exist
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.meshBufMapMap.get( group );
+        if( this._groupMap === undefined )
         {
-            groupMap = new Map;
-            this.meshBufMapMap.set( group, groupMap );
+            this._groupMap = new Map;
+            this.meshBufMapMap.set( group, this._groupMap );
         }
         
-        let meshGrp = groupMap.get( filePath );
-        if( meshGrp === undefined || meshGrp === -1 )
+        this._meshGrp = this._groupMap.get( filePath );
+        if( this._meshGrp === undefined || this._meshGrp === -1 )
         {
-            meshGrp = new mesh3d.MeshGroup;
-            groupMap.set( filePath, meshGrp );
+            this._meshGrp = new mesh3d.MeshGroup;
+            this._groupMap.set( filePath, this._meshGrp );
             
-            this.loadData( group, filePath, binaryData, meshGrp );
+            this.loadData( group, filePath, binaryData, this._meshGrp );
         }
 
-        return meshGrp;
+        return this._meshGrp;
     }
 
     // 
@@ -55,19 +55,19 @@ class MeshManager
     //
     allowLoad( group, filePath )
     {
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap === undefined )
+        this._groupMap = this.meshBufMapMap.get( group );
+        if( this._groupMap === undefined )
         {
-            groupMap = new Map;
-            this.meshBufMapMap.set( group, groupMap );
+            this._groupMap = new Map;
+            this.meshBufMapMap.set( group, this._groupMap );
         }
         
-        let meshGrp = groupMap.get( filePath );
-        if( meshGrp === undefined )
+        this._meshGrp = this._groupMap.get( filePath );
+        if( this._meshGrp === undefined )
         {
             // Add an entry to the map as a 
             // place holder for future checks
-            groupMap.set( filePath, -1 );
+            this._groupMap.set( filePath, -1 );
 
             return true;
         }
@@ -80,15 +80,15 @@ class MeshManager
     //
     get( group, filePath )
     {
-        let groupMap = this.meshBufMapMap.get( group );
-        if( groupMap === undefined )
-            throw new Error( `Texture group does not exists! (${group}, ${filePath}).` );
+        this._groupMap = this.meshBufMapMap.get( group );
+        if( this._groupMap === undefined )
+            throw new Error( `Mesh group does not exist! (${group}, ${filePath}).` );
 
-        let meshBuf = groupMap.get( filePath );
-        if( meshBuf === undefined || meshBuf === -1 )
-            throw new Error( `Texture does not exists! (${group}, ${filePath}).` );
+        this._meshGrp = this._groupMap.get( filePath );
+        if( this._meshGrp === undefined || this._meshGrp === -1 )
+            throw new Error( `Mesh does not exist! (${group}, ${filePath}).` );
 
-        return meshBuf;
+        return this._meshGrp;
     }
     
     //
@@ -334,8 +334,8 @@ class MeshManager
     {
         if( allowCheck )
         {
-            let tag = dataView.getUint32( this.counter, true ); this.counter += 4;
-            if( tag !== meshFileHeader.TAG_CHECK )
+            this._tag = dataView.getUint32( this.counter, true ); this.counter += 4;
+            if( this._tag !== meshFileHeader.TAG_CHECK )
                 throw new Error( `Tag check mismatch! (${group}, ${filePath}).` );
         }
     }
@@ -345,28 +345,26 @@ class MeshManager
     //
     deleteGroup( group )
     {
-        let groupAry = group;
+        this._groupAry = group;
         if( !(group instanceof Array) )
-            groupAry = [group];
+            this._groupAry = [group];
 
-        for( let grp = 0; grp < groupAry.length; ++grp )
+        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
         {
-            let group = groupAry[grp];
-            let groupMap = this.meshBufMapMap.get( group );
-            if( groupMap !== undefined )
+            this._group = this._groupAry[this._grp];
+            this._groupMap = this.meshBufMapMap.get( this._group );
+            if( this._groupMap !== undefined )
             {
-                let gl = device.gl;
-                
-                for( const each of groupMap.values() )
+                for( this._each of this._groupMap.values() )
                 {
-                    for( const mesh of each.meshAry )
+                    for( this._m = 0; this._m < this._each.meshAry.length; ++this._m )
                     {
-                        gl.deleteBuffer( mesh.vbo );
-                        gl.deleteBuffer( mesh.ibo );
+                        device.gl.deleteBuffer( this._each.meshAry[this._m].vbo );
+                        device.gl.deleteBuffer( this._each.meshAry[this._m].ibo );
                     }
                 }
 
-                this.meshBufMapMap.delete( group );
+                this.meshBufMapMap.delete( this._group );
             }
         }
     }

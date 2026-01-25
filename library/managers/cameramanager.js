@@ -7,6 +7,7 @@
 "use strict";
 
 import { Camera } from '../common/camera';
+import * as genFunc from '../utilities/genfunc';
 
 class CameraManager
 {
@@ -100,7 +101,7 @@ class CameraManager
             this._camera = this.cameraMap.get( this._cameraIdAry[this._i] );
             if( this._camera )
             {
-                this._index = this.transformAry.findIndex( (obj) => obj === this._camera );
+                this._index = genFunc.indexOf( this.transformAry, this._camera );
                 if( this._index !== -1 )
                     console.warn( `Camera is already being transformed (${this._cameraIdAry[this._i]})!` );
                 else
@@ -119,7 +120,7 @@ class CameraManager
         this._camera = this.cameraMap.get( cameraId );
         if( this._camera )
         {
-            this._index = this.transformAry.findIndex( (obj) => obj === this._camera );
+            this._index = genFunc.indexOf( this.transformAry, this._camera );
             if( this._index === -1 )
                 console.warn( `Camera is not being transformed (${cameraId})!` );
             else
@@ -144,9 +145,9 @@ class CameraManager
     clear()
     {
         this.defaultCamera = null;
-        this.cameraMap = new Map;
+        this.cameraMap.clear();
         
-        this.transformAry = [];
+        this.transformAry.length = 0;
     }
     
     //
@@ -154,7 +155,7 @@ class CameraManager
     //
     clearTransAry()
     {
-        this.transformAry = [];
+        this.transformAry.length = 0;
     }
 
     //
@@ -164,8 +165,8 @@ class CameraManager
     {
         this.defaultCamera.setup();
 
-        for( let camera of this.cameraMap.values() )
-            camera.setup();
+        for( this._camera of this.cameraMap.values() )
+            this._camera.setup();
     }
 }
 

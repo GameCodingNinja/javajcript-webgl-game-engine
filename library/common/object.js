@@ -99,6 +99,14 @@ export class Object
         this.scriptComponent.update();
     }
 
+    // 
+    //  DESC: Update the physics
+    //
+    physicsUpdate()
+    {
+        
+    }
+
     //
     //  DESC: Set the object's position
     //

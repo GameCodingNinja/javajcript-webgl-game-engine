@@ -292,10 +292,12 @@ class EventManager
     {
         if( this.gamePadList.length )
         {
+            this._gamepads = navigator.getGamepads();
+
             // Send out events for the button presses
             for ( this._each = 0; this._each < this.gamePadList.length; ++this._each )
             {
-                this._gp = navigator.getGamepads()[this._each];
+                this._gp = this._gamepads[this._each];
 
                 if( this._gp && this._gp.connected )
                 {
