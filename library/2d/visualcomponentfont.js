@@ -177,7 +177,7 @@ export class VisualComponentFont extends VisualComponentQuad
             (this.fontData.fontProp.fontName !== null) &&
             ((fontString !== this.fontData.fontString) || (this.vbo === null)) )
         {
-            this.fontData.fontStrSize.reset();
+            this.fontData.fontStrSize.clear();
             let lastCharDif = 0;
 
             let font = fontManager.getFont( this.fontData.fontProp.fontName );

@@ -60,7 +60,7 @@ export class Rect
     // 
     //  DESC: Is this rect equil
     //
-    isEquil( rect )
+    isEqual( rect )
     {
         if( this.data[0] === rect.data[0] )
         {
@@ -79,6 +79,31 @@ export class Rect
         return false;
     }
     
+    // 
+    //  DESC: Get the width
+    //
+    getWidth()
+    {
+        return this.data[2] - this.data[0];
+    }
+
+    // 
+    //  DESC: Get the height
+    //
+    getHeight()
+    {
+        return this.data[3] - this.data[1];
+    }
+
+    // 
+    //  DESC: Check if point is inside rect
+    //
+    contains( x, y )
+    {
+        return x >= this.data[0] && x <= this.data[2] &&
+               y >= this.data[1] && y <= this.data[3];
+    }
+
     set x1(value) { this.data[0] = value; }
     get x1() { return this.data[0]; }
     

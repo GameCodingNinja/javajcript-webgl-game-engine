@@ -574,7 +574,7 @@ export class Level1State extends CommonState
         {
             if( this._featureIndex === REWARD_FEATURE_UNLIMITED_BOOST )
             {
-                this.unlimitedBoos = true;
+                this.unlimitedBoost = true;
             }
             else if( this._featureIndex === REWARD_FEATURE_DOUBLE_HEALTH )
             {

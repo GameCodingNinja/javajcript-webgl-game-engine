@@ -107,7 +107,7 @@ class Enemy00Ship_Hit
         // Remove the AI script since the enemy is to die
         this.sprite.scriptComponent.remove( 'AI_Enemy00' );
 
-        this._dist = this.sprite.pos.getDistance( projectileSprite.pos );
+        this._dist = this.sprite.pos.getDistanceNoGC( projectileSprite.pos );
 
         this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius);
         this._offsetY = Math.abs(this.sprite.pos.y - this._dest);

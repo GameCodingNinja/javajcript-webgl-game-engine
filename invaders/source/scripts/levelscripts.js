@@ -12,6 +12,7 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { cameraManager } from '../../../library/managers/cameramanager';
+import { Point } from '../../../library/common/point';
 import * as utilScripts from './utilityscripts';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as gameDefs from '../state/gamedefs';
@@ -32,6 +33,9 @@ class Explode_animation
         // Setup the animation
         this.explodeAnim = new utilScripts.PlayAnim();
 
+        // Allocate the dif point
+        this.dif = new Point();
+
         // Continues the init
         this.recycle( sprite, projectileSprite, shipSprite, offset );
     }
@@ -51,7 +55,8 @@ class Explode_animation
         this.explodeAnim.sprite.setPosXYZ( shipSprite.pos.x, projectileSprite.pos.y );
         this.explodeAnim.sprite.transform();
 
-        this.dif = this.shipSprite.pos.getDistance( this.explodeAnim.sprite.pos );
+        // Use the NoGC approach that uses a temporary variable
+        this.dif.copy( this.shipSprite.pos.getDistanceNoGC( this.explodeAnim.sprite.pos ) );
 
         // Offset a bit relitive to where the projectile hit
         if(projectileSprite.rot.y > 1.0)

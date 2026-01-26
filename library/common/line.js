@@ -11,19 +11,29 @@ export class Line
 {
     constructor( obj = null )
     {
-        this.head = null;
-        this.tail = null;
+        // Pre-allocate to avoid GC during copy
+        this.head = new Point();
+        this.tail = new Point();
 
         if(obj)
             this.copy( obj );
     }
 
     // 
-    //  DESC: Copy from another line
+    //  DESC: Copy from another line (no allocation)
     //
     copy( obj )
     {
-        this.head = new Point( obj.head );
-        this.tail = new Point( obj.tail );
+        this.head.copy( obj.head );
+        this.tail.copy( obj.tail );
+    }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.head.clear();
+        this.tail.clear();
     }
 }

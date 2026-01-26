@@ -216,7 +216,7 @@ class EventManager
     {
         // Don't handle resize during a fullscreen
         if( !event.target.document.fullscreen && !this.fullscreenChange &&
-            !settings.displayRes.isEquil( window.innerWidth, window.innerHeight ) )
+            !settings.displayRes.isEqual( window.innerWidth, window.innerHeight ) )
         {
             console.log( "onResize handled" );
             device.handleResolutionChange( window.innerWidth, window.innerHeight, false );

@@ -50,15 +50,6 @@ export class Size
     }
     
     // 
-    //  DESC: Reset the data
-    //
-    reset()
-    {
-        this.w = 0;
-        this.h = 0;
-    }
-    
-    // 
     //  DESC: Does this size not have any data?
     //
     isEmpty()
@@ -72,7 +63,7 @@ export class Size
     // 
     //  DESC: Is this size equil
     //
-    isEquil( w = 0, h = 0 )
+    isEqual( w = 0, h = 0 )
     {
         if(w instanceof Size)
         {
@@ -128,7 +119,7 @@ export class Size
     //
     valueOf()
     {
-        return Number(`${Math.trunc(this.w)}${Math.trunc(this.h)}`);
+        return (Math.trunc(this.w) * 100000) + Math.trunc(this.h)
     }
     
     // 

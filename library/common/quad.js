@@ -13,6 +13,28 @@ export class Quad
     {
         this.point = [new Point, new Point, new Point, new Point];
     }
+
+    // 
+    //  DESC: Copy from another quad (no allocation)
+    //
+    copy( obj )
+    {
+        this.point[0].copy( obj.point[0] );
+        this.point[1].copy( obj.point[1] );
+        this.point[2].copy( obj.point[2] );
+        this.point[3].copy( obj.point[3] );
+    }
+
+    // 
+    //  DESC: Clear the values
+    //
+    clear()
+    {
+        this.point[0].clear();
+        this.point[1].clear();
+        this.point[2].clear();
+        this.point[3].clear();
+    }
     
     // 
     //  DESC: Is the point in the Quad

@@ -164,10 +164,24 @@ export class Point
     
     // 
     //  DESC: Invert a copy of this point and return it
+    //  NOTE: ALLOCATES - use getInvertTemp() in hot paths
     //
     getInvert()
     {
         return new Point(-this.data[0], -this.data[1], -this.data[2]);
+    }
+
+    // 
+    //  DESC: Returns inverted point via global temp (no allocation)
+    //  NOTE: Use immediately - do not store reference
+    //
+    getInvertNoGC()
+    {
+        gTempPoint.data[0] = -this.data[0];
+        gTempPoint.data[1] = -this.data[1];
+        gTempPoint.data[2] = -this.data[2];
+
+        return gTempPoint;
     }
     
     // 
@@ -209,7 +223,7 @@ export class Point
     // 
     //  DESC: Is this point equil
     //
-    isEquil( pos )
+    isEqual( pos )
     {
         if( this.data[0] === pos.x )
         {
@@ -228,7 +242,7 @@ export class Point
     // 
     //  DESC: Is this point equil
     //
-    isEquilXYZ( x, y, z )
+    isEqualXYZ( x, y, z )
     {
         if( this.data[0] === x )
         {
@@ -318,9 +332,26 @@ export class Point
 
     // 
     //  DESC: Get the distance
+    //  NOTE: ALLOCATES - use getDistanceTemp() in hot paths
     //
     getDistance( point )
     {
         return new Point( this.data[0] - point.data[0], this.data[1] - point.data[1], this.data[2] - point.data[2] );
     }
+
+    // 
+    //  DESC: Returns distance via global temp (no allocation)
+    //  NOTE: Use immediately - do not store reference
+    //
+    getDistanceNoGC( point )
+    {
+        gTempPoint.data[0] = this.data[0] - point.data[0];
+        gTempPoint.data[1] = this.data[1] - point.data[1];
+        gTempPoint.data[2] = this.data[2] - point.data[2];
+
+        return gTempPoint;
+    }
 }
+
+// Global temp point for non-allocating returns (use immediately, do not store)
+var gTempPoint = new Point();
