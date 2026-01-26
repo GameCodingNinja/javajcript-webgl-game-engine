@@ -135,22 +135,22 @@ export class VisualComponentFont extends VisualComponentQuad
         {
             this.fontData.fontProp.fontName = fontName;
             
-            if( hAlign )
+            if( hAlign != null )
                 this.fontData.fontProp.hAlign = hAlign;
             
-            if( vAlign )
+            if( vAlign != null )
                 this.fontData.fontProp.vAlign = vAlign;
             
-            if( kerning )
+            if( kerning != null )
                 this.fontData.fontProp.kerning = kerning;
             
-            if( sKern )
+            if( sKern != null )
                 this.fontData.fontProp.spaceCharKerning = sKern;
             
-            if( lineWrapWidth )
+            if( lineWrapWidth != null )
                 this.fontData.fontProp.lineWrapWidth = lineWrapWidth;
             
-            if( lineWrapHeight )
+            if( lineWrapHeight != null )
                 this.fontData.fontProp.lineWrapHeight = lineWrapHeight;
         }
     }

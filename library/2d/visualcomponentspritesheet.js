@@ -99,8 +99,6 @@ export class VisualComponentSpriteSheet extends VisualComponentQuad
 
         this.vertexScale.w = this.glyph.size.w * this.visualData.defaultUniformScale;
         this.vertexScale.h = this.glyph.size.h * this.visualData.defaultUniformScale;
-
-        this.glyphUV = this.glyph.uv;
     }
 
     //
