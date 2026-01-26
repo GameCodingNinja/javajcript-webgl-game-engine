@@ -67,13 +67,30 @@ export class VisualComponent3D extends ivisualComponent
     //
     render( object, camera )
     {
+        if( !this.meshAry || !this.shaderData )
+            return;
+
+        // Bind the shader once for all meshes
+        shaderManager.bind( this.shaderData );
+
+        // Send the color to the shader
+        device.gl.uniform4fv( this.colorLocation, this.color.data );
+
+        // Compute and send matrices once for all meshes
+        gFinalMatrix.initilizeMatrix();
+        gFinalMatrix.mergeMatrix( object.matrix.matrix );
+        gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
+        device.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
+        
+        gFinalMatrix.initilizeMatrix();
+        gFinalMatrix.mergeMatrix( object.rotMatrix.matrix );
+        gFinalMatrix.mergeMatrix( camera.rotMatrix.matrix );
+        device.gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
+
         for( this._i = 0; this._i < this.meshAry.length; ++this._i )
         {
-            // Bind the VBO and IBO. NOTE: One singlton needs to manage the vertex bindings
+            // Bind the VBO and IBO
             vertexBufferManager.bind( this.meshAry[this._i].vbo, this.meshAry[this._i].ibo );
-
-            // Bind the shader.
-            shaderManager.bind( this.shaderData );
 
             // Setup the vertex attribute shader data
             device.gl.vertexAttribPointer( this.vertexLocation, 3, device.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
@@ -84,35 +101,18 @@ export class VisualComponent3D extends ivisualComponent
             // Increment our stat counter to keep track of what is going on.
             statCounter.vObjCounter++;
 
-            // Enable the UV attribute shade data
-            if( this.uvLocation )
+            // Bind texture if needed
+            if( this.uvLocation && this.meshAry[this._i].textureAry.length )
             {
-                // Bind the texture
-                for( this._j = 0; this._j < this.meshAry[this._i].textureAry.length; ++this._j )
-                {
-                    textureManager.bind( this.meshAry[this._i].textureAry[this._j].id );
-                    device.gl.uniform1i( this.text0Location, 0);// future implementation - this.meshAry[i].textureAry[j].type ); // 0 = TEXTURE0
-                }
+                textureManager.bind( this.meshAry[this._i].textureAry[0].id );
+                device.gl.uniform1i( this.text0Location, 0 );
 
                 // Setup the uv attribute shade data
                 device.gl.vertexAttribPointer( this.uvLocation, 2, device.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 24 );
             }
 
-            // Send the color to the shader
-            device.gl.uniform4fv( this.colorLocation, this.color.data );
-
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( object.matrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.finalMatrix.matrix );
-            device.gl.uniformMatrix4fv( this.matrixLocation, false, gFinalMatrix.matrix );
-            
-            gFinalMatrix.initilizeMatrix();
-            gFinalMatrix.mergeMatrix( object.rotMatrix.matrix );
-            gFinalMatrix.mergeMatrix( camera.rotMatrix.matrix );
-            device.gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
-
             // Render it
-            device.gl.drawElements( device.gl.TRIANGLES, this.meshAry[this._i].iboCount, device.gl.UNSIGNED_SHORT, 0);
+            device.gl.drawElements( device.gl.TRIANGLES, this.meshAry[this._i].iboCount, device.gl.UNSIGNED_SHORT, 0 );
         }
     }
 }
