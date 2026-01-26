@@ -18,7 +18,7 @@ import { Polygon } from '../common/polygon';
 import { signalManager } from '../managers/signalmanager';
 import * as defs from '../common/defs';
 
-// Reusable global objects so as to avoid exessive allocations and cleanup
+// Reusable global objects so as to avoid excessive allocations and cleanup
 var gPoint = new Point;
 var gLine1 = new Line;
 gLine1.head = new Point;
