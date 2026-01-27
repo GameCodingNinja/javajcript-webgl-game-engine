@@ -23,6 +23,10 @@ import * as genFunc from '../utilities/genfunc';
 // allocated and heald within each class
 var gFinalMatrix = new Matrix;
 
+// init with 50 characters that will satisfy most interface needs
+var gVertAry = new Float32Array(50 * 4 * 5);
+var gIndexAry = new Uint16Array(50 * 6);
+
 export class VisualComponentFont extends VisualComponentQuad
 {
     constructor( visualData )
@@ -169,8 +173,6 @@ export class VisualComponentFont extends VisualComponentQuad
     //
     createFontString( fontString )
     {
-        let gl = device.gl;
-        
         // Qualify if we want to build the font string
         if( (this.fontData !== null) &&
             (fontString !== '') &&
@@ -178,236 +180,238 @@ export class VisualComponentFont extends VisualComponentQuad
             ((fontString !== this.fontData.fontString) || (this.vbo === null)) )
         {
             this.fontData.fontStrSize.clear();
-            let lastCharDif = 0;
+            this._lastCharDif = 0;
 
-            let font = fontManager.getFont( this.fontData.fontProp.fontName );
+            this._font = fontManager.getFont( this.fontData.fontProp.fontName );
 
-            this.texture = font.texture;
+            this.texture = this._font.texture;
 
             this.fontData.fontString = fontString;
 
             // count up the number of space characters
-            let spaceCharCount = genFunc.countStrOccurrence( this.fontData.fontString, ' ' );
+            this._spaceCharCount = genFunc.countStrOccurrence( this.fontData.fontString, ' ' );
 
             // count up the number of bar | characters
-            let barCharCount = genFunc.countStrOccurrence( this.fontData.fontString, '|' );
+            this._barCharCount = genFunc.countStrOccurrence( this.fontData.fontString, '|' );
 
             // Size of the allocation
-            const charCount = this.fontData.fontString.length - spaceCharCount - barCharCount;
-            this.iboCount = charCount * 6;
+            this._charCount = this.fontData.fontString.length - this._spaceCharCount - this._barCharCount;
+            this.iboCount = this._charCount * 6;
             
             // Set a flag to indicate if the IBO should be built
-            const BUILD_FONT_IBO = (this.iboCount > vertexBufferManager.currentMaxFontIndices);
+            this._BUILD_FONT_IBO = (this.iboCount > vertexBufferManager.currentMaxFontIndices);
             
-            // Allocate the vert array
-            let vertAry = new Array(charCount * 4 * 5);
+            // Allocate the vert array if necessary
+            if(gVertAry.length < (this._charCount * 4 * 5))
+                gVertAry = new Float32Array(this._charCount * 4 * 5);
 
-            // Create a buffer to hold the indicies
-            let indexAry = null;
-            
             // Should we build or rebuild the font IBO
-            if( BUILD_FONT_IBO )
-                indexAry = new Array(this.iboCount);
+            // All fonts share the same IBO because it's always the same and the only difference is it's length
+            if( this._BUILD_FONT_IBO )
+            {
+                if(gIndexAry.length < this.iboCount)
+                    gIndexAry = new Uint16Array(this.iboCount);
+            }
+                
+            this._xOffset = 0;
+            this._width = 0;
+            this._lineHeightOffset = 0;
+            this._lineHeightWrap = this._font.lineHeight + this._font.vertPadding + this.fontData.fontProp.lineWrapHeight;
+            this._initialHeightOffset = this._font.baselineOffset + this._font.vertPadding;
+            this._lineSpace = this._font.lineHeight - this._font.baselineOffset;
 
-            let xOffset = 0;
-            let width = 0;
-            let lineHeightOffset = 0;
-            let lineHeightWrap = font.lineHeight + font.vertPadding + this.fontData.fontProp.lineWrapHeight;
-            let initialHeightOffset = font.baselineOffset + font.vertPadding;
-            let lineSpace = font.lineHeight - font.baselineOffset;
-
-            let counter = 0;
-            let vertAryIndex = 0;
-            let lineCount = 0;
+            this._counter = 0;
+            this._vertAryIndex = 0;
+            this._lineCount = 0;
 
             // Get the size of the texture
-            let textureSize = font.texture.size;
+            this._textureSize = this._font.texture.size;
 
             // Handle the horizontal alignment
-            let lineWidthOffsetAry = this.calcLineWidthOffset( font, this.fontData.fontString );
+            this._lineWidthOffsetAry = this.calcLineWidthOffset( this._font, this.fontData.fontString );
 
             // Set the initial line offset
-            xOffset = lineWidthOffsetAry[lineCount++];
+            this._xOffset = this._lineWidthOffsetAry[this._lineCount++];
 
             // Handle the vertical alighnmenrt
             if( this.fontData.fontProp.vAlign === defs.EVA_VERT_TOP )
-                lineHeightOffset = -initialHeightOffset;
+                this._lineHeightOffset = -this._initialHeightOffset;
 
             if( this.fontData.fontProp.vAlign === defs.EVA_VERT_CENTER )
             {
-                lineHeightOffset = -(initialHeightOffset - ((font.baselineOffset-lineSpace) / 2) - font.vertPadding);
+                this._lineHeightOffset = -(this._initialHeightOffset - ((this._font.baselineOffset-this._lineSpace) / 2) - this._font.vertPadding);
 
-                if( lineWidthOffsetAry.length > 1 )
-                    lineHeightOffset = ((lineHeightWrap * lineWidthOffsetAry.length) / 2) - font.baselineOffset;
+                if( this._lineWidthOffsetAry.length > 1 )
+                    this._lineHeightOffset = ((this._lineHeightWrap * this._lineWidthOffsetAry.length) / 2) - this._font.baselineOffset;
             }
 
             else if( this.fontData.fontProp.vAlign === defs.EVA_VERT_BOTTOM )
             {
-                lineHeightOffset = -(initialHeightOffset - font.baselineOffset - font.vertPadding);
+                this._lineHeightOffset = -(this._initialHeightOffset - this._font.baselineOffset - this._font.vertPadding);
 
-                if( lineWidthOffsetAry.length > 1 )
-                    lineHeightOffset += (lineHeightWrap * (lineWidthOffsetAry.length-1));
+                if( this._lineWidthOffsetAry.length > 1 )
+                    this._lineHeightOffset += (this._lineHeightWrap * (this._lineWidthOffsetAry.length-1));
             }
 
             // Remove any fractional component of the line height offset
-            lineHeightOffset = Math.trunc(lineHeightOffset);
+            this._lineHeightOffset = Math.trunc(this._lineHeightOffset);
 
             // Setup each character in the vertex buffer
-            for( let i = 0; i < this.fontData.fontString.length; ++i )
+            for( this._i = 0; this._i < this.fontData.fontString.length; ++this._i )
             {
-                let id = this.fontData.fontString.charCodeAt(i);
+                this._id = this.fontData.fontString.charCodeAt(this._i);
 
                 // Line wrap if '|' character was used
-                if( id === defs.CHAR_CODE_PIPE )
+                if( this._id === defs.CHAR_CODE_PIPE )
                 {
-                    xOffset = lineWidthOffsetAry[lineCount];
-                    width = 0;
+                    this._xOffset = this._lineWidthOffsetAry[this._lineCount];
+                    this._width = 0;
 
-                    lineHeightOffset += -lineHeightWrap;
-                    ++lineCount;
+                    this._lineHeightOffset += -this._lineHeightWrap;
+                    ++this._lineCount;
                 }
                 else
                 {
                     // See if we can find the character
-                    let charData = font.getCharData(id);
+                    this._charData = this._font.getCharData(this._id);
 
                     // Ignore space characters
-                    if( id != defs.CHAR_CODE_SPACE )
+                    if( this._id != defs.CHAR_CODE_SPACE )
                     {
-                        let rect = charData.rect;
+                        this._rect = this._charData.rect;
 
-                        let yOffset = (font.lineHeight - rect.y2 - charData.offset.h) + lineHeightOffset;
+                        this._yOffset = (this._font.lineHeight - this._rect.y2 - this._charData.offset.h) + this._lineHeightOffset;
 
                         // Check if the width or height is odd. If so, we offset
                         // by 0.5 for proper orthographic rendering
                         // speed enhancement - if( Math.trunc(rect.x2) % 2 != 0 )
-                        let additionalOffsetX = 0;
-                        if( Math.trunc(rect.x2) & 1 !== 0 )
-                            additionalOffsetX = 0.5;
+                        this._additionalOffsetX = 0;
+                        if( Math.trunc(this._rect.x2) & 1 !== 0 )
+                            this._additionalOffsetX = 0.5;
 
-                        let additionalOffsetY = 0;
-                        if( Math.trunc(rect.y2) & 1 !== 0 )
-                            additionalOffsetY = 0.5;
+                        this._additionalOffsetY = 0;
+                        if( Math.trunc(this._rect.y2) & 1 !== 0 )
+                            this._additionalOffsetY = 0.5;
                         
-                        vertAry[vertAryIndex]   = xOffset + charData.offset.w + additionalOffsetX;
-                        vertAry[vertAryIndex+1] = yOffset + additionalOffsetY;
-                        vertAry[vertAryIndex+2] = 0;
-                        vertAry[vertAryIndex+3] = rect.x1 / textureSize.w;
-                        vertAry[vertAryIndex+4] = (rect.y1 + rect.y2) / textureSize.h;
+                        gVertAry[this._vertAryIndex]   = this._xOffset + this._charData.offset.w + this._additionalOffsetX;
+                        gVertAry[this._vertAryIndex+1] = this._yOffset + this._additionalOffsetY;
+                        gVertAry[this._vertAryIndex+2] = 0;
+                        gVertAry[this._vertAryIndex+3] = this._rect.x1 / this._textureSize.w;
+                        gVertAry[this._vertAryIndex+4] = (this._rect.y1 + this._rect.y2) / this._textureSize.h;
 
                         // Calculate the second vertex of the first face
-                        vertAry[vertAryIndex+5] = xOffset + rect.x2 + charData.offset.w + additionalOffsetX;
-                        vertAry[vertAryIndex+6] = yOffset + rect.y2 + additionalOffsetY;
-                        vertAry[vertAryIndex+7] = 0;
-                        vertAry[vertAryIndex+8] = (rect.x1 + rect.x2) / textureSize.w;
-                        vertAry[vertAryIndex+9] = rect.y1 / textureSize.h;
+                        gVertAry[this._vertAryIndex+5] = this._xOffset + this._rect.x2 + this._charData.offset.w + this._additionalOffsetX;
+                        gVertAry[this._vertAryIndex+6] = this._yOffset + this._rect.y2 + this._additionalOffsetY;
+                        gVertAry[this._vertAryIndex+7] = 0;
+                        gVertAry[this._vertAryIndex+8] = (this._rect.x1 + this._rect.x2) / this._textureSize.w;
+                        gVertAry[this._vertAryIndex+9] = this._rect.y1 / this._textureSize.h;
 
                         // Calculate the third vertex of the first face
-                        vertAry[vertAryIndex+10] = vertAry[vertAryIndex];
-                        vertAry[vertAryIndex+11] = vertAry[vertAryIndex+6];
-                        vertAry[vertAryIndex+12] = 0;
-                        vertAry[vertAryIndex+13] = vertAry[vertAryIndex+3];
-                        vertAry[vertAryIndex+14] = vertAry[vertAryIndex+9];
+                        gVertAry[this._vertAryIndex+10] = gVertAry[this._vertAryIndex];
+                        gVertAry[this._vertAryIndex+11] = gVertAry[this._vertAryIndex+6];
+                        gVertAry[this._vertAryIndex+12] = 0;
+                        gVertAry[this._vertAryIndex+13] = gVertAry[this._vertAryIndex+3];
+                        gVertAry[this._vertAryIndex+14] = gVertAry[this._vertAryIndex+9];
 
                         // Calculate the second vertex of the second face
-                        vertAry[vertAryIndex+15] = vertAry[vertAryIndex+5];
-                        vertAry[vertAryIndex+16] = vertAry[vertAryIndex+1];
-                        vertAry[vertAryIndex+17] = 0;
-                        vertAry[vertAryIndex+18] = vertAry[vertAryIndex+8];
-                        vertAry[vertAryIndex+19] = vertAry[vertAryIndex+4];
+                        gVertAry[this._vertAryIndex+15] = gVertAry[this._vertAryIndex+5];
+                        gVertAry[this._vertAryIndex+16] = gVertAry[this._vertAryIndex+1];
+                        gVertAry[this._vertAryIndex+17] = 0;
+                        gVertAry[this._vertAryIndex+18] = gVertAry[this._vertAryIndex+8];
+                        gVertAry[this._vertAryIndex+19] = gVertAry[this._vertAryIndex+4];
                         
-                        vertAryIndex += 20;
+                        this._vertAryIndex += 20;
 
-                        if( BUILD_FONT_IBO )
+                        if( this._BUILD_FONT_IBO )
                         {
                             // Create the indicies into the VBO
-                            let arrayIndex = counter * 6;
-                            let vertIndex = counter * 4;
+                            this._arrayIndex = this._counter * 6;
+                            this._vertIndex = this._counter * 4;
 
-                            indexAry[arrayIndex]   = vertIndex;
-                            indexAry[arrayIndex+1] = vertIndex+1;
-                            indexAry[arrayIndex+2] = vertIndex+2;
+                            gIndexAry[this._arrayIndex]   = this._vertIndex;
+                            gIndexAry[this._arrayIndex+1] = this._vertIndex+1;
+                            gIndexAry[this._arrayIndex+2] = this._vertIndex+2;
 
-                            indexAry[arrayIndex+3] = vertIndex;
-                            indexAry[arrayIndex+4] = vertIndex+3;
-                            indexAry[arrayIndex+5] = vertIndex+1;
+                            gIndexAry[this._arrayIndex+3] = this._vertIndex;
+                            gIndexAry[this._arrayIndex+4] = this._vertIndex+3;
+                            gIndexAry[this._arrayIndex+5] = this._vertIndex+1;
                         }
 
-                        ++counter;
+                        ++this._counter;
                     }
 
                     // Inc the font position
-                    let inc = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+                    this._inc = this._charData.xAdvance + this.fontData.fontProp.kerning + this._font.horzPadding;
 
                     // Add in any additional spacing for the space character
-                    if( id === defs.CHAR_CODE_SPACE )
-                        inc += this.fontData.fontProp.spaceCharKerning;
+                    if( this._id === defs.CHAR_CODE_SPACE )
+                        this._inc += this.fontData.fontProp.spaceCharKerning;
 
-                    width += inc;
-                    xOffset += inc;
+                    this._width += this._inc;
+                    this._xOffset += this._inc;
 
                     // Get the longest width of this font string
-                    if( this.fontData.fontStrSize.w < width )
+                    if( this.fontData.fontStrSize.w < this._width )
                     {
-                        this.fontData.fontStrSize.w = width;
+                        this.fontData.fontStrSize.w = this._width;
 
                         // This is the space between this character and the next.
                         // Save this difference so that it can be subtracted at the end
-                        lastCharDif = inc - charData.rect.x2;
+                        this._lastCharDif = this._inc - this._charData.rect.x2;
                     }
 
                     // Wrap to another line
-                    if( (id === defs.CHAR_CODE_SPACE ) && (this.fontData.fontProp.lineWrapWidth > 0) )
+                    if( (this._id === defs.CHAR_CODE_SPACE ) && (this.fontData.fontProp.lineWrapWidth > 0) )
                     {
-                        let nextWord = 0;
+                        this._nextWord = 0;
 
                         // Get the length of the next word to see if if should wrap
-                        for( let j = i+1; j < this.fontData.fontString.length; ++j )
+                        for( this._j = this._i+1; this._j < this.fontData.fontString.length; ++this._j )
                         {
-                            id = this.fontData.fontString.charCodeAt(j);
+                            this._id = this.fontData.fontString.charCodeAt(this._j);
 
-                            if( id != defs.CHAR_CODE_PIPE )
+                            if( this._id != defs.CHAR_CODE_PIPE )
                             {
                                 // See if we can find the character
-                                let anotherCharData = font.getCharData(id);
+                                this._anotherCharData = this._font.getCharData(this._id);
 
                                 // Break here when space is found
                                 // Don't add the space to the size of the next word
-                                if( id === defs.CHAR_CODE_SPACE )
+                                if( this._id === defs.CHAR_CODE_SPACE )
                                     break;
 
                                 // Don't count the
-                                nextWord += anotherCharData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+                                this._nextWord += this._anotherCharData.xAdvance + this.fontData.fontProp.kerning + this._font.horzPadding;
                             }
                         }
 
-                        if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
+                        if( this._width + this._nextWord >= this.fontData.fontProp.lineWrapWidth )
                         {
-                            xOffset = lineWidthOffsetAry[lineCount++];
-                            width = 0;
+                            this._xOffset = this._lineWidthOffsetAry[this._lineCount++];
+                            this._width = 0;
 
-                            lineHeightOffset += -lineHeightWrap;
+                            this._lineHeightOffset += -this._lineHeightWrap;
                         }
                     }
                 }
             }
 
             // Subtract the extra space after the last character
-            this.fontData.fontStrSize.w -= lastCharDif;
-            this.fontData.fontStrSize.h = font.lineHeight;
+            this.fontData.fontStrSize.w -= this._lastCharDif;
+            this.fontData.fontStrSize.h = this._font.lineHeight;
 
             // Save the data
             // If one doesn't exist, create the VBO and IBO for this font
             if( this.vbo === null )
-                this.vbo = gl.createBuffer();
+                this.vbo = device.gl.createBuffer();
 
-            gl.bindBuffer( gl.ARRAY_BUFFER, this.vbo );
-            gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(vertAry), gl.STATIC_DRAW );
-            gl.bindBuffer( gl.ARRAY_BUFFER, null );
+            device.gl.bindBuffer( device.gl.ARRAY_BUFFER, this.vbo );
+            device.gl.bufferData( device.gl.ARRAY_BUFFER, gVertAry.subarray(0, this._vertAryIndex), device.gl.STATIC_DRAW );
+            device.gl.bindBuffer( device.gl.ARRAY_BUFFER, null );
 
             // All fonts share the same IBO because it's always the same and the only difference is it's length
             // This updates the current IBO if it exceeds the current max
-            this.ibo = vertexBufferManager.createDynamicFontIBO( fontManager.groupName, 'dynamic_font_ibo', indexAry, this.iboCount );
+            this.ibo = vertexBufferManager.createDynamicFontIBO( fontManager.groupName, 'dynamic_font_ibo', gIndexAry, this.iboCount );
         }
         else if( (this.fontData !== null) &&
                  (fontString !== '') &&
@@ -423,88 +427,88 @@ export class VisualComponentFont extends VisualComponentQuad
     //
     calcLineWidthOffset( font, str )
     {
-        let firstCharOffset = 0;
-        let lastCharOffset = 0;
-        let spaceWidth = 0;
-        let width = 0;
-        let counter = 0;
-        let lineWidthOffsetAry = [];
+        this._firstCharOffset = 0;
+        this._lastCharOffset = 0;
+        this._spaceWidth = 0;
+        this._clwo_width = 0;
+        this._clwo_counter = 0;
+        this._clwo_lineWidthOffsetAry = [];
 
-        for( let i = 0; i < str.length; ++i )
+        for( this._clwo_i = 0; this._clwo_i < str.length; ++this._clwo_i )
         {
-            let id = str.charCodeAt(i);
+            this._clwo_id = str.charCodeAt(this._clwo_i);
 
             // Line wrap if '|' character was used
-            if( id === defs.CHAR_CODE_PIPE )
+            if( this._clwo_id === defs.CHAR_CODE_PIPE )
             {
                 // Add the line width to the vector based on horz alignment
-                this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
+                this.addLineWithToAry( font, this._clwo_lineWidthOffsetAry, this.fontData.fontProp.hAlign, this._clwo_width, this._firstCharOffset, this._lastCharOffset );
 
-                counter = 0;
-                width = 0;
+                this._clwo_counter = 0;
+                this._clwo_width = 0;
             }
             else
             {
                 // Get the next character
-                let charData = font.getCharData( id );
+                this._clwo_charData = font.getCharData( this._clwo_id );
 
-                if(counter === 0)
-                    firstCharOffset = charData.offset.w;
+                if(this._clwo_counter === 0)
+                    this._firstCharOffset = this._clwo_charData.offset.w;
 
-                spaceWidth = charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+                this._spaceWidth = this._clwo_charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
 
                 // Add in any additional spacing for the space character
-                if( id === defs.CHAR_CODE_SPACE )
-                    spaceWidth += this.fontData.fontProp.spaceCharKerning;
+                if( this._clwo_id === defs.CHAR_CODE_SPACE )
+                    this._spaceWidth += this.fontData.fontProp.spaceCharKerning;
 
-                width += spaceWidth;
+                this._clwo_width += this._spaceWidth;
 
-                if( id != defs.CHAR_CODE_SPACE )
-                    lastCharOffset = charData.offset.w;
+                if( this._clwo_id != defs.CHAR_CODE_SPACE )
+                    this._lastCharOffset = this._clwo_charData.offset.w;
 
-                ++counter;
+                ++this._clwo_counter;
             }
 
             // Wrap to another line
-            if( (id === defs.CHAR_CODE_SPACE) && (this.fontData.fontProp.lineWrapWidth > 0) )
+            if( (this._clwo_id === defs.CHAR_CODE_SPACE) && (this.fontData.fontProp.lineWrapWidth > 0) )
             {
-                let nextWord = 0;
+                this._clwo_nextWord = 0;
 
                 // Get the length of the next word to see if if should wrap
-                for( let j = i+1; j < str.length; ++j )
+                for( this._clwo_j = this._clwo_i+1; this._clwo_j < str.length; ++this._clwo_j )
                 {
-                    id = str.charCodeAt(j);
+                    this._clwo_id = str.charCodeAt(this._clwo_j);
 
-                    if( id != defs.CHAR_CODE_PIPE )
+                    if( this._clwo_id != defs.CHAR_CODE_PIPE )
                     {
                         // See if we can find the character
-                        let charData = font.getCharData(id);
+                        this._clwo_charData = font.getCharData(this._clwo_id);
 
                         // Break here when space is found
                         // Don't add the space to the size of the next word
-                        if( id === defs.CHAR_CODE_SPACE )
+                        if( this._clwo_id === defs.CHAR_CODE_SPACE )
                             break;
 
                         // Don't count the
-                        nextWord += charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
+                        this._clwo_nextWord += this._clwo_charData.xAdvance + this.fontData.fontProp.kerning + font.horzPadding;
                     }
                 }
 
-                if( width + nextWord >= this.fontData.fontProp.lineWrapWidth )
+                if( this._clwo_width + this._clwo_nextWord >= this.fontData.fontProp.lineWrapWidth )
                 {
                     // Add the line width to the vector based on horz alignment
-                    this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width-spaceWidth, firstCharOffset, lastCharOffset );
+                    this.addLineWithToAry( font, this._clwo_lineWidthOffsetAry, this.fontData.fontProp.hAlign, this._clwo_width-this._spaceWidth, this._firstCharOffset, this._lastCharOffset );
 
-                    counter = 0;
-                    width = 0;
+                    this._clwo_counter = 0;
+                    this._clwo_width = 0;
                 }
             }
         }
 
         // Add the line width to the vector based on horz alignment
-        this.addLineWithToAry( font, lineWidthOffsetAry, this.fontData.fontProp.hAlign, width, firstCharOffset, lastCharOffset );
+        this.addLineWithToAry( font, this._clwo_lineWidthOffsetAry, this.fontData.fontProp.hAlign, this._clwo_width, this._firstCharOffset, this._lastCharOffset );
 
-        return lineWidthOffsetAry;
+        return this._clwo_lineWidthOffsetAry;
     }
 
     //

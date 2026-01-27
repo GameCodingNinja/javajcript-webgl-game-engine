@@ -118,7 +118,7 @@ class VertexBufferManager
         if( maxIndicies > this.currentMaxFontIndices )
         {
             device.gl.bindBuffer( device.gl.ELEMENT_ARRAY_BUFFER, iboID);
-            device.gl.bufferData( device.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexAry), device.gl.STATIC_DRAW );
+            device.gl.bufferData( device.gl.ELEMENT_ARRAY_BUFFER, indexAry, device.gl.STATIC_DRAW );
             device.gl.bindBuffer( device.gl.ELEMENT_ARRAY_BUFFER, null );
 
             // Save the number of indices for later to compare and expand this size of this IBO
