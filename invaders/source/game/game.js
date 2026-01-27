@@ -36,7 +36,8 @@ export class Game
 {
     constructor()
     {
-        this.gameLoopFunc = this.gameLoop.bind(this)
+        this.gameLoopFunc = this.gameLoop.bind(this);
+        this.initShaderCallBackFunc = this.initShaderCallBack.bind(this)
     }
     
     // 
@@ -64,9 +65,10 @@ export class Game
 
             // Create the OpenGL context (disable antialias for pixel-art style)
             let gl = device.create('game-surface', { antialias: false });
+            if (!gl) throw new Error('Failed to create WebGL context');
 
             // Set the init shader callback
-            signalManager.connect_initShader( this.initShaderCallBack.bind(this) );
+            signalManager.connect_initShader( this.initShaderCallBackFunc );
 
             // Do we add stencil buffer
             if( settings.createStencilBuffer )
@@ -130,7 +132,7 @@ export class Game
             gl.clear( this.clearBufferMask );
             
             // Create the startup state
-            this.gameState = new StartUpState( this.gameLoop.bind(this) );
+            this.gameState = new StartUpState( this.gameLoopFunc );
         })
     }
     
@@ -152,7 +154,7 @@ export class Game
             this.gameState.cleanUp();
             
             if( this.gameState.nextState === stateDefs.EGS_LEVEL_1 )
-                this.gameState = new Level1State( this.gameLoop.bind(this) );
+                this.gameState = new Level1State( this.gameLoopFunc );
             
             return true;
         }

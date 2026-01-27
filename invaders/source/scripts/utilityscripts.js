@@ -327,6 +327,7 @@ class ScreenFade
 {
     constructor( current, final, time, fadeType )
     {
+        this.floatAry = new Float32Array([0, 0, 0, 1]);
         this.fadeTo = new FadeTo();
 
         // Continues the init
@@ -355,9 +356,14 @@ class ScreenFade
 
         do
         {
-            if( this.fadeTo.execute() )
+            this._result = this.fadeTo.execute();
+            this.floatAry[0] = this.fadeTo.value;
+            this.floatAry[1] = this.fadeTo.value;
+            this.floatAry[2] = this.fadeTo.value;
+
+            if( this._result )
             {
-                shaderManager.setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+                shaderManager.setAllShaderValue4fv( 'additive', this.floatAry );
 
                 if( this.fadeTo.inc > 0 )
                     eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_COMPLETE, this.fadeType );
@@ -367,7 +373,7 @@ class ScreenFade
                 break;
             }
 
-            shaderManager.setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+            shaderManager.setAllShaderValue4fv( 'additive', this.floatAry );
 
             yield;
         }
