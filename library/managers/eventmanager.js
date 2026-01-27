@@ -11,6 +11,7 @@ import { Gamepad } from '../common/gamepad';
 import { actionManager } from '../managers/actionmanager';
 import { settings } from '../utilities/settings';
 import { device } from '../system/device';
+import { menuManager } from '../gui/menumanager';
 import * as gamepadevent from '../common/gamepadevent';
 import * as genFunc from '../utilities/genfunc';
 
@@ -51,6 +52,7 @@ class EventManager
         window.addEventListener( 'wheel', this.onWheel.bind(this) );
 
         document.addEventListener('fullscreenchange', this.onFullScreenChange.bind(this) );
+        document.addEventListener("visibilitychange", this.onVisibilityChange.bind(this) );
         
         // Mouse move relative offset data types
         this.mouseAbsolutePos = new Point;
@@ -247,6 +249,21 @@ class EventManager
         {
             this.queue.push( event );
             console.debug(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
+        }
+    }
+
+    //
+    //  DESC: Handle onVisibilityChange events
+    //
+    onVisibilityChange( event )
+    {
+        if (document.hidden)
+        {
+            if (!menuManager.isMenuActive())
+            {
+                // Get the menu tree in question that is transitioning out
+                menuManager.getTree('pause_tree').transitionMenu();
+            }
         }
     }
 

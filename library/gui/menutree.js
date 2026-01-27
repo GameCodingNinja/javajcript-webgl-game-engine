@@ -228,7 +228,7 @@ export class MenuTree
             this.state = menuDefs.EMTS_ACTIVE;
 
             // Get the menu in question that is transitioning out
-            this._menu = this.menuMap.get(this.toMenu) ;
+            this._menu = this.menuMap.get(this.toMenu);
 
             // Start the transition in
             eventManager.dispatchEvent( menuDefs.EME_MENU_TRANS_IN, menuDefs.ETC_BEGIN, this._menu );
