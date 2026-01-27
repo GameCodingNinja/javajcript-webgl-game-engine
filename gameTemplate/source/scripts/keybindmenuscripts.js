@@ -23,15 +23,16 @@ export class KeyBindBtn_init
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -44,7 +45,7 @@ export class KeyBindBtn_init
             this.control.findSubControlByName('mouse'),
             this.control.findSubControlByName('gamepad') ];
 
-        for( let i = 0; i < deviceAry.length; i++ )
+        for( let i = 0; i < deviceAry.length; ++i )
         {
             const [actionStr, configurable] = actionManager.getDeviceActionStr( i, this.control.name );
 
@@ -97,18 +98,16 @@ export class KeyBindBtn_event
 {
     constructor( control, event )
     {
-        this.control = control;
-        
-
         // Continues the init
-        this.recycle(event);
+        this.recycle( control, event );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( event )
+    recycle( control, event )
     {
+        this.control = control;
         this.event = event;
     }
 
@@ -156,7 +155,7 @@ export class KeyBindBtn_event
     //
     execute()
     {
-        if( !actionManager.allowActionHandling && this.control.isSelected() )
+        if( !actionManager.allowAction && this.control.isSelected() )
         {
             if( this.event instanceof KeyboardEvent )
             {

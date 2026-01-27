@@ -17,18 +17,18 @@ class State_PlayLoadAnim
 {
     constructor( sprite )
     {
-        this.animate = new utilScripts.PlayAnim( sprite );
+        this.animate = new utilScripts.PlayAnim();
         
         // Continues the init
-        this.recycle();
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        this.animate.init( 12, true );
+        this.animate.init( 12, true, sprite );
     }
 
     // 
@@ -47,15 +47,16 @@ class State_RotateCube
 {
     constructor( sprite )
     {
-        this.sprite = sprite;
+        // Continues the init
+        this.recycle( sprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( sprite )
     {
-        // Nothing to do here
+        this.sprite = sprite;
     }
     
     // 
@@ -63,8 +64,8 @@ class State_RotateCube
     //
     execute()
     {
-        let rot = highResTimer.elapsedTime * 0.04;
-        this.sprite.incRotXYZ( rot, rot, 0 );
+        this._rot = highResTimer.elapsedTime * 0.04;
+        this.sprite.incRotXYZ( this._rot, this._rot, 0 );
 
         return false;
     }

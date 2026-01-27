@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<loader>
-    
-    <strategy name="_startup_">
-        <node name="logo"/>
-        <node name="UIProgressBar" instance="UIProgressBar"/>
-    </strategy>
-  
-</loader>

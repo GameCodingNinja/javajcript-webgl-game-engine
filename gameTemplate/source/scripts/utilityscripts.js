@@ -1,7 +1,7 @@
 
 //
 //  FILE NAME: utilityscripts.js
-//  DESC:      script for fading the screen
+//  DESC:      scripts for fading the screen
 //
 
 "use strict";
@@ -59,17 +59,15 @@ export class Hold
     }
 }
 
-
 //
 //  DESC: Script for playing the frames of an animation
 //
 export class PlayAnim
 {
-    constructor( sprite )
+    constructor( sprite = null )
     {
         this.sprite = sprite;
-        
-        this.frameCount = this.sprite.getFrameCount();
+        this.frameCount = 0;
         this.time = 0;
         this.fps = 0;
         this.counter = 0;
@@ -80,8 +78,12 @@ export class PlayAnim
     // 
     //  DESC: Init the script for use
     //
-    init( fps, loop = false )
+    init( fps, loop = false, sprite = null )
     {
+        if( sprite != null )
+            this.sprite = sprite;
+        
+        this.frameCount = this.sprite.getFrameCount();
         this.fps = fps;
         this.time = 1000.0 / this.fps;
         this.loop = loop;
@@ -325,9 +327,20 @@ class ScreenFade
 {
     constructor( current, final, time, fadeType )
     {
+        this.floatAry = new Float32Array([0, 0, 0, 1]);
         this.fadeTo = new FadeTo();
-        this.fadeTo.init( current, final, time );
+
+        // Continues the init
+        this.recycle( current, final, time, fadeType );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( current, final, time, fadeType )
+    {
         this.iter = this.iteration();
+        this.fadeTo.init( current, final, time );
         this.fadeType = fadeType;
     }
 
@@ -343,9 +356,15 @@ class ScreenFade
 
         do
         {
-            if( this.fadeTo.execute() )
+            this._result = this.fadeTo.execute();
+            
+            this.floatAry[0] = this.fadeTo.value;
+            this.floatAry[1] = this.fadeTo.value;
+            this.floatAry[2] = this.fadeTo.value;
+
+            if( this._result )
             {
-                shaderManager.setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+                shaderManager.setAllShaderValue4fv( 'additive', this.floatAry );
 
                 if( this.fadeTo.inc > 0 )
                     eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_COMPLETE, this.fadeType );
@@ -355,7 +374,7 @@ class ScreenFade
                 break;
             }
 
-            shaderManager.setAllShaderValue4fv( 'additive', [this.fadeTo.value, this.fadeTo.value, this.fadeTo.value, 1] );
+            shaderManager.setAllShaderValue4fv( 'additive', this.floatAry );
 
             yield;
         }
