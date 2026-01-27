@@ -37,7 +37,8 @@ export class Game
     constructor()
     {
         this.gameLoopFunc = this.gameLoop.bind(this);
-        this.initShaderCallBackFunc = this.initShaderCallBack.bind(this)
+        this.initShaderCallBackFunc = this.initShaderCallBack.bind(this);
+        this.clearBufferMask = 0;
     }
     
     // 

@@ -266,9 +266,6 @@ export function loadScripts()
 
     scriptManager.set( 'EnemyShip_CheckForCollideWithPlayer',
         ( sprite ) => { return new EnemyShip_CheckForCollideWithPlayer( sprite ); } );
-    
-    scriptManager.set( 'HealthCharacter_CheckForCollideWithPlayer',
-        ( sprite ) => { return new HealthCharacter_CheckForCollideWithPlayer( sprite ); } );
 
     scriptManager.set( 'Building_Die',
         ( sprite ) => { return new Building_Die( sprite ); } );

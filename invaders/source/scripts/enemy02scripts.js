@@ -93,9 +93,6 @@ class Enemy02Ship_Die
 
         // Let this sprite die
         this.sprite.alive = false;
-
-        // Enemy strategy
-        this.enemyStrategy = strategyManager.get('_enemy_');
     }
     
     // 

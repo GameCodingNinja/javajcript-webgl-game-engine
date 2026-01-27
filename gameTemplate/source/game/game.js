@@ -29,6 +29,8 @@ export class Game
 {
     constructor()
     {
+        this.gameLoopFunc = this.gameLoop.bind(this);
+        this.initShaderCallBackFunc = this.initShaderCallBack.bind(this);
         this.clearBufferMask = 0;
     }
     
@@ -46,11 +48,12 @@ export class Game
         // Load the user settings. Needs to be after localStorage.init()
         settings.loadUserSettingsFromObj( userSettingsObj );
 
-        // Create the OpenGL context
-        let gl = device.create();
+            // Create the OpenGL context (disable antialias for pixel-art style)
+            let gl = device.create('game-surface', { antialias: false });
+            if (!gl) throw new Error('Failed to create WebGL context');
 
-        // Set the init shader callback
-        signalManager.connect_initShader( this.initShaderCallBack.bind(this) );
+            // Set the init shader callback
+            signalManager.connect_initShader( this.initShaderCallBackFunc );
 
         // Do we add stencil buffer
         if( settings.createStencilBuffer )
@@ -114,7 +117,7 @@ export class Game
         gl.clear( this.clearBufferMask );
         
         // Create the startup state
-        this.gameState = new StartUpState( this.gameLoop.bind(this) );
+        this.gameState = new StartUpState( this.gameLoopFunc );
     }
     
     // 
@@ -135,13 +138,13 @@ export class Game
             this.gameState.cleanUp();
             
             if( this.gameState.nextState === stateDefs.EGS_TITLE_SCREEN )
-                this.gameState = new TitleScreenState( this.gameLoop.bind(this) );
+                this.gameState = new TitleScreenState( this.gameLoopFunc );
             
             else if( this.gameState.nextState === stateDefs.EGS_GAME_LOAD )
-                this.gameState = new LoadState( this.gameState.stateMessage, this.gameLoop.bind(this) );
+                this.gameState = new LoadState( this.gameState.stateMessage, this.gameLoopFunc );
             
             else if( this.gameState.nextState === stateDefs.EGS_LEVEL_1 )
-                this.gameState = new Level1State( this.gameLoop.bind(this) );
+                this.gameState = new Level1State( this.gameLoopFunc );
             
             return true;
         }
@@ -209,6 +212,6 @@ export class Game
         vertexBufferManager.unbind();
 
         // Continues the loop
-        requestAnimationFrame( this.gameLoop.bind(this) );
+        requestAnimationFrame( this.gameLoopFunc );
     }
 }

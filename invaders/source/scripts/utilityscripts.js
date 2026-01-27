@@ -357,6 +357,7 @@ class ScreenFade
         do
         {
             this._result = this.fadeTo.execute();
+            
             this.floatAry[0] = this.fadeTo.value;
             this.floatAry[1] = this.fadeTo.value;
             this.floatAry[2] = this.fadeTo.value;
