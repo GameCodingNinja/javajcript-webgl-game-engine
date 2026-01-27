@@ -74,6 +74,8 @@ class EventManager
         this.gamePadEventQueue = [];
         for( let i = 0; i < MAX_GAMEPAD_EVENT_QUEUE; ++i )
             this.gamePadEventQueue.push( new gamepadevent.GamepadEvent() );
+
+        this.gamepadDeadZone = gamepadevent.ANALOG_STICK_MSG_MAX;
     }
     
     //
@@ -311,6 +313,9 @@ class EventManager
         {
             this._gamepads = navigator.getGamepads();
 
+            // Set the dead zone for the control
+            this.gamepadDeadZone = gamepadevent.ANALOG_STICK_MSG_MAX + settings.user.stickDeadZone;
+
             // Send out events for the button presses
             for ( this._each = 0; this._each < this.gamePadList.length; ++this._each )
             {
@@ -345,32 +350,32 @@ class EventManager
                     //console.log( `Left Axes Y Value: ${gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
 
                     // Create UP/DOWN events for the Left analog stick
-                    if(!(this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
-                        (this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -gamepadevent.ANALOG_STICK_MSG_MAX))
+                    if(!(this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -this.gamepadDeadZone) && 
+                        (this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -this.gamepadDeadZone))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_UP, this._gp);
                         this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left Y Axes UP Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if((this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
-                        !(this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -gamepadevent.ANALOG_STICK_MSG_MAX))
+                    else if((this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -this.gamepadDeadZone) && 
+                        !(this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] < -this.gamepadDeadZone))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(gamepadevent.GAMEPAD_BUTTON_UP, gamepadevent.GAMEPAD_BUTTON_L_STICK_UP, this._gp);
                         this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left Y Axes UP Button Up; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if(!(this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > gamepadevent.ANALOG_STICK_MSG_MAX) && 
-                        (this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > gamepadevent.ANALOG_STICK_MSG_MAX))
+                    else if(!(this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > this.gamepadDeadZone) && 
+                        (this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > this.gamepadDeadZone))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_DOWN, this._gp);
                         this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left Y Axes DOWN Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y]};` );
                     }
-                    else if((this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > gamepadevent.ANALOG_STICK_MSG_MAX) && 
-                        !(this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > gamepadevent.ANALOG_STICK_MSG_MAX))
+                    else if((this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > this.gamepadDeadZone) && 
+                        !(this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_Y] > this.gamepadDeadZone))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(gamepadevent.GAMEPAD_BUTTON_UP, gamepadevent.GAMEPAD_BUTTON_L_STICK_DOWN, this._gp);
                         this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
@@ -379,32 +384,32 @@ class EventManager
                     }
 
                     // Create Left/Right events for the Left analog stick
-                    if(!(this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
-                        (this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX))
+                    if(!(this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -this.gamepadDeadZone) && 
+                        (this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -this.gamepadDeadZone))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_LEFT, this._gp);
                         this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left X Axes LEFT Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if((this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX) && 
-                        !(this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -gamepadevent.ANALOG_STICK_MSG_MAX))
+                    else if((this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -this.gamepadDeadZone) && 
+                        !(this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] < -this.gamepadDeadZone))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(gamepadevent.GAMEPAD_BUTTON_UP, gamepadevent.GAMEPAD_BUTTON_L_STICK_LEFT, this._gp);
                         this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left X Axes LEFT Button Up; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if(!(this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > gamepadevent.ANALOG_STICK_MSG_MAX) && 
-                        (this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > gamepadevent.ANALOG_STICK_MSG_MAX))
+                    else if(!(this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > this.gamepadDeadZone) && 
+                        (this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > this.gamepadDeadZone))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(gamepadevent.GAMEPAD_BUTTON_DOWN, gamepadevent.GAMEPAD_BUTTON_L_STICK_RIGHT, this._gp);
                         this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
                         this.gamePadEventIndex = (this.gamePadEventIndex + 1) % MAX_GAMEPAD_EVENT_QUEUE;
                         //console.log( `Left X Axes RIGHT Button Down; Value: ${this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X]};` );
                     }
-                    else if((this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > gamepadevent.ANALOG_STICK_MSG_MAX) && 
-                        !(this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > gamepadevent.ANALOG_STICK_MSG_MAX))
+                    else if((this._lastGp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > this.gamepadDeadZone) && 
+                        !(this._gp.axes[gamepadevent.GAMEPAD_AXIS_LEFT_X] > this.gamepadDeadZone))
                     {
                         this.gamePadEventQueue[this.gamePadEventIndex].init(gamepadevent.GAMEPAD_BUTTON_UP, gamepadevent.GAMEPAD_BUTTON_L_STICK_RIGHT, this._gp);
                         this.queue.push( this.gamePadEventQueue[this.gamePadEventIndex] );
