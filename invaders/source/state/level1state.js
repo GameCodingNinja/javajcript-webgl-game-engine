@@ -64,6 +64,8 @@ const MOVE_NULL = -1,
       ENEMY02_SHIP_HIT_VALUE = 3,
       ENEMY01_SHIP_HIT_COUNT = 30,
       ENEMY02_SHIP_HIT_COUNT = 10,
+      ENEMY01_LEVEL_THRESHOLD = 7,
+      ENEMY02_LEVEL_THRESHOLD = 3,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
@@ -300,10 +302,14 @@ export class Level1State extends CommonState
 
         this.healthSpawnTimer = new Timer(10000);
         this.enemy00SpawnTimer = new Timer(2000);
-        this.enemy01SpawnTimer = new Timer((1000 * 60) + genFunc.randomInt( (1000 * 30), (1000 * 120)));
-        this.enemy02SpawnTimer = new Timer((1000 * 25) + genFunc.randomInt( (1000 * 20), (1000 * 80)));
+        this.enemy01SpawnTimer = new Timer(genFunc.randomInt( (1000 * 30), (1000 * 120)));
+        this.enemy02SpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 80)));
+        this.enemy01SpawnTimer.disable();
+        this.enemy02SpawnTimer.disable();
         this.enemy00MaxTimer = new Timer(15000);
         this.enemy00Max = 5;
+
+
 
         this.train = {};
         this.train.strategy = null;
@@ -981,6 +987,17 @@ export class Level1State extends CommonState
             this.hudLevelFont.visualComponent.createFontString( `Level ${this.playerLevel}` );
 
             this.groupPlayer.play( 'level_up' );
+
+            // Enable enemy spawns when level thresholds are reached
+            if( this.playerLevel >= ENEMY02_LEVEL_THRESHOLD && this.enemy02SpawnTimer.disabled )
+            {
+                this.enemy02SpawnTimer.reset();
+            }
+
+            if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD && this.enemy01SpawnTimer.disabled )
+            {
+                this.enemy01SpawnTimer.reset();
+            }
         }
 
         this.hudProgressBar.incCurrentValue( value );
