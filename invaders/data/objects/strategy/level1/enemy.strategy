@@ -69,4 +69,13 @@
 
     </node>
 
+    <!-- Not an enemy but allow the player to better find the health character -->
+    <node name="help" id="-51">
+
+        <sprite>
+            <scale x="0.50" y="0.50" z="1"/>
+        </sprite>
+
+    </node>
+
 </strategy>

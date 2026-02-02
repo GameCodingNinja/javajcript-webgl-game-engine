@@ -4,7 +4,8 @@
     "(level_1)": [
         "data/sound/playerSound.lst",
         "data/sound/enemySound.lst",
-        "data/sound/gameSound.lst"],
+        "data/sound/gameSound.lst",
+        "data/sound/healthCharSound.lst"],
     "(music)": [
         "data/sound/music.lst"
     ]

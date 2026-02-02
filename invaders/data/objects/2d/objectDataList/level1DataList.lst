@@ -422,8 +422,14 @@
                 <texture count="2" file="data/textures/character/healthA_${NUM}.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="25"/>
+                <circle radius="30"/>
             </collision>
+        </object>
+
+        <object name="help">
+            <visual>
+                <texture file="data/textures/character/help.png"/>
+            </visual>
         </object>
 
         <object name="marker">

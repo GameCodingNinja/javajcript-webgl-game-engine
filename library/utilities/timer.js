@@ -40,7 +40,11 @@ export class Timer
     //
     pause()
     {
-        this.isPaused = true;
+        if(!this.isPaused && !this.disabled)
+        {
+            this.isPaused = true;
+            this.expiredTime += performance.now() - this.lastTime;
+        }
     }
 
     //
@@ -48,8 +52,11 @@ export class Timer
     //
     resume()
     {
-        this.isPaused = false;
-        this.lastTime = performance.now();
+        if(this.isPaused && !this.disabled)
+        {
+            this.isPaused = false;
+            this.lastTime = performance.now();
+        }
     }
     
     //

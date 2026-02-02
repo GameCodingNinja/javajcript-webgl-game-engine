@@ -260,13 +260,7 @@ class EventManager
     onVisibilityChange( event )
     {
         if (document.hidden)
-        {
-            if (!menuManager.isMenuActive())
-            {
-                // Get the menu tree in question that is transitioning out
-                menuManager.getTree('pause_tree').transitionMenu();
-            }
-        }
+            this.queue.push( event );
     }
 
     //

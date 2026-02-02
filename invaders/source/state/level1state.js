@@ -64,8 +64,9 @@ const MOVE_NULL = -1,
       ENEMY02_SHIP_HIT_VALUE = 3,
       ENEMY01_SHIP_HIT_COUNT = 30,
       ENEMY02_SHIP_HIT_COUNT = 10,
-      ENEMY01_LEVEL_THRESHOLD = 7,
+      ENEMY01_LEVEL_THRESHOLD = 5,
       ENEMY02_LEVEL_THRESHOLD = 3,
+      HEALTH_CHAR_THRESHOLD = 3,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
@@ -300,16 +301,18 @@ export class Level1State extends CommonState
         this.slowHealTimer = null;
         this.musicTimer = new Timer((1000 * 60 * 5));
 
-        this.healthSpawnTimer = new Timer(10000);
+        this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 10), (1000 * 40)));
         this.enemy00SpawnTimer = new Timer(2000);
-        this.enemy01SpawnTimer = new Timer(genFunc.randomInt( (1000 * 30), (1000 * 120)));
-        this.enemy02SpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 80)));
+        this.enemy01SpawnTimer = new Timer(genFunc.randomInt( (1000 * 40), (1000 * 150)));
+        this.enemy02SpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 100)));
         this.enemy01SpawnTimer.disable();
         this.enemy02SpawnTimer.disable();
+        this.healthSpawnTimer.disable();
+        this.enemy01Active = false;
+        this.enemy02Active = false;
+        this.healthCharActive = false;
         this.enemy00MaxTimer = new Timer(15000);
         this.enemy00Max = 5;
-
-
 
         this.train = {};
         this.train.strategy = null;
@@ -464,8 +467,20 @@ export class Level1State extends CommonState
             {
                 // We are done with these sprites, queue it up to be recycled
                 this.enemyStrategy.recycle( spriteA.parentNode );
-                this.groupPlayer.play( 'EXPLOSION_Metllic' );
+                this.enemyStrategy.recycle( 'help' );
+                this.groupPlayer.play( 'exclamation_male_b' );
                 this.healthSpawnTimer.reset();
+
+                // Release it's lock on the building
+                spriteA.targetBuilding = null;
+
+                if(!this.playerShip.progressBar.isMaxValue())
+                {
+                    this.playerShip.progressBar.incCurrentValue(25);
+
+                    if(this.playerShip.progressBar.isMaxValue())
+                        this.playerShip.progressBar.setVisible( false );
+                }
             }
 
             // Player ship is to die from above hit/collision
@@ -514,6 +529,9 @@ export class Level1State extends CommonState
 
                 let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                 scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
+
+                // Resume the timer on the next enemy
+                this.enemy02SpawnTimer.resume();
             }
 
             spriteB.hitCount++;
@@ -543,6 +561,9 @@ export class Level1State extends CommonState
             spriteB.hitCount++;
 
             this.groupPlayer.play( 'enemy_explosion' );
+
+            // Resume the timer on the next enemy
+            this.enemy01SpawnTimer.resume();
         }
         // Player shot health character
         else if( spriteB.parentNode.userId == HEALTH_CHARACTER )
@@ -550,10 +571,14 @@ export class Level1State extends CommonState
             // Stop any more collision detection for the shot
             spriteB.collisionComponent.enable = false;
 
+            // Release it's lock on the building
+            spriteB.targetBuilding = null;
+
             // Execute the scripts that handle being hit
             spriteB.prepareScript( 'hit', spriteA );
 
-            this.groupPlayer.play( 'EXPLOSION_Metllic' );
+            this.groupPlayer.play( 'scream_male_b' );
+            this.groupPlayer.play( 'gore_splat' );
             this.healthSpawnTimer.reset();
         }
     }
@@ -944,6 +969,11 @@ export class Level1State extends CommonState
                             this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
                     }
                 }
+                else if( event.type == 'visibilitychange' )
+                {
+                    // Get the menu tree in question that is transitioning out
+                    menuManager.getTree('pause_tree').transitionMenu();
+                }
             }
         }
     }
@@ -989,14 +1019,22 @@ export class Level1State extends CommonState
             this.groupPlayer.play( 'level_up' );
 
             // Enable enemy spawns when level thresholds are reached
-            if( this.playerLevel >= ENEMY02_LEVEL_THRESHOLD && this.enemy02SpawnTimer.disabled )
+            if( this.playerLevel == ENEMY01_LEVEL_THRESHOLD && !this.enemy01Active )
             {
+                this.enemy01Active = true;
+                this.enemy01SpawnTimer.reset();
+            }
+
+            if( this.playerLevel == ENEMY02_LEVEL_THRESHOLD && !this.enemy02Active )
+            {
+                this.enemy02Active = true;
                 this.enemy02SpawnTimer.reset();
             }
 
-            if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD && this.enemy01SpawnTimer.disabled )
+            if( this.playerLevel == HEALTH_CHAR_THRESHOLD && !this.healthCharActive )
             {
-                this.enemy01SpawnTimer.reset();
+                this.healthCharActive = true;
+                this.healthSpawnTimer.reset();
             }
         }
 
@@ -1181,6 +1219,9 @@ export class Level1State extends CommonState
 
             if( genFunc.randomInt( 0, 1 ) === 0 )
                 this._node.get().setRotXYZ(0, 180);
+
+            // Pause the next enemy so that they don't pile up
+            this.enemy02SpawnTimer.pause();
         }
         // Create enemy02 and position it outside of the view
         else if( this.enemy02SpawnTimer.expired(false, true) )
@@ -1191,21 +1232,46 @@ export class Level1State extends CommonState
 
             if( genFunc.randomInt( 0, 1 ) === 0 )
                 this._node.get().setRotXYZ(0, 180);
+
+            // Pause the next enemy so that they don't pile up
+            this.enemy01SpawnTimer.pause();
         }
         // Create a health character and position it on a building
-        else if(this.healthSpawnTimer.expired( false, true ))
+        else if(this.healthSpawnTimer.expired( false, false ))
         {
             this._buildings = this.buildingsStrategy.nodeAry;
+            this._enemies = this.enemyStrategy.nodeAry;
 
-            this._node = this.enemyStrategy.create('health_character');
+            this.groupPlayer.play( 'health_char_spawn' );
 
             this._index = genFunc.randomInt( 0, this._buildings.length-1 );
             this._targetBuilding = this._buildings[this._index].get();
 
-            // Parce the additive Y offset for the health character to stand on the building
-            this._yOffsetValueHealth = parseInt(this._targetBuilding.parentNode.name.match(/\d+$/)[0], 10) - 1;
+            // See if the building is already targeted
+            this._freeBuildingFound = true;
+            for( this._i = 0; this._i < this._enemies.length; ++this._i )
+            {
+                if( this._enemies[this._i].get().targetBuilding === this._targetBuilding )
+                {
+                    this._freeBuildingFound = false;
+                    break;
+                }
+            }
 
-            this._node.get().setPosXYZ(this._targetBuilding.pos.x, this._targetBuilding.pos.y + this.healthCharYOffsetAry[this._yOffsetValueHealth]);
+            // If not found, we'll try again next time
+            if( this._freeBuildingFound )
+            {
+                this._helpSprite = this.enemyStrategy.create('help').get();
+                this._healthSprite = this.enemyStrategy.create('health_character').get();
+                this._healthSprite.targetBuilding = this._targetBuilding;
+                this.healthSpawnTimer.disable();
+
+                // Parce the additive Y offset for the health character to stand on the building
+                this._yOffsetValueHealth = parseInt(this._targetBuilding.parentNode.name.match(/\d+$/)[0], 10) - 1;
+
+                this._healthSprite.setPosXYZ(this._targetBuilding.pos.x, this._targetBuilding.pos.y + this.healthCharYOffsetAry[this._yOffsetValueHealth]);
+                this._helpSprite.setPosXYZ(this._healthSprite.pos.x, this._healthSprite.pos.y + 90);
+            }
         }
     }
 

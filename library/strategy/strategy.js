@@ -336,15 +336,39 @@ export class Strategy extends Object
     //
     destroy( node )
     {
-        this.deleteAry.push( node );
+        if( typeof node === 'string' )
+        {
+            for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+            {
+                if( this.nodeAry[this._i].name === node  )
+                {
+                    this.deleteAry.push( this.nodeAry[this._i] );
+                    break;
+                }
+            }
+        }
+        else
+            this.deleteAry.push( node );
     }
 
     //
-    //  DESC: Add the node to the pool list
+    //  DESC: Add the node to the recycle list
     //
     recycle( node )
     {
-        this.recycleAry.push( node );
+        if( typeof node === 'string' )
+        {
+            for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+            {
+                if( this.nodeAry[this._i].name === node  )
+                {
+                    this.recycleAry.push( this.nodeAry[this._i] );
+                    break;
+                }
+            }
+        }
+        else
+            this.recycleAry.push( node );
     }
 
     //

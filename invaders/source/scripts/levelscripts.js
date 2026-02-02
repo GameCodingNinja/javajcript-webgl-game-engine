@@ -251,6 +251,7 @@ class HealthCharacter_Hit
     {
         // We are done with these sprites, queue it up to be recycled
         this.enemyStrategy.recycle( this.sprite.parentNode );
+        this.enemyStrategy.recycle( 'help' );
 
         return true;
     }
