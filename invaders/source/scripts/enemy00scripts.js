@@ -12,6 +12,7 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { Point } from '../../../library/common/point';
 import { settings } from '../../../library/utilities/settings';
 import * as easing from '../../../library/utilities/easingfunc';
+import * as gameDefs from '../state/gamedefs';
 
 //
 //  DESC: Script for shooting enemy00 projectile
@@ -107,24 +108,29 @@ class Enemy00Ship_Hit
         // Remove the AI script since the enemy is to die
         this.sprite.scriptComponent.remove( 'AI_Enemy00' );
 
-        this._dist = this.sprite.pos.getDistanceNoGC( projectileSprite.pos );
-
         this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius);
         this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
         this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
 
-        this.rotate = 0.04;
+        this._dist = this.sprite.pos.getDistanceNoGC( projectileSprite.pos );
+
+        this.rotate = Math.abs(this._dist.y * 0.004);
         this.rotateVelocity = 0.00004;
 
-        if( (this._dist.x > 0 && this._dist.y > 0) || (this._dist.x < 0 && this._dist.y < 0) )
+        // Rotate the enemy as it falls based on where it was hit. A positive y vs a negative y and the side it is hit from determins the spin.
+        // The y distance from the center is how fast it rotates from the start
+        if( (projectileSprite.rot.y > 1 && this._dist.y > 0) || (projectileSprite.rot.y < 1 && this._dist.y < 0) )
         {
-            this.rotate = -0.04;
+            this.rotate = -Math.abs(this._dist.y * 0.004);
             this.rotateVelocity = -0.00004;
         }
 
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
-        this._explodeSprite = this.enemyStrategy.create('explode').get();
-        this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -15 : 15 );
+        if( projectileSprite.parentNode.userId != gameDefs.PLAYER_SHIP_ID )
+        {
+            this._explodeSprite = this.enemyStrategy.create('explode').get();
+            this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite );
+        }
 
         // Hide the projectile and allow it to be recycled from the script moving it
         if( projectileSprite.parentNode.name === 'player_shot' )
@@ -141,9 +147,10 @@ class Enemy00Ship_Hit
     {
         this.easingY.execute();
         this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+
         this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
         this.rotate += this.rotateVelocity * highResTimer.elapsedTime;
-
+        
         if( this.easingY.isFinished() )
         {
             // We are done with these sprites, queue it up to be recycled

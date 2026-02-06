@@ -17,18 +17,13 @@ import * as utilScripts from './utilityscripts';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as gameDefs from '../state/gamedefs';
 
-const PLAYER_SHIP_ID = 0,
-      ENEMY00_SHOT_ID = -2,
-      ENEMY00_SHIP_ID = -3,
-      ENEMY01_SHIP_ID = -4,
-      ENEMY02_SHIP_ID = -5
 
 //
 //  DESC: Script for handling player ship explosion
 //
 class Explode_animation
 {
-    constructor( sprite, projectileSprite, shipSprite, offset )
+    constructor( sprite, projectileSprite, shipSprite )
     {
         // Setup the animation
         this.explodeAnim = new utilScripts.PlayAnim();
@@ -37,13 +32,13 @@ class Explode_animation
         this.dif = new Point();
 
         // Continues the init
-        this.recycle( sprite, projectileSprite, shipSprite, offset );
+        this.recycle( sprite, projectileSprite, shipSprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( sprite, projectileSprite, shipSprite, offset )
+    recycle( sprite, projectileSprite, shipSprite )
     {
         this.sprite = sprite;
         this.shipSprite = shipSprite
@@ -51,22 +46,47 @@ class Explode_animation
         // This resets the animation
         this.explodeAnim.init( 24, false, this.sprite );
 
+        this._xPos = projectileSprite.pos.x;
+        this._yPos = projectileSprite.pos.y
+
+        if( shipSprite.parentNode.userId == gameDefs.PLAYER_SHIP_ID)
+        {
+            if(projectileSprite.parentNode.userId == gameDefs.ENEMY00_SHIP_ID)
+            {
+                this._xPos += (shipSprite.pos.x - projectileSprite.pos.x) * 0.3;
+                this._yPos += (shipSprite.pos.y - projectileSprite.pos.y) * 0.6;
+            }
+            else if(projectileSprite.parentNode.userId == gameDefs.ENEMY01_SHIP_ID)
+            {
+                this._xPos = shipSprite.pos.x;
+                this._yPos = shipSprite.pos.y
+            }
+        }
+        else if(projectileSprite.parentNode.userId == gameDefs.PLAYER_SHOT_ID && shipSprite.parentNode.userId == gameDefs.ENEMY00_SHIP_ID)
+        {
+            this._xPos = shipSprite.pos.x;
+
+            // Offset a bit relitive to where the projectile hit
+            if(projectileSprite.rot.y > 1.0)
+            {
+                this._xPos += 10;
+            }
+            else
+            {
+                this._xPos -= 10;
+            }
+        }
+
         // Create an explode graphic node and translate it to the projectile sprite
-        this.explodeAnim.sprite.setPosXYZ( shipSprite.pos.x, projectileSprite.pos.y );
+        this.explodeAnim.sprite.setPosXYZ( this._xPos, this._yPos );
         this.explodeAnim.sprite.transform();
 
         // Use the NoGC approach that uses a temporary variable
         this.dif.copy( this.shipSprite.pos.getDistanceNoGC( this.explodeAnim.sprite.pos ) );
 
-        // Offset a bit relitive to where the projectile hit
-        if(projectileSprite.rot.y > 1.0)
-        {
-            this.dif.x -= 10;
-        }
-        else
-        {
-            this.dif.x += 10;
-        }
+        this._yRot = projectileSprite.rot.y;
+        if( projectileSprite.parentNode.name == 'player_ship' )
+            this._yRot = projectileSprite.parentNode.nodeAry[2].object.rot.y;
     }
     
     // 
@@ -234,7 +254,7 @@ class HealthCharacter_Hit
 
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
         this._explodeSprite = this.enemyStrategy.create('explode').get();
-        this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -10 : 10 );
+        this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite );
 
         // Hide the projectile and allow it to be recycled from the script moving it
         if( projectileSprite.parentNode.name === 'player_shot' )
@@ -263,7 +283,7 @@ class HealthCharacter_Hit
 export function loadScripts()
 {
     scriptManager.set( 'Explode_animation',
-            ( sprite, projectileSprite, shipSprite, offset ) => { return new Explode_animation( sprite, projectileSprite, shipSprite, offset ); } );
+            ( sprite, projectileSprite, shipSprite ) => { return new Explode_animation( sprite, projectileSprite, shipSprite ); } );
 
     scriptManager.set( 'EnemyShip_CheckForCollideWithPlayer',
         ( sprite ) => { return new EnemyShip_CheckForCollideWithPlayer( sprite ); } );

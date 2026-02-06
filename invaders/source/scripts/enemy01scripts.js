@@ -12,6 +12,7 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { soundManager } from '../../../library/sound/soundmanager';
 import * as easing from '../../../library/utilities/easingfunc';
+import * as gameDefs from '../state/gamedefs';
 
 //
 //  DESC: Script for handling enemy01 getting hit
@@ -35,8 +36,11 @@ class Enemy01Ship_Hit
         this.sprite = sprite;
 
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
-        this._explodeSprite = this.enemyStrategy.create('explode').get();
-        this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite, (projectileSprite.rot.y > 1) ? -30 : 20 );
+        if( projectileSprite.parentNode.userId != gameDefs.PLAYER_SHIP_ID )
+        {
+            this._explodeSprite = this.enemyStrategy.create('explode').get();
+            this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite );
+        }
 
         // Hide the projectile and allow it to be recycled from the script moving it
         if( projectileSprite.parentNode.name === 'player_shot' )

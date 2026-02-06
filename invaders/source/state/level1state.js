@@ -53,10 +53,7 @@ const MOVE_NULL = -1,
       PLAYER_SHIP_TOP_SPEED = 12,
       PLAYER_SHIP_BOOST_TOP_SPEED = 16,
       MAX_CLOUDS = 8,
-      PLAYER_SHIP_ID = 0,
       ENEMY00_SHOT_ID = -2,
-      ENEMY00_SHIP_ID = -3,
-      ENEMY01_SHIP_ID = -4,
       ENEMY02_SHIP_ID = -5,
       HEALTH_CHARACTER = -50,
       ENEMY00_SHIP_HIT_VALUE = 1,
@@ -66,6 +63,8 @@ const MOVE_NULL = -1,
       ENEMY02_SHIP_HIT_COUNT = 10,
       ENEMY01_LEVEL_THRESHOLD = 5,
       ENEMY02_LEVEL_THRESHOLD = 3,
+      MAX_ENEMY00 = 20,
+      MIN_ENEMY00 = 5,
       HEALTH_CHAR_THRESHOLD = 3,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
@@ -302,7 +301,7 @@ export class Level1State extends CommonState
         this.musicTimer = new Timer((1000 * 60 * 5));
 
         this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 10), (1000 * 40)));
-        this.enemy00SpawnTimer = new Timer(2000);
+        this.enemy00SpawnTimer = new Timer(1000 * 2);
         this.enemy01SpawnTimer = new Timer(genFunc.randomInt( (1000 * 40), (1000 * 150)));
         this.enemy02SpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 100)));
         this.enemy01SpawnTimer.disable();
@@ -311,8 +310,8 @@ export class Level1State extends CommonState
         this.enemy01Active = false;
         this.enemy02Active = false;
         this.healthCharActive = false;
-        this.enemy00MaxTimer = new Timer(15000);
-        this.enemy00Max = 5;
+        this.enemy00MaxTimer = new Timer(1000 * 30);
+        this.enemy00Max = MIN_ENEMY00;
 
         this.train = {};
         this.train.strategy = null;
@@ -418,7 +417,7 @@ export class Level1State extends CommonState
     collisionCallBack( spriteA, spriteB )
     {
         // Player ship was involved in a collision
-        if(spriteB.parentNode.userId == PLAYER_SHIP_ID)
+        if(spriteB.parentNode.userId == gameDefs.PLAYER_SHIP_ID)
         {
             spriteA.collisionComponent.enable = false;
 
@@ -435,7 +434,7 @@ export class Level1State extends CommonState
                 this.groupPlayer.play( 'player_hit' );
             }
             // Player collides into enemy00
-            else if( spriteA.parentNode.userId == ENEMY00_SHIP_ID )
+            else if( spriteA.parentNode.userId == gameDefs.ENEMY00_SHIP_ID )
             {
                 spriteB.prepareScript( 'hit', spriteA );
                 if( GOD_MODE == false )
@@ -447,7 +446,7 @@ export class Level1State extends CommonState
                 this.groupPlayer.play( 'EXPLOSION_Metllic' );
             }
             // Player collides into enemy01 or enemy02
-            else if( spriteA.parentNode.userId == ENEMY01_SHIP_ID || spriteA.parentNode.userId == ENEMY02_SHIP_ID )
+            else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHIP_ID || spriteA.parentNode.userId == ENEMY02_SHIP_ID )
             {
                 spriteA.collisionComponent.enable = true;
                 if(this.playerShip.collisionTimer.expired(true))
@@ -496,7 +495,7 @@ export class Level1State extends CommonState
             }
         }
         // Player shot enemy00 ship
-        else if( spriteB.parentNode.userId == ENEMY00_SHIP_ID )
+        else if( spriteB.parentNode.userId == gameDefs.ENEMY00_SHIP_ID )
         {
             // Stop any more collision detection
             spriteA.collisionComponent.enable = false;
@@ -510,7 +509,7 @@ export class Level1State extends CommonState
             this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
         }
         // Player shot enemy01 ship
-        else if( spriteB.parentNode.userId == ENEMY01_SHIP_ID )
+        else if( spriteB.parentNode.userId == gameDefs.ENEMY01_SHIP_ID )
         {
             // Stop any more collision detection for the shot
             spriteA.collisionComponent.enable = false;
@@ -532,6 +531,7 @@ export class Level1State extends CommonState
 
                 // Resume the timer on the next enemy
                 this.enemy02SpawnTimer.resume();
+                this.enemy00MaxTimer.resume();
             }
 
             spriteB.hitCount++;
@@ -564,6 +564,7 @@ export class Level1State extends CommonState
 
             // Resume the timer on the next enemy
             this.enemy01SpawnTimer.resume();
+            this.enemy00MaxTimer.resume();
         }
         // Player shot health character
         else if( spriteB.parentNode.userId == HEALTH_CHARACTER )
@@ -762,6 +763,7 @@ export class Level1State extends CommonState
                         this.enemy02SpawnTimer.pause();
                         this.train.timer.pause();
                         this.healthSpawnTimer.pause();
+                        this.enemy00MaxTimer.pause();
 
                         this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                         if(this._gsnd.isPlaying())
@@ -811,6 +813,7 @@ export class Level1State extends CommonState
                             this.enemy02SpawnTimer.resume();
                             this.train.timer.resume();
                             this.healthSpawnTimer.resume();
+                            this.enemy00MaxTimer.resume();
 
                             this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                             if(this._gsnd.isPaused())
@@ -871,6 +874,7 @@ export class Level1State extends CommonState
                     this.enemy02SpawnTimer.resume();
                     this.train.timer.resume();
                     this.healthSpawnTimer.resume();
+                    this.enemy00MaxTimer.resume();
 
                     // Indicate to Crazy Games the game has started
                     if(typeof window.CrazyGames !== 'undefined' )
@@ -1009,7 +1013,7 @@ export class Level1State extends CommonState
         if( this.hudProgressBar.isMaxValue() )
         {
             this.hudProgressBar.setCurrentValue( 0 );
-            this.hudProgressBar.incProgressBarMax( 2 );
+            this.hudProgressBar.incProgressBarMax( 1 );
             this.playerLevel += value;
 
             this.setYTGameScore();
@@ -1205,7 +1209,7 @@ export class Level1State extends CommonState
                 this._node.get().setPosXYZ(0, settings.deviceRes.h);
             }
 
-            if( this.enemy00MaxTimer.expired(true) && this.enemy00Max < 25 )
+            if( this.enemy00MaxTimer.expired(true) && this.enemy00Max < MAX_ENEMY00 )
             {
                 this.enemy00Max++;
             }
@@ -1222,6 +1226,7 @@ export class Level1State extends CommonState
 
             // Pause the next enemy so that they don't pile up
             this.enemy02SpawnTimer.pause();
+            this.enemy00MaxTimer.pause();
         }
         // Create enemy02 and position it outside of the view
         else if( this.enemy02SpawnTimer.expired(false, true) )
@@ -1235,6 +1240,7 @@ export class Level1State extends CommonState
 
             // Pause the next enemy so that they don't pile up
             this.enemy01SpawnTimer.pause();
+            this.enemy00MaxTimer.pause();
         }
         // Create a health character and position it on a building
         else if(this.healthSpawnTimer.expired( false, false ))
