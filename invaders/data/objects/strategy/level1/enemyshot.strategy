@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<strategy defaultGroup="(level_1)" defaultCamera="buildingsCamera">
+
+    <object>
+        <position z="-70"/>
+    </object>
+
+    <node name="enemy_shot" id="-2">
+        <sprite>
+            <scriptList>
+                <script shoot="Enemy00Ship_Shoot"/>
+                <script hit="Enemy00Shot_Hit"/>
+            </scriptList>
+        </sprite>
+    </node>
+
+</strategy>

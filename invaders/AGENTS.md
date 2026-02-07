@@ -122,6 +122,47 @@ export const exampleManager = new ExampleManager();
 - 4-space indentation
 - ESLint: ES2018, browser environment
 
+## Circular Map / Wrap-Around System
+The play area is circular — the player can fly in either X direction and loop back around at `±GAMEPLAY_LOOPING_WRAP_DIST` (5600). Key details:
+
+### Wrapping Pattern
+Entities that wrap use this pattern after movement:
+```javascript
+if( sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+    sprite.incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+else if( sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+    sprite.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+```
+
+### Shortest Path Calculation
+When an entity needs to chase a target across the wrap boundary, compute the shortest wrapped delta:
+```javascript
+this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+this._deltaX = targetX - this.sprite.pos.x;
+if( this._deltaX > this._wrapSpan / 2 )
+    this._deltaX -= this._wrapSpan;
+else if( this._deltaX < -this._wrapSpan / 2 )
+    this._deltaX += this._wrapSpan;
+this._targetX = this.sprite.pos.x + this._deltaX;
+```
+
+### Wrap-Aware Visibility
+To check if a sprite is visible across the wrap boundary, test the sprite's position and both wrapped offsets (±wrapSpan) against the camera's `inView()`. See `inViewWithWrap()` in `enemy00aiscripts.js`.
+
+### Strategies and Rendering
+- **`_enemy_shot_` strategy**: Enemy00 projectiles are in their own strategy (`enemyshot.strategy`) using `buildingsCamera`, separate from `_player_ship_`. This avoids projectiles being shifted when the player wraps and allows independent wrap-around rendering via `wrapAroundCamera`.
+- **`wrapAroundCamera`**: Positioned based on `buildingsCamera` in the wrap zone. Strategies that need wrap rendering get an additional `render(wrapAroundCamera)` call when `buildingsCamera.pos.x < -4900 || > 5000`.
+- **Projectile distance tracking**: Enemy00 projectiles use cumulative `distTraveled` instead of `startPos.calcLength2D()` for lifetime checks, since external position shifts (from strategy-wide wraps) would break absolute distance comparisons.
+
+### Which Entities Wrap
+| Entity | Wraps Movement | Wraps Shooting | Notes |
+|--------|---------------|----------------|-------|
+| Player ship | Yes | N/A | Wraps all sprites in `_player_ship_` strategy + `levelCamera` |
+| Enemy00 | Yes (Roam phase) | Yes (via `inViewWithWrap`) | Takes shortest path to buildings and player |
+| Enemy02 | Yes (Seek_and_Destroy) | No | Free-flying, natural fit for wrapping |
+| Enemy01 | No | No | Boss enemy, stays in play area |
+| Enemy00 shots | Yes | N/A | Own strategy (`_enemy_shot_`), wrap independently |
+
 ## Platform Integration
 - **CrazyGames SDK**: Optional, detected at runtime (`window.CrazyGames`)
 - **YouTube Playables**: Optional, detected at runtime (`window.ytgame`)

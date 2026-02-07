@@ -58,7 +58,7 @@ class AI_Enemy00_base extends aiNode
                     // Should we skip a shot?
                     if( genFunc.randomInt( 0, 10 ) > 3 )
                     {
-                        this._shootSprite = this.data.playerShipStrategy.create('enemy_shot').get();
+                        this._shootSprite = this.data.enemyShotStrategy.create('enemy_shot').get();
                         this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite );
 
                         this.data.groupPlayer.play( 'enemy00_gun' );
@@ -119,6 +119,7 @@ class AI_Enemy00_Head extends aiNode
             this.data.minX = this.data.buildings[0].get().pos.x;
             this.data.maxX = this.data.buildings[this.data.buildings.length-1].get().pos.x;
             this.data.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
+            this.data.enemyShotStrategy = strategyManager.get('_enemy_shot_');
         }
     }
 
@@ -268,6 +269,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                 // Wrap the sprite position when crossing the map boundary
                 if( this.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
                     this.sprite.incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+
                 else if( this.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
                     this.sprite.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
@@ -302,15 +304,26 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                             // Set the target building
                             this.sprite.targetBuilding = this._targetBuilding;
 
+                            // Use shortest path considering map wrapping
+                            this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+                            this._deltaX = this.sprite.targetBuilding.pos.x - this.sprite.pos.x;
+                            if( this._deltaX > this._wrapSpan / 2 )
+                                this._deltaX -= this._wrapSpan;
+                            
+                            else if( this._deltaX < -this._wrapSpan / 2 )
+                                this._deltaX += this._wrapSpan;
+
+                            this._targetX = this.sprite.pos.x + this._deltaX;
+
                             // Calculate the travel time
-                            this._time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / gameDefs.pixel_per_sec_100;
-                            this.easingX.init( this.sprite.pos.x, this.sprite.targetBuilding.pos.x, this._time, easing.getSineInOut() );
+                            this._time = Math.abs(this._deltaX) / gameDefs.pixel_per_sec_100;
+                            this.easingX.init( this.sprite.pos.x, this._targetX, this._time, easing.getSineInOut() );
 
                             // Force an initialization to start the movement on first time execution of this function
                             this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
 
                             // Only set the Y easing if not the same building position as we are now
-                            if( Math.abs( this.sprite.targetBuilding.pos.x - this.sprite.pos.x) > 100 )
+                            if( Math.abs( this._deltaX ) > 100 )
                             {
                                 // Generate the Y range in which the enemy will travel
                                 this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
@@ -335,6 +348,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                             this._deltaX = this._offsetX - this.sprite.pos.x;
                             if( this._deltaX > this._wrapSpan / 2 )
                                 this._deltaX -= this._wrapSpan;
+                            
                             else if( this._deltaX < -this._wrapSpan / 2 )
                                 this._deltaX += this._wrapSpan;
 

@@ -146,6 +146,7 @@ export class Level1State extends CommonState
         this.hudLevelFont = this.upperHudStategy.get('level_font').get();
         this.hudProgressBar = this.upperHudStategy.get('level_progress_bar').get();
         this.enemyStrategy = strategyManager.get('_enemy_');
+        this.enemyShotStrategy = strategyManager.get('_enemy_shot_');
 
         // Y Offset based on the building for the health character
         this.healthCharYOffsetAry = [80,102,45,86,110,68,66,98];
@@ -341,7 +342,7 @@ export class Level1State extends CommonState
 
         enemy00aiscripts.clearAIData();
         enemy02aiscripts.clearAIData();
-        strategyManager.deleteStrategy( ['_buildings_','_enemy_','_player_ship_','_train_'] );
+        strategyManager.deleteStrategy( ['_buildings_','_enemy_','_enemy_shot_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
         .then(() =>
         {
@@ -352,6 +353,7 @@ export class Level1State extends CommonState
 
             // Reactivate strategies
             this.enemyStrategy = strategyManager.get('_enemy_');
+            this.enemyShotStrategy = strategyManager.get('_enemy_shot_');
 
             // Init the player ship
             this.initPlayerShip();
@@ -1546,6 +1548,7 @@ export class Level1State extends CommonState
             this.upperHudStategy.update();
             this.lowerHudStategy.update();
             this.enemyStrategy.update();
+            this.enemyShotStrategy.update();
             this.playerShip.strategy.update();
         }
     }
@@ -1563,6 +1566,7 @@ export class Level1State extends CommonState
             this.upperHudStategy.transform();
             this.lowerHudStategy.transform();
             this.enemyStrategy.transform();
+            this.enemyShotStrategy.transform();
             this.playerShip.strategy.transform();
         }
     }
@@ -1586,10 +1590,11 @@ export class Level1State extends CommonState
                 if( this.train.strategy )
                     this.train.strategy.render( this.train.camera );
                 this.enemyStrategy.render( this.wrapAroundCamera );
-                this.playerShip.strategy.render( this.wrapAroundCamera );
+                this.enemyShotStrategy.render( this.wrapAroundCamera );
             }
 
             this.enemyStrategy.render();
+            this.enemyShotStrategy.render();
             this.playerShip.strategy.render();
             this.lowerHudStategy.render();
 
@@ -1598,9 +1603,11 @@ export class Level1State extends CommonState
             device.gl.viewport(this._viewPort[0], this._viewPort[3] - (this._viewPort[3] * 0.09), this._viewPort[2], this._viewPort[3] * RADAR_SCALE);
             this.buildingsStrategy.render( this.radarCamera1 );
             this.enemyStrategy.render( this.radarCamera1 );
+            this.enemyShotStrategy.render( this.radarCamera1 );
             this.playerShip.strategy.render( this.radarCamera1 );
             this.buildingsStrategy.render( this.radarCamera2 );
             this.enemyStrategy.render( this.radarCamera2 );
+            this.enemyShotStrategy.render( this.radarCamera2 );
             this.playerShip.strategy.render( this.radarCamera2 );
             device.gl.viewport(this._viewPort[0], this._viewPort[1], this._viewPort[2], this._viewPort[3]);
 

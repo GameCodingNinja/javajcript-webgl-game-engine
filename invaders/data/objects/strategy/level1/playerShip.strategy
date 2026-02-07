@@ -16,17 +16,6 @@
 
     </node>
 
-    <node name="enemy_shot" id="-2">
-
-        <sprite>
-            <scriptList>
-                <script shoot="Enemy00Ship_Shoot"/>
-                <script hit="Enemy00Shot_Hit"/>
-            </scriptList>
-        </sprite>
-
-    </node>
-
     <node name="explode">
 
         <sprite>

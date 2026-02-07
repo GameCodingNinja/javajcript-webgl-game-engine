@@ -9,7 +9,6 @@
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { strategyManager } from '../../../library/strategy/strategymanager';
-import { Point } from '../../../library/common/point';
 import { settings } from '../../../library/utilities/settings';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
@@ -27,10 +26,9 @@ class Enemy00Ship_Shoot
         this.PROJECTILE_SPEED = 0.25;
         this.PROJECTILE_ROT_SPEED = 0.5;
 
-        this.startPos = new Point;
-
         // Player ship
         this.playerShipStrategy = strategyManager.get('_player_ship_');
+        this.enemyShotStrategy = strategyManager.get('_enemy_shot_');
         this.camera = this.playerShipStrategy.camera;
 
         // Continues the init
@@ -64,7 +62,7 @@ class Enemy00Ship_Shoot
         if( this.moveX < 0.0 )
             this.projectile_rot_speed = this.PROJECTILE_ROT_SPEED;
 
-        this.startPos.copy( enemySprite.pos );
+        this.distTraveled = 0;
 
         this.sprite.transform();
     }
@@ -76,29 +74,25 @@ class Enemy00Ship_Shoot
     {
         if( this.camera.inViewY( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
-            this.sprite.incPosXYZ( this.moveX * highResTimer.elapsedTime * this.PROJECTILE_SPEED, this.moveY * highResTimer.elapsedTime * this.PROJECTILE_SPEED );
+            this._moveInc = highResTimer.elapsedTime * this.PROJECTILE_SPEED;
+            this.sprite.incPosXYZ( this.moveX * this._moveInc, this.moveY * this._moveInc );
             this.sprite.incRotXYZ( 0, 0, this.projectile_rot_speed * highResTimer.elapsedTime );
 
-            // Wrap the projectile position and shift startPos to keep distance check valid
+            // Wrap the projectile position at the map boundary
             if( this.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-            {
                 this.sprite.incPosXYZ( gWrapSpan );
-                this.startPos.x += gWrapSpan;
-            }
             else if( this.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-            {
                 this.sprite.incPosXYZ( -gWrapSpan );
-                this.startPos.x -= gWrapSpan;
-            }
 
             this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry );
 
-            if( this.startPos.calcLength2D( this.sprite.pos ) < settings.deviceRes.w )
+            this.distTraveled += this._moveInc;
+            if( this.distTraveled < settings.deviceRes.w )
                 return false;
         }
 
         // We are done with this sprite, queue it up to be recycled
-        this.playerShipStrategy.recycle( this.sprite.parentNode );
+        this.enemyShotStrategy.recycle( this.sprite.parentNode );
 
         return true;
     }
@@ -205,7 +199,7 @@ class Enemy00Shot_Hit
         this.sprite = sprite;
 
         // We are done with this sprite, queue it up to be recycled
-        strategyManager.get('_player_ship_').recycle( this.sprite.parentNode );
+        strategyManager.get('_enemy_shot_').recycle( this.sprite.parentNode );
     }
     
     // 
