@@ -1586,6 +1586,7 @@ export class Level1State extends CommonState
                 if( this.train.strategy )
                     this.train.strategy.render( this.train.camera );
                 this.enemyStrategy.render( this.wrapAroundCamera );
+                this.playerShip.strategy.render( this.wrapAroundCamera );
             }
 
             this.enemyStrategy.render();

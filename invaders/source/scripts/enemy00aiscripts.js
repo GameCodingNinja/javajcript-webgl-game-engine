@@ -14,10 +14,14 @@ import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
+import { Point } from '../../../library/common/point';
 import * as gameDefs from '../state/gamedefs';
 
 // Shared AI data
 var ai_data = {};
+
+// Global temp point for wrap-aware view checks (GC optimization)
+var gTempWrapPoint = new Point;
 
 // 
 //  DESC: Clear the AI data
@@ -49,7 +53,7 @@ class AI_Enemy00_base extends aiNode
 
             if( this.sprite.shootTime < 0 )
             {
-                if( this.data.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius )  )
+                if( this.inViewWithWrap( this.sprite.transPos, this.sprite.parentNode.radius ) )
                 {
                     // Should we skip a shot?
                     if( genFunc.randomInt( 0, 10 ) > 3 )
@@ -64,6 +68,25 @@ class AI_Enemy00_base extends aiNode
                 }
             }
         }
+    }
+
+    // 
+    //  DESC: Check if the sprite is in view, accounting for map wrapping
+    //
+    inViewWithWrap( transPos, radius )
+    {
+        if( this.data.camera.inView( transPos, radius ) )
+            return true;
+
+        this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+
+        gTempWrapPoint.copy( transPos );
+        gTempWrapPoint.x = transPos.x + this._wrapSpan;
+        if( this.data.camera.inView( gTempWrapPoint, radius ) )
+            return true;
+
+        gTempWrapPoint.x = transPos.x - this._wrapSpan;
+        return this.data.camera.inView( gTempWrapPoint, radius );
     }
 }
 
@@ -241,6 +264,12 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
             if( this.easingY.isInitialized() )
             {
                 this.sprite.setPosXYZ( this.easingX.getValue(), this.easingY.getValue() );
+
+                // Wrap the sprite position when crossing the map boundary
+                if( this.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+                    this.sprite.incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                else if( this.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+                    this.sprite.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
 
             // Shoot at the player
@@ -298,6 +327,18 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                         if( this.data.buildings.length >= this.data.enemy.length )
                         {
                             this._offsetX = genFunc.randomInt( this.data.minX, this.data.maxX );
+                        }
+                        else
+                        {
+                            // Use shortest path considering map wrapping
+                            this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+                            this._deltaX = this._offsetX - this.sprite.pos.x;
+                            if( this._deltaX > this._wrapSpan / 2 )
+                                this._deltaX -= this._wrapSpan;
+                            else if( this._deltaX < -this._wrapSpan / 2 )
+                                this._deltaX += this._wrapSpan;
+
+                            this._offsetX = this.sprite.pos.x + this._deltaX;
                         }
                         
                         // Calculate the travel time

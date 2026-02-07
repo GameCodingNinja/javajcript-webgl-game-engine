@@ -241,16 +241,27 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
                 {
                     this._y_pixel_per_sec = gameDefs.pixel_per_sec_300;
 
-                    if(Math.abs(this.sprite.pos.x - this.data.playerShipSprite.pos.x) > 800)
+                    this._wrapDist = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+                    this._directDiff = this.data.playerShipSprite.pos.x - this.sprite.pos.x;
+                    this._directDist = Math.abs(this._directDiff);
+
+                    if(this._directDist > 800)
                     {
-                        if((this.sprite.pos.x < this.data.playerShipSprite.pos.x) && (this.sprite.rot.y > 1))
+                        this._wrappedDist = this._wrapDist - this._directDist;
+
+                        if(this._wrappedDist < this._directDist)
+                            this._shouldGoRight = (this._directDiff < 0);
+                        else
+                            this._shouldGoRight = (this._directDiff > 0);
+
+                        if(this._shouldGoRight && (this.sprite.rot.y > 1))
                         {
                             // Flip the ship facing right
                             this.sprite.setRotXYZ( 0, 0 );
 
                             this.easingX.init( this.easingX.getValue(), gameDefs.X_EASING_SPEED, 2, easing.getLinear() );
                         }
-                        else if((this.sprite.pos.x > this.data.playerShipSprite.pos.x) && (this.sprite.rot.y < 1))
+                        else if(!this._shouldGoRight && (this.sprite.rot.y < 1))
                         {
                             // Flip the ship facing left
                             this.sprite.setRotXYZ( 0, 180 );

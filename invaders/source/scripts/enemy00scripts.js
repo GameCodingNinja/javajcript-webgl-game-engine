@@ -14,6 +14,8 @@ import { settings } from '../../../library/utilities/settings';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
 
+var gWrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+
 //
 //  DESC: Script for shooting enemy00 projectile
 //
@@ -46,9 +48,17 @@ class Enemy00Ship_Shoot
         this.sprite.setRotXYZ(0, 0, 0);
 
         this.playerShipSprite = this.playerShipStrategy.get('player_ship').get();
-        this._length = this.playerShipSprite.pos.calcLength2D( enemySprite.pos );
-        this.moveX = (this.playerShipSprite.pos.x - enemySprite.pos.x) / this._length;
-        this.moveY = (this.playerShipSprite.pos.y - enemySprite.pos.y) / this._length;
+
+        this._deltaX = this.playerShipSprite.pos.x - enemySprite.pos.x;
+        if( this._deltaX > gWrapSpan / 2 )
+            this._deltaX -= gWrapSpan;
+        else if( this._deltaX < -gWrapSpan / 2 )
+            this._deltaX += gWrapSpan;
+
+        this._deltaY = this.playerShipSprite.pos.y - enemySprite.pos.y;
+        this._length = Math.sqrt( this._deltaX * this._deltaX + this._deltaY * this._deltaY );
+        this.moveX = this._deltaX / this._length;
+        this.moveY = this._deltaY / this._length;
 
         this.projectile_rot_speed = -this.PROJECTILE_ROT_SPEED;
         if( this.moveX < 0.0 )
@@ -68,6 +78,19 @@ class Enemy00Ship_Shoot
         {
             this.sprite.incPosXYZ( this.moveX * highResTimer.elapsedTime * this.PROJECTILE_SPEED, this.moveY * highResTimer.elapsedTime * this.PROJECTILE_SPEED );
             this.sprite.incRotXYZ( 0, 0, this.projectile_rot_speed * highResTimer.elapsedTime );
+
+            // Wrap the projectile position and shift startPos to keep distance check valid
+            if( this.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+            {
+                this.sprite.incPosXYZ( gWrapSpan );
+                this.startPos.x += gWrapSpan;
+            }
+            else if( this.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+            {
+                this.sprite.incPosXYZ( -gWrapSpan );
+                this.startPos.x -= gWrapSpan;
+            }
+
             this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry );
 
             if( this.startPos.calcLength2D( this.sprite.pos ) < settings.deviceRes.w )
