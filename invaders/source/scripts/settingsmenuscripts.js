@@ -76,6 +76,7 @@ export class SoundCheckBox_execute
         {
             settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
             settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
+            settingsMenu.getControl( "sound_dialog_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
 
             soundManager.play( '(music)', 'LOOP_Synthetic_Humanity', true );
         }
@@ -83,6 +84,7 @@ export class SoundCheckBox_execute
         {
             settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
             settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
+            settingsMenu.getControl( "sound_dialog_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
 
             soundManager.stopGroup( '(music)' );
         }
@@ -225,6 +227,70 @@ export class SoundMusicCheckBox_execute
 }
 
 //
+//  Handle init status of sound dialog check box
+//
+export class SoundDialogCheckBox_InitStatus
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( !settings.user.soundEnabled )
+            this.control.changeState( uiControlDefs.ECS_DISABLE );
+
+        this.control.toggleState = (settings.user.soundDialogEnabled === 1);
+
+        return true;
+    }
+}
+
+//
+//  Handle execute of sound dialog check box
+//
+export class SoundDialogCheckBox_execute
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        settings.user.soundDialogEnabled = this.control.toggleState == true ? 1 : 0;
+        localStorage.set( 'userSettings', settings.user );
+
+        return true;
+    }
+}
+
+//
 //  Handle init status of dead zone slider
 //
 export class DeadZoneSlider_InitStatus
@@ -306,6 +372,12 @@ export function loadScripts()
 
     scriptManager.set( 'SoundMusicCheckBox_execute',
         ( control ) => { return new SoundMusicCheckBox_execute( control ); } );
+
+    scriptManager.set( 'SoundDialogCheckBox_InitStatus',
+        ( control ) => { return new SoundDialogCheckBox_InitStatus( control ); } );
+
+    scriptManager.set( 'SoundDialogCheckBox_execute',
+        ( control ) => { return new SoundDialogCheckBox_execute( control ); } );
 
     scriptManager.set( 'DeadZoneSlider_InitStatus',
         ( control ) => { return new DeadZoneSlider_InitStatus( control ); } );

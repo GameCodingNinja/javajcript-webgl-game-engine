@@ -72,7 +72,16 @@ pollEvents() → physics() → update() → transform() → render() → request
 Behavior classes registered with `scriptManager.set('ClassName', ClassName)` for:
 - Player behaviors: `PlayerShip_FireTailAnim`, `PlayerShip_ShootLazer`, `PlayerShip_Die`
 - Enemy AI and death animations
-- Menu transitions
+- Menu transitions and settings controls (e.g., `SoundCheckBox_execute`, `SoundEffectCheckBox_execute`)
+
+### Menu System
+- Menu definitions: `data/objects/2d/menu/*.menu` (XML files defining controls, layout, navigation, scripts)
+- Menu control templates: `data/objects/2d/menu/control/*.ctrl`
+- Menu backgrounds: `data/objects/2d/objectDataList/menuBackgrounds.lst` (defines sizes for scaled-frame backgrounds)
+- Settings menu scripts: `source/scripts/settingsmenuscripts.js` (each control has `_InitStatus` and `_execute` script classes)
+- Coordinate system is center 0,0; positive Y is up
+- When adding controls to a menu, update: the `.menu` XML (control + navigation chain), background size in `menuBackgrounds.lst`, and script classes + registration in the corresponding scripts file
+- The master Sound checkbox enables/disables all sub-checkboxes (Effects, Music, Dialog) via `changeState(ECS_INACTIVE/ECS_DISABLE)`
 
 ## Code Conventions
 

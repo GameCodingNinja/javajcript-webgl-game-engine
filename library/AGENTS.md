@@ -105,6 +105,12 @@ Mouse events are filtered through `filterMousePos()` which adds game-adjusted pr
 
 Fullscreen scaling uses `canvas.width / canvas.clientWidth` ratio, NOT `devicePixelRatio`.
 
+## Sound System (sound/)
+Sound playback is managed by `soundManager` with per-type enable/disable via `settings.user`:
+- **Sound Types** (defined in `common/defs.js`): `ESND_EFFECT` (1), `ESND_MUSIC` (2), `ESND_DIALOG` (3) — set from the `type` attribute in sound XML data
+- **User Settings** (`utilities/settings.js` → `settings.user`): `soundEnabled` (master toggle), `soundEffectEnabled`, `soundMusicEnabled`, `soundDialogEnabled` — persisted via `localStorage.set('userSettings', settings.user)`
+- Sounds only play when the master toggle AND the type-specific toggle are both enabled (see `sound/sound.js` play/resume logic)
+
 ## GC Optimization Caveats
 - **Do NOT reuse arrays in async/Promise contexts**: Instance variables for promise collection (e.g., `this._promiseAry`) cause race conditions when multiple loads occur concurrently. Use local variables for promise arrays.
 - **Avoid `findIndex` with closures**: Use `genFunc.indexOf()` instead of `Array.findIndex((obj) => ...)` to avoid closure creation per call.

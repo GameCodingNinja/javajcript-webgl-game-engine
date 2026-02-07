@@ -2,13 +2,13 @@
 <soundList>
 
     <soundFiles>
-        <load id="scream_male_b_01" file="data/sound/level/health_char/SCREAM_Male_B_01_mono.ogg" defaultVolume="0.5"/>
-        <load id="scream_male_b_05" file="data/sound/level/health_char/SCREAM_Male_B_05_mono.ogg" defaultVolume="0.5"/>
-        <load id="scream_male_b_06" file="data/sound/level/health_char/SCREAM_Male_B_06_mono.ogg" defaultVolume="0.5"/>
+        <load id="scream_male_b_01" file="data/sound/level/health_char/SCREAM_Male_B_01_mono.ogg" defaultVolume="0.5" type="dialog"/>
+        <load id="scream_male_b_05" file="data/sound/level/health_char/SCREAM_Male_B_05_mono.ogg" defaultVolume="0.5" type="dialog"/>
+        <load id="scream_male_b_06" file="data/sound/level/health_char/SCREAM_Male_B_06_mono.ogg" defaultVolume="0.5" type="dialog"/>
 
-        <load id="exclamation_male_b_horray" file="data/sound/level/health_char/EXCLAMATION_Male_B_Horray_01_mono.ogg" defaultVolume="0.5"/>
-        <load id="exclamation_male_b_woooho" file="data/sound/level/health_char/EXCLAMATION_Male_B_Woooho_mono.ogg" defaultVolume="0.5"/>
-        <load id="exclamation_male_b_yehoo" file="data/sound/level/health_char/EXCLAMATION_Male_B_Yehoo_01_mono.ogg" defaultVolume="0.5"/>
+        <load id="exclamation_male_b_horray" file="data/sound/level/health_char/EXCLAMATION_Male_B_Horray_01_mono.ogg" defaultVolume="0.5" type="dialog"/>
+        <load id="exclamation_male_b_woooho" file="data/sound/level/health_char/EXCLAMATION_Male_B_Woooho_mono.ogg" defaultVolume="0.5" type="dialog"/>
+        <load id="exclamation_male_b_yehoo" file="data/sound/level/health_char/EXCLAMATION_Male_B_Yehoo_01_mono.ogg" defaultVolume="0.5" type="dialog"/>
 
         <load id="gore_splat_blunt_hit_bounce" file="data/sound/level/health_char/GORE_Splat_Blunt_Hit_Bounce_mono.ogg" defaultVolume="1.0"/>
         <load id="gore_splat_bubbles" file="data/sound/level/health_char/GORE_Splat_Hit_Bubbles_mono.ogg" defaultVolume="1.0"/>

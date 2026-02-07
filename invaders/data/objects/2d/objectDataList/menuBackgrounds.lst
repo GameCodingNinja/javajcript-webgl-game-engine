@@ -25,7 +25,7 @@
         </object>
 
         <object name="settings_menu_bg">
-            <size width="330" height="380"/>
+            <size width="330" height="435"/>
         </object>
         
         <object name="confirmation_menu_bg">
