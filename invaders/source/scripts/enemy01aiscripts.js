@@ -14,9 +14,6 @@ import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
 
-const pixel_per_sec_100 = 100,
-      pixel_per_sec_200 = 200;
-
 //
 //  DESC: AI Enemy01 head (root) node Head class script
 //        Only supports one child
@@ -94,7 +91,7 @@ class AI_Enemy01_Descend extends aiNode
                 this._yDestination = -60;
         }
 
-        this.easingY.init( this.sprite.pos.y, this._yDestination, this.sprite.pos.y / pixel_per_sec_200, easing.getSineOut() );
+        this.easingY.init( this.sprite.pos.y, this._yDestination, this.sprite.pos.y / gameDefs.pixel_per_sec_200, easing.getSineOut() );
 
         // Init the hit count
         this.sprite.hitCount = 0;

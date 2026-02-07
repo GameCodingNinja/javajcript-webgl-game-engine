@@ -14,14 +14,10 @@ import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
+import * as gameDefs from '../state/gamedefs';
 
 // Shared AI data
 var ai_data = {};
-
-const pixel_per_sec_100 = 100,
-      passive_shooter_time = 2000,
-      aggressive_shooter_time = 1000,
-      destroy_building_shooter_time = 500;
 
 // 
 //  DESC: Clear the AI data
@@ -154,14 +150,14 @@ class AI_Enemy00_Descend extends AI_Enemy00_base
     {
         // Set the initial position of the sprite above the height of the screen
         // with a random amount to delay how long it takes to be visible on the screen
-        this.sprite.shoot_player_time = passive_shooter_time;
+        this.sprite.shoot_player_time = gameDefs.passive_shooter_time;
         this.sprite.targetBuilding = null;
         this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
         this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.deviceRes_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
         this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
 
         // Calculated to move in pixels per second
-        this.easingY.init( this.sprite.pos.y, this._offsetY, Math.abs(this.sprite.pos.y - this._offsetY) / pixel_per_sec_100, easing.getSineOut() );
+        this.easingY.init( this.sprite.pos.y, this._offsetY, Math.abs(this.sprite.pos.y - this._offsetY) / gameDefs.pixel_per_sec_100, easing.getSineOut() );
     }
 
     // 
@@ -278,7 +274,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                             this.sprite.targetBuilding = this._targetBuilding;
 
                             // Calculate the travel time
-                            this._time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / pixel_per_sec_100;
+                            this._time = Math.abs(this.sprite.pos.x - this.sprite.targetBuilding.pos.x) / gameDefs.pixel_per_sec_100;
                             this.easingX.init( this.sprite.pos.x, this.sprite.targetBuilding.pos.x, this._time, easing.getSineInOut() );
 
                             // Force an initialization to start the movement on first time execution of this function
@@ -305,7 +301,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                         }
                         
                         // Calculate the travel time
-                        this._time = Math.abs( this.sprite.pos.x - this._offsetX ) / pixel_per_sec_100;
+                        this._time = Math.abs( this.sprite.pos.x - this._offsetX ) / gameDefs.pixel_per_sec_100;
                         this.easingX.init( this.sprite.pos.x, this._offsetX, this._time, easing.getSineInOut() );
 
                         // Force an initialization to start the movement on first time execution of this function
@@ -367,7 +363,7 @@ class AI_Enemy00_DescendToBuilding extends AI_Enemy00_base
             if( !this.easingY.isInitialized() )
             {
                 this._offsetY = this.sprite.targetBuilding.pos.y + (this.sprite.targetBuilding.getSize().h / 2) + (this.sprite.getSize().h / 2) - 20;
-                this._time = Math.abs(this.sprite.pos.y - this._offsetY) / pixel_per_sec_100;
+                this._time = Math.abs(this.sprite.pos.y - this._offsetY) / gameDefs.pixel_per_sec_100;
 
                 this.easingY.init( this.sprite.pos.y, this._offsetY, this._time, easing.getSineInOut() );
             }
@@ -376,7 +372,7 @@ class AI_Enemy00_DescendToBuilding extends AI_Enemy00_base
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             // Shoot at the player
-            this.sprite.shoot_player_time = aggressive_shooter_time;
+            this.sprite.shoot_player_time = gameDefs.aggressive_shooter_time;
             this.shootPlayer( this.sprite.shoot_player_time );
 
             if( this.easingY.isFinished() )
@@ -428,7 +424,7 @@ class AI_Enemy00_DestroyBuilding extends AI_Enemy00_base
             this.shakeTime -= highResTimer.elapsedTime;
 
             // Shoot at the player
-            this.shootPlayer( destroy_building_shooter_time );
+            this.shootPlayer( gameDefs.destroy_building_shooter_time );
 
             // Shake a the enemy to simulate it attacking the building
             if( this.shakeTime < 0 )
