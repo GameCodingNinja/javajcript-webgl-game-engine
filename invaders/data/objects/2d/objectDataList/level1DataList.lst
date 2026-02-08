@@ -235,7 +235,7 @@
 
         <object name="enemy00_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy00.png"/>
+                <texture file="data/textures/enemyShip/enemy00a.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
 
@@ -275,42 +275,42 @@
 
         <object name="enemy01_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy01.png" />
+                <texture file="data/textures/enemyShip/enemy01a.png" />
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
                 
                 <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
-                        <point x="26" y="1"/>
+                        <point x="30" y="1"/>
                         <point x="60" y="1"/>
-                        <point x="111" y="115"/>
-                        <point x="60" y="148"/>
+                        <point x="130" y="106"/>
+                        <point x="60" y="128"/>
                     </polygon>
                     <polygon>
                         <point x="60" y="128"/>
-                        <point x="107" y="103"/>
-                        <point x="126" y="229"/>
-                        <point x="39" y="229"/>
+                        <point x="130" y="106"/>
+                        <point x="160" y="220"/>
+                        <point x="50" y="225"/>
                     </polygon>
                     <polygon>
-                        <point x="56" y="223"/>
-                        <point x="113" y="223"/>
-                        <point x="113" y="297"/>
-                        <point x="53" y="297"/>
-                        <point x="0" y="268"/>
-                        <point x="0" y="254"/>
+                        <point x="66" y="225"/>
+                        <point x="135" y="225"/>
+                        <point x="135" y="300"/>
+                        <point x="66" y="300"/>
+                        <point x="0" y="270"/>
+                        <point x="0" y="253"/>
                     </polygon>
                     <polygon>
-                        <point x="35" y="291"/>
-                        <point x="126" y="291"/>
-                        <point x="99" y="427"/>
-                        <point x="60" y="387"/>
+                        <point x="50" y="300"/>
+                        <point x="160" y="300"/>
+                        <point x="130" y="415"/>
+                        <point x="60" y="390"/>
                     </polygon>
                     <polygon>
-                        <point x="60" y="337"/>
-                        <point x="103" y="418"/>
-                        <point x="38" y="520"/>
-                        <point x="20" y="520"/>
+                        <point x="60" y="390"/>
+                        <point x="130" y="415"/>
+                        <point x="60" y="520"/>
+                        <point x="26" y="520"/>
                     </polygon>
                 </polygonList>
 
@@ -319,7 +319,7 @@
 
         <object name="enemy02_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy02.png"/>
+                <texture file="data/textures/enemyShip/enemy02a.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
                 <circle radius="25"/>

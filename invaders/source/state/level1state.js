@@ -311,7 +311,7 @@ export class Level1State extends CommonState
         this.enemy01Active = false;
         this.enemy02Active = false;
         this.healthCharActive = false;
-        this.enemy00MaxTimer = new Timer(1000 * 30);
+        this.enemy00MaxTimer = new Timer(1000 * 20);
         this.enemy00Max = MIN_ENEMY00;
 
         this.train = {};
