@@ -22,6 +22,7 @@
             <scriptList>
                 <script ai_enemy="AI_Enemy00" prepareOnInit="true" ai="true"/>
                 <script hit="Enemy00Ship_Hit"/>
+                <script die="Enemy00Ship_Die"/>
                 <script collision="EnemyShip_CheckForCollideWithPlayer" prepareOnInit="true"/>
             </scriptList>
         </sprite>

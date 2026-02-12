@@ -176,8 +176,10 @@ class AI_Enemy00_Descend extends AI_Enemy00_base
         // with a random amount to delay how long it takes to be visible on the screen
         this.sprite.shoot_player_time = gameDefs.passive_shooter_time;
         this.sprite.targetBuilding = null;
+        this.sprite.hitCount = 0;
         this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
         this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.deviceRes_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
+        this.sprite.setFrame(0);
         this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
 
         // Calculated to move in pixels per second
@@ -434,6 +436,7 @@ class AI_Enemy00_DescendToBuilding extends AI_Enemy00_base
             {
                 this.state = defs.EAIS_SUCCESS;
                 this.data.groupPlayer.play( 'enemy00_attack_building' );
+                this.sprite.setFrame(1);
             }
         }
 

@@ -235,7 +235,7 @@
 
         <object name="enemy00_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy00a.png"/>
+                <texture count="2" file="data/textures/enemyShip/enemy00_${NUM}.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
 

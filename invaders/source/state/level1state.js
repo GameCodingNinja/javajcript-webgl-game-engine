@@ -61,6 +61,7 @@ const MOVE_NULL = -1,
       ENEMY02_SHIP_HIT_VALUE = 3,
       ENEMY01_SHIP_HIT_COUNT = 30,
       ENEMY02_SHIP_HIT_COUNT = 10,
+      ENEMY00_SHIP_HIT_COUNT = 5,
       ENEMY01_LEVEL_THRESHOLD = 5,
       ENEMY02_LEVEL_THRESHOLD = 3,
       MAX_ENEMY00 = 20,
@@ -78,7 +79,7 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
-      GOD_MODE = false;
+      GOD_MODE = true;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -303,13 +304,10 @@ export class Level1State extends CommonState
 
         this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 10), (1000 * 40)));
         this.enemy00SpawnTimer = new Timer(1000 * 2);
-        this.enemy01SpawnTimer = new Timer(genFunc.randomInt( (1000 * 40), (1000 * 150)));
-        this.enemy02SpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 100)));
-        this.enemy01SpawnTimer.disable();
-        this.enemy02SpawnTimer.disable();
+        this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 100)));
+        this.miniBossSpawnTimer.disable();
         this.healthSpawnTimer.disable();
-        this.enemy01Active = false;
-        this.enemy02Active = false;
+        this.miniBossActive = false;
         this.healthCharActive = false;
         this.enemy00MaxTimer = new Timer(1000 * 20);
         this.enemy00Max = MIN_ENEMY00;
@@ -438,14 +436,38 @@ export class Level1State extends CommonState
             // Player collides into enemy00
             else if( spriteA.parentNode.userId == gameDefs.ENEMY00_SHIP_ID )
             {
-                spriteB.prepareScript( 'hit', spriteA );
-                if( GOD_MODE == false )
+                // Re-enable collision for enemy00 for the aggressive type
+                spriteA.collisionComponent.enable = true;
+                if(this.playerShip.collisionTimer.expired(true))
                 {
-                    this.playerShip.progressBar.incCurrentValue( -20 );
-                    this.playerShip.progressBar.setVisible( true );
+                    spriteB.prepareScript( 'hit', spriteA );
+                    if( GOD_MODE == false )
+                    {
+                        this.playerShip.progressBar.incCurrentValue( -20 );
+                        this.playerShip.progressBar.setVisible( true );
+                    }
+
+                    spriteA.prepareScript( 'hit', spriteB );
+
+                    spriteA.hitCount++;
+
+                    // In passive mode (frame 0), one shot kills
+                    if( spriteA.visualComponent.frameIndex === 0 )
+                    {
+                        spriteA.collisionComponent.enable = false;
+                        spriteA.prepareScript( 'die' );
+                        this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
+                    }
+                    // In aggressive mode (frame 1), takes multiple shots to kill
+                    else if( spriteA.hitCount == ENEMY00_SHIP_HIT_COUNT )
+                    {
+                        spriteA.collisionComponent.enable = false;
+                        spriteA.prepareScript( 'die' );
+                        this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE * 2 );
+                    }
+
+                    this.groupPlayer.play( 'EXPLOSION_Metllic' );
                 }
-                spriteA.prepareScript( 'hit', spriteB );
-                this.groupPlayer.play( 'EXPLOSION_Metllic' );
             }
             // Player collides into enemy01 or enemy02
             else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHIP_ID || spriteA.parentNode.userId == ENEMY02_SHIP_ID )
@@ -453,7 +475,6 @@ export class Level1State extends CommonState
                 spriteA.collisionComponent.enable = true;
                 if(this.playerShip.collisionTimer.expired(true))
                 {
-                    this.playerShip.allowCollision = false;
                     this.playerShip.sprite.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false )
                     {
@@ -499,16 +520,33 @@ export class Level1State extends CommonState
         // Player shot enemy00 ship
         else if( spriteB.parentNode.userId == gameDefs.ENEMY00_SHIP_ID )
         {
-            // Stop any more collision detection
+            // Stop any more collision detection for the shot
             spriteA.collisionComponent.enable = false;
-            spriteB.collisionComponent.enable = false;
+
+            // Re-enable collision for enemy00 for the aggressive type
+            spriteB.collisionComponent.enable = true;
 
             // Execute the scripts that handle being hit
             spriteB.prepareScript( 'hit', spriteA );
 
-            this.groupPlayer.play( 'enemy_explosion' );
+            spriteB.hitCount++;
 
-            this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
+            // In passive mode (frame 0), one shot kills
+            if( spriteB.visualComponent.frameIndex === 0 )
+            {
+                spriteB.collisionComponent.enable = false;
+                spriteB.prepareScript( 'die' );
+                this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
+            }
+            // In aggressive mode (frame 1), takes multiple shots to kill
+            else if( spriteB.hitCount == ENEMY00_SHIP_HIT_COUNT )
+            {
+                spriteB.collisionComponent.enable = false;
+                spriteB.prepareScript( 'die' );
+                this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE * 2 );
+            }
+
+            this.groupPlayer.play( 'enemy_explosion' );
         }
         // Player shot enemy01 ship
         else if( spriteB.parentNode.userId == gameDefs.ENEMY01_SHIP_ID )
@@ -519,24 +557,22 @@ export class Level1State extends CommonState
             // Execute the scripts that handle being hit
             spriteB.prepareScript( 'hit', spriteA );
 
+            spriteB.hitCount++;
+
             if(spriteB.hitCount == ENEMY01_SHIP_HIT_COUNT)
             {
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die' );
                 this.updateHudProgress( ENEMY01_SHIP_HIT_VALUE );
-                this.enemy01SpawnTimer.reset();
 
                 this.groupPlayer.play( 'enemy01_descend_to_crash' );
 
                 let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                 scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
 
-                // Resume the timer on the next enemy
-                this.enemy02SpawnTimer.resume();
+                this.miniBossSpawnTimer.reset();
                 this.enemy00MaxTimer.resume();
             }
-
-            spriteB.hitCount++;
 
             this.groupPlayer.play( 'enemy_explosion' );
         }
@@ -549,24 +585,22 @@ export class Level1State extends CommonState
             // Execute the scripts that handle being hit
             spriteB.prepareScript( 'hit', spriteA );
 
+            spriteB.hitCount++;
+
             if(spriteB.hitCount == ENEMY02_SHIP_HIT_COUNT)
             {
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die' );
                 this.updateHudProgress( ENEMY02_SHIP_HIT_VALUE );
-                this.enemy02SpawnTimer.reset();
 
                 let gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
                 scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
+
+                this.miniBossSpawnTimer.reset();
+                this.enemy00MaxTimer.resume();
             }
 
-            spriteB.hitCount++;
-
             this.groupPlayer.play( 'enemy_explosion' );
-
-            // Resume the timer on the next enemy
-            this.enemy01SpawnTimer.resume();
-            this.enemy00MaxTimer.resume();
         }
         // Player shot health character
         else if( spriteB.parentNode.userId == HEALTH_CHARACTER )
@@ -761,8 +795,7 @@ export class Level1State extends CommonState
 
                         this.musicTimer.pause();
                         this.enemy00SpawnTimer.pause();
-                        this.enemy01SpawnTimer.pause();
-                        this.enemy02SpawnTimer.pause();
+                        this.miniBossSpawnTimer.pause();
                         this.train.timer.pause();
                         this.healthSpawnTimer.pause();
                         this.enemy00MaxTimer.pause();
@@ -811,8 +844,7 @@ export class Level1State extends CommonState
 
                             this.musicTimer.resume();
                             this.enemy00SpawnTimer.resume();
-                            this.enemy01SpawnTimer.resume();
-                            this.enemy02SpawnTimer.resume();
+                            this.miniBossSpawnTimer.resume();
                             this.train.timer.resume();
                             this.healthSpawnTimer.resume();
                             this.enemy00MaxTimer.resume();
@@ -872,8 +904,7 @@ export class Level1State extends CommonState
 
                     this.musicTimer.resume();
                     this.enemy00SpawnTimer.resume();
-                    this.enemy01SpawnTimer.resume();
-                    this.enemy02SpawnTimer.resume();
+                    this.miniBossSpawnTimer.resume();
                     this.train.timer.resume();
                     this.healthSpawnTimer.resume();
                     this.enemy00MaxTimer.resume();
@@ -1024,17 +1055,11 @@ export class Level1State extends CommonState
 
             this.groupPlayer.play( 'level_up' );
 
-            // Enable enemy spawns when level thresholds are reached
-            if( this.playerLevel == ENEMY01_LEVEL_THRESHOLD && !this.enemy01Active )
+            // Enable mini-boss spawns when the earliest level threshold is reached
+            if( this.playerLevel >= ENEMY02_LEVEL_THRESHOLD && !this.miniBossActive )
             {
-                this.enemy01Active = true;
-                this.enemy01SpawnTimer.reset();
-            }
-
-            if( this.playerLevel == ENEMY02_LEVEL_THRESHOLD && !this.enemy02Active )
-            {
-                this.enemy02Active = true;
-                this.enemy02SpawnTimer.reset();
+                this.miniBossActive = true;
+                this.miniBossSpawnTimer.reset();
             }
 
             if( this.playerLevel == HEALTH_CHAR_THRESHOLD && !this.healthCharActive )
@@ -1216,32 +1241,26 @@ export class Level1State extends CommonState
                 this.enemy00Max++;
             }
         }
-        // Create enemy01 and position it outside of the view
-        else if(this.enemy01SpawnTimer.expired( false, true ))
+        // Create a mini-boss and position it outside of the view
+        else if( this.miniBossSpawnTimer.expired(false, true) )
         {
-            this._node = this.enemyStrategy.create('enemy01_ship');
-            this._node.get().setPosXYZ(genFunc.randomInt(-5000, 5000), settings.deviceRes.h + (this._node.radius / 2));
+            // Determine which mini-boss to spawn based on level thresholds
+            if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
+                this._miniBossType = (genFunc.randomInt( 0, 9 ) < 6) ? 'enemy02_ship' : 'enemy01_ship';
+            else
+                this._miniBossType = 'enemy02_ship';
+
+            this._spawnX = this.playerShip.sprite.pos.x + gameDefs.GAMEPLAY_LOOPING_WRAP_DIST;
+            if( this._spawnX > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+                this._spawnX -= gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+
+            this._node = this.enemyStrategy.create(this._miniBossType);
+            this._node.get().setPosXYZ(this._spawnX, settings.deviceRes.h + (this._node.radius / 2));
             this._node.get().setRotXYZ();
 
             if( genFunc.randomInt( 0, 1 ) === 0 )
                 this._node.get().setRotXYZ(0, 180);
 
-            // Pause the next enemy so that they don't pile up
-            this.enemy02SpawnTimer.pause();
-            this.enemy00MaxTimer.pause();
-        }
-        // Create enemy02 and position it outside of the view
-        else if( this.enemy02SpawnTimer.expired(false, true) )
-        {
-            this._node = this.enemyStrategy.create('enemy02_ship');
-            this._node.get().setPosXYZ(genFunc.randomInt(-5000, 5000), settings.deviceRes.h + (this._node.radius / 2));
-            this._node.get().setRotXYZ();
-
-            if( genFunc.randomInt( 0, 1 ) === 0 )
-                this._node.get().setRotXYZ(0, 180);
-
-            // Pause the next enemy so that they don't pile up
-            this.enemy01SpawnTimer.pause();
             this.enemy00MaxTimer.pause();
         }
         // Create a health character and position it on a building
