@@ -306,11 +306,10 @@ export class Level1State extends CommonState
         this.slowHealTimer = null;
         this.musicTimer = new Timer((1000 * 60 * 5));
 
-        this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 60)));
         this.enemy00SpawnTimer = new Timer(1000 * 2);
-        //this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 150)));
-        //this.miniBossSpawnTimer.disable();
-        this.miniBossSpawnTimer = new Timer(1000 * 4);
+        this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 150)));
+        this.miniBossSpawnTimer.disable();
+        this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 60)));
         this.healthSpawnTimer.disable();
         this.enemy00MaxTimer = new Timer(1000 * 20);
         this.enemy00Max = MIN_ENEMY00;
@@ -1249,7 +1248,7 @@ export class Level1State extends CommonState
     handleEnemySpawn()
     {
         // Create enemy00 and position it outside of the view
-        /*if( this.enemy00SpawnTimer.expired(true) )
+        if( this.enemy00SpawnTimer.expired(true) )
         {
             if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
             {
@@ -1263,12 +1262,12 @@ export class Level1State extends CommonState
             }
         }
         // Create a mini-boss and position it outside of the view
-        else*/ if( this.miniBossSpawnTimer.expired(false, true) )
+        else if( this.miniBossSpawnTimer.expired(false, true) )
         {
             // Determine which mini-boss to spawn based on level thresholds
-            /*if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
+            if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
                 this._miniBossType = (genFunc.randomInt( 0, 9 ) < 6) ? 'enemy02_ship' : 'enemy01_ship';
-            else*/
+            else
                 this._miniBossType = 'enemy01_ship';
 
             this._spawnX = this.playerShip.sprite.pos.x + gameDefs.GAMEPLAY_LOOPING_WRAP_DIST;
@@ -1283,7 +1282,7 @@ export class Level1State extends CommonState
                 this._node.get().setRotXYZ(0, 180);
         }
         // Create a health character and position it on a building
-        /*else if(this.healthSpawnTimer.expired( false, false ))
+        else if(this.healthSpawnTimer.expired( false, false ))
         {
             this._buildings = this.buildingsStrategy.nodeAry;
             this._enemies = this.enemyStrategy.nodeAry;
@@ -1318,7 +1317,7 @@ export class Level1State extends CommonState
                 this._healthSprite.setPosXYZ(this._targetBuilding.pos.x, this._targetBuilding.pos.y + this.healthCharYOffsetAry[this._yOffsetValueHealth]);
                 this._helpSprite.setPosXYZ(this._healthSprite.pos.x, this._healthSprite.pos.y + 90);
             }
-        }*/
+        }
     }
 
     // 
