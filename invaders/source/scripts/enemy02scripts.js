@@ -33,13 +33,11 @@ class Enemy02Ship_Hit
     //
     recycle( sprite, projectileSprite )
     {
-        this.sprite = sprite;
-
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
         if( projectileSprite.parentNode.userId != gameDefs.PLAYER_SHIP_ID )
         {
             this._explodeSprite = this.enemyStrategy.create('explode').get();
-            this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite );
+            this._explodeSprite.prepareScript( 'explode', projectileSprite, sprite );
         }
 
         // Hide the projectile and allow it to be recycled from the script moving it
@@ -82,21 +80,21 @@ class Enemy02Ship_Die
     {
         this.sprite = sprite;
 
-        this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius)
-        this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
-        this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
+        this._dest = -(settings.deviceRes_half.h + sprite.parentNode.radius)
+        this._offsetY = Math.abs(sprite.pos.y - this._dest);
+        this.easingY.init( sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
 
         this.rotate = 0.04;
         this.rotateVelocity = 0.00004;
 
-        if( this.sprite.rot.y > 1 )
+        if( sprite.rot.y > 1 )
         {
             this.rotate = -0.04;
             this.rotateVelocity = -0.00004;
         }
 
         // Let this sprite die
-        this.sprite.alive = false;
+        sprite.alive = false;
     }
     
     // 

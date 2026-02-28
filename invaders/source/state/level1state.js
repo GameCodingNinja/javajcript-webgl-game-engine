@@ -59,12 +59,16 @@ const MOVE_NULL = -1,
       ENEMY00_SHIP_HIT_VALUE = 1,
       ENEMY01_SHIP_HIT_VALUE = 5,
       ENEMY02_SHIP_HIT_VALUE = 3,
-      ENEMY01_SHIP_HIT_COUNT = 30,
-      ENEMY02_SHIP_HIT_COUNT = 10,
-      ENEMY00_SHIP_HIT_COUNT = 5,
+      ENEMY01_INITIAL_SHIP_HIT_COUNT = 30,
+      ENEMY01_MAX_SHIP_HIT_COUNT = 100,
+      ENEMY01_SHIP_HIT_INC = 10,
+      ENEMY02_INITIAL_SHIP_HIT_COUNT = 10,
+      ENEMY02_MAX_SHIP_HIT_COUNT = 60,
+      ENEMY02_SHIP_HIT_INC = 5,
+      ENEMY00_SHIP_HIT_COUNT = 3,
       ENEMY01_LEVEL_THRESHOLD = 5,
       ENEMY02_LEVEL_THRESHOLD = 3,
-      MAX_ENEMY00 = 20,
+      MAX_ENEMY00 = 30,
       MIN_ENEMY00 = 5,
       HEALTH_CHAR_THRESHOLD = 3,
       CLOUD_MIN_Y = -150,
@@ -79,7 +83,7 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
-      GOD_MODE = true;
+      GOD_MODE = false;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -302,15 +306,16 @@ export class Level1State extends CommonState
         this.slowHealTimer = null;
         this.musicTimer = new Timer((1000 * 60 * 5));
 
-        this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 10), (1000 * 40)));
+        this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 60)));
         this.enemy00SpawnTimer = new Timer(1000 * 2);
-        this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 100)));
-        this.miniBossSpawnTimer.disable();
+        //this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 150)));
+        //this.miniBossSpawnTimer.disable();
+        this.miniBossSpawnTimer = new Timer(1000 * 4);
         this.healthSpawnTimer.disable();
-        this.miniBossActive = false;
-        this.healthCharActive = false;
         this.enemy00MaxTimer = new Timer(1000 * 20);
         this.enemy00Max = MIN_ENEMY00;
+        this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
+        this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
 
         this.train = {};
         this.train.strategy = null;
@@ -427,7 +432,11 @@ export class Level1State extends CommonState
                 spriteB.prepareScript( 'hit', spriteA );
                 if( GOD_MODE == false )
                 {
-                    this.playerShip.progressBar.incCurrentValue( -10 );
+                    // Was player hit by an aggressive shot? Takes more damage
+                    if(spriteA.visualComponent.frameIndex == 1)
+                        this.playerShip.progressBar.incCurrentValue( -20 );
+                    else
+                        this.playerShip.progressBar.incCurrentValue( -10 );
                     this.playerShip.progressBar.setVisible( true );
                 }
                 spriteA.prepareScript( 'hit' );
@@ -559,7 +568,7 @@ export class Level1State extends CommonState
 
             spriteB.hitCount++;
 
-            if(spriteB.hitCount == ENEMY01_SHIP_HIT_COUNT)
+            if(spriteB.hitCount == this.enemy01ShipHitCount)
             {
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die' );
@@ -571,10 +580,14 @@ export class Level1State extends CommonState
                 scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
 
                 this.miniBossSpawnTimer.reset();
-                this.enemy00MaxTimer.resume();
             }
 
             this.groupPlayer.play( 'enemy_explosion' );
+
+            // Inc the hit count
+            if( this.enemy01ShipHitCount < ENEMY01_MAX_SHIP_HIT_COUNT )
+                this.enemy01ShipHitCount + ENEMY01_SHIP_HIT_INC;
+
         }
         // Player shot enemy02 ship
         else if( spriteB.parentNode.userId == ENEMY02_SHIP_ID )
@@ -587,7 +600,7 @@ export class Level1State extends CommonState
 
             spriteB.hitCount++;
 
-            if(spriteB.hitCount == ENEMY02_SHIP_HIT_COUNT)
+            if(spriteB.hitCount == this.enemy02ShipHitCount)
             {
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die' );
@@ -597,10 +610,13 @@ export class Level1State extends CommonState
                 scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
 
                 this.miniBossSpawnTimer.reset();
-                this.enemy00MaxTimer.resume();
             }
 
             this.groupPlayer.play( 'enemy_explosion' );
+
+            // Inc the hit count
+            if( this.enemy02ShipHitCount < ENEMY02_MAX_SHIP_HIT_COUNT )
+                this.enemy02ShipHitCount + ENEMY02_SHIP_HIT_INC;
         }
         // Player shot health character
         else if( spriteB.parentNode.userId == HEALTH_CHARACTER )
@@ -1056,17 +1072,22 @@ export class Level1State extends CommonState
             this.groupPlayer.play( 'level_up' );
 
             // Enable mini-boss spawns when the earliest level threshold is reached
-            if( this.playerLevel >= ENEMY02_LEVEL_THRESHOLD && !this.miniBossActive )
-            {
-                this.miniBossActive = true;
+            if( this.playerLevel >= ENEMY02_LEVEL_THRESHOLD && this.miniBossSpawnTimer.disabled )
                 this.miniBossSpawnTimer.reset();
-            }
 
-            if( this.playerLevel == HEALTH_CHAR_THRESHOLD && !this.healthCharActive )
-            {
-                this.healthCharActive = true;
+            // Enable health character
+            if( this.playerLevel == HEALTH_CHAR_THRESHOLD && this.healthSpawnTimer.disabled )
                 this.healthSpawnTimer.reset();
-            }
+
+            // Adjust how fast enemy00 is spawned
+            if( this.playerLevel == 7 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.8) )
+                this.enemy00SpawnTimer.reset((1000 * 1.75));
+
+            else if( this.playerLevel == 12 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.7) )
+                this.enemy00SpawnTimer.reset((1000 * 1.5));
+
+            else if( this.playerLevel == 20 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.4) )
+                this.enemy00SpawnTimer.reset((1000 * 1.25));
         }
 
         this.hudProgressBar.incCurrentValue( value );
@@ -1228,7 +1249,7 @@ export class Level1State extends CommonState
     handleEnemySpawn()
     {
         // Create enemy00 and position it outside of the view
-        if( this.enemy00SpawnTimer.expired(true) )
+        /*if( this.enemy00SpawnTimer.expired(true) )
         {
             if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
             {
@@ -1242,13 +1263,13 @@ export class Level1State extends CommonState
             }
         }
         // Create a mini-boss and position it outside of the view
-        else if( this.miniBossSpawnTimer.expired(false, true) )
+        else*/ if( this.miniBossSpawnTimer.expired(false, true) )
         {
             // Determine which mini-boss to spawn based on level thresholds
-            if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
+            /*if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
                 this._miniBossType = (genFunc.randomInt( 0, 9 ) < 6) ? 'enemy02_ship' : 'enemy01_ship';
-            else
-                this._miniBossType = 'enemy02_ship';
+            else*/
+                this._miniBossType = 'enemy01_ship';
 
             this._spawnX = this.playerShip.sprite.pos.x + gameDefs.GAMEPLAY_LOOPING_WRAP_DIST;
             if( this._spawnX > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
@@ -1260,11 +1281,9 @@ export class Level1State extends CommonState
 
             if( genFunc.randomInt( 0, 1 ) === 0 )
                 this._node.get().setRotXYZ(0, 180);
-
-            this.enemy00MaxTimer.pause();
         }
         // Create a health character and position it on a building
-        else if(this.healthSpawnTimer.expired( false, false ))
+        /*else if(this.healthSpawnTimer.expired( false, false ))
         {
             this._buildings = this.buildingsStrategy.nodeAry;
             this._enemies = this.enemyStrategy.nodeAry;
@@ -1299,7 +1318,7 @@ export class Level1State extends CommonState
                 this._healthSprite.setPosXYZ(this._targetBuilding.pos.x, this._targetBuilding.pos.y + this.healthCharYOffsetAry[this._yOffsetValueHealth]);
                 this._helpSprite.setPosXYZ(this._healthSprite.pos.x, this._healthSprite.pos.y + 90);
             }
-        }
+        }*/
     }
 
     // 

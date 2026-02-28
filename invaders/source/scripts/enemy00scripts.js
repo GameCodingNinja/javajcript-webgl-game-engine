@@ -42,8 +42,9 @@ class Enemy00Ship_Shoot
     {
         this.sprite = sprite;
 
-        this.sprite.setPos( enemySprite.pos );
-        this.sprite.setRotXYZ(0, 0, 0);
+        sprite.setPos( enemySprite.pos );
+        sprite.setRotXYZ(0, 0, 0);
+        sprite.setFrame(enemySprite.visualComponent.frameIndex);
 
         this.playerShipSprite = this.playerShipStrategy.get('player_ship').get();
 
@@ -64,7 +65,7 @@ class Enemy00Ship_Shoot
 
         this.distTraveled = 0;
 
-        this.sprite.transform();
+        sprite.transform();
     }
 
     // 
@@ -117,13 +118,11 @@ class Enemy00Ship_Hit
     //
     recycle( sprite, projectileSprite )
     {
-        this.sprite = sprite;
-
         // Create an explode graphic node and translate it to the projectile sprite and execute the script
         if( projectileSprite.parentNode.userId != gameDefs.PLAYER_SHIP_ID )
         {
             this._explodeSprite = this.enemyStrategy.create('explode').get();
-            this._explodeSprite.prepareScript( 'explode', projectileSprite, this.sprite );
+            this._explodeSprite.prepareScript( 'explode', projectileSprite, sprite );
         }
 
         // Hide the projectile and allow it to be recycled from the script moving it
@@ -167,16 +166,16 @@ class Enemy00Ship_Die
         this.sprite = sprite;
 
         // Remove the AI script since the enemy is to die
-        this.sprite.scriptComponent.remove( 'AI_Enemy00' );
+        sprite.scriptComponent.remove( 'AI_Enemy00' );
 
-        this._dest = -(settings.deviceRes_half.h + this.sprite.parentNode.radius);
-        this._offsetY = Math.abs(this.sprite.pos.y - this._dest);
-        this.easingY.init( this.sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
+        this._dest = -(settings.deviceRes_half.h + sprite.parentNode.radius);
+        this._offsetY = Math.abs(sprite.pos.y - this._dest);
+        this.easingY.init( sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
 
         this.rotate = 0.04;
         this.rotateVelocity = 0.00004;
 
-        if( this.sprite.rot.y > 1 )
+        if( sprite.rot.y > 1 )
         {
             this.rotate = -0.04;
             this.rotateVelocity = -0.00004;
@@ -222,10 +221,8 @@ class Enemy00Shot_Hit
     //
     recycle( sprite )
     {
-        this.sprite = sprite;
-
         // We are done with this sprite, queue it up to be recycled
-        strategyManager.get('_enemy_shot_').recycle( this.sprite.parentNode );
+        strategyManager.get('_enemy_shot_').recycle( sprite.parentNode );
     }
     
     // 

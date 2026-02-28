@@ -80,15 +80,15 @@ class AI_Enemy01_Descend extends aiNode
         switch (genFunc.randomInt( 0, 2 ))
         {
             case 0:
-                this._yDestination = 20;
+                this._yDestination = 0;
             break;
             
             case 1:
-                this._yDestination = -20;
+                this._yDestination = -33;
             break;
 
             default:
-                this._yDestination = -60;
+                this._yDestination = -50;
         }
 
         this.easingY.init( this.sprite.pos.y, this._yDestination, this.sprite.pos.y / gameDefs.pixel_per_sec_200, easing.getSineOut() );
@@ -116,7 +116,9 @@ class AI_Enemy01_Descend extends aiNode
         {
             this.init();
             this.state = defs.EAIS_ACTIVE;
-            this.groupPlayer.play('enemy01_descend');
+
+            let gsnd = this.groupPlayer.getSound(`enemy01_descend`);
+            scriptSingleton.prepare( 'sound_fade', 0.3, 1250, gsnd, () => gsnd.play() );
         }
 
         if( this.state === defs.EAIS_ACTIVE )
@@ -128,8 +130,10 @@ class AI_Enemy01_Descend extends aiNode
             {
                 this.state = defs.EAIS_SUCCESS;
 
-                let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
-                scriptSingleton.prepare( 'sound_fade', 0.7, 1000, gsnd, () => gsnd.play('enemy01_loop_sound', true) );
+                let gsnd1 = this.groupPlayer.getSound(`enemy01_loop_sound`);
+                scriptSingleton.prepare( 'sound_fade', 0.7, 1000, gsnd1, () => gsnd1.play(true) );
+
+                scriptSingleton.prepare( 'sound_fade', 0.0, 500, this.groupPlayer.getSound(`enemy01_descend`) );
             }
         }
 

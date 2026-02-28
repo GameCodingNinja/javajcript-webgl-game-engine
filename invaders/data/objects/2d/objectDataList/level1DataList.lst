@@ -328,7 +328,7 @@
 
         <object name="enemy_shot">
             <visual>
-                <texture file="data/textures/enemyShip/projectile06-5.png"/>
+                <texture count="2" file="data/textures/enemyShip/projectile_${NUM}.png"/>
             </visual>
             <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <circle radius="10"/>

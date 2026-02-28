@@ -1,5 +1,8 @@
 # Invaders Game - AGENTS.md
 
+## Workspace Setup
+Always load the `.code-workspace` file to determine project and library paths. Also read the `AGENTS.md` in each library path for its conventions.
+
 ## Overview
 Space invaders-style game built on the custom WebGL game engine located at `../library/`.
 
