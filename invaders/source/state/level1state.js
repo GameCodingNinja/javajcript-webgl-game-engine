@@ -83,6 +83,7 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
+      MAX_MINI_BOSS_STREAK = 2,
       GOD_MODE = false;
 
 var gAdPlayed = false,
@@ -309,6 +310,8 @@ export class Level1State extends CommonState
         this.enemy00SpawnTimer = new Timer(1000 * 2);
         this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 150)));
         this.miniBossSpawnTimer.disable();
+        this.lastMiniBossType = '';
+        this.miniBossStreakCount = 0;
         this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 60)));
         this.healthSpawnTimer.disable();
         this.enemy00MaxTimer = new Timer(1000 * 20);
@@ -463,14 +466,14 @@ export class Level1State extends CommonState
                     if( spriteA.visualComponent.frameIndex === 0 )
                     {
                         spriteA.collisionComponent.enable = false;
-                        spriteA.prepareScript( 'die' );
+                        spriteA.prepareScript( 'die', spriteB );
                         this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
                     }
                     // In aggressive mode (frame 1), takes multiple shots to kill
                     else if( spriteA.hitCount == ENEMY00_SHIP_HIT_COUNT )
                     {
                         spriteA.collisionComponent.enable = false;
-                        spriteA.prepareScript( 'die' );
+                        spriteA.prepareScript( 'die', spriteB );
                         this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE * 2 );
                     }
 
@@ -543,14 +546,14 @@ export class Level1State extends CommonState
             if( spriteB.visualComponent.frameIndex === 0 )
             {
                 spriteB.collisionComponent.enable = false;
-                spriteB.prepareScript( 'die' );
+                spriteB.prepareScript( 'die', spriteA );
                 this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
             }
             // In aggressive mode (frame 1), takes multiple shots to kill
             else if( spriteB.hitCount == ENEMY00_SHIP_HIT_COUNT )
             {
                 spriteB.collisionComponent.enable = false;
-                spriteB.prepareScript( 'die' );
+                spriteB.prepareScript( 'die', spriteA );
                 this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE * 2 );
             }
 
@@ -1266,9 +1269,30 @@ export class Level1State extends CommonState
         {
             // Determine which mini-boss to spawn based on level thresholds
             if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
+            {
                 this._miniBossType = (genFunc.randomInt( 0, 9 ) < 6) ? 'enemy02_ship' : 'enemy01_ship';
+                if( (this._miniBossType === this.lastMiniBossType) && (this.miniBossStreakCount >= MAX_MINI_BOSS_STREAK) )
+                {
+                    if( this._miniBossType === 'enemy02_ship' )
+                        this._miniBossType = 'enemy01_ship';
+                    else
+                        this._miniBossType = 'enemy02_ship';
+                }
+            }
             else
+            {
                 this._miniBossType = 'enemy01_ship';
+            }
+            
+            if( this._miniBossType === this.lastMiniBossType )
+            {
+                this.miniBossStreakCount++;
+            }
+            else
+            {
+                this.lastMiniBossType = this._miniBossType;
+                this.miniBossStreakCount = 1;
+            }
 
             this._spawnX = this.playerShip.sprite.pos.x + gameDefs.GAMEPLAY_LOOPING_WRAP_DIST;
             if( this._spawnX > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )

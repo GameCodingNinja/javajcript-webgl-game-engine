@@ -147,7 +147,7 @@ class Enemy00Ship_Hit
 //
 class Enemy00Ship_Die
 {
-    constructor( sprite )
+    constructor( sprite, projectileSprite )
     {
         this.easingY = new easing.valueTo;
 
@@ -155,13 +155,13 @@ class Enemy00Ship_Die
         this.enemyStrategy = strategyManager.get('_enemy_');
 
         // Continues the init
-        this.recycle( sprite );
+        this.recycle( sprite, projectileSprite );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle( sprite )
+    recycle( sprite, projectileSprite )
     {
         this.sprite = sprite;
 
@@ -172,12 +172,16 @@ class Enemy00Ship_Die
         this._offsetY = Math.abs(sprite.pos.y - this._dest);
         this.easingY.init( sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
 
-        this.rotate = 0.04;
+        this._dist = this.sprite.pos.getDistanceNoGC( projectileSprite.pos );
+
+        this.rotate = Math.abs(this._dist.y * 0.004);
         this.rotateVelocity = 0.00004;
 
-        if( sprite.rot.y > 1 )
+        // Rotate the enemy as it falls based on where it was hit. A positive y vs a negative y and the side it is hit from determins the spin.
+        // The y distance from the center is how fast it rotates from the start
+        if( (projectileSprite.rot.y > 1 && this._dist.y > 0) || (projectileSprite.rot.y < 1 && this._dist.y < 0) )
         {
-            this.rotate = -0.04;
+            this.rotate = -Math.abs(this._dist.y * 0.004);
             this.rotateVelocity = -0.00004;
         }
     }
@@ -244,7 +248,7 @@ export function loadScripts()
         ( sprite, projectileSprite ) => { return new Enemy00Ship_Hit( sprite, projectileSprite ); } );
 
     scriptManager.set( 'Enemy00Ship_Die',
-        ( sprite ) => { return new Enemy00Ship_Die( sprite ); } );
+        ( sprite, projectileSprite ) => { return new Enemy00Ship_Die( sprite, projectileSprite ); } );
 
     scriptManager.set( 'Enemy00Shot_Hit',
         ( sprite ) => { return new Enemy00Shot_Hit( sprite ); } );
