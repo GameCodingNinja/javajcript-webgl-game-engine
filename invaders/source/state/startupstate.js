@@ -59,7 +59,7 @@ import actionManagerJson from '../../data/settings/controllerMapping.json';
 import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
-const STARTUP_ASSET_COUNT = 219,
+const STARTUP_ASSET_COUNT = 139,
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState

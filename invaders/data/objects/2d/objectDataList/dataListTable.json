@@ -8,5 +8,5 @@
         "data/objects/2d/objectDataList/menuMisc.lst"],
 
     "(level_1)": [
-        "data/objects/2d/objectDataList/level1DataList.lst"]
+        "data/objects/2d/objectDataList/level1SpriteSheetDataList.lst"]
 }

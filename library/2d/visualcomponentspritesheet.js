@@ -102,10 +102,13 @@ export class VisualComponentSpriteSheet extends VisualComponentQuad
     }
 
     //
-    //  DESC: Get the size of the texture
+    //  DESC: Get the size of the current glyph
     //
-    getTextureSize()
+    getSize()
     {
-        return this.glyph.size;
+        if( this.glyph !== null )
+            return this.glyph.size;
+
+        return null;
     }
 }

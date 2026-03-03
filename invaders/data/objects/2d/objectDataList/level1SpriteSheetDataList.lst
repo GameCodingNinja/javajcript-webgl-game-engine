@@ -1,0 +1,669 @@
+<?xml version="1.0"?>
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default name="">
+        <visual>
+            <texture file="data/textures/level/level1_spriteSheet.png" filter="NEAREST"/>
+            <mesh genType="sprite_sheet">
+                <spriteSheet file="data/objects/2d/mesh/level/level1.xml"/>
+            </mesh>
+            <shader id="shader_2d_spriteSheet"/>
+            <color r="1" g="1" b="1" a="1"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+
+    <objectList>
+
+        <object name="progress_frame">
+            <visual>
+                <mesh genType="scaled_frame">
+                    <spriteSheet>
+                        <glyph id="8x8_1_pixel_frame"/>
+                    </spriteSheet>
+                    <scaledFrame thicknessWidth="3" thicknessHeight="3" centerQuad="true"/>
+                </mesh>
+                <shader id="shader_2d"/>
+                <color r="0" g="0" b="0" a="1"/>
+            </visual>
+            <size width="60" height="8"/>
+        </object>
+
+        <object name="progress_solid">
+            <visual>
+                <mesh genType="quad"/>
+                <shader id="shader_solid_2d"/>
+                <texture file=""/>
+                <color r="0" g="255" b="0" a="1"/>
+            </visual>
+            <size width="54" height="4"/>
+        </object>
+
+        <object name="boost_solid">
+            <visual>
+                <mesh genType="quad"/>
+                <shader id="shader_solid_2d"/>
+                <texture file=""/>
+                <color r="100" g="140" b="250" a="1"/>
+            </visual>
+            <size width="54" height="4"/>
+        </object>
+
+        <object name="background">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="background_0"/>
+                        <glyph id="background_1"/>
+                        <glyph id="background_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="buildingsback">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingsback_0"/>
+                        <glyph id="buildingsback_1"/>
+                        <glyph id="buildingsback_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="buildingsfront">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingsfront_0"/>
+                        <glyph id="buildingsfront_1"/>
+                        <glyph id="buildingsfront_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="trees">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="trees_0"/>
+                        <glyph id="trees_1"/>
+                        <glyph id="trees_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="traintracks">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="traintracks_0"/>
+                        <glyph id="traintracks_1"/>
+                        <glyph id="traintracks_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="train">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="train_0"/>
+                        <glyph id="train_1"/>
+                        <glyph id="train_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="cloud_0">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="cloudA_0"/>
+                        <glyph id="cloudA_1"/>
+                        <glyph id="cloudA_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="cloud_1">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="cloudB_0"/>
+                        <glyph id="cloudB_1"/>
+                        <glyph id="cloudB_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="cloud_2">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="cloudC_0"/>
+                        <glyph id="cloudC_1"/>
+                        <glyph id="cloudC_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="cloud_3">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="cloudD_0"/>
+                        <glyph id="cloudD_1"/>
+                        <glyph id="cloudD_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="cloud_4">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="cloudE_0"/>
+                        <glyph id="cloudE_1"/>
+                        <glyph id="cloudE_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="cloud_5">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="cloudF_0"/>
+                        <glyph id="cloudF_1"/>
+                        <glyph id="cloudF_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="cloud_6">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="cloudG_0"/>
+                        <glyph id="cloudG_1"/>
+                        <glyph id="cloudG_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="cloud_7">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="cloudH_0"/>
+                        <glyph id="cloudH_1"/>
+                        <glyph id="cloudH_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="building01">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingA_0"/>
+                        <glyph id="buildingA_1"/>
+                        <glyph id="buildingA_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="building02">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingB_0"/>
+                        <glyph id="buildingB_1"/>
+                        <glyph id="buildingB_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="building03">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingC_0"/>
+                        <glyph id="buildingC_1"/>
+                        <glyph id="buildingC_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="building04">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingD_0"/>
+                        <glyph id="buildingD_1"/>
+                        <glyph id="buildingD_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="building05">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingE_0"/>
+                        <glyph id="buildingE_1"/>
+                        <glyph id="buildingE_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="building06">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingF_0"/>
+                        <glyph id="buildingF_1"/>
+                        <glyph id="buildingF_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="building07">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingG_0"/>
+                        <glyph id="buildingG_1"/>
+                        <glyph id="buildingG_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="building08">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="buildingH_0"/>
+                        <glyph id="buildingH_1"/>
+                        <glyph id="buildingH_2"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="null_player_ship">
+            <visual>
+                <mesh genType="null"/>
+                <shader id="shader_2d"/>
+                <texture file=""/>
+            </visual>
+            <!-- Don't need a collision signal for the player ship since other elements initiate the collision -->
+            <collision filterCategoryBits="0x00000000" filterMaskBits="0x00000006" collisionSignal="false">
+                <rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                    <rect x1="-5" y1="-5" x2="-5" y2="-5"/>
+                </rectList>
+                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="5" y="5"/>
+                        <point x="5" y="20"/>
+                        <point x="40" y="20"/>
+                        <point x="40" y="5"/>
+                    </polygon>
+                </polygonList>-->
+            </collision>
+            <size width="45" height="25"/>
+        </object>
+
+        <object name="player_ship_body">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="blue_1_idle"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="player_fire_tail">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="firetail_halfsize_pixel_0"/>
+                        <glyph id="firetail_halfsize_pixel_1"/>
+                        <glyph id="firetail_halfsize_pixel_2"/>
+                        <glyph id="firetail_halfsize_pixel_3"/>
+                        <glyph id="firetail_halfsize_pixel_4"/>
+                        <glyph id="firetail_halfsize_pixel_5"/>
+                        <glyph id="firetail_halfsize_pixel_6"/>
+                        <glyph id="firetail_halfsize_pixel_7"/>
+                        <glyph id="firetail_halfsize_pixel_8"/>
+                        <glyph id="firetail_halfsize_pixel_9"/>
+                        <glyph id="firetail_halfsize_pixel_10"/>
+                        <glyph id="firetail_halfsize_pixel_11"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="player_shot">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="projectile03-4"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000001" filterMaskBits="0x00000000" collisionSignal="true">
+                <!--<circle radiusFromVisual="true"/>-->
+                <!--<rect radiusFromVisual="true" rectFromVisual="true"/>-->
+                <pointList radiusFromVisual="true">
+                    <point x="18" y="0"/>
+                    <point x="-18" y="0"/>
+                </pointList>
+                <!--<lineList radiusFromVisual="true" pointsToModelView="true">
+                    <line>
+                        <point x="37" y="2"/>
+                        <point x="0" y="2"/>
+                    </line>
+                </lineList>-->
+                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="0" y="0"/>
+                        <point x="0" y="7"/>
+                        <point x="16" y="7"/>
+                        <point x="16" y="0"/>
+                    </polygon>
+                </polygonList>-->
+            </collision>
+        </object>
+
+        <object name="enemy00_ship">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="enemy00_0"/>
+                        <glyph id="enemy00_1"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="24" y="-2"/>
+                        <point x="44" y="-2"/>
+                        <point x="70" y="30"/>
+                        <point x="70" y="64"/>
+                        <point x="51" y="87"/>
+                        <point x="18" y="87"/>
+                        <point x="0" y="64"/>
+                        <point x="0" y="30"/>
+                    </polygon>
+                </polygonList>-->
+                <rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                    <rect x1="-5" y1="-1" x2="-5" y2="-1"/>
+                </rectList>
+                <!--<rectList radiusFromVisual="true" rectToModelView="true">
+                    <rect x1="9" y1="12" x2="47" y2="120"/>
+                    <rect x1="45" y1="17" x2="111" y2="102"/>
+                    <rect x1="112" y1="12" x2="150" y2="120"/>
+                </rectList>
+                
+                <circle radiusFromVisual="true"/>
+                <point radiusFromVisual="true"/>
+                <lineList radiusFromVisual="true" pointsToModelView="true">
+                    <line>
+                        <point x="78" y="5"/>
+                        <point x="79" y="100"/>
+                    </line>
+                </lineList>-->
+            </collision>
+        </object>
+
+        <object name="enemy01_ship">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="enemy01a"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="30" y="1"/>
+                        <point x="60" y="1"/>
+                        <point x="130" y="106"/>
+                        <point x="60" y="128"/>
+                    </polygon>
+                    <polygon>
+                        <point x="60" y="128"/>
+                        <point x="130" y="106"/>
+                        <point x="160" y="220"/>
+                        <point x="50" y="225"/>
+                    </polygon>
+                    <polygon>
+                        <point x="66" y="225"/>
+                        <point x="135" y="225"/>
+                        <point x="135" y="300"/>
+                        <point x="66" y="300"/>
+                        <point x="0" y="270"/>
+                        <point x="0" y="253"/>
+                    </polygon>
+                    <polygon>
+                        <point x="50" y="300"/>
+                        <point x="160" y="300"/>
+                        <point x="130" y="415"/>
+                        <point x="60" y="390"/>
+                    </polygon>
+                    <polygon>
+                        <point x="60" y="390"/>
+                        <point x="130" y="415"/>
+                        <point x="60" y="520"/>
+                        <point x="26" y="520"/>
+                    </polygon>
+                </polygonList>
+            </collision>
+        </object>
+
+        <object name="enemy02_ship">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="enemy02a"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <circle radius="25"/>
+            </collision>
+        </object>
+
+        <object name="enemy_shot">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="projectile_0"/>
+                        <glyph id="projectile_1"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
+                <circle radius="10"/>
+            </collision>
+        </object>
+
+        <object name="hud_background">
+            <visual>
+                <mesh genType="quad"/>
+                <shader id="shader_solid_2d"/>
+                <texture file=""/>
+                <color r="0" g="150" b="255" a="1"/>
+            </visual>
+            <size width="1280" height="66"/>
+        </object>
+
+        <object name="hud_frame">
+            <visual>
+                <mesh genType="scaled_frame">
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <shader id="shader_2d"/>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="1288" height="74"/>
+        </object>
+
+        <object name="level_frame">
+            <visual>
+                <mesh genType="scaled_frame">
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <shader id="shader_2d"/>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+            <size width="158" height="74"/>
+        </object>
+
+        <object name="hud_screen_frame">
+            <visual>
+                <mesh genType="scaled_frame">
+                    <spriteSheet>
+                        <glyph id="16x16_3_pixel_frame"/>
+                    </spriteSheet>
+                    <scaledFrame thicknessWidth="5" thicknessHeight="5" centerQuad="false"/>
+                </mesh>
+                <shader id="shader_2d"/>
+                <color r="28" g="77" b="123" a="1"/>
+            </visual>
+            <size width="140" height="69"/>
+        </object>
+
+        <object name="level_background">
+            <visual>
+                <mesh genType="quad"/>
+                <shader id="shader_solid_2d"/>
+                <texture file=""/>
+                <color r="0" g="150" b="255" a="1"/>
+            </visual>
+            <size width="153" height="66"/>
+        </object>
+
+        <object name="level_font">
+            <visual>
+                <mesh genType="font"/>
+                <shader id="shader_2d"/>
+                <texture file=""/>
+                <color r="48" g="97" b="153" a="1"/>
+            </visual>
+        </object>
+
+        <object name="level_progress_frame">
+            <visual>
+                <mesh genType="scaled_frame">
+                    <spriteSheet>
+                        <glyph id="8x8_1_pixel_frame"/>
+                    </spriteSheet>
+                    <scaledFrame thicknessWidth="3" thicknessHeight="3" centerQuad="true"/>
+                </mesh>
+                <shader id="shader_2d"/>
+                <color r="0" g="0" b="0" a="1"/>
+            </visual>
+            <size width="120" height="8"/>
+        </object>
+
+        <object name="level_progress_solid">
+            <visual>
+                <mesh genType="quad"/>
+                <shader id="shader_solid_2d"/>
+                <texture file=""/>
+                <color r="0" g="255" b="0" a="0.8"/>
+            </visual>
+            <size width="114" height="4"/>
+        </object>
+
+        <object name="explode">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="explosion_0"/>
+                        <glyph id="explosion_1"/>
+                        <glyph id="explosion_2"/>
+                        <glyph id="explosion_3"/>
+                        <glyph id="explosion_4"/>
+                        <glyph id="explosion_5"/>
+                        <glyph id="explosion_6"/>
+                        <glyph id="explosion_7"/>
+                        <glyph id="explosion_8"/>
+                        <glyph id="explosion_9"/>
+                        <glyph id="explosion_10"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="health_character">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="healthA_0"/>
+                        <glyph id="healthA_1"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <circle radius="30"/>
+            </collision>
+        </object>
+
+        <object name="help">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="help"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+        <object name="marker">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="projectile02-4"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>
