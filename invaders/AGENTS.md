@@ -6,6 +6,9 @@ Always load the `.code-workspace` file to determine project and library paths. A
 ## Overview
 Space invaders-style game built on the custom WebGL game engine located at `../library/`.
 
+## Collaboration Preferences
+- Never ask to commit or push changes.
+
 ## Performance Goal
 **Avoid triggering garbage collection (GC) during gameplay.** GC pauses cause frame drops and stuttering. All runtime code should:
 - Reuse objects via global temp variables (e.g., `gTempPoint`, `gTempMatrix`)

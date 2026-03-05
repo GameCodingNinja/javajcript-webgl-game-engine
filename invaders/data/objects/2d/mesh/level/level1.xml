@@ -1,108 +1,108 @@
 <?xml version="1.0"?>
-<spriteSheet width="324" height="2562">
+<spriteSheet width="643" height="1316">
 
-    <rect x1=" 304" y1=" 405" x2="  16" y2="  16" cx="   0" cy="   0" name="16x16_3_pixel_frame"/>
-    <rect x1=" 311" y1=" 189" x2="   8" y2="   8" cx="   0" cy="   0" name="8x8_1_pixel_frame"/>
-    <rect x1="   0" y1=" 523" x2=" 320" y2=" 200" cx="   0" cy="   0" name="background_0"/>
-    <rect x1="   0" y1=" 724" x2=" 320" y2=" 200" cx="   0" cy="   0" name="background_1"/>
-    <rect x1="   0" y1=" 925" x2=" 320" y2=" 200" cx="   0" cy="   0" name="background_2"/>
-    <rect x1=" 222" y1="1980" x2="  45" y2="  25" cx="   0" cy="   0" name="blue_1_idle"/>
-    <rect x1=" 204" y1="1330" x2="  50" y2="  80" cx="   0" cy="   0" name="buildingA_0"/>
-    <rect x1=" 255" y1="1330" x2="  50" y2="  80" cx="   0" cy="   0" name="buildingA_1"/>
-    <rect x1="   0" y1="1929" x2="  50" y2="  80" cx="   0" cy="   0" name="buildingA_2"/>
-    <rect x1=" 154" y1="1126" x2="  60" y2=" 100" cx="   0" cy="   0" name="buildingB_0"/>
-    <rect x1=" 215" y1="1126" x2="  60" y2=" 100" cx="   0" cy="   0" name="buildingB_1"/>
-    <rect x1="   0" y1="1229" x2="  60" y2=" 100" cx="   0" cy="   0" name="buildingB_2"/>
-    <rect x1=" 142" y1="2010" x2="  52" y2="  46" cx="   0" cy="   0" name="buildingC_0"/>
-    <rect x1=" 195" y1="2010" x2="  52" y2="  46" cx="   0" cy="   0" name="buildingC_1"/>
-    <rect x1=" 248" y1="2010" x2="  52" y2="  46" cx="   0" cy="   0" name="buildingC_2"/>
-    <rect x1=" 248" y1=" 189" x2="  62" y2=" 102" cx="   0" cy="   0" name="buildingD_0"/>
-    <rect x1=" 248" y1=" 297" x2="  62" y2=" 102" cx="   0" cy="   0" name="buildingD_1"/>
-    <rect x1=" 164" y1=" 405" x2="  62" y2=" 102" cx="   0" cy="   0" name="buildingD_2"/>
-    <rect x1="  61" y1="1229" x2="  62" y2="  98" cx="   0" cy="   0" name="buildingE_0"/>
-    <rect x1=" 124" y1="1229" x2="  62" y2="  98" cx="   0" cy="   0" name="buildingE_1"/>
-    <rect x1=" 187" y1="1229" x2="  62" y2="  98" cx="   0" cy="   0" name="buildingE_2"/>
-    <rect x1="  51" y1="1929" x2="  56" y2="  62" cx="   0" cy="   0" name="buildingF_0"/>
-    <rect x1=" 108" y1="1929" x2="  56" y2="  62" cx="   0" cy="   0" name="buildingF_1"/>
-    <rect x1=" 165" y1="1929" x2="  56" y2="  62" cx="   0" cy="   0" name="buildingF_2"/>
-    <rect x1=" 222" y1="1929" x2="  70" y2="  50" cx="   0" cy="   0" name="buildingG_0"/>
-    <rect x1="   0" y1="2010" x2="  70" y2="  50" cx="   0" cy="   0" name="buildingG_1"/>
-    <rect x1="  71" y1="2010" x2="  70" y2="  50" cx="   0" cy="   0" name="buildingG_2"/>
-    <rect x1=" 227" y1=" 405" x2="  76" y2=" 102" cx="   0" cy="   0" name="buildingH_0"/>
-    <rect x1="   0" y1="1126" x2="  76" y2=" 102" cx="   0" cy="   0" name="buildingH_1"/>
-    <rect x1="  77" y1="1126" x2="  76" y2=" 102" cx="   0" cy="   0" name="buildingH_2"/>
-    <rect x1="   0" y1="1419" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsback_0"/>
-    <rect x1="   0" y1="1504" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsback_1"/>
-    <rect x1="   0" y1="1589" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsback_2"/>
-    <rect x1="   0" y1="1674" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsfront_0"/>
-    <rect x1="   0" y1="1759" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsfront_1"/>
-    <rect x1="   0" y1="1844" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsfront_2"/>
-    <rect x1=" 216" y1="2275" x2="  78" y2="  26" cx="   0" cy="   0" name="cloudA_0"/>
-    <rect x1="   0" y1="2402" x2="  78" y2="  26" cx="   0" cy="   0" name="cloudA_1"/>
-    <rect x1="  79" y1="2402" x2="  78" y2="  26" cx="   0" cy="   0" name="cloudA_2"/>
-    <rect x1=" 158" y1="2402" x2=" 104" y2="  22" cx="   0" cy="   0" name="cloudB_0"/>
-    <rect x1="   0" y1="2429" x2=" 104" y2="  22" cx="   0" cy="   0" name="cloudB_1"/>
-    <rect x1=" 105" y1="2429" x2=" 104" y2="  22" cx="   0" cy="   0" name="cloudB_2"/>
-    <rect x1=" 227" y1=" 508" x2="  70" y2="  14" cx="   0" cy="   0" name="cloudC_0"/>
-    <rect x1="   0" y1="2509" x2="  70" y2="  14" cx="   0" cy="   0" name="cloudC_1"/>
-    <rect x1="  71" y1="2509" x2="  70" y2="  14" cx="   0" cy="   0" name="cloudC_2"/>
-    <rect x1=" 249" y1="2129" x2="  68" y2="  16" cx="   0" cy="   0" name="cloudD_0"/>
-    <rect x1=" 249" y1="2108" x2="  68" y2="  20" cx="   0" cy="   0" name="cloudD_1"/>
-    <rect x1=" 210" y1="2429" x2="  68" y2="  16" cx="   0" cy="   0" name="cloudD_2"/>
-    <rect x1=" 164" y1=" 508" x2="  54" y2="  12" cx="   0" cy="   0" name="cloudE_0"/>
-    <rect x1="  51" y1="1992" x2="  54" y2="  12" cx="   0" cy="   0" name="cloudE_1"/>
-    <rect x1=" 108" y1="1992" x2="  54" y2="  12" cx="   0" cy="   0" name="cloudE_2"/>
-    <rect x1=" 276" y1="1220" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_0"/>
-    <rect x1=" 250" y1="1318" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_1"/>
-    <rect x1=" 165" y1="1992" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_2"/>
-    <rect x1=" 249" y1="2146" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_0"/>
-    <rect x1=" 216" y1="2302" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_1"/>
-    <rect x1="  89" y1="2524" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_2"/>
-    <rect x1=" 142" y1="2509" x2="  88" y2="  10" cx="   0" cy="   0" name="cloudH_0"/>
-    <rect x1=" 231" y1="2509" x2="  88" y2="  10" cx="   0" cy="   0" name="cloudH_1"/>
-    <rect x1="   0" y1="2524" x2="  88" y2="  10" cx="   0" cy="   0" name="cloudH_2"/>
-    <rect x1=" 250" y1="1229" x2="  72" y2="  88" cx="   0" cy="   0" name="enemy00_0"/>
-    <rect x1="   0" y1="1330" x2="  72" y2="  88" cx="   0" cy="   0" name="enemy00_1"/>
+    <rect x1=" 248" y1=" 505" x2="  16" y2="  16" cx="   0" cy="   0" name="16x16_3_pixel_frame"/>
+    <rect x1=" 632" y1="   0" x2="   8" y2="   8" cx="   0" cy="   0" name="8x8_1_pixel_frame"/>
+    <rect x1=" 164" y1="   0" x2=" 320" y2=" 200" cx="   0" cy="   0" name="background_0"/>
+    <rect x1=" 164" y1=" 201" x2=" 320" y2=" 200" cx="   0" cy="   0" name="background_1"/>
+    <rect x1="   0" y1=" 523" x2=" 320" y2=" 200" cx="   0" cy="   0" name="background_2"/>
+    <rect x1=" 324" y1="1030" x2="  45" y2="  25" cx="   0" cy="   0" name="blue_1_idle"/>
+    <rect x1="   0" y1=" 979" x2="  50" y2="  80" cx="   0" cy="   0" name="buildingA_0"/>
+    <rect x1="  51" y1=" 979" x2="  50" y2="  80" cx="   0" cy="   0" name="buildingA_1"/>
+    <rect x1=" 102" y1=" 979" x2="  50" y2="  80" cx="   0" cy="   0" name="buildingA_2"/>
+    <rect x1=" 485" y1=" 304" x2="  60" y2=" 100" cx="   0" cy="   0" name="buildingB_0"/>
+    <rect x1=" 546" y1=" 304" x2="  60" y2=" 100" cx="   0" cy="   0" name="buildingB_1"/>
+    <rect x1=" 485" y1=" 405" x2="  60" y2=" 100" cx="   0" cy="   0" name="buildingB_2"/>
+    <rect x1=" 537" y1=" 979" x2="  52" y2="  46" cx="   0" cy="   0" name="buildingC_0"/>
+    <rect x1=" 590" y1=" 979" x2="  52" y2="  46" cx="   0" cy="   0" name="buildingC_1"/>
+    <rect x1="   0" y1="1060" x2="  52" y2="  46" cx="   0" cy="   0" name="buildingC_2"/>
+    <rect x1=" 569" y1="   0" x2="  62" y2=" 102" cx="   0" cy="   0" name="buildingD_0"/>
+    <rect x1=" 248" y1=" 402" x2="  62" y2=" 102" cx="   0" cy="   0" name="buildingD_1"/>
+    <rect x1=" 311" y1=" 402" x2="  62" y2=" 102" cx="   0" cy="   0" name="buildingD_2"/>
+    <rect x1=" 546" y1=" 405" x2="  62" y2="  98" cx="   0" cy="   0" name="buildingE_0"/>
+    <rect x1=" 481" y1=" 523" x2="  62" y2="  98" cx="   0" cy="   0" name="buildingE_1"/>
+    <rect x1=" 544" y1=" 523" x2="  62" y2="  98" cx="   0" cy="   0" name="buildingE_2"/>
+    <rect x1=" 153" y1=" 979" x2="  56" y2="  62" cx="   0" cy="   0" name="buildingF_0"/>
+    <rect x1=" 210" y1=" 979" x2="  56" y2="  62" cx="   0" cy="   0" name="buildingF_1"/>
+    <rect x1=" 267" y1=" 979" x2="  56" y2="  62" cx="   0" cy="   0" name="buildingF_2"/>
+    <rect x1=" 324" y1=" 979" x2="  70" y2="  50" cx="   0" cy="   0" name="buildingG_0"/>
+    <rect x1=" 395" y1=" 979" x2="  70" y2="  50" cx="   0" cy="   0" name="buildingG_1"/>
+    <rect x1=" 466" y1=" 979" x2="  70" y2="  50" cx="   0" cy="   0" name="buildingG_2"/>
+    <rect x1=" 374" y1=" 402" x2="  76" y2=" 102" cx="   0" cy="   0" name="buildingH_0"/>
+    <rect x1=" 485" y1=" 201" x2="  76" y2=" 102" cx="   0" cy="   0" name="buildingH_1"/>
+    <rect x1=" 562" y1=" 201" x2="  76" y2=" 102" cx="   0" cy="   0" name="buildingH_2"/>
+    <rect x1="   0" y1=" 724" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsback_0"/>
+    <rect x1=" 321" y1=" 724" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsback_1"/>
+    <rect x1="   0" y1=" 809" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsback_2"/>
+    <rect x1=" 321" y1=" 809" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsfront_0"/>
+    <rect x1="   0" y1=" 894" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsfront_1"/>
+    <rect x1=" 321" y1=" 894" x2=" 320" y2="  84" cx="   0" cy="   0" name="buildingsfront_2"/>
+    <rect x1=" 540" y1="1107" x2="  78" y2="  26" cx="   0" cy="   0" name="cloudA_0"/>
+    <rect x1=" 540" y1="1147" x2="  78" y2="  26" cx="   0" cy="   0" name="cloudA_1"/>
+    <rect x1=" 537" y1="1187" x2="  78" y2="  26" cx="   0" cy="   0" name="cloudA_2"/>
+    <rect x1="   0" y1="1256" x2=" 104" y2="  22" cx="   0" cy="   0" name="cloudB_0"/>
+    <rect x1=" 105" y1="1256" x2=" 104" y2="  22" cx="   0" cy="   0" name="cloudB_1"/>
+    <rect x1=" 210" y1="1256" x2=" 104" y2="  22" cx="   0" cy="   0" name="cloudB_2"/>
+    <rect x1=" 570" y1="1060" x2="  70" y2="  14" cx="   0" cy="   0" name="cloudC_0"/>
+    <rect x1=" 570" y1="1075" x2="  70" y2="  14" cx="   0" cy="   0" name="cloudC_1"/>
+    <rect x1=" 570" y1="1090" x2="  70" y2="  14" cx="   0" cy="   0" name="cloudC_2"/>
+    <rect x1=" 374" y1=" 505" x2="  68" y2="  16" cx="   0" cy="   0" name="cloudD_0"/>
+    <rect x1=" 395" y1="1030" x2="  68" y2="  20" cx="   0" cy="   0" name="cloudD_1"/>
+    <rect x1=" 466" y1="1030" x2="  68" y2="  16" cx="   0" cy="   0" name="cloudD_2"/>
+    <rect x1=" 164" y1=" 510" x2="  54" y2="  12" cx="   0" cy="   0" name="cloudE_0"/>
+    <rect x1=" 311" y1=" 505" x2="  54" y2="  12" cx="   0" cy="   0" name="cloudE_1"/>
+    <rect x1=" 485" y1=" 506" x2="  54" y2="  12" cx="   0" cy="   0" name="cloudE_2"/>
+    <rect x1=" 265" y1=" 505" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_0"/>
+    <rect x1=" 265" y1=" 514" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_1"/>
+    <rect x1=" 546" y1=" 504" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_2"/>
+    <rect x1=" 410" y1=" 712" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_0"/>
+    <rect x1=" 395" y1="1051" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_1"/>
+    <rect x1=" 466" y1="1047" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_2"/>
+    <rect x1=" 321" y1=" 712" x2="  88" y2="  10" cx="   0" cy="   0" name="cloudH_0"/>
+    <rect x1=" 481" y1=" 711" x2="  88" y2="  10" cx="   0" cy="   0" name="cloudH_1"/>
+    <rect x1=" 216" y1="1216" x2="  88" y2="  10" cx="   0" cy="   0" name="cloudH_2"/>
+    <rect x1=" 485" y1=" 108" x2="  72" y2="  88" cx="   0" cy="   0" name="enemy00_0"/>
+    <rect x1=" 558" y1=" 108" x2="  72" y2="  88" cx="   0" cy="   0" name="enemy00_1"/>
     <rect x1="   0" y1="   0" x2=" 163" y2=" 522" cx="   0" cy="   0" name="enemy01a"/>
-    <rect x1="  73" y1="1330" x2=" 130" y2="  88" cx="   0" cy="   0" name="enemy02a"/>
-    <rect x1=" 276" y1="1126" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_0"/>
-    <rect x1=" 276" y1="1173" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_1"/>
-    <rect x1="   0" y1="2061" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_10"/>
-    <rect x1="  47" y1="2061" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_2"/>
-    <rect x1="  94" y1="2061" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_3"/>
-    <rect x1=" 141" y1="2061" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_4"/>
-    <rect x1=" 188" y1="2061" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_5"/>
-    <rect x1=" 235" y1="2061" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_6"/>
-    <rect x1="   0" y1="2108" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_7"/>
-    <rect x1="  47" y1="2108" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_8"/>
-    <rect x1="  94" y1="2108" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_9"/>
-    <rect x1=" 141" y1="2108" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_0"/>
-    <rect x1="   0" y1="2155" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_1"/>
-    <rect x1=" 108" y1="2155" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_10"/>
-    <rect x1=" 216" y1="2155" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_11"/>
-    <rect x1="   0" y1="2195" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_2"/>
-    <rect x1=" 108" y1="2195" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_3"/>
-    <rect x1=" 216" y1="2195" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_4"/>
-    <rect x1="   0" y1="2235" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_5"/>
-    <rect x1=" 108" y1="2235" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_6"/>
-    <rect x1=" 216" y1="2235" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_7"/>
-    <rect x1="   0" y1="2275" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_8"/>
-    <rect x1=" 108" y1="2275" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_9"/>
-    <rect x1=" 164" y1=" 189" x2="  83" y2=" 107" cx="   0" cy="   0" name="healthA_0"/>
-    <rect x1=" 164" y1=" 297" x2="  83" y2=" 107" cx="   0" cy="   0" name="healthA_1"/>
-    <rect x1=" 164" y1="   0" x2=" 159" y2=" 188" cx="   0" cy="   0" name="help"/>
-    <rect x1=" 282" y1="2061" x2="  32" y2="  32" cx="   0" cy="   0" name="projectile02-4"/>
-    <rect x1=" 204" y1="1411" x2="  38" y2="   6" cx="   0" cy="   0" name="projectile03-4"/>
-    <rect x1=" 268" y1="1980" x2="  23" y2="  23" cx="   0" cy="   0" name="projectile_0"/>
-    <rect x1=" 293" y1="1929" x2="  23" y2="  23" cx="   0" cy="   0" name="projectile_1"/>
-    <rect x1="   0" y1="2535" x2=" 240" y2="   8" cx="   0" cy="   0" name="train_0"/>
-    <rect x1="   0" y1="2544" x2=" 240" y2="   8" cx="   0" cy="   0" name="train_1"/>
-    <rect x1="   0" y1="2553" x2=" 240" y2="   8" cx="   0" cy="   0" name="train_2"/>
-    <rect x1="   0" y1="2315" x2=" 320" y2="  28" cx="   0" cy="   0" name="traintracks_0"/>
-    <rect x1="   0" y1="2344" x2=" 320" y2="  28" cx="   0" cy="   0" name="traintracks_1"/>
-    <rect x1="   0" y1="2373" x2=" 320" y2="  28" cx="   0" cy="   0" name="traintracks_2"/>
-    <rect x1="   0" y1="2452" x2=" 270" y2="  18" cx="   0" cy="   0" name="trees_0"/>
-    <rect x1="   0" y1="2471" x2=" 270" y2="  18" cx="   0" cy="   0" name="trees_1"/>
-    <rect x1="   0" y1="2490" x2=" 320" y2="  18" cx="   0" cy="   0" name="trees_2"/>
+    <rect x1=" 481" y1=" 622" x2=" 130" y2="  88" cx="   0" cy="   0" name="enemy02a"/>
+    <rect x1="  53" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_0"/>
+    <rect x1=" 100" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_1"/>
+    <rect x1=" 147" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_10"/>
+    <rect x1=" 194" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_2"/>
+    <rect x1=" 241" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_3"/>
+    <rect x1=" 288" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_4"/>
+    <rect x1=" 335" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_5"/>
+    <rect x1=" 382" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_6"/>
+    <rect x1=" 429" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_7"/>
+    <rect x1=" 476" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_8"/>
+    <rect x1=" 523" y1="1060" x2="  46" y2="  46" cx="   0" cy="   0" name="explosion_9"/>
+    <rect x1="   0" y1="1107" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_0"/>
+    <rect x1=" 108" y1="1107" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_1"/>
+    <rect x1=" 216" y1="1107" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_10"/>
+    <rect x1=" 324" y1="1107" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_11"/>
+    <rect x1=" 432" y1="1107" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_2"/>
+    <rect x1="   0" y1="1147" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_3"/>
+    <rect x1=" 108" y1="1147" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_4"/>
+    <rect x1=" 216" y1="1147" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_5"/>
+    <rect x1=" 324" y1="1147" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_6"/>
+    <rect x1=" 432" y1="1147" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_7"/>
+    <rect x1="   0" y1="1187" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_8"/>
+    <rect x1=" 108" y1="1187" x2=" 107" y2="  39" cx="   0" cy="   0" name="firetail_halfsize_pixel_9"/>
+    <rect x1=" 485" y1="   0" x2="  83" y2=" 107" cx="   0" cy="   0" name="healthA_0"/>
+    <rect x1=" 164" y1=" 402" x2="  83" y2=" 107" cx="   0" cy="   0" name="healthA_1"/>
+    <rect x1=" 321" y1=" 523" x2=" 159" y2=" 188" cx="   0" cy="   0" name="help"/>
+    <rect x1=" 451" y1=" 402" x2="  32" y2="  32" cx="   0" cy="   0" name="projectile02-4"/>
+    <rect x1=" 546" y1=" 513" x2="  38" y2="   6" cx="   0" cy="   0" name="projectile03-4"/>
+    <rect x1=" 451" y1=" 435" x2="  23" y2="  23" cx="   0" cy="   0" name="projectile_0"/>
+    <rect x1=" 451" y1=" 459" x2="  23" y2="  23" cx="   0" cy="   0" name="projectile_1"/>
+    <rect x1="   0" y1="1298" x2=" 240" y2="   8" cx="   0" cy="   0" name="train_0"/>
+    <rect x1=" 241" y1="1298" x2=" 240" y2="   8" cx="   0" cy="   0" name="train_1"/>
+    <rect x1="   0" y1="1307" x2=" 240" y2="   8" cx="   0" cy="   0" name="train_2"/>
+    <rect x1=" 216" y1="1187" x2=" 320" y2="  28" cx="   0" cy="   0" name="traintracks_0"/>
+    <rect x1="   0" y1="1227" x2=" 320" y2="  28" cx="   0" cy="   0" name="traintracks_1"/>
+    <rect x1=" 321" y1="1227" x2=" 320" y2="  28" cx="   0" cy="   0" name="traintracks_2"/>
+    <rect x1=" 315" y1="1256" x2=" 270" y2="  18" cx="   0" cy="   0" name="trees_0"/>
+    <rect x1="   0" y1="1279" x2=" 270" y2="  18" cx="   0" cy="   0" name="trees_1"/>
+    <rect x1=" 271" y1="1279" x2=" 320" y2="  18" cx="   0" cy="   0" name="trees_2"/>
 
 </spriteSheet>

@@ -31,6 +31,15 @@
             },
             "command": "../node_modules/.bin/webpack --mode production",
             "problemMatcher": []
+        },
+        {
+            "label": "Generate Sprite Sheet",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "command": "python3 generate_spritesheet_from_lst.py data/objects/2d/objectDataList/level1DataList.lst data/objects/2d/objectDataList/level1SpriteSheetDataList.lst data/textures/level/level1_spriteSheet.png data/objects/2d/mesh/level/level1.xml 644",
+            "problemMatcher": []
         }
     ]
 }
