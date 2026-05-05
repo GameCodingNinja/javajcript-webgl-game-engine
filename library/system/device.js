@@ -55,6 +55,7 @@ class Device
         this.canvas.height = settings.displayRes.h;
         this.canvas.style.position = settings.canvasStylePosition;
         this.canvas.style.display = settings.canvasStyleDisplay;
+        this.canvas.style.touchAction = 'none';
         document.body.style.backgroundColor = settings.docBodyStyleBackgroundColor;
         document.body.style.margin = settings.docBodyStyleMargin;
         document.body.style.width = settings.docBodyStyleWidth;
@@ -160,6 +161,16 @@ class Device
     {
         return this.glContext;
     }
+
+}
+
+// 
+//  DESC: Returns true if running on a mobile device (phone or tablet)
+//
+export function isMobile()
+{
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
 }
 
 export var device = new Device;

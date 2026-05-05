@@ -59,5 +59,14 @@
                 { "action": "menu_select", "componetId": "A", "defaultId": "A", "configurable": "true" },
                 { "action": "menu_back", "componetId": "B", "defaultId": "B", "configurable": "true" },
                 { "action": "shoot", "componetId": "A", "defaultId": "A", "configurable": "true" },
-                { "action": "boost", "componetId": "B", "defaultId": "B", "configurable": "true" } ] }
+                { "action": "boost", "componetId": "B", "defaultId": "B", "configurable": "true" } ] },
+
+    "touchMapping": {
+        "playerHidden": [
+                { "action": "menu_toggle", "componetId": "TOUCH PAUSE" },
+                { "action": "up", "componetId": "TOUCH DPAD UP" },
+                { "action": "down", "componetId": "TOUCH DPAD DOWN" },
+                { "action": "left", "componetId": "TOUCH DPAD LEFT" },
+                { "action": "right", "componetId": "TOUCH DPAD RIGHT" },
+                { "action": "shoot", "componetId": "TOUCH FIRE" } ] }
 }

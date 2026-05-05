@@ -6,10 +6,13 @@
 "use strict";
 import { KeyCodeAction } from '../common/keycodeaction';
 import { GamepadEvent } from '../common/gamepadevent';
+import { TouchEvent } from '../common/touchevent';
+import * as touchevent from '../common/touchevent';
 import { localStorage } from '../utilities/localstorage';
 import * as gamepadevent from '../common/gamepadevent';
 import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
+import { isMobile } from '../system/device';
 
 export const UNBOUND_KEYCODE_STR_ID     = '---',
              UNBOUND_KEYCODE_ID         = -1;
@@ -204,6 +207,20 @@ class ActionManager
         this.gamepadKeyCodeMap.set( 'R STICK DOWN',  gamepadevent.GAMEPAD_BUTTON_R_STICK_DOWN );
         this.gamepadKeyCodeMap.set( 'R STICK LEFT',  gamepadevent.GAMEPAD_BUTTON_R_STICK_LEFT );
         this.gamepadKeyCodeMap.set( 'R STICK RIGHT', gamepadevent.GAMEPAD_BUTTON_R_STICK_RIGHT );
+
+        if( isMobile() )
+        {
+            this.touchKeyCodeMap = new Map;
+            this.touchActionMap = new Map;
+            
+            this.touchKeyCodeMap.set( UNBOUND_KEYCODE_STR_ID, UNBOUND_KEYCODE_ID );
+            this.touchKeyCodeMap.set( 'TOUCH DPAD UP',    touchevent.TOUCH_DPAD_UP );
+            this.touchKeyCodeMap.set( 'TOUCH DPAD DOWN',  touchevent.TOUCH_DPAD_DOWN );
+            this.touchKeyCodeMap.set( 'TOUCH DPAD LEFT',  touchevent.TOUCH_DPAD_LEFT );
+            this.touchKeyCodeMap.set( 'TOUCH DPAD RIGHT', touchevent.TOUCH_DPAD_RIGHT );
+            this.touchKeyCodeMap.set( 'TOUCH FIRE',       touchevent.TOUCH_FIRE );
+            this.touchKeyCodeMap.set( 'TOUCH PAUSE',      touchevent.TOUCH_PAUSE );
+        }
     }
 
     // 
@@ -237,6 +254,12 @@ class ActionManager
             // Load the gamepad mapping
             this.loadAction( this.actionDict.gamepadMapping.playerHidden, this.gamepadKeyCodeMap, this.gamepadActionMap );
             this.loadAction( this.actionDict.gamepadMapping.playerVisible, this.gamepadKeyCodeMap, this.gamepadActionMap );
+
+            // Load the touch mapping
+            if( isMobile() && this.actionDict.touchMapping )
+            {
+                this.loadAction( this.actionDict.touchMapping.playerHidden, this.touchKeyCodeMap, this.touchActionMap );
+            }
         }
     }
 
@@ -387,6 +410,24 @@ class ActionManager
                         this._result = defs.EAP_DOWN;
 
                         if( event.type === gamepadevent.GAMEPAD_BUTTON_UP )
+                        {
+                            this._result = defs.EAP_UP;
+                        }
+                    }
+                }
+            }
+            // Check for touch event
+            else if( event instanceof TouchEvent )
+            {
+                this.lastDeviceUsed = defs.TOUCH;
+
+                if( event.action === touchevent.TOUCH_BUTTON_DOWN || event.action === touchevent.TOUCH_BUTTON_UP )
+                {
+                    if( this.wasActionMap( event.type, actionStr, this.touchActionMap ) )
+                    {
+                        this._result = defs.EAP_DOWN;
+
+                        if( event.action === touchevent.TOUCH_BUTTON_UP )
                         {
                             this._result = defs.EAP_UP;
                         }
@@ -601,6 +642,11 @@ class ActionManager
     wasLastDeviceMouse()
     {
         return (this.lastDeviceUsed === defs.MOUSE);
+    }
+
+    wasLastDeviceTouch()
+    {
+        return (this.lastDeviceUsed === defs.TOUCH);
     }
 
     // 

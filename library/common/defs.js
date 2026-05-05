@@ -67,7 +67,8 @@ export const EAP_IDLE = 0,
 export const DEVICE_NULL = -1,
              KEYBOARD    = 0,
              MOUSE       = 1,
-             GAMEPAD     = 2;
+             GAMEPAD     = 2,
+             TOUCH       = 3;
 
 // Sprite transform Bitmask
 

@@ -172,6 +172,9 @@ export class Game
 
         // Handle any gamepad inputs
         eventManager.handleGamepad();
+
+        // Handle any touch d-pad inputs
+        eventManager.handleTouch();
         
         // Handle events on the queue
         while( (this._event = eventManager.pollEvent()) )

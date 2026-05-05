@@ -1447,6 +1447,11 @@ export class Level1State extends CommonState
 
             this._easingVal = this.easingX.getValue() + this.cameraEasingX.getValue();
 
+            // Normalize movement to elapsed time so varying frame durations
+            // don't cause visible speed-ups / slow-downs (especially on mobile touch)
+            this._timeScale = highResTimer.elapsedTime / 16.667;
+            this._easingVal *= this._timeScale;
+
             // Handle the enemy spawn
             this.handleEnemySpawn();
 
@@ -1587,7 +1592,7 @@ export class Level1State extends CommonState
                 }
             }
 
-            this.playerShip.sprite.incPosXYZ( this.easingX.getValue(), this.easingY.getValue() );
+            this.playerShip.sprite.incPosXYZ( this.easingX.getValue() * this._timeScale, this.easingY.getValue() * this._timeScale );
 
             // Loop the player strategy and camera
             if( this.playerShip.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )

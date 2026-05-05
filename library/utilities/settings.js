@@ -64,7 +64,16 @@ class Settings
                 if( this.user.version != savedUserSettings.version )
                     localStorage.free( 'userSettings' );
                 else
+                {
+                    // Backfill any new fields missing from saved settings
+                    for( let key in obj )
+                    {
+                        if( savedUserSettings[key] === undefined )
+                            savedUserSettings[key] = obj[key];
+                    }
+
                     this.user = savedUserSettings;
+                }
             }
         }
     }
