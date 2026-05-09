@@ -975,6 +975,11 @@ export class Level1State extends CommonState
                     scriptSingleton.prepare( 'sound_fade', asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true) );
                 this.restartGame();
             }
+            else if( event.type === menuDefs.EME_USER_FOCUS_LOST )
+            {
+                if( !menuManager.active )
+                    menuManager.getTree('pause_tree').transitionMenu();
+            }
             else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
             {
                 this._allToBeDeleted = true;
@@ -1024,11 +1029,7 @@ export class Level1State extends CommonState
                             this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
                     }
                 }
-                else if( event.type == 'visibilitychange' )
-                {
-                    // Get the menu tree in question that is transitioning out
-                    menuManager.getTree('pause_tree').transitionMenu();
-                }
+
             }
         }
     }

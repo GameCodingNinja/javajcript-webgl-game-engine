@@ -49,7 +49,9 @@ export const EME_MENU_TRANS_IN             = 100,
              EME_MENU_SCROLL_LEFT          = 119,
              EME_MENU_SCROLL_RIGHT         = 120,
              EME_MENU_TAB_LEFT             = 121,
-             EME_MENU_TAB_RIGHT            = 122;
+             EME_MENU_TAB_RIGHT            = 122,
+             EME_USER_FOCUS_LOST           = 123,
+             EME_USER_FOCUS_GAINED         = 124;
 
 // EActiveControl
 export const EAC_NULL                 = 0,

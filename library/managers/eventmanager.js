@@ -17,6 +17,8 @@ import * as gamepadevent from '../common/gamepadevent';
 import { TouchEvent } from '../common/touchevent';
 import * as touchevent from '../common/touchevent';
 import * as genFunc from '../utilities/genfunc';
+import { EME_USER_FOCUS_LOST, EME_USER_FOCUS_GAINED } from '../gui/menudefs';
+import { soundManager } from '../sound/soundmanager';
 
 const MAX_GAMEPAD_EVENT_QUEUE = 50;
 const MAX_TOUCH_POOL = 5;
@@ -93,6 +95,9 @@ class EventManager
 
         // fullscreen change flag
         this.fullscreenChange = false;
+
+        // Track focus state to avoid duplicate events
+        this._hasFocus = true;
 
         // Reuable Gamepad event ques
         this.gamePadEventIndex = 0;
@@ -284,8 +289,36 @@ class EventManager
     //
     onVisibilityChange( event )
     {
-        if (document.hidden)
-            this.queue.push( event );
+        if( document.hidden )
+            this._dispatchFocusLost();
+        else
+            this._dispatchFocusGained();
+    }
+
+    //
+    //  DESC: Suspend all sounds and dispatch focus lost event (deduped)
+    //
+    _dispatchFocusLost()
+    {
+        if( this._hasFocus )
+        {
+            this._hasFocus = false;
+            soundManager.suspendAllSounds();
+            this.dispatchEvent( EME_USER_FOCUS_LOST );
+        }
+    }
+
+    //
+    //  DESC: Resume all sounds and dispatch focus gained event (deduped)
+    //
+    _dispatchFocusGained()
+    {
+        if( !this._hasFocus )
+        {
+            this._hasFocus = true;
+            soundManager.resumeAllSounds();
+            this.dispatchEvent( EME_USER_FOCUS_GAINED );
+        }
     }
 
     //
