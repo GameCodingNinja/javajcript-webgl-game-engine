@@ -30,6 +30,8 @@ class EventManager
     {
         this.canvas = document.getElementById('game-surface');
         this.queue = [];
+        this.touchPool = null;
+        this.touchEventQueue = null;
         
         // Init with the most common events
 
@@ -38,26 +40,6 @@ class EventManager
         this.canvas.addEventListener( 'mouseup', this.onMouseUp.bind(this) );
         this.canvas.addEventListener( 'mousemove', this.onMouseMove.bind(this) );
         //document.addEventListener( 'scroll', this.onScroll.bind(this) );
-        
-        if( isMobile() )
-        {
-            this.canvas.addEventListener( 'touchstart',  this.onTouchStart.bind(this),  { passive: false } );
-            this.canvas.addEventListener( 'touchmove',   this.onTouchMove.bind(this),   { passive: true } );
-            this.canvas.addEventListener( 'touchend',    this.onTouchEnd.bind(this),    { passive: false } );
-            this.canvas.addEventListener( 'touchcancel', this.onTouchEnd.bind(this),    { passive: false } );
-
-            // Pre-allocated touch pool for mobile input
-            this._touchPool = [];
-            for( let i = 0; i < MAX_TOUCH_POOL; ++i )
-                this._touchPool.push({ id: -1, startX: 0, startY: 0, currentX: 0, currentY: 0, side: '',
-                    dpadLeft: false, dpadRight: false, dpadUp: false, dpadDown: false, ended: false });
-
-            // Reusable touch event queue
-            this._touchEventIndex = 0;
-            this._touchEventQueue = [];
-            for( let i = 0; i < MAX_TOUCH_EVENT_QUEUE; ++i )
-                this._touchEventQueue.push( new TouchEvent() );
-        }
         
         // Using document for key listener because canvas needs the focus before
         // it will trap key events. There's no good solution for force the focus
@@ -97,15 +79,41 @@ class EventManager
         this.fullscreenChange = false;
 
         // Track focus state to avoid duplicate events
-        this._hasFocus = true;
+        this.hasFocus = true;
 
         // Reuable Gamepad event ques
         this.gamePadEventIndex = 0;
         this.gamePadEventQueue = [];
-        for( let i = 0; i < MAX_GAMEPAD_EVENT_QUEUE; ++i )
+        for( this._i = 0; this._i < MAX_GAMEPAD_EVENT_QUEUE; ++this._i )
             this.gamePadEventQueue.push( new gamepadevent.GamepadEvent() );
 
         this.gamepadDeadZone = gamepadevent.ANALOG_STICK_MSG_MAX;
+    }
+
+    //
+    //  DESC: Post init due to the need for settings.js
+    //
+    initTouchEventListeners()
+    {
+        if( isMobile() && settings.allowTouch )
+        {
+            this.canvas.addEventListener( 'touchstart',  this.onTouchStart.bind(this),  { passive: false } );
+            this.canvas.addEventListener( 'touchmove',   this.onTouchMove.bind(this),   { passive: true } );
+            this.canvas.addEventListener( 'touchend',    this.onTouchEnd.bind(this),    { passive: false } );
+            this.canvas.addEventListener( 'touchcancel', this.onTouchEnd.bind(this),    { passive: false } );
+
+            // Pre-allocated touch pool for mobile input
+            this.touchPool = [];
+            for( this._i = 0; this._i < MAX_TOUCH_POOL; ++this._i )
+                this.touchPool.push({ id: -1, startX: 0, startY: 0, currentX: 0, currentY: 0, side: '',
+                    dpadLeft: false, dpadRight: false, dpadUp: false, dpadDown: false, ended: false });
+
+            // Reusable touch event queue
+            this.touchEventIndex = 0;
+            this.touchEventQueue = [];
+            for( this._i = 0; this._i < MAX_TOUCH_EVENT_QUEUE; ++this._i )
+                this.touchEventQueue.push( new TouchEvent() );
+        }
     }
     
     //
@@ -300,9 +308,9 @@ class EventManager
     //
     _dispatchFocusLost()
     {
-        if( this._hasFocus )
+        if( this.hasFocus )
         {
-            this._hasFocus = false;
+            this.hasFocus = false;
             soundManager.suspendAllSounds();
             this.dispatchEvent( EME_USER_FOCUS_LOST );
         }
@@ -313,9 +321,9 @@ class EventManager
     //
     _dispatchFocusGained()
     {
-        if( !this._hasFocus )
+        if( !this.hasFocus )
         {
-            this._hasFocus = true;
+            this.hasFocus = true;
             soundManager.resumeAllSounds();
             this.dispatchEvent( EME_USER_FOCUS_GAINED );
         }
@@ -444,52 +452,61 @@ class EventManager
     //
     handleTouch()
     {
-        if( !this._touchPool )
-            return;
-
-        for( this._ti = 0; this._ti < MAX_TOUCH_POOL; ++this._ti )
+        if( this.touchPool )
         {
-            this._slot = this._touchPool[this._ti];
-            if( this._slot.id === -1 || this._slot.ended )
-                continue;
-
-            // Process active left-side touches for d-pad
-            if( this._slot.side === 'left' )
+            for( this._ti = 0; this._ti < MAX_TOUCH_POOL; ++this._ti )
             {
-                this._tdx = this._slot.currentX - this._slot.startX;
-                this._tdy = this._slot.currentY - this._slot.startY;
+                this._slot = this.touchPool[this._ti];
+                if( this._slot.id === -1 || this._slot.ended )
+                    continue;
 
-                // Left
-                this._nowPast = (this._tdx < -settings.user.touchDeadZone);
-                if( !this._slot.dpadLeft && this._nowPast )
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_LEFT, touchevent.TOUCH_BUTTON_DOWN );
-                else if( this._slot.dpadLeft && !this._nowPast )
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_LEFT, touchevent.TOUCH_BUTTON_UP );
-                this._slot.dpadLeft = this._nowPast;
+                // Process active left-side touches for d-pad
+                if( this._slot.side === 'left' )
+                {
+                    this._tdx = this._slot.currentX - this._slot.startX;
+                    this._tdy = this._slot.currentY - this._slot.startY;
 
-                // Right
-                this._nowPast = (this._tdx > settings.user.touchDeadZone);
-                if( !this._slot.dpadRight && this._nowPast )
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_RIGHT, touchevent.TOUCH_BUTTON_DOWN );
-                else if( this._slot.dpadRight && !this._nowPast )
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_RIGHT, touchevent.TOUCH_BUTTON_UP );
-                this._slot.dpadRight = this._nowPast;
+                    if( settings.touchDpadLeftRight )
+                    {
+                        // Left
+                        this._nowPast = (this._tdx < -settings.user.touchDeadZone);
+                        if( !this._slot.dpadLeft && this._nowPast )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_LEFT, touchevent.TOUCH_BUTTON_DOWN );
+                        else if( this._slot.dpadLeft && !this._nowPast )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_LEFT, touchevent.TOUCH_BUTTON_UP );
+                        this._slot.dpadLeft = this._nowPast;
 
-                // Up (screen Y is inverted: negative = up)
-                this._nowPast = (this._tdy < -settings.user.touchDeadZone);
-                if( !this._slot.dpadUp && this._nowPast )
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_UP, touchevent.TOUCH_BUTTON_DOWN );
-                else if( this._slot.dpadUp && !this._nowPast )
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_UP, touchevent.TOUCH_BUTTON_UP );
-                this._slot.dpadUp = this._nowPast;
+                        // Right
+                        this._nowPast = (this._tdx > settings.user.touchDeadZone);
+                        if( !this._slot.dpadRight && this._nowPast )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_RIGHT, touchevent.TOUCH_BUTTON_DOWN );
+                        else if( this._slot.dpadRight && !this._nowPast )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_RIGHT, touchevent.TOUCH_BUTTON_UP );
+                        this._slot.dpadRight = this._nowPast;
+                    }
 
-                // Down (screen Y is inverted: positive = down)
-                this._nowPast = (this._tdy > settings.user.touchDeadZone);
-                if( !this._slot.dpadDown && this._nowPast )
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_DOWN, touchevent.TOUCH_BUTTON_DOWN );
-                else if( this._slot.dpadDown && !this._nowPast )
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_DOWN, touchevent.TOUCH_BUTTON_UP );
-                this._slot.dpadDown = this._nowPast;
+                    if( settings.touchDpadUpDown )
+                    {
+                        // Up (screen Y is inverted: negative = up)
+                        this._nowPast = (this._tdy < -settings.user.touchDeadZone);
+                        if( !this._slot.dpadUp && this._nowPast )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_UP, touchevent.TOUCH_BUTTON_DOWN );
+                        else if( this._slot.dpadUp && !this._nowPast )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_UP, touchevent.TOUCH_BUTTON_UP );
+                        this._slot.dpadUp = this._nowPast;
+
+                        // Down (screen Y is inverted: positive = down)
+                        this._nowPast = (this._tdy > settings.user.touchDeadZone);
+                        if( !this._slot.dpadDown && this._nowPast )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_DOWN, touchevent.TOUCH_BUTTON_DOWN );
+                        else if( this._slot.dpadDown && !this._nowPast )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_DOWN, touchevent.TOUCH_BUTTON_UP );
+                        this._slot.dpadDown = this._nowPast;
+                    }
+
+                    // Send continuous Y position for direct vertical tracking
+                    this._queueTouchEvent( touchevent.TOUCH_DPAD_Y_MOVE, 0, this._slot.currentY );
+                }
             }
         }
     }
@@ -501,8 +518,8 @@ class EventManager
     {
         for( this._si = 0; this._si < MAX_TOUCH_POOL; ++this._si )
         {
-            if( this._touchPool[this._si].id === identifier )
-                return this._touchPool[this._si];
+            if( this.touchPool[this._si].id === identifier )
+                return this.touchPool[this._si];
         }
         return null;
     }
@@ -514,8 +531,8 @@ class EventManager
     {
         for( this._si = 0; this._si < MAX_TOUCH_POOL; ++this._si )
         {
-            if( this._touchPool[this._si].id === -1 )
-                return this._touchPool[this._si];
+            if( this.touchPool[this._si].id === -1 )
+                return this.touchPool[this._si];
         }
         return null;
     }
@@ -587,17 +604,26 @@ class EventManager
                 // Left-side: release any active d-pad directions
                 if( this._slot.side === 'left' )
                 {
-                    if( this._slot.dpadLeft )
-                        this._queueTouchEvent( touchevent.TOUCH_DPAD_LEFT, touchevent.TOUCH_BUTTON_UP );
+                    if( settings.touchDpadLeftRight )
+                    {
+                        if( this._slot.dpadLeft )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_LEFT, touchevent.TOUCH_BUTTON_UP );
 
-                    if( this._slot.dpadRight )
-                        this._queueTouchEvent( touchevent.TOUCH_DPAD_RIGHT, touchevent.TOUCH_BUTTON_UP );
+                        if( this._slot.dpadRight )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_RIGHT, touchevent.TOUCH_BUTTON_UP );
+                    }
 
-                    if( this._slot.dpadUp )
-                        this._queueTouchEvent( touchevent.TOUCH_DPAD_UP, touchevent.TOUCH_BUTTON_UP );
+                    if( settings.touchDpadUpDown )
+                    {
+                        if( this._slot.dpadUp )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_UP, touchevent.TOUCH_BUTTON_UP );
 
-                    if( this._slot.dpadDown )
-                        this._queueTouchEvent( touchevent.TOUCH_DPAD_DOWN, touchevent.TOUCH_BUTTON_UP );
+                        if( this._slot.dpadDown )
+                            this._queueTouchEvent( touchevent.TOUCH_DPAD_DOWN, touchevent.TOUCH_BUTTON_UP );
+                    }
+
+                    // Signal touch Y tracking stopped
+                    this._queueTouchEvent( touchevent.TOUCH_DPAD_Y_MOVE, touchevent.TOUCH_BUTTON_UP );
                 }
                 // Right-side: detect tap or swipe
                 else if( this._slot.side === 'right' )
@@ -623,11 +649,11 @@ class EventManager
     //
     //  DESC: Queue a touch event
     //
-    _queueTouchEvent( type, action )
+    _queueTouchEvent( type, action, value )
     {
-        this._touchEventQueue[this._touchEventIndex].init( type, action );
-        this.queue.push( this._touchEventQueue[this._touchEventIndex] );
-        this._touchEventIndex = (this._touchEventIndex + 1) % MAX_TOUCH_EVENT_QUEUE;
+        this.touchEventQueue[this.touchEventIndex].init( type, action, value );
+        this.queue.push( this.touchEventQueue[this.touchEventIndex] );
+        this.touchEventIndex = (this.touchEventIndex + 1) % MAX_TOUCH_EVENT_QUEUE;
     }
 
     // 

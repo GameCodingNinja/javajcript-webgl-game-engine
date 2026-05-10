@@ -11,6 +11,7 @@
         "depthStencilBuffer": { "enableDepthBuffer": "false", "createStencilBuffer": "true", "clearStencilBuffer": "true", "stencilBufferBitSize": 1 },
         "targetBuffer": { "clear": "true" },
         "gamepad": { "allow": "true", "stickDeadZone": 0.0 },
+        "touch": { "enable": "true", "dpadLeftRight": "true", "dpadUpDown": "false" },
         "stats": { "allow": "false" } },
 
     "game": { "name": "invaders", "id": "MDEQ3792", "version": "1.0.0" }

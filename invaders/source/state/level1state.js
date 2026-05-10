@@ -31,6 +31,8 @@ import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
+import { TouchEvent } from '../../../library/common/touchevent';
+import * as touchevent from '../../../library/common/touchevent';
 import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 import * as enemy00aiscripts from '../scripts/enemy00aiscripts';
@@ -1004,7 +1006,45 @@ export class Level1State extends CommonState
                 // Handle the ship movement
                 this.handleShipMovement( event );
 
-                if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
+                // Handle touch Y position tracking - ease ship toward finger position
+                if( event instanceof TouchEvent && event.type === touchevent.TOUCH_DPAD_Y_MOVE )
+                {
+                    // Touch released - stop Y movement
+                    if( event.action === touchevent.TOUCH_BUTTON_UP )
+                    {
+                        this.moveDirY = MOVE_NULL;
+                        this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
+                    }
+                    else
+                    {
+                        this._gameY = settings.deviceRes_half.h - (event.value / device.canvas.clientHeight) * settings.deviceRes.h;
+
+                        // Clamp to the existing bounds
+                        if( this._gameY < -(settings.deviceRes_half.h * 0.92) )
+                            this._gameY = -(settings.deviceRes_half.h * 0.92);
+                        else if( this._gameY > (settings.deviceRes_half.h * 0.73) )
+                            this._gameY = (settings.deviceRes_half.h * 0.73);
+
+                        this._diffY = this._gameY - this.playerShip.sprite.pos.y;
+
+                        if( this._diffY > settings.user.touchDeadZone )
+                        {
+                            this.easingY.init( this.easingY.getValue(), 7, 0.5, easing.getLinear() );
+                            this.moveDirY = MOVE_UP;
+                        }
+                        else if( this._diffY < -settings.user.touchDeadZone )
+                        {
+                            this.easingY.init( this.easingY.getValue(), -7, 0.5, easing.getLinear() );
+                            this.moveDirY = MOVE_DOWN;
+                        }
+                        else
+                        {
+                            this.moveDirY = MOVE_NULL;
+                            this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
+                        }
+                    }
+                }
+                else if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
                 {
                     this._laserBlastNode = this.playerShip.strategy.create('player_shot');
                     this._laserBlastNode.get().prepareScript( 'shoot', this.easingX.getValue() );

@@ -13,6 +13,7 @@ import * as gamepadevent from '../common/gamepadevent';
 import * as genFunc from '../utilities/genfunc';
 import * as defs from '../common/defs';
 import { isMobile } from '../system/device';
+import { settings } from '../utilities/settings';
 
 export const UNBOUND_KEYCODE_STR_ID     = '---',
              UNBOUND_KEYCODE_ID         = -1;
@@ -256,7 +257,7 @@ class ActionManager
             this.loadAction( this.actionDict.gamepadMapping.playerVisible, this.gamepadKeyCodeMap, this.gamepadActionMap );
 
             // Load the touch mapping
-            if( isMobile() && this.actionDict.touchMapping )
+            if( isMobile() && settings.allowTouch && this.actionDict.touchMapping )
             {
                 this.loadAction( this.actionDict.touchMapping.playerHidden, this.touchKeyCodeMap, this.touchActionMap );
             }

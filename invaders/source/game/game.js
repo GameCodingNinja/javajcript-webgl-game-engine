@@ -64,6 +64,9 @@ export class Game
             // Load the user settings. Needs to be after localStorage.init()
             settings.loadUserSettingsFromObj( userSettingsObj );
 
+            // Enable the touch listeners
+            eventManager.initTouchEventListeners();
+
             // Create the OpenGL context (disable antialias for pixel-art style)
             let gl = device.create('game-surface', { antialias: false });
             if (!gl) throw new Error('Failed to create WebGL context');

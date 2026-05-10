@@ -12,7 +12,8 @@ export const TOUCH_DPAD_UP    = 0,
              TOUCH_DPAD_LEFT  = 2,
              TOUCH_DPAD_RIGHT = 3,
              TOUCH_FIRE       = 4,
-             TOUCH_PAUSE      = 5;
+             TOUCH_PAUSE      = 5,
+             TOUCH_DPAD_Y_MOVE = 6;
 
 // Touch event actions
 export const TOUCH_BUTTON_DOWN = 0,
@@ -22,23 +23,15 @@ export class TouchEvent
 {
     constructor()
     {
-        this._type = 0;
-        this._action = 0;
+        this.type = 0;
+        this.action = 0;
+        this.value = 0;
     }
 
-    init( type, action )
+    init( type, action, value = 0 )
     {
-        this._type = type;
-        this._action = action;
-    }
-
-    get type()
-    {
-        return this._type;
-    }
-
-    get action()
-    {
-        return this._action;
+        this.type = type;
+        this.action = action;
+        this.value = value;
     }
 }

@@ -40,6 +40,9 @@ class Settings
         this.cullFace = "BACK";
 
         this.allowGamepad = false;
+        this.allowTouch = false;
+        this.touchDpadLeftRight = false;
+        this.touchDpadUpDown = false;
 
         this.gameName = "Unnamed Game";
         this.gameId = "unnamedgame";
@@ -182,6 +185,18 @@ class Settings
 
                 if( obj.device.gamepad.stickDeadZone )
                     this.stickDeadZone = obj.device.gamepad.stickDeadZone;
+            }
+
+            if( obj.device.touch )
+            {
+                if( obj.device.touch.enable )
+                    this.allowTouch = (obj.device.touch.enable === 'true');
+
+                if( obj.device.touch.dpadLeftRight )
+                    this.touchDpadLeftRight = (obj.device.touch.dpadLeftRight === 'true');
+
+                if( obj.device.touch.dpadUpDown )
+                    this.touchDpadUpDown = (obj.device.touch.dpadUpDown === 'true');
             }
 
             if( obj.device.stats )
