@@ -20,3 +20,9 @@ export const EGE_BUILDING_DESTROYED     = 2000,
              passive_shooter_time = 2000,
              aggressive_shooter_time = 1000,
              destroy_building_shooter_time = 500;
+
+// Game-specific touch event types (starting at 100 to leave room for library types)
+export const TOUCH_FIRE        = 100,
+             TOUCH_PAUSE       = 101,
+             TOUCH_BOOST       = 102,
+             TOUCH_DPAD_Y_MOVE = 103;

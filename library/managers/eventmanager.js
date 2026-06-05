@@ -88,6 +88,21 @@ class EventManager
             this.gamePadEventQueue.push( new gamepadevent.GamepadEvent() );
 
         this.gamepadDeadZone = gamepadevent.ANALOG_STICK_MSG_MAX;
+
+        // For Mobile: Optional game-specific callback for left-side per-frame touch processing
+        this.leftTouchCallback = null;
+
+        // For Mobile: Optional game-specific callback for left-side touch end
+        this.leftTouchEndCallback = null;
+
+        // For Mobile: Optional game-specific callback for right-side touch end
+        this.rightTouchEndCallback = null;
+
+        // For Mobile: Optional game-specific callback for right-side per-frame touch processing
+        this.rightTouchCallback = null;
+
+        // For Mobile: Optional game-specific callback for whole-screen touch end (bypasses d-pad/side split)
+        this.touchEndCallback = null;
     }
 
     //
@@ -105,7 +120,7 @@ class EventManager
             // Pre-allocated touch pool for mobile input
             this.touchPool = [];
             for( this._i = 0; this._i < MAX_TOUCH_POOL; ++this._i )
-                this.touchPool.push({ id: -1, startX: 0, startY: 0, currentX: 0, currentY: 0, side: '',
+                this.touchPool.push({ id: -1, startX: 0, startY: 0, currentX: 0, currentY: 0, startTime: 0, side: '',
                     dpadLeft: false, dpadRight: false, dpadUp: false, dpadDown: false, ended: false });
 
             // Reusable touch event queue
@@ -447,7 +462,7 @@ class EventManager
     }
 
     //
-    //  DESC: Handle touch - called once per frame like handleGamepad
+    //  DESC: For Mobile: Handle touch - called once per frame like handleGamepad
     //        All touch event generation happens here
     //
     handleTouch()
@@ -504,8 +519,14 @@ class EventManager
                         this._slot.dpadDown = this._nowPast;
                     }
 
-                    // Send continuous Y position for direct vertical tracking
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_Y_MOVE, 0, this._slot.currentY );
+                    // Delegate to game-specific per-frame callback
+                    if( this.leftTouchCallback )
+                        this.leftTouchCallback( this._slot );
+                }
+                // Right-side: delegate to game-specific per-frame callback
+                else if( this._slot.side === 'right' && this.rightTouchCallback )
+                {
+                    this.rightTouchCallback( this._slot );
                 }
             }
         }
@@ -563,6 +584,7 @@ class EventManager
                 this._slot.startY = this._t.clientY;
                 this._slot.currentX = this._t.clientX;
                 this._slot.currentY = this._t.clientY;
+                this._slot.startTime = performance.now();
                 this._slot.side = (this._t.clientX < this._halfWidth) ? 'left' : 'right';
                 this._slot.dpadLeft = false;
                 this._slot.dpadRight = false;
@@ -601,8 +623,15 @@ class EventManager
             this._slot = this._findTouchSlot( this._t.identifier );
             if( this._slot )
             {
+                // Whole-screen callback bypasses d-pad/side split
+                if( this.touchEndCallback )
+                {
+                    this._dx = this._t.clientX - this._slot.startX;
+                    this._dy = this._t.clientY - this._slot.startY;
+                    this.touchEndCallback( this._slot, this._dx, this._dy );
+                }
                 // Left-side: release any active d-pad directions
-                if( this._slot.side === 'left' )
+                else if( this._slot.side === 'left' )
                 {
                     if( settings.touchDpadLeftRight )
                     {
@@ -622,22 +651,16 @@ class EventManager
                             this._queueTouchEvent( touchevent.TOUCH_DPAD_DOWN, touchevent.TOUCH_BUTTON_UP );
                     }
 
-                    // Signal touch Y tracking stopped
-                    this._queueTouchEvent( touchevent.TOUCH_DPAD_Y_MOVE, touchevent.TOUCH_BUTTON_UP );
+                    // Delegate to game-specific left-side touch end callback
+                    if( this.leftTouchEndCallback )
+                        this.leftTouchEndCallback( this._slot );
                 }
-                // Right-side: detect tap or swipe
-                else if( this._slot.side === 'right' )
+                // Right-side: delegate to game-specific callback
+                else if( this._slot.side === 'right' && this.rightTouchEndCallback )
                 {
                     this._dx = this._t.clientX - this._slot.startX;
                     this._dy = this._t.clientY - this._slot.startY;
-
-                    // Right-to-left swipe across 60%+ of screen width → toggle pause
-                    if( this._dx < -(device.canvas.width * 0.6) )
-                        this._queueTouchEvent( touchevent.TOUCH_PAUSE, touchevent.TOUCH_BUTTON_DOWN );
-
-                    // Small movement → tap to fire (only during gameplay)
-                    else if( !menuManager.active && (this._dx * this._dx + this._dy * this._dy) < 400 )
-                        this._queueTouchEvent( touchevent.TOUCH_FIRE, touchevent.TOUCH_BUTTON_DOWN );
+                    this.rightTouchEndCallback( this._slot, this._dx, this._dy, performance.now() - this._slot.startTime );
                 }
 
                 // Free the slot

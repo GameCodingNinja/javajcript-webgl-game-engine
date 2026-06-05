@@ -24,7 +24,7 @@ import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import { settings } from '../../../library/utilities/settings';
 import { Timer } from '../../../library/utilities/timer';
-import { device } from '../../../library/system/device';
+import { device, isMobile } from '../../../library/system/device';
 import { Color } from '../../../library/common/color';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 import * as defs from '../../../library/common/defs';
@@ -131,6 +131,15 @@ export class Level1State extends CommonState
 
         // Clear the event queue
         eventManager.clear();
+
+        // Register touch callbacks for mobile
+        if( isMobile() )
+        {
+            eventManager.leftTouchCallback = this.onLeftTouch.bind(this);
+            eventManager.leftTouchEndCallback = this.onLeftTouchEnd.bind(this);
+            eventManager.rightTouchEndCallback = this.onRightTouchEnd.bind(this);
+            eventManager.rightTouchCallback = this.onRightTouch.bind(this);
+        }
 
         // Clear the last device used so that the button on start game menu is active by default
         actionManager.clearLastDeviceUsed();
@@ -1006,45 +1015,7 @@ export class Level1State extends CommonState
                 // Handle the ship movement
                 this.handleShipMovement( event );
 
-                // Handle touch Y position tracking - ease ship toward finger position
-                if( event instanceof TouchEvent && event.type === touchevent.TOUCH_DPAD_Y_MOVE )
-                {
-                    // Touch released - stop Y movement
-                    if( event.action === touchevent.TOUCH_BUTTON_UP )
-                    {
-                        this.moveDirY = MOVE_NULL;
-                        this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
-                    }
-                    else
-                    {
-                        this._gameY = settings.deviceRes_half.h - (event.value / device.canvas.clientHeight) * settings.deviceRes.h;
-
-                        // Clamp to the existing bounds
-                        if( this._gameY < -(settings.deviceRes_half.h * 0.92) )
-                            this._gameY = -(settings.deviceRes_half.h * 0.92);
-                        else if( this._gameY > (settings.deviceRes_half.h * 0.73) )
-                            this._gameY = (settings.deviceRes_half.h * 0.73);
-
-                        this._diffY = this._gameY - this.playerShip.sprite.pos.y;
-
-                        if( this._diffY > settings.user.touchDeadZone )
-                        {
-                            this.easingY.init( this.easingY.getValue(), 7, 0.5, easing.getLinear() );
-                            this.moveDirY = MOVE_UP;
-                        }
-                        else if( this._diffY < -settings.user.touchDeadZone )
-                        {
-                            this.easingY.init( this.easingY.getValue(), -7, 0.5, easing.getLinear() );
-                            this.moveDirY = MOVE_DOWN;
-                        }
-                        else
-                        {
-                            this.moveDirY = MOVE_NULL;
-                            this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
-                        }
-                    }
-                }
-                else if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
+                if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
                 {
                     this._laserBlastNode = this.playerShip.strategy.create('player_shot');
                     this._laserBlastNode.get().prepareScript( 'shoot', this.easingX.getValue() );
@@ -1752,6 +1723,91 @@ export class Level1State extends CommonState
         {
             let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[i]}` );
             scriptSingleton.prepare( 'delayed_execution', 500, null, () => gsnd.stop() );
+        }
+    }
+
+    //
+    //  DESC: For Mobile: Left-side per-frame touch callback - continuous Y position tracking
+    //
+    onLeftTouch( slot )
+    {
+        if( !menuManager.active && this.playerShip.sprite.collisionComponent.enable )
+        {
+            this._gameY = settings.deviceRes_half.h - (slot.currentY / device.canvas.clientHeight) * settings.deviceRes.h;
+
+            // Clamp to the existing bounds
+            if( this._gameY < -(settings.deviceRes_half.h * 0.92) )
+                this._gameY = -(settings.deviceRes_half.h * 0.92);
+            else if( this._gameY > (settings.deviceRes_half.h * 0.73) )
+                this._gameY = (settings.deviceRes_half.h * 0.73);
+
+            this._diffY = this._gameY - this.playerShip.sprite.pos.y;
+
+            if( this._diffY > settings.user.touchDeadZone )
+            {
+                this.easingY.init( this.easingY.getValue(), 7, 0.5, easing.getLinear() );
+                this.moveDirY = MOVE_UP;
+            }
+            else if( this._diffY < -settings.user.touchDeadZone )
+            {
+                this.easingY.init( this.easingY.getValue(), -7, 0.5, easing.getLinear() );
+                this.moveDirY = MOVE_DOWN;
+            }
+            else
+            {
+                this.moveDirY = MOVE_NULL;
+                this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
+            }
+        }
+    }
+
+    //
+    //  DESC: For Mobile: Left-side touch end callback - stop Y movement
+    //
+    onLeftTouchEnd( slot )
+    {
+        this.moveDirY = MOVE_NULL;
+        this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
+    }
+
+    //
+    //  DESC: For Mobile: Right-side per-frame touch callback - detect hold for boost activation
+    //
+    onRightTouch( slot )
+    {
+        this._tdx = slot.currentX - slot.startX;
+        this._tdy = slot.currentY - slot.startY;
+
+        // Small movement held long enough → boost
+        if( !slot.boostHold && (this._tdx * this._tdx + this._tdy * this._tdy) < 400 &&
+            (performance.now() - slot.startTime) >= 300 )
+        {
+            slot.boostHold = true;
+            eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_DOWN );
+        }
+    }
+
+    //
+    //  DESC: For Mobile: Right-side touch end callback - detect tap to fire, hold to release boost, or swipe to pause
+    //
+    onRightTouchEnd( slot, dx, dy, holdDuration )
+    {
+        // Reset boost hold state for next touch
+        slot.boostHold = false;
+
+        // Right-to-left swipe across 60%+ of screen width → toggle pause
+        if( dx < -(device.canvas.width * 0.6) )
+            eventManager._queueTouchEvent( gameDefs.TOUCH_PAUSE, touchevent.TOUCH_BUTTON_DOWN );
+
+        else if( !menuManager.active && (dx * dx + dy * dy) < 400 )
+        {
+            // Hold down → release boost
+            if( holdDuration >= 300 )
+                eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_UP );
+
+            // Quick tap → fire
+            else
+                eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_DOWN );
         }
     }
 }

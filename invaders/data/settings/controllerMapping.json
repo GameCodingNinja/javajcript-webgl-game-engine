@@ -68,5 +68,6 @@
                 { "action": "down", "componetId": "TOUCH DPAD DOWN" },
                 { "action": "left", "componetId": "TOUCH DPAD LEFT" },
                 { "action": "right", "componetId": "TOUCH DPAD RIGHT" },
-                { "action": "shoot", "componetId": "TOUCH FIRE" } ] }
+                { "action": "shoot", "componetId": "TOUCH FIRE" },
+                { "action": "boost", "componetId": "TOUCH BOOST" } ] }
 }

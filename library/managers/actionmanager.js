@@ -219,8 +219,6 @@ class ActionManager
             this.touchKeyCodeMap.set( 'TOUCH DPAD DOWN',  touchevent.TOUCH_DPAD_DOWN );
             this.touchKeyCodeMap.set( 'TOUCH DPAD LEFT',  touchevent.TOUCH_DPAD_LEFT );
             this.touchKeyCodeMap.set( 'TOUCH DPAD RIGHT', touchevent.TOUCH_DPAD_RIGHT );
-            this.touchKeyCodeMap.set( 'TOUCH FIRE',       touchevent.TOUCH_FIRE );
-            this.touchKeyCodeMap.set( 'TOUCH PAUSE',      touchevent.TOUCH_PAUSE );
         }
     }
 
@@ -262,6 +260,15 @@ class ActionManager
                 this.loadAction( this.actionDict.touchMapping.playerHidden, this.touchKeyCodeMap, this.touchActionMap );
             }
         }
+    }
+
+    //
+    //  DESC: Register a game-specific touch key code mapping for mobile: 
+    //
+    registerTouchKeyCode( keyCodeStr, keyCodeId )
+    {
+        if( this.touchKeyCodeMap )
+            this.touchKeyCodeMap.set( keyCodeStr, keyCodeId );
     }
 
     // 

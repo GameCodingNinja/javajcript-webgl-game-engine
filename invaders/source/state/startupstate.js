@@ -42,7 +42,9 @@ import * as enemy02aiscripts from '../scripts/enemy02aiscripts';
 import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
 import * as settingsMenuScripts from '../scripts/settingsmenuscripts';
 import * as aiBaseScripts from '../scripts/aibasescripts';
+import { isMobile } from '../../../library/system/device';
 import * as stateDefs from './statedefs';
+import * as gameDefs from './gamedefs';
 
 // Load data from bundle as string
 import dataListTable2D from '../../data/objects/2d/objectDataList/dataListTable.json';
@@ -77,6 +79,13 @@ export class StartUpState extends GameState
         soundManager.loadListTableFromObj( soundManagerListTable );
         physicsWorldManager.loadListTableFromObj( physicsManagerListTable );
         menuManager.loadListTableFromObj( menuManagerListTable );
+        // Register game-specific touch key codes for mobile before loading action mappings
+        if( isMobile() )
+        {
+            actionManager.registerTouchKeyCode( 'TOUCH FIRE',  gameDefs.TOUCH_FIRE );
+            actionManager.registerTouchKeyCode( 'TOUCH PAUSE', gameDefs.TOUCH_PAUSE );
+            actionManager.registerTouchKeyCode( 'TOUCH BOOST', gameDefs.TOUCH_BOOST );
+        }
         actionManager.loadFromObj( actionManagerJson );
         menuManager.loadMenuActionFromObj( menuActionJSON );
 
