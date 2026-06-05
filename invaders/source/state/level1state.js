@@ -31,7 +31,6 @@ import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
-import { TouchEvent } from '../../../library/common/touchevent';
 import * as touchevent from '../../../library/common/touchevent';
 import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';

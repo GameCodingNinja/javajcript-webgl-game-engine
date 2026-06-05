@@ -115,7 +115,7 @@ class PlayerShip_ShootLazer
     {
         if( this.camera.inViewX( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
-            this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + this.shipVelocity );
+            this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + (this.shipVelocity * highResTimer.timeScale) );
             this.sprite.collisionComponent.checkForCollision( this.enemyStrategy.nodeAry );
 
             // Do wrapparound collision detection

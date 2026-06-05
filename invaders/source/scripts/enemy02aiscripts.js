@@ -10,6 +10,7 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
 import { scriptSingleton } from '../../../library/script/scriptcomponent';
+import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
@@ -145,8 +146,8 @@ class AI_Enemy02_Descend extends aiNode
             this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             if( this.easingY.isFinished() )
-            {
-                this.state = defs.EAIS_SUCCESS;
+                {
+                    this.state = defs.EAIS_SUCCESS;
             }
         }
 
@@ -185,7 +186,7 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
         this.easingY.init(
             this.sprite.pos.y,
             this.data.playerShipSprite.pos.y,
-            Math.abs(this.sprite.pos.y - this.data.playerShipSprite.pos.y) / gameDefs.pixel_per_sec_100,
+            (Math.abs(this.sprite.pos.y - this.data.playerShipSprite.pos.y) / gameDefs.pixel_per_sec_100) * highResTimer.timeScale,
             easing.getLinear() );
     }
 
@@ -210,13 +211,12 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
             this.init();
             this.state = defs.EAIS_ACTIVE;
         }
-
-        if( this.state === defs.EAIS_ACTIVE )
+        else if( this.state === defs.EAIS_ACTIVE )
         {
             this.easingX.execute();
             this.easingY.execute();
 
-            this.sprite.incPosXYZ( this.easingX.getValue() );
+            this.sprite.incPosXYZ( this.easingX.getValue() * highResTimer.timeScale );
 
             if(this.sprite.alive)
                 this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );

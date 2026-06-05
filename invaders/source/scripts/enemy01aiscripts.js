@@ -9,6 +9,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
 import { scriptSingleton } from '../../../library/script/scriptcomponent';
+import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
@@ -124,7 +125,7 @@ class AI_Enemy01_Descend extends aiNode
         if( this.state === defs.EAIS_ACTIVE )
         {
             this.easingY.execute();
-            this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+            this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() * highResTimer.timeScale );
 
             if( this.easingY.isFinished() )
             {
@@ -163,9 +164,9 @@ class AI_Enemy01_Go extends aiNode
     {
         // Calculated to move in pixels per second
         if(this.sprite.rot.y > 1)
-            this.easingX.init( this.easingX.getValue(), -20, 2, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), -20, 3, easing.getLinear() );
         else
-            this.easingX.init( this.easingX.getValue(), 20, 2, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), 20, 3, easing.getLinear() );
     }
 
     // 
@@ -192,7 +193,7 @@ class AI_Enemy01_Go extends aiNode
         if( this.state === defs.EAIS_ACTIVE )
         {
             this.easingX.execute();
-            this.sprite.incPosXYZ( this.easingX.getValue(), 0 );
+            this.sprite.incPosXYZ( this.easingX.getValue() * highResTimer.timeScale );
 
             // Loop the player strategy and camera
             if( this.sprite.pos.x < -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST + 50) )
