@@ -288,8 +288,8 @@ class EventManager
     {
         if( settings.allowGamepad )
         {
-            actionManager.initGamepadMapping( event.gamepad.mapping );
-            this.gamePadList.push( new Gamepad( event.gamepad ) );
+            actionManager.initGamepadMapping( event.gamepad );
+            this.gamePadList[event.gamepad.index] = new Gamepad( event.gamepad );
             this.queue.push( event );
             console.debug(`Gamepad connected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}; Button Count: ${event.gamepad.buttons.length}; Axes: ${event.gamepad.axes.length}`);
         }
@@ -302,6 +302,7 @@ class EventManager
     {
         if( settings.allowGamepad )
         {
+            delete this.gamePadList[event.gamepad.index];
             this.queue.push( event );
             console.debug(`Gamepad disconnected: Index ${event.gamepad.index}; Id: ${event.gamepad.id}`);
         }
@@ -384,19 +385,22 @@ class EventManager
     //
     handleGamepad()
     {
-        if( this.gamePadList.length )
+        this._gamepads = navigator.getGamepads();
+        if( this._gamepads )
         {
-            this._gamepads = navigator.getGamepads();
             this.gamepadDeadZone = gamepadevent.ANALOG_STICK_MSG_MAX + settings.user.stickDeadZone;
 
-            for ( this._each = 0; this._each < this.gamePadList.length; ++this._each )
+            for ( this._each = 0; this._each < this._gamepads.length; ++this._each )
             {
                 this._gp = this._gamepads[this._each];
 
-                if( this._gp && this._gp.connected )
-                {
-                    this._lastGp = this.gamePadList[this._each];
+                if( !this._gp || !this._gp.connected )
+                    continue;
 
+                this._lastGp = this.gamePadList[this._each];
+
+                if( this._lastGp )
+                {
                     // Create Up/DOWN events for the buttons
                     for(this._i = 0; this._i < this._gp.buttons.length; ++this._i)
                     {

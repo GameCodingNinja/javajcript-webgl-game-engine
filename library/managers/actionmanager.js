@@ -274,10 +274,10 @@ class ActionManager
     // 
     //  DESC: Setup the gamepad mapping based on controller mapping mode
     //
-    initGamepadMapping( mapping )
+    initGamepadMapping( gamepad )
     {
         // Remap for non-standard mapping
-        if( mapping === '' )
+        if( gamepad.mapping === '' )
         {
             this.gamepadKeyCodeMap = new Map;
             this.gamepadActionMap = new Map;
