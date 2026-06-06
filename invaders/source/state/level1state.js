@@ -317,8 +317,8 @@ export class Level1State extends CommonState
         this.slowHealTimer = null;
         this.musicTimer = new Timer((1000 * 60 * 5));
 
-        this.enemy00SpawnTimer = new Timer(1000 * 2);
-        this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 150)));
+        this.enemy00SpawnTimer = new Timer(1000 * 2.5);
+        this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 30), (1000 * 150)));
         this.miniBossSpawnTimer.disable();
         this.lastMiniBossType = '';
         this.miniBossStreakCount = 0;
@@ -336,6 +336,8 @@ export class Level1State extends CommonState
         this.train.node = null;
         this.train.dir = 0;
         this.train.camera = cameraManager.get('trainCamera');
+
+        this.allowMiniBoss = false;
     }
 
     // 
@@ -1085,22 +1087,28 @@ export class Level1State extends CommonState
             this.groupPlayer.play( 'level_up' );
 
             // Enable mini-boss spawns when the earliest level threshold is reached
-            if( this.playerLevel >= ENEMY02_LEVEL_THRESHOLD && this.miniBossSpawnTimer.disabled )
+            if( this.playerLevel >= ENEMY02_LEVEL_THRESHOLD && this.allowMiniBoss == false )
+            {
                 this.miniBossSpawnTimer.reset();
+                this.allowMiniBoss = true;
+            }
 
             // Enable health character
             if( this.playerLevel == HEALTH_CHAR_THRESHOLD && this.healthSpawnTimer.disabled )
                 this.healthSpawnTimer.reset();
 
             // Adjust how fast enemy00 is spawned
-            if( this.playerLevel == 7 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.8) )
+            if( this.playerLevel == 5 && this.enemy00SpawnTimer.timeInterval > (1000 * 2.3) )
+                this.enemy00SpawnTimer.reset((1000 * 2.25));
+
+            else if( this.playerLevel == 10 && this.enemy00SpawnTimer.timeInterval > (1000 * 2.1) )
+                this.enemy00SpawnTimer.reset((1000 * 2));
+
+            else if( this.playerLevel == 20 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.8) )
                 this.enemy00SpawnTimer.reset((1000 * 1.75));
 
-            else if( this.playerLevel == 12 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.7) )
+            else if( this.playerLevel == 40 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.6) )
                 this.enemy00SpawnTimer.reset((1000 * 1.5));
-
-            else if( this.playerLevel == 20 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.4) )
-                this.enemy00SpawnTimer.reset((1000 * 1.25));
         }
 
         this.hudProgressBar.incCurrentValue( value );
@@ -1278,6 +1286,8 @@ export class Level1State extends CommonState
         // Create a mini-boss and position it outside of the view
         else if( this.miniBossSpawnTimer.expired(false, true) )
         {
+            this.miniBossSpawnTimer.disable();
+
             // Determine which mini-boss to spawn based on level thresholds
             if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
             {
@@ -1484,7 +1494,7 @@ export class Level1State extends CommonState
                     if(this.playerShip.progressBar.isMaxValue())
                         this.playerShip.progressBar.setVisible( false );
                     else
-                        this.playerShip.progressBar.incCurrentValue(1);
+                        this.playerShip.progressBar.incCurrentValue(1.5);
                 }
             }
 

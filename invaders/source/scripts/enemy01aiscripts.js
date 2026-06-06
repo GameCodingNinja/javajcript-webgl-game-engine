@@ -125,7 +125,7 @@ class AI_Enemy01_Descend extends aiNode
         if( this.state === defs.EAIS_ACTIVE )
         {
             this.easingY.execute();
-            this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() * highResTimer.timeScale );
+            this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
 
             if( this.easingY.isFinished() )
             {
