@@ -169,6 +169,44 @@ To check if a sprite is visible across the wrap boundary, test the sprite's posi
 | Enemy01 | No | No | Boss enemy, stays in play area |
 | Enemy00 shots | Yes | N/A | Own strategy (`_enemy_shot_`), wrap independently |
 
+## Frame-Rate Independence
+All runtime movement must be frame-rate independent for consistent behavior across desktop and mobile.
+
+### Easing System (`library/utilities/easingfunc.js`)
+The `valueTo` easing class is **already time-based internally** — `execute()` advances by `highResTimer.elapsedTime`. Key rules:
+- **Easing durations** are in seconds (e.g., `distance / pixelsPerSec`). **Never** multiply durations by `highResTimer.timeScale` — that corrupts the timing.
+- **Absolute position easings** (used with `setPosXYZ`): Use `getValue()` directly — **never** multiply by `timeScale`. The easing interpolates between start and end over the specified time.
+- **Velocity easings** (used with `incPosXYZ`): The easing ramps a velocity value (e.g., 0 → 20). Multiply `getValue()` by `highResTimer.timeScale` since the result is applied per-frame as a position increment.
+
+### Common Patterns
+```javascript
+// CORRECT: Absolute position from easing (no timeScale)
+this.easingY.init( startY, endY, distance / pixelsPerSec, easing.getSineOut() );
+this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
+
+// CORRECT: Velocity from easing (timeScale needed)
+this.easingX.init( 0, topSpeed, rampUpSeconds, easing.getLinear() );
+this.sprite.incPosXYZ( this.easingX.getValue() * highResTimer.timeScale );
+
+// CORRECT: Direct per-frame movement (elapsedTime needed)
+this.sprite.incPosXYZ( this.moveX * highResTimer.elapsedTime * this.SPEED );
+
+// CORRECT: Inherited velocity from another easing (timeScale needed)
+this.sprite.incPosXYZ( (this.SPEED * highResTimer.elapsedTime) + (shipVelocity * highResTimer.timeScale) );
+```
+
+### Touch Event System
+Touch event types are split between library (generic) and game (specific):
+- **Library** (`library/common/touchevent.js`): `TOUCH_DPAD_UP/DOWN/LEFT/RIGHT`, `TOUCH_BUTTON_DOWN/UP`
+- **Game** (`source/state/gamedefs.js`, starting at 100): `TOUCH_FIRE`, `TOUCH_PAUSE`, `TOUCH_BOOST`, `TOUCH_DPAD_Y_MOVE`
+- Game-specific touch key codes are registered via `actionManager.registerTouchKeyCode()` in `StartUpState` before `loadFromObj()`
+- Touch callbacks are registered in `Level1State` constructor inside `isMobile()` check:
+  - `eventManager.leftTouchCallback` — per-frame left-side processing (Y position tracking)
+  - `eventManager.leftTouchEndCallback` — left-side touch release
+  - `eventManager.rightTouchEndCallback` — right-side touch end (tap to fire, hold to boost, swipe to pause)
+  - `eventManager.rightTouchCallback` — per-frame right-side processing (boost hold detection)
+  - `eventManager.touchEndCallback` — whole-screen touch end (bypasses d-pad/side split, for future use)
+
 ## Platform Integration
 - **CrazyGames SDK**: Optional, detected at runtime (`window.CrazyGames`)
 - **YouTube Playables**: Optional, detected at runtime (`window.ytgame`)

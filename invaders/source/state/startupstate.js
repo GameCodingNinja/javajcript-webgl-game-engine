@@ -312,6 +312,20 @@ export class StartUpState extends GameState
 
         ]))
 
+        // Scale up menus for mobile so controls are easier to tap
+        .then(() =>
+        {
+            if( isMobile() )
+            {
+                for( let menu of menuManager.menuMapMap.get( '(menu)' ).values() )
+                    menu.setScaleXYZ( 1.2, 1.2 );
+
+                // Disable the key binding menu because it's not needed in mobile
+                menuManager.getMenu("pause_menu").getControl("key_binding_btn").disableControl();
+                menuManager.getMenu("settings_menu").getControl("dead_zone_slider").disableControl();
+            }
+        })
+
         // Clean up the temporary files
         .then(() =>
         {
