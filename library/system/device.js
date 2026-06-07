@@ -19,6 +19,10 @@ const DEFAULT_CONTEXT_ATTRS = Object.freeze({
     powerPreference: 'high-performance'
 });
 
+// Cap the device pixel ratio so high-DPI mobile screens (often 3x-4x) don't
+// blow up fragment/fill-rate cost and tank the frame rate. 2x is plenty crisp.
+const MAX_PIXEL_RATIO = 2;
+
 class Device
 {
     constructor()
@@ -27,6 +31,7 @@ class Device
         this.glContext = null;
         this.isWebGL2 = false;
         this.lost = false;
+        this.pixelRatio = 1; // Backing-store scale applied to the canvas (DPR, capped)
 
         this.caps = {
             maxTextureSize: 0,
@@ -51,8 +56,7 @@ class Device
         if( !this.canvas )
             throw new Error(`Canvas not found: #${canvasId}`);
 
-        this.canvas.width = settings.displayRes.w;
-        this.canvas.height = settings.displayRes.h;
+        this._applyCanvasSize();
         this.canvas.style.position = settings.canvasStylePosition;
         this.canvas.style.display = settings.canvasStyleDisplay;
         this.canvas.style.touchAction = 'none';
@@ -132,6 +136,29 @@ class Device
     }
 
     //
+    //  DESC: Size the canvas. The CSS (layout) size stays in logical/CSS pixels
+    //        (settings.displayRes) while the backing store is scaled by the
+    //        device pixel ratio so high-DPI screens render crisp instead of being
+    //        upscaled from a smaller buffer. Input math stays in CSS pixels and is
+    //        unaffected (it reads canvas.clientWidth/Height, not canvas.width/height).
+    //
+    _applyCanvasSize()
+    {
+        this.pixelRatio = Math.min( window.devicePixelRatio || 1, MAX_PIXEL_RATIO );
+
+        // CSS / layout size in logical pixels
+        this.canvas.style.width = `${settings.displayRes.w}px`;
+        this.canvas.style.height = `${settings.displayRes.h}px`;
+
+        // Backing store (drawing buffer) in physical pixels
+        this.canvas.width = Math.round( settings.displayRes.w * this.pixelRatio );
+        this.canvas.height = Math.round( settings.displayRes.h * this.pixelRatio );
+
+        if( this.glContext )
+            this.glContext.viewport( 0, 0, this.canvas.width, this.canvas.height );
+    }
+
+    //
     //  DESC: Handle the resolution change
     //
     handleResolutionChange( width, height, fullscreenChange )
@@ -142,9 +169,7 @@ class Device
             menuManager.resetTransform();
             menuManager.resetDynamicOffset();
             cameraManager.rebuild();
-            this.canvas.width = settings.displayRes.w;
-            this.canvas.height = settings.displayRes.h;
-            this.glContext.viewport(0, 0, settings.displayRes.w, settings.displayRes.h);
+            this._applyCanvasSize();
         }
 
         if( settings.centerInWnd )

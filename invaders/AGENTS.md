@@ -213,6 +213,7 @@ Touch event types are split between library (generic) and game (specific):
   - `eventManager.rightTouchEndCallback` — right-side touch end (tap to fire, hold to boost, swipe to pause)
   - `eventManager.rightTouchCallback` — per-frame right-side processing (boost hold detection)
   - `eventManager.touchEndCallback` — whole-screen touch end (bypasses d-pad/side split, for future use)
+- Touch coords (`clientX/Y`, and the `dx/dy` deltas passed to callbacks) are in **CSS pixels**. When comparing them against the screen size (e.g. swipe-distance thresholds, touch-Y mapping), use `device.canvas.clientWidth/clientHeight` — NOT `device.canvas.width/height`, which is the DPR-scaled backing store (see the library's "Canvas Sizing & Device Pixel Ratio" note).
 
 ## Platform Integration
 - **CrazyGames SDK**: Optional, detected at runtime (`window.CrazyGames`)

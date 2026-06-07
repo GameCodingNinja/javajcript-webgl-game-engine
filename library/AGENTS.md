@@ -97,13 +97,21 @@ Example game-level override:
 device.create('game-surface', { antialias: false }); // pixel-art games
 ```
 
+### Canvas Sizing & Device Pixel Ratio (DPR)
+`device._applyCanvasSize()` (called by `create()` and `handleResolutionChange()`) splits the canvas into two distinct sizes:
+- **CSS / layout size** (`canvas.style.width/height`) = `settings.displayRes` in **logical/CSS pixels**. This is the coordinate space all game logic, ortho projection, cameras, and input math use.
+- **Backing store / drawing buffer** (`canvas.width/height`) = `displayRes × device.pixelRatio` in **physical pixels**. The GL viewport matches this. This makes high-DPI (mobile) screens render crisp instead of being upscaled from a smaller buffer.
+- `device.pixelRatio` = `Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO)` — capped at **2** to protect mobile fill-rate/frame-rate.
+
+**Critical rule:** `canvas.width/height` is now the DPR-scaled backing store, NOT a CSS size. Any input/layout math that needs the on-screen (CSS) size must use `canvas.clientWidth/clientHeight` (or `settings.displayRes`), never `canvas.width/height`. Touch/mouse event coordinates (`clientX`, `offsetX`, etc.) are always in CSS pixels.
+
 ## Mouse Coordinates (managers/eventmanager.js)
 Mouse events are filtered through `filterMousePos()` which adds game-adjusted properties:
 - `event.gameAdjustedMouseX/Y`: Position scaled for fullscreen
 - `event.gameAdjustedMovementX/Y`: Relative movement scaled for fullscreen (used by sliders)
 - `event.gameAdjustedPixelRatio`: DPR value (1.0 in fullscreen)
 
-Fullscreen scaling uses `canvas.width / canvas.clientWidth` ratio, NOT `devicePixelRatio`.
+Fullscreen scaling maps CSS-pixel event coords into logical space using `settings.displayRes.w / canvas.clientWidth` (NOT `canvas.width`, which is the DPR-scaled backing store, and NOT `devicePixelRatio`).
 
 ## Sound System (sound/)
 Sound playback is managed by `soundManager` with per-type enable/disable via `settings.user`:

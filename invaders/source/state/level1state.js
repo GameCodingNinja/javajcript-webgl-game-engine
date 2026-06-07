@@ -1804,8 +1804,10 @@ export class Level1State extends CommonState
         // Reset boost hold state for next touch
         slot.boostHold = false;
 
-        // Right-to-left swipe across 60%+ of screen width → toggle pause
-        if( dx < -(device.canvas.width * 0.6) )
+        // Right-to-left swipe across 60%+ of screen width → toggle pause.
+        // dx is in CSS pixels (clientX delta), so compare against the CSS width
+        // (clientWidth), not the DPR-scaled backing store (canvas.width).
+        if( dx < -(device.canvas.clientWidth * 0.6) )
             eventManager._queueTouchEvent( gameDefs.TOUCH_PAUSE, touchevent.TOUCH_BUTTON_DOWN );
 
         else if( !menuManager.active && (dx * dx + dy * dy) < 400 )

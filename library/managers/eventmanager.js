@@ -358,9 +358,11 @@ class EventManager
 
         if( document.fullscreenElement )
         {
-            // Scale mouse coordinates based on canvas internal size vs CSS display size
-            this._scaleX = device.canvas.width / device.canvas.clientWidth;
-            this._scaleY = device.canvas.height / device.canvas.clientHeight;
+            // Scale mouse coordinates from CSS display size into logical (displayRes)
+            // space. Use displayRes (not canvas.width) since the backing store is
+            // scaled by the device pixel ratio.
+            this._scaleX = settings.displayRes.w / device.canvas.clientWidth;
+            this._scaleY = settings.displayRes.h / device.canvas.clientHeight;
             this._x = Math.trunc(event.offsetX * this._scaleX);
             this._y = Math.trunc(event.offsetY * this._scaleY);
             this._movementX = event.movementX * this._scaleX;
@@ -575,7 +577,9 @@ class EventManager
         if( !menuManager.active )
             event.preventDefault();
 
-        this._halfWidth = device.canvas.width / 2;
+        // clientWidth (CSS size) matches the touch clientX values; canvas.width is
+        // the DPR-scaled backing store and must not be used here.
+        this._halfWidth = device.canvas.clientWidth / 2;
 
         for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
         {
