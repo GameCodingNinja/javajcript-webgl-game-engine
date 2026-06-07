@@ -89,6 +89,13 @@ Behavior classes registered with `scriptManager.set('ClassName', ClassName)` for
 - When adding controls to a menu, update: the `.menu` XML (control + navigation chain), background size in `menuBackgrounds.lst`, and script classes + registration in the corresponding scripts file
 - The master Sound checkbox enables/disables all sub-checkboxes (Effects, Music, Dialog) via `changeState(ECS_INACTIVE/ECS_DISABLE)`
 
+### Mobile Menu Fork (`_mobile`)
+There is a separate mobile fork of the menu, selected at runtime via `isMobile()`:
+- `StartUpState.assetLoad()` (`source/state/startupstate.js`) picks the group name: `'(menu)'` on desktop, `'(menu_mobile)'` on mobile. That single `menu_obj` group is used for both `objectDataManager.loadGroup()` and `menuManager.loadGroupXML()`.
+- `data/objects/2d/menu/menuListTable.json`: `(menu_mobile)` → `main_menu_mobile.cfg` (the mobile-specific menu config).
+- `data/objects/2d/objectDataList/dataListTable.json`: `(menu_mobile)` reuses the same `.lst` files as `(menu)` (backgrounds, button frames, misc) — only the menu `.cfg`/XML differs, not the texture/object data.
+- When changing menus, update **both** the desktop and `_mobile` variants (and their entries in the list tables) to keep them in sync.
+
 ## Code Conventions
 
 ### Naming

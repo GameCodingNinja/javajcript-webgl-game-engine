@@ -61,9 +61,9 @@ import actionManagerJson from '../../data/settings/controllerMapping.json';
 import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
-const STARTUP_ASSET_COUNT = 139,
-      MIN_LOAD_TIME = 1500;
-
+const MIN_LOAD_TIME = 1500;
+var STARTUP_ASSET_COUNT = 139;
+      
 export class StartUpState extends GameState
 {
     constructor( gameLoopCallback )
@@ -82,6 +82,7 @@ export class StartUpState extends GameState
         // Register game-specific touch key codes for mobile before loading action mappings
         if( isMobile() )
         {
+            STARTUP_ASSET_COUNT = 130;
             actionManager.registerTouchKeyCode( 'TOUCH FIRE',  gameDefs.TOUCH_FIRE );
             actionManager.registerTouchKeyCode( 'TOUCH PAUSE', gameDefs.TOUCH_PAUSE );
             actionManager.registerTouchKeyCode( 'TOUCH BOOST', gameDefs.TOUCH_BOOST );
@@ -286,7 +287,12 @@ export class StartUpState extends GameState
         // Set the function to be called to update the progress bar during the download
         signalManager.connect_loadComplete( this.progressBar.incCurrentValue.bind(this.progressBar) );
 
-        let groupAry = ['(menu)'];
+        let menu_obj = '(menu)';
+
+        if( isMobile() )
+            menu_obj = '(menu_mobile)';
+
+        let groupAry = [menu_obj];
 
         Promise.all([
 
@@ -311,20 +317,6 @@ export class StartUpState extends GameState
             level1State.load()
 
         ]))
-
-        // Scale up menus for mobile so controls are easier to tap
-        .then(() =>
-        {
-            if( isMobile() )
-            {
-                for( let menu of menuManager.menuMapMap.get( '(menu)' ).values() )
-                    menu.setScaleXYZ( 1.2, 1.2 );
-
-                // Disable the key binding menu because it's not needed in mobile
-                menuManager.getMenu("pause_menu").getControl("key_binding_btn").disableControl();
-                menuManager.getMenu("settings_menu").getControl("dead_zone_slider").disableControl();
-            }
-        })
 
         // Clean up the temporary files
         .then(() =>

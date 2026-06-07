@@ -1,4 +1,7 @@
 {
     "(menu)": [
-        "data/objects/2d/menu/main_menu.cfg"]
+        "data/objects/2d/menu/main_menu.cfg"],
+        
+    "(menu_mobile)": [
+        "data/objects/2d/menu/main_menu_mobile.cfg"]
 }
