@@ -103,6 +103,13 @@ class EventManager
 
         // For Mobile: Optional game-specific callback for whole-screen touch end (bypasses d-pad/side split)
         this.touchEndCallback = null;
+
+        // For Mobile: Identifier of the single touch captured for menu interaction
+        // (-1 = none). While captured, that touch is routed into the menu system
+        // as synthetic mouse events instead of the gameplay touch path.
+        this.menuTouchId = -1;
+        this.menuTouchLastX = 0;
+        this.menuTouchLastY = 0;
     }
 
     //
@@ -113,7 +120,7 @@ class EventManager
         if( isMobile() && settings.allowTouch )
         {
             this.canvas.addEventListener( 'touchstart',  this.onTouchStart.bind(this),  { passive: false } );
-            this.canvas.addEventListener( 'touchmove',   this.onTouchMove.bind(this),   { passive: true } );
+            this.canvas.addEventListener( 'touchmove',   this.onTouchMove.bind(this),   { passive: false } );
             this.canvas.addEventListener( 'touchend',    this.onTouchEnd.bind(this),    { passive: false } );
             this.canvas.addEventListener( 'touchcancel', this.onTouchEnd.bind(this),    { passive: false } );
 
@@ -350,10 +357,21 @@ class EventManager
     //
     filterMousePos( event )
     {
-        this._x = event.offsetX;
-        this._y = event.offsetY;
-        this._movementX = event.movementX;
-        this._movementY = event.movementY;
+        this._applyGameAdjustedPointerData( event, event.offsetX, event.offsetY, event.movementX, event.movementY );
+    }
+
+    //
+    //  DESC: Compute the game-adjusted pointer data (position, movement, pixel
+    //        ratio) and attach it to the event. Shared by real mouse events and
+    //        synthetic touch-driven mouse events (which supply absolute position
+    //        and a caller-computed movement delta).
+    //
+    _applyGameAdjustedPointerData( event, x, y, movementX, movementY )
+    {
+        this._x = x;
+        this._y = y;
+        this._movementX = movementX;
+        this._movementY = movementY;
         this._pixelRatio = window.devicePixelRatio;
 
         if( document.fullscreenElement )
@@ -363,10 +381,10 @@ class EventManager
             // scaled by the device pixel ratio.
             this._scaleX = settings.displayRes.w / device.canvas.clientWidth;
             this._scaleY = settings.displayRes.h / device.canvas.clientHeight;
-            this._x = Math.trunc(event.offsetX * this._scaleX);
-            this._y = Math.trunc(event.offsetY * this._scaleY);
-            this._movementX = event.movementX * this._scaleX;
-            this._movementY = event.movementY * this._scaleY;
+            this._x = Math.trunc(x * this._scaleX);
+            this._y = Math.trunc(y * this._scaleY);
+            this._movementX = movementX * this._scaleX;
+            this._movementY = movementY * this._scaleY;
 
             // Since it's needed for fullscreen, nullify it for anyone else using it
             this._pixelRatio = 1.0; 
@@ -573,9 +591,16 @@ class EventManager
         if( !document.fullscreenElement )
             device.canvas.requestFullscreen().catch(() => {});
 
-        // When menus are active, don't preventDefault so browser generates mouse events for menu interaction
-        if( !menuManager.active )
+        // While a menu is active, route the touch into the menu system as synthetic
+        // mouse events so menu controls (sliders, buttons, etc.) work via touch.
+        if( menuManager.active )
+        {
             event.preventDefault();
+            this._menuTouchStart( event );
+            return;
+        }
+
+        event.preventDefault();
 
         // clientWidth (CSS size) matches the touch clientX values; canvas.width is
         // the DPR-scaled backing store and must not be used here.
@@ -608,6 +633,14 @@ class EventManager
     //
     onTouchMove( event )
     {
+        // A touch captured for menu interaction is routed as synthetic mouse moves.
+        if( this.menuTouchId !== -1 )
+        {
+            event.preventDefault();
+            this._menuTouchMove( event );
+            return;
+        }
+
         for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
         {
             this._t = event.changedTouches[this._ti];
@@ -625,6 +658,15 @@ class EventManager
     //
     onTouchEnd( event )
     {
+        // Release the menu-captured touch (always, even if the menu has since
+        // closed) so the synthetic mouseup fires and the control state is reset.
+        if( this.menuTouchId !== -1 )
+        {
+            event.preventDefault();
+            this._menuTouchEnd( event );
+            return;
+        }
+
         for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
         {
             this._t = event.changedTouches[this._ti];
@@ -673,6 +715,91 @@ class EventManager
 
                 // Free the slot
                 this._slot.id = -1;
+            }
+        }
+    }
+
+    //
+    //  DESC: For Mobile: Build a synthetic mouse event from a touch so menu
+    //        controls (which are driven by mouse events) respond to touch.
+    //        x/y are canvas-local CSS pixels; dx/dy are the movement delta.
+    //        NOTE: only used while a menu is active (gameplay is not in its
+    //        hot loop), so the per-event allocation here is acceptable.
+    //
+    _makeMenuMouseEvent( type, x, y, dx, dy )
+    {
+        this._mouseEvt = new MouseEvent( type, { button: 0 } );
+        this._applyGameAdjustedPointerData( this._mouseEvt, x, y, dx, dy );
+        return this._mouseEvt;
+    }
+
+    //
+    //  DESC: For Mobile: Capture a single touch for menu interaction and queue a
+    //        synthetic mousedown (preceded by a move to sync hover/active state).
+    //
+    _menuTouchStart( event )
+    {
+        // Only one touch drives the menu at a time
+        if( this.menuTouchId !== -1 )
+            return;
+
+        this._mt = event.changedTouches[0];
+        this._rect = this.canvas.getBoundingClientRect();
+        this._mtX = this._mt.clientX - this._rect.left;
+        this._mtY = this._mt.clientY - this._rect.top;
+
+        this.menuTouchId = this._mt.identifier;
+        this.menuTouchLastX = this._mtX;
+        this.menuTouchLastY = this._mtY;
+
+        this.queue.push( this._makeMenuMouseEvent( 'mousemove', this._mtX, this._mtY, 0, 0 ) );
+        this.queue.push( this._makeMenuMouseEvent( 'mousedown', this._mtX, this._mtY, 0, 0 ) );
+    }
+
+    //
+    //  DESC: For Mobile: Queue a synthetic mousemove for the captured menu touch,
+    //        deriving the movement delta from the last touch position.
+    //
+    _menuTouchMove( event )
+    {
+        for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
+        {
+            this._mt = event.changedTouches[this._ti];
+            if( this._mt.identifier === this.menuTouchId )
+            {
+                this._rect = this.canvas.getBoundingClientRect();
+                this._mtX = this._mt.clientX - this._rect.left;
+                this._mtY = this._mt.clientY - this._rect.top;
+                this._mtdX = this._mtX - this.menuTouchLastX;
+                this._mtdY = this._mtY - this.menuTouchLastY;
+                this.menuTouchLastX = this._mtX;
+                this.menuTouchLastY = this._mtY;
+
+                this.queue.push( this._makeMenuMouseEvent( 'mousemove', this._mtX, this._mtY, this._mtdX, this._mtdY ) );
+                break;
+            }
+        }
+    }
+
+    //
+    //  DESC: For Mobile: Release the captured menu touch and queue a synthetic
+    //        mouseup so controls (e.g. slider press) reset their state.
+    //
+    _menuTouchEnd( event )
+    {
+        for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
+        {
+            this._mt = event.changedTouches[this._ti];
+            if( this._mt.identifier === this.menuTouchId )
+            {
+                this._rect = this.canvas.getBoundingClientRect();
+                this._mtX = this._mt.clientX - this._rect.left;
+                this._mtY = this._mt.clientY - this._rect.top;
+
+                this.queue.push( this._makeMenuMouseEvent( 'mouseup', this._mtX, this._mtY, 0, 0 ) );
+
+                this.menuTouchId = -1;
+                break;
             }
         }
     }
