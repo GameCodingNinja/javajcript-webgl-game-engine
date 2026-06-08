@@ -11,6 +11,7 @@ import { settings } from '../../../library/utilities/settings';
 import { localStorage } from '../../../library/utilities/localstorage';
 import { menuManager } from '../../../library/gui/menumanager';
 import { soundManager } from '../../../library/sound/soundmanager';
+import { eventManager } from '../../../library/managers/eventmanager';
 import { isMobile } from '../../../library/system/device';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 
@@ -361,6 +362,70 @@ export class DeadZoneSlider_execute
     }
 }
 
+//
+//  Handle init status of left-handed check box (mobile only)
+//
+export class LeftHandedCheckBox_InitStatus
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.control.toggleState = (settings.user.leftHandedTouch === 1);
+
+        return true;
+    }
+}
+
+//
+//  Handle execute of left-handed check box (mobile only)
+//
+export class LeftHandedCheckBox_execute
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        settings.user.leftHandedTouch = this.control.toggleState == true ? 1 : 0;
+        localStorage.set( 'userSettings', settings.user );
+
+        // Apply immediately so the swap takes effect without a restart
+        eventManager.leftHandedTouch = (settings.user.leftHandedTouch === 1);
+
+        return true;
+    }
+}
+
 // 
 //  DESC: Load scripts
 //
@@ -395,4 +460,10 @@ export function loadScripts()
 
     scriptManager.set( 'DeadZoneSlider_execute',
         ( control ) => { return new DeadZoneSlider_execute( control ); } );
+
+    scriptManager.set( 'LeftHandedCheckBox_InitStatus',
+        ( control ) => { return new LeftHandedCheckBox_InitStatus( control ); } );
+
+    scriptManager.set( 'LeftHandedCheckBox_execute',
+        ( control ) => { return new LeftHandedCheckBox_execute( control ); } );
 }

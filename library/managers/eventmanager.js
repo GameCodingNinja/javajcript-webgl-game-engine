@@ -110,6 +110,10 @@ class EventManager
         this.menuTouchId = -1;
         this.menuTouchLastX = 0;
         this.menuTouchLastY = 0;
+
+        // For Mobile: When true, swap which physical screen half is the 'left'
+        // (movement/d-pad) vs 'right' (action) side, for left-handed players.
+        this.leftHandedTouch = false;
     }
 
     //
@@ -618,7 +622,9 @@ class EventManager
                 this._slot.currentX = this._t.clientX;
                 this._slot.currentY = this._t.clientY;
                 this._slot.startTime = performance.now();
-                this._slot.side = (this._t.clientX < this._halfWidth) ? 'left' : 'right';
+                // 'left' = movement/d-pad role, 'right' = action role. The XOR with
+                // leftHandedTouch swaps which physical half maps to which role.
+                this._slot.side = ((this._t.clientX < this._halfWidth) !== this.leftHandedTouch) ? 'left' : 'right';
                 this._slot.dpadLeft = false;
                 this._slot.dpadRight = false;
                 this._slot.dpadUp = false;

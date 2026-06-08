@@ -13,7 +13,7 @@
         <!-- Settings Label -->
         <control controlType="label" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/menu_label.ctrl"/>
-            <position x="-35" y="165" z="0"/>
+            <position x="-35" y="195" z="0"/>
             <fontStringList>
                 <string text="Settings"/>
             </fontStringList>
@@ -26,7 +26,7 @@
         <!-- mouse-only close Button -->
         <control name="close_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/close_button.ctrl"/>
-            <position x="120" y="165" z="0"/>
+            <position x="120" y="195" z="0"/>
             <fontStringList>
                 <string text="x"/>
             </fontStringList>
@@ -40,7 +40,7 @@
         <!-- mouse-only close Button -->
         <control name="back_btn" controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/back_button.ctrl"/>
-            <position x="90" y="165" z="0"/>
+            <position x="90" y="195" z="0"/>
             <fontStringList>
                 <string text="^"/>
             </fontStringList>
@@ -58,7 +58,7 @@
         <!-- Master Sound Check Box -->
         <control name="sound_check_box" controlType="check_box" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
-            <position x="-10" y="105" z="0"/>
+            <position x="-10" y="135" z="0"/>
             <fontStringList>
                 <string text="Sound"/>
                 <string text="x"/>
@@ -75,7 +75,7 @@
         <!-- Sound effect Check Box -->
         <control name="sound_effect_check_box" controlType="check_box" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
-            <position x="20" y="50" z="0"/>
+            <position x="20" y="80" z="0"/>
             <fontStringList>
                 <string text="Effects"/>
                 <string text="x"/>
@@ -92,7 +92,7 @@
         <!-- Sound music Check Box -->
         <control name="sound_music_check_box" controlType="check_box" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
-            <position x="20" y="-5" z="0"/>
+            <position x="20" y="25" z="0"/>
             <fontStringList>
                 <string text="Music"/>
                 <string text="x"/>
@@ -109,12 +109,12 @@
         <!-- Sound dialog Check Box -->
         <control name="sound_dialog_check_box" controlType="check_box" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
-            <position x="20" y="-60" z="0"/>
+            <position x="20" y="-30" z="0"/>
             <fontStringList>
                 <string text="Dialog"/>
                 <string text="x"/>
             </fontStringList>
-            <navigate up="sound_music_check_box" down="dead_zone_slider"/>
+            <navigate up="sound_music_check_box" down="left_handed_check_box"/>
             <scriptList>
                 <script init="SoundDialogCheckBox_InitStatus" prepareOnInit="true" forceUpdate="true"/>
                 <script active="Control_OnActive"/>
@@ -123,15 +123,32 @@
             </scriptList>
         </control>
 
+        <!-- Left-Handed Check Box -->
+        <control name="left_handed_check_box" controlType="check_box" defaultState="inactive">
+            <filePath file="data/objects/2d/menu/control/check_box_245x55.ctrl"/>
+            <position x="-10" y="-85" z="0"/>
+            <fontStringList>
+                <string text="Left-Handed"/>
+                <string text="x"/>
+            </fontStringList>
+            <navigate up="sound_dialog_check_box" down="dead_zone_slider"/>
+            <scriptList>
+                <script init="LeftHandedCheckBox_InitStatus" prepareOnInit="true" forceUpdate="true"/>
+                <script active="Control_OnActive"/>
+                <script select="Control_OnSelect"/>
+                <script execute="LeftHandedCheckBox_execute"/>
+            </scriptList>
+        </control>
+
         <!-- dead zone slider Control -->
         <control name="dead_zone_slider" controlType="slider" defaultState="inactive" mouseSelectDown="true">
             <filePath file="data/objects/2d/menu/control/deadzone_slider.ctrl"/>
-            <position x="0" y="-145" z="0"/>
+            <position x="0" y="-170" z="0"/>
             <settings orientation="HORZ" minValue="0" maxValue="100" defValue="0" incValue="1" displayValueAsInt="true" displayValueDecimalPlaces="2"/>
             <fontStringList>
                 <string text="Touch Deadzone: %d"/>
             </fontStringList>
-            <navigate up="sound_dialog_check_box" down="sound_check_box"/>
+            <navigate up="left_handed_check_box" down="sound_check_box"/>
             <scroll startDelay="750" scrollDelay="100" left="true" right="true"/>
             <scriptList>
                 <script init="DeadZoneSlider_InitStatus" prepareOnInit="true" forceUpdate="true"/>
@@ -145,7 +162,7 @@
 
     <spriteList>
 
-        <sprite objectName="settings_menu_bg"/>
+        <sprite objectName="settings_menu_mobile_bg"/>
     
     </spriteList>
   

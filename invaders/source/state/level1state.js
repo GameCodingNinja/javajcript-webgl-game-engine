@@ -138,6 +138,9 @@ export class Level1State extends CommonState
             eventManager.leftTouchEndCallback = this.onLeftTouchEnd.bind(this);
             eventManager.rightTouchEndCallback = this.onRightTouchEnd.bind(this);
             eventManager.rightTouchCallback = this.onRightTouch.bind(this);
+
+            // Apply the left-handed (swap movement/action sides) preference
+            eventManager.leftHandedTouch = (settings.user.leftHandedTouch === 1);
         }
 
         // Clear the last device used so that the button on start game menu is active by default
@@ -1804,10 +1807,14 @@ export class Level1State extends CommonState
         // Reset boost hold state for next touch
         slot.boostHold = false;
 
-        // Right-to-left swipe across 60%+ of screen width → toggle pause.
+        // Swipe across 60%+ of screen width, away from the action thumb, → toggle pause.
+        // Right-handed: action thumb is on the right, so swipe right-to-left (dx negative).
+        // Left-handed: action thumb is on the left, so swipe left-to-right (dx positive).
         // dx is in CSS pixels (clientX delta), so compare against the CSS width
         // (clientWidth), not the DPR-scaled backing store (canvas.width).
-        if( dx < -(device.canvas.clientWidth * 0.6) )
+        this._swipeDist = device.canvas.clientWidth * 0.6;
+        if( (eventManager.leftHandedTouch && dx > this._swipeDist) ||
+            (!eventManager.leftHandedTouch && dx < -this._swipeDist) )
             eventManager._queueTouchEvent( gameDefs.TOUCH_PAUSE, touchevent.TOUCH_BUTTON_DOWN );
 
         else if( !menuManager.active && (dx * dx + dy * dy) < 400 )

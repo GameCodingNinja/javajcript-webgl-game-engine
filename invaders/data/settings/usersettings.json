@@ -2,6 +2,7 @@
     "version": 1,
     "stickDeadZone": 0.1,
     "touchDeadZone": 15,
+    "leftHandedTouch": 0,
     "soundEnabled": 1,
     "soundEffectEnabled": 1,
     "soundMusicEnabled": 1,
