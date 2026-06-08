@@ -96,6 +96,13 @@ There is a separate mobile fork of the menu, selected at runtime via `isMobile()
 - `data/objects/2d/objectDataList/dataListTable.json`: `(menu_mobile)` reuses the same `.lst` files as `(menu)` (backgrounds, button frames, misc) — only the menu `.cfg`/XML differs, not the texture/object data.
 - When changing menus, update **both** the desktop and `_mobile` variants (and their entries in the list tables) to keep them in sync.
 
+### Deadzone Slider (shared, platform-aware)
+A single `dead_zone_slider` control (in both `settings.menu` and `settings_mobile.menu`) drives two different settings depending on platform, via the shared `DeadZoneSlider_InitStatus`/`DeadZoneSlider_execute` scripts (`source/scripts/settingsmenuscripts.js`) which branch on `isMobile()`:
+- **Mobile** → `settings.user.touchDeadZone`, stored directly in **pixels** (slider value is 1:1 with pixels). Mobile menu: `maxValue="100"`, label `"Touch Deadzone: %d"`.
+- **Gamepad/desktop** → `settings.user.stickDeadZone`, a **0–1 fraction** shown as a percentage (`value × 100` to display, `× 0.01` to store). Desktop menu: `maxValue="80"`, label `"GPad Deadzone: %d%"`.
+- The two menus intentionally use **different `maxValue`s**: gamepad is capped at 80 so 100% can't fully disable the controller (counter-intuitive); touch uses the full 0–100px range.
+- The native units are consumed unchanged by gameplay code — `stickDeadZone` in `eventmanager.handleGamepad()` (added to `ANALOG_STICK_MSG_MAX`), `touchDeadZone` (px) in `eventmanager` touch d-pad and `level1state` touch-Y. Only the slider scripts do the conversion.
+
 ## Code Conventions
 
 ### Naming
@@ -214,6 +221,7 @@ Touch event types are split between library (generic) and game (specific):
   - `eventManager.rightTouchCallback` — per-frame right-side processing (boost hold detection)
   - `eventManager.touchEndCallback` — whole-screen touch end (bypasses d-pad/side split, for future use)
 - Touch coords (`clientX/Y`, and the `dx/dy` deltas passed to callbacks) are in **CSS pixels**. When comparing them against the screen size (e.g. swipe-distance thresholds, touch-Y mapping), use `device.canvas.clientWidth/clientHeight` — NOT `device.canvas.width/height`, which is the DPR-scaled backing store (see the library's "Canvas Sizing & Device Pixel Ratio" note).
+- The above callbacks are the **gameplay** touch path. While a menu is active, touch is instead bridged into the menu system as synthetic mouse events by the library (so sliders/buttons work via touch) — see the library's "Touch → Menu Mouse Bridge" note. The gameplay callbacks are not invoked while a menu is up.
 
 ## Platform Integration
 - **CrazyGames SDK**: Optional, detected at runtime (`window.CrazyGames`)

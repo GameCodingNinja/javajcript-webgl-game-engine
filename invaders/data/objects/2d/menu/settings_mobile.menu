@@ -127,9 +127,9 @@
         <control name="dead_zone_slider" controlType="slider" defaultState="inactive" mouseSelectDown="true">
             <filePath file="data/objects/2d/menu/control/deadzone_slider.ctrl"/>
             <position x="0" y="-145" z="0"/>
-            <settings orientation="HORZ" minValue="0" maxValue="90" defValue="0" incValue="1" displayValueAsInt="true" displayValueDecimalPlaces="2"/>
+            <settings orientation="HORZ" minValue="0" maxValue="100" defValue="0" incValue="1" displayValueAsInt="true" displayValueDecimalPlaces="2"/>
             <fontStringList>
-                <string text="GPad Deadzone: %d%"/>
+                <string text="Touch Deadzone: %d"/>
             </fontStringList>
             <navigate up="sound_dialog_check_box" down="sound_check_box"/>
             <scroll startDelay="750" scrollDelay="100" left="true" right="true"/>

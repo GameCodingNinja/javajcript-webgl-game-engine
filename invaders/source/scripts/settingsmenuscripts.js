@@ -11,6 +11,7 @@ import { settings } from '../../../library/utilities/settings';
 import { localStorage } from '../../../library/utilities/localstorage';
 import { menuManager } from '../../../library/gui/menumanager';
 import { soundManager } from '../../../library/sound/soundmanager';
+import { isMobile } from '../../../library/system/device';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 
 //
@@ -314,7 +315,12 @@ export class DeadZoneSlider_InitStatus
     //
     execute()
     {
-        this.control.setSlider( settings.user.stickDeadZone * 100 );
+        // Mobile: touchDeadZone is in pixels (slider 1:1). Gamepad: stickDeadZone
+        // is a 0-1 fraction shown as a percentage.
+        if( isMobile() )
+            this.control.setSlider( settings.user.touchDeadZone );
+        else
+            this.control.setSlider( settings.user.stickDeadZone * 100 );
 
         return true;
     }
@@ -344,7 +350,12 @@ export class DeadZoneSlider_execute
     //
     execute()
     {
-        settings.user.stickDeadZone = Number((Math.trunc(this.control.curValue) * 0.01).toFixed(2));
+        // Mobile: store the slider value as pixels. Gamepad: store as a 0-1 fraction.
+        if( isMobile() )
+            settings.user.touchDeadZone = Math.round( this.control.curValue );
+        else
+            settings.user.stickDeadZone = Number((Math.trunc(this.control.curValue) * 0.01).toFixed(2));
+
         localStorage.set( 'userSettings', settings.user );
         return true;
     }

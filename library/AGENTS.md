@@ -113,6 +113,18 @@ Mouse events are filtered through `filterMousePos()` which adds game-adjusted pr
 
 Fullscreen scaling maps CSS-pixel event coords into logical space using `settings.displayRes.w / canvas.clientWidth` (NOT `canvas.width`, which is the DPR-scaled backing store, and NOT `devicePixelRatio`).
 
+`filterMousePos()` delegates to `_applyGameAdjustedPointerData(event, x, y, dx, dy)` so the same scaling logic is reused by both real mouse events and the synthetic touch→mouse bridge (below).
+
+### Touch → Menu Mouse Bridge (mobile)
+Menu controls (sliders, buttons, scrollboxes) are driven by **mouse events**. On mobile the gameplay touch path (`touchPool`, d-pad, game callbacks) never reaches the menu system, and browser compatibility mouse events only fire a one-shot tap sequence (no continuous `mousemove` during a drag, `movementX/Y` == 0). So drag-based controls like `UISlider` could not be used by touch.
+
+To fix this, `eventmanager` bridges touch into the menu system **only while `menuManager.active`**:
+- `onTouchStart/Move/End` detect an active menu and capture a **single** touch (`menuTouchId`), calling `_menuTouchStart/Move/End` and `preventDefault()` (the `touchmove` listener is registered `{ passive: false }` for this).
+- `_makeMenuMouseEvent(type, x, y, dx, dy)` builds a real `new MouseEvent('mousedown'|'mousemove'|'mouseup', {button:0})` (button 0 = `menu_select`), runs it through `_applyGameAdjustedPointerData`, and pushes it on the normal event queue — so `menuManager`/controls handle it exactly like a mouse.
+- Touch only gives **absolute** position, so the movement delta (`gameAdjustedMovementX/Y`, used by `UISlider.onMouseMove`) is computed manually from the last touch position (`menuTouchLastX/Y`). Coords are canvas-local via `getBoundingClientRect()`.
+- A synthetic `mouseup` is always emitted on touch end/cancel so control `pressType` never sticks.
+- This path is gated by `isMobile()` (touch listeners are only registered on mobile), so desktop behavior is unaffected.
+
 ## Sound System (sound/)
 Sound playback is managed by `soundManager` with per-type enable/disable via `settings.user`:
 - **Sound Types** (defined in `common/defs.js`): `ESND_EFFECT` (1), `ESND_MUSIC` (2), `ESND_DIALOG` (3) — set from the `type` attribute in sound XML data
