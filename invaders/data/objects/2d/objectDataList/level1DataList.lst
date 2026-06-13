@@ -326,6 +326,15 @@
             </collision>
         </object>
 
+        <object name="boss00_ship">
+            <visual>
+                <texture file="data/textures/enemyShip/boss00.png"/>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <circle radius="25"/>
+            </collision>
+        </object>
+
         <object name="enemy_shot">
             <visual>
                 <texture count="2" file="data/textures/enemyShip/projectile_${NUM}.png"/>

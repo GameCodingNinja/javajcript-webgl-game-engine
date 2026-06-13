@@ -266,7 +266,18 @@ def choose_packing(pairs, width):
 
     if width > 0:
         if width < min_width:
-            raise RuntimeError(f"width ({width}) is too small. Minimum is {min_width}.")
+            offenders = [item for item in pairs if item.pack_width > width]
+            offenders.sort(key=lambda item: item.pack_width, reverse=True)
+            details = "\n".join(
+                f"  - {item.name} ({item.width}x{item.height}, "
+                f"needs {item.pack_width}px with {SPACING}px spacing) at {item.path}"
+                for item in offenders
+            )
+            raise RuntimeError(
+                f"width ({width}) is too small. Minimum is {min_width}.\n"
+                f"The following image(s) are wider than the requested width:\n"
+                f"{details}"
+            )
         packed = pack_with_width(pairs, width)
         if packed is None:
             raise RuntimeError(f"Could not pack with width {width}.")

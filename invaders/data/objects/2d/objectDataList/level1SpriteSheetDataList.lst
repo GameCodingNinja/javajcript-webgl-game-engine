@@ -501,6 +501,19 @@
             </collision>
         </object>
 
+        <object name="boss00_ship">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="boss00"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <circle radius="25"/>
+            </collision>
+        </object>
+
         <object name="enemy_shot">
             <visual>
                 <mesh>
