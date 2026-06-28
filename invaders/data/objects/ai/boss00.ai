@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<ai>
+
+    <node name="AI_Boss00">
+
+        <head script="AI_Boss00_Head"/>
+
+        <node>
+
+            <composite script="AI_Composite" condition="all_success"/>
+
+            <node>
+
+                <leaf script="AI_Boss00_Descend"/>
+
+            </node>
+
+            <node>
+
+                <leaf script="AI_Boss00_DestroyBuilding"/>
+
+            </node>
+
+            <node>
+
+                <decorator script="AI_Decorator" type="repeater"/>
+
+                <node>
+
+                    <composite script="AI_Composite" condition="all_success"/>
+
+                    <node>
+
+                        <leaf script="AI_Boss00_PickAndMoveToBuilding"/>
+
+                    </node>
+
+                    <node>
+
+                        <leaf script="AI_Boss00_DestroyBuilding"/>
+
+                    </node>
+
+                </node>
+
+            </node>
+
+        </node>
+
+    </node>
+
+</ai>
