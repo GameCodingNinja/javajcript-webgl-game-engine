@@ -36,11 +36,13 @@ import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 import * as enemy00aiscripts from '../scripts/enemy00aiscripts';
 import * as enemy02aiscripts from '../scripts/enemy02aiscripts';
+import * as boss00aiscripts from '../scripts/boss00aiscripts';
 
 // AI_Enemy00 AI_Enemy01 AI_Enemy02
 import enemy00_ai from 'raw-loader!../../data/objects/ai/enemy00.ai';
 import enemy01_ai from 'raw-loader!../../data/objects/ai/enemy01.ai';
 import enemy02_ai from 'raw-loader!../../data/objects/ai/enemy02.ai';
+import boss00_ai from 'raw-loader!../../data/objects/ai/boss00.ai';
 
 const MOVE_NULL = -1,
       MOVE_LEFT = 0,
@@ -67,6 +69,7 @@ const MOVE_NULL = -1,
       ENEMY02_MAX_SHIP_HIT_COUNT = 60,
       ENEMY02_SHIP_HIT_INC = 5,
       ENEMY00_SHIP_HIT_COUNT = 3,
+      BOSS00_SHIP_HIT_VALUE = 10,
       ENEMY01_LEVEL_THRESHOLD = 5,
       ENEMY02_LEVEL_THRESHOLD = 3,
       MAX_ENEMY00 = 30,
@@ -329,6 +332,10 @@ export class Level1State extends CommonState
         this.healthSpawnTimer.disable();
         this.enemy00MaxTimer = new Timer(1000 * 20);
         this.enemy00Max = MIN_ENEMY00;
+
+        // TEMP Phase 2 test: spawn the boss 10s after the game starts
+        this.bossTestSpawnTimer = new Timer(1000 * 10);
+        this.bossSpawned = false;
         this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
         this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
 
@@ -362,6 +369,7 @@ export class Level1State extends CommonState
 
         enemy00aiscripts.clearAIData();
         enemy02aiscripts.clearAIData();
+        boss00aiscripts.clearAIData();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_enemy_shot_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
         .then(() =>
@@ -510,6 +518,22 @@ export class Level1State extends CommonState
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
                 }
             }
+            // Player collides into the boss (the boss damages the player when it barrels past)
+            else if( spriteA.parentNode.userId == gameDefs.BOSS00_SHIP_ID )
+            {
+                // Keep the boss collidable (the top of this branch disabled it)
+                spriteA.collisionComponent.enable = true;
+                if(this.playerShip.collisionTimer.expired(true))
+                {
+                    this.playerShip.sprite.prepareScript( 'hit', spriteA );
+                    if( GOD_MODE == false )
+                    {
+                        this.playerShip.progressBar.incCurrentValue( -20 );
+                        this.playerShip.progressBar.setVisible( true );
+                    }
+                    this.groupPlayer.play( 'EXPLOSION_Metllic' );
+                }
+            }
             // Player collides with health character
             else if( spriteA.parentNode.userId == HEALTH_CHARACTER )
             {
@@ -634,6 +658,44 @@ export class Level1State extends CommonState
             // Inc the hit count
             if( this.enemy02ShipHitCount < ENEMY02_MAX_SHIP_HIT_COUNT )
                 this.enemy02ShipHitCount + ENEMY02_SHIP_HIT_INC;
+        }
+        // Player shot the boss
+        else if( spriteB.parentNode.userId == gameDefs.BOSS00_SHIP_ID )
+        {
+            // Stop any more collision detection for the shot
+            spriteA.collisionComponent.enable = false;
+
+            // The boss only takes damage while attacking a building (hit bar active)
+            if( spriteB.vulnerable )
+            {
+                // Explosion + hide the player shot
+                spriteB.prepareScript( 'hit', spriteA );
+                this.groupPlayer.play( 'enemy_explosion' );
+
+                // Drain the hit bar
+                spriteB.bossHitBar -= 1;
+                if( spriteB.hitBarCtrl )
+                    spriteB.hitBarCtrl.setCurrentValue( spriteB.bossHitBar );
+
+                // Hit bar depleted -> interrupt the attack and cost the boss a health point
+                if( spriteB.bossHitBar <= 0 )
+                {
+                    spriteB.vulnerable = false;
+                    spriteB.interrupted = true;
+
+                    spriteB.bossHealth -= 1;
+                    if( spriteB.healthBarCtrl )
+                        spriteB.healthBarCtrl.setCurrentValue( spriteB.bossHealth );
+
+                    // Health depleted -> the boss dies
+                    if( spriteB.bossHealth <= 0 )
+                    {
+                        spriteB.collisionComponent.enable = false;
+                        spriteB.prepareScript( 'die', spriteA );
+                        this.updateHudProgress( BOSS00_SHIP_HIT_VALUE );
+                    }
+                }
+            }
         }
         // Player shot health character
         else if( spriteB.parentNode.userId == HEALTH_CHARACTER )
@@ -881,6 +943,10 @@ export class Level1State extends CommonState
                             this.train.timer.resume();
                             this.healthSpawnTimer.resume();
                             this.enemy00MaxTimer.resume();
+
+                            // TEMP Phase 2 test: (re)start the 10s boss spawn countdown from gameplay start
+                            if( !this.bossSpawned )
+                                this.bossTestSpawnTimer.reset();
 
                             this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                             if(this._gsnd.isPaused())
@@ -1272,6 +1338,9 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
+        // TEMP Phase 1 test: enemy00 spawning disabled to isolate boss00
+        return;
+
         // Create enemy00 and position it outside of the view
         if( this.enemy00SpawnTimer.expired(true) )
         {
@@ -1474,6 +1543,19 @@ export class Level1State extends CommonState
             // Normalize movement to elapsed time so varying frame durations
             // don't cause visible speed-ups / slow-downs (especially on mobile touch)
             this._easingVal *= highResTimer.timeScale;
+
+            // TEMP Phase 2 test: spawn the boss above the screen 10s in so its AI descends onto a far building
+            if( !this.bossSpawned && this.bossTestSpawnTimer.expired( false, true ) )
+            {
+                this.bossSpawned = true;
+                this._bossNode = this.enemyStrategy.create('boss00_ship');
+                this._bossNode.get().setPosXYZ( 0, settings.deviceRes.h );
+
+                // The boss head is a SpriteNode (it has children), whose init() only prepares
+                // the children's prepareOnInit scripts - not the head sprite's own. Prepare the
+                // head sprite's AI + collision scripts manually.
+                this._bossNode.get().prepareScriptOnInit();
+            }
 
             // Handle the enemy spawn
             this.handleEnemySpawn();
@@ -1720,6 +1802,7 @@ export class Level1State extends CommonState
         // Clear out any AI data dictionaries
         enemy00aiscripts.clearAIData();
         enemy02aiscripts.clearAIData();
+        boss00aiscripts.clearAIData();
         
         objectDataManager.freeGroup( ['(level_1)'] );
 
@@ -1846,7 +1929,8 @@ export function load()
         .then(() => aiManager.loadFromXml( [
             genFunc.stringLoadXML( enemy00_ai ),
             genFunc.stringLoadXML( enemy01_ai ),
-            genFunc.stringLoadXML( enemy02_ai )] ))
+            genFunc.stringLoadXML( enemy02_ai ),
+            genFunc.stringLoadXML( boss00_ai )] ))
 
         // Load and execute all the strategy loaders.
         .then(() => strategyLoader.loadGroup( '-level1-' ))

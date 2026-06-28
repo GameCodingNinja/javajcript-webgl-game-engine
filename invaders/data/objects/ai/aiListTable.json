@@ -2,5 +2,6 @@
     "|enemy|": [
         "data/objects/ai/enemy00.ai",
         "data/objects/ai/enemy01.ai",
-        "data/objects/ai/enemy02.ai"]
+        "data/objects/ai/enemy02.ai",
+        "data/objects/ai/boss00.ai"]
 }

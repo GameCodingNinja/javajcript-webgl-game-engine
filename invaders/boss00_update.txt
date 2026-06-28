@@ -1,0 +1,11 @@
+update the plan with this new boss info.
+Both boss progress bars will start out full with all green.
+The health bar will be from 0 to 4
+The hit bar will be from 0 to 30.
+As the player shoots the boss, the hit progress bar will go down 1 value per hit until depleted.
+When the hit progress bar is depleted, the boss takes no more hits/damage, his heal bar will go down 1. he'll stop attacking the building, select the new building and move quickly to that building.
+The goal of the player is to interrupt the boss, cause damage before it destroyed the building
+If the boss succeeds in destroying the building before the player can max out the hit meter, the boss movies quickly to the next building, the hit meter is replenished and the boss takes no damage
+The boss always picks a builing far away from the player to force the player to move quickly to where the boss is. Randomly pick a building that far away from the player if possible
+Have the boss move in the direction of the player so that the player receives some hit damage
+The boss battle disables enemy01 and enemy02 from spawning

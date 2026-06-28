@@ -57,6 +57,68 @@
 
     </node>
 
+    <node name="boss00_ship" id="-20">
+
+        <!-- Null head node carries the collision; children render in order:
+             beam (behind) -> body (front) -> health bar (on top) -->
+        <sprite objectName="null_boss00_ship">
+            <scale x="1" y="1" z="1"/>
+            <scriptList>
+                <script ai_boss="AI_Boss00" prepareOnInit="true" ai="true"/>
+                <script hit="Boss00Ship_Hit"/>
+                <script die="Boss00Ship_Die"/>
+                <script collision="EnemyShip_CheckForCollideWithPlayer" prepareOnInit="true"/>
+            </scriptList>
+        </sprite>
+
+        <node name="boss00_beam">
+
+            <sprite visible="false" useSizeForRadiusCalc="false">
+                <position x="0" y="-280" z="0"/>
+            </sprite>
+
+        </node>
+
+        <node name="boss00_body">
+
+            <sprite useSizeForRadiusCalc="false"/>
+
+        </node>
+
+        <node name="UIBossHealthBar" type="uiControlNode">
+
+            <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
+                <position x="0" y="220" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <spriteLst>
+                    <sprite objectName="boss00_health_frame"/>
+                    <sprite objectName="boss00_health_solid"/>
+                </spriteLst>
+
+                <!-- stencil mask -->
+                <stencilMask objectName="" spriteIndex="1" />
+            </uiProgressBar>
+
+        </node>
+
+        <node name="UIBossHitBar" type="uiControlNode">
+
+            <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
+                <position x="0" y="205" z="0"/>
+                <scale x="1" y="1" z="1"/>
+                <spriteLst>
+                    <sprite objectName="boss00_hit_frame"/>
+                    <sprite objectName="boss00_hit_solid"/>
+                </spriteLst>
+
+                <!-- stencil mask -->
+                <stencilMask objectName="" spriteIndex="1" />
+            </uiProgressBar>
+
+        </node>
+
+    </node>
+
     <!-- Not an enemy but the player needs to collide with it to gain health -->
     <node name="health_character" id="-50">
 

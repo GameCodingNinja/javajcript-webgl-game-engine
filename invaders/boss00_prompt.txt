@@ -1,0 +1,16 @@
+Load the agents file.
+develop a plan and write it to a file called boss00_plan.md
+
+We are adding a new enemy. This new enemy is a boss named boss00 and the texture can be found in "data/objects/2d/objectDataList/level1SpriteSheetDataList.lst".
+add a new ai for the boss00 here "data/objects/ai/aiListTable.json". Look at the other AI's and generate one accordingly.
+you can find the AI scripts here to examine "source/scripts".
+For the boss00, create a strategy "data/objects/strategy/strageyListTable.json" (look at player ship for an example).
+Create it's AI to have it descend, randomly pick a building that's not currently picked, move to it, destry it, repeat.
+The way the boss will distroy a building is will stop over it, animate a beam over it for a few seconds. When the beam goes away, the building will be gone just like if it was destroyed by enemy00.
+The beam is just a rectangle piece of art that starts out thin as it becomes visible, expands to cover the width of the building (about 1 second), three seconds later the building is destroyed.
+The beam narrows and disapears as the building is seen to fall. 
+This will repeat until the player kills the boss.
+boss00 will also show a health bar above letting the player know how much damage is left.
+
+make sure the plan is multiphase and stops at each phase and asks for the user to review
+create an open questions section for the plan so that any ambiguity in the plan can be addressed by the user
