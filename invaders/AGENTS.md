@@ -122,6 +122,8 @@ Enemies (including bosses — a boss is just an enemy) live in the **`_enemy_` s
 
 **Progress bars / UI on an entity:** add `<node type="uiControlNode"><uiProgressBar>...` children (frame sprite + solid fill + `<stencilMask spriteIndex="1"/>`). Access them from an AI/collision script via `sprite.parentNode.findChild('NodeName').get()`, then `setProgressBarMax / setCurrentValue / setVisible`. Cache the control refs on the sprite (e.g. `sprite.healthBarCtrl`) so both the AI and the collision handler can reach them.
 
+**Boss music:** call `Level1State.startBossMusic()` when the boss battle starts (crossfades the game music to `LOOP_City-Showdown`), and dispatch `gameDefs.EGE_BOSS_DEFEATED` from the boss's die script (handled by `endBossMusic()`, which crossfades back). Any code that fades/pauses/resumes the **gameplay** music must get the track via `getGameMusic()` (not the `LOOP_Techno_in_Space_*` name directly), so pause/resume/game-over work during a boss battle. The 5-minute track rotation is skipped while boss music is active.
+
 **Per-entity state** lives on the head sprite (e.g. `sprite.targetBuilding`, `sprite.vulnerable`, `sprite.bossHealth`), mirroring how `enemy00` stores `hitCount`/`targetBuilding`. The collision handler reads/writes this state on `spriteB`.
 
 ### Adding an Enemy Projectile

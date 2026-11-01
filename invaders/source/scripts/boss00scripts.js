@@ -11,6 +11,8 @@ import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as genFunc from '../../../library/utilities/genfunc';
+import { soundManager } from '../../../library/sound/soundmanager';
+import { eventManager } from '../../../library/managers/eventmanager';
 import * as gameDefs from '../state/gamedefs';
 
 var gWrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
@@ -278,6 +280,9 @@ class Boss00Ship_Die
         // Remove the AI script so the boss stops attacking
         sprite.scriptComponent.remove( 'AI_Boss00' );
 
+        // Let the level know the boss battle is over (switches back to the game music)
+        eventManager.dispatchEvent( gameDefs.EGE_BOSS_DEFEATED );
+
         // Hide the beam
         this._beam = sprite.parentNode.findChild('boss00_beam');
         if( this._beam )
@@ -317,6 +322,8 @@ class Boss00Ship_Die
 
         if( this.easingY.isFinished() )
         {
+            soundManager.play( '(level_1)', 'boss_crash' );
+
             // We are done with this sprite, queue it up to be recycled
             this.enemyStrategy.recycle( this.sprite.parentNode );
 

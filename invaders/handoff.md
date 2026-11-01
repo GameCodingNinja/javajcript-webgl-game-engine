@@ -19,6 +19,7 @@ It currently spawns from **temporary test code**, not a real game trigger. All o
 5. Targets only buildings that are not destroyed and not already targeted. With no buildings left, it just sits (the game is over anyway).
 6. Free-flying wrap-around movement (shortest wrapped path).
 7. Health 0 → beam/bars hidden, shaken building restored, boss falls fast while spinning, then is recycled. Player scores `BOSS00_SHIP_HIT_VALUE` (10).
+8. **Music:** on spawn, the game music crossfades (2s, `BOSS00_MUSIC_FADE_MS`) to `LOOP_City-Showdown`. On death (`EGE_BOSS_DEFEATED`), it crossfades back to the track that was playing, and the 5-minute rotation timer restarts. Pause/resume/game over use `getGameMusic()`, so they handle the boss track. **Crash sound:** `boss_crash` plays when the death fall lands.
 
 ## How the missile behaves
 - **When:** only while the beam is out (DestroyBuilding `destroying` phase, not after an interrupt), and only if the boss is in view and the player is alive. About one per second (1000ms ± 200). First missile about 1s after the beam appears. Stops on retract, interrupt, travel, and boss death.
@@ -27,7 +28,7 @@ It currently spawns from **temporary test code**, not a real game trigger. All o
 - **Far-side loop:** if it launched on the side away from the player, it doesn't hard turn back across the boss. It turns **outward** at 120°/s (wide enough to clear the boss body) and loops back around. Once its natural turn toward the player matches the loop direction, normal homing takes over.
 - **Final run (dodge window):** once within 200px **and** its nose is within 10° of the player, it stops steering and flies straight. A player who sits still gets hit, one who moves dodges it, and the missile shoots out the other side.
 - **Hit:** 30 player health (unless `GOD_MODE`), player explosion + `player_hit` sound, missile removed. Player shots pass through missiles. Missiles expire after 6s or when they leave the screen vertically.
-- **No launch sound yet** — waiting for new audio.
+- **Launch sound:** each launch plays the random `boss_rocket_launch` playlist (`enemySound.lst`, 3 rocket sounds at volume 0.5).
 - Tried and rejected by the user: a straight shot, hard homing (undodgeable), a sharp zig-zag, and random swirling wander.
 
 ## Key files
@@ -60,7 +61,7 @@ The user asked to **keep** this for now. Also note **`GOD_MODE = true`** (~L91),
 ## Not done yet
 - **Real spawn trigger** (TBD).
 - **Final spawn rules during the fight**: enemy00 keeps spawning; enemy01/02 are paused, then re-enabled with timers restarted when the boss dies.
-- Sound (Q10), including the missile launch sound.
+- Sound (Q10) is done: missile launch, boss crash, and boss battle music.
 - Optional: bigger multi-burst death explosion (idea: several staggered `explode` sprites scattered over the body).
 
 ## Known review findings (user chose not to fix — leave unless asked)
@@ -94,4 +95,4 @@ Uncommitted: the missile work (`enemyshot.strategy`, `boss00aiscripts.js`, `boss
 ## Suggested next steps
 1. Add the real boss trigger and remove the TEMP code (and restore `GOD_MODE = false`).
 2. Apply the enemy spawn rules for the fight (pause/resume enemy01/02).
-3. Sound (missile launch, boss) and a bigger death explosion.
+3. A bigger death explosion. When the real trigger replaces the TEMP spawn, keep the `startBossMusic()` call with the spawn.

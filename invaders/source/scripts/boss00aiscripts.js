@@ -70,6 +70,8 @@ class AI_Boss00_base extends aiNode
                     this._shootSprite = this.data.enemyShotStrategy.create('boss_shot').get();
                     this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite );
 
+                    this.data.groupPlayer.play( 'boss_rocket_launch' );
+
                     this.sprite.shootTime = gameDefs.BOSS00_FIRE_INTERVAL +
                         genFunc.randomInt( -gameDefs.BOSS00_FIRE_JITTER, gameDefs.BOSS00_FIRE_JITTER );
                 }

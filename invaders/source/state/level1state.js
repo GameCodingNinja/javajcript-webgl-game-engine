@@ -88,7 +88,7 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
       MAX_MINI_BOSS_STREAK = 2,
-      GOD_MODE = false;
+      GOD_MODE = true;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -336,6 +336,10 @@ export class Level1State extends CommonState
         // TEMP Phase 2 test: spawn the boss 10s after the game starts
         this.bossTestSpawnTimer = new Timer(1000 * 10);
         this.bossSpawned = false;
+
+        // Boss battle music is playing instead of the game music
+        this.bossMusicActive = false;
+
         this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
         this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
 
@@ -888,7 +892,7 @@ export class Level1State extends CommonState
                         if( asnd.isPaused() )
                         {
                             // Fade out the game music
-                            let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                            let gsnd = this.getGameMusic();
                             scriptSingleton.prepare( 'sound_fade', 0.0, 500, gsnd, null, () => gsnd.pause() );
 
                             // Start the ambient music
@@ -941,7 +945,7 @@ export class Level1State extends CommonState
                                 scriptSingleton.prepare( 'sound_fade', 0.0, 500, asnd, null, () => asnd.pause() );
 
                             // Start the game music
-                            let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                            let gsnd = this.getGameMusic();
                             scriptSingleton.prepare( 'sound_fade', gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true) );
                         }
 
@@ -994,7 +998,7 @@ export class Level1State extends CommonState
                 menuManager.getTree('pause_tree').transitionMenu();
 
                 // Fade out the game music
-                let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+                let gsnd = this.getGameMusic();
                 scriptSingleton.prepare( 'sound_fade', 0.0, 500, gsnd, null, () => gsnd.pause() );
 
                 // Start the ambient music
@@ -1072,6 +1076,10 @@ export class Level1State extends CommonState
             {
                 if( !menuManager.active )
                     menuManager.getTree('pause_tree').transitionMenu();
+            }
+            else if( event.type === gameDefs.EGE_BOSS_DEFEATED )
+            {
+                this.endBossMusic();
             }
             else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
             {
@@ -1200,8 +1208,8 @@ export class Level1State extends CommonState
     //
     handleMusicChange()
     {
-        // Change out the music every 5 minutes
-        if( this.musicTimer.expired(true) )
+        // Change out the music every 5 minutes (not during the boss battle)
+        if( !this.bossMusicActive && this.musicTimer.expired(true) )
         {
             // Fade out the current game music
             let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
@@ -1213,6 +1221,54 @@ export class Level1State extends CommonState
             let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
             scriptSingleton.prepare( 'sound_fade', asnd.defaultVolume, 500, asnd, () => asnd.play(true) );
         }
+    }
+
+    // 
+    //  DESC: Get the music that should be playing during gameplay (boss battle or game music)
+    //
+    getGameMusic()
+    {
+        if( this.bossMusicActive )
+            return soundManager.getSound( '(music)', 'LOOP_City-Showdown' );
+
+        return soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
+    }
+
+    // 
+    //  DESC: Boss battle started - fade out the game music and fade in the boss music
+    //
+    startBossMusic()
+    {
+        if( this.bossMusicActive )
+            return;
+
+        let gsnd = this.getGameMusic();
+        scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, gsnd, null, () => gsnd.pause() );
+
+        this.bossMusicActive = true;
+
+        let bsnd = this.getGameMusic();
+        scriptSingleton.prepare( 'sound_fade', bsnd.defaultVolume, gameDefs.BOSS00_MUSIC_FADE_MS, bsnd, () => bsnd.play(true) );
+    }
+
+    // 
+    //  DESC: Boss defeated - fade out the boss music and fade the game music back in
+    //
+    endBossMusic()
+    {
+        if( !this.bossMusicActive )
+            return;
+
+        let bsnd = this.getGameMusic();
+        scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, bsnd, null, () => bsnd.stop() );
+
+        this.bossMusicActive = false;
+
+        let gsnd = this.getGameMusic();
+        scriptSingleton.prepare( 'sound_fade', gsnd.defaultVolume, gameDefs.BOSS00_MUSIC_FADE_MS, gsnd, () => gsnd.playOrResume(true) );
+
+        // Restart the 5 minute music rotation so it doesn't swap tracks right after the boss
+        this.musicTimer.reset();
     }
 
     // 
@@ -1569,6 +1625,9 @@ export class Level1State extends CommonState
                 // (already prepared by resetTree) isn't double-prepared.
                 if( !this._bossNode.get().scriptComponent.isActive() )
                     this._bossNode.get().prepareScriptOnInit();
+
+                // Boss battle music
+                this.startBossMusic();
             }
 
             // Handle the enemy spawn
@@ -1833,6 +1892,9 @@ export class Level1State extends CommonState
             let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[i]}` );
             scriptSingleton.prepare( 'delayed_execution', 500, null, () => gsnd.stop() );
         }
+
+        let bsnd = soundManager.getSound( '(music)', 'LOOP_City-Showdown' );
+        scriptSingleton.prepare( 'delayed_execution', 500, null, () => bsnd.stop() );
     }
 
     //

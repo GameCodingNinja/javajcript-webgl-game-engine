@@ -8,6 +8,7 @@
 
 // EGameEvent
 export const EGE_BUILDING_DESTROYED     = 2000,
+             EGE_BOSS_DEFEATED          = 2001,
              GAMEPLAY_LOOPING_WRAP_DIST = 5600,
              PLAYER_SHIP_ID = 0,
              PLAYER_SHOT_ID = 1,
@@ -42,6 +43,7 @@ export const EGE_BUILDING_DESTROYED     = 2000,
              BOSS00_MISSILE_ANIM_MS = 80,
              BOSS00_MISSILE_LIFETIME = 6000,
              BOSS00_MISSILE_DAMAGE = 30,
+             BOSS00_MUSIC_FADE_MS = 2000,
              pixel_per_sec_100 = 100,
              pixel_per_sec_200 = 200,
              pixel_per_sec_300 = 300,
