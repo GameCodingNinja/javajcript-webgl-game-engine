@@ -23,7 +23,7 @@ import * as gameDefs from '../state/gamedefs';
 //
 class Explode_animation
 {
-    constructor( sprite, projectileSprite, shipSprite )
+    constructor( sprite, projectileSprite, shipSprite, offsetX = 0, offsetY = 0 )
     {
         // Setup the animation
         this.explodeAnim = new utilScripts.PlayAnim();
@@ -32,13 +32,14 @@ class Explode_animation
         this.dif = new Point();
 
         // Continues the init
-        this.recycle( sprite, projectileSprite, shipSprite );
+        this.recycle( sprite, projectileSprite, shipSprite, offsetX, offsetY );
     }
 
     // 
     //  DESC: Recycle the script
+    //        offsetX/offsetY optionally shift the explosion from its computed position
     //
-    recycle( sprite, projectileSprite, shipSprite )
+    recycle( sprite, projectileSprite, shipSprite, offsetX = 0, offsetY = 0 )
     {
         this.sprite = sprite;
         this.shipSprite = shipSprite
@@ -76,6 +77,9 @@ class Explode_animation
                 this._xPos -= 10;
             }
         }
+
+        this._xPos += offsetX;
+        this._yPos += offsetY;
 
         // Create an explode graphic node and translate it to the projectile sprite
         this.explodeAnim.sprite.setPosXYZ( this._xPos, this._yPos );
@@ -283,7 +287,7 @@ class HealthCharacter_Hit
 export function loadScripts()
 {
     scriptManager.set( 'Explode_animation',
-            ( sprite, projectileSprite, shipSprite ) => { return new Explode_animation( sprite, projectileSprite, shipSprite ); } );
+            ( sprite, projectileSprite, shipSprite, offsetX, offsetY ) => { return new Explode_animation( sprite, projectileSprite, shipSprite, offsetX, offsetY ); } );
 
     scriptManager.set( 'EnemyShip_CheckForCollideWithPlayer',
         ( sprite ) => { return new EnemyShip_CheckForCollideWithPlayer( sprite ); } );

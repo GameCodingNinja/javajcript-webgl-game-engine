@@ -308,6 +308,10 @@ class Boss00Ship_Die
 
         this.rotate = -0.003;
         this.rotateVelocity = -0.00001;
+
+        // Death explosion - first burst right away
+        this.burstCount = gameDefs.BOSS00_DEATH_BURSTS;
+        this.burstTime = 0;
     }
 
     // 
@@ -319,6 +323,29 @@ class Boss00Ship_Die
         this.sprite.setPosXYZ( this.sprite.pos.x, this.easingY.getValue() );
         this.sprite.incRotXYZ( 0, 0, (this.rotate * highResTimer.elapsedTime) );
         this.rotate += this.rotateVelocity * highResTimer.elapsedTime;
+
+        // Death explosion: staggered bursts of random size scattered over the body. Each burst
+        // follows the boss as it falls (Explode_animation tracks its offset from the boss).
+        if( this.burstCount > 0 )
+        {
+            this.burstTime -= highResTimer.elapsedTime;
+            if( this.burstTime <= 0 )
+            {
+                this.burstTime = gameDefs.BOSS00_DEATH_BURST_INTERVAL;
+                --this.burstCount;
+
+                this._explodeSprite = this.enemyStrategy.create('explode').get();
+                this._explodeSprite.prepareScript( 'explode', this.sprite, this.sprite,
+                    genFunc.randomArbitrary( -gameDefs.BOSS00_DEATH_BURST_SPREAD_X, gameDefs.BOSS00_DEATH_BURST_SPREAD_X ),
+                    genFunc.randomArbitrary( -gameDefs.BOSS00_DEATH_BURST_SPREAD_Y, gameDefs.BOSS00_DEATH_BURST_SPREAD_Y ) );
+
+                // Pooled explode nodes are reset (scale 1) when reused, so this doesn't leak to other explosions
+                this._scale = genFunc.randomArbitrary( gameDefs.BOSS00_DEATH_BURST_SCALE_MIN, gameDefs.BOSS00_DEATH_BURST_SCALE_MAX );
+                this._explodeSprite.setScaleXYZ( this._scale, this._scale );
+
+                soundManager.play( '(level_1)', 'enemy_explosion' );
+            }
+        }
 
         if( this.easingY.isFinished() )
         {

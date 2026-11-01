@@ -15,8 +15,8 @@ It currently spawns from **temporary test code**, not a real game trigger. All o
 1. Spawns above the screen and descends onto a building **far from the player** (≥ half the wrap distance away).
 2. Over the building: beam widens to 33px over 1s. Then the destroy countdown (7s) starts; after 1s the building begins shaking, faster and harder until it's destroyed (shake only moves down — there's no art above/below the building).
 3. Boss is **vulnerable only while parked over a building**. Health and hit bars are shown then, hidden while moving.
-4. Each player hit lowers the hit bar. When it's empty: boss stops taking hits, loses 1 health, beam retracts, pauses ~1s so the player sees the change, then flies fast to the next building (and can ram the player on the way). Hit bar refills instantly on arrival.
-5. Targets only buildings that are not destroyed and not already targeted. With no buildings left, it just sits (the game is over anyway).
+4. Each player hit lowers the hit bar. When it's empty: boss stops taking hits, loses 1 health, beam retracts, pauses ~1s so the player sees the change, then flies fast to the next building. **Half the time (`BOSS00_CHARGE_CHANCE` 0.5) it charges**: it travels to the building in the direction of the player (going the long way around the map if needed), at its normal height and speed, so it can ram the player on the way (only if the player is alive and the boss is on screen). Ramming the player costs 20 health. Hit bar refills instantly on arrival.
+5. Targets only buildings that are not destroyed and not already targeted. **First descent:** a random building in the half farthest from the player. **Each later move:** a random building at least `BOSS00_MIN_TARGET_DIST` (2000px = 10 buildings, wrap-aware) from the boss. If only closer buildings are left, it picks one of them and **always goes the long way around** the map. With no buildings left, it just sits (the game is over anyway).
 6. Free-flying wrap-around movement (shortest wrapped path).
 7. Health 0 → beam/bars hidden, shaken building restored, boss falls fast while spinning, then is recycled. Player scores `BOSS00_SHIP_HIT_VALUE` (10).
 8. **Music:** on spawn, the game music crossfades (2s, `BOSS00_MUSIC_FADE_MS`) to `LOOP_City-Showdown`. On death (`EGE_BOSS_DEFEATED`), it crossfades back to the track that was playing, and the 5-minute rotation timer restarts. Pause/resume/game over use `getGameMusic()`, so they handle the boss track. **Crash sound:** `boss_crash` plays when the death fall lands.
@@ -45,7 +45,7 @@ It currently spawns from **temporary test code**, not a real game trigger. All o
 | `source/state/startupstate.js` | Script registration |
 
 ## Current tunables (`gamedefs.js`, user-tuned — don't overwrite)
-**Boss:** health 5, hit bar 20, destroy 7000ms, interrupt pause 1000ms, beam width 33, beam grow 1s / retract 0.4s, shake delay 1000ms, shake interval 80→15ms, shake amp 2→7, move 1300 px/s, descend 300 px/s, resting Y 55.
+**Boss:** charge chance 0.5, health 5, hit bar 20, destroy 7000ms, interrupt pause 1000ms, beam width 33, beam grow 1s / retract 0.4s, shake delay 1000ms, shake interval 80→15ms, shake amp 2→7, move 1300 px/s, descend 300 px/s, resting Y 55.
 
 **Missile:** `BOSS00_SHOT_ID` -21, `FIRE_INTERVAL` 1000ms, `FIRE_JITTER` 200ms, `MISSILE_SPEED` 0.3 px/ms, `TURN_RATE` 180°/s, `LAUNCH_TIME` 250ms, `LOOP_TURN_RATE` 120°/s, `LOCK_DIST` 200px, `LOCK_ALIGN` 10°, `SPAWN_OFFSET_X` 30px, `ANIM_MS` 80, `LIFETIME` 6000ms, `DAMAGE` 30. Scale (2×) is in the strategy, not code.
 
@@ -62,7 +62,7 @@ The user asked to **keep** this for now. Also note **`GOD_MODE = true`** (~L91),
 - **Real spawn trigger** (TBD).
 - **Final spawn rules during the fight**: enemy00 keeps spawning; enemy01/02 are paused, then re-enabled with timers restarted when the boss dies.
 - Sound (Q10) is done: missile launch, boss crash, and boss battle music.
-- Optional: bigger multi-burst death explosion (idea: several staggered `explode` sprites scattered over the body).
+- Death explosion is done: 10 staggered bursts (2–4× scale) scattered over the body, each playing `enemy_explosion` (`BOSS00_DEATH_BURST_*`).
 
 ## Known review findings (user chose not to fix — leave unless asked)
 - Collision is disabled during the descent.

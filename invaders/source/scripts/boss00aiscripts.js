@@ -128,13 +128,11 @@ class AI_Boss00_base extends aiNode
     }
 
     // 
-    //  DESC: Select a building that is not destroyed, not already targeted, and far
-    //        from the player. Randomly pick among the farthest candidates.
-    //        Returns the building sprite or null if none are available.
+    //  DESC: Gather the buildings the boss can target (not destroyed, not already targeted)
+    //        into the pre-allocated candidate array. Returns the candidate count.
     //
-    selectFarBuilding()
+    gatherTargets()
     {
-        // Gather valid (not destroyed, not already targeted) candidates
         this._candAry.length = 0;
         for( this._i = 0; this._i < this.data.buildings.length; ++this._i )
         {
@@ -159,7 +157,16 @@ class AI_Boss00_base extends aiNode
                 this._candAry.push( this._building );
         }
 
-        if( this._candAry.length === 0 )
+        return this._candAry.length;
+    }
+
+    // 
+    //  DESC: Select the building for the first descent: far from the player.
+    //        Randomly picks among the farthest candidates. Returns null if none are available.
+    //
+    selectDescendBuilding()
+    {
+        if( this.gatherTargets() === 0 )
             return null;
 
         // Find the farthest candidate distance from the player
@@ -184,6 +191,35 @@ class AI_Boss00_base extends aiNode
         }
 
         // Randomly pick one of the far candidates
+        return this._candAry[ genFunc.randomInt( 0, this._farCount - 1 ) ];
+    }
+
+    // 
+    //  DESC: Select the next building to move to: a good distance (BOSS00_MIN_TARGET_DIST, wrap-aware)
+    //        from the boss. If only nearby buildings are left, picks one of those and sets
+    //        onlyNearTargets so the move goes the long way around. Returns null if none are available.
+    //
+    selectNextBuilding()
+    {
+        if( this.gatherTargets() === 0 )
+            return null;
+
+        // Keep only buildings a good distance from the boss (compacts in place)
+        this._farCount = 0;
+        for( this._i = 0; this._i < this._candAry.length; ++this._i )
+        {
+            if( this.wrapDistX( this._candAry[this._i].pos.x, this.sprite.pos.x ) >= gameDefs.BOSS00_MIN_TARGET_DIST )
+            {
+                this._candAry[this._farCount] = this._candAry[this._i];
+                ++this._farCount;
+            }
+        }
+
+        // Only nearby buildings left - pick from all of them (the move goes the long way around)
+        this.onlyNearTargets = (this._farCount === 0);
+        if( this.onlyNearTargets )
+            this._farCount = this._candAry.length;
+
         return this._candAry[ genFunc.randomInt( 0, this._farCount - 1 ) ];
     }
 }
@@ -294,7 +330,7 @@ class AI_Boss00_Descend extends AI_Boss00_base
         this.setBarsVisible( false );
 
         // Select a far building and descend directly onto it
-        this.sprite.targetBuilding = this.selectFarBuilding();
+        this.sprite.targetBuilding = this.selectDescendBuilding();
         if( this.sprite.targetBuilding !== null )
             this.sprite.setPosXYZ( this.sprite.targetBuilding.pos.x, this.sprite.pos.y );
 
@@ -375,7 +411,7 @@ class AI_Boss00_PickAndMoveToBuilding extends AI_Boss00_base
         {
             if( !this.selected )
             {
-                this.sprite.targetBuilding = this.selectFarBuilding();
+                this.sprite.targetBuilding = this.selectNextBuilding();
 
                 // No building available - idle in place until one is (game over handled elsewhere)
                 if( this.sprite.targetBuilding === null )
@@ -387,10 +423,27 @@ class AI_Boss00_PickAndMoveToBuilding extends AI_Boss00_base
                 this.setBarsVisible( false );
 
                 // Fast move to the target building (wrap-aware shortest path)
-                // TODO (Phase 4/playtest): bias the initial direction toward the player.
-                this._deltaX = this.wrapDeltaX( this.sprite.targetBuilding.pos.x );
-                this._targetX = this.sprite.pos.x + this._deltaX;
-                this._time = Math.abs( this._deltaX ) / gameDefs.BOSS00_MOVE_PIXELS_PER_SEC;
+                // (_moveX gets its own name: wrapDeltaX() overwrites _deltaX when checking the player's direction)
+                this._moveX = this.wrapDeltaX( this.sprite.targetBuilding.pos.x );
+
+                // Only a few buildings are left and they're right next to the boss - always go the long way around
+                if( this.onlyNearTargets )
+                {
+                    this._moveX -= ((this._moveX < 0) ? -1 : 1) * gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+                }
+                // Randomly charge: travel in the direction of the player instead, going the long way around
+                // the map if needed (only if the player is alive and the boss is on screen to see it coming)
+                else if( this.data.playerShipSprite.collisionComponent.enable &&
+                    (genFunc.randomArbitrary( 0, 1 ) < gameDefs.BOSS00_CHARGE_CHANCE) &&
+                    this.inViewWithWrap( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                {
+                    this._playerDir = (this.wrapDeltaX( this.data.playerShipSprite.pos.x ) < 0) ? -1 : 1;
+                    if( (this._moveX < 0 ? -1 : 1) !== this._playerDir )
+                        this._moveX += this._playerDir * gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+                }
+
+                this._targetX = this.sprite.pos.x + this._moveX;
+                this._time = Math.abs( this._moveX ) / gameDefs.BOSS00_MOVE_PIXELS_PER_SEC;
                 this.easingX.init( this.sprite.pos.x, this._targetX, this._time, easing.getSineInOut() );
 
                 this.selected = true;
