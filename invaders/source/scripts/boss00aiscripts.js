@@ -13,10 +13,14 @@ import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
+import { Point } from '../../../library/common/point';
 import * as gameDefs from '../state/gamedefs';
 
 // Shared AI data
 var ai_data = {};
+
+// Global temp point for wrap-aware view checks (GC optimization)
+var gTempWrapPoint = new Point;
 
 // 
 //  DESC: Clear the AI data
@@ -48,6 +52,48 @@ class AI_Boss00_base extends aiNode
             this.sprite.healthBarCtrl.setVisible( visible );
         if( this.sprite.hitBarCtrl )
             this.sprite.hitBarCtrl.setVisible( visible );
+    }
+
+    // 
+    //  DESC: Fire a missile at the player about once a second while the boss is in view
+    //
+    shootPlayer()
+    {
+        if( this.data.playerShipSprite.collisionComponent.enable )
+        {
+            this.sprite.shootTime -= highResTimer.elapsedTime;
+
+            if( this.sprite.shootTime < 0 )
+            {
+                if( this.inViewWithWrap( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                {
+                    this._shootSprite = this.data.enemyShotStrategy.create('boss_shot').get();
+                    this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite );
+
+                    this.sprite.shootTime = gameDefs.BOSS00_FIRE_INTERVAL +
+                        genFunc.randomInt( -gameDefs.BOSS00_FIRE_JITTER, gameDefs.BOSS00_FIRE_JITTER );
+                }
+            }
+        }
+    }
+
+    // 
+    //  DESC: Check if the sprite is in view, accounting for map wrapping
+    //
+    inViewWithWrap( transPos, radius )
+    {
+        if( this.data.camera.inView( transPos, radius ) )
+            return true;
+
+        this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+
+        gTempWrapPoint.copy( transPos );
+        gTempWrapPoint.x = transPos.x + this._wrapSpan;
+        if( this.data.camera.inView( gTempWrapPoint, radius ) )
+            return true;
+
+        gTempWrapPoint.x = transPos.x - this._wrapSpan;
+        return this.data.camera.inView( gTempWrapPoint, radius );
     }
 
     // 
@@ -165,6 +211,8 @@ class AI_Boss00_Head extends aiNode
             this.data.enemy = strategyManager.get('_enemy_').nodeAry;
             this.data.playerShipSprite = this.data.playerShipStrategy.get('player_ship').get();
             this.data.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
+            this.data.camera = this.data.playerShipStrategy.camera;
+            this.data.enemyShotStrategy = strategyManager.get('_enemy_shot_');
         }
     }
 
@@ -494,10 +542,17 @@ class AI_Boss00_DestroyBuilding extends AI_Boss00_base
                 this.sprite.buildingBaseX = this.sprite.targetBuilding.pos.x;
                 this.sprite.buildingBaseY = this.sprite.targetBuilding.pos.y;
                 this.showBeam();
+
+                // First missile about a second after the beam appears
+                this.sprite.shootTime = gameDefs.BOSS00_FIRE_INTERVAL;
             }
 
             if( this.phase === 'destroying' )
             {
+                // Fire missiles at the player only while beaming
+                if( !this.sprite.interrupted )
+                    this.shootPlayer();
+
                 // Player interrupted the attack (hit bar depleted - flag set by the collision handler)
                 if( this.sprite.interrupted )
                 {

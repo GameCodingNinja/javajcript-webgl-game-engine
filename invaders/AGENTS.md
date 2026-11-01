@@ -124,6 +124,20 @@ Enemies (including bosses — a boss is just an enemy) live in the **`_enemy_` s
 
 **Per-entity state** lives on the head sprite (e.g. `sprite.targetBuilding`, `sprite.vulnerable`, `sprite.bossHealth`), mirroring how `enemy00` stores `hitCount`/`targetBuilding`. The collision handler reads/writes this state on `spriteB`.
 
+### Adding an Enemy Projectile
+Enemy projectiles live in the **`_enemy_shot_` strategy** ([enemyshot.strategy](data/objects/strategy/level1/enemyshot.strategy)), already updated/rendered (incl. wrap-around + radar) by `Level1State`. References: `enemy_shot` (enemy00, straight) and `boss_shot` (boss00 homing missile).
+1. **Art** in `level1DataList.lst` + regenerate the sprite sheet. Collision points (`pointList`) are transformed by the sprite matrix, so they **rotate and scale with the sprite** automatically.
+2. **Own userId** (e.g. `BOSS00_SHOT_ID = -21`) — don't reuse `ENEMY00_SHOT_ID`; its collision branch decides damage by `frameIndex`.
+3. **Strategy node** with `shoot="..."` and `hit="..."` scripts. A `<sprite>` with no `objectName` uses the node name as the object name. Put static transforms like `<scale x="2" y="2"/>` here, not in code — `sprite.reset()` reloads the strategy XML when a pooled node is reused, so it persists.
+4. **Fire** from the AI with `enemyShotStrategy.create('<node>').get()` then `scriptComponent.prepare('shoot', shotSprite, enemySprite)`. Gate it on the player being alive (`playerShipSprite.collisionComponent.enable`) and the shooter being in view (`inViewWithWrap`). See `shootPlayer()` in `enemy00aiscripts.js` / `boss00aiscripts.js`.
+5. **Flight script** (`*_Shoot`/`*_Fire`): per-frame move + wrap + `collisionComponent.checkForCollision(playerShipStrategy.nodeAry)`; recycle itself (`enemyShotStrategy.recycle(sprite.parentNode)`, return `true`) on lifetime or `camera.inViewY` failure. Use the wrap-aware shortest X delta when aiming at the player.
+6. **Hit script** just recycles the shot. **Collision:** add a `userId` branch in the "player ship involved" block of `collisionCallBack()` (damage unless `GOD_MODE`, `spriteB.prepareScript('hit', spriteA)` for the explosion, `spriteA.prepareScript('hit')`). The block disables the shot's collision first, so it can't hit twice.
+
+**Rotation/animation tips:**
+- `setRotXYZ(0, 0, angle, false)` takes **radians** with `false` (degrees otherwise). Z rotation is counter-clockwise with +Y up, so art that points **right (+X)** uses `Math.atan2(dy, dx)` directly as its rotation.
+- For a simple 2-frame cycle, toggle `setFrame(1 - visualComponent.frameIndex)` on a timer. `utilScripts.PlayAnim.init()` allocates a generator each call (GC on every shot).
+- Homing that never lets go is undodgeable. Boss00's missile commits to a straight final run once it's close **and** lined up (`BOSS00_MISSILE_LOCK_DIST` / `LOCK_ALIGN`), which keeps it hitting a still player but dodgeable.
+
 ### Menu System
 - Menu definitions: `data/objects/2d/menu/*.menu` (XML files defining controls, layout, navigation, scripts)
 - Menu control templates: `data/objects/2d/menu/control/*.ctrl`
@@ -214,7 +228,7 @@ this._targetX = this.sprite.pos.x + this._deltaX;
 To check if a sprite is visible across the wrap boundary, test the sprite's position and both wrapped offsets (±wrapSpan) against the camera's `inView()`. See `inViewWithWrap()` in `enemy00aiscripts.js`.
 
 ### Strategies and Rendering
-- **`_enemy_shot_` strategy**: Enemy00 projectiles are in their own strategy (`enemyshot.strategy`) using `buildingsCamera`, separate from `_player_ship_`. This avoids projectiles being shifted when the player wraps and allows independent wrap-around rendering via `wrapAroundCamera`.
+- **`_enemy_shot_` strategy**: Enemy00 projectiles and boss00 missiles are in their own strategy (`enemyshot.strategy`) using `buildingsCamera`, separate from `_player_ship_`. This avoids projectiles being shifted when the player wraps and allows independent wrap-around rendering via `wrapAroundCamera`.
 - **`wrapAroundCamera`**: Positioned based on `buildingsCamera` in the wrap zone. Strategies that need wrap rendering get an additional `render(wrapAroundCamera)` call when `buildingsCamera.pos.x < -4900 || > 5000`.
 - **Projectile distance tracking**: Enemy00 projectiles use cumulative `distTraveled` instead of `startPos.calcLength2D()` for lifetime checks, since external position shifts (from strategy-wide wraps) would break absolute distance comparisons.
 
@@ -226,6 +240,8 @@ To check if a sprite is visible across the wrap boundary, test the sprite's posi
 | Enemy02 | Yes (Seek_and_Destroy) | No | Free-flying, natural fit for wrapping |
 | Enemy01 | No | No | Boss enemy, stays in play area |
 | Enemy00 shots | Yes | N/A | Own strategy (`_enemy_shot_`), wrap independently |
+| Boss00 | Yes (travel between buildings) | Yes (via `inViewWithWrap`) | Shortest wrapped path to target building |
+| Boss00 missiles | Yes | N/A | `_enemy_shot_`; homing uses the wrap-aware X delta to the player |
 
 ## Frame-Rate Independence
 All runtime movement must be frame-rate independent for consistent behavior across desktop and mobile.

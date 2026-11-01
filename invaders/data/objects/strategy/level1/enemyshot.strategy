@@ -14,4 +14,14 @@
         </sprite>
     </node>
 
+    <node name="boss_shot" id="-21">
+        <sprite>
+            <scale x="2" y="2"/>
+            <scriptList>
+                <script shoot="Boss00Shot_Fire"/>
+                <script hit="Boss00Shot_Hit"/>
+            </scriptList>
+        </sprite>
+    </node>
+
 </strategy>

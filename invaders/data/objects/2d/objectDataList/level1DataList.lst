@@ -364,7 +364,7 @@
         <object name="boss00_health_solid">
             <visual>
                 <shader id="shader_solid_2d"/>
-                <color r="0" g="255" b="0" a="1"/>
+                <color r="0" g="200" b="0" a="1"/>
             </visual>
             <size width="592" height="9"/>
         </object>
@@ -381,7 +381,7 @@
         <object name="boss00_hit_solid">
             <visual>
                 <shader id="shader_solid_2d"/>
-                <color r="0" g="255" b="0" a="1"/>
+                <color r="0" g="140" b="255" a="1"/>
             </visual>
             <size width="592" height="4"/>
         </object>

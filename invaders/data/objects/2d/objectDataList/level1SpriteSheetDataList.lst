@@ -548,7 +548,7 @@
                 <mesh genType="quad"/>
                 <shader id="shader_solid_2d"/>
                 <texture file=""/>
-                <color r="0" g="255" b="0" a="1"/>
+                <color r="0" g="200" b="0" a="1"/>
             </visual>
             <size width="592" height="9"/>
         </object>
@@ -568,7 +568,7 @@
                 <mesh genType="quad"/>
                 <shader id="shader_solid_2d"/>
                 <texture file=""/>
-                <color r="0" g="255" b="0" a="1"/>
+                <color r="0" g="140" b="255" a="1"/>
             </visual>
             <size width="592" height="4"/>
         </object>
@@ -598,8 +598,8 @@
             </visual>
             <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <pointList radiusFromVisual="true">
-                    <point x="18" y="0"/>
-                    <point x="-18" y="0"/>
+                    <point x="12" y="0"/>
+                    <point x="-12" y="0"/>
                 </pointList>
             </collision>
         </object>

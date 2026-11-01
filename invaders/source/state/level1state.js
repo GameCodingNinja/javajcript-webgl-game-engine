@@ -467,6 +467,18 @@ export class Level1State extends CommonState
                 spriteA.prepareScript( 'hit' );
                 this.groupPlayer.play( 'player_hit' );
             }
+            // Player hit by a boss00 missile
+            else if( spriteA.parentNode.userId == gameDefs.BOSS00_SHOT_ID )
+            {
+                spriteB.prepareScript( 'hit', spriteA );
+                if( GOD_MODE == false )
+                {
+                    this.playerShip.progressBar.incCurrentValue( -gameDefs.BOSS00_MISSILE_DAMAGE );
+                    this.playerShip.progressBar.setVisible( true );
+                }
+                spriteA.prepareScript( 'hit' );
+                this.groupPlayer.play( 'player_hit' );
+            }
             // Player collides into enemy00
             else if( spriteA.parentNode.userId == gameDefs.ENEMY00_SHIP_ID )
             {
