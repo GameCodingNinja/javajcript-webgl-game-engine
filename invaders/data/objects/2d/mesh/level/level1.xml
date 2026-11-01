@@ -54,8 +54,8 @@
     <rect x1=" 248" y1=" 509" x2="  54" y2="  12" cx="   0" cy="   0" name="cloudE_1"/>
     <rect x1=" 349" y1=" 504" x2="  54" y2="  12" cx="   0" cy="   0" name="cloudE_2"/>
     <rect x1=" 842" y1=" 390" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_0"/>
-    <rect x1=" 563" y1=" 502" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_1"/>
-    <rect x1=" 563" y1=" 511" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_2"/>
+    <rect x1=" 685" y1=" 502" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_1"/>
+    <rect x1=" 685" y1=" 511" x2="  38" y2="   8" cx="   0" cy="   0" name="cloudF_2"/>
     <rect x1=" 731" y1=" 712" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_0"/>
     <rect x1=" 802" y1=" 711" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_1"/>
     <rect x1=" 756" y1=" 997" x2="  66" y2="   8" cx="   0" cy="   0" name="cloudG_2"/>
@@ -92,8 +92,10 @@
     <rect x1=" 164" y1=" 401" x2="  83" y2=" 107" cx="   0" cy="   0" name="healthA_0"/>
     <rect x1=" 248" y1=" 401" x2="  83" y2=" 107" cx="   0" cy="   0" name="healthA_1"/>
     <rect x1=" 642" y1=" 523" x2=" 159" y2=" 188" cx="   0" cy="   0" name="help"/>
+    <rect x1=" 563" y1=" 502" x2="  32" y2="  12" cx="   0" cy="   0" name="missile-0"/>
+    <rect x1=" 624" y1=" 502" x2="  32" y2="  12" cx="   0" cy="   0" name="missile-1"/>
     <rect x1=" 865" y1=" 523" x2="  32" y2="  32" cx="   0" cy="   0" name="projectile02-4"/>
-    <rect x1=" 624" y1=" 502" x2="  38" y2="   6" cx="   0" cy="   0" name="projectile03-4"/>
+    <rect x1=" 746" y1=" 500" x2="  38" y2="   6" cx="   0" cy="   0" name="projectile03-4"/>
     <rect x1=" 872" y1=" 401" x2="  23" y2="  23" cx="   0" cy="   0" name="projectile_0"/>
     <rect x1=" 872" y1=" 425" x2="  23" y2="  23" cx="   0" cy="   0" name="projectile_1"/>
     <rect x1=" 321" y1="1234" x2=" 240" y2="   8" cx="   0" cy="   0" name="train_0"/>

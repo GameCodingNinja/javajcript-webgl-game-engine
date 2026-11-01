@@ -587,6 +587,23 @@
             </collision>
         </object>
 
+        <object name="boss_shot">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="missile-0"/>
+                        <glyph id="missile-1"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
+                <pointList radiusFromVisual="true">
+                    <point x="18" y="0"/>
+                    <point x="-18" y="0"/>
+                </pointList>
+            </collision>
+        </object>
+
         <object name="hud_background">
             <visual>
                 <mesh genType="quad"/>

@@ -1553,8 +1553,10 @@ export class Level1State extends CommonState
 
                 // The boss head is a SpriteNode (it has children), whose init() only prepares
                 // the children's prepareOnInit scripts - not the head sprite's own. Prepare the
-                // head sprite's AI + collision scripts manually.
-                this._bossNode.get().prepareScriptOnInit();
+                // head sprite's AI + collision scripts manually. Guarded so a recycled node
+                // (already prepared by resetTree) isn't double-prepared.
+                if( !this._bossNode.get().scriptComponent.isActive() )
+                    this._bossNode.get().prepareScriptOnInit();
             }
 
             // Handle the enemy spawn

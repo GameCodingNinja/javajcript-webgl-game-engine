@@ -1,0 +1,118 @@
+========================================================================
+  BOSS00 - PLAIN-LANGUAGE SUMMARY
+========================================================================
+
+WHAT IT IS
+----------
+boss00 is a big new boss enemy for the Invaders game. It flies in,
+picks a building far from the player, and tries to destroy it with a
+beam. The player has to chase the boss down and shoot it enough to
+interrupt the attack. Do that four times and the boss dies.
+
+Because "a boss is just an enemy," boss00 lives inside the normal
+enemy system (the "_enemy_" strategy) alongside enemy00/01/02.
+
+
+HOW THE FIGHT WORKS
+-------------------
+1. The boss descends onto a building that is FAR from the player
+   (so the player has to fly across the map to reach it).
+
+2. Once over the building it starts the ATTACK:
+     - A beam appears under the boss and expands to full width (~1s).
+     - After the beam is full, a 5-second countdown begins.
+     - 1 second in, the building starts SHAKING - slowly at first,
+       then faster and harder (it only shakes downward, never up).
+     - If the countdown finishes, the building is destroyed (it falls
+       like any other destroyed building) and the beam retracts.
+
+3. While the boss is attacking it is VULNERABLE - the player can shoot
+   it. Two bars appear above the boss (both start full and green):
+     - HIT BAR  - drains one notch per hit. This is the "interrupt" meter.
+     - HEALTH BAR - the boss's life.
+
+4. Two ways the attack can end:
+     - PLAYER WINS THE EXCHANGE (empties the hit bar before the 5s):
+       INTERRUPT! The boss stops, loses 1 HEALTH, pauses ~1 second so
+       you can see the change, then races off to the next building.
+     - BOSS WINS THE EXCHANGE (5s runs out first):
+       The building is destroyed, the boss loses NO health, and it
+       races off to the next building.
+
+5. While flying between buildings the boss is NOT shootable, but it
+   still moves fast and can crash into the player for damage.
+
+6. Repeat until the HEALTH bar is empty -> the boss dies, spinning and
+   falling quickly off the bottom of the screen.
+
+Bars are only shown while the boss can be hit (during an attack).
+
+
+TUNING (all in source/state/gamedefs.js)
+-----------------------------------------
+BOSS00_HEALTH_MAX .......... how many interrupts kill the boss
+BOSS00_HIT_BAR_MAX ......... hits needed to interrupt one attack
+BOSS00_DESTROY_TIME ........ how long the boss needs to destroy a building
+BOSS00_BEAM_WIDTH .......... beam full width in pixels
+BOSS00_BEAM_GROW_SEC ....... beam expand time
+BOSS00_BEAM_RETRACT_SEC .... beam retract time
+BOSS00_SHAKE_DELAY ......... wait before the building starts shaking
+BOSS00_SHAKE_*_START/END ... shake speed + strength ramp
+BOSS00_MOVE_PIXELS_PER_SEC . travel speed to the next building
+BOSS00_DESCEND_PIXELS_PER_SEC  first descent speed
+BOSS00_RESTING_Y ........... attack height above the buildings
+
+
+WHAT WAS BUILT (BY PHASE)
+-------------------------
+Phase 1 - Data / art / strategy
+  * boss00_ship node added to enemy.strategy: a NULL head sprite that
+    carries the collision, with children for the beam, the visible
+    body, and the two progress bars.
+  * Art (null head, body, beam, health bar, hit bar) added to the
+    SOURCE list (level1DataList.lst) and the sprite sheet regenerated.
+
+Phase 2 - AI (source/scripts/boss00aiscripts.js + data/objects/ai/boss00.ai)
+  * Behavior tree: Descend -> DestroyBuilding -> repeat(Pick+Move ->
+    DestroyBuilding).
+  * Picks a non-destroyed, not-already-targeted building far from the
+    player; flies there fast (wrap-around aware).
+
+Phase 3 - Beam + shake visuals
+  * Beam shows, widens to full, then narrows/retracts when done or
+    interrupted.
+  * Building shakes progressively faster during the destroy countdown.
+
+Phase 4 - Damage model (source/scripts/boss00scripts.js + level1state.js)
+  * Player shots drain the hit bar (only while vulnerable).
+  * Empty hit bar -> interrupt -> lose 1 health -> flee.
+  * Empty health bar -> boss dies (Boss00Ship_Die).
+  * Boss can damage the player by colliding with it.
+  * Bars turned green.
+
+Phase 5 - Verify
+  * Builds clean; no per-frame memory allocations; movement is
+    frame-rate independent; state resets correctly on restart.
+
+
+IMPORTANT GOTCHA (for future enemies with children)
+---------------------------------------------------
+A strategy node WITH child nodes becomes a "SpriteNode", and the engine
+does NOT auto-prepare the head sprite's own prepareOnInit scripts (like
+the AI). So after creating such a boss you must call
+    node.get().prepareScriptOnInit()
+or its AI silently never runs. (Simple childless enemies don't need this.)
+See AGENTS.md -> "Adding a New Enemy or Boss".
+
+
+STILL TO DO / DEFERRED
+----------------------
+  * Real spawn trigger (right now a TEMP test spawns the boss 10s after
+    the game starts, with all other enemies disabled for testing).
+  * Final spawn rules: enemy00 keeps spawning during the fight;
+    enemy01/02 disabled and re-enabled (timers restarted) when the boss
+    dies.
+  * Sound effects (beam, hits, death).
+  * Optional: boss "move toward the player" lunge between buildings,
+    and a bigger multi-burst death explosion.
+========================================================================
