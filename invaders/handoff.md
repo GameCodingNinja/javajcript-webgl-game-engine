@@ -3,23 +3,31 @@
 ## Status
 Boss00 (the building-destroying boss) is implemented and playable — plan phases 1–5 are done.
 Its **homing missile attack** is also done (missile phases M1–M4; the final flight style was approved by the user).
-It currently spawns from **temporary test code**, not a real game trigger. All other enemies are disabled while testing.
+It is **wired into normal play**: it takes the place of the next mini-boss once the player has fought both enemy01 and enemy02 (see "When the boss appears"). The TEMP test code has been removed.
 
 - Boss design/plan: `boss00_plan.md` (questions Q1–Q16 resolved; Q10 sound deferred)
 - Missile design/plan: `boss00_missle_plan.md` (see "M4 revised (as built)" for the final flight)
 - Original specs: `boss00_prompt.txt`, `boss00_update.txt`
-- Plain-language summary: `summary.txt` (covers the boss, not the missile)
+- Plain-language summary: `summary.txt` (early boss plan only. It doesn't cover the missile, sound, trigger, or later tuning)
 - How to add enemies/bosses/projectiles in general: `AGENTS.md` → "Adding a New Enemy or Boss" and "Adding an Enemy Projectile"
+
+## When the boss appears
+- Mini-bosses (enemy01/02) come from `miniBossSpawnTimer` in `Level1State.handleEnemySpawn()`. It is disabled when a mini-boss spawns and reset when that mini-boss dies, so only one is alive at a time. Mini-bosses start once the player reaches the mini-boss level threshold.
+- `foughtEnemy01` / `foughtEnemy02` (cleared in `initMiscObjects()`) are set when that mini-boss spawns. The next mini-boss can't trigger until the current one dies, so spawn = fought. When the timer fires with **both** set, `spawnBoss()` runs **instead of** that mini-boss. Below `ENEMY01_LEVEL_THRESHOLD` only enemy01 spawns, so the boss can't come until enemy02 has also appeared. The existing streak cap (`MAX_MINI_BOSS_STREAK` 2) ensures both types come up after that.
+- **During the battle:** the mini-boss timer stays disabled, so enemy01/02 are paused, and enemy00 spawns **much slower**: only every `BOSS00_ENEMY00_SPAWN_SLOWDOWN` (4th) spawn tick produces one while `bossBattleActive` is set (set/cleared in `startBossMusic()`/`endBossMusic()`). The normal rate (including level-based speed-ups) resumes when the boss dies.
+- **On boss death** (`EGE_BOSS_DEFEATED`): enemy00 returns to its normal spawn rate, music crossfades back, the mini-boss timer is reset (enemy01/02 resume with a fresh timer), and both fought flags are cleared, so the player has to fight both mini-bosses again before the next boss.
+- `spawnBoss()` creates the node above the screen, calls `prepareScriptOnInit()` (SpriteNode gotcha), and calls `startBossMusic()`.
+- Restart mid-battle: `restartGame()` deletes/reloads the strategies (boss + missiles gone), clears the AI data, and `initMiscObjects()` resets `bossBattleActive` and the fought flags. The paused boss track restarts from the top on the next battle.
 
 ## How the boss behaves
 1. Spawns above the screen and descends onto a building **far from the player** (≥ half the wrap distance away).
 2. Over the building: beam widens to 33px over 1s. Then the destroy countdown (7s) starts; after 1s the building begins shaking, faster and harder until it's destroyed (shake only moves down — there's no art above/below the building).
 3. Boss is **vulnerable only while parked over a building**. Health and hit bars are shown then, hidden while moving.
-4. Each player hit lowers the hit bar. When it's empty: boss stops taking hits, loses 1 health, beam retracts, pauses ~1s so the player sees the change, then flies fast to the next building. **Half the time (`BOSS00_CHARGE_CHANCE` 0.5) it charges**: it travels to the building in the direction of the player (going the long way around the map if needed), at its normal height and speed, so it can ram the player on the way (only if the player is alive and the boss is on screen). Ramming the player costs 20 health. Hit bar refills instantly on arrival.
+4. Each player hit lowers the hit bar. When it's empty: boss stops taking hits, loses 1 health, beam retracts, pauses ~1s so the player sees the change, then flies fast to the next building. **Half the time (`BOSS00_CHARGE_CHANCE` 0.5) it charges**: it travels to the building in the direction of the player (going the long way around the map if needed), at its normal height and speed, so it can ram the player on the way (only if the player is alive and the boss is on screen). Ramming the player costs 20 health. The ram explosion is centered on the player ship and shifted toward the enemy by `RAM_EXPLODE_SHIFT_X` (16px) horizontally and `RAM_EXPLODE_SHIFT_Y` (8px) vertically, the same as enemy01 and enemy02 (`Explode_animation` in `levelscripts.js`). An earlier version that put it at the ship's edge, up to 40px off center, was unreliable and was removed. Hit bar refills instantly on arrival.
 5. Targets only buildings that are not destroyed and not already targeted. **First descent:** a random building in the half farthest from the player. **Each later move:** a random building at least `BOSS00_MIN_TARGET_DIST` (2000px = 10 buildings, wrap-aware) from the boss. If only closer buildings are left, it picks one of them and **always goes the long way around** the map. With no buildings left, it just sits (the game is over anyway).
 6. Free-flying wrap-around movement (shortest wrapped path).
 7. Health 0 → beam/bars hidden, shaken building restored, boss falls fast while spinning, then is recycled. Player scores `BOSS00_SHIP_HIT_VALUE` (10).
-8. **Music:** on spawn, the game music crossfades (2s, `BOSS00_MUSIC_FADE_MS`) to `LOOP_City-Showdown`. On death (`EGE_BOSS_DEFEATED`), it crossfades back to the track that was playing, and the 5-minute rotation timer restarts. Pause/resume/game over use `getGameMusic()`, so they handle the boss track. **Crash sound:** `boss_crash` plays when the death fall lands.
+8. **Music:** on spawn, the game music crossfades (2s, `BOSS00_MUSIC_FADE_MS`) to `LOOP_City-Showdown`. On death (`EGE_BOSS_DEFEATED`), it crossfades back to the track that was playing, and the 5-minute rotation timer restarts. Pause/resume/game over use `getGameMusic()`, so they handle the boss track. **Alarm:** `boss_alarm` loops at the start of the battle (started in `startBossMusic()` at full volume), then `BOSS00_ALARM_TIME` (5s) in it fades out over `BOSS00_MUSIC_FADE_MS`. It's also faded in `endBossMusic()` and on game over, and paused/resumed with the pause menu only while the battle is active. **Crash sound:** `boss_crash` plays when the death fall lands.
 
 ## How the missile behaves
 - **When:** only while the beam is out (DestroyBuilding `destroying` phase, not after an interrupt), and only if the boss is in view and the player is alive. About one per second (1000ms ± 200). First missile about 1s after the beam appears. Stops on retract, interrupt, travel, and boss death.
@@ -40,29 +48,24 @@ It currently spawns from **temporary test code**, not a real game trigger. All o
 | `data/objects/ai/boss00.ai` | Behavior tree: Descend → DestroyBuilding → repeat[PickAndMoveToBuilding → DestroyBuilding] |
 | `source/scripts/boss00aiscripts.js` | AI nodes, building selection, beam, shake, bar visibility, `shootPlayer()` + `inViewWithWrap()`, `clearAIData()` |
 | `source/scripts/boss00scripts.js` | `Boss00Shot_Fire` (missile flight), `Boss00Shot_Hit`, `Boss00Ship_Hit`, `Boss00Ship_Die` |
-| `source/state/gamedefs.js` | `BOSS00_*` tunables (boss + missile) |
-| `source/state/level1state.js` | AI load, collision handling (incl. `BOSS00_SHOT_ID` branch), cleanup, temp spawn |
+| `source/state/gamedefs.js` | `BOSS00_*` tunables (boss + missile), `RAM_EXPLODE_SHIFT_X/Y`, `EGE_BOSS_DEFEATED`, `ENEMY02_SHIP_ID` |
+| `source/state/level1state.js` | AI load, collision handling (incl. `BOSS00_SHOT_ID` branch), boss trigger (`handleEnemySpawn` / `spawnBoss`), boss music, `EGE_BOSS_DEFEATED` handling, cleanup |
+| `source/scripts/levelscripts.js` | `Explode_animation` (optional offsets used by the death bursts; boss/enemy01/enemy02 ram explosion centered on the player, shifted 16px X / 8px Y toward the enemy) |
 | `source/state/startupstate.js` | Script registration |
 
 ## Current tunables (`gamedefs.js`, user-tuned — don't overwrite)
-**Boss:** charge chance 0.5, health 5, hit bar 20, destroy 7000ms, interrupt pause 1000ms, beam width 33, beam grow 1s / retract 0.4s, shake delay 1000ms, shake interval 80→15ms, shake amp 2→7, move 1300 px/s, descend 300 px/s, resting Y 55.
+**Boss:** boss after both mini-bosses fought, enemy00 spawn slowdown 4× during battle, alarm 5s, music fade 2s, death bursts 10 × 100ms, min target distance 2000px, charge chance 0.5, health 5, hit bar 20, destroy 7000ms, interrupt pause 1000ms, beam width 33, beam grow 1s / retract 0.4s, shake delay 1000ms, shake interval 80→15ms, shake amp 2→7, move 1300 px/s, descend 300 px/s, resting Y 55.
 
 **Missile:** `BOSS00_SHOT_ID` -21, `FIRE_INTERVAL` 1000ms, `FIRE_JITTER` 200ms, `MISSILE_SPEED` 0.3 px/ms, `TURN_RATE` 180°/s, `LAUNCH_TIME` 250ms, `LOOP_TURN_RATE` 120°/s, `LOCK_DIST` 200px, `LOCK_ALIGN` 10°, `SPAWN_OFFSET_X` 30px, `ANIM_MS` 80, `LIFETIME` 6000ms, `DAMAGE` 30. Scale (2×) is in the strategy, not code.
 
-## Temporary test code (remove when adding the real trigger)
-All in `source/state/level1state.js`, marked `// TEMP`:
-- ~L336 `initMiscObjects()`: `bossTestSpawnTimer = new Timer(10000)` and `bossSpawned`.
-- ~L959 menu-resume block: restarts the 10s countdown at gameplay start.
-- ~L1353 `handleEnemySpawn()`: early `return;` disables all enemy spawning.
-- ~L1559 `update()`: spawns the boss 10s in, then calls `prepareScriptOnInit()`.
+## Testing note
+**`GOD_MODE = true`** (~L91 of `level1state.js`) is still set by the user for testing; set it to `false` to see missile/ram damage. With the real trigger, reaching the boss takes the mini-boss level thresholds plus fighting both enemy01 and enemy02 (mini-bosses come 30–150s apart). To test the boss quickly, temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()`.
 
-The user asked to **keep** this for now. Also note **`GOD_MODE = true`** (~L91), set by the user for testing; set it to `false` to see missile/ram damage.
-
-## Not done yet
-- **Real spawn trigger** (TBD).
-- **Final spawn rules during the fight**: enemy00 keeps spawning; enemy01/02 are paused, then re-enabled with timers restarted when the boss dies.
-- Sound (Q10) is done: missile launch, boss crash, and boss battle music.
-- Death explosion is done: 10 staggered bursts (2–4× scale) scattered over the body, each playing `enemy_explosion` (`BOSS00_DEATH_BURST_*`).
+## Done since the first handoff
+- Real spawn trigger (after fighting both mini-bosses) and enemy rules during the fight (see "When the boss appears"). TEMP test code removed.
+- Sound (Q10): missile launch, boss crash, boss battle music, `boss_alarm` at battle start.
+- Death explosion: 10 staggered bursts (2–4× scale) scattered over the body, each playing `enemy_explosion` (`BOSS00_DEATH_BURST_*`).
+- Charge, next-target distance rule + long-way fallback, boss/enemy01/enemy02 ram explosion centered on the player with a 16px X / 8px Y shift toward the enemy.
 
 ## Known review findings (user chose not to fix — leave unless asked)
 - Collision is disabled during the descent.
@@ -87,12 +90,12 @@ The user asked to **keep** this for now. Also note **`GOD_MODE = true`** (~L91),
 npx webpack --mode development
 npx eslint source/scripts/boss00aiscripts.js source/scripts/boss00scripts.js
 ```
-Lint errors that were already in `level1state.js` (`ytgame` ×2, `slot`, unreachable code after the temp early return) are expected.
+The only remaining lint errors are 2 × `'ytgame' is not defined` in `level1state.js` (the YouTube Playables global, guarded by `typeof` at runtime). Adding `"ytgame": "readonly"` to `globals` in the root `.eslintrc.json` would clear them. The unused `slot` parameter on `onLeftTouchEnd()` was removed (mobile behavior unchanged).
 
 ## Working state
-Uncommitted: the missile work (`enemyshot.strategy`, `boss00aiscripts.js`, `boss00scripts.js`, `gamedefs.js`, `level1state.js`, `level1SpriteSheetDataList.lst`), `boss00_missle_plan.md` (new), and doc updates to `handoff.md` / `AGENTS.md`. Don't ask to commit or push.
+The user has committed everything up to the charge fix. Uncommitted: ram explosion shift for boss/enemy01/enemy02 (`levelscripts.js`); in `level1state.js`, the real trigger (both mini-bosses fought), the `boss_alarm` loop (5s then fade), slower enemy00 spawning during the battle, the TEMP code removal, and the unused `slot` parameter removed from `onLeftTouchEnd()`; new constants and `ENEMY02_SHIP_ID` moved from a local constant in `level1state.js` into `gamedefs.js`; the `boss_alarm` sound entry + `.ogg`; and the `handoff.md` / `AGENTS.md` updates. Don't ask to commit or push.
 
 ## Suggested next steps
-1. Add the real boss trigger and remove the TEMP code (and restore `GOD_MODE = false`).
-2. Apply the enemy spawn rules for the fight (pause/resume enemy01/02).
-3. A bigger death explosion. When the real trigger replaces the TEMP spawn, keep the `startBossMusic()` call with the spawn.
+1. Playtest a full cycle with the real trigger (temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()` to get there fast), including game over mid-battle → restart.
+2. Set `GOD_MODE = false` when testing is finished.
+3. Optional: the three declined review findings above.

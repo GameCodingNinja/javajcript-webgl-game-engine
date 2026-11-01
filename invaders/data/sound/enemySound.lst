@@ -18,6 +18,7 @@
         <load id="boss_rocket_launch_bright" file="data/sound/level/enemy/ROCKET_Launch_Bright_mono.ogg" defaultVolume="0.5"/>
         <load id="boss_rocket_launch_short" file="data/sound/level/enemy/ROCKET_Launch_Deep_Short_mono.ogg" defaultVolume="0.5"/>
         <load id="boss_rocket_launch_slow" file="data/sound/level/enemy/ROCKET_Launch_Deep_Slow_mono.ogg" defaultVolume="0.5"/>
+        <load id="boss_alarm" file="data/sound/level/enemy/ALARM_Military_Large_Echo_Bounce_loop_stereo.ogg" defaultVolume="0.4"/>
     </soundFiles>
 
     <playlistSet>

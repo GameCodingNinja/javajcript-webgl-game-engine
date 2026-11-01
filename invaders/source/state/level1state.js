@@ -57,7 +57,6 @@ const MOVE_NULL = -1,
       PLAYER_SHIP_BOOST_TOP_SPEED = 16,
       MAX_CLOUDS = 8,
       ENEMY00_SHOT_ID = -2,
-      ENEMY02_SHIP_ID = -5,
       HEALTH_CHARACTER = -50,
       ENEMY00_SHIP_HIT_VALUE = 1,
       ENEMY01_SHIP_HIT_VALUE = 5,
@@ -88,7 +87,7 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
       MAX_MINI_BOSS_STREAK = 2,
-      GOD_MODE = true;
+      GOD_MODE = false;
 
 var gAdPlayed = false,
     gAdError = false,
@@ -333,12 +332,13 @@ export class Level1State extends CommonState
         this.enemy00MaxTimer = new Timer(1000 * 20);
         this.enemy00Max = MIN_ENEMY00;
 
-        // TEMP Phase 2 test: spawn the boss 10s after the game starts
-        this.bossTestSpawnTimer = new Timer(1000 * 10);
-        this.bossSpawned = false;
+        // The boss battle takes the place of the next mini-boss once the player has fought both mini-bosses
+        this.foughtEnemy01 = false;
+        this.foughtEnemy02 = false;
 
-        // Boss battle music is playing instead of the game music
-        this.bossMusicActive = false;
+        // Boss battle in progress (boss music plays instead of the game music, enemy00 spawns slower)
+        this.bossBattleActive = false;
+        this.enemy00BossSpawnTick = 0;
 
         this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
         this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
@@ -520,7 +520,7 @@ export class Level1State extends CommonState
                 }
             }
             // Player collides into enemy01 or enemy02
-            else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHIP_ID || spriteA.parentNode.userId == ENEMY02_SHIP_ID )
+            else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHIP_ID || spriteA.parentNode.userId == gameDefs.ENEMY02_SHIP_ID )
             {
                 spriteA.collisionComponent.enable = true;
                 if(this.playerShip.collisionTimer.expired(true))
@@ -647,7 +647,7 @@ export class Level1State extends CommonState
 
         }
         // Player shot enemy02 ship
-        else if( spriteB.parentNode.userId == ENEMY02_SHIP_ID )
+        else if( spriteB.parentNode.userId == gameDefs.ENEMY02_SHIP_ID )
         {
             // Stop any more collision detection for the shot
             spriteA.collisionComponent.enable = false;
@@ -919,6 +919,10 @@ export class Level1State extends CommonState
                         if(this._gsnd.isPlaying())
                             this._gsnd.pause()
 
+                        this._gsnd = soundManager.getSound( '(level_1)', 'boss_alarm' );
+                        if(this._gsnd.isPlaying())
+                            this._gsnd.pause()
+
                         // Indicate to Crazy Games the game has started
                         if(typeof window.CrazyGames !== 'undefined')
                         {
@@ -960,16 +964,17 @@ export class Level1State extends CommonState
                             this.healthSpawnTimer.resume();
                             this.enemy00MaxTimer.resume();
 
-                            // TEMP Phase 2 test: (re)start the 10s boss spawn countdown from gameplay start
-                            if( !this.bossSpawned )
-                                this.bossTestSpawnTimer.reset();
-
                             this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                             if(this._gsnd.isPaused())
                                 this._gsnd.resume()
 
                             this._gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
                             if(this._gsnd.isPaused())
+                                this._gsnd.resume()
+
+                            // Only resume the alarm if the boss battle is still going (not after a restart)
+                            this._gsnd = soundManager.getSound( '(level_1)', 'boss_alarm' );
+                            if(this._gsnd.isPaused() && this.bossBattleActive)
                                 this._gsnd.resume()
 
                             // Indicate to Crazy Games the game has stopped
@@ -1012,6 +1017,10 @@ export class Level1State extends CommonState
                 let gsnd_loop02 = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
                 if(gsnd_loop02.isPlaying( 'enemy02_loop_sound' ))
                     scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd_loop02, null, () => gsnd_loop02.stop() );
+
+                let gsnd_alarm = soundManager.getSound( '(level_1)', 'boss_alarm' );
+                if(gsnd_alarm.isPlaying())
+                    scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd_alarm, null, () => gsnd_alarm.stop() );
 
                 if( !this.gameStartStopToggle )
                 {
@@ -1080,6 +1089,12 @@ export class Level1State extends CommonState
             else if( event.type === gameDefs.EGE_BOSS_DEFEATED )
             {
                 this.endBossMusic();
+
+                // Re-enable mini-boss (enemy01/02) spawns with a restarted timer. The player has
+                // to fight both mini-bosses again before the next boss battle.
+                this.miniBossSpawnTimer.reset();
+                this.foughtEnemy01 = false;
+                this.foughtEnemy02 = false;
             }
             else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
             {
@@ -1209,7 +1224,7 @@ export class Level1State extends CommonState
     handleMusicChange()
     {
         // Change out the music every 5 minutes (not during the boss battle)
-        if( !this.bossMusicActive && this.musicTimer.expired(true) )
+        if( !this.bossBattleActive && this.musicTimer.expired(true) )
         {
             // Fade out the current game music
             let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
@@ -1228,41 +1243,56 @@ export class Level1State extends CommonState
     //
     getGameMusic()
     {
-        if( this.bossMusicActive )
+        if( this.bossBattleActive )
             return soundManager.getSound( '(music)', 'LOOP_City-Showdown' );
 
         return soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
     }
 
     // 
-    //  DESC: Boss battle started - fade out the game music and fade in the boss music
+    //  DESC: Boss battle started - fade out the game music, fade in the boss music, and sound the alarm
     //
     startBossMusic()
     {
-        if( this.bossMusicActive )
+        if( this.bossBattleActive )
             return;
 
         let gsnd = this.getGameMusic();
         scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, gsnd, null, () => gsnd.pause() );
 
-        this.bossMusicActive = true;
+        this.bossBattleActive = true;
 
         let bsnd = this.getGameMusic();
         scriptSingleton.prepare( 'sound_fade', bsnd.defaultVolume, gameDefs.BOSS00_MUSIC_FADE_MS, bsnd, () => bsnd.play(true) );
+
+        // Loop the alarm at the start of the battle (restore its volume - a previous fade-out leaves it at 0),
+        // then fade it out BOSS00_ALARM_TIME into the battle
+        let asnd = soundManager.getSound( '(level_1)', 'boss_alarm' );
+        asnd.setVolume( asnd.defaultVolume );
+        asnd.play( true );
+        scriptSingleton.prepare( 'delayed_execution', gameDefs.BOSS00_ALARM_TIME, null, () =>
+        {
+            // Also when paused by the menu - stop() clears the paused state so it won't resume
+            if( asnd.isPlaying() || asnd.isPaused() )
+                scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, asnd, null, () => asnd.stop() );
+        });
     }
 
     // 
-    //  DESC: Boss defeated - fade out the boss music and fade the game music back in
+    //  DESC: Boss defeated - fade out the boss music and alarm, and fade the game music back in
     //
     endBossMusic()
     {
-        if( !this.bossMusicActive )
+        if( !this.bossBattleActive )
             return;
 
         let bsnd = this.getGameMusic();
         scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, bsnd, null, () => bsnd.stop() );
 
-        this.bossMusicActive = false;
+        let asnd = soundManager.getSound( '(level_1)', 'boss_alarm' );
+        scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, asnd, null, () => asnd.stop() );
+
+        this.bossBattleActive = false;
 
         let gsnd = this.getGameMusic();
         scriptSingleton.prepare( 'sound_fade', gsnd.defaultVolume, gameDefs.BOSS00_MUSIC_FADE_MS, gsnd, () => gsnd.playOrResume(true) );
@@ -1406,13 +1436,12 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
-        // TEMP Phase 1 test: enemy00 spawning disabled to isolate boss00
-        return;
-
-        // Create enemy00 and position it outside of the view
+        // Create enemy00 and position it outside of the view.
+        // During the boss battle only every Nth spawn tick spawns one (much slower).
         if( this.enemy00SpawnTimer.expired(true) )
         {
-            if( this.enemyStrategy.nodeAry.length < this.enemy00Max )
+            if( this.enemyStrategy.nodeAry.length < this.enemy00Max &&
+                (!this.bossBattleActive || (++this.enemy00BossSpawnTick % gameDefs.BOSS00_ENEMY00_SPAWN_SLOWDOWN) === 0) )
             {
                 this._node = this.enemyStrategy.create('enemy00_ship');
                 this._node.get().setPosXYZ(0, settings.deviceRes.h);
@@ -1427,6 +1456,14 @@ export class Level1State extends CommonState
         else if( this.miniBossSpawnTimer.expired(false, true) )
         {
             this.miniBossSpawnTimer.disable();
+
+            // Once the player has fought both mini-bosses, the boss battle takes this mini-boss's turn.
+            // The mini-boss timer stays disabled during the battle (enemy01/02 paused) until the boss is defeated.
+            if( this.foughtEnemy01 && this.foughtEnemy02 )
+            {
+                this.spawnBoss();
+                return;
+            }
 
             // Determine which mini-boss to spawn based on level thresholds
             if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
@@ -1445,6 +1482,12 @@ export class Level1State extends CommonState
                 this._miniBossType = 'enemy01_ship';
             }
             
+            // Track which mini-bosses the player has fought since the last boss battle
+            if( this._miniBossType === 'enemy01_ship' )
+                this.foughtEnemy01 = true;
+            else
+                this.foughtEnemy02 = true;
+
             if( this._miniBossType === this.lastMiniBossType )
             {
                 this.miniBossStreakCount++;
@@ -1503,6 +1546,26 @@ export class Level1State extends CommonState
                 this._helpSprite.setPosXYZ(this._healthSprite.pos.x, this._healthSprite.pos.y + 90);
             }
         }
+    }
+
+    // 
+    //  DESC: Spawn the boss and start the boss battle
+    //
+    spawnBoss()
+    {
+        // Spawn above the screen. The AI moves it over a building far from the player and descends.
+        this._bossNode = this.enemyStrategy.create('boss00_ship');
+        this._bossNode.get().setPosXYZ( 0, settings.deviceRes.h );
+
+        // The boss head is a SpriteNode (it has children), whose init() only prepares
+        // the children's prepareOnInit scripts - not the head sprite's own. Prepare the
+        // head sprite's AI + collision scripts manually. Guarded so a recycled node
+        // (already prepared by resetTree) isn't double-prepared.
+        if( !this._bossNode.get().scriptComponent.isActive() )
+            this._bossNode.get().prepareScriptOnInit();
+
+        // Boss battle music
+        this.startBossMusic();
     }
 
     // 
@@ -1611,24 +1674,6 @@ export class Level1State extends CommonState
             // Normalize movement to elapsed time so varying frame durations
             // don't cause visible speed-ups / slow-downs (especially on mobile touch)
             this._easingVal *= highResTimer.timeScale;
-
-            // TEMP Phase 2 test: spawn the boss above the screen 10s in so its AI descends onto a far building
-            if( !this.bossSpawned && this.bossTestSpawnTimer.expired( false, true ) )
-            {
-                this.bossSpawned = true;
-                this._bossNode = this.enemyStrategy.create('boss00_ship');
-                this._bossNode.get().setPosXYZ( 0, settings.deviceRes.h );
-
-                // The boss head is a SpriteNode (it has children), whose init() only prepares
-                // the children's prepareOnInit scripts - not the head sprite's own. Prepare the
-                // head sprite's AI + collision scripts manually. Guarded so a recycled node
-                // (already prepared by resetTree) isn't double-prepared.
-                if( !this._bossNode.get().scriptComponent.isActive() )
-                    this._bossNode.get().prepareScriptOnInit();
-
-                // Boss battle music
-                this.startBossMusic();
-            }
 
             // Handle the enemy spawn
             this.handleEnemySpawn();
@@ -1935,7 +1980,7 @@ export class Level1State extends CommonState
     //
     //  DESC: For Mobile: Left-side touch end callback - stop Y movement
     //
-    onLeftTouchEnd( slot )
+    onLeftTouchEnd()
     {
         this.moveDirY = MOVE_NULL;
         this.easingY.init( this.easingY.getValue(), 0, 0.25, easing.getLinear() );
