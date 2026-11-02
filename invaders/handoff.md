@@ -56,7 +56,7 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
 ## Current tunables (`gamedefs.js`, user-tuned — don't overwrite)
 **Boss:** boss after both mini-bosses fought, enemy00 spawn slowdown 4× during battle, alarm 5s, music fade 2s, death bursts 10 × 100ms, min target distance 2000px, charge chance 0.5, health 5, hit bar 20, destroy 7000ms, interrupt pause 1000ms, beam width 33, beam grow 1s / retract 0.4s, shake delay 1000ms, shake interval 80→15ms, shake amp 2→7, move 1300 px/s, descend 300 px/s, resting Y 55.
 
-**Missile:** `BOSS00_SHOT_ID` -21, `FIRE_INTERVAL` 1000ms, `FIRE_JITTER` 200ms, `MISSILE_SPEED` 0.3 px/ms, `TURN_RATE` 180°/s, `LAUNCH_TIME` 250ms, `LOOP_TURN_RATE` 120°/s, `LOCK_DIST` 200px, `LOCK_ALIGN` 10°, `SPAWN_OFFSET_X` 30px, `ANIM_MS` 80, `LIFETIME` 6000ms, `DAMAGE` 30. Scale (2×) is in the strategy, not code.
+**Missile:** `BOSS00_SHOT_ID` -21, `FIRE_INTERVAL` 2000ms, `FIRE_JITTER` 200ms, `MISSILE_SPEED` 0.3 px/ms, `TURN_RATE` 180°/s, `LAUNCH_TIME` 250ms, `LOOP_TURN_RATE` 120°/s, `LOCK_DIST` 200px, `LOCK_ALIGN` 10°, `SPAWN_OFFSET_X` 30px, `ANIM_MS` 80, `LIFETIME` 6000ms, `DAMAGE` 30. Scale (2×) is in the strategy, not code.
 
 ## Testing note
 **`GOD_MODE = true`** (~L91 of `level1state.js`) is still set by the user for testing; set it to `false` to see missile/ram damage. With the real trigger, reaching the boss takes the mini-boss level thresholds plus fighting both enemy01 and enemy02 (mini-bosses come 30–150s apart). To test the boss quickly, temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()`.

@@ -323,7 +323,7 @@ export class Level1State extends CommonState
         this.musicTimer = new Timer((1000 * 60 * 5));
 
         this.enemy00SpawnTimer = new Timer(1000 * 2.5);
-        this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 30), (1000 * 150)));
+        this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 30), (1000 * 130)));
         this.miniBossSpawnTimer.disable();
         this.lastMiniBossType = '';
         this.miniBossStreakCount = 0;
