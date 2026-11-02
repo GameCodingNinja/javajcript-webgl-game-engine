@@ -371,6 +371,12 @@ export class Level1State extends CommonState
         this.gameReady = false;
         this.playerShip = null;
 
+        // Stop all the level sounds so the pause menu doesn't resume them. Re-prime the thrust
+        // (it's resumed/paused by the ship movement)
+        soundManager.stopGroup( '(level_1)' );
+        this.groupPlayer.play( 'player_thrust', true );
+        this.groupPlayer.pause( 'player_thrust' );
+
         enemy00aiscripts.clearAIData();
         enemy02aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
@@ -633,8 +639,7 @@ export class Level1State extends CommonState
 
                 this.groupPlayer.play( 'enemy01_descend_to_crash' );
 
-                let gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
-                scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
+                soundManager.fadeTo( '(level_1)', 'enemy01_loop_sound', 0.0, 2000, defs.ESND_FADE_STOP );
 
                 this.miniBossSpawnTimer.reset();
             }
@@ -663,8 +668,7 @@ export class Level1State extends CommonState
                 spriteB.prepareScript( 'die' );
                 this.updateHudProgress( ENEMY02_SHIP_HIT_VALUE );
 
-                let gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
-                scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd, null, () => gsnd.stop() );
+                soundManager.fadeTo( '(level_1)', 'enemy02_loop_sound', 0.0, 2000, defs.ESND_FADE_STOP );
 
                 this.miniBossSpawnTimer.reset();
             }
@@ -889,15 +893,9 @@ export class Level1State extends CommonState
                     {
                         let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
 
+                        // Crossfade from the game music to the ambient music
                         if( asnd.isPaused() )
-                        {
-                            // Fade out the game music
-                            let gsnd = this.getGameMusic();
-                            scriptSingleton.prepare( 'sound_fade', 0.0, 500, gsnd, null, () => gsnd.pause() );
-
-                            // Start the ambient music
-                            scriptSingleton.prepare( 'sound_fade', asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true) );
-                        }
+                            soundManager.crossfade( this.getGameMusic(), asnd, 500 );
                     }
 
                     if( this.gameStartStopToggle )
@@ -911,17 +909,8 @@ export class Level1State extends CommonState
                         this.healthSpawnTimer.pause();
                         this.enemy00MaxTimer.pause();
 
-                        this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
-                        if(this._gsnd.isPlaying())
-                            this._gsnd.pause()
-
-                        this._gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
-                        if(this._gsnd.isPlaying())
-                            this._gsnd.pause()
-
-                        this._gsnd = soundManager.getSound( '(level_1)', 'boss_alarm' );
-                        if(this._gsnd.isPlaying())
-                            this._gsnd.pause()
+                        // Pause the looping level sounds (enemy loops, boss alarm, thrust)
+                        soundManager.pauseLoopingSounds( '(level_1)' );
 
                         // Indicate to Crazy Games the game has started
                         if(typeof window.CrazyGames !== 'undefined')
@@ -943,14 +932,8 @@ export class Level1State extends CommonState
                             event.arg[1].name == 'settings_menu' || 
                             event.arg[1].name == 'key_bindings_menu') )
                         {
-                            // Fade out the ambient music
-                            let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
-                            if(asnd.isPlaying())
-                                scriptSingleton.prepare( 'sound_fade', 0.0, 500, asnd, null, () => asnd.pause() );
-
-                            // Start the game music
-                            let gsnd = this.getGameMusic();
-                            scriptSingleton.prepare( 'sound_fade', gsnd.defaultVolume, 500, gsnd, () => gsnd.playOrResume(true) );
+                            // Crossfade from the ambient music to the game music
+                            soundManager.crossfade( soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' ), this.getGameMusic(), 500 );
                         }
 
                         if( !this.gameStartStopToggle )
@@ -964,18 +947,8 @@ export class Level1State extends CommonState
                             this.healthSpawnTimer.resume();
                             this.enemy00MaxTimer.resume();
 
-                            this._gsnd = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
-                            if(this._gsnd.isPaused())
-                                this._gsnd.resume()
-
-                            this._gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
-                            if(this._gsnd.isPaused())
-                                this._gsnd.resume()
-
-                            // Only resume the alarm if the boss battle is still going (not after a restart)
-                            this._gsnd = soundManager.getSound( '(level_1)', 'boss_alarm' );
-                            if(this._gsnd.isPaused() && this.bossBattleActive)
-                                this._gsnd.resume()
+                            // Resume the looping sounds the pause menu paused (not the ones stopped since, ex: by a restart)
+                            soundManager.resumeLoopingSounds( '(level_1)' );
 
                             // Indicate to Crazy Games the game has stopped
                             if(typeof window.CrazyGames !== 'undefined')
@@ -1002,25 +975,20 @@ export class Level1State extends CommonState
 
                 menuManager.getTree('pause_tree').transitionMenu();
 
-                // Fade out the game music
-                let gsnd = this.getGameMusic();
-                scriptSingleton.prepare( 'sound_fade', 0.0, 500, gsnd, null, () => gsnd.pause() );
-
-                // Start the ambient music
-                let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
-                scriptSingleton.prepare( 'sound_fade', asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true) );
+                // Crossfade from the game music to the ambient music
+                soundManager.crossfade( this.getGameMusic(), soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' ), 500 );
 
                 let gsnd_loop01 = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
                 if(gsnd_loop01.isPlaying( 'enemy01_loop_sound' ))
-                    scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd_loop01, null, () => gsnd_loop01.stop() );
+                    gsnd_loop01.fadeTo( 0.0, 2000, defs.ESND_FADE_STOP );
 
                 let gsnd_loop02 = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
                 if(gsnd_loop02.isPlaying( 'enemy02_loop_sound' ))
-                    scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd_loop02, null, () => gsnd_loop02.stop() );
+                    gsnd_loop02.fadeTo( 0.0, 2000, defs.ESND_FADE_STOP );
 
                 let gsnd_alarm = soundManager.getSound( '(level_1)', 'boss_alarm' );
                 if(gsnd_alarm.isPlaying())
-                    scriptSingleton.prepare( 'sound_fade', 0.0, 2000, gsnd_alarm, null, () => gsnd_alarm.stop() );
+                    gsnd_alarm.fadeTo( 0.0, 2000, defs.ESND_FADE_STOP );
 
                 if( !this.gameStartStopToggle )
                 {
@@ -1051,7 +1019,7 @@ export class Level1State extends CommonState
                     // Fade out the ambient music
                     let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
                     if(asnd.isPlaying())
-                        scriptSingleton.prepare( 'sound_fade', 0.0, 250, asnd, null, () => asnd.pause() );
+                        asnd.fadeTo( 0.0, 250, defs.ESND_FADE_PAUSE );
                     
                     scriptSingleton.prepare( 'screen_fade', 1, 0, 500, stateDefs.ESE_GAME_AD_START );
                 }
@@ -1078,7 +1046,10 @@ export class Level1State extends CommonState
                 // Fade in the ambient music
                 let asnd = soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' );
                 if(asnd.isPaused())
-                    scriptSingleton.prepare( 'sound_fade', asnd.defaultVolume, 500, asnd, () => asnd.playOrResume(true) );
+                {
+                    asnd.playOrResume( true );
+                    asnd.fadeTo( asnd.defaultVolume, 500 );
+                }
                 this.restartGame();
             }
             else if( event.type === menuDefs.EME_USER_FOCUS_LOST )
@@ -1226,15 +1197,10 @@ export class Level1State extends CommonState
         // Change out the music every 5 minutes (not during the boss battle)
         if( !this.bossBattleActive && this.musicTimer.expired(true) )
         {
-            // Fade out the current game music
-            let gsnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-            scriptSingleton.prepare( 'sound_fade', 0.0, 500, gsnd, null, () => gsnd.stop() );
-
+            // Crossfade from the current game music to the next one
+            let gsnd = this.getGameMusic();
             this.musicCounter = (this.musicCounter + 1) % this.musicAry.length;
-
-            // Start the next game music
-            let asnd = soundManager.getSound( '(music)', `LOOP_Techno_in_Space_${this.musicAry[this.musicCounter]}` );
-            scriptSingleton.prepare( 'sound_fade', asnd.defaultVolume, 500, asnd, () => asnd.play(true) );
+            soundManager.crossfade( gsnd, this.getGameMusic(), 500, defs.ESND_FADE_STOP );
         }
     }
 
@@ -1258,23 +1224,23 @@ export class Level1State extends CommonState
             return;
 
         let gsnd = this.getGameMusic();
-        scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, gsnd, null, () => gsnd.pause() );
 
         this.bossBattleActive = true;
 
+        // Always start the boss music from the beginning (it may have been left paused by a game over)
         let bsnd = this.getGameMusic();
-        scriptSingleton.prepare( 'sound_fade', bsnd.defaultVolume, gameDefs.BOSS00_MUSIC_FADE_MS, bsnd, () => bsnd.play(true) );
+        bsnd.stop();
+        soundManager.crossfade( gsnd, bsnd, gameDefs.BOSS00_MUSIC_FADE_MS );
 
-        // Loop the alarm at the start of the battle (restore its volume - a previous fade-out leaves it at 0),
+        // Loop the alarm at the start of the battle (reset the volume - a previous fade-out leaves it at 0),
         // then fade it out BOSS00_ALARM_TIME into the battle
         let asnd = soundManager.getSound( '(level_1)', 'boss_alarm' );
-        asnd.setVolume( asnd.defaultVolume );
-        asnd.play( true );
+        asnd.play( true, 0, true );
         scriptSingleton.prepare( 'delayed_execution', gameDefs.BOSS00_ALARM_TIME, null, () =>
         {
             // Also when paused by the menu - stop() clears the paused state so it won't resume
             if( asnd.isPlaying() || asnd.isPaused() )
-                scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, asnd, null, () => asnd.stop() );
+                asnd.fadeTo( 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, defs.ESND_FADE_STOP );
         });
     }
 
@@ -1286,16 +1252,14 @@ export class Level1State extends CommonState
         if( !this.bossBattleActive )
             return;
 
-        let bsnd = this.getGameMusic();
-        scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, bsnd, null, () => bsnd.stop() );
+        soundManager.fadeTo( '(level_1)', 'boss_alarm', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, defs.ESND_FADE_STOP );
 
-        let asnd = soundManager.getSound( '(level_1)', 'boss_alarm' );
-        scriptSingleton.prepare( 'sound_fade', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, asnd, null, () => asnd.stop() );
+        let bsnd = this.getGameMusic();
 
         this.bossBattleActive = false;
 
-        let gsnd = this.getGameMusic();
-        scriptSingleton.prepare( 'sound_fade', gsnd.defaultVolume, gameDefs.BOSS00_MUSIC_FADE_MS, gsnd, () => gsnd.playOrResume(true) );
+        // Crossfade from the boss music back to the game music
+        soundManager.crossfade( bsnd, this.getGameMusic(), gameDefs.BOSS00_MUSIC_FADE_MS, defs.ESND_FADE_STOP );
 
         // Restart the 5 minute music rotation so it doesn't swap tracks right after the boss
         this.musicTimer.reset();

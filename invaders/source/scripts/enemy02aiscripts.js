@@ -9,7 +9,6 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
-import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
@@ -137,7 +136,8 @@ class AI_Enemy02_Descend extends aiNode
             this.state = defs.EAIS_ACTIVE;
 
             let gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
-            scriptSingleton.prepare( 'sound_fade', 1.0, 4000, gsnd, () => gsnd.play('enemy02_loop_sound', true) );
+            gsnd.play( true );
+            gsnd.fadeTo( 1.0, 4000 );
         }
 
         if( this.state === defs.EAIS_ACTIVE )

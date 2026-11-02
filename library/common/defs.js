@@ -183,3 +183,8 @@ export const ESND_NULL    = 0,
              ESND_EFFECT  = 1,
              ESND_MUSIC   = 2,
              ESND_DIALOG  = 3;
+
+// What a sound does when its fade finishes
+export const ESND_FADE_NONE  = 0,
+             ESND_FADE_PAUSE = 1,
+             ESND_FADE_STOP  = 2;

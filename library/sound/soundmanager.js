@@ -10,7 +10,9 @@ import { ManagerBase } from '../managers/managerbase';
 import { Sound } from '../sound/sound';
 import { PlayList } from '../sound/playlist';
 import { GroupPlayer } from '../sound/groupplayer';
+import { highResTimer } from '../utilities/highresolutiontimer';
 import * as genFunc from '../utilities/genfunc';
+import * as defs from '../common/defs';
 
 class SoundManager extends ManagerBase
 {
@@ -32,6 +34,27 @@ class SoundManager extends ManagerBase
         // Map containing a group of map of play list ID's
         // Do not free the sounds copied to the play list
         this.playListMapMap = new Map;
+
+        // Sounds with a fade running (see Sound.fadeTo)
+        this.fadeAry = [];
+    }
+
+    //
+    //  DESC: Update the sound fades. Call once per frame
+    //
+    update()
+    {
+        for( this._f = this.fadeAry.length - 1; this._f >= 0; --this._f )
+        {
+            this._fadeSnd = this.fadeAry[this._f];
+
+            // Remove sounds whose fade finished or was canceled
+            if( !this._fadeSnd.fading || this._fadeSnd.updateFade( highResTimer.elapsedTime ) )
+            {
+                this._fadeSnd.fadeListed = false;
+                genFunc.removeAt( this.fadeAry, this._f );
+            }
+        }
     }
     
     //
@@ -68,7 +91,7 @@ class SoundManager extends ManagerBase
             if( this._groupMap.has(id) )
                 throw new Error( `Duplicate sound group id (${id}, ${group}, ${filePath})!` );
             
-            this._snd = new Sound;
+            this._snd = new Sound( this.fadeAry );
             this._groupMap.set( id, this._snd );
             
             // Load from node
@@ -179,6 +202,30 @@ class SoundManager extends ManagerBase
     }
 
     //
+    //  DESC: Pause the playing looping sounds of a group (ex: when the pause menu opens)
+    //        resumeLoopingSounds() resumes only those, unless they were stopped or replayed since
+    //
+    pauseLoopingSounds( group )
+    {
+        this._groupMap = this.soundMapMap.get( group );
+        if( this._groupMap )
+        {
+            for( this._sound of this._groupMap.values() )
+                this._sound.pauseLooping();
+        }
+    }
+
+    resumeLoopingSounds( group )
+    {
+        this._groupMap = this.soundMapMap.get( group );
+        if( this._groupMap )
+        {
+            for( this._sound of this._groupMap.values() )
+                this._sound.resumeLooping();
+        }
+    }
+
+    //
     //  DESC: Create and return a group player
     //
     createGroupPlayer( group )
@@ -247,9 +294,9 @@ class SoundManager extends ManagerBase
     //
     //  DESC: Play a sound
     //
-    play( group, soundID, loop = false )
+    play( group, soundID, loop = false, offset = 0, resetVolume = false )
     {
-        this.getSound( group, soundID ).play( loop );
+        this.getSound( group, soundID ).play( loop, offset, resetVolume );
     }
 
     //
@@ -287,6 +334,30 @@ class SoundManager extends ManagerBase
     getVolume( group, soundID )
     {
         return this.getSound( group, soundID ).getVolume();
+    }
+
+    //
+    //  DESC: Fade a sound to the volume over time (ms). See Sound.fadeTo
+    //
+    fadeTo( group, soundID, volume, time, endAction )
+    {
+        this.getSound( group, soundID ).fadeTo( volume, time, endAction );
+    }
+
+    //
+    //  DESC: Crossfade from one sound to another over time (ms)
+    //        fromSnd fades to 0 then does fromEndAction (ESND_FADE_PAUSE by default)
+    //        toSnd starts (or resumes if paused) and fades to its default volume.
+    //        If toSnd is still playing (ex: fading out), it keeps playing from where it is
+    //
+    crossfade( fromSnd, toSnd, time, fromEndAction = defs.ESND_FADE_PAUSE, loop = true )
+    {
+        fromSnd.fadeTo( 0, time, fromEndAction );
+
+        if( !toSnd.isPlaying() )
+            toSnd.playOrResume( loop );
+
+        toSnd.fadeTo( toSnd.defaultVolume, time );
     }
 
     //

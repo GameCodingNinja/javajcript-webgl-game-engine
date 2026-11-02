@@ -391,65 +391,6 @@ class ScreenFade
 }
 
 //
-//  DESC: Script for fading the music
-//
-class SoundFade
-{
-    constructor( final, time, snd, preAction = null, postAction = null )
-    {
-        this.fadeTo = new FadeTo();
-        this.result;
-        
-        // Continues the init
-        this.recycle( final, time, snd, preAction, postAction );
-    }
-
-    // 
-    //  DESC: Recycle the script
-    //
-    recycle( final, time, snd, preAction = null, postAction = null )
-    {
-        this.iter = this.iteration();
-        this.fadeTo.init( snd.getVolume(), final, time );
-        this.postAction = postAction;
-        this.snd = snd;
-
-        if( preAction )
-            preAction();
-    }
-
-    // 
-    //  DESC: Iterate the logic
-    //
-    * iteration()
-    {
-        do
-        {
-            this.result = this.fadeTo.execute();
-
-            this.snd.setVolume( this.fadeTo.value );
-
-            if( this.result )
-                break;
-
-            yield;
-        }
-        while( true );
-
-        if( this.postAction )
-            this.postAction();
-    }
-
-    // 
-    //  DESC: Execute the iteration
-    //
-    execute()
-    {
-        return this.iter.next().done;
-    }
-}
-
-//
 //  DESC: Script that executes a function before and after a timeout
 //
 class DelayedExecution
@@ -511,9 +452,6 @@ export function loadScripts()
 {
     scriptManager.set( 'ScreenFade',
         ( current, final, time, fadeType = null ) => { return new ScreenFade( current, final, time, fadeType ); } );
-
-    scriptManager.set( 'SoundFade',
-        ( final, time, snd, preAction, postAction ) => { return new SoundFade( final, time, snd, preAction, postAction ); } );
 
     scriptManager.set( 'DelayedExecution',
         ( time, preAction, postAction ) => { return new DelayedExecution( time, preAction, postAction ); } );

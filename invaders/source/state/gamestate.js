@@ -8,6 +8,7 @@
 
 import { StateMessage } from './statemessage';
 import { scriptSingleton } from '../../../library/script/scriptcomponent';
+import { soundManager } from '../../../library/sound/soundmanager';
 import * as stateDefs from './statedefs';
 
 export class GameState
@@ -46,6 +47,7 @@ export class GameState
     update()
     {
         scriptSingleton.update();
+        soundManager.update();
     }
     
     transform()

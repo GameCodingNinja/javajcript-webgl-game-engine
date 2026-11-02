@@ -116,7 +116,6 @@ export class StartUpState extends GameState
 
         // Setup the script info for the global scripts so that they are recyclable
         scriptSingleton.setScriptInfo( 'screen_fade', 'ScreenFade' );
-        scriptSingleton.setScriptInfo( 'sound_fade', 'SoundFade' );
         scriptSingleton.setScriptInfo( 'delayed_execution', 'DelayedExecution' );
 
         // Create the internal script component so that a script can be run across states

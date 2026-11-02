@@ -11,8 +11,23 @@ import * as defs from '../common/defs';
 
 export class Sound
 {
-    constructor()
+    constructor( fadeAry = null )
     {
+        // Sound manager's list of fading sounds
+        this.fadeAry = fadeAry;
+
+        // Fade data - driven by soundManager.update()
+        this.fading = false;
+        this.fadeListed = false;
+        this.fadeStartVolume = 0;
+        this.fadeEndVolume = 0;
+        this.fadeTime = 0;
+        this.fadeTimer = 0;
+        this.fadeEndAction = defs.ESND_FADE_NONE;
+
+        // Paused by soundManager.pauseLoopingSounds()
+        this.loopPaused = false;
+
         // Audio context
         this.context = null;
         
@@ -108,10 +123,15 @@ export class Sound
     
     //
     //  DESC: Play the sound
+    //        resetVolume: start at the default volume (a fade-out leaves the volume at 0).
+    //        By default the current volume is kept, ex: to fade in from 0 with fadeTo()
     //
-    play( loop = false, offset = 0 )
+    play( loop = false, offset = 0, resetVolume = false )
     {
         this.stop();
+
+        if( resetVolume )
+            this.setVolume( this.defaultVolume );
 
         if( settings.user.soundEnabled && 
             ((this.type === defs.ESND_EFFECT && settings.user.soundEffectEnabled) ||
@@ -136,6 +156,10 @@ export class Sound
     //
     stop()
     {
+        // Stopping or replaying the sound cancels any fade and pauseLooping()
+        this.fading = false;
+        this.loopPaused = false;
+
         if( this.source )
         {
             this.startTime = 0;
@@ -166,16 +190,40 @@ export class Sound
     resume()
     {
         if( this.paused && settings.user.soundEnabled && 
-            (this.type === defs.ESND_EFFECT && settings.user.soundEffectEnabled) ||
+            ((this.type === defs.ESND_EFFECT && settings.user.soundEffectEnabled) ||
             (this.type === defs.ESND_MUSIC && settings.user.soundMusicEnabled) ||
-            (this.type === defs.ESND_DIALOG && settings.user.soundDialogEnabled) )
+            (this.type === defs.ESND_DIALOG && settings.user.soundDialogEnabled)) )
         {
             this.paused = false;
             this.playing = true;
-            this.play(this.source.loop, this.startTime);
+            this.play( this.source.loop, this.startTime );
         }
     }
     
+    //
+    //  DESC: Pause the sound if it's playing and looping, and remember it for resumeLooping()
+    //        Only looping sounds, because a one-shot sound still reports playing after it ends
+    //
+    pauseLooping()
+    {
+        if( this.playing && this.source && this.source.loop )
+        {
+            this.pause();
+            this.loopPaused = true;
+        }
+    }
+
+    //
+    //  DESC: Resume the sound if pauseLooping() paused it and it wasn't stopped or replayed since
+    //
+    resumeLooping()
+    {
+        if( this.loopPaused && this.paused )
+            this.resume();
+
+        this.loopPaused = false;
+    }
+
     //
     //  DESC: Set/get the volume (0..1)
     //
@@ -204,6 +252,54 @@ export class Sound
     }
 
     //
+    //  DESC: Fade from the current volume to the final volume over time (ms)
+    //        endAction: ESND_FADE_NONE, ESND_FADE_PAUSE or ESND_FADE_STOP when the fade finishes
+    //        Replaces any fade already running on this sound. play() and stop() cancel the fade.
+    //        Needs soundManager.update() to be called every frame
+    //
+    fadeTo( volume, time, endAction = defs.ESND_FADE_NONE )
+    {
+        this.fadeStartVolume = this.getVolume();
+        this.fadeEndVolume = volume;
+        this.fadeTime = time;
+        this.fadeTimer = 0;
+        this.fadeEndAction = endAction;
+        this.fading = true;
+
+        if( !this.fadeListed )
+        {
+            this.fadeListed = true;
+            this.fadeAry.push( this );
+        }
+    }
+
+    //
+    //  DESC: Update the fade. Returns true when the fade is finished
+    //
+    updateFade( elapsedTime )
+    {
+        this.fadeTimer += elapsedTime;
+
+        if( this.fadeTimer < this.fadeTime )
+        {
+            this.setVolume( this.fadeStartVolume + ((this.fadeEndVolume - this.fadeStartVolume) * (this.fadeTimer / this.fadeTime)) );
+            return false;
+        }
+
+        this.fading = false;
+        this.setVolume( this.fadeEndVolume );
+
+        if( this.fadeEndAction === defs.ESND_FADE_STOP )
+            this.stop();
+
+        // Don't pause a sound that isn't playing - it would corrupt the resume offset
+        else if( this.fadeEndAction === defs.ESND_FADE_PAUSE && this.playing )
+            this.pause();
+
+        return true;
+    }
+
+    //
     //  DESC: Is playing?
     //
     isPlaying()
@@ -222,12 +318,12 @@ export class Sound
     //
     //  DESC: Resume if paused, play if not?
     //
-    playOrResume( loop = false )
+    playOrResume( loop = false, resetVolume = false )
     {
         if( this.paused )
             this.resume();
         else
-            this.play( loop );
+            this.play( loop, 0, resetVolume );
     }
 
     //
@@ -238,11 +334,12 @@ export class Sound
         return (this.startTime !== 0);
     }
 
-        //
+    //
     //  DESC: Dispose of sound resources
     //
     dispose()
     {
+        this.fading = false;
         this.source.stop();
         if( this.gainNode )
         {

@@ -8,7 +8,6 @@
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
-import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
@@ -119,7 +118,8 @@ class AI_Enemy01_Descend extends aiNode
             this.state = defs.EAIS_ACTIVE;
 
             let gsnd = this.groupPlayer.getSound(`enemy01_descend`);
-            scriptSingleton.prepare( 'sound_fade', 0.3, 1250, gsnd, () => gsnd.play() );
+            gsnd.play();
+            gsnd.fadeTo( 0.3, 1250 );
         }
 
         if( this.state === defs.EAIS_ACTIVE )
@@ -132,9 +132,10 @@ class AI_Enemy01_Descend extends aiNode
                 this.state = defs.EAIS_SUCCESS;
 
                 let gsnd1 = this.groupPlayer.getSound(`enemy01_loop_sound`);
-                scriptSingleton.prepare( 'sound_fade', 0.7, 1000, gsnd1, () => gsnd1.play(true) );
+                gsnd1.play( true );
+                gsnd1.fadeTo( 0.7, 1000 );
 
-                scriptSingleton.prepare( 'sound_fade', 0.0, 500, this.groupPlayer.getSound(`enemy01_descend`) );
+                this.groupPlayer.getSound(`enemy01_descend`).fadeTo( 0.0, 500 );
             }
         }
 
