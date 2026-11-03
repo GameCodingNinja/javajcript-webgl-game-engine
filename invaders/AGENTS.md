@@ -8,6 +8,7 @@ Space invaders-style game built on the custom WebGL game engine located at `../l
 
 ## Collaboration Preferences
 - Never ask to commit or push changes.
+- When playtesting, open a **visible** Chrome window and play there so the user can watch (see "Playtesting in Chrome").
 
 ## Performance Goal
 **Avoid triggering garbage collection (GC) during gameplay.** GC pauses cause frame drops and stuttering. All runtime code should:
@@ -124,6 +125,8 @@ Enemies (including bosses — a boss is just an enemy) live in the **`_enemy_` s
 
 **Boss music:** call `Level1State.startBossMusic()` when the boss battle starts (crossfades the game music to `LOOP_City-Showdown`), and dispatch `gameDefs.EGE_BOSS_DEFEATED` from the boss's die script (handled by `endBossMusic()`, which crossfades back). Any code that fades/pauses/resumes the **gameplay** music must get the track via `getGameMusic()` (not the `LOOP_Techno_in_Space_*` name directly), so pause/resume/game-over work during a boss battle. The 5-minute track rotation is skipped while `bossBattleActive` is set. `startBossMusic()` also starts the looping `boss_alarm`, faded out `BOSS00_ALARM_TIME` into the battle. Looping battle sounds like this are paused/resumed with the pause menu automatically (see Sound Fades → `pauseLoopingSounds`) and must be faded out on game over. Replay it with `play( true, 0, true )` so it starts at its `defaultVolume` (a fade-out leaves the gain at 0).
 
+**Boss screen lock:** `Level1State.handleBossScreenLock()` (called in `update()` right after `_easingVal` is scaled by `timeScale`) stops all scrolling while the boss is in view: once the boss is down on the screen and its center is within `deviceRes_half.w - BOSS00_SCREEN_LOCK_INSET` of the screen center, `_easingVal` is set to 0 so no camera moves, and only the ship moves (clamped `BOSS00_SCREEN_LOCK_EDGE` px from the screen sides right after its `incPosXYZ`). It unlocks when the boss is completely off the side of the screen (`deviceRes_half.w + INSET`) or dies (`bossSprite` cleared on `EGE_BOSS_DEFEATED`), clears `cameraEasingX` so the screen doesn't jump, and if the ship is moving starts the facing-direction camera easing like a thrust press (`endBossScreenLock()`). That easing is started by `startCameraEasing( moveDir )` (thrust press + unlock). During the boss battle it's faster when the ship turns **toward** the boss (wrap-aware): `BOSS00_CAMERA_EASING_SPEED` 25 vs `CAMERA_EASING_SPEED` 10, ramp `BOSS00_CAMERA_EASING_RAMP_SEC` 0.5 s vs 1 s, so the ship is back at its normal back-of-screen position, not the middle, by the time the boss comes into view. Reversing away from the boss (e.g. to slow down) uses the normal speed. Screen X = `sprite.pos.x + camera.pos.x` (a camera stores its position negated); the boss uses `buildingsCamera`, the ship `levelCamera`, wrapped to the nearest copy. `spawnBoss()` stores `this.bossSprite`. Rejected by the user, don't reintroduce: a camera framing the ship/boss midpoint, and a fast shift of the ship to the far screen edge before the lock (too harsh).
+
 **Per-entity state** lives on the head sprite (e.g. `sprite.targetBuilding`, `sprite.vulnerable`, `sprite.bossHealth`), mirroring how `enemy00` stores `hitCount`/`targetBuilding`. The collision handler reads/writes this state on `spriteB`.
 
 ### Adding an Enemy Projectile
@@ -172,6 +175,15 @@ A single `dead_zone_slider` control (in both `settings.menu` and `settings_mobil
 - **Gamepad/desktop** → `settings.user.stickDeadZone`, a **0–1 fraction** shown as a percentage (`value × 100` to display, `× 0.01` to store). Desktop menu: `maxValue="80"`, label `"GPad Deadzone: %d%"`.
 - The two menus intentionally use **different `maxValue`s**: gamepad is capped at 80 so 100% can't fully disable the controller (counter-intuitive); touch uses the full 0–100px range.
 - The native units are consumed unchanged by gameplay code — `stickDeadZone` in `eventmanager.handleGamepad()` (added to `ANALOG_STICK_MSG_MAX`), `touchDeadZone` (px) in `eventmanager` touch d-pad and `level1state` touch-Y. Only the slider scripts do the conversion.
+
+## Playtesting in Chrome
+How the boss fight was bot-played so the user could watch (all temporary, clean up afterwards):
+1. Add `window.gLvl = this; // AMP-DEBUG` after `this.gameReady = true;` in the `Level1State` constructor and build (`npx webpack --mode development`). **Remove it and rebuild when done.**
+2. Serve the game: `python3 -m http.server 8123 --bind 127.0.0.1` in `invaders/`.
+3. Open a visible window: `google-chrome-stable --new-window --remote-debugging-port=9333 --autoplay-policy=no-user-gesture-required --window-size=1300,800 --user-data-dir=/tmp/amp_chrome_live http://127.0.0.1:8123/index.html`. The user may close it between tests; check `http://127.0.0.1:9333/json/list` and relaunch if needed.
+4. Drive it with a small Node script over the DevTools protocol (`ws` is in the root `node_modules`): `Input.dispatchKeyEvent` (`code: 'Enter'`) to start the game (also unlocks audio), `Runtime.evaluate` to read `gLvl` state and inject a bot, `Page.captureScreenshot`, `Page.reload` with `ignoreCache` after a rebuild.
+5. The bot runs **in the page** (`setInterval` ~50ms) so play is real-time: it dispatches `KeyboardEvent`s on `document` with `code` (`KeyA`/`KeyD`/`KeyW`/`KeyS`/`Space`; the game reads `event.code`), flies toward `gLvl.bossSprite` using the wrap-aware screen distance, faces it, lines up vertically and shoots. Refill health every tick (`gLvl.playerShip.progressBar.setCurrentValue(100)`), because `GOD_MODE` is a `const`. Log measurements (e.g. ship/boss screen X at each lock) to `window` variables and read them back.
+6. Clicking away from the window can open the pause menu (focus lost), so the user should just watch while the bot plays.
 
 ## Code Conventions
 

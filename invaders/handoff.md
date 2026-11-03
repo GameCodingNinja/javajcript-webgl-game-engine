@@ -27,15 +27,17 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
 5. Targets only buildings that are not destroyed and not already targeted. **First descent:** a random building in the half farthest from the player. **Each later move:** a random building at least `BOSS00_MIN_TARGET_DIST` (2000px = 10 buildings, wrap-aware) from the boss. If only closer buildings are left, it picks one of them and **always goes the long way around** the map. With no buildings left, it just sits (the game is over anyway).
 6. Free-flying wrap-around movement (shortest wrapped path).
 7. Health 0 → beam/bars hidden, shaken building restored, boss falls fast while spinning, then is recycled. Player scores `BOSS00_SHIP_HIT_VALUE` (10).
-8. **Music:** on spawn, the game music crossfades (2s, `BOSS00_MUSIC_FADE_MS`) to `LOOP_City-Showdown`. On death (`EGE_BOSS_DEFEATED`), it crossfades back to the track that was playing, and the 5-minute rotation timer restarts. Pause/resume/game over use `getGameMusic()`, so they handle the boss track. **Alarm:** `boss_alarm` loops at the start of the battle (started in `startBossMusic()` at full volume), then `BOSS00_ALARM_TIME` (5s) in it fades out over `BOSS00_MUSIC_FADE_MS`. It's also faded in `endBossMusic()` and on game over, and paused/resumed with the pause menu only while the battle is active. **Crash sound:** `boss_crash` plays when the death fall lands.
+8. **Music:** on spawn, the game music crossfades (2s, `BOSS00_MUSIC_FADE_MS`) to `LOOP_City-Showdown`. On death (`EGE_BOSS_DEFEATED`), it crossfades back to the track that was playing, and the 5-minute rotation timer restarts. Pause/resume/game over use `getGameMusic()`, so they handle the boss track. **Alarm:** `boss_alarm` loops at the start of the battle (started in `startBossMusic()` at full volume), then `BOSS00_ALARM_TIME` (5s) in it fades out over `BOSS00_MUSIC_FADE_MS`. It's also faded in `endBossMusic()` and on game over, and paused/resumed with the pause menu like every looping level sound (`pauseLoopingSounds`). **Crash sound:** `boss_crash` plays when the death fall lands.
+9. **Screen lock (camera):** once the boss is down on the screen and its body is on screen (center within 380px of the screen center), the screen stops scrolling and only the player ship moves, kept 60px from the screen sides. It unlocks when the boss is completely off the side of the screen (flies off) or dies. During the battle, the camera slide that moves the ship to the back of the screen when it changes direction is **fast when the ship turns toward the boss** (speed 25, 0.5s ramp; normal 10, 1s) so the ship isn't mid-screen when the boss comes into view; reversing away from the boss (e.g. to slow down) uses the normal speed. The slide also restarts when a lock ends if the ship is moving. Code: `handleBossScreenLock()`, `endBossScreenLock()`, `startCameraEasing( moveDir )` in `level1state.js` (details in AGENTS.md "Boss screen lock").
+   - Tried and rejected by the user: a camera that framed the ship/boss midpoint (no visible effect), and a fast pre-lock shift of the ship to the far edge (too harsh).
 
 ## How the missile behaves
-- **When:** only while the beam is out (DestroyBuilding `destroying` phase, not after an interrupt), and only if the boss is in view and the player is alive. About one per second (1000ms ± 200). First missile about 1s after the beam appears. Stops on retract, interrupt, travel, and boss death.
+- **When:** only while the beam is out (DestroyBuilding `destroying` phase, not after an interrupt), and only if the boss is in view and the player is alive. About one every 2 seconds (2000ms ± 200). First missile about 1s after the beam appears. Stops on retract, interrupt, travel, and boss death.
 - **Launch:** from either side of the boss at random (±30px from center, regardless of where the player is), flying straight **up or down** at random for 250ms.
 - **Curve:** then it homes in on the player at up to 180°/s (a smooth arc). The nose always faces the direction of flight, and the missile cycles `missile-0`/`missile-1` every 80ms.
 - **Far-side loop:** if it launched on the side away from the player, it doesn't hard turn back across the boss. It turns **outward** at 120°/s (wide enough to clear the boss body) and loops back around. Once its natural turn toward the player matches the loop direction, normal homing takes over.
 - **Final run (dodge window):** once within 200px **and** its nose is within 10° of the player, it stops steering and flies straight. A player who sits still gets hit, one who moves dodges it, and the missile shoots out the other side.
-- **Hit:** 30 player health (unless `GOD_MODE`), player explosion + `player_hit` sound, missile removed. Player shots pass through missiles. Missiles expire after 6s or when they leave the screen vertically.
+- **Hit:** 20 player health (unless `GOD_MODE`), player explosion + `player_hit` sound, missile removed. Player shots pass through missiles. Missiles expire after 6s or when they leave the screen vertically.
 - **Launch sound:** each launch plays the random `boss_rocket_launch` playlist (`enemySound.lst`, 3 rocket sounds at volume 0.5).
 - Tried and rejected by the user: a straight shot, hard homing (undodgeable), a sharp zig-zag, and random swirling wander.
 
@@ -49,23 +51,28 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
 | `source/scripts/boss00aiscripts.js` | AI nodes, building selection, beam, shake, bar visibility, `shootPlayer()` + `inViewWithWrap()`, `clearAIData()` |
 | `source/scripts/boss00scripts.js` | `Boss00Shot_Fire` (missile flight), `Boss00Shot_Hit`, `Boss00Ship_Hit`, `Boss00Ship_Die` |
 | `source/state/gamedefs.js` | `BOSS00_*` tunables (boss + missile), `RAM_EXPLODE_SHIFT_X/Y`, `EGE_BOSS_DEFEATED`, `ENEMY02_SHIP_ID` |
-| `source/state/level1state.js` | AI load, collision handling (incl. `BOSS00_SHOT_ID` branch), boss trigger (`handleEnemySpawn` / `spawnBoss`), boss music, `EGE_BOSS_DEFEATED` handling, cleanup |
+| `source/state/level1state.js` | AI load, collision handling (incl. `BOSS00_SHOT_ID` branch), boss trigger (`handleEnemySpawn` / `spawnBoss`), boss music, screen lock + boss camera easing (`handleBossScreenLock` / `endBossScreenLock` / `startCameraEasing`), `EGE_BOSS_DEFEATED` handling, cleanup |
 | `source/scripts/levelscripts.js` | `Explode_animation` (optional offsets used by the death bursts; boss/enemy01/enemy02 ram explosion centered on the player, shifted 16px X / 8px Y toward the enemy) |
 | `source/state/startupstate.js` | Script registration |
 
 ## Current tunables (`gamedefs.js`, user-tuned — don't overwrite)
 **Boss:** boss after both mini-bosses fought, enemy00 spawn slowdown 4× during battle, alarm 5s, music fade 2s, death bursts 10 × 100ms, min target distance 2000px, charge chance 0.5, health 5, hit bar 20, destroy 7000ms, interrupt pause 1000ms, beam width 33, beam grow 1s / retract 0.4s, shake delay 1000ms, shake interval 80→15ms, shake amp 2→7, move 1300 px/s, descend 300 px/s, resting Y 55.
 
-**Missile:** `BOSS00_SHOT_ID` -21, `FIRE_INTERVAL` 2000ms, `FIRE_JITTER` 200ms, `MISSILE_SPEED` 0.3 px/ms, `TURN_RATE` 180°/s, `LAUNCH_TIME` 250ms, `LOOP_TURN_RATE` 120°/s, `LOCK_DIST` 200px, `LOCK_ALIGN` 10°, `SPAWN_OFFSET_X` 30px, `ANIM_MS` 80, `LIFETIME` 6000ms, `DAMAGE` 30. Scale (2×) is in the strategy, not code.
+**Camera:** `BOSS00_SCREEN_LOCK_INSET` 260px (lock when the boss center is within 640−260 of the screen center, unlock beyond 640+260), `BOSS00_SCREEN_LOCK_EDGE` 60px (ship margin while locked), `BOSS00_CAMERA_EASING_SPEED` 25, `BOSS00_CAMERA_EASING_RAMP_SEC` 0.5.
+
+**Missile:** `BOSS00_SHOT_ID` -21, `FIRE_INTERVAL` 2000ms, `FIRE_JITTER` 200ms, `MISSILE_SPEED` 0.3 px/ms, `TURN_RATE` 180°/s, `LAUNCH_TIME` 250ms, `LOOP_TURN_RATE` 120°/s, `LOCK_DIST` 200px, `LOCK_ALIGN` 10°, `SPAWN_OFFSET_X` 30px, `ANIM_MS` 80, `LIFETIME` 6000ms, `DAMAGE` 20. Scale (2×) is in the strategy, not code.
 
 ## Testing note
-**`GOD_MODE = true`** (~L91 of `level1state.js`) is still set by the user for testing; set it to `false` to see missile/ram damage. With the real trigger, reaching the boss takes the mini-boss level thresholds plus fighting both enemy01 and enemy02 (mini-bosses come 30–150s apart). To test the boss quickly, temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()`.
+`GOD_MODE` (~L90 of `level1state.js`) is now `false` (user), so missiles and rams do damage. With the real trigger, reaching the boss takes the mini-boss level thresholds plus fighting both enemy01 and enemy02 (mini-bosses come 30–150s apart). To test the boss quickly, temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()`.
 
 ## Done since the first handoff
 - Real spawn trigger (after fighting both mini-bosses) and enemy rules during the fight (see "When the boss appears"). TEMP test code removed.
 - Sound (Q10): missile launch, boss crash, boss battle music, `boss_alarm` at battle start.
 - Death explosion: 10 staggered bursts (2–4× scale) scattered over the body, each playing `enemy_explosion` (`BOSS00_DEATH_BURST_*`).
 - Charge, next-target distance rule + long-way fallback, boss/enemy01/enemy02 ram explosion centered on the player with a 16px X / 8px Y shift toward the enemy.
+- Missile interval raised to 2s (`BOSS00_FIRE_INTERVAL` 2000).
+- Library sound features (committed): built-in fades, `soundManager.crossfade()`, `play(..., resetVolume)`, pause menu `pauseLoopingSounds`/`resumeLoopingSounds`, `Sound.resume()` precedence fix. See AGENTS.md "Sound Fades".
+- Screen lock + boss camera easing (item 9 above).
 
 ## Known review findings (user chose not to fix — leave unless asked)
 - Collision is disabled during the descent.
@@ -90,12 +97,15 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
 npx webpack --mode development
 npx eslint source/scripts/boss00aiscripts.js source/scripts/boss00scripts.js
 ```
-The only remaining lint errors are 2 × `'ytgame' is not defined` in `level1state.js` (the YouTube Playables global, guarded by `typeof` at runtime). Adding `"ytgame": "readonly"` to `globals` in the root `.eslintrc.json` would clear them. The unused `slot` parameter on `onLeftTouchEnd()` was removed (mobile behavior unchanged).
+The only remaining lint errors are `'ytgame' is not defined` (2 in `level1state.js`, 6 in `startupstate.js`; the YouTube Playables global, guarded by `typeof` at runtime). Adding `"ytgame": "readonly"` to `globals` in the root `.eslintrc.json` would clear them. `soundmanager.js` also has a pre-existing optional-chaining parse error under the ES2018 lint config.
+
+## Playtesting
+The user wants to **watch**: open a visible Chrome window and play the boss fight there (see AGENTS.md "Playtesting in Chrome" for the method). The bot refills the ship's health, so a bot run says nothing about difficulty.
 
 ## Working state
-The user has committed all the boss work. Uncommitted: **sound fades moved into the library sound system** — `Sound.fadeTo(volume, ms, endAction)` / `soundManager.fadeTo(group, id, ...)` with `ESND_FADE_NONE/PAUSE/STOP`, driven by `soundManager.update()` from `GameState.update()`. All 25 `sound_fade` call sites (`level1state.js`, `enemy01aiscripts.js`, `enemy02aiscripts.js`) were migrated, and the `SoundFade` script and its registration were removed. A new fade replaces the old one and `play()`/`stop()` cancel it, so a stale fade can no longer pause/stop a sound that was restarted (e.g. quick pause/unpause). The fade list removes entries with `genFunc.removeAt()`. **Crossfade:** `soundManager.crossfade(fromSnd, toSnd, ms, fromEndAction = PAUSE, loop = true)` replaces the hand-written music crossfades (pause menu in/out, game over, 5-minute rotation, boss start/end); a `toSnd` still playing isn't restarted, and `startBossMusic()` calls `bsnd.stop()` first so the boss track always starts from the beginning. **Volume reset:** `Sound.play( loop, offset, resetVolume = false )` (also `playOrResume`, `soundManager.play`, `GroupPlayer.play`, `PlayList.play`). Default keeps the current volume, so fade-ins still rise from 0; pass `true` to start at `defaultVolume`. `boss_alarm` replays with `play( true, 0, true )` instead of a manual `setVolume()`. **Pause menu loops:** `soundManager.pauseLoopingSounds/resumeLoopingSounds( group )` (per-sound `loopPaused` flag, cleared by `stop()`/`play()`) replace the per-sound pause/resume code for enemy01/02 loops and `boss_alarm`, and the `bossBattleActive` resume check. `restartGame()` now calls `stopGroup( '(level_1)' )` and re-primes `player_thrust`, which also fixes enemy loops coming back after a restart from the pause menu. `player_thrust` now pauses with the menu too if it was playing. **`Sound.resume()` fix:** added the missing parentheses around the type checks, so music/dialog sounds no longer resume when not paused (crash on a null source / restart at a wrong position) or when the master Sound switch is off. Build passes; fade logic was checked with a scratch Node test; not playtested. Don't ask to commit or push.
+The user has committed everything up to the faster boss camera easing except the screen lock work below. Uncommitted: **screen lock + boss camera easing** (item 9 in "How the boss behaves"; `level1state.js`, the four camera tunables in `gamedefs.js`) and these doc updates. The boss-only TEMP test code has been removed, so spawning is normal. Bot-played in a visible Chrome window (full fight, 5 locks): at each lock the ship was at its normal back position (±390–510) with the boss at ±375; after an unlock the ship swings back to its normal position in under 0.8s; every brake (reverse) before a lock used the normal slide speed, every turn toward the boss the fast one. Don't ask to commit or push.
 
 ## Suggested next steps
-1. Playtest a full cycle with the real trigger (temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()` to get there fast), including game over mid-battle → restart.
-2. Set `GOD_MODE = false` when testing is finished.
+1. Playtest a full cycle with the real trigger (temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()` to get there fast), including game over mid-battle → restart and the pause menu during the fight (sound + screen lock).
+2. Optional: add `ytgame` to the ESLint globals.
 3. Optional: the three declined review findings above.

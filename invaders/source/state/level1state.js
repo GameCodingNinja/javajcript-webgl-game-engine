@@ -340,6 +340,10 @@ export class Level1State extends CommonState
         this.bossBattleActive = false;
         this.enemy00BossSpawnTick = 0;
 
+        // Boss head sprite, and whether the screen is locked because the boss is in view (see handleBossScreenLock())
+        this.bossSprite = null;
+        this.bossScreenLock = false;
+
         this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
         this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
 
@@ -1060,6 +1064,7 @@ export class Level1State extends CommonState
             else if( event.type === gameDefs.EGE_BOSS_DEFEATED )
             {
                 this.endBossMusic();
+                this.bossSprite = null;
 
                 // Re-enable mini-boss (enemy01/02) spawns with a restarted timer. The player has
                 // to fight both mini-bosses again before the next boss battle.
@@ -1302,7 +1307,7 @@ export class Level1State extends CommonState
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
                             if(this._dir > -CAMERA_EASING_OFFSET)
-                                this.cameraEasingX.init( this.cameraEasingX.getValue(), -CAMERA_EASING_SPEED, 1, easing.getLinear() );
+                                this.startCameraEasing( MOVE_LEFT );
                         }
                         else
                         {
@@ -1337,7 +1342,7 @@ export class Level1State extends CommonState
                             // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
                             // Don't allow any more camera easing, in this direction, after a certain point
                             if(this._dir < CAMERA_EASING_OFFSET)
-                                this.cameraEasingX.init( this.cameraEasingX.getValue(), CAMERA_EASING_SPEED, 1, easing.getLinear() );
+                                this.startCameraEasing( MOVE_RIGHT );
                         }
                         else
                         {
@@ -1520,6 +1525,7 @@ export class Level1State extends CommonState
         // Spawn above the screen. The AI moves it over a building far from the player and descends.
         this._bossNode = this.enemyStrategy.create('boss00_ship');
         this._bossNode.get().setPosXYZ( 0, settings.deviceRes.h );
+        this.bossSprite = this._bossNode.get();
 
         // The boss head is a SpriteNode (it has children), whose init() only prepares
         // the children's prepareOnInit scripts - not the head sprite's own. Prepare the
@@ -1530,6 +1536,100 @@ export class Level1State extends CommonState
 
         // Boss battle music
         this.startBossMusic();
+    }
+
+    // 
+    //  DESC: Start the camera easing that slides the player ship to the back of the screen when it
+    //        moves in moveDir. During the boss battle it's faster when the ship turns toward the boss,
+    //        so the ship is at its normal position (not the middle of the screen) by the time the boss
+    //        comes into view. Reversing away from the boss (ex: to slow down) uses the normal speed.
+    //
+    startCameraEasing( moveDir )
+    {
+        this._fastCameraEasing = false;
+
+        if( this.bossBattleActive && this.bossSprite )
+        {
+            // Wrap-aware screen distance from the ship to the boss
+            this._bossDeltaX = (this.bossSprite.pos.x + this.buildingsCamera.pos.x) -
+                (this.playerShip.sprite.pos.x + this.levelCamera.pos.x);
+            this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+            if( this._bossDeltaX > this._wrapSpan / 2 )
+                this._bossDeltaX -= this._wrapSpan;
+            else if( this._bossDeltaX < -this._wrapSpan / 2 )
+                this._bossDeltaX += this._wrapSpan;
+
+            this._fastCameraEasing = ((moveDir === MOVE_RIGHT) === (this._bossDeltaX > 0));
+        }
+
+        this._cameraEasingSpeed = this._fastCameraEasing ? gameDefs.BOSS00_CAMERA_EASING_SPEED : CAMERA_EASING_SPEED;
+
+        this.cameraEasingX.init( this.cameraEasingX.getValue(),
+            (moveDir === MOVE_LEFT) ? -this._cameraEasingSpeed : this._cameraEasingSpeed,
+            this._fastCameraEasing ? gameDefs.BOSS00_CAMERA_EASING_RAMP_SEC : 1, easing.getLinear() );
+    }
+
+    // 
+    //  DESC: Boss battle screen lock. Once the boss is in view (body on the screen), the screen stops
+    //        scrolling and only the player ship moves, until the boss flies off the screen or dies.
+    //        Must be called after _easingVal is set (it zeroes it while locked).
+    //
+    handleBossScreenLock()
+    {
+        if( this.bossBattleActive && this.bossSprite )
+        {
+            // Boss X on the screen (camera pos is the negated camera position), wrapped to the nearest copy
+            this._bossScreenX = this.bossSprite.pos.x + this.buildingsCamera.pos.x;
+            this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+            if( this._bossScreenX > this._wrapSpan / 2 )
+                this._bossScreenX -= this._wrapSpan;
+            else if( this._bossScreenX < -this._wrapSpan / 2 )
+                this._bossScreenX += this._wrapSpan;
+
+            // Lock once the boss body is on the screen (and it's down, not flying above the screen).
+            // Unlock once it's completely off the side of the screen.
+            if( !this.bossScreenLock )
+            {
+                this.bossScreenLock =
+                    (Math.abs( this._bossScreenX ) < (settings.deviceRes_half.w - gameDefs.BOSS00_SCREEN_LOCK_INSET)) &&
+                    this.buildingsCamera.inViewY( this.bossSprite.transPos, this.bossSprite.parentNode.radius );
+            }
+            else if( Math.abs( this._bossScreenX ) > (settings.deviceRes_half.w + gameDefs.BOSS00_SCREEN_LOCK_INSET) )
+            {
+                this.endBossScreenLock();
+            }
+        }
+        else if( this.bossScreenLock )
+        {
+            this.endBossScreenLock();
+        }
+
+        // Locked: the cameras don't move
+        if( this.bossScreenLock )
+            this._easingVal = 0;
+    }
+
+    // 
+    //  DESC: End the boss screen lock. The facing-direction camera easing was ignored while locked, so drop it.
+    //        If the ship is moving, slide it back to its normal position (back of the screen) like a thrust press does.
+    //
+    endBossScreenLock()
+    {
+        this.bossScreenLock = false;
+        this.cameraEasingX.clear();
+
+        this._shipScreenX = this.playerShip.sprite.pos.x + this.levelCamera.pos.x;
+
+        if( this.lastMoveDirX === MOVE_LEFT && this.easingX.getValue() < 0 && this._shipScreenX < CAMERA_EASING_OFFSET )
+        {
+            this.moveDirX = MOVE_LEFT;
+            this.startCameraEasing( MOVE_LEFT );
+        }
+        else if( this.lastMoveDirX === MOVE_RIGHT && this.easingX.getValue() > 0 && this._shipScreenX > -CAMERA_EASING_OFFSET )
+        {
+            this.moveDirX = MOVE_RIGHT;
+            this.startCameraEasing( MOVE_RIGHT );
+        }
     }
 
     // 
@@ -1638,6 +1738,9 @@ export class Level1State extends CommonState
             // Normalize movement to elapsed time so varying frame durations
             // don't cause visible speed-ups / slow-downs (especially on mobile touch)
             this._easingVal *= highResTimer.timeScale;
+
+            // Boss battle: lock the screen while the boss is in view (only the player ship moves)
+            this.handleBossScreenLock();
 
             // Handle the enemy spawn
             this.handleEnemySpawn();
@@ -1780,6 +1883,18 @@ export class Level1State extends CommonState
             }
 
             this.playerShip.sprite.incPosXYZ( this.easingX.getValue() * highResTimer.timeScale, this.easingY.getValue() * highResTimer.timeScale );
+
+            // Screen locked for the boss: keep the ship on the screen
+            if( this.bossScreenLock )
+            {
+                this._shipScreenX = this.playerShip.sprite.pos.x + this.levelCamera.pos.x;
+                this._shipLimitX = settings.deviceRes_half.w - gameDefs.BOSS00_SCREEN_LOCK_EDGE;
+
+                if( this._shipScreenX > this._shipLimitX )
+                    this.playerShip.sprite.incPosXYZ( this._shipLimitX - this._shipScreenX );
+                else if( this._shipScreenX < -this._shipLimitX )
+                    this.playerShip.sprite.incPosXYZ( -this._shipLimitX - this._shipScreenX );
+            }
 
             // Loop the player strategy and camera
             if( this.playerShip.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
