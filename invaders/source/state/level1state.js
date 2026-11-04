@@ -343,6 +343,8 @@ export class Level1State extends CommonState
         // Boss head sprite, and whether the screen is locked because the boss is in view (see handleBossScreenLock())
         this.bossSprite = null;
         this.bossScreenLock = false;
+        this.bossBrake = false;
+        this.bossBrakeDone = false;
 
         this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
         this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
@@ -1103,7 +1105,8 @@ export class Level1State extends CommonState
 
                     this.groupPlayer.play( 'player_gun_1' );
                 }
-                else if( actionManager.wasActionPress( event, 'boost', defs.EAP_DOWN ) )
+                // Boost is ignored during the boss slow-down (a release still lets the boost bar recharge)
+                else if( actionManager.wasActionPress( event, 'boost', defs.EAP_DOWN ) && !this.bossBrake )
                 {
                     this.playerShip.boostButtonPress = defs.EAP_DOWN;
                     this.handleBoostActivation();
@@ -1113,7 +1116,7 @@ export class Level1State extends CommonState
                     this.playerShip.boostSpeed = 0;
                     this.playerShip.boostButtonPress = defs.EAP_UP;
 
-                    if( this.lastMoveAction === defs.EAP_DOWN )
+                    if( this.lastMoveAction === defs.EAP_DOWN && !this.bossBrake )
                     {
                         if( this.lastMoveDirX === MOVE_LEFT )
                             this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
@@ -1298,27 +1301,34 @@ export class Level1State extends CommonState
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
                             this.playerShip.fireTailScript.pause = false;
-                            this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
-
                             this.groupPlayer.resume( 'player_thrust' );
 
                             //console.log("Move Left DOWN");
 
-                            // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
-                            // Don't allow any more camera easing, in this direction, after a certain point
-                            if(this._dir > -CAMERA_EASING_OFFSET)
-                                this.startCameraEasing( MOVE_LEFT );
+                            // Ignored during the boss slow-down (applied when it finishes, see handleBossScreenLock())
+                            if( !this.bossBrake )
+                            {
+                                this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
+
+                                // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
+                                // Don't allow any more camera easing, in this direction, after a certain point
+                                if(this._dir > -CAMERA_EASING_OFFSET)
+                                    this.startCameraEasing( MOVE_LEFT );
+                            }
                         }
                         else
                         {
                             this.playerShip.fireTailSprite.setVisible( false );
                             this.playerShip.fireTailScript.pause = true;
-                            this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
-
                             this.groupPlayer.pause( 'player_thrust' );
 
-                            this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
-                            this.playerShip.boostSpeed = 0;
+                            // Ignored during the boss slow-down (applied when it finishes, see handleBossScreenLock())
+                            if( !this.bossBrake )
+                            {
+                                this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+                                this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+                                this.playerShip.boostSpeed = 0;
+                            }
                         }
 
                         this.moveDirX = MOVE_LEFT;
@@ -1333,27 +1343,34 @@ export class Level1State extends CommonState
                         {
                             this.playerShip.fireTailSprite.setVisible( true );
                             this.playerShip.fireTailScript.pause = false;
-                            this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
-
                             this.groupPlayer.resume( 'player_thrust' );
 
                             //console.log("Move Right DOWN");
 
-                            // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
-                            // Don't allow any more camera easing, in this direction, after a certain point
-                            if(this._dir < CAMERA_EASING_OFFSET)
-                                this.startCameraEasing( MOVE_RIGHT );
+                            // Ignored during the boss slow-down (applied when it finishes, see handleBossScreenLock())
+                            if( !this.bossBrake )
+                            {
+                                this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
+
+                                // Camera easing has to move slower or faster then the elements on the screen to avoid movement studder
+                                // Don't allow any more camera easing, in this direction, after a certain point
+                                if(this._dir < CAMERA_EASING_OFFSET)
+                                    this.startCameraEasing( MOVE_RIGHT );
+                            }
                         }
                         else
                         {
                             this.playerShip.fireTailSprite.setVisible( false );
                             this.playerShip.fireTailScript.pause = true;
-                            this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
-
                             this.groupPlayer.pause( 'player_thrust' );
 
-                            this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
-                            this.playerShip.boostSpeed = 0;
+                            // Ignored during the boss slow-down (applied when it finishes, see handleBossScreenLock())
+                            if( !this.bossBrake )
+                            {
+                                this.easingX.init( this.easingX.getValue(), 0, 3, easing.getLinear() );
+                                this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+                                this.playerShip.boostSpeed = 0;
+                            }
                         }
 
                         this.moveDirX = MOVE_RIGHT;
@@ -1362,7 +1379,7 @@ export class Level1State extends CommonState
                     this.lastMoveDirX = this.moveDirX;
                     this.lastMoveAction = this._actionResult;
 
-                    if(this.playerShip.boostButtonPress === defs.EAP_DOWN)
+                    if(this.playerShip.boostButtonPress === defs.EAP_DOWN && !this.bossBrake)
                         this.handleBoostActivation();
                 }
                 else
@@ -1586,6 +1603,22 @@ export class Level1State extends CommonState
             else if( this._bossScreenX < -this._wrapSpan / 2 )
                 this._bossScreenX += this._wrapSpan;
 
+            // Coming into view of the boss: slow the ship down once, before the lock, so it stops in time.
+            // Re-armed once the boss is completely off the side of the screen again (ex: the player chases it).
+            if( !this.bossBrakeDone )
+            {
+                if( (Math.abs( this._bossScreenX ) < gameDefs.BOSS00_BRAKE_START_DIST) &&
+                    this.buildingsCamera.inViewY( this.bossSprite.transPos, this.bossSprite.parentNode.radius ) )
+                {
+                    this.bossBrakeDone = true;
+                    this.startBossBrake();
+                }
+            }
+            else if( Math.abs( this._bossScreenX ) > (settings.deviceRes_half.w + gameDefs.BOSS00_SCREEN_LOCK_INSET) )
+            {
+                this.bossBrakeDone = false;
+            }
+
             // Lock once the boss body is on the screen (and it's down, not flying above the screen).
             // Unlock once it's completely off the side of the screen.
             if( !this.bossScreenLock )
@@ -1599,14 +1632,54 @@ export class Level1State extends CommonState
                 this.endBossScreenLock();
             }
         }
-        else if( this.bossScreenLock )
+        else
         {
-            this.endBossScreenLock();
+            this.bossBrakeDone = false;
+
+            if( this.bossScreenLock )
+                this.endBossScreenLock();
         }
 
         // Locked: the cameras don't move
         if( this.bossScreenLock )
             this._easingVal = 0;
+
+        // The slow-down finished (left/right/boost input was ignored during it): give the control back.
+        // If a direction is held, speed up in it like a thrust press does, else let the camera easing settle.
+        if( this.bossBrake && this.easingX.isFinished() )
+        {
+            this.bossBrake = false;
+
+            if( this.lastMoveAction === defs.EAP_DOWN )
+            {
+                this.easingX.init( this.easingX.getValue(),
+                    ((this.lastMoveDirX === MOVE_LEFT) ? -1 : 1) * (this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
+
+                this._dir = -this.levelCamera.pos.x - this.playerShip.sprite.pos.x;
+                if( (this.lastMoveDirX === MOVE_LEFT) ? (this._dir > -CAMERA_EASING_OFFSET) : (this._dir < CAMERA_EASING_OFFSET) )
+                    this.startCameraEasing( this.lastMoveDirX );
+            }
+            else
+            {
+                this.cameraEasingX.init( this.cameraEasingX.getValue(), 0, 1, easing.getLinear() );
+            }
+        }
+    }
+
+    // 
+    //  DESC: The boss is coming into view. If the ship is flying toward the boss, slow it down
+    //        fast (once) so it doesn't run into the boss. The player has the control again right after.
+    //
+    startBossBrake()
+    {
+        this._shipScreenX = this.playerShip.sprite.pos.x + this.levelCamera.pos.x;
+
+        if( (this.easingX.getValue() !== 0) && ((this.easingX.getValue() > 0) === (this._bossScreenX > this._shipScreenX)) )
+        {
+            this.playerShip.boostSpeed = 0;
+            this.easingX.init( this.easingX.getValue(), 0, gameDefs.BOSS00_LOCK_BRAKE_SEC, easing.getLinear() );
+            this.bossBrake = true;
+        }
     }
 
     // 
