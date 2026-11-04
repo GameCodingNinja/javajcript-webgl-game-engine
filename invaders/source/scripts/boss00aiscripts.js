@@ -72,8 +72,7 @@ class AI_Boss00_base extends aiNode
 
                     this.data.groupPlayer.play( 'boss_rocket_launch' );
 
-                    this.sprite.shootTime = gameDefs.BOSS00_FIRE_INTERVAL +
-                        genFunc.randomInt( -gameDefs.BOSS00_FIRE_JITTER, gameDefs.BOSS00_FIRE_JITTER );
+                    this.sprite.shootTime = this.sprite.fireInterval;
                 }
             }
         }
@@ -321,6 +320,7 @@ class AI_Boss00_Descend extends AI_Boss00_base
 
         this.sprite.bossHealth = gameDefs.BOSS00_HEALTH_MAX;
         this.sprite.bossHitBar = gameDefs.BOSS00_HIT_BAR_MAX;
+        this.sprite.fireInterval = gameDefs.BOSS00_FIRE_INTERVAL;
         this.sprite.vulnerable = false;
         this.sprite.interrupted = false;
         this.sprite.targetBuilding = null;
@@ -599,7 +599,7 @@ class AI_Boss00_DestroyBuilding extends AI_Boss00_base
                 this.showBeam();
 
                 // First missile about a second after the beam appears
-                this.sprite.shootTime = gameDefs.BOSS00_FIRE_INTERVAL;
+                this.sprite.shootTime = this.sprite.fireInterval;
             }
 
             if( this.phase === 'destroying' )

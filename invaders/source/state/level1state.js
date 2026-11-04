@@ -709,6 +709,9 @@ export class Level1State extends CommonState
                     spriteB.vulnerable = false;
                     spriteB.interrupted = true;
 
+                    // The boss fires missiles faster each time its hit bar is depleted
+                    spriteB.fireInterval -= gameDefs.BOSS00_FIRE_INTERVAL_STEP;
+
                     spriteB.bossHealth -= 1;
                     if( spriteB.healthBarCtrl )
                         spriteB.healthBarCtrl.setCurrentValue( spriteB.bossHealth );
@@ -1257,20 +1260,20 @@ export class Level1State extends CommonState
     //
     endBossMusic()
     {
-        if( !this.bossBattleActive )
-            return;
+        if( this.bossBattleActive )
+        {
+            soundManager.fadeTo( '(level_1)', 'boss_alarm', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, defs.ESND_FADE_STOP );
 
-        soundManager.fadeTo( '(level_1)', 'boss_alarm', 0.0, gameDefs.BOSS00_MUSIC_FADE_MS, defs.ESND_FADE_STOP );
+            let bsnd = this.getGameMusic();
 
-        let bsnd = this.getGameMusic();
+            this.bossBattleActive = false;
 
-        this.bossBattleActive = false;
+            // Crossfade from the boss music back to the game music
+            soundManager.crossfade( bsnd, this.getGameMusic(), gameDefs.BOSS00_MUSIC_FADE_MS, defs.ESND_FADE_STOP );
 
-        // Crossfade from the boss music back to the game music
-        soundManager.crossfade( bsnd, this.getGameMusic(), gameDefs.BOSS00_MUSIC_FADE_MS, defs.ESND_FADE_STOP );
-
-        // Restart the 5 minute music rotation so it doesn't swap tracks right after the boss
-        this.musicTimer.reset();
+            // Restart the 5 minute music rotation so it doesn't swap tracks right after the boss
+            this.musicTimer.reset();
+        }
     }
 
     // 
@@ -1604,10 +1607,12 @@ export class Level1State extends CommonState
                 this._bossScreenX += this._wrapSpan;
 
             // Coming into view of the boss: slow the ship down once, before the lock, so it stops in time.
-            // Re-armed once the boss is completely off the side of the screen again (ex: the player chases it).
+            // Only while the boss is over its building attacking (vulnerable), not while it travels, so chasing
+            // a boss that flies off isn't interrupted. Re-armed once the boss is completely off the side of the screen.
             if( !this.bossBrakeDone )
             {
-                if( (Math.abs( this._bossScreenX ) < gameDefs.BOSS00_BRAKE_START_DIST) &&
+                if( this.bossSprite.vulnerable &&
+                    (Math.abs( this._bossScreenX ) < gameDefs.BOSS00_BRAKE_START_DIST) &&
                     this.buildingsCamera.inViewY( this.bossSprite.transPos, this.bossSprite.parentNode.radius ) )
                 {
                     this.bossBrakeDone = true;
@@ -1619,15 +1624,17 @@ export class Level1State extends CommonState
                 this.bossBrakeDone = false;
             }
 
-            // Lock once the boss body is on the screen (and it's down, not flying above the screen).
-            // Unlock once it's completely off the side of the screen.
+            // Lock once the boss body is on the screen while it's over its building attacking (vulnerable: down,
+            // not traveling). Unlock as soon as it stops attacking (ex: it leaves for the next building) so the
+            // player has full control to chase it, or once it's completely off the side of the screen.
             if( !this.bossScreenLock )
             {
-                this.bossScreenLock =
+                this.bossScreenLock = this.bossSprite.vulnerable &&
                     (Math.abs( this._bossScreenX ) < (settings.deviceRes_half.w - gameDefs.BOSS00_SCREEN_LOCK_INSET)) &&
                     this.buildingsCamera.inViewY( this.bossSprite.transPos, this.bossSprite.parentNode.radius );
             }
-            else if( Math.abs( this._bossScreenX ) > (settings.deviceRes_half.w + gameDefs.BOSS00_SCREEN_LOCK_INSET) )
+            else if( !this.bossSprite.vulnerable ||
+                (Math.abs( this._bossScreenX ) > (settings.deviceRes_half.w + gameDefs.BOSS00_SCREEN_LOCK_INSET)) )
             {
                 this.endBossScreenLock();
             }

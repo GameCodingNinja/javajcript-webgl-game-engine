@@ -301,10 +301,10 @@ class Boss00Ship_Die
             sprite.targetBuilding = null;
         }
 
-        // Fall off the bottom of the screen while spinning (fast)
+        // Fall off the bottom of the screen while spinning
         this._dest = -(settings.deviceRes_half.h + sprite.parentNode.radius);
         this._offsetY = Math.abs( sprite.pos.y - this._dest );
-        this.easingY.init( sprite.pos.y, this._dest, this._offsetY / 600, easing.getSineIn(), true );
+        this.easingY.init( sprite.pos.y, this._dest, this._offsetY / 450, easing.getSineIn(), true );
 
         this.rotate = -0.003;
         this.rotateVelocity = -0.00001;

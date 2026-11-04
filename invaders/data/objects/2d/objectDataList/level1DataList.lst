@@ -278,7 +278,7 @@
                 <texture file="data/textures/enemyShip/enemy01a.png" />
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                
+                <!-- clock wise winding seem to work a bit better -->
                 <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
                         <point x="30" y="1"/>
@@ -333,9 +333,21 @@
                 <mesh genType="null"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="100"/>
+                <!--<circle radius="120"/>-->
+                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <!-- clock wise winding seem to work a bit better -->
+                    <polygon>
+                        <point x="334" y="10"/>
+                        <point x="390" y="173"/>
+                        <point x="390" y="285"/>
+                        <point x="350" y="325"/>
+                        <point x="316" y="325"/>
+                        <point x="270" y="285"/>
+                        <point x="270" y="173"/>
+                    </polygon>
+                </polygonList>
             </collision>
-            <size width="504" height="400"/>
+            <size width="668" height="400"/>
         </object>
 
         <!-- Visible boss body (no collision; collision is on null_boss00_ship head) -->
@@ -358,7 +370,7 @@
                 <shader id="shader_solid_2d"/>
                 <color r="0" g="0" b="0" a="1"/>
             </visual>
-            <size width="600" height="15"/>
+            <size width="400" height="15"/>
         </object>
 
         <object name="boss00_health_solid">
@@ -366,7 +378,7 @@
                 <shader id="shader_solid_2d"/>
                 <color r="0" g="200" b="0" a="1"/>
             </visual>
-            <size width="592" height="9"/>
+            <size width="392" height="9"/>
         </object>
 
         <!-- Hit bar: same width as the health bar, half the height -->
@@ -375,7 +387,7 @@
                 <shader id="shader_solid_2d"/>
                 <color r="0" g="0" b="0" a="1"/>
             </visual>
-            <size width="600" height="8"/>
+            <size width="400" height="8"/>
         </object>
 
         <object name="boss00_hit_solid">
@@ -383,7 +395,7 @@
                 <shader id="shader_solid_2d"/>
                 <color r="0" g="140" b="255" a="1"/>
             </visual>
-            <size width="592" height="4"/>
+            <size width="392" height="4"/>
         </object>
 
         <object name="enemy_shot">
