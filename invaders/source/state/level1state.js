@@ -77,6 +77,10 @@ const MOVE_NULL = -1,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
       LOOPING_BKG_WRAP_DIST = 1280,
+      // The enemies are also rendered with the wrap around camera once the view is past this (wider than the
+      // buildings' -4900/5000). The boss (about 670px wide, culling radius about 389) can sit right up to the
+      // wrap point (5600), so it's visible across it from 5600 - (640 half screen + 389) = 4571.
+      ENEMY_WRAP_RENDER_DIST = 4500,
       RADAR_SCALE = 0.1,
       DEFAULT_SHIP_PROGRESS_BAR_VALUE = 100,
       DEFAULT_SHIP_BOOST_BAR_VALUE = 3000,
@@ -685,7 +689,7 @@ export class Level1State extends CommonState
             if( this.enemy02ShipHitCount < ENEMY02_MAX_SHIP_HIT_COUNT )
                 this.enemy02ShipHitCount + ENEMY02_SHIP_HIT_INC;
         }
-        // Player shot the boss
+        // Player shot the BOSS00
         else if( spriteB.parentNode.userId == gameDefs.BOSS00_SHIP_ID )
         {
             // Stop any more collision detection for the shot
@@ -1898,17 +1902,18 @@ export class Level1State extends CommonState
             else if( this.forgroundCamera.pos.x > LOOPING_BKG_WRAP_DIST )
                 this.forgroundCamera.incPosXYZ( LOOPING_BKG_WRAP_DIST * 2 );
 
-            // Set the wrap around camera when we are about to exceed the range of the buildings
-            if( this.buildingsCamera.pos.x > -6200 && this.buildingsCamera.pos.x < -4900 )
-                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x + ((gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2))) );
-            else if( this.buildingsCamera.pos.x > 5000 && this.buildingsCamera.pos.x < 6300 )
-                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x - (gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2)) );
-
             // Reset the building camera once we are done with filling the gap with the wrap around camera
             if( this.buildingsCamera.pos.x < -6200 )
                 this.buildingsCamera.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             else if( this.buildingsCamera.pos.x > 6300)
                 this.buildingsCamera.incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+
+            // Near the wrap point, put the wrap around camera on the copy of the view on the other side of the map.
+            // The enemies' band (ENEMY_WRAP_RENDER_DIST) is wider than the buildings' and contains it.
+            if( this.buildingsCamera.pos.x < -ENEMY_WRAP_RENDER_DIST )
+                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x + (gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2)) );
+            else if( this.buildingsCamera.pos.x > ENEMY_WRAP_RENDER_DIST )
+                this.wrapAroundCamera.setPosXYZ( -(this.buildingsCamera.pos.x - (gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2)) );
 
             // Stop the up/down movement
             if( (this.moveDirY === MOVE_UP && this.playerShip.sprite.transPos.y > (settings.deviceRes_half.h * 0.73)) ||
@@ -2037,6 +2042,11 @@ export class Level1State extends CommonState
                 this.forgroundStrategy.render( this.forgroundCamera );
                 if( this.train.strategy )
                     this.train.strategy.render( this.train.camera );
+            }
+
+            // Render the enemies across the wrap around in a wider band than the buildings (big enemies like the boss)
+            if( this.buildingsCamera.pos.x < -ENEMY_WRAP_RENDER_DIST || this.buildingsCamera.pos.x > ENEMY_WRAP_RENDER_DIST )
+            {
                 this.enemyStrategy.render( this.wrapAroundCamera );
                 this.enemyShotStrategy.render( this.wrapAroundCamera );
             }
