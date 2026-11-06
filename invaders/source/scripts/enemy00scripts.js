@@ -168,6 +168,13 @@ class Enemy00Ship_Die
         // Remove the AI script since the enemy is to die
         sprite.scriptComponent.remove( 'AI_Enemy00' );
 
+        // Restore a building that was caught mid-attack (shaking)
+        if( sprite.shakingBuilding )
+        {
+            sprite.targetBuilding.setPosXYZ( sprite.buildingBaseX, sprite.buildingBaseY );
+            sprite.shakingBuilding = false;
+        }
+
         this._dest = -(settings.deviceRes_half.h + sprite.parentNode.radius);
         this._offsetY = Math.abs(sprite.pos.y - this._dest);
         this.easingY.init( sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );

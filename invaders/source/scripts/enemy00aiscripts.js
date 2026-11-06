@@ -176,6 +176,7 @@ class AI_Enemy00_Descend extends AI_Enemy00_base
         // with a random amount to delay how long it takes to be visible on the screen
         this.sprite.shoot_player_time = gameDefs.passive_shooter_time;
         this.sprite.targetBuilding = null;
+        this.sprite.shakingBuilding = false;
         this.sprite.hitCount = 0;
         this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
         this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.deviceRes_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
@@ -484,11 +485,27 @@ class AI_Enemy00_DestroyBuilding extends AI_Enemy00_base
             // Shoot at the player
             this.shootPlayer( gameDefs.destroy_building_shooter_time );
 
+            // Cache the building's resting position before shaking it. Cached on the sprite
+            // so the death script can restore a building caught mid-attack.
+            if( !this.sprite.shakingBuilding )
+            {
+                this.sprite.shakingBuilding = true;
+                this.sprite.buildingBaseX = this.sprite.targetBuilding.pos.x;
+                this.sprite.buildingBaseY = this.sprite.targetBuilding.pos.y;
+            }
+
             // Shake a the enemy to simulate it attacking the building
             if( this.shakeTime < 0 )
             {
                 this.shakeTime = highResTimer.elapsedTime + this.shakeTimeout;
                 this.sprite.incPosXYZ( this.offset[this.indexX], this.offset[this.indexY] );
+
+                // Shake the building with it, at the enemy's current shake level. Only jitter downward - the
+                // building has no graphical height below it, so it can't rise above its resting Y.
+                this._amp = this.offset[1];
+                this.sprite.targetBuilding.setPosXYZ(
+                    this.sprite.buildingBaseX + genFunc.randomInt( -this._amp, this._amp ),
+                    this.sprite.buildingBaseY + genFunc.randomInt( -this._amp, 0 ) );
                 this.indexX = (this.indexX + 1) % this.offset.length;
                 this.indexY = (this.indexY + 1) % this.offset.length;
 
@@ -513,6 +530,8 @@ class AI_Enemy00_DestroyBuilding extends AI_Enemy00_base
                     }
                     else if( this.shakeTimeout === -10 )
                     {
+                        this.sprite.targetBuilding.setPosXYZ( this.sprite.buildingBaseX, this.sprite.buildingBaseY );
+                        this.sprite.shakingBuilding = false;
                         this.sprite.targetBuilding.prepareScript( 'die' );
                         this.sprite.targetBuilding = null;
 
