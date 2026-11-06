@@ -91,6 +91,7 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
       data/objects/2d/mesh/level/level1.xml 900
   ```
 - Per-entity state lives on the head sprite: `bossHealth`, `bossHitBar`, `vulnerable`, `interrupted`, `targetBuilding`, `healthBarCtrl`, `hitBarCtrl`, `buildingBaseX/Y`, `shootTime`.
+- **Ram cooldown:** all ram collisions (enemy00/01/02/boss) share `playerShip.collisionTimer` (1 s). For a second after any ram the ship passes through every enemy, and a red (aggressive) enemy00 takes one ram per second. Intended; it explained the "ship passes through enemy00" report, not the wrap-around.
 - Missile rotation uses `setRotXYZ(0, 0, radians, false)`. The art points right, so heading = `atan2(dy, dx)`. Turn-rate constants are converted to radians/ms once at module load in `boss00scripts.js`.
 
 ## Build / check
@@ -104,9 +105,14 @@ The only remaining lint errors are `'ytgame' is not defined` (2 in `level1state.
 The user wants to **watch**: open a visible Chrome window and play the boss fight there (see AGENTS.md "Playtesting in Chrome" for the method). The bot refills the ship's health, so a bot run says nothing about difficulty.
 
 ## Working state
-The user has committed everything through the enemy00 building shake (`6909bd8`), including the lock/brake `vulnerable` gate, the missile fire interval (2000ms, 250ms faster per hit-bar depletion, no jitter), the slower death fall (450 px/s), the `endBossMusic()` cleanup, the boss head polygon collision, and **enemy00 now shakes the building it attacks** in step with its own shake (1→5px, X both ways, Y downward only; restored on destroy or when enemy00 dies mid-attack, `AI_Enemy00_DestroyBuilding` / `Enemy00Ship_Die`).
+The user has committed everything through the boss wrap-around fix (`2e78a26`): lock/brake `vulnerable` gate, missile fire interval (2000ms, 250ms faster per hit-bar depletion, no jitter), slower death fall (450 px/s), `endBossMusic()` cleanup, boss head polygon collision, enemy00 building shake, and the enemies' wider wrap-render band (`ENEMY_WRAP_RENDER_DIST`, item 10).
 
-Uncommitted: the **wrap rendering fix** (item 10, `level1state.js`) and these doc updates (`AGENTS.md` "Strategies and Rendering" `wrapAroundCamera` note, boss notes). The TEMP boss test code has been removed, so spawning and targeting are normal. The user asked for no more playtesting for now. Don't ask to commit or push.
+Uncommitted:
+- `webpack.config.js`: size warning limit raised to 1 MB (`maxAssetSize`/`maxEntrypointSize`). The ~600 KiB production bundle tripped webpack's 244 KiB default, which only warns when `NODE_ENV=production` (the hosting build server), and that failed the server build. The user confirmed it works.
+- The user's own menu changes (`button_list.ctrl`, `game_over.menu`, `game_over_ad.menu`, `menuButtonFrames.lst`).
+- These doc updates.
+
+Tried and reverted (user's call): a wrap-aware ram collision check (the pass-through turned out to be the ram cooldown, see Gotchas) and removing the ram cooldown for enemy00. The TEMP boss test code has been removed, so spawning and targeting are normal. The user asked for no more playtesting for now. Don't ask to commit or push.
 
 ## Suggested next steps
 1. Playtest a full cycle with the real trigger (temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()` to get there fast), including game over mid-battle → restart and the pause menu during the fight (sound + screen lock).
