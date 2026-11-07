@@ -90,6 +90,8 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_UNLIMITED_BOOST = 1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
+      REWARD_FEATURE_RAPID_FIRE = 4,
+      RAPID_FIRE_INTERVAL = 150,
       MAX_MINI_BOSS_STREAK = 2,
       GOD_MODE = false;
 
@@ -147,6 +149,13 @@ export class Level1State extends CommonState
 
             // Apply the left-handed (swap movement/action sides) preference
             eventManager.leftHandedTouch = (settings.user.leftHandedTouch === 1);
+        }
+        // Rapid Fire is a desktop only reward (on mobile, holding the fire side boosts), so add it as the
+        // last entry of the reward lists. This state is created once per session, so it's only added once.
+        else
+        {
+            menuManager.getMenu('game_over_menu').getControl('feature_btn_lst').setStringToList('Rapid Fire');
+            menuManager.getMenu('game_over_menu_ad').getControl('feature_btn_lst').setStringToList('Rapid Fire');
         }
 
         // Clear the last device used so that the button on start game menu is active by default
@@ -262,6 +271,9 @@ export class Level1State extends CommonState
         else
             this.unlimitedBoost = false;
 
+        // Rapid Fire reward (desktop only): holding the fire button keeps firing
+        this.rapidFire = false;
+
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
         this.groupPlayer.play( 'player_thrust', true );
@@ -349,6 +361,10 @@ export class Level1State extends CommonState
         this.bossScreenLock = false;
         this.bossBrake = false;
         this.bossBrakeDone = false;
+
+        // Fire button held (for the Rapid Fire reward)
+        this.shootHeld = false;
+        this.rapidFireTime = 0;
 
         this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
         this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
@@ -766,6 +782,8 @@ export class Level1State extends CommonState
         else
             this.unlimitedBoost = false;
 
+        this.rapidFire = false;
+
         if( gAdPlayed || (typeof window.CrazyGames === 'undefined'))
         {
             if( this._featureIndex === REWARD_FEATURE_UNLIMITED_BOOST )
@@ -781,6 +799,11 @@ export class Level1State extends CommonState
             else if( this._featureIndex === REWARD_FEATURE_HEAL_OVER_TIME )
             {
                 this.slowHealTimer = new Timer(2000);
+            }
+            // Only in the list on desktop (added in StartUpState)
+            else if( this._featureIndex === REWARD_FEATURE_RAPID_FIRE )
+            {
+                this.rapidFire = true;
             }
 
             this.setBattleTime( this._battleTimeIndex );
@@ -914,6 +937,9 @@ export class Level1State extends CommonState
                     if( this.gameStartStopToggle )
                     {
                         this.gameStartStopToggle = !this.gameStartStopToggle;
+
+                        // The fire button release can be missed while paused (ex: focus lost)
+                        this.shootHeld = false;
 
                         this.musicTimer.pause();
                         this.enemy00SpawnTimer.pause();
@@ -1100,6 +1126,10 @@ export class Level1State extends CommonState
         }
         else
         {
+            // Fire button released (checked even when a menu is up, so it can't get stuck held)
+            if( actionManager.wasActionPress( event, 'shoot', defs.EAP_UP ) )
+                this.shootHeld = false;
+
             if( !menuManager.active && this.playerShip.sprite.collisionComponent.enable )
             {
                 // Handle the ship movement
@@ -1107,10 +1137,11 @@ export class Level1State extends CommonState
 
                 if( actionManager.wasActionPress( event, 'shoot', defs.EAP_DOWN ) )
                 {
-                    this._laserBlastNode = this.playerShip.strategy.create('player_shot');
-                    this._laserBlastNode.get().prepareScript( 'shoot', this.easingX.getValue() );
+                    this.firePlayerShot();
 
-                    this.groupPlayer.play( 'player_gun_1' );
+                    // With Rapid Fire, keep firing while the button is held (see update())
+                    this.shootHeld = true;
+                    this.rapidFireTime = RAPID_FIRE_INTERVAL;
                 }
                 // Boost is ignored during the boss slow-down (a release still lets the boost bar recharge)
                 else if( actionManager.wasActionPress( event, 'boost', defs.EAP_DOWN ) && !this.bossBrake )
@@ -1134,6 +1165,17 @@ export class Level1State extends CommonState
 
             }
         }
+    }
+
+    // 
+    //  DESC: Fire a player shot
+    //
+    firePlayerShot()
+    {
+        this._laserBlastNode = this.playerShip.strategy.create('player_shot');
+        this._laserBlastNode.get().prepareScript( 'shoot', this.easingX.getValue() );
+
+        this.groupPlayer.play( 'player_gun_1' );
     }
 
     // 
@@ -1828,6 +1870,17 @@ export class Level1State extends CommonState
 
             // Handle the enemy spawn
             this.handleEnemySpawn();
+
+            // Rapid Fire reward: keep firing while the fire button is held
+            if( this.rapidFire && this.shootHeld && this.playerShip.sprite.collisionComponent.enable )
+            {
+                this.rapidFireTime -= highResTimer.elapsedTime;
+                if( this.rapidFireTime <= 0 )
+                {
+                    this.rapidFireTime = RAPID_FIRE_INTERVAL;
+                    this.firePlayerShot();
+                }
+            }
 
             // Handle the train spawn
             this.handleTrainSpawn( this._easingVal );
