@@ -7,7 +7,7 @@
         "data/objects/strategy/level1/forground.strategy.loader",
         "data/objects/strategy/level1/enemy.strategy.loader",
         "data/objects/strategy/level1/enemyshot.strategy.loader",
-        "data/objects/strategy/level1/ship.strategy.loader",
+        "data/objects/strategy/level1/playership.strategy.loader",
         "data/objects/strategy/level1/lower_hud.strategy.loader",
         "data/objects/strategy/level1/upper_hud.strategy.loader",
         "data/objects/strategy/level1/train.strategy.loader"],
@@ -16,6 +16,6 @@
         "data/objects/strategy/level1/enemy.strategy.loader",
         "data/objects/strategy/level1/enemyshot.strategy.loader",
         "data/objects/strategy/level1/buildings.strategy.loader",
-        "data/objects/strategy/level1/ship.strategy.loader",
+        "data/objects/strategy/level1/playership.strategy.loader",
         "data/objects/strategy/level1/train.strategy.loader"]
 }

@@ -26,7 +26,8 @@
                 { "action": "left", "componetId": "A", "defaultId": "A", "configurable": "true" },
                 { "action": "right", "componetId": "D", "defaultId": "D", "configurable": "true" },
                 { "action": "shoot", "componetId": "SPACE", "defaultId": "SPACE", "configurable": "true" },
-                { "action": "boost", "componetId": "SHIFT LEFT", "defaultId": "SHIFT LEFT", "configurable": "true" } ] },
+                { "action": "boost", "componetId": "SHIFT LEFT", "defaultId": "SHIFT LEFT", "configurable": "true" },
+                { "action": "shield", "componetId": "E", "defaultId": "E", "configurable": "true" } ] },
 
     "mouseMapping": {
         "playerVisible": [
@@ -59,7 +60,8 @@
                 { "action": "menu_select", "componetId": "A", "defaultId": "A", "configurable": "true" },
                 { "action": "menu_back", "componetId": "B", "defaultId": "B", "configurable": "true" },
                 { "action": "shoot", "componetId": "A", "defaultId": "A", "configurable": "true" },
-                { "action": "boost", "componetId": "B", "defaultId": "B", "configurable": "true" } ] },
+                { "action": "boost", "componetId": "B", "defaultId": "B", "configurable": "true" },
+                { "action": "shield", "componetId": "Y", "defaultId": "Y", "configurable": "true" } ] },
 
     "touchMapping": {
         "playerHidden": [
@@ -69,5 +71,6 @@
                 { "action": "left", "componetId": "TOUCH DPAD LEFT" },
                 { "action": "right", "componetId": "TOUCH DPAD RIGHT" },
                 { "action": "shoot", "componetId": "TOUCH FIRE" },
-                { "action": "boost", "componetId": "TOUCH BOOST" } ] }
+                { "action": "boost", "componetId": "TOUCH BOOST" },
+                { "action": "shield", "componetId": "TOUCH SHIELD" } ] }
 }

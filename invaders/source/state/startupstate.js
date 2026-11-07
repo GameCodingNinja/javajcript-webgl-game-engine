@@ -88,6 +88,7 @@ export class StartUpState extends GameState
             actionManager.registerTouchKeyCode( 'TOUCH FIRE',  gameDefs.TOUCH_FIRE );
             actionManager.registerTouchKeyCode( 'TOUCH PAUSE', gameDefs.TOUCH_PAUSE );
             actionManager.registerTouchKeyCode( 'TOUCH BOOST', gameDefs.TOUCH_BOOST );
+            actionManager.registerTouchKeyCode( 'TOUCH SHIELD', gameDefs.TOUCH_SHIELD );
         }
         actionManager.loadFromObj( actionManagerJson );
         menuManager.loadMenuActionFromObj( menuActionJSON );

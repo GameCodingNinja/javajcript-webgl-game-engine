@@ -75,4 +75,5 @@ export const EGE_BUILDING_DESTROYED     = 2000,
 export const TOUCH_FIRE        = 100,
              TOUCH_PAUSE       = 101,
              TOUCH_BOOST       = 102,
-             TOUCH_DPAD_Y_MOVE = 103;
+             TOUCH_DPAD_Y_MOVE = 103,
+             TOUCH_SHIELD      = 104;

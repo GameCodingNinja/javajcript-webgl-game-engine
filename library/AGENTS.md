@@ -131,6 +131,11 @@ Sound playback is managed by `soundManager` with per-type enable/disable via `se
 - **User Settings** (`utilities/settings.js` → `settings.user`): `soundEnabled` (master toggle), `soundEffectEnabled`, `soundMusicEnabled`, `soundDialogEnabled` — persisted via `localStorage.set('userSettings', settings.user)`
 - Sounds only play when the master toggle AND the type-specific toggle are both enabled (see `sound/sound.js` play/resume logic)
 
+## Collision (collision/collisioncomponent.js)
+- `checkForCollision( nodeAry, checkChildren = false )` tests the sprites of the top-level nodes in `nodeAry` and returns the first one hit (broadcasting the collision signal). With `checkChildren = true` it also recurses into each node's child nodes, so a child sprite with collision data (e.g. a shield that's a child of the player ship) can be hit. It's opt-in because it walks every child of every node on each check.
+- Child nodes inherit the head node's `userId` (a child's own `id` attribute is ignored), so a collision callback has to tell a child hit apart by the sprite itself.
+- Child sprites collide in world space: their `transPos` and collision matrix include the parent's transform.
+
 ## GC Optimization Caveats
 - **Do NOT reuse arrays in async/Promise contexts**: Instance variables for promise collection (e.g., `this._promiseAry`) cause race conditions when multiple loads occur concurrently. Use local variables for promise arrays.
 - **Avoid `findIndex` with closures**: Use `genFunc.indexOf()` instead of `Array.findIndex((obj) => ...)` to avoid closure creation per call.

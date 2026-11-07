@@ -171,7 +171,7 @@ class Boss00Shot_Fire
             else if( this.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
                 this.sprite.incPosXYZ( -gWrapSpan );
 
-            this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry );
+            this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry, this.playerShipSprite.shieldOn );
 
             this.age += highResTimer.elapsedTime;
             if( this.age < gameDefs.BOSS00_MISSILE_LIFETIME )

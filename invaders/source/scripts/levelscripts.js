@@ -195,6 +195,7 @@ class EnemyShip_CheckForCollideWithPlayer
     recycle( sprite )
     {
         this.sprite = sprite;
+        this.playerShipSprite = this.playerShipStrategy.get('player_ship').get();
     }
     
     // 
@@ -205,7 +206,7 @@ class EnemyShip_CheckForCollideWithPlayer
         // This enemy00 needs to be in view to possibly collide with the player
         if( this.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
-            if( this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry ) )
+            if( this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry, this.playerShipSprite.shieldOn ) )
                 if(this.sprite.collisionComponent.enable == false)
                     return true;
         }

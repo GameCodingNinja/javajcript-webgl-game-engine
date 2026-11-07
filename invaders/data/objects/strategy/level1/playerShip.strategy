@@ -36,6 +36,22 @@
             </scriptList>
         </sprite>
 
+        <node name="UIShieldBar" type="uiControlNode">
+        
+            <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
+                <position x="0" y="25" z="0"/>
+                <scale x="0.35" y="0.5"/>
+                <spriteLst>
+                    <sprite objectName="progress_frame"/>
+                    <sprite objectName="shield_solid"/>
+                </spriteLst>
+                
+                <!-- stencil mask -->
+                <stencilMask objectName="" spriteIndex="1" />
+            </uiProgressBar>
+
+        </node>
+
         <node name="UIBoostBar" type="uiControlNode">
         
             <uiProgressBar defaultState="inactive" useSizeForRadiusCalc="false">
@@ -89,6 +105,15 @@
                 </sprite>
 
             </node>
+
+        </node>
+
+        <!-- Shield art + collision. Collision checks against the player ship strategy pass checkChildren = true so
+             this child is tested. Only visible and collidable while the shield is up. -->
+        <node name="player_shield">
+
+            <sprite visible="false" useSizeForRadiusCalc="false">
+            </sprite>
 
         </node>
 

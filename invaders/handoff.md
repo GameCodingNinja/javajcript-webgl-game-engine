@@ -78,6 +78,8 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
 - **Rapid Fire** reward (5th game over reward): hold fire to keep firing every 150 ms (`RAPID_FIRE_INTERVAL`, `firePlayerShot()`). See AGENTS.md "Menu System".
 - **Mobile right-side gestures:** quick swipe up = boost until lifted, hold = fire (Rapid Fire keeps firing), tap = one shot, long horizontal swipe = pause. Boost used to be the one-finger hold. See AGENTS.md "Touch Event System".
 - **Bigger tap area for the game over button list arrows** (`<rect>` size modifier in `button_list.ctrl`), since the 33×41 arrows were hard to tap on a phone. Confirmed by the user.
+- **Unlimited Boost** shows the boost bar while boosting, always full. Confirmed by the user.
+- **Player shield** (E / gamepad Y / two fingers on the right): white oval art, 3 s bar that recharges at half speed, must fully recharge after a full drain. Blocks shots, missiles and rams with no damage; enemy00 hitting it is otherwise the same as hitting the ship. See AGENTS.md "Menu System" → "Player shield".
 
 ## Known review findings (user chose not to fix — leave unless asked)
 - Collision is disabled during the descent.
@@ -114,6 +116,8 @@ The user has committed everything through desktop Rapid Fire (`aab4d4c`), includ
 Uncommitted:
 - **Mobile gestures + Rapid Fire on mobile** (`level1state.js`): swipe up to boost, hold to fire; "Rapid Fire" is now in the two game over `.menu` files for every platform (the desktop-only `setStringToList()` code in the `Level1State` constructor was removed). Not tested on a phone by Amp.
 - **Arrow tap area** (`button_list.ctrl`). Tested by the user on a phone.
+- **Unlimited Boost bar** (`level1state.js`). Confirmed by the user.
+- **Player shield**: `player_shield.png` (new), `level1DataList.lst` + regenerated sprite sheet, `playerShip.strategy`, `playership.strategy.loader` (renamed from `ship.strategy.loader`), library `collisioncomponent.js` (`checkChildren` parameter), `enemy00scripts.js`/`boss00scripts.js`/`levelscripts.js` (pass `playerShipSprite.shieldOn`), `gamedefs.js`, `startupstate.js` (touch code registration), `controllerMapping.json`, `key_binding_scroll_box.ctrl`, `level1state.js`. Builds and lints; not tested yet. A browser with saved key bindings needs "Reset To Default" once to get the new binding.
 - These doc updates.
 
 The `.menu`/`.ctrl` files use CRLF line endings; keep them (edit without converting) so diffs stay small. The user asked for no more playtesting for now. Don't ask to commit or push.

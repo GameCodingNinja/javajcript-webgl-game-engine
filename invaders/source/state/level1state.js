@@ -84,6 +84,8 @@ const MOVE_NULL = -1,
       RADAR_SCALE = 0.1,
       DEFAULT_SHIP_PROGRESS_BAR_VALUE = 100,
       DEFAULT_SHIP_BOOST_BAR_VALUE = 3000,
+      DEFAULT_SHIP_SHIELD_BAR_VALUE = 1000,
+      SHIELD_RECHARGE_SPEED = 0.05,
       GAME_START_MENU_DEFAULT_MSG = 0,
       GAME_START_MENU_AD_THANKS_MSG = 1,
       GAME_START_MENU_AD_ERROR_MSG = 2,
@@ -302,12 +304,16 @@ export class Level1State extends CommonState
         this.playerShip.sprite = this.playerShip.node.get();
         this.playerShip.progressBar = this.playerShip.node.findChild('UIProgressBar').get();
         this.playerShip.boostBar = this.playerShip.node.findChild('UIBoostBar').get();
+        this.playerShip.shieldBar = this.playerShip.node.findChild('UIShieldBar').get();
+        this.playerShip.shieldSprite = this.playerShip.node.findChild('player_shield').get();
         this.playerShip.fireTailSprite = this.playerShip.node.findChild('player_fire_tail').get();
         this.playerShip.fireTailScript = this.playerShip.fireTailSprite.prepareScript( 'fireTailAnim' );
         this.playerShip.speed = PLAYER_SHIP_TOP_SPEED;
         this.playerShip.boostSpeed = 0;
         this.playerShip.boostButtonPress = defs.EAP_UP;
         this.playerShip.waitForFullBoostCharge = false;
+        this.playerShip.shieldButtonPress = defs.EAP_UP;
+        this.playerShip.waitForFullShieldCharge = false;
         this.playerShip.collisionTimer = new Timer(1000, true);
 
         this.playerShip.progressBar.setProgressBarMax( DEFAULT_SHIP_PROGRESS_BAR_VALUE );
@@ -316,6 +322,9 @@ export class Level1State extends CommonState
         this.playerShip.boostBar.setProgressBarMax( DEFAULT_SHIP_BOOST_BAR_VALUE );
         this.playerShip.boostBar.setCurrentValue( DEFAULT_SHIP_BOOST_BAR_VALUE );
 
+        this.playerShip.shieldBar.setProgressBarMax( DEFAULT_SHIP_SHIELD_BAR_VALUE );
+        this.playerShip.shieldBar.setCurrentValue( DEFAULT_SHIP_SHIELD_BAR_VALUE );
+
         // This part is needed for the reload but here for completeness
         this.playerShip.object.setRotXYZ();
         this.playerShip.sprite.setPosXYZ();
@@ -323,6 +332,8 @@ export class Level1State extends CommonState
         this.playerShip.sprite.collisionComponent.enable = true;
         this.playerShip.progressBar.setVisible( false );
         this.playerShip.boostBar.setVisible( false );
+        this.setShield( false );
+        this.playerShip.shieldBar.setVisible( false );
     }
 
     // 
@@ -360,6 +371,9 @@ export class Level1State extends CommonState
         // Fire button held (for the Rapid Fire reward)
         this.shootHeld = false;
         this.rapidFireTime = 0;
+
+        // For Mobile: the shield is held with two fingers on the right side
+        this.touchShieldHeld = false;
 
         this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
         this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
@@ -477,6 +491,13 @@ export class Level1State extends CommonState
     //
     collisionCallBack( spriteA, spriteB )
     {
+        // The shield was hit: handled like a hit on the player ship (explosions, sounds, enemy00 hit/die, score,
+        // ram cooldown), except the ship takes no damage
+        // (the shield is a child of the player ship node, so it has the ship's userId: compare the sprite)
+        this._shieldHit = (spriteB === this.playerShip.shieldSprite);
+        if( this._shieldHit )
+            spriteB = this.playerShip.sprite;
+
         // Player ship was involved in a collision
         if(spriteB.parentNode.userId == gameDefs.PLAYER_SHIP_ID)
         {
@@ -486,7 +507,7 @@ export class Level1State extends CommonState
             if( spriteA.parentNode.userId == ENEMY00_SHOT_ID )
             {
                 spriteB.prepareScript( 'hit', spriteA );
-                if( GOD_MODE == false )
+                if( GOD_MODE == false && !this._shieldHit )
                 {
                     // Was player hit by an aggressive shot? Takes more damage
                     if(spriteA.visualComponent.frameIndex == 1)
@@ -502,7 +523,7 @@ export class Level1State extends CommonState
             else if( spriteA.parentNode.userId == gameDefs.BOSS00_SHOT_ID )
             {
                 spriteB.prepareScript( 'hit', spriteA );
-                if( GOD_MODE == false )
+                if( GOD_MODE == false && !this._shieldHit )
                 {
                     this.playerShip.progressBar.incCurrentValue( -gameDefs.BOSS00_MISSILE_DAMAGE );
                     this.playerShip.progressBar.setVisible( true );
@@ -518,7 +539,7 @@ export class Level1State extends CommonState
                 if(this.playerShip.collisionTimer.expired(true))
                 {
                     spriteB.prepareScript( 'hit', spriteA );
-                    if( GOD_MODE == false )
+                    if( GOD_MODE == false && !this._shieldHit )
                     {
                         this.playerShip.progressBar.incCurrentValue( -20 );
                         this.playerShip.progressBar.setVisible( true );
@@ -553,7 +574,7 @@ export class Level1State extends CommonState
                 if(this.playerShip.collisionTimer.expired(true))
                 {
                     this.playerShip.sprite.prepareScript( 'hit', spriteA );
-                    if( GOD_MODE == false )
+                    if( GOD_MODE == false && !this._shieldHit )
                     {
                         this.playerShip.progressBar.incCurrentValue( -20 );
                         this.playerShip.progressBar.setVisible( true );
@@ -569,7 +590,7 @@ export class Level1State extends CommonState
                 if(this.playerShip.collisionTimer.expired(true))
                 {
                     this.playerShip.sprite.prepareScript( 'hit', spriteA );
-                    if( GOD_MODE == false )
+                    if( GOD_MODE == false && !this._shieldHit )
                     {
                         this.playerShip.progressBar.incCurrentValue( -20 );
                         this.playerShip.progressBar.setVisible( true );
@@ -604,6 +625,7 @@ export class Level1State extends CommonState
                 this.playerShip.sprite.collisionComponent.enable = false;
                 this.playerShip.progressBar.setVisible( false );
                 this.playerShip.boostBar.setVisible( false );
+                this.playerShip.shieldBar.setVisible( false );
                 this.playerShip.fireTailSprite.setVisible( false );
                 this.playerShip.fireTailScript.pause = true;
                 this.groupPlayer.pause( 'player_thrust' );
@@ -935,6 +957,11 @@ export class Level1State extends CommonState
                         // The fire button release can be missed while paused (ex: focus lost)
                         this.shootHeld = false;
 
+                        // So can the shield release: drop the shield and let the bar recharge
+                        this.playerShip.shieldButtonPress = defs.EAP_UP;
+                        this.setShield( false );
+                        this.touchShieldHeld = false;
+
                         this.musicTimer.pause();
                         this.enemy00SpawnTimer.pause();
                         this.miniBossSpawnTimer.pause();
@@ -1124,6 +1151,13 @@ export class Level1State extends CommonState
             if( actionManager.wasActionPress( event, 'shoot', defs.EAP_UP ) )
                 this.shootHeld = false;
 
+            // Shield button released (checked even when a menu is up, so it can't get stuck on)
+            if( actionManager.wasActionPress( event, 'shield', defs.EAP_UP ) )
+            {
+                this.playerShip.shieldButtonPress = defs.EAP_UP;
+                this.setShield( false );
+            }
+
             if( !menuManager.active && this.playerShip.sprite.collisionComponent.enable )
             {
                 // Handle the ship movement
@@ -1157,8 +1191,41 @@ export class Level1State extends CommonState
                     }
                 }
 
+                // Shield. After a full drain, it can't come back up until the bar is full again.
+                // The bar only recharges while the button is up, so holding it stalls the recharge.
+                if( actionManager.wasActionPress( event, 'shield', defs.EAP_DOWN ) )
+                {
+                    this.playerShip.shieldButtonPress = defs.EAP_DOWN;
+
+                    if( !this.playerShip.waitForFullShieldCharge || this.playerShip.shieldBar.isMaxValue() )
+                    {
+                        this.playerShip.waitForFullShieldCharge = false;
+                        this.setShield( true );
+                    }
+                }
             }
         }
+    }
+
+    // 
+    //  DESC: Raise or drop the player ship shield
+    //
+    setShield( on )
+    {
+        // Kept on the ship's head sprite so the enemy collision scripts only check the ship's children
+        // (where the shield is) while the shield is up
+        this.playerShip.sprite.shieldOn = on;
+        this.playerShip.shieldSprite.setVisible( on );
+        this.playerShip.shieldSprite.collisionComponent.enable = on;
+
+        // The ship can't be hit while the shield is up, so only the shield collides. The ship's collision "enable"
+        // is left alone because it's the ship's alive flag (input, enemy shooting, death check). The shield has
+        // the same filter mask as the ship (see level1DataList.lst), so it's used to restore the ship's.
+        this.playerShip.sprite.collisionComponent.filterMaskBits =
+            on ? 0 : this.playerShip.shieldSprite.collisionComponent.filterMaskBits;
+
+        if( on )
+            this.playerShip.shieldBar.setVisible( true );
     }
 
     // 
@@ -1934,6 +2001,28 @@ export class Level1State extends CommonState
                 this.playerShip.boostBar.setVisible( false );
             }
 
+            // Shield bar: drains while the shield is up, recharges slowly while the button is up
+            if( this.playerShip.sprite.shieldOn )
+            {
+                this.playerShip.shieldBar.incCurrentValue( -highResTimer.elapsedTime );
+
+                if( this.playerShip.shieldBar.isMinValue() )
+                {
+                    this.playerShip.waitForFullShieldCharge = true;
+                    this.setShield( false );
+                }
+            }
+            else if( this.playerShip.shieldButtonPress === defs.EAP_UP )
+            {
+                this.playerShip.shieldBar.incCurrentValue( highResTimer.elapsedTime * SHIELD_RECHARGE_SPEED );
+
+                if( this.playerShip.shieldBar.isMaxValue() )
+                {
+                    this.playerShip.shieldButtonPress = defs.EAP_IDLE;
+                    this.playerShip.shieldBar.setVisible( false );
+                }
+            }
+
             this.levelCamera.incPosXYZ( this._easingVal );
             this.forgroundCamera.incPosXYZ( this._easingVal );
             this.buildingsCamera.incPosXYZ( this._easingVal );
@@ -2210,27 +2299,58 @@ export class Level1State extends CommonState
     }
 
     //
-    //  DESC: For Mobile: Right-side per-frame touch callback - detect a quick swipe up (boost) or a hold (fire)
+    //  DESC: For Mobile: Right-side per-frame touch callback - detect two fingers (shield),
+    //        a quick swipe up (boost) or a hold (fire)
     //
     onRightTouch( slot )
     {
-        if( !slot.boostHold && !slot.fireHold )
+        // A finger that's part of the shield gesture does nothing else until it's lifted
+        if( !slot.shieldHold )
         {
-            this._tdx = slot.currentX - slot.startX;
-            this._tdy = slot.currentY - slot.startY;
-            this._holdTime = performance.now() - slot.startTime;
-
-            // Quick swipe up → boost until the finger is lifted (dy is negative going up)
-            if( this._holdTime < TOUCH_HOLD_TIME && -this._tdy > TOUCH_BOOST_SWIPE_DIST && -this._tdy > Math.abs( this._tdx ) )
+            // Two fingers on the right side → shield until either is lifted. Cancels this finger's boost or fire.
+            this._rightTouchCount = 0;
+            for( this._ti = 0; this._ti < eventManager.touchPool.length; ++this._ti )
             {
-                slot.boostHold = true;
-                eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_DOWN );
+                this._slot = eventManager.touchPool[this._ti];
+                if( this._slot.id !== -1 && !this._slot.ended && this._slot.side === 'right' )
+                    ++this._rightTouchCount;
             }
-            // Small movement held long enough → fire (with the Rapid Fire reward, it keeps firing until lifted)
-            else if( this._holdTime >= TOUCH_HOLD_TIME && (this._tdx * this._tdx + this._tdy * this._tdy) < 400 )
+
+            if( this._rightTouchCount > 1 )
             {
-                slot.fireHold = true;
-                eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_DOWN );
+                if( slot.boostHold )
+                    eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_UP );
+                else if( slot.fireHold )
+                    eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_UP );
+
+                slot.boostHold = false;
+                slot.fireHold = false;
+                slot.shieldHold = true;
+
+                if( !this.touchShieldHeld )
+                {
+                    this.touchShieldHeld = true;
+                    eventManager._queueTouchEvent( gameDefs.TOUCH_SHIELD, touchevent.TOUCH_BUTTON_DOWN );
+                }
+            }
+            else if( !slot.boostHold && !slot.fireHold )
+            {
+                this._tdx = slot.currentX - slot.startX;
+                this._tdy = slot.currentY - slot.startY;
+                this._holdTime = performance.now() - slot.startTime;
+
+                // Quick swipe up → boost until the finger is lifted (dy is negative going up)
+                if( this._holdTime < TOUCH_HOLD_TIME && -this._tdy > TOUCH_BOOST_SWIPE_DIST && -this._tdy > Math.abs( this._tdx ) )
+                {
+                    slot.boostHold = true;
+                    eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_DOWN );
+                }
+                // Small movement held long enough → fire (with the Rapid Fire reward, it keeps firing until lifted)
+                else if( this._holdTime >= TOUCH_HOLD_TIME && (this._tdx * this._tdx + this._tdy * this._tdy) < 400 )
+                {
+                    slot.fireHold = true;
+                    eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_DOWN );
+                }
             }
         }
     }
@@ -2244,8 +2364,17 @@ export class Level1State extends CommonState
         // (clientWidth), not the DPR-scaled backing store (canvas.width).
         this._swipeDist = device.canvas.clientWidth * 0.6;
 
+        // A shield finger lifted → drop the shield (not a tap, swipe or pause)
+        if( slot.shieldHold )
+        {
+            if( this.touchShieldHeld )
+            {
+                this.touchShieldHeld = false;
+                eventManager._queueTouchEvent( gameDefs.TOUCH_SHIELD, touchevent.TOUCH_BUTTON_UP );
+            }
+        }
         // Boost swipe lifted → stop boosting
-        if( slot.boostHold )
+        else if( slot.boostHold )
             eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_UP );
 
         // Fire hold lifted → stop firing
@@ -2269,6 +2398,7 @@ export class Level1State extends CommonState
         // Reset the hold states for the next touch
         slot.boostHold = false;
         slot.fireHold = false;
+        slot.shieldHold = false;
     }
 }
 

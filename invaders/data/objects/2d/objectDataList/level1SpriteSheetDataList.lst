@@ -50,6 +50,16 @@
             <size width="54" height="4"/>
         </object>
 
+        <object name="shield_solid">
+            <visual>
+                <mesh genType="quad"/>
+                <shader id="shader_solid_2d"/>
+                <texture file=""/>
+                <color r="255" g="140" b="0" a="1"/>
+            </visual>
+            <size width="54" height="4"/>
+        </object>
+
         <object name="background">
             <visual>
                 <mesh>
@@ -322,19 +332,45 @@
             </visual>
             <!-- Don't need a collision signal for the player ship since other elements initiate the collision -->
             <collision filterCategoryBits="0x00000000" filterMaskBits="0x00000006" collisionSignal="false">
-                <rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
+                <!--<rectList radiusFromVisual="true" rectFromVisual="true" rectAsSizeModifier="true">
                     <rect x1="-5" y1="-5" x2="-5" y2="-5"/>
-                </rectList>
-                <!--<polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                </rectList>-->
+                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
-                        <point x="5" y="5"/>
-                        <point x="5" y="20"/>
-                        <point x="40" y="20"/>
-                        <point x="40" y="5"/>
+                        <point x="1" y="1"/>
+                        <point x="13" y="1"/>
+                        <point x="43" y="10"/>
+                        <point x="43" y="15"/>
+                        <point x="1" y="23"/>
                     </polygon>
-                </polygonList>-->
+                </polygonList>
             </collision>
             <size width="45" height="25"/>
+        </object>
+
+        <object name="player_shield">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="player_shield"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <!-- Same filter as null_player_ship. Oval matching the art (radii 30x18 in the 64x40 image) -->
+            <collision filterCategoryBits="0x00000000" filterMaskBits="0x00000006" collisionSignal="false">
+                <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
+                    <polygon>
+                        <point x="32" y="2"/>
+                        <point x="53" y="7"/>
+                        <point x="62" y="20"/>
+                        <point x="53" y="33"/>
+                        <point x="32" y="38"/>
+                        <point x="11" y="33"/>
+                        <point x="2" y="20"/>
+                        <point x="11" y="7"/>
+                    </polygon>
+                </polygonList>
+            </collision>
         </object>
 
         <object name="player_ship_body">
@@ -451,6 +487,7 @@
                 </mesh>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <!-- clock wise winding seem to work a bit better -->
                 <polygonList radiusFromVisual="true" pointsToModelView="true" optionalPointCheck="false">
                     <polygon>
                         <point x="30" y="1"/>

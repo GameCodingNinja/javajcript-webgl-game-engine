@@ -85,7 +85,7 @@ class Enemy00Ship_Shoot
             else if( this.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
                 this.sprite.incPosXYZ( -gWrapSpan );
 
-            this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry );
+            this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry, this.playerShipSprite.shieldOn );
 
             this.distTraveled += this._moveInc;
             if( this.distTraveled < settings.deviceRes.w )
