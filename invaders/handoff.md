@@ -74,6 +74,10 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
 - Missile interval raised to 2s (`BOSS00_FIRE_INTERVAL` 2000).
 - Library sound features (committed): built-in fades, `soundManager.crossfade()`, `play(..., resetVolume)`, pause menu `pauseLoopingSounds`/`resumeLoopingSounds`, `Sound.resume()` precedence fix. See AGENTS.md "Sound Fades".
 - Screen lock + boss camera easing (item 9 above).
+- Production build: webpack size warning limit raised to 1 MB (the server build failed on the 244 KiB default warning).
+- **Rapid Fire** reward (5th game over reward): hold fire to keep firing every 150 ms (`RAPID_FIRE_INTERVAL`, `firePlayerShot()`). See AGENTS.md "Menu System".
+- **Mobile right-side gestures:** quick swipe up = boost until lifted, hold = fire (Rapid Fire keeps firing), tap = one shot, long horizontal swipe = pause. Boost used to be the one-finger hold. See AGENTS.md "Touch Event System".
+- **Bigger tap area for the game over button list arrows** (`<rect>` size modifier in `button_list.ctrl`), since the 33×41 arrows were hard to tap on a phone. Confirmed by the user.
 
 ## Known review findings (user chose not to fix — leave unless asked)
 - Collision is disabled during the descent.
@@ -105,14 +109,14 @@ The only remaining lint errors are `'ytgame' is not defined` (2 in `level1state.
 The user wants to **watch**: open a visible Chrome window and play the boss fight there (see AGENTS.md "Playtesting in Chrome" for the method). The bot refills the ship's health, so a bot run says nothing about difficulty.
 
 ## Working state
-The user has committed everything through the boss wrap-around fix (`2e78a26`): lock/brake `vulnerable` gate, missile fire interval (2000ms, 250ms faster per hit-bar depletion, no jitter), slower death fall (450 px/s), `endBossMusic()` cleanup, boss head polygon collision, enemy00 building shake, and the enemies' wider wrap-render band (`ENEMY_WRAP_RENDER_DIST`, item 10).
+The user has committed everything through desktop Rapid Fire (`aab4d4c`), including the webpack 1 MB size limit and the wider game over button lists.
 
 Uncommitted:
-- `webpack.config.js`: size warning limit raised to 1 MB (`maxAssetSize`/`maxEntrypointSize`). The ~600 KiB production bundle tripped webpack's 244 KiB default, which only warns when `NODE_ENV=production` (the hosting build server), and that failed the server build. The user confirmed it works.
-- The user's own menu changes (`button_list.ctrl`, `game_over.menu`, `game_over_ad.menu`, `menuButtonFrames.lst`).
+- **Mobile gestures + Rapid Fire on mobile** (`level1state.js`): swipe up to boost, hold to fire; "Rapid Fire" is now in the two game over `.menu` files for every platform (the desktop-only `setStringToList()` code in the `Level1State` constructor was removed). Not tested on a phone by Amp.
+- **Arrow tap area** (`button_list.ctrl`). Tested by the user on a phone.
 - These doc updates.
 
-Tried and reverted (user's call): a wrap-aware ram collision check (the pass-through turned out to be the ram cooldown, see Gotchas) and removing the ram cooldown for enemy00. The TEMP boss test code has been removed, so spawning and targeting are normal. The user asked for no more playtesting for now. Don't ask to commit or push.
+The `.menu`/`.ctrl` files use CRLF line endings; keep them (edit without converting) so diffs stay small. The user asked for no more playtesting for now. Don't ask to commit or push.
 
 ## Suggested next steps
 1. Playtest a full cycle with the real trigger (temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()` to get there fast), including game over mid-battle → restart and the pause menu during the fight (sound + screen lock).

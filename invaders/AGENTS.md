@@ -164,6 +164,8 @@ Fades are built into the library sound system (the old `sound_fade` script is go
 - Coordinate system is center 0,0; positive Y is up
 - When adding controls to a menu, update: the `.menu` XML (control + navigation chain), background size in `menuBackgrounds.lst`, and script classes + registration in the corresponding scripts file
 - The master Sound checkbox enables/disables all sub-checkboxes (Effects, Music, Dialog) via `changeState(ECS_INACTIVE/ECS_DISABLE)`
+- **Tap area (touch):** a control's hit area is its largest sprite's size, which can be too small to tap on a phone (1280 game px span about 800–930 CSS px). Enlarge it without changing the art with a `<rect x1 y1 x2 y2/>` size modifier inside the control's `<control>` element (left/bottom/right/top grow, in game px). The button list arrows in `button_list.ctrl` use `<rect x1="25" y1="7" x2="25" y2="7"/>` (33×41 art → 83×55 tap area). Keep x1 = x2 on a rotated control (the increment arrow is rotated 180°, which swaps the sides).
+- **Game over rewards:** `feature_btn_lst` in `game_over.menu` and `game_over_ad.menu` (keep both in sync). Its entry index is the reward id in `Level1State.setupRewards()`: 0 none, 1 `REWARD_FEATURE_UNLIMITED_BOOST`, 2 `DOUBLE_HEALTH`, 3 `HEAL_OVER_TIME`, 4 `RAPID_FIRE`. Add new rewards at the end. **Rapid Fire:** holding fire keeps firing every `RAPID_FIRE_INTERVAL` (150 ms) from `update()` through `firePlayerShot()`. `shootHeld` is set on the shoot press, cleared on its release (checked even while a menu is up), on pause and on restart, so a missed release can't leave it firing.
 
 ### Mobile Menu Fork (`_mobile`)
 There is a separate mobile fork of the menu, selected at runtime via `isMobile()`:
@@ -304,8 +306,9 @@ Touch event types are split between library (generic) and game (specific):
 - Touch callbacks are registered in `Level1State` constructor inside `isMobile()` check:
   - `eventManager.leftTouchCallback` — per-frame left-side processing (Y position tracking)
   - `eventManager.leftTouchEndCallback` — left-side touch release
-  - `eventManager.rightTouchEndCallback` — right-side touch end (tap to fire, hold to boost, swipe to pause)
-  - `eventManager.rightTouchCallback` — per-frame right-side processing (boost hold detection)
+  - `eventManager.rightTouchEndCallback` — right-side touch end (release the boost/fire hold, long horizontal swipe to pause, tap to fire)
+  - `eventManager.rightTouchCallback` — per-frame right-side processing (quick swipe up = boost, hold = fire)
+- **Right-side gestures** (`onRightTouch`/`onRightTouchEnd` in `level1state.js`): a **quick swipe up** (more than `TOUCH_BOOST_SWIPE_DIST` 40 px up, mostly vertical, within `TOUCH_HOLD_TIME` 300 ms) boosts until the finger is lifted (`TOUCH_BOOST` down/up). **Holding still** for 300 ms fires (`TOUCH_FIRE` down, up on lift), so with the Rapid Fire reward it keeps firing. A **tap** fires one shot (`TOUCH_FIRE` down + up). Once a touch starts a boost or fire hold (`slot.boostHold`/`slot.fireHold`) it stays that until lifted, so its release isn't also a tap or pause. Boost used to be a one-finger hold; it moved to the swipe so Rapid Fire could use the hold on mobile.
   - `eventManager.touchEndCallback` — whole-screen touch end (bypasses d-pad/side split, for future use)
 - Touch coords (`clientX/Y`, and the `dx/dy` deltas passed to callbacks) are in **CSS pixels**. When comparing them against the screen size (e.g. swipe-distance thresholds, touch-Y mapping), use `device.canvas.clientWidth/clientHeight` — NOT `device.canvas.width/height`, which is the DPR-scaled backing store (see the library's "Canvas Sizing & Device Pixel Ratio" note).
 - The above callbacks are the **gameplay** touch path. While a menu is active, touch is instead bridged into the menu system as synthetic mouse events by the library (so sliders/buttons work via touch) — see the library's "Touch → Menu Mouse Bridge" note. The gameplay callbacks are not invoked while a menu is up.

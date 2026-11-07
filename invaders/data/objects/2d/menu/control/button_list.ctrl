@@ -32,6 +32,8 @@
         <control controlType="button" defaultState="inactive">
             <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
             <position x="-175" y="0" z="0"/>
+            <!-- size modifier for the collision rect: a bigger tap area than the 33x41 arrow (for touch) -->
+            <rect x1="25" y1="7" x2="25" y2="7"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>
@@ -44,6 +46,8 @@
             <filePath file="data/objects/2d/menu/control/button_arrow.ctrl"/>
             <position x="175" y="0" z="0"/>
             <rotation z="180"/>
+            <!-- size modifier for the collision rect: a bigger tap area than the 33x41 arrow (for touch) -->
+            <rect x1="25" y1="7" x2="25" y2="7"/>
             <!-- Supports transIn, transOut, disabled, inactive, active, select, change, execute & event -->
             <scriptList>
                 <script active="Control_OnActive"/>

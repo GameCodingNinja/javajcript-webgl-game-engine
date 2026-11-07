@@ -92,6 +92,8 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
       REWARD_FEATURE_RAPID_FIRE = 4,
       RAPID_FIRE_INTERVAL = 150,
+      TOUCH_HOLD_TIME = 300,
+      TOUCH_BOOST_SWIPE_DIST = 40,
       MAX_MINI_BOSS_STREAK = 2,
       GOD_MODE = false;
 
@@ -149,13 +151,6 @@ export class Level1State extends CommonState
 
             // Apply the left-handed (swap movement/action sides) preference
             eventManager.leftHandedTouch = (settings.user.leftHandedTouch === 1);
-        }
-        // Rapid Fire is a desktop only reward (on mobile, holding the fire side boosts), so add it as the
-        // last entry of the reward lists. This state is created once per session, so it's only added once.
-        else
-        {
-            menuManager.getMenu('game_over_menu').getControl('feature_btn_lst').setStringToList('Rapid Fire');
-            menuManager.getMenu('game_over_menu_ad').getControl('feature_btn_lst').setStringToList('Rapid Fire');
         }
 
         // Clear the last device used so that the button on start game menu is active by default
@@ -271,7 +266,7 @@ export class Level1State extends CommonState
         else
             this.unlimitedBoost = false;
 
-        // Rapid Fire reward (desktop only): holding the fire button keeps firing
+        // Rapid Fire reward: holding the fire button (on mobile, holding the right side) keeps firing
         this.rapidFire = false;
 
         // Create a player for this group
@@ -800,7 +795,6 @@ export class Level1State extends CommonState
             {
                 this.slowHealTimer = new Timer(2000);
             }
-            // Only in the list on desktop (added in StartUpState)
             else if( this._featureIndex === REWARD_FEATURE_RAPID_FIRE )
             {
                 this.rapidFire = true;
@@ -2209,50 +2203,65 @@ export class Level1State extends CommonState
     }
 
     //
-    //  DESC: For Mobile: Right-side per-frame touch callback - detect hold for boost activation
+    //  DESC: For Mobile: Right-side per-frame touch callback - detect a quick swipe up (boost) or a hold (fire)
     //
     onRightTouch( slot )
     {
-        this._tdx = slot.currentX - slot.startX;
-        this._tdy = slot.currentY - slot.startY;
-
-        // Small movement held long enough → boost
-        if( !slot.boostHold && (this._tdx * this._tdx + this._tdy * this._tdy) < 400 &&
-            (performance.now() - slot.startTime) >= 300 )
+        if( !slot.boostHold && !slot.fireHold )
         {
-            slot.boostHold = true;
-            eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_DOWN );
+            this._tdx = slot.currentX - slot.startX;
+            this._tdy = slot.currentY - slot.startY;
+            this._holdTime = performance.now() - slot.startTime;
+
+            // Quick swipe up → boost until the finger is lifted (dy is negative going up)
+            if( this._holdTime < TOUCH_HOLD_TIME && -this._tdy > TOUCH_BOOST_SWIPE_DIST && -this._tdy > Math.abs( this._tdx ) )
+            {
+                slot.boostHold = true;
+                eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_DOWN );
+            }
+            // Small movement held long enough → fire (with the Rapid Fire reward, it keeps firing until lifted)
+            else if( this._holdTime >= TOUCH_HOLD_TIME && (this._tdx * this._tdx + this._tdy * this._tdy) < 400 )
+            {
+                slot.fireHold = true;
+                eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_DOWN );
+            }
         }
     }
 
     //
-    //  DESC: For Mobile: Right-side touch end callback - detect tap to fire, hold to release boost, or swipe to pause
+    //  DESC: For Mobile: Right-side touch end callback - release the boost or fire hold, swipe to pause or tap to fire
     //
-    onRightTouchEnd( slot, dx, dy, holdDuration )
+    onRightTouchEnd( slot, dx, dy )
     {
-        // Reset boost hold state for next touch
-        slot.boostHold = false;
+        // dx is in CSS pixels (clientX delta), so compare against the CSS width
+        // (clientWidth), not the DPR-scaled backing store (canvas.width).
+        this._swipeDist = device.canvas.clientWidth * 0.6;
+
+        // Boost swipe lifted → stop boosting
+        if( slot.boostHold )
+            eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_UP );
+
+        // Fire hold lifted → stop firing
+        else if( slot.fireHold )
+            eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_UP );
 
         // Swipe across 60%+ of screen width, away from the action thumb, → toggle pause.
         // Right-handed: action thumb is on the right, so swipe right-to-left (dx negative).
         // Left-handed: action thumb is on the left, so swipe left-to-right (dx positive).
-        // dx is in CSS pixels (clientX delta), so compare against the CSS width
-        // (clientWidth), not the DPR-scaled backing store (canvas.width).
-        this._swipeDist = device.canvas.clientWidth * 0.6;
-        if( (eventManager.leftHandedTouch && dx > this._swipeDist) ||
+        else if( (eventManager.leftHandedTouch && dx > this._swipeDist) ||
             (!eventManager.leftHandedTouch && dx < -this._swipeDist) )
             eventManager._queueTouchEvent( gameDefs.TOUCH_PAUSE, touchevent.TOUCH_BUTTON_DOWN );
 
+        // Quick tap → fire one shot
         else if( !menuManager.active && (dx * dx + dy * dy) < 400 )
         {
-            // Hold down → release boost
-            if( holdDuration >= 300 )
-                eventManager._queueTouchEvent( gameDefs.TOUCH_BOOST, touchevent.TOUCH_BUTTON_UP );
-
-            // Quick tap → fire
-            else
-                eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_DOWN );
+            eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_DOWN );
+            eventManager._queueTouchEvent( gameDefs.TOUCH_FIRE, touchevent.TOUCH_BUTTON_UP );
         }
+
+        // Reset the hold states for the next touch
+        slot.boostHold = false;
+        slot.fireHold = false;
     }
 }
 
