@@ -1184,8 +1184,8 @@ export class Level1State extends CommonState
                 this.playerShip.waitForFullBoostCharge = false;
                 this.playerShip.boostSpeed = PLAYER_SHIP_BOOST_TOP_SPEED;
 
-                if( !this.unlimitedBoost )
-                    this.playerShip.boostBar.setVisible( true );
+                // Shown with unlimited boost too, but then it stays full (it's never drained in update())
+                this.playerShip.boostBar.setVisible( true );
 
                 if( this.lastMoveDirX === MOVE_LEFT )
                     this.easingX.init( this.easingX.getValue(), -(this.playerShip.speed + this.playerShip.boostSpeed), 2, easing.getLinear() );
@@ -1925,6 +1925,13 @@ export class Level1State extends CommonState
                         this.playerShip.boostBar.setVisible( false );
                     }
                 }
+            }
+            // Unlimited boost: the bar stays full, so hide it as soon as the boost is released
+            // (like the normal bar does once it's recharged)
+            else if( this.playerShip.boostButtonPress === defs.EAP_UP )
+            {
+                this.playerShip.boostButtonPress = defs.EAP_IDLE;
+                this.playerShip.boostBar.setVisible( false );
             }
 
             this.levelCamera.incPosXYZ( this._easingVal );
