@@ -93,6 +93,8 @@ const MOVE_NULL = -1,
       REWARD_FEATURE_DOUBLE_HEALTH = 2,
       REWARD_FEATURE_HEAL_OVER_TIME = 3,
       REWARD_FEATURE_RAPID_FIRE = 4,
+      REWARD_FEATURE_SHIELD_OVERDRIVE = 5,
+      SHIELD_OVERDRIVE_SCALE = 1.5,
       RAPID_FIRE_INTERVAL = 150,
       TOUCH_HOLD_TIME = 300,
       TOUCH_BOOST_SWIPE_DIST = 40,
@@ -270,6 +272,9 @@ export class Level1State extends CommonState
 
         // Rapid Fire reward: holding the fire button (on mobile, holding the right side) keeps firing
         this.rapidFire = false;
+
+        // Shield Overdrive reward: 1.5x the shield time and recharge rate, no lockout after a full drain
+        this.shieldOverdrive = false;
 
         // Create a player for this group
         this.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
@@ -800,6 +805,7 @@ export class Level1State extends CommonState
             this.unlimitedBoost = false;
 
         this.rapidFire = false;
+        this.shieldOverdrive = false;
 
         if( gAdPlayed || (typeof window.CrazyGames === 'undefined'))
         {
@@ -820,6 +826,13 @@ export class Level1State extends CommonState
             else if( this._featureIndex === REWARD_FEATURE_RAPID_FIRE )
             {
                 this.rapidFire = true;
+            }
+            // initPlayerShip() sets the normal shield bar on every restart, so only the reward changes it
+            else if( this._featureIndex === REWARD_FEATURE_SHIELD_OVERDRIVE )
+            {
+                this.shieldOverdrive = true;
+                this.playerShip.shieldBar.setProgressBarMax( DEFAULT_SHIP_SHIELD_BAR_VALUE * SHIELD_OVERDRIVE_SCALE );
+                this.playerShip.shieldBar.setCurrentValue( DEFAULT_SHIP_SHIELD_BAR_VALUE * SHIELD_OVERDRIVE_SCALE );
             }
 
             this.setBattleTime( this._battleTimeIndex );
@@ -1191,13 +1204,15 @@ export class Level1State extends CommonState
                     }
                 }
 
-                // Shield. After a full drain, it can't come back up until the bar is full again.
-                // The bar only recharges while the button is up, so holding it stalls the recharge.
+                // Shield. After a full drain, it can't come back up until the bar is full again (except with
+                // Shield Overdrive). The bar only recharges while the button is up, so holding it stalls the recharge.
                 if( actionManager.wasActionPress( event, 'shield', defs.EAP_DOWN ) )
                 {
                     this.playerShip.shieldButtonPress = defs.EAP_DOWN;
 
-                    if( !this.playerShip.waitForFullShieldCharge || this.playerShip.shieldBar.isMaxValue() )
+                    // Needs some charge, so an empty bar doesn't flash the shield up for a frame
+                    if( !this.playerShip.shieldBar.isMinValue() &&
+                        (!this.playerShip.waitForFullShieldCharge || this.playerShip.shieldBar.isMaxValue()) )
                     {
                         this.playerShip.waitForFullShieldCharge = false;
                         this.setShield( true );
@@ -2008,13 +2023,14 @@ export class Level1State extends CommonState
 
                 if( this.playerShip.shieldBar.isMinValue() )
                 {
-                    this.playerShip.waitForFullShieldCharge = true;
+                    // Shield Overdrive doesn't lock the shield out after a full drain
+                    this.playerShip.waitForFullShieldCharge = !this.shieldOverdrive;
                     this.setShield( false );
                 }
             }
             else if( this.playerShip.shieldButtonPress === defs.EAP_UP )
             {
-                this.playerShip.shieldBar.incCurrentValue( highResTimer.elapsedTime * SHIELD_RECHARGE_SPEED );
+                this.playerShip.shieldBar.incCurrentValue( highResTimer.elapsedTime * SHIELD_RECHARGE_SPEED * (this.shieldOverdrive ? SHIELD_OVERDRIVE_SCALE : 1) );
 
                 if( this.playerShip.shieldBar.isMaxValue() )
                 {
