@@ -73,6 +73,11 @@ class Settings
                     {
                         if( savedUserSettings[key] === undefined )
                             savedUserSettings[key] = obj[key];
+
+                        // Older builds saved some numbers as strings (ex: stickDeadZone "0.10" from toFixed()),
+                        // which breaks the math on them (0.2 + "0.10" is "0.20.10"), so convert them back
+                        else if( typeof obj[key] === 'number' && typeof savedUserSettings[key] === 'string' )
+                            savedUserSettings[key] = Number( savedUserSettings[key] );
                     }
 
                     this.user = savedUserSettings;

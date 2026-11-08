@@ -21,6 +21,7 @@ import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
+import { platform } from '../../../library/system/platform';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
@@ -52,6 +53,11 @@ export class Level1State extends CommonState
         strategyManager.activateStrategy('_level-1-stage_');
         strategyManager.activateStrategy('_level-1-ball_');
         
+        // Indicate to the game portal the end of the loading and the start of the gameplay
+        platform.loadingStop();
+        platform.gameplayStart();
+        this.gameplayActive = true;
+
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
         
@@ -72,6 +78,26 @@ export class Level1State extends CommonState
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
                     this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE  ) );
+            }
+            // A menu (ex: pause) is coming up: indicate to the game portal the gameplay has stopped
+            else if( event.type === menuDefs.EME_MENU_TRANS_IN )
+            {
+                if( event.arg[0] === menuDefs.ETC_BEGIN && this.gameplayActive )
+                {
+                    this.gameplayActive = false;
+                    platform.gameplayStop();
+                }
+            }
+            // The last menu is gone: indicate the gameplay has started again. Not when leaving the state
+            // (CommonState blocks the menu event handling once the state change begins).
+            else if( event.type === menuDefs.EME_MENU_TRANS_OUT )
+            {
+                if( event.arg[0] === menuDefs.ETC_END && !this.gameplayActive &&
+                    !menuManager.getActiveTree() && menuManager.allowEventHandling )
+                {
+                    this.gameplayActive = true;
+                    platform.gameplayStart();
+                }
             }
         }
     }

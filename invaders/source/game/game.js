@@ -18,19 +18,12 @@ import { eventManager } from '../../../library/managers/eventmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { statCounter } from '../../../library/utilities/statcounter';
 import { localStorage } from '../../../library/utilities/localstorage';
+import { platform } from '../../../library/system/platform';
 import * as stateDefs from '../state/statedefs';
 
 // Load data from bundle
 import settingsObj from '../../data/settings/settings.json';
 import userSettingsObj from '../../data/settings/usersettings.json';
-
-async function initCrazyGames()
-{
-    if(typeof window.CrazyGames !== 'undefined')
-    {
-        await window.CrazyGames.SDK.init();
-    }
-}
 
 export class Game
 {
@@ -47,13 +40,12 @@ export class Game
     init()
     {
         Promise.all([
-            initCrazyGames()
+            platform.init()
         ])
         .then(() =>
         {
-            // Indicate to Crazy Games the start of the loading
-            if(typeof window.CrazyGames !== 'undefined')
-                window.CrazyGames.SDK.game.loadingStart();
+            // Indicate to the game portal the start of the loading
+            platform.loadingStart();
 
             // Load the settings
             settings.loadFromObj( settingsObj );

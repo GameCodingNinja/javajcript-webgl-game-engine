@@ -105,7 +105,7 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
 npx webpack --mode development
 npx eslint source/scripts/boss00aiscripts.js source/scripts/boss00scripts.js
 ```
-The only remaining lint errors are `'ytgame' is not defined` (2 in `level1state.js`, 6 in `startupstate.js`; the YouTube Playables global, guarded by `typeof` at runtime). Adding `"ytgame": "readonly"` to `globals` in the root `.eslintrc.json` would clear them. `soundmanager.js` also has a pre-existing optional-chaining parse error under the ES2018 lint config.
+The game state files now lint clean (the old `'ytgame' is not defined` errors went away when the portal SDK calls moved into the library `platform` module). `soundmanager.js` also has a pre-existing optional-chaining parse error under the ES2018 lint config.
 
 ## Playtesting
 The user wants to **watch**: open a visible Chrome window and play the boss fight there (see AGENTS.md "Playtesting in Chrome" for the method). The bot refills the ship's health, so a bot run says nothing about difficulty.
@@ -119,11 +119,12 @@ Uncommitted:
 - **Unlimited Boost bar** (`level1state.js`). Confirmed by the user.
 - **Shield Overdrive** reward (id 5, both game over menus): 1.5× shield time and recharge rate (`SHIELD_OVERDRIVE_SCALE`; 2× was too good), no lockout after a full drain. Confirmed working by the user.
 - **Player shield**: `player_shield.png` (new), `level1DataList.lst` + regenerated sprite sheet, `playerShip.strategy`, `playership.strategy.loader` (renamed from `ship.strategy.loader`), library `collisioncomponent.js` (`checkChildren` parameter), `enemy00scripts.js`/`boss00scripts.js`/`levelscripts.js` (pass `playerShipSprite.shieldOn`), `gamedefs.js`, `startupstate.js` (touch code registration), `controllerMapping.json`, `key_binding_scroll_box.ctrl`, `level1state.js`. Builds and lints; not tested yet. A browser with saved key bindings needs "Reset To Default" once to get the new binding.
+- **Platform SDK wrapper**: new library `system/platform.js`; `game.js`, `startupstate.js` and `level1state.js` call `platform.*` instead of `window.CrazyGames`/`ytgame`. Same calls as before. The YouTube hooks in `preloadComplete()` are wrapped in `if( platform.isYouTubePlayables() )` so none run outside YouTube. gameTemplate uses `platform` too: the YouTube hooks in `startupstate.js`, plus the CrazyGames calls added like invaders (`game.js` waits for `platform.init()` then `loadingStart()`; `LoadState` starts loading and `TitleScreenState`/`Level1State` stop it; `Level1State` starts gameplay, stops it when a menu comes up and restarts it when the last menu is gone). Its `index.html` has the commented-out CrazyGames SDK line. Not run with the SDK. Not tested on CrazyGames/YouTube.
+- **CrazyGames SDK** was enabled in `index.html` to test, then commented out again (the user's choice). Left stick fix found while testing: library `settings.loadUserSettingsFromObj()` converts saved number settings that older builds stored as strings (`stickDeadZone` `"0.00"` in the CrazyGames save made the stick threshold `NaN`). Confirmed by the user. See AGENTS.md "Platform Integration".
 - These doc updates.
 
 The `.menu`/`.ctrl` files use CRLF line endings; keep them (edit without converting) so diffs stay small. The user asked for no more playtesting for now. Don't ask to commit or push.
 
 ## Suggested next steps
 1. Playtest a full cycle with the real trigger (temporarily set `foughtEnemy01/02 = true` in `initMiscObjects()` to get there fast), including game over mid-battle → restart and the pause menu during the fight (sound + screen lock).
-2. Optional: add `ytgame` to the ESLint globals.
-3. Optional: the three declined review findings above.
+2. Optional: the three declined review findings above.

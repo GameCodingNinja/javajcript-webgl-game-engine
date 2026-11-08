@@ -19,6 +19,7 @@ import { device } from '../../../library/system/device';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { localStorage } from '../../../library/utilities/localstorage';
+import { platform } from '../../../library/system/platform';
 import * as stateDefs from '../state/statedefs';
 
 // Load data from bundle
@@ -39,14 +40,21 @@ export class Game
     //
     init()
     {
-        // Load the settings
-        settings.loadFromObj( settingsObj );
+        // Wait for the game portal SDK (CrazyGames) to init before anything else
+        platform.init()
+        .then(() =>
+        {
+            // Indicate to the game portal the start of the loading
+            platform.loadingStart();
 
-        // Init local storage
-        localStorage.init();
+            // Load the settings
+            settings.loadFromObj( settingsObj );
 
-        // Load the user settings. Needs to be after localStorage.init()
-        settings.loadUserSettingsFromObj( userSettingsObj );
+            // Init local storage
+            localStorage.init();
+
+            // Load the user settings. Needs to be after localStorage.init()
+            settings.loadUserSettingsFromObj( userSettingsObj );
 
             // Create the OpenGL context (disable antialias for pixel-art style)
             let gl = device.create('game-surface', { antialias: false });
@@ -55,69 +63,70 @@ export class Game
             // Set the init shader callback
             signalManager.connect_initShader( this.initShaderCallBackFunc );
 
-        // Do we add stencil buffer
-        if( settings.createStencilBuffer )
-            gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
-        
-        // Depth testing is off by default. Enable it?
-        if( settings.enableDepthBuffer )
-            gl.enable(gl.DEPTH_TEST);
-    
-        // Init the clear color
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        
-        // Init the stencil clear mask based on the bit size of the mask
-        // Stencil buffer can only be 1 or 8 bits per pixel
-        if( settings.stencilBufferBitSize === 1 )
-        {
-            gl.stencilFunc(gl.ALWAYS, 1, 0x1);
-            gl.stencilMask(0x1);
-        }
-        else if( settings.stencilBufferBitSize === 8 )
-        {
-            gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
-            gl.stencilMask(0xff);
-        }
-        
-        // Identify the front face winding orientation 
-        if( settings.cullFrontFace === 'CCW' )
-            gl.frontFace(gl.CCW);
-        else if( settings.cullFrontFace === 'CW' )
-            gl.frontFace(gl.CW);
+            // Do we add stencil buffer
+            if( settings.createStencilBuffer )
+                gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
 
-        // Specify whether or not front- and/or back-facing polygons can be culled
-        if( settings.cullFace === 'BACK' )
-            gl.cullFace(gl.BACK);
-        else if( settings.cullFace === 'FRONT' )
-            gl.cullFace(gl.FRONT);
-        else if( settings.cullFace === 'FRONT_AND_BACK' )
-            gl.cullFace(gl.FRONT_AND_BACK);
+            // Depth testing is off by default. Enable it?
+            if( settings.enableDepthBuffer )
+                gl.enable(gl.DEPTH_TEST);
 
-        // Enable culling. Disabled by default
-        if( settings.cullEnable )
-            gl.enable(gl.CULL_FACE);
-        
-        // Enable alpha blending
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            // Init the clear color
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-        // Make the zero texture the active texture
-        gl.activeTexture(gl.TEXTURE0);
-        
-        // Init the clear buffer mask
-        if( settings.clearTargetBuffer )
-            this.clearBufferMask |= gl.COLOR_BUFFER_BIT;
+            // Init the stencil clear mask based on the bit size of the mask
+            // Stencil buffer can only be 1 or 8 bits per pixel
+            if( settings.stencilBufferBitSize === 1 )
+            {
+                gl.stencilFunc(gl.ALWAYS, 1, 0x1);
+                gl.stencilMask(0x1);
+            }
+            else if( settings.stencilBufferBitSize === 8 )
+            {
+                gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+                gl.stencilMask(0xff);
+            }
 
-        if( settings.enableDepthBuffer )
-            this.clearBufferMask |= gl.DEPTH_BUFFER_BIT;
+            // Identify the front face winding orientation 
+            if( settings.cullFrontFace === 'CCW' )
+                gl.frontFace(gl.CCW);
+            else if( settings.cullFrontFace === 'CW' )
+                gl.frontFace(gl.CW);
 
-        if( settings.clearStencilBuffer )
-            this.clearBufferMask |= gl.STENCIL_BUFFER_BIT;
-        
-        gl.clear( this.clearBufferMask );
-        
-        // Create the startup state
-        this.gameState = new StartUpState( this.gameLoopFunc );
+            // Specify whether or not front- and/or back-facing polygons can be culled
+            if( settings.cullFace === 'BACK' )
+                gl.cullFace(gl.BACK);
+            else if( settings.cullFace === 'FRONT' )
+                gl.cullFace(gl.FRONT);
+            else if( settings.cullFace === 'FRONT_AND_BACK' )
+                gl.cullFace(gl.FRONT_AND_BACK);
+
+            // Enable culling. Disabled by default
+            if( settings.cullEnable )
+                gl.enable(gl.CULL_FACE);
+
+            // Enable alpha blending
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+            // Make the zero texture the active texture
+            gl.activeTexture(gl.TEXTURE0);
+
+            // Init the clear buffer mask
+            if( settings.clearTargetBuffer )
+                this.clearBufferMask |= gl.COLOR_BUFFER_BIT;
+
+            if( settings.enableDepthBuffer )
+                this.clearBufferMask |= gl.DEPTH_BUFFER_BIT;
+
+            if( settings.clearStencilBuffer )
+                this.clearBufferMask |= gl.STENCIL_BUFFER_BIT;
+
+            gl.clear( this.clearBufferMask );
+
+            // Create the startup state
+            this.gameState = new StartUpState( this.gameLoopFunc );
+        });
     }
     
     // 

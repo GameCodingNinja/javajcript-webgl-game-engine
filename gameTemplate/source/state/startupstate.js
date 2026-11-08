@@ -26,6 +26,7 @@ import { ScriptComponent } from '../../../library/script/scriptcomponent';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import { settings } from '../../../library/utilities/settings';
+import { platform } from '../../../library/system/platform';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
@@ -134,31 +135,31 @@ export class StartUpState extends GameState
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
 
-        // Init Youtube playable if in the environment
-        if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
+        // YouTube Playables hooks (skipped entirely when not in its environment)
+        if( platform.isYouTubePlayables() )
+        {
+            platform.onAudioEnabledChange((isAudioEnabled) =>
             {
-                ytgame.system.onAudioEnabledChange((isAudioEnabled) =>
+                if(menuManager.initialized)
                 {
-                    if(menuManager.initialized)
+                    // Allow audio.
+                    if (isAudioEnabled)
                     {
-                        // Allow audio.
-                        if (isAudioEnabled)
-                        {
-                            settings.user.soundEnabled = 1;
-                        }
-                        else // Disable audio.
-                        {
-                            settings.user.soundEnabled = 0;
-                        }
+                        settings.user.soundEnabled = 1;
                     }
-                });
-    
-                // Send first frame ready now that we've started to draw.
-                ytgame.game.firstFrameReady();
-    
-                // Send game ready since there isn't any other processing.
-                ytgame.game.gameReady();
-            }
+                    else // Disable audio.
+                    {
+                        settings.user.soundEnabled = 0;
+                    }
+                }
+            });
+
+            // Send first frame ready now that we've started to draw.
+            platform.firstFrameReady();
+
+            // Send game ready since there isn't any other processing.
+            platform.gameReady();
+        }
 
         // Start the game loop
         requestAnimationFrame( this.callback );

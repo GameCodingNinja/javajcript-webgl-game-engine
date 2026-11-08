@@ -318,6 +318,9 @@ Touch event types are split between library (generic) and game (specific):
 ## Platform Integration
 - **CrazyGames SDK**: Optional, detected at runtime (`window.CrazyGames`)
 - **YouTube Playables**: Optional, detected at runtime (`window.ytgame`)
+- Both SDK `<script>` tags are commented out in `index.html` for local development; uncomment one to test that platform.
+- Both go through the library `platform` singleton (`library/system/platform.js`): `init()`, `loadingStart/Stop()`, `gameplayStart/Stop()`, `requestRewardedAd( callbacks )`, `sendScore()`, `firstFrameReady()`, `gameReady()`, `onAudioEnabledChange/onPause/onResume( cb )`, `isCrazyGames()`, `isYouTubePlayables()`. Every call does nothing when its SDK isn't loaded, so a single call can be made unconditionally; wrap a group of calls for one platform in `if( platform.isYouTubePlayables() )`/`isCrazyGames()` so none of them run elsewhere (like the YouTube hooks in `StartUpState.preloadComplete()`). Don't reference `window.CrazyGames`/`ytgame` directly in game code. The game keeps its own ad result state (`gAdPlayed`/`gAdError` in `level1state.js`, set by the callbacks passed to `requestRewardedAd()`).
+- With the CrazyGames SDK loaded, the library `localStorage` saves through `CrazyGames.SDK.data` instead of `window.localStorage`, so key bindings and user settings are a **separate save**. On localhost the SDK keeps it in the browser's `localStorage` under `SDK_DATA_local` (delete that key in DevTools to reset it). An old save there had `stickDeadZone` as the string `"0.00"`, which made the gamepad stick threshold `NaN` (dead left stick); `settings.loadUserSettingsFromObj()` now converts saved strings back to numbers when the default is a number.
 
 ## Webpack Config
 - Entry: `./source/game/main.js`

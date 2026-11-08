@@ -45,6 +45,7 @@ import * as keybindMenuScripts from '../scripts/keybindmenuscripts';
 import * as settingsMenuScripts from '../scripts/settingsmenuscripts';
 import * as aiBaseScripts from '../scripts/aibasescripts';
 import { isMobile } from '../../../library/system/device';
+import { platform } from '../../../library/system/platform';
 import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 
@@ -170,10 +171,10 @@ export class StartUpState extends GameState
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
 
-        // Init Youtube playable if in the environment
-        if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
+        // YouTube Playables hooks (skipped entirely when not in its environment)
+        if( platform.isYouTubePlayables() )
         {
-            ytgame.system.onAudioEnabledChange((isAudioEnabled) =>
+            platform.onAudioEnabledChange((isAudioEnabled) =>
             {
                 // Resume all audio
                 if (isAudioEnabled)
@@ -188,7 +189,7 @@ export class StartUpState extends GameState
                 }
             });
 
-            ytgame.system.onPause(() =>
+            platform.onPause(() =>
             {
                 if( menuManager.initialized && !menuManager.active)
                 {
@@ -197,8 +198,8 @@ export class StartUpState extends GameState
 
                 //console.log('Suspend game');
             });
-            
-            ytgame.system.onResume(() =>
+        
+            platform.onResume(() =>
             {
                 if( menuManager.initialized && menuManager.active)
                 {
@@ -209,10 +210,10 @@ export class StartUpState extends GameState
             });
 
             // Send first frame ready now that we've started to draw.
-            ytgame.game.firstFrameReady();
+            platform.firstFrameReady();
 
             // Send game ready since there isn't any other processing.
-            ytgame.game.gameReady();
+            platform.gameReady();
         }
 
         // Start the game loop

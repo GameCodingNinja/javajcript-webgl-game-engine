@@ -20,6 +20,7 @@ import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as menuDefs from '../../../library/gui/menudefs';
+import { platform } from '../../../library/system/platform';
 import * as stateDefs from './statedefs';
 
 // Load data from bundle as string
@@ -47,6 +48,9 @@ export class TitleScreenState extends CommonState
         // Clear the event queue
         eventManager.clear();
         
+        // Indicate to the game portal the end of the loading
+        platform.loadingStop();
+
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
         

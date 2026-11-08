@@ -25,6 +25,7 @@ import { GenericEvent } from '../../../library/common/genericevent';
 import { settings } from '../../../library/utilities/settings';
 import { Timer } from '../../../library/utilities/timer';
 import { device, isMobile } from '../../../library/system/device';
+import { platform } from '../../../library/system/platform';
 import { Color } from '../../../library/common/color';
 import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 import * as defs from '../../../library/common/defs';
@@ -122,13 +123,6 @@ const fadeOutAmbientMusic_cb =
     }
 };
 
-async function crazyGamesRequestAd()
-{
-    if(typeof window.CrazyGames !== 'undefined')
-    {
-        await window.CrazyGames.SDK.ad.requestAd("rewarded", fadeOutAmbientMusic_cb);
-    }
-}
 
 export class Level1State extends CommonState
 {
@@ -289,9 +283,8 @@ export class Level1State extends CommonState
 
         this.setYTGameScore();
 
-        // Indicate to Crazy Games the start of the loading
-        if(typeof window.CrazyGames !== 'undefined')
-            window.CrazyGames.SDK.game.loadingStop();
+        // Indicate to the game portal the end of the loading
+        platform.loadingStop();
         
         requestAnimationFrame( this.callback );
     }
@@ -399,8 +392,7 @@ export class Level1State extends CommonState
     //
     setYTGameScore()
     {
-        if(typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
-            ytgame.engagement.sendScore({ value: this.playerLevel });
+        platform.sendScore( this.playerLevel );
     }
 
     // 
@@ -487,7 +479,7 @@ export class Level1State extends CommonState
 
         // Preload the strategies
         Promise.all([
-            crazyGamesRequestAd()
+            platform.requestRewardedAd( fadeOutAmbientMusic_cb )
         ]);
     }
 
@@ -791,7 +783,7 @@ export class Level1State extends CommonState
     //
     setupRewards()
     {
-        if(typeof window.CrazyGames !== 'undefined')
+        if( platform.isCrazyGames() )
             this._menu = menuManager.getMenu("game_over_menu_ad");
         else
             this._menu = menuManager.getMenu("game_over_menu");
@@ -807,7 +799,7 @@ export class Level1State extends CommonState
         this.rapidFire = false;
         this.shieldOverdrive = false;
 
-        if( gAdPlayed || (typeof window.CrazyGames === 'undefined'))
+        if( gAdPlayed || !platform.isCrazyGames() )
         {
             if( this._featureIndex === REWARD_FEATURE_UNLIMITED_BOOST )
             {
@@ -985,11 +977,8 @@ export class Level1State extends CommonState
                         // Pause the looping level sounds (enemy loops, boss alarm, thrust)
                         soundManager.pauseLoopingSounds( '(level_1)' );
 
-                        // Indicate to Crazy Games the game has started
-                        if(typeof window.CrazyGames !== 'undefined')
-                        {
-                            window.CrazyGames.SDK.game.gameplayStop();
-                        }
+                        // Indicate to the game portal the gameplay has stopped
+                        platform.gameplayStop();
                     }
                 }
             }
@@ -1023,11 +1012,8 @@ export class Level1State extends CommonState
                             // Resume the looping sounds the pause menu paused (not the ones stopped since, ex: by a restart)
                             soundManager.resumeLoopingSounds( '(level_1)' );
 
-                            // Indicate to Crazy Games the game has stopped
-                            if(typeof window.CrazyGames !== 'undefined')
-                            {
-                                window.CrazyGames.SDK.game.gameplayStart();
-                            }
+                            // Indicate to the game portal the gameplay has started
+                            platform.gameplayStart();
                         }
 
                         this._tree = menuManager.getTree( 'pause_tree' );
@@ -1041,7 +1027,7 @@ export class Level1State extends CommonState
                 eventManager.clear();
                 actionManager.clearLastDeviceUsed();
 
-                if(typeof window.CrazyGames !== 'undefined')
+                if( platform.isCrazyGames() )
                     menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu_ad');
                 else
                     menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
@@ -1074,11 +1060,8 @@ export class Level1State extends CommonState
                     this.healthSpawnTimer.resume();
                     this.enemy00MaxTimer.resume();
 
-                    // Indicate to Crazy Games the game has started
-                    if(typeof window.CrazyGames !== 'undefined' )
-                    {
-                        window.CrazyGames.SDK.game.gameplayStop();
-                    }
+                    // Indicate to the game portal the gameplay has stopped
+                    platform.gameplayStop();
                 }
             }
             else if( event.type === uiControlDefs.ECAT_ACTION_EVENT )

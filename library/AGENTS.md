@@ -136,6 +136,11 @@ Sound playback is managed by `soundManager` with per-type enable/disable via `se
 - Child nodes inherit the head node's `userId` (a child's own `id` attribute is ignored), so a collision callback has to tell a child hit apart by the sprite itself.
 - Child sprites collide in world space: their `transPos` and collision matrix include the parent's transform.
 
+## Platform SDKs (system/platform.js)
+- `platform` wraps the optional game portal SDKs, detected at runtime: CrazyGames (`window.CrazyGames`: `init`, loading/gameplay start/stop, rewarded ads) and YouTube Playables (`window.ytgame`: first frame/game ready, score, audio/pause/resume hooks).
+- Every method checks for its SDK and does nothing when it isn't there, so games call them unconditionally instead of writing `typeof window.X` checks. Wait for `platform.init()` before the other calls.
+- Add new portal calls here rather than in game code.
+
 ## GC Optimization Caveats
 - **Do NOT reuse arrays in async/Promise contexts**: Instance variables for promise collection (e.g., `this._promiseAry`) cause race conditions when multiple loads occur concurrently. Use local variables for promise arrays.
 - **Avoid `findIndex` with closures**: Use `genFunc.indexOf()` instead of `Array.findIndex((obj) => ...)` to avoid closure creation per call.

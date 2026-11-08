@@ -11,6 +11,7 @@ import { scriptManager } from '../../../library/script/scriptmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { settings } from '../../../library/utilities/settings';
+import { platform } from '../../../library/system/platform';
 import { signalManager } from '../../../library/managers/signalmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
@@ -47,6 +48,9 @@ export class LoadState extends GameState
         
         // Clear the event queue
         eventManager.clear();
+
+        // Indicate to the game portal the start of the loading (the next state indicates the end)
+        platform.loadingStart();
         
         // Preload assets for the loading screen
         this.preload();
