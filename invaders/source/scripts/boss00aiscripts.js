@@ -13,14 +13,10 @@ import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
-import { Point } from '../../../library/common/point';
 import * as gameDefs from '../state/gamedefs';
 
 // Shared AI data
 var ai_data = {};
-
-// Global temp point for wrap-aware view checks (GC optimization)
-var gTempWrapPoint = new Point;
 
 // 
 //  DESC: Clear the AI data
@@ -65,7 +61,7 @@ class AI_Boss00_base extends aiNode
 
             if( this.sprite.shootTime < 0 )
             {
-                if( this.inViewWithWrap( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                if( this.data.camera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 ) )
                 {
                     this._shootSprite = this.data.enemyShotStrategy.create('boss_shot').get();
                     this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite );
@@ -79,34 +75,11 @@ class AI_Boss00_base extends aiNode
     }
 
     // 
-    //  DESC: Check if the sprite is in view, accounting for map wrapping
-    //
-    inViewWithWrap( transPos, radius )
-    {
-        if( this.data.camera.inView( transPos, radius ) )
-            return true;
-
-        this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-
-        gTempWrapPoint.copy( transPos );
-        gTempWrapPoint.x = transPos.x + this._wrapSpan;
-        if( this.data.camera.inView( gTempWrapPoint, radius ) )
-            return true;
-
-        gTempWrapPoint.x = transPos.x - this._wrapSpan;
-        return this.data.camera.inView( gTempWrapPoint, radius );
-    }
-
-    // 
     //  DESC: Wrap-aware distance between two world X positions
     //
     wrapDistX( x1, x2 )
     {
-        this._wd = Math.abs( x1 - x2 );
-        if( this._wd > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-            this._wd = (gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) - this._wd;
-
-        return this._wd;
+        return Math.abs( genFunc.wrapDelta( x1 - x2, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 ) );
     }
 
     // 
@@ -114,16 +87,7 @@ class AI_Boss00_base extends aiNode
     //
     wrapDeltaX( targetX )
     {
-        this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-        this._deltaX = targetX - this.sprite.pos.x;
-
-        if( this._deltaX > this._wrapSpan / 2 )
-            this._deltaX -= this._wrapSpan;
-
-        else if( this._deltaX < -this._wrapSpan / 2 )
-            this._deltaX += this._wrapSpan;
-
-        return this._deltaX;
+        return genFunc.wrapDelta( targetX - this.sprite.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
     }
 
     // 
@@ -435,7 +399,7 @@ class AI_Boss00_PickAndMoveToBuilding extends AI_Boss00_base
                 // the map if needed (only if the player is alive and the boss is on screen to see it coming)
                 else if( this.data.playerShipSprite.collisionComponent.enable &&
                     (genFunc.randomArbitrary( 0, 1 ) < gameDefs.BOSS00_CHARGE_CHANCE) &&
-                    this.inViewWithWrap( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                    this.data.camera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 ) )
                 {
                     this._playerDir = (this.wrapDeltaX( this.data.playerShipSprite.pos.x ) < 0) ? -1 : 1;
                     if( (this._moveX < 0 ? -1 : 1) !== this._playerDir )

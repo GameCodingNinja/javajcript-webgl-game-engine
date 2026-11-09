@@ -242,6 +242,22 @@ export function cap(value, min, max)
 }
 
 // 
+//  DESC: Shortest delta on a wrap-around (looping) axis
+//        delta: target - from. span: the full length of the loop (ex: 2 * wrap distance)
+//        Returns the delta to the nearest copy of the target, between -span/2 and span/2
+//
+export function wrapDelta(delta, span)
+{
+    if( delta > span / 2 )
+        delta -= span;
+    
+    else if( delta < -span / 2 )
+        delta += span;
+
+    return delta;
+}
+
+// 
 //  DESC: Remove value from array without incuring garbage collection
 //
 export function removeAt(array, index)

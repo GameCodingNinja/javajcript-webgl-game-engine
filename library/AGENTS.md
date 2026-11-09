@@ -136,6 +136,10 @@ Sound playback is managed by `soundManager` with per-type enable/disable via `se
 - Child nodes inherit the head node's `userId` (a child's own `id` attribute is ignored), so a collision callback has to tell a child hit apart by the sprite itself.
 - Child sprites collide in world space: their `transPos` and collision matrix include the parent's transform.
 
+## Wrap-Around (looping) Worlds
+- `genFunc.wrapDelta( delta, span )` (utilities/genfunc.js): shortest delta to the nearest copy of a target on a looping axis, between -span/2 and span/2. `span` is the full loop length (2 × the wrap distance). Wrap-aware distance is `Math.abs( wrapDelta( x1 - x2, span ) )`.
+- `camera.inViewWrapped( transPos, radius, span )` (common/camera.js): `inView()` that also tests the copies one span to either side on X. Uses a module temp point, no allocation.
+
 ## Platform SDKs (system/platform.js)
 - `platform` wraps the optional game portal SDKs, detected at runtime: CrazyGames (`window.CrazyGames`: `init`, loading/gameplay start/stop, rewarded ads) and YouTube Playables (`window.ytgame`: first frame/game ready, score, audio/pause/resume hooks).
 - Every method checks for its SDK and does nothing when it isn't there, so games call them unconditionally instead of writing `typeof window.X` checks. Wait for `platform.init()` before the other calls.

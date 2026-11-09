@@ -8,8 +8,12 @@
 
 import { Matrix } from '../utilities/matrix';
 import { Object } from '../common/object';
+import { Point } from '../common/point';
 import { settings } from '../utilities/settings';
 import * as defs from './defs';
+
+// Temp point for inViewWrapped() to avoid garbage collection
+var gWrapPoint = new Point;
 
 export class Camera extends Object
 {
@@ -253,6 +257,31 @@ export class Camera extends Object
         }
 
         return true;
+    }
+
+    //
+    //  DESC: Check if the raduis is in the view frustrum on a wrap-around (looping) X axis:
+    //        tests the position and its copies one loop span to either side
+    //        wrapSpan: the full length of the loop (ex: 2 * wrap distance)
+    //
+    inViewWrapped( transPos, radius, wrapSpan )
+    {
+        this._wrapInView = this.inView( transPos, radius );
+
+        if( !this._wrapInView )
+        {
+            gWrapPoint.copy( transPos );
+            gWrapPoint.x = transPos.x + wrapSpan;
+            this._wrapInView = this.inView( gWrapPoint, radius );
+
+            if( !this._wrapInView )
+            {
+                gWrapPoint.x = transPos.x - wrapSpan;
+                this._wrapInView = this.inView( gWrapPoint, radius );
+            }
+        }
+
+        return this._wrapInView;
     }
 
     //

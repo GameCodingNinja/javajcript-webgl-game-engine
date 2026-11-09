@@ -63,11 +63,7 @@ class Explode_animation
             {
                 // enemy01, enemy02, boss: center the explosion on the player ship, then shift it
                 // a little toward the enemy, i.e. the side of the collision (X and Y shifted separately)
-                this._dx = projectileSprite.pos.x - shipSprite.pos.x;
-                if( this._dx > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-                    this._dx -= gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-                else if( this._dx < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-                    this._dx += gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+                this._dx = genFunc.wrapDelta( projectileSprite.pos.x - shipSprite.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
                 this._xPos = shipSprite.pos.x + ((this._dx < 0) ? -gameDefs.RAM_EXPLODE_SHIFT_X : gameDefs.RAM_EXPLODE_SHIFT_X);
                 this._yPos = shipSprite.pos.y + ((projectileSprite.pos.y < shipSprite.pos.y) ? -gameDefs.RAM_EXPLODE_SHIFT_Y : gameDefs.RAM_EXPLODE_SHIFT_Y);

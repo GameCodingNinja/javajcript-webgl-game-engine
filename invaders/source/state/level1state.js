@@ -1678,11 +1678,7 @@ export class Level1State extends CommonState
             // Wrap-aware screen distance from the ship to the boss
             this._bossDeltaX = (this.bossSprite.pos.x + this.buildingsCamera.pos.x) -
                 (this.playerShip.sprite.pos.x + this.levelCamera.pos.x);
-            this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-            if( this._bossDeltaX > this._wrapSpan / 2 )
-                this._bossDeltaX -= this._wrapSpan;
-            else if( this._bossDeltaX < -this._wrapSpan / 2 )
-                this._bossDeltaX += this._wrapSpan;
+            this._bossDeltaX = genFunc.wrapDelta( this._bossDeltaX, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
             this._fastCameraEasing = ((moveDir === MOVE_RIGHT) === (this._bossDeltaX > 0));
         }
@@ -1705,11 +1701,7 @@ export class Level1State extends CommonState
         {
             // Boss X on the screen (camera pos is the negated camera position), wrapped to the nearest copy
             this._bossScreenX = this.bossSprite.pos.x + this.buildingsCamera.pos.x;
-            this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-            if( this._bossScreenX > this._wrapSpan / 2 )
-                this._bossScreenX -= this._wrapSpan;
-            else if( this._bossScreenX < -this._wrapSpan / 2 )
-                this._bossScreenX += this._wrapSpan;
+            this._bossScreenX = genFunc.wrapDelta( this._bossScreenX, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
             // Coming into view of the boss: slow the ship down once, before the lock, so it stops in time.
             // Only while the boss is over its building attacking (vulnerable), not while it travels, so chasing

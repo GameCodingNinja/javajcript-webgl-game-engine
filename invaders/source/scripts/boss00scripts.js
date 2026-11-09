@@ -89,13 +89,7 @@ class Boss00Shot_Fire
     //
     wrapDeltaX( fromX )
     {
-        this._wd = this.playerShipSprite.pos.x - fromX;
-        if( this._wd > gWrapSpan / 2 )
-            this._wd -= gWrapSpan;
-        else if( this._wd < -gWrapSpan / 2 )
-            this._wd += gWrapSpan;
-
-        return this._wd;
+        return genFunc.wrapDelta( this.playerShipSprite.pos.x - fromX, gWrapSpan );
     }
 
     // 

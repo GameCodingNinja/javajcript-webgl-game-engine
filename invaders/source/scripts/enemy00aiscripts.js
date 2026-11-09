@@ -14,14 +14,10 @@ import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
-import { Point } from '../../../library/common/point';
 import * as gameDefs from '../state/gamedefs';
 
 // Shared AI data
 var ai_data = {};
-
-// Global temp point for wrap-aware view checks (GC optimization)
-var gTempWrapPoint = new Point;
 
 // 
 //  DESC: Clear the AI data
@@ -53,7 +49,7 @@ class AI_Enemy00_base extends aiNode
 
             if( this.sprite.shootTime < 0 )
             {
-                if( this.inViewWithWrap( this.sprite.transPos, this.sprite.parentNode.radius ) )
+                if( this.data.camera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 ) )
                 {
                     // Should we skip a shot?
                     if( genFunc.randomInt( 0, 10 ) > 3 )
@@ -70,24 +66,6 @@ class AI_Enemy00_base extends aiNode
         }
     }
 
-    // 
-    //  DESC: Check if the sprite is in view, accounting for map wrapping
-    //
-    inViewWithWrap( transPos, radius )
-    {
-        if( this.data.camera.inView( transPos, radius ) )
-            return true;
-
-        this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-
-        gTempWrapPoint.copy( transPos );
-        gTempWrapPoint.x = transPos.x + this._wrapSpan;
-        if( this.data.camera.inView( gTempWrapPoint, radius ) )
-            return true;
-
-        gTempWrapPoint.x = transPos.x - this._wrapSpan;
-        return this.data.camera.inView( gTempWrapPoint, radius );
-    }
 }
 
 //
@@ -308,13 +286,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                             this.sprite.targetBuilding = this._targetBuilding;
 
                             // Use shortest path considering map wrapping
-                            this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-                            this._deltaX = this.sprite.targetBuilding.pos.x - this.sprite.pos.x;
-                            if( this._deltaX > this._wrapSpan / 2 )
-                                this._deltaX -= this._wrapSpan;
-                            
-                            else if( this._deltaX < -this._wrapSpan / 2 )
-                                this._deltaX += this._wrapSpan;
+                            this._deltaX = genFunc.wrapDelta( this.sprite.targetBuilding.pos.x - this.sprite.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
                             this._targetX = this.sprite.pos.x + this._deltaX;
 
@@ -347,13 +319,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                         else
                         {
                             // Use shortest path considering map wrapping
-                            this._wrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-                            this._deltaX = this._offsetX - this.sprite.pos.x;
-                            if( this._deltaX > this._wrapSpan / 2 )
-                                this._deltaX -= this._wrapSpan;
-                            
-                            else if( this._deltaX < -this._wrapSpan / 2 )
-                                this._deltaX += this._wrapSpan;
+                            this._deltaX = genFunc.wrapDelta( this._offsetX - this.sprite.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
                             this._offsetX = this.sprite.pos.x + this._deltaX;
                         }

@@ -11,6 +11,7 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import * as easing from '../../../library/utilities/easingfunc';
+import * as genFunc from '../../../library/utilities/genfunc';
 import * as gameDefs from '../state/gamedefs';
 
 var gWrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
@@ -48,11 +49,7 @@ class Enemy00Ship_Shoot
 
         this.playerShipSprite = this.playerShipStrategy.get('player_ship').get();
 
-        this._deltaX = this.playerShipSprite.pos.x - enemySprite.pos.x;
-        if( this._deltaX > gWrapSpan / 2 )
-            this._deltaX -= gWrapSpan;
-        else if( this._deltaX < -gWrapSpan / 2 )
-            this._deltaX += gWrapSpan;
+        this._deltaX = genFunc.wrapDelta( this.playerShipSprite.pos.x - enemySprite.pos.x, gWrapSpan );
 
         this._deltaY = this.playerShipSprite.pos.y - enemySprite.pos.y;
         this._length = Math.sqrt( this._deltaX * this._deltaX + this._deltaY * this._deltaY );
