@@ -7,47 +7,24 @@
 "use strict";
 
 import { settings } from '../utilities/settings';
-
-var YTGameData = null;
-
-// Has to be placed in this function to work
-async function getYTGameData()
-{
-    if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV)
-        YTGameData = await ytgame.game.loadData();
-}
-
-await getYTGameData();
+import { platform } from '../system/platform';
 
 class LocalStorage
 {
     constructor()
     {
         this.buffer = null;
-        this.storage = null;
     }
 
     // 
-    //  DESC: Init the storage be it local or youtube data
+    //  DESC: Init the storage from the platform's saved data (browser localStorage, CrazyGames or YouTube)
+    //        Call after platform.init()
     //
     init()
     {
         try
         {
-            if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV )
-            {
-                this.buffer = YTGameData;
-            }
-            else if( typeof window.CrazyGames !== 'undefined')
-            {
-                this.storage = window.CrazyGames.SDK.data;
-                this.buffer = this.storage.getItem( `${settings.gameName}_${settings.gameId}` );
-            }
-            else
-            {
-                this.storage = window.localStorage;
-                this.buffer = this.storage.getItem( `${settings.gameName}_${settings.gameId}` );
-            }
+            this.buffer = platform.loadData( `${settings.gameName}_${settings.gameId}` );
 
             // Check for an empty string then data has never been saved
             if (this.buffer)
@@ -73,22 +50,7 @@ class LocalStorage
         try
         {
             this.buffer[key] = value;
-
-            if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV )
-            {
-                ytgame.game.saveData(JSON.stringify(this.buffer)).then(() => {
-                    // Handle data save success.
-                    }, (e) => {
-                        // Handle data save failure.
-                        console.error(e);
-                        // Send an error to YouTube when this happens.
-                        ytgame.health.logError();
-                    });
-            }
-            else
-            {
-                this.storage.setItem( `${settings.gameName}_${settings.gameId}`, JSON.stringify(this.buffer) );
-            }
+            platform.saveData( `${settings.gameName}_${settings.gameId}`, JSON.stringify(this.buffer) );
         }
         catch (e)
         {
@@ -119,22 +81,7 @@ class LocalStorage
         try
         {
             delete this.buffer[key];
-
-            if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV )
-            {
-                ytgame.game.saveData(JSON.stringify(this.buffer)).then(() => {
-                    // Handle data save success.
-                    }, (e) => {
-                        // Handle data save failure.
-                        console.error(e);
-                        // Send an error to YouTube when this happens.
-                        ytgame.health.logError();
-                    });
-            }
-            else
-            {
-                this.storage.setItem( `${settings.gameName}_${settings.gameId}`, JSON.stringify(this.buffer) );
-            }
+            platform.saveData( `${settings.gameName}_${settings.gameId}`, JSON.stringify(this.buffer) );
         }
         catch (e)
         {
@@ -150,22 +97,7 @@ class LocalStorage
         try
         {
             this.buffer = {};
-
-            if( typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV )
-            {
-                ytgame.game.saveData('').then(() => {
-                    // Handle data save success.
-                    }, (e) => {
-                        // Handle data save failure.
-                        console.error(e);
-                        // Send an error to YouTube when this happens.
-                        ytgame.health.logError();
-                    });
-            }
-            else
-            {
-                this.storage.clear();
-            }
+            platform.clearData();
         }
         catch (e)
         {

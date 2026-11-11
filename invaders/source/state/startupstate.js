@@ -171,22 +171,20 @@ export class StartUpState extends GameState
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
 
+        // CrazyGames mute setting. It takes priority over the in-game sound settings (they don't resume the audio).
+        if( platform.isCrazyGames() )
+        {
+            soundManager.setPlatformMuted( platform.isAudioMuted() );
+            platform.onAudioMutedChange( (muted) => soundManager.setPlatformMuted( muted ) );
+        }
+
         // YouTube Playables hooks (skipped entirely when not in its environment)
         if( platform.isYouTubePlayables() )
         {
+            // Suspend/resume all audio (also keeps it suspended when the window regains focus)
             platform.onAudioEnabledChange((isAudioEnabled) =>
             {
-                // Resume all audio
-                if (isAudioEnabled)
-                {
-                    soundManager.resumeAllSounds();
-                    //console.log('Resume all audio');
-                }
-                else // Suspend all audio.
-                {
-                    soundManager.suspendAllSounds();
-                    //console.log('Suspend all audio');
-                }
+                soundManager.setPlatformMuted( !isAudioEnabled );
             });
 
             platform.onPause(() =>

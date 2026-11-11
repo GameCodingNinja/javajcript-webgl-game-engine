@@ -143,7 +143,10 @@ Sound playback is managed by `soundManager` with per-type enable/disable via `se
 ## Platform SDKs (system/platform.js)
 - `platform` wraps the optional game portal SDKs, detected at runtime: CrazyGames (`window.CrazyGames`: `init`, loading/gameplay start/stop, rewarded ads) and YouTube Playables (`window.ytgame`: first frame/game ready, score, audio/pause/resume hooks).
 - Every method checks for its SDK and does nothing when it isn't there, so games call them unconditionally instead of writing `typeof window.X` checks. Wait for `platform.init()` before the other calls.
+- `isCrazyGames()` is a flag set by `init()`: true only when the SDK script is loaded **and** `SDK.environment` isn't `disabled`. On any domain other than CrazyGames or localhost the SDK inits fine but reports `disabled`, and every call throws `sdkDisabled`, so the game runs as a plain browser game there (`window.localStorage` saves, no ads) even with the script tag in. It's false before `init()` finishes. Test the disabled path by serving on another loopback address, e.g. `http.server --bind 127.0.0.2` (its `init()` takes several seconds there).
+- Saves: `platform.loadData( key )`/`saveData( key, data )`/`clearData()` pick the store: YouTube Playables save data (loaded in `init()`), the CrazyGames Data Module, or the browser's `window.localStorage`. The library `localStorage` (utilities/localstorage.js) goes through them, so call its `init()` after `platform.init()`.
 - Add new portal calls here rather than in game code.
+- Portal mute (CrazyGames `muteAudio` via `isAudioMuted()`/`onAudioMutedChange()`, YouTube `onAudioEnabledChange()`): pass it to `soundManager.setPlatformMuted( muted )`, not `suspendAllSounds()`/`resumeAllSounds()`. While set, `resumeAllSounds()` does nothing, so the window focus handler (`eventManager` resumes the audio context when the page becomes visible) can't override the mute.
 
 ## GC Optimization Caveats
 - **Do NOT reuse arrays in async/Promise contexts**: Instance variables for promise collection (e.g., `this._promiseAry`) cause race conditions when multiple loads occur concurrently. Use local variables for promise arrays.

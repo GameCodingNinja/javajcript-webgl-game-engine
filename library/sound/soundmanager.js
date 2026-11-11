@@ -21,6 +21,10 @@ class SoundManager extends ManagerBase
         super();
         
         this.context = null;
+
+        // Audio muted by the game portal (ex: CrazyGames muteAudio). Takes priority over resumeAllSounds(),
+        // so regaining the window focus doesn't bring the audio back
+        this.platformMuted = false;
         
         if( typeof AudioContext !== 'undefined' )
             this.context = new AudioContext();
@@ -274,8 +278,21 @@ class SoundManager extends ManagerBase
     //
     resumeAllSounds()
     {
-        if(this.context)
+        if(this.context && !this.platformMuted)
             this.context.resume();
+    }
+
+    //
+    //  DESC: Mute/unmute all audio for the game portal (overrides the in-game sound settings)
+    //
+    setPlatformMuted( muted )
+    {
+        this.platformMuted = muted;
+
+        if( muted )
+            this.suspendAllSounds();
+        else
+            this.resumeAllSounds();
     }
 
     //
