@@ -27,6 +27,17 @@ class Platform
     }
 
     // 
+    //  DESC: The page is served from a CrazyGames domain (also their iOS/Android apps) or localhost (sitelock)
+    //
+    isCrazyGamesHost()
+    {
+        let hostname = window.location.hostname;
+
+        return (hostname === 'crazygames.com' || hostname.endsWith( '.crazygames.com' ) ||
+                hostname === 'localhost' || hostname === '127.0.0.1');
+    }
+
+    // 
     //  DESC: Running in YouTube Playables
     //
     isYouTubePlayables()
@@ -37,13 +48,22 @@ class Platform
     // 
     //  DESC: Init the SDKs that need it (CrazyGames) and load the YouTube Playables save data.
     //        Wait for it before calling anything else.
-    //        Outside CrazyGames and localhost the CrazyGames SDK is "disabled" and all its calls throw,
+    //        Sitelock: with the CrazyGames SDK loaded, the game only runs on CrazyGames (and localhost for testing).
+    //        Anywhere else it shows a message and rejects, so the game never starts.
+    //        The CrazyGames SDK is "disabled" outside CrazyGames and localhost and all its calls throw,
     //        so it's treated as not loaded.
     //
     async init()
     {
         if( typeof window.CrazyGames !== 'undefined' )
         {
+            if( !this.isCrazyGamesHost() )
+            {
+                document.body.style.backgroundColor = 'black';
+                document.body.innerHTML = '<p style="color: white; font: 24px sans-serif; text-align: center; margin-top: 40vh;">Available only on CrazyGames</p>';
+                throw new Error( 'Sitelock: this game is available only on CrazyGames' );
+            }
+
             await window.CrazyGames.SDK.init();
             this.crazyGames = (window.CrazyGames.SDK.environment !== 'disabled');
         }

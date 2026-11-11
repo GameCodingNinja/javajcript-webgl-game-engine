@@ -126,6 +126,7 @@ Uncommitted:
 - **CrazyGames SDK enabled** in `index.html` (user).
 - **`localstorage.js` uses `platform`:** `platform.loadData()/saveData()/clearData()` pick the YouTube save data (now loaded in `platform.init()`, replacing the module-level `await`), the CrazyGames Data Module or `window.localStorage`. Checked headless: loads and saves in CrazyGames mode and plain browser mode. The YouTube path isn't tested.
 - **CrazyGames environment check:** `platform.init()` sets `isCrazyGames()` only when the SDK's `environment` isn't `disabled` (any domain other than CrazyGames/localhost, where every SDK call throws `sdkDisabled`). Before, the first SDK call (`loadingStart()` right after `init()`) would throw there and stop the game from starting. Checked headless: the game loads to the start menu on `127.0.0.2` (disabled) and `127.0.0.1` (local) with no errors.
+- **CrazyGames sitelock** (only when the SDK script is loaded): `platform.init()` checks the host (`crazygames.com`/`*.crazygames.com`/`localhost`/`127.0.0.1`) before the SDK init; anywhere else it shows "Available only on CrazyGames" and rejects, so the game never starts. Checked headless: `127.0.0.2` with the SDK shows the message, `127.0.0.1` runs, `127.0.0.2` with the SDK blocked runs. Not obfuscated, so a determined copier can remove it.
 - These doc updates.
 
 The `.menu`/`.ctrl` files use CRLF line endings; keep them (edit without converting) so diffs stay small. The user asked for no more playtesting for now. Don't ask to commit or push.
