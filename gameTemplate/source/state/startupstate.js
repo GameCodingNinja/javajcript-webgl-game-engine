@@ -21,12 +21,12 @@ import { physicsWorldManager } from '../../../library/physics/physicsworldmanage
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { scriptManager } from '../../../library/script/scriptmanager';
-import { ScriptComponent } from '../../../library/script/scriptcomponent';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
 import { settings } from '../../../library/utilities/settings';
 import { platform } from '../../../library/system/platform';
+import { isMobile } from '../../../library/system/device';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as titleScreenState from '../state/titlescreenstate';
 import * as utilScripts from '../scripts/utilityscripts';
@@ -52,6 +52,7 @@ import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
 const STARTUP_ASSET_COUNT = 77,
+      STARTUP_ASSET_COUNT_MOBILE = 68, // The mobile menus don't load the key bindings menu
       MIN_LOAD_TIME = 1500;
 
 export class StartUpState extends GameState
@@ -83,9 +84,12 @@ export class StartUpState extends GameState
         // NOTE: Can only call this after Camera Manager has been loaded
         menuManager.setDefaultCamera();
 
-        // Create the script component and add a script
-        this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE  ) );
+        // Register the screen fade with the script singleton so it's recycled instead of allocated each fade.
+        // The singleton runs across states; GameState.update() updates it.
+        scriptSingleton.setScriptInfo( 'screen_fade', 'ScreenFade' );
+
+        // Fade in the screen
+        scriptSingleton.prepare( 'screen_fade', 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE );
 
         // Preload assets for the startup screen
         this.preload();
@@ -128,7 +132,7 @@ export class StartUpState extends GameState
     {
         // Prepare the strategies to run
         this.progressBar = strategyManager.get( '_startup_' ).get( 'UIProgressBar' ).get();
-        this.progressBar.setProgressBarMax( STARTUP_ASSET_COUNT );
+        this.progressBar.setProgressBarMax( isMobile() ? STARTUP_ASSET_COUNT_MOBILE : STARTUP_ASSET_COUNT );
         
         strategyManager.activateStrategy('_startup_');
 
@@ -195,9 +199,9 @@ export class StartUpState extends GameState
 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
+                    scriptSingleton.prepare( 'screen_fade', 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE );
                 else
-                    setTimeout( () => this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE  ) ), MIN_LOAD_TIME - loadTime );
+                    setTimeout( () => scriptSingleton.prepare( 'screen_fade', 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ), MIN_LOAD_TIME - loadTime );
                 
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();
@@ -212,7 +216,8 @@ export class StartUpState extends GameState
     //
     update()
     {
-        this.scriptComponent.update();
+        super.update();
+
         strategyManager.update();
     }
     
@@ -243,12 +248,13 @@ export class StartUpState extends GameState
         // Set the function to be called to update the progress bar during the download
         signalManager.connect_loadComplete( this.progressBar.incCurrentValue.bind(this.progressBar) );
 
-        let groupAry = ['(menu)'];
+        // Mobile uses its own menu config (bigger menus, no key bindings) with the same object data
+        let groupAry = [isMobile() ? '(menu_mobile)' : '(menu)'];
 
         Promise.all([
 
             // Load the Sound Manager group
-            soundManager.loadGroup( groupAry ),
+            soundManager.loadGroup( ['(menu)'] ),
 
             // Load the Object Manager group
             objectDataManager.loadGroup( groupAry ),

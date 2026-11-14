@@ -9,8 +9,7 @@
 import { eventManager } from '../../../library/managers/eventmanager';
 import { menuManager } from '../../../library/gui/menumanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { ScriptComponent } from '../../../library/script/scriptcomponent';
-import { scriptManager } from '../../../library/script/scriptmanager';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { physicsWorldManager } from '../../../library/physics/physicsworldmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
@@ -38,9 +37,8 @@ export class Level1State extends CommonState
         
         this.physicsWorld = physicsWorldManager.getWorld( "(game)" );
 
-        // Create the script component and add a script
-        this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE  ) );
+        // Fade in the screen
+        scriptSingleton.prepare( 'screen_fade', 0, 1, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE );
         
         // Unblock the menu messaging and activate needed trees
         menuManager.allowEventHandling = true;
@@ -77,7 +75,7 @@ export class Level1State extends CommonState
             if( event.type === menuDefs.EME_MENU_GAME_STATE_CHANGE )
             {
                 if( event.arg[0] === menuDefs.ETC_BEGIN )
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE  ) );
+                    scriptSingleton.prepare( 'screen_fade', 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE );
             }
             // A menu (ex: pause) is coming up: indicate to the game portal the gameplay has stopped
             else if( event.type === menuDefs.EME_MENU_TRANS_IN )
@@ -131,7 +129,6 @@ export class Level1State extends CommonState
     {
         super.update();
         
-        this.scriptComponent.update();
         
         if( !menuManager.active )
             strategyManager.update();

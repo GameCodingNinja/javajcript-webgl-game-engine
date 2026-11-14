@@ -7,6 +7,8 @@
 "use strict";
 
 import { StateMessage } from './statemessage';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
+import { soundManager } from '../../../library/sound/soundmanager';
 import * as stateDefs from './statedefs';
 
 export class GameState
@@ -42,9 +44,14 @@ export class GameState
         // Empty function to be overwritten
     }
     
+    // 
+    //  DESC: Update the scripts that run across states (screen fades) and the sound fades.
+    //        Every state's update() needs to call super.update()
+    //
     update()
     {
-        // Empty function to be overwritten
+        scriptSingleton.update();
+        soundManager.update();
     }
     
     transform()

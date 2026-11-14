@@ -9,6 +9,10 @@
 import { scriptManager } from '../../../library/script/scriptmanager';
 import { settings } from '../../../library/utilities/settings';
 import { localStorage } from '../../../library/utilities/localstorage';
+import { menuManager } from '../../../library/gui/menumanager';
+import { eventManager } from '../../../library/managers/eventmanager';
+import { isMobile } from '../../../library/system/device';
+import * as uiControlDefs from '../../../library/gui/uicontroldefs';
 
 //
 //  Handle init status of sound check box
@@ -17,15 +21,16 @@ export class SoundCheckBox_InitStatus
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -46,15 +51,16 @@ export class SoundCheckBox_execute
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -63,6 +69,213 @@ export class SoundCheckBox_execute
     execute()
     {
         settings.user.soundEnabled = this.control.toggleState == true ? 1 : 0;
+        localStorage.set( 'userSettings', settings.user );
+
+        let settingsMenu = menuManager.getMenu('settings_menu');
+
+        if( settings.user.soundEnabled )
+        {
+            settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
+            settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
+            settingsMenu.getControl( "sound_dialog_check_box" ).changeState( uiControlDefs.ECS_INACTIVE );
+        }
+        else
+        {
+            settingsMenu.getControl( "sound_effect_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
+            settingsMenu.getControl( "sound_music_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
+            settingsMenu.getControl( "sound_dialog_check_box" ).changeState( uiControlDefs.ECS_DISABLE );
+        }
+
+        return true;
+    }
+}
+
+//
+//  Handle init status of sound effect check box
+//
+export class SoundEffectCheckBox_InitStatus
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( !settings.user.soundEnabled )
+            this.control.changeState( uiControlDefs.ECS_DISABLE );
+
+        this.control.toggleState = (settings.user.soundEffectEnabled === 1);
+
+        return true;
+    }
+}
+
+//
+//  Handle execute of sound effect check box
+//
+export class SoundEffectCheckBox_execute
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        settings.user.soundEffectEnabled = this.control.toggleState == true ? 1 : 0;
+        localStorage.set( 'userSettings', settings.user );
+
+        return true;
+    }
+}
+
+//
+//  Handle init status of sound music check box
+//
+export class SoundMusicCheckBox_InitStatus
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( !settings.user.soundEnabled )
+            this.control.changeState( uiControlDefs.ECS_DISABLE );
+
+        this.control.toggleState = (settings.user.soundMusicEnabled === 1);
+
+        return true;
+    }
+}
+
+//
+//  Handle execute of sound music check box
+//
+export class SoundMusicCheckBox_execute
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        settings.user.soundMusicEnabled = this.control.toggleState == true ? 1 : 0;
+        localStorage.set( 'userSettings', settings.user );
+
+        return true;
+    }
+}
+
+//
+//  Handle init status of sound dialog check box
+//
+export class SoundDialogCheckBox_InitStatus
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        if( !settings.user.soundEnabled )
+            this.control.changeState( uiControlDefs.ECS_DISABLE );
+
+        this.control.toggleState = (settings.user.soundDialogEnabled === 1);
+
+        return true;
+    }
+}
+
+//
+//  Handle execute of sound dialog check box
+//
+export class SoundDialogCheckBox_execute
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        settings.user.soundDialogEnabled = this.control.toggleState == true ? 1 : 0;
         localStorage.set( 'userSettings', settings.user );
 
         return true;
@@ -76,15 +289,16 @@ export class DeadZoneSlider_InitStatus
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -92,7 +306,12 @@ export class DeadZoneSlider_InitStatus
     //
     execute()
     {
-        this.control.setSlider( settings.user.stickDeadZone * 100 );
+        // Mobile: touchDeadZone is in pixels (slider 1:1). Gamepad: stickDeadZone
+        // is a 0-1 fraction shown as a percentage.
+        if( isMobile() )
+            this.control.setSlider( settings.user.touchDeadZone );
+        else
+            this.control.setSlider( settings.user.stickDeadZone * 100 );
 
         return true;
     }
@@ -105,15 +324,16 @@ export class DeadZoneSlider_execute
 {
     constructor( control )
     {
-        this.control = control;
+        // Continues the init
+        this.recycle( control );
     }
 
     // 
     //  DESC: Recycle the script
     //
-    recycle()
+    recycle( control )
     {
-        // Nothing to do here
+        this.control = control;
     }
     
     // 
@@ -121,8 +341,77 @@ export class DeadZoneSlider_execute
     //
     execute()
     {
-        settings.user.stickDeadZone = Number((Math.trunc(this.control.curValue) * 0.01).toFixed(2));
+        // Mobile: store the slider value as pixels. Gamepad: store as a 0-1 fraction.
+        if( isMobile() )
+            settings.user.touchDeadZone = Math.round( this.control.curValue );
+        else
+            settings.user.stickDeadZone = Number((Math.trunc(this.control.curValue) * 0.01).toFixed(2));
+
         localStorage.set( 'userSettings', settings.user );
+        return true;
+    }
+}
+
+//
+//  Handle init status of left-handed check box (mobile only)
+//
+export class LeftHandedCheckBox_InitStatus
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        this.control.toggleState = (settings.user.leftHandedTouch === 1);
+
+        return true;
+    }
+}
+
+//
+//  Handle execute of left-handed check box (mobile only)
+//
+export class LeftHandedCheckBox_execute
+{
+    constructor( control )
+    {
+        // Continues the init
+        this.recycle( control );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( control )
+    {
+        this.control = control;
+    }
+    
+    // 
+    //  DESC: Execute this script object
+    //
+    execute()
+    {
+        settings.user.leftHandedTouch = this.control.toggleState == true ? 1 : 0;
+        localStorage.set( 'userSettings', settings.user );
+
+        // Apply immediately so the swap takes effect without a restart
+        eventManager.leftHandedTouch = (settings.user.leftHandedTouch === 1);
+
         return true;
     }
 }
@@ -138,9 +427,33 @@ export function loadScripts()
     scriptManager.set( 'SoundCheckBox_execute',
         ( control ) => { return new SoundCheckBox_execute( control ); } );
 
+    scriptManager.set( 'SoundEffectCheckBox_InitStatus',
+        ( control ) => { return new SoundEffectCheckBox_InitStatus( control ); } );
+
+    scriptManager.set( 'SoundEffectCheckBox_execute',
+        ( control ) => { return new SoundEffectCheckBox_execute( control ); } );
+
+    scriptManager.set( 'SoundMusicCheckBox_InitStatus',
+        ( control ) => { return new SoundMusicCheckBox_InitStatus( control ); } );
+
+    scriptManager.set( 'SoundMusicCheckBox_execute',
+        ( control ) => { return new SoundMusicCheckBox_execute( control ); } );
+
+    scriptManager.set( 'SoundDialogCheckBox_InitStatus',
+        ( control ) => { return new SoundDialogCheckBox_InitStatus( control ); } );
+
+    scriptManager.set( 'SoundDialogCheckBox_execute',
+        ( control ) => { return new SoundDialogCheckBox_execute( control ); } );
+
     scriptManager.set( 'DeadZoneSlider_InitStatus',
         ( control ) => { return new DeadZoneSlider_InitStatus( control ); } );
 
     scriptManager.set( 'DeadZoneSlider_execute',
         ( control ) => { return new DeadZoneSlider_execute( control ); } );
+
+    scriptManager.set( 'LeftHandedCheckBox_InitStatus',
+        ( control ) => { return new LeftHandedCheckBox_InitStatus( control ); } );
+
+    scriptManager.set( 'LeftHandedCheckBox_execute',
+        ( control ) => { return new LeftHandedCheckBox_execute( control ); } );
 }

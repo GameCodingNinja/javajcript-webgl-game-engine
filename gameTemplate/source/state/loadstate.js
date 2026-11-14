@@ -7,7 +7,6 @@
 "use strict";
 
 import { GameState } from './gamestate';
-import { scriptManager } from '../../../library/script/scriptmanager';
 import { eventManager } from '../../../library/managers/eventmanager';
 import { objectDataManager } from '../../../library/objectdatamanager/objectdatamanager'
 import { settings } from '../../../library/utilities/settings';
@@ -16,7 +15,7 @@ import { signalManager } from '../../../library/managers/signalmanager';
 import { strategyManager } from '../../../library/strategy/strategymanager';
 import { strategyLoader } from '../../../library/strategy/strategyloader';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import { ScriptComponent } from '../../../library/script/scriptcomponent';
+import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { spriteSheetManager } from '../../../library/managers/spritesheetmanager';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
@@ -42,9 +41,8 @@ export class LoadState extends GameState
         this.loadCounter = 0;
         this.maxLoadCount = 0;
         
-        // Create the script component and add a script
-        this.scriptComponent = new ScriptComponent;
-        this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 0, 1, 250, stateDefs.ESE_FADE_GAME_STATE_CHANGE  ) );
+        // Fade in the screen
+        scriptSingleton.prepare( 'screen_fade', 0, 1, 250, stateDefs.ESE_FADE_GAME_STATE_CHANGE );
         
         // Clear the event queue
         eventManager.clear();
@@ -130,9 +128,9 @@ export class LoadState extends GameState
                 
                 // If the load was too fast, do a timeout of the difference before fading out
                 if( loadTime > MIN_LOAD_TIME )
-                    this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500 ) );
+                    scriptSingleton.prepare( 'screen_fade', 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE );
                 else
-                    setTimeout( () => this.scriptComponent.prepare( scriptManager.get('ScreenFade')( 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ) ), MIN_LOAD_TIME - loadTime );
+                    setTimeout( () => scriptSingleton.prepare( 'screen_fade', 1, 0, 500, stateDefs.ESE_FADE_GAME_STATE_CHANGE ), MIN_LOAD_TIME - loadTime );
 
                 // Disconnect to the load signal
                 signalManager.clear_loadComplete();
@@ -147,7 +145,8 @@ export class LoadState extends GameState
     //
     update()
     {
-        this.scriptComponent.update();
+        super.update();
+
         strategyManager.update();
     }
 

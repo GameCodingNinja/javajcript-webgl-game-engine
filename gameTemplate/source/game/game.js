@@ -56,6 +56,9 @@ export class Game
             // Load the user settings. Needs to be after localStorage.init()
             settings.loadUserSettingsFromObj( userSettingsObj );
 
+            // Apply the saved left-handed touch setting (swaps the touch sides)
+            eventManager.leftHandedTouch = (settings.user.leftHandedTouch === 1);
+
             // Create the OpenGL context (disable antialias for pixel-art style)
             let gl = device.create('game-surface', { antialias: false });
             if (!gl) throw new Error('Failed to create WebGL context');

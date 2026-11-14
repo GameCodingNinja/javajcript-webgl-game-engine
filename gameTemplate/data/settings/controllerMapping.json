@@ -1,4 +1,5 @@
 ﻿{
+    "version": 1,
     "keyboardMapping": {
         "playerHidden": [
                 { "action": "menu_escape", "componetId": "ESCAPE" },
@@ -9,7 +10,11 @@
                 { "action": "menu_up", "componetId": "ARROW UP" },
                 { "action": "menu_down", "componetId": "ARROW DOWN" },
                 { "action": "menu_left", "componetId": "ARROW LEFT" },
-                { "action": "menu_right", "componetId": "ARROW RIGHT" } ],
+                { "action": "menu_right", "componetId": "ARROW RIGHT" },
+                { "action": "up", "componetId": "ARROW UP" },
+                { "action": "down", "componetId": "ARROW DOWN" },
+                { "action": "left", "componetId": "ARROW LEFT" },
+                { "action": "right", "componetId": "ARROW RIGHT" } ],
 
         "playerVisible": [
                 { "action": "menu_select", "componetId": "ENTER", "configurable": "false" },
@@ -36,7 +41,15 @@
                 { "action": "menu_left", "componetId": "LEFT" },
                 { "action": "menu_right", "componetId": "RIGHT" },
                 { "action": "menu_back", "componetId": "BACK" },
-                { "action": "menu_toggle", "componetId": "START" } ],
+                { "action": "menu_toggle", "componetId": "START" },
+                { "action": "up", "componetId": "L STICK UP" },
+                { "action": "down", "componetId": "L STICK DOWN" },
+                { "action": "left", "componetId": "L STICK LEFT" },
+                { "action": "right", "componetId": "L STICK RIGHT" },
+                { "action": "up", "componetId": "UP" },
+                { "action": "down", "componetId": "DOWN" },
+                { "action": "left", "componetId": "LEFT" },
+                { "action": "right", "componetId": "RIGHT" } ],
 
         "playerVisible": [
                 { "action": "menu_select", "componetId": "A", "defaultId": "A", "configurable": "true" },
