@@ -171,10 +171,19 @@ export class StartUpState extends GameState
         // Reset the elapsed time before entering the render loop
         highResTimer.calcElapsedTime();
 
-        // GameMonetize requires the game to be muted while an ad plays
+        // GameMonetize requires the game to be paused and muted while an ad plays
         if( platform.isGameMonetize() )
         {
-            platform.onAdPause( () => soundManager.setPlatformMuted( true ) );
+            platform.onAdPause( () =>
+            {
+                soundManager.setPlatformMuted( true );
+
+                // Pause the gameplay like a focus loss: Level1State opens the pause menu only while a game
+                // is being played (not during a rewarded ad, where the game is already stopped behind the fade)
+                eventManager.dispatchEvent( menuDefs.EME_USER_FOCUS_LOST );
+            });
+
+            // Unmute. The player resumes from the pause menu (if the ad paused the gameplay).
             platform.onAdResume( () => soundManager.setPlatformMuted( false ) );
         }
 

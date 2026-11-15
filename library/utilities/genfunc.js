@@ -8,8 +8,13 @@
 
 import { signalManager } from '../managers/signalmanager';
 
+// Cache buster added to every downloaded file: the "version" of the game's script tag in index.html
+// (bundle.js?version=1.0.2), so the files stay cached until the version is bumped. Without a version,
+// a random number per session (always downloads). document.currentScript is only set while the bundle first runs.
+var gCacheBustNo = (document.currentScript && document.currentScript.src &&
+    new URL( document.currentScript.src ).searchParams.get( 'version' )) || Math.random();
+
 // Globals used in functions to avoid garbage collection
-var gSessionCacheBustNo = Math.random();
 var gLen;
 var gI;
 var gReturn;
@@ -97,7 +102,7 @@ export function downloadFile( fileType, filePath )
                 }
 
             // Define which file to open and send the request. True = asynchronous
-            request.open('GET', filePath + '?cache_buster=' + gSessionCacheBustNo, true);
+            request.open('GET', filePath + '?cache_buster=' + gCacheBustNo, true);
             request.send();
         }
         // Images are handled differently
@@ -108,7 +113,7 @@ export function downloadFile( fileType, filePath )
             image.onload = () => { signalManager.broadcast_loadComplete(); resolve(image); }
             image.onerror = () => reject( Error(`Error downloading file: ${filePath}`) );
 
-            image.src = filePath;
+            image.src = filePath + '?cache_buster=' + gCacheBustNo;
         }
     });
 }

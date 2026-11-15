@@ -32,12 +32,13 @@ and open the template in the editor.
                 a.src = "https://api.gamemonetize.com/sdk.js", d.parentNode.insertBefore(a, d))
             })(document, "script", "gamemonetize-sdk");
         </script>
-        
+    
     </head>
     <body style = "background-color: black;">
         <canvas tabindex='0' id="game-surface">
             Your browser does not support HTML5
         </canvas>
-        <script src="bundle.js?version=1.0.0"></script>
+        <!-- bump the number for each change that needs to go live -->
+        <script src="bundle.js?version=1.0.3"></script>
     </body>
 </html>

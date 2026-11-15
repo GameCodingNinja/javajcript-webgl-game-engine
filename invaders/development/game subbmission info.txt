@@ -11,7 +11,7 @@ Aliens are attacking and destroying the city. You are the only one left to keep 
 
 Controls:
 Default controls (can be changed in Key Bindings menu)
-Keyboard: W: up, S: down. A: left, S: right, SPACE: shoot, LEFT SHIFT: Boost, E: shields, Esc: Pause game
+Keyboard: W: up, S: down. A: left, S: right, SPACE: shoot, LEFT SHIFT: Boost, E: shields, Esc: Pause game; F: Full Screen
 Game-pad: Movement: D-Pad, Left Stick, A: Shoot, B: Boost, Y: Shields, Start: Pause game
 Mobile: Left side of screen acts as Left Stick. Center point is where it is touched. Right side of screen, tap to shoot, swipe up and hold to boost, two finger touch for shields. Hold down 1 finger for rapid fire when feature is available. Swipe across the screen from right to left to pause the game
 
