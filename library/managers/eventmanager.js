@@ -258,8 +258,9 @@ class EventManager
         if( actionManager.wasAction( event, 'fullscreen_toggle' ) )
         {
             //console.log('onKeyDown');
+            // The whole page goes fullscreen, not the canvas, so page overlays such as portal ads stay visible
             if (!document.fullscreenElement)
-                device.canvas.requestFullscreen();
+                document.documentElement.requestFullscreen();
 
             else if (document.exitFullscreen)
                 document.exitFullscreen();
@@ -591,9 +592,9 @@ class EventManager
     //
     onTouchStart( event )
     {
-        // Request fullscreen on first touch if not already fullscreen
+        // Request fullscreen on first touch if not already fullscreen (the whole page, see onKeyUp())
         if( !document.fullscreenElement )
-            device.canvas.requestFullscreen().catch(() => {});
+            document.documentElement.requestFullscreen().catch(() => {});
 
         // While a menu is active, route the touch into the menu system as synthetic
         // mouse events so menu controls (sliders, buttons, etc.) work via touch.

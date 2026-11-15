@@ -19,6 +19,20 @@ and open the template in the editor.
         <!-- <script src="https://www.youtube.com/game_api/v1"></script> -->
         <!-- Load the Crazy Games SDK as the first script on the page. -->
         <!-- <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script> -->
+        <!-- Load the GameMonetize SDK. onEvent forwards the SDK events to the library platform singleton. -->
+        
+        <script type="text/javascript">
+            window.SDK_OPTIONS = {
+                gameId: "gpzb4me9vyjfaja0zfpf6wjqlfc7ppfa",
+                onEvent: function (a) { if (window.gameMonetizeOnEvent) window.gameMonetizeOnEvent(a); }
+            };
+            (function (a, b, c) {
+                var d = a.getElementsByTagName(b)[0];
+                a.getElementById(c) || (a = a.createElement(b), a.id = c,
+                a.src = "https://api.gamemonetize.com/sdk.js", d.parentNode.insertBefore(a, d))
+            })(document, "script", "gamemonetize-sdk");
+        </script>
+        
     </head>
     <body style = "background-color: black;">
         <canvas tabindex='0' id="game-surface">

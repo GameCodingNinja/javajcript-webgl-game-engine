@@ -65,6 +65,13 @@ class Device
         document.body.style.width = settings.docBodyStyleWidth;
         document.body.style.height = settings.docBodyStyleHeight;
 
+        // The whole page goes fullscreen (eventManager), not the canvas, so page overlays such as portal ads
+        // stay visible. Stretch the canvas over the screen like the browser does for a fullscreen canvas.
+        let fullscreenStyle = document.createElement('style');
+        fullscreenStyle.textContent = `:root:fullscreen #${canvasId} { position: fixed !important; inset: 0 !important; ` +
+            `width: 100% !important; height: 100% !important; object-fit: contain; }`;
+        document.head.appendChild( fullscreenStyle );
+
         if( settings.centerInWnd )
         {
             this.canvas.style.left = `${(window.innerWidth - settings.displayRes.w) / 2}px`;

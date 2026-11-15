@@ -156,6 +156,7 @@ class AI_Enemy00_Descend extends AI_Enemy00_base
         this.sprite.targetBuilding = null;
         this.sprite.shakingBuilding = false;
         this.sprite.hitCount = 0;
+        this.sprite.ramTime = 0;   // Time of the last ram on the player (Level1State ENEMY00_RAM_COOLDOWN)
         this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
         this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.deviceRes_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
         this.sprite.setFrame(0);

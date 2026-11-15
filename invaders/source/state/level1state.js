@@ -69,6 +69,7 @@ const MOVE_NULL = -1,
       ENEMY02_MAX_SHIP_HIT_COUNT = 60,
       ENEMY02_SHIP_HIT_INC = 5,
       ENEMY00_SHIP_HIT_COUNT = 3,
+      ENEMY00_RAM_COOLDOWN = 500,
       BOSS00_SHIP_HIT_VALUE = 10,
       ENEMY01_LEVEL_THRESHOLD = 5,
       ENEMY02_LEVEL_THRESHOLD = 3,
@@ -533,8 +534,13 @@ export class Level1State extends CommonState
             {
                 // Re-enable collision for enemy00 for the aggressive type
                 spriteA.collisionComponent.enable = true;
-                if(this.playerShip.collisionTimer.expired(true))
+
+                // Each enemy00 has its own short ram cooldown (not the shared playerShip.collisionTimer), so one ram
+                // counts once (the collision repeats every frame of contact) without blocking hits on other enemies
+                if( performance.now() - spriteA.ramTime > ENEMY00_RAM_COOLDOWN )
                 {
+                    spriteA.ramTime = performance.now();
+
                     spriteB.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
@@ -783,7 +789,7 @@ export class Level1State extends CommonState
     //
     setupRewards()
     {
-        if( platform.isCrazyGames() )
+        if( platform.hasRewardedAds() )
             this._menu = menuManager.getMenu("game_over_menu_ad");
         else
             this._menu = menuManager.getMenu("game_over_menu");
@@ -799,7 +805,7 @@ export class Level1State extends CommonState
         this.rapidFire = false;
         this.shieldOverdrive = false;
 
-        if( gAdPlayed || !platform.isCrazyGames() )
+        if( gAdPlayed || !platform.hasRewardedAds() )
         {
             if( this._featureIndex === REWARD_FEATURE_UNLIMITED_BOOST )
             {
@@ -1027,7 +1033,7 @@ export class Level1State extends CommonState
                 eventManager.clear();
                 actionManager.clearLastDeviceUsed();
 
-                if( platform.isCrazyGames() )
+                if( platform.hasRewardedAds() )
                     menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu_ad');
                 else
                     menuManager.getTree('pause_tree').setDefaultMenu('game_over_menu');
@@ -1110,7 +1116,9 @@ export class Level1State extends CommonState
             }
             else if( event.type === menuDefs.EME_USER_FOCUS_LOST )
             {
-                if( !menuManager.active )
+                // Not while the game isn't ready (ex: during a rewarded ad, a click on it opens another page).
+                // The restart after the ad would toggle this menu closed instead of opening the start menu.
+                if( !menuManager.active && this.gameReady )
                     menuManager.getTree('pause_tree').transitionMenu();
             }
             else if( event.type === gameDefs.EGE_BOSS_DEFEATED )
