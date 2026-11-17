@@ -52,7 +52,7 @@ class Explode_animation
 
         if( shipSprite.parentNode.userId == gameDefs.PLAYER_SHIP_ID)
         {
-            if(projectileSprite.parentNode.userId == gameDefs.ENEMY00_SHIP_ID)
+            if(projectileSprite.parentNode.userId == gameDefs.ENEMY00_SHIP_ID || projectileSprite.parentNode.userId == gameDefs.ENEMY01_SHIP_ID)
             {
                 this._xPos += (shipSprite.pos.x - projectileSprite.pos.x) * 0.3;
                 this._yPos += (shipSprite.pos.y - projectileSprite.pos.y) * 0.6;
@@ -69,7 +69,8 @@ class Explode_animation
                 this._yPos = shipSprite.pos.y + ((projectileSprite.pos.y < shipSprite.pos.y) ? -gameDefs.RAM_EXPLODE_SHIFT_Y : gameDefs.RAM_EXPLODE_SHIFT_Y);
             }
         }
-        else if(projectileSprite.parentNode.userId == gameDefs.PLAYER_SHOT_ID && shipSprite.parentNode.userId == gameDefs.ENEMY00_SHIP_ID)
+        else if(projectileSprite.parentNode.userId == gameDefs.PLAYER_SHOT_ID &&
+                (shipSprite.parentNode.userId == gameDefs.ENEMY00_SHIP_ID || shipSprite.parentNode.userId == gameDefs.ENEMY01_SHIP_ID))
         {
             this._xPos = shipSprite.pos.x;
 

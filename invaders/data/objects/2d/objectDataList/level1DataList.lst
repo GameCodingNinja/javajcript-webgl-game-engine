@@ -454,7 +454,7 @@
                 <texture file="data/textures/enemyShip/enemy01.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="75"/>
+                <circle radius="50"/>
             </collision>
         </object>
 

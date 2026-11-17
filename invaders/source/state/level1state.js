@@ -36,11 +36,13 @@ import * as touchevent from '../../../library/common/touchevent';
 import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 import * as enemy00aiscripts from '../scripts/enemy00aiscripts';
+import * as enemy01aiscripts from '../scripts/enemy01aiscripts';
 import * as miniboss01aiscripts from '../scripts/miniboss01aiscripts';
 import * as boss00aiscripts from '../scripts/boss00aiscripts';
 
-// AI_Enemy00 AI_MiniBoss00 AI_MiniBoss01
+// AI_Enemy00 AI_Enemy01 AI_MiniBoss00 AI_MiniBoss01
 import enemy00_ai from 'raw-loader!../../data/objects/ai/enemy00.ai';
+import enemy01_ai from 'raw-loader!../../data/objects/ai/enemy01.ai';
 import mini_boss_00_ai from 'raw-loader!../../data/objects/ai/mini_boss_00.ai';
 import mini_boss_01_ai from 'raw-loader!../../data/objects/ai/mini_boss_01.ai';
 import boss00_ai from 'raw-loader!../../data/objects/ai/boss00.ai';
@@ -70,6 +72,13 @@ const MOVE_NULL = -1,
       MINI_BOSS_01_SHIP_HIT_INC = 5,
       ENEMY00_SHIP_HIT_COUNT = 3,
       ENEMY00_RAM_COOLDOWN = 500,
+      ENEMY01_SHIP_HIT_VALUE = 2,
+      ENEMY01_SHIP_HIT_COUNT = 3,
+      ENEMY01_RAM_COOLDOWN = 500,
+      ENEMY01_LEVEL_THRESHOLD = 2,
+      ENEMY01_SPAWN_TIME_MIN = 15000,
+      ENEMY01_SPAWN_TIME_MAX = 40000,
+      MAX_ENEMY01 = 1,
       BOSS00_SHIP_HIT_VALUE = 10,
       MINI_BOSS_00_LEVEL_THRESHOLD = 5,
       MINI_BOSS_01_LEVEL_THRESHOLD = 3,
@@ -352,6 +361,8 @@ export class Level1State extends CommonState
         this.healthSpawnTimer.disable();
         this.enemy00MaxTimer = new Timer(1000 * 20);
         this.enemy00Max = MIN_ENEMY00;
+        this.enemy01SpawnTimer = new Timer(genFunc.randomInt( ENEMY01_SPAWN_TIME_MIN, ENEMY01_SPAWN_TIME_MAX ));
+        this.enemy01SpawnTimer.disable();
 
         // The boss battle takes the place of the next mini-boss once the player has fought both mini-bosses
         this.foughtMiniBoss00 = false;
@@ -386,6 +397,16 @@ export class Level1State extends CommonState
         this.train.camera = cameraManager.get('trainCamera');
 
         this.allowMiniBoss = false;
+
+        // The game start menu is up (first start and restart): the spawn timers don't run until it
+        // closes (resumed in the EME_MENU_TRANS_OUT handler). Disabled timers ignore pause; they're
+        // enabled during gameplay.
+        this.enemy00SpawnTimer.pause();
+        this.miniBossSpawnTimer.pause();
+        this.healthSpawnTimer.pause();
+        this.enemy00MaxTimer.pause();
+        this.enemy01SpawnTimer.pause();
+        this.train.timer.pause();
     }
 
     // 
@@ -411,6 +432,7 @@ export class Level1State extends CommonState
         this.groupPlayer.pause( 'player_thrust' );
 
         enemy00aiscripts.clearAIData();
+        enemy01aiscripts.clearAIData();
         miniboss01aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_enemy_shot_','_player_ship_','_train_'] );
@@ -570,6 +592,41 @@ export class Level1State extends CommonState
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
                 }
             }
+            // Player hit by an enemy01 missile
+            else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHOT_ID )
+            {
+                spriteB.prepareScript( 'hit', spriteA );
+                if( GOD_MODE == false && !this._shieldHit )
+                {
+                    this.playerShip.progressBar.incCurrentValue( -gameDefs.ENEMY01_MISSILE_DAMAGE );
+                    this.playerShip.progressBar.setVisible( true );
+                }
+                spriteA.prepareScript( 'hit' );
+                this.groupPlayer.play( 'player_hit' );
+            }
+            // Player collides into enemy01
+            else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHIP_ID )
+            {
+                // Keep enemy01 collidable (the top of this branch disabled it)
+                spriteA.collisionComponent.enable = true;
+
+                // Its own short ram cooldown, like enemy00, so one ram counts once
+                if( performance.now() - spriteA.ramTime > ENEMY01_RAM_COOLDOWN )
+                {
+                    spriteA.ramTime = performance.now();
+
+                    spriteB.prepareScript( 'hit', spriteA );
+                    if( GOD_MODE == false && !this._shieldHit )
+                    {
+                        this.playerShip.progressBar.incCurrentValue( -20 );
+                        this.playerShip.progressBar.setVisible( true );
+                    }
+
+                    // A ram only damages the player ship, never enemy01
+
+                    this.groupPlayer.play( 'EXPLOSION_Metllic' );
+                }
+            }
             // Player collides into mini_boss_00 or mini_boss_01
             else if( spriteA.parentNode.userId == gameDefs.MINI_BOSS_00_SHIP_ID || spriteA.parentNode.userId == gameDefs.MINI_BOSS_01_SHIP_ID )
             {
@@ -662,6 +719,37 @@ export class Level1State extends CommonState
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die', spriteA );
                 this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE * 2 );
+            }
+
+            this.groupPlayer.play( 'enemy_explosion' );
+        }
+        // Player shot enemy01 ship
+        else if( spriteB.parentNode.userId == gameDefs.ENEMY01_SHIP_ID )
+        {
+            // Stop any more collision detection for the shot
+            spriteA.collisionComponent.enable = false;
+
+            // Execute the scripts that handle being hit (the explosion)
+            spriteB.prepareScript( 'hit', spriteA );
+
+            // Spinning (spin attack and flee): the hit doesn't count, it slows the spin a step (fewer missiles
+            // per volley), and enough of them stop the spin (the flee stops it, AI_Enemy01_Flee)
+            if( spriteB.spinning )
+            {
+                if( ++spriteB.spinHitCount >= gameDefs.ENEMY01_MISSILES_MAX )
+                {
+                    spriteB.spinning = false;
+                    spriteB.knockedOut = true;
+                }
+            }
+            else if( ++spriteB.hitCount >= ENEMY01_SHIP_HIT_COUNT )
+            {
+                spriteB.collisionComponent.enable = false;
+                spriteB.prepareScript( 'die', spriteA );
+                this.updateHudProgress( ENEMY01_SHIP_HIT_VALUE );
+
+                // The spawn timer for the next enemy01 starts when this one dies
+                this.enemy01SpawnTimer.reset( genFunc.randomInt( ENEMY01_SPAWN_TIME_MIN, ENEMY01_SPAWN_TIME_MAX ) );
             }
 
             this.groupPlayer.play( 'enemy_explosion' );
@@ -978,6 +1066,7 @@ export class Level1State extends CommonState
                         this.train.timer.pause();
                         this.healthSpawnTimer.pause();
                         this.enemy00MaxTimer.pause();
+                        this.enemy01SpawnTimer.pause();
 
                         // Pause the looping level sounds (enemy loops, boss alarm, thrust)
                         soundManager.pauseLoopingSounds( '(level_1)' );
@@ -1013,6 +1102,7 @@ export class Level1State extends CommonState
                             this.train.timer.resume();
                             this.healthSpawnTimer.resume();
                             this.enemy00MaxTimer.resume();
+                            this.enemy01SpawnTimer.resume();
 
                             // Resume the looping sounds the pause menu paused (not the ones stopped since, ex: by a restart)
                             soundManager.resumeLoopingSounds( '(level_1)' );
@@ -1064,6 +1154,7 @@ export class Level1State extends CommonState
                     this.train.timer.resume();
                     this.healthSpawnTimer.resume();
                     this.enemy00MaxTimer.resume();
+                    this.enemy01SpawnTimer.resume();
 
                     // Indicate to the game portal the gameplay has stopped
                     platform.gameplayStop();
@@ -1290,6 +1381,10 @@ export class Level1State extends CommonState
                 this.miniBossSpawnTimer.reset();
                 this.allowMiniBoss = true;
             }
+
+            // Enable enemy01 spawns
+            if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD && this.enemy01SpawnTimer.disabled )
+                this.enemy01SpawnTimer.reset();
 
             // Enable health character
             if( this.playerLevel == HEALTH_CHAR_THRESHOLD && this.healthSpawnTimer.disabled )
@@ -1537,11 +1632,25 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
+        // Create enemy01 (from level ENEMY01_LEVEL_THRESHOLD, also during boss and mini-boss battles). Its AI
+        // positions it above the screen. One at a time: if it expires while one is out, the timer just goes
+        // round again, and when that one dies the timer restarts (collisionCallBack()).
+        if( this.enemy01SpawnTimer.expired(true) )
+        {
+            this.enemy01SpawnTimer.reset( genFunc.randomInt( ENEMY01_SPAWN_TIME_MIN, ENEMY01_SPAWN_TIME_MAX ) );
+
+            if( this.countEnemy01() < MAX_ENEMY01 )
+            {
+                this._node = this.enemyStrategy.create('enemy01_ship');
+                this._node.get().setPosXYZ(0, settings.deviceRes.h);
+            }
+        }
+
         // Create enemy00 and position it outside of the view.
         // During the boss battle only every Nth spawn tick spawns one (much slower).
         if( this.enemy00SpawnTimer.expired(true) )
         {
-            if( this.enemyStrategy.nodeAry.length < this.enemy00Max &&
+            if( (this.enemyStrategy.nodeAry.length - this.countEnemy01()) < this.enemy00Max &&
                 (!this.bossBattleActive || (++this.enemy00BossSpawnTick % gameDefs.BOSS00_ENEMY00_SPAWN_SLOWDOWN) === 0) )
             {
                 this._node = this.enemyStrategy.create('enemy00_ship');
@@ -1647,6 +1756,23 @@ export class Level1State extends CommonState
                 this._helpSprite.setPosXYZ(this._healthSprite.pos.x, this._healthSprite.pos.y + 90);
             }
         }
+    }
+
+    // 
+    //  DESC: Number of enemy01 alive (they don't take up enemy00's spawn slots)
+    //
+    countEnemy01()
+    {
+        this._enemy01Count = 0;
+        for( this._i = 0; this._i < this.enemyStrategy.nodeAry.length; ++this._i )
+        {
+            // Not counting one that's dying (falling off the screen)
+            if( this.enemyStrategy.nodeAry[this._i].userId === gameDefs.ENEMY01_SHIP_ID &&
+                this.enemyStrategy.nodeAry[this._i].get().collisionComponent.enable )
+                this._enemy01Count++;
+        }
+
+        return this._enemy01Count;
     }
 
     // 
@@ -2229,6 +2355,7 @@ export class Level1State extends CommonState
 
         // Clear out any AI data dictionaries
         enemy00aiscripts.clearAIData();
+        enemy01aiscripts.clearAIData();
         miniboss01aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
         
@@ -2415,6 +2542,7 @@ export function load()
         // Load the AI. Needs to be loaded before the strategy loader
         .then(() => aiManager.loadFromXml( [
             genFunc.stringLoadXML( enemy00_ai ),
+            genFunc.stringLoadXML( enemy01_ai ),
             genFunc.stringLoadXML( mini_boss_00_ai ),
             genFunc.stringLoadXML( mini_boss_01_ai ),
             genFunc.stringLoadXML( boss00_ai )] ))
