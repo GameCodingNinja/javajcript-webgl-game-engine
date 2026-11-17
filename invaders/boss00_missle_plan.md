@@ -2,11 +2,11 @@
 
 ## Goal
 While the boss is **beaming a building**, and the boss and player are both in view, the boss fires a missile at the player **about once a second**.
-- The missile uses the `boss_shot` object (`missile-0` / `missile-1` frames) and **cycles between the two frames** while flying.
+- The missile uses the `boss00_shot` object (`missile-0` / `missile-1` frames) and **cycles between the two frames** while flying.
 - The art points **right**, so the missile is **rotated to face the direction it's moving**.
 - The missile flies a **sharp zig-zag with hard turns**, like an unstable rocket, but still homes in and hits its mark. This is for entertainment.
 
-`boss_shot` is already in `level1DataList.lst` and the sprite sheet has been regenerated. Its collision is a 2-point line (±18, 0) using `radiusFromVisual`. Collision points are transformed by the sprite matrix, so they rotate with the missile automatically.
+`boss00_shot` is already in `level1DataList.lst` and the sprite sheet has been regenerated. Its collision is a 2-point line (±18, 0) using `radiusFromVisual`. Collision points are transformed by the sprite matrix, so they rotate with the missile automatically.
 
 ## Decisions
 | # | Question | Answer |
@@ -35,8 +35,8 @@ Copy the enemy00 shot pattern; it already handles everything this needs:
 
 ### 2. Strategy node — `data/objects/strategy/level1/enemyshot.strategy`
 ```xml
-<node name="boss_shot" id="-21">
-    <sprite objectName="boss_shot">
+<node name="boss00_shot" id="-21">
+    <sprite objectName="boss00_shot">
         <scriptList>
             <script shoot="Boss00Shot_Fire"/>
             <script hit="Boss00Shot_Hit"/>
@@ -51,7 +51,7 @@ Add to `AI_Boss00_base`:
 - `shootPlayer()`:
   - Only fires when the player is alive (`playerShipSprite.collisionComponent.enable`, same as enemy00).
   - Counts down `sprite.shootTime` by `highResTimer.elapsedTime`.
-  - When the countdown reaches zero **and** the boss is in view (`inViewWithWrap` against the player camera): create `boss_shot`, `prepare('shoot', shot, this.sprite)`, and reset `shootTime` to `BOSS00_FIRE_INTERVAL` ± a random `BOSS00_FIRE_JITTER`. That gives "about once a second" without a mechanical rhythm.
+  - When the countdown reaches zero **and** the boss is in view (`inViewWithWrap` against the player camera): create `boss00_shot`, `prepare('shoot', shot, this.sprite)`, and reset `shootTime` to `BOSS00_FIRE_INTERVAL` ± a random `BOSS00_FIRE_JITTER`. That gives "about once a second" without a mechanical rhythm.
   - No sound for now (decision 5).
 
 Call it **only** from `AI_Boss00_DestroyBuilding.evaluate()`:
@@ -132,7 +132,7 @@ Every phase ends with: `npx webpack --mode development` + `npx eslint source/scr
 ### Phase M1: Fire a straight, animated missile while beaming (no damage yet)
 **Code**
 - `gamedefs.js`: `BOSS00_SHOT_ID`, `BOSS00_FIRE_INTERVAL`, `BOSS00_FIRE_JITTER`, `BOSS00_MISSILE_SPEED`, `BOSS00_MISSILE_ANIM_MS`, `BOSS00_MISSILE_LIFETIME`.
-- `enemyshot.strategy`: `boss_shot` node (section 2).
+- `enemyshot.strategy`: `boss00_shot` node (section 2).
 - `boss00scripts.js`: `Boss00Shot_Fire` **basic version**. Launch from the center of the boss, aimed at the player's position at launch, then fly **straight**. Includes: nose rotated to the flight angle, frame toggle, wrap, collision check, expire by lifetime or by leaving the view vertically. Also `Boss00Shot_Hit` and registration of both.
 - `boss00aiscripts.js`: `inViewWithWrap()` + `shootPlayer()` in the AI base; head caches `enemyShotStrategy` / `camera`. DestroyBuilding resets `shootTime` when the beam appears and calls `shootPlayer()` only in the `destroying` phase.
 

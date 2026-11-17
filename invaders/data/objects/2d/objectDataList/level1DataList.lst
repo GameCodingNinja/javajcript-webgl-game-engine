@@ -303,9 +303,9 @@
             </collision>
         </object>
 
-        <object name="enemy01_ship">
+        <object name="mini_boss_00_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy01a.png" />
+                <texture file="data/textures/enemyShip/mini_boss_00_ship.png" />
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
                 <!-- clock wise winding seem to work a bit better -->
@@ -347,9 +347,9 @@
             </collision>
         </object>
 
-        <object name="enemy02_ship">
+        <object name="mini_boss_01_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy02a.png"/>
+                <texture file="data/textures/enemyShip/mini_boss_01_ship.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
                 <circle radius="25"/>
@@ -428,7 +428,7 @@
             <size width="392" height="4"/>
         </object>
 
-        <object name="enemy_shot">
+        <object name="enemy00_shot">
             <visual>
                 <texture count="2" file="data/textures/enemyShip/projectile_${NUM}.png"/>
             </visual>
@@ -437,7 +437,7 @@
             </collision>
         </object>
 
-        <object name="boss_shot">
+        <object name="boss00_shot">
             <visual>
                 <texture count="2" file="data/textures/enemyShip/missile-${NUM}.png"/>
             </visual>
@@ -445,6 +445,27 @@
                 <pointList radiusFromVisual="true">
                     <point x="12" y="0"/>
                     <point x="-12" y="0"/>
+                </pointList>
+            </collision>
+        </object>
+
+        <object name="enemy01_ship">
+            <visual>
+                <texture file="data/textures/enemyShip/enemy01.png"/>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <circle radius="75"/>
+            </collision>
+        </object>
+
+        <object name="enemy01_shot">
+            <visual>
+                <texture file="data/textures/enemyShip/projectile05-4.png"/>
+            </visual>
+            <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
+                <pointList radiusFromVisual="true">
+                    <point x="10" y="0"/>
+                    <point x="-11" y="0"/>
                 </pointList>
             </collision>
         </object>

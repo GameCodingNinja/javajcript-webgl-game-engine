@@ -54,7 +54,7 @@ class AI_Enemy00_base extends aiNode
                     // Should we skip a shot?
                     if( genFunc.randomInt( 0, 10 ) > 3 )
                     {
-                        this._shootSprite = this.data.enemyShotStrategy.create('enemy_shot').get();
+                        this._shootSprite = this.data.enemyShotStrategy.create('enemy00_shot').get();
                         this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite );
 
                         this.data.groupPlayer.play( 'enemy00_gun' );

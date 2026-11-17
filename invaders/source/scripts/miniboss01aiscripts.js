@@ -1,5 +1,5 @@
 //
-//  FILE NAME: enemy02aiscripts.js
+//  FILE NAME: miniboss01aiscripts.js
 //  DESC:      scripts for AI
 //
 
@@ -28,10 +28,10 @@ export function clearAIData()
 
 
 //
-//  DESC: AI Enemy02 head (root) node Head class script
+//  DESC: AI MiniBoss01 head (root) node Head class script
 //        Only supports one child
 //
-class AI_Enemy02_Head extends aiNode
+class AI_MiniBoss01_Head extends aiNode
 {
     constructor( nodeData )
     {
@@ -86,7 +86,7 @@ class AI_Enemy02_Head extends aiNode
 //  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy02_Descend extends aiNode
+class AI_MiniBoss01_Descend extends aiNode
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -135,7 +135,7 @@ class AI_Enemy02_Descend extends aiNode
             this.init();
             this.state = defs.EAIS_ACTIVE;
 
-            let gsnd = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
+            let gsnd = soundManager.getSound( '(level_1)', `mini_boss_01_loop_sound` );
             gsnd.play( true );
             gsnd.fadeTo( 1.0, 4000 );
         }
@@ -159,7 +159,7 @@ class AI_Enemy02_Descend extends aiNode
 //  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy02_Seek_and_Destroy extends aiNode
+class AI_MiniBoss01_Seek_and_Destroy extends aiNode
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -292,13 +292,13 @@ class AI_Enemy02_Seek_and_Destroy extends aiNode
 //
 export function loadScripts()
 {
-    // Enemy02 AI functions
-    scriptManager.set( 'AI_Enemy02_Head',
-        ( nodeData ) => { return new AI_Enemy02_Head( nodeData ); } );
+    // MiniBoss01 AI functions
+    scriptManager.set( 'AI_MiniBoss01_Head',
+        ( nodeData ) => { return new AI_MiniBoss01_Head( nodeData ); } );
 
-    scriptManager.set( 'AI_Enemy02_Descend',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy02_Descend( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_MiniBoss01_Descend',
+        ( nodeData, headNode, sprite ) => { return new AI_MiniBoss01_Descend( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy02_Seek_and_Destroy',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy02_Seek_and_Destroy( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_MiniBoss01_Seek_and_Destroy',
+        ( nodeData, headNode, sprite ) => { return new AI_MiniBoss01_Seek_and_Destroy( nodeData, headNode, sprite ); } );
 }

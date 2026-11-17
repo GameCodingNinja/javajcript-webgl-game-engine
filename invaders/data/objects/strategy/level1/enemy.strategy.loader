@@ -2,7 +2,7 @@
 <loader>
 
     <strategy name="_enemy_">
-        <!--<node name="enemy01_ship">
+        <!--<node name="mini_boss_00_ship">
             <sprite>
                 <position x="700" y="0"/>
             </sprite>

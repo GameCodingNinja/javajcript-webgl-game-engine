@@ -110,7 +110,7 @@ STILL TO DO / DEFERRED
   * Real spawn trigger (right now a TEMP test spawns the boss 10s after
     the game starts, with all other enemies disabled for testing).
   * Final spawn rules: enemy00 keeps spawning during the fight;
-    enemy01/02 disabled and re-enabled (timers restarted) when the boss
+    mini_boss_00/01 disabled and re-enabled (timers restarted) when the boss
     dies.
   * Sound effects (beam, hits, death).
   * Optional: boss "move toward the player" lunge between buildings,

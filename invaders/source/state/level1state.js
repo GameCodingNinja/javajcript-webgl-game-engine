@@ -36,13 +36,13 @@ import * as touchevent from '../../../library/common/touchevent';
 import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 import * as enemy00aiscripts from '../scripts/enemy00aiscripts';
-import * as enemy02aiscripts from '../scripts/enemy02aiscripts';
+import * as miniboss01aiscripts from '../scripts/miniboss01aiscripts';
 import * as boss00aiscripts from '../scripts/boss00aiscripts';
 
-// AI_Enemy00 AI_Enemy01 AI_Enemy02
+// AI_Enemy00 AI_MiniBoss00 AI_MiniBoss01
 import enemy00_ai from 'raw-loader!../../data/objects/ai/enemy00.ai';
-import enemy01_ai from 'raw-loader!../../data/objects/ai/enemy01.ai';
-import enemy02_ai from 'raw-loader!../../data/objects/ai/enemy02.ai';
+import mini_boss_00_ai from 'raw-loader!../../data/objects/ai/mini_boss_00.ai';
+import mini_boss_01_ai from 'raw-loader!../../data/objects/ai/mini_boss_01.ai';
 import boss00_ai from 'raw-loader!../../data/objects/ai/boss00.ai';
 
 const MOVE_NULL = -1,
@@ -60,19 +60,19 @@ const MOVE_NULL = -1,
       ENEMY00_SHOT_ID = -2,
       HEALTH_CHARACTER = -50,
       ENEMY00_SHIP_HIT_VALUE = 1,
-      ENEMY01_SHIP_HIT_VALUE = 5,
-      ENEMY02_SHIP_HIT_VALUE = 3,
-      ENEMY01_INITIAL_SHIP_HIT_COUNT = 30,
-      ENEMY01_MAX_SHIP_HIT_COUNT = 100,
-      ENEMY01_SHIP_HIT_INC = 10,
-      ENEMY02_INITIAL_SHIP_HIT_COUNT = 10,
-      ENEMY02_MAX_SHIP_HIT_COUNT = 60,
-      ENEMY02_SHIP_HIT_INC = 5,
+      MINI_BOSS_00_SHIP_HIT_VALUE = 5,
+      MINI_BOSS_01_SHIP_HIT_VALUE = 3,
+      MINI_BOSS_00_INITIAL_SHIP_HIT_COUNT = 30,
+      MINI_BOSS_00_MAX_SHIP_HIT_COUNT = 100,
+      MINI_BOSS_00_SHIP_HIT_INC = 10,
+      MINI_BOSS_01_INITIAL_SHIP_HIT_COUNT = 10,
+      MINI_BOSS_01_MAX_SHIP_HIT_COUNT = 60,
+      MINI_BOSS_01_SHIP_HIT_INC = 5,
       ENEMY00_SHIP_HIT_COUNT = 3,
       ENEMY00_RAM_COOLDOWN = 500,
       BOSS00_SHIP_HIT_VALUE = 10,
-      ENEMY01_LEVEL_THRESHOLD = 5,
-      ENEMY02_LEVEL_THRESHOLD = 3,
+      MINI_BOSS_00_LEVEL_THRESHOLD = 5,
+      MINI_BOSS_01_LEVEL_THRESHOLD = 3,
       MAX_ENEMY00 = 30,
       MIN_ENEMY00 = 5,
       HEALTH_CHAR_THRESHOLD = 3,
@@ -354,8 +354,8 @@ export class Level1State extends CommonState
         this.enemy00Max = MIN_ENEMY00;
 
         // The boss battle takes the place of the next mini-boss once the player has fought both mini-bosses
-        this.foughtEnemy01 = false;
-        this.foughtEnemy02 = false;
+        this.foughtMiniBoss00 = false;
+        this.foughtMiniBoss01 = false;
 
         // Boss battle in progress (boss music plays instead of the game music, enemy00 spawns slower)
         this.bossBattleActive = false;
@@ -374,8 +374,8 @@ export class Level1State extends CommonState
         // For Mobile: the shield is held with two fingers on the right side
         this.touchShieldHeld = false;
 
-        this.enemy01ShipHitCount = ENEMY01_INITIAL_SHIP_HIT_COUNT;
-        this.enemy02ShipHitCount = ENEMY02_INITIAL_SHIP_HIT_COUNT;
+        this.miniBoss00ShipHitCount = MINI_BOSS_00_INITIAL_SHIP_HIT_COUNT;
+        this.miniBoss01ShipHitCount = MINI_BOSS_01_INITIAL_SHIP_HIT_COUNT;
 
         this.train = {};
         this.train.strategy = null;
@@ -411,7 +411,7 @@ export class Level1State extends CommonState
         this.groupPlayer.pause( 'player_thrust' );
 
         enemy00aiscripts.clearAIData();
-        enemy02aiscripts.clearAIData();
+        miniboss01aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_enemy_shot_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
@@ -570,8 +570,8 @@ export class Level1State extends CommonState
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
                 }
             }
-            // Player collides into enemy01 or enemy02
-            else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHIP_ID || spriteA.parentNode.userId == gameDefs.ENEMY02_SHIP_ID )
+            // Player collides into mini_boss_00 or mini_boss_01
+            else if( spriteA.parentNode.userId == gameDefs.MINI_BOSS_00_SHIP_ID || spriteA.parentNode.userId == gameDefs.MINI_BOSS_01_SHIP_ID )
             {
                 spriteA.collisionComponent.enable = true;
                 if(this.playerShip.collisionTimer.expired(true))
@@ -666,8 +666,8 @@ export class Level1State extends CommonState
 
             this.groupPlayer.play( 'enemy_explosion' );
         }
-        // Player shot enemy01 ship
-        else if( spriteB.parentNode.userId == gameDefs.ENEMY01_SHIP_ID )
+        // Player shot mini_boss_00 ship
+        else if( spriteB.parentNode.userId == gameDefs.MINI_BOSS_00_SHIP_ID )
         {
             // Stop any more collision detection for the shot
             spriteA.collisionComponent.enable = false;
@@ -677,28 +677,27 @@ export class Level1State extends CommonState
 
             spriteB.hitCount++;
 
-            if(spriteB.hitCount == this.enemy01ShipHitCount)
+            if(spriteB.hitCount == this.miniBoss00ShipHitCount)
             {
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die' );
-                this.updateHudProgress( ENEMY01_SHIP_HIT_VALUE );
+                this.updateHudProgress( MINI_BOSS_00_SHIP_HIT_VALUE );
 
-                this.groupPlayer.play( 'enemy01_descend_to_crash' );
+                this.groupPlayer.play( 'mini_boss_00_descend_to_crash' );
 
-                soundManager.fadeTo( '(level_1)', 'enemy01_loop_sound', 0.0, 2000, defs.ESND_FADE_STOP );
+                soundManager.fadeTo( '(level_1)', 'mini_boss_00_loop_sound', 0.0, 2000, defs.ESND_FADE_STOP );
 
                 this.miniBossSpawnTimer.reset();
+
+                // Each kill makes the next mini_boss_00 take more hits
+                if( this.miniBoss00ShipHitCount < MINI_BOSS_00_MAX_SHIP_HIT_COUNT )
+                    this.miniBoss00ShipHitCount += MINI_BOSS_00_SHIP_HIT_INC;
             }
 
             this.groupPlayer.play( 'enemy_explosion' );
-
-            // Inc the hit count
-            if( this.enemy01ShipHitCount < ENEMY01_MAX_SHIP_HIT_COUNT )
-                this.enemy01ShipHitCount + ENEMY01_SHIP_HIT_INC;
-
         }
-        // Player shot enemy02 ship
-        else if( spriteB.parentNode.userId == gameDefs.ENEMY02_SHIP_ID )
+        // Player shot mini_boss_01 ship
+        else if( spriteB.parentNode.userId == gameDefs.MINI_BOSS_01_SHIP_ID )
         {
             // Stop any more collision detection for the shot
             spriteA.collisionComponent.enable = false;
@@ -708,22 +707,22 @@ export class Level1State extends CommonState
 
             spriteB.hitCount++;
 
-            if(spriteB.hitCount == this.enemy02ShipHitCount)
+            if(spriteB.hitCount == this.miniBoss01ShipHitCount)
             {
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die' );
-                this.updateHudProgress( ENEMY02_SHIP_HIT_VALUE );
+                this.updateHudProgress( MINI_BOSS_01_SHIP_HIT_VALUE );
 
-                soundManager.fadeTo( '(level_1)', 'enemy02_loop_sound', 0.0, 2000, defs.ESND_FADE_STOP );
+                soundManager.fadeTo( '(level_1)', 'mini_boss_01_loop_sound', 0.0, 2000, defs.ESND_FADE_STOP );
 
                 this.miniBossSpawnTimer.reset();
+
+                // Each kill makes the next mini_boss_01 take more hits
+                if( this.miniBoss01ShipHitCount < MINI_BOSS_01_MAX_SHIP_HIT_COUNT )
+                    this.miniBoss01ShipHitCount += MINI_BOSS_01_SHIP_HIT_INC;
             }
 
             this.groupPlayer.play( 'enemy_explosion' );
-
-            // Inc the hit count
-            if( this.enemy02ShipHitCount < ENEMY02_MAX_SHIP_HIT_COUNT )
-                this.enemy02ShipHitCount + ENEMY02_SHIP_HIT_INC;
         }
         // Player shot the BOSS00
         else if( spriteB.parentNode.userId == gameDefs.BOSS00_SHIP_ID )
@@ -1043,12 +1042,12 @@ export class Level1State extends CommonState
                 // Crossfade from the game music to the ambient music
                 soundManager.crossfade( this.getGameMusic(), soundManager.getSound( '(music)', 'LOOP_Synthetic_Humanity' ), 500 );
 
-                let gsnd_loop01 = soundManager.getSound( '(level_1)', `enemy01_loop_sound` );
-                if(gsnd_loop01.isPlaying( 'enemy01_loop_sound' ))
+                let gsnd_loop01 = soundManager.getSound( '(level_1)', `mini_boss_00_loop_sound` );
+                if(gsnd_loop01.isPlaying( 'mini_boss_00_loop_sound' ))
                     gsnd_loop01.fadeTo( 0.0, 2000, defs.ESND_FADE_STOP );
 
-                let gsnd_loop02 = soundManager.getSound( '(level_1)', `enemy02_loop_sound` );
-                if(gsnd_loop02.isPlaying( 'enemy02_loop_sound' ))
+                let gsnd_loop02 = soundManager.getSound( '(level_1)', `mini_boss_01_loop_sound` );
+                if(gsnd_loop02.isPlaying( 'mini_boss_01_loop_sound' ))
                     gsnd_loop02.fadeTo( 0.0, 2000, defs.ESND_FADE_STOP );
 
                 let gsnd_alarm = soundManager.getSound( '(level_1)', 'boss_alarm' );
@@ -1126,11 +1125,11 @@ export class Level1State extends CommonState
                 this.endBossMusic();
                 this.bossSprite = null;
 
-                // Re-enable mini-boss (enemy01/02) spawns with a restarted timer. The player has
+                // Re-enable mini-boss (mini_boss_00/01) spawns with a restarted timer. The player has
                 // to fight both mini-bosses again before the next boss battle.
                 this.miniBossSpawnTimer.reset();
-                this.foughtEnemy01 = false;
-                this.foughtEnemy02 = false;
+                this.foughtMiniBoss00 = false;
+                this.foughtMiniBoss01 = false;
             }
             else if( event.type === gameDefs.EGE_BUILDING_DESTROYED )
             {
@@ -1286,7 +1285,7 @@ export class Level1State extends CommonState
             this.groupPlayer.play( 'level_up' );
 
             // Enable mini-boss spawns when the earliest level threshold is reached
-            if( this.playerLevel >= ENEMY02_LEVEL_THRESHOLD && this.allowMiniBoss == false )
+            if( this.playerLevel >= MINI_BOSS_01_LEVEL_THRESHOLD && this.allowMiniBoss == false )
             {
                 this.miniBossSpawnTimer.reset();
                 this.allowMiniBoss = true;
@@ -1560,35 +1559,35 @@ export class Level1State extends CommonState
             this.miniBossSpawnTimer.disable();
 
             // Once the player has fought both mini-bosses, the boss battle takes this mini-boss's turn.
-            // The mini-boss timer stays disabled during the battle (enemy01/02 paused) until the boss is defeated.
-            if( this.foughtEnemy01 && this.foughtEnemy02 )
+            // The mini-boss timer stays disabled during the battle (mini_boss_00/01 paused) until the boss is defeated.
+            if( this.foughtMiniBoss00 && this.foughtMiniBoss01 )
             {
                 this.spawnBoss();
                 return;
             }
 
             // Determine which mini-boss to spawn based on level thresholds
-            if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD )
+            if( this.playerLevel >= MINI_BOSS_00_LEVEL_THRESHOLD )
             {
-                this._miniBossType = (genFunc.randomInt( 0, 9 ) < 6) ? 'enemy02_ship' : 'enemy01_ship';
+                this._miniBossType = (genFunc.randomInt( 0, 9 ) < 6) ? 'mini_boss_01_ship' : 'mini_boss_00_ship';
                 if( (this._miniBossType === this.lastMiniBossType) && (this.miniBossStreakCount >= MAX_MINI_BOSS_STREAK) )
                 {
-                    if( this._miniBossType === 'enemy02_ship' )
-                        this._miniBossType = 'enemy01_ship';
+                    if( this._miniBossType === 'mini_boss_01_ship' )
+                        this._miniBossType = 'mini_boss_00_ship';
                     else
-                        this._miniBossType = 'enemy02_ship';
+                        this._miniBossType = 'mini_boss_01_ship';
                 }
             }
             else
             {
-                this._miniBossType = 'enemy01_ship';
+                this._miniBossType = 'mini_boss_00_ship';
             }
             
             // Track which mini-bosses the player has fought since the last boss battle
-            if( this._miniBossType === 'enemy01_ship' )
-                this.foughtEnemy01 = true;
+            if( this._miniBossType === 'mini_boss_00_ship' )
+                this.foughtMiniBoss00 = true;
             else
-                this.foughtEnemy02 = true;
+                this.foughtMiniBoss01 = true;
 
             if( this._miniBossType === this.lastMiniBossType )
             {
@@ -2230,7 +2229,7 @@ export class Level1State extends CommonState
 
         // Clear out any AI data dictionaries
         enemy00aiscripts.clearAIData();
-        enemy02aiscripts.clearAIData();
+        miniboss01aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
         
         objectDataManager.freeGroup( ['(level_1)'] );
@@ -2416,8 +2415,8 @@ export function load()
         // Load the AI. Needs to be loaded before the strategy loader
         .then(() => aiManager.loadFromXml( [
             genFunc.stringLoadXML( enemy00_ai ),
-            genFunc.stringLoadXML( enemy01_ai ),
-            genFunc.stringLoadXML( enemy02_ai ),
+            genFunc.stringLoadXML( mini_boss_00_ai ),
+            genFunc.stringLoadXML( mini_boss_01_ai ),
             genFunc.stringLoadXML( boss00_ai )] ))
 
         // Load and execute all the strategy loaders.

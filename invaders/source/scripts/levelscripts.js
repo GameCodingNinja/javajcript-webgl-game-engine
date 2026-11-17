@@ -57,11 +57,11 @@ class Explode_animation
                 this._xPos += (shipSprite.pos.x - projectileSprite.pos.x) * 0.3;
                 this._yPos += (shipSprite.pos.y - projectileSprite.pos.y) * 0.6;
             }
-            else if(projectileSprite.parentNode.userId == gameDefs.ENEMY01_SHIP_ID ||
-                    projectileSprite.parentNode.userId == gameDefs.ENEMY02_SHIP_ID ||
+            else if(projectileSprite.parentNode.userId == gameDefs.MINI_BOSS_00_SHIP_ID ||
+                    projectileSprite.parentNode.userId == gameDefs.MINI_BOSS_01_SHIP_ID ||
                     projectileSprite.parentNode.userId == gameDefs.BOSS00_SHIP_ID)
             {
-                // enemy01, enemy02, boss: center the explosion on the player ship, then shift it
+                // mini_boss_00, mini_boss_01, boss: center the explosion on the player ship, then shift it
                 // a little toward the enemy, i.e. the side of the collision (X and Y shifted separately)
                 this._dx = genFunc.wrapDelta( projectileSprite.pos.x - shipSprite.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 

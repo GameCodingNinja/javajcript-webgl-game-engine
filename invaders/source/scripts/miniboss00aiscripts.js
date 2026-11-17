@@ -1,5 +1,5 @@
 //
-//  FILE NAME: enemy01aiscripts.js
+//  FILE NAME: miniboss00aiscripts.js
 //  DESC:      scripts for AI
 //
 
@@ -15,10 +15,10 @@ import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
 
 //
-//  DESC: AI Enemy01 head (root) node Head class script
+//  DESC: AI MiniBoss00 head (root) node Head class script
 //        Only supports one child
 //
-class AI_Enemy01_Head extends aiNode
+class AI_MiniBoss00_Head extends aiNode
 {
     constructor( nodeData )
     {
@@ -58,7 +58,7 @@ class AI_Enemy01_Head extends aiNode
 //  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy01_Descend extends aiNode
+class AI_MiniBoss00_Descend extends aiNode
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -117,7 +117,7 @@ class AI_Enemy01_Descend extends aiNode
             this.init();
             this.state = defs.EAIS_ACTIVE;
 
-            let gsnd = this.groupPlayer.getSound(`enemy01_descend`);
+            let gsnd = this.groupPlayer.getSound(`mini_boss_00_descend`);
             gsnd.play();
             gsnd.fadeTo( 0.3, 1250 );
         }
@@ -131,11 +131,11 @@ class AI_Enemy01_Descend extends aiNode
             {
                 this.state = defs.EAIS_SUCCESS;
 
-                let gsnd1 = this.groupPlayer.getSound(`enemy01_loop_sound`);
+                let gsnd1 = this.groupPlayer.getSound(`mini_boss_00_loop_sound`);
                 gsnd1.play( true );
                 gsnd1.fadeTo( 0.7, 1000 );
 
-                this.groupPlayer.getSound(`enemy01_descend`).fadeTo( 0.0, 500 );
+                this.groupPlayer.getSound(`mini_boss_00_descend`).fadeTo( 0.0, 500 );
             }
         }
 
@@ -147,7 +147,7 @@ class AI_Enemy01_Descend extends aiNode
 //  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy01_Go extends aiNode
+class AI_MiniBoss00_Go extends aiNode
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -217,13 +217,13 @@ class AI_Enemy01_Go extends aiNode
 //
 export function loadScripts()
 {
-    // Enemy01 AI functions
-    scriptManager.set( 'AI_Enemy01_Head',
-        ( nodeData ) => { return new AI_Enemy01_Head( nodeData ); } );
+    // MiniBoss00 AI functions
+    scriptManager.set( 'AI_MiniBoss00_Head',
+        ( nodeData ) => { return new AI_MiniBoss00_Head( nodeData ); } );
 
-    scriptManager.set( 'AI_Enemy01_Descend',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Descend( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_MiniBoss00_Descend',
+        ( nodeData, headNode, sprite ) => { return new AI_MiniBoss00_Descend( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy01_Go',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Go( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_MiniBoss00_Go',
+        ( nodeData, headNode, sprite ) => { return new AI_MiniBoss00_Go( nodeData, headNode, sprite ); } );
 }

@@ -1,7 +1,7 @@
 
 //
-//  FILE NAME: enemy02scripts.js
-//  DESC:      scripts for the enemy02
+//  FILE NAME: miniboss00scripts.js
+//  DESC:      scripts for the mini_boss_00
 //
 
 "use strict";
@@ -15,9 +15,9 @@ import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
 
 //
-//  DESC: Script for handling enemy02 getting hit
+//  DESC: Script for handling mini_boss_00 getting hit
 //
-class Enemy02Ship_Hit
+class MiniBoss00Ship_Hit
 {
     constructor( sprite, projectileSprite )
     {
@@ -58,17 +58,14 @@ class Enemy02Ship_Hit
 }
 
 //
-//  DESC: Script for handling enemy02 dying
+//  DESC: Script for handling mini_boss_00 ship dying
 //
-class Enemy02Ship_Die
+class MiniBoss00Ship_Die
 {
     constructor( sprite )
     {
         this.easingY = new easing.valueTo;
-
-        // Enemy strategy
-        this.enemyStrategy = strategyManager.get('_enemy_');
-
+        
         // Continues the init
         this.recycle( sprite );
     }
@@ -80,21 +77,21 @@ class Enemy02Ship_Die
     {
         this.sprite = sprite;
 
-        this._dest = -(settings.deviceRes_half.h + sprite.parentNode.radius)
-        this._offsetY = Math.abs(sprite.pos.y - this._dest);
-        this.easingY.init( sprite.pos.y, this._dest, this._offsetY / 250, easing.getSineIn(), true );
+        // Y Rotation
+        this.dest = -(settings.deviceRes_half.h + sprite.parentNode.radius)
+        this.offsetY = Math.abs(sprite.pos.y - this.dest);
+        this.easingY.init( sprite.pos.y, this.dest, this.offsetY / 300, easing.getSineIn(), true );
 
-        this.rotate = 0.04;
-        this.rotateVelocity = 0.00004;
-
-        if( sprite.rot.y > 1 )
+        this.rotateVelocity = -0.00001;
+        this.rotate = -0.005;
+        if(sprite.rot.y > 1)
         {
-            this.rotate = -0.04;
-            this.rotateVelocity = -0.00004;
+            this.rotate = 0.005;
+            this.rotateVelocity = 0.00001;
         }
 
-        // Let this sprite die
-        sprite.alive = false;
+        // Enemy strategy
+        this.enemyStrategy = strategyManager.get('_enemy_');
     }
     
     // 
@@ -110,9 +107,9 @@ class Enemy02Ship_Die
         if( this.easingY.isFinished() )
         {
             // Remove the AI script since the enemy is to die
-            this.sprite.scriptComponent.remove( 'AI_Enemy02' );
+            this.sprite.scriptComponent.remove( 'AI_MiniBoss00' );
 
-            soundManager.play( '(level_1)', 'enemy02_crash' );
+            soundManager.play( '(level_1)', 'mini_boss_00_crash' );
 
             // We are done with this sprite, queue it up to be recycled
             this.enemyStrategy.recycle( this.sprite.parentNode );
@@ -129,9 +126,9 @@ class Enemy02Ship_Die
 //
 export function loadScripts()
 {
-    scriptManager.set( 'Enemy02Ship_Hit',
-            ( sprite, projectileSprite ) => { return new Enemy02Ship_Hit( sprite, projectileSprite ); } );
+    scriptManager.set( 'MiniBoss00Ship_Hit',
+            ( sprite, projectileSprite ) => { return new MiniBoss00Ship_Hit( sprite, projectileSprite ); } );
 
-    scriptManager.set( 'Enemy02Ship_Die',
-            ( sprite ) => { return new Enemy02Ship_Die( sprite ); } );
+    scriptManager.set( 'MiniBoss00Ship_Die',
+        ( sprite ) => { return new MiniBoss00Ship_Die( sprite ); } );
 }

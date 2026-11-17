@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <ai>
 
-    <node name="AI_Enemy02">
+    <node name="AI_MiniBoss00">
 
-        <head script="AI_Enemy02_Head"/>
+        <head script="AI_MiniBoss00_Head"/>
 
         <node>
 
@@ -11,7 +11,7 @@
 
             <node>
 
-                <leaf script="AI_Enemy02_Descend"/>
+                <leaf script="AI_MiniBoss00_Descend"/>
 
             </node>
 
@@ -21,7 +21,7 @@
 
                 <node>
 
-                    <leaf script="AI_Enemy02_Seek_and_Destroy"/>
+                    <leaf script="AI_MiniBoss00_Go"/>
 
                 </node>
 

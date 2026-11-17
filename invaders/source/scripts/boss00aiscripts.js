@@ -63,7 +63,7 @@ class AI_Boss00_base extends aiNode
             {
                 if( this.data.camera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 ) )
                 {
-                    this._shootSprite = this.data.enemyShotStrategy.create('boss_shot').get();
+                    this._shootSprite = this.data.enemyShotStrategy.create('boss00_shot').get();
                     this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite );
 
                     this.data.groupPlayer.play( 'boss_rocket_launch' );
