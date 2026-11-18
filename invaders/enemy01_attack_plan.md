@@ -30,12 +30,13 @@ It always flies forward along its heading, turning at a limited rate, with its s
 
 enemy01 is round, so it fires by spinning: the spin is what flings the missiles out. While it coasts to a stop:
 
-- **Spin up:** quickly, to **6 turns/s** over 0.3 s.
+- **Spin up:** quickly, to **6 turns/s** over 0.3 s. After a charge it keeps following its stop point beside the ship while it spins (a ship flying away would otherwise leave it off the screen, where it can't fire); caught up while roaming, it coasts to a stop where it is.
+- **Only fires in view:** at full spin it waits up to 1.5 s (still spinning and following) to be in view, then fires.
 - **Fire:** at full spin, a volley of **5 missiles** flings out **at the same time**, **evenly spaced** around the ship (72° apart for 5, 90° for 4, 120° for 3), each from the rim and flying straight outward. The ring starts at the current spin angle, so it's rotated differently each time.
 - **Keeps spinning and firing:** it runs off right away, still spinning, and fires another volley while it's in view: the first **2.5 s** after the spin attack's volley, then **every 2 s** while the player chases it (see Run off). Once the spin is stopped it still fires **one missile** at the player every 2 s while in view.
 - **The faster the spin, the more missiles:** each player shot that hits the spin slows it a step and takes one missile off the next volley: 5 → 4 → 3 → 2 → 1. The spin slows from 6 turns/s down to 2.5 turns/s (at 1 missile) in equal steps, so the player can see it working and it's clearly spinning whenever it fires.
 - **Spin hits don't count:** while it spins (the spin attack and the run off), a player shot explodes on it as normal, but it isn't counted as a hit until the spin has stopped. (Shots used to bounce off, which gave too little feedback.)
-- **Knock it out of the spin:** the **5th spin hit** knocks it out of the spin. If it hasn't fired yet, no missiles come out. The spin comes to a stop while it keeps fleeing (ending facing the way it flies), and shots hit it from then on. This rewards a player who keeps firing into the spin.
+- **Knock it out of the spin:** the **5th spin hit** knocks it out of the spin, and then **one more hit kills it**. If it gets away (the run off ends), its hit count starts over. If it hasn't fired yet, no missiles come out. The spin comes to a stop while it keeps fleeing (ending facing the way it flies), and shots hit it from then on. This rewards a player who keeps firing into the spin.
 
 The missiles reach the player at different times: the one flung toward the ship arrives first, and the ones flung away loop around and come in later from other directions. It stops about 350 px out so the missile flung toward the ship gives the player time to react.
 
@@ -65,14 +66,14 @@ A missile flung directly away from the player has to turn up to 180°, so the tu
 
 - **Toughness:** dies in **3 hits**.
 - **Score:** 2 (2× enemy00's).
-- **Ramming:** only damages the player ship (20, none through the shield); enemy01 takes no hit from it. It has its own short ram cooldown (`sprite.ramTime`, 500 ms), so one ram counts once and doesn't block hits on other enemies. It doesn't use the shared `collisionTimer`.
+- **Ramming:** only damages the player ship (15, `ENEMY01_RAM_DAMAGE`, none through the shield); enemy01 takes no hit from it. It has its own short ram cooldown (`sprite.ramTime`, 500 ms), so one ram counts once and doesn't block hits on other enemies. It doesn't use the shared `collisionTimer`.
 - **Counterplay:** shoot it as it charges in, before the spin (it runs from you while roaming). Or keep firing into the spin: each spin hit means fewer missiles, and 5 of them stop the spin so shots count as hits, then dodge, boost away from or shield the missiles as they come in.
 
 ## Spawning
 
 - **From level 2:** its spawn timer starts when `playerLevel` reaches 2 (`ENEMY01_LEVEL_THRESHOLD = 2`), the same way `MINI_BOSS_01_LEVEL_THRESHOLD` turns on mini-boss spawns in the level-up code.
-- **Own spawn timer** (15–40 s), separate from enemy00's.
-- **One at a time** (`MAX_ENEMY01 = 1`). When it dies the spawn timer starts over (a new 15–40 s) for the next one; one that's dying (falling off the screen) doesn't count.
+- **Own spawn timer** (20–50 s), separate from enemy00's.
+- **One at a time** (`MAX_ENEMY01 = 1`). When it dies the spawn timer starts over (a new 20–50 s) for the next one; one that's dying (falling off the screen) doesn't count.
 - **Boss and mini-boss battles:** it spawns during them too.
 - The enemy00 spawn check subtracts the enemy01 count (`countEnemy01()`), so enemy01 doesn't use up an enemy00 slot.
 

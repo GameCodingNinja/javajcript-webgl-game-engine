@@ -249,6 +249,50 @@ class AI_Enemy01_base extends aiNode
     }
 
     // 
+    //  DESC: Fly to the attack stop point and brake to a stop there: ENEMY01_CHARGE_STOP_DIST beside the ship on the
+    //        side it came from (sprite.attackSide), at the ship's Y kept in the cruise band (so it stops above the
+    //        buildings when the player flies low), kept ENEMY01_CHARGE_SCREEN_MARGIN in from the side of the screen
+    //        (the ship is often near the side of the screen, and an attack out of view fires no missiles). When
+    //        that leaves too little room beside the ship, the point moves above or below it (whichever has more
+    //        room in the band). The point moves with the ship, so it follows a ship that flies away.
+    //        Leaves the distance to the point in this._dist.
+    //
+    steerToStopPoint()
+    {
+        // Screen X (a camera stores its position negated) of the ship and this enemy
+        this._camX = this.data.playerCamera.pos.x;
+        this._shipScreenX = genFunc.wrapDelta( this.data.playerShipSprite.pos.x + this._camX, gWrapSpan );
+        this._screenX = genFunc.wrapDelta( this.sprite.pos.x + this._camX, gWrapSpan );
+
+        // The stop point beside the ship, kept in view
+        this._limitX = settings.deviceRes_half.w - gameDefs.ENEMY01_CHARGE_SCREEN_MARGIN;
+        this._aimX = Math.min( Math.max( this._shipScreenX + (this.sprite.attackSide * gameDefs.ENEMY01_CHARGE_STOP_DIST), -this._limitX ), this._limitX );
+        this._shipY = this.data.playerShipSprite.pos.y;
+        this._aimY = this._shipY;
+
+        // Not enough room beside the ship: above or below it, whichever has more room in the band
+        this._besideX = Math.abs( this._aimX - this._shipScreenX );
+        if( this._besideX < gameDefs.ENEMY01_CHARGE_STOP_DIST )
+        {
+            this._offsetY = Math.sqrt( (gameDefs.ENEMY01_CHARGE_STOP_DIST * gameDefs.ENEMY01_CHARGE_STOP_DIST) - (this._besideX * this._besideX) );
+            this._aimY += ((gameDefs.ENEMY01_MAX_Y - this._shipY) > (this._shipY - gameDefs.ENEMY01_MIN_Y)) ? this._offsetY : -this._offsetY;
+        }
+
+        this._aimY = Math.min( Math.max( this._aimY, gameDefs.ENEMY01_MIN_Y ), gameDefs.ENEMY01_MAX_Y );
+
+        this._dx = genFunc.wrapDelta( this._aimX - this._screenX, gWrapSpan );
+        this._dy = this._aimY - this.sprite.pos.y;
+        this._dist = Math.sqrt( (this._dx * this._dx) + (this._dy * this._dy) );
+
+        // Full speed, then brake (constant deceleration) to stop at the stop point
+        this._targetSpeed = Math.min( gameDefs.ENEMY01_CHARGE_SPEED, Math.sqrt( 2 * gameDefs.ENEMY01_CHARGE_BRAKE * this._dist ) );
+
+        this.faceAngle( this.bandAngle( Math.atan2( this._dy, this._dx ) ), gChargeTurnRate );
+        this.approachSpeed( this._targetSpeed, (this._targetSpeed < this.sprite.speed) ? gameDefs.ENEMY01_CHARGE_BRAKE * 2 : gameDefs.ENEMY01_CHARGE_ACCEL );
+        this.moveForward();
+    }
+
+    // 
     //  DESC: Is this enemy in view?
     //
     inView()
@@ -341,6 +385,7 @@ class AI_Enemy01_Descend extends AI_Enemy01_base
         this.sprite.spinHitCount = 0;   // Player shots that hit this spin, each slows it (Level1State.collisionCallBack())
         this.sprite.knockedOut = false; // Enough spin hits knocked it out of the spin: the flee stops it (AI_Enemy01_Flee)
         this.sprite.volleyTime = 0;     // Time since the last missile volley while spinning (ms)
+        this.sprite.attackSide = 0;     // Side of the ship it charged in from (-1/1), 0 when it attacks where it is (AI_Enemy01_Charge)
         this.sprite.wavePhase = Math.random() * gTwoPi;
         this.sprite.heading = -(Math.PI / 2);
         this.applyRot();
@@ -537,12 +582,8 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
 }
 
 //
-//  DESC: AI Leaf node script. Charge in at the player and brake to a stop near it, in view, for the spin attack.
-//        It aims at a point ENEMY01_CHARGE_STOP_DIST beside the ship on the side it comes from, at the ship's Y
-//        kept in the cruise band (so it stops above the buildings when the player flies low). The point is kept
-//        ENEMY01_CHARGE_SCREEN_MARGIN in from the side of the screen: the ship is often near the side of the
-//        screen, and a spin attack out of view fires no missiles. When that leaves too little room beside the
-//        ship, the point moves above or below it (whichever has more room in the band).
+//  DESC: AI Leaf node script. Charge in at the player and brake to a stop near it, in view, for the spin attack
+//        (steerToStopPoint()).
 //
 class AI_Enemy01_Charge extends AI_Enemy01_base
 {
@@ -560,50 +601,21 @@ class AI_Enemy01_Charge extends AI_Enemy01_base
         {
             this.chargeTime = 0;
             this.chargeViewTime = 0;
-            this.side = (this.shipDeltaX() > 0) ? -1 : 1;   // The side of the ship it comes from
+            this.sprite.attackSide = (this.shipDeltaX() > 0) ? -1 : 1;   // The side of the ship it comes from
             this.state = defs.EAIS_ACTIVE;
 
-            // The player caught up with it while roaming: go straight to the spin attack
+            // The player caught up with it while roaming: go straight to the spin attack, where it is
             if( this.sprite.caughtUp )
             {
                 this.sprite.caughtUp = false;
+                this.sprite.attackSide = 0;
                 this.state = defs.EAIS_SUCCESS;
             }
         }
 
         if( this.state === defs.EAIS_ACTIVE )
         {
-            // Screen X (a camera stores its position negated) of the ship and this enemy
-            this._camX = this.data.playerCamera.pos.x;
-            this._shipScreenX = genFunc.wrapDelta( this.data.playerShipSprite.pos.x + this._camX, gWrapSpan );
-            this._screenX = genFunc.wrapDelta( this.sprite.pos.x + this._camX, gWrapSpan );
-
-            // The stop point beside the ship, kept in view
-            this._limitX = settings.deviceRes_half.w - gameDefs.ENEMY01_CHARGE_SCREEN_MARGIN;
-            this._aimX = Math.min( Math.max( this._shipScreenX + (this.side * gameDefs.ENEMY01_CHARGE_STOP_DIST), -this._limitX ), this._limitX );
-            this._shipY = this.data.playerShipSprite.pos.y;
-            this._aimY = this._shipY;
-
-            // Not enough room beside the ship: above or below it, whichever has more room in the band
-            this._besideX = Math.abs( this._aimX - this._shipScreenX );
-            if( this._besideX < gameDefs.ENEMY01_CHARGE_STOP_DIST )
-            {
-                this._offsetY = Math.sqrt( (gameDefs.ENEMY01_CHARGE_STOP_DIST * gameDefs.ENEMY01_CHARGE_STOP_DIST) - (this._besideX * this._besideX) );
-                this._aimY += ((gameDefs.ENEMY01_MAX_Y - this._shipY) > (this._shipY - gameDefs.ENEMY01_MIN_Y)) ? this._offsetY : -this._offsetY;
-            }
-
-            this._aimY = Math.min( Math.max( this._aimY, gameDefs.ENEMY01_MIN_Y ), gameDefs.ENEMY01_MAX_Y );
-
-            this._dx = genFunc.wrapDelta( this._aimX - this._screenX, gWrapSpan );
-            this._dy = this._aimY - this.sprite.pos.y;
-            this._dist = Math.sqrt( (this._dx * this._dx) + (this._dy * this._dy) );
-
-            // Full speed, then brake (constant deceleration) to stop at the stop point
-            this._targetSpeed = Math.min( gameDefs.ENEMY01_CHARGE_SPEED, Math.sqrt( 2 * gameDefs.ENEMY01_CHARGE_BRAKE * this._dist ) );
-
-            this.faceAngle( this.bandAngle( Math.atan2( this._dy, this._dx ) ), gChargeTurnRate );
-            this.approachSpeed( this._targetSpeed, (this._targetSpeed < this.sprite.speed) ? gameDefs.ENEMY01_CHARGE_BRAKE * 2 : gameDefs.ENEMY01_CHARGE_ACCEL );
-            this.moveForward();
+            this.steerToStopPoint();
             this.applyRot();
 
             // Done at the stop point. While the ship flies, the stop point moves with it and it trails it
@@ -624,6 +636,8 @@ class AI_Enemy01_Charge extends AI_Enemy01_base
 
 //
 //  DESC: AI Leaf node script. Spin attack: quick spin up, fling the first volley of missiles out at full spin.
+//        After a charge it keeps following the stop point beside the ship (a ship flying away would leave it
+//        out of view), and it waits up to ENEMY01_SPIN_WAIT_MAX at full spin to be in view before it fires.
 //        It keeps spinning and firing volleys while it flees (AI_Enemy01_Flee).
 //
 class AI_Enemy01_Spin extends AI_Enemy01_base
@@ -644,6 +658,7 @@ class AI_Enemy01_Spin extends AI_Enemy01_base
             this.sprite.spinning = true;
             this.sprite.spinHitCount = 0;
             this.sprite.volleyTime = gameDefs.ENEMY01_VOLLEY_INTERVAL - gameDefs.ENEMY01_FLEE_VOLLEY_DELAY;   // Also when knocked out before the first volley
+            this.waitTime = 0;
             this.state = defs.EAIS_ACTIVE;
         }
 
@@ -653,16 +668,26 @@ class AI_Enemy01_Spin extends AI_Enemy01_base
 
         if( this.state === defs.EAIS_ACTIVE )
         {
-            // Coast to a stop
-            this.approachSpeed( 0, gameDefs.ENEMY01_CHARGE_BRAKE );
-            this.moveForward();
+            // After a charge, keep following the stop point beside the ship. Caught up (attackSide 0), coast to a stop where it is.
+            if( this.sprite.attackSide !== 0 )
+            {
+                this.steerToStopPoint();
+            }
+            else
+            {
+                this.approachSpeed( 0, gameDefs.ENEMY01_CHARGE_BRAKE );
+                this.moveForward();
+            }
 
             // Spin up
             this.spinStep();
 
-            // Up to speed (slower for each shot that hit it during the spin up): fling the first
-            // volley out and flee, still spinning
+            // Up to speed (slower for each shot that hit it during the spin up) and in view (or waited long
+            // enough): fling the first volley out and flee, still spinning
             if( this.sprite.spinRate >= this._spinTarget )
+                this.waitTime += highResTimer.elapsedTime;
+
+            if( this.sprite.spinRate >= this._spinTarget && (this.inView() || this.waitTime > gameDefs.ENEMY01_SPIN_WAIT_MAX) )
             {
                 this.fireMissiles();
                 this.sprite.volleyTime = gameDefs.ENEMY01_VOLLEY_INTERVAL - gameDefs.ENEMY01_FLEE_VOLLEY_DELAY;   // First flee volley after ENEMY01_FLEE_VOLLEY_DELAY
@@ -845,9 +870,11 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
                 this.sprite.volleyTime = 0;
             }
 
-            // Far enough away (off the screen): stop spinning
+            // Far enough away (off the screen): stop spinning. It got away, so its hit count starts over
+            // (it's no longer one hit from death after its spin was shot to a stop).
             if( Math.abs( this.shipDeltaX() ) > gameDefs.ENEMY01_FLEE_DIST )
             {
+                this.sprite.hitCount = 0;
                 this.sprite.spinning = false;
                 this.sprite.knockedOut = false;
                 this.sprite.spinRate = 0;

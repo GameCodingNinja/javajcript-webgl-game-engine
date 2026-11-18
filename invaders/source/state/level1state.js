@@ -72,12 +72,19 @@ const MOVE_NULL = -1,
       MINI_BOSS_01_SHIP_HIT_INC = 5,
       ENEMY00_SHIP_HIT_COUNT = 3,
       ENEMY00_RAM_COOLDOWN = 500,
+      ENEMY00_SHOT_DAMAGE = 10,             // Player ship damage (health is 100, DEFAULT_SHIP_PROGRESS_BAR_VALUE)
+      ENEMY00_AGGRESSIVE_SHOT_DAMAGE = 20,
+      ENEMY00_RAM_DAMAGE = 15,
+      ENEMY01_RAM_DAMAGE = 15,
+      MINI_BOSS_RAM_DAMAGE = 15,
+      BOSS00_RAM_DAMAGE = 15,
+      HEALTH_CHARACTER_HEAL = 30,
       ENEMY01_SHIP_HIT_VALUE = 2,
       ENEMY01_SHIP_HIT_COUNT = 3,
       ENEMY01_RAM_COOLDOWN = 500,
       ENEMY01_LEVEL_THRESHOLD = 2,
-      ENEMY01_SPAWN_TIME_MIN = 15000,
-      ENEMY01_SPAWN_TIME_MAX = 40000,
+      ENEMY01_SPAWN_TIME_MIN = 20000,
+      ENEMY01_SPAWN_TIME_MAX = 50000,
       MAX_ENEMY01 = 1,
       BOSS00_SHIP_HIT_VALUE = 10,
       MINI_BOSS_00_LEVEL_THRESHOLD = 5,
@@ -531,9 +538,9 @@ export class Level1State extends CommonState
                 {
                     // Was player hit by an aggressive shot? Takes more damage
                     if(spriteA.visualComponent.frameIndex == 1)
-                        this.playerShip.progressBar.incCurrentValue( -20 );
+                        this.playerShip.progressBar.incCurrentValue( -ENEMY00_AGGRESSIVE_SHOT_DAMAGE );
                     else
-                        this.playerShip.progressBar.incCurrentValue( -10 );
+                        this.playerShip.progressBar.incCurrentValue( -ENEMY00_SHOT_DAMAGE );
                     this.playerShip.progressBar.setVisible( true );
                 }
                 spriteA.prepareScript( 'hit' );
@@ -566,7 +573,7 @@ export class Level1State extends CommonState
                     spriteB.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
-                        this.playerShip.progressBar.incCurrentValue( -20 );
+                        this.playerShip.progressBar.incCurrentValue( -ENEMY00_RAM_DAMAGE );
                         this.playerShip.progressBar.setVisible( true );
                     }
 
@@ -618,7 +625,7 @@ export class Level1State extends CommonState
                     spriteB.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
-                        this.playerShip.progressBar.incCurrentValue( -20 );
+                        this.playerShip.progressBar.incCurrentValue( -ENEMY01_RAM_DAMAGE );
                         this.playerShip.progressBar.setVisible( true );
                     }
 
@@ -636,7 +643,7 @@ export class Level1State extends CommonState
                     this.playerShip.sprite.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
-                        this.playerShip.progressBar.incCurrentValue( -20 );
+                        this.playerShip.progressBar.incCurrentValue( -MINI_BOSS_RAM_DAMAGE );
                         this.playerShip.progressBar.setVisible( true );
                     }
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
@@ -652,7 +659,7 @@ export class Level1State extends CommonState
                     this.playerShip.sprite.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
-                        this.playerShip.progressBar.incCurrentValue( -20 );
+                        this.playerShip.progressBar.incCurrentValue( -BOSS00_RAM_DAMAGE );
                         this.playerShip.progressBar.setVisible( true );
                     }
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
@@ -672,7 +679,7 @@ export class Level1State extends CommonState
 
                 if(!this.playerShip.progressBar.isMaxValue())
                 {
-                    this.playerShip.progressBar.incCurrentValue(25);
+                    this.playerShip.progressBar.incCurrentValue( HEALTH_CHARACTER_HEAL );
 
                     if(this.playerShip.progressBar.isMaxValue())
                         this.playerShip.progressBar.setVisible( false );
@@ -740,6 +747,9 @@ export class Level1State extends CommonState
                 {
                     spriteB.spinning = false;
                     spriteB.knockedOut = true;
+
+                    // The player shot its spin to a stop: one more hit kills it
+                    spriteB.hitCount = ENEMY01_SHIP_HIT_COUNT - 1;
                 }
             }
             else if( ++spriteB.hitCount >= ENEMY01_SHIP_HIT_COUNT )
