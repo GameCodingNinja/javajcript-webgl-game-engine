@@ -14,7 +14,7 @@ All numbers below are starting values to tune in playtesting (`ENEMY01_*` in `ga
                  └────────────────────────────────────────────────────┘
 ```
 
-**Altitude:** it cruises **above the buildings and below the top of the screen** (y −110 to 230; the tallest building top is about −156). Its waypoints and charge stop point are in that band. It looks a quarter second ahead along its course and turns back in when it would leave the band, so even fast swoops don't overshoot far: it can swoop a little into the building area but never flies along there. It always stays fully below the HUD strip across the top of the screen (the radar bar, 66 px high), so it never disappears under it.
+**Altitude:** it cruises **above the buildings and below the top of the screen** (y −110 to 230; the tallest building top is about −156). Its waypoints and charge stop point are in that band. Its climb or dive is limited to what keeps it in the band a quarter second ahead, so it levels off smoothly near an edge and even fast swoops don't overshoot far: it can swoop a little into the building area but never flies along there. It steers away from the player ship when it gets within 220 px (harder the closer), so it doesn't run into it when it charges past or the player catches up with it. It always stays fully below the HUD strip across the top of the screen (the radar bar, 66 px high), so it never disappears under it.
 
 It always flies forward along its heading, turning at a limited rate, with its speed carried smoothly from one step to the next, so its paths are curves rather than straight lines. The nose (the art points right) faces its heading; the art is symmetrical, so flying upside down is fine.
 
@@ -30,7 +30,7 @@ It always flies forward along its heading, turning at a limited rate, with its s
 
 enemy01 is round, so it fires by spinning: the spin is what flings the missiles out. While it coasts to a stop:
 
-- **Spin up:** quickly, to **6 turns/s** over 0.3 s. After a charge it keeps following its stop point beside the ship while it spins (a ship flying away would otherwise leave it off the screen, where it can't fire); caught up while roaming, it coasts to a stop where it is.
+- **Spin up:** quickly, to **6 turns/s** over 0.3 s. After a charge it keeps following its stop point beside the ship while it spins (a ship flying away would otherwise leave it off the screen, where it can't fire); caught up while roaming, it coasts to a stop where it is, but backs off to its stop point beside the ship if the ship comes within 350 px (so a player flying up to it doesn't run into it).
 - **Only fires in view:** at full spin it waits up to 1.5 s (still spinning and following) to be in view, then fires.
 - **Fire:** at full spin, a volley of **5 missiles** flings out **at the same time**, **evenly spaced** around the ship (72° apart for 5, 90° for 4, 120° for 3), each from the rim and flying straight outward. The ring starts at the current spin angle, so it's rotated differently each time.
 - **Keeps spinning and firing:** it runs off right away, still spinning, and fires another volley while it's in view: the first **2.5 s** after the spin attack's volley, then **every 2 s** while the player chases it (see Run off). Once the spin is stopped it still fires **one missile** at the player every 2 s while in view.
@@ -74,7 +74,7 @@ A missile flung directly away from the player has to turn up to 180°, so the tu
 - **From level 2:** its spawn timer starts when `playerLevel` reaches 2 (`ENEMY01_LEVEL_THRESHOLD = 2`), the same way `MINI_BOSS_01_LEVEL_THRESHOLD` turns on mini-boss spawns in the level-up code.
 - **Own spawn timer** (20–50 s), separate from enemy00's.
 - **One at a time** (`MAX_ENEMY01 = 1`). When it dies the spawn timer starts over (a new 20–50 s) for the next one; one that's dying (falling off the screen) doesn't count.
-- **Boss and mini-boss battles:** it spawns during them too.
+- **Boss and mini-boss battles:** none spawn while a mini-boss is out or the boss battle is on (one that's already out stays), until the level reaches **15** (`ENEMY01_BATTLE_SPAWN_LEVEL`); from level 15 it spawns during them too. If the spawn timer runs out then, it starts another 20–50 s round.
 - The enemy00 spawn check subtracts the enemy01 count (`countEnemy01()`), so enemy01 doesn't use up an enemy00 slot.
 
 ## Sound
@@ -88,7 +88,7 @@ A missile flung directly away from the player has to turn up to 180°, so the tu
 Provided and already in `level1DataList.lst` and the sprite sheet (single frames):
 
 - **Ship:** `enemy01_ship` (`enemy01.png`, 150×175, nose points right; collision circle radius 75). Scaled to enemy00's size (`<scale x="0.35" y="0.35"/>` in its strategy node, about 52×61 on screen like enemy00's 50×62).
-- **Missile:** `enemy01_shot` (`projectile05-4.png`, 2-point collision line), `<scale x="1.5" y="1.5"/>` in its strategy node.
+- **Missile:** `enemy01_shot` (`enemy01_projectile.png`, 2-point collision line), `<scale x="1.5" y="1.5"/>` in its strategy node.
 
 ## How it's built
 

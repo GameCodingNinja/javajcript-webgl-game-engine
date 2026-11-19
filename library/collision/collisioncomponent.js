@@ -86,6 +86,9 @@ export class CollisionComponent
 
         if( this.radius == -1 )
             console.warn( `Radius has not been defined (${objectData.group}, ${objectData.name})!` );
+
+        // Radius in the object's own units. A circle's radius is scaled by the sprite (and parent) scale in transform().
+        this.baseRadius = this.radius;
     }
 
     // 
@@ -278,6 +281,13 @@ export class CollisionComponent
             {
                 for( this._i = 0; this._i < this.pointAry.length; ++this._i )
                     this.matrix.transformPoint( this.transPointAry[this._i], this.pointAry[this._i] );
+            }
+            else if( this.type === defs.ECT_CIRCLE )
+            {
+                // Scale the circle like the other shapes: the matrix's X axis length is the sprite's scale
+                // (including the parent's). Squared space, so the squared radius times the squared scale.
+                this._m = this.matrix.matrix;
+                this.radius = this.baseRadius * ((this._m[0] * this._m[0]) + (this._m[1] * this._m[1]) + (this._m[2] * this._m[2]));
             }
         }
     }

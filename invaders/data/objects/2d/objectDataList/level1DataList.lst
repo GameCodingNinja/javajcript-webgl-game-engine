@@ -347,12 +347,21 @@
             </collision>
         </object>
 
+        <object name="mini_boss_00_mine">
+            <visual>
+                <texture file="data/textures/enemyShip/mini_boss_00_mine.png"/>
+            </visual>
+            <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
+                <circle radius="5"/>
+            </collision>
+        </object>
+
         <object name="mini_boss_01_ship">
             <visual>
                 <texture file="data/textures/enemyShip/mini_boss_01_ship.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="25"/>
+                <circle radius="50"/>
             </collision>
         </object>
 
@@ -430,7 +439,7 @@
 
         <object name="enemy00_shot">
             <visual>
-                <texture count="2" file="data/textures/enemyShip/projectile_${NUM}.png"/>
+                <texture count="2" file="data/textures/enemyShip/enemy00_projectile_${NUM}.png"/>
             </visual>
             <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <circle radius="10"/>
@@ -454,13 +463,13 @@
                 <texture file="data/textures/enemyShip/enemy01.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="50"/>
+                <circle radius="143"/>
             </collision>
         </object>
 
         <object name="enemy01_shot">
             <visual>
-                <texture file="data/textures/enemyShip/projectile05-4.png"/>
+                <texture file="data/textures/enemyShip/enemy01_projectile.png"/>
             </visual>
             <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <pointList radiusFromVisual="true">
@@ -557,7 +566,7 @@
                 <texture count="2" file="data/textures/character/healthA_${NUM}.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="30"/>
+                <circle radius="60"/>
             </collision>
         </object>
 

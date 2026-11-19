@@ -6,6 +6,7 @@
 "use strict";
 
 import { scriptManager } from '../../../library/script/scriptmanager';
+import { strategyManager } from '../../../library/strategy/strategymanager';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
@@ -144,7 +145,7 @@ class AI_MiniBoss00_Descend extends aiNode
 }
 
 //
-//  DESC: AI Leaf (task) node script. Descend into the game
+//  DESC: AI Leaf (task) node script. Fly across the map, dropping mines in the path of a player chasing it
 //        The last node on the branch. Implements game specific tests or actions.
 //
 class AI_MiniBoss00_Go extends aiNode
@@ -156,6 +157,59 @@ class AI_MiniBoss00_Go extends aiNode
         this.sprite = sprite;
         this.state = defs.EAIS_INIT;
         this.easingX = new easing.valueTo;
+
+        this.playerShipStrategy = strategyManager.get('_player_ship_');
+        this.enemyShotStrategy = strategyManager.get('_enemy_shot_');
+        this.camera = this.playerShipStrategy.camera;
+        this.mineTime = 0;
+        this.playerLastY = null;
+        this.playerVelY = 0;
+    }
+
+    // 
+    //  DESC: Drop a mine behind it every so often while the player chases it: the player is alive, behind it,
+    //        close and lined up, and it's in view (not while it's dying). Each mine is thrown to the height the player ship is
+    //        heading for (its vertical speed, smoothed, MINI_BOSS_00_MINE_LEAD ahead), so it's in its path.
+    //
+    dropMines()
+    {
+        if( highResTimer.elapsedTime <= 0 )
+            return;
+
+        // Track the player ship's vertical speed (px/s, smoothed)
+        this._playerShipSprite = this.playerShipStrategy.get('player_ship').get();
+
+        // Dying (its collision is disabled when it's shot down): no more mines
+        if( !this.sprite.collisionComponent.enable )
+            return;
+
+        if( this.playerLastY !== null )
+            this.playerVelY = (this.playerVelY * 0.8) + (0.2 * (this._playerShipSprite.pos.y - this.playerLastY) * 1000 / highResTimer.elapsedTime);
+        this.playerLastY = this._playerShipSprite.pos.y;
+
+        this.mineTime -= highResTimer.elapsedTime;
+        if( this.mineTime > 0 )
+            return;
+        this._dirX = (this.sprite.rot.y > 1) ? -1 : 1;
+        this._behindX = -genFunc.wrapDelta( this._playerShipSprite.pos.x - this.sprite.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 ) * this._dirX;
+
+        if( this._playerShipSprite.collisionComponent.enable &&
+            this._behindX > 0 && this._behindX < gameDefs.MINI_BOSS_00_MINE_TRIGGER_DIST &&
+            Math.abs( this._playerShipSprite.pos.y - this.sprite.pos.y ) < gameDefs.MINI_BOSS_00_MINE_TRIGGER_Y &&
+            this.camera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 ) )
+        {
+            // Where the player ship is heading, kept in its height range
+            this._targetY = this._playerShipSprite.pos.y + (this.playerVelY * gameDefs.MINI_BOSS_00_MINE_LEAD) +
+                genFunc.randomInt( -gameDefs.MINI_BOSS_00_MINE_SCATTER, gameDefs.MINI_BOSS_00_MINE_SCATTER );
+            this._targetY = Math.min( Math.max( this._targetY, gameDefs.MINI_BOSS_00_MINE_BOTTOM_Y ), gameDefs.MINI_BOSS_00_MINE_TOP_Y );
+
+            // Leaves with the ship's speed (px/s)
+            this._mineSprite = this.enemyShotStrategy.create('mini_boss_00_mine').get();
+            this._mineSprite.scriptComponent.prepare( 'shoot', this._mineSprite, this.sprite,
+                this.easingX.getValue() * highResTimer.timeScale * 1000 / highResTimer.elapsedTime, this._targetY );
+
+            this.mineTime = genFunc.randomInt( gameDefs.MINI_BOSS_00_MINE_INTERVAL_MIN, gameDefs.MINI_BOSS_00_MINE_INTERVAL_MAX );
+        }
     }
 
     // 
@@ -177,6 +231,9 @@ class AI_MiniBoss00_Go extends aiNode
     {
         this.state = defs.EAIS_INIT;
         this.easingX.clear();
+        this.mineTime = 0;
+        this.playerLastY = null;
+        this.playerVelY = 0;
     }
     
     // 
@@ -195,6 +252,8 @@ class AI_MiniBoss00_Go extends aiNode
         {
             this.easingX.execute();
             this.sprite.incPosXYZ( this.easingX.getValue() * highResTimer.timeScale );
+
+            this.dropMines();
 
             // Loop the player strategy and camera
             if( this.sprite.pos.x < -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST + 50) )

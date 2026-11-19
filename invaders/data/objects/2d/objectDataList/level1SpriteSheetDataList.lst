@@ -525,6 +525,19 @@
             </collision>
         </object>
 
+        <object name="mini_boss_00_mine">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="mini_boss_00_mine"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
+                <circle radius="5"/>
+            </collision>
+        </object>
+
         <object name="mini_boss_01_ship">
             <visual>
                 <mesh>
@@ -534,7 +547,7 @@
                 </mesh>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="25"/>
+                <circle radius="50"/>
             </collision>
         </object>
 
@@ -626,8 +639,8 @@
             <visual>
                 <mesh>
                     <spriteSheet>
-                        <glyph id="projectile_0"/>
-                        <glyph id="projectile_1"/>
+                        <glyph id="enemy00_projectile_0"/>
+                        <glyph id="enemy00_projectile_1"/>
                     </spriteSheet>
                 </mesh>
             </visual>
@@ -662,7 +675,7 @@
                 </mesh>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="50"/>
+                <circle radius="143"/>
             </collision>
         </object>
 
@@ -670,7 +683,7 @@
             <visual>
                 <mesh>
                     <spriteSheet>
-                        <glyph id="projectile05-4"/>
+                        <glyph id="enemy01_projectile"/>
                     </spriteSheet>
                 </mesh>
             </visual>
@@ -807,7 +820,7 @@
                 </mesh>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
-                <circle radius="30"/>
+                <circle radius="60"/>
             </collision>
         </object>
 

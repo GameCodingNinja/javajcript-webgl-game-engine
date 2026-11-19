@@ -155,22 +155,51 @@ class AI_Enemy01_base extends aiNode
 
     // 
     //  DESC: Adjust a wanted heading to keep the cruise band (above the buildings, below the top of the
-    //        screen): when it would leave the band within ENEMY01_BAND_LOOKAHEAD at its current
-    //        heading and speed, and isn't already heading back, it climbs or dives back in. Looking
-    //        ahead turns it early enough that a fast swoop doesn't overshoot far. Turning at the normal
-    //        rate makes it a swoop: it can dip into the building area, but doesn't stay there.
+    //        screen): the climb (or dive) is limited to what keeps it in the band ENEMY01_BAND_LOOKAHEAD
+    //        ahead at its speed, so it levels off smoothly as it nears an edge (early enough that a fast
+    //        swoop doesn't overshoot far), and out of the band it climbs or dives back in at up to about
+    //        30 degrees. A smooth limit, not an on/off switch: switching made the heading flip back and
+    //        forth every frame near the edge (jerky once it wasn't spinning to hide it).
     //
     bandAngle( angle )
     {
-        this._lookY = this.sprite.pos.y + (Math.sin( this.sprite.heading ) * this.sprite.speed * gameDefs.ENEMY01_BAND_LOOKAHEAD);
+        // Every wanted heading comes through here: keep clear of the player ship first
+        angle = this.avoidShip( angle );
 
-        if( this._lookY < gameDefs.ENEMY01_MIN_Y && Math.sin( angle ) < 0.5 )
-            return Math.atan2( 0.6, (Math.cos( angle ) < 0) ? -1 : 1 );
+        this._reach = Math.max( this.sprite.speed * gameDefs.ENEMY01_BAND_LOOKAHEAD, 1 );
+        this._maxSin = (gameDefs.ENEMY01_MAX_Y - this.sprite.pos.y) / this._reach;
+        this._minSin = (gameDefs.ENEMY01_MIN_Y - this.sprite.pos.y) / this._reach;
+        this._sin = Math.sin( angle );
 
-        if( this._lookY > gameDefs.ENEMY01_MAX_Y && Math.sin( angle ) > -0.5 )
-            return Math.atan2( -0.6, (Math.cos( angle ) < 0) ? -1 : 1 );
+        if( this._sin > this._maxSin )
+            this._sin = Math.max( this._maxSin, -0.5 );
+        else if( this._sin < this._minSin )
+            this._sin = Math.min( this._minSin, 0.5 );
+        else
+            return angle;
 
-        return angle;
+        this._sin = Math.min( Math.max( this._sin, -1 ), 1 );
+
+        return Math.atan2( this._sin, ((Math.cos( angle ) < 0) ? -1 : 1) * Math.sqrt( 1 - (this._sin * this._sin) ) );
+    }
+
+    // 
+    //  DESC: Bend a wanted heading away from the player ship when it's within ENEMY01_SHIP_CLEAR_DIST,
+    //        harder the closer it is, so it doesn't run into the ship (charging past it, or the player
+    //        catching up with it as it flees)
+    //
+    avoidShip( angle )
+    {
+        this._shipDX = this.shipDeltaX();
+        this._shipDY = this.data.playerShipSprite.pos.y - this.sprite.pos.y;
+        this._shipDist = Math.sqrt( (this._shipDX * this._shipDX) + (this._shipDY * this._shipDY) );
+
+        if( this._shipDist >= gameDefs.ENEMY01_SHIP_CLEAR_DIST || this._shipDist < 1 )
+            return angle;
+
+        this._push = 2 * (1 - (this._shipDist / gameDefs.ENEMY01_SHIP_CLEAR_DIST)) / this._shipDist;
+
+        return Math.atan2( Math.sin( angle ) - (this._push * this._shipDY), Math.cos( angle ) - (this._push * this._shipDX) );
     }
 
     // 
@@ -668,7 +697,14 @@ class AI_Enemy01_Spin extends AI_Enemy01_base
 
         if( this.state === defs.EAIS_ACTIVE )
         {
-            // After a charge, keep following the stop point beside the ship. Caught up (attackSide 0), coast to a stop where it is.
+            // Caught up (attackSide 0): coast to a stop where it is, unless the ship comes within the stop distance
+            // (the player flew up to it): then back off to the stop point on its side, so the ship doesn't run into it
+            if( this.sprite.attackSide === 0 &&
+                Math.abs( this.shipDeltaX() ) < gameDefs.ENEMY01_CHARGE_STOP_DIST &&
+                Math.abs( this.data.playerShipSprite.pos.y - this.sprite.pos.y ) < gameDefs.ENEMY01_CHARGE_STOP_DIST )
+                this.sprite.attackSide = (this.shipDeltaX() > 0) ? -1 : 1;
+
+            // After a charge (or backing off), keep following the stop point beside the ship
             if( this.sprite.attackSide !== 0 )
             {
                 this.steerToStopPoint();
@@ -795,7 +831,9 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
             {
                 // Dodging: a quick jink up or down
                 this.dodgeTime -= highResTimer.elapsedTime;
-                this.faceAngle( this.bandAngle( this.fleeHeading( this.dodgeUp ? gDodgeAngle : -gDodgeAngle ) ), gDodgeTurnRate );
+                // A sharp jink while it spins (the spin hides it), a smoother one once the spin is stopped
+                this.faceAngle( this.bandAngle( this.fleeHeading( this.dodgeUp ? gDodgeAngle : -gDodgeAngle ) ),
+                    this.sprite.spinning ? gDodgeTurnRate : gFleeTurnRate );
             }
             else
             {

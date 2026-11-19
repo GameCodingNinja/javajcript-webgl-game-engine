@@ -137,6 +137,7 @@ Sound playback is managed by `soundManager` with per-type enable/disable via `se
 - `checkForCollision( nodeAry, checkChildren = false )` tests the sprites of the top-level nodes in `nodeAry` and returns the first one hit (broadcasting the collision signal). With `checkChildren = true` it also recurses into each node's child nodes, so a child sprite with collision data (e.g. a shield that's a child of the player ship) can be hit. It's opt-in because it walks every child of every node on each check.
 - Child nodes inherit the head node's `userId` (a child's own `id` attribute is ignored), so a collision callback has to tell a child hit apart by the sprite itself.
 - Child sprites collide in world space: their `transPos` and collision matrix include the parent's transform.
+- Every shape scales with the sprite, including a `<circle>`: `transform()` scales its radius (`baseRadius`, the object's own units, squared) by the matrix scale (the sprite's and its parents'). So a circle radius is in the art's own pixels, like the other shapes' points. Before, circles didn't scale.
 
 ## Wrap-Around (looping) Worlds
 - `genFunc.wrapDelta( delta, span )` (utilities/genfunc.js): shortest delta to the nearest copy of a target on a looping axis, between -span/2 and span/2. `span` is the full loop length (2 × the wrap distance). Wrap-aware distance is `Math.abs( wrapDelta( x1 - x2, span ) )`.

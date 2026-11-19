@@ -83,6 +83,7 @@ const MOVE_NULL = -1,
       ENEMY01_SHIP_HIT_COUNT = 3,
       ENEMY01_RAM_COOLDOWN = 500,
       ENEMY01_LEVEL_THRESHOLD = 2,
+      ENEMY01_BATTLE_SPAWN_LEVEL = 15,      // From this level enemy01 also spawns while a mini-boss or the boss is out
       ENEMY01_SPAWN_TIME_MIN = 20000,
       ENEMY01_SPAWN_TIME_MAX = 50000,
       MAX_ENEMY01 = 1,
@@ -598,6 +599,18 @@ export class Level1State extends CommonState
 
                     this.groupPlayer.play( 'EXPLOSION_Metllic' );
                 }
+            }
+            // Player hit by a mini_boss_00 mine
+            else if( spriteA.parentNode.userId == gameDefs.MINI_BOSS_00_MINE_ID )
+            {
+                spriteB.prepareScript( 'hit', spriteA );
+                if( GOD_MODE == false && !this._shieldHit )
+                {
+                    this.playerShip.progressBar.incCurrentValue( -gameDefs.MINI_BOSS_00_MINE_DAMAGE );
+                    this.playerShip.progressBar.setVisible( true );
+                }
+                spriteA.prepareScript( 'hit' );
+                this.groupPlayer.play( 'player_hit' );
             }
             // Player hit by an enemy01 missile
             else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHOT_ID )
@@ -1642,14 +1655,16 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
-        // Create enemy01 (from level ENEMY01_LEVEL_THRESHOLD, also during boss and mini-boss battles). Its AI
-        // positions it above the screen. One at a time: if it expires while one is out, the timer just goes
-        // round again, and when that one dies the timer restarts (collisionCallBack()).
+        // Create enemy01 (from level ENEMY01_LEVEL_THRESHOLD). Its AI positions it above the screen.
+        // One at a time, and none while a mini-boss or the boss is out until the level reaches
+        // ENEMY01_BATTLE_SPAWN_LEVEL: if it expires then, the timer just goes round again.
+        // When an enemy01 dies the timer restarts (collisionCallBack()).
         if( this.enemy01SpawnTimer.expired(true) )
         {
             this.enemy01SpawnTimer.reset( genFunc.randomInt( ENEMY01_SPAWN_TIME_MIN, ENEMY01_SPAWN_TIME_MAX ) );
 
-            if( this.countEnemy01() < MAX_ENEMY01 )
+            if( (this.playerLevel >= ENEMY01_BATTLE_SPAWN_LEVEL || (!this.bossBattleActive && !this.isMiniBossActive())) &&
+                this.countEnemy01() < MAX_ENEMY01 )
             {
                 this._node = this.enemyStrategy.create('enemy01_ship');
                 this._node.get().setPosXYZ(0, settings.deviceRes.h);
@@ -1733,27 +1748,26 @@ export class Level1State extends CommonState
         else if(this.healthSpawnTimer.expired( false, false ))
         {
             this._buildings = this.buildingsStrategy.nodeAry;
-            this._enemies = this.enemyStrategy.nodeAry;
 
-            this.groupPlayer.play( 'health_char_spawn' );
+            // Pick a random building out of the free ones (not targeted, not destroyed)
+            this._freeCount = 0;
+            for( this._j = 0; this._j < this._buildings.length; ++this._j )
+                if( this.isBuildingFree( this._buildings[this._j].get() ) )
+                    this._freeCount++;
 
-            this._index = genFunc.randomInt( 0, this._buildings.length-1 );
-            this._targetBuilding = this._buildings[this._index].get();
-
-            // See if the building is already targeted
-            this._freeBuildingFound = true;
-            for( this._i = 0; this._i < this._enemies.length; ++this._i )
+            // If none are free, we'll try again next time
+            if( this._freeCount > 0 )
             {
-                if( this._enemies[this._i].get().targetBuilding === this._targetBuilding )
+                this._index = genFunc.randomInt( 0, this._freeCount-1 );
+                for( this._j = 0; this._j < this._buildings.length; ++this._j )
                 {
-                    this._freeBuildingFound = false;
-                    break;
+                    this._targetBuilding = this._buildings[this._j].get();
+                    if( this.isBuildingFree( this._targetBuilding ) && (this._index-- === 0) )
+                        break;
                 }
-            }
 
-            // If not found, we'll try again next time
-            if( this._freeBuildingFound )
-            {
+                this.groupPlayer.play( 'health_char_spawn' );
+
                 this._helpSprite = this.enemyStrategy.create('help').get();
                 this._healthSprite = this.enemyStrategy.create('health_character').get();
                 this._healthSprite.targetBuilding = this._targetBuilding;
@@ -1766,6 +1780,23 @@ export class Level1State extends CommonState
                 this._helpSprite.setPosXYZ(this._healthSprite.pos.x, this._healthSprite.pos.y + 90);
             }
         }
+    }
+
+    // 
+    //  DESC: Is the building free for the health character? Not destroyed (a destroyed building
+    //        stays in the strategy while it sinks, after the enemy has let go of it) and not
+    //        targeted by an enemy
+    //
+    isBuildingFree( building )
+    {
+        if( building.destroyed !== undefined )
+            return false;
+
+        for( this._i = 0; this._i < this.enemyStrategy.nodeAry.length; ++this._i )
+            if( this.enemyStrategy.nodeAry[this._i].get().targetBuilding === building )
+                return false;
+
+        return true;
     }
 
     // 
@@ -1783,6 +1814,21 @@ export class Level1State extends CommonState
         }
 
         return this._enemy01Count;
+    }
+
+    // 
+    //  DESC: Is a mini-boss out?
+    //
+    isMiniBossActive()
+    {
+        for( this._i = 0; this._i < this.enemyStrategy.nodeAry.length; ++this._i )
+        {
+            if( this.enemyStrategy.nodeAry[this._i].userId === gameDefs.MINI_BOSS_00_SHIP_ID ||
+                this.enemyStrategy.nodeAry[this._i].userId === gameDefs.MINI_BOSS_01_SHIP_ID )
+                return true;
+        }
+
+        return false;
     }
 
     // 
