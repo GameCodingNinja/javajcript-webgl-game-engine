@@ -35,14 +35,14 @@ import * as menuDefs from '../../../library/gui/menudefs';
 import * as touchevent from '../../../library/common/touchevent';
 import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
-import * as enemy00aiscripts from '../scripts/enemy00aiscripts';
-import * as enemy01aiscripts from '../scripts/enemy01aiscripts';
+import * as wreck00aiscripts from '../scripts/wreck00aiscripts';
+import * as pest00aiscripts from '../scripts/pest00aiscripts';
 import * as miniboss01aiscripts from '../scripts/miniboss01aiscripts';
 import * as boss00aiscripts from '../scripts/boss00aiscripts';
 
-// AI_Enemy00 AI_Enemy01 AI_MiniBoss00 AI_MiniBoss01
-import enemy00_ai from 'raw-loader!../../data/objects/ai/enemy00.ai';
-import enemy01_ai from 'raw-loader!../../data/objects/ai/enemy01.ai';
+// AI_Wreck00 AI_Pest00 AI_MiniBoss00 AI_MiniBoss01
+import wreck00_ai from 'raw-loader!../../data/objects/ai/wreck00.ai';
+import pest00_ai from 'raw-loader!../../data/objects/ai/pest00.ai';
 import mini_boss_00_ai from 'raw-loader!../../data/objects/ai/mini_boss_00.ai';
 import mini_boss_01_ai from 'raw-loader!../../data/objects/ai/mini_boss_01.ai';
 import boss00_ai from 'raw-loader!../../data/objects/ai/boss00.ai';
@@ -59,9 +59,9 @@ const MOVE_NULL = -1,
       PLAYER_SHIP_TOP_SPEED = 12,
       PLAYER_SHIP_BOOST_TOP_SPEED = 16,
       MAX_CLOUDS = 8,
-      ENEMY00_SHOT_ID = -2,
+      WRECK00_SHOT_ID = -2,
       HEALTH_CHARACTER = -50,
-      ENEMY00_SHIP_HIT_VALUE = 1,
+      WRECK00_SHIP_HIT_VALUE = 1,
       MINI_BOSS_00_SHIP_HIT_VALUE = 5,
       MINI_BOSS_01_SHIP_HIT_VALUE = 3,
       MINI_BOSS_00_INITIAL_SHIP_HIT_COUNT = 30,
@@ -70,30 +70,30 @@ const MOVE_NULL = -1,
       MINI_BOSS_01_INITIAL_SHIP_HIT_COUNT = 10,
       MINI_BOSS_01_MAX_SHIP_HIT_COUNT = 60,
       MINI_BOSS_01_SHIP_HIT_INC = 5,
-      ENEMY00_SHIP_HIT_COUNT = 3,
-      ENEMY00_RAM_COOLDOWN = 500,
-      ENEMY00_SHOT_DAMAGE = 10,             // Player ship damage (health is 100, DEFAULT_SHIP_PROGRESS_BAR_VALUE)
-      ENEMY00_AGGRESSIVE_SHOT_DAMAGE = 20,
-      ENEMY00_RAM_DAMAGE = 15,
-      ENEMY01_RAM_DAMAGE = 15,
+      WRECK00_SHIP_HIT_COUNT = 3,
+      WRECK00_RAM_COOLDOWN = 500,
+      WRECK00_SHOT_DAMAGE = 10,             // Player ship damage (health is 100, DEFAULT_SHIP_PROGRESS_BAR_VALUE)
+      WRECK00_AGGRESSIVE_SHOT_DAMAGE = 20,
+      WRECK00_RAM_DAMAGE = 15,
+      PEST00_RAM_DAMAGE = 15,
       MINI_BOSS_RAM_DAMAGE = 15,
       BOSS00_RAM_DAMAGE = 15,
       HEALTH_CHARACTER_HEAL = 30,
-      BUILDING_SAVE_BONUS = 2,              // Extra points for killing an enemy00 while it's attacking a building
+      BUILDING_SAVE_BONUS = 2,              // Extra points for killing an wreck00 while it's attacking a building
       BUILDING_SAVE_HEAL = 10,              // Player health for the save
-      ENEMY01_SHIP_HIT_VALUE = 2,
-      ENEMY01_SHIP_HIT_COUNT = 3,
-      ENEMY01_RAM_COOLDOWN = 500,
-      ENEMY01_LEVEL_THRESHOLD = 2,
-      ENEMY01_BATTLE_SPAWN_LEVEL = 15,      // From this level enemy01 also spawns while a mini-boss or the boss is out
-      ENEMY01_SPAWN_TIME_MIN = 20000,
-      ENEMY01_SPAWN_TIME_MAX = 50000,
-      MAX_ENEMY01 = 1,
+      PEST00_SHIP_HIT_VALUE = 2,
+      PEST00_SHIP_HIT_COUNT = 3,
+      PEST00_RAM_COOLDOWN = 500,
+      PEST00_LEVEL_THRESHOLD = 2,
+      PEST00_BATTLE_SPAWN_LEVEL = 15,      // From this level pest00 also spawns while a mini-boss or the boss is out
+      PEST00_SPAWN_TIME_MIN = 20000,
+      PEST00_SPAWN_TIME_MAX = 50000,
+      MAX_PEST00 = 1,
       BOSS00_SHIP_HIT_VALUE = 10,
       MINI_BOSS_00_LEVEL_THRESHOLD = 5,
       MINI_BOSS_01_LEVEL_THRESHOLD = 3,
-      MAX_ENEMY00 = 30,
-      MIN_ENEMY00 = 5,
+      MAX_WRECK00 = 30,
+      MIN_WRECK00 = 5,
       HEALTH_CHAR_THRESHOLD = 3,
       CLOUD_MIN_Y = -150,
       CLOUD_MAX_Y = 300,
@@ -362,25 +362,25 @@ export class Level1State extends CommonState
         this.slowHealTimer = null;
         this.musicTimer = new Timer((1000 * 60 * 5));
 
-        this.enemy00SpawnTimer = new Timer(1000 * 2.5);
+        this.wreck00SpawnTimer = new Timer(1000 * 2.5);
         this.miniBossSpawnTimer = new Timer(genFunc.randomInt( (1000 * 30), (1000 * 130)));
         this.miniBossSpawnTimer.disable();
         this.lastMiniBossType = '';
         this.miniBossStreakCount = 0;
         this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 60)));
         this.healthSpawnTimer.disable();
-        this.enemy00MaxTimer = new Timer(1000 * 20);
-        this.enemy00Max = MIN_ENEMY00;
-        this.enemy01SpawnTimer = new Timer(genFunc.randomInt( ENEMY01_SPAWN_TIME_MIN, ENEMY01_SPAWN_TIME_MAX ));
-        this.enemy01SpawnTimer.disable();
+        this.wreck00MaxTimer = new Timer(1000 * 20);
+        this.wreck00Max = MIN_WRECK00;
+        this.pest00SpawnTimer = new Timer(genFunc.randomInt( PEST00_SPAWN_TIME_MIN, PEST00_SPAWN_TIME_MAX ));
+        this.pest00SpawnTimer.disable();
 
         // The boss battle takes the place of the next mini-boss once the player has fought both mini-bosses
         this.foughtMiniBoss00 = false;
         this.foughtMiniBoss01 = false;
 
-        // Boss battle in progress (boss music plays instead of the game music, enemy00 spawns slower)
+        // Boss battle in progress (boss music plays instead of the game music, wreck00 spawns slower)
         this.bossBattleActive = false;
-        this.enemy00BossSpawnTick = 0;
+        this.wreck00BossSpawnTick = 0;
 
         // Boss head sprite, and whether the screen is locked because the boss is in view (see handleBossScreenLock())
         this.bossSprite = null;
@@ -411,11 +411,11 @@ export class Level1State extends CommonState
         // The game start menu is up (first start and restart): the spawn timers don't run until it
         // closes (resumed in the EME_MENU_TRANS_OUT handler). Disabled timers ignore pause; they're
         // enabled during gameplay.
-        this.enemy00SpawnTimer.pause();
+        this.wreck00SpawnTimer.pause();
         this.miniBossSpawnTimer.pause();
         this.healthSpawnTimer.pause();
-        this.enemy00MaxTimer.pause();
-        this.enemy01SpawnTimer.pause();
+        this.wreck00MaxTimer.pause();
+        this.pest00SpawnTimer.pause();
         this.train.timer.pause();
     }
 
@@ -441,8 +441,8 @@ export class Level1State extends CommonState
         this.groupPlayer.play( 'player_thrust', true );
         this.groupPlayer.pause( 'player_thrust' );
 
-        enemy00aiscripts.clearAIData();
-        enemy01aiscripts.clearAIData();
+        wreck00aiscripts.clearAIData();
+        pest00aiscripts.clearAIData();
         miniboss01aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_enemy_shot_','_player_ship_','_train_'] );
@@ -537,7 +537,7 @@ export class Level1State extends CommonState
     //
     collisionCallBack( spriteA, spriteB )
     {
-        // The shield was hit: handled like a hit on the player ship (projectile hit, enemy00 hit/die, score,
+        // The shield was hit: handled like a hit on the player ship (projectile hit, wreck00 hit/die, score,
         // ram cooldown), except the ship takes no damage and there's no explosion, just the impact sound
         // (the shield is a child of the player ship node, so it has the ship's userId: compare the sprite)
         this._shieldHit = (spriteB === this.playerShip.shieldSprite);
@@ -549,16 +549,16 @@ export class Level1State extends CommonState
         {
             spriteA.collisionComponent.enable = false;
 
-            // Player hit by enemy00 projectile
-            if( spriteA.parentNode.userId == ENEMY00_SHOT_ID )
+            // Player hit by wreck00 projectile
+            if( spriteA.parentNode.userId == WRECK00_SHOT_ID )
             {
                 if( GOD_MODE == false && !this._shieldHit )
                 {
                     // Was player hit by an aggressive shot? Takes more damage
                     if(spriteA.visualComponent.frameIndex == 1)
-                        this.playerShip.progressBar.incCurrentValue( -ENEMY00_AGGRESSIVE_SHOT_DAMAGE );
+                        this.playerShip.progressBar.incCurrentValue( -WRECK00_AGGRESSIVE_SHOT_DAMAGE );
                     else
-                        this.playerShip.progressBar.incCurrentValue( -ENEMY00_SHOT_DAMAGE );
+                        this.playerShip.progressBar.incCurrentValue( -WRECK00_SHOT_DAMAGE );
                     this.playerShip.progressBar.setVisible( true );
                 }
                 this.playerHitEffect( spriteA, 'player_hit' );
@@ -575,21 +575,21 @@ export class Level1State extends CommonState
                 this.playerHitEffect( spriteA, 'player_hit' );
                 spriteA.prepareScript( 'hit' );
             }
-            // Player collides into enemy00
-            else if( spriteA.parentNode.userId == gameDefs.ENEMY00_SHIP_ID )
+            // Player collides into wreck00
+            else if( spriteA.parentNode.userId == gameDefs.WRECK00_SHIP_ID )
             {
-                // Re-enable collision for enemy00 for the aggressive type
+                // Re-enable collision for wreck00 for the aggressive type
                 spriteA.collisionComponent.enable = true;
 
-                // Each enemy00 has its own short ram cooldown (not the shared playerShip.collisionTimer), so one ram
+                // Each wreck00 has its own short ram cooldown (not the shared playerShip.collisionTimer), so one ram
                 // counts once (the collision repeats every frame of contact) without blocking hits on other enemies
-                if( performance.now() - spriteA.ramTime > ENEMY00_RAM_COOLDOWN )
+                if( performance.now() - spriteA.ramTime > WRECK00_RAM_COOLDOWN )
                 {
                     spriteA.ramTime = performance.now();
 
                     if( GOD_MODE == false && !this._shieldHit )
                     {
-                        this.playerShip.progressBar.incCurrentValue( -ENEMY00_RAM_DAMAGE );
+                        this.playerShip.progressBar.incCurrentValue( -WRECK00_RAM_DAMAGE );
                         this.playerShip.progressBar.setVisible( true );
                     }
 
@@ -602,15 +602,15 @@ export class Level1State extends CommonState
                     {
                         spriteA.collisionComponent.enable = false;
                         spriteA.prepareScript( 'die', spriteB );
-                        this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
+                        this.updateHudProgress( WRECK00_SHIP_HIT_VALUE );
                     }
                     // In aggressive mode (frame 1), takes multiple shots to kill
-                    else if( spriteA.hitCount == ENEMY00_SHIP_HIT_COUNT )
+                    else if( spriteA.hitCount == WRECK00_SHIP_HIT_COUNT )
                     {
                         this._saveBonus = this.buildingSaveBonus( spriteA );   // before the die script lets go of the building
                         spriteA.collisionComponent.enable = false;
                         spriteA.prepareScript( 'die', spriteB );
-                        this.updateHudProgress( (ENEMY00_SHIP_HIT_VALUE * 2) + this._saveBonus );
+                        this.updateHudProgress( (WRECK00_SHIP_HIT_VALUE * 2) + this._saveBonus );
                     }
 
                     this.playerHitEffect( spriteA, 'EXPLOSION_Metllic' );
@@ -627,35 +627,35 @@ export class Level1State extends CommonState
                 this.playerHitEffect( spriteA, 'player_hit' );
                 spriteA.prepareScript( 'hit' );
             }
-            // Player hit by an enemy01 missile
-            else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHOT_ID )
+            // Player hit by an pest00 missile
+            else if( spriteA.parentNode.userId == gameDefs.PEST00_SHOT_ID )
             {
                 if( GOD_MODE == false && !this._shieldHit )
                 {
-                    this.playerShip.progressBar.incCurrentValue( -gameDefs.ENEMY01_MISSILE_DAMAGE );
+                    this.playerShip.progressBar.incCurrentValue( -gameDefs.PEST00_MISSILE_DAMAGE );
                     this.playerShip.progressBar.setVisible( true );
                 }
                 this.playerHitEffect( spriteA, 'player_hit' );
                 spriteA.prepareScript( 'hit' );
             }
-            // Player collides into enemy01
-            else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHIP_ID )
+            // Player collides into pest00
+            else if( spriteA.parentNode.userId == gameDefs.PEST00_SHIP_ID )
             {
-                // Keep enemy01 collidable (the top of this branch disabled it)
+                // Keep pest00 collidable (the top of this branch disabled it)
                 spriteA.collisionComponent.enable = true;
 
-                // Its own short ram cooldown, like enemy00, so one ram counts once
-                if( performance.now() - spriteA.ramTime > ENEMY01_RAM_COOLDOWN )
+                // Its own short ram cooldown, like wreck00, so one ram counts once
+                if( performance.now() - spriteA.ramTime > PEST00_RAM_COOLDOWN )
                 {
                     spriteA.ramTime = performance.now();
 
                     if( GOD_MODE == false && !this._shieldHit )
                     {
-                        this.playerShip.progressBar.incCurrentValue( -ENEMY01_RAM_DAMAGE );
+                        this.playerShip.progressBar.incCurrentValue( -PEST00_RAM_DAMAGE );
                         this.playerShip.progressBar.setVisible( true );
                     }
 
-                    // A ram only damages the player ship, never enemy01
+                    // A ram only damages the player ship, never pest00
 
                     this.playerHitEffect( spriteA, 'EXPLOSION_Metllic' );
                 }
@@ -723,13 +723,13 @@ export class Level1State extends CommonState
                 this.playerShip.sprite.prepareScript( 'die' );
             }
         }
-        // Player shot enemy00 ship
-        else if( spriteB.parentNode.userId == gameDefs.ENEMY00_SHIP_ID )
+        // Player shot wreck00 ship
+        else if( spriteB.parentNode.userId == gameDefs.WRECK00_SHIP_ID )
         {
             // Stop any more collision detection for the shot
             spriteA.collisionComponent.enable = false;
 
-            // Re-enable collision for enemy00 for the aggressive type
+            // Re-enable collision for wreck00 for the aggressive type
             spriteB.collisionComponent.enable = true;
 
             // Execute the scripts that handle being hit
@@ -742,21 +742,21 @@ export class Level1State extends CommonState
             {
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die', spriteA );
-                this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE );
+                this.updateHudProgress( WRECK00_SHIP_HIT_VALUE );
             }
             // In aggressive mode (frame 1), takes multiple shots to kill
-            else if( spriteB.hitCount == ENEMY00_SHIP_HIT_COUNT )
+            else if( spriteB.hitCount == WRECK00_SHIP_HIT_COUNT )
             {
                 this._saveBonus = this.buildingSaveBonus( spriteB );   // before the die script lets go of the building
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die', spriteA );
-                this.updateHudProgress( (ENEMY00_SHIP_HIT_VALUE * 2) + this._saveBonus );
+                this.updateHudProgress( (WRECK00_SHIP_HIT_VALUE * 2) + this._saveBonus );
             }
 
             this.groupPlayer.play( 'enemy_explosion' );
         }
-        // Player shot enemy01 ship
-        else if( spriteB.parentNode.userId == gameDefs.ENEMY01_SHIP_ID )
+        // Player shot pest00 ship
+        else if( spriteB.parentNode.userId == gameDefs.PEST00_SHIP_ID )
         {
             // Stop any more collision detection for the shot
             spriteA.collisionComponent.enable = false;
@@ -765,26 +765,26 @@ export class Level1State extends CommonState
             spriteB.prepareScript( 'hit', spriteA );
 
             // Spinning (spin attack and flee): the hit doesn't count, it slows the spin a step (fewer missiles
-            // per volley), and enough of them stop the spin (the flee stops it, AI_Enemy01_Flee)
+            // per volley), and enough of them stop the spin (the flee stops it, AI_Pest00_Flee)
             if( spriteB.spinning )
             {
-                if( ++spriteB.spinHitCount >= gameDefs.ENEMY01_MISSILES_MAX )
+                if( ++spriteB.spinHitCount >= gameDefs.PEST00_MISSILES_MAX )
                 {
                     spriteB.spinning = false;
                     spriteB.knockedOut = true;
 
                     // The player shot its spin to a stop: one more hit kills it
-                    spriteB.hitCount = ENEMY01_SHIP_HIT_COUNT - 1;
+                    spriteB.hitCount = PEST00_SHIP_HIT_COUNT - 1;
                 }
             }
-            else if( ++spriteB.hitCount >= ENEMY01_SHIP_HIT_COUNT )
+            else if( ++spriteB.hitCount >= PEST00_SHIP_HIT_COUNT )
             {
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die', spriteA );
-                this.updateHudProgress( ENEMY01_SHIP_HIT_VALUE );
+                this.updateHudProgress( PEST00_SHIP_HIT_VALUE );
 
-                // The spawn timer for the next enemy01 starts when this one dies
-                this.enemy01SpawnTimer.reset( genFunc.randomInt( ENEMY01_SPAWN_TIME_MIN, ENEMY01_SPAWN_TIME_MAX ) );
+                // The spawn timer for the next pest00 starts when this one dies
+                this.pest00SpawnTimer.reset( genFunc.randomInt( PEST00_SPAWN_TIME_MIN, PEST00_SPAWN_TIME_MAX ) );
             }
 
             this.groupPlayer.play( 'enemy_explosion' );
@@ -1096,12 +1096,12 @@ export class Level1State extends CommonState
                         this.touchShieldHeld = false;
 
                         this.musicTimer.pause();
-                        this.enemy00SpawnTimer.pause();
+                        this.wreck00SpawnTimer.pause();
                         this.miniBossSpawnTimer.pause();
                         this.train.timer.pause();
                         this.healthSpawnTimer.pause();
-                        this.enemy00MaxTimer.pause();
-                        this.enemy01SpawnTimer.pause();
+                        this.wreck00MaxTimer.pause();
+                        this.pest00SpawnTimer.pause();
 
                         // Pause the looping level sounds (enemy loops, boss alarm, thrust)
                         soundManager.pauseLoopingSounds( '(level_1)' );
@@ -1132,12 +1132,12 @@ export class Level1State extends CommonState
                             this.gameStartStopToggle = !this.gameStartStopToggle;
 
                             this.musicTimer.resume();
-                            this.enemy00SpawnTimer.resume();
+                            this.wreck00SpawnTimer.resume();
                             this.miniBossSpawnTimer.resume();
                             this.train.timer.resume();
                             this.healthSpawnTimer.resume();
-                            this.enemy00MaxTimer.resume();
-                            this.enemy01SpawnTimer.resume();
+                            this.wreck00MaxTimer.resume();
+                            this.pest00SpawnTimer.resume();
 
                             // Resume the looping sounds the pause menu paused (not the ones stopped since, ex: by a restart)
                             soundManager.resumeLoopingSounds( '(level_1)' );
@@ -1184,12 +1184,12 @@ export class Level1State extends CommonState
                     this.gameStartStopToggle = !this.gameStartStopToggle;
 
                     this.musicTimer.resume();
-                    this.enemy00SpawnTimer.resume();
+                    this.wreck00SpawnTimer.resume();
                     this.miniBossSpawnTimer.resume();
                     this.train.timer.resume();
                     this.healthSpawnTimer.resume();
-                    this.enemy00MaxTimer.resume();
-                    this.enemy01SpawnTimer.resume();
+                    this.wreck00MaxTimer.resume();
+                    this.pest00SpawnTimer.resume();
 
                     // Indicate to the game portal the gameplay has stopped
                     platform.gameplayStop();
@@ -1394,7 +1394,7 @@ export class Level1State extends CommonState
     }
 
     // 
-    //  DESC: An enemy00 killed while attacking a building saved it: heal the player and return the bonus points
+    //  DESC: An wreck00 killed while attacking a building saved it: heal the player and return the bonus points
     //
     buildingSaveBonus( sprite )
     {
@@ -1436,26 +1436,26 @@ export class Level1State extends CommonState
                 this.allowMiniBoss = true;
             }
 
-            // Enable enemy01 spawns
-            if( this.playerLevel >= ENEMY01_LEVEL_THRESHOLD && this.enemy01SpawnTimer.disabled )
-                this.enemy01SpawnTimer.reset();
+            // Enable pest00 spawns
+            if( this.playerLevel >= PEST00_LEVEL_THRESHOLD && this.pest00SpawnTimer.disabled )
+                this.pest00SpawnTimer.reset();
 
             // Enable health character
             if( this.playerLevel == HEALTH_CHAR_THRESHOLD && this.healthSpawnTimer.disabled )
                 this.healthSpawnTimer.reset();
 
-            // Adjust how fast enemy00 is spawned
-            if( this.playerLevel == 5 && this.enemy00SpawnTimer.timeInterval > (1000 * 2.3) )
-                this.enemy00SpawnTimer.reset((1000 * 2.25));
+            // Adjust how fast wreck00 is spawned
+            if( this.playerLevel == 5 && this.wreck00SpawnTimer.timeInterval > (1000 * 2.3) )
+                this.wreck00SpawnTimer.reset((1000 * 2.25));
 
-            else if( this.playerLevel == 10 && this.enemy00SpawnTimer.timeInterval > (1000 * 2.1) )
-                this.enemy00SpawnTimer.reset((1000 * 2));
+            else if( this.playerLevel == 10 && this.wreck00SpawnTimer.timeInterval > (1000 * 2.1) )
+                this.wreck00SpawnTimer.reset((1000 * 2));
 
-            else if( this.playerLevel == 20 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.8) )
-                this.enemy00SpawnTimer.reset((1000 * 1.75));
+            else if( this.playerLevel == 20 && this.wreck00SpawnTimer.timeInterval > (1000 * 1.8) )
+                this.wreck00SpawnTimer.reset((1000 * 1.75));
 
-            else if( this.playerLevel == 40 && this.enemy00SpawnTimer.timeInterval > (1000 * 1.6) )
-                this.enemy00SpawnTimer.reset((1000 * 1.5));
+            else if( this.playerLevel == 40 && this.wreck00SpawnTimer.timeInterval > (1000 * 1.6) )
+                this.wreck00SpawnTimer.reset((1000 * 1.5));
         }
 
         this.hudProgressBar.incCurrentValue( value );
@@ -1686,36 +1686,36 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
-        // Create enemy01 (from level ENEMY01_LEVEL_THRESHOLD). Its AI positions it above the screen.
+        // Create pest00 (from level PEST00_LEVEL_THRESHOLD). Its AI positions it above the screen.
         // One at a time, and none while a mini-boss or the boss is out until the level reaches
-        // ENEMY01_BATTLE_SPAWN_LEVEL: if it expires then, the timer just goes round again.
-        // When an enemy01 dies the timer restarts (collisionCallBack()).
-        if( this.enemy01SpawnTimer.expired(true) )
+        // PEST00_BATTLE_SPAWN_LEVEL: if it expires then, the timer just goes round again.
+        // When an pest00 dies the timer restarts (collisionCallBack()).
+        if( this.pest00SpawnTimer.expired(true) )
         {
-            this.enemy01SpawnTimer.reset( genFunc.randomInt( ENEMY01_SPAWN_TIME_MIN, ENEMY01_SPAWN_TIME_MAX ) );
+            this.pest00SpawnTimer.reset( genFunc.randomInt( PEST00_SPAWN_TIME_MIN, PEST00_SPAWN_TIME_MAX ) );
 
-            if( (this.playerLevel >= ENEMY01_BATTLE_SPAWN_LEVEL || (!this.bossBattleActive && !this.isMiniBossActive())) &&
-                this.countEnemy01() < MAX_ENEMY01 )
+            if( (this.playerLevel >= PEST00_BATTLE_SPAWN_LEVEL || (!this.bossBattleActive && !this.isMiniBossActive())) &&
+                this.countPest00() < MAX_PEST00 )
             {
-                this._node = this.enemyStrategy.create('enemy01_ship');
+                this._node = this.enemyStrategy.create('pest00_ship');
                 this._node.get().setPosXYZ(0, settings.deviceRes.h);
             }
         }
 
-        // Create enemy00 and position it outside of the view.
+        // Create wreck00 and position it outside of the view.
         // During the boss battle only every Nth spawn tick spawns one (much slower).
-        if( this.enemy00SpawnTimer.expired(true) )
+        if( this.wreck00SpawnTimer.expired(true) )
         {
-            if( (this.enemyStrategy.nodeAry.length - this.countEnemy01()) < this.enemy00Max &&
-                (!this.bossBattleActive || (++this.enemy00BossSpawnTick % gameDefs.BOSS00_ENEMY00_SPAWN_SLOWDOWN) === 0) )
+            if( (this.enemyStrategy.nodeAry.length - this.countPest00()) < this.wreck00Max &&
+                (!this.bossBattleActive || (++this.wreck00BossSpawnTick % gameDefs.BOSS00_WRECK00_SPAWN_SLOWDOWN) === 0) )
             {
-                this._node = this.enemyStrategy.create('enemy00_ship');
+                this._node = this.enemyStrategy.create('wreck00_ship');
                 this._node.get().setPosXYZ(0, settings.deviceRes.h);
             }
 
-            if( this.enemy00MaxTimer.expired(true) && this.enemy00Max < MAX_ENEMY00 )
+            if( this.wreck00MaxTimer.expired(true) && this.wreck00Max < MAX_WRECK00 )
             {
-                this.enemy00Max++;
+                this.wreck00Max++;
             }
         }
         // Create a mini-boss and position it outside of the view
@@ -1831,20 +1831,20 @@ export class Level1State extends CommonState
     }
 
     // 
-    //  DESC: Number of enemy01 alive (they don't take up enemy00's spawn slots)
+    //  DESC: Number of pest00 alive (they don't take up wreck00's spawn slots)
     //
-    countEnemy01()
+    countPest00()
     {
-        this._enemy01Count = 0;
+        this._pest00Count = 0;
         for( this._i = 0; this._i < this.enemyStrategy.nodeAry.length; ++this._i )
         {
             // Not counting one that's dying (falling off the screen)
-            if( this.enemyStrategy.nodeAry[this._i].userId === gameDefs.ENEMY01_SHIP_ID &&
+            if( this.enemyStrategy.nodeAry[this._i].userId === gameDefs.PEST00_SHIP_ID &&
                 this.enemyStrategy.nodeAry[this._i].get().collisionComponent.enable )
-                this._enemy01Count++;
+                this._pest00Count++;
         }
 
-        return this._enemy01Count;
+        return this._pest00Count;
     }
 
     // 
@@ -2441,8 +2441,8 @@ export class Level1State extends CommonState
         aiManager.clear();
 
         // Clear out any AI data dictionaries
-        enemy00aiscripts.clearAIData();
-        enemy01aiscripts.clearAIData();
+        wreck00aiscripts.clearAIData();
+        pest00aiscripts.clearAIData();
         miniboss01aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
         
@@ -2628,8 +2628,8 @@ export function load()
 
         // Load the AI. Needs to be loaded before the strategy loader
         .then(() => aiManager.loadFromXml( [
-            genFunc.stringLoadXML( enemy00_ai ),
-            genFunc.stringLoadXML( enemy01_ai ),
+            genFunc.stringLoadXML( wreck00_ai ),
+            genFunc.stringLoadXML( pest00_ai ),
             genFunc.stringLoadXML( mini_boss_00_ai ),
             genFunc.stringLoadXML( mini_boss_01_ai ),
             genFunc.stringLoadXML( boss00_ai )] ))

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <ai>
 
-    <node name="AI_Enemy01">
+    <node name="AI_Pest00">
 
-        <head script="AI_Enemy01_Head"/>
+        <head script="AI_Pest00_Head"/>
 
         <node>
 
@@ -11,7 +11,7 @@
 
             <node>
 
-                <leaf script="AI_Enemy01_Descend"/>
+                <leaf script="AI_Pest00_Descend"/>
 
             </node>
 
@@ -25,25 +25,25 @@
 
                     <node>
 
-                        <leaf script="AI_Enemy01_Roam"/>
+                        <leaf script="AI_Pest00_Roam"/>
 
                     </node>
 
                     <node>
 
-                        <leaf script="AI_Enemy01_Charge"/>
+                        <leaf script="AI_Pest00_Charge"/>
 
                     </node>
 
                     <node>
 
-                        <leaf script="AI_Enemy01_Spin"/>
+                        <leaf script="AI_Pest00_Spin"/>
 
                     </node>
 
                     <node>
 
-                        <leaf script="AI_Enemy01_Flee"/>
+                        <leaf script="AI_Pest00_Flee"/>
 
                     </node>
 

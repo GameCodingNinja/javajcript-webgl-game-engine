@@ -263,9 +263,9 @@
             </collision>
         </object>
 
-        <object name="enemy00_ship">
+        <object name="wreck00_ship">
             <visual>
-                <texture count="2" file="data/textures/enemyShip/enemy00_${NUM}.png"/>
+                <texture count="2" file="data/textures/enemyShip/wreck00_${NUM}.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
 
@@ -437,9 +437,9 @@
             <size width="392" height="4"/>
         </object>
 
-        <object name="enemy00_shot">
+        <object name="wreck00_shot">
             <visual>
-                <texture count="2" file="data/textures/enemyShip/enemy00_projectile_${NUM}.png"/>
+                <texture count="2" file="data/textures/enemyShip/wreck00_projectile_${NUM}.png"/>
             </visual>
             <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <circle radius="10"/>
@@ -458,18 +458,39 @@
             </collision>
         </object>
 
-        <object name="enemy01_ship">
+        <object name="pest00_ship">
             <visual>
-                <texture file="data/textures/enemyShip/enemy01.png"/>
+                <texture file="data/textures/enemyShip/pest00.png"/>
             </visual>
             <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
                 <circle radius="143"/>
             </collision>
         </object>
 
-        <object name="enemy01_shot">
+        <object name="pest00_shot">
             <visual>
-                <texture file="data/textures/enemyShip/enemy01_projectile.png"/>
+                <texture file="data/textures/enemyShip/pest00_projectile.png"/>
+            </visual>
+            <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
+                <pointList radiusFromVisual="true">
+                    <point x="10" y="0"/>
+                    <point x="-11" y="0"/>
+                </pointList>
+            </collision>
+        </object>
+
+        <object name="pest01_ship">
+            <visual>
+                <texture count="2" file="data/textures/enemyShip/pest01-${NUM}.png"/>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <circle radius="70"/>
+            </collision>
+        </object>
+
+        <object name="pest01_shot">
+            <visual>
+                <texture file="data/textures/enemyShip/pest01_projectile.png"/>
             </visual>
             <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <pointList radiusFromVisual="true">

@@ -5,11 +5,11 @@
         <position z="-70"/>
     </object>
 
-    <node name="enemy00_shot" id="-2">
+    <node name="wreck00_shot" id="-2">
         <sprite>
             <scriptList>
-                <script shoot="Enemy00Ship_Shoot"/>
-                <script hit="Enemy00Shot_Hit"/>
+                <script shoot="Wreck00Ship_Shoot"/>
+                <script hit="Wreck00Shot_Hit"/>
             </scriptList>
         </sprite>
     </node>
@@ -29,17 +29,17 @@
             <scale x="1.5" y="1.5"/>
             <scriptList>
                 <script shoot="MiniBoss00Mine_Drop"/>
-                <script hit="Enemy00Shot_Hit"/>
+                <script hit="Wreck00Shot_Hit"/>
             </scriptList>
         </sprite>
     </node>
 
-    <node name="enemy01_shot" id="-7">
+    <node name="pest00_shot" id="-7">
         <sprite>
             <scale x="1.5" y="1.5"/>
             <scriptList>
-                <script shoot="Enemy01Shot_Fire"/>
-                <script hit="Enemy00Shot_Hit"/>
+                <script shoot="Pest00Shot_Fire"/>
+                <script hit="Wreck00Shot_Hit"/>
             </scriptList>
         </sprite>
     </node>

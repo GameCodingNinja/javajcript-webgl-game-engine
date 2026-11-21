@@ -52,7 +52,7 @@ class Explode_animation
 
         if( shipSprite.parentNode.userId == gameDefs.PLAYER_SHIP_ID)
         {
-            if(projectileSprite.parentNode.userId == gameDefs.ENEMY00_SHIP_ID || projectileSprite.parentNode.userId == gameDefs.ENEMY01_SHIP_ID)
+            if(projectileSprite.parentNode.userId == gameDefs.WRECK00_SHIP_ID || projectileSprite.parentNode.userId == gameDefs.PEST00_SHIP_ID)
             {
                 this._xPos += (shipSprite.pos.x - projectileSprite.pos.x) * 0.3;
                 this._yPos += (shipSprite.pos.y - projectileSprite.pos.y) * 0.6;
@@ -70,7 +70,7 @@ class Explode_animation
             }
         }
         else if(projectileSprite.parentNode.userId == gameDefs.PLAYER_SHOT_ID &&
-                (shipSprite.parentNode.userId == gameDefs.ENEMY00_SHIP_ID || shipSprite.parentNode.userId == gameDefs.ENEMY01_SHIP_ID))
+                (shipSprite.parentNode.userId == gameDefs.WRECK00_SHIP_ID || shipSprite.parentNode.userId == gameDefs.PEST00_SHIP_ID))
         {
             this._xPos = shipSprite.pos.x;
 
@@ -172,7 +172,7 @@ class Building_Die
 }
 
 //
-//  DESC: Script for handling enemy00 ship colliding with the player ship
+//  DESC: Script for handling wreck00 ship colliding with the player ship
 //
 class EnemyShip_CheckForCollideWithPlayer
 {
@@ -200,7 +200,7 @@ class EnemyShip_CheckForCollideWithPlayer
     //
     execute()
     {
-        // This enemy00 needs to be in view to possibly collide with the player
+        // This wreck00 needs to be in view to possibly collide with the player
         if( this.camera.inView( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
             if( this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry, this.playerShipSprite.shieldOn ) )

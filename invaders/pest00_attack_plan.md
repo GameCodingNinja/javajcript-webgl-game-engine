@@ -1,8 +1,8 @@
-# enemy01 Attack Plan
+# pest00 Attack Plan
 
-A small, fast enemy at enemy00's level that ignores the buildings and **harasses the player**. It roams around away from the player for a while, then charges in, does a spin attack that flings a ring of homing missiles, and runs off. Its spawn timer starts at **level 2**, and it appears one at a time.
+The first **Pest** (was enemy01). A small, fast enemy at wreck00's level that ignores the buildings and **harasses the player**. It roams around away from the player for a while, then charges in, does a spin attack that flings a ring of homing missiles, and runs off. Its spawn timer starts at **level 2**, and it appears one at a time.
 
-All numbers below are starting values to tune in playtesting (`ENEMY01_*` in `gamedefs.js`).
+All numbers below are starting values to tune in playtesting (`PEST00_*` in `gamedefs.js`).
 
 ## Attack cycle
 
@@ -22,13 +22,13 @@ It always flies forward along its heading, turning at a limited rate, with its s
 2. **Roam:** for a random **6–10 s** it flies around **away from the player** (about **450 px/s**). It never flies straight: it **weaves in waves** (35° either side of its course, one wave every 1.6 s) and flies a **full loop** (about a 260 px circle) every 3–6 s, turning up in the lower half of its band and down in the upper half. That's fun to watch in the distance and makes it harder to shoot. It heads for waypoints **1200–2400 px** from the player on its side, and picks a new one when it reaches it or when the player gets within **1000 px** of it. It's mostly off-screen, visible on the radar.
    - **Avoids the player:** when the player gets within **1100 px** (X) it runs away at **1300 px/s**, weaving in wider waves (45°), angled off the ship's firing line (its Y), or straight sideways near the edge of its band, so it can't easily be shot down while roaming. It goes back to roaming once the player is farther away.
    - **Caught up:** if the player still catches up with it (it's in view, after the first second of the roam), it skips the charge and does the spin attack where it is, then runs off. It doesn't need to be close.
-3. **Charge:** turns toward the player and charges in at up to **1300 px/s**, then brakes to a stop about **350 px** from the ship (aiming at the ship's Y kept in the band, so it stops above the buildings when the player flies low). The stop point is always **in view**, at least 120 px in from the side of the screen: the ship often sits near the side of the screen, and coming from that side, 350 px beside it would be off the screen, where the spin attack fires no missiles. When there isn't enough room beside the ship, it stops above or below it instead (whichever has more room in the band). It's done when it gets within 150 px of the stop point, or after **1 s in view**. While the ship flies, the stop point moves with it and enemy01 trails it without slowing down, so before this it could follow the ship around in view without attacking. Gives up after 6 s if it can't get there (the player is boosting away).
+3. **Charge:** turns toward the player and charges in at up to **1300 px/s**, then brakes to a stop about **350 px** from the ship (aiming at the ship's Y kept in the band, so it stops above the buildings when the player flies low). The stop point is always **in view**, at least 120 px in from the side of the screen: the ship often sits near the side of the screen, and coming from that side, 350 px beside it would be off the screen, where the spin attack fires no missiles. When there isn't enough room beside the ship, it stops above or below it instead (whichever has more room in the band). It's done when it gets within 150 px of the stop point, or after **1 s in view**. While the ship flies, the stop point moves with it and pest00 trails it without slowing down, so before this it could follow the ship around in view without attacking. Gives up after 6 s if it can't get there (the player is boosting away).
 4. **Spin attack:** see below.
 5. **Run off:** accelerates away from the player to **800 px/s** (about 650 px/s sideways with the swoops), a bit slower than the ship (720 px/s, 1680 boosting), mostly sideways, **still spinning**, **swooping** up and down (20–50°, a mix of short 0.35–0.6 s swoops and, half the time, longer 1–1.8 s ones, usually to the other direction but 20% of the time a different angle the same way, turning at 400°/s) and **dodging** player shots: a shot heading at it from within 450 px and lined up within 60 px makes it jink up or down, away from the shot, for 0.25 s (half the time, with a 0.6 s cooldown, so it can still be hit). It keeps going until it's **2500 px** away (about two screens, so the player has time to chase it), then stops spinning off the screen and roams again. There's no time limit, so it never comes back for another spin attack while it's still in view. Shots that hit it while it spins still don't count as hits.
 
 ### Spin attack
 
-enemy01 is round, so it fires by spinning: the spin is what flings the missiles out. While it coasts to a stop:
+pest00 is round, so it fires by spinning: the spin is what flings the missiles out. While it coasts to a stop:
 
 - **Spin up:** quickly, to **6 turns/s** over 0.3 s. After a charge it keeps following its stop point beside the ship while it spins (a ship flying away would otherwise leave it off the screen, where it can't fire); caught up while roaming, it coasts to a stop where it is, but backs off to its stop point beside the ship if the ship comes within 350 px (so a player flying up to it doesn't run into it).
 - **Only fires in view:** at full spin it waits up to 1.5 s (still spinning and following) to be in view, then fires.
@@ -49,7 +49,7 @@ Modeled on boss00's missile (`Boss00Shot_Fire`), but weaker. Each missile has tw
 
 A missile flung directly away from the player has to turn up to 180°, so the turn rate and lifetime are high enough that flung-away missiles still reach the player.
 
-|  | enemy01 missile | Boss00 missile (for comparison) |
+|  | pest00 missile | Boss00 missile (for comparison) |
 | --- | --- | --- |
 | Damage | **5** | 20 |
 | Speed | about 0.35 px/ms | 0.3 px/ms |
@@ -60,57 +60,57 @@ A missile flung directly away from the player has to turn up to 180°, so the tu
 
 - The straight final run (like `BOSS00_MISSILE_LOCK_DIST`/`LOCK_ALIGN`) keeps them dodgeable. AGENTS.md notes that missiles which home forever can't be dodged.
 - The shield blocks them (the shot's collision check passes `playerShipSprite.shieldOn`, like the other enemy shots).
-- Only fired while the player is alive and enemy01 is in view, like the other shooters.
+- Only fired while the player is alive and pest00 is in view, like the other shooters.
 
 ## Fighting it
 
 - **Toughness:** dies in **3 hits**.
-- **Score:** 2 (2× enemy00's).
-- **Ramming:** only damages the player ship (15, `ENEMY01_RAM_DAMAGE`, none through the shield); enemy01 takes no hit from it. It has its own short ram cooldown (`sprite.ramTime`, 500 ms), so one ram counts once and doesn't block hits on other enemies. It doesn't use the shared `collisionTimer`.
+- **Score:** 2 (2× wreck00's).
+- **Ramming:** only damages the player ship (15, `PEST00_RAM_DAMAGE`, none through the shield); pest00 takes no hit from it. It has its own short ram cooldown (`sprite.ramTime`, 500 ms), so one ram counts once and doesn't block hits on other enemies. It doesn't use the shared `collisionTimer`.
 - **Counterplay:** shoot it as it charges in, before the spin (it runs from you while roaming). Or keep firing into the spin: each spin hit means fewer missiles, and 5 of them stop the spin so shots count as hits, then dodge, boost away from or shield the missiles as they come in.
 
 ## Spawning
 
-- **From level 2:** its spawn timer starts when `playerLevel` reaches 2 (`ENEMY01_LEVEL_THRESHOLD = 2`), the same way `MINI_BOSS_01_LEVEL_THRESHOLD` turns on mini-boss spawns in the level-up code.
-- **Own spawn timer** (20–50 s), separate from enemy00's.
-- **One at a time** (`MAX_ENEMY01 = 1`). When it dies the spawn timer starts over (a new 20–50 s) for the next one; one that's dying (falling off the screen) doesn't count.
-- **Boss and mini-boss battles:** none spawn while a mini-boss is out or the boss battle is on (one that's already out stays), until the level reaches **15** (`ENEMY01_BATTLE_SPAWN_LEVEL`); from level 15 it spawns during them too. If the spawn timer runs out then, it starts another 20–50 s round.
-- The enemy00 spawn check subtracts the enemy01 count (`countEnemy01()`), so enemy01 doesn't use up an enemy00 slot.
+- **From level 2:** its spawn timer starts when `playerLevel` reaches 2 (`PEST00_LEVEL_THRESHOLD = 2`), the same way `MINI_BOSS_01_LEVEL_THRESHOLD` turns on mini-boss spawns in the level-up code.
+- **Own spawn timer** (20–50 s), separate from wreck00's.
+- **One at a time** (`MAX_PEST00 = 1`). When it dies the spawn timer starts over (a new 20–50 s) for the next one; one that's dying (falling off the screen) doesn't count.
+- **Boss and mini-boss battles:** none spawn while a mini-boss is out or the boss battle is on (one that's already out stays), until the level reaches **15** (`PEST00_BATTLE_SPAWN_LEVEL`); from level 15 it spawns during them too. If the spawn timer runs out then, it starts another 20–50 s round.
+- The wreck00 spawn check subtracts the pest00 count (`countPest00()`), so pest00 doesn't use up an wreck00 slot.
 
 ## Sound
 
 - **Missile launch:** the existing missile sounds (the `boss_rocket_launch` play list), once per volley.
 - **Death:** one of the existing `enemy_explosion_*` sounds.
-- **Later, from the user:** a spinning sound for the spin attack, and a sound when enemy01 comes in to attack.
+- **Later, from the user:** a spinning sound for the spin attack, and a sound when pest00 comes in to attack.
 
 ## Art
 
 Provided and already in `level1DataList.lst` and the sprite sheet (single frames):
 
-- **Ship:** `enemy01_ship` (`enemy01.png`, 150×175, nose points right; collision circle radius 75). Scaled to enemy00's size (`<scale x="0.35" y="0.35"/>` in its strategy node, about 52×61 on screen like enemy00's 50×62).
-- **Missile:** `enemy01_shot` (`enemy01_projectile.png`, 2-point collision line), `<scale x="1.5" y="1.5"/>` in its strategy node.
+- **Ship:** `pest00_ship` (`pest00.png`, 150×175, nose points right; collision circle radius 75). Scaled to wreck00's size (`<scale x="0.35" y="0.35"/>` in its strategy node, about 52×61 on screen like wreck00's 50×62).
+- **Missile:** `pest00_shot` (`pest00_projectile.png`, 2-point collision line), `<scale x="1.5" y="1.5"/>` in its strategy node.
 
 ## How it's built
 
 It follows the "Adding a New Enemy or Boss" checklist in AGENTS.md:
 
 1. **Art:** done (objects in `level1DataList.lst`, sprite sheet regenerated).
-2. **Ids:** `ENEMY01_SHIP_ID` (-6) and `ENEMY01_SHOT_ID` (-7) in `gamedefs.js`.
+2. **Ids:** `PEST00_SHIP_ID` (-6) and `PEST00_SHOT_ID` (-7) in `gamedefs.js`.
 3. **Strategy nodes:**
-   - `enemy01_ship` in `enemy.strategy` with `ai_*`, `hit` (reuses `Enemy00Ship_Hit`), `die` and `collision="EnemyShip_CheckForCollideWithPlayer"` scripts. It's a single node with no children, so its `prepareOnInit` scripts run without the boss workaround.
-   - `enemy01_shot` in `enemyshot.strategy` with `shoot` and `hit` (reuses `Enemy00Shot_Hit`) scripts.
-4. **AI tree:** `data/objects/ai/enemy01.ai`: Descend, then a repeater over Roam → Charge → Spin → Flee. Listed in `aiListTable.json` and the `aiManager.loadFromXml([...])` list in `level1state.js`.
-5. **AI scripts:** `source/scripts/enemy01aiscripts.js` (`AI_Enemy01_*`).
+   - `pest00_ship` in `enemy.strategy` with `ai_*`, `hit` (reuses `Wreck00Ship_Hit`), `die` and `collision="EnemyShip_CheckForCollideWithPlayer"` scripts. It's a single node with no children, so its `prepareOnInit` scripts run without the boss workaround.
+   - `pest00_shot` in `enemyshot.strategy` with `shoot` and `hit` (reuses `Wreck00Shot_Hit`) scripts.
+4. **AI tree:** `data/objects/ai/pest00.ai`: Descend, then a repeater over Roam → Charge → Spin → Flee. Listed in `aiListTable.json` and the `aiManager.loadFromXml([...])` list in `level1state.js`.
+5. **AI scripts:** `source/scripts/pest00aiscripts.js` (`AI_Pest00_*`).
    - Head, Descend, Roam, Charge, Spin and Flee leaves.
-   - Per-enemy01 state on its sprite, reset in Descend's `init()`: `hitCount`, `ramTime`, `heading`, `speed`.
+   - Per-pest00 state on its sprite, reset in Descend's `init()`: `hitCount`, `ramTime`, `heading`, `speed`.
    - Positions are world positions; the X delta to the player is wrap-aware (`genFunc.wrapDelta`), and X is wrapped after every move.
-6. **Die and missile scripts:** `source/scripts/enemy01scripts.js` (`Enemy01Ship_Die`, `Enemy01Shot_Fire`).
+6. **Die and missile scripts:** `source/scripts/pest00scripts.js` (`Pest00Ship_Die`, `Pest00Shot_Fire`).
 7. **Register and clean up:** `loadScripts()` in `startupstate.js`; `clearAIData()` in `restartGame()` and `cleanUp()`.
 8. **Collisions** in `collisionCallBack()`:
-   - enemy01 missile hits the ship (−5 unless shielded).
-   - enemy01 rams the ship (its own ram cooldown).
-   - Player shot hits enemy01 (hit, die, score).
+   - pest00 missile hits the ship (−5 unless shielded).
+   - pest00 rams the ship (its own ram cooldown).
+   - Player shot hits pest00 (hit, die, score).
 9. **Spawning:**
-   - An enemy01 spawn timer in `handleEnemySpawn()`, started at level 2.
+   - An pest00 spawn timer in `handleEnemySpawn()`, started at level 2.
    - Paused while the start menu is up, and paused and resumed with the others for the pause menu and game over.
-10. **AGENTS.md:** enemy01 in the "Which Entities Wrap" table and its behavior described.
+10. **AGENTS.md:** pest00 in the "Which Entities Wrap" table and its behavior described.

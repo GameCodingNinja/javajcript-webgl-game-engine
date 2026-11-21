@@ -20,10 +20,10 @@ While the boss is **beaming a building**, and the boss and player are both in vi
 ---
 
 ## How it fits the existing code
-Copy the enemy00 shot pattern; it already handles everything this needs:
+Copy the wreck00 shot pattern; it already handles everything this needs:
 - **Strategy:** missiles go in the `_enemy_shot_` strategy (`enemyshot.strategy`). `Level1State` already updates, transforms, and renders it, including the wrap-around camera and radar passes. Because it isn't in `_player_ship_`, missiles aren't shifted when the player wraps.
-- **Firing:** enemy00's `shootPlayer()` / `inViewWithWrap()` in `enemy00aiscripts.js` create the shot with `enemyShotStrategy.create(...)` and `prepare('shoot', shot, enemySprite)`.
-- **Flight script:** `Enemy00Ship_Shoot` in `enemy00scripts.js` moves the shot, wraps it, calls `checkForCollision(playerShipStrategy.nodeAry)`, and recycles itself when it's done.
+- **Firing:** wreck00's `shootPlayer()` / `inViewWithWrap()` in `wreck00aiscripts.js` create the shot with `enemyShotStrategy.create(...)` and `prepare('shoot', shot, enemySprite)`.
+- **Flight script:** `Wreck00Ship_Shoot` in `wreck00scripts.js` moves the shot, wraps it, calls `checkForCollision(playerShipStrategy.nodeAry)`, and recycles itself when it's done.
 - **Hit:** the player-ship branch of `collisionCallBack()` in `level1state.js` damages the player and calls the shot's `hit` script, which recycles it.
 
 ---
@@ -31,7 +31,7 @@ Copy the enemy00 shot pattern; it already handles everything this needs:
 ## Changes
 
 ### 1. New userId — `source/state/gamedefs.js`
-- `BOSS00_SHOT_ID = -21`. The missile needs its own id: the enemy00 shot branch decides damage by `frameIndex`, which would be wrong for an animated missile.
+- `BOSS00_SHOT_ID = -21`. The missile needs its own id: the wreck00 shot branch decides damage by `frameIndex`, which would be wrong for an animated missile.
 
 ### 2. Strategy node — `data/objects/strategy/level1/enemyshot.strategy`
 ```xml
@@ -47,9 +47,9 @@ Copy the enemy00 shot pattern; it already handles everything this needs:
 
 ### 3. Firing (only while beaming) — `source/scripts/boss00aiscripts.js`
 Add to `AI_Boss00_base`:
-- `inViewWithWrap( transPos, radius )`, the same as enemy00 (uses a module-level `gTempWrapPoint`, so no GC).
+- `inViewWithWrap( transPos, radius )`, the same as wreck00 (uses a module-level `gTempWrapPoint`, so no GC).
 - `shootPlayer()`:
-  - Only fires when the player is alive (`playerShipSprite.collisionComponent.enable`, same as enemy00).
+  - Only fires when the player is alive (`playerShipSprite.collisionComponent.enable`, same as wreck00).
   - Counts down `sprite.shootTime` by `highResTimer.elapsedTime`.
   - When the countdown reaches zero **and** the boss is in view (`inViewWithWrap` against the player camera): create `boss00_shot`, `prepare('shoot', shot, this.sprite)`, and reset `shootTime` to `BOSS00_FIRE_INTERVAL` ± a random `BOSS00_FIRE_JITTER`. That gives "about once a second" without a mechanical rhythm.
   - No sound for now (decision 5).
@@ -72,7 +72,7 @@ All state is pre-allocated in the constructor and reset in `recycle()`, so there
 
 `recycle()`:
 - Start the missile at the **center of the boss**: `setPos( bossSprite.pos )` (the null head sprite's position is the boss center). `_enemy_shot_` renders after `_enemy_`, so the missile draws on top of the boss body as it launches out of it.
-- Set the aim angle toward the player, using the wrap-aware shortest X delta (same as `Enemy00Ship_Shoot`).
+- Set the aim angle toward the player, using the wrap-aware shortest X delta (same as `Wreck00Ship_Shoot`).
 - `zigSide` = random ±1. Pick the first kick (angle + duration, see below).
 - Reset the frame-toggle timer, `setFrame(0)`, `age = 0`, and set the rotation from the flight angle.
 
@@ -88,12 +88,12 @@ Each frame, with `dt = highResTimer.elapsedTime` (ms), so everything is frame-ra
 6. **Animate:** subtract `dt` from a toggle timer. At 0, `setFrame( 1 - frameIndex )` and reset the timer to `BOSS00_MISSILE_ANIM_MS`. This is a plain toggle rather than `utilScripts.PlayAnim`, which allocates a generator on every `init()`.
 7. **Wrap:** the standard ±`GAMEPLAY_LOOPING_WRAP_DIST` pattern.
 8. **Collide:** `sprite.collisionComponent.checkForCollision( playerShipStrategy.nodeAry )`.
-9. **Expire:** `age += dt`. Recycle into `_enemy_shot_` and return `true` when `age > BOSS00_MISSILE_LIFETIME`, or when it leaves the view vertically (`camera.inViewY`, same as enemy00). Otherwise return `false`.
+9. **Expire:** `age += dt`. Recycle into `_enemy_shot_` and return `true` when `age > BOSS00_MISSILE_LIFETIME`, or when it leaves the view vertically (`camera.inViewY`, same as wreck00). Otherwise return `false`.
 
 Tuning note: raise `LOCK_DIST` to make dodging easier, raise `TURN_RATE` / `SPEED` to make it harder.
 
 #### `Boss00Shot_Hit( sprite )`
-Recycles the missile into `_enemy_shot_` (same as `Enemy00Shot_Hit`).
+Recycles the missile into `_enemy_shot_` (same as `Wreck00Shot_Hit`).
 
 Register both in `loadScripts()`. `startupstate.js` already calls `boss00scripts.loadScripts()`.
 
@@ -112,7 +112,7 @@ In the "player ship involved" block, add a branch for `BOSS00_SHOT_ID`:
 | `BOSS00_SHOT_ID` | -21 | userId |
 | `BOSS00_FIRE_INTERVAL` | 1000 | ms between shots |
 | `BOSS00_FIRE_JITTER` | 200 | ± random ms |
-| `BOSS00_MISSILE_SPEED` | 0.4 | px/ms forward speed (enemy00 shot is 0.25) |
+| `BOSS00_MISSILE_SPEED` | 0.4 | px/ms forward speed (wreck00 shot is 0.25) |
 | `BOSS00_MISSILE_TURN_RATE` | 180 | max homing turn of the aim, deg/sec |
 | `BOSS00_MISSILE_ZIG_ANGLE_MIN` | 25 | min hard-turn kick, degrees off aim |
 | `BOSS00_MISSILE_ZIG_ANGLE_MAX` | 55 | max hard-turn kick, degrees off aim |

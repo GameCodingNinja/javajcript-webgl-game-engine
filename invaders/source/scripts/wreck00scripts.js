@@ -1,7 +1,7 @@
 
 //
-//  FILE NAME: enemy00scripts.js
-//  DESC:      scripts for the enemy00
+//  FILE NAME: wreck00scripts.js
+//  DESC:      scripts for the wreck00
 //
 
 "use strict";
@@ -17,9 +17,9 @@ import * as gameDefs from '../state/gamedefs';
 var gWrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
 
 //
-//  DESC: Script for shooting enemy00 projectile
+//  DESC: Script for shooting wreck00 projectile
 //
-class Enemy00Ship_Shoot
+class Wreck00Ship_Shoot
 {
     constructor( sprite, enemySprite )
     {
@@ -97,9 +97,9 @@ class Enemy00Ship_Shoot
 }
 
 //
-//  DESC: Script for handling enemy00 getting hit
+//  DESC: Script for handling wreck00 getting hit
 //
-class Enemy00Ship_Hit
+class Wreck00Ship_Hit
 {
     constructor( sprite, projectileSprite )
     {
@@ -140,9 +140,9 @@ class Enemy00Ship_Hit
 }
 
 //
-//  DESC: Script for handling enemy00 ship dying
+//  DESC: Script for handling wreck00 ship dying
 //
-class Enemy00Ship_Die
+class Wreck00Ship_Die
 {
     constructor( sprite, projectileSprite )
     {
@@ -163,7 +163,7 @@ class Enemy00Ship_Die
         this.sprite = sprite;
 
         // Remove the AI script since the enemy is to die
-        sprite.scriptComponent.remove( 'AI_Enemy00' );
+        sprite.scriptComponent.remove( 'AI_Wreck00' );
 
         // Restore a building that was caught mid-attack (shaking)
         if( sprite.shakingBuilding )
@@ -214,9 +214,9 @@ class Enemy00Ship_Die
 }
 
 //
-//  DESC: Script for handling enemy00 shot hitting player
+//  DESC: Script for handling wreck00 shot hitting player
 //
-class Enemy00Shot_Hit
+class Wreck00Shot_Hit
 {
     constructor( sprite )
     {
@@ -248,15 +248,15 @@ class Enemy00Shot_Hit
 //
 export function loadScripts()
 {
-    scriptManager.set( 'Enemy00Ship_Hit',
-        ( sprite, projectileSprite ) => { return new Enemy00Ship_Hit( sprite, projectileSprite ); } );
+    scriptManager.set( 'Wreck00Ship_Hit',
+        ( sprite, projectileSprite ) => { return new Wreck00Ship_Hit( sprite, projectileSprite ); } );
 
-    scriptManager.set( 'Enemy00Ship_Die',
-        ( sprite, projectileSprite ) => { return new Enemy00Ship_Die( sprite, projectileSprite ); } );
+    scriptManager.set( 'Wreck00Ship_Die',
+        ( sprite, projectileSprite ) => { return new Wreck00Ship_Die( sprite, projectileSprite ); } );
 
-    scriptManager.set( 'Enemy00Shot_Hit',
-        ( sprite ) => { return new Enemy00Shot_Hit( sprite ); } );
+    scriptManager.set( 'Wreck00Shot_Hit',
+        ( sprite ) => { return new Wreck00Shot_Hit( sprite ); } );
 
-    scriptManager.set( 'Enemy00Ship_Shoot',
-        ( sprite, enemySprite ) => { return new Enemy00Ship_Shoot( sprite, enemySprite ); } );
+    scriptManager.set( 'Wreck00Ship_Shoot',
+        ( sprite, enemySprite ) => { return new Wreck00Ship_Shoot( sprite, enemySprite ); } );
 }

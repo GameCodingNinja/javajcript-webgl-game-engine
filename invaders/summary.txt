@@ -10,7 +10,7 @@ beam. The player has to chase the boss down and shoot it enough to
 interrupt the attack. Do that four times and the boss dies.
 
 Because "a boss is just an enemy," boss00 lives inside the normal
-enemy system (the "_enemy_" strategy) alongside enemy00/01/02.
+enemy system (the "_enemy_" strategy) alongside wreck00/01/02.
 
 
 HOW THE FIGHT WORKS
@@ -109,7 +109,7 @@ STILL TO DO / DEFERRED
 ----------------------
   * Real spawn trigger (right now a TEMP test spawns the boss 10s after
     the game starts, with all other enemies disabled for testing).
-  * Final spawn rules: enemy00 keeps spawning during the fight;
+  * Final spawn rules: wreck00 keeps spawning during the fight;
     mini_boss_00/01 disabled and re-enabled (timers restarted) when the boss
     dies.
   * Sound effects (beam, hits, death).

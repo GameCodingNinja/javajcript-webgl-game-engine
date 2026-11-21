@@ -1,6 +1,6 @@
 //
-//  FILE NAME: enemy01aiscripts.js
-//  DESC:      scripts for the enemy01 AI
+//  FILE NAME: pest00aiscripts.js
+//  DESC:      scripts for the pest00 AI
 //             A harasser that ignores the buildings. It roams around away from the player for a while,
 //             then charges in, stops to do a spin attack (flings a ring of homing missiles) and runs off.
 //
@@ -23,25 +23,25 @@ var gDegToRad = Math.PI / 180;
 var gTwoPi = Math.PI * 2;
 
 // Turn rates converted from degrees/sec to radians/ms
-var gRoamTurnRate = gameDefs.ENEMY01_ROAM_TURN_RATE * gDegToRad / 1000;
-var gAvoidTurnRate = gameDefs.ENEMY01_AVOID_TURN_RATE * gDegToRad / 1000;
-var gLoopTurnRate = gameDefs.ENEMY01_LOOP_TURN_RATE * gDegToRad / 1000;
+var gRoamTurnRate = gameDefs.PEST00_ROAM_TURN_RATE * gDegToRad / 1000;
+var gAvoidTurnRate = gameDefs.PEST00_AVOID_TURN_RATE * gDegToRad / 1000;
+var gLoopTurnRate = gameDefs.PEST00_LOOP_TURN_RATE * gDegToRad / 1000;
 
 // Weave: wave amplitudes in radians, phase rate in radians/ms
-var gWaveAmp = gameDefs.ENEMY01_WAVE_AMP * gDegToRad;
-var gAvoidWaveAmp = gameDefs.ENEMY01_AVOID_WAVE_AMP * gDegToRad;
-var gWaveRate = gTwoPi / gameDefs.ENEMY01_WAVE_PERIOD;
-var gChargeTurnRate = gameDefs.ENEMY01_CHARGE_TURN_RATE * gDegToRad / 1000;
-var gFleeTurnRate = gameDefs.ENEMY01_FLEE_TURN_RATE * gDegToRad / 1000;
+var gWaveAmp = gameDefs.PEST00_WAVE_AMP * gDegToRad;
+var gAvoidWaveAmp = gameDefs.PEST00_AVOID_WAVE_AMP * gDegToRad;
+var gWaveRate = gTwoPi / gameDefs.PEST00_WAVE_PERIOD;
+var gChargeTurnRate = gameDefs.PEST00_CHARGE_TURN_RATE * gDegToRad / 1000;
+var gFleeTurnRate = gameDefs.PEST00_FLEE_TURN_RATE * gDegToRad / 1000;
 
 // Full spin speed and the slowest firing spin speed in radians/ms, and how much it speeds up or slows down each ms
-var gSpinRate = gameDefs.ENEMY01_SPIN_RATE * gTwoPi / 1000;
-var gSpinRateMin = gameDefs.ENEMY01_SPIN_RATE_MIN * gTwoPi / 1000;
-var gSpinAccel = gSpinRate / (gameDefs.ENEMY01_SPIN_UP_SEC * 1000);
+var gSpinRate = gameDefs.PEST00_SPIN_RATE * gTwoPi / 1000;
+var gSpinRateMin = gameDefs.PEST00_SPIN_RATE_MIN * gTwoPi / 1000;
+var gSpinAccel = gSpinRate / (gameDefs.PEST00_SPIN_UP_SEC * 1000);
 
 // Flee dodge: angle in radians, turn rate in radians/ms
-var gDodgeAngle = gameDefs.ENEMY01_DODGE_ANGLE * gDegToRad;
-var gDodgeTurnRate = gameDefs.ENEMY01_DODGE_TURN_RATE * gDegToRad / 1000;
+var gDodgeAngle = gameDefs.PEST00_DODGE_ANGLE * gDegToRad;
+var gDodgeTurnRate = gameDefs.PEST00_DODGE_TURN_RATE * gDegToRad / 1000;
 
 // Easing functions allocated once (the get functions create a new closure on every call)
 var gSineOut = easing.getSineOut();
@@ -71,11 +71,11 @@ function normalizeAngle( angle )
 }
 
 //
-//  DESC: AI Enemy01 base class - shared helpers
+//  DESC: AI Pest00 base class - shared helpers
 //        It flies forward along its heading (sprite.heading, radians) at its speed (sprite.speed, px/s).
 //        Both live on the sprite so the speed carries smoothly from one leaf to the next.
 //
-class AI_Enemy01_base extends aiNode
+class AI_Pest00_base extends aiNode
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -145,7 +145,7 @@ class AI_Enemy01_base extends aiNode
         else if( this.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
             this.sprite.incPosXYZ( -gWrapSpan );
 
-        this._topY = gameDefs.ENEMY01_VIEW_TOP - this.sprite.parentNode.radius;
+        this._topY = gameDefs.PEST00_VIEW_TOP - this.sprite.parentNode.radius;
         this._bottomY = -(settings.deviceRes_half.h - this.sprite.parentNode.radius);
         if( this.sprite.pos.y > this._topY )
             this.sprite.setPosXYZ( this.sprite.pos.x, this._topY );
@@ -155,7 +155,7 @@ class AI_Enemy01_base extends aiNode
 
     // 
     //  DESC: Adjust a wanted heading to keep the cruise band (above the buildings, below the top of the
-    //        screen): the climb (or dive) is limited to what keeps it in the band ENEMY01_BAND_LOOKAHEAD
+    //        screen): the climb (or dive) is limited to what keeps it in the band PEST00_BAND_LOOKAHEAD
     //        ahead at its speed, so it levels off smoothly as it nears an edge (early enough that a fast
     //        swoop doesn't overshoot far), and out of the band it climbs or dives back in at up to about
     //        30 degrees. A smooth limit, not an on/off switch: switching made the heading flip back and
@@ -166,9 +166,9 @@ class AI_Enemy01_base extends aiNode
         // Every wanted heading comes through here: keep clear of the player ship first
         angle = this.avoidShip( angle );
 
-        this._reach = Math.max( this.sprite.speed * gameDefs.ENEMY01_BAND_LOOKAHEAD, 1 );
-        this._maxSin = (gameDefs.ENEMY01_MAX_Y - this.sprite.pos.y) / this._reach;
-        this._minSin = (gameDefs.ENEMY01_MIN_Y - this.sprite.pos.y) / this._reach;
+        this._reach = Math.max( this.sprite.speed * gameDefs.PEST00_BAND_LOOKAHEAD, 1 );
+        this._maxSin = (gameDefs.PEST00_MAX_Y - this.sprite.pos.y) / this._reach;
+        this._minSin = (gameDefs.PEST00_MIN_Y - this.sprite.pos.y) / this._reach;
         this._sin = Math.sin( angle );
 
         if( this._sin > this._maxSin )
@@ -184,7 +184,7 @@ class AI_Enemy01_base extends aiNode
     }
 
     // 
-    //  DESC: Bend a wanted heading away from the player ship when it's within ENEMY01_SHIP_CLEAR_DIST,
+    //  DESC: Bend a wanted heading away from the player ship when it's within PEST00_SHIP_CLEAR_DIST,
     //        harder the closer it is, so it doesn't run into the ship (charging past it, or the player
     //        catching up with it as it flees)
     //
@@ -194,10 +194,10 @@ class AI_Enemy01_base extends aiNode
         this._shipDY = this.data.playerShipSprite.pos.y - this.sprite.pos.y;
         this._shipDist = Math.sqrt( (this._shipDX * this._shipDX) + (this._shipDY * this._shipDY) );
 
-        if( this._shipDist >= gameDefs.ENEMY01_SHIP_CLEAR_DIST || this._shipDist < 1 )
+        if( this._shipDist >= gameDefs.PEST00_SHIP_CLEAR_DIST || this._shipDist < 1 )
             return angle;
 
-        this._push = 2 * (1 - (this._shipDist / gameDefs.ENEMY01_SHIP_CLEAR_DIST)) / this._shipDist;
+        this._push = 2 * (1 - (this._shipDist / gameDefs.PEST00_SHIP_CLEAR_DIST)) / this._shipDist;
 
         return Math.atan2( Math.sin( angle ) - (this._push * this._shipDY), Math.cos( angle ) - (this._push * this._shipDX) );
     }
@@ -229,10 +229,10 @@ class AI_Enemy01_base extends aiNode
     spinStep()
     {
         // Each shot that hits the spin slows it a step (one missile fewer per volley), from the full spin speed
-        // down to ENEMY01_SPIN_RATE_MIN at one missile. The last one stops it (AI_Enemy01_Flee).
-        this._missiles = gameDefs.ENEMY01_MISSILES_MAX - this.sprite.spinHitCount;
+        // down to PEST00_SPIN_RATE_MIN at one missile. The last one stops it (AI_Pest00_Flee).
+        this._missiles = gameDefs.PEST00_MISSILES_MAX - this.sprite.spinHitCount;
         if( this._missiles > 0 )
-            this._spinTarget = gSpinRateMin + ((gSpinRate - gSpinRateMin) * (this._missiles - 1) / (gameDefs.ENEMY01_MISSILES_MAX - 1));
+            this._spinTarget = gSpinRateMin + ((gSpinRate - gSpinRateMin) * (this._missiles - 1) / (gameDefs.PEST00_MISSILES_MAX - 1));
         else
             this._spinTarget = 0;
         if( this.sprite.spinRate < this._spinTarget )
@@ -247,7 +247,7 @@ class AI_Enemy01_base extends aiNode
 
     // 
     //  DESC: Fling a volley of missiles out at the same time, evenly spaced around the enemy, starting at
-    //        its spin angle. The faster the spin, the more missiles: ENEMY01_MISSILES_MAX at full spin,
+    //        its spin angle. The faster the spin, the more missiles: PEST00_MISSILES_MAX at full spin,
     //        one fewer for each shot that hit the spin. Not spinning (the spin was stopped), one missile at the player.
     //
     fireMissiles()
@@ -256,7 +256,7 @@ class AI_Enemy01_base extends aiNode
         {
             if( this.sprite.spinning )
             {
-                this._count = gameDefs.ENEMY01_MISSILES_MAX - this.sprite.spinHitCount;
+                this._count = gameDefs.PEST00_MISSILES_MAX - this.sprite.spinHitCount;
                 this._angle = this.sprite.heading + this.sprite.spinAngle;
             }
             else
@@ -269,7 +269,7 @@ class AI_Enemy01_base extends aiNode
 
             for( this._i = 0; this._i < this._count; ++this._i )
             {
-                this._shootSprite = this.data.enemyShotStrategy.create('enemy01_shot').get();
+                this._shootSprite = this.data.enemyShotStrategy.create('pest00_shot').get();
                 this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite, this._angle + (this._i * this._step) );
             }
 
@@ -278,9 +278,9 @@ class AI_Enemy01_base extends aiNode
     }
 
     // 
-    //  DESC: Fly to the attack stop point and brake to a stop there: ENEMY01_CHARGE_STOP_DIST beside the ship on the
+    //  DESC: Fly to the attack stop point and brake to a stop there: PEST00_CHARGE_STOP_DIST beside the ship on the
     //        side it came from (sprite.attackSide), at the ship's Y kept in the cruise band (so it stops above the
-    //        buildings when the player flies low), kept ENEMY01_CHARGE_SCREEN_MARGIN in from the side of the screen
+    //        buildings when the player flies low), kept PEST00_CHARGE_SCREEN_MARGIN in from the side of the screen
     //        (the ship is often near the side of the screen, and an attack out of view fires no missiles). When
     //        that leaves too little room beside the ship, the point moves above or below it (whichever has more
     //        room in the band). The point moves with the ship, so it follows a ship that flies away.
@@ -294,30 +294,30 @@ class AI_Enemy01_base extends aiNode
         this._screenX = genFunc.wrapDelta( this.sprite.pos.x + this._camX, gWrapSpan );
 
         // The stop point beside the ship, kept in view
-        this._limitX = settings.deviceRes_half.w - gameDefs.ENEMY01_CHARGE_SCREEN_MARGIN;
-        this._aimX = Math.min( Math.max( this._shipScreenX + (this.sprite.attackSide * gameDefs.ENEMY01_CHARGE_STOP_DIST), -this._limitX ), this._limitX );
+        this._limitX = settings.deviceRes_half.w - gameDefs.PEST00_CHARGE_SCREEN_MARGIN;
+        this._aimX = Math.min( Math.max( this._shipScreenX + (this.sprite.attackSide * gameDefs.PEST00_CHARGE_STOP_DIST), -this._limitX ), this._limitX );
         this._shipY = this.data.playerShipSprite.pos.y;
         this._aimY = this._shipY;
 
         // Not enough room beside the ship: above or below it, whichever has more room in the band
         this._besideX = Math.abs( this._aimX - this._shipScreenX );
-        if( this._besideX < gameDefs.ENEMY01_CHARGE_STOP_DIST )
+        if( this._besideX < gameDefs.PEST00_CHARGE_STOP_DIST )
         {
-            this._offsetY = Math.sqrt( (gameDefs.ENEMY01_CHARGE_STOP_DIST * gameDefs.ENEMY01_CHARGE_STOP_DIST) - (this._besideX * this._besideX) );
-            this._aimY += ((gameDefs.ENEMY01_MAX_Y - this._shipY) > (this._shipY - gameDefs.ENEMY01_MIN_Y)) ? this._offsetY : -this._offsetY;
+            this._offsetY = Math.sqrt( (gameDefs.PEST00_CHARGE_STOP_DIST * gameDefs.PEST00_CHARGE_STOP_DIST) - (this._besideX * this._besideX) );
+            this._aimY += ((gameDefs.PEST00_MAX_Y - this._shipY) > (this._shipY - gameDefs.PEST00_MIN_Y)) ? this._offsetY : -this._offsetY;
         }
 
-        this._aimY = Math.min( Math.max( this._aimY, gameDefs.ENEMY01_MIN_Y ), gameDefs.ENEMY01_MAX_Y );
+        this._aimY = Math.min( Math.max( this._aimY, gameDefs.PEST00_MIN_Y ), gameDefs.PEST00_MAX_Y );
 
         this._dx = genFunc.wrapDelta( this._aimX - this._screenX, gWrapSpan );
         this._dy = this._aimY - this.sprite.pos.y;
         this._dist = Math.sqrt( (this._dx * this._dx) + (this._dy * this._dy) );
 
         // Full speed, then brake (constant deceleration) to stop at the stop point
-        this._targetSpeed = Math.min( gameDefs.ENEMY01_CHARGE_SPEED, Math.sqrt( 2 * gameDefs.ENEMY01_CHARGE_BRAKE * this._dist ) );
+        this._targetSpeed = Math.min( gameDefs.PEST00_CHARGE_SPEED, Math.sqrt( 2 * gameDefs.PEST00_CHARGE_BRAKE * this._dist ) );
 
         this.faceAngle( this.bandAngle( Math.atan2( this._dy, this._dx ) ), gChargeTurnRate );
-        this.approachSpeed( this._targetSpeed, (this._targetSpeed < this.sprite.speed) ? gameDefs.ENEMY01_CHARGE_BRAKE * 2 : gameDefs.ENEMY01_CHARGE_ACCEL );
+        this.approachSpeed( this._targetSpeed, (this._targetSpeed < this.sprite.speed) ? gameDefs.PEST00_CHARGE_BRAKE * 2 : gameDefs.PEST00_CHARGE_ACCEL );
         this.moveForward();
     }
 
@@ -331,10 +331,10 @@ class AI_Enemy01_base extends aiNode
 }
 
 //
-//  DESC: AI Enemy01 head (root) node script
+//  DESC: AI Pest00 head (root) node script
 //        Only supports one child
 //
-class AI_Enemy01_Head extends aiNode
+class AI_Pest00_Head extends aiNode
 {
     constructor( nodeData )
     {
@@ -390,7 +390,7 @@ class AI_Enemy01_Head extends aiNode
 //
 //  DESC: AI Leaf node script. Descend into the game from above the screen
 //
-class AI_Enemy01_Descend extends AI_Enemy01_base
+class AI_Pest00_Descend extends AI_Pest00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -405,23 +405,23 @@ class AI_Enemy01_Descend extends AI_Enemy01_base
     init()
     {
         this.sprite.hitCount = 0;
-        this.sprite.ramTime = 0;     // Time of the last ram on the player (Level1State ENEMY01_RAM_COOLDOWN)
+        this.sprite.ramTime = 0;     // Time of the last ram on the player (Level1State PEST00_RAM_COOLDOWN)
         this.sprite.speed = 0;
         this.sprite.caughtUp = false;   // The player caught up with it while roaming: skip the charge
         this.sprite.spinning = false;   // Spinning (spin attack and flee): player shots don't count as hits
         this.sprite.spinAngle = 0;      // Spin added to the heading for the rotation (radians, 0 - 2PI)
         this.sprite.spinRate = 0;       // Spin speed (radians/ms)
         this.sprite.spinHitCount = 0;   // Player shots that hit this spin, each slows it (Level1State.collisionCallBack())
-        this.sprite.knockedOut = false; // Enough spin hits knocked it out of the spin: the flee stops it (AI_Enemy01_Flee)
+        this.sprite.knockedOut = false; // Enough spin hits knocked it out of the spin: the flee stops it (AI_Pest00_Flee)
         this.sprite.volleyTime = 0;     // Time since the last missile volley while spinning (ms)
-        this.sprite.attackSide = 0;     // Side of the ship it charged in from (-1/1), 0 when it attacks where it is (AI_Enemy01_Charge)
+        this.sprite.attackSide = 0;     // Side of the ship it charged in from (-1/1), 0 when it attacks where it is (AI_Pest00_Charge)
         this.sprite.wavePhase = Math.random() * gTwoPi;
         this.sprite.heading = -(Math.PI / 2);
         this.applyRot();
 
         // Away from the player, either side, off the screen
         this._x = this.data.playerShipSprite.pos.x +
-            (((Math.random() < 0.5) ? -1 : 1) * genFunc.randomInt( gameDefs.ENEMY01_SPAWN_DIST_MIN, gameDefs.ENEMY01_SPAWN_DIST_MAX ));
+            (((Math.random() < 0.5) ? -1 : 1) * genFunc.randomInt( gameDefs.PEST00_SPAWN_DIST_MIN, gameDefs.PEST00_SPAWN_DIST_MAX ));
         if( this._x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
             this._x += gWrapSpan;
         else if( this._x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
@@ -430,7 +430,7 @@ class AI_Enemy01_Descend extends AI_Enemy01_base
         this.sprite.setPosXYZ( this._x, settings.deviceRes_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
         this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
 
-        this.easingY.init( this.sprite.pos.y, this._offsetY, Math.abs(this.sprite.pos.y - this._offsetY) / gameDefs.ENEMY01_DESCEND_PIXELS_PER_SEC, gSineOut );
+        this.easingY.init( this.sprite.pos.y, this._offsetY, Math.abs(this.sprite.pos.y - this._offsetY) / gameDefs.PEST00_DESCEND_PIXELS_PER_SEC, gSineOut );
     }
 
     // 
@@ -454,7 +454,7 @@ class AI_Enemy01_Descend extends AI_Enemy01_base
 
             // The player came over while it drops in: once it's fully below the HUD strip, spin attack right away
             // (the roam and the charge are skipped), so it isn't a sitting duck
-            else if( this.sprite.pos.y < (gameDefs.ENEMY01_VIEW_TOP - this.sprite.parentNode.radius) && this.inView() )
+            else if( this.sprite.pos.y < (gameDefs.PEST00_VIEW_TOP - this.sprite.parentNode.radius) && this.inView() )
             {
                 this.sprite.caughtUp = true;
                 this.state = defs.EAIS_SUCCESS;
@@ -472,7 +472,7 @@ class AI_Enemy01_Descend extends AI_Enemy01_base
 //        line, so it can't easily be shot down. If the player still catches up with it (it's in view),
 //        it spin attacks where it is and flees.
 //
-class AI_Enemy01_Roam extends AI_Enemy01_base
+class AI_Pest00_Roam extends AI_Pest00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -487,8 +487,8 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
         this._dx = -this.shipDeltaX();
         this.side = (this._dx < 0) ? -1 : 1;
 
-        this.waypointX = this.data.playerShipSprite.pos.x + (this.side * genFunc.randomInt( gameDefs.ENEMY01_ROAM_DIST_MIN, gameDefs.ENEMY01_ROAM_DIST_MAX ));
-        this.waypointY = genFunc.randomInt( gameDefs.ENEMY01_MIN_Y + 60, gameDefs.ENEMY01_MAX_Y - 40 );
+        this.waypointX = this.data.playerShipSprite.pos.x + (this.side * genFunc.randomInt( gameDefs.PEST00_ROAM_DIST_MIN, gameDefs.PEST00_ROAM_DIST_MAX ));
+        this.waypointY = genFunc.randomInt( gameDefs.PEST00_MIN_Y + 60, gameDefs.PEST00_MAX_Y - 40 );
     }
 
     // 
@@ -499,9 +499,9 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
         if( this.state === defs.EAIS_INIT )
         {
             this.pickWaypoint();
-            this.roamTime = genFunc.randomInt( gameDefs.ENEMY01_ROAM_TIME_MIN, gameDefs.ENEMY01_ROAM_TIME_MAX );
+            this.roamTime = genFunc.randomInt( gameDefs.PEST00_ROAM_TIME_MIN, gameDefs.PEST00_ROAM_TIME_MAX );
             this.avoiding = false;
-            this.loopTime = genFunc.randomInt( gameDefs.ENEMY01_LOOP_TIME_MIN, gameDefs.ENEMY01_LOOP_TIME_MAX );
+            this.loopTime = genFunc.randomInt( gameDefs.PEST00_LOOP_TIME_MIN, gameDefs.PEST00_LOOP_TIME_MAX );
             this.loopLeft = 0;
             this.roamAge = 0;
             this.state = defs.EAIS_ACTIVE;
@@ -509,14 +509,14 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
 
         // The player caught up with it (it's in view): spin attack where it is and flee (the charge is skipped).
         // Not right at the start of the roam, so it doesn't attack again straight after descending.
-        // Caught up while it dropped in (AI_Enemy01_Descend), it goes straight on to the attack.
+        // Caught up while it dropped in (AI_Pest00_Descend), it goes straight on to the attack.
         if( this.state === defs.EAIS_ACTIVE )
         {
             if( this.sprite.caughtUp )
                 this.state = defs.EAIS_SUCCESS;
 
             this.roamAge += highResTimer.elapsedTime;
-            if( this.roamAge > gameDefs.ENEMY01_CATCH_GRACE && this.inView() )
+            if( this.roamAge > gameDefs.PEST00_CATCH_GRACE && this.inView() )
             {
                 this.sprite.caughtUp = true;
                 this.state = defs.EAIS_SUCCESS;
@@ -534,7 +534,7 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
             this._turn = gLoopTurnRate * highResTimer.elapsedTime;
             this.sprite.heading = normalizeAngle( this.sprite.heading + (this.loopDir * this._turn) );
             this.loopLeft -= this._turn;
-            this.approachSpeed( gameDefs.ENEMY01_ROAM_SPEED, gameDefs.ENEMY01_ROAM_ACCEL );
+            this.approachSpeed( gameDefs.PEST00_ROAM_SPEED, gameDefs.PEST00_ROAM_ACCEL );
         }
         else if( this.state === defs.EAIS_ACTIVE )
         {
@@ -550,7 +550,7 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
 
             // Reached the waypoint, or the player got close to it: pick another one away from the player
             if( (Math.abs( this._wpDX ) + Math.abs( this._wpDY )) < 150 ||
-                Math.abs( genFunc.wrapDelta( this.waypointX - this.data.playerShipSprite.pos.x, gWrapSpan ) ) < gameDefs.ENEMY01_ROAM_KEEP_AWAY )
+                Math.abs( genFunc.wrapDelta( this.waypointX - this.data.playerShipSprite.pos.x, gWrapSpan ) ) < gameDefs.PEST00_ROAM_KEEP_AWAY )
             {
                 this.pickWaypoint();
                 this._wpDX = genFunc.wrapDelta( this.waypointX - this.sprite.pos.x, gWrapSpan );
@@ -558,16 +558,16 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
             }
 
             this.faceAngle( this.bandAngle( this.weave( Math.atan2( this._wpDY, this._wpDX ), gWaveAmp ) ), gRoamTurnRate );
-            this.approachSpeed( gameDefs.ENEMY01_ROAM_SPEED, gameDefs.ENEMY01_ROAM_ACCEL );
+            this.approachSpeed( gameDefs.PEST00_ROAM_SPEED, gameDefs.PEST00_ROAM_ACCEL );
 
             // Time for a loop: a full circle, turning up when it's in the lower half of its band, down in the upper half
             this.loopTime -= highResTimer.elapsedTime;
             if( this.loopTime <= 0 )
             {
-                this.loopTime = genFunc.randomInt( gameDefs.ENEMY01_LOOP_TIME_MIN, gameDefs.ENEMY01_LOOP_TIME_MAX );
+                this.loopTime = genFunc.randomInt( gameDefs.PEST00_LOOP_TIME_MIN, gameDefs.PEST00_LOOP_TIME_MAX );
                 this.loopLeft = gTwoPi;
                 this.loopDir = ((Math.cos( this.sprite.heading ) >= 0) ? 1 : -1) *
-                    ((this.sprite.pos.y < ((gameDefs.ENEMY01_MIN_Y + gameDefs.ENEMY01_MAX_Y) / 2)) ? 1 : -1);
+                    ((this.sprite.pos.y < ((gameDefs.PEST00_MIN_Y + gameDefs.PEST00_MAX_Y) / 2)) ? 1 : -1);
             }
         }
 
@@ -592,19 +592,19 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
     avoidPlayer()
     {
         this._awayX = -this.shipDeltaX();
-        if( Math.abs( this._awayX ) >= gameDefs.ENEMY01_AVOID_DIST )
+        if( Math.abs( this._awayX ) >= gameDefs.PEST00_AVOID_DIST )
             return false;
 
         this._awayY = this.sprite.pos.y - this.data.playerShipSprite.pos.y;
         this._vy = ((this._awayY < 0) ? -1 : 1) * ((Math.abs( this._awayY ) < 200) ? 0.8 : 0.25);
 
         // Near the edge of the cruise band: run straight sideways rather than out of the band
-        if( (this._vy < 0 && this.sprite.pos.y < (gameDefs.ENEMY01_MIN_Y + 60)) ||
-            (this._vy > 0 && this.sprite.pos.y > (gameDefs.ENEMY01_MAX_Y - 60)) )
+        if( (this._vy < 0 && this.sprite.pos.y < (gameDefs.PEST00_MIN_Y + 60)) ||
+            (this._vy > 0 && this.sprite.pos.y > (gameDefs.PEST00_MAX_Y - 60)) )
             this._vy = 0;
 
         this.faceAngle( this.bandAngle( this.weave( Math.atan2( this._vy, (this._awayX < 0) ? -1 : 1 ), gAvoidWaveAmp ) ), gAvoidTurnRate );
-        this.approachSpeed( gameDefs.ENEMY01_AVOID_SPEED, gameDefs.ENEMY01_AVOID_ACCEL );
+        this.approachSpeed( gameDefs.PEST00_AVOID_SPEED, gameDefs.PEST00_AVOID_ACCEL );
 
         return true;
     }
@@ -614,7 +614,7 @@ class AI_Enemy01_Roam extends AI_Enemy01_base
 //  DESC: AI Leaf node script. Charge in at the player and brake to a stop near it, in view, for the spin attack
 //        (steerToStopPoint()).
 //
-class AI_Enemy01_Charge extends AI_Enemy01_base
+class AI_Pest00_Charge extends AI_Pest00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -653,9 +653,9 @@ class AI_Enemy01_Charge extends AI_Enemy01_base
             if( this.inView() )
                 this.chargeViewTime += highResTimer.elapsedTime;
 
-            if( this._dist < gameDefs.ENEMY01_CHARGE_ARRIVE_DIST ||
-                this.chargeViewTime > gameDefs.ENEMY01_CHARGE_VIEW_TIME ||
-                this.chargeTime > gameDefs.ENEMY01_CHARGE_TIME_MAX )
+            if( this._dist < gameDefs.PEST00_CHARGE_ARRIVE_DIST ||
+                this.chargeViewTime > gameDefs.PEST00_CHARGE_VIEW_TIME ||
+                this.chargeTime > gameDefs.PEST00_CHARGE_TIME_MAX )
                 this.state = defs.EAIS_SUCCESS;
         }
 
@@ -666,10 +666,10 @@ class AI_Enemy01_Charge extends AI_Enemy01_base
 //
 //  DESC: AI Leaf node script. Spin attack: quick spin up, fling the first volley of missiles out at full spin.
 //        After a charge it keeps following the stop point beside the ship (a ship flying away would leave it
-//        out of view), and it waits up to ENEMY01_SPIN_WAIT_MAX at full spin to be in view before it fires.
-//        It keeps spinning and firing volleys while it flees (AI_Enemy01_Flee).
+//        out of view), and it waits up to PEST00_SPIN_WAIT_MAX at full spin to be in view before it fires.
+//        It keeps spinning and firing volleys while it flees (AI_Pest00_Flee).
 //
-class AI_Enemy01_Spin extends AI_Enemy01_base
+class AI_Pest00_Spin extends AI_Pest00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -686,7 +686,7 @@ class AI_Enemy01_Spin extends AI_Enemy01_base
             // Player shots don't count as hits while it spins, they slow the spin (Level1State.collisionCallBack())
             this.sprite.spinning = true;
             this.sprite.spinHitCount = 0;
-            this.sprite.volleyTime = gameDefs.ENEMY01_VOLLEY_INTERVAL - gameDefs.ENEMY01_FLEE_VOLLEY_DELAY;   // Also when knocked out before the first volley
+            this.sprite.volleyTime = gameDefs.PEST00_VOLLEY_INTERVAL - gameDefs.PEST00_FLEE_VOLLEY_DELAY;   // Also when knocked out before the first volley
             this.waitTime = 0;
             this.state = defs.EAIS_ACTIVE;
         }
@@ -700,8 +700,8 @@ class AI_Enemy01_Spin extends AI_Enemy01_base
             // Caught up (attackSide 0): coast to a stop where it is, unless the ship comes within the stop distance
             // (the player flew up to it): then back off to the stop point on its side, so the ship doesn't run into it
             if( this.sprite.attackSide === 0 &&
-                Math.abs( this.shipDeltaX() ) < gameDefs.ENEMY01_CHARGE_STOP_DIST &&
-                Math.abs( this.data.playerShipSprite.pos.y - this.sprite.pos.y ) < gameDefs.ENEMY01_CHARGE_STOP_DIST )
+                Math.abs( this.shipDeltaX() ) < gameDefs.PEST00_CHARGE_STOP_DIST &&
+                Math.abs( this.data.playerShipSprite.pos.y - this.sprite.pos.y ) < gameDefs.PEST00_CHARGE_STOP_DIST )
                 this.sprite.attackSide = (this.shipDeltaX() > 0) ? -1 : 1;
 
             // After a charge (or backing off), keep following the stop point beside the ship
@@ -711,7 +711,7 @@ class AI_Enemy01_Spin extends AI_Enemy01_base
             }
             else
             {
-                this.approachSpeed( 0, gameDefs.ENEMY01_CHARGE_BRAKE );
+                this.approachSpeed( 0, gameDefs.PEST00_CHARGE_BRAKE );
                 this.moveForward();
             }
 
@@ -723,10 +723,10 @@ class AI_Enemy01_Spin extends AI_Enemy01_base
             if( this.sprite.spinRate >= this._spinTarget )
                 this.waitTime += highResTimer.elapsedTime;
 
-            if( this.sprite.spinRate >= this._spinTarget && (this.inView() || this.waitTime > gameDefs.ENEMY01_SPIN_WAIT_MAX) )
+            if( this.sprite.spinRate >= this._spinTarget && (this.inView() || this.waitTime > gameDefs.PEST00_SPIN_WAIT_MAX) )
             {
                 this.fireMissiles();
-                this.sprite.volleyTime = gameDefs.ENEMY01_VOLLEY_INTERVAL - gameDefs.ENEMY01_FLEE_VOLLEY_DELAY;   // First flee volley after ENEMY01_FLEE_VOLLEY_DELAY
+                this.sprite.volleyTime = gameDefs.PEST00_VOLLEY_INTERVAL - gameDefs.PEST00_FLEE_VOLLEY_DELAY;   // First flee volley after PEST00_FLEE_VOLLEY_DELAY
                 this.state = defs.EAIS_SUCCESS;
             }
 
@@ -738,12 +738,12 @@ class AI_Enemy01_Spin extends AI_Enemy01_base
 }
 
 //
-//  DESC: AI Leaf node script. Run off away from the player at ENEMY01_FLEE_SPEED, swooping up and down and
-//        dodging player shots, still spinning and firing a volley every ENEMY01_VOLLEY_INTERVAL while in
-//        view (one missile once the spin is stopped), until it's ENEMY01_FLEE_DIST away (off the screen, so the player has time to chase it), then
+//  DESC: AI Leaf node script. Run off away from the player at PEST00_FLEE_SPEED, swooping up and down and
+//        dodging player shots, still spinning and firing a volley every PEST00_VOLLEY_INTERVAL while in
+//        view (one missile once the spin is stopped), until it's PEST00_FLEE_DIST away (off the screen, so the player has time to chase it), then
 //        roam again. Each shot that hits the spin slows it (spinStep()); the last one stops it (sprite.knockedOut).
 //
-class AI_Enemy01_Flee extends AI_Enemy01_base
+class AI_Pest00_Flee extends AI_Pest00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -758,19 +758,19 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
     //
     newSwoop()
     {
-        if( this.sprite.pos.y > (gameDefs.ENEMY01_MAX_Y - 60) )
+        if( this.sprite.pos.y > (gameDefs.PEST00_MAX_Y - 60) )
             this.swoopUp = false;
-        else if( this.sprite.pos.y < (gameDefs.ENEMY01_MIN_Y + 60) )
+        else if( this.sprite.pos.y < (gameDefs.PEST00_MIN_Y + 60) )
             this.swoopUp = true;
-        else if( Math.random() < gameDefs.ENEMY01_SWOOP_FLIP_CHANCE )
+        else if( Math.random() < gameDefs.PEST00_SWOOP_FLIP_CHANCE )
             this.swoopUp = !this.swoopUp;
 
-        this.swoopAngle = (this.swoopUp ? 1 : -1) * genFunc.randomInt( gameDefs.ENEMY01_SWOOP_ANGLE_MIN, gameDefs.ENEMY01_SWOOP_ANGLE_MAX ) * gDegToRad;
+        this.swoopAngle = (this.swoopUp ? 1 : -1) * genFunc.randomInt( gameDefs.PEST00_SWOOP_ANGLE_MIN, gameDefs.PEST00_SWOOP_ANGLE_MAX ) * gDegToRad;
         // A mix of short jinks and longer swoops
-        if( Math.random() < gameDefs.ENEMY01_SWOOP_LONG_CHANCE )
-            this.swoopTime = genFunc.randomInt( gameDefs.ENEMY01_SWOOP_LONG_MIN, gameDefs.ENEMY01_SWOOP_LONG_MAX );
+        if( Math.random() < gameDefs.PEST00_SWOOP_LONG_CHANCE )
+            this.swoopTime = genFunc.randomInt( gameDefs.PEST00_SWOOP_LONG_MIN, gameDefs.PEST00_SWOOP_LONG_MAX );
         else
-            this.swoopTime = genFunc.randomInt( gameDefs.ENEMY01_SWOOP_SHORT_MIN, gameDefs.ENEMY01_SWOOP_SHORT_MAX );
+            this.swoopTime = genFunc.randomInt( gameDefs.PEST00_SWOOP_SHORT_MIN, gameDefs.PEST00_SWOOP_SHORT_MAX );
     }
 
     // 
@@ -791,8 +791,8 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
 
             // A shot flipped like the ship (rot.y) flies left
             this._dx = genFunc.wrapDelta( this.sprite.pos.x - this._shot.pos.x, gWrapSpan ) * ((this._shot.rot.y > 1) ? -1 : 1);
-            if( this._dx > 0 && this._dx < gameDefs.ENEMY01_DODGE_DIST &&
-                Math.abs( this._shot.pos.y - this.sprite.pos.y ) < gameDefs.ENEMY01_DODGE_Y )
+            if( this._dx > 0 && this._dx < gameDefs.PEST00_DODGE_DIST &&
+                Math.abs( this._shot.pos.y - this.sprite.pos.y ) < gameDefs.PEST00_DODGE_Y )
                 return this._shot;
         }
 
@@ -840,14 +840,14 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
                 // A player shot heading at it: maybe dodge, away from the shot (back toward the band near its edges)
                 if( this.dodgeCooldown <= 0 && this.findShot() !== null )
                 {
-                    this.dodgeCooldown = gameDefs.ENEMY01_DODGE_COOLDOWN;
-                    if( Math.random() < gameDefs.ENEMY01_DODGE_CHANCE )
+                    this.dodgeCooldown = gameDefs.PEST00_DODGE_COOLDOWN;
+                    if( Math.random() < gameDefs.PEST00_DODGE_CHANCE )
                     {
-                        this.dodgeTime = gameDefs.ENEMY01_DODGE_TIME;
+                        this.dodgeTime = gameDefs.PEST00_DODGE_TIME;
                         this.dodgeUp = (this.sprite.pos.y >= this._shot.pos.y);
-                        if( this.sprite.pos.y > (gameDefs.ENEMY01_MAX_Y - 60) )
+                        if( this.sprite.pos.y > (gameDefs.PEST00_MAX_Y - 60) )
                             this.dodgeUp = false;
-                        else if( this.sprite.pos.y < (gameDefs.ENEMY01_MIN_Y + 60) )
+                        else if( this.sprite.pos.y < (gameDefs.PEST00_MIN_Y + 60) )
                             this.dodgeUp = true;
 
                         // Carry on swooping the way it dodged
@@ -863,7 +863,7 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
                 this.faceAngle( this.bandAngle( this.fleeHeading( this.swoopAngle ) ), gFleeTurnRate );
             }
 
-            this.approachSpeed( gameDefs.ENEMY01_FLEE_SPEED, gameDefs.ENEMY01_FLEE_ACCEL );
+            this.approachSpeed( gameDefs.PEST00_FLEE_SPEED, gameDefs.PEST00_FLEE_ACCEL );
             this.moveForward();
 
             // The last spin hit stops the spin: ease to the next whole turn (at least a radian away), starting at
@@ -902,7 +902,7 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
             // Another volley every so often (when in view): smaller for each spin hit, one missile
             // once the spin is stopped
             this.sprite.volleyTime += highResTimer.elapsedTime;
-            if( this.sprite.volleyTime >= gameDefs.ENEMY01_VOLLEY_INTERVAL )
+            if( this.sprite.volleyTime >= gameDefs.PEST00_VOLLEY_INTERVAL )
             {
                 this.fireMissiles();
                 this.sprite.volleyTime = 0;
@@ -910,7 +910,7 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
 
             // Far enough away (off the screen): stop spinning. It got away, so its hit count starts over
             // (it's no longer one hit from death after its spin was shot to a stop).
-            if( Math.abs( this.shipDeltaX() ) > gameDefs.ENEMY01_FLEE_DIST )
+            if( Math.abs( this.shipDeltaX() ) > gameDefs.PEST00_FLEE_DIST )
             {
                 this.sprite.hitCount = 0;
                 this.sprite.spinning = false;
@@ -931,22 +931,22 @@ class AI_Enemy01_Flee extends AI_Enemy01_base
 //
 export function loadScripts()
 {
-    // Enemy01 AI functions
-    scriptManager.set( 'AI_Enemy01_Head',
-        ( nodeData ) => { return new AI_Enemy01_Head( nodeData ); } );
+    // Pest00 AI functions
+    scriptManager.set( 'AI_Pest00_Head',
+        ( nodeData ) => { return new AI_Pest00_Head( nodeData ); } );
 
-    scriptManager.set( 'AI_Enemy01_Descend',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Descend( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Pest00_Descend',
+        ( nodeData, headNode, sprite ) => { return new AI_Pest00_Descend( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy01_Roam',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Roam( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Pest00_Roam',
+        ( nodeData, headNode, sprite ) => { return new AI_Pest00_Roam( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy01_Charge',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Charge( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Pest00_Charge',
+        ( nodeData, headNode, sprite ) => { return new AI_Pest00_Charge( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy01_Spin',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Spin( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Pest00_Spin',
+        ( nodeData, headNode, sprite ) => { return new AI_Pest00_Spin( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy01_Flee',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy01_Flee( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Pest00_Flee',
+        ( nodeData, headNode, sprite ) => { return new AI_Pest00_Flee( nodeData, headNode, sprite ); } );
 }

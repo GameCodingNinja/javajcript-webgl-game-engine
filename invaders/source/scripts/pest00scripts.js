@@ -1,7 +1,7 @@
 //
-//  FILE NAME: enemy01scripts.js
-//  DESC:      scripts for the enemy01
-//             (its hit and missile hit scripts are the generic enemy00 ones: Enemy00Ship_Hit, Enemy00Shot_Hit)
+//  FILE NAME: pest00scripts.js
+//  DESC:      scripts for the pest00
+//             (its hit and missile hit scripts are the generic wreck00 ones: Wreck00Ship_Hit, Wreck00Shot_Hit)
 //
 
 "use strict";
@@ -18,24 +18,24 @@ var gWrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
 var gDegToRad = Math.PI / 180;
 
 // Missile homing turn rate converted from degrees/sec to radians/ms
-var gMissileTurnRate = gameDefs.ENEMY01_MISSILE_TURN_RATE * gDegToRad / 1000;
+var gMissileTurnRate = gameDefs.PEST00_MISSILE_TURN_RATE * gDegToRad / 1000;
 
 // Missile commits to a straight final run once this close to the player (squared for a sqrt-free compare)...
-var gMissileLockDistSq = gameDefs.ENEMY01_MISSILE_LOCK_DIST * gameDefs.ENEMY01_MISSILE_LOCK_DIST;
+var gMissileLockDistSq = gameDefs.PEST00_MISSILE_LOCK_DIST * gameDefs.PEST00_MISSILE_LOCK_DIST;
 
 // ...and its nose is within this angle of the player
-var gMissileLockAlign = gameDefs.ENEMY01_MISSILE_LOCK_ALIGN * gDegToRad;
+var gMissileLockAlign = gameDefs.PEST00_MISSILE_LOCK_ALIGN * gDegToRad;
 
 // Easing function allocated once (the get functions create a new closure on every call)
 var gSineIn = easing.getSineIn();
 
 //
-//  DESC: Script for the enemy01 missile flight
+//  DESC: Script for the pest00 missile flight
 //        Flung straight out from the rim of the spinning enemy at an angle, slowing down, then turns to
 //        home in on the player. Once close and lined up it commits to a straight final run the player
 //        can dodge. Nose facing its flight (the art points right).
 //
-class Enemy01Shot_Fire
+class Pest00Shot_Fire
 {
     constructor( sprite, enemySprite, angle )
     {
@@ -58,7 +58,7 @@ class Enemy01Shot_Fire
         // Start on the rim of the enemy, heading straight out
         this.heading = angle;
         sprite.setPos( enemySprite.pos );
-        sprite.incPosXYZ( Math.cos( angle ) * gameDefs.ENEMY01_MISSILE_SPAWN_OFFSET, Math.sin( angle ) * gameDefs.ENEMY01_MISSILE_SPAWN_OFFSET );
+        sprite.incPosXYZ( Math.cos( angle ) * gameDefs.PEST00_MISSILE_SPAWN_OFFSET, Math.sin( angle ) * gameDefs.PEST00_MISSILE_SPAWN_OFFSET );
         sprite.setRotXYZ( 0, 0, this.heading, false );
 
         this.age = 0;
@@ -75,14 +75,14 @@ class Enemy01Shot_Fire
         if( this.camera.inViewY( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
             // Launch: fly straight out, slowing down to the cruise speed
-            if( this.age < gameDefs.ENEMY01_MISSILE_LAUNCH_TIME )
+            if( this.age < gameDefs.PEST00_MISSILE_LAUNCH_TIME )
             {
-                this._speed = gameDefs.ENEMY01_MISSILE_LAUNCH_SPEED +
-                    ((gameDefs.ENEMY01_MISSILE_SPEED - gameDefs.ENEMY01_MISSILE_LAUNCH_SPEED) * gSineIn( this.age / gameDefs.ENEMY01_MISSILE_LAUNCH_TIME ));
+                this._speed = gameDefs.PEST00_MISSILE_LAUNCH_SPEED +
+                    ((gameDefs.PEST00_MISSILE_SPEED - gameDefs.PEST00_MISSILE_LAUNCH_SPEED) * gSineIn( this.age / gameDefs.PEST00_MISSILE_LAUNCH_TIME ));
             }
             else
             {
-                this._speed = gameDefs.ENEMY01_MISSILE_SPEED;
+                this._speed = gameDefs.PEST00_MISSILE_SPEED;
 
                 // Home in on the player until it commits to the final run
                 if( this.homing )
@@ -137,7 +137,7 @@ class Enemy01Shot_Fire
             this.sprite.collisionComponent.checkForCollision( this.playerShipStrategy.nodeAry, this.playerShipSprite.shieldOn );
 
             this.age += highResTimer.elapsedTime;
-            if( this.age < gameDefs.ENEMY01_MISSILE_LIFETIME )
+            if( this.age < gameDefs.PEST00_MISSILE_LIFETIME )
                 return false;
         }
 
@@ -149,10 +149,10 @@ class Enemy01Shot_Fire
 }
 
 //
-//  DESC: Script for handling enemy01 ship dying
-//        Falls off the bottom of the screen spinning, like enemy00
+//  DESC: Script for handling pest00 ship dying
+//        Falls off the bottom of the screen spinning, like wreck00
 //
-class Enemy01Ship_Die
+class Pest00Ship_Die
 {
     constructor( sprite, projectileSprite )
     {
@@ -173,7 +173,7 @@ class Enemy01Ship_Die
         this.sprite = sprite;
 
         // Remove the AI script since the enemy is to die
-        sprite.scriptComponent.remove( 'AI_Enemy01' );
+        sprite.scriptComponent.remove( 'AI_Pest00' );
 
         this._dest = -(settings.deviceRes_half.h + sprite.parentNode.radius);
         this._offsetY = Math.abs(sprite.pos.y - this._dest);
@@ -222,9 +222,9 @@ class Enemy01Ship_Die
 //
 export function loadScripts()
 {
-    scriptManager.set( 'Enemy01Shot_Fire',
-        ( sprite, enemySprite, angle ) => { return new Enemy01Shot_Fire( sprite, enemySprite, angle ); } );
+    scriptManager.set( 'Pest00Shot_Fire',
+        ( sprite, enemySprite, angle ) => { return new Pest00Shot_Fire( sprite, enemySprite, angle ); } );
 
-    scriptManager.set( 'Enemy01Ship_Die',
-        ( sprite, projectileSprite ) => { return new Enemy01Ship_Die( sprite, projectileSprite ); } );
+    scriptManager.set( 'Pest00Ship_Die',
+        ( sprite, projectileSprite ) => { return new Pest00Ship_Die( sprite, projectileSprite ); } );
 }

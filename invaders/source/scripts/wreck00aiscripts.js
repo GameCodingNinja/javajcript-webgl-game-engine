@@ -1,5 +1,5 @@
 //
-//  FILE NAME: enemy00aiscripts.js
+//  FILE NAME: wreck00aiscripts.js
 //  DESC:      scripts for AI
 //
 
@@ -28,9 +28,9 @@ export function clearAIData()
 }
 
 //
-//  DESC: AI Enemy00 base class
+//  DESC: AI Wreck00 base class
 //
-class AI_Enemy00_base extends aiNode
+class AI_Wreck00_base extends aiNode
 {
     constructor( nodeData )
     {
@@ -54,10 +54,10 @@ class AI_Enemy00_base extends aiNode
                     // Should we skip a shot?
                     if( genFunc.randomInt( 0, 10 ) > 3 )
                     {
-                        this._shootSprite = this.data.enemyShotStrategy.create('enemy00_shot').get();
+                        this._shootSprite = this.data.enemyShotStrategy.create('wreck00_shot').get();
                         this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite );
 
-                        this.data.groupPlayer.play( 'enemy00_gun' );
+                        this.data.groupPlayer.play( 'wreck00_gun' );
                     }
 
                     this.sprite.shootTime = highResTimer.elapsedTime + shootTime;
@@ -69,10 +69,10 @@ class AI_Enemy00_base extends aiNode
 }
 
 //
-//  DESC: AI Enemy00 head (root) node base class script
+//  DESC: AI Wreck00 head (root) node base class script
 //        Only supports one child
 //
-class AI_Enemy00_Head extends aiNode
+class AI_Wreck00_Head extends aiNode
 {
     constructor( nodeData )
     {
@@ -133,7 +133,7 @@ class AI_Enemy00_Head extends aiNode
 //  DESC: AI Leaf (task) node script. Descend into the game
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy00_Descend extends AI_Enemy00_base
+class AI_Wreck00_Descend extends AI_Wreck00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -156,7 +156,7 @@ class AI_Enemy00_Descend extends AI_Enemy00_base
         this.sprite.targetBuilding = null;
         this.sprite.shakingBuilding = false;
         this.sprite.hitCount = 0;
-        this.sprite.ramTime = 0;   // Time of the last ram on the player (Level1State ENEMY00_RAM_COOLDOWN)
+        this.sprite.ramTime = 0;   // Time of the last ram on the player (Level1State WRECK00_RAM_COOLDOWN)
         this.sprite.shootTime = genFunc.randomInt( 0, 5000 );
         this.sprite.setPosXYZ( genFunc.randomInt( this.data.minX, this.data.maxX ), settings.deviceRes_half.h + this.sprite.parentNode.radius + genFunc.randomInt( 0, 200 ) );
         this.sprite.setFrame(0);
@@ -210,7 +210,7 @@ class AI_Enemy00_Descend extends AI_Enemy00_base
 //  DESC: AI Leaf (task) node script. Roam around the play area.
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy00_Roam extends AI_Enemy00_base
+class AI_Wreck00_Roam extends AI_Wreck00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -233,7 +233,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
         this.state = defs.EAIS_ACTIVE;
 
         // Hover bob, eased in from 0 so it doesn't jump
-        this.hoverTime = genFunc.randomInt( 0, gameDefs.ENEMY00_HOVER_PERIOD );
+        this.hoverTime = genFunc.randomInt( 0, gameDefs.WRECK00_HOVER_PERIOD );
         this.hoverRamp = 0;
         this.hoverOffset = 0;
     }
@@ -244,8 +244,8 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
     hover()
     {
         this.hoverTime += highResTimer.elapsedTime;
-        this.hoverRamp = Math.min( 1, this.hoverRamp + (highResTimer.elapsedTime / gameDefs.ENEMY00_HOVER_RAMP) );
-        this.hoverOffset = Math.sin( this.hoverTime * (Math.PI * 2) / gameDefs.ENEMY00_HOVER_PERIOD ) * gameDefs.ENEMY00_HOVER_AMP * this.hoverRamp;
+        this.hoverRamp = Math.min( 1, this.hoverRamp + (highResTimer.elapsedTime / gameDefs.WRECK00_HOVER_RAMP) );
+        this.hoverOffset = Math.sin( this.hoverTime * (Math.PI * 2) / gameDefs.WRECK00_HOVER_PERIOD ) * gameDefs.WRECK00_HOVER_AMP * this.hoverRamp;
 
         return this.hoverOffset;
     }
@@ -377,7 +377,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
 //  DESC: AI Leaf (task) node script. Destroy building
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy00_DescendToBuilding extends AI_Enemy00_base
+class AI_Wreck00_DescendToBuilding extends AI_Wreck00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -423,7 +423,7 @@ class AI_Enemy00_DescendToBuilding extends AI_Enemy00_base
             if( this.easingY.isFinished() )
             {
                 this.state = defs.EAIS_SUCCESS;
-                this.data.groupPlayer.play( 'enemy00_attack_building' );
+                this.data.groupPlayer.play( 'wreck00_attack_building' );
                 this.sprite.setFrame(1);
             }
         }
@@ -436,7 +436,7 @@ class AI_Enemy00_DescendToBuilding extends AI_Enemy00_base
 //  DESC: AI Leaf (task) node script. Destroy building
 //        The last node on the branch. Implements game specific tests or actions.
 //
-class AI_Enemy00_DestroyBuilding extends AI_Enemy00_base
+class AI_Wreck00_DestroyBuilding extends AI_Wreck00_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -545,19 +545,19 @@ class AI_Enemy00_DestroyBuilding extends AI_Enemy00_base
 //
 export function loadScripts()
 {
-    // Enemy00 AI functions
-    scriptManager.set( 'AI_Enemy00_Head',
-        ( nodeData ) => { return new AI_Enemy00_Head( nodeData ); } );
+    // Wreck00 AI functions
+    scriptManager.set( 'AI_Wreck00_Head',
+        ( nodeData ) => { return new AI_Wreck00_Head( nodeData ); } );
 
-    scriptManager.set( 'AI_Enemy00_Descend',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy00_Descend( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Wreck00_Descend',
+        ( nodeData, headNode, sprite ) => { return new AI_Wreck00_Descend( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy00_Roam',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy00_Roam( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Wreck00_Roam',
+        ( nodeData, headNode, sprite ) => { return new AI_Wreck00_Roam( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy00_DescendToBuilding',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy00_DescendToBuilding( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Wreck00_DescendToBuilding',
+        ( nodeData, headNode, sprite ) => { return new AI_Wreck00_DescendToBuilding( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Enemy00_DestroyBuilding',
-        ( nodeData, headNode, sprite ) => { return new AI_Enemy00_DestroyBuilding( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Wreck00_DestroyBuilding',
+        ( nodeData, headNode, sprite ) => { return new AI_Wreck00_DestroyBuilding( nodeData, headNode, sprite ); } );
 }

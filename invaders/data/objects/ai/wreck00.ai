@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <ai>
 
-    <node name="AI_Enemy00">
+    <node name="AI_Wreck00">
 
-        <head script="AI_Enemy00_Head"/>
+        <head script="AI_Wreck00_Head"/>
 
         <node>
 
@@ -11,7 +11,7 @@
 
             <node>
 
-                <leaf script="AI_Enemy00_Descend"/>
+                <leaf script="AI_Wreck00_Descend"/>
 
             </node>
 
@@ -25,19 +25,19 @@
 
                     <node>
 
-                        <leaf script="AI_Enemy00_Roam"/>
+                        <leaf script="AI_Wreck00_Roam"/>
 
                     </node>
 
                     <node>
 
-                        <leaf script="AI_Enemy00_DescendToBuilding"/>
+                        <leaf script="AI_Wreck00_DescendToBuilding"/>
 
                     </node>
 
                     <node>
 
-                        <leaf script="AI_Enemy00_DestroyBuilding"/>
+                        <leaf script="AI_Wreck00_DestroyBuilding"/>
 
                     </node>
 

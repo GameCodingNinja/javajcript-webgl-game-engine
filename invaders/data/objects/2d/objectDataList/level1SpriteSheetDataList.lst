@@ -436,12 +436,12 @@
             </collision>
         </object>
 
-        <object name="enemy00_ship">
+        <object name="wreck00_ship">
             <visual>
                 <mesh>
                     <spriteSheet>
-                        <glyph id="enemy00_0"/>
-                        <glyph id="enemy00_1"/>
+                        <glyph id="wreck00_0"/>
+                        <glyph id="wreck00_1"/>
                     </spriteSheet>
                 </mesh>
             </visual>
@@ -635,12 +635,12 @@
             <size width="392" height="4"/>
         </object>
 
-        <object name="enemy00_shot">
+        <object name="wreck00_shot">
             <visual>
                 <mesh>
                     <spriteSheet>
-                        <glyph id="enemy00_projectile_0"/>
-                        <glyph id="enemy00_projectile_1"/>
+                        <glyph id="wreck00_projectile_0"/>
+                        <glyph id="wreck00_projectile_1"/>
                     </spriteSheet>
                 </mesh>
             </visual>
@@ -666,11 +666,11 @@
             </collision>
         </object>
 
-        <object name="enemy01_ship">
+        <object name="pest00_ship">
             <visual>
                 <mesh>
                     <spriteSheet>
-                        <glyph id="enemy01"/>
+                        <glyph id="pest00"/>
                     </spriteSheet>
                 </mesh>
             </visual>
@@ -679,11 +679,41 @@
             </collision>
         </object>
 
-        <object name="enemy01_shot">
+        <object name="pest00_shot">
             <visual>
                 <mesh>
                     <spriteSheet>
-                        <glyph id="enemy01_projectile"/>
+                        <glyph id="pest00_projectile"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
+                <pointList radiusFromVisual="true">
+                    <point x="10" y="0"/>
+                    <point x="-11" y="0"/>
+                </pointList>
+            </collision>
+        </object>
+
+        <object name="pest01_ship">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="pest01-0"/>
+                        <glyph id="pest01-1"/>
+                    </spriteSheet>
+                </mesh>
+            </visual>
+            <collision filterCategoryBits="0x00000002" filterMaskBits="0x00000001" collisionSignal="true">
+                <circle radius="70"/>
+            </collision>
+        </object>
+
+        <object name="pest01_shot">
+            <visual>
+                <mesh>
+                    <spriteSheet>
+                        <glyph id="pest01_projectile"/>
                     </spriteSheet>
                 </mesh>
             </visual>
