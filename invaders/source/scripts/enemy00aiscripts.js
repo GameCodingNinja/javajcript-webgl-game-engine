@@ -231,6 +231,23 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
         this.easingY.clear(easing.CLEAR_EASING_FUNC);
         this.sprite.targetBuilding = null;
         this.state = defs.EAIS_ACTIVE;
+
+        // Hover bob, eased in from 0 so it doesn't jump
+        this.hoverTime = genFunc.randomInt( 0, gameDefs.ENEMY00_HOVER_PERIOD );
+        this.hoverRamp = 0;
+        this.hoverOffset = 0;
+    }
+
+    // 
+    //  DESC: Hover bob offset (added to the eased Y)
+    //
+    hover()
+    {
+        this.hoverTime += highResTimer.elapsedTime;
+        this.hoverRamp = Math.min( 1, this.hoverRamp + (highResTimer.elapsedTime / gameDefs.ENEMY00_HOVER_RAMP) );
+        this.hoverOffset = Math.sin( this.hoverTime * (Math.PI * 2) / gameDefs.ENEMY00_HOVER_PERIOD ) * gameDefs.ENEMY00_HOVER_AMP * this.hoverRamp;
+
+        return this.hoverOffset;
     }
     
     // 
@@ -246,7 +263,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
             // First interation, the easing is uninitialized so don't use the value which is 0,0.
             if( this.easingY.isInitialized() )
             {
-                this.sprite.setPosXYZ( this.easingX.getValue(), this.easingY.getValue() );
+                this.sprite.setPosXYZ( this.easingX.getValue(), this.easingY.getValue() + this.hover() );
 
                 // Wrap the sprite position when crossing the map boundary
                 if( this.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
@@ -263,6 +280,9 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
             {
                 if( this.sprite.targetBuilding === null )
                 {
+                    // Start the next move from the Y without the hover bob, so the bob carries on smoothly
+                    this._baseY = this.sprite.pos.y - this.hoverOffset;
+
                     // Randmoly pick a building to target
                     this._index = genFunc.randomInt( 0, this.data.buildings.length-1 );
                     this._targetBuilding = this.data.buildings[this._index].get();
@@ -296,14 +316,14 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                             this.easingX.init( this.sprite.pos.x, this._targetX, this._time, easing.getSineInOut() );
 
                             // Force an initialization to start the movement on first time execution of this function
-                            this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
+                            this.easingY.init( this._baseY, this._baseY, 0, easing.getSineInOut() );
 
                             // Only set the Y easing if not the same building position as we are now
                             if( Math.abs( this._deltaX ) > 100 )
                             {
                                 // Generate the Y range in which the enemy will travel
                                 this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
-                                this.easingY.init( this.sprite.pos.y, this._offsetY, this._time, easing.getSineInOut() );
+                                this.easingY.init( this._baseY, this._offsetY, this._time, easing.getSineInOut() );
                             }
                         }
                     }
@@ -330,7 +350,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                         this.easingX.init( this.sprite.pos.x, this._offsetX, this._time, easing.getSineInOut() );
 
                         // Force an initialization to start the movement on first time execution of this function
-                        this.easingY.init( this.sprite.pos.y, this.sprite.pos.y, 0, easing.getSineInOut() );
+                        this.easingY.init( this._baseY, this._baseY, 0, easing.getSineInOut() );
 
                         // Only set the Y easing if not the same building position as we are now
                         if( Math.abs( this.sprite.pos.x - this._offsetX ) > 100 )
@@ -338,7 +358,7 @@ class AI_Enemy00_Roam extends AI_Enemy00_base
                             // Generate the Y range in which the enemy will travel
                             this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
 
-                            this.easingY.init( this.sprite.pos.y, this._offsetY, this._time, easing.getSineInOut() );
+                            this.easingY.init( this._baseY, this._offsetY, this._time, easing.getSineInOut() );
                         }
                     }
                 }

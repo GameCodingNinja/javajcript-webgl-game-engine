@@ -79,6 +79,8 @@ const MOVE_NULL = -1,
       MINI_BOSS_RAM_DAMAGE = 15,
       BOSS00_RAM_DAMAGE = 15,
       HEALTH_CHARACTER_HEAL = 30,
+      BUILDING_SAVE_BONUS = 2,              // Extra points for killing an enemy00 while it's attacking a building
+      BUILDING_SAVE_HEAL = 10,              // Player health for the save
       ENEMY01_SHIP_HIT_VALUE = 2,
       ENEMY01_SHIP_HIT_COUNT = 3,
       ENEMY01_RAM_COOLDOWN = 500,
@@ -515,12 +517,28 @@ export class Level1State extends CommonState
     }
 
     // 
+    //  DESC: Something hit the player ship: the explosion and its sound, or only the impact sound on the shield
+    //
+    playerHitEffect( sprite, soundId )
+    {
+        if( this._shieldHit )
+        {
+            this.groupPlayer.play( 'player_impact' );
+        }
+        else
+        {
+            this.playerShip.sprite.prepareScript( 'hit', sprite );
+            this.groupPlayer.play( soundId );
+        }
+    }
+
+    // 
     //  DESC: handle collisions
     //
     collisionCallBack( spriteA, spriteB )
     {
-        // The shield was hit: handled like a hit on the player ship (explosions, sounds, enemy00 hit/die, score,
-        // ram cooldown), except the ship takes no damage
+        // The shield was hit: handled like a hit on the player ship (projectile hit, enemy00 hit/die, score,
+        // ram cooldown), except the ship takes no damage and there's no explosion, just the impact sound
         // (the shield is a child of the player ship node, so it has the ship's userId: compare the sprite)
         this._shieldHit = (spriteB === this.playerShip.shieldSprite);
         if( this._shieldHit )
@@ -534,7 +552,6 @@ export class Level1State extends CommonState
             // Player hit by enemy00 projectile
             if( spriteA.parentNode.userId == ENEMY00_SHOT_ID )
             {
-                spriteB.prepareScript( 'hit', spriteA );
                 if( GOD_MODE == false && !this._shieldHit )
                 {
                     // Was player hit by an aggressive shot? Takes more damage
@@ -544,20 +561,19 @@ export class Level1State extends CommonState
                         this.playerShip.progressBar.incCurrentValue( -ENEMY00_SHOT_DAMAGE );
                     this.playerShip.progressBar.setVisible( true );
                 }
+                this.playerHitEffect( spriteA, 'player_hit' );
                 spriteA.prepareScript( 'hit' );
-                this.groupPlayer.play( 'player_hit' );
             }
             // Player hit by a boss00 missile
             else if( spriteA.parentNode.userId == gameDefs.BOSS00_SHOT_ID )
             {
-                spriteB.prepareScript( 'hit', spriteA );
                 if( GOD_MODE == false && !this._shieldHit )
                 {
                     this.playerShip.progressBar.incCurrentValue( -gameDefs.BOSS00_MISSILE_DAMAGE );
                     this.playerShip.progressBar.setVisible( true );
                 }
+                this.playerHitEffect( spriteA, 'player_hit' );
                 spriteA.prepareScript( 'hit' );
-                this.groupPlayer.play( 'player_hit' );
             }
             // Player collides into enemy00
             else if( spriteA.parentNode.userId == gameDefs.ENEMY00_SHIP_ID )
@@ -571,7 +587,6 @@ export class Level1State extends CommonState
                 {
                     spriteA.ramTime = performance.now();
 
-                    spriteB.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
                         this.playerShip.progressBar.incCurrentValue( -ENEMY00_RAM_DAMAGE );
@@ -592,37 +607,36 @@ export class Level1State extends CommonState
                     // In aggressive mode (frame 1), takes multiple shots to kill
                     else if( spriteA.hitCount == ENEMY00_SHIP_HIT_COUNT )
                     {
+                        this._saveBonus = this.buildingSaveBonus( spriteA );   // before the die script lets go of the building
                         spriteA.collisionComponent.enable = false;
                         spriteA.prepareScript( 'die', spriteB );
-                        this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE * 2 );
+                        this.updateHudProgress( (ENEMY00_SHIP_HIT_VALUE * 2) + this._saveBonus );
                     }
 
-                    this.groupPlayer.play( 'EXPLOSION_Metllic' );
+                    this.playerHitEffect( spriteA, 'EXPLOSION_Metllic' );
                 }
             }
             // Player hit by a mini_boss_00 mine
             else if( spriteA.parentNode.userId == gameDefs.MINI_BOSS_00_MINE_ID )
             {
-                spriteB.prepareScript( 'hit', spriteA );
                 if( GOD_MODE == false && !this._shieldHit )
                 {
                     this.playerShip.progressBar.incCurrentValue( -gameDefs.MINI_BOSS_00_MINE_DAMAGE );
                     this.playerShip.progressBar.setVisible( true );
                 }
+                this.playerHitEffect( spriteA, 'player_hit' );
                 spriteA.prepareScript( 'hit' );
-                this.groupPlayer.play( 'player_hit' );
             }
             // Player hit by an enemy01 missile
             else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHOT_ID )
             {
-                spriteB.prepareScript( 'hit', spriteA );
                 if( GOD_MODE == false && !this._shieldHit )
                 {
                     this.playerShip.progressBar.incCurrentValue( -gameDefs.ENEMY01_MISSILE_DAMAGE );
                     this.playerShip.progressBar.setVisible( true );
                 }
+                this.playerHitEffect( spriteA, 'player_hit' );
                 spriteA.prepareScript( 'hit' );
-                this.groupPlayer.play( 'player_hit' );
             }
             // Player collides into enemy01
             else if( spriteA.parentNode.userId == gameDefs.ENEMY01_SHIP_ID )
@@ -635,7 +649,6 @@ export class Level1State extends CommonState
                 {
                     spriteA.ramTime = performance.now();
 
-                    spriteB.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
                         this.playerShip.progressBar.incCurrentValue( -ENEMY01_RAM_DAMAGE );
@@ -644,7 +657,7 @@ export class Level1State extends CommonState
 
                     // A ram only damages the player ship, never enemy01
 
-                    this.groupPlayer.play( 'EXPLOSION_Metllic' );
+                    this.playerHitEffect( spriteA, 'EXPLOSION_Metllic' );
                 }
             }
             // Player collides into mini_boss_00 or mini_boss_01
@@ -653,13 +666,12 @@ export class Level1State extends CommonState
                 spriteA.collisionComponent.enable = true;
                 if(this.playerShip.collisionTimer.expired(true))
                 {
-                    this.playerShip.sprite.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
                         this.playerShip.progressBar.incCurrentValue( -MINI_BOSS_RAM_DAMAGE );
                         this.playerShip.progressBar.setVisible( true );
                     }
-                    this.groupPlayer.play( 'EXPLOSION_Metllic' );
+                    this.playerHitEffect( spriteA, 'EXPLOSION_Metllic' );
                 }
             }
             // Player collides into the boss (the boss damages the player when it barrels past)
@@ -669,13 +681,12 @@ export class Level1State extends CommonState
                 spriteA.collisionComponent.enable = true;
                 if(this.playerShip.collisionTimer.expired(true))
                 {
-                    this.playerShip.sprite.prepareScript( 'hit', spriteA );
                     if( GOD_MODE == false && !this._shieldHit )
                     {
                         this.playerShip.progressBar.incCurrentValue( -BOSS00_RAM_DAMAGE );
                         this.playerShip.progressBar.setVisible( true );
                     }
-                    this.groupPlayer.play( 'EXPLOSION_Metllic' );
+                    this.playerHitEffect( spriteA, 'EXPLOSION_Metllic' );
                 }
             }
             // Player collides with health character
@@ -736,9 +747,10 @@ export class Level1State extends CommonState
             // In aggressive mode (frame 1), takes multiple shots to kill
             else if( spriteB.hitCount == ENEMY00_SHIP_HIT_COUNT )
             {
+                this._saveBonus = this.buildingSaveBonus( spriteB );   // before the die script lets go of the building
                 spriteB.collisionComponent.enable = false;
                 spriteB.prepareScript( 'die', spriteA );
-                this.updateHudProgress( ENEMY00_SHIP_HIT_VALUE * 2 );
+                this.updateHudProgress( (ENEMY00_SHIP_HIT_VALUE * 2) + this._saveBonus );
             }
 
             this.groupPlayer.play( 'enemy_explosion' );
@@ -1379,6 +1391,25 @@ export class Level1State extends CommonState
                     this.easingX.init( this.easingX.getValue(), this.playerShip.speed + this.playerShip.boostSpeed, 2, easing.getLinear() );
             }
         }
+    }
+
+    // 
+    //  DESC: An enemy00 killed while attacking a building saved it: heal the player and return the bonus points
+    //
+    buildingSaveBonus( sprite )
+    {
+        if( !sprite.shakingBuilding )
+            return 0;
+
+        if( !this.playerShip.progressBar.isMaxValue() )
+        {
+            this.playerShip.progressBar.incCurrentValue( BUILDING_SAVE_HEAL );
+
+            if( this.playerShip.progressBar.isMaxValue() )
+                this.playerShip.progressBar.setVisible( false );
+        }
+
+        return BUILDING_SAVE_BONUS;
     }
 
     // 
