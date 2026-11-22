@@ -71,11 +71,10 @@ A missile flung directly away from the player has to turn up to 180°, so the tu
 
 ## Spawning
 
-- **From level 2:** its spawn timer starts when `playerLevel` reaches 2 (`PEST00_LEVEL_THRESHOLD = 2`), the same way `MINI_BOSS_01_LEVEL_THRESHOLD` turns on mini-boss spawns in the level-up code.
-- **Own spawn timer** (20–50 s), separate from wreck00's.
-- **One at a time** (`MAX_PEST00 = 1`). When it dies the spawn timer starts over (a new 20–50 s) for the next one; one that's dying (falling off the screen) doesn't count.
-- **Boss and mini-boss battles:** none spawn while a mini-boss is out or the boss battle is on (one that's already out stays), until the level reaches **15** (`PEST00_BATTLE_SPAWN_LEVEL`); from level 15 it spawns during them too. If the spawn timer runs out then, it starts another 20–50 s round.
-- The wreck00 spawn check subtracts the pest00 count (`countPest00()`), so pest00 doesn't use up an wreck00 slot.
+- **Pest group:** pest00 and pest01 (the swarm) share one spawn timer, `pestSpawnTimer` (20–50 s), started when `playerLevel` reaches 2 (`PEST_LEVEL_THRESHOLD = 2`), the same way `MINI_BOSS_01_LEVEL_THRESHOLD` turns on mini-boss spawns in the level-up code. When it runs out it picks pest00 or the swarm at random, but after 2 of the same one in a row (`MAX_PEST_STREAK`) the other one comes next.
+- **One Pest at a time** (`countPests()`, one that's dying doesn't count). When pest00 dies the spawn timer starts over (a new 20–50 s).
+- **Boss and mini-boss battles:** none spawn while a mini-boss is out or the boss battle is on (one that's already out stays), until the level reaches **15** (`PEST_BATTLE_SPAWN_LEVEL`); from level 15 they spawn during them too. If the spawn timer runs out then, it starts another 20–50 s round.
+- The wreck00 spawn check subtracts the Pest count (`countPests()`), so Pests don't use up wreck00 slots.
 
 ## Sound
 
@@ -111,6 +110,6 @@ It follows the "Adding a New Enemy or Boss" checklist in AGENTS.md:
    - pest00 rams the ship (its own ram cooldown).
    - Player shot hits pest00 (hit, die, score).
 9. **Spawning:**
-   - An pest00 spawn timer in `handleEnemySpawn()`, started at level 2.
+   - The shared Pest spawn timer in `handleEnemySpawn()`, started at level 2.
    - Paused while the start menu is up, and paused and resumed with the others for the pause menu and game over.
 10. **AGENTS.md:** pest00 in the "Which Entities Wrap" table and its behavior described.

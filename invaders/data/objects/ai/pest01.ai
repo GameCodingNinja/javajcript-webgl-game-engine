@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<ai>
+
+    <node name="AI_Pest01">
+
+        <head script="AI_Pest01_Head"/>
+
+        <node>
+
+            <composite script="AI_Composite" condition="all_success"/>
+
+            <node>
+
+                <leaf script="AI_Pest01_Docile"/>
+
+            </node>
+
+            <node>
+
+                <leaf script="AI_Pest01_Scatter"/>
+
+            </node>
+
+            <node>
+
+                <leaf script="AI_Pest01_Attack"/>
+
+            </node>
+
+        </node>
+
+    </node>
+
+</ai>

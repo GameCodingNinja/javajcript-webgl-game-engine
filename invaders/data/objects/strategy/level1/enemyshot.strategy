@@ -44,4 +44,14 @@
         </sprite>
     </node>
 
+    <node name="pest01_shot" id="-10">
+        <sprite>
+            <scale x="1" y="1"/>
+            <scriptList>
+                <script shoot="Pest01Shot_Fire"/>
+                <script hit="Wreck00Shot_Hit"/>
+            </scriptList>
+        </sprite>
+    </node>
+
 </strategy>

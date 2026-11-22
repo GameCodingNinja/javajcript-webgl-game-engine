@@ -37,12 +37,14 @@ import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 import * as wreck00aiscripts from '../scripts/wreck00aiscripts';
 import * as pest00aiscripts from '../scripts/pest00aiscripts';
+import * as pest01aiscripts from '../scripts/pest01aiscripts';
 import * as miniboss01aiscripts from '../scripts/miniboss01aiscripts';
 import * as boss00aiscripts from '../scripts/boss00aiscripts';
 
-// AI_Wreck00 AI_Pest00 AI_MiniBoss00 AI_MiniBoss01
+// AI_Wreck00 AI_Pest00 AI_Pest01 AI_MiniBoss00 AI_MiniBoss01
 import wreck00_ai from 'raw-loader!../../data/objects/ai/wreck00.ai';
 import pest00_ai from 'raw-loader!../../data/objects/ai/pest00.ai';
+import pest01_ai from 'raw-loader!../../data/objects/ai/pest01.ai';
 import mini_boss_00_ai from 'raw-loader!../../data/objects/ai/mini_boss_00.ai';
 import mini_boss_01_ai from 'raw-loader!../../data/objects/ai/mini_boss_01.ai';
 import boss00_ai from 'raw-loader!../../data/objects/ai/boss00.ai';
@@ -76,19 +78,22 @@ const MOVE_NULL = -1,
       WRECK00_AGGRESSIVE_SHOT_DAMAGE = 20,
       WRECK00_RAM_DAMAGE = 15,
       PEST00_RAM_DAMAGE = 15,
+      PEST01_RAM_DAMAGE = 15,
       MINI_BOSS_RAM_DAMAGE = 15,
       BOSS00_RAM_DAMAGE = 15,
       HEALTH_CHARACTER_HEAL = 30,
-      BUILDING_SAVE_BONUS = 2,              // Extra points for killing an wreck00 while it's attacking a building
+      BUILDING_SAVE_BONUS = 2,              // Extra points for killing a wreck00 while it's attacking a building
       BUILDING_SAVE_HEAL = 10,              // Player health for the save
       PEST00_SHIP_HIT_VALUE = 2,
       PEST00_SHIP_HIT_COUNT = 3,
       PEST00_RAM_COOLDOWN = 500,
-      PEST00_LEVEL_THRESHOLD = 2,
-      PEST00_BATTLE_SPAWN_LEVEL = 15,      // From this level pest00 also spawns while a mini-boss or the boss is out
-      PEST00_SPAWN_TIME_MIN = 20000,
-      PEST00_SPAWN_TIME_MAX = 50000,
-      MAX_PEST00 = 1,
+      PEST01_SHIP_HIT_VALUE = 1,
+      PEST01_SWARM_BONUS = 3,               // Extra points for killing all the swarm members
+      PEST_LEVEL_THRESHOLD = 2,             // The Pest group (pest00, pest01) shares one spawn timer, started at this level
+      PEST_BATTLE_SPAWN_LEVEL = 15,         // From this level Pests also spawn while a mini-boss or the boss is out
+      PEST_SPAWN_TIME_MIN = 20000,
+      PEST_SPAWN_TIME_MAX = 50000,
+      MAX_PEST_STREAK = 2,                  // After this many of the same Pest in a row, the other one spawns next
       BOSS00_SHIP_HIT_VALUE = 10,
       MINI_BOSS_00_LEVEL_THRESHOLD = 5,
       MINI_BOSS_01_LEVEL_THRESHOLD = 3,
@@ -367,12 +372,14 @@ export class Level1State extends CommonState
         this.miniBossSpawnTimer.disable();
         this.lastMiniBossType = '';
         this.miniBossStreakCount = 0;
+        this.lastPestType = '';
+        this.pestStreakCount = 0;
         this.healthSpawnTimer = new Timer(genFunc.randomInt( (1000 * 20), (1000 * 60)));
         this.healthSpawnTimer.disable();
         this.wreck00MaxTimer = new Timer(1000 * 20);
         this.wreck00Max = MIN_WRECK00;
-        this.pest00SpawnTimer = new Timer(genFunc.randomInt( PEST00_SPAWN_TIME_MIN, PEST00_SPAWN_TIME_MAX ));
-        this.pest00SpawnTimer.disable();
+        this.pestSpawnTimer = new Timer(genFunc.randomInt( PEST_SPAWN_TIME_MIN, PEST_SPAWN_TIME_MAX ));
+        this.pestSpawnTimer.disable();
 
         // The boss battle takes the place of the next mini-boss once the player has fought both mini-bosses
         this.foughtMiniBoss00 = false;
@@ -408,6 +415,9 @@ export class Level1State extends CommonState
 
         this.allowMiniBoss = false;
 
+        // Swarm out (Level1State.handleEnemySpawn() restarts the Pest spawn timer when it's gone)
+        this.swarmActive = false;
+
         // The game start menu is up (first start and restart): the spawn timers don't run until it
         // closes (resumed in the EME_MENU_TRANS_OUT handler). Disabled timers ignore pause; they're
         // enabled during gameplay.
@@ -415,7 +425,7 @@ export class Level1State extends CommonState
         this.miniBossSpawnTimer.pause();
         this.healthSpawnTimer.pause();
         this.wreck00MaxTimer.pause();
-        this.pest00SpawnTimer.pause();
+        this.pestSpawnTimer.pause();
         this.train.timer.pause();
     }
 
@@ -443,6 +453,7 @@ export class Level1State extends CommonState
 
         wreck00aiscripts.clearAIData();
         pest00aiscripts.clearAIData();
+        pest01aiscripts.clearAIData();
         miniboss01aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_enemy_shot_','_player_ship_','_train_'] );
@@ -627,7 +638,7 @@ export class Level1State extends CommonState
                 this.playerHitEffect( spriteA, 'player_hit' );
                 spriteA.prepareScript( 'hit' );
             }
-            // Player hit by an pest00 missile
+            // Player hit by a pest00 missile
             else if( spriteA.parentNode.userId == gameDefs.PEST00_SHOT_ID )
             {
                 if( GOD_MODE == false && !this._shieldHit )
@@ -659,6 +670,28 @@ export class Level1State extends CommonState
 
                     this.playerHitEffect( spriteA, 'EXPLOSION_Metllic' );
                 }
+            }
+            // Player hit by a pest01 shot
+            else if( spriteA.parentNode.userId == gameDefs.PEST01_SHOT_ID )
+            {
+                if( GOD_MODE == false && !this._shieldHit )
+                {
+                    this.playerShip.progressBar.incCurrentValue( -gameDefs.PEST01_SHOT_DAMAGE );
+                    this.playerShip.progressBar.setVisible( true );
+                }
+                this.playerHitEffect( spriteA, 'player_hit' );
+                spriteA.prepareScript( 'hit' );
+            }
+            // Player collides into a pest01 swarm member: it disturbs the swarm and the member dies
+            else if( spriteA.parentNode.userId == gameDefs.PEST01_SHIP_ID )
+            {
+                if( GOD_MODE == false && !this._shieldHit )
+                {
+                    this.playerShip.progressBar.incCurrentValue( -PEST01_RAM_DAMAGE );
+                    this.playerShip.progressBar.setVisible( true );
+                }
+                this.playerHitEffect( spriteA, 'EXPLOSION_Metllic' );
+                this.pest01Killed( spriteA, spriteB );
             }
             // Player collides into mini_boss_00 or mini_boss_01
             else if( spriteA.parentNode.userId == gameDefs.MINI_BOSS_00_SHIP_ID || spriteA.parentNode.userId == gameDefs.MINI_BOSS_01_SHIP_ID )
@@ -784,8 +817,20 @@ export class Level1State extends CommonState
                 this.updateHudProgress( PEST00_SHIP_HIT_VALUE );
 
                 // The spawn timer for the next pest00 starts when this one dies
-                this.pest00SpawnTimer.reset( genFunc.randomInt( PEST00_SPAWN_TIME_MIN, PEST00_SPAWN_TIME_MAX ) );
+                this.pestSpawnTimer.reset( genFunc.randomInt( PEST_SPAWN_TIME_MIN, PEST_SPAWN_TIME_MAX ) );
             }
+
+            this.groupPlayer.play( 'enemy_explosion' );
+        }
+        // Player shot a pest01 swarm member: one hit kills, and it disturbs the swarm
+        else if( spriteB.parentNode.userId == gameDefs.PEST01_SHIP_ID )
+        {
+            // Stop any more collision detection for the shot
+            spriteA.collisionComponent.enable = false;
+
+            // Execute the scripts that handle being hit (the explosion)
+            spriteB.prepareScript( 'hit', spriteA );
+            this.pest01Killed( spriteB, spriteA );
 
             this.groupPlayer.play( 'enemy_explosion' );
         }
@@ -1101,7 +1146,7 @@ export class Level1State extends CommonState
                         this.train.timer.pause();
                         this.healthSpawnTimer.pause();
                         this.wreck00MaxTimer.pause();
-                        this.pest00SpawnTimer.pause();
+                        this.pestSpawnTimer.pause();
 
                         // Pause the looping level sounds (enemy loops, boss alarm, thrust)
                         soundManager.pauseLoopingSounds( '(level_1)' );
@@ -1137,7 +1182,7 @@ export class Level1State extends CommonState
                             this.train.timer.resume();
                             this.healthSpawnTimer.resume();
                             this.wreck00MaxTimer.resume();
-                            this.pest00SpawnTimer.resume();
+                            this.pestSpawnTimer.resume();
 
                             // Resume the looping sounds the pause menu paused (not the ones stopped since, ex: by a restart)
                             soundManager.resumeLoopingSounds( '(level_1)' );
@@ -1189,7 +1234,7 @@ export class Level1State extends CommonState
                     this.train.timer.resume();
                     this.healthSpawnTimer.resume();
                     this.wreck00MaxTimer.resume();
-                    this.pest00SpawnTimer.resume();
+                    this.pestSpawnTimer.resume();
 
                     // Indicate to the game portal the gameplay has stopped
                     platform.gameplayStop();
@@ -1394,7 +1439,7 @@ export class Level1State extends CommonState
     }
 
     // 
-    //  DESC: An wreck00 killed while attacking a building saved it: heal the player and return the bonus points
+    //  DESC: A wreck00 killed while attacking a building saved it: heal the player and return the bonus points
     //
     buildingSaveBonus( sprite )
     {
@@ -1437,8 +1482,8 @@ export class Level1State extends CommonState
             }
 
             // Enable pest00 spawns
-            if( this.playerLevel >= PEST00_LEVEL_THRESHOLD && this.pest00SpawnTimer.disabled )
-                this.pest00SpawnTimer.reset();
+            if( this.playerLevel >= PEST_LEVEL_THRESHOLD && this.pestSpawnTimer.disabled )
+                this.pestSpawnTimer.reset();
 
             // Enable health character
             if( this.playerLevel == HEALTH_CHAR_THRESHOLD && this.healthSpawnTimer.disabled )
@@ -1686,19 +1731,49 @@ export class Level1State extends CommonState
     //
     handleEnemySpawn()
     {
-        // Create pest00 (from level PEST00_LEVEL_THRESHOLD). Its AI positions it above the screen.
-        // One at a time, and none while a mini-boss or the boss is out until the level reaches
-        // PEST00_BATTLE_SPAWN_LEVEL: if it expires then, the timer just goes round again.
-        // When an pest00 dies the timer restarts (collisionCallBack()).
-        if( this.pest00SpawnTimer.expired(true) )
+        // The swarm is gone (all killed): the Pest spawn timer starts over
+        if( this.swarmActive && this.countPest01() === 0 )
         {
-            this.pest00SpawnTimer.reset( genFunc.randomInt( PEST00_SPAWN_TIME_MIN, PEST00_SPAWN_TIME_MAX ) );
+            this.swarmActive = false;
+            this.pestSpawnTimer.reset( genFunc.randomInt( PEST_SPAWN_TIME_MIN, PEST_SPAWN_TIME_MAX ) );
+        }
 
-            if( (this.playerLevel >= PEST00_BATTLE_SPAWN_LEVEL || (!this.bossBattleActive && !this.isMiniBossActive())) &&
-                this.countPest00() < MAX_PEST00 )
+        // Create a Pest (from level PEST_LEVEL_THRESHOLD): pest00 or the pest01 swarm, picked at random, but after
+        // MAX_PEST_STREAK of the same one in a row the other one spawns next (like the mini-bosses).
+        // One Pest at a time, and none while a mini-boss or the boss is out until the level reaches
+        // PEST_BATTLE_SPAWN_LEVEL: if it expires then, the timer just goes round again.
+        // The timer restarts when pest00 dies (collisionCallBack()) or the swarm is gone (above).
+        if( this.pestSpawnTimer.expired(true) )
+        {
+            this.pestSpawnTimer.reset( genFunc.randomInt( PEST_SPAWN_TIME_MIN, PEST_SPAWN_TIME_MAX ) );
+
+            if( (this.playerLevel >= PEST_BATTLE_SPAWN_LEVEL || (!this.bossBattleActive && !this.isMiniBossActive())) &&
+                this.countPests() === 0 )
             {
-                this._node = this.enemyStrategy.create('pest00_ship');
-                this._node.get().setPosXYZ(0, settings.deviceRes.h);
+                this._pestType = (Math.random() < 0.5) ? 'pest01_ship' : 'pest00_ship';
+                if( (this._pestType === this.lastPestType) && (this.pestStreakCount >= MAX_PEST_STREAK) )
+                    this._pestType = (this._pestType === 'pest01_ship') ? 'pest00_ship' : 'pest01_ship';
+
+                if( this._pestType === this.lastPestType )
+                {
+                    this.pestStreakCount++;
+                }
+                else
+                {
+                    this.lastPestType = this._pestType;
+                    this.pestStreakCount = 1;
+                }
+
+                if( this._pestType === 'pest01_ship' )
+                {
+                    this.spawnSwarm();
+                }
+                else
+                {
+                    // Its AI positions it above the screen
+                    this._node = this.enemyStrategy.create('pest00_ship');
+                    this._node.get().setPosXYZ(0, settings.deviceRes.h);
+                }
             }
         }
 
@@ -1706,7 +1781,7 @@ export class Level1State extends CommonState
         // During the boss battle only every Nth spawn tick spawns one (much slower).
         if( this.wreck00SpawnTimer.expired(true) )
         {
-            if( (this.enemyStrategy.nodeAry.length - this.countPest00()) < this.wreck00Max &&
+            if( (this.enemyStrategy.nodeAry.length - this.countPests()) < this.wreck00Max &&
                 (!this.bossBattleActive || (++this.wreck00BossSpawnTick % gameDefs.BOSS00_WRECK00_SPAWN_SLOWDOWN) === 0) )
             {
                 this._node = this.enemyStrategy.create('wreck00_ship');
@@ -1831,20 +1906,84 @@ export class Level1State extends CommonState
     }
 
     // 
-    //  DESC: Number of pest00 alive (they don't take up wreck00's spawn slots)
+    //  DESC: Number of Pests alive, pest00 and pest01 swarm members (they don't take up wreck00's spawn slots)
     //
-    countPest00()
+    countPests()
     {
-        this._pest00Count = 0;
-        for( this._i = 0; this._i < this.enemyStrategy.nodeAry.length; ++this._i )
+        this._pestCount = 0;
+        for( this._pi = 0; this._pi < this.enemyStrategy.nodeAry.length; ++this._pi )
         {
             // Not counting one that's dying (falling off the screen)
-            if( this.enemyStrategy.nodeAry[this._i].userId === gameDefs.PEST00_SHIP_ID &&
-                this.enemyStrategy.nodeAry[this._i].get().collisionComponent.enable )
-                this._pest00Count++;
+            if( (this.enemyStrategy.nodeAry[this._pi].userId === gameDefs.PEST00_SHIP_ID ||
+                 this.enemyStrategy.nodeAry[this._pi].userId === gameDefs.PEST01_SHIP_ID) &&
+                this.enemyStrategy.nodeAry[this._pi].get().collisionComponent.enable )
+                this._pestCount++;
         }
 
-        return this._pest00Count;
+        return this._pestCount;
+    }
+
+    // 
+    //  DESC: Number of pest01 swarm members alive
+    //
+    countPest01()
+    {
+        this._pestCount = 0;
+        for( this._pi = 0; this._pi < this.enemyStrategy.nodeAry.length; ++this._pi )
+        {
+            // Not counting one that's dying (falling off the screen)
+            if( this.enemyStrategy.nodeAry[this._pi].userId === gameDefs.PEST01_SHIP_ID &&
+                this.enemyStrategy.nodeAry[this._pi].get().collisionComponent.enable )
+                this._pestCount++;
+        }
+
+        return this._pestCount;
+    }
+
+    // 
+    //  DESC: Spawn the pest01 swarm above the screen, somewhere across the view but at least PEST01_SPAWN_CLEAR_X
+    //        to the side of the player ship, so it doesn't descend onto the ship (it descends into the cruise band)
+    //
+    spawnSwarm()
+    {
+        // Screen X range (a camera stores its position negated), less the room on either side of the ship
+        this._margin = settings.deviceRes_half.w - gameDefs.PEST01_FLOCK_RADIUS - 60;
+        this._shipScreenX = genFunc.wrapDelta( this.playerShip.sprite.pos.x + this.levelCamera.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+        this._leftLen = Math.max( 0, (this._shipScreenX - gameDefs.PEST01_SPAWN_CLEAR_X) + this._margin );
+        this._rightLen = Math.max( 0, this._margin - (this._shipScreenX + gameDefs.PEST01_SPAWN_CLEAR_X) );
+
+        this._r = Math.random() * (this._leftLen + this._rightLen);
+        if( this._r < this._leftLen )
+            this._screenX = -this._margin + this._r;
+        else
+            this._screenX = this._shipScreenX + gameDefs.PEST01_SPAWN_CLEAR_X + (this._r - this._leftLen);
+
+        // World X
+        this._x = this._screenX - this.buildingsCamera.pos.x;
+        if( this._x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+            this._x += gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+        else if( this._x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+            this._x -= gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+
+        pest01aiscripts.startSwarm( this._x );
+
+        for( this._i = 0; this._i < gameDefs.PEST01_MEMBERS; ++this._i )
+            pest01aiscripts.addMember( this._i, this.enemyStrategy.create('pest01_ship').get() );
+
+        this.swarmActive = true;
+    }
+
+    // 
+    //  DESC: A pest01 swarm member was killed (by a shot or a ram): score, and the bonus for the last one
+    //
+    pest01Killed( sprite, killerSprite )
+    {
+        pest01aiscripts.disturbSwarm();
+
+        sprite.collisionComponent.enable = false;
+        sprite.prepareScript( 'die', killerSprite );
+
+        this.updateHudProgress( PEST01_SHIP_HIT_VALUE + ((this.countPest01() === 0) ? PEST01_SWARM_BONUS : 0) );
     }
 
     // 
@@ -2443,6 +2582,7 @@ export class Level1State extends CommonState
         // Clear out any AI data dictionaries
         wreck00aiscripts.clearAIData();
         pest00aiscripts.clearAIData();
+        pest01aiscripts.clearAIData();
         miniboss01aiscripts.clearAIData();
         boss00aiscripts.clearAIData();
         
@@ -2630,6 +2770,7 @@ export function load()
         .then(() => aiManager.loadFromXml( [
             genFunc.stringLoadXML( wreck00_ai ),
             genFunc.stringLoadXML( pest00_ai ),
+            genFunc.stringLoadXML( pest01_ai ),
             genFunc.stringLoadXML( mini_boss_00_ai ),
             genFunc.stringLoadXML( mini_boss_01_ai ),
             genFunc.stringLoadXML( boss00_ai )] ))
