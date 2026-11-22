@@ -156,10 +156,10 @@ export class UIMeter extends UIControl
     //
     findFontSprite()
     {
-        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+        for( let i = 0; i < this.spriteAry.length; ++i )
         {
-            if( this.spriteAry[this._i].visualComponent.isFontSprite() )
-                this.fontSprite = this.spriteAry[this._i];
+            if( this.spriteAry[i].visualComponent.isFontSprite() )
+                this.fontSprite = this.spriteAry[i];
         }
 
         if( this.fontSprite == null )
@@ -213,12 +213,12 @@ export class UIMeter extends UIControl
     {
         this._found = false;
 
-        for( this._i = 0; this._i < this.bangRangeAry.length; ++this._i )
+        for( let i = 0; i < this.bangRangeAry.length; ++i )
         {
-            if( (this.targetValue - this.currentValue) <= this.bangRangeAry[this._i].target )
+            if( (this.targetValue - this.currentValue) <= this.bangRangeAry[i].target )
             {
                 this._found = true;
-                this.initBangRange( this.bangRangeAry[this._i] );
+                this.initBangRange( this.bangRangeAry[i] );
                 break;
             }
         }

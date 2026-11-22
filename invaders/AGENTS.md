@@ -209,6 +209,7 @@ How the boss fight was bot-played so the user could watch (all temporary, clean 
 - **Files**: lowercase (`statedefs.js`, `commonstate.js`)
 - **Constants**: SCREAMING_SNAKE_CASE (`ESGS_GAME_START`, `EGS_LEVEL_1`)
 - **Private vars**: Underscore prefix (`this._event`) - assumed to be pre-allocated cache variables to avoid GC, does not need to be defined in the constructor
+- **Loop counters**: local `let` (`for( let i = 0; ... )`), not `this._i`, like the library (see its "Loop counters" note). Numbers in locals never allocate; only objects need pre-allocating. When the code after a loop reads the counter, declare it before the loop (`let i, j;`, see `randomPointOnShip()` in `miniboss00scripts.js`).
 
 ### Module Structure
 ```javascript

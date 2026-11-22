@@ -267,10 +267,10 @@ class AI_Pest00_base extends aiNode
 
             this._step = gTwoPi / this._count;
 
-            for( this._i = 0; this._i < this._count; ++this._i )
+            for( let i = 0; i < this._count; ++i )
             {
                 this._shootSprite = this.data.enemyShotStrategy.create('pest00_shot').get();
-                this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite, this._angle + (this._i * this._step) );
+                this._shootSprite.scriptComponent.prepare( 'shoot', this._shootSprite, this.sprite, this._angle + (i * this._step) );
             }
 
             this.data.groupPlayer.play( 'boss_rocket_launch' );
@@ -780,12 +780,12 @@ class AI_Pest00_Flee extends AI_Pest00_base
     {
         this._nodeAry = this.data.playerShipStrategy.nodeAry;
 
-        for( this._i = 0; this._i < this._nodeAry.length; ++this._i )
+        for( let i = 0; i < this._nodeAry.length; ++i )
         {
-            if( this._nodeAry[this._i].userId !== gameDefs.PLAYER_SHOT_ID )
+            if( this._nodeAry[i].userId !== gameDefs.PLAYER_SHOT_ID )
                 continue;
 
-            this._shot = this._nodeAry[this._i].get();
+            this._shot = this._nodeAry[i].get();
             if( !this._shot.collisionComponent.enable )
                 continue;
 

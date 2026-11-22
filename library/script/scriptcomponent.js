@@ -36,25 +36,25 @@ export class ScriptComponent
         if( !this.scriptFactoryMap && this._scriptNode.length )
             this.scriptFactoryMap = new Map;
 
-        for( this._i = 0; this._i < this._scriptNode.length; ++this._i )
+        for( let i = 0; i < this._scriptNode.length; ++i )
         {
             this._prepareOnInit = false;
             this._forceUpdate = false;
             this._ai = false;
-            this._attr = this._scriptNode[this._i].getAttribute( 'prepareOnInit' );
+            this._attr = this._scriptNode[i].getAttribute( 'prepareOnInit' );
             if( this._attr !== null )
                 this._prepareOnInit = (this._attr === 'true')
 
-            this._attr = this._scriptNode[this._i].getAttribute( 'forceUpdate' );
+            this._attr = this._scriptNode[i].getAttribute( 'forceUpdate' );
             if( this._attr !== null )
                 this._forceUpdate = (this._attr === 'true')
 
             // See if this is an ai
-            this._attr = this._scriptNode[this._i].getAttribute( 'ai' );
+            this._attr = this._scriptNode[i].getAttribute( 'ai' );
             if( this._attr )
                 this._ai = (this._attr === 'true');
 
-            this._attr = this._scriptNode[this._i].attributes[0];
+            this._attr = this._scriptNode[i].attributes[0];
             if( this._attr && !this.scriptFactoryMap.has(this._attr.name) )
                 // This allocates the script info to the map
                 this.scriptFactoryMap.set( this._attr.name, new CScriptPrepareFunc(this._attr.value, this._prepareOnInit, this._forceUpdate, this._ai) );
@@ -120,8 +120,8 @@ export class ScriptComponent
     {
         if( this.scriptAry.length )
         {
-            for( this._i = 0; this._i < this.scriptAry.length; this._i++ )
-                this.setScriptToRecycle(this.scriptAry[this._i])
+            for( let i = 0; i < this.scriptAry.length; i++ )
+                this.setScriptToRecycle(this.scriptAry[i])
 
             this.scriptAry.length = 0;
         }
@@ -296,27 +296,27 @@ export class ScriptComponent
     update()
     {
         // Call the active scripts
-        for( this._i = this.scriptAry.length - 1; this._i > -1; --this._i )
+        for( let i = this.scriptAry.length - 1; i > -1; --i )
         {
             // If the script is finished, recycle it
-            if( this.scriptAry[this._i].execute() )
+            if( this.scriptAry[i].execute() )
             {
-                this.setScriptToRecycle(this.scriptAry[this._i]);
-                genFunc.removeAt( this.scriptAry, this._i );
+                this.setScriptToRecycle(this.scriptAry[i]);
+                genFunc.removeAt( this.scriptAry, i );
             }
         }
 
         if( this.removeAry.length )
         {
-            for( this._i = 0; this._i < this.removeAry.length; this._i++ )
+            for( let i = 0; i < this.removeAry.length; i++ )
             {
-                for( this._j = 0; this._j < this.scriptAry.length; this._j++ )
+                for( let j = 0; j < this.scriptAry.length; j++ )
                 {
                     // If the script is finished, recycle it
-                    if( this.scriptAry[this._j].name === this.removeAry[this._i] )
+                    if( this.scriptAry[j].name === this.removeAry[i] )
                     {
-                        this.setScriptToRecycle(this.scriptAry[this._j]);
-                        genFunc.removeAt( this.scriptAry, this._j );
+                        this.setScriptToRecycle(this.scriptAry[j]);
+                        genFunc.removeAt( this.scriptAry, j );
                         break;
                     }
                 }
@@ -331,12 +331,12 @@ export class ScriptComponent
     //
     initScriptTree()
     {
-        for( this._i = 0; this._i < this.scriptAry.length; this._i++ )
+        for( let i = 0; i < this.scriptAry.length; i++ )
         {
             // initTree is only in scripts that inherit from Node
-            if( this.scriptAry[this._i].initTree !== undefined )
+            if( this.scriptAry[i].initTree !== undefined )
             {
-                this.scriptAry[this._i].initTree();
+                this.scriptAry[i].initTree();
             }
         }
     }

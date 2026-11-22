@@ -81,30 +81,30 @@ class AIManager extends ManagerBase
         if(this._aiNodeData)
         {
             this._aiNodeDataAry = this._aiNodeData.dataAry;
-            for( this._i = 0; this._i < this._aiNodeDataAry.length; this._i++ )
+            for( let i = 0; i < this._aiNodeDataAry.length; i++ )
             {
                 this._node = null;
 
                 // Handle the head node
-                if( this._aiNodeDataAry[this._i].behavior === defs.EAIB_HEAD )
+                if( this._aiNodeDataAry[i].behavior === defs.EAIB_HEAD )
                 {
-                    this._headNode = scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i]);
+                    this._headNode = scriptManager.get( this._aiNodeDataAry[i].scriptName )(this._aiNodeDataAry[i]);
                     this._headNode.name = name;
                     continue;
                 }
                 // The leaf node executes game logic so need to pass in the object
-                else if( this._aiNodeDataAry[this._i].behavior === defs.EAIB_LEAF_TASK )
+                else if( this._aiNodeDataAry[i].behavior === defs.EAIB_LEAF_TASK )
                 {
-                    this._node = scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i], this._headNode, object);
+                    this._node = scriptManager.get( this._aiNodeDataAry[i].scriptName )(this._aiNodeDataAry[i], this._headNode, object);
                 }
                 else
                 {
-                    this._node = scriptManager.get( this._aiNodeDataAry[this._i].scriptName )(this._aiNodeDataAry[this._i], this._headNode);
+                    this._node = scriptManager.get( this._aiNodeDataAry[i].scriptName )(this._aiNodeDataAry[i], this._headNode);
                 }
 
                 if( !this._headNode.addNode( this._node ) )
                 {
-                    throw new Error( `Parent node not found or node does not support adding children (${this._aiNodeDataAry[this._i].scriptName}, ${this._node.parentId})!` );
+                    throw new Error( `Parent node not found or node does not support adding children (${this._aiNodeDataAry[i].scriptName}, ${this._node.parentId})!` );
                 }
             }
         }

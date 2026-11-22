@@ -349,18 +349,18 @@ class MeshManager
         if( !(group instanceof Array) )
             this._groupAry = [group];
 
-        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
+        for( let grp = 0; grp < this._groupAry.length; ++grp )
         {
-            this._group = this._groupAry[this._grp];
+            this._group = this._groupAry[grp];
             this._groupMap = this.meshBufMapMap.get( this._group );
             if( this._groupMap !== undefined )
             {
                 for( this._each of this._groupMap.values() )
                 {
-                    for( this._m = 0; this._m < this._each.meshAry.length; ++this._m )
+                    for( let m = 0; m < this._each.meshAry.length; ++m )
                     {
-                        device.gl.deleteBuffer( this._each.meshAry[this._m].vbo );
-                        device.gl.deleteBuffer( this._each.meshAry[this._m].ibo );
+                        device.gl.deleteBuffer( this._each.meshAry[m].vbo );
+                        device.gl.deleteBuffer( this._each.meshAry[m].ibo );
                     }
                 }
 

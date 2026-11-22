@@ -157,8 +157,8 @@ export class UISubControl extends UIControl
         super.update();
 
         // Update all controls
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].update();
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].update();
     }
 
     // 
@@ -170,8 +170,8 @@ export class UISubControl extends UIControl
         super.transform( object );
 
         // Update all controls
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].transform( this );
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].transform( this );
     }
 
     // 
@@ -182,8 +182,8 @@ export class UISubControl extends UIControl
         // Call the parent
         super.render( camera );
 
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].render( camera );
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].render( camera );
     }
 
     // 
@@ -194,8 +194,8 @@ export class UISubControl extends UIControl
         // Call the parent
         super.handleEvent( event );
 
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].handleEvent( event );
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].handleEvent( event );
 
         if( this.isActive() && (event instanceof GenericEvent) )
         {
@@ -405,8 +405,8 @@ export class UISubControl extends UIControl
     {
         super.reset( complete );
         
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].reset( complete );
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].reset( complete );
     }
 
     // 
@@ -432,8 +432,8 @@ export class UISubControl extends UIControl
     {
         this._result1 = false;
 
-        for( this._i = 0; this._i < this.subControlAry.length && !this._result1; ++this._i )
-            this._result1 = this.subControlAry[this._i].onMouseMove( event );
+        for( let i = 0; i < this.subControlAry.length && !this._result1; ++i )
+            this._result1 = this.subControlAry[i].onMouseMove( event );
 
         return this._result1;
     }
@@ -449,8 +449,8 @@ export class UISubControl extends UIControl
         }
         else
         {
-            for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-                if( this.subControlAry[this._i].handleSelectAction( event ) )
+            for( let i = 0; i < this.subControlAry.length; ++i )
+                if( this.subControlAry[i].handleSelectAction( event ) )
                     return true;
         }
 
@@ -487,8 +487,8 @@ export class UISubControl extends UIControl
     {
         this._ctrl3 = null;
 
-        for( this._i = 0; this._i < this.subControlAry.length && !this._ctrl3; ++this._i )
-            this._ctrl3 = this.subControlAry[this._i].findControlByName( name );
+        for( let i = 0; i < this.subControlAry.length && !this._ctrl3; ++i )
+            this._ctrl3 = this.subControlAry[i].findControlByName( name );
 
         return this._ctrl3;
     }
@@ -497,8 +497,8 @@ export class UISubControl extends UIControl
     {
         this._ctrl4 = null;
 
-        for( this._i = 0; this._i < this.subControlAry.length && !this._ctrl4; ++this._i )
-            this._ctrl4 = this.subControlAry[this._i].findControlByRef( control );
+        for( let i = 0; i < this.subControlAry.length && !this._ctrl4; ++i )
+            this._ctrl4 = this.subControlAry[i].findControlByRef( control );
 
         return this._ctrl4;
     }
@@ -513,17 +513,17 @@ export class UISubControl extends UIControl
         {
             this._found = false;
 
-            for( this._i = 0; this._i < this.controlNodeAry.length; ++this._i )
+            for( let i = 0; i < this.controlNodeAry.length; ++i )
             {
-                if( !this._found && this.controlNodeAry[this._i].uiControl.activateFirstInactiveControl() )
+                if( !this._found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
                 {
-                    this.activeNode = this.controlNodeAry[this._i];
+                    this.activeNode = this.controlNodeAry[i];
 
                     this._found = true;
                 }
                 else
                 {
-                    this.controlNodeAry[this._i].uiControl.deactivateControl();
+                    this.controlNodeAry[i].uiControl.deactivateControl();
                 }
             }
 
@@ -553,8 +553,8 @@ export class UISubControl extends UIControl
     //
     deactivateSubControl()
     {
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].deactivateControl();
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].deactivateControl();
     }
 
     // 
@@ -572,8 +572,8 @@ export class UISubControl extends UIControl
     {
         super.disableControl();
 
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].disableControl();
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].disableControl();
     }
 
     // 
@@ -583,8 +583,8 @@ export class UISubControl extends UIControl
     {
         super.enableControl();
 
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].enableControl();
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].enableControl();
     }
 
     // 
@@ -594,8 +594,8 @@ export class UISubControl extends UIControl
     {
         super.setAlpha( alpha );
 
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
-            this.subControlAry[this._i].setAlpha( alpha );
+        for( let i = 0; i < this.subControlAry.length; ++i )
+            this.subControlAry[i].setAlpha( alpha );
     }
 
     // 
@@ -609,11 +609,11 @@ export class UISubControl extends UIControl
         if( this.respondsToSelectMsg )
             this._result = this;
 
-        for( this._i = 0; this._i < this.subControlAry.length; ++this._i )
+        for( let i = 0; i < this.subControlAry.length; ++i )
         {
-            if( this.subControlAry[this._i].state > uiControlDefs.ECS_INACTIVE )
+            if( this.subControlAry[i].state > uiControlDefs.ECS_INACTIVE )
             {
-                this._result = this.subControlAry[this._i].getActiveControl();
+                this._result = this.subControlAry[i].getActiveControl();
                 break;
             }
         }

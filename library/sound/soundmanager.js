@@ -48,15 +48,15 @@ class SoundManager extends ManagerBase
     //
     update()
     {
-        for( this._f = this.fadeAry.length - 1; this._f >= 0; --this._f )
+        for( let f = this.fadeAry.length - 1; f >= 0; --f )
         {
-            this._fadeSnd = this.fadeAry[this._f];
+            this._fadeSnd = this.fadeAry[f];
 
             // Remove sounds whose fade finished or was canceled
             if( !this._fadeSnd.fading || this._fadeSnd.updateFade( highResTimer.elapsedTime ) )
             {
                 this._fadeSnd.fadeListed = false;
-                genFunc.removeAt( this.fadeAry, this._f );
+                genFunc.removeAt( this.fadeAry, f );
             }
         }
     }
@@ -86,10 +86,10 @@ class SoundManager extends ManagerBase
         this._loadFilesNode = xmlNode.getElementsByTagName( 'load' );
         
         // Load the buffered sounds
-        for( this._i = 0; this._i < this._loadFilesNode.length; ++this._i )
+        for( let i = 0; i < this._loadFilesNode.length; ++i )
         {
-            let id = this._loadFilesNode[this._i].getAttribute( 'id' );
-            let filePath = this._loadFilesNode[this._i].getAttribute( 'file' );
+            let id = this._loadFilesNode[i].getAttribute( 'id' );
+            let filePath = this._loadFilesNode[i].getAttribute( 'file' );
             
             // Check for duplicate names
             if( this._groupMap.has(id) )
@@ -99,7 +99,7 @@ class SoundManager extends ManagerBase
             this._groupMap.set( id, this._snd );
             
             // Load from node
-            this._snd.loadFromNode( this._loadFilesNode[this._i] );
+            this._snd.loadFromNode( this._loadFilesNode[i] );
 
             // Load the sound file
             promiseAry.push( 
@@ -120,10 +120,10 @@ class SoundManager extends ManagerBase
                 this.playListMapMap.set( group, this._groupMap );
             }
             
-            for( this._i = 0; this._i < this._playListNode.length; ++this._i )
+            for( let i = 0; i < this._playListNode.length; ++i )
             {
                 // Get the id
-                this._id = this._playListNode[this._i].getAttribute( 'id' );
+                this._id = this._playListNode[i].getAttribute( 'id' );
                 
                 // Check for duplicate names
                 if( this._groupMap.has(this._id) )
@@ -134,7 +134,7 @@ class SoundManager extends ManagerBase
                 this._groupMap.set( this._id, this._playLst );
                 
                 // Load the playlist from node
-                this._playLst.loadFromNode( this._playListNode[this._i], this.soundMapMap.get( group ), group, filePath );
+                this._playLst.loadFromNode( this._playListNode[i], this.soundMapMap.get( group ), group, filePath );
             }
         }
 
@@ -166,9 +166,9 @@ class SoundManager extends ManagerBase
         if( !(group instanceof Array) )
             this._groupAry = [group];
 
-        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
+        for( let grp = 0; grp < this._groupAry.length; ++grp )
         {
-            this._group = this._groupAry[this._grp];
+            this._group = this._groupAry[grp];
             
             // Make sure the group we are looking for exists
             if( this.listTableMap.get( this._group ) === undefined )

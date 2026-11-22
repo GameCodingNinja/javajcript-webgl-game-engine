@@ -24,12 +24,12 @@ export class Polygon
     copy( obj )
     {
         // Grow the polygon length if needed
-        for( this._i = this.maxLength; this._i < obj.pointAry.length; ++this._i )
+        for( let i = this.maxLength; i < obj.pointAry.length; ++i )
             this.pointAry.push( new Point() );
 
         // Copy over the points
-        for( this._i = 0; this._i < obj.pointAry.length; ++this._i )
-            this.pointAry[this._i].copy( obj.pointAry[this._i] );
+        for( let i = 0; i < obj.pointAry.length; ++i )
+            this.pointAry[i].copy( obj.pointAry[i] );
 
         // Set the length if it was larger before
         this.pointAry.length = obj.pointAry.length;
@@ -45,8 +45,8 @@ export class Polygon
     //
     clear()
     {
-        for( this._i = 0; this._i < this.maxLength; ++this._i )
-            this.pointAry[this._i].clear();
+        for( let i = 0; i < this.maxLength; ++i )
+            this.pointAry[i].clear();
 
         // Set the length to it's current size
         this.pointAry.length = this.maxLength;

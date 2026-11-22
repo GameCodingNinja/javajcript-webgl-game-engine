@@ -84,7 +84,7 @@ class EventManager
         // Reuable Gamepad event ques
         this.gamePadEventIndex = 0;
         this.gamePadEventQueue = [];
-        for( this._i = 0; this._i < MAX_GAMEPAD_EVENT_QUEUE; ++this._i )
+        for( let i = 0; i < MAX_GAMEPAD_EVENT_QUEUE; ++i )
             this.gamePadEventQueue.push( new gamepadevent.GamepadEvent() );
 
         this.gamepadDeadZone = gamepadevent.ANALOG_STICK_MSG_MAX;
@@ -130,14 +130,14 @@ class EventManager
 
             // Pre-allocated touch pool for mobile input
             this.touchPool = [];
-            for( this._i = 0; this._i < MAX_TOUCH_POOL; ++this._i )
+            for( let i = 0; i < MAX_TOUCH_POOL; ++i )
                 this.touchPool.push({ id: -1, startX: 0, startY: 0, currentX: 0, currentY: 0, startTime: 0, side: '',
                     dpadLeft: false, dpadRight: false, dpadUp: false, dpadDown: false, ended: false });
 
             // Reusable touch event queue
             this.touchEventIndex = 0;
             this.touchEventQueue = [];
-            for( this._i = 0; this._i < MAX_TOUCH_EVENT_QUEUE; ++this._i )
+            for( let i = 0; i < MAX_TOUCH_EVENT_QUEUE; ++i )
                 this.touchEventQueue.push( new TouchEvent() );
         }
     }
@@ -415,25 +415,25 @@ class EventManager
         {
             this.gamepadDeadZone = gamepadevent.ANALOG_STICK_MSG_MAX + settings.user.stickDeadZone;
 
-            for ( this._each = 0; this._each < this._gamepads.length; ++this._each )
+            for ( let each = 0; each < this._gamepads.length; ++each )
             {
-                this._gp = this._gamepads[this._each];
+                this._gp = this._gamepads[each];
 
                 if( !this._gp || !this._gp.connected )
                     continue;
 
-                this._lastGp = this.gamePadList[this._each];
+                this._lastGp = this.gamePadList[each];
 
                 if( this._lastGp )
                 {
                     // Create Up/DOWN events for the buttons
-                    for(this._i = 0; this._i < this._gp.buttons.length; ++this._i)
+                    for( let i = 0; i < this._gp.buttons.length; ++i)
                     {
-                        if(!this._lastGp.pressed[this._i] && this._gp.buttons[this._i].pressed)
-                            this.queueGamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, this._i);
+                        if(!this._lastGp.pressed[i] && this._gp.buttons[i].pressed)
+                            this.queueGamepadEvent(gamepadevent.GAMEPAD_BUTTON_DOWN, i);
                         
-                        else if(this._lastGp.pressed[this._i] && !this._gp.buttons[this._i].pressed)
-                            this.queueGamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, this._i);
+                        else if(this._lastGp.pressed[i] && !this._gp.buttons[i].pressed)
+                            this.queueGamepadEvent(gamepadevent.GAMEPAD_BUTTON_UP, i);
                     }
 
                     // Process each stick axis direction independently (allows diagonal input)
@@ -498,9 +498,9 @@ class EventManager
     {
         if( this.touchPool )
         {
-            for( this._ti = 0; this._ti < MAX_TOUCH_POOL; ++this._ti )
+            for( let ti = 0; ti < MAX_TOUCH_POOL; ++ti )
             {
-                this._slot = this.touchPool[this._ti];
+                this._slot = this.touchPool[ti];
                 if( this._slot.id === -1 || this._slot.ended )
                     continue;
 
@@ -566,10 +566,10 @@ class EventManager
     //
     _findTouchSlot( identifier )
     {
-        for( this._si = 0; this._si < MAX_TOUCH_POOL; ++this._si )
+        for( let si = 0; si < MAX_TOUCH_POOL; ++si )
         {
-            if( this.touchPool[this._si].id === identifier )
-                return this.touchPool[this._si];
+            if( this.touchPool[si].id === identifier )
+                return this.touchPool[si];
         }
         return null;
     }
@@ -579,10 +579,10 @@ class EventManager
     //
     _findFreeTouchSlot()
     {
-        for( this._si = 0; this._si < MAX_TOUCH_POOL; ++this._si )
+        for( let si = 0; si < MAX_TOUCH_POOL; ++si )
         {
-            if( this.touchPool[this._si].id === -1 )
-                return this.touchPool[this._si];
+            if( this.touchPool[si].id === -1 )
+                return this.touchPool[si];
         }
         return null;
     }
@@ -611,9 +611,9 @@ class EventManager
         // the DPR-scaled backing store and must not be used here.
         this._halfWidth = device.canvas.clientWidth / 2;
 
-        for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
+        for( let ti = 0; ti < event.changedTouches.length; ++ti )
         {
-            this._t = event.changedTouches[this._ti];
+            this._t = event.changedTouches[ti];
             this._slot = this._findFreeTouchSlot();
             if( this._slot )
             {
@@ -648,9 +648,9 @@ class EventManager
             return;
         }
 
-        for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
+        for( let ti = 0; ti < event.changedTouches.length; ++ti )
         {
-            this._t = event.changedTouches[this._ti];
+            this._t = event.changedTouches[ti];
             this._slot = this._findTouchSlot( this._t.identifier );
             if( this._slot )
             {
@@ -674,9 +674,9 @@ class EventManager
             return;
         }
 
-        for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
+        for( let ti = 0; ti < event.changedTouches.length; ++ti )
         {
-            this._t = event.changedTouches[this._ti];
+            this._t = event.changedTouches[ti];
             this._slot = this._findTouchSlot( this._t.identifier );
             if( this._slot )
             {
@@ -769,9 +769,9 @@ class EventManager
     //
     _menuTouchMove( event )
     {
-        for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
+        for( let ti = 0; ti < event.changedTouches.length; ++ti )
         {
-            this._mt = event.changedTouches[this._ti];
+            this._mt = event.changedTouches[ti];
             if( this._mt.identifier === this.menuTouchId )
             {
                 this._rect = this.canvas.getBoundingClientRect();
@@ -794,9 +794,9 @@ class EventManager
     //
     _menuTouchEnd( event )
     {
-        for( this._ti = 0; this._ti < event.changedTouches.length; ++this._ti )
+        for( let ti = 0; ti < event.changedTouches.length; ++ti )
         {
-            this._mt = event.changedTouches[this._ti];
+            this._mt = event.changedTouches[ti];
             if( this._mt.identifier === this.menuTouchId )
             {
                 this._rect = this.canvas.getBoundingClientRect();

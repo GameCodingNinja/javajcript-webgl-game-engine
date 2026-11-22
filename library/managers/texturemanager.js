@@ -91,9 +91,9 @@ class TextureManager
         if( !(group instanceof Array) )
             this._groupAry = [group];
 
-        for( this._grp = 0; this._grp < this._groupAry.length; ++this._grp )
+        for( let grp = 0; grp < this._groupAry.length; ++grp )
         {
-            this._group = this._groupAry[this._grp];
+            this._group = this._groupAry[grp];
             this._groupMap = this.textureForMapMap.get( this._group );
             if( this._groupMap !== undefined )
             {

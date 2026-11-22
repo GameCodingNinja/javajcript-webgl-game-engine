@@ -35,8 +35,8 @@ class AI_Composite extends aiNode
 
         if( this.childIndexAry.length === 0 )
         {
-            for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-                this.childIndexAry[this._i] = this._i;
+            for( let i = 0; i < this.nodeAry.length; ++i )
+                this.childIndexAry[i] = i;
         }
 
         if( this.order === defs.EAO_RANDOM )

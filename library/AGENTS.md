@@ -43,6 +43,7 @@ Component-based 2D/3D WebGL game engine with scene graph architecture, manager s
 - **Files**: lowercase, no separators (`objectdatamanager.js`, `visualcomponentspritesheet.js`)
 - **Constants**: SCREAMING_SNAKE_CASE with prefix (`EGT_QUAD`, `ECT_CIRCLE`, `EAIS_ACTIVE`)
 - **Private/temp vars**: Underscore prefix (`this._node`, `this._result`) - assumed to be pre-allocated cache variables to avoid GC, does not need to be defined in the constructor
+- **Loop counters**: local `let` (`for( let i = 0; ... )`), not `this._i`. Numbers in locals never allocate, locals are faster than field writes, and a `this._` counter gets clobbered when the loop calls back into a method of the same object that loops on it (e.g. a node's update calling `create()` on the strategy whose `update()` loop is running). Only objects (`new`, `[]`, `{}`, closures) need the pre-allocated `this._`/`gTemp` treatment.
 - **Singletons**: Lowercase exported instance (`export var device = new Device;`)
 
 ### Module Structure

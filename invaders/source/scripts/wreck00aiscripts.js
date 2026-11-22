@@ -289,9 +289,9 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
 
                     // Find a building that's not already targeted
                     this._freeBuildingFound = true;
-                    for( this._i = 0; this._i < this.data.enemy.length; ++this._i )
+                    for( let i = 0; i < this.data.enemy.length; ++i )
                     {
-                        if( this.data.enemy[this._i].get().targetBuilding === this._targetBuilding )
+                        if( this.data.enemy[i].get().targetBuilding === this._targetBuilding )
                         {
                             this._freeBuildingFound = false;
                             break;

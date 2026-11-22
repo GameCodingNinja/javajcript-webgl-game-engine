@@ -321,9 +321,9 @@ class AI_Pest01_base extends aiNode
     //
     separate( dist, speed )
     {
-        for( this._i = 0; this._i < gSwarm.members.length; ++this._i )
+        for( let i = 0; i < gSwarm.members.length; ++i )
         {
-            this._member = gSwarm.members[this._i];
+            this._member = gSwarm.members[i];
             if( this._member === null || this._member === this.sprite || !this._member.swarmAlive )
                 continue;
 
@@ -487,9 +487,9 @@ class AI_Pest01_Docile extends AI_Pest01_base
         this._cy = 0;
         this._avx = 0;
         this._avy = 0;
-        for( this._i = 0; this._i < gSwarm.members.length; ++this._i )
+        for( let i = 0; i < gSwarm.members.length; ++i )
         {
-            this._member = gSwarm.members[this._i];
+            this._member = gSwarm.members[i];
             if( this._member === null || this._member === this.sprite || !this._member.swarmAlive )
                 continue;
 

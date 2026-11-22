@@ -257,9 +257,9 @@ export class VisualComponentFont extends VisualComponentQuad
             this._lineHeightOffset = Math.trunc(this._lineHeightOffset);
 
             // Setup each character in the vertex buffer
-            for( this._i = 0; this._i < this.fontData.fontString.length; ++this._i )
+            for( let i = 0; i < this.fontData.fontString.length; ++i )
             {
-                this._id = this.fontData.fontString.charCodeAt(this._i);
+                this._id = this.fontData.fontString.charCodeAt(i);
 
                 // Line wrap if '|' character was used
                 if( this._id === defs.CHAR_CODE_PIPE )
@@ -366,9 +366,9 @@ export class VisualComponentFont extends VisualComponentQuad
                         this._nextWord = 0;
 
                         // Get the length of the next word to see if if should wrap
-                        for( this._j = this._i+1; this._j < this.fontData.fontString.length; ++this._j )
+                        for( let j = i+1; j < this.fontData.fontString.length; ++j )
                         {
-                            this._id = this.fontData.fontString.charCodeAt(this._j);
+                            this._id = this.fontData.fontString.charCodeAt(j);
 
                             if( this._id != defs.CHAR_CODE_PIPE )
                             {
@@ -434,9 +434,9 @@ export class VisualComponentFont extends VisualComponentQuad
         this._clwo_counter = 0;
         this._clwo_lineWidthOffsetAry = [];
 
-        for( this._clwo_i = 0; this._clwo_i < str.length; ++this._clwo_i )
+        for( let clwo_i = 0; clwo_i < str.length; ++clwo_i )
         {
-            this._clwo_id = str.charCodeAt(this._clwo_i);
+            this._clwo_id = str.charCodeAt(clwo_i);
 
             // Line wrap if '|' character was used
             if( this._clwo_id === defs.CHAR_CODE_PIPE )
@@ -475,9 +475,9 @@ export class VisualComponentFont extends VisualComponentQuad
                 this._clwo_nextWord = 0;
 
                 // Get the length of the next word to see if if should wrap
-                for( this._clwo_j = this._clwo_i+1; this._clwo_j < str.length; ++this._clwo_j )
+                for( let clwo_j = clwo_i+1; clwo_j < str.length; ++clwo_j )
                 {
-                    this._clwo_id = str.charCodeAt(this._clwo_j);
+                    this._clwo_id = str.charCodeAt(clwo_j);
 
                     if( this._clwo_id != defs.CHAR_CODE_PIPE )
                     {

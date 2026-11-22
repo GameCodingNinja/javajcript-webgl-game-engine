@@ -85,8 +85,8 @@ class SignalManager
     //
     broadcast_loadComplete()
     {
-        for( this._i1 = 0; this._i1 < this.loadCompleteSignal.length; ++this._i1 )
-            this.loadCompleteSignal[this._i1]();
+        for( let i = 0; i < this.loadCompleteSignal.length; ++i )
+            this.loadCompleteSignal[i]();
     }
     
     // 
@@ -94,8 +94,8 @@ class SignalManager
     //
     broadcast_resolutionChange()
     {
-        for( this._i2 = 0; this._i2 < this.resolutionChangeSignal.length; ++this._i2 )
-            this.resolutionChangeSignal[this._i2]();
+        for( let i = 0; i < this.resolutionChangeSignal.length; ++i )
+            this.resolutionChangeSignal[i]();
     }
 
     // 
@@ -103,8 +103,8 @@ class SignalManager
     //
     broadcast_initShader( shaderId )
     {
-        for( this._i3 = 0; this._i3 < this.initShaderSignal.length; ++this._i3 )
-            this.initShaderSignal[this._i3](shaderId);
+        for( let i = 0; i < this.initShaderSignal.length; ++i )
+            this.initShaderSignal[i](shaderId);
     }
 
     // 
@@ -112,8 +112,8 @@ class SignalManager
     //
     broadcast_collisionSignal( spriteA, spriteB )
     {
-        for( this._i4 = 0; this._i4 < this.collisionSignal.length; ++this._i4 )
-            this.collisionSignal[this._i4](spriteA, spriteB);
+        for( let i = 0; i < this.collisionSignal.length; ++i )
+            this.collisionSignal[i](spriteA, spriteB);
     }
 }
 

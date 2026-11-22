@@ -286,22 +286,22 @@ export class Menu extends Object
     //
     init()
     {
-        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
+        for( let i = 0; i < this.spriteAry.length; ++i )
         {
-            this.spriteAry[this._i].init();
+            this.spriteAry[i].init();
 
             // Prepare any script functions that are flagged to prepareOnInit
-            this.spriteAry[this._i].prepareScriptOnInit();
+            this.spriteAry[i].prepareScriptOnInit();
         }
 
-        for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
-            this.staticControlAry[this._i].init();
+        for( let i = 0; i < this.staticControlAry.length; ++i )
+            this.staticControlAry[i].init();
 
-        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-            this.mouseOnlyControlAry[this._i].init();
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].init();
 
-        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-            this.controlAry[this._i].init();
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].init();
         
         // Prepare any script functions that are flagged to prepareOnInit
         this.scriptComponent.prepareOnInit( this );
@@ -312,17 +312,17 @@ export class Menu extends Object
     //
     cleanUp()
     {
-        for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
-            this.spriteAry[this._i].cleanUp();
+        for( let i = 0; i < this.spriteAry.length; ++i )
+            this.spriteAry[i].cleanUp();
 
-        for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
-            this.staticControlAry[this._i].cleanUp();
+        for( let i = 0; i < this.staticControlAry.length; ++i )
+            this.staticControlAry[i].cleanUp();
 
-        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-            this.mouseOnlyControlAry[this._i].cleanUp();
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].cleanUp();
 
-        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-            this.controlAry[this._i].cleanUp();
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].cleanUp();
     }
     
     // 
@@ -343,14 +343,14 @@ export class Menu extends Object
     {
         this.setDynamicPos();
 
-        for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
-            this.staticControlAry[this._i].setDynamicPos();
+        for( let i = 0; i < this.staticControlAry.length; ++i )
+            this.staticControlAry[i].setDynamicPos();
         
-        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-            this.mouseOnlyControlAry[this._i].setDynamicPos();
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].setDynamicPos();
 
-        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-            this.controlAry[this._i].setDynamicPos();
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].setDynamicPos();
     }
 
     // 
@@ -362,17 +362,17 @@ export class Menu extends Object
 
         if( this.isVisible() )
         {
-            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
-                this.spriteAry[this._i].update();
+            for( let i = 0; i < this.spriteAry.length; ++i )
+                this.spriteAry[i].update();
             
-            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
-                this.staticControlAry[this._i].update();
+            for( let i = 0; i < this.staticControlAry.length; ++i )
+                this.staticControlAry[i].update();
             
-            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-                this.mouseOnlyControlAry[this._i].update();
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                this.mouseOnlyControlAry[i].update();
             
-            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-                this.controlAry[this._i].update();
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].update();
         }
     }
 
@@ -385,17 +385,17 @@ export class Menu extends Object
         {
             super.transform();
             
-            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
-                this.spriteAry[this._i].transform( this );
+            for( let i = 0; i < this.spriteAry.length; ++i )
+                this.spriteAry[i].transform( this );
             
-            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
-                this.staticControlAry[this._i].transform( this );
+            for( let i = 0; i < this.staticControlAry.length; ++i )
+                this.staticControlAry[i].transform( this );
             
-            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-                this.mouseOnlyControlAry[this._i].transform( this );
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                this.mouseOnlyControlAry[i].transform( this );
             
-            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-                this.controlAry[this._i].transform( this );
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].transform( this );
         }
     }
 
@@ -406,17 +406,17 @@ export class Menu extends Object
     {
         if( this.isVisible() )
         {
-            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
-                this.spriteAry[this._i].render( camera );
+            for( let i = 0; i < this.spriteAry.length; ++i )
+                this.spriteAry[i].render( camera );
             
-            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
-                this.staticControlAry[this._i].render( camera );
+            for( let i = 0; i < this.staticControlAry.length; ++i )
+                this.staticControlAry[i].render( camera );
             
-            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-                this.mouseOnlyControlAry[this._i].render( camera );
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                this.mouseOnlyControlAry[i].render( camera );
             
-            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-                this.controlAry[this._i].render( camera );
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].render( camera );
         }
     }
 
@@ -437,11 +437,11 @@ export class Menu extends Object
         }
 
         // Have the controls handle events
-        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-            this.controlAry[this._i].handleEvent( event );
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].handleEvent( event );
 
-        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-            this.mouseOnlyControlAry[this._i].handleEvent( event );
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].handleEvent( event );
 
         if( event instanceof GenericEvent )
         {
@@ -594,17 +594,17 @@ export class Menu extends Object
     //
     onMouseMove( event )
     {
-        for( this._i = 0; this._i < this.controlNodeAry.length; ++this._i )
+        for( let i = 0; i < this.controlNodeAry.length; ++i )
         {
-            if( this.controlNodeAry[this._i].uiControl.onMouseMove( event ) )
-                this.activeNode = this.controlNodeAry[this._i];
+            if( this.controlNodeAry[i].uiControl.onMouseMove( event ) )
+                this.activeNode = this.controlNodeAry[i];
             else
-                this.controlNodeAry[this._i].uiControl.deactivateControl();
+                this.controlNodeAry[i].uiControl.deactivateControl();
         }
 
-        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-            if( !this.mouseOnlyControlAry[this._i].onMouseMove( event ) )
-                this.mouseOnlyControlAry[this._i].deactivateControl();
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            if( !this.mouseOnlyControlAry[i].onMouseMove( event ) )
+                this.mouseOnlyControlAry[i].deactivateControl();
     }
 
     // 
@@ -612,11 +612,11 @@ export class Menu extends Object
     //
     onWheel( event )
     {
-        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-            this.mouseOnlyControlAry[this._i].onWheel( event );
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].onWheel( event );
 
-        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-            this.controlAry[this._i].onWheel( event );
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].onWheel( event );
     }
 
     // 
@@ -639,14 +639,14 @@ export class Menu extends Object
         else if( event.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
         {
             // For mouse only controls
-            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
             {
-                if( this.mouseOnlyControlAry[this._i].handleSelectAction( event ) )
+                if( this.mouseOnlyControlAry[i].handleSelectAction( event ) )
                 {
                     this._selectionFound = true;
 
                     // Set the state to active which will block all messages until the state is reset to idle
-                    if( this.mouseOnlyControlAry[this._i].actionType > uiControlDefs.ECAT_IDLE )
+                    if( this.mouseOnlyControlAry[i].actionType > uiControlDefs.ECAT_IDLE )
                         this.state = menuDefs.EMS_ACTIVE;
 
                     break;
@@ -665,9 +665,9 @@ export class Menu extends Object
                 this.activeNode.uiControl.deactivateControl();
 
                 // Go through all the controls on this menu to try to find the one clicked on
-                for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+                for( let i = 0; i < this.controlAry.length; ++i )
                 {
-                    if( this.controlAry[this._i].handleSelectAction( event ) )
+                    if( this.controlAry[i].handleSelectAction( event ) )
                     {
                         // Set the state to active which will block all messages until the state is reset to idle
                         this._ctrl = this.activeNode.uiControl.getActiveControl();
@@ -741,17 +741,17 @@ export class Menu extends Object
         this._found = false;
 
         // Activate the first control found and deactivate all the rest
-        for( this._i = 0; this._i < this.controlNodeAry.length; ++this._i )
+        for( let i = 0; i < this.controlNodeAry.length; ++i )
         {
-            if( !this._found && this.controlNodeAry[this._i].uiControl.activateFirstInactiveControl() )
+            if( !this._found && this.controlNodeAry[i].uiControl.activateFirstInactiveControl() )
             {
-                this.activeNode = this.controlNodeAry[this._i];
+                this.activeNode = this.controlNodeAry[i];
 
                 this._found = true;
             }
             else
             {
-                this.controlNodeAry[this._i].uiControl.deactivateControl();
+                this.controlNodeAry[i].uiControl.deactivateControl();
             }
         }
     }
@@ -761,11 +761,11 @@ export class Menu extends Object
     //
     reset()
     {
-        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-            this.controlAry[this._i].reset( true );
+        for( let i = 0; i < this.controlAry.length; ++i )
+            this.controlAry[i].reset( true );
 
-        for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-            this.mouseOnlyControlAry[this._i].reset( true );
+        for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+            this.mouseOnlyControlAry[i].reset( true );
     }
 
     // 
@@ -791,11 +791,11 @@ export class Menu extends Object
     {
         this._result = null;
 
-        for( this._i = 0; this._i < this.controlAry.length; ++this._i )
+        for( let i = 0; i < this.controlAry.length; ++i )
         {
-            if( this.controlAry[this._i].state > uiControlDefs.ECS_INACTIVE )
+            if( this.controlAry[i].state > uiControlDefs.ECS_INACTIVE )
             {
-                this._result = this.controlAry[this._i].getActiveControl();
+                this._result = this.controlAry[i].getActiveControl();
                 break;
             }
         }
@@ -832,17 +832,17 @@ export class Menu extends Object
     {
         if( this.isVisible() )
         {
-            for( this._i = 0; this._i < this.spriteAry.length; ++this._i )
-                this.spriteAry[this._i].setAlpha( alpha );
+            for( let i = 0; i < this.spriteAry.length; ++i )
+                this.spriteAry[i].setAlpha( alpha );
 
-            for( this._i = 0; this._i < this.staticControlAry.length; ++this._i )
-                this.staticControlAry[this._i].setAlpha( alpha );
+            for( let i = 0; i < this.staticControlAry.length; ++i )
+                this.staticControlAry[i].setAlpha( alpha );
 
-            for( this._i = 0; this._i < this.mouseOnlyControlAry.length; ++this._i )
-                this.mouseOnlyControlAry[this._i].setAlpha( alpha );
+            for( let i = 0; i < this.mouseOnlyControlAry.length; ++i )
+                this.mouseOnlyControlAry[i].setAlpha( alpha );
 
-            for( this._i = 0; this._i < this.controlAry.length; ++this._i )
-                this.controlAry[this._i].setAlpha( alpha );
+            for( let i = 0; i < this.controlAry.length; ++i )
+                this.controlAry[i].setAlpha( alpha );
         }
 
         this.alpha = alpha;

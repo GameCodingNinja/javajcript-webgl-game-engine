@@ -146,20 +146,20 @@ class ShaderManager
             {
                 this.currentAttributeCount = shaderData.attributeCount;
                 
-                for( this._i = 0; this._i < this.currentAttributeCount; ++this._i )
-                    device.gl.enableVertexAttribArray(this._i);
+                for( let i = 0; i < this.currentAttributeCount; ++i )
+                    device.gl.enableVertexAttribArray(i);
             }
             else if( this.currentAttributeCount != shaderData.attributeCount )
             {
                 if( this.currentAttributeCount < shaderData.attributeCount )
                 {
-                    for( this._i = this.currentAttributeCount; this._i < shaderData.attributeCount; ++this._i )
-                        device.gl.enableVertexAttribArray(this._i);
+                    for( let i = this.currentAttributeCount; i < shaderData.attributeCount; ++i )
+                        device.gl.enableVertexAttribArray(i);
                 }
                 else
                 {
-                    for( this._i = shaderData.attributeCount; this._i < this.currentAttributeCount; ++this._i )
-                        device.gl.disableVertexAttribArray(this._i);
+                    for( let i = shaderData.attributeCount; i < this.currentAttributeCount; ++i )
+                        device.gl.disableVertexAttribArray(i);
                 }
 
                 this.currentAttributeCount = shaderData.attributeCount;
@@ -178,8 +178,8 @@ class ShaderManager
     //
     unbind()
     {
-        for( this._i = 0; this._i < this.currentAttributeCount; ++this._i )
-            device.gl.disableVertexAttribArray(this._i);
+        for( let i = 0; i < this.currentAttributeCount; ++i )
+            device.gl.disableVertexAttribArray(i);
     
         this.currentShaderData = null;
         this.currentAttributeCount = 0;

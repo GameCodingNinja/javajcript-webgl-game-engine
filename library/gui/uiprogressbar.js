@@ -260,9 +260,9 @@ export class UIProgressBar extends UIControl
     {
         if( this.stencilMaskSprite )
         {
-            for( this._i  = 0; this._i < this.spriteAry.length; ++this._i )
+            for( let i  = 0; i < this.spriteAry.length; ++i )
             {
-                if( this._i === this.spriteApplyIndex )
+                if( i === this.spriteApplyIndex )
                 {
                     // Disable rendering to the color buffer
                     // NOTE: Using gl.FALSE or gl.TRUE causes a problem with this function call
@@ -295,14 +295,14 @@ export class UIProgressBar extends UIControl
                     device.gl.depthMask( true );
 
 
-                    this.spriteAry[this._i].render( this.matrix );
+                    this.spriteAry[i].render( this.matrix );
 
 
                     // Finished using stencil
                     device.gl.disable( device.gl.STENCIL_TEST );
                 }
                 else
-                    this.spriteAry[this._i].render( camera );
+                    this.spriteAry[i].render( camera );
             }
         }
         else

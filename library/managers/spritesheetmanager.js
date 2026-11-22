@@ -90,8 +90,8 @@ class SpriteSheetManager
         if( !(group instanceof Array) )
             this._groupAry = [group];
 
-        for( this._i = 0; this._i < this._groupAry.length; ++this._i )
-            this.spriteSheetMapMap.delete( this._groupAry[this._i] );
+        for( let i = 0; i < this._groupAry.length; ++i )
+            this.spriteSheetMapMap.delete( this._groupAry[i] );
     }
     
     //

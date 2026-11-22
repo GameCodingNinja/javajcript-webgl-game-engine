@@ -226,8 +226,8 @@ export class UIScrollBox extends UISubControl
     {
         super.handleEvent( event );
 
-        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
-            this.scrollControlAry[this._i].handleEvent( event );
+        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+            this.scrollControlAry[i].handleEvent( event );
     }
 
     // 
@@ -351,8 +351,8 @@ export class UIScrollBox extends UISubControl
         super.update();
 
         // Update all controls
-        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
-            this.scrollControlAry[this._i].update();
+        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+            this.scrollControlAry[i].update();
 
         // Handle any scrolling
         this.handleScrollUpdate();
@@ -367,8 +367,8 @@ export class UIScrollBox extends UISubControl
         super.transform( object );
 
         // Transform all controls
-        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
-            this.scrollControlAry[this._i].transform( this );
+        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+            this.scrollControlAry[i].transform( this );
 
         // Transform the mask
         this.stencilMaskSprite.transform( this );
@@ -414,8 +414,8 @@ export class UIScrollBox extends UISubControl
         device.gl.depthMask( true );
 
 
-        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
-            this.scrollControlAry[this._i].render( camera );
+        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+            this.scrollControlAry[i].render( camera );
 
 
         // Finished using stencil
@@ -430,11 +430,11 @@ export class UIScrollBox extends UISubControl
     {
         if( super.baseActivateFirstInactiveControl() )
         {
-            for( this._i = 0; this._i < this.scrollControlAry.length; ++this._i )
+            for( let i = 0; i < this.scrollControlAry.length; ++i )
             {
-                if( this.scrollControlAry[this._i].activateFirstInactiveControl() )
+                if( this.scrollControlAry[i].activateFirstInactiveControl() )
                 {
-                    this.activeScrollCtrl = this._i;
+                    this.activeScrollCtrl = i;
                     break;
                 }
             }
@@ -451,14 +451,14 @@ export class UIScrollBox extends UISubControl
         this._result = super.handleSelectAction( event );
 
         // Let the scroll controls handle any selection
-        for( this._i = 0; this._i < this.scrollControlAry.length && !this._result; ++this._i )
+        for( let i = 0; i < this.scrollControlAry.length && !this._result; ++i )
         {
-            this._result = this.scrollControlAry[this._i].handleSelectAction( event );
+            this._result = this.scrollControlAry[i].handleSelectAction( event );
             if( this._result )
             {
                 // Set the active scroll control to the one the mouse clicked
                 if( event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE )
-                    this.activeScrollCtrl = this._i;
+                    this.activeScrollCtrl = i;
                     
                 break;
             }
@@ -818,8 +818,8 @@ export class UIScrollBox extends UISubControl
     {
         this._ctrl = super.findSubControlByName( name );
 
-        for( this._i = this.visStartPos; this._i < this.visEndPos && (this._ctrl === null); ++this._i )
-            this._ctrl = this.scrollControlAry[this._i].findControlByName( name );
+        for( let i = this.visStartPos; i < this.visEndPos && (this._ctrl === null); ++i )
+            this._ctrl = this.scrollControlAry[i].findControlByName( name );
 
         return this._ctrl;
     }
@@ -831,9 +831,9 @@ export class UIScrollBox extends UISubControl
     {
         this._ctrl = super.findSubControlByRef( control );
 
-        for( this._i = this.visStartPos; this._i < this.visEndPos && (this._ctrl === null); ++this._i )
-            if( this.scrollControlAry[this._i] === control )
-                this._ctrl = this.scrollControlAry[this._i];
+        for( let i = this.visStartPos; i < this.visEndPos && (this._ctrl === null); ++i )
+            if( this.scrollControlAry[i] === control )
+                this._ctrl = this.scrollControlAry[i];
 
         return this._ctrl;
     }
@@ -848,12 +848,12 @@ export class UIScrollBox extends UISubControl
         // We only care about the scroll controls if the point is within the scroll box
         if( !this._result && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
         {
-            for( this._i = this.visStartPos; this._i < this.visEndPos && !this._result; ++this._i )
+            for( let i = this.visStartPos; i < this.visEndPos && !this._result; ++i )
             {
-                this._result = this.scrollControlAry[this._i].onMouseMove( event );
+                this._result = this.scrollControlAry[i].onMouseMove( event );
 
                 if( this._result )
-                    this.activeScrollCtrl = this._i;
+                    this.activeScrollCtrl = i;
             }
         }
 
@@ -867,8 +867,8 @@ export class UIScrollBox extends UISubControl
     {
         super.deactivateSubControl();
 
-        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
-            this.scrollControlAry[this._i].deactivateControl();
+        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+            this.scrollControlAry[i].deactivateControl();
     }
 
     // 
@@ -897,11 +897,11 @@ export class UIScrollBox extends UISubControl
     //
     repositionScrollControls()
     {
-        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
+        for( let i = this.visStartPos; i < this.visEndPos; ++i )
         {
-            this._pos = this.scrollControlAry[this._i].pos;
-            this._y = this.defaultOffsetAry[this._i] + this.scrollCurPos;
-            this.scrollControlAry[this._i].setPosXYZ( this._pos.x, this._y, this._pos.z );
+            this._pos = this.scrollControlAry[i].pos;
+            this._y = this.defaultOffsetAry[i] + this.scrollCurPos;
+            this.scrollControlAry[i].setPosXYZ( this._pos.x, this._y, this._pos.z );
         }
     }
 
@@ -937,8 +937,8 @@ export class UIScrollBox extends UISubControl
     {
         super.setAlpha( alpha );
 
-        for( this._i = this.visStartPos; this._i < this.visEndPos; ++this._i )
-            this.scrollControlAry[this._i].setAlpha( alpha );
+        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+            this.scrollControlAry[i].setAlpha( alpha );
     }
 
     // 
@@ -950,11 +950,11 @@ export class UIScrollBox extends UISubControl
 
         if( this._result === null )
         {
-            for( this._i = 0; this._i < this.scrollControlAry.length; ++this._i )
+            for( let i = 0; i < this.scrollControlAry.length; ++i )
             {
-                if( this.scrollControlAry[this._i].state > uiControlDefs.ECS_INACTIVE )
+                if( this.scrollControlAry[i].state > uiControlDefs.ECS_INACTIVE )
                 {
-                    this._result = this.scrollControlAry[this._i].getActiveControl();
+                    this._result = this.scrollControlAry[i].getActiveControl();
                     break;
                 }
             }

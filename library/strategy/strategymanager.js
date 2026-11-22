@@ -111,20 +111,20 @@ class StrategyManager extends ManagerBase
         if( !(strategyGrp instanceof Array) )
             this._strategyGrpAry = [strategyGrp];
 
-        for( this._i = 0; this._i < this._strategyGrpAry.length; ++this._i )
+        for( let i = 0; i < this._strategyGrpAry.length; ++i )
         {
             // First deactivate the strategy
-            this.deactivateStrategy( this._strategyGrpAry[this._i] );
+            this.deactivateStrategy( this._strategyGrpAry[i] );
 
             // Cleanup and delete the strategy
-            this._strategy = this.strategyMap.get( this._strategyGrpAry[this._i] );
+            this._strategy = this.strategyMap.get( this._strategyGrpAry[i] );
             if( this._strategy )
             {
                 this._strategy.cleanUp();
-                this.strategyMap.delete( this._strategyGrpAry[this._i] );
+                this.strategyMap.delete( this._strategyGrpAry[i] );
             }
             else
-                console.warn( `Strategy id can't be found to clean up (${this._strategyGrpAry[this._i]})!` );
+                console.warn( `Strategy id can't be found to clean up (${this._strategyGrpAry[i]})!` );
         }
     }
     
@@ -166,8 +166,8 @@ class StrategyManager extends ManagerBase
     //
     update()
     {
-        for( this._i = 0; this._i < this.strategyAry.length; ++this._i )
-            this.strategyAry[this._i].update();
+        for( let i = 0; i < this.strategyAry.length; ++i )
+            this.strategyAry[i].update();
     }
 
     //
@@ -175,8 +175,8 @@ class StrategyManager extends ManagerBase
     //
     transform()
     {
-        for( this._i = 0; this._i < this.strategyAry.length; ++this._i )
-            this.strategyAry[this._i].transform();
+        for( let i = 0; i < this.strategyAry.length; ++i )
+            this.strategyAry[i].transform();
     }
 
     //
@@ -184,9 +184,9 @@ class StrategyManager extends ManagerBase
     //
     render( overrideCamera = null )
     {
-        for( this._i = 0; this._i < this.strategyAry.length; ++this._i )
-            if( this.strategyAry[this._i].isVisible() )
-                this.strategyAry[this._i].render( overrideCamera );
+        for( let i = 0; i < this.strategyAry.length; ++i )
+            if( this.strategyAry[i].isVisible() )
+                this.strategyAry[i].render( overrideCamera );
     }
 
     //

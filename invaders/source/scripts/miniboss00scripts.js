@@ -119,18 +119,20 @@ class MiniBoss00Ship_Die
 
         // Total area of the fan triangles
         this._totalArea = 0;
-        for( this._i = 0; this._i < this._polygonAry.length; ++this._i )
-            for( this._j = 1; this._j < this._polygonAry[this._i].pointAry.length - 1; ++this._j )
-                this._totalArea += this.triangleArea( this._polygonAry[this._i].pointAry, this._j );
+        for( let i = 0; i < this._polygonAry.length; ++i )
+            for( let j = 1; j < this._polygonAry[i].pointAry.length - 1; ++j )
+                this._totalArea += this.triangleArea( this._polygonAry[i].pointAry, j );
 
         // Pick a triangle by area
+        // i and j are read after the loops (the triangle the pick stopped on), so they're declared out here
         this._pick = Math.random() * this._totalArea;
-        for( this._i = 0; this._i < this._polygonAry.length; ++this._i )
+        let i, j;
+        for( i = 0; i < this._polygonAry.length; ++i )
         {
-            this._pointAry = this._polygonAry[this._i].pointAry;
-            for( this._j = 1; this._j < this._pointAry.length - 1; ++this._j )
+            this._pointAry = this._polygonAry[i].pointAry;
+            for( j = 1; j < this._pointAry.length - 1; ++j )
             {
-                this._pick -= this.triangleArea( this._pointAry, this._j );
+                this._pick -= this.triangleArea( this._pointAry, j );
                 if( this._pick <= 0 )
                     break;
             }
@@ -139,10 +141,10 @@ class MiniBoss00Ship_Die
                 break;
         }
 
-        if( this._i >= this._polygonAry.length )
+        if( i >= this._polygonAry.length )
         {
             this._pointAry = this._polygonAry[this._polygonAry.length - 1].pointAry;
-            this._j = this._pointAry.length - 2;
+            j = this._pointAry.length - 2;
         }
 
         // Uniform random point in the triangle (p0, pj, pj+1)
@@ -151,8 +153,8 @@ class MiniBoss00Ship_Die
         this._a = 1 - this._r1;
         this._b = this._r1 * (1 - this._r2);
         this._c = this._r1 * this._r2;
-        gLocalPoint.x = (this._a * this._pointAry[0].x) + (this._b * this._pointAry[this._j].x) + (this._c * this._pointAry[this._j + 1].x);
-        gLocalPoint.y = (this._a * this._pointAry[0].y) + (this._b * this._pointAry[this._j].y) + (this._c * this._pointAry[this._j + 1].y);
+        gLocalPoint.x = (this._a * this._pointAry[0].x) + (this._b * this._pointAry[j].x) + (this._c * this._pointAry[j + 1].x);
+        gLocalPoint.y = (this._a * this._pointAry[0].y) + (this._b * this._pointAry[j].y) + (this._c * this._pointAry[j + 1].y);
         gLocalPoint.z = 0;
 
         this.sprite.matrix.transformPoint( gWorldPoint, gLocalPoint );

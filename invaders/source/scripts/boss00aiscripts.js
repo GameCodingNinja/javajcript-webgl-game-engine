@@ -97,9 +97,9 @@ class AI_Boss00_base extends aiNode
     gatherTargets()
     {
         this._candAry.length = 0;
-        for( this._i = 0; this._i < this.data.buildings.length; ++this._i )
+        for( let i = 0; i < this.data.buildings.length; ++i )
         {
-            this._building = this.data.buildings[this._i].get();
+            this._building = this.data.buildings[i].get();
 
             // Skip destroyed buildings
             if( this._building.destroyed !== undefined )
@@ -107,9 +107,9 @@ class AI_Boss00_base extends aiNode
 
             // Skip buildings already targeted by another entity
             this._taken = false;
-            for( this._j = 0; this._j < this.data.enemy.length; ++this._j )
+            for( let j = 0; j < this.data.enemy.length; ++j )
             {
-                if( this.data.enemy[this._j].get().targetBuilding === this._building )
+                if( this.data.enemy[j].get().targetBuilding === this._building )
                 {
                     this._taken = true;
                     break;
@@ -135,20 +135,20 @@ class AI_Boss00_base extends aiNode
         // Find the farthest candidate distance from the player
         this._playerX = this.data.playerShipSprite.pos.x;
         this._maxDist = 0;
-        for( this._i = 0; this._i < this._candAry.length; ++this._i )
+        for( let i = 0; i < this._candAry.length; ++i )
         {
-            this._d = this.wrapDistX( this._candAry[this._i].pos.x, this._playerX );
+            this._d = this.wrapDistX( this._candAry[i].pos.x, this._playerX );
             if( this._d > this._maxDist )
                 this._maxDist = this._d;
         }
 
         // Collect the "far half" (>= half the max distance) by compacting in place
         this._farCount = 0;
-        for( this._i = 0; this._i < this._candAry.length; ++this._i )
+        for( let i = 0; i < this._candAry.length; ++i )
         {
-            if( this.wrapDistX( this._candAry[this._i].pos.x, this._playerX ) >= this._maxDist * 0.5 )
+            if( this.wrapDistX( this._candAry[i].pos.x, this._playerX ) >= this._maxDist * 0.5 )
             {
-                this._candAry[this._farCount] = this._candAry[this._i];
+                this._candAry[this._farCount] = this._candAry[i];
                 ++this._farCount;
             }
         }
@@ -169,11 +169,11 @@ class AI_Boss00_base extends aiNode
 
         // Keep only buildings a good distance from the boss (compacts in place)
         this._farCount = 0;
-        for( this._i = 0; this._i < this._candAry.length; ++this._i )
+        for( let i = 0; i < this._candAry.length; ++i )
         {
-            if( this.wrapDistX( this._candAry[this._i].pos.x, this.sprite.pos.x ) >= gameDefs.BOSS00_MIN_TARGET_DIST )
+            if( this.wrapDistX( this._candAry[i].pos.x, this.sprite.pos.x ) >= gameDefs.BOSS00_MIN_TARGET_DIST )
             {
-                this._candAry[this._farCount] = this._candAry[this._i];
+                this._candAry[this._farCount] = this._candAry[i];
                 ++this._farCount;
             }
         }

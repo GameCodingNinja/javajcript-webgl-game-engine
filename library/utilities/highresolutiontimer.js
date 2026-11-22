@@ -120,13 +120,13 @@ class HighResTimer
         this._bestDiff = Infinity;
         this._bestTime = measuredMs;
 
-        for( this._si = 0; this._si < KNOWN_FRAME_TIMES.length; ++this._si )
+        for( let si = 0; si < KNOWN_FRAME_TIMES.length; ++si )
         {
-            this._diff = Math.abs( measuredMs - KNOWN_FRAME_TIMES[this._si] );
+            this._diff = Math.abs( measuredMs - KNOWN_FRAME_TIMES[si] );
             if( this._diff < this._bestDiff )
             {
                 this._bestDiff = this._diff;
-                this._bestTime = KNOWN_FRAME_TIMES[this._si];
+                this._bestTime = KNOWN_FRAME_TIMES[si];
             }
         }
 

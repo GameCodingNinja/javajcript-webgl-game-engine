@@ -50,10 +50,10 @@ export class PlayList
         this._soundNode = node.children;
         if( this._soundNode.length )
         {
-            for( this._i = 0; this._i < this._soundNode.length; ++this._i )
+            for( let i = 0; i < this._soundNode.length; ++i )
             {
                 // Get the id
-                this._id = this._soundNode[this._i].getAttribute( "id" );
+                this._id = this._soundNode[i].getAttribute( "id" );
                 
                 // Add the sound to the playlist
                 this._snd = soundGroupMap.get( this._id );

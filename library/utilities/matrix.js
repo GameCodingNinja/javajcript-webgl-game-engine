@@ -31,10 +31,10 @@ export class Matrix
     
     copy( obj )
     {
-        this._i = this.matrix.length;
+        let i = this.matrix.length;
         
-        while( this._i-- )
-            this.matrix[this._i] = obj.matrix[this._i];  
+        while( i-- )
+            this.matrix[i] = obj.matrix[i];
     }
     
     //
@@ -59,14 +59,14 @@ export class Matrix
     //  
     mergeMatrix( matrix )
     {
-        for( this._i = 0; this._i < 4; ++this._i )
+        for( let i = 0; i < 4; ++i )
         {
-            for( this._j = 0; this._j < 4; ++this._j )
+            for( let j = 0; j < 4; ++j )
             { 
-                gTempMergeMatrix[(this._i*4)+this._j] = (this.matrix[this._i*4] * matrix[this._j])
-                + (this.matrix[(this._i*4)+1] * matrix[4+this._j])
-                + (this.matrix[(this._i*4)+2] * matrix[8+this._j])
-                + (this.matrix[(this._i*4)+3] * matrix[12+this._j]);
+                gTempMergeMatrix[(i*4)+j] = (this.matrix[i*4] * matrix[j])
+                + (this.matrix[(i*4)+1] * matrix[4+j])
+                + (this.matrix[(i*4)+2] * matrix[8+j])
+                + (this.matrix[(i*4)+3] * matrix[12+j]);
             }
         }
 
@@ -287,14 +287,14 @@ export class Matrix
     
     transformQuad( dest, source )
     {
-        for( this._i = 0; this._i < 4; ++this._i )
-            this.transformPoint( dest.point[this._i], source.point[this._i] );
+        for( let i = 0; i < 4; ++i )
+            this.transformPoint( dest.point[i], source.point[i] );
     }
 
     transformPolygon( dest, source )
     {
-        for( this._i = 0; this._i < source.pointAry.length; ++this._i )
-            this.transformPoint( dest.pointAry[this._i], source.pointAry[this._i] );
+        for( let i = 0; i < source.pointAry.length; ++i )
+            this.transformPoint( dest.pointAry[i], source.pointAry[i] );
     }
 
     transformLine( dest, source )
@@ -436,13 +436,13 @@ export class Matrix
     {
         this.initIdentityMatrix( gTempMergeMatrix );
 
-        for( this._i = 0; this._i < 3; ++this._i )
+        for( let i = 0; i < 3; ++i )
         {
-            for( this._j = 0; this._j < 3; ++this._j )
+            for( let j = 0; j < 3; ++j )
             { 
-                gTempMergeMatrix[(this._i*4)+this._j] = (this.matrix[this._i*4] * matrix[this._j])
-                + (this.matrix[(this._i*4)+1] * matrix[4+this._j])
-                + (this.matrix[(this._i*4)+2] * matrix[8+this._j]);
+                gTempMergeMatrix[(i*4)+j] = (this.matrix[i*4] * matrix[j])
+                + (this.matrix[(i*4)+1] * matrix[4+j])
+                + (this.matrix[(i*4)+2] * matrix[8+j]);
             }
         }
 

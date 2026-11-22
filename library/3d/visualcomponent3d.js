@@ -87,10 +87,10 @@ export class VisualComponent3D extends ivisualComponent
         gFinalMatrix.mergeMatrix( camera.rotMatrix.matrix );
         device.gl.uniformMatrix4fv( this.normalMatrixLocation, false, gFinalMatrix.matrix );
 
-        for( this._i = 0; this._i < this.meshAry.length; ++this._i )
+        for( let i = 0; i < this.meshAry.length; ++i )
         {
             // Bind the VBO and IBO
-            vertexBufferManager.bind( this.meshAry[this._i].vbo, this.meshAry[this._i].ibo );
+            vertexBufferManager.bind( this.meshAry[i].vbo, this.meshAry[i].ibo );
 
             // Setup the vertex attribute shader data
             device.gl.vertexAttribPointer( this.vertexLocation, 3, device.gl.FLOAT, false, this.VERTEX_BUF_SIZE, 0 );
@@ -102,9 +102,9 @@ export class VisualComponent3D extends ivisualComponent
             statCounter.vObjCounter++;
 
             // Bind texture if needed
-            if( this.uvLocation && this.meshAry[this._i].textureAry.length )
+            if( this.uvLocation && this.meshAry[i].textureAry.length )
             {
-                textureManager.bind( this.meshAry[this._i].textureAry[0].id );
+                textureManager.bind( this.meshAry[i].textureAry[0].id );
                 device.gl.uniform1i( this.text0Location, 0 );
 
                 // Setup the uv attribute shade data
@@ -112,7 +112,7 @@ export class VisualComponent3D extends ivisualComponent
             }
 
             // Render it
-            device.gl.drawElements( device.gl.TRIANGLES, this.meshAry[this._i].iboCount, device.gl.UNSIGNED_SHORT, 0 );
+            device.gl.drawElements( device.gl.TRIANGLES, this.meshAry[i].iboCount, device.gl.UNSIGNED_SHORT, 0 );
         }
     }
 }

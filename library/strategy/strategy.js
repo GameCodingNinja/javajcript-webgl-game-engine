@@ -111,8 +111,8 @@ export class Strategy extends Object
     //
     clear()
     {
-        for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-            this.deleteAry.push( this.nodeAry[this._i] );
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.deleteAry.push( this.nodeAry[i] );
     }
 
     //
@@ -123,8 +123,8 @@ export class Strategy extends Object
         for( this._node of this.nodeMap.values() )
             this._node.cleanUp();
 
-        for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-            this.nodeAry[this._i].cleanUp();
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].cleanUp();
     }
 
     //
@@ -191,9 +191,9 @@ export class Strategy extends Object
 
         // Build the node list
         this._headNode = null;
-        for( this._i = 0; this._i < this._nodeDataAry.length; ++this._i )
+        for( let i = 0; i < this._nodeDataAry.length; ++i )
         {
-            this._node = nodeFactory.create( this._nodeDataAry[this._i] );
+            this._node = nodeFactory.create( this._nodeDataAry[i] );
 
             if( this._headNode === null )
                 this._headNode = this._node;
@@ -240,9 +240,9 @@ export class Strategy extends Object
     {
         this._result = 0;
 
-        for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+        for( let i = 0; i < this.nodeAry.length; ++i )
         {
-            this._sprite = this.nodeAry[this._i].get();
+            this._sprite = this.nodeAry[i].get();
             if( this._sprite.isPhysicsActive() )
             {
                 if( this._sprite.isPhysicsAwake() )
@@ -260,9 +260,9 @@ export class Strategy extends Object
     //
     isPhysicsAwake()
     {
-        for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+        for( let i = 0; i < this.nodeAry.length; ++i )
         {
-            this._sprite = this.nodeAry[this._i].get();
+            this._sprite = this.nodeAry[i].get();
             if( this._sprite.isPhysicsActive() )
             {
                 if( this._sprite.isPhysicsAwake() )
@@ -280,8 +280,8 @@ export class Strategy extends Object
     //
     initScriptTree()
     {
-        for( this._i = 0; this._i < this.activateAry.length; ++this._i )
-            this.activateAry[this._i].get().scriptComponent.initScriptTree();
+        for( let i = 0; i < this.activateAry.length; ++i )
+            this.activateAry[i].get().scriptComponent.initScriptTree();
     }
     
     //
@@ -327,8 +327,8 @@ export class Strategy extends Object
     //
     deactivateAll()
     {
-        for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-            this.deactivateAry.push( this.nodeAry[this._i] );
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.deactivateAry.push( this.nodeAry[i] );
     }
 
     //
@@ -338,11 +338,11 @@ export class Strategy extends Object
     {
         if( typeof node === 'string' )
         {
-            for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+            for( let i = 0; i < this.nodeAry.length; ++i )
             {
-                if( this.nodeAry[this._i].name === node  )
+                if( this.nodeAry[i].name === node  )
                 {
-                    this.deleteAry.push( this.nodeAry[this._i] );
+                    this.deleteAry.push( this.nodeAry[i] );
                     break;
                 }
             }
@@ -358,11 +358,11 @@ export class Strategy extends Object
     {
         if( typeof node === 'string' )
         {
-            for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+            for( let i = 0; i < this.nodeAry.length; ++i )
             {
-                if( this.nodeAry[this._i].name === node  )
+                if( this.nodeAry[i].name === node  )
                 {
-                    this.recycleAry.push( this.nodeAry[this._i] );
+                    this.recycleAry.push( this.nodeAry[i] );
                     break;
                 }
             }
@@ -388,11 +388,11 @@ export class Strategy extends Object
         {
             this._index = -1;
 
-            for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+            for( let i = 0; i < this.nodeAry.length; ++i )
             {
-                if( this.nodeAry[this._i].userId === id  )
+                if( this.nodeAry[i].userId === id  )
                 {
-                    this._index = this._i;
+                    this._index = i;
                     break;
                 }
             }
@@ -411,8 +411,8 @@ export class Strategy extends Object
     //
     update()
     {
-        for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-            this.nodeAry[this._i].update();
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].update();
 
         // Remove nodes from the active list
         this.removeFromActiveList();
@@ -434,8 +434,8 @@ export class Strategy extends Object
     {
         super.transform();
 
-        for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-            this.nodeAry[this._i].transform( this );
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].transform( this );
     }
 
     //
@@ -450,33 +450,33 @@ export class Strategy extends Object
         // Cull frustrum on the head node
         if( this._camera.cull === defs.CULL_NULL )
         {
-            for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-                this.nodeAry[this._i].render( this._camera );
+            for( let i = 0; i < this.nodeAry.length; ++i )
+                this.nodeAry[i].render( this._camera );
         }
         else
         {
             if( this._camera.cull === defs.CULL_FULL )
             {
-                for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+                for( let i = 0; i < this.nodeAry.length; ++i )
                 {
-                    if( this._camera.inView( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( this._camera );
+                    if( this._camera.inView( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( this._camera );
                 }
             }
             else if( this._camera.cull === defs.CULL_X_ONLY )
             {
-                for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+                for( let i = 0; i < this.nodeAry.length; ++i )
                 {
-                    if( this._camera.inViewX( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( this._camera );
+                    if( this._camera.inViewX( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( this._camera );
                 }
             }
             else if( this._camera.cull === defs.CULL_Y_ONLY )
             {
-                for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
+                for( let i = 0; i < this.nodeAry.length; ++i )
                 {
-                    if( this._camera.inViewY( this.nodeAry[this._i].get().transPos, this.nodeAry[this._i].radius ) )
-                        this.nodeAry[this._i].render( this._camera );
+                    if( this._camera.inViewY( this.nodeAry[i].get().transPos, this.nodeAry[i].radius ) )
+                        this.nodeAry[i].render( this._camera );
                 }
             }
         }
@@ -489,12 +489,12 @@ export class Strategy extends Object
     {
         if( this.activateAry.length )
         {
-            for( this._i = 0; this._i < this.activateAry.length; ++this._i )
+            for( let i = 0; i < this.activateAry.length; ++i )
             {
                 // Do a transform if any scripts are to execute upon first update
-                this.activateAry[this._i].transform( this );
-                this.activateAry[this._i].update();
-                this.nodeAry.push( this.activateAry[this._i] );
+                this.activateAry[i].transform( this );
+                this.activateAry[i].update();
+                this.nodeAry.push( this.activateAry[i] );
             }
 
             this.activateAry.length = 0;
@@ -508,9 +508,9 @@ export class Strategy extends Object
     {
         if( this.deactivateAry.length )
         {
-            for( this._i = 0; this._i < this.deactivateAry.length; ++this._i )
+            for( let i = 0; i < this.deactivateAry.length; ++i )
             {
-                this._index = genFunc.indexOf( this.nodeAry, this.deactivateAry[this._i] );
+                this._index = genFunc.indexOf( this.nodeAry, this.deactivateAry[i] );
 
                 if( this._index !== -1 )
                     genFunc.removeAt( this.nodeAry, this._index );
@@ -529,9 +529,9 @@ export class Strategy extends Object
     {
         if( this.deleteAry.length )
         {
-            for( this._i = 0; this._i < this.deleteAry.length; ++this._i )
+            for( let i = 0; i < this.deleteAry.length; ++i )
             {
-                this._index = genFunc.indexOf( this.nodeAry, this.deleteAry[this._i] );
+                this._index = genFunc.indexOf( this.nodeAry, this.deleteAry[i] );
 
                 if( this._index !== -1 )
                 {
@@ -543,7 +543,7 @@ export class Strategy extends Object
                     throw new Error( `Node can't be found to delete!` );
                 
                 // If this same node is in the map, delete it here too.
-                this._key = genFunc.getKey( this.nodeMap, this.deleteAry[this._i] );
+                this._key = genFunc.getKey( this.nodeMap, this.deleteAry[i] );
 
                 if( this._key !== undefined )
                     this.nodeMap.delete(this._key);
@@ -560,9 +560,9 @@ export class Strategy extends Object
     {
         if( this.recycleAry.length )
         {
-            for( this._i = 0; this._i < this.recycleAry.length; ++this._i )
+            for( let i = 0; i < this.recycleAry.length; ++i )
             {
-                this._index = genFunc.indexOf( this.nodeAry, this.recycleAry[this._i] );
+                this._index = genFunc.indexOf( this.nodeAry, this.recycleAry[i] );
 
                 if( this._index !== -1 )
                 {
@@ -572,7 +572,7 @@ export class Strategy extends Object
                 }
                 else
                 {
-                    console.warn( `Node can't be found to recycle!: ${this.recycleAry[this._i].name}` );
+                    console.warn( `Node can't be found to recycle!: ${this.recycleAry[i].name}` );
                 }
             }
 
@@ -585,8 +585,8 @@ export class Strategy extends Object
     //
     setAllToDefaultId()
     {
-        for( this._i = 0; this._i < this.nodeAry.length; ++this._i )
-            this.nodeAry[this._i].userId = defs.DEFAULT_ID;
+        for( let i = 0; i < this.nodeAry.length; ++i )
+            this.nodeAry[i].userId = defs.DEFAULT_ID;
     }
 
     // 

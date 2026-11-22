@@ -205,9 +205,9 @@ export class Level1State extends CommonState
 
         // Randomly distrabute the clouds
         this.cloudAry = [];
-        for( this._i = 0; this._i < MAX_CLOUDS; ++this._i )
+        for( let i = 0; i < MAX_CLOUDS; ++i )
         {
-            this._sprite = this.bkgStrategy.get(`cloud_${this._i}`).get();
+            this._sprite = this.bkgStrategy.get(`cloud_${i}`).get();
             this._sprite.speed = genFunc.randomArbitrary(0.001, 0.02);
             this._sprite.setPosXYZ(genFunc.randomInt(-640, 640), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
             this._sprite.setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
@@ -1017,20 +1017,20 @@ export class Level1State extends CommonState
     //
     setBattleTime( index = 0 )
     {
-        for( this._i = 0; this._i < this.bkgStrategy.nodeAry.length; ++this._i )
-            this.bkgStrategy.nodeAry[this._i].get().setFrame( index );
+        for( let i = 0; i < this.bkgStrategy.nodeAry.length; ++i )
+            this.bkgStrategy.nodeAry[i].get().setFrame( index );
 
-        for( this._i = 0; this._i < this.buildingsBackStrategy.nodeAry.length; ++this._i )
-            this.buildingsBackStrategy.nodeAry[this._i].get().setFrame( index );
+        for( let i = 0; i < this.buildingsBackStrategy.nodeAry.length; ++i )
+            this.buildingsBackStrategy.nodeAry[i].get().setFrame( index );
 
-        for( this._i = 0; this._i < this.buildingsFrontStrategy.nodeAry.length; ++this._i )
-            this.buildingsFrontStrategy.nodeAry[this._i].get().setFrame( index );
+        for( let i = 0; i < this.buildingsFrontStrategy.nodeAry.length; ++i )
+            this.buildingsFrontStrategy.nodeAry[i].get().setFrame( index );
 
-        for( this._i = 0; this._i < this.buildingsStrategy.nodeAry.length; ++this._i )
-            this.buildingsStrategy.nodeAry[this._i].get().setFrame( index );
+        for( let i = 0; i < this.buildingsStrategy.nodeAry.length; ++i )
+            this.buildingsStrategy.nodeAry[i].get().setFrame( index );
 
-        for( this._i = 0; this._i < this.forgroundStrategy.nodeAry.length; ++this._i )
-            this.forgroundStrategy.nodeAry[this._i].get().setFrame( index );
+        for( let i = 0; i < this.forgroundStrategy.nodeAry.length; ++i )
+            this.forgroundStrategy.nodeAry[i].get().setFrame( index );
 
         strategyManager.get('_train_').get('train').get().setFrame( index );
 
@@ -1306,9 +1306,9 @@ export class Level1State extends CommonState
             {
                 this._allToBeDeleted = true;
                 this._buildingsAry = strategyManager.get('_buildings_').nodeAry;
-                for( this._i = 0; this._i < this._buildingsAry.length; ++this._i )
+                for( let i = 0; i < this._buildingsAry.length; ++i )
                 {
-                    if( this._buildingsAry[this._i].toBeDeleted === undefined )
+                    if( this._buildingsAry[i].toBeDeleted === undefined )
                     {
                         this._allToBeDeleted = false;
                         break;
@@ -1589,18 +1589,18 @@ export class Level1State extends CommonState
     {
         this._dir = -this.levelCamera.pos.x - this.playerShip.sprite.pos.x;
 
-        for( this._i = 0; this._i < this.moveActionAry.length; ++this._i )
+        for( let i = 0; i < this.moveActionAry.length; ++i )
         {
-            this._actionResult = actionManager.wasAction( event, this.moveActionAry[this._i] );
+            this._actionResult = actionManager.wasAction( event, this.moveActionAry[i] );
             if( this._actionResult != defs.EAP_IDLE )
             {
-                if( this._i < MOVE_LEFT_RIGHT )
+                if( i < MOVE_LEFT_RIGHT )
                 {
                     // Only act on action press for the last button down
-                    if( this._actionResult === defs.EAP_UP && this._i !== this.lastMoveDirX )
+                    if( this._actionResult === defs.EAP_UP && i !== this.lastMoveDirX )
                         continue;
 
-                    if( this._i === MOVE_LEFT )
+                    if( i === MOVE_LEFT )
                     {
                         // Flip the ship facing left
                         this.playerShip.object.setRotXYZ( 0, 180 );
@@ -1642,7 +1642,7 @@ export class Level1State extends CommonState
 
                         this.moveDirX = MOVE_LEFT;
                     }
-                    else if( this._i === MOVE_RIGHT )
+                    else if( i === MOVE_RIGHT )
                     {
                         // Flip the ship facing right (default orientation)
                         this.playerShip.object.setRotXYZ();
@@ -1693,7 +1693,7 @@ export class Level1State extends CommonState
                 }
                 else
                 {
-                    if( this._i === MOVE_UP )
+                    if( i === MOVE_UP )
                     {
                         if( this._actionResult === defs.EAP_DOWN )
                         {
@@ -1706,7 +1706,7 @@ export class Level1State extends CommonState
 
                         this.moveDirY = MOVE_UP;
                     }
-                    else if( this._i === MOVE_DOWN )
+                    else if( i === MOVE_DOWN )
                     {
                         if( this._actionResult === defs.EAP_DOWN )
                         {
@@ -1857,17 +1857,17 @@ export class Level1State extends CommonState
 
             // Pick a random building out of the free ones (not targeted, not destroyed)
             this._freeCount = 0;
-            for( this._j = 0; this._j < this._buildings.length; ++this._j )
-                if( this.isBuildingFree( this._buildings[this._j].get() ) )
+            for( let j = 0; j < this._buildings.length; ++j )
+                if( this.isBuildingFree( this._buildings[j].get() ) )
                     this._freeCount++;
 
             // If none are free, we'll try again next time
             if( this._freeCount > 0 )
             {
                 this._index = genFunc.randomInt( 0, this._freeCount-1 );
-                for( this._j = 0; this._j < this._buildings.length; ++this._j )
+                for( let j = 0; j < this._buildings.length; ++j )
                 {
-                    this._targetBuilding = this._buildings[this._j].get();
+                    this._targetBuilding = this._buildings[j].get();
                     if( this.isBuildingFree( this._targetBuilding ) && (this._index-- === 0) )
                         break;
                 }
@@ -1898,8 +1898,8 @@ export class Level1State extends CommonState
         if( building.destroyed !== undefined )
             return false;
 
-        for( this._i = 0; this._i < this.enemyStrategy.nodeAry.length; ++this._i )
-            if( this.enemyStrategy.nodeAry[this._i].get().targetBuilding === building )
+        for( let i = 0; i < this.enemyStrategy.nodeAry.length; ++i )
+            if( this.enemyStrategy.nodeAry[i].get().targetBuilding === building )
                 return false;
 
         return true;
@@ -1911,12 +1911,12 @@ export class Level1State extends CommonState
     countPests()
     {
         this._pestCount = 0;
-        for( this._pi = 0; this._pi < this.enemyStrategy.nodeAry.length; ++this._pi )
+        for( let pi = 0; pi < this.enemyStrategy.nodeAry.length; ++pi )
         {
             // Not counting one that's dying (falling off the screen)
-            if( (this.enemyStrategy.nodeAry[this._pi].userId === gameDefs.PEST00_SHIP_ID ||
-                 this.enemyStrategy.nodeAry[this._pi].userId === gameDefs.PEST01_SHIP_ID) &&
-                this.enemyStrategy.nodeAry[this._pi].get().collisionComponent.enable )
+            if( (this.enemyStrategy.nodeAry[pi].userId === gameDefs.PEST00_SHIP_ID ||
+                 this.enemyStrategy.nodeAry[pi].userId === gameDefs.PEST01_SHIP_ID) &&
+                this.enemyStrategy.nodeAry[pi].get().collisionComponent.enable )
                 this._pestCount++;
         }
 
@@ -1929,11 +1929,11 @@ export class Level1State extends CommonState
     countPest01()
     {
         this._pestCount = 0;
-        for( this._pi = 0; this._pi < this.enemyStrategy.nodeAry.length; ++this._pi )
+        for( let pi = 0; pi < this.enemyStrategy.nodeAry.length; ++pi )
         {
             // Not counting one that's dying (falling off the screen)
-            if( this.enemyStrategy.nodeAry[this._pi].userId === gameDefs.PEST01_SHIP_ID &&
-                this.enemyStrategy.nodeAry[this._pi].get().collisionComponent.enable )
+            if( this.enemyStrategy.nodeAry[pi].userId === gameDefs.PEST01_SHIP_ID &&
+                this.enemyStrategy.nodeAry[pi].get().collisionComponent.enable )
                 this._pestCount++;
         }
 
@@ -1967,8 +1967,8 @@ export class Level1State extends CommonState
 
         pest01aiscripts.startSwarm( this._x );
 
-        for( this._i = 0; this._i < gameDefs.PEST01_MEMBERS; ++this._i )
-            pest01aiscripts.addMember( this._i, this.enemyStrategy.create('pest01_ship').get() );
+        for( let i = 0; i < gameDefs.PEST01_MEMBERS; ++i )
+            pest01aiscripts.addMember( i, this.enemyStrategy.create('pest01_ship').get() );
 
         this.swarmActive = true;
     }
@@ -1991,10 +1991,10 @@ export class Level1State extends CommonState
     //
     isMiniBossActive()
     {
-        for( this._i = 0; this._i < this.enemyStrategy.nodeAry.length; ++this._i )
+        for( let i = 0; i < this.enemyStrategy.nodeAry.length; ++i )
         {
-            if( this.enemyStrategy.nodeAry[this._i].userId === gameDefs.MINI_BOSS_00_SHIP_ID ||
-                this.enemyStrategy.nodeAry[this._i].userId === gameDefs.MINI_BOSS_01_SHIP_ID )
+            if( this.enemyStrategy.nodeAry[i].userId === gameDefs.MINI_BOSS_00_SHIP_ID ||
+                this.enemyStrategy.nodeAry[i].userId === gameDefs.MINI_BOSS_01_SHIP_ID )
                 return true;
         }
 
@@ -2214,20 +2214,20 @@ export class Level1State extends CommonState
     //
     handleCloudMovement()
     {
-        for( this._i = 0; this._i < MAX_CLOUDS; ++this._i )
+        for( let i = 0; i < MAX_CLOUDS; ++i )
         {
-            this.cloudAry[this._i].incPosXYZ(highResTimer.elapsedTime * this.cloudAry[this._i].speed);
+            this.cloudAry[i].incPosXYZ(highResTimer.elapsedTime * this.cloudAry[i].speed);
 
-            if(this.cloudAry[this._i].pos.x - (this.cloudAry[this._i].getSize().w / 2) > settings.deviceRes_half.w)
+            if(this.cloudAry[i].pos.x - (this.cloudAry[i].getSize().w / 2) > settings.deviceRes_half.w)
             {
-                this.cloudAry[this._i].setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
-                this.cloudAry[this._i].speed = genFunc.randomArbitrary(0.001, 0.02);
-                this.cloudAry[this._i].setPosXYZ(-((this.cloudAry[this._i].getSize().w / 2) + settings.deviceRes_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
+                this.cloudAry[i].setScaleXYZ(genFunc.randomInt(2, 4), genFunc.randomInt(2, 4));
+                this.cloudAry[i].speed = genFunc.randomArbitrary(0.001, 0.02);
+                this.cloudAry[i].setPosXYZ(-((this.cloudAry[i].getSize().w / 2) + settings.deviceRes_half.w), genFunc.randomInt(CLOUD_MIN_Y, CLOUD_MAX_Y));
 
                 // Flip the sprite?
-                this.cloudAry[this._i].setRotXYZ(0, 0);
+                this.cloudAry[i].setRotXYZ(0, 0);
                 if(genFunc.randomInt(0, 1))
-                    this.cloudAry[this._i].setRotXYZ(0, 180);
+                    this.cloudAry[i].setRotXYZ(0, 180);
             }
         }
     }
@@ -2477,15 +2477,15 @@ export class Level1State extends CommonState
             // Loop the player strategy and camera
             if( this.playerShip.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; ++this._i )
-                    this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                for( let i = 0; i < this.playerShip.strategy.nodeAry.length; ++i )
+                    this.playerShip.strategy.nodeAry[i].get().incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
                 this.levelCamera.incPosXYZ( gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
             }
             else if( this.playerShip.sprite.pos.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
             {
-                for( this._i = 0; this._i < this.playerShip.strategy.nodeAry.length; ++this._i )
-                    this.playerShip.strategy.nodeAry[this._i].get().incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                for( let i = 0; i < this.playerShip.strategy.nodeAry.length; ++i )
+                    this.playerShip.strategy.nodeAry[i].get().incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
 
                 this.levelCamera.incPosXYZ( -(gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2) );
             }
@@ -2661,9 +2661,9 @@ export class Level1State extends CommonState
         {
             // Two fingers on the right side → shield until either is lifted. Cancels this finger's boost or fire.
             this._rightTouchCount = 0;
-            for( this._ti = 0; this._ti < eventManager.touchPool.length; ++this._ti )
+            for( let ti = 0; ti < eventManager.touchPool.length; ++ti )
             {
-                this._slot = eventManager.touchPool[this._ti];
+                this._slot = eventManager.touchPool[ti];
                 if( this._slot.id !== -1 && !this._slot.ended && this._slot.side === 'right' )
                     ++this._rightTouchCount;
             }

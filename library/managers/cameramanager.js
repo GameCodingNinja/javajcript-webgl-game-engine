@@ -96,19 +96,19 @@ class CameraManager
         if( !(cameraId instanceof Array) )
             this._cameraIdAry = [cameraId];
 
-        for( this._i = 0; this._i < this._cameraIdAry.length; ++this._i )
+        for( let i = 0; i < this._cameraIdAry.length; ++i )
         {
-            this._camera = this.cameraMap.get( this._cameraIdAry[this._i] );
+            this._camera = this.cameraMap.get( this._cameraIdAry[i] );
             if( this._camera )
             {
                 this._index = genFunc.indexOf( this.transformAry, this._camera );
                 if( this._index !== -1 )
-                    console.warn( `Camera is already being transformed (${this._cameraIdAry[this._i]})!` );
+                    console.warn( `Camera is already being transformed (${this._cameraIdAry[i]})!` );
                 else
                     this.transformAry.push( this._camera );
             }
             else
-                throw new Error( `Camera id is not defined (${this._cameraIdAry[this._i]})!` );
+                throw new Error( `Camera id is not defined (${this._cameraIdAry[i]})!` );
         }
     }
     
@@ -135,8 +135,8 @@ class CameraManager
     //
     transform()
     {
-        for( this._i = 0; this._i < this.transformAry.length; this._i++ )
-            this.transformAry[this._i].transform();
+        for( let i = 0; i < this.transformAry.length; i++ )
+            this.transformAry[i].transform();
     }
     
     //
