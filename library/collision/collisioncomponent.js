@@ -20,12 +20,8 @@ import * as defs from '../common/defs';
 
 // Reusable global objects so as to avoid excessive allocations and cleanup
 var gPoint = new Point;
-var gLine1 = new Line;
-gLine1.head = new Point;
-gLine1.tail = new Point;
-var gLine2 = new Line;
-gLine2.head = new Point;
-gLine2.tail = new Point;
+var gCorner1 = new Point;
+var gCorner2 = new Point;
 
 export class CollisionComponent
 {
@@ -77,9 +73,9 @@ export class CollisionComponent
     {
         this.radius = objectData.collisionData.radius;
 
-        // Create the radius from visual size
+        // Create the radius from visual size: half the diagonal, squared (diagonal² / 4)
         if( objectData.collisionData.radiusFromVisual )
-            this.radius = objectData.size.getLengthSquared() / 2;
+            this.radius = objectData.size.getLengthSquared() / 4;
 
         // Adjust the radius based on the modifier
         this.radius += objectData.collisionData.radiusModifier;
@@ -87,7 +83,7 @@ export class CollisionComponent
         if( this.radius == -1 )
             console.warn( `Radius has not been defined (${objectData.group}, ${objectData.name})!` );
 
-        // Radius in the object's own units. A circle's radius is scaled by the sprite (and parent) scale in transform().
+        // Radius in the object's own units. transform() scales it by the sprite (and parent) scale, for every shape.
         this.baseRadius = this.radius;
     }
 
@@ -264,31 +260,30 @@ export class CollisionComponent
         {
             if( this.type === defs.ECT_RECT )
             {
-                for( this._i = 0; this._i < this.rectAry.length; ++this._i )
-                    this.matrix.transformRect( this.transRectAry[this._i], this.rectAry[this._i] );
+                for( let i = 0; i < this.rectAry.length; ++i )
+                    this.matrix.transformRect( this.transRectAry[i], this.rectAry[i] );
             }
             else if( this.type === defs.ECT_POLYGON )
             {
-                for( this._i = 0; this._i < this.polygonAry.length; ++this._i )
-                    this.matrix.transformPolygon( this.transPolygonAry[this._i], this.polygonAry[this._i] );
+                for( let i = 0; i < this.polygonAry.length; ++i )
+                    this.matrix.transformPolygon( this.transPolygonAry[i], this.polygonAry[i] );
             }
             else if( this.type === defs.ECT_LINE )
             {
-                for( this._i = 0; this._i < this.lineAry.length; ++this._i )
-                    this.matrix.transformLine( this.transLineAry[this._i], this.lineAry[this._i] );
+                for( let i = 0; i < this.lineAry.length; ++i )
+                    this.matrix.transformLine( this.transLineAry[i], this.lineAry[i] );
             }
             else if( this.type === defs.ECT_POINT )
             {
-                for( this._i = 0; this._i < this.pointAry.length; ++this._i )
-                    this.matrix.transformPoint( this.transPointAry[this._i], this.pointAry[this._i] );
+                for( let i = 0; i < this.pointAry.length; ++i )
+                    this.matrix.transformPoint( this.transPointAry[i], this.pointAry[i] );
             }
-            else if( this.type === defs.ECT_CIRCLE )
-            {
-                // Scale the circle like the other shapes: the matrix's X axis length is the sprite's scale
-                // (including the parent's). Squared space, so the squared radius times the squared scale.
-                this._m = this.matrix.matrix;
-                this.radius = this.baseRadius * ((this._m[0] * this._m[0]) + (this._m[1] * this._m[1]) + (this._m[2] * this._m[2]));
-            }
+
+            // Scale the radius (a circle's, and every other shape's broad phase radius) like the shapes' points:
+            // the matrix's X axis length is the sprite's scale (including the parent's).
+            // Squared space, so the squared radius times the squared scale.
+            this._m = this.matrix.matrix;
+            this.radius = this.baseRadius * ((this._m[0] * this._m[0]) + (this._m[1] * this._m[1]) + (this._m[2] * this._m[2]));
         }
     }
 
@@ -359,7 +354,7 @@ export class CollisionComponent
                 }
                 else if( this.local_sprite.collisionComponent.type === defs.ECT_CIRCLE )
                 {
-                    this._result = this.circleToCircleCheck( this.local_sprite );
+                    this._result = this.circleToCircleCollision( this.local_sprite );
                 }
                 else if( this.local_sprite.collisionComponent.type === defs.ECT_RECT )
                 {
@@ -455,9 +450,9 @@ export class CollisionComponent
     {
         this._transPointAry = this.sprite.collisionComponent.transPointAry;
 
-        for( this._i = 0; this._i < this._transPointAry.length; ++this._i )
+        for( let i = 0; i < this._transPointAry.length; ++i )
         {
-            if( this.pointToCircleCheck( this._transPointAry[this._i], sprite.transPos, sprite.collisionComponent.radius ) )
+            if( this.pointToCircleCheck( this._transPointAry[i], sprite.transPos, sprite.collisionComponent.radius ) )
                 return true;
         }
         
@@ -476,14 +471,14 @@ export class CollisionComponent
             this._transRectAry = sprite.collisionComponent.transRectAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transRectAry.length; ++this._i )
+            for( let i = 0; i < this._transRectAry.length; ++i )
             {
-                for( this._j = 0; this._j < this.transRectAry.length; ++this._j )
+                for( let j = 0; j < this.transRectAry.length; ++j )
                 {
-                    if( this.transRectAry[this._j].x1 < this._transRectAry[this._i].x2 &&
-                        this.transRectAry[this._j].x2 > this._transRectAry[this._i].x1 &&
-                        this.transRectAry[this._j].y1 > this._transRectAry[this._i].y2 &&
-                        this.transRectAry[this._j].y2 < this._transRectAry[this._i].y1 )
+                    if( this.transRectAry[j].x1 < this._transRectAry[i].x2 &&
+                        this.transRectAry[j].x2 > this._transRectAry[i].x1 &&
+                        this.transRectAry[j].y1 > this._transRectAry[i].y2 &&
+                        this.transRectAry[j].y2 < this._transRectAry[i].y1 )
                     {
                         return true;
                     }
@@ -506,21 +501,21 @@ export class CollisionComponent
             this._transPos = this.sprite.transPos;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transRectAry.length; ++this._i )
+            for( let i = 0; i < this._transRectAry.length; ++i )
             {
                 // Find the edge the point is out side of
                 this._edgeX = this._transPos.x;
                 this._edgeY = this._transPos.y;
 
-                if( this._transPos.x < this._transRectAry[this._i].x1 )
-                    this._edgeX = this._transRectAry[this._i].x1;
-                else if( this._transPos.x > this._transRectAry[this._i].x2 )
-                    this._edgeX = this._transRectAry[this._i].x2;
+                if( this._transPos.x < this._transRectAry[i].x1 )
+                    this._edgeX = this._transRectAry[i].x1;
+                else if( this._transPos.x > this._transRectAry[i].x2 )
+                    this._edgeX = this._transRectAry[i].x2;
 
-                if( this._transPos.y < this._transRectAry[this._i].y2 )
-                    this._edgeY = this._transRectAry[this._i].y2;
-                else if( this._transPos.y > this._transRectAry[this._i].y1 )
-                    this._edgeY = this._transRectAry[this._i].y1;
+                if( this._transPos.y < this._transRectAry[i].y2 )
+                    this._edgeY = this._transRectAry[i].y2;
+                else if( this._transPos.y > this._transRectAry[i].y1 )
+                    this._edgeY = this._transRectAry[i].y1;
                 
                 // Get distance from closest edges
                 this._distX = this._transPos.x - this._edgeX;
@@ -547,12 +542,12 @@ export class CollisionComponent
             this._transRectAry = sprite.collisionComponent.transRectAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transPointAry.length; ++this._i )
+            for( let i = 0; i < this._transPointAry.length; ++i )
             {
-                for( this._j = 0; this._j < this._transRectAry.length; ++this._j )
+                for( let j = 0; j < this._transRectAry.length; ++j )
                 {
-                    if( !(this._transPointAry[this._i].x < this._transRectAry[this._j].x1 || this._transPointAry[this._i].x > this._transRectAry[this._j].x2 ||
-                        this._transPointAry[this._i].y > this._transRectAry[this._j].y1 || this._transPointAry[this._i].y < this._transRectAry[this._j].y2) )
+                    if( !(this._transPointAry[i].x < this._transRectAry[j].x1 || this._transPointAry[i].x > this._transRectAry[j].x2 ||
+                        this._transPointAry[i].y > this._transRectAry[j].y1 || this._transPointAry[i].y < this._transRectAry[j].y2) )
                         return true;
                 }
             }
@@ -573,11 +568,11 @@ export class CollisionComponent
             this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transPointAry.length; ++this._i )
+            for( let i = 0; i < this._transPointAry.length; ++i )
             {
-                for( this._j = 0; this._j < this._transPolygonAry.length; ++this._j )
+                for( let j = 0; j < this._transPolygonAry.length; ++j )
                 {
-                    if( this.pointToPolygonCheck( this._transPointAry[this._i], this._transPolygonAry[this._j]) )
+                    if( this.pointToPolygonCheck( this._transPointAry[i], this._transPolygonAry[j]) )
                         return true;
                 }
             }
@@ -598,17 +593,17 @@ export class CollisionComponent
             this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transPolygonAry.length; ++this._i )
+            for( let i = 0; i < this._transPolygonAry.length; ++i )
             {
-                for( this._j = 0; this._j < this._transPolygonAry[this._i].pointAry.length; ++this._j )
+                for( let j = 0; j < this._transPolygonAry[i].pointAry.length; ++j )
                 {
                     // Get next vertex in list. If we've hit the end, wrap around to 0
-                    this._next = this._j + 1;
-                    if( this._next == this._transPolygonAry[this._i].pointAry.length )
-                        this._next = 0;
+                    let next = j + 1;
+                    if( next == this._transPolygonAry[i].pointAry.length )
+                        next = 0;
 
                     // check for collision between the circle and a line formed between the two vertices
-                    if( this.lineToCircleCheck(this._transPolygonAry[this._i].pointAry[this._j], this._transPolygonAry[this._i].pointAry[this._next], this._transPos, this.radius) )
+                    if( this.lineToCircleCheck(this._transPolygonAry[i].pointAry[j], this._transPolygonAry[i].pointAry[next], this._transPos, this.radius) )
                         return true;
                 }
 
@@ -616,7 +611,7 @@ export class CollisionComponent
                 // sides of the polygon again, so only use this if you need to
                 if( sprite.collisionComponent.optionalPointCheck )
                 {
-                    if( this.pointToPolygonCheck( this._transPos, this._transPolygonAry[this._i] ) )
+                    if( this.pointToPolygonCheck( this._transPos, this._transPolygonAry[i] ) )
                         return true;
                 }
             }
@@ -637,10 +632,10 @@ export class CollisionComponent
             this._transLineAry = sprite.collisionComponent.transLineAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transLineAry.length; ++this._i )
+            for( let i = 0; i < this._transLineAry.length; ++i )
             {
                 // Check for collision between the circle and a line formed between the two vertices
-                if( this.lineToCircleCheck(this._transLineAry[this._i].head, this._transLineAry[this._i].tail, this._transPos, this.radius) )
+                if( this.lineToCircleCheck(this._transLineAry[i].head, this._transLineAry[i].tail, this._transPos, this.radius) )
                     return true;
             }
         }
@@ -659,12 +654,12 @@ export class CollisionComponent
             this._transLineAry = sprite.collisionComponent.transLineAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transLineAry.length; ++this._i )
+            for( let i = 0; i < this._transLineAry.length; ++i )
             {
-                for( this._j = 0; this._j < this.transLineAry.length; ++this._j )
+                for( let j = 0; j < this.transLineAry.length; ++j )
                 {
                     // Check for collision between the circle and a line formed between the two vertices
-                    if( this.lineToLineCheck( this.transLineAry[this._j], this._transLineAry[this._i] ) )
+                    if( this.lineToLineCheck( this.transLineAry[j].head, this.transLineAry[j].tail, this._transLineAry[i].head, this._transLineAry[i].tail ) )
                         return true;
                 }
             }
@@ -684,11 +679,11 @@ export class CollisionComponent
             this._transRectAry = sprite.collisionComponent.transRectAry;
 
             // Do the narrow phase check
-            for( this._i = 0; this._i < this._transRectAry.length; ++this._i )
+            for( let i = 0; i < this._transRectAry.length; ++i )
             {
-                for( this._j = 0; this._j < this.transLineAry.length; ++this._j )
+                for( let j = 0; j < this.transLineAry.length; ++j )
                 {
-                    if( this.lineToRectCheck( this.transLineAry[this._j], this._transRectAry[this._i] ) )
+                    if( this.lineToRectCheck( this.transLineAry[j].head, this.transLineAry[j].tail, this._transRectAry[i] ) )
                         return true;
                 }
             }
@@ -708,22 +703,19 @@ export class CollisionComponent
             this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( this._line = 0; this._line < this.transLineAry.length; ++this._line )
+            for( let line = 0; line < this.transLineAry.length; ++line )
             {
-                for( this._i = 0; this._i < this._transPolygonAry.length; ++this._i )
+                for( let i = 0; i < this._transPolygonAry.length; ++i )
                 {
-                    for( this._j = 0; this._j < this._transPolygonAry[this._i].pointAry.length; ++this._j )
+                    for( let j = 0; j < this._transPolygonAry[i].pointAry.length; ++j )
                     {
                         // Get next vertex in list. If we've hit the end, wrap around to 0
-                        this._next = this._j + 1;
-                        if( this._next == this._transPolygonAry[this._i].pointAry.length )
-                            this._next = 0;
+                        let next = j + 1;
+                        if( next == this._transPolygonAry[i].pointAry.length )
+                            next = 0;
 
-                        gLine1.head.setXYZ( this._transPolygonAry[this._i].pointAry[this._j].x, this._transPolygonAry[this._i].pointAry[this._j].y );
-                        gLine1.tail.setXYZ( this._transPolygonAry[this._i].pointAry[this._next].x, this._transPolygonAry[this._i].pointAry[this._next].y );
-                            
                         // check for collision between the line and a polygon line formed between the two vertices
-                        if( this.lineToLineCheck( gLine1, this.transLineAry[this._line] ) )
+                        if( this.lineToLineCheck( this._transPolygonAry[i].pointAry[j], this._transPolygonAry[i].pointAry[next], this.transLineAry[line].head, this.transLineAry[line].tail ) )
                             return true;
                     }
 
@@ -731,10 +723,10 @@ export class CollisionComponent
                     // sides of the polygon again, so only use this if you need to
                     if( sprite.collisionComponent.optionalPointCheck )
                     {
-                        if( this.pointToPolygonCheck( this.transLineAry[this._line].head, this._transPolygonAry[this._i] ) )
+                        if( this.pointToPolygonCheck( this.transLineAry[line].head, this._transPolygonAry[i] ) )
                             return true;
                         
-                        if( this.pointToPolygonCheck( this.transLineAry[this._line].tail, this._transPolygonAry[this._i] ) )
+                        if( this.pointToPolygonCheck( this.transLineAry[line].tail, this._transPolygonAry[i] ) )
                             return true;
                     }
                 }
@@ -755,22 +747,19 @@ export class CollisionComponent
             this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
             // Do the narrow phase check
-            for( this._rect = 0; this._rect < this.transRectAry.length; ++this._rect )
+            for( let rect = 0; rect < this.transRectAry.length; ++rect )
             {
-                for( this._i = 0; this._i < this._transPolygonAry.length; ++this._i )
+                for( let i = 0; i < this._transPolygonAry.length; ++i )
                 {
-                    for( this._j = 0; this._j < this._transPolygonAry[this._i].pointAry.length; ++this._j )
+                    for( let j = 0; j < this._transPolygonAry[i].pointAry.length; ++j )
                     {
                         // Get next vertex in list. If we've hit the end, wrap around to 0
-                        this._next = this._j + 1;
-                        if( this._next == this._transPolygonAry[this._i].pointAry.length )
-                            this._next = 0;
+                        let next = j + 1;
+                        if( next == this._transPolygonAry[i].pointAry.length )
+                            next = 0;
 
-                        gLine1.head.setXYZ( this._transPolygonAry[this._i].pointAry[this._j].x, this._transPolygonAry[this._i].pointAry[this._j].y );
-                        gLine1.tail.setXYZ( this._transPolygonAry[this._i].pointAry[this._next].x, this._transPolygonAry[this._i].pointAry[this._next].y );
-                            
                         // check for collision between the rect and a polygon line formed between the two vertices
-                        if( this.lineToRectCheck( gLine1, this.transRectAry[this._rect] ) )
+                        if( this.lineToRectCheck( this._transPolygonAry[i].pointAry[j], this._transPolygonAry[i].pointAry[next], this.transRectAry[rect] ) )
                             return true;
                     }
 
@@ -778,20 +767,20 @@ export class CollisionComponent
                     // sides of the polygon again, so only use this if you need to
                     if( sprite.collisionComponent.optionalPointCheck )
                     {
-                        gPoint.setXYZ( this.transRectAry[this._rect].x1, this.transRectAry[this._rect].y1 );
-                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[this._i] ) )
+                        gPoint.setXYZ( this.transRectAry[rect].x1, this.transRectAry[rect].y1 );
+                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[i] ) )
                             return true;
                         
-                        gPoint.setXYZ( this.transRectAry[this._rect].x2, this.transRectAry[this._rect].y1 );
-                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[this._i] ) )
+                        gPoint.setXYZ( this.transRectAry[rect].x2, this.transRectAry[rect].y1 );
+                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[i] ) )
                             return true;
 
-                        gPoint.setXYZ( this.transRectAry[this._rect].x2, this.transRectAry[this._rect].y2 );
-                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[this._i] ) )
+                        gPoint.setXYZ( this.transRectAry[rect].x2, this.transRectAry[rect].y2 );
+                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[i] ) )
                             return true;
 
-                        gPoint.setXYZ( this.transRectAry[this._rect].x1, this.transRectAry[this._rect].y2 );
-                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[this._i] ) )
+                        gPoint.setXYZ( this.transRectAry[rect].x1, this.transRectAry[rect].y2 );
+                        if( this.pointToPolygonCheck( gPoint, this._transPolygonAry[i] ) )
                             return true;
                     }
                 }
@@ -811,58 +800,48 @@ export class CollisionComponent
         {
             this._transPolygonAry = sprite.collisionComponent.transPolygonAry;
 
-            // Do the narrow phase check
-            for( this._poly1 = 0; this._poly1 < this.transPolygonAry.length; ++this._poly1 )
+            // Do the narrow phase check: does an edge of one polygon cross an edge of the other?
+            for( let poly1 = 0; poly1 < this.transPolygonAry.length; ++poly1 )
             {
-                for( this._point1 = 0; this._point1 < this.transPolygonAry[this._poly1].pointAry.length; ++this._point1 )
+                for( let point1 = 0; point1 < this.transPolygonAry[poly1].pointAry.length; ++point1 )
                 {
                     // Get next vertex in list. If we've hit the end, wrap around to 0
-                    this._next1 = this._point1 + 1;
-                    if( this._next1 == this.transPolygonAry[this._poly1].pointAry.length )
-                        this._next1 = 0;
+                    let next1 = point1 + 1;
+                    if( next1 == this.transPolygonAry[poly1].pointAry.length )
+                        next1 = 0;
 
-                    gLine1.head.setXYZ( this.transPolygonAry[this._poly1].pointAry[this._point1].x, this.transPolygonAry[this._poly1].pointAry[this._point1].y );
-                    gLine1.tail.setXYZ( this.transPolygonAry[this._poly1].pointAry[this._next1].x, this.transPolygonAry[this._poly1].pointAry[this._next1].y );
-
-                    for( this._poly2 = 0; this._poly2 < this._transPolygonAry.length; ++this._poly2 )
+                    for( let poly2 = 0; poly2 < this._transPolygonAry.length; ++poly2 )
                     {
-                        for( this._point2 = 0; this._point2 < this._transPolygonAry[this._poly2].pointAry.length; ++this._point2 )
+                        for( let point2 = 0; point2 < this._transPolygonAry[poly2].pointAry.length; ++point2 )
                         {
                             // Get next vertex in list. If we've hit the end, wrap around to 0
-                            this._next2 = this._point2 + 1;
-                            if( this._next2 == this._transPolygonAry[this._poly2].pointAry.length )
-                                this._next2 = 0;
+                            let next2 = point2 + 1;
+                            if( next2 == this._transPolygonAry[poly2].pointAry.length )
+                                next2 = 0;
 
-                            gLine2.head.setXYZ( this._transPolygonAry[this._poly2].pointAry[this._point2].x, this._transPolygonAry[this._poly2].pointAry[this._point2].y );
-                            gLine2.tail.setXYZ( this._transPolygonAry[this._poly2].pointAry[this._next2].x, this._transPolygonAry[this._poly2].pointAry[this._next2].y );
-                                
-                            // check for collision between the rect and a polygon line formed between the two vertices
-                            if( this.lineToLineCheck( gLine1, gLine2 ) )
-                                return true;
-
-                            // Optional: Test if the point is INSIDE the polygon note that this iterates all
-                            // sides of the polygon again, so only use this if you need to
-                            if( this.optionalPointCheck )
-                            {
-                                if( this.pointToPolygonCheck( gLine2.head, this.transPolygonAry[this._poly1] ) )
-                                    return true;
-                                
-                                if( this.pointToPolygonCheck( gLine2.tail, this.transPolygonAry[this._poly1] ) )
-                                    return true;
-                            }
-                        }
-
-                        // Optional: Test if the point is INSIDE the polygon note that this iterates all
-                        // sides of the polygon again, so only use this if you need to
-                        if( sprite.collisionComponent.optionalPointCheck )
-                        {
-                            if( this.pointToPolygonCheck( gLine1.head, this._transPolygonAry[this._poly2] ) )
-                                return true;
-                            
-                            if( this.pointToPolygonCheck( gLine1.tail, this._transPolygonAry[this._poly2] ) )
+                            // check for collision between the two polygon lines
+                            if( this.lineToLineCheck( this.transPolygonAry[poly1].pointAry[point1], this.transPolygonAry[poly1].pointAry[next1],
+                                                      this._transPolygonAry[poly2].pointAry[point2], this._transPolygonAry[poly2].pointAry[next2] ) )
                                 return true;
                         }
                     }
+                }
+            }
+
+            // Optional: Test if one polygon is INSIDE the other. No edges cross, so each polygon is either
+            // entirely inside the other or entirely outside it, and testing one of its vertices tells which.
+            // (This used to test every vertex again for every pair of edges.)
+            for( let poly1 = 0; poly1 < this.transPolygonAry.length; ++poly1 )
+            {
+                for( let poly2 = 0; poly2 < this._transPolygonAry.length; ++poly2 )
+                {
+                    // Is the other sprite's polygon inside this one?
+                    if( this.optionalPointCheck && this.pointToPolygonCheck( this._transPolygonAry[poly2].pointAry[0], this.transPolygonAry[poly1] ) )
+                        return true;
+
+                    // Is this polygon inside the other sprite's?
+                    if( sprite.collisionComponent.optionalPointCheck && this.pointToPolygonCheck( this.transPolygonAry[poly1].pointAry[0], this._transPolygonAry[poly2] ) )
+                        return true;
                 }
             }
         }
@@ -875,7 +854,10 @@ export class CollisionComponent
     //
     circleToCircleCheck( sprite )
     {
-        if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this.radius + sprite.collisionComponent.radius) )
+        // Broad phase, fast rather than exact. The radii are stored squared, and touching is distance <= r1 + r2.
+        // (r1 + r2)² <= 2 × (r1² + r2²), so this never misses a hit without a sqrt: exact for equal radii,
+        // looser the more they differ. (r1² + r2² alone was too tight: about 71% of the touching distance.)
+        if( this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= 2 * (this.radius + sprite.collisionComponent.radius) )
         {
             //console.log(`circleToCircleCheck ${sprite.transPos.x}`);
             return true;
@@ -885,22 +867,32 @@ export class CollisionComponent
     }
 
     // 
+    //  DESC: Exact circle to circle collision (the full circle vs circle test, not the broad phase)
+    //
+    circleToCircleCollision( sprite )
+    {
+        this._radiusSum = Math.sqrt( this.radius ) + Math.sqrt( sprite.collisionComponent.radius );
+
+        return (this.sprite.transPos.calcLengthSquared2D( sprite.transPos ) <= (this._radiusSum * this._radiusSum));
+    }
+
+    // 
     //  DESC: Check for point to polygon collision
     //
     pointToPolygonCheck( point, polygon )
     {
         this._collision = false;
 
-        for( this._ii = 0; this._ii < polygon.pointAry.length; ++this._ii )
+        for( let ii = 0; ii < polygon.pointAry.length; ++ii )
         {
             // Get next vertex in list. If we've hit the end, wrap around to 0
-            this._next = this._ii + 1;
-            if( this._next == polygon.pointAry.length )
-                this._next = 0;
+            let next = ii + 1;
+            if( next == polygon.pointAry.length )
+                next = 0;
 
             // Go the current and next point
-            this._vc = polygon.pointAry[this._ii];
-            this._vn = polygon.pointAry[this._next];
+            this._vc = polygon.pointAry[ii];
+            this._vn = polygon.pointAry[next];
             this._px = point.x;
             this._py = point.y;
 
@@ -920,34 +912,29 @@ export class CollisionComponent
     //
     lineToCircleCheck( pointPos1, pointPos2, circlePos, radius )
     {
-        // Is either end INSIDE the circle? if so, return true immediately
-        if( this.pointToCircleCheck( pointPos1, circlePos, radius ) ||
-            this.pointToCircleCheck( pointPos2, circlePos, radius ) )
-            return true;
-      
-        // Get length of the line
+        // Get length of the line (squared)
         this._distance = pointPos1.calcLengthSquared2D( pointPos2 );
-      
-        // Get dot product of the line and circle
-        this._dot = ( ((circlePos.x-pointPos1.x)*(pointPos2.x-pointPos1.x)) + ((circlePos.y-pointPos1.y)*(pointPos2.y-pointPos1.y)) ) / this._distance;
-      
-        // Find the closest point on the line
+
+        // Where the point on the line closest to the circle is, as a fraction of the line (0 = pointPos1, 1 = pointPos2)
+        this._dot = 0;
+        if( this._distance > 0 )
+            this._dot = ( ((circlePos.x-pointPos1.x)*(pointPos2.x-pointPos1.x)) + ((circlePos.y-pointPos1.y)*(pointPos2.y-pointPos1.y)) ) / this._distance;
+
+        // Keep it on the line segment. Without this, the test used the endless line through the two points,
+        // so a circle anywhere along an edge's extension (ex: straight below the player ship's nose) was a hit.
+        if( this._dot < 0 )
+            this._dot = 0;
+        else if( this._dot > 1 )
+            this._dot = 1;
+
+        // Find the closest point on the line segment
         gPoint.setXYZ(
             pointPos1.x + (this._dot * (pointPos2.x-pointPos1.x)),
             pointPos1.y + (this._dot * (pointPos2.y-pointPos1.y)) );
 
-        // !! Commented out because it's too precise to trigger and keeps the below from catching any collision
-        // Is this point actually on the line segment?
-        // If so keep going, but if not, return false
-        //if( !this.lineToPointCheck( pointPos1, pointPos2, closest ) )
-        //    return false;
-
         // Is the circle on the line?
-        if( this.pointToCircleCheck( gPoint, circlePos, radius ) )
-            return true;
-
-        return false;
-      }
+        return this.pointToCircleCheck( gPoint, circlePos, radius );
+    }
 
     // 
     //  DESC: Point to circle test
@@ -965,88 +952,45 @@ export class CollisionComponent
     // 
     //  DESC: Line to line test
     //
-    lineToLineCheck( line1, line2 )
+    lineToLineCheck( head1, tail1, head2, tail2 )
     {
-        this._x1 = line1.head.x;
-        this._y1 = line1.head.y;
-        this._x2 = line1.tail.x;
-        this._y2 = line1.tail.y;
-        
-        this._x3 = line2.head.x;
-        this._y3 = line2.head.y;
-        this._x4 = line2.tail.x;
-        this._y4 = line2.tail.y;
+        // Takes the end points directly so polygon edges and rect sides don't need copying into a line first.
+        // Locals, not this._ members: numbers in locals don't allocate.
+        const x1 = head1.x, y1 = head1.y, x2 = tail1.x, y2 = tail1.y;
+        const x3 = head2.x, y3 = head2.y, x4 = tail2.x, y4 = tail2.y;
+        const denom = ((y4-y3)*(x2-x1)) - ((x4-x3)*(y2-y1));
 
         // calculate the distance to intersection point
-        this._uA = ((this._x4-this._x3)*(this._y1-this._y3) - (this._y4-this._y3)*(this._x1-this._x3)) / ((this._y4-this._y3)*(this._x2-this._x1) - (this._x4-this._x3)*(this._y2-this._y1));
-        this._uB = ((this._x2-this._x1)*(this._y1-this._y3) - (this._y2-this._y1)*(this._x1-this._x3)) / ((this._y4-this._y3)*(this._x2-this._x1) - (this._x4-this._x3)*(this._y2-this._y1));
-      
-        // if uA and uB are between 0-1, lines are colliding
-        if( this._uA >= 0 && this._uA <= 1 && this._uB >= 0 && this._uB <= 1 )
-            return true;
+        const uA = (((x4-x3)*(y1-y3)) - ((y4-y3)*(x1-x3))) / denom;
+        const uB = (((x2-x1)*(y1-y3)) - ((y2-y1)*(x1-x3))) / denom;
 
-        return false;
+        // if uA and uB are between 0-1, lines are colliding
+        return (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1);
     }
 
     // 
     //  DESC: Line to line test
     //
-    lineToRectCheck( line, rect )
+    lineToRectCheck( head, tail, rect )
     {
-        gLine2.head.setXYZ( rect.x1, rect.y1 );
-        gLine2.tail.setXYZ( rect.x2, rect.y1 );
-
-        // Check for collision between the circle and a line formed between the two vertices
-        if( this.lineToLineCheck( line, gLine2 ) )
+        // Check the line against each side of the rect
+        gCorner1.setXYZ( rect.x1, rect.y1 );
+        gCorner2.setXYZ( rect.x2, rect.y1 );
+        if( this.lineToLineCheck( head, tail, gCorner1, gCorner2 ) )
             return true;
 
-        gLine2.head.setXYZ( rect.x2, rect.y1 );
-        gLine2.tail.setXYZ( rect.x2, rect.y2 );
-
-        // Check for collision between the circle and a line formed between the two vertices
-        if( this.lineToLineCheck( line, gLine2 ) )
+        gCorner1.setXYZ( rect.x2, rect.y2 );
+        if( this.lineToLineCheck( head, tail, gCorner2, gCorner1 ) )
             return true;
 
-        gLine2.head.setXYZ( rect.x2, rect.y2 );
-        gLine2.tail.setXYZ( rect.x1, rect.y2 );
-
-        // Check for collision between the circle and a line formed between the two vertices
-        if( this.lineToLineCheck( line, gLine2 ) )
+        gCorner2.setXYZ( rect.x1, rect.y2 );
+        if( this.lineToLineCheck( head, tail, gCorner1, gCorner2 ) )
             return true;
 
-        gLine2.head.setXYZ( rect.x1, rect.y2 );
-        gLine2.tail.setXYZ( rect.x1, rect.y1 );
-
-        // Check for collision between the circle and a line formed between the two vertices
-        if( this.lineToLineCheck( line, gLine2 ) )
+        gCorner1.setXYZ( rect.x1, rect.y1 );
+        if( this.lineToLineCheck( head, tail, gCorner2, gCorner1 ) )
             return true;
 
         return false;
     }
-
-    // 
-    //  DESC: Line to Point test
-    //
-    /*lineToPointCheck( pointPos1, pointPos2, pos )
-    {
-        // Get distance from the point to the two ends of the line
-        let d1 = pos.calcLengthSquared( pointPos1 );
-        let d2 = pos.calcLengthSquared( pointPos2 );
-      
-        // Get the length of the line
-        let lineLen = pointPos1.calcLengthSquared( pointPos2 );
-      
-        // since floats are so minutely accurate, add
-        // a little buffer zone that will give collision
-        let buffer = 0.2;    // higher # = less accurate
-      
-        // if the two distances are equal to the line's
-        // length, the point is on the line!
-        // note we use the buffer here to give a range, rather
-        // than one #
-        if (d1+d2 >= lineLen-buffer && d1+d2 <= lineLen+buffer)
-            return true;
-
-        return false;
-    }*/
 }
