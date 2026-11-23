@@ -16,6 +16,10 @@ import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
 
+// Easing functions, made once: each easing.getX() call creates a new function
+var gSineInOut = easing.getSineInOut();
+var gSineOut = easing.getSineOut();
+
 // Shared AI data
 var ai_data = {};
 
@@ -163,7 +167,7 @@ class AI_Wreck00_Descend extends AI_Wreck00_base
         this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5);
 
         // Calculated to move in pixels per second
-        this.easingY.init( this.sprite.pos.y, this._offsetY, Math.abs(this.sprite.pos.y - this._offsetY) / gameDefs.pixel_per_sec_100, easing.getSineOut() );
+        this.easingY.init( this.sprite.pos.y, this._offsetY, Math.abs(this.sprite.pos.y - this._offsetY) / gameDefs.pixel_per_sec_100, gSineOut );
     }
 
     // 
@@ -313,17 +317,17 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
 
                             // Calculate the travel time
                             this._time = Math.abs(this._deltaX) / gameDefs.pixel_per_sec_100;
-                            this.easingX.init( this.sprite.pos.x, this._targetX, this._time, easing.getSineInOut() );
+                            this.easingX.init( this.sprite.pos.x, this._targetX, this._time, gSineInOut );
 
                             // Force an initialization to start the movement on first time execution of this function
-                            this.easingY.init( this._baseY, this._baseY, 0, easing.getSineInOut() );
+                            this.easingY.init( this._baseY, this._baseY, 0, gSineInOut );
 
                             // Only set the Y easing if not the same building position as we are now
                             if( Math.abs( this._deltaX ) > 100 )
                             {
                                 // Generate the Y range in which the enemy will travel
                                 this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
-                                this.easingY.init( this._baseY, this._offsetY, this._time, easing.getSineInOut() );
+                                this.easingY.init( this._baseY, this._offsetY, this._time, gSineInOut );
                             }
                         }
                     }
@@ -347,10 +351,10 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
                         
                         // Calculate the travel time
                         this._time = Math.abs( this.sprite.pos.x - this._offsetX ) / gameDefs.pixel_per_sec_100;
-                        this.easingX.init( this.sprite.pos.x, this._offsetX, this._time, easing.getSineInOut() );
+                        this.easingX.init( this.sprite.pos.x, this._offsetX, this._time, gSineInOut );
 
                         // Force an initialization to start the movement on first time execution of this function
-                        this.easingY.init( this._baseY, this._baseY, 0, easing.getSineInOut() );
+                        this.easingY.init( this._baseY, this._baseY, 0, gSineInOut );
 
                         // Only set the Y easing if not the same building position as we are now
                         if( Math.abs( this.sprite.pos.x - this._offsetX ) > 100 )
@@ -358,7 +362,7 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
                             // Generate the Y range in which the enemy will travel
                             this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
 
-                            this.easingY.init( this._baseY, this._offsetY, this._time, easing.getSineInOut() );
+                            this.easingY.init( this._baseY, this._offsetY, this._time, gSineInOut );
                         }
                     }
                 }
@@ -410,7 +414,7 @@ class AI_Wreck00_DescendToBuilding extends AI_Wreck00_base
                 this._offsetY = this.sprite.targetBuilding.pos.y + (this.sprite.targetBuilding.getSize().h / 2) + (this.sprite.getSize().h / 2) - 20;
                 this._time = Math.abs(this.sprite.pos.y - this._offsetY) / gameDefs.pixel_per_sec_100;
 
-                this.easingY.init( this.sprite.pos.y, this._offsetY, this._time, easing.getSineInOut() );
+                this.easingY.init( this.sprite.pos.y, this._offsetY, this._time, gSineInOut );
             }
 
             this.easingY.execute();

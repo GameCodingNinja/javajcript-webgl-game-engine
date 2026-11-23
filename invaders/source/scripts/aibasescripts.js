@@ -93,7 +93,7 @@ class AI_Composite extends aiNode
                     }
                 }
                 // Until all success - AND operation for success
-                if( this.condition === defs.EAIC_ALL_SUCCESS )
+                else if( this.condition === defs.EAIC_ALL_SUCCESS )
                 {
                     // If the child returns FAILURE, set this node's state to FAILURE
                     if( this._childState === defs.EAIS_FAILURE )
@@ -152,6 +152,7 @@ class AI_Decorator extends aiNode
     reset()
     {
         this.state = defs.EAIS_ACTIVE;
+        this.repeatCounter = 1;
     }
     
     // 

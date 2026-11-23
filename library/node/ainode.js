@@ -18,7 +18,7 @@ export class aiNode extends Node
         this.scriptName = nodeData.scriptName;
         this.behavior = nodeData.behavior;
         this.type = nodeData.type;
-        this.order = nodeData.order;
+        this.order = nodeData.accessOrder;
         this.condition = nodeData.condition;
         this.repeatCount = nodeData.repeatCount;
     }

@@ -15,6 +15,10 @@ import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
 
+// Easing functions, made once: each easing.getX() call creates a new function
+var gLinear = easing.getLinear();
+var gSineOut = easing.getSineOut();
+
 // Shared AI data
 var ai_data = {};
 
@@ -108,7 +112,7 @@ class AI_MiniBoss01_Descend extends aiNode
             this.sprite.pos.y,
             this.data.playerShipSprite.pos.y,
             Math.abs(this.sprite.pos.y - this.data.playerShipSprite.pos.y) / gameDefs.pixel_per_sec_200,
-            easing.getSineOut() );
+            gSineOut );
 
         // Init the hit count
         this.sprite.hitCount = 0;
@@ -179,15 +183,15 @@ class AI_MiniBoss01_Seek_and_Destroy extends aiNode
     {
         // Calculated to move in pixels per second
         if(this.sprite.rot.y > 1)
-            this.easingX.init( this.easingX.getValue(), -gameDefs.X_EASING_SPEED, 2, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), -gameDefs.X_EASING_SPEED, 2, gLinear );
         else
-            this.easingX.init( this.easingX.getValue(), gameDefs.X_EASING_SPEED, 2, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), gameDefs.X_EASING_SPEED, 2, gLinear );
 
         this.easingY.init(
             this.sprite.pos.y,
             this.data.playerShipSprite.pos.y,
             (Math.abs(this.sprite.pos.y - this.data.playerShipSprite.pos.y) / gameDefs.pixel_per_sec_100) * highResTimer.timeScale,
-            easing.getLinear() );
+            gLinear );
     }
 
     // 
@@ -259,14 +263,14 @@ class AI_MiniBoss01_Seek_and_Destroy extends aiNode
                             // Flip the ship facing right
                             this.sprite.setRotXYZ( 0, 0 );
 
-                            this.easingX.init( this.easingX.getValue(), gameDefs.X_EASING_SPEED, 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), gameDefs.X_EASING_SPEED, 2, gLinear );
                         }
                         else if(!this._shouldGoRight && (this.sprite.rot.y < 1))
                         {
                             // Flip the ship facing left
                             this.sprite.setRotXYZ( 0, 180 );
 
-                            this.easingX.init( this.easingX.getValue(), -gameDefs.X_EASING_SPEED, 2, easing.getLinear() );
+                            this.easingX.init( this.easingX.getValue(), -gameDefs.X_EASING_SPEED, 2, gLinear );
                         }
                     }
                 }
@@ -277,7 +281,7 @@ class AI_MiniBoss01_Seek_and_Destroy extends aiNode
                         this.easingY.getValue(),
                         this.data.playerShipSprite.pos.y,
                         Math.abs(this.easingY.getValue() - this.data.playerShipSprite.pos.y) / this._y_pixel_per_sec,
-                        easing.getLinear() );
+                        gLinear );
                 }
             }
         }

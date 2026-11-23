@@ -15,6 +15,11 @@ import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
 
+// Easing functions, made once: each easing.getX() call creates a new function
+var gSineIn = easing.getSineIn();
+var gSineInOut = easing.getSineInOut();
+var gSineOut = easing.getSineOut();
+
 // Shared AI data
 var ai_data = {};
 
@@ -300,7 +305,7 @@ class AI_Boss00_Descend extends AI_Boss00_base
 
         // Ease the boss down to its attack height over the building
         this._time = Math.abs( this.sprite.pos.y - gameDefs.BOSS00_RESTING_Y ) / gameDefs.BOSS00_DESCEND_PIXELS_PER_SEC;
-        this.easingY.init( this.sprite.pos.y, gameDefs.BOSS00_RESTING_Y, this._time, easing.getSineOut() );
+        this.easingY.init( this.sprite.pos.y, gameDefs.BOSS00_RESTING_Y, this._time, gSineOut );
     }
 
     // 
@@ -408,7 +413,7 @@ class AI_Boss00_PickAndMoveToBuilding extends AI_Boss00_base
 
                 this._targetX = this.sprite.pos.x + this._moveX;
                 this._time = Math.abs( this._moveX ) / gameDefs.BOSS00_MOVE_PIXELS_PER_SEC;
-                this.easingX.init( this.sprite.pos.x, this._targetX, this._time, easing.getSineInOut() );
+                this.easingX.init( this.sprite.pos.x, this._targetX, this._time, gSineInOut );
 
                 this.selected = true;
             }
@@ -480,7 +485,7 @@ class AI_Boss00_DestroyBuilding extends AI_Boss00_base
             this._wideScale = gameDefs.BOSS00_BEAM_WIDTH / this.beamSprite.objData.size.w;
             this.beamSprite.setScaleXYZ( 1, 1 );
             this.beamSprite.setVisible( true );
-            this.beamEasing.init( 1, this._wideScale, gameDefs.BOSS00_BEAM_GROW_SEC, easing.getSineOut() );
+            this.beamEasing.init( 1, this._wideScale, gameDefs.BOSS00_BEAM_GROW_SEC, gSineOut );
         }
     }
 
@@ -490,7 +495,7 @@ class AI_Boss00_DestroyBuilding extends AI_Boss00_base
     startBeamRetract()
     {
         if( this.beamSprite )
-            this.beamEasing.init( this.beamSprite.scale.x, 1, gameDefs.BOSS00_BEAM_RETRACT_SEC, easing.getSineIn() );
+            this.beamEasing.init( this.beamSprite.scale.x, 1, gameDefs.BOSS00_BEAM_RETRACT_SEC, gSineIn );
     }
 
     // 

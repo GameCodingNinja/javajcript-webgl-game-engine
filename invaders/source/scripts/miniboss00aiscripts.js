@@ -15,6 +15,10 @@ import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
 
+// Easing functions, made once: each easing.getX() call creates a new function
+var gLinear = easing.getLinear();
+var gSineOut = easing.getSineOut();
+
 //
 //  DESC: AI MiniBoss00 head (root) node Head class script
 //        Only supports one child
@@ -92,7 +96,7 @@ class AI_MiniBoss00_Descend extends aiNode
                 this._yDestination = -50;
         }
 
-        this.easingY.init( this.sprite.pos.y, this._yDestination, this.sprite.pos.y / gameDefs.pixel_per_sec_200, easing.getSineOut() );
+        this.easingY.init( this.sprite.pos.y, this._yDestination, this.sprite.pos.y / gameDefs.pixel_per_sec_200, gSineOut );
 
         // Init the hit count
         this.sprite.hitCount = 0;
@@ -219,9 +223,9 @@ class AI_MiniBoss00_Go extends aiNode
     {
         // Calculated to move in pixels per second
         if(this.sprite.rot.y > 1)
-            this.easingX.init( this.easingX.getValue(), -20, 3, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), -20, 3, gLinear );
         else
-            this.easingX.init( this.easingX.getValue(), 20, 3, easing.getLinear() );
+            this.easingX.init( this.easingX.getValue(), 20, 3, gLinear );
     }
 
     // 
