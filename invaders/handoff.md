@@ -49,7 +49,7 @@ It is **wired into normal play**: it takes the place of the next mini-boss once 
 | `data/objects/strategy/level1/enemyshot.strategy` | `boss00_shot` node (id -21), `<scale x="2" y="2"/>`, scripts `Boss00Shot_Fire` / `Boss00Shot_Hit` |
 | `data/objects/2d/objectDataList/level1DataList.lst` | Boss art + `boss00_shot` (`missile-0/1.png`, 2-point collision line). Source list — edit this, then regenerate the sprite sheet |
 | `data/objects/ai/boss00.ai` | Behavior tree: Descend → DestroyBuilding → repeat[PickAndMoveToBuilding → DestroyBuilding] |
-| `source/scripts/boss00aiscripts.js` | AI nodes, building selection, beam, shake, bar visibility, `shootPlayer()`, `clearAIData()` |
+| `source/scripts/boss00aiscripts.js` | AI nodes, building selection, beam, shake, bar visibility, `shootPlayer()` |
 | `source/scripts/boss00scripts.js` | `Boss00Shot_Fire` (missile flight), `Boss00Shot_Hit`, `Boss00Ship_Hit`, `Boss00Ship_Die` |
 | `source/state/gamedefs.js` | `BOSS00_*` tunables (boss + missile), `RAM_EXPLODE_SHIFT_X/Y`, `EGE_BOSS_DEFEATED`, `MINI_BOSS_01_SHIP_ID` |
 | `source/state/level1state.js` | AI load, collision handling (incl. `BOSS00_SHOT_ID` branch), boss trigger (`handleEnemySpawn` / `spawnBoss`), boss music, screen lock + boss camera easing (`handleBossScreenLock` / `endBossScreenLock` / `startCameraEasing`), `EGE_BOSS_DEFEATED` handling, cleanup |

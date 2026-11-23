@@ -10,14 +10,13 @@
 
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { aiNode } from '../../../library/node/ainode';
-import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
+import { gAIData, initAIData } from './aidata';
 
 var gWrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
 var gDegToRad = Math.PI / 180;
@@ -63,15 +62,11 @@ var gSwarm = {
 var gSpawnR = 0;
 var gSpawnA = 0;
 
-// Shared AI data
-var ai_data = {};
-
 // 
-//  DESC: Clear the AI data
+//  DESC: Clear the swarm (Level1State restartGame() and cleanUp())
 //
-export function clearAIData()
+export function clearSwarm()
 {
-    ai_data = {};
     gSwarm.disturbed = false;
     gSwarm.members.fill( null );
 }
@@ -162,7 +157,7 @@ class AI_Pest01_base extends aiNode
     //
     inView()
     {
-        return this.data.playerCamera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gWrapSpan );
+        return this.data.camera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gWrapSpan );
     }
 
     // 
@@ -403,7 +398,7 @@ class AI_Pest01_Head extends aiNode
     {
         super( nodeData );
 
-        this.data = ai_data;
+        this.data = gAIData;
         this.state = defs.EAIS_INIT;
     }
     
@@ -412,15 +407,7 @@ class AI_Pest01_Head extends aiNode
     //
     init()
     {
-        if( genFunc.isEmpty( this.data ) )
-        {
-            this.data.playerShipStrategy = strategyManager.get('_player_ship_');
-            this.data.playerShipSprite = this.data.playerShipStrategy.get('player_ship').get();
-            this.data.playerCamera = this.data.playerShipStrategy.camera;
-            this.data.enemyStrategy = strategyManager.get('_enemy_');
-            this.data.enemyShotStrategy = strategyManager.get('_enemy_shot_');
-            this.data.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
-        }
+        initAIData();
     }
 
     // 
@@ -739,7 +726,7 @@ class AI_Pest01_Attack extends AI_Pest01_base
 
             // The spot in screen X (a camera stores its position negated), kept in from the sides of the screen,
             // and in the cruise band
-            this._camX = this.data.playerCamera.pos.x;
+            this._camX = this.data.camera.pos.x;
             this._shipScreenX = genFunc.wrapDelta( this.data.playerShipSprite.pos.x + this._camX, gWrapSpan );
             this._screenX = genFunc.wrapDelta( this.sprite.pos.x + this._camX, gWrapSpan );
             this._limitX = settings.deviceRes_half.w - gameDefs.PEST01_SCREEN_MARGIN;

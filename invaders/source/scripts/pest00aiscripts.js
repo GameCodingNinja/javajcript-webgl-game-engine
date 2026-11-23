@@ -9,14 +9,13 @@
 
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { strategyManager } from '../../../library/strategy/strategymanager';
 import { settings } from '../../../library/utilities/settings';
 import { aiNode } from '../../../library/node/ainode';
-import { soundManager } from '../../../library/sound/soundmanager';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
+import { gAIData, initAIData } from './aidata';
 
 var gWrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
 var gDegToRad = Math.PI / 180;
@@ -46,16 +45,6 @@ var gDodgeTurnRate = gameDefs.PEST00_DODGE_TURN_RATE * gDegToRad / 1000;
 // Easing functions allocated once (the get functions create a new closure on every call)
 var gSineOut = easing.getSineOut();
 
-// Shared AI data
-var ai_data = {};
-
-// 
-//  DESC: Clear the AI data
-//
-export function clearAIData()
-{
-    ai_data = {};
-}
 
 // 
 //  DESC: Keep an angle in the -PI..PI range
@@ -289,7 +278,7 @@ class AI_Pest00_base extends aiNode
     steerToStopPoint()
     {
         // Screen X (a camera stores its position negated) of the ship and this enemy
-        this._camX = this.data.playerCamera.pos.x;
+        this._camX = this.data.camera.pos.x;
         this._shipScreenX = genFunc.wrapDelta( this.data.playerShipSprite.pos.x + this._camX, gWrapSpan );
         this._screenX = genFunc.wrapDelta( this.sprite.pos.x + this._camX, gWrapSpan );
 
@@ -326,7 +315,7 @@ class AI_Pest00_base extends aiNode
     //
     inView()
     {
-        return this.data.playerCamera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gWrapSpan );
+        return this.data.camera.inViewWrapped( this.sprite.transPos, this.sprite.parentNode.radius, gWrapSpan );
     }
 }
 
@@ -340,7 +329,7 @@ class AI_Pest00_Head extends aiNode
     {
         super( nodeData );
 
-        this.data = ai_data;
+        this.data = gAIData;
         this.state = defs.EAIS_INIT;
     }
     
@@ -349,14 +338,7 @@ class AI_Pest00_Head extends aiNode
     //
     init()
     {
-        if( genFunc.isEmpty( this.data ) )
-        {
-            this.data.playerShipStrategy = strategyManager.get('_player_ship_');
-            this.data.playerShipSprite = this.data.playerShipStrategy.get('player_ship').get();
-            this.data.playerCamera = this.data.playerShipStrategy.camera;
-            this.data.enemyShotStrategy = strategyManager.get('_enemy_shot_');
-            this.data.groupPlayer = soundManager.createGroupPlayer( '(level_1)' );
-        }
+        initAIData();
     }
 
     // 

@@ -98,13 +98,13 @@ It follows the "Adding a New Enemy or Boss" checklist in AGENTS.md:
 3. **Strategy nodes:**
    - `pest00_ship` in `enemy.strategy` with `ai_*`, `hit` (reuses `Wreck00Ship_Hit`), `die` and `collision="EnemyShip_CheckForCollideWithPlayer"` scripts. It's a single node with no children, so its `prepareOnInit` scripts run without the boss workaround.
    - `pest00_shot` in `enemyshot.strategy` with `shoot` and `hit` (reuses `Wreck00Shot_Hit`) scripts.
-4. **AI tree:** `data/objects/ai/pest00.ai`: Descend, then a repeater over Roam → Charge → Spin → Flee. Listed in `aiListTable.json` and the `aiManager.loadFromXml([...])` list in `level1state.js`.
+4. **AI tree:** `data/objects/ai/pest00.ai`: Descend, then a repeater over Roam → Charge → Spin → Flee. Bundled with `raw-loader` and listed in the `aiManager.loadFromXml([...])` array in `level1state.js`.
 5. **AI scripts:** `source/scripts/pest00aiscripts.js` (`AI_Pest00_*`).
    - Head, Descend, Roam, Charge, Spin and Flee leaves.
    - Per-pest00 state on its sprite, reset in Descend's `init()`: `hitCount`, `ramTime`, `heading`, `speed`.
    - Positions are world positions; the X delta to the player is wrap-aware (`genFunc.wrapDelta`), and X is wrapped after every move.
 6. **Die and missile scripts:** `source/scripts/pest00scripts.js` (`Pest00Ship_Die`, `Pest00Shot_Fire`).
-7. **Register and clean up:** `loadScripts()` in `startupstate.js`; `clearAIData()` in `restartGame()` and `cleanUp()`.
+7. **Register and clean up:** `loadScripts()` in `startupstate.js`. Uses the shared `gAIData` (`aidata.js`), cleared in `restartGame()` and `cleanUp()`.
 8. **Collisions** in `collisionCallBack()`:
    - pest00 missile hits the ship (−5 unless shielded).
    - pest00 rams the ship (its own ram cooldown).

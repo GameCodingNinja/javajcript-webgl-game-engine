@@ -35,11 +35,8 @@ import * as menuDefs from '../../../library/gui/menudefs';
 import * as touchevent from '../../../library/common/touchevent';
 import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
-import * as wreck00aiscripts from '../scripts/wreck00aiscripts';
-import * as pest00aiscripts from '../scripts/pest00aiscripts';
+import * as aidata from '../scripts/aidata';
 import * as pest01aiscripts from '../scripts/pest01aiscripts';
-import * as miniboss01aiscripts from '../scripts/miniboss01aiscripts';
-import * as boss00aiscripts from '../scripts/boss00aiscripts';
 
 // AI_Wreck00 AI_Pest00 AI_Pest01 AI_MiniBoss00 AI_MiniBoss01
 import wreck00_ai from 'raw-loader!../../data/objects/ai/wreck00.ai';
@@ -451,11 +448,8 @@ export class Level1State extends CommonState
         this.groupPlayer.play( 'player_thrust', true );
         this.groupPlayer.pause( 'player_thrust' );
 
-        wreck00aiscripts.clearAIData();
-        pest00aiscripts.clearAIData();
-        pest01aiscripts.clearAIData();
-        miniboss01aiscripts.clearAIData();
-        boss00aiscripts.clearAIData();
+        aidata.clearAIData();
+        pest01aiscripts.clearSwarm();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_enemy_shot_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
         .then(() =>
@@ -2580,11 +2574,8 @@ export class Level1State extends CommonState
         aiManager.clear();
 
         // Clear out any AI data dictionaries
-        wreck00aiscripts.clearAIData();
-        pest00aiscripts.clearAIData();
-        pest01aiscripts.clearAIData();
-        miniboss01aiscripts.clearAIData();
-        boss00aiscripts.clearAIData();
+        aidata.clearAIData();
+        pest01aiscripts.clearSwarm();
         
         objectDataManager.freeGroup( ['(level_1)'] );
 

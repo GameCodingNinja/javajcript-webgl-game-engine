@@ -6,29 +6,18 @@
 "use strict";
 
 import { scriptManager } from '../../../library/script/scriptmanager';
-import { strategyManager } from '../../../library/strategy/strategymanager';
 import { aiNode } from '../../../library/node/ainode';
 import { soundManager } from '../../../library/sound/soundmanager';
 import { highResTimer } from '../../../library/utilities/highresolutiontimer';
-import * as genFunc from '../../../library/utilities/genfunc';
 import * as defs from '../../../library/common/defs';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as gameDefs from '../state/gamedefs';
+import { gAIData, initAIData } from './aidata';
 
 // Easing functions, made once: each easing.getX() call creates a new function
 var gLinear = easing.getLinear();
 var gSineOut = easing.getSineOut();
 
-// Shared AI data
-var ai_data = {};
-
-// 
-//  DESC: Clear the AI data
-//
-export function clearAIData()
-{
-    ai_data = {};
-}
 
 
 //
@@ -41,7 +30,7 @@ class AI_MiniBoss01_Head extends aiNode
     {
         super( nodeData );
 
-        this.data = ai_data;
+        this.data = gAIData;
         this.state = defs.EAIS_INIT;
     }
 
@@ -50,12 +39,7 @@ class AI_MiniBoss01_Head extends aiNode
     //
     init()
     {
-        if( genFunc.isEmpty( this.data ) )
-        {
-            this.data.playerShipStrategy = strategyManager.get('_player_ship_');
-            this.data.playerShipSprite = this.data.playerShipStrategy.get('player_ship').get();
-            this.data.camera = this.data.playerShipStrategy.camera;
-        }
+        initAIData();
     }
 
     // 

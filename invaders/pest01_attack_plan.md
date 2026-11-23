@@ -90,14 +90,14 @@ It follows the "Adding a New Enemy or Boss" checklist in AGENTS.md:
 3. **Strategy nodes:**
    - `pest01_ship` in `enemy.strategy` with `ai_*`, `hit` (reuses `Wreck00Ship_Hit`), `die` and `collision="EnemyShip_CheckForCollideWithPlayer"` scripts. A single node with no children, created 6 times per swarm.
    - `pest01_shot` in `enemyshot.strategy` with `shoot` and `hit` (reuses `Wreck00Shot_Hit`) scripts.
-4. **AI tree:** `data/objects/ai/pest01.ai`: Docile (ends when disturbed or after `PEST01_ATTACK_TIME`), Scatter, then Attack, which never ends. Listed in `aiListTable.json` and the `aiManager.loadFromXml([...])` list in `level1state.js`.
+4. **AI tree:** `data/objects/ai/pest01.ai`: Docile (ends when disturbed or after `PEST01_ATTACK_TIME`), Scatter, then Attack, which never ends. Bundled with `raw-loader` and listed in the `aiManager.loadFromXml([...])` array in `level1state.js`.
 5. **AI scripts:** `source/scripts/pest01aiscripts.js` (`AI_Pest01_*`).
    - **Swarm object:** one preallocated module object, `gSwarm` (one swarm at a time): center x/y and velocity, wander target, `disturbed`, age, members. Each member sprite keeps `sprite.slot` (0–5) and `sprite.swarmAlive`, set at spawn.
    - Per-member state on its sprite, set in Docile's `init()` and `addMember()`: `slot`, `swarmAlive`, `spinAngle`, `bobPhase`, `vx`/`vy` (px/s).
    - The swarm center is advanced once a frame by whichever member's Docile leaf runs first (frame token `highResTimer.lastTime`), not by every member.
    - Its own steering, not pest00's helpers: the members are velocity-steered (`vx`/`vy` toward a wanted velocity, limited by `PEST01_ATTACK_ACCEL`), which suits a hovering drone (it turns its nose toward the way it's flying, `face()`, at `PEST01_TURN_RATE`), while pest00 flies along a heading. It reuses pest00's cruise band constants (`PEST00_MIN_Y`/`MAX_Y`/`VIEW_TOP`).
 6. **Die and shot scripts:** `source/scripts/pest01scripts.js` (`Pest01Ship_Die`, `Pest01Shot_Fire`).
-7. **Register and clean up:** `loadScripts()` in `startupstate.js`; `clearAIData()` in `restartGame()` and `cleanUp()`.
+7. **Register and clean up:** `loadScripts()` in `startupstate.js`. Uses the shared `gAIData` (`aidata.js`); `pest01aiscripts.clearSwarm()` resets `gSwarm` in `restartGame()` and `cleanUp()`.
 8. **Collisions** in `collisionCallBack()`:
    - pest01 shot hits the ship (−5 unless shielded).
    - pest01 collides with the ship (disturb, −15 unless shielded, member dies, own ram cooldown not needed since it dies).
