@@ -16,7 +16,9 @@ import * as utilScripts from './utilityscripts';
 import * as easing from '../../../library/utilities/easingfunc';
 import * as stateDefs from '../state/statedefs';
 
-const GAMEPLAY_LOOPING_WRAP_DIST = 5600;
+const GAMEPLAY_LOOPING_WRAP_DIST = 5600,
+      PLAYER_SHOT_SWEEP_STEP = 10,     // px. The shot's collision is checked along its move each frame in steps of at most this
+      PLAYER_SHOT_WRAP_CHECK = 500;    // px. Within this of the wrap point the shot also checks the enemies across it (more than the boss's radius, about 389, plus the shot)
 
 //
 //  DESC: Script for animating fire tale
@@ -115,27 +117,27 @@ class PlayerShip_ShootLazer
     {
         if( this.camera.inViewX( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
-            this.sprite.incPosXYZ( (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + (this.shipVelocity * highResTimer.timeScale) );
-            this.sprite.collisionComponent.checkForCollision( this.enemyStrategy.nodeAry );
+            this._moveX = (this.PROJECTILE_SPEED * highResTimer.elapsedTime) + (this.shipVelocity * highResTimer.timeScale);
+            this.sprite.incPosXYZ( this._moveX );
 
-            // Do wrapparound collision detection
-            if( this.sprite.pos.x < -(GAMEPLAY_LOOPING_WRAP_DIST + 100) )
+            // Checked along the move (a fast shot jumped past the narrow parts of wreck00's polygon between frames: it
+            // moves 25 to 100+ px a frame and its two collision points are 36 px apart)
+            this.sprite.collisionComponent.sweepForCollision( this.enemyStrategy.nodeAry, this._moveX, 0, PLAYER_SHOT_SWEEP_STEP );
+
+            // Do wrapparound collision detection: near either side of the wrap point, also check the enemies across it.
+            // The same distance on both sides (the left side used to check only past -(WRAP + 100), so shots near the
+            // left edge passed through enemies just across the wrap point).
+            if( this.sprite.pos.x < -(GAMEPLAY_LOOPING_WRAP_DIST - PLAYER_SHOT_WRAP_CHECK) )
             {
                 // Set the transpos just for the wraparound collision check that will be overwritten on the next translate
-                for( let i = 0; i < this.sprite.collisionComponent.transPointAry.length; ++i )
-                    this.sprite.collisionComponent.transPointAry[i].x += (GAMEPLAY_LOOPING_WRAP_DIST * 2);
-
-                this.sprite.transPos.x += (GAMEPLAY_LOOPING_WRAP_DIST * 2);
-                this.sprite.collisionComponent.checkForCollision( this.enemyStrategy.nodeAry );
+                this.sprite.collisionComponent.offsetTransform( GAMEPLAY_LOOPING_WRAP_DIST * 2 );
+                this.sprite.collisionComponent.sweepForCollision( this.enemyStrategy.nodeAry, this._moveX, 0, PLAYER_SHOT_SWEEP_STEP );
             }
-            else if( this.sprite.pos.x > (GAMEPLAY_LOOPING_WRAP_DIST - 100) )
+            else if( this.sprite.pos.x > (GAMEPLAY_LOOPING_WRAP_DIST - PLAYER_SHOT_WRAP_CHECK) )
             {
                 // Set the transpos just for the wraparound collision check that will be overwritten on the next translate
-                for( let i = 0; i < this.sprite.collisionComponent.transPointAry.length; ++i )
-                    this.sprite.collisionComponent.transPointAry[i].x += -(GAMEPLAY_LOOPING_WRAP_DIST * 2);
-                
-                this.sprite.transPos.x += -(GAMEPLAY_LOOPING_WRAP_DIST * 2);
-                this.sprite.collisionComponent.checkForCollision( this.enemyStrategy.nodeAry );
+                this.sprite.collisionComponent.offsetTransform( -(GAMEPLAY_LOOPING_WRAP_DIST * 2) );
+                this.sprite.collisionComponent.sweepForCollision( this.enemyStrategy.nodeAry, this._moveX, 0, PLAYER_SHOT_SWEEP_STEP );
             }
 
             return false;

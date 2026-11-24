@@ -303,6 +303,68 @@ export class CollisionComponent
     }
 
     // 
+    //  DESC: Check for collision along a move (moveX, moveY), in steps of at most maxStep, stopping at the first hit.
+    //        Returns the first sprite collided with or null, like checkForCollision().
+    //        For a fast object that would otherwise jump past thin parts of a target between frames. It starts at the
+    //        transformed position (the last transform) and shifts it along the move in place, then puts it back. The
+    //        caller passes the move: positions can jump (a strategy wrapping its sprites shifts them by the map span).
+    //        Point and circle collision only.
+    //
+    sweepForCollision( nodeAry, moveX, moveY, maxStep, checkChildren = false )
+    {
+        if( !this.enable )
+            return null;
+
+        if( this.type !== defs.ECT_POINT && this.type !== defs.ECT_CIRCLE )
+            throw new Error( 'Sweep collision only supports point and circle collision.' );
+
+        let steps = Math.max( 1, Math.ceil( Math.sqrt( (moveX * moveX) + (moveY * moveY) ) / maxStep ) );
+        let stepX = moveX / steps;
+        let stepY = moveY / steps;
+        let shifts = 0;
+        let result = null;
+
+        for( let i = 0; i < steps && result === null; ++i )
+        {
+            if( i > 0 )
+            {
+                this.offsetTransform( stepX, stepY );
+                shifts++;
+            }
+
+            result = this.checkForCollision( nodeAry, checkChildren );
+        }
+
+        // Back to where it started
+        this.offsetTransform( -stepX * shifts, -stepY * shifts );
+
+        return result;
+    }
+
+    // 
+    //  DESC: Shift the transformed collision position in place, until the next transform. For a sweep, or to check
+    //        the copy of a sprite across a wrap point. Point and circle collision only.
+    //
+    offsetTransform( x, y = 0 )
+    {
+        if( this.type === defs.ECT_POINT )
+        {
+            for( let i = 0; i < this.transPointAry.length; ++i )
+            {
+                this.transPointAry[i].x += x;
+                this.transPointAry[i].y += y;
+            }
+        }
+        else if( this.type !== defs.ECT_CIRCLE )
+        {
+            throw new Error( 'Collision offset only supports point and circle collision.' );
+        }
+
+        this.sprite.transPos.x += x;
+        this.sprite.transPos.y += y;
+    }
+
+    // 
     //  DESC: Check the nodes for collision, recursing into the children if requested
     //        Returns the first sprite collided with or null
     //
