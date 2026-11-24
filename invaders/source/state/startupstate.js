@@ -67,7 +67,7 @@ import menuActionJSON from '../../data/objects/2d/menu/menu_action.json';
 import startUpStrategyLoader from 'raw-loader!../../data/objects/strategy/state/startup.loader';
 
 const MIN_LOAD_TIME = 1500;
-var STARTUP_ASSET_COUNT = 139;
+var STARTUP_ASSET_COUNT = 151;
       
 export class StartUpState extends GameState
 {
@@ -86,7 +86,7 @@ export class StartUpState extends GameState
         // Register game-specific touch key codes for mobile before loading action mappings
         if( isMobile() )
         {
-            STARTUP_ASSET_COUNT = 130;
+            STARTUP_ASSET_COUNT = 142;
             actionManager.registerTouchKeyCode( 'TOUCH FIRE',  gameDefs.TOUCH_FIRE );
             actionManager.registerTouchKeyCode( 'TOUCH PAUSE', gameDefs.TOUCH_PAUSE );
             actionManager.registerTouchKeyCode( 'TOUCH BOOST', gameDefs.TOUCH_BOOST );

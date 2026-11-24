@@ -37,6 +37,7 @@ import * as stateDefs from './statedefs';
 import * as gameDefs from './gamedefs';
 import * as aidata from '../scripts/aidata';
 import * as pest01aiscripts from '../scripts/pest01aiscripts';
+import * as wreck00aiscripts from '../scripts/wreck00aiscripts';
 
 // AI_Wreck00 AI_Pest00 AI_Pest01 AI_MiniBoss00 AI_MiniBoss01
 import wreck00_ai from 'raw-loader!../../data/objects/ai/wreck00.ai';
@@ -450,6 +451,7 @@ export class Level1State extends CommonState
 
         aidata.clearAIData();
         pest01aiscripts.clearSwarm();
+        wreck00aiscripts.clearLockCooldown();
         strategyManager.deleteStrategy( ['_buildings_','_enemy_','_enemy_shot_','_player_ship_','_train_'] );
         strategyLoader.loadGroup( '-reloadlevel1-' )
         .then(() =>
@@ -1935,29 +1937,15 @@ export class Level1State extends CommonState
     }
 
     // 
-    //  DESC: Spawn the pest01 swarm above the screen, somewhere across the view but at least PEST01_SPAWN_CLEAR_X
-    //        to the side of the player ship, so it doesn't descend onto the ship (it descends into the cruise band)
+    //  DESC: Spawn the pest01 swarm above the screen, PEST01_SPAWN_DIST_MIN/MAX to either side of the player, off the
+    //        screen (it descends into the cruise band)
     //
     spawnSwarm()
     {
-        // Screen X range (a camera stores its position negated), less the room on either side of the ship
-        this._margin = settings.deviceRes_half.w - gameDefs.PEST01_FLOCK_RADIUS - 60;
-        this._shipScreenX = genFunc.wrapDelta( this.playerShip.sprite.pos.x + this.levelCamera.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
-        this._leftLen = Math.max( 0, (this._shipScreenX - gameDefs.PEST01_SPAWN_CLEAR_X) + this._margin );
-        this._rightLen = Math.max( 0, this._margin - (this._shipScreenX + gameDefs.PEST01_SPAWN_CLEAR_X) );
-
-        this._r = Math.random() * (this._leftLen + this._rightLen);
-        if( this._r < this._leftLen )
-            this._screenX = -this._margin + this._r;
-        else
-            this._screenX = this._shipScreenX + gameDefs.PEST01_SPAWN_CLEAR_X + (this._r - this._leftLen);
-
-        // World X
-        this._x = this._screenX - this.buildingsCamera.pos.x;
-        if( this._x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-            this._x += gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
-        else if( this._x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-            this._x -= gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
+        // Away from the player, either side, off the screen (like pest00)
+        this._x = genFunc.wrapDelta( this.playerShip.sprite.pos.x +
+            (((Math.random() < 0.5) ? -1 : 1) * genFunc.randomInt( gameDefs.PEST01_SPAWN_DIST_MIN, gameDefs.PEST01_SPAWN_DIST_MAX )),
+            gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
 
         pest01aiscripts.startSwarm( this._x );
 
@@ -2576,6 +2564,7 @@ export class Level1State extends CommonState
         // Clear out any AI data dictionaries
         aidata.clearAIData();
         pest01aiscripts.clearSwarm();
+        wreck00aiscripts.clearLockCooldown();
         
         objectDataManager.freeGroup( ['(level_1)'] );
 

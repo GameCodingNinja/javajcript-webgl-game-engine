@@ -717,8 +717,8 @@
             </visual>
             <collision filterCategoryBits="0x00000004" filterMaskBits="0x00000000" collisionSignal="true">
                 <pointList radiusFromVisual="true">
-                    <point x="10" y="0"/>
-                    <point x="-11" y="0"/>
+                    <point x="9" y="0"/>
+                    <point x="-9" y="0"/>
                 </pointList>
             </collision>
         </object>

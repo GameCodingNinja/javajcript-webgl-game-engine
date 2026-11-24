@@ -2,8 +2,11 @@
 //  FILE NAME: pest01aiscripts.js
 //  DESC:      scripts for the pest01 AI (the swarm)
 //             A swarm of drones that flies around as a flock, ignoring the buildings and the player, for about a
-//             minute. Shoot one or fly into one (or wait the minute) and the swarm breaks apart: every member
-//             takes its own spot around the player and shoots at it until killed.
+//             minute. Shoot one or fly into one (or wait the minute) and the swarm breaks apart: the members scatter,
+//             fly off to regroup somewhere else on the map, then as an angry flock repeat a cycle: keep away from the
+//             player for a while, then make an attack run past the player and away again (catching up with it sets off
+//             the run). Members shoot at the player whenever they're in view. It only scatters once: after that it keeps
+//             hunting until every member is killed.
 //
 
 "use strict";
@@ -25,12 +28,10 @@ var gTwoPi = Math.PI * 2;
 // Rates converted from degrees/sec to radians/ms
 var gTurnRate = gameDefs.PEST01_TURN_RATE * gDegToRad / 1000;
 var gWanderTurnRate = gameDefs.PEST01_WANDER_TURN_RATE * gDegToRad / 1000;
+var gRunTurnRate = gameDefs.PEST01_RUN_TURN_RATE * gDegToRad / 1000;
+var gFleeTurnRate = gameDefs.PEST01_FLEE_TURN_RATE * gDegToRad / 1000;
 var gWiggleRateMin = gameDefs.PEST01_FLOCK_WIGGLE_RATE_MIN * gDegToRad / 1000;
 var gWiggleRateMax = gameDefs.PEST01_FLOCK_WIGGLE_RATE_MAX * gDegToRad / 1000;
-
-var gFireAlign = gameDefs.PEST01_FIRE_ALIGN * gDegToRad;
-var gSector = gTwoPi / gameDefs.PEST01_MEMBERS;
-var gSpotJitter = gameDefs.PEST01_SPOT_JITTER * gDegToRad;
 
 // The swarm center stays in the cruise band with room for the flock
 var gCenterMinY = gameDefs.PEST00_MIN_Y + gameDefs.PEST01_FLOCK_RADIUS;
@@ -48,14 +49,31 @@ var gSwarm = {
     y: 0,
     heading: 0,
     speed: 0,
-    spotOffset: 0,  // Rotation of the attack sectors around the player (radians), random per swarm
     vx: 0,      // Velocity of the swarm center (px/s), which the flock follows
     vy: 0,
     wayX: 0,
     wayY: 0,
     needWaypoint: true,
     age: 0,
-    disturbed: false,
+    disturbed: false,       // Shot, rammed or 60 s passed: it turns angry and hunts
+    skipScatter: false,     // 60 s passed: no scatter or regroup, it attacks as it is
+    regroupPicked: false,   // The regroup point has been picked (by the first member done scattering)
+    regrouping: false,      // The swarm center waits at the regroup point until the members have joined
+    regroupTime: 0,
+    attackRun: false,   // Hunting: an attack run past the player (otherwise avoiding it)
+    passed: false,      // The attack run has passed the player
+    runDir: 1,          // Which way the attack run goes in X
+    runOffsetY: 0,      // The attack run passes this far above or below the player
+    modeTime: 0,        // ms in the current hunting mode
+    avoidTime: 0,       // How long it avoids the player before the next attack run
+    roaming: false,     // Docile or avoiding: roaming far (may lap the map), otherwise hovering around the player's area...
+    roamTime: 0,        // ...until it switches (ms)
+    chaseTime: 0,       // ms the player has been chasing it while it avoids...
+    evadeTime: 0,       // ...until it circles back past the player (an attack run) and flees the other way
+    lastShipX: 0,       // The player ship's X last frame (its speed toward the swarm tells if it's chasing)
+    jinkTime: 0,        // Fleeing: ms until the next jink...
+    jinkUp: 1,          // ...which way it jinks (1 up, -1 down)...
+    jinkAngle: 0,       // ...and how sharply (radians off its course)
     frameTime: -1 };
 
 // Temporaries for addMember()
@@ -68,6 +86,9 @@ var gSpawnA = 0;
 export function clearSwarm()
 {
     gSwarm.disturbed = false;
+    gSwarm.skipScatter = false;
+    gSwarm.regroupPicked = false;
+    gSwarm.regrouping = false;
     gSwarm.members.fill( null );
 }
 
@@ -89,10 +110,24 @@ export function startSwarm( x )
     gSwarm.speed = gameDefs.PEST01_WANDER_SPEED;
     gSwarm.needWaypoint = true;
     gSwarm.age = 0;
+    setRoamMode( Math.random() >= gameDefs.PEST01_HOVER_CHANCE );   // Starts hovering or roaming, at random
     gSwarm.disturbed = false;
+    gSwarm.skipScatter = false;
+    gSwarm.regroupPicked = false;
+    gSwarm.regrouping = false;
     gSwarm.frameTime = -1;
-    gSwarm.spotOffset = Math.random() * gTwoPi;
     gSwarm.members.fill( null );
+}
+
+// 
+//  DESC: Start roaming far or hovering around the player's area, for a random time
+//
+function setRoamMode( roam )
+{
+    gSwarm.roaming = roam;
+    gSwarm.roamTime = roam ?
+        genFunc.randomInt( gameDefs.PEST01_ROAM_TIME_MIN, gameDefs.PEST01_ROAM_TIME_MAX ) :
+        genFunc.randomInt( gameDefs.PEST01_HOVER_TIME_MIN, gameDefs.PEST01_HOVER_TIME_MAX );
 }
 
 // 
@@ -115,11 +150,16 @@ export function addMember( slot, sprite )
 }
 
 // 
-//  DESC: A player shot or the ship hit a member: the swarm breaks apart and attacks
+//  DESC: A player shot or the ship hit a member: the swarm scatters and regroups elsewhere. Only the first time:
+//        after that a hit just kills the member and the flock keeps hunting.
 //
 export function disturbSwarm()
 {
+    if( gSwarm.disturbed )
+        return;
+
     gSwarm.disturbed = true;
+    gSwarm.regrouping = true;
 }
 
 //
@@ -194,26 +234,30 @@ class AI_Pest01_base extends aiNode
     }
 
     // 
-    //  DESC: Move by its velocity (sprite.vx/vy, px/s), wrap at the map boundary, and stay above the ground and
-    //        fully below the HUD strip at the top of the screen
+    //  DESC: Move by its velocity (sprite.vx/vy, px/s) and wrap at the map boundary. Nothing stops it at the top
+    //        or bottom of the screen (a hard stop there looked like hitting an invisible wall): turnIntoBand()
+    //        brings it back.
     //
     moveByVelocity()
     {
         this.sprite.incPosXYZ( this.sprite.vx * highResTimer.elapsedTime / 1000, this.sprite.vy * highResTimer.elapsedTime / 1000 );
         this.wrapX();
+    }
 
-        this._topY = gameDefs.PEST00_VIEW_TOP - this.sprite.parentNode.radius;
-        this._bottomY = -(settings.deviceRes_half.h - this.sprite.parentNode.radius);
-        if( this.sprite.pos.y > this._topY )
-        {
-            this.sprite.setPosXYZ( this.sprite.pos.x, this._topY );
-            this.sprite.vy = Math.min( this.sprite.vy, 0 );
-        }
-        else if( this.sprite.pos.y < this._bottomY )
-        {
-            this.sprite.setPosXYZ( this.sprite.pos.x, this._bottomY );
-            this.sprite.vy = Math.max( this.sprite.vy, 0 );
-        }
+    // 
+    //  DESC: Turn back into the cruise band (PEST00_MIN_Y/MAX_Y) when out of it: a pull back in (PEST01_BAND_PULL per
+    //        px out) plus a brake on its speed further out (PEST01_BAND_DAMP), so it curves back in quickly instead
+    //        of coasting far above or below the screen. Its sideways speed is untouched, so it turns rather than
+    //        stops (a hard stop and a speed cap at the edges both looked like hitting an invisible wall).
+    //
+    turnIntoBand()
+    {
+        if( this.sprite.pos.y > gameDefs.PEST00_MAX_Y )
+            this.sprite.vy -= (((this.sprite.pos.y - gameDefs.PEST00_MAX_Y) * gameDefs.PEST01_BAND_PULL) +
+                (Math.max( 0, this.sprite.vy ) * gameDefs.PEST01_BAND_DAMP)) * highResTimer.elapsedTime / 1000;
+        else if( this.sprite.pos.y < gameDefs.PEST00_MIN_Y )
+            this.sprite.vy += (((gameDefs.PEST00_MIN_Y - this.sprite.pos.y) * gameDefs.PEST01_BAND_PULL) +
+                (Math.max( 0, -this.sprite.vy ) * gameDefs.PEST01_BAND_DAMP)) * highResTimer.elapsedTime / 1000;
     }
 
     // 
@@ -228,23 +272,235 @@ class AI_Pest01_base extends aiNode
     }
 
     // 
-    //  DESC: Pick the next wander waypoint for the swarm center, around the player's area
+    //  DESC: Pick the next waypoint for the swarm center (docile, and hunting while it avoids the player): hovering
+    //        around the player's area (within PEST01_WANDER_RANGE), or roaming PEST01_ROAM_STEP_MIN/MAX on the way it's
+    //        flying, so it may go far and lap the map (gSwarm.roaming, switched by updateRoamMode()). Chased, it goes
+    //        on away from the player.
     //
     pickWaypoint()
     {
-        gSwarm.wayX = this.data.playerShipSprite.pos.x + genFunc.randomInt( -gameDefs.PEST01_WANDER_RANGE, gameDefs.PEST01_WANDER_RANGE );
-        if( gSwarm.wayX < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-            gSwarm.wayX += gWrapSpan;
-        else if( gSwarm.wayX > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
-            gSwarm.wayX -= gWrapSpan;
+        if( this._chased || gSwarm.roaming )
+        {
+            this._dir = this._chased ? ((this._shipDx < 0) ? 1 : -1) : ((Math.cos( gSwarm.heading ) < 0) ? -1 : 1);
+            gSwarm.wayX = gSwarm.x + (this._dir * genFunc.randomInt( gameDefs.PEST01_ROAM_STEP_MIN, gameDefs.PEST01_ROAM_STEP_MAX ));
+        }
+        else
+        {
+            gSwarm.wayX = this.data.playerShipSprite.pos.x + genFunc.randomInt( -gameDefs.PEST01_WANDER_RANGE, gameDefs.PEST01_WANDER_RANGE );
+        }
 
+        gSwarm.wayX = genFunc.wrapDelta( gSwarm.wayX, gWrapSpan );
         gSwarm.wayY = genFunc.randomInt( gCenterMinY, gCenterMaxY );
         gSwarm.needWaypoint = false;
     }
 
     // 
-    //  DESC: Move the docile swarm center (once a frame, whichever member gets here first): it wanders between
-    //        waypoints in smooth curves, and after PEST01_ATTACK_TIME the swarm breaks off and attacks anyway
+    //  DESC: Pick the regroup point after a scatter, somewhere else on the map: PEST01_REGROUP_DIST_MIN/MAX from the
+    //        player on the side the swarm was on (off the screen). The swarm center waits there for the members.
+    //
+    pickRegroupPoint()
+    {
+        this._side = (genFunc.wrapDelta( gSwarm.x - this.data.playerShipSprite.pos.x, gWrapSpan ) < 0) ? -1 : 1;
+
+        gSwarm.x = this.data.playerShipSprite.pos.x +
+            (this._side * genFunc.randomInt( gameDefs.PEST01_REGROUP_DIST_MIN, gameDefs.PEST01_REGROUP_DIST_MAX ));
+        if( gSwarm.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+            gSwarm.x += gWrapSpan;
+        else if( gSwarm.x > gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
+            gSwarm.x -= gWrapSpan;
+
+        gSwarm.y = genFunc.randomInt( gCenterMinY, gCenterMaxY );
+        gSwarm.vx = 0;
+        gSwarm.vy = 0;
+        gSwarm.descending = false;   // In case it was disturbed while dropping in
+        gSwarm.heading = (this._side > 0) ? 0 : Math.PI;   // Heads on away from the player when it starts hunting
+        gSwarm.regroupTime = 0;
+        gSwarm.regroupPicked = true;
+    }
+
+    // 
+    //  DESC: Switch between hovering around the player's area (PEST01_HOVER_TIME_MIN/MAX) and roaming far
+    //        (PEST01_ROAM_TIME_MIN/MAX), docile or hunting, so it isn't predictable: a hover always ends in a roam,
+    //        a roam is followed by a hover or another roam at random (PEST01_HOVER_CHANCE)
+    //
+    updateRoamMode()
+    {
+        gSwarm.roamTime -= highResTimer.elapsedTime;
+        if( gSwarm.roamTime <= 0 )
+        {
+            setRoamMode( !gSwarm.roaming || (Math.random() >= gameDefs.PEST01_HOVER_CHANCE) );
+            gSwarm.needWaypoint = true;
+        }
+    }
+
+    // 
+    //  DESC: The angry flock keeps away from the player for a while (PEST01_AVOID_TIME_MIN/MAX)
+    //
+    startAvoid()
+    {
+        gSwarm.attackRun = false;
+        gSwarm.modeTime = 0;
+        gSwarm.avoidTime = genFunc.randomInt( gameDefs.PEST01_AVOID_TIME_MIN, gameDefs.PEST01_AVOID_TIME_MAX );
+        gSwarm.chaseTime = 0;
+        gSwarm.lastShipX = this.data.playerShipSprite.pos.x;
+        gSwarm.evadeTime = genFunc.randomInt( gameDefs.PEST01_EVADE_TIME_MIN, gameDefs.PEST01_EVADE_TIME_MAX );
+        gSwarm.speed = gameDefs.PEST01_WANDER_SPEED;
+        gSwarm.needWaypoint = true;
+    }
+
+    // 
+    //  DESC: The angry flock makes an attack run: a pass by the player, PEST01_RUN_OFFSET_Y above or below it
+    //
+    startRun()
+    {
+        gSwarm.attackRun = true;
+        gSwarm.passed = false;
+        gSwarm.modeTime = 0;
+        gSwarm.runDir = (genFunc.wrapDelta( this.data.playerShipSprite.pos.x - gSwarm.x, gWrapSpan ) < 0) ? -1 : 1;
+        gSwarm.runOffsetY = (Math.random() < 0.5) ? -gameDefs.PEST01_RUN_OFFSET_Y : gameDefs.PEST01_RUN_OFFSET_Y;
+        gSwarm.speed = gameDefs.PEST01_RUN_SPEED;
+    }
+
+    // 
+    //  DESC: Where the angry swarm center heads (this._dx/_dy) and its turn rate (this._turnRate). It repeats a cycle:
+    //        avoid the player, then an attack run past it and away again. Chased while it's avoiding, it flees faster
+    //        than the ship, then circles back around the player (the attack run) and flees the other way; catching
+    //        up with it sets that off right away.
+    //
+    huntTarget()
+    {
+        gSwarm.modeTime += highResTimer.elapsedTime;
+        this._shipDx = genFunc.wrapDelta( this.data.playerShipSprite.pos.x - gSwarm.x, gWrapSpan );
+
+        // The player ship's X speed toward the swarm (px/s, wrap-aware)
+        this._shipMoveX = genFunc.wrapDelta( this.data.playerShipSprite.pos.x - gSwarm.lastShipX, gWrapSpan );
+        this._shipToward = ((this._shipDx < 0) ? this._shipMoveX : -this._shipMoveX) * 1000 / Math.max( 1, highResTimer.elapsedTime );
+        gSwarm.lastShipX = this.data.playerShipSprite.pos.x;
+
+        if( gSwarm.attackRun )
+        {
+            this._turnRate = gRunTurnRate;
+
+            // Passed the player: carry on the same way until far enough past it, then back to avoiding
+            if( !gSwarm.passed && (this._shipDx * gSwarm.runDir) <= 0 )
+                gSwarm.passed = true;
+
+            if( gSwarm.passed )
+            {
+                gSwarm.speed = gameDefs.PEST01_FLEE_SPEED;   // Gets away faster than the ship can follow without boost
+                this._dx = gSwarm.runDir;
+                this._dy = 0;
+                this.evade();
+                if( Math.abs( this._shipDx ) > gameDefs.PEST01_RUN_PAST_DIST )
+                    this.startAvoid();
+            }
+            else
+            {
+                this._dx = this._shipDx;
+                this._dy = Math.min( Math.max( this.data.playerShipSprite.pos.y + gSwarm.runOffsetY, gCenterMinY ), gCenterMaxY ) - gSwarm.y;
+            }
+
+            if( gSwarm.modeTime > gameDefs.PEST01_RUN_MAX_TIME )
+                this.startAvoid();
+
+            return;
+        }
+
+        this._turnRate = gWanderTurnRate;
+
+        // The player chasing it: within PEST01_CHASE_DIST and flying toward it at PEST01_CHASE_MIN_SPEED or more
+        this._chased = (Math.abs( this._shipDx ) < gameDefs.PEST01_CHASE_DIST && this._shipToward > gameDefs.PEST01_CHASE_MIN_SPEED);
+        gSwarm.chaseTime = this._chased ? (gSwarm.chaseTime + highResTimer.elapsedTime) : 0;
+
+        // Avoided long enough, chased for a while, or the player caught up with it: attack run. When chased it's an
+        // evade: it circles back around the player, passing it, and flees the other way.
+        if( gSwarm.modeTime > gSwarm.avoidTime || gSwarm.chaseTime > gSwarm.evadeTime ||
+            (gSwarm.modeTime > gameDefs.PEST01_AVOID_GRACE && Math.abs( this._shipDx ) < gameDefs.PEST01_CATCH_DIST) )
+        {
+            this.startRun();
+            this.huntTarget();
+            return;
+        }
+
+        this.updateRoamMode();
+
+        if( gSwarm.needWaypoint )
+            this.pickWaypoint();
+
+        // The player coming after it: flee faster than the ship can follow without boost, to a waypoint farther
+        // from the player than it is
+        if( this._chased )
+        {
+            gSwarm.speed = gameDefs.PEST01_FLEE_SPEED;
+            if( Math.abs( genFunc.wrapDelta( gSwarm.wayX - this.data.playerShipSprite.pos.x, gWrapSpan ) ) < Math.abs( this._shipDx ) )
+                this.pickWaypoint();
+        }
+        else
+        {
+            gSwarm.speed = gameDefs.PEST01_WANDER_SPEED;
+        }
+
+        this._dx = genFunc.wrapDelta( gSwarm.wayX - gSwarm.x, gWrapSpan );
+        this._dy = gSwarm.wayY - gSwarm.y;
+
+        if( ((this._dx * this._dx) + (this._dy * this._dy)) < (gameDefs.PEST01_WAYPOINT_DIST * gameDefs.PEST01_WAYPOINT_DIST) )
+            this.pickWaypoint();
+
+        if( this._chased )
+            this.evade();
+    }
+
+    // 
+    //  DESC: Fleeing from the player: zigzag, jinking up or down off its course (this._jink, PEST01_JINK_ANGLE_MIN/MAX)
+    //        every PEST01_JINK_TIME_MIN/MAX, turning sharper (PEST01_FLEE_TURN_RATE), so the flock weaves and is harder
+    //        to catch and shoot. Mostly flips each jink, always jinks back toward the middle near the edge of the band,
+    //        and flips right away when it reaches the edge.
+    //
+    evade()
+    {
+        // Reached the edge of the band: jink the other way now (a zigzag, not a slide along the edge)
+        gSwarm.jinkTime -= highResTimer.elapsedTime;
+        if( (gSwarm.jinkUp > 0 && gSwarm.y >= gCenterMaxY) || (gSwarm.jinkUp < 0 && gSwarm.y <= gCenterMinY) )
+            gSwarm.jinkTime = 0;
+
+        if( gSwarm.jinkTime <= 0 )
+        {
+            gSwarm.jinkTime = genFunc.randomInt( gameDefs.PEST01_JINK_TIME_MIN, gameDefs.PEST01_JINK_TIME_MAX );
+            gSwarm.jinkAngle = genFunc.randomInt( gameDefs.PEST01_JINK_ANGLE_MIN, gameDefs.PEST01_JINK_ANGLE_MAX ) * gDegToRad;
+
+            if( gSwarm.y > gCenterMaxY - gameDefs.PEST01_JINK_EDGE )
+                gSwarm.jinkUp = -1;
+            else if( gSwarm.y < gCenterMinY + gameDefs.PEST01_JINK_EDGE )
+                gSwarm.jinkUp = 1;
+            else if( Math.random() < gameDefs.PEST01_JINK_FLIP_CHANCE )
+                gSwarm.jinkUp = -gSwarm.jinkUp;
+        }
+
+        // A positive angle turns up going right and down going left
+        this._jink = gSwarm.jinkUp * gSwarm.jinkAngle * ((this._dx < 0) ? -1 : 1);
+        this._turnRate = gFleeTurnRate;
+    }
+
+    // 
+    //  DESC: Have all the living members joined the regrouped flock?
+    //
+    allRegrouped()
+    {
+        for( let i = 0; i < gSwarm.members.length; ++i )
+        {
+            this._member = gSwarm.members[i];
+            if( this._member !== null && this._member.swarmAlive && !this._member.regrouped )
+                return false;
+        }
+
+        return true;
+    }
+
+    // 
+    //  DESC: Move the swarm center (once a frame, whichever member gets here first) in smooth curves. Docile, it
+    //        wanders between waypoints around the player's area, and after PEST01_ATTACK_TIME the swarm breaks off
+    //        anyway. After the scatter it waits at the regroup point until the members have joined, then hunts
+    //        (huntTarget()).
     //
     updateSwarm()
     {
@@ -253,8 +509,17 @@ class AI_Pest01_base extends aiNode
 
         gSwarm.frameTime = highResTimer.lastTime;
 
-        if( gSwarm.needWaypoint )
-            this.pickWaypoint();
+        if( gSwarm.regrouping )
+        {
+            gSwarm.regroupTime += highResTimer.elapsedTime;
+            if( this.allRegrouped() || gSwarm.regroupTime > gameDefs.PEST01_REGROUP_MAX_TIME )
+            {
+                gSwarm.regrouping = false;
+                this.startAvoid();
+            }
+
+            return;
+        }
 
         gSwarm.age += highResTimer.elapsedTime;
 
@@ -276,24 +541,48 @@ class AI_Pest01_base extends aiNode
             return;
         }
 
-        // Undisturbed long enough: the swarm breaks off and attacks anyway
-        if( gSwarm.age > gameDefs.PEST01_ATTACK_TIME )
-            gSwarm.disturbed = true;
+        this._jink = 0;
+        this._chased = false;
 
-        this._dx = genFunc.wrapDelta( gSwarm.wayX - gSwarm.x, gWrapSpan );
-        this._dy = gSwarm.wayY - gSwarm.y;
+        if( gSwarm.disturbed )
+        {
+            this.huntTarget();
+        }
+        else
+        {
+            this.updateRoamMode();
 
-        if( ((this._dx * this._dx) + (this._dy * this._dy)) < (gameDefs.PEST01_WAYPOINT_DIST * gameDefs.PEST01_WAYPOINT_DIST) )
-            this.pickWaypoint();
+            if( gSwarm.needWaypoint )
+                this.pickWaypoint();
 
-        // Turn toward the waypoint, limited by the turn rate
-        this._turn = Math.atan2( this._dy, this._dx ) - gSwarm.heading;
+            this._dx = genFunc.wrapDelta( gSwarm.wayX - gSwarm.x, gWrapSpan );
+            this._dy = gSwarm.wayY - gSwarm.y;
+
+            if( ((this._dx * this._dx) + (this._dy * this._dy)) < (gameDefs.PEST01_WAYPOINT_DIST * gameDefs.PEST01_WAYPOINT_DIST) )
+                this.pickWaypoint();
+
+            this._turnRate = gWanderTurnRate;
+
+            // Undisturbed long enough: the swarm turns angry and makes an attack run, without a scatter or regroup
+            // (scattering for no reason looked odd)
+            if( gSwarm.age > gameDefs.PEST01_ATTACK_TIME )
+            {
+                gSwarm.disturbed = true;
+                gSwarm.skipScatter = true;
+                gSwarm.regroupPicked = true;
+                this.startAvoid();
+                this.startRun();
+            }
+        }
+
+        // Turn toward where it's heading (plus a jink when fleeing), limited by the turn rate
+        this._turn = Math.atan2( this._dy, this._dx ) + this._jink - gSwarm.heading;
         if( this._turn > Math.PI )
             this._turn -= gTwoPi;
         else if( this._turn < -Math.PI )
             this._turn += gTwoPi;
 
-        this._maxTurn = gWanderTurnRate * highResTimer.elapsedTime;
+        this._maxTurn = this._turnRate * highResTimer.elapsedTime;
         gSwarm.heading += Math.min( Math.max( this._turn, -this._maxTurn ), this._maxTurn );
 
         gSwarm.vx = Math.cos( gSwarm.heading ) * gSwarm.speed;
@@ -386,6 +675,121 @@ class AI_Pest01_base extends aiNode
             this._wantY = dy / this._dist * this._speed;
         }
     }
+
+    // 
+    //  DESC: Shoot at the player every so often while it's in view and the player is alive: straight at the
+    //        player from wherever it is, whichever way it's facing (steering at the player to line its nose up
+    //        didn't look good)
+    //
+    shoot()
+    {
+        this.sprite.fireTime -= highResTimer.elapsedTime;
+        if( this.sprite.fireTime > 0 )
+            return;
+
+        if( !this.data.playerShipSprite.collisionComponent.enable || !this.inView() )
+        {
+            // Not in view: shoot soon after it comes into view (staggered, so they don't all fire together)
+            this.sprite.fireTime = genFunc.randomInt( 200, 800 );
+            return;
+        }
+
+        this._angle = Math.atan2( this.data.playerShipSprite.pos.y - this.sprite.pos.y, this.shipDeltaX() );
+        this._shotSprite = this.data.enemyShotStrategy.create('pest01_shot').get();
+        this._shotSprite.scriptComponent.prepare( 'shoot', this._shotSprite, this.sprite, this._angle );
+        this.data.groupPlayer.play( 'pest01_shot' );
+
+        this.sprite.fireTime = genFunc.randomInt( gameDefs.PEST01_FIRE_INTERVAL_MIN, gameDefs.PEST01_FIRE_INTERVAL_MAX );
+    }
+
+    // 
+    //  DESC: Fly with the flock (boids): toward the middle of the other members (cohesion), matching their
+    //        velocity (alignment), apart from the ones too close (separation), following the wandering swarm
+    //        center (the leader), plus a slow wiggle so it never flies dead straight. Always moving, between
+    //        PEST01_FLOCK_MIN_SPEED and PEST01_FLOCK_MAX_SPEED (PEST01_FAST_FLOCK_MAX_SPEED while the swarm
+    //        center is faster than PEST01_WANDER_SPEED: attack run, fleeing). Used by the docile and the hunting (angry) flock.
+    //
+    flock()
+    {
+        // Middle and average velocity of the other members
+        this._n = 0;
+        this._cx = 0;
+        this._cy = 0;
+        this._avx = 0;
+        this._avy = 0;
+        for( let i = 0; i < gSwarm.members.length; ++i )
+        {
+            this._member = gSwarm.members[i];
+            if( this._member === null || this._member === this.sprite || !this._member.swarmAlive )
+                continue;
+
+            this._n++;
+            this._cx += genFunc.wrapDelta( this._member.pos.x - this.sprite.pos.x, gWrapSpan );
+            this._cy += this._member.pos.y - this.sprite.pos.y;
+            this._avx += this._member.vx;
+            this._avy += this._member.vy;
+        }
+
+        // Acceleration (px/s/s) in this._wantX/Y
+        this._wantX = 0;
+        this._wantY = 0;
+        if( this._n > 0 )
+        {
+            this._wantX += (this._cx / this._n) * gameDefs.PEST01_FLOCK_COHESION;
+            this._wantY += (this._cy / this._n) * gameDefs.PEST01_FLOCK_COHESION;
+            this._wantX += ((this._avx / this._n) - this.sprite.vx) * gameDefs.PEST01_FLOCK_ALIGNMENT;
+            this._wantY += ((this._avy / this._n) - this.sprite.vy) * gameDefs.PEST01_FLOCK_ALIGNMENT;
+        }
+
+        // Follow the swarm center
+        this._wantX += (genFunc.wrapDelta( gSwarm.x - this.sprite.pos.x, gWrapSpan ) * gameDefs.PEST01_FLOCK_LEADER) +
+            ((gSwarm.vx - this.sprite.vx) * gameDefs.PEST01_FLOCK_LEADER_ALIGN);
+        this._wantY += ((gSwarm.y - this.sprite.pos.y) * gameDefs.PEST01_FLOCK_LEADER) +
+            ((gSwarm.vy - this.sprite.vy) * gameDefs.PEST01_FLOCK_LEADER_ALIGN);
+
+        this.separate( gameDefs.PEST01_FLOCK_SEPARATION_DIST, gameDefs.PEST01_FLOCK_SEPARATION );
+
+        // Part around the player ship, so the swarm doesn't fly into a ship that's sitting still
+        // (only a shot or the player ramming it should set it off)
+        this.avoidShip( gameDefs.PEST01_FLOCK_SHIP_CLEAR_DIST, gameDefs.PEST01_FLOCK_SHIP_CLEAR );
+
+        // Wiggle
+        this.sprite.wiggleAngle += this.sprite.wiggleRate * highResTimer.elapsedTime;
+        this._wantX += Math.cos( this.sprite.wiggleAngle ) * gameDefs.PEST01_FLOCK_WIGGLE;
+        this._wantY += Math.sin( this.sprite.wiggleAngle ) * gameDefs.PEST01_FLOCK_WIGGLE;
+
+        // Limit the acceleration, apply it, and keep the speed in range
+        this._a = Math.sqrt( (this._wantX * this._wantX) + (this._wantY * this._wantY) );
+        if( this._a > gameDefs.PEST01_FLOCK_ACCEL )
+        {
+            this._wantX *= gameDefs.PEST01_FLOCK_ACCEL / this._a;
+            this._wantY *= gameDefs.PEST01_FLOCK_ACCEL / this._a;
+        }
+
+        this.sprite.vx += this._wantX * highResTimer.elapsedTime / 1000;
+        this.sprite.vy += this._wantY * highResTimer.elapsedTime / 1000;
+
+        this._speed = Math.sqrt( (this.sprite.vx * this.sprite.vx) + (this.sprite.vy * this.sprite.vy) );
+        this._maxSpeed = (gSwarm.speed > gameDefs.PEST01_WANDER_SPEED) ? gameDefs.PEST01_FAST_FLOCK_MAX_SPEED : gameDefs.PEST01_FLOCK_MAX_SPEED;
+        if( this._speed > this._maxSpeed )
+        {
+            this.sprite.vx *= this._maxSpeed / this._speed;
+            this.sprite.vy *= this._maxSpeed / this._speed;
+        }
+        else if( this._speed < gameDefs.PEST01_FLOCK_MIN_SPEED && this._speed > 0.01 )
+        {
+            this.sprite.vx *= gameDefs.PEST01_FLOCK_MIN_SPEED / this._speed;
+            this.sprite.vy *= gameDefs.PEST01_FLOCK_MIN_SPEED / this._speed;
+        }
+
+        // Once the swarm has descended, turn back into the cruise band when it strays out (after the
+        // acceleration limit, so it always works)
+        if( !gSwarm.descending )
+            this.turnIntoBand();
+
+        this.sprite.incPosXYZ( this.sprite.vx * highResTimer.elapsedTime / 1000, this.sprite.vy * highResTimer.elapsedTime / 1000 );
+        this.wrapX();
+    }
 }
 
 //
@@ -461,108 +865,6 @@ class AI_Pest01_Docile extends AI_Pest01_base
     }
 
     // 
-    //  DESC: Fly with the flock (boids): toward the middle of the other members (cohesion), matching their
-    //        velocity (alignment), apart from the ones too close (separation), following the wandering swarm
-    //        center (the leader), plus a slow wiggle so it never flies dead straight. Always moving, between
-    //        PEST01_FLOCK_MIN_SPEED and PEST01_FLOCK_MAX_SPEED (faster when the swarm flies off).
-    //
-    flock()
-    {
-        // Middle and average velocity of the other members
-        this._n = 0;
-        this._cx = 0;
-        this._cy = 0;
-        this._avx = 0;
-        this._avy = 0;
-        for( let i = 0; i < gSwarm.members.length; ++i )
-        {
-            this._member = gSwarm.members[i];
-            if( this._member === null || this._member === this.sprite || !this._member.swarmAlive )
-                continue;
-
-            this._n++;
-            this._cx += genFunc.wrapDelta( this._member.pos.x - this.sprite.pos.x, gWrapSpan );
-            this._cy += this._member.pos.y - this.sprite.pos.y;
-            this._avx += this._member.vx;
-            this._avy += this._member.vy;
-        }
-
-        // Acceleration (px/s/s) in this._wantX/Y
-        this._wantX = 0;
-        this._wantY = 0;
-        if( this._n > 0 )
-        {
-            this._wantX += (this._cx / this._n) * gameDefs.PEST01_FLOCK_COHESION;
-            this._wantY += (this._cy / this._n) * gameDefs.PEST01_FLOCK_COHESION;
-            this._wantX += ((this._avx / this._n) - this.sprite.vx) * gameDefs.PEST01_FLOCK_ALIGNMENT;
-            this._wantY += ((this._avy / this._n) - this.sprite.vy) * gameDefs.PEST01_FLOCK_ALIGNMENT;
-        }
-
-        // Follow the swarm center
-        this._wantX += (genFunc.wrapDelta( gSwarm.x - this.sprite.pos.x, gWrapSpan ) * gameDefs.PEST01_FLOCK_LEADER) +
-            ((gSwarm.vx - this.sprite.vx) * gameDefs.PEST01_FLOCK_LEADER_ALIGN);
-        this._wantY += ((gSwarm.y - this.sprite.pos.y) * gameDefs.PEST01_FLOCK_LEADER) +
-            ((gSwarm.vy - this.sprite.vy) * gameDefs.PEST01_FLOCK_LEADER_ALIGN);
-
-        this.separate( gameDefs.PEST01_FLOCK_SEPARATION_DIST, gameDefs.PEST01_FLOCK_SEPARATION );
-
-        // Part around the player ship, so the swarm doesn't fly into a ship that's sitting still
-        // (only a shot or the player ramming it should set it off)
-        this.avoidShip( gameDefs.PEST01_FLOCK_SHIP_CLEAR_DIST, gameDefs.PEST01_FLOCK_SHIP_CLEAR );
-
-        // Wiggle
-        this.sprite.wiggleAngle += this.sprite.wiggleRate * highResTimer.elapsedTime;
-        this._wantX += Math.cos( this.sprite.wiggleAngle ) * gameDefs.PEST01_FLOCK_WIGGLE;
-        this._wantY += Math.sin( this.sprite.wiggleAngle ) * gameDefs.PEST01_FLOCK_WIGGLE;
-
-        // Limit the acceleration, apply it, and keep the speed in range
-        this._a = Math.sqrt( (this._wantX * this._wantX) + (this._wantY * this._wantY) );
-        if( this._a > gameDefs.PEST01_FLOCK_ACCEL )
-        {
-            this._wantX *= gameDefs.PEST01_FLOCK_ACCEL / this._a;
-            this._wantY *= gameDefs.PEST01_FLOCK_ACCEL / this._a;
-        }
-
-        this.sprite.vx += this._wantX * highResTimer.elapsedTime / 1000;
-        this.sprite.vy += this._wantY * highResTimer.elapsedTime / 1000;
-
-        this._speed = Math.sqrt( (this.sprite.vx * this.sprite.vx) + (this.sprite.vy * this.sprite.vy) );
-        if( this._speed > gameDefs.PEST01_FLOCK_MAX_SPEED )
-        {
-            this.sprite.vx *= gameDefs.PEST01_FLOCK_MAX_SPEED / this._speed;
-            this.sprite.vy *= gameDefs.PEST01_FLOCK_MAX_SPEED / this._speed;
-        }
-        else if( this._speed < gameDefs.PEST01_FLOCK_MIN_SPEED && this._speed > 0.01 )
-        {
-            this.sprite.vx *= gameDefs.PEST01_FLOCK_MIN_SPEED / this._speed;
-            this.sprite.vy *= gameDefs.PEST01_FLOCK_MIN_SPEED / this._speed;
-        }
-
-        // Once the swarm has descended, keep to the cruise band: pushed back in when it strays out (after the
-        // acceleration limit, so it always works), and never further than fully below the HUD strip at the top of
-        // the screen or past the bottom of the screen
-        if( !gSwarm.descending )
-        {
-            if( this.sprite.pos.y > gameDefs.PEST00_MAX_Y )
-                this.sprite.vy -= (this.sprite.pos.y - gameDefs.PEST00_MAX_Y) * gameDefs.PEST01_FLOCK_BAND * highResTimer.elapsedTime / 1000;
-            else if( this.sprite.pos.y < gameDefs.PEST00_MIN_Y )
-                this.sprite.vy += (gameDefs.PEST00_MIN_Y - this.sprite.pos.y) * gameDefs.PEST01_FLOCK_BAND * highResTimer.elapsedTime / 1000;
-
-            // Brake smoothly before the HUD strip at the top and the bottom of the screen: the speed toward the
-            // edge is limited to what stops it (at PEST01_FLOCK_EDGE_BRAKE) PEST01_FLOCK_EDGE_GAP short of it.
-            // A hard stop made them hit the bottom of the radar and slide along it.
-            this._room = gameDefs.PEST00_VIEW_TOP - this.sprite.parentNode.radius - gameDefs.PEST01_FLOCK_EDGE_GAP - this.sprite.pos.y;
-            this.sprite.vy = Math.min( this.sprite.vy, (this._room > 0) ? Math.sqrt( 2 * gameDefs.PEST01_FLOCK_EDGE_BRAKE * this._room ) : 0 );
-
-            this._room = this.sprite.pos.y + settings.deviceRes_half.h - this.sprite.parentNode.radius - gameDefs.PEST01_FLOCK_EDGE_GAP;
-            this.sprite.vy = Math.max( this.sprite.vy, (this._room > 0) ? -Math.sqrt( 2 * gameDefs.PEST01_FLOCK_EDGE_BRAKE * this._room ) : 0 );
-        }
-
-        this.sprite.incPosXYZ( this.sprite.vx * highResTimer.elapsedTime / 1000, this.sprite.vy * highResTimer.elapsedTime / 1000 );
-        this.wrapX();
-    }
-
-    // 
     //  DESC: Handle the docile swarm
     //
     evaluate()
@@ -590,7 +892,7 @@ class AI_Pest01_Docile extends AI_Pest01_base
 }
 
 //
-//  DESC: AI Leaf node script. Disturbed: burst out from the swarm center
+//  DESC: AI Leaf node script. Disturbed: burst out from the swarm center, shooting at the player in view
 //
 class AI_Pest01_Scatter extends AI_Pest01_base
 {
@@ -607,6 +909,17 @@ class AI_Pest01_Scatter extends AI_Pest01_base
         if( this.state === defs.EAIS_INIT )
         {
             this.sprite.setFrame( 1 );   // Angry art
+            this.sprite.regrouped = false;
+
+            // Angry from here on: it shoots at the player in view from the scatter on (sprite.fireTime carries into the Hunt)
+            this.sprite.fireTime = genFunc.randomInt( gameDefs.PEST01_FIRST_SHOT_MIN, gameDefs.PEST01_FIRST_SHOT_MAX );
+
+            // The docile time ran out: no scatter, it stays with the flock and attacks
+            if( gSwarm.skipScatter )
+            {
+                this.sprite.regrouped = true;
+                return this.state = defs.EAIS_SUCCESS;
+            }
 
             // Out from the swarm center, give or take a bit (any way when it's right at the center)
             this._dx = genFunc.wrapDelta( this.sprite.pos.x - gSwarm.x, gWrapSpan );
@@ -622,8 +935,10 @@ class AI_Pest01_Scatter extends AI_Pest01_base
 
         if( this.state === defs.EAIS_ACTIVE )
         {
+            this.turnIntoBand();
             this.moveByVelocity();
             this.face();
+            this.shoot();
 
             this.time += highResTimer.elapsedTime;
             if( this.time > gameDefs.PEST01_SCATTER_TIME )
@@ -635,11 +950,12 @@ class AI_Pest01_Scatter extends AI_Pest01_base
 }
 
 //
-//  DESC: AI Leaf node script. Attack: take a spot around the player, move to a new one every so
-//        often, keep apart from the other members and clear of the ship, and shoot at the player.
-//        Never ends: it attacks until it's killed.
+//  DESC: AI Leaf node script. Hunt (after each scatter): fly on its own to the regroup point somewhere else on the
+//        map, join the flock there, then fly with the angry flock as it hunts (avoids the player, then makes an
+//        attack run, see huntTarget()), shooting at the player whenever it's in view. Never ends: it hunts until
+//        it's killed.
 //
-class AI_Pest01_Attack extends AI_Pest01_base
+class AI_Pest01_Hunt extends AI_Pest01_base
 {
     constructor( nodeData, headNode, sprite )
     {
@@ -647,114 +963,47 @@ class AI_Pest01_Attack extends AI_Pest01_base
     }
 
     // 
-    //  DESC: Pick a new spot around the player (an angle and distance from the ship). Each member keeps to its own
-    //        sector (a share of the circle by its slot, give or take PEST01_SPOT_JITTER), so they spread out around
-    //        the player instead of bunching up.
+    //  DESC: Fly to the regroup point (the swarm center) on its own, kept apart from the other members and clear
+    //        of the ship, and join the flock once it's close
     //
-    pickSpot()
+    regroup()
     {
-        this.spotAngle = gSwarm.spotOffset + (this.sprite.slot * gSector) + ((Math.random() - 0.5) * 2 * gSpotJitter);
-        this.spotDist = genFunc.randomInt( gameDefs.PEST01_ATTACK_DIST_MIN, gameDefs.PEST01_ATTACK_DIST_MAX );
-        this.repositionTime = genFunc.randomInt( gameDefs.PEST01_REPOSITION_MIN, gameDefs.PEST01_REPOSITION_MAX );
+        this._dx = genFunc.wrapDelta( gSwarm.x - this.sprite.pos.x, gWrapSpan );
+        this._dy = gSwarm.y - this.sprite.pos.y;
+        if( ((this._dx * this._dx) + (this._dy * this._dy)) < (gameDefs.PEST01_REGROUP_JOIN_DIST * gameDefs.PEST01_REGROUP_JOIN_DIST) )
+            this.sprite.regrouped = true;
+
+        this.arriveAt( this._dx, this._dy, gameDefs.PEST01_REGROUP_SPEED, gameDefs.PEST01_ARRIVE_RATE );
+        this.separate( gameDefs.PEST01_SEPARATION_DIST, gameDefs.PEST01_SEPARATION_SPEED );
+        this.avoidShip( gameDefs.PEST01_SHIP_CLEAR_DIST, gameDefs.PEST01_SHIP_CLEAR_SPEED );
+        this.steerVelocity( gameDefs.PEST01_REGROUP_ACCEL );
+        this.turnIntoBand();
+        this.moveByVelocity();
     }
 
     // 
-    //  DESC: Is a shot due (within PEST01_AIM_TIME) and can it shoot (in view, the player alive)? Then it steers
-    //        toward the player (Attack evaluate()) to line its nose up for the shot.
-    //
-    aiming()
-    {
-        return this.fireTime <= gameDefs.PEST01_AIM_TIME && this.data.playerShipSprite.collisionComponent.enable && this.inView();
-    }
-
-    // 
-    //  DESC: Shoot. It can only shoot straight out of its nose, which faces the way it's flying, so while a shot is
-    //        due it steers toward the player, and fires once its nose is lined up (within PEST01_FIRE_ALIGN).
-    //        It gives up on a shot it can't line up within PEST01_AIM_MAX_WAIT.
-    //
-    shoot()
-    {
-        this.fireTime -= highResTimer.elapsedTime;
-        if( this.fireTime > 0 )
-            return;
-
-        if( !this.aiming() )
-        {
-            // Not in view: shoot soon after it comes into view (staggered, so they don't all fire together)
-            this.fireTime = genFunc.randomInt( 200, 800 );
-            return;
-        }
-
-        this._turn = Math.atan2( this.data.playerShipSprite.pos.y - this.sprite.pos.y, this.shipDeltaX() ) - this.sprite.faceAngle;
-        if( this._turn > Math.PI )
-            this._turn -= gTwoPi;
-        else if( this._turn < -Math.PI )
-            this._turn += gTwoPi;
-
-        if( Math.abs( this._turn ) < gFireAlign )
-        {
-            this._shotSprite = this.data.enemyShotStrategy.create('pest01_shot').get();
-            this._shotSprite.scriptComponent.prepare( 'shoot', this._shotSprite, this.sprite, this.sprite.faceAngle );
-            this.data.groupPlayer.play( 'wreck00_gun' );
-
-            this.fireTime = genFunc.randomInt( gameDefs.PEST01_FIRE_INTERVAL_MIN, gameDefs.PEST01_FIRE_INTERVAL_MAX );
-        }
-        else if( this.fireTime < -gameDefs.PEST01_AIM_MAX_WAIT )
-        {
-            this.fireTime = genFunc.randomInt( gameDefs.PEST01_FIRE_INTERVAL_MIN, gameDefs.PEST01_FIRE_INTERVAL_MAX );
-        }
-    }
-
-    // 
-    //  DESC: Handle the attack
+    //  DESC: Handle the hunt
     //
     evaluate()
     {
         if( this.state === defs.EAIS_INIT )
         {
-            this.pickSpot();
-            // The first shot waits until it has spread out to its spot (aiming steers it at the player)
-            this.fireTime = genFunc.randomInt( gameDefs.PEST01_FIRST_SHOT_MIN, gameDefs.PEST01_FIRST_SHOT_MAX );
+            // The first member here after the scatter picks where the swarm regroups
+            if( !gSwarm.regroupPicked )
+                this.pickRegroupPoint();
+
             this.state = defs.EAIS_ACTIVE;
         }
 
         if( this.state === defs.EAIS_ACTIVE )
         {
-            this.repositionTime -= highResTimer.elapsedTime;
-            if( this.repositionTime < 0 )
-                this.pickSpot();
+            this.updateSwarm();
 
-            // The spot in screen X (a camera stores its position negated), kept in from the sides of the screen,
-            // and in the cruise band
-            this._camX = this.data.camera.pos.x;
-            this._shipScreenX = genFunc.wrapDelta( this.data.playerShipSprite.pos.x + this._camX, gWrapSpan );
-            this._screenX = genFunc.wrapDelta( this.sprite.pos.x + this._camX, gWrapSpan );
-            this._limitX = settings.deviceRes_half.w - gameDefs.PEST01_SCREEN_MARGIN;
-            this._spotX = Math.min( Math.max( this._shipScreenX + (Math.cos( this.spotAngle ) * this.spotDist), -this._limitX ), this._limitX );
-            this._spotY = Math.min( Math.max( this.data.playerShipSprite.pos.y + (Math.sin( this.spotAngle ) * this.spotDist),
-                gameDefs.PEST00_MIN_Y ), gameDefs.PEST00_MAX_Y );
-
-            // Wanted velocity: toward the spot, slowing down near it, or straight at the player when a shot is due
-            // (it shoots out of its nose, which faces the way it's flying), kept apart from the other members
-            if( this.aiming() )
-            {
-                this._dx = this.shipDeltaX();
-                this._dy = this.data.playerShipSprite.pos.y - this.sprite.pos.y;
-                this._dist = Math.max( Math.sqrt( (this._dx * this._dx) + (this._dy * this._dy) ), 1 );
-                this._wantX = this._dx / this._dist * gameDefs.PEST01_ATTACK_SPEED;
-                this._wantY = this._dy / this._dist * gameDefs.PEST01_ATTACK_SPEED;
-            }
+            if( this.sprite.regrouped )
+                this.flock();
             else
-            {
-                this.arriveAt( genFunc.wrapDelta( this._spotX - this._screenX, gWrapSpan ), this._spotY - this.sprite.pos.y,
-                    gameDefs.PEST01_ATTACK_SPEED, gameDefs.PEST01_ARRIVE_RATE );
-            }
-            this.separate( gameDefs.PEST01_SEPARATION_DIST, gameDefs.PEST01_SEPARATION_SPEED );
+                this.regroup();
 
-            this.avoidShip( gameDefs.PEST01_SHIP_CLEAR_DIST, gameDefs.PEST01_SHIP_CLEAR_SPEED );
-
-            this.steerVelocity( gameDefs.PEST01_ATTACK_ACCEL );
-            this.moveByVelocity();
             this.face();
             this.shoot();
         }
@@ -777,6 +1026,6 @@ export function loadScripts()
     scriptManager.set( 'AI_Pest01_Scatter',
         ( nodeData, headNode, sprite ) => { return new AI_Pest01_Scatter( nodeData, headNode, sprite ); } );
 
-    scriptManager.set( 'AI_Pest01_Attack',
-        ( nodeData, headNode, sprite ) => { return new AI_Pest01_Attack( nodeData, headNode, sprite ); } );
+    scriptManager.set( 'AI_Pest01_Hunt',
+        ( nodeData, headNode, sprite ) => { return new AI_Pest01_Hunt( nodeData, headNode, sprite ); } );
 }

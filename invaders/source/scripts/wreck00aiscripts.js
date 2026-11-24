@@ -19,6 +19,52 @@ import { gAIData, initAIData } from './aidata';
 var gSineInOut = easing.getSineInOut();
 var gSineOut = easing.getSineOut();
 
+// Building lock cap shared by every wreck00: once WRECK00_MAX_LOCKS are locked (gCapReached), no new lock until all of
+// them have cleared (shot down or building destroyed), then for WRECK00_LOCK_COOLDOWN more (gLockCooldown, ms). Both are
+// updated once a frame by the first wreck00 head to run (frame token gLockFrame).
+var gCapReached = false;
+var gLockCooldown = 0;
+var gLockFrame = -1;
+
+// 
+//  DESC: Clear the building lock cap and cooldown (Level1State restartGame() and cleanUp())
+//
+export function clearLockCooldown()
+{
+    gCapReached = false;
+    gLockCooldown = 0;
+}
+
+// 
+//  DESC: Number of living wreck00 with a building locked (heading to it, descending on it or shaking it)
+//
+function countLocks()
+{
+    let count = 0;
+    for( let i = 0; i < gAIData.enemy.length; ++i )
+    {
+        if( gAIData.enemy[i].userId === gameDefs.WRECK00_SHIP_ID && gAIData.enemy[i].get().collisionComponent.enable &&
+            gAIData.enemy[i].get().targetBuilding )
+            count++;
+    }
+
+    return count;
+}
+
+// 
+//  DESC: Can a wreck00 lock onto a building? Not while the cap is reached or during the cooldown after it cleared
+//
+function canLock()
+{
+    return !gCapReached && (gLockCooldown <= 0) && (countLocks() < gameDefs.WRECK00_MAX_LOCKS);
+}
+
+// Shapes of a roam leg's path (AI_Wreck00_Roam.pickPathShape())
+const WRECK00_PATH_STRAIGHT = 0,
+      WRECK00_PATH_DIP = 1,
+      WRECK00_PATH_CLIMB = 2,
+      WRECK00_PATH_S = 3;
+
 
 //
 //  DESC: AI Wreck00 base class
@@ -101,6 +147,24 @@ class AI_Wreck00_Head extends aiNode
         {
             this.init();
             this.state = defs.EAIS_ACTIVE;
+        }
+
+        // Shared building lock cap, once a frame: when all the capped locks have cleared, start the cooldown
+        if( gLockFrame !== highResTimer.lastTime )
+        {
+            gLockFrame = highResTimer.lastTime;
+            if( gCapReached )
+            {
+                if( countLocks() === 0 )
+                {
+                    gCapReached = false;
+                    gLockCooldown = gameDefs.WRECK00_LOCK_COOLDOWN;
+                }
+            }
+            else if( gLockCooldown > 0 )
+            {
+                gLockCooldown -= highResTimer.elapsedTime;
+            }
         }
 
         // Returning SUCCESS or FAILURE terminates the execution of this behavioral tree
@@ -218,6 +282,83 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
         this.hoverTime = genFunc.randomInt( 0, gameDefs.WRECK00_HOVER_PERIOD );
         this.hoverRamp = 0;
         this.hoverOffset = 0;
+
+        // Path shape of the current leg and the settle back after an overshoot
+        this.pathShape = WRECK00_PATH_STRAIGHT;
+        this.pathAmp = 0;
+        this.settleDX = 0;
+    }
+
+    // 
+    //  DESC: Start a leg of the roam to an X (unwrapped, from the shortest path), at a random speed (a multiple of
+    //        pixel_per_sec_100 between speedMin and speedMax: slow drifts to faster moves), and to a random Y when
+    //        it's going somewhere. Sometimes (WRECK00_OVERSHOOT_CHANCE) it glides a bit past the X and settles back,
+    //        like a heavy ship, and each leg's path takes a random shape (pickPathShape()).
+    //
+    startLeg( targetX, speedMin, speedMax )
+    {
+        this._deltaX = targetX - this.sprite.pos.x;
+        this._time = Math.abs( this._deltaX ) / (gameDefs.pixel_per_sec_100 * (speedMin + (Math.random() * (speedMax - speedMin))));
+
+        this.settleDX = 0;
+        if( Math.abs( this._deltaX ) > gameDefs.WRECK00_OVERSHOOT_MIN_LEG && Math.random() < gameDefs.WRECK00_OVERSHOOT_CHANCE )
+            this.settleDX = -Math.sign( this._deltaX ) * genFunc.randomInt( gameDefs.WRECK00_OVERSHOOT_MIN, gameDefs.WRECK00_OVERSHOOT_MAX );
+
+        this.easingX.init( this.sprite.pos.x, targetX - this.settleDX, this._time, gSineInOut );
+
+        // Force an initialization to start the movement on first time execution of this function
+        this.easingY.init( this._baseY, this._baseY, 0, gSineInOut );
+        this.pathShape = WRECK00_PATH_STRAIGHT;
+
+        // Only set the Y easing if not the same building position as we are now
+        if( Math.abs( this._deltaX ) > 100 )
+        {
+            // Generate the Y range in which the enemy will travel
+            this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
+            this.easingY.init( this._baseY, this._offsetY, this._time, gSineInOut );
+            this.pickPathShape( this._baseY, this._offsetY );
+        }
+    }
+
+    // 
+    //  DESC: Pick the shape of a leg's path at random: straight, a dip (sags down and back up), a climb (arcs up and
+    //        back down) or an S curve (up then down), by WRECK00_PATH_AMP_MIN/MAX, less where it would leave
+    //        WRECK00_PATH_MIN_Y/MAX_Y (above the buildings, below the HUD strip)
+    //
+    pickPathShape( startY, endY )
+    {
+        this.pathShape = genFunc.randomInt( WRECK00_PATH_STRAIGHT, WRECK00_PATH_S );
+        this.pathAmp = genFunc.randomInt( gameDefs.WRECK00_PATH_AMP_MIN, gameDefs.WRECK00_PATH_AMP_MAX );
+
+        this._roomDown = Math.min( startY, endY ) - gameDefs.WRECK00_PATH_MIN_Y;
+        this._roomUp = gameDefs.WRECK00_PATH_MAX_Y - Math.max( startY, endY );
+        if( this.pathShape === WRECK00_PATH_DIP )
+            this.pathAmp = Math.min( this.pathAmp, this._roomDown );
+        else if( this.pathShape === WRECK00_PATH_CLIMB )
+            this.pathAmp = Math.min( this.pathAmp, this._roomUp );
+        else if( this.pathShape === WRECK00_PATH_S )
+            this.pathAmp = Math.min( this.pathAmp, this._roomDown, this._roomUp );
+
+        // Not enough room for it: straight
+        if( this.pathAmp < gameDefs.WRECK00_PATH_AMP_MIN / 2 )
+            this.pathShape = WRECK00_PATH_STRAIGHT;
+    }
+
+    // 
+    //  DESC: Y offset of the leg's path shape (added to the eased Y), 0 at both ends of the leg
+    //
+    pathOffset()
+    {
+        if( this.pathShape === WRECK00_PATH_STRAIGHT || this.easingX.totalTime <= 0 )
+            return 0;
+
+        this._t = Math.min( 1, this.easingX.time / this.easingX.totalTime );
+        if( this.pathShape === WRECK00_PATH_DIP )
+            return -Math.sin( this._t * Math.PI ) * this.pathAmp;
+        else if( this.pathShape === WRECK00_PATH_CLIMB )
+            return Math.sin( this._t * Math.PI ) * this.pathAmp;
+
+        return Math.sin( this._t * Math.PI * 2 ) * this.pathAmp;
     }
 
     // 
@@ -245,7 +386,7 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
             // First interation, the easing is uninitialized so don't use the value which is 0,0.
             if( this.easingY.isInitialized() )
             {
-                this.sprite.setPosXYZ( this.easingX.getValue(), this.easingY.getValue() + this.hover() );
+                this.sprite.setPosXYZ( this.easingX.getValue(), this.easingY.getValue() + this.hover() + this.pathOffset() );
 
                 // Wrap the sprite position when crossing the map boundary
                 if( this.sprite.pos.x < -gameDefs.GAMEPLAY_LOOPING_WRAP_DIST )
@@ -260,11 +401,20 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
 
             if( this.easingX.isFinished() && this.easingY.isFinished() )
             {
-                if( this.sprite.targetBuilding === null )
-                {
-                    // Start the next move from the Y without the hover bob, so the bob carries on smoothly
-                    this._baseY = this.sprite.pos.y - this.hoverOffset;
+                // Start the next move from the Y without the hover bob, so the bob carries on smoothly (the path
+                // shape is 0 at the end of a leg)
+                this._baseY = this.sprite.pos.y - this.hoverOffset;
 
+                // Overshot the end of the leg: settle back to it
+                if( this.settleDX !== 0 )
+                {
+                    this.easingX.init( this.sprite.pos.x, this.sprite.pos.x + this.settleDX, gameDefs.WRECK00_SETTLE_TIME, gSineInOut );
+                    this.easingY.init( this._baseY, this._baseY, 0, gSineInOut );
+                    this.pathShape = WRECK00_PATH_STRAIGHT;
+                    this.settleDX = 0;
+                }
+                else if( this.sprite.targetBuilding === null )
+                {
                     // Randmoly pick a building to target
                     this._index = genFunc.randomInt( 0, this.data.buildings.length-1 );
                     this._targetBuilding = this.data.buildings[this._index].get();
@@ -282,31 +432,20 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
 
                     if( (this._targetBuilding.destroyed === undefined) && this._freeBuildingFound )
                     {
-                        // Should we target lock on a building?
-                        if( genFunc.randomInt( 0, 10 ) > 4 )
+                        // Should we target lock on a building? Capped, so a crowd of wreck00 doesn't attack the
+                        // buildings all at once
+                        if( canLock() && (Math.random() < gameDefs.WRECK00_LOCK_CHANCE) )
                         {
                             // Set the target building
                             this.sprite.targetBuilding = this._targetBuilding;
 
+                            // Reached the cap: no more locks until they've all cleared, then the cooldown
+                            if( countLocks() >= gameDefs.WRECK00_MAX_LOCKS )
+                                gCapReached = true;
+
                             // Use shortest path considering map wrapping
                             this._deltaX = genFunc.wrapDelta( this.sprite.targetBuilding.pos.x - this.sprite.pos.x, gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2 );
-
-                            this._targetX = this.sprite.pos.x + this._deltaX;
-
-                            // Calculate the travel time
-                            this._time = Math.abs(this._deltaX) / gameDefs.pixel_per_sec_100;
-                            this.easingX.init( this.sprite.pos.x, this._targetX, this._time, gSineInOut );
-
-                            // Force an initialization to start the movement on first time execution of this function
-                            this.easingY.init( this._baseY, this._baseY, 0, gSineInOut );
-
-                            // Only set the Y easing if not the same building position as we are now
-                            if( Math.abs( this._deltaX ) > 100 )
-                            {
-                                // Generate the Y range in which the enemy will travel
-                                this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
-                                this.easingY.init( this._baseY, this._offsetY, this._time, gSineInOut );
-                            }
+                            this.startLeg( this.sprite.pos.x + this._deltaX, gameDefs.WRECK00_LOCK_SPEED_MIN, gameDefs.WRECK00_LOCK_SPEED_MAX );
                         }
                     }
 
@@ -327,21 +466,7 @@ class AI_Wreck00_Roam extends AI_Wreck00_base
                             this._offsetX = this.sprite.pos.x + this._deltaX;
                         }
                         
-                        // Calculate the travel time
-                        this._time = Math.abs( this.sprite.pos.x - this._offsetX ) / gameDefs.pixel_per_sec_100;
-                        this.easingX.init( this.sprite.pos.x, this._offsetX, this._time, gSineInOut );
-
-                        // Force an initialization to start the movement on first time execution of this function
-                        this.easingY.init( this._baseY, this._baseY, 0, gSineInOut );
-
-                        // Only set the Y easing if not the same building position as we are now
-                        if( Math.abs( this.sprite.pos.x - this._offsetX ) > 100 )
-                        {
-                            // Generate the Y range in which the enemy will travel
-                            this._offsetY = genFunc.randomInt( -(settings.deviceRes_half.h * 0.15), settings.deviceRes_half.h * 0.5 );
-
-                            this.easingY.init( this._baseY, this._offsetY, this._time, gSineInOut );
-                        }
+                        this.startLeg( this._offsetX, gameDefs.WRECK00_LEG_SPEED_MIN, gameDefs.WRECK00_LEG_SPEED_MAX );
                     }
                 }
                 else

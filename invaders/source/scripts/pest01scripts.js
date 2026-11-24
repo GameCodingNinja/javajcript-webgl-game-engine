@@ -19,8 +19,8 @@ var gWrapSpan = gameDefs.GAMEPLAY_LOOPING_WRAP_DIST * 2;
 var gSineIn = easing.getSineIn();
 
 //
-//  DESC: Script for the pest01 shot: a straight bolt out of the member's nose (it turns to face the player
-//        to shoot), nose facing its flight (the art points right)
+//  DESC: Script for the pest01 shot: a straight bolt fired at the player from the member, whichever way the
+//        member faces, nose facing its flight (the art points right)
 //
 class Pest01Shot_Fire
 {
@@ -44,6 +44,10 @@ class Pest01Shot_Fire
 
         this.moveX = Math.cos( angle );
         this.moveY = Math.sin( angle );
+
+        // Plus the shooter's speed toward the player (px/s to px/ms), so a member flying at the player doesn't keep up
+        // with its own bolt (the flock flies about as fast as PEST01_SHOT_SPEED). Only that part, so the aim stays true.
+        this.speed = gameDefs.PEST01_SHOT_SPEED + (Math.max( 0, (enemySprite.vx * this.moveX) + (enemySprite.vy * this.moveY) ) / 1000);
         sprite.setPos( enemySprite.pos );
         sprite.incPosXYZ( this.moveX * gameDefs.PEST01_SHOT_OFFSET, this.moveY * gameDefs.PEST01_SHOT_OFFSET );
         sprite.setRotXYZ( 0, 0, angle, false );
@@ -61,7 +65,7 @@ class Pest01Shot_Fire
     {
         if( this.camera.inViewY( this.sprite.transPos, this.sprite.parentNode.radius ) )
         {
-            this._moveInc = highResTimer.elapsedTime * gameDefs.PEST01_SHOT_SPEED;
+            this._moveInc = highResTimer.elapsedTime * this.speed;
             this.sprite.incPosXYZ( this.moveX * this._moveInc, this.moveY * this._moveInc );
 
             // Wrap the shot position at the map boundary

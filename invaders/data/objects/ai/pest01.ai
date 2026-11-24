@@ -23,7 +23,7 @@
 
             <node>
 
-                <leaf script="AI_Pest01_Attack"/>
+                <leaf script="AI_Pest01_Hunt"/>
 
             </node>
 
