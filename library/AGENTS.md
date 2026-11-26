@@ -5,6 +5,7 @@ Component-based 2D/3D WebGL game engine with scene graph architecture, manager s
 
 ## Collaboration Rules
 - **Don't edit code until the user says go.** Investigate and propose a plan first, then wait for the go-ahead.
+- **Never stage, commit or push.** The user does all git operations. Move and delete files with plain `mv`/`rm`, not `git mv`/`git rm` (they stage the change).
 - Ignore `obsolete/`: retired code and projects that will never be developed.
 
 ## Performance Goal
