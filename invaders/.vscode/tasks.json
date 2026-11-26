@@ -38,7 +38,7 @@
             "options": {
                 "cwd": "${workspaceRoot}"
             },
-            "command": "python3 generate_spritesheet_from_lst.py data/objects/2d/objectDataList/level1DataList.lst data/objects/2d/objectDataList/level1SpriteSheetDataList.lst data/textures/level/level1_spriteSheet.png data/objects/2d/mesh/level/level1.xml 900",
+            "command": "python3 ../tools/generate_spritesheet_from_lst.py data/objects/2d/objectDataList/level1DataList.lst data/objects/2d/objectDataList/level1SpriteSheetDataList.lst data/textures/level/level1_spriteSheet.png data/objects/2d/mesh/level/level1.xml 900",
             "problemMatcher": []
         },
         {
@@ -47,7 +47,7 @@
             "options": {
                 "cwd": "${workspaceRoot}"
             },
-            "command": "python3 zip_game.py",
+            "command": "python3 ../tools/zip_game.py",
             "dependsOn": [ "Make Production" ],
             "problemMatcher": []
         }

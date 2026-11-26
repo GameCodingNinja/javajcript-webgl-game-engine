@@ -13,9 +13,11 @@
 #
 #             Make a production build first (webpack --mode production) and bump the bundle.js
 #             version in index.html for every upload.
+#
+#             Shared by all the games: it zips the current folder, or the one given with --game-dir.
 #  EXAMPLES:
-#    python3 zip_game.py
-#    python3 zip_game.py Invaders.zip --list-unused
+#    cd invaders && python3 ../tools/zip_game.py
+#    python3 tools/zip_game.py Invaders.zip --game-dir invaders --list-unused
 #
 
 import argparse
@@ -77,14 +79,18 @@ def collect_data_files(game_dir):
 
 
 def main():
-    game_dir = Path(__file__).resolve().parent
-
     parser = argparse.ArgumentParser(description='Zip the game with only the data files it loads.')
-    parser.add_argument('zip_file', nargs='?', default=f'{game_dir.name.capitalize()}.zip',
-                        help='zip file to create (default: %(default)s in the game folder)')
+    parser.add_argument('zip_file', nargs='?', default='',
+                        help='zip file to create (default: <Game folder name>.zip in the game folder)')
+    parser.add_argument('--game-dir', default='.',
+                        help='game folder to zip (default: the current folder)')
     parser.add_argument('--list-unused', action='store_true',
                         help='list the data files that are left out')
     args = parser.parse_args()
+
+    game_dir = Path(args.game_dir).resolve()
+    if not args.zip_file:
+        args.zip_file = f'{game_dir.name.capitalize()}.zip'
 
     for name in ROOT_FILES:
         if not (game_dir / name).is_file():

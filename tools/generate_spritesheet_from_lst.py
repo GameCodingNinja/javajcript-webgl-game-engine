@@ -2,11 +2,12 @@
 #
 #  FILE NAME: generate_spritesheet_from_lst.py
 #  DESC:      Generate sprite sheet assets from a source objectDataList (*.lst)
+#             Shared by all the games: run it from the game folder (paths are relative to it).
 #  EXAMPLES:
-#    python3 generate_spritesheet_from_lst.py \
+#    python3 ../tools/generate_spritesheet_from_lst.py \
 #        data/objects/2d/objectDataList/level1DataList.lst
 #
-#    python3 generate_spritesheet_from_lst.py \
+#    python3 ../tools/generate_spritesheet_from_lst.py \
 #        data/objects/2d/objectDataList/level1DataList.lst \
 #        data/objects/2d/objectDataList/level1SpriteSheetDataList.lst \
 #        data/textures/level/level1_spriteSheet.png \
@@ -37,8 +38,8 @@ SRGB_PROFILE_CANDIDATES = [
     "/usr/share/gimp/profiles/sRGB-elle-V2-srgbtrc.icc",
     "/usr/share/gimp/profiles/sRGB-elle-V4-srgbtrc.icc",
     # Optional local override: drop a GIMP profile here to force usage.
-    str(Path(__file__).resolve().parent / "development" / "profiles" / "sRGB-elle-V2-srgbtrc.icc"),
-    str(Path(__file__).resolve().parent / "development" / "profiles" / "sRGB-elle-V4-srgbtrc.icc"),
+    str(Path(__file__).resolve().parent / "profiles" / "sRGB-elle-V2-srgbtrc.icc"),
+    str(Path(__file__).resolve().parent / "profiles" / "sRGB-elle-V4-srgbtrc.icc"),
     # Fallback system profiles
     "/usr/share/color/icc/colord/sRGB.icc",
     "/usr/share/ghostscript/iccprofiles/srgb.icc",

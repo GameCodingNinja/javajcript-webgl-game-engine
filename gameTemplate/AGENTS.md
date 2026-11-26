@@ -24,7 +24,7 @@ Starter project for new games on the WebGL engine in `../library/`. It wires up 
 - Webpack's size warnings are on only when `NODE_ENV=production` (set by hosting build servers), with the limit raised to 1 MB (`maxAssetSize`/`maxEntrypointSize`). The production bundle is about 510 KiB, over webpack's default 244 KiB, and the warnings fail server builds. Raise the limit if the bundle grows past 1 MB.
 - Assets in `data/` are fetched at runtime by relative path, so serve this folder over HTTP (VS Code Live Server port 5503 per the workspace file, or `python3 -m http.server`) and open `index.html`. Opening the file directly won't load assets.
 - No test suite. Verify changes by building and running the game in a browser.
-- `strip.py` is an old helper that writes a comment/whitespace-stripped `bundle_strip.js`; not part of the build.
+- VS Code tasks for the shared `../tools/` scripts (see library AGENTS.md "Tools"): **"Zip Game"** (production build, then `Gametemplate.zip` for a portal upload) and **"Generate Sprite Sheet"** (`level1DataList.lst` → `level1SpriteSheetDataList.lst`, `data/textures/level/level1_spriteSheet.png`, `data/objects/2d/mesh/level/level1.xml`). The generated list isn't loaded until the `(level_1)` group in `dataListTable.json` points at it.
 
 ## Directory Structure
 | Directory | Purpose |

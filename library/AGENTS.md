@@ -3,6 +3,10 @@
 ## Overview
 Component-based 2D/3D WebGL game engine with scene graph architecture, manager singletons, and XML-driven asset loading.
 
+## Collaboration Rules
+- **Don't edit code until the user says go.** Investigate and propose a plan first, then wait for the go-ahead.
+- Ignore `obsolete/`: retired code and projects that will never be developed.
+
 ## Performance Goal
 **Avoid triggering garbage collection (GC) during gameplay.** GC pauses cause frame drops and stuttering. All runtime code should:
 - Reuse objects via global temp variables (e.g., `gTempMatrix`, `gTempPoint`, `gTempGroupAry`)
@@ -168,6 +172,11 @@ Sound playback is managed by `soundManager` with per-type enable/disable via `se
 ## GC Optimization Caveats
 - **Do NOT reuse arrays in async/Promise contexts**: Instance variables for promise collection (e.g., `this._promiseAry`) cause race conditions when multiple loads occur concurrently. Use local variables for promise arrays.
 - **Avoid `findIndex` with closures**: Use `genFunc.indexOf()` instead of `Array.findIndex((obj) => ...)` to avoid closure creation per call.
+
+## Tools (../tools/)
+Python scripts shared by all the games. Run them from the game folder (`python3 ../tools/<script>`); each game's `.vscode/tasks.json` has a task for each.
+- `generate_spritesheet_from_lst.py <source.lst> [out.lst] [out.png] [out.xml] [width]` (task **"Generate Sprite Sheet"**): packs the PNG textures of a source object data list into one sprite sheet and writes the sheet PNG, its glyph rect XML and a generated object data list that uses them. Edit only the source `.lst` and regenerate; never hand-edit the outputs. Load the generated `.lst` in `dataListTable.json` (not the source) for the sheet to be used. Width `0` searches for the smallest sheet. Only `.png` textures are packed (objects with other textures, like a `.jpg`, are copied as is), and it fails when the list has none. Needs ImageMagick (`magick`) on PATH. A GIMP sRGB profile dropped in `tools/profiles/` overrides the system one.
+- `zip_game.py [zip_file] [--game-dir DIR] [--list-unused]` (task **"Zip Game"**, which runs "Make Production" first): zips the game folder (default: the current one) into `<Folder>.zip` with `index.html`, `bundle.js`, `favicon.ico` and only the data files the game loads. It follows every `data/...` path from `bundle.js` (which holds the imported JSON tables, `.lst`, `.loader`) through the data files (XML comments skipped; an extensionless path like a font name adds `name.*`). A file whose name is only built in JS code (other than fonts) would be missed. Bump the `bundle.js` version in `index.html` for every upload.
 
 ## External Dependencies
 - **planck-js**: Box2D physics port

@@ -32,7 +32,7 @@ webpack --mode none
 ```
 Webpack's size warnings are on only when `NODE_ENV=production` (set by hosting build servers), with the limit raised to 1 MB in `webpack.config.js` (`maxAssetSize`/`maxEntrypointSize`). The production `bundle.js` is about 600 KiB (engine + planck-js + game), over webpack's default 244 KiB web page budget, and the warnings made the server build fail. A plain local `webpack --mode production` doesn't set `NODE_ENV`, so it never showed them. Raise the limit again if the bundle grows past 1 MB.
 
-**Zip for a portal upload:** VS Code task **"Zip Game"** (runs "Make Production", then `python3 zip_game.py`) creates `Invaders.zip` with `index.html`, `bundle.js`, `favicon.ico` and only the data files the game loads: it follows every `data/...` path from `bundle.js` (which holds the imported JSON tables, `.lst`, `.loader`, `.ai`) through the data files (XML comments skipped; an extensionless path like a font name adds `name.*`). `--list-unused` lists what's left out. A file whose name is only built in JS code (other than fonts) would be missed.
+**Zip for a portal upload:** VS Code task **"Zip Game"** (runs "Make Production", then the shared `python3 ../tools/zip_game.py`; see library AGENTS.md "Tools") creates `Invaders.zip` with `index.html`, `bundle.js`, `favicon.ico` and only the data files the game loads: it follows every `data/...` path from `bundle.js` (which holds the imported JSON tables, `.lst`, `.loader`, `.ai`) through the data files (XML comments skipped; an extensionless path like a font name adds `name.*`). `--list-unused` lists what's left out. A file whose name is only built in JS code (other than fonts) would be missed.
 
 ## Directory Structure
 | Directory | Purpose |
@@ -70,7 +70,7 @@ The level object data list has a **source** file and **generated** outputs. Only
 - `dataListTable.json` loads **only** `level1SpriteSheetDataList.lst` for the `(level_1)` group at runtime, so the sprite sheet must be regenerated for source changes to take effect.
 - **Regenerate** by running the VS Code task **"Generate Sprite Sheet"** (`.vscode/tasks.json`), which runs:
   ```bash
-  python3 generate_spritesheet_from_lst.py \
+  python3 ../tools/generate_spritesheet_from_lst.py \
       data/objects/2d/objectDataList/level1DataList.lst \
       data/objects/2d/objectDataList/level1SpriteSheetDataList.lst \
       data/textures/level/level1_spriteSheet.png \
