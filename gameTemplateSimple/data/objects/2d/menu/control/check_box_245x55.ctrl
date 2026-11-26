@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<UIControl>
+
+    <spriteList>
+
+        <sprite objectName="245x55_button_frame">
+            <scriptList>
+                <script disable="Control_Hidden" forceUpdate="true"/>
+                <script inactive="Control_Hidden" forceUpdate="true"/>
+                <script active="Control_Solid_Active"/>
+                <script select="Control_Solid_Selected_visible"/>
+            </scriptList>
+        </sprite>
+    
+        <sprite objectName="28x28_button_frame">
+            <position x="-97" y="0" z="0"/>
+            <scriptList>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
+                <script active="Control_Active"/>
+                <script select="Control_Solid_Selected_visible"/>
+            </scriptList>
+        </sprite>
+
+        <sprite objectName="control_font">
+            <position x="-75" y="0" z="0"/>
+            <font fontName="dejavu_sans_reg_40">
+                <alignment horzAlign="left" vertAlign="center"/>
+            </font>
+            <scriptList>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
+                <script active="Control_Active"/>
+                <script select="Control_Selected_Dispatch_Exe_Act"/>
+            </scriptList>
+        </sprite>
+
+        <!-- This sprite is toggled so it need to be last -->
+        <sprite objectName="control_font">
+            <font fontName="dejavu_sans_reg_bold_32"/>
+            <position x="-97.5" y="2" z="0"/>
+            <scriptList>
+                <script disable="Control_Disabled" forceUpdate="true"/>
+                <script inactive="Control_Inactive" forceUpdate="true"/>
+                <script active="Control_Active"/>
+                <script select="Control_Selected_Visible"/>
+            </scriptList>
+        </sprite>
+
+    </spriteList>
+
+</UIControl>

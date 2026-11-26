@@ -1,0 +1,36 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "make",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "command": "../node_modules/.bin/webpack --mode none",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Make Development",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "command": "../node_modules/.bin/webpack --mode development",
+            "problemMatcher": []
+        },
+        {
+            "label": "Make Production",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "command": "../node_modules/.bin/webpack --mode production",
+            "problemMatcher": []
+        }
+    ]
+}

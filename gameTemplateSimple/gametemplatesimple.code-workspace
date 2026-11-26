@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../library"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "gameTemplateSimple",
+		"liveServer.settings.port": 5504
+	}
+}

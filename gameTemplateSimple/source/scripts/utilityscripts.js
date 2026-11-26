@@ -1,0 +1,400 @@
+
+//
+//  FILE NAME: utilityscripts.js
+//  DESC:      scripts for fading the screen
+//
+
+"use strict";
+
+import { highResTimer } from '../../../library/utilities/highresolutiontimer';
+import { shaderManager } from '../../../library/managers/shadermanager';
+import { scriptManager } from '../../../library/script/scriptmanager';
+import { eventManager } from '../../../library/managers/eventmanager';
+import { Color } from '../../../library/common/color';
+import * as stateDefs from '../state/statedefs';
+
+//
+//  DESC: Script for holding for time duration
+//
+export class Hold
+{
+    constructor()
+    {
+        this.time = 0;
+        this.iter = null;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( time )
+    {
+        this.time = time;
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= highResTimer.elapsedTime;
+
+            if( this.time < 0 )
+                break;
+
+            yield;
+        }
+        while( true );
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
+//
+//  DESC: Script for playing the frames of an animation
+//
+export class PlayAnim
+{
+    constructor( sprite = null )
+    {
+        this.sprite = sprite;
+        this.frameCount = 0;
+        this.time = 0;
+        this.fps = 0;
+        this.counter = 0;
+        this.loop = false;
+        this.iter = null;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( fps, loop = false, sprite = null )
+    {
+        if( sprite != null )
+            this.sprite = sprite;
+        
+        this.frameCount = this.sprite.getFrameCount();
+        this.fps = fps;
+        this.time = 1000.0 / this.fps;
+        this.loop = loop;
+        this.counter = 0;
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= highResTimer.elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.time = 1000.0 / this.fps;
+                this.counter++;
+                
+                if( this.counter < this.frameCount )
+                {
+                    this.sprite.setFrame( this.counter );
+                }
+                else
+                {
+                    if( this.loop )
+                    {
+                        this.counter = 0;
+                        this.sprite.setFrame( this.counter );
+                    }
+                    else
+                        break;
+                }
+            }
+
+            yield;
+        }
+        while(true)
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
+//
+//  DESC: Execute an action at a specific frame rate
+//
+export class FrameExecute
+{
+    constructor()
+    {
+        this.time = 0;
+        this.duration = 0;
+        this.durationTime = 0;
+        this.fps = 0;
+        this.iter = null;
+        this.callback = null;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( fps, callback, duration = 0 )
+    {
+        this.fps = fps;
+        this.time = 1000.0 / this.fps;
+        this.duration = duration;
+        if( duration > 0 )
+            this.durationTime = 1000.0 / duration;
+        this.callback = callback;
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= highResTimer.elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.time = 1000.0 / this.fps;
+                this.callback();
+            }
+
+            // Do we specify a count
+            if( this.duration > 0 )
+            {
+                this.durationTime -= highResTimer.elapsedTime;
+                if( this.durationTime < 0 )
+                    break;
+            }
+
+            yield;
+        }
+        while( true );
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
+
+//
+//  DESC: Script for fading in the menu
+//
+export class FadeTo
+{
+    constructor()
+    {
+        this.value = 0;
+        this.final = 0;
+        this.time = 0;
+        this.inc = 0;
+        this.iter = null;
+    }
+
+    // 
+    //  DESC: Init the script for use
+    //
+    init( start, final, time )
+    {
+        this.value = start;
+        this.final = final;
+        this.time = time;
+        this.inc = (final - start) / time;
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= highResTimer.elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.value = this.final;
+                break;
+            }
+
+            this.value += (this.inc * highResTimer.elapsedTime);
+                
+            yield;
+        }
+        while( true );
+    }
+
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
+//
+//  DESC: Color to the final color in time
+//
+export class ColorTo
+{
+    constructor()
+    {
+        this.value = new Color;
+        this.inc = new Color;
+        this.final = null;
+        this.time = 0;
+        this.iter = null;
+    }
+    
+    // 
+    //  DESC: Init the script for use
+    //
+    init( start, final, time )
+    {
+        this.time = time;
+        this.final = final;
+        this.value.copy( start );
+        
+        for( let i = 0; i < 4; ++i )
+            this.inc.data[i] = (this.final.data[i] - this.value.data[i]) / this.time;
+
+        this.iter = this.iteration();
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        do
+        {
+            this.time -= highResTimer.elapsedTime;
+
+            if( this.time < 0 )
+            {
+                this.value.copy( this.final );
+                break;
+            }
+
+            for( let i = 0; i < 4; ++i )
+                this.value.data[i] += this.inc.data[i] * highResTimer.elapsedTime;
+                
+            yield;
+        }
+        while( true );
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
+//
+//  DESC: Script for fading the screen
+//
+class ScreenFade
+{
+    constructor( current, final, time, fadeType )
+    {
+        this.floatAry = new Float32Array([0, 0, 0, 1]);
+        this.fadeTo = new FadeTo();
+
+        // Continues the init
+        this.recycle( current, final, time, fadeType );
+    }
+
+    // 
+    //  DESC: Recycle the script
+    //
+    recycle( current, final, time, fadeType )
+    {
+        this.iter = this.iteration();
+        this.fadeTo.init( current, final, time );
+        this.fadeType = fadeType;
+    }
+
+    // 
+    //  DESC: Iterate the logic
+    //
+    * iteration()
+    {
+        if( this.fadeTo.inc > 0 )
+            eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_START, this.fadeType );
+        else
+            eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_START, this.fadeType );
+
+        do
+        {
+            this._result = this.fadeTo.execute();
+            
+            this.floatAry[0] = this.fadeTo.value;
+            this.floatAry[1] = this.fadeTo.value;
+            this.floatAry[2] = this.fadeTo.value;
+
+            if( this._result )
+            {
+                shaderManager.setAllShaderValue4fv( 'additive', this.floatAry );
+
+                if( this.fadeTo.inc > 0 )
+                    eventManager.dispatchEvent( stateDefs.ESE_FADE_IN_COMPLETE, this.fadeType );
+                else
+                    eventManager.dispatchEvent( stateDefs.ESE_FADE_OUT_COMPLETE, this.fadeType );
+
+                break;
+            }
+
+            shaderManager.setAllShaderValue4fv( 'additive', this.floatAry );
+
+            yield;
+        }
+        while( true );
+    }
+    
+    // 
+    //  DESC: Execute the iteration
+    //
+    execute()
+    {
+        return this.iter.next().done;
+    }
+}
+
+// 
+//  DESC: Load scripts
+//
+export function loadScripts()
+{
+    scriptManager.set( 'ScreenFade',
+        ( current, final, time, fadeType = null ) => { return new ScreenFade( current, final, time, fadeType ); } );
+}

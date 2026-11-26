@@ -1,0 +1,17 @@
+{
+    "(startup)": [
+        "data/objects/2d/objectDataList/startupDataList.lst"],
+
+    "(menu)": [
+        "data/objects/2d/objectDataList/menuBackgrounds.lst",
+        "data/objects/2d/objectDataList/menuButtonFrames.lst",
+        "data/objects/2d/objectDataList/menuMisc.lst"],
+
+    "(menu_mobile)": [
+        "data/objects/2d/objectDataList/menuBackgrounds.lst",
+        "data/objects/2d/objectDataList/menuButtonFrames.lst",
+        "data/objects/2d/objectDataList/menuMisc.lst"],
+
+    "(run)": [
+        "data/objects/2d/objectDataList/runDataList.lst"]
+}

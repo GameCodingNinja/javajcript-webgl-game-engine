@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<objectDataList2D>
+
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+    <default  name="">
+        <visual>
+            <mesh genType="quad"/>
+            <shader id="shader_2d"/>
+        </visual>
+    </default>
+    <!-- DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT DEFAULT -->
+  
+    <objectList>
+
+        <object name="runstate_background">
+            <visual>
+                <texture file="data/textures/run/runstate_background.jpg"/>
+            </visual>
+        </object>
+
+    </objectList>
+
+</objectDataList2D>

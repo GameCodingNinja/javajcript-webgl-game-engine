@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<loader>
+
+    <strategy name="_run_" defaultGroup="(run)">
+        <node name="runstate_background"/>
+    </strategy>
+  
+</loader>
