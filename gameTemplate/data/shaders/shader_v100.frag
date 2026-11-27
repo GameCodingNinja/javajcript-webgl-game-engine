@@ -5,7 +5,7 @@
 #version 100
 
 // Needs to be the same name as in the vertex shader
-varying lowp vec2 uv0;
+varying mediump vec2 uv0;
 
 uniform sampler2D text0;
 uniform lowp vec4 color;
