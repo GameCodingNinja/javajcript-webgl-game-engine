@@ -117,6 +117,12 @@ export class Sprite extends Object
         this.scale.setXYZ( 1, 1, 1 );
         this.matrix.initilizeMatrix();
 
+        // Back to the default frame. A recycled sprite still shows the frame it ended on
+        if( this.objData.visualData.genType === defs.EGT_SPRITE_SHEET )
+            this.setFrame( this.objData.visualData.spriteSheet.defaultIndex );
+        else
+            this.setFrame( 0 );
+
         if( this.collisionComponent && this.objData.collisionData.isActive() )
             this.collisionComponent.enable = true;
 

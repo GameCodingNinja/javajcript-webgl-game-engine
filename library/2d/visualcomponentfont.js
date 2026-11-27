@@ -40,6 +40,9 @@ export class VisualComponentFont extends VisualComponentQuad
             
             // Allocate the storage for the font if this is a font sprite
             this.fontData = new FontData;
+
+            // The font string in the VBO. fontData.fontString can change without a rebuild
+            this.builtFontString = null;
         }
     }
     
@@ -127,7 +130,12 @@ export class VisualComponentFont extends VisualComponentQuad
     loadFontPropFromNode( node )
     {
         if( this.fontData )
+        {
             this.fontData.loadFromNode( node );
+
+            // Rebuild on the next createFontString() with the loaded properties
+            this.builtFontString = null;
+        }
     }
     
     //
@@ -156,6 +164,9 @@ export class VisualComponentFont extends VisualComponentQuad
             
             if( lineWrapHeight != null )
                 this.fontData.fontProp.lineWrapHeight = lineWrapHeight;
+
+            // Rebuild on the next createFontString() with the new properties
+            this.builtFontString = null;
         }
     }
     
@@ -177,7 +188,7 @@ export class VisualComponentFont extends VisualComponentQuad
         if( (this.fontData !== null) &&
             (fontString !== '') &&
             (this.fontData.fontProp.fontName !== null) &&
-            ((fontString !== this.fontData.fontString) || (this.vbo === null)) )
+            ((fontString !== this.builtFontString) || (this.vbo === null)) )
         {
             this.fontData.fontStrSize.clear();
             this._lastCharDif = 0;
@@ -408,6 +419,7 @@ export class VisualComponentFont extends VisualComponentQuad
             device.gl.bindBuffer( device.gl.ARRAY_BUFFER, this.vbo );
             device.gl.bufferData( device.gl.ARRAY_BUFFER, gVertAry.subarray(0, this._vertAryIndex), device.gl.STATIC_DRAW );
             device.gl.bindBuffer( device.gl.ARRAY_BUFFER, null );
+            this.builtFontString = fontString;
 
             // All fonts share the same IBO because it's always the same and the only difference is it's length
             // This updates the current IBO if it exceeds the current max
