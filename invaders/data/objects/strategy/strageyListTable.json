@@ -2,9 +2,6 @@
     "_startup_": [
         "data/objects/strategy/state/startup.strategy"],
     
-    "_loading-screen_": [
-        "data/objects/strategy/state/loadscreen.strategy"],
-    
     "_background_": [
         "data/objects/strategy/level1/background.strategy"],
     

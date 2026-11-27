@@ -46,7 +46,7 @@ Webpack's size warnings are on only when `NODE_ENV=production` (set by hosting b
 | data/shaders/ | WebGL shaders |
 | data/sound/ | Audio files |
 | data/textures/ | Image assets |
-| development/ | Raw source artwork - **can be ignored** |
+| development/ | Archive of raw source art and audio used during development - **can be ignored, never delete from it** |
 
 ### Data Folder Details
 The `data/` folder contains all active game assets loaded and used at runtime:
@@ -58,6 +58,13 @@ The `data/` folder contains all active game assets loaded and used at runtime:
 - Sound files
 - Textures
 - JSON/XML descriptor files that define what data to load
+
+**Keep `data/` to the files the game uses.** Unused assets were cleaned out (old fonts, v120/v140 shaders, unused `.ctrl` templates, music not in `music.lst`, old firetail frames, the old loading screen strategy, loader and data list). Delete an asset when it stops being used. Unused-asset cleanups cover `data/` only: `development/` is an archive of what was used at some point in the game's development, so never delete anything from it. Since the source art for the "Generate Sprite Sheet" task is never loaded, `python3 ../tools/zip_game.py --list-unused` lists it along with the truly unused files:
+- `level1DataList.lst` and every texture it points to (`${NUM}` with `count` covers frames `0` to `count - 1`) are that source art. Keep them: they're needed to regenerate `level1_spriteSheet.png`. The game loads the generated `level1SpriteSheetDataList.lst`.
+- Fonts are loaded by name from `fontList.json`, so a font file is used only if `fontList.json` lists it. Make new sizes with `generate_bitmap_font.py`.
+- `shader.json` uses only the v100 shaders.
+
+This applies to Invaders only. The template games (`gameTemplate`, `gameTemplateSimple`) keep their unused assets on purpose, because the next game made from them might need them.
 
 ### Sprite Sheet Generation (IMPORTANT)
 The level object data list has a **source** file and **generated** outputs. Only edit the source.

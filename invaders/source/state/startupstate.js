@@ -27,7 +27,6 @@ import { GenericEvent } from '../../../library/common/genericevent';
 import * as genFunc from '../../../library/utilities/genfunc';
 import * as level1State from './level1state';
 import * as utilScripts from '../scripts/utilityscripts';
-import * as stateScripts from '../scripts/statescripts';
 import * as menuScripts from '../scripts/menuscripts';
 import * as menuDefs from '../../../library/gui/menudefs';
 import * as levelScripts from '../scripts/levelscripts';
@@ -97,7 +96,6 @@ export class StartUpState extends GameState
 
         // Load the scripts into the scriptmanager
         utilScripts.loadScripts();
-        stateScripts.loadScripts();
         menuScripts.loadScripts();
         levelScripts.loadScripts();
         playershipscripts.loadScripts();
