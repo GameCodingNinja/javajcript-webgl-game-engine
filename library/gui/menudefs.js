@@ -10,21 +10,14 @@ export const EMT_NON_BLOCKING = 0,
              EMT_BLOCKING     = 1;
 
 // EMenuState
-export const EMS_INACTIVE        = 0,
-             EMS_IDLE            = 1,
-             EMS_ACTIVE          = 2,
-             EMS_MAX_MENU_STATES = 3;
-
-// EMenuNavigationState
-export const EMNS_NULL             = 0,
-             EMNS_MOUSE            = 1,
-             EMNS_GAMEPAD_KEYBAORD = 2;
+export const EMS_INACTIVE = 0,
+             EMS_IDLE     = 1,
+             EMS_ACTIVE   = 2;
 
 // EMenuTreeState
-export const EMTS_INACTIVE             = 0,
-             EMTS_IDLE                 = 1,
-             EMTS_ACTIVE               = 2,
-             EMTS_MAX_MENU_TREE_STATES = 3;
+export const EMTS_INACTIVE = 0,
+             EMTS_IDLE     = 1,
+             EMTS_ACTIVE   = 2;
 
 // EMenuEvent
 export const EME_MENU_TRANS_IN             = 100,

@@ -97,6 +97,13 @@ export class Level1State extends CommonState
                     platform.gameplayStart();
                 }
             }
+            // The window lost the focus: pause the game. Not when leaving the state
+            // (the menu manager ignores events once the state change begins).
+            else if( event.type === menuDefs.EME_USER_FOCUS_LOST )
+            {
+                if( !menuManager.active && menuManager.allowEventHandling )
+                    menuManager.getTree( 'pause_tree' ).transitionMenu();
+            }
         }
     }
     

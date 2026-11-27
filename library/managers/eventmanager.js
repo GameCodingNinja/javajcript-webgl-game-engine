@@ -32,6 +32,9 @@ class EventManager
         this.queue = [];
         this.touchPool = null;
         this.touchEventQueue = null;
+
+        // The fullscreen toggle is checked on every key up (onKeyUp), so its key can't be shared with any other action
+        actionManager.exclusiveActionSet.add( 'fullscreen_toggle' );
         
         // Init with the most common events
 

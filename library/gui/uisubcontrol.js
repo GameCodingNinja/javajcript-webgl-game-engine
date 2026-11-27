@@ -253,33 +253,41 @@ export class UISubControl extends UIControl
     // 
     //  DESC: Handle OnUpAction message
     //
-    onUpAction( /*event*/ )
+    onUpAction( event )
     {
-        this.navigateMenu( defs.ENAV_NODE_UP );
+        // Move once per key press, not again on the release
+        if( event.arg[0] === defs.EAP_DOWN )
+            this.navigateMenu( defs.ENAV_NODE_UP );
     }
 
     // 
     //  DESC: Handle OnMenuDown message
     //
-    onDownAction( /*event*/ )
+    onDownAction( event )
     {
-        this.navigateMenu( defs.ENAV_NODE_DOWN );
+        // Move once per key press, not again on the release
+        if( event.arg[0] === defs.EAP_DOWN )
+            this.navigateMenu( defs.ENAV_NODE_DOWN );
     }
 
     // 
     //  DESC: Handle OnMenuLeft message
     //
-    onLeftAction( /*event*/ )
+    onLeftAction( event )
     {
-        this.navigateMenu( defs.ENAV_NODE_LEFT );
+        // Move once per key press, not again on the release
+        if( event.arg[0] === defs.EAP_DOWN )
+            this.navigateMenu( defs.ENAV_NODE_LEFT );
     }
 
     // 
     //  DESC: Handle OnRightAction message
     //
-    onRightAction( /*event*/ )
+    onRightAction( event )
     {
-        this.navigateMenu( defs.ENAV_NODE_RIGHT );
+        // Move once per key press, not again on the release
+        if( event.arg[0] === defs.EAP_DOWN )
+            this.navigateMenu( defs.ENAV_NODE_RIGHT );
     }
 
     // 
@@ -334,15 +342,17 @@ export class UISubControl extends UIControl
     //  DESC: Navigate the menu. Find the next control node that isn't
     //        disabled and make it the active control node
     //
-    navigateMenu( /*navNode*/ )
+    navigateMenu( navNodeAction )
     {
         if( this.activeNode !== null )
         {
             this._navNode = this.activeNode;
 
-            do
+            // Visit at most as many nodes as this control has. When every control in a
+            // navigation loop is disabled, the loop would otherwise never end.
+            for( let i = 0; i < this.controlNodeAry.length; ++i )
             {
-                this._navNode = this._navNode.getNode( this._navNode );
+                this._navNode = this._navNode.getNode( navNodeAction );
                 
                 if( this._navNode === null )
                 {
@@ -360,7 +370,6 @@ export class UISubControl extends UIControl
                     break;
                 }
             }
-            while( this._navNode );
         }
     }
 

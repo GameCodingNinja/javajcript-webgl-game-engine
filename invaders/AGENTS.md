@@ -187,6 +187,11 @@ There is a separate mobile fork of the menu, selected at runtime via `isMobile()
 - `data/objects/2d/menu/menuListTable.json`: `(menu_mobile)` → `main_menu_mobile.cfg` (the mobile-specific menu config).
 - `data/objects/2d/objectDataList/dataListTable.json`: `(menu_mobile)` reuses the same `.lst` files as `(menu)` (backgrounds, button frames, misc) — only the menu `.cfg`/XML differs, not the texture/object data.
 - When changing menus, update **both** the desktop and `_mobile` variants (and their entries in the list tables) to keep them in sync.
+- The mobile config loads only the menus the game uses (no title screen or key bindings menu). The library checks at load that every enabled `to_menu` button goes to a loaded menu, so a button to a desktop-only menu must be `defaultState="disabled"` in the mobile menus.
+
+### Menu Keys
+- Menu Toggle defaults to `CTRL LEFT` (mapping `version` 2), not Left Shift like the templates, because Left Shift is boost. The gamepad uses Start and mobile the pause swipe (`TOUCH PAUSE`).
+- A menu's up/down key repeat comes only from its own `<scroll>` node. The two game over menus declare `<scroll startDelay="900" scrollDelay="300" up="true" down="true"/>` like the pause and settings menus (`key_bindings.menu` and `confirmation.menu` have none); keep a `<scroll>` on any new menu that needs repeat.
 
 ### Deadzone Slider (shared, platform-aware)
 A single `dead_zone_slider` control (in both `settings.menu` and `settings_mobile.menu`) drives two different settings depending on platform, via the shared `DeadZoneSlider_InitStatus`/`DeadZoneSlider_execute` scripts (`source/scripts/settingsmenuscripts.js`) which branch on `isMobile()`:

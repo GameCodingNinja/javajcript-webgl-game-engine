@@ -23,7 +23,6 @@ import { highResTimer } from '../../../library/utilities/highresolutiontimer';
 import { scriptSingleton } from '../../../library/script/scriptcomponent';
 import { assetHolder } from '../../../library/utilities/assetholder';
 import { GenericEvent } from '../../../library/common/genericevent';
-import { settings } from '../../../library/utilities/settings';
 import { platform } from '../../../library/system/platform';
 import { isMobile } from '../../../library/system/device';
 import * as genFunc from '../../../library/utilities/genfunc';
@@ -140,20 +139,10 @@ export class StartUpState extends GameState
         // YouTube Playables hooks (skipped entirely when not in its environment)
         if( platform.isYouTubePlayables() )
         {
+            // Suspend/resume all audio (also keeps it suspended when the window regains focus)
             platform.onAudioEnabledChange((isAudioEnabled) =>
             {
-                if(menuManager.initialized)
-                {
-                    // Allow audio.
-                    if (isAudioEnabled)
-                    {
-                        settings.user.soundEnabled = 1;
-                    }
-                    else // Disable audio.
-                    {
-                        settings.user.soundEnabled = 0;
-                    }
-                }
+                soundManager.setPlatformMuted( !isAudioEnabled );
             });
 
             // Send first frame ready now that we've started to draw.

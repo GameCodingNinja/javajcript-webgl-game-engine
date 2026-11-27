@@ -35,9 +35,6 @@ export class UIScrollBox extends UISubControl
         // Initial scroll box control offset
         this.initialOffset = new Point;
 
-        // Height to cull
-        this.cullHeight = 0;
-
         // height of control
         this.controlHeight = 0;
 
@@ -100,6 +97,10 @@ export class UIScrollBox extends UISubControl
     {
         super.loadFromNode( node );
 
+        // The first sub control is the scroll slider
+        if( (this.subControlAry.length === 0) || (this.subControlAry[0].type !== uiControlDefs.ECT_SLIDER) )
+            throw new Error( `Scroll box needs a slider as the first control of its <subControlList>! (${this.name})` );
+
         // Init the slider
         this.subControlAry[0].maxValue = this.maxMoveAmount;
         this.subControlAry[0].setSlider();
@@ -138,6 +139,9 @@ export class UIScrollBox extends UISubControl
 
             // Get the scroll boc info node
             let controlInfoNode = menuControlsNode[0].getElementsByTagName( "controlInfo" );
+            if( controlInfoNode.length === 0 )
+                throw new Error( `Scroll box needs a <controlInfo> node! (${this.name})` );
+
             this.controlHeight = Number( controlInfoNode[0].getAttribute( "height" ) );
             this.visibleCount = Number( controlInfoNode[0].getAttribute( "visibleInScrollBox" ) );
 
@@ -157,11 +161,12 @@ export class UIScrollBox extends UISubControl
 
             this.stencilMaskSprite = new Sprite( objectDataManager.getData( this.group, objectName ) );
 
-            // Get the cull height
-            this.cullHeight = (this.stencilMaskSprite.objData.size.w + this.controlHeight) / 2;
-
             // Load the transform data
             this.stencilMaskSprite.load( stencilMaskNode[0] );
+        }
+        else
+        {
+            throw new Error( `Scroll box needs a <stencilMask> node! (${this.name})` );
         }
     }
 
@@ -296,13 +301,16 @@ export class UIScrollBox extends UISubControl
     //
     onMouseMove( event )
     {
-        this._result = super.onMouseMove( event );
-
-        // Invalidate the active control
+        // Invalidate the active control. onSubControlMouseMove sets the one under the mouse.
         this.activeScrollCtrl = defs.NO_ACTIVE_CONTROL;
+
+        this._result = super.onMouseMove( event );
 
         if( this.subControlAry[0].isMouseDown() )
         {
+            // Don't leave an active control that scrolls out of view
+            this.deactivateScrollControls();
+
             // Get the current scroll position
             this.scrollCurPos = this.subControlAry[0].curValue;
 
@@ -329,6 +337,12 @@ export class UIScrollBox extends UISubControl
 
         else if( this._scrollCurPos > this.maxMoveAmount )
             this._scrollCurPos = this.maxMoveAmount;
+
+        if( this._scrollCurPos === this.scrollCurPos )
+            return;
+
+        // Don't leave an active control that scrolls out of view
+        this.deactivateScrollControls();
         
         // Set the current scroll position
         this.scrollCurPos = this._scrollCurPos;
@@ -450,8 +464,16 @@ export class UIScrollBox extends UISubControl
     {
         this._result = super.handleSelectAction( event );
 
-        // Let the scroll controls handle any selection
-        for( let i = 0; i < this.scrollControlAry.length && !this._result; ++i )
+        // Only a click within the scroll box can select a scroll control. Parts of the
+        // first and last visible controls are hidden by the stencil mask.
+        if( !this._result && (event.arg[defs.ESMA_DEVICE_TYPE] === defs.MOUSE) &&
+            !this.isPointInControl( event.arg[defs.ESMA_MOUSE_X], event.arg[defs.ESMA_MOUSE_Y] ) )
+        {
+            return false;
+        }
+
+        // Let the visible scroll controls handle any selection
+        for( let i = this.visStartPos; i < this.visEndPos && !this._result; ++i )
         {
             this._result = this.scrollControlAry[i].handleSelectAction( event );
             if( this._result )
@@ -627,7 +649,7 @@ export class UIScrollBox extends UISubControl
         }
         else if( this.activeScrollCtrl >= this.scrollControlAry.length - 1 )
         {
-            this.activeScrollCtrl = this.scrollControlAry.size() -1;
+            this.activeScrollCtrl = this.scrollControlAry.length - 1;
             scrollVector = -1;
         }
 
@@ -843,21 +865,30 @@ export class UIScrollBox extends UISubControl
     //
     onSubControlMouseMove( event )
     {
-        this._result = super.onSubControlMouseMove( event );
+        // A local so the result of the caller, UISubControl.onMouseMove(), isn't overwritten
+        let result = super.onSubControlMouseMove( event );
 
         // We only care about the scroll controls if the point is within the scroll box
-        if( !this._result && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
+        if( !result && this.isPointInControl( event.gameAdjustedMouseX, event.gameAdjustedMouseY ) )
         {
-            for( let i = this.visStartPos; i < this.visEndPos && !this._result; ++i )
+            // Keep the focus on the scroll slider while it's dragged
+            if( this.subControlAry[0].isMouseDown() )
             {
-                this._result = this.scrollControlAry[i].onMouseMove( event );
+                result = true;
+            }
+            else
+            {
+                for( let i = this.visStartPos; i < this.visEndPos && !result; ++i )
+                {
+                    result = this.scrollControlAry[i].onMouseMove( event );
 
-                if( this._result )
-                    this.activeScrollCtrl = i;
+                    if( result )
+                        this.activeScrollCtrl = i;
+                }
             }
         }
 
-        return this._result;
+        return result;
     }
 
     // 
@@ -869,6 +900,18 @@ export class UIScrollBox extends UISubControl
 
         for( let i = this.visStartPos; i < this.visEndPos; ++i )
             this.scrollControlAry[i].deactivateControl();
+    }
+
+    // 
+    //  DESC: Deactivate the visible scroll controls before scrolling with the mouse.
+    //        Controls out of view aren't updated, so one left active could still be selected.
+    //
+    deactivateScrollControls()
+    {
+        for( let i = this.visStartPos; i < this.visEndPos; ++i )
+            this.scrollControlAry[i].deactivateControl();
+
+        this.activeScrollCtrl = defs.NO_ACTIVE_CONTROL;
     }
 
     // 
@@ -950,7 +993,7 @@ export class UIScrollBox extends UISubControl
 
         if( this._result === null )
         {
-            for( let i = 0; i < this.scrollControlAry.length; ++i )
+            for( let i = this.visStartPos; i < this.visEndPos; ++i )
             {
                 if( this.scrollControlAry[i].state > uiControlDefs.ECS_INACTIVE )
                 {

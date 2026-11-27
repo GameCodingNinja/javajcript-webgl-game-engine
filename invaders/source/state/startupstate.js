@@ -86,7 +86,7 @@ export class StartUpState extends GameState
         // Register game-specific touch key codes for mobile before loading action mappings
         if( isMobile() )
         {
-            STARTUP_ASSET_COUNT = 142;
+            STARTUP_ASSET_COUNT = 141;
             actionManager.registerTouchKeyCode( 'TOUCH FIRE',  gameDefs.TOUCH_FIRE );
             actionManager.registerTouchKeyCode( 'TOUCH PAUSE', gameDefs.TOUCH_PAUSE );
             actionManager.registerTouchKeyCode( 'TOUCH BOOST', gameDefs.TOUCH_BOOST );

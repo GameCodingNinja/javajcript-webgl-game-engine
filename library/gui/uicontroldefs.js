@@ -19,9 +19,7 @@ export const ECT_NULL          = 0,
              ECT_SCROLL_BOX    = 6,
              ECT_SUB_CONTROL   = 7,
              ECT_METER         = 8,
-             ECT_TAB_CONTROL   = 9,
-             ECT_PROGRESS_BAR  = 10,
-             ECT_AMOUNT_BUTTON = 11;
+             ECT_PROGRESS_BAR  = 10;
 
 // EControlState
 export const ECS_NULL      = 0,
@@ -38,14 +36,11 @@ export const ECS_NULL      = 0,
 // EControlActionType
 export const ECAT_IDLE              = -1,
              ECAT_NULL              = 0,
-             ECAT_ACTION            = 1,
              ECAT_TO_TREE           = 2,
              ECAT_TO_MENU           = 3,
              ECAT_BACK              = 4,
              ECAT_CLOSE             = 5,
-             ECAT_CHANGE_FOCUS      = 6,
              ECAT_GAME_STATE_CHANGE = 7,
-             ECAT_QUIT_GAME         = 8,
              ECAT_ACTION_EVENT      = 9,
              ECAT_SCRIPT_EXECUTE    = 10;
 

@@ -169,6 +169,9 @@ class MenuManager extends ManagerBase
             // Get the menu file path
             let filePath = menuNode[i].getAttribute( 'file' );
 
+            if( !name || !filePath )
+                throw new Error( `Menu needs a name and a file! (group: ${group}, name: ${name}, file: ${filePath}).` );
+
             // Check for duplicates
             if( groupMap.get( name ) !== undefined )
                 throw new Error( `Duplicate menu name! (${name}).` );
@@ -225,11 +228,14 @@ class MenuManager extends ManagerBase
             // Get the name
             let name = treeNode[i].getAttribute( 'name' );
 
-            // Get the root menu
-            let rootMenu = treeNode[i].getAttribute( 'root' );
+            if( !name )
+                throw new Error( `Menu tree needs a name! (${group})` );
+
+            // Get the root menu. A missing attribute is the same as an empty one.
+            let rootMenu = treeNode[i].getAttribute( 'root' ) || '';
 
             // Get the default menu
-            let defaultMenu = treeNode[i].getAttribute( 'default' );
+            let defaultMenu = treeNode[i].getAttribute( 'default' ) || '';
 
             // Is this menu an interface menu?
             let interfaceMenu = (treeNode[i].getAttribute( 'interfaceMenu' ) === 'true');
@@ -241,17 +247,12 @@ class MenuManager extends ManagerBase
             // Add the tree data to the map
             treeGroupMap.set( name, new MenuTree( name, menuGroupMap, rootMenu, defaultMenu, interfaceMenu ) );
 
-            // Check that the root menu exists
-            if( rootMenu !== '' )
-            {
-                if( menuGroupMap.get( rootMenu ) === undefined )
-                    throw new Error( `Root menu doesn't exist! (${name}).` );
-            }
-            else if( defaultMenu !== '' )
-            {
-                if( menuGroupMap.get( defaultMenu ) === undefined )
-                    throw new Error( `Default menu doesn't exist! (${name}).` );
-            }
+            // Check that the root and default menus exist
+            if( rootMenu && (menuGroupMap.get( rootMenu ) === undefined) )
+                throw new Error( `Root menu doesn't exist! (tree: ${name}, menu: ${rootMenu}).` );
+
+            if( defaultMenu && (menuGroupMap.get( defaultMenu ) === undefined) )
+                throw new Error( `Default menu doesn't exist! (tree: ${name}, menu: ${defaultMenu}).` );
         }
     }
     
@@ -392,7 +393,12 @@ class MenuManager extends ManagerBase
         if( this._groupMap !== undefined )
         {
             for( this._menu of this._groupMap.values() )
+            {
                 this._menu.init();
+
+                // Find a button to a menu this group doesn't load now, not when it's pressed
+                this._menu.checkToMenuActions( this._groupMap );
+            }
         }
         else
         {
@@ -419,15 +425,6 @@ class MenuManager extends ManagerBase
     }
     
     // 
-    //  DESC: Load the menu action list from XML
-    //
-    loadMenuAction( filePath )
-    {
-        return genFunc.downloadFile( 'xml', filePath,
-            ( xmlNode ) => this.loadMenuActionFromNode( xmlNode ));
-    }
-
-    // 
     //  DESC: Load the menu action list from JSON
     //
     loadMenuActionFromObj( obj )
@@ -443,6 +440,11 @@ class MenuManager extends ManagerBase
         this.tabLeft = obj.tabLeft;
         this.tabRight = obj.tabRight;
         this.defaultTree = obj.defaultTree;
+
+        // The toggle and escape actions are checked even when no menu is active,
+        // so their keys can't be shared with any other action
+        actionManager.exclusiveActionSet.add( this.toggleAction );
+        actionManager.exclusiveActionSet.add( this.escapeAction );
     }
     
     // 
@@ -594,8 +596,7 @@ class MenuManager extends ManagerBase
     {
         this.active = false;
         
-        if( this.scrollTimerId !== 0 )
-            clearInterval( this.scrollTimerId );
+        this.stopScrollTimer();
 
         this.activeMenuTreeAry.length = 0;
         this.activeInterTreeAry.length = 0;
@@ -615,13 +616,15 @@ class MenuManager extends ManagerBase
                 if( (event.type >= menuDefs.EME_MENU_UP_ACTION) && (event.type <= menuDefs.EME_MENU_RIGHT_ACTION) )
                 {
                     // Free a timer if one happens to be running
-                    if( this.scrollTimerId != 0 )
-                        clearTimeout( this.scrollTimerId );
-                    
-                    this.scrollTimerId = 0;
+                    this.stopScrollTimer();
 
                     if( event.arg[0] === defs.EAP_DOWN )
                         this.handleEventForScrolling( event );
+                }
+                // The key release that stops the scrolling won't come when the focus is lost
+                else if( event.type === menuDefs.EME_USER_FOCUS_LOST )
+                {
+                    this.stopScrollTimer();
                 }
                 
                 this.handleEventForTrees( event );
@@ -632,28 +635,18 @@ class MenuManager extends ManagerBase
             else
             {
                 // Only the default tree can execute an escape or toggle when none are active.
-                if( actionManager.wasActionPress( event, this.escapeAction, defs.EAP_DOWN ) )
+                this._escape = actionManager.wasActionPress( event, this.escapeAction, defs.EAP_DOWN );
+
+                if( this._escape || actionManager.wasActionPress( event, this.toggleAction, defs.EAP_DOWN ) )
                 {
                     this._tree = this.getActiveTree();
 
-                    if( this._tree === null )
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_ESCAPE_ACTION, this.defaultTree );
-                    else
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_ESCAPE_ACTION, this._tree.name );
-                }
-                else if( actionManager.wasActionPress( event, this.toggleAction, defs.EAP_DOWN ) )
-                {
-                    this._tree = this.getActiveTree();
-
-                    if( this._tree === null )
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_TOGGLE_ACTION, this.defaultTree );
-                    else
-                        eventManager.dispatchEvent( menuDefs.EME_MENU_TOGGLE_ACTION, this._tree.name );
+                    eventManager.dispatchEvent(
+                        this._escape ? menuDefs.EME_MENU_ESCAPE_ACTION : menuDefs.EME_MENU_TOGGLE_ACTION,
+                        (this._tree === null) ? this.defaultTree : this._tree.name );
                 }
                 else if( this.active )
                 {
-                    this._pressType;
-
                     // common and can result in many messages which is why it's specifically defined here
                     if( event.type === 'mousemove' || event.type === 'wheel' )
                     {
@@ -790,6 +783,19 @@ class MenuManager extends ManagerBase
         }
 
         return this._menuActive;
+    }
+    
+    // 
+    //  DESC: Stop the scroll timer if one is running
+    //
+    stopScrollTimer()
+    {
+        if( this.scrollTimerId !== 0 )
+        {
+            // clearTimeout also clears an interval
+            clearTimeout( this.scrollTimerId );
+            this.scrollTimerId = 0;
+        }
     }
     
     // 
@@ -975,6 +981,10 @@ class MenuManager extends ManagerBase
                 }
             }
         }
+
+        // The key release that stops the scrolling isn't handled when the menus aren't active
+        if( !this.active )
+            this.stopScrollTimer();
     }
     
     // 

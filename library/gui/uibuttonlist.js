@@ -43,6 +43,9 @@ export class UIButtonList extends UISubControl
 
         // See what the control will respond to
         let actionResponseNode = node.getElementsByTagName( 'actionResponse' );
+        if( actionResponseNode.length === 0 )
+            throw new Error( `Button list needs an <actionResponse> node! (${this.name})` );
+
         let attr = actionResponseNode[0].getAttribute('up');
         if( attr && (attr === 'true') )
         {

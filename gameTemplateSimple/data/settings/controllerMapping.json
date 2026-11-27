@@ -1,5 +1,5 @@
 ﻿{
-    "version": 1,
+    "version": 2,
     "keyboardMapping": {
         "playerHidden": [
                 { "action": "menu_escape", "componetId": "ESCAPE" },
@@ -19,7 +19,7 @@
         "playerVisible": [
                 { "action": "menu_select", "componetId": "ENTER", "configurable": "false" },
                 { "action": "menu_escape", "componetId": "M", "defaultId": "M", "configurable": "true" },
-                { "action": "menu_toggle", "componetId": "LEFT SHIFT", "defaultId": "LEFT SHIFT", "configurable": "true" },
+                { "action": "menu_toggle", "componetId": "SHIFT LEFT", "defaultId": "SHIFT LEFT", "configurable": "true" },
                 { "action": "fullscreen_toggle", "componetId": "F", "defaultId": "F", "configurable": "true" },
                 { "action": "up", "componetId": "W", "defaultId": "W", "configurable": "true" },
                 { "action": "down", "componetId": "S", "defaultId": "S", "configurable": "true" },

@@ -45,6 +45,10 @@ class ActionManager
         
         // Flag to allow action handling
         this.allowAction = true;
+
+        // Actions checked on every input, even during gameplay (ex: menu toggle).
+        // A key bound to one of these can't be shared with any other action on the same device.
+        this.exclusiveActionSet = new Set;
         
         // Last device used
         this.lastDeviceUsed = defs.DEVICE_NULL;
@@ -573,6 +577,10 @@ class ActionManager
                 else
                     newKeyCode = UNBOUND_KEYCODE_ID;
 
+                // Refuse a key that an exclusive action would share
+                if( (newKeyCode !== UNBOUND_KEYCODE_ID) && this.isKeyCodeConflict( actionMap, actionNameStr, newKeyCode ) )
+                    return ['', false];
+
                 let oldKeyCode = keyCodeMap.get(oldComponetIdStr);
                 if( oldKeyCode != undefined )
                 {
@@ -595,6 +603,22 @@ class ActionManager
         }
 
         return ['', false];
+    }
+
+    // 
+    //  DESC: Is the key code bound to another action when either action is exclusive
+    //
+    isKeyCodeConflict( actionMap, actionNameStr, keyCode )
+    {
+        let exclusive = this.exclusiveActionSet.has( actionNameStr );
+
+        for( const [name, action] of actionMap )
+        {
+            if( (name !== actionNameStr) && (exclusive || this.exclusiveActionSet.has( name )) && action.wasAction( keyCode ) )
+                return true;
+        }
+
+        return false;
     }
 
     // 

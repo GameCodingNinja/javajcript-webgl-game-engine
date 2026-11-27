@@ -57,6 +57,10 @@ export class UISlider extends UISubControl
 
         // The current press type
         this.pressType = defs.EAP_IDLE;
+
+        // Last mouse position of a drag, in the same units as the mouse events
+        this.dragMouseX = 0;
+        this.dragMouseY = 0;
     }
     
     // 
@@ -107,6 +111,10 @@ export class UISlider extends UISubControl
     {
         // Have the parent load it's stuff
         super.loadControlFromNode( node );
+
+        // The first sub control is the slider button
+        if( this.subControlAry.length === 0 )
+            throw new Error( `Slider needs a slider button in its <subControlList>! (${this.name})` );
 
         // Get the position of the slider button as the default position
         this.defaultPos.copy( this.subControlAry[0].pos );
@@ -249,11 +257,16 @@ export class UISlider extends UISubControl
             globalMatrix.mergeMatrix( menuManager.camera.matrix.matrix );
             globalMatrix.scaleFromValue( settings.orthoAspectRatio.h );
 
+            // Move by the change in the mouse position, like the click does. The movement values
+            // of the event aren't used: their units differ between browsers and the touch bridge.
             // (1.0 / this.matrix.matrix[]) handles the scaling of the control
             if( this.orientation === defs.EO_HORIZONTAL )
-                this.incSliderMovePos( event.gameAdjustedMovementX * (1 / event.gameAdjustedPixelRatio) * (1.0 / globalMatrix.matrix[0]) );
+                this.incSliderMovePos( (event.gameAdjustedMouseX - this.dragMouseX) * (1.0 / globalMatrix.matrix[0]) );
             else
-                this.incSliderMovePos( event.gameAdjustedMovementY * (1 / event.gameAdjustedPixelRatio) * (1.0 / globalMatrix.matrix[5]) );
+                this.incSliderMovePos( (event.gameAdjustedMouseY - this.dragMouseY) * (1.0 / globalMatrix.matrix[5]) );
+
+            this.dragMouseX = event.gameAdjustedMouseX;
+            this.dragMouseY = event.gameAdjustedMouseY;
         }
 
         return this._result;
@@ -278,6 +291,10 @@ export class UISlider extends UISubControl
             {
                 this.prepareControlScript( uiControlDefs.ECS_SELECT );
 
+                // Start of a drag
+                this.dragMouseX = event.arg[defs.ESMA_MOUSE_X];
+                this.dragMouseY = event.arg[defs.ESMA_MOUSE_Y];
+
                 globalMatrix.initilizeMatrix();
                 globalMatrix.mergeMatrix( this.matrix.matrix );
                 globalMatrix.mergeMatrix( menuManager.camera.matrix.matrix );
@@ -290,7 +307,8 @@ export class UISlider extends UISubControl
                     this.incSliderMovePos( (event.arg[defs.ESMA_MOUSE_Y] - this.subControlAry[0].collisionCenter.y) * (1.0 / globalMatrix.matrix[5]) );
             }
         }
-        else if( event.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType )
+        // The mouse was released after a press on the slider
+        else if( (this.pressType === defs.EAP_DOWN) && (event.arg[defs.ESMA_PRESS_TYPE] !== this.mouseSelectType) )
         {
             // Prepare script function associated with handling this game event
             this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
@@ -307,6 +325,28 @@ export class UISlider extends UISubControl
     deactivateControl()
     {
         super.deactivateControl();
+
+        this.endDrag();
+    }
+
+    // 
+    //  DESC: Reset the control
+    //
+    reset( complete = false )
+    {
+        super.reset( complete );
+
+        this.endDrag();
+    }
+
+    // 
+    //  DESC: End a drag whose mouse release won't come to the slider
+    //        (the mouse left it or the menu closed). Execute now to keep the new value.
+    //
+    endDrag()
+    {
+        if( this.pressType === defs.EAP_DOWN )
+            this.prepareControlScript( uiControlDefs.ECS_EXECUTE );
 
         this.pressType = defs.EAP_IDLE;
     }

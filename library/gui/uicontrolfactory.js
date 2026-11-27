@@ -53,7 +53,7 @@ export function create( node, group )
         control = new UIProgressBar( group );
 
     else
-        throw new Error( `UI Control not defined! (${ctrlType})` );
+        throw new Error( `UI Control not defined! (type: ${ctrlType}, name: ${node.getAttribute( 'name' )})` );
 
     // Have the control load it's share
     control.loadFromNode( node );

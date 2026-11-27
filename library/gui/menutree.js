@@ -45,6 +45,10 @@ export class MenuTree
     {
         this.menuPathAry.length = 0;
 
+        // The tree may have been cleared in the middle of a transition
+        this.state = menuDefs.EMTS_IDLE;
+        this.toMenu = '';
+
         if( this.rootMenu !== undefined )
         {
             // If we have a root menu, add it to the path
@@ -196,8 +200,11 @@ export class MenuTree
         }
         else
         {
-            // Don't process menu specific messages for an interface menu
-            if( (event instanceof GenericEvent) && event.type <= menuDefs.EME_MENU_GAME_STATE_CHANGE )
+            // Don't process menu specific messages for an interface menu. Other events, like
+            // custom game events and the action events of controls, still go to the menu.
+            if( (event instanceof GenericEvent) &&
+                (event.type >= menuDefs.EME_MENU_TRANS_IN) &&
+                (event.type <= menuDefs.EME_MENU_GAME_STATE_CHANGE) )
                 return;
                 
             if( this.menuPathAry.length )
@@ -215,7 +222,7 @@ export class MenuTree
         {
             // Make sure the menu exists
             if( this.defaultMenu === undefined )
-                throw new Error( 'Default menu does not exist!' );
+                throw new Error( `Menu tree has no default menu! (${this.name})` );
 
             // Add the default menu to the path
             this.menuPathAry.push( this.defaultMenu );

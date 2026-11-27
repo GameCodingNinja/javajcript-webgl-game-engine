@@ -92,6 +92,12 @@ export class RunState extends GameState
                     platform.gameplayStart();
                 }
             }
+            // The window lost the focus: pause the game
+            else if( event.type === menuDefs.EME_USER_FOCUS_LOST )
+            {
+                if( !menuManager.active )
+                    menuManager.getTree( 'pause_tree' ).transitionMenu();
+            }
         }
     }
     

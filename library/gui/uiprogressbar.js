@@ -113,6 +113,10 @@ export class UIProgressBar extends UIControl
             }
         }
 
+        // The sprite the progress is shown with
+        if( (this.spriteApplyIndex < 0) || (this.spriteApplyIndex >= this.spriteAry.length) )
+            throw new Error( `Progress bar needs a <stencilMask> node with the spriteIndex of one of its sprites! (${this.name})` );
+
         // Calculate the progress bar size and position
         this.setSizePos();
     }
@@ -128,11 +132,9 @@ export class UIProgressBar extends UIControl
         let stencilMaskNode = controlNode.getElementsByTagName( "stencilMask" );
         if( stencilMaskNode.length )
         {
-            let stencilMaskSprite = stencilMaskNode[0].getAttribute( "objectName" );
-
             this.spriteApplyIndex = Number(stencilMaskNode[0].getAttribute( "spriteIndex" ));
             
-            this.initSizePosScale( this.spriteApplyIndex, stencilMaskSprite );
+            this.initSizePosScale( this.spriteApplyIndex, stencilMaskNode[0] );
         }
     }
 
@@ -157,13 +159,19 @@ export class UIProgressBar extends UIControl
     // 
     //  DESC: Init the progress bar size, pos and scale
     //
-    initSizePosScale( spriteApplyIndex, stencilMaskSprite = null )
+    initSizePosScale( spriteApplyIndex, stencilMaskNode = null )
     {
         this.spriteApplyIndex = spriteApplyIndex;
         
-        if( stencilMaskSprite )
+        // An empty object name means no stencil mask
+        let stencilMaskObjName = stencilMaskNode ? stencilMaskNode.getAttribute( "objectName" ) : null;
+        
+        if( stencilMaskObjName )
         {
-            this.stencilMaskSprite = new Sprite( objectDataManager.getData( this.group, stencilMaskSprite ) );
+            this.stencilMaskSprite = new Sprite( objectDataManager.getData( this.group, stencilMaskObjName ) );
+
+            // Load the transform data
+            this.stencilMaskSprite.load( stencilMaskNode );
             
             // Get the size
             this.progressBarSize.copy( this.stencilMaskSprite.objData.size );
@@ -295,7 +303,7 @@ export class UIProgressBar extends UIControl
                     device.gl.depthMask( true );
 
 
-                    this.spriteAry[i].render( this.matrix );
+                    this.spriteAry[i].render( camera );
 
 
                     // Finished using stencil
@@ -333,7 +341,7 @@ export class UIProgressBar extends UIControl
             if( this.alignment == defs.EHA_HORZ_LEFT )
                 this._posX -= (this.progressBarSize.w - this._offset) / 2;
 
-            else if( this.alignment.horz == defs.EHA_HORZ_RIGHT )
+            else if( this.alignment === defs.EHA_HORZ_RIGHT )
                 this._posX += (this.progressBarSize.w - this._offset) / 2;
         }
         else

@@ -5,7 +5,6 @@
 
 "use strict";
 import { Object } from '../common/object';
-import { DynamicOffset } from '../common/dynamicoffset';
 import { ScrollParam } from './scrollparam';
 import { settings } from '../utilities/settings';
 import { Sprite } from '../sprite/sprite';
@@ -56,10 +55,10 @@ export class Menu extends Object
         this.activeNode = null;
 
         // menu state
-        this.state = uiControlDefs.ECS_NULL;
+        this.state = menuDefs.EMS_INACTIVE;
 
         // Dynamic offset
-        this.dynamicOffset = new DynamicOffset;
+        this.dynamicOffset = null;
 
         // Scrolling parameters
         this.scrollParam = new ScrollParam;
@@ -90,8 +89,8 @@ export class Menu extends Object
         // Init the script Ids
         this.initScriptIds( node );
         
-        // Load the scroll data from node
-        this.scrollParam.loadFromNode( node.getElementsByTagName( 'scroll' ) );
+        // Load the scroll data from node. Only the menu's own, not one from its controls.
+        this.scrollParam.loadFromNode( node.querySelectorAll( ':scope > scroll' ), this.name );
 
         // Get the static sprite
         let nodeLst = node.getElementsByTagName( 'spriteList' );
@@ -148,8 +147,8 @@ export class Menu extends Object
     //
     initScriptIds( node )
     {
-        // Check for scripting
-        let scriptList = node.getElementsByTagName( 'scriptList' );
+        // Check for scripting. Only the menu's own, not one from its controls.
+        let scriptList = node.querySelectorAll( ':scope > scriptList' );
         if( scriptList.length )
             this.scriptComponent.initScriptIds( scriptList[0] );
     }
@@ -181,7 +180,7 @@ export class Menu extends Object
 
         // Does this control have a name then add it to the map
         if( control.name )
-            this.controlMap.set( control.name, control );
+            this.addToControlMap( control );
     }
 
     // 
@@ -195,7 +194,7 @@ export class Menu extends Object
 
         // Does this control have a name then add it to the map
         if( control.name )
-            this.controlMap.set( control.name, control );
+            this.addToControlMap( control );
     }
 
     // 
@@ -207,25 +206,50 @@ export class Menu extends Object
         let control = UIControlFactory.create( node, this.group );
         this.controlAry.push( control );
 
-        // Does this control have a name then add it to the map
-        if( control.name )
-        {
-            // Check for duplicate names
-            if( this.controlMap.has( control.name ) )
-                throw new Error( `Duplicate control name! (${control.name})` );
-            
-            // Map of menu controls
-            this.controlMap.set( control.name, control );
+        // The navigation nodes are indexed like the controls, so every control needs one and a name
+        if( !control.name )
+            throw new Error( `Menu control needs a name! (${this.name})` );
 
-            // Add a node to the array with it's control
-            let navNode = new UIControlNavNode( control );
-            this.controlNodeAry.push( navNode );
+        // Map of menu controls
+        this.addToControlMap( control );
 
-            // Map of menu control nodes
-            navNodeMap.set( control.name, navNode );
-        }
+        // Add a node to the array with it's control
+        let navNode = new UIControlNavNode( control );
+        this.controlNodeAry.push( navNode );
+
+        // Map of menu control nodes
+        navNodeMap.set( control.name, navNode );
     }
     
+    // 
+    //  DESC: Add a control to the map of controls. The names are unique across the static,
+    //        mouse only and menu controls.
+    //
+    addToControlMap( control )
+    {
+        if( this.controlMap.has( control.name ) )
+            throw new Error( `Duplicate control name! (menu: ${this.name}, control: ${control.name})` );
+
+        this.controlMap.set( control.name, control );
+    }
+
+    // 
+    //  DESC: Check that the to_menu actions of the controls go to menus of this menu's group.
+    //        Disabled controls are skipped (ex: a mobile menu's button to a menu only the desktop config loads).
+    //
+    checkToMenuActions( menuMap )
+    {
+        for( const control of this.controlMap.values() )
+        {
+            if( (control.actionType === uiControlDefs.ECAT_TO_MENU) &&
+                (control.defaultState !== uiControlDefs.ECS_DISABLE) &&
+                !menuMap.has( control.executionAction ) )
+            {
+                throw new Error( `Control goes to a menu that doesn't exist! (menu: ${this.name}, control: ${control.name}, to: ${control.executionAction})` );
+            }
+        }
+    }
+
     // 
     //  DESC: Load the dynamic offset data from node
     //
@@ -565,7 +589,9 @@ export class Menu extends Object
         {
             let navNode = this.activeNode;
 
-            do
+            // Visit at most as many nodes as the menu has. When every control in a
+            // navigation loop is disabled, the loop would otherwise never end.
+            for( let i = 0; i < this.controlNodeAry.length; ++i )
             {
                 navNode = navNode.getNode( navNodeAction );
                 
@@ -585,7 +611,6 @@ export class Menu extends Object
                     break;
                 }
             }
-            while( navNode );
         }
     }
 
@@ -658,24 +683,22 @@ export class Menu extends Object
         // The mouse just happends to be clicked over a non-active control
         if( !this._selectionFound && event.arg[ defs.ESMA_DEVICE_TYPE ] === defs.MOUSE )
         {
-            // Deactivate the control that should be active
-            if( (this.activeNode !== null) &&
-                (event.arg[ defs.ESMA_PRESS_TYPE ] === this.activeNode.uiControl.mouseSelectType) )
+            // Go through all the controls on this menu to try to find the one clicked on.
+            // Each control checks its own mouse select type. The select state change deactivates the others.
+            for( let i = 0; i < this.controlNodeAry.length; ++i )
             {
-                this.activeNode.uiControl.deactivateControl();
-
-                // Go through all the controls on this menu to try to find the one clicked on
-                for( let i = 0; i < this.controlAry.length; ++i )
+                if( (this.controlNodeAry[i] !== this.activeNode) &&
+                    this.controlNodeAry[i].uiControl.handleSelectAction( event ) )
                 {
-                    if( this.controlAry[i].handleSelectAction( event ) )
-                    {
-                        // Set the state to active which will block all messages until the state is reset to idle
-                        this._ctrl = this.activeNode.uiControl.getActiveControl();
-                        if( this._ctrl && this._ctrl.actionType > uiControlDefs.ECAT_IDLE )
-                            this.state = menuDefs.EMS_ACTIVE;
+                    // The clicked control is now the active one
+                    this.activeNode = this.controlNodeAry[i];
 
-                        break;
-                    }
+                    // Set the state to active which will block all messages until the state is reset to idle
+                    this._ctrl = this.activeNode.uiControl.getActiveControl();
+                    if( this._ctrl && this._ctrl.actionType > uiControlDefs.ECAT_IDLE )
+                        this.state = menuDefs.EMS_ACTIVE;
+
+                    break;
                 }
             }
         }
@@ -801,14 +824,6 @@ export class Menu extends Object
         }
 
         return this._result;
-    }
-
-    // 
-    //  DESC: Does this menu use dynamic offsets
-    //
-    isDynamicOffset()
-    {
-        return !this.dynamicOffset.isEmpty();
     }
 
     // 

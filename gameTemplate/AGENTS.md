@@ -60,7 +60,7 @@ GameState (base) → CommonState (menus) → TitleScreenState, Level1State
 - `StartUpState`: loads all list tables, registers every script module's `loadScripts()`, preloads the `(startup)` group and shows a progress bar (`STARTUP_ASSET_COUNT`) while loading the `(menu)` group, fonts, menus and the title screen assets. Enforces `MIN_LOAD_TIME`.
 - `TitleScreenState`: `_title_screen_` and `_cube_` strategies, `title_screen_tree` menu.
 - `LoadState`: loading screen between states; calls the target state's exported `load()` and shows a percentage from its `ASSET_COUNT`.
-- `Level1State`: `_level-1-stage_` and `_level-1-ball_` strategies, `(game)` physics world, `pause_tree` menu. Physics and strategy updates pause while a menu is active. Reports `platform.gameplayStart/Stop()` on pause menu in/out.
+- `Level1State`: `_level-1-stage_` and `_level-1-ball_` strategies, `(game)` physics world, `pause_tree` menu. Physics and strategy updates pause while a menu is active. Losing the window focus (`EME_USER_FOCUS_LOST`) opens the pause menu when no menu is active, but not once a state change has begun (`menuManager.allowEventHandling`). Reports `platform.gameplayStart/Stop()` on pause menu in/out.
 - `GameState.update()` runs `scriptSingleton.update()` (screen fades, which run across states) and `soundManager.update()` (drives `Sound.fadeTo()`/`soundManager.crossfade()`; without it fades never progress). **Every state's `update()` must call `super.update()`**; `CommonState.update()` does, then updates the menus.
 - `CommonState` passes events to `menuManager` and turns `EME_MENU_GAME_STATE_CHANGE` + fade-out into a state change. State names used by menus (`'title_screen_state'`, `'level_1_state'`) are mapped in `CommonState.getLoadState()` and `GameState.getGameState()/getStateStr()`.
 - State and event IDs live in `source/state/statedefs.js` (`EGS_*` states, `ESE_*` events from 1000). `StateMessage` carries the load/unload states to `LoadState`.
@@ -85,6 +85,7 @@ GameState (base) → CommonState (menus) → TitleScreenState, Level1State
 ### Menu System
 - `data/objects/2d/menu/main_menu.cfg` lists menus and trees (`title_screen_tree`, `pause_tree`); `menu_action.json` maps menu actions; controls are templates in `menu/control/*.ctrl`; backgrounds sized in `objectDataList/menuBackgrounds.lst`.
 - Coordinate system is center 0,0 with positive Y up.
+- Menu Toggle defaults to Left Shift (the engine's key name is `SHIFT LEFT`, not `LEFT SHIFT`: an unknown key name is skipped silently) and Start on a gamepad. A game that uses Left Shift for gameplay should move it, like Invaders' `CTRL LEFT`.
 - `confirmation.menu` is `type="blocking"`: escape/toggle/back are ignored while it's idle, so it only closes with Yes/No.
 - When adding a control: update the `.menu` XML (control + navigation), the background size in `menuBackgrounds.lst`, and the script classes + registration in the scripts file.
 - Settings menu scripts (`settingsmenuscripts.js`) follow the `_InitStatus` / `_execute` pair pattern and save with `localStorage.set( 'userSettings', settings.user )`.

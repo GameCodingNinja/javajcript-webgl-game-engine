@@ -25,8 +25,9 @@ export class ScrollParam
     
     // 
     //  DESC: Load the scroll data from node
+    //        ownerName is the name of the menu or control, for the error message
     //
-    loadFromNode( node )
+    loadFromNode( node, ownerName )
     {
         if( node.length )
         {
@@ -34,6 +35,10 @@ export class ScrollParam
             
             this.startDelay = Number(node[0].getAttribute( 'startDelay' ));
             this.scrollDelay = Number(node[0].getAttribute( 'scrollDelay' ));
+
+            // A missing delay would be 0, a timer that floods the event queue while a key is held
+            if( !(this.startDelay > 0) || !(this.scrollDelay > 0) )
+                throw new Error( `Scroll needs a startDelay and scrollDelay greater than 0! (${ownerName})` );
             
             if( node[0].getAttribute( 'up' ) === 'true' )
                 this.scrollTypesMap.set( menuDefs.EME_MENU_UP_ACTION, menuDefs.EME_MENU_SCROLL_UP );

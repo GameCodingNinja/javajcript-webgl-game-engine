@@ -37,8 +37,8 @@ export class UIControl extends ControlBase
         // sprite array
         this.spriteAry = [];
 
-        // control's default state
-        this.defaultState;
+        // control's default state. Inactive when the XML doesn't set one.
+        this.defaultState = uiControlDefs.ECS_INACTIVE;
 
         // control's current state
         this.state = uiControlDefs.ECS_NULL;
@@ -102,17 +102,17 @@ export class UIControl extends ControlBase
                 this.executionAction = attr;
         }
 
-        // Check for scripting
-        let scriptList = xmlNode.getElementsByTagName( 'scriptList' );
+        // Check for scripting. Only the control's own, not one from its sprites or sub controls.
+        let scriptList = xmlNode.querySelectorAll( ':scope > scriptList' );
         if( scriptList.length )
             this.scriptComponent.initScriptIds( scriptList[0] );
 
-        // Load the scroll data from node
-        let scrollParamNode = xmlNode.getElementsByTagName( 'scroll' );
+        // Load the scroll data from node. Only the control's own, not one from its sub controls.
+        let scrollParamNode = xmlNode.querySelectorAll( ':scope > scroll' );
         if( scrollParamNode.length )
         {
             this.scrollParam = new ScrollParam;
-            this.scrollParam.loadFromNode( scrollParamNode );
+            this.scrollParam.loadFromNode( scrollParamNode, this.name );
         }
 
         // Get the size modifier info
@@ -728,6 +728,9 @@ export class UIControl extends ControlBase
 
         else if( value === 'selected' )
             this.defaultState = uiControlDefs.ECS_SELECT;
+
+        else
+            console.warn( `Unknown defaultState: "${value}" in control "${this.name}"` );
     }
 
     // 
@@ -769,15 +772,9 @@ export class UIControl extends ControlBase
         else if( value === 'close' )
             this.actionType = uiControlDefs.ECAT_CLOSE;
 
-        else if( value === 'change_focus' )
-            this.actionType = uiControlDefs.ECAT_CHANGE_FOCUS;
-
         else if( value === 'game_state_change' )
             this.actionType = uiControlDefs.ECAT_GAME_STATE_CHANGE;
 
-        else if( value === 'quit_game' )
-            this.actionType = uiControlDefs.ECAT_QUIT_GAME;
-        
         else if( value === 'action_event' )
             this.actionType = uiControlDefs.ECAT_ACTION_EVENT;
 
