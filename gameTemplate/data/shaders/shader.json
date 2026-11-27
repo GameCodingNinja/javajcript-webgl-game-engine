@@ -66,22 +66,5 @@
             "dataType": [
                 { "name": "text0" },
                 { "name": "color" },
-                { "name": "additive" } ] } },
-
-    "shader_3d_no_txt": {
-        "vert": {
-            "file": "data/shaders/shader_mesh_no_txt_v100.vert",
-
-            "dataType": [
-                { "name": "in_position", "location": 0 },
-                { "name": "in_normal", "location": 1 },
-                { "name": "cameraViewProjMatrix" },
-                { "name": "normalMatrix" } ] },
-
-        "frag": {
-            "file": "data/shaders/shader_mesh_no_txt_v100.frag",
-
-            "dataType": [
-                { "name": "color" },
                 { "name": "additive" } ] } }
 }

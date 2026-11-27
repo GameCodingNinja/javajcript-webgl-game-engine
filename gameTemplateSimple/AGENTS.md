@@ -40,7 +40,7 @@ Starter project for simple games on the WebGL engine in `../library/`: a copy of
 | data/objects/camera.lst | Camera definitions (default orthographic) |
 | data/shaders/, data/sound/, data/textures/ | Shaders (`shader.json`), sounds (`soundListTable.json`), textures and fonts (`fonts/fontList.json`) |
 
-There are no 3D assets: the 3D will be redone later. The `shader_3d`/`shader_3d_no_txt` shaders in `shader.json` are kept for it.
+There are no 3D assets or 3D shaders: the 3D will be redone later. `gameTemplate`'s `shader_3d` (`shader_mesh_v100.vert`/`.frag`) is the one to copy when it's added back.
 
 ## Architecture
 

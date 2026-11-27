@@ -43,13 +43,6 @@
             </visual>
             <size width="794" height="14"/>
         </object>
-        
-        <!--<object name="loadTest">
-            <visual defaultUniformScale="1.5">
-                <texture count="18" file="data/textures/titleScreen/Load_Animation_${NUM}.png"/>
-                <mesh genType="quad"/>
-            </visual>
-        </object>-->
 
     </objectList>
 

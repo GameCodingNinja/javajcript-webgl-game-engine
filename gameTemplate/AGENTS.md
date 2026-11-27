@@ -38,7 +38,6 @@ Starter project for new games on the WebGL engine in `../library/`. It wires up 
 | data/objects/strategy/ | Strategy (`.strategy`) and loader (`.loader`) XML plus `strageyListTable.json` (sic) |
 | data/objects/camera.lst | Camera definitions (default orthographic, `cubeCamera` perspective) |
 | data/shaders/, data/sound/, data/textures/ | Shaders (`shader.json`), sounds (`soundListTable.json`), textures and fonts (`fonts/fontList.json`) |
-| data/objects/2d/slot/ | Leftover slot-machine configs, not loaded by the template |
 | development/ | Raw source art (`.xcf`, `.blend`) - **can be ignored** |
 
 ## Architecture
